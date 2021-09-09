@@ -91,10 +91,6 @@ public class GHEventInfo extends GitHubInteractiveObject {
         return transformTypeToGHEvent(type);
     }
 
-    GHEventInfo wrapUp(GitHub root) {
-        return this;
-    }
-
     /**
      * Gets id.
      *
@@ -177,7 +173,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
         T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);
-        v.wrapUp(root());
+        v.lateBind();
         return v;
     }
 }

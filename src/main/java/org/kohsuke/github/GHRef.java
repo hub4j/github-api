@@ -70,8 +70,7 @@ public class GHRef extends GitHubInteractiveObject {
                 .with("sha", sha)
                 .with("force", force)
                 .withUrlPath(url)
-                .fetch(GHRef.class)
-                .wrap(root());
+                .fetch(GHRef.class);
     }
 
     /**
@@ -82,10 +81,6 @@ public class GHRef extends GitHubInteractiveObject {
      */
     public void delete() throws IOException {
         root().createRequest().method("DELETE").withUrlPath(url).send();
-    }
-
-    GHRef wrap(GitHub root) {
-        return this;
     }
 
     /**
@@ -112,8 +107,7 @@ public class GHRef extends GitHubInteractiveObject {
             result = repository.root()
                     .createRequest()
                     .withUrlPath(repository.getApiTailUrl(String.format("git/refs/%s", refName)))
-                    .fetch(GHRef.class)
-                    .wrap(repository.root());
+                    .fetch(GHRef.class);
         } catch (IOException e) {
             // If the parse exception is due to the above returning an array instead of a single ref
             // that means the individual ref did not exist. Handled by result check below.
@@ -156,10 +150,7 @@ public class GHRef extends GitHubInteractiveObject {
         if (refType.equals("")) {
             url = url.substring(0, url.length() - 1);
         }
-        return repository.root()
-                .createRequest()
-                .withUrlPath(url)
-                .toIterable(GHRef[].class, item -> item.wrap(repository.root()));
+        return repository.root().createRequest().withUrlPath(url).toIterable(GHRef[].class, item -> repository.root());
     }
 
     /**

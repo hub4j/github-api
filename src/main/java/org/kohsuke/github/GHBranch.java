@@ -97,8 +97,7 @@ public class GHBranch extends GitHubInteractiveObject {
         return root().createRequest()
                 .withPreview(Previews.LUKE_CAGE)
                 .setRawUrlPath(protection_url)
-                .fetch(GHBranchProtection.class)
-                .wrap(this);
+                .fetch(GHBranchProtection.class);
     }
 
     /**
@@ -222,7 +221,6 @@ public class GHBranch extends GitHubInteractiveObject {
 
     GHBranch wrap(GHRepository repo) {
         this.owner = repo;
-        repo.root();
         return this;
     }
 }

@@ -66,15 +66,9 @@ public class GHProject extends GHObject {
         if (owner == null) {
             try {
                 if (owner_url.contains("/orgs/")) {
-                    owner = root().createRequest()
-                            .withUrlPath(getOwnerUrl().getPath())
-                            .fetch(GHOrganization.class)
-                            .wrapUp(root());
+                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHOrganization.class);
                 } else if (owner_url.contains("/users/")) {
-                    owner = root().createRequest()
-                            .withUrlPath(getOwnerUrl().getPath())
-                            .fetch(GHUser.class)
-                            .wrapUp(root());
+                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class);
                 } else if (owner_url.contains("/repos/")) {
                     String[] pathElements = getOwnerUrl().getPath().split("/");
                     owner = GHRepository.read(root(), pathElements[1], pathElements[2]);
@@ -167,17 +161,6 @@ public class GHProject extends GHObject {
     /**
      * Wrap gh project.
      *
-     * @param root
-     *            the root
-     * @return the gh project
-     */
-    GHProject lateBind(GitHub root) {
-        return this;
-    }
-
-    /**
-     * Wrap gh project.
-     *
      * @param repo
      *            the repo
      * @return the gh project
@@ -196,7 +179,7 @@ public class GHProject extends GHObject {
      */
     GHProject lateBind(GHRepository repo) {
         this.owner = repo;
-        return lateBind(repo.root());
+        return this;
     }
 
     private void edit(String key, Object value) throws IOException {

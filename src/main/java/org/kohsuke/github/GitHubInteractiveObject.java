@@ -50,4 +50,13 @@ abstract class GitHubInteractiveObject {
         return Objects.requireNonNull(root,
                 "The root GitHub reference for this instance is null. Probably caused by deserializing this class without using a GitHub instance. If you must do this, use the MappingObjectReader from GitHub.getMappingObjectReader().");
     }
+
+    /**
+     * Object is offline.
+     *
+     * @return true if GitHub instance is null or offline.
+     */
+    boolean isOffline() {
+        return root == null || root.isOffline();
+    }
 }

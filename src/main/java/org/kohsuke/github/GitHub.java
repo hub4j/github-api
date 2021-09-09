@@ -517,7 +517,6 @@ public class GitHub {
 
     private void setMyself(GHMyself myself) {
         synchronized (this) {
-            myself.wrapUp(this);
             this.myself = myself;
         }
     }
@@ -576,7 +575,7 @@ public class GitHub {
     public GHOrganization getOrganization(String name) throws IOException {
         GHOrganization o = orgs.get(name);
         if (o == null) {
-            o = createRequest().withUrlPath("/orgs/" + name).fetch(GHOrganization.class).wrapUp(this);
+            o = createRequest().withUrlPath("/orgs/" + name).fetch(GHOrganization.class);
             orgs.put(name, o);
         }
         return o;
@@ -602,7 +601,7 @@ public class GitHub {
     public PagedIterable<GHOrganization> listOrganizations(final String since) {
         return createRequest().with("since", since)
                 .withUrlPath("/organizations")
-                .toIterable(GHOrganization[].class, item -> item.wrapUp(this));
+                .toIterable(GHOrganization[].class, null);
     }
 
     /**
@@ -637,7 +636,7 @@ public class GitHub {
      */
     @Deprecated
     public GHRepository getRepositoryById(String id) throws IOException {
-        return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class).wrap(this);
+        return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class);
     }
 
     /**
@@ -650,7 +649,7 @@ public class GitHub {
      *             the io exception
      */
     public GHRepository getRepositoryById(long id) throws IOException {
-        return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class).wrap(this);
+        return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class);
     }
 
     /**
@@ -662,7 +661,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      */
     public PagedIterable<GHLicense> listLicenses() throws IOException {
-        return createRequest().withUrlPath("/licenses").toIterable(GHLicense[].class, item -> item.wrap(this));
+        return createRequest().withUrlPath("/licenses").toIterable(GHLicense[].class, null);
     }
 
     /**
@@ -673,7 +672,7 @@ public class GitHub {
      *             the io exception
      */
     public PagedIterable<GHUser> listUsers() throws IOException {
-        return createRequest().withUrlPath("/users").toIterable(GHUser[].class, item -> item.wrapUp(this));
+        return createRequest().withUrlPath("/users").toIterable(GHUser[].class, null);
     }
 
     /**
@@ -704,8 +703,7 @@ public class GitHub {
      *      Plans</a>
      */
     public PagedIterable<GHMarketplacePlan> listMarketplacePlans() throws IOException {
-        return createRequest().withUrlPath("/marketplace_listing/plans")
-                .toIterable(GHMarketplacePlan[].class, item -> item.wrapUp(this));
+        return createRequest().withUrlPath("/marketplace_listing/plans").toIterable(GHMarketplacePlan[].class, null);
     }
 
     /**
@@ -717,7 +715,7 @@ public class GitHub {
      */
     public List<GHInvitation> getMyInvitations() throws IOException {
         return createRequest().withUrlPath("/user/repository_invitations")
-                .toIterable(GHInvitation[].class, item -> item.wrapUp(this))
+                .toIterable(GHInvitation[].class, null)
                 .toList();
     }
 
@@ -733,7 +731,7 @@ public class GitHub {
      */
     public Map<String, GHOrganization> getMyOrganizations() throws IOException {
         GHOrganization[] orgs = createRequest().withUrlPath("/user/orgs")
-                .toIterable(GHOrganization[].class, item -> item.wrapUp(this))
+                .toIterable(GHOrganization[].class, null)
                 .toArray();
         Map<String, GHOrganization> r = new HashMap<>();
         for (GHOrganization o : orgs) {
@@ -759,7 +757,7 @@ public class GitHub {
      */
     public PagedIterable<GHMarketplaceUserPurchase> getMyMarketplacePurchases() throws IOException {
         return createRequest().withUrlPath("/user/marketplace_purchases")
-                .toIterable(GHMarketplaceUserPurchase[].class, item -> item.wrapUp(this));
+                .toIterable(GHMarketplaceUserPurchase[].class, null);
     }
 
     /**
@@ -788,7 +786,7 @@ public class GitHub {
      */
     public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
         GHOrganization[] orgs = createRequest().withUrlPath("/users/" + login + "/orgs")
-                .toIterable(GHOrganization[].class, item -> item.wrapUp(this))
+                .toIterable(GHOrganization[].class, null)
                 .toArray();
         Map<String, GHOrganization> r = new HashMap<>();
         for (GHOrganization o : orgs) {
@@ -849,9 +847,7 @@ public class GitHub {
      *             the io exception
      */
     public List<GHEventInfo> getEvents() throws IOException {
-        return createRequest().withUrlPath("/events")
-                .toIterable(GHEventInfo[].class, item -> item.wrapUp(this))
-                .toList();
+        return createRequest().withUrlPath("/events").toIterable(GHEventInfo[].class, null).toList();
     }
 
     /**
@@ -894,7 +890,7 @@ public class GitHub {
      */
     public <T extends GHEventPayload> T parseEventPayload(Reader r, Class<T> type) throws IOException {
         T t = GitHubClient.getMappingObjectReader(this).forType(type).readValue(r);
-        t.wrapUp(this);
+        t.lateBind();
         return t;
     }
 
@@ -958,7 +954,7 @@ public class GitHub {
     public GHAuthorization createToken(Collection<String> scope, String note, String noteUrl) throws IOException {
         Requester requester = createRequest().with("scopes", scope).with("note", note).with("note_url", noteUrl);
 
-        return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class).wrap(this);
+        return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class);
     }
 
     /**
@@ -992,7 +988,7 @@ public class GitHub {
             Requester requester = createRequest().with("scopes", scope).with("note", note).with("note_url", noteUrl);
             // Add the OTP from the user
             requester.setHeader("x-github-otp", OTPstring);
-            return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class).wrap(this);
+            return requester.method("POST").withUrlPath("/authorizations").fetch(GHAuthorization.class);
         }
     }
 
@@ -1089,8 +1085,7 @@ public class GitHub {
      *      authorizations</a>
      */
     public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
-        return createRequest().withUrlPath("/authorizations")
-                .toIterable(GHAuthorization[].class, item -> item.wrap(this));
+        return createRequest().withUrlPath("/authorizations").toIterable(GHAuthorization[].class, null);
     }
 
     /**
@@ -1106,7 +1101,7 @@ public class GitHub {
      */
     @Preview(MACHINE_MAN)
     public GHApp getApp() throws IOException {
-        return createRequest().withPreview(MACHINE_MAN).withUrlPath("/app").fetch(GHApp.class).wrapUp(this);
+        return createRequest().withPreview(MACHINE_MAN).withUrlPath("/app").fetch(GHApp.class);
     }
 
     /**
@@ -1141,10 +1136,7 @@ public class GitHub {
      *             the io exception
      */
     public GHProject getProject(long id) throws IOException {
-        return createRequest().withPreview(INERTIA)
-                .withUrlPath("/projects/" + id)
-                .fetch(GHProject.class)
-                .lateBind(this);
+        return createRequest().withPreview(INERTIA).withUrlPath("/projects/" + id).fetch(GHProject.class);
     }
 
     /**
@@ -1270,9 +1262,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/repos/#list-all-public-repositories">documentation</a>
      */
     public PagedIterable<GHRepository> listAllPublicRepositories(final String since) {
-        return createRequest().with("since", since)
-                .withUrlPath("/repositories")
-                .toIterable(GHRepository[].class, item -> item.wrap(this));
+        return createRequest().with("since", since).withUrlPath("/repositories").toIterable(GHRepository[].class, null);
     }
 
     /**

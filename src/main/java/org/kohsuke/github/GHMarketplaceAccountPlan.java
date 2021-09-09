@@ -16,24 +16,6 @@ public class GHMarketplaceAccountPlan extends GHMarketplaceAccount {
     private GHMarketplacePurchase marketplacePurchase;
 
     /**
-     * Wrap up gh marketplace account.
-     *
-     * @param root
-     *            the root
-     * @return an instance of the GHMarketplaceAccount class
-     */
-    GHMarketplaceAccountPlan wrapUp(GitHub root) {
-        super.wrapUp(root);
-        if (this.marketplacePendingChange != null)
-            this.marketplacePendingChange.wrapUp(this.root());
-
-        if (this.marketplacePurchase != null)
-            this.marketplacePurchase.wrapUp(this.root());
-
-        return this;
-    }
-
-    /**
      * Gets marketplace pending change.
      *
      * @return the marketplace pending change

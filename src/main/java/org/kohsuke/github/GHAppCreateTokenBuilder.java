@@ -78,8 +78,7 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
         return builder.method("POST")
                 .withPreview(MACHINE_MAN)
                 .withUrlPath(apiUrlTail)
-                .fetch(GHAppInstallationToken.class)
-                .wrapUp(root());
+                .fetch(GHAppInstallationToken.class);
     }
 
 }

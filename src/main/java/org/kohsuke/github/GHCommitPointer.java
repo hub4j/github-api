@@ -99,10 +99,4 @@ public class GHCommitPointer {
         return getRepository().getCommit(getSha());
     }
 
-    void wrapUp(GitHub root) {
-        if (user != null) {
-        }
-        if (repo != null)
-            repo.wrap(root);
-    }
 }

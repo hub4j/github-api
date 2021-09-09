@@ -181,7 +181,7 @@ public class GHMyself extends GHUser {
         return root().createRequest()
                 .with("type", repoType)
                 .withUrlPath("/user/repos")
-                .toIterable(GHRepository[].class, item -> item.wrap(root()))
+                .toIterable(GHRepository[].class, null)
                 .withPageSize(pageSize);
     }
 

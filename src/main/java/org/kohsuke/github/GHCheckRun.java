@@ -50,7 +50,6 @@ public class GHCheckRun extends GHObject {
 
     GHCheckRun wrap(GitHub root) {
         if (owner != null) {
-            owner.wrap(root);
             for (GHPullRequest singlePull : pullRequests) {
                 singlePull.wrap(owner);
             }
@@ -61,9 +60,6 @@ public class GHCheckRun extends GHObject {
             } else {
                 checkSuite.wrap(root);
             }
-        }
-        if (app != null) {
-            app.wrapUp(root);
         }
 
         return this;

@@ -183,10 +183,6 @@ public class GHApp extends GHObject {
         throw new RuntimeException("Do not use this method.");
     }
 
-    GHApp wrapUp(GitHub root) {
-        return this;
-    }
-
     /**
      * Obtains all the installations associated with this app.
      * <p>
@@ -200,7 +196,7 @@ public class GHApp extends GHObject {
         return root().createRequest()
                 .withPreview(MACHINE_MAN)
                 .withUrlPath("/app/installations")
-                .toIterable(GHAppInstallation[].class, item -> item.wrapUp(root()));
+                .toIterable(GHAppInstallation[].class, null);
     }
 
     /**
@@ -220,8 +216,7 @@ public class GHApp extends GHObject {
         return root().createRequest()
                 .withPreview(MACHINE_MAN)
                 .withUrlPath(String.format("/app/installations/%d", id))
-                .fetch(GHAppInstallation.class)
-                .wrapUp(root());
+                .fetch(GHAppInstallation.class);
     }
 
     /**
@@ -242,8 +237,7 @@ public class GHApp extends GHObject {
         return root().createRequest()
                 .withPreview(MACHINE_MAN)
                 .withUrlPath(String.format("/orgs/%s/installation", name))
-                .fetch(GHAppInstallation.class)
-                .wrapUp(root());
+                .fetch(GHAppInstallation.class);
     }
 
     /**
@@ -266,8 +260,7 @@ public class GHApp extends GHObject {
         return root().createRequest()
                 .withPreview(MACHINE_MAN)
                 .withUrlPath(String.format("/repos/%s/%s/installation", ownerName, repositoryName))
-                .fetch(GHAppInstallation.class)
-                .wrapUp(root());
+                .fetch(GHAppInstallation.class);
     }
 
     /**
@@ -287,8 +280,7 @@ public class GHApp extends GHObject {
         return root().createRequest()
                 .withPreview(MACHINE_MAN)
                 .withUrlPath(String.format("/users/%s/installation", name))
-                .fetch(GHAppInstallation.class)
-                .wrapUp(root());
+                .fetch(GHAppInstallation.class);
     }
 
 }

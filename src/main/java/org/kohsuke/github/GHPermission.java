@@ -62,10 +62,4 @@ class GHPermission {
     public GHUser getUser() {
         return user;
     }
-
-    void wrapUp(GitHub root) {
-        if (user != null) {
-        }
-    }
-
 }

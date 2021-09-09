@@ -17,7 +17,6 @@ public class GHTag extends GitHubInteractiveObject {
 
     GHTag wrap(GHRepository owner) {
         this.owner = owner;
-        owner.root();
         if (commit != null)
             commit.wrapUp(owner);
         return this;

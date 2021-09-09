@@ -94,8 +94,7 @@ public class GHBranchProtectionBuilder {
                 .withNullable("restrictions", restrictions)
                 .withNullable("enforce_admins", enforceAdmins)
                 .withUrlPath(branch.getProtectionUrl().toString())
-                .fetch(GHBranchProtection.class)
-                .wrap(branch);
+                .fetch(GHBranchProtection.class);
     }
 
     /**

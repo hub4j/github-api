@@ -14,13 +14,6 @@ public class GHRequestedAction extends GHObject {
 
     GHRequestedAction wrap(GHRepository owner) {
         this.owner = owner;
-        wrap(owner.root());
-        return this;
-    }
-    GHRequestedAction wrap(GitHub root) {
-        if (owner != null) {
-            owner.wrap(root);
-        }
         return this;
     }
 

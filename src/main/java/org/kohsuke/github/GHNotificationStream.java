@@ -160,7 +160,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                             long nt = n.getUpdatedAt().getTime();
                             if (nt >= lastUpdated) {
                                 lastUpdated = nt;
-                                return n.wrap(root());
+                                return n;
                             }
                         }
 

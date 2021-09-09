@@ -128,7 +128,7 @@ public class GHRepository extends GHObject {
     private boolean compareUsePaginatedCommits;
 
     static GHRepository read(GitHub root, String owner, String name) throws IOException {
-        return root.createRequest().withUrlPath("/repos/" + owner + '/' + name).fetch(GHRepository.class).wrap(root);
+        return root.createRequest().withUrlPath("/repos/" + owner + '/' + name).fetch(GHRepository.class);
     }
 
     /**
@@ -374,7 +374,7 @@ public class GHRepository extends GHObject {
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getOwner() throws IOException {
-        return root().isOffline() ? owner : root().getUser(getOwnerName()); // because 'owner' isn't fully populated
+        return isOffline() ? owner : root().getUser(getOwnerName()); // because 'owner' isn't fully populated
     }
 
     /**
@@ -477,8 +477,7 @@ public class GHRepository extends GHObject {
                 .with("ref", name)
                 .with("sha", sha)
                 .withUrlPath(getApiTailUrl("git/refs"))
-                .fetch(GHRef.class)
-                .wrap(root());
+                .fetch(GHRef.class);
     }
 
     /**
@@ -1021,7 +1020,6 @@ public class GHRepository extends GHObject {
         GHPermission perm = root().createRequest()
                 .withUrlPath(getApiTailUrl("collaborators/" + user + "/permission"))
                 .fetch(GHPermission.class);
-        perm.wrapUp(root());
         return perm.getPermissionType();
     }
 
@@ -1425,7 +1423,7 @@ public class GHRepository extends GHObject {
         return root().createRequest()
                 .with("sort", sort)
                 .withUrlPath(getApiTailUrl("forks"))
-                .toIterable(GHRepository[].class, item -> item.wrap(root()));
+                .toIterable(GHRepository[].class, null);
     }
 
     /**
@@ -2022,7 +2020,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHCommitStatus> listCommitStatuses(final String sha1) throws IOException {
         return root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/statuses/%s", getOwnerName(), name, sha1))
-                .toIterable(GHCommitStatus[].class, item -> item.wrapUp(root()));
+                .toIterable(GHCommitStatus[].class, null);
     }
 
     /**
@@ -2088,8 +2086,7 @@ public class GHRepository extends GHObject {
                 .with("description", description)
                 .with("context", context)
                 .withUrlPath(String.format("/repos/%s/%s/statuses/%s", getOwnerName(), this.name, sha1))
-                .fetch(GHCommitStatus.class)
-                .wrapUp(root());
+                .fetch(GHCommitStatus.class);
     }
 
     /**
@@ -2150,7 +2147,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/events", getOwnerName(), name))
-                .toIterable(GHEventInfo[].class, item -> item.wrapUp(root()));
+                .toIterable(GHEventInfo[].class, null);
     }
 
     /**
@@ -2219,7 +2216,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHInvitation> listInvitations() {
         return root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/invitations", getOwnerName(), name))
-                .toIterable(GHInvitation[].class, item -> item.wrapUp(root()));
+                .toIterable(GHInvitation[].class, null);
     }
 
     /**
@@ -2261,7 +2258,7 @@ public class GHRepository extends GHObject {
     }
 
     private PagedIterable<GHUser> listUsers(Requester requester, final String suffix) {
-        return requester.withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, item -> item.wrapUp(root()));
+        return requester.withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);
     }
 
     /**
@@ -2396,19 +2393,6 @@ public class GHRepository extends GHObject {
         };
     }
 
-    GHRepository wrap(GitHub root) {
-        if (root.isOffline() && owner != null) {
-            owner.wrapUp(root);
-        }
-        if (source != null) {
-            source.wrap(root);
-        }
-        if (parent != null) {
-            parent.wrap(root);
-        }
-        return this;
-    }
-
     /**
      * Gets branches by {@linkplain GHBranch#getName() their names}.
      *
@@ -2484,7 +2468,6 @@ public class GHRepository extends GHObject {
         if (m == null) {
             m = root().createRequest().withUrlPath(getApiTailUrl("milestones/" + number)).fetch(GHMilestone.class);
             m.owner = this;
-            root();
             milestones.put(m.getNumber(), m);
         }
         return m;
@@ -2805,9 +2788,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public PagedIterable<Contributor> listContributors() throws IOException {
-        return root().createRequest()
-                .withUrlPath(getApiTailUrl("contributors"))
-                .toIterable(Contributor[].class, item -> item.wrapUp(root()));
+        return root().createRequest().withUrlPath(getApiTailUrl("contributors")).toIterable(Contributor[].class, null);
     }
 
     /**
@@ -2992,7 +2973,7 @@ public class GHRepository extends GHObject {
     public PagedIterable<GHIssueEvent> listIssueEvents() throws IOException {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("issues/events"))
-                .toIterable(GHIssueEvent[].class, item -> item.wrapUp(root()));
+                .toIterable(GHIssueEvent[].class, null);
     }
 
     /**
@@ -3005,10 +2986,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHIssueEvent getIssueEvent(long id) throws IOException {
-        return root().createRequest()
-                .withUrlPath(getApiTailUrl("issues/events/" + id))
-                .fetch(GHIssueEvent.class)
-                .wrapUp(root());
+        return root().createRequest().withUrlPath(getApiTailUrl("issues/events/" + id)).fetch(GHIssueEvent.class);
     }
 
     /**
@@ -3234,7 +3212,7 @@ public class GHRepository extends GHObject {
      *             The IO exception
      */
     void populate() throws IOException {
-        if (root().isOffline()) {
+        if (isOffline()) {
             return; // can't populate if the root is offline
         }
 
@@ -3249,16 +3227,14 @@ public class GHRepository extends GHObject {
                     .withPreview(BAPTISTE)
                     .withPreview(NEBULA)
                     .setRawUrlPath(url.toString())
-                    .fetchInto(this)
-                    .wrap(root());
+                    .fetchInto(this);
         } catch (HttpException e) {
             if (e.getCause() instanceof JsonParseException) {
                 root().createRequest()
                         .withPreview(BAPTISTE)
                         .withPreview(NEBULA)
                         .withUrlPath("/repos/" + full_name)
-                        .fetchInto(this)
-                        .wrap(root());
+                        .fetchInto(this);
             } else {
                 throw e;
             }

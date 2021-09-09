@@ -29,17 +29,6 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     private List<String> bullets;
 
     /**
-     * Wrap up gh marketplace plan.
-     *
-     * @param root
-     *            the root
-     * @return an instance of the GHMarketplacePlan class
-     */
-    GHMarketplacePlan wrapUp(GitHub root) {
-        return this;
-    }
-
-    /**
      * Gets url.
      *
      * @return the url

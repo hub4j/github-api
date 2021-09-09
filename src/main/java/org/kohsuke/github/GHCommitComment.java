@@ -91,7 +91,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-        return owner == null || owner.root().isOffline() ? user : owner.root().getUser(user.login);
+        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.login);
     }
 
     /**
@@ -131,8 +131,7 @@ public class GHCommitComment extends GHObject implements Reactable {
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getApiTail() + "/reactions")
-                .fetch(GHReaction.class)
-                .wrap(owner.root());
+                .fetch(GHReaction.class);
     }
 
     @Preview(SQUIRREL_GIRL)
@@ -141,7 +140,7 @@ public class GHCommitComment extends GHObject implements Reactable {
                 .createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiTail() + "/reactions")
-                .toIterable(GHReaction[].class, item -> item.wrap(owner.root()));
+                .toIterable(GHReaction[].class, item -> owner.root());
     }
 
     /**
@@ -160,9 +159,6 @@ public class GHCommitComment extends GHObject implements Reactable {
 
     GHCommitComment wrap(GHRepository owner) {
         this.owner = owner;
-        if (owner.root().isOffline()) {
-            user.wrapUp(owner.root());
-        }
         return this;
     }
 }

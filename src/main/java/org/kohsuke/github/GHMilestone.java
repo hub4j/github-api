@@ -221,7 +221,6 @@ public class GHMilestone extends GHObject {
      */
     GHMilestone lateBind(GHRepository repo) {
         this.owner = repo;
-        repo.root();
         return this;
     }
 

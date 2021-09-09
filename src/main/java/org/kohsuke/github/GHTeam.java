@@ -48,20 +48,11 @@ public class GHTeam extends GHObject implements Refreshable {
 
     GHTeam wrapUp(GHOrganization owner) {
         this.organization = owner;
-        owner.root();
         return this;
     }
 
     GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
-        this.organization.wrapUp(root);
         return wrapUp(organization);
-    }
-
-    static GHTeam[] wrapUp(GHTeam[] teams, GHPullRequest owner) {
-        for (GHTeam t : teams) {
-            owner.root();
-        }
-        return teams;
     }
 
     /**
@@ -155,10 +146,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public PagedIterable<GHUser> listMembers(String role) throws IOException {
-        return root().createRequest()
-                .withUrlPath(api("/members"))
-                .with("role", role)
-                .toIterable(GHUser[].class, item -> item.wrapUp(root()));
+        return root().createRequest().withUrlPath(api("/members")).with("role", role).toIterable(GHUser[].class, null);
     }
 
     /**
@@ -251,9 +239,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories() {
-        return root().createRequest()
-                .withUrlPath(api("/repos"))
-                .toIterable(GHRepository[].class, item -> item.wrap(root()));
+        return root().createRequest().withUrlPath(api("/repos")).toIterable(GHRepository[].class, null);
     }
 
     /**

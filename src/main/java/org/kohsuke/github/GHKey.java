@@ -59,10 +59,6 @@ public class GHKey extends GitHubInteractiveObject {
         return verified;
     }
 
-    GHKey wrap(GitHub root) {
-        return this;
-    }
-
     public String toString() {
         return new ToStringBuilder(this).append("title", title).append("id", id).append("key", key).toString();
     }

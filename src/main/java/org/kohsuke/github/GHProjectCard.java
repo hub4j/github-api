@@ -86,10 +86,7 @@ public class GHProjectCard extends GHObject {
     public GHProject getProject() throws IOException {
         if (project == null) {
             try {
-                project = root().createRequest()
-                        .withUrlPath(getProjectUrl().getPath())
-                        .fetch(GHProject.class)
-                        .lateBind(root());
+                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
             } catch (FileNotFoundException e) {
             }
         }
@@ -129,12 +126,9 @@ public class GHProjectCard extends GHObject {
             return null;
         try {
             if (content_url.contains("/pulls")) {
-                return root().createRequest()
-                        .withUrlPath(getContentUrl().getPath())
-                        .fetch(GHPullRequest.class)
-                        .wrap(root());
+                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHPullRequest.class);
             } else {
-                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class).wrap(root());
+                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);
             }
         } catch (FileNotFoundException e) {
             return null;

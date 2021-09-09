@@ -131,8 +131,4 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
     private Object expiresAtStr(Date id, Class type) {
         return expires_at;
     }
-
-    GHAppInstallationToken wrapUp(GitHub root) {
-        return this;
-    }
 }

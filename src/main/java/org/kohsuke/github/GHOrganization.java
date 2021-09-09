@@ -21,10 +21,6 @@ public class GHOrganization extends GHPerson {
 
     private boolean has_organization_projects;
 
-    GHOrganization wrapUp(GitHub root) {
-        return (GHOrganization) super.wrapUp(root);
-    }
-
     /**
      * Creates a new repository.
      *
@@ -355,7 +351,7 @@ public class GHOrganization extends GHPerson {
                 .withUrlPath(String.format("/orgs/%s/%s", login, suffix))
                 .with("filter", filter)
                 .with("role", role)
-                .toIterable(GHUser[].class, item -> item.wrapUp(root()));
+                .toIterable(GHUser[].class, null);
     }
 
     /**
@@ -416,7 +412,7 @@ public class GHOrganization extends GHPerson {
                 .withPreview(INERTIA)
                 .with("state", status)
                 .withUrlPath(String.format("/orgs/%s/projects", login))
-                .toIterable(GHProject[].class, item -> item.lateBind(root()));
+                .toIterable(GHProject[].class, null);
     }
 
     /**
@@ -448,8 +444,7 @@ public class GHOrganization extends GHPerson {
                 .with("name", name)
                 .with("body", body)
                 .withUrlPath(String.format("/orgs/%s/projects", login))
-                .fetch(GHProject.class)
-                .lateBind(root());
+                .fetch(GHProject.class);
     }
 
     /**
@@ -573,7 +568,6 @@ public class GHOrganization extends GHPerson {
     public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
         List<GHRepository> r = new ArrayList<GHRepository>();
         for (GHRepository repository : listRepositories(100)) {
-            repository.wrap(root());
             List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
             if (pullRequests.size() > 0) {
                 r.add(repository);
@@ -603,7 +597,7 @@ public class GHOrganization extends GHPerson {
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return root().createRequest()
                 .withUrlPath(String.format("/orgs/%s/events", login))
-                .toIterable(GHEventInfo[].class, item -> item.wrapUp(root()));
+                .toIterable(GHEventInfo[].class, null);
     }
 
     /**
@@ -618,7 +612,7 @@ public class GHOrganization extends GHPerson {
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return root().createRequest()
                 .withUrlPath("/orgs/" + login + "/repos")
-                .toIterable(GHRepository[].class, item -> item.wrap(root()))
+                .toIterable(GHRepository[].class, null)
                 .withPageSize(pageSize);
     }
 

@@ -18,17 +18,6 @@ public class GHMarketplaceAccount extends GitHubInteractiveObject {
     private GHMarketplaceAccountType type;
 
     /**
-     * Wrap up gh marketplace account.
-     *
-     * @param root
-     *            the root
-     * @return an instance of the GHMarketplaceAccount class
-     */
-    GHMarketplaceAccount wrapUp(GitHub root) {
-        return this;
-    }
-
-    /**
      * Gets url.
      *
      * @return the url

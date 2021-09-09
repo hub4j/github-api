@@ -43,15 +43,11 @@ public class GHCheckSuite extends GHObject {
 
     GHCheckSuite wrap(GitHub root) {
         if (owner != null) {
-            owner.wrap(root);
             if (pullRequests != null && pullRequests.length != 0) {
                 for (GHPullRequest singlePull : pullRequests) {
                     singlePull.wrap(owner);
                 }
             }
-        }
-        if (app != null) {
-            app.wrapUp(root);
         }
         return this;
     }

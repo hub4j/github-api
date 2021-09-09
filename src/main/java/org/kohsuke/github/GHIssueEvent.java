@@ -189,13 +189,8 @@ public class GHIssueEvent extends GitHubInteractiveObject {
         return this.requestedReviewer;
     }
 
-    GHIssueEvent wrapUp(GitHub root) {
-        return this;
-    }
-
     GHIssueEvent wrapUp(GHIssue parent) {
         this.issue = parent;
-        parent.root();
         return this;
     }
 

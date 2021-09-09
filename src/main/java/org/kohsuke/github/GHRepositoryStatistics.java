@@ -87,7 +87,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
     private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("contributors"))
-                .toIterable(ContributorStats[].class, item -> item.wrapUp(root()));
+                .toIterable(ContributorStats[].class, null);
     }
 
     /**
@@ -217,10 +217,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
                 return String.format("Week starting %d - Additions: %d, Deletions: %d, Commits: %d", w, a, d, c);
             }
         }
-
-        ContributorStats wrapUp(GitHub root) {
-            return this;
-        }
     }
 
     /**
@@ -234,7 +230,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
     public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("commit_activity"))
-                .toIterable(CommitActivity[].class, item -> item.wrapUp(root()));
+                .toIterable(CommitActivity[].class, null);
     }
 
     /**
@@ -273,10 +269,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          */
         public long getWeek() {
             return week;
-        }
-
-        CommitActivity wrapUp(GitHub root) {
-            return this;
         }
 
         @Override
@@ -400,10 +392,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          */
         public List<Integer> getOwnerCommits() {
             return Collections.unmodifiableList(owner);
-        }
-
-        Participation wrapUp(GitHub root) {
-            return this;
         }
     }
 

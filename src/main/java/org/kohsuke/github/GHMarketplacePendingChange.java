@@ -20,20 +20,6 @@ public class GHMarketplacePendingChange extends GitHubInteractiveObject {
     private String effectiveDate;
 
     /**
-     * Wrap up gh marketplace pending change.
-     *
-     * @param root
-     *            the root
-     * @return an instance of the GHMarketplacePendingChange class
-     */
-    GHMarketplacePendingChange wrapUp(GitHub root) {
-        if (plan != null) { // sanity check
-            this.plan.wrapUp(this.root());
-        }
-        return this;
-    }
-
-    /**
      * Gets id.
      *
      * @return the id

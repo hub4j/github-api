@@ -31,10 +31,6 @@ public abstract class GHPerson extends GHObject {
     // other fields (that only show up in full data) that require privileged scope
     protected Integer total_private_repos;
 
-    GHPerson wrapUp(GitHub root) {
-        return this;
-    }
-
     /**
      * Fully populate the data by retrieving missing data.
      * <p>
@@ -47,7 +43,7 @@ public abstract class GHPerson extends GHObject {
         if (super.getCreatedAt() != null) {
             return; // already populated
         }
-        if (root() == null || root().isOffline()) {
+        if (isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
         URL url = getUrl();
@@ -96,7 +92,7 @@ public abstract class GHPerson extends GHObject {
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return root().createRequest()
                 .withUrlPath("/users/" + login + "/repos")
-                .toIterable(GHRepository[].class, item -> item.wrap(root()))
+                .toIterable(GHRepository[].class, null)
                 .withPageSize(pageSize);
     }
 
@@ -124,7 +120,7 @@ public abstract class GHPerson extends GHObject {
                         GHRepository[].class,
                         root().createRequest().withUrlPath("users", login, "repos").build(),
                         pageSize);
-                pager = new PagedIterator<>(iterator, item -> item.wrap(root()));
+                pager = new PagedIterator<>(iterator, null);
             } catch (MalformedURLException e) {
                 throw new GHException("Unable to build GitHub API URL", e);
             }

@@ -351,19 +351,11 @@ public class GHWorkflowRun extends GHObject {
 
     GHWorkflowRun wrapUp(GitHub root) {
         if (owner != null) {
-            owner.wrap(root);
             if (pullRequests != null) {
                 for (GHPullRequest singlePull : pullRequests) {
                     singlePull.wrap(owner);
                 }
             }
-        } else if (pullRequests != null) {
-            for (GHPullRequest singlePull : pullRequests) {
-                singlePull.wrap(root);
-            }
-        }
-        if (headRepository != null) {
-            headRepository.wrap(root);
         }
         return this;
     }

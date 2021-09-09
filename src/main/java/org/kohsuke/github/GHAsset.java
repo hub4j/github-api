@@ -147,7 +147,6 @@ public class GHAsset extends GHObject {
 
     GHAsset wrap(GHRelease release) {
         this.owner = release.getOwner();
-        owner.root();
         return this;
     }
 

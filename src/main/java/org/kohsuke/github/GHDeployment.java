@@ -32,9 +32,6 @@ public class GHDeployment extends GHObject {
 
     GHDeployment wrap(GHRepository owner) {
         this.owner = owner;
-        owner.root();
-        if (creator != null)
-            creator.wrapUp(root());
         return this;
     }
 
@@ -201,4 +198,8 @@ public class GHDeployment extends GHObject {
                 .toIterable(GHDeploymentStatus[].class, item -> item.lateBind(owner));
     }
 
+    // test only
+    GHRepository getOwner() {
+        return owner;
+    }
 }

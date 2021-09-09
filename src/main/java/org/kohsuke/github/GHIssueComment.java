@@ -85,7 +85,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-        return owner == null || owner.root().isOffline() ? user : owner.root().getUser(user.getLogin());
+        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());
     }
 
     @Override
@@ -138,8 +138,7 @@ public class GHIssueComment extends GHObject implements Reactable {
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getApiRoute() + "/reactions")
-                .fetch(GHReaction.class)
-                .wrap(owner.root());
+                .fetch(GHReaction.class);
     }
 
     @Preview(SQUIRREL_GIRL)
@@ -148,7 +147,7 @@ public class GHIssueComment extends GHObject implements Reactable {
                 .createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiRoute() + "/reactions")
-                .toIterable(GHReaction[].class, item -> item.wrap(owner.root()));
+                .toIterable(GHReaction[].class, item -> owner.root());
     }
 
     private String getApiRoute() {

@@ -148,12 +148,7 @@ public class GHWorkflow extends GHObject {
 
     GHWorkflow wrapUp(GHRepository owner) {
         this.owner = owner;
-        return wrapUp(owner.root());
-    }
-
-    GHWorkflow wrapUp(GitHub root) {
-        if (owner != null)
-            owner.wrap(root);
         return this;
     }
+
 }

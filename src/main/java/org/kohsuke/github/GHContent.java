@@ -386,13 +386,6 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
 
     GHContent wrap(GHRepository owner) {
         this.repository = owner;
-        owner.root();
-        return this;
-    }
-
-    GHContent wrap(GitHub root) {
-        if (repository != null)
-            repository.wrap(root);
         return this;
     }
 

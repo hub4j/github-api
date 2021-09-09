@@ -158,8 +158,8 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
 
         @Override
         GHContent[] getItems(GitHub root) {
-            for (GHContent item : items)
-                item.wrap(root);
+            for (GHContent item : items) {
+            }
             return items;
         }
     }

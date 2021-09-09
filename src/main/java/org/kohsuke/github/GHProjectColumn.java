@@ -82,10 +82,7 @@ public class GHProjectColumn extends GHObject {
     public GHProject getProject() throws IOException {
         if (project == null) {
             try {
-                project = root().createRequest()
-                        .withUrlPath(getProjectUrl().getPath())
-                        .fetch(GHProject.class)
-                        .lateBind(root());
+                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
             } catch (FileNotFoundException e) {
             }
         }

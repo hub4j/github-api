@@ -222,8 +222,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getApiRoute() + "/reactions")
-                .fetch(GHReaction.class)
-                .wrap(owner.root());
+                .fetch(GHReaction.class);
     }
 
     @Preview(SQUIRREL_GIRL)
@@ -232,6 +231,6 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
                 .createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiRoute() + "/reactions")
-                .toIterable(GHReaction[].class, item -> item.wrap(owner.root()));
+                .toIterable(GHReaction[].class, item -> owner.root());
     }
 }

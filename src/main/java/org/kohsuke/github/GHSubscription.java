@@ -94,10 +94,6 @@ public class GHSubscription extends GitHubInteractiveObject {
 
     GHSubscription wrapUp(GHRepository repo) {
         this.repo = repo;
-        return wrapUp(repo.root());
-    }
-
-    GHSubscription wrapUp(GitHub root) {
         return this;
     }
 }

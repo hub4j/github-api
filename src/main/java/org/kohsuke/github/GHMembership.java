@@ -79,9 +79,7 @@ public class GHMembership extends GitHubInteractiveObject {
 
     GHMembership wrap(GitHub root) {
         if (user != null)
-            user = root.getUser(user.wrapUp(root));
-        if (organization != null)
-            organization.wrapUp(root);
+            user = root.getUser(user);
         return this;
     }
 

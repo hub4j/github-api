@@ -137,8 +137,8 @@ public class GHAppInstallation extends GHObject {
 
         @Override
         GHRepository[] getItems(GitHub root) {
-            for (GHRepository item : repositories)
-                item.wrap(root);
+            for (GHRepository item : repositories) {
+            }
             return repositories;
         }
     }
@@ -302,10 +302,6 @@ public class GHAppInstallation extends GHObject {
     @Deprecated
     public void setRepositorySelection(GHRepositorySelection repositorySelection) {
         throw new RuntimeException("Do not use this method.");
-    }
-
-    GHAppInstallation wrapUp(GitHub root) {
-        return this;
     }
 
     /**

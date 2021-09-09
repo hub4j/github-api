@@ -22,7 +22,6 @@ public class GHTagObject extends GitHubInteractiveObject {
 
     GHTagObject wrap(GHRepository owner) {
         this.owner = owner;
-        owner.root();
         return this;
     }
 

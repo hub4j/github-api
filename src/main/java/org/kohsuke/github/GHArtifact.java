@@ -130,12 +130,8 @@ public class GHArtifact extends GHObject {
 
     GHArtifact wrapUp(GHRepository owner) {
         this.owner = owner;
-        return wrapUp(owner.root());
-    }
-
-    GHArtifact wrapUp(GitHub root) {
-        if (owner != null)
-            owner.wrap(root);
+        this.owner = owner;
         return this;
     }
+
 }

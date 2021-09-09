@@ -75,22 +75,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     GHPullRequest wrapUp(GHRepository owner) {
         this.wrap(owner);
-        return wrapUp(owner.root());
-    }
-
-    GHPullRequest wrapUp(GitHub root) {
-        if (owner != null)
-            owner.wrap(root);
-        if (base != null)
-            base.wrapUp(root);
-        if (head != null)
-            head.wrapUp(root);
-        if (merged_by != null)
-            merged_by.wrapUp(root);
-        if (requested_reviewers != null)
-            GHUser.wrap(requested_reviewers, root);
-        if (requested_teams != null)
-            GHTeam.wrapUp(requested_teams, this);
         return this;
     }
 
@@ -379,7 +363,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Repopulates this object.
      */
     public void refresh() throws IOException {
-        if (root() == null || root().isOffline()) {
+        if (isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
 
@@ -572,8 +556,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
                 .method("PATCH")
                 .with("base", newBaseBranch)
                 .withUrlPath(getApiRoute())
-                .fetch(GHPullRequest.class)
-                .wrapUp(root());
+                .fetch(GHPullRequest.class);
     }
 
     /**

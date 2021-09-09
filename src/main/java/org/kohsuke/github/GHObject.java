@@ -64,7 +64,7 @@ public abstract class GHObject extends GitHubInteractiveObject {
     @CheckForNull
     @Deprecated
     public Map<String, List<String>> getResponseHeaderFields() {
-        return responseHeaderFields;
+        return GitHubClient.unmodifiableMapOrNull(responseHeaderFields);
     }
 
     /**

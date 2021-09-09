@@ -149,6 +149,6 @@ public class GHDeploymentStatusBuilder {
     public GHDeploymentStatus create() throws IOException {
         return builder.withUrlPath(repo.getApiTailUrl("deployments/" + deploymentId + "/statuses"))
                 .fetch(GHDeploymentStatus.class)
-                .wrap(repo);
+                .lateBind(repo);
     }
 }

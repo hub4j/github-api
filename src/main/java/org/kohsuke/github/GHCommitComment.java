@@ -31,6 +31,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }

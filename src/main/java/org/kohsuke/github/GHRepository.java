@@ -372,6 +372,7 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getOwner() throws IOException {
         return root.isOffline() ? owner : root.getUser(getOwnerName()); // because 'owner' isn't fully populated
     }
@@ -1680,7 +1681,7 @@ public class GHRepository extends GHObject {
         }
         requester.injectMappingValue("GHCompare_usePaginatedCommits", compareUsePaginatedCommits);
         GHCompare compare = requester.fetch(GHCompare.class);
-        return compare.wrap(this);
+        return compare.lateBind(this);
     }
 
     /**
@@ -2313,7 +2314,7 @@ public class GHRepository extends GHObject {
      * @return the post commit hooks
      * @deprecated Use {@link #getHooks()} and {@link #createHook(String, Map, Collection, boolean)}
      */
-    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
+    @SuppressFBWarnings(value = { "DMI_COLLECTION_OF_URLS", "EI_EXPOSE_REP" },
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     @Deprecated
     public Set<URL> getPostCommitHooks() {
@@ -2461,7 +2462,7 @@ public class GHRepository extends GHObject {
         return root.createRequest()
                 .with("state", state)
                 .withUrlPath(getApiTailUrl("milestones"))
-                .toIterable(GHMilestone[].class, item -> item.wrap(this));
+                .toIterable(GHMilestone[].class, item -> item.lateBind(this));
     }
 
     /**
@@ -2670,7 +2671,7 @@ public class GHRepository extends GHObject {
                 .with("description", description)
                 .withUrlPath(getApiTailUrl("milestones"))
                 .fetch(GHMilestone.class)
-                .wrap(this);
+                .lateBind(this);
     }
 
     /**
@@ -2691,7 +2692,7 @@ public class GHRepository extends GHObject {
                 .with("key", key)
                 .withUrlPath(getApiTailUrl("keys"))
                 .fetch(GHDeployKey.class)
-                .wrap(this);
+                .lateBind(this);
 
     }
 
@@ -2705,7 +2706,7 @@ public class GHRepository extends GHObject {
     public List<GHDeployKey> getDeployKeys() throws IOException {
         return root.createRequest()
                 .withUrlPath(getApiTailUrl("keys"))
-                .toIterable(GHDeployKey[].class, item -> item.wrap(this))
+                .toIterable(GHDeployKey[].class, item -> item.lateBind(this))
                 .toList();
     }
 
@@ -2718,6 +2719,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      * @see #getParent() #getParent()
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getSource() throws IOException {
         if (fork && source == null) {
             populate();
@@ -2739,6 +2741,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      * @see #getSource() #getSource()
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getParent() throws IOException {
         if (fork && parent == null) {
             populate();
@@ -2860,7 +2863,7 @@ public class GHRepository extends GHObject {
                 .with("body", body)
                 .withUrlPath(getApiTailUrl("projects"))
                 .fetch(GHProject.class)
-                .wrap(this);
+                .lateBind(this);
     }
 
     /**
@@ -2877,7 +2880,7 @@ public class GHRepository extends GHObject {
                 .withPreview(INERTIA)
                 .with("state", status)
                 .withUrlPath(getApiTailUrl("projects"))
-                .toIterable(GHProject[].class, item -> item.wrap(this));
+                .toIterable(GHProject[].class, item -> item.lateBind(this));
     }
 
     /**

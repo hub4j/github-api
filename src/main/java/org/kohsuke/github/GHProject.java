@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -57,6 +59,7 @@ public class GHProject extends GHObject {
      *
      * @return the root
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }
@@ -68,6 +71,7 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHObject getOwner() throws IOException {
         if (owner == null) {
             try {
@@ -150,21 +154,9 @@ public class GHProject extends GHObject {
      *
      * @return the creator
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getCreator() {
         return creator;
-    }
-
-    /**
-     * Wrap gh project.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh project
-     */
-    public GHProject wrap(GHRepository repo) {
-        this.owner = repo;
-        this.root = repo.root;
-        return this;
     }
 
     /**
@@ -174,9 +166,45 @@ public class GHProject extends GHObject {
      *            the root
      * @return the gh project
      */
+    @Deprecated
     public GHProject wrap(GitHub root) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param root
+     *            the root
+     * @return the gh project
+     */
+    GHProject lateBind(GitHub root) {
         this.root = root;
         return this;
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh project
+     */
+    @Deprecated
+    public GHProject wrap(GHRepository repo) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh project
+     */
+    GHProject lateBind(GHRepository repo) {
+        this.owner = repo;
+        return lateBind(repo.root);
     }
 
     private void edit(String key, Object value) throws IOException {
@@ -289,7 +317,7 @@ public class GHProject extends GHObject {
         return root.createRequest()
                 .withPreview(INERTIA)
                 .withUrlPath(String.format("/projects/%d/columns", getId()))
-                .toIterable(GHProjectColumn[].class, item -> item.wrap(project));
+                .toIterable(GHProjectColumn[].class, item -> item.lateBind(project));
     }
 
     /**
@@ -308,6 +336,6 @@ public class GHProject extends GHObject {
                 .with("name", name)
                 .withUrlPath(String.format("/projects/%d/columns", getId()))
                 .fetch(GHProjectColumn.class)
-                .wrap(this);
+                .lateBind(this);
     }
 }

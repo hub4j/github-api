@@ -1,11 +1,14 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -115,6 +118,7 @@ public class GHRelease extends GHObject {
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }
@@ -124,9 +128,11 @@ public class GHRelease extends GHObject {
      *
      * @param owner
      *            the owner
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setOwner(GHRepository owner) {
-        this.owner = owner;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -152,6 +158,7 @@ public class GHRelease extends GHObject {
      *
      * @return the root
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }
@@ -270,7 +277,7 @@ public class GHRelease extends GHObject {
      */
     @Deprecated
     public List<GHAsset> assets() {
-        return assets;
+        return Collections.unmodifiableList(assets);
     }
 
     /**

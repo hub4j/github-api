@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
      * @return the views
      */
     public List<DailyInfo> getViews() {
-        return views;
+        return Collections.unmodifiableList(views);
     }
 
     public List<DailyInfo> getDailyInfo() {

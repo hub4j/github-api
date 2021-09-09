@@ -3,6 +3,7 @@ package org.kohsuke.github.example.dataobject;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,7 +98,7 @@ public final class ReadOnlyObjects {
      * </ul>
      * Con:
      * <ul>
-     * <li>Exposes public setters for fields that should not be changed</li>
+     * <li>Exposes public setters for fields that should not be changed, flagged by spotbugs</li>
      * <li>Lists modifiable when they should not be changed</li>
      * <li>Jackson generally doesn't call the setters, it just sets the fields directly</li>
      * </ul>
@@ -130,6 +131,7 @@ public final class ReadOnlyObjects {
             this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getHooks() {
             return hooks;
         }
@@ -140,10 +142,12 @@ public final class ReadOnlyObjects {
          * @param hooks
          *            the hooks
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
         public void setHooks(List<String> hooks) {
             this.hooks = hooks;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getGit() {
             return git;
         }
@@ -154,10 +158,12 @@ public final class ReadOnlyObjects {
          * @param git
          *            the git
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
         public void setGit(List<String> git) {
             this.git = git;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getWeb() {
             return web;
         }
@@ -168,10 +174,12 @@ public final class ReadOnlyObjects {
          * @param web
          *            the web
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
         public void setWeb(List<String> web) {
             this.web = web;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getApi() {
             return api;
         }
@@ -182,10 +190,12 @@ public final class ReadOnlyObjects {
          * @param api
          *            the api
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
         public void setApi(List<String> api) {
             this.api = api;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getPages() {
             return pages;
         }
@@ -196,10 +206,12 @@ public final class ReadOnlyObjects {
          * @param pages
          *            the pages
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
         public void setPages(List<String> pages) {
             this.pages = pages;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getImporter() {
             return importer;
         }
@@ -210,6 +222,7 @@ public final class ReadOnlyObjects {
          * @param importer
          *            the importer
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
         public void setImporter(List<String> importer) {
             this.importer = importer;
         }
@@ -261,6 +274,7 @@ public final class ReadOnlyObjects {
         }
 
         @JsonProperty
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getHooks() {
             return hooks;
         }
@@ -276,6 +290,7 @@ public final class ReadOnlyObjects {
             this.hooks = hooks;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getGit() {
             return git;
         }
@@ -292,6 +307,7 @@ public final class ReadOnlyObjects {
             this.git = git;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getWeb() {
             return web;
         }
@@ -307,6 +323,7 @@ public final class ReadOnlyObjects {
         }
 
         @JsonProperty
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getApi() {
             return api;
         }
@@ -316,6 +333,7 @@ public final class ReadOnlyObjects {
         }
 
         @JsonProperty
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getPages() {
             return pages;
         }
@@ -329,6 +347,7 @@ public final class ReadOnlyObjects {
          *
          * @return list of importer addresses
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getImporter() {
             return importer;
         }
@@ -551,26 +570,32 @@ public final class ReadOnlyObjects {
             return verifiablePasswordAuthentication;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
         public List<String> getHooks() {
             return hooks;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
         public List<String> getGit() {
             return git;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
         public List<String> getWeb() {
             return web;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
         public List<String> getApi() {
             return api;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
         public List<String> getPages() {
             return pages;
         }
 
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
         public List<String> getImporter() {
             return importer;
         }

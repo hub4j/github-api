@@ -1,11 +1,13 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,7 +54,10 @@ public class GHAppInstallation extends GHObject {
      * Gets root.
      *
      * @return the root
+     * @deprecated This method should be used internally only.
      */
+    @Deprecated
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GitHub getRoot() {
         return root;
     }
@@ -66,7 +71,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setRoot(GitHub root) {
-        this.root = root;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -74,6 +79,7 @@ public class GHAppInstallation extends GHObject {
      *
      * @return the account
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getAccount() {
         return account;
     }
@@ -87,7 +93,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setAccount(GHUser account) {
-        this.account = account;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -108,7 +114,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setAccessTokenUrl(String accessTokenUrl) {
-        this.accessTokenUrl = accessTokenUrl;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -158,7 +164,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setRepositoriesUrl(String repositoriesUrl) {
-        this.repositoriesUrl = repositoriesUrl;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -179,7 +185,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setAppId(long appId) {
-        this.appId = appId;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -200,7 +206,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setTargetId(long targetId) {
-        this.targetId = targetId;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -221,7 +227,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setTargetType(GHTargetType targetType) {
-        this.targetType = targetType;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -230,7 +236,7 @@ public class GHAppInstallation extends GHObject {
      * @return the permissions
      */
     public Map<String, GHPermissionType> getPermissions() {
-        return permissions;
+        return Collections.unmodifiableMap(permissions);
     }
 
     /**
@@ -242,7 +248,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setPermissions(Map<String, GHPermissionType> permissions) {
-        this.permissions = permissions;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -265,7 +271,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setEvents(List<GHEvent> events) {
-        this.events = events.stream().map(GHEvent::symbol).collect(Collectors.toList());
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -286,7 +292,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setSingleFileName(String singleFileName) {
-        this.singleFileName = singleFileName;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -307,7 +313,7 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-        this.repositorySelection = repositorySelection;
+        throw new RuntimeException("Do not use this method.");
     }
 
     GHAppInstallation wrapUp(GitHub root) {

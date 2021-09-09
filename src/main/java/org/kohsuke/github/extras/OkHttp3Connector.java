@@ -1,5 +1,6 @@
 package org.kohsuke.github.extras;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import okhttp3.OkHttpClient;
 import okhttp3.OkUrlFactory;
 import org.kohsuke.github.HttpConnector;
@@ -19,6 +20,7 @@ import java.net.URL;
  * @see org.kohsuke.github.extras.okhttp3.OkHttpConnector
  */
 @Deprecated
+@SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Deprecated")
 public class OkHttp3Connector implements HttpConnector {
     private final OkUrlFactory urlFactory;
 

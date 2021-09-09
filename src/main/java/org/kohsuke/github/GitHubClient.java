@@ -710,4 +710,12 @@ abstract class GitHubClient {
         }
         return MAPPER.reader(new InjectableValues.Std(injected));
     }
+
+    static <K, V> Map<K, V> unmodifiableMapOrNull(Map<? extends K, ? extends V> map) {
+        return map == null ? null : Collections.unmodifiableMap(map);
+    }
+
+    static <T> List<T> unmodifiableListOrNull(List<? extends T> list) {
+        return list == null ? null : Collections.unmodifiableList(list);
+    }
 }

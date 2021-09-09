@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -80,6 +81,7 @@ public class GHGist extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getOwner() throws IOException {
         return owner;
     }
@@ -182,7 +184,7 @@ public class GHGist extends GHObject {
      * @return the files
      */
     public Map<String, GHGistFile> getFiles() {
-        return files;
+        return Collections.unmodifiableMap(files);
     }
 
     String getApiTailUrl(String tail) {

@@ -30,7 +30,7 @@ public class GHCheckSuite extends GHObject {
     private String before;
     private String after;
     private int latestCheckRunsCount;
-    private URL checkRunsUrl;
+    private String checkRunsUrl;
     private HeadCommit headCommit;
     private GHApp app;
     private GHPullRequest[] pullRequests;
@@ -142,7 +142,7 @@ public class GHCheckSuite extends GHObject {
      * @return url containing all check runs
      */
     public URL getCheckRunsUrl() {
-        return checkRunsUrl;
+        return GitHubClient.parseURL(checkRunsUrl);
     }
 
     /**
@@ -159,6 +159,7 @@ public class GHCheckSuite extends GHObject {
      *
      * @return GitHub App
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHApp getApp() {
         return app;
     }

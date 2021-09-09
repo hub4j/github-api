@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * The response that is returned when updating repository content.
  */
@@ -12,6 +14,7 @@ public class GHContentUpdateResponse {
      *
      * @return the content
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHContent getContent() {
         return content;
     }
@@ -21,6 +24,7 @@ public class GHContentUpdateResponse {
      *
      * @return the commit
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHCommit getCommit() {
         return commit;
     }

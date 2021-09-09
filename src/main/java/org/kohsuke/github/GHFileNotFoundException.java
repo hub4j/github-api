@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +52,7 @@ public class GHFileNotFoundException extends FileNotFoundException {
      */
     @CheckForNull
     public Map<String, List<String>> getResponseHeaderFields() {
-        return responseHeaderFields;
+        return Collections.unmodifiableMap(responseHeaderFields);
     }
 
     GHFileNotFoundException withResponseHeaderFields(@Nonnull Map<String, List<String>> headerFields) {

@@ -281,6 +281,7 @@ public class GHCommit {
      *
      * @return the repository that contains the commit.
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }

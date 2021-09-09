@@ -7,8 +7,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Date;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
 
 /**
  * @author Martin van Zijl
@@ -54,6 +54,10 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         // The time is truncated when sent to the server, but still part of the returned value
         // 07:00 midnight PDT
         assertThat(milestone.getDueOn(), equalTo(OUTPUT_DUE_DATE));
+        assertThat(milestone.getHtmlUrl().toString(), containsString("/hub4j-test-org/github-api/milestone/"));
+        assertThat(milestone.getUrl().toString(), containsString("/repos/hub4j-test-org/github-api/milestones/"));
+        assertThat(milestone.getClosedIssues(), equalTo(0));
+        assertThat(milestone.getOpenIssues(), equalTo(0));
     }
 
     @Test

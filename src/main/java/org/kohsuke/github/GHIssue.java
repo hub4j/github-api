@@ -75,7 +75,7 @@ public class GHIssue extends GHObject implements Reactable {
     GHIssue wrap(GHRepository owner) {
         this.owner = owner;
         if (milestone != null)
-            milestone.wrap(owner);
+            milestone.lateBind(owner);
         return wrap(owner.root);
     }
 
@@ -97,6 +97,7 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
         return owner;
     }
@@ -696,6 +697,7 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * @return the milestone
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHMilestone getMilestone() {
         return milestone;
     }
@@ -703,8 +705,7 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * The type PullRequest.
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },
-            justification = "JSON API")
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class PullRequest {
         private String diff_url, patch_url, html_url;
 

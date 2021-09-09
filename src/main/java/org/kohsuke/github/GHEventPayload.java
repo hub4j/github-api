@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,7 @@ import java.util.Map;
  * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads">Webhook events
  *      and payloads</a>
  */
-@SuppressWarnings("UnusedDeclaration")
-@SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHEventPayload extends GitHubInteractiveObject {
     // https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#webhook-payload-object-common-properties
     // Webhook payload object common properties: action, sender, repository, organization, installation
@@ -46,6 +46,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @return the sender or {@code null} if accessed via the events API.
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHUser getSender() {
         return sender;
     }
@@ -55,9 +56,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @param sender
      *            the sender
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setSender(GHUser sender) {
-        this.sender = sender;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -65,6 +68,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHRepository getRepository() {
         return repository;
     }
@@ -74,9 +78,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @param repository
      *            the repository
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRepository(GHRepository repository) {
-        this.repository = repository;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -84,6 +90,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @return the organization
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHOrganization getOrganization() {
         return organization;
     }
@@ -93,9 +100,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @param organization
      *            the organization
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setOrganization(GHOrganization organization) {
-        this.organization = organization;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -103,6 +112,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @return the installation
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHAppInstallation getInstallation() {
         return installation;
     }
@@ -157,9 +167,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param currentCheckRun
          *            the check run object
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setCheckRun(GHCheckRun currentCheckRun) {
-            this.checkRun = currentCheckRun;
+            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -167,6 +179,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the current checkRun object
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHCheckRun getCheckRun() {
             return checkRun;
         }
@@ -176,9 +189,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param currentRequestedAction
          *            the current action
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setCheckRun(GHRequestedAction currentRequestedAction) {
-            this.requestedAction = currentRequestedAction;
+            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -186,6 +201,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the requested action
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHRequestedAction getRequestedAction() {
             return requestedAction;
         }
@@ -220,6 +236,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the Check Suite object
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHCheckSuite getCheckSuite() {
             return checkSuite;
         }
@@ -256,7 +273,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the repositories
          */
         public List<GHRepository> getRepositories() {
-            return repositories;
+            return Collections.unmodifiableList(repositories);
         };
 
         @Override
@@ -308,7 +325,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the repositories
          */
         public List<GHRepository> getRepositoriesAdded() {
-            return repositoriesAdded;
+            return Collections.unmodifiableList(repositoriesAdded);
         }
 
         /**
@@ -317,7 +334,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the repositories
          */
         public List<GHRepository> getRepositoriesRemoved() {
-            return repositoriesRemoved;
+            return Collections.unmodifiableList(repositoriesRemoved);
         }
 
         @Override
@@ -376,6 +393,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the pull request
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHPullRequest getPullRequest() {
             pullRequest.root = root;
             return pullRequest;
@@ -386,6 +404,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return label the added or removed label
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHLabel getLabel() {
             return label;
         }
@@ -395,6 +414,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return changes
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHPullRequestChanges getChanges() {
             return changes;
         }
@@ -431,6 +451,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the review
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHPullRequestReview getReview() {
             return review;
         }
@@ -440,6 +461,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the pull request
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHPullRequest getPullRequest() {
             return pullRequest;
         }
@@ -479,6 +501,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the comment
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHPullRequestReviewComment getComment() {
             return comment;
         }
@@ -488,6 +511,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the pull request
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHPullRequest getPullRequest() {
             return pullRequest;
         }
@@ -530,6 +554,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the issue
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHIssue getIssue() {
             return issue;
         }
@@ -539,9 +564,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param issue
          *            the issue
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setIssue(GHIssue issue) {
-            this.issue = issue;
+            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -549,6 +576,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return label the added or removed label
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHLabel getLabel() {
             return label;
         }
@@ -558,6 +586,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return changes
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHIssueChanges getChanges() {
             return changes;
         }
@@ -591,6 +620,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the comment
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHIssueComment getComment() {
             return comment;
         }
@@ -600,9 +630,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param comment
          *            the comment
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setComment(GHIssueComment comment) {
-            this.comment = comment;
+            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -610,6 +642,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the issue
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHIssue getIssue() {
             return issue;
         }
@@ -619,9 +652,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param issue
          *            the issue
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setIssue(GHIssue issue) {
-            this.issue = issue;
+            throw new RuntimeException("Do not use this method.");
         }
 
         @Override
@@ -653,6 +688,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the comment
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHCommitComment getComment() {
             return comment;
         }
@@ -662,9 +698,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param comment
          *            the comment
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setComment(GHCommitComment comment) {
-            this.comment = comment;
+            throw new RuntimeException("Do not use this method.");
         }
 
         @Override
@@ -695,7 +733,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the ref
          */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
         public String getRef() {
             return ref;
         }
@@ -705,7 +742,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the ref type
          */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
         public String getRefType() {
             return refType;
         }
@@ -717,7 +753,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the default branch
          */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
         public String getMasterBranch() {
             return masterBranch;
         }
@@ -727,7 +762,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the description
          */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
         public String getDescription() {
             return description;
         }
@@ -749,7 +783,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the ref
          */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
         public String getRef() {
             return ref;
         }
@@ -759,7 +792,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the ref type
          */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Comes from JSON deserialization")
         public String getRefType() {
             return refType;
         }
@@ -780,6 +812,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the deployment
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHDeployment getDeployment() {
             return deployment;
         }
@@ -789,9 +822,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param deployment
          *            the deployment
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setDeployment(GHDeployment deployment) {
-            this.deployment = deployment;
+            throw new RuntimeException("Do not use this method.");
         }
 
         @Override
@@ -821,6 +856,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the deployment status
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHDeploymentStatus getDeploymentStatus() {
             return deploymentStatus;
         }
@@ -830,9 +866,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param deploymentStatus
          *            the deployment status
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setDeploymentStatus(GHDeploymentStatus deploymentStatus) {
-            this.deploymentStatus = deploymentStatus;
+            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -840,6 +878,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the deployment
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHDeployment getDeployment() {
             return deployment;
         }
@@ -849,9 +888,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param deployment
          *            the deployment
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setDeployment(GHDeployment deployment) {
-            this.deployment = deployment;
+            throw new RuntimeException("Do not use this method.");
         }
 
         @Override
@@ -860,7 +901,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
             GHRepository repository = getRepository();
             if (repository != null) {
                 deployment.wrap(repository);
-                deploymentStatus.wrap(repository);
+                deploymentStatus.lateBind(repository);
             }
         }
     }
@@ -880,6 +921,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the forkee
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHRepository getForkee() {
             return forkee;
         }
@@ -889,9 +931,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param forkee
          *            the forkee
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setForkee(GHRepository forkee) {
-            this.forkee = forkee;
+            throw new RuntimeException("Do not use this method.");
         }
 
         @Override
@@ -1011,7 +1055,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the commits
          */
         public List<PushCommit> getCommits() {
-            return commits;
+            return Collections.unmodifiableList(commits);
         }
 
         /**
@@ -1019,6 +1063,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the pusher
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public Pusher getPusher() {
             return pusher;
         }
@@ -1028,9 +1073,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param pusher
          *            the pusher
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setPusher(Pusher pusher) {
-            this.pusher = pusher;
+            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -1062,9 +1109,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
              *
              * @param name
              *            the name
+             * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
              */
+            @Deprecated
             public void setName(String name) {
-                this.name = name;
+                throw new RuntimeException("Do not use this method.");
             }
 
             /**
@@ -1081,9 +1130,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
              *
              * @param email
              *            the email
+             * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
              */
+            @Deprecated
             public void setEmail(String email) {
-                this.email = email;
+                throw new RuntimeException("Do not use this method.");
             }
         }
 
@@ -1162,7 +1213,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the added
              */
             public List<String> getAdded() {
-                return added;
+                return Collections.unmodifiableList(added);
             }
 
             /**
@@ -1171,7 +1222,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the removed
              */
             public List<String> getRemoved() {
-                return removed;
+                return Collections.unmodifiableList(removed);
             }
 
             /**
@@ -1180,7 +1231,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the modified
              */
             public List<String> getModified() {
-                return modified;
+                return Collections.unmodifiableList(modified);
             }
 
             /**
@@ -1211,6 +1262,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the release
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHRelease getRelease() {
             return release;
         }
@@ -1220,9 +1272,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param release
          *            the release
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setRelease(GHRelease release) {
-            this.release = release;
+            throw new RuntimeException("Do not use this method.");
         }
     }
 
@@ -1292,9 +1346,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param state
          *            status state
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setState(GHCommitState state) {
-            this.state = state;
+            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -1302,6 +1358,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return commit
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHCommit getCommit() {
             return commit;
         }
@@ -1311,9 +1368,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param commit
          *            commit
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setCommit(GHCommit commit) {
-            this.commit = commit;
+            throw new RuntimeException("Do not use this method.");
         }
 
         @Override
@@ -1352,7 +1411,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the map of input parameters
          */
         public Map<String, Object> getInputs() {
-            return inputs;
+            return Collections.unmodifiableMap(inputs);
         }
 
         /**
@@ -1391,6 +1450,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the workflow run
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHWorkflowRun getWorkflowRun() {
             return workflowRun;
         }
@@ -1400,6 +1460,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the associated workflow
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHWorkflow getWorkflow() {
             return workflow;
         }
@@ -1437,6 +1498,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the label
          */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
         public GHLabel getLabel() {
             return label;
         }

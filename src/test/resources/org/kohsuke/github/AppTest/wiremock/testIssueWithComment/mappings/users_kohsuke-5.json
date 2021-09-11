@@ -1,8 +1,8 @@
 {
-  "id": "48b2f967-216a-4753-ba69-62685e448b75",
-  "name": "user",
+  "id": "89560905-fbd1-4837-8df1-1b26b3550b12",
+  "name": "users_kohsuke",
   "request": {
-    "url": "/user",
+    "url": "/users/kohsuke",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,25 +12,25 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "user-1.json",
+    "bodyFileName": "users_kohsuke-5.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Sat, 11 Sep 2021 07:32:33 GMT",
+      "Date": "Sat, 11 Sep 2021 07:03:04 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"1e4a53189cfad918f0dc47242f1cf6851fa90ece03a5a078f56dcb6d39398c79\"",
-      "Last-Modified": "Fri, 10 Sep 2021 14:35:52 GMT",
+      "ETag": "W/\"2f9a9f8e413765119df0e062c48ab8f926c00c7034e0f14f91bc577ac636c338\"",
+      "Last-Modified": "Mon, 30 Aug 2021 20:04:20 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4899",
+      "X-RateLimit-Remaining": "4931",
       "X-RateLimit-Reset": "1631346154",
-      "X-RateLimit-Used": "101",
+      "X-RateLimit-Used": "69",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -38,10 +38,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D388:8A77:2D863B:322F79:613C5B90"
+      "X-GitHub-Request-Id": "D36A:32F5:6EB88E:7453CF:613C54A8"
     }
   },
-  "uuid": "48b2f967-216a-4753-ba69-62685e448b75",
+  "uuid": "89560905-fbd1-4837-8df1-1b26b3550b12",
   "persistent": true,
-  "insertionIndex": 1
+  "insertionIndex": 5
 }

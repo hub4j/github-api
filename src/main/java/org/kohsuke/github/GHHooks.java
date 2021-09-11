@@ -27,8 +27,8 @@ class GHHooks {
          */
         public List<GHHook> getHooks() throws IOException {
 
-            GHHook[] hookArray = root().createRequest().withUrlPath(collection()).fetch(collectionClass()); // jdk/eclipse
-                                                                                                            // bug
+            // jdk/eclipse bug
+            GHHook[] hookArray = root().createRequest().withUrlPath(collection()).fetch(collectionClass());
             // requires this
             // to be on separate line
             List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));

@@ -1,5 +1,5 @@
 {
-  "id": "bfa0b4a7-b631-4985-8e94-165089b4abbb",
+  "id": "63a37d11-81e6-47f4-b14d-4e3255143ab7",
   "name": "repos_kohsuke_test_issues_4",
   "request": {
     "url": "/repos/kohsuke/test/issues/4",
@@ -14,35 +14,34 @@
     "status": 200,
     "bodyFileName": "repos_kohsuke_test_issues_4-3.json",
     "headers": {
-      "Date": "Fri, 22 Jan 2021 18:17:31 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
+      "Date": "Sat, 11 Sep 2021 06:56:14 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"9d1eb2299b3485f2f67b89dabf14a564021c0012e25ebfc9f56b302cd79fd3fe\"",
-      "last-modified": "Tue, 29 Dec 2020 01:03:48 GMT",
+      "ETag": "W/\"3803d7456837240d9e2006ae62417faa16179f1dfedd15441a160c00712899d5\"",
+      "Last-Modified": "Mon, 30 Aug 2021 20:04:20 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4933",
-      "X-RateLimit-Reset": "1611341728",
-      "x-ratelimit-used": "67",
+      "X-RateLimit-Remaining": "4985",
+      "X-RateLimit-Reset": "1631346154",
+      "X-RateLimit-Used": "15",
+      "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C1CD:3B98:1C8B50:213261:600B16BB"
+      "X-GitHub-Request-Id": "D39E:860B:740BA1:79B8A2:613C530E"
     }
   },
-  "uuid": "bfa0b4a7-b631-4985-8e94-165089b4abbb",
+  "uuid": "63a37d11-81e6-47f4-b14d-4e3255143ab7",
   "persistent": true,
   "insertionIndex": 3
 }

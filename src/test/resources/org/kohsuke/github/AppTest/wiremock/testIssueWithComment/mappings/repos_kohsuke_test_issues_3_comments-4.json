@@ -1,5 +1,5 @@
 {
-  "id": "19cd2239-5813-4b95-9e1b-93238535fd98",
+  "id": "b730b957-6403-4077-87b1-1ea732bc3182",
   "name": "repos_kohsuke_test_issues_3_comments",
   "request": {
     "url": "/repos/kohsuke/test/issues/3/comments",
@@ -12,36 +12,38 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_kohsuke_test_issues_3_comments-6.json",
+    "bodyFileName": "repos_kohsuke_test_issues_3_comments-4.json",
     "headers": {
-      "Date": "Fri, 22 Jan 2021 18:17:32 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
+      "Date": "Sat, 11 Sep 2021 07:03:04 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"dd55742c97be12871eade5263a2ea712626f2a3dcc90aae7295300d9bc6083b2\"",
+      "ETag": "W/\"acc78f75dc73507b01f43951c2819009d0f985cb12cef25af138f927cfb03762\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4930",
-      "X-RateLimit-Reset": "1611341728",
-      "x-ratelimit-used": "70",
+      "X-RateLimit-Remaining": "4932",
+      "X-RateLimit-Reset": "1631346154",
+      "X-RateLimit-Used": "68",
+      "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C1CD:3B98:1C8B5D:213279:600B16BB"
+      "X-GitHub-Request-Id": "D368:8A76:1C4D8C:208793:613C54A8"
     }
   },
-  "uuid": "19cd2239-5813-4b95-9e1b-93238535fd98",
+  "uuid": "b730b957-6403-4077-87b1-1ea732bc3182",
   "persistent": true,
-  "insertionIndex": 6
+  "scenarioName": "scenario-1-repos-kohsuke-test-issues-3-comments",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-kohsuke-test-issues-3-comments-2",
+  "insertionIndex": 4
 }

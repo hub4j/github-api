@@ -137,8 +137,6 @@ public class GHAppInstallation extends GHObject {
 
         @Override
         GHRepository[] getItems(GitHub root) {
-            for (GHRepository item : repositories) {
-            }
             return repositories;
         }
     }

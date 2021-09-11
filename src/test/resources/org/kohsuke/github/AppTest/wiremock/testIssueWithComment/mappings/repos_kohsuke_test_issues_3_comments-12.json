@@ -1,8 +1,8 @@
 {
-  "id": "48b2f967-216a-4753-ba69-62685e448b75",
-  "name": "user",
+  "id": "83627e28-47f6-4933-954c-3910e5392e5d",
+  "name": "repos_kohsuke_test_issues_3_comments",
   "request": {
-    "url": "/user",
+    "url": "/repos/kohsuke/test/issues/3/comments",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,25 +12,24 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "user-1.json",
+    "bodyFileName": "repos_kohsuke_test_issues_3_comments-12.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Sat, 11 Sep 2021 07:32:33 GMT",
+      "Date": "Sat, 11 Sep 2021 07:03:06 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"1e4a53189cfad918f0dc47242f1cf6851fa90ece03a5a078f56dcb6d39398c79\"",
-      "Last-Modified": "Fri, 10 Sep 2021 14:35:52 GMT",
+      "ETag": "W/\"acc78f75dc73507b01f43951c2819009d0f985cb12cef25af138f927cfb03762\"",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4899",
+      "X-RateLimit-Remaining": "4924",
       "X-RateLimit-Reset": "1631346154",
-      "X-RateLimit-Used": "101",
+      "X-RateLimit-Used": "76",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -38,10 +37,12 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D388:8A77:2D863B:322F79:613C5B90"
+      "X-GitHub-Request-Id": "D378:60B8:79A8ED:7F4295:613C54A9"
     }
   },
-  "uuid": "48b2f967-216a-4753-ba69-62685e448b75",
+  "uuid": "83627e28-47f6-4933-954c-3910e5392e5d",
   "persistent": true,
-  "insertionIndex": 1
+  "scenarioName": "scenario-1-repos-kohsuke-test-issues-3-comments",
+  "requiredScenarioState": "scenario-1-repos-kohsuke-test-issues-3-comments-3",
+  "insertionIndex": 12
 }

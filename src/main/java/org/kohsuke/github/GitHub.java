@@ -1331,8 +1331,11 @@ public class GitHub {
     @Nonnull
     Requester createRequest() {
         Requester requester = new Requester(client);
-        // For classes that extend GitHub, treat them still as a GitHub instance
-        requester.injectMappingValue(GitHub.class.getName(), this);
+        requester.injectMappingValue(this);
+        if (!this.getClass().equals(GitHub.class)) {
+            // For classes that extend GitHub, treat them still as a GitHub instance
+            requester.injectMappingValue(GitHub.class.getName(), this);
+        }
         return requester;
     }
 

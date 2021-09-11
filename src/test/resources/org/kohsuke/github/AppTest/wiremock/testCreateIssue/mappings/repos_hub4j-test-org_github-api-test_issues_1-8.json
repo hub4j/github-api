@@ -1,8 +1,8 @@
 {
-  "id": "48b2f967-216a-4753-ba69-62685e448b75",
-  "name": "user",
+  "id": "84e98afa-b226-46f1-aa09-b103191ec0d8",
+  "name": "repos_hub4j-test-org_github-api-test_issues_1",
   "request": {
-    "url": "/user",
+    "url": "/repos/hub4j-test-org/github-api-test/issues/1",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,25 +12,25 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "user-1.json",
+    "bodyFileName": "repos_hub4j-test-org_github-api-test_issues_1-8.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Sat, 11 Sep 2021 07:32:33 GMT",
+      "Date": "Sat, 11 Sep 2021 07:32:39 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"1e4a53189cfad918f0dc47242f1cf6851fa90ece03a5a078f56dcb6d39398c79\"",
-      "Last-Modified": "Fri, 10 Sep 2021 14:35:52 GMT",
+      "ETag": "W/\"53d51b439c282d3488deaebff8924e91a56364af2f4ddefdf2dfd800e6055599\"",
+      "Last-Modified": "Sat, 11 Sep 2021 07:32:39 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
-      "X-Accepted-OAuth-Scopes": "",
+      "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4899",
+      "X-RateLimit-Remaining": "4888",
       "X-RateLimit-Reset": "1631346154",
-      "X-RateLimit-Used": "101",
+      "X-RateLimit-Used": "112",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -38,10 +38,12 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D388:8A77:2D863B:322F79:613C5B90"
+      "X-GitHub-Request-Id": "D39A:860A:4176D3:468FB7:613C5B97"
     }
   },
-  "uuid": "48b2f967-216a-4753-ba69-62685e448b75",
+  "uuid": "84e98afa-b226-46f1-aa09-b103191ec0d8",
   "persistent": true,
-  "insertionIndex": 1
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-test-issues-1",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-github-api-test-issues-1-2",
+  "insertionIndex": 8
 }

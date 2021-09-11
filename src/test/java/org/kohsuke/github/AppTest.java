@@ -17,6 +17,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 
@@ -138,9 +139,13 @@ public class AppTest extends AbstractGitHubWireMockTest {
         List<GHIssueComment> v = i.getComments();
         // System.out.println(v);
         assertThat(v, is(empty()));
+    }
 
-        i = repository.getIssue(3);
-        v = i.getComments();
+    @Test
+    public void testIssueWithComment() throws IOException {
+        GHRepository repository = gitHub.getRepository("kohsuke/test");
+        GHIssue i = repository.getIssue(3);
+        List<GHIssueComment> v = i.getComments();
         // System.out.println(v);
         assertThat(v.size(), equalTo(3));
         assertThat(v.get(0).getHtmlUrl().toString(),
@@ -160,10 +165,33 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(v.get(1).getUser().getLogin(), equalTo("kohsuke"));
         List<GHReaction> reactions = v.get(1).listReactions().toList();
         assertThat(reactions.size(), equalTo(3));
+        assertThat(reactions.stream().map(item -> item.getContent()).collect(Collectors.toList()),
+                containsInAnyOrder(ReactionContent.EYES, ReactionContent.HOORAY, ReactionContent.ROCKET));
 
         // TODO: Add comment CRUD test
-        // TODO: Add reactions CRUD test
 
+        GHReaction reaction = null;
+        try {
+            reaction = v.get(1).createReaction(ReactionContent.CONFUSED);
+            v = i.getComments();
+            reactions = v.get(1).listReactions().toList();
+            assertThat(reactions.stream().map(item -> item.getContent()).collect(Collectors.toList()),
+                    containsInAnyOrder(ReactionContent.CONFUSED,
+                            ReactionContent.EYES,
+                            ReactionContent.HOORAY,
+                            ReactionContent.ROCKET));
+
+            reaction.delete();
+            reaction = null;
+            v = i.getComments();
+            reactions = v.get(1).listReactions().toList();
+            assertThat(reactions.stream().map(item -> item.getContent()).collect(Collectors.toList()),
+                    containsInAnyOrder(ReactionContent.EYES, ReactionContent.HOORAY, ReactionContent.ROCKET));
+        } finally {
+            if (reaction != null) {
+                reaction.delete();
+            }
+        }
     }
 
     @Test
@@ -179,6 +207,17 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .milestone(milestone)
                 .create();
         assertThat(o, notNullValue());
+        assertThat(o.getBody(), equalTo("this is body"));
+
+        // test locking
+        assertThat(o.isLocked(), is(false));
+        o.lock();
+        o = repository.getIssue(o.getNumber());
+        assertThat(o.isLocked(), is(true));
+        o.unlock();
+        o = repository.getIssue(o.getNumber());
+        assertThat(o.isLocked(), is(false));
+
         o.close();
     }
 
@@ -771,6 +810,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         // System.out.println(state);
         assertThat(state.getDescription(), equalTo("testing!"));
         assertThat(state.getTargetUrl(), equalTo("http://kohsuke.org/"));
+        assertThat(state.getCreator().getLogin(), equalTo("kohsuke"));
     }
 
     @Test

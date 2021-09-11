@@ -130,7 +130,6 @@ public class GHArtifact extends GHObject {
 
     GHArtifact wrapUp(GHRepository owner) {
         this.owner = owner;
-        this.owner = owner;
         return this;
     }
 

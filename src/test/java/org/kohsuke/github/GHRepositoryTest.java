@@ -495,7 +495,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat("Comment text found",
                 commitComments.stream().map(GHCommitComment::getBody).collect(Collectors.toList()),
                 containsInAnyOrder("comment 1", "comment 2"));
-
     }
 
     @Test // Issue #261

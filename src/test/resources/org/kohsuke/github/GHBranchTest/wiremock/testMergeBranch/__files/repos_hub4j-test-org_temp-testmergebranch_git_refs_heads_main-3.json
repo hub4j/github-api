@@ -1,10 +1,10 @@
 {
   "ref": "refs/heads/main",
-  "node_id": "MDM6UmVmMjgzMzEzNTkzOnJlZnMvaGVhZHMvbWFzdGVy",
+  "node_id": "MDM6UmVmNDA2NTE1NjIyOnJlZnMvaGVhZHMvbWFpbg==",
   "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/refs/heads/main",
   "object": {
-    "sha": "688a1c3f8bc67deb767f68560ed8c7350d70d50f",
+    "sha": "90bbfcb03e9ddcd9ccb4894a417e4a1cf3c8fbd5",
     "type": "commit",
-    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/688a1c3f8bc67deb767f68560ed8c7350d70d50f"
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/90bbfcb03e9ddcd9ccb4894a417e4a1cf3c8fbd5"
   }
 }

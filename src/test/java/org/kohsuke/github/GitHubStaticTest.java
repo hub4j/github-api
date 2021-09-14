@@ -329,6 +329,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         // This should never happen if the internal method isn't used
         final GHRepository readRepoFinal = readRepo;
         assertThrows(NullPointerException.class, () -> readRepoFinal.getRoot());
+        assertThrows(NullPointerException.class, () -> readRepoFinal.root());
+        assertThat(readRepoFinal.isOffline(), is(true));
         assertThat(readRepo.getResponseHeaderFields(), nullValue());
 
         readRepo = GitHub.getMappingObjectReader().forType(GHRepository.class).readValue(repoString);

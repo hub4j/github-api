@@ -1,25 +1,25 @@
 {
   "name": "testBranch2",
   "commit": {
-    "sha": "506cfc5bb47ac087b26c6d95d0ad305c5917c4b2",
-    "node_id": "MDY6Q29tbWl0MjgzMzEzNTkzOjUwNmNmYzViYjQ3YWMwODdiMjZjNmQ5NWQwYWQzMDVjNTkxN2M0YjI=",
+    "sha": "40c8528e09198f7c8f4d707f7932680befba487b",
+    "node_id": "MDY6Q29tbWl0NDA2NTE1NjIyOjQwYzg1MjhlMDkxOThmN2M4ZjRkNzA3Zjc5MzI2ODBiZWZiYTQ4N2I=",
     "commit": {
       "author": {
         "name": "Liam Newman",
         "email": "bitwiseman@gmail.com",
-        "date": "2020-07-28T19:54:57Z"
+        "date": "2021-09-14T20:43:13Z"
       },
       "committer": {
         "name": "Liam Newman",
         "email": "bitwiseman@gmail.com",
-        "date": "2020-07-28T19:54:57Z"
+        "date": "2021-09-14T20:43:13Z"
       },
-      "message": "testBranch2",
+      "message": "refs/heads/testBranch2",
       "tree": {
-        "sha": "a183aaff617bc52ba1bdcea74faf24687194faf1",
-        "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/trees/a183aaff617bc52ba1bdcea74faf24687194faf1"
+        "sha": "7fa66a75b5edb80c2c35a061dc7609379a347d1e",
+        "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/trees/7fa66a75b5edb80c2c35a061dc7609379a347d1e"
       },
-      "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/506cfc5bb47ac087b26c6d95d0ad305c5917c4b2",
+      "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/40c8528e09198f7c8f4d707f7932680befba487b",
       "comment_count": 0,
       "verification": {
         "verified": false,
@@ -28,14 +28,14 @@
         "payload": null
       }
     },
-    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/506cfc5bb47ac087b26c6d95d0ad305c5917c4b2",
-    "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/506cfc5bb47ac087b26c6d95d0ad305c5917c4b2",
-    "comments_url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/506cfc5bb47ac087b26c6d95d0ad305c5917c4b2/comments",
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/40c8528e09198f7c8f4d707f7932680befba487b",
+    "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/40c8528e09198f7c8f4d707f7932680befba487b",
+    "comments_url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/40c8528e09198f7c8f4d707f7932680befba487b/comments",
     "author": {
       "login": "bitwiseman",
       "id": 1958953,
       "node_id": "MDQ6VXNlcjE5NTg5NTM=",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1958953?v=4",
       "gravatar_id": "",
       "url": "https://api.github.com/users/bitwiseman",
       "html_url": "https://github.com/bitwiseman",
@@ -55,7 +55,7 @@
       "login": "bitwiseman",
       "id": 1958953,
       "node_id": "MDQ6VXNlcjE5NTg5NTM=",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1958953?v=4",
       "gravatar_id": "",
       "url": "https://api.github.com/users/bitwiseman",
       "html_url": "https://github.com/bitwiseman",
@@ -73,9 +73,9 @@
     },
     "parents": [
       {
-        "sha": "688a1c3f8bc67deb767f68560ed8c7350d70d50f",
-        "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/688a1c3f8bc67deb767f68560ed8c7350d70d50f",
-        "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/688a1c3f8bc67deb767f68560ed8c7350d70d50f"
+        "sha": "90bbfcb03e9ddcd9ccb4894a417e4a1cf3c8fbd5",
+        "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/90bbfcb03e9ddcd9ccb4894a417e4a1cf3c8fbd5",
+        "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/90bbfcb03e9ddcd9ccb4894a417e4a1cf3c8fbd5"
       }
     ]
   },

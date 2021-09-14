@@ -736,6 +736,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRef, notNullValue());
         assertThat(ghRef.getRef(), equalTo("refs/heads/gh-pages"));
         assertThat(ghRefWithPrefix.getRef(), equalTo(ghRef.getRef()));
+        assertThat(ghRefWithPrefix.getObject().getType(), equalTo("commit"));
+        assertThat(ghRefWithPrefix.getObject().getUrl().toString(),
+                containsString("/repos/hub4j-test-org/github-api/git/commits/"));
 
         // git/refs/heads/gh-pages
         ghRef = repo.getRef("heads/gh-pages");

@@ -28,6 +28,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
+import org.kohsuke.github.authorization.UserAuthorizationProvider;
 import org.kohsuke.github.internal.Previews;
 
 import java.io.*;
@@ -115,23 +117,70 @@ public class GitHub {
             AuthorizationProvider authorizationProvider) throws IOException {
         if (authorizationProvider instanceof DependentAuthorizationProvider) {
             ((DependentAuthorizationProvider) authorizationProvider).bind(this);
+        } else if (authorizationProvider instanceof ImmutableAuthorizationProvider
+                && authorizationProvider instanceof UserAuthorizationProvider) {
+            UserAuthorizationProvider provider = (UserAuthorizationProvider) authorizationProvider;
+            if (provider.getLogin() == null && provider.getEncodedAuthorization() != null
+                    && provider.getEncodedAuthorization().startsWith("token")) {
+                authorizationProvider = new LoginLoadingUserAuthorizationProvider(provider, this);
+            }
         }
+
+        users = new ConcurrentHashMap<>();
+        orgs = new ConcurrentHashMap<>();
 
         this.client = new GitHubHttpUrlConnectionClient(apiUrl,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
-                (myself) -> setMyself(myself),
                 authorizationProvider);
-        users = new ConcurrentHashMap<>();
-        orgs = new ConcurrentHashMap<>();
+
+        // Ensure we have the login if it is available
+        // This preserves previously existing behavior. Consider removing in future.
+        if (authorizationProvider instanceof LoginLoadingUserAuthorizationProvider) {
+            ((LoginLoadingUserAuthorizationProvider) authorizationProvider).getLogin();
+        }
     }
 
     private GitHub(GitHubClient client) {
-        this.client = client;
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();
+        this.client = client;
+    }
+
+    private static class LoginLoadingUserAuthorizationProvider implements UserAuthorizationProvider {
+        private final GitHub gitHub;
+        private final AuthorizationProvider authorizationProvider;
+        private boolean loginLoaded = false;
+        private String login;
+
+        LoginLoadingUserAuthorizationProvider(AuthorizationProvider authorizationProvider, GitHub gitHub) {
+            this.gitHub = gitHub;
+            this.authorizationProvider = authorizationProvider;
+        }
+
+        @Override
+        public String getEncodedAuthorization() throws IOException {
+            return authorizationProvider.getEncodedAuthorization();
+        }
+
+        @Override
+        public String getLogin() {
+            synchronized (this) {
+                if (!loginLoaded) {
+                    loginLoaded = true;
+                    try {
+                        GHMyself u = gitHub.setMyself();
+                        if (u != null) {
+                            login = u.getLogin();
+                        }
+                    } catch (IOException e) {
+                    }
+                }
+                return login;
+            }
+        }
     }
 
     public static abstract class DependentAuthorizationProvider implements AuthorizationProvider {
@@ -506,18 +555,15 @@ public class GitHub {
     @WithBridgeMethods(value = GHUser.class)
     public GHMyself getMyself() throws IOException {
         client.requireCredential();
-        synchronized (this) {
-            if (this.myself == null) {
-                GHMyself u = createRequest().withUrlPath("/user").fetch(GHMyself.class);
-                setMyself(u);
-            }
-            return myself;
-        }
+        return setMyself();
     }
 
-    private void setMyself(GHMyself myself) {
+    private GHMyself setMyself() throws IOException {
         synchronized (this) {
-            this.myself = myself;
+            if (this.myself == null) {
+                this.myself = createRequest().withUrlPath("/user").fetch(GHMyself.class);
+            }
+            return myself;
         }
     }
 

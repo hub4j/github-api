@@ -453,6 +453,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testGetMyself() throws Exception {
         GHMyself me = gitHub.getMyself();
         assertThat(me, notNullValue());
+        assertThat(me.root(), sameInstance(gitHub));
         assertThat(gitHub.getUser("bitwiseman"), notNullValue());
         PagedIterable<GHRepository> ghRepositories = me.listRepositories();
         assertThat(ghRepositories, is(not(emptyIterable())));

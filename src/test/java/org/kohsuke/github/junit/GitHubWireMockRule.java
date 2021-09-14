@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
 import com.github.tomakehurst.wiremock.http.*;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
+import com.github.tomakehurst.wiremock.recording.RecordSpecBuilder;
 import com.google.gson.*;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -18,6 +19,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
@@ -40,6 +42,12 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     private final static boolean testWithOrg = System.getProperty("test.github.org", "true") == "true";
     private final static boolean useProxy = takeSnapshot
             || System.getProperty("test.github.useProxy", "false") != "false";
+
+    public void customizeRecordSpec(Consumer<RecordSpecBuilder> customizeRecordSpec) {
+        this.customizeRecordSpec = customizeRecordSpec;
+    }
+
+    private Consumer<RecordSpecBuilder> customizeRecordSpec = null;
 
     public GitHubWireMockRule() {
         this(WireMockConfiguration.options());
@@ -158,7 +166,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     private void recordSnapshot(WireMockServer server, String target, boolean isRawServer) {
         if (server != null) {
 
-            server.snapshotRecord(recordSpec().forTarget(target)
+            final RecordSpecBuilder recordSpecBuilder = recordSpec().forTarget(target)
                     // "If-None-Match" header used for ETag matching for caching connections
                     .captureHeader("If-None-Match")
                     // "If-Modified-Since" header used for ETag matching for caching connections
@@ -170,7 +178,13 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                     // For example, if you update "title" and "body", and then update just "title" to the same value
                     // the mock framework will treat those two requests as equivalent, which we do not want.
                     .chooseBodyMatchTypeAutomatically(true, false, false)
-                    .extractTextBodiesOver(255));
+                    .extractTextBodiesOver(255);
+
+            if (customizeRecordSpec != null) {
+                customizeRecordSpec.accept(recordSpecBuilder);
+            }
+
+            server.snapshotRecord(recordSpecBuilder);
 
             // After taking the snapshot, format the output
             formatTestResources(new File(server.getOptions().filesRoot().getPath()).toPath(), isRawServer);

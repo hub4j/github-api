@@ -34,7 +34,7 @@ public class GHCommitBuilder {
 
     GHCommitBuilder(GHRepository repo) {
         this.repo = repo;
-        req = repo.root.createRequest().method("POST");
+        req = repo.root().createRequest().method("POST");
     }
 
     /**

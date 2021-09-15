@@ -22,7 +22,7 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
     @Override
     public PagedIterator<GHCheckRun> _iterator(int pageSize) {
         return new PagedIterator<>(
-                adapt(GitHubPageIterator.create(owner.getRoot().getClient(), GHCheckRunsPage.class, request, pageSize)),
+                adapt(GitHubPageIterator.create(owner.root().getClient(), GHCheckRunsPage.class, request, pageSize)),
                 null);
     }
 

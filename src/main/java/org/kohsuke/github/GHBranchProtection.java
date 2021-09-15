@@ -115,13 +115,8 @@ public class GHBranchProtection extends GitHubInteractiveObject {
         return url;
     }
 
-    GHBranchProtection wrap(GHBranch branch) {
-        this.root = branch.getRoot();
-        return this;
-    }
-
     private Requester requester() {
-        return root.createRequest().withPreview(ZZZAX);
+        return root().createRequest().withPreview(ZZZAX);
     }
 
     /**

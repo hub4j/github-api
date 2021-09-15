@@ -257,8 +257,8 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
 
         @Override
         GHRepository[] getItems(GitHub root) {
-            for (GHRepository item : items)
-                item.wrap(root);
+            for (GHRepository item : items) {
+            }
             return items;
         }
     }

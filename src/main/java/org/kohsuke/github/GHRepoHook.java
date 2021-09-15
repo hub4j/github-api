@@ -12,8 +12,8 @@ class GHRepoHook extends GHHook {
     }
 
     @Override
-    GitHub getRoot() {
-        return repository.root;
+    GitHub root() {
+        return repository.root();
     }
 
     @Override

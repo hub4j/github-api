@@ -189,13 +189,13 @@ public class GHLicense extends GHObject {
         if (description != null)
             return; // already populated
 
-        if (root == null || root.isOffline()) {
+        if (isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
 
         URL url = getUrl();
         if (url != null) {
-            root.createRequest().setRawUrlPath(url.toString()).fetchInto(this);
+            root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);
         }
     }
 
@@ -213,10 +213,5 @@ public class GHLicense extends GHObject {
     @Override
     public int hashCode() {
         return Objects.hashCode(getUrl());
-    }
-
-    GHLicense wrap(GitHub root) {
-        this.root = root;
-        return this;
     }
 }

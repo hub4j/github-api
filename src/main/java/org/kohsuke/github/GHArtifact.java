@@ -99,7 +99,7 @@ public class GHArtifact extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(getApiRoute()).fetchHttpStatusCode();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).fetchHttpStatusCode();
     }
 
     /**
@@ -116,27 +116,21 @@ public class GHArtifact extends GHObject {
     public <T> T download(InputStreamFunction<T> streamFunction) throws IOException {
         requireNonNull(streamFunction, "Stream function must not be null");
 
-        return root.createRequest().method("GET").withUrlPath(getApiRoute(), "zip").fetchStream(streamFunction);
+        return root().createRequest().method("GET").withUrlPath(getApiRoute(), "zip").fetchStream(streamFunction);
     }
 
     private String getApiRoute() {
         if (owner == null) {
             // Workflow runs returned from search to do not have an owner. Attempt to use url.
             final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), ""), "/");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
         }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/artifacts/" + getId();
     }
 
     GHArtifact wrapUp(GHRepository owner) {
         this.owner = owner;
-        return wrapUp(owner.root);
-    }
-
-    GHArtifact wrapUp(GitHub root) {
-        this.root = root;
-        if (owner != null)
-            owner.wrap(root);
         return this;
     }
+
 }

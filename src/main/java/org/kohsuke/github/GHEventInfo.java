@@ -91,11 +91,6 @@ public class GHEventInfo extends GitHubInteractiveObject {
         return transformTypeToGHEvent(type);
     }
 
-    GHEventInfo wrapUp(GitHub root) {
-        this.root = root;
-        return this;
-    }
-
     /**
      * Gets id.
      *
@@ -124,7 +119,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
     public GHRepository getRepository() throws IOException {
-        return root.getRepository(repo.name);
+        return root().getRepository(repo.name);
     }
 
     /**
@@ -137,7 +132,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
     public GHUser getActor() throws IOException {
-        return root.getUser(actor.getLogin());
+        return root().getUser(actor.getLogin());
     }
 
     /**
@@ -161,7 +156,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
     public GHOrganization getOrganization() throws IOException {
-        return (org == null || org.getLogin() == null) ? null : root.getOrganization(org.getLogin());
+        return (org == null || org.getLogin() == null) ? null : root().getOrganization(org.getLogin());
     }
 
     /**
@@ -177,8 +172,8 @@ public class GHEventInfo extends GitHubInteractiveObject {
      *             if payload cannot be parsed
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        T v = GitHubClient.getMappingObjectReader(root).readValue(payload.traverse(), type);
-        v.wrapUp(root);
+        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);
+        v.lateBind();
         return v;
     }
 }

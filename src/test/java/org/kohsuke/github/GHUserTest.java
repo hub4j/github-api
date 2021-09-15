@@ -13,6 +13,28 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class GHUserTest extends AbstractGitHubWireMockTest {
+
+    @Test
+    public void isMemberOf() throws IOException {
+        GHUser u = gitHub.getUser("bitwiseman");
+        String teamSlug = "dummy-team";
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        assertThat(u.isMemberOf(org), is(true));
+        assertThat(u.isMemberOf(team), is(true));
+        assertThat(u.isPublicMemberOf(org), is(false));
+
+        org = gitHub.getOrganization("hub4j");
+        assertThat(u.isMemberOf(org), is(true));
+        assertThat(u.isPublicMemberOf(org), is(true));
+
+        u = gitHub.getUser("rtyler");
+        assertThat(u.isMemberOf(org), is(false));
+        assertThat(u.isMemberOf(team), is(false));
+        assertThat(u.isPublicMemberOf(org), is(false));
+    }
+
     @Test
     public void listFollowsAndFollowers() throws IOException {
         GHUser u = gitHub.getUser("rtyler");

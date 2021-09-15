@@ -22,7 +22,7 @@ class GHWorkflowJobsIterable extends PagedIterable<GHWorkflowJob> {
     @Override
     public PagedIterator<GHWorkflowJob> _iterator(int pageSize) {
         return new PagedIterator<>(
-                adapt(GitHubPageIterator.create(repo.root.getClient(), GHWorkflowJobsPage.class, request, pageSize)),
+                adapt(GitHubPageIterator.create(repo.root().getClient(), GHWorkflowJobsPage.class, request, pageSize)),
                 null);
     }
 

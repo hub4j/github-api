@@ -19,7 +19,7 @@ import java.util.Map;
  *      and payloads</a>
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GHEventPayload extends GitHubInteractiveObject {
+public abstract class GHEventPayload extends GitHubInteractiveObject {
     // https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#webhook-payload-object-common-properties
     // Webhook payload object common properties: action, sender, repository, organization, installation
     private String action;
@@ -117,22 +117,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
         return installation;
     }
 
-    void wrapUp(GitHub root) {
-        this.root = root;
-        if (sender != null) {
-            sender.wrapUp(root);
-        }
-        if (repository != null) {
-            repository.wrap(root);
-        }
-        if (organization != null) {
-            organization.wrapUp(root);
-        }
-        if (installation != null) {
-            installation.wrapUp(root);
-        }
-    }
-
     // List of events that still need to be added:
     // ContentReferenceEvent
     // DeployKeyEvent DownloadEvent FollowEvent ForkApplyEvent GitHubAppAuthorizationEvent GistEvent GollumEvent
@@ -140,6 +124,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
     // MembershipEvent MetaEvent MilestoneEvent OrganizationEvent OrgBlockEvent PackageEvent PageBuildEvent
     // ProjectCardEvent ProjectColumnEvent ProjectEvent RepositoryDispatchEvent RepositoryImportEvent
     // RepositoryVulnerabilityAlertEvent SecurityAdvisoryEvent StarEvent StatusEvent TeamEvent TeamAddEvent WatchEvent
+
+    void lateBind() {
+    }
 
     /**
      * A check run event has been created, rerequested, completed, or has a requested_action.
@@ -192,7 +179,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
         @Deprecated
-        public void setCheckRun(GHRequestedAction currentRequestedAction) {
+        public void setRequestedAction(GHRequestedAction currentRequestedAction) {
             throw new RuntimeException("Do not use this method.");
         }
 
@@ -207,16 +194,16 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
             if (checkRun == null)
                 throw new IllegalStateException(
                         "Expected check_run payload, but got something else. Maybe we've got another type of event?");
+            super.lateBind();
             GHRepository repository = getRepository();
             if (repository != null) {
                 checkRun.wrap(repository);
             } else {
-                checkRun.wrap(root);
+                checkRun.wrap(root());
             }
         }
     }
@@ -242,16 +229,16 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
             if (checkSuite == null)
                 throw new IllegalStateException(
                         "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+            super.lateBind();
             GHRepository repository = getRepository();
             if (repository != null) {
                 checkSuite.wrap(repository);
             } else {
-                checkSuite.wrap(root);
+                checkSuite.wrap(root());
             }
         }
     }
@@ -277,17 +264,15 @@ public class GHEventPayload extends GitHubInteractiveObject {
         };
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
             if (getInstallation() == null) {
                 throw new IllegalStateException(
                         "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
             }
-
+            super.lateBind();
             if (repositories != null && !repositories.isEmpty()) {
                 try {
                     for (GHRepository singleRepo : repositories) { // warp each of the repository
-                        singleRepo.wrap(root);
                         singleRepo.populate();
                     }
                 } catch (IOException e) {
@@ -338,13 +323,12 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
             if (getInstallation() == null) {
                 throw new IllegalStateException(
                         "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
             }
-
+            super.lateBind();
             List<GHRepository> repositories;
             if ("added".equals(getAction()))
                 repositories = repositoriesAdded;
@@ -354,7 +338,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
             if (repositories != null && !repositories.isEmpty()) {
                 try {
                     for (GHRepository singleRepo : repositories) { // warp each of the repository
-                        singleRepo.wrap(root);
                         singleRepo.populate();
                     }
                 } catch (IOException e) {
@@ -395,7 +378,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHPullRequest getPullRequest() {
-            pullRequest.root = root;
             return pullRequest;
         }
 
@@ -420,16 +402,14 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
             if (pullRequest == null)
                 throw new IllegalStateException(
                         "Expected pull_request payload, but got something else. Maybe we've got another type of event?");
+            super.lateBind();
             GHRepository repository = getRepository();
             if (repository != null) {
                 pullRequest.wrapUp(repository);
-            } else {
-                pullRequest.wrapUp(root);
             }
         }
     }
@@ -467,19 +447,17 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
             if (review == null)
                 throw new IllegalStateException(
                         "Expected pull_request_review payload, but got something else. Maybe we've got another type of event?");
+            super.lateBind();
 
             review.wrapUp(pullRequest);
 
             GHRepository repository = getRepository();
             if (repository != null) {
                 pullRequest.wrapUp(repository);
-            } else {
-                pullRequest.wrapUp(root);
             }
         }
     }
@@ -517,19 +495,16 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
             if (comment == null)
                 throw new IllegalStateException(
                         "Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?");
-
+            super.lateBind();
             comment.wrapUp(pullRequest);
 
             GHRepository repository = getRepository();
             if (repository != null) {
                 pullRequest.wrapUp(repository);
-            } else {
-                pullRequest.wrapUp(root);
             }
         }
     }
@@ -592,13 +567,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
+            super.lateBind();
             GHRepository repository = getRepository();
             if (repository != null) {
                 issue.wrap(repository);
-            } else {
-                issue.wrap(root);
             }
         }
     }
@@ -660,13 +633,11 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
+            super.lateBind();
             GHRepository repository = getRepository();
             if (repository != null) {
                 issue.wrap(repository);
-            } else {
-                issue.wrap(root);
             }
             comment.wrapUp(issue);
         }
@@ -706,8 +677,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
+            super.lateBind();
             GHRepository repository = getRepository();
             if (repository != null) {
                 comment.wrap(repository);
@@ -830,8 +801,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
+            super.lateBind();
             GHRepository repository = getRepository();
             if (repository != null) {
                 deployment.wrap(repository);
@@ -896,8 +867,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
+            super.lateBind();
             GHRepository repository = getRepository();
             if (repository != null) {
                 deployment.wrap(repository);
@@ -937,12 +908,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
         public void setForkee(GHRepository forkee) {
             throw new RuntimeException("Do not use this method.");
         }
-
-        @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
-            forkee.wrap(root);
-        }
     }
 
     /**
@@ -952,7 +917,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * event</a>
      */
     public static class Ping extends GHEventPayload {
-
     }
 
     /**
@@ -962,7 +926,6 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      public event</a>
      */
     public static class Public extends GHEventPayload {
-
     }
 
     /**
@@ -1376,12 +1339,14 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
+
             if (state == null) {
                 throw new IllegalStateException(
                         "Expected status payload, but got something else. Maybe we've got another type of event?");
             }
+            super.lateBind();
+
             GHRepository repository = getRepository();
             if (repository != null) {
                 commit.wrapUp(repository);
@@ -1466,12 +1431,12 @@ public class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @Override
-        void wrapUp(GitHub root) {
-            super.wrapUp(root);
+        void lateBind() {
             if (workflowRun == null || workflow == null) {
                 throw new IllegalStateException(
                         "Expected workflow and workflow_run payload, but got something else. Maybe we've got another type of event?");
             }
+            super.lateBind();
             GHRepository repository = getRepository();
             if (repository == null) {
                 throw new IllegalStateException("Repository must not be null");

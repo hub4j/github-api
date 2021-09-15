@@ -86,6 +86,7 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
         assertThat(license.getBody(), startsWith("MIT License\n" + "\n" + "Copyright (c) [year] [fullname]\n\n"));
         assertThat(license.getForbidden(), is(empty()));
         assertThat(license.getPermitted(), is(empty()));
+        assertThat(license.getRequired(), is(empty()));
         assertThat(license.getImplementation(),
                 equalTo("Create a text file (typically named LICENSE or LICENSE.txt) in the root of your source code and copy the text of the license into the file. Replace [year] with the current year and [fullname] with the name (or names) of the copyright holders."));
         assertThat(license.getCategory(), nullValue());

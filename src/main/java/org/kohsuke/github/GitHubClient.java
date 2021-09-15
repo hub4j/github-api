@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
@@ -41,7 +40,6 @@ abstract class GitHubClient {
      * If timeout issues let's retry after milliseconds.
      */
     static final int retryTimeoutMillis = 100;
-    /* private */ final String login;
 
     // Cache of myself object.
     private final String apiUrl;
@@ -76,7 +74,6 @@ abstract class GitHubClient {
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            Consumer<GHMyself> myselfConsumer,
             AuthorizationProvider authorizationProvider) throws IOException {
 
         if (apiUrl.endsWith("/")) {
@@ -95,37 +92,25 @@ abstract class GitHubClient {
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
         this.rateLimitChecker = rateLimitChecker;
-
-        this.login = getCurrentUser(myselfConsumer);
     }
 
-    private String getCurrentUser(Consumer<GHMyself> myselfConsumer) throws IOException {
-        String login = null;
-        if (this.authorizationProvider instanceof UserAuthorizationProvider
-                && this.authorizationProvider.getEncodedAuthorization() != null) {
+    String getLogin() {
+        try {
+            if (this.authorizationProvider instanceof UserAuthorizationProvider
+                    && this.authorizationProvider.getEncodedAuthorization() != null) {
 
-            UserAuthorizationProvider userAuthorizationProvider = (UserAuthorizationProvider) this.authorizationProvider;
+                UserAuthorizationProvider userAuthorizationProvider = (UserAuthorizationProvider) this.authorizationProvider;
 
-            login = userAuthorizationProvider.getLogin();
-
-            if (login == null) {
-                try {
-                    GHMyself myself = fetch(GHMyself.class, "/user");
-                    if (myselfConsumer != null) {
-                        myselfConsumer.accept(myself);
-                    }
-                    login = myself.getLogin();
-                } catch (IOException e) {
-                    return null;
-                }
+                return userAuthorizationProvider.getLogin();
             }
+        } catch (IOException e) {
         }
-        return login;
+        return null;
     }
 
     private <T> T fetch(Class<T> type, String urlPath) throws IOException {
         GitHubRequest request = GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build();
-        return this.sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, type)).body();
+        return sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, type)).body();
     }
 
     /**
@@ -141,7 +126,7 @@ abstract class GitHubClient {
             return true;
         } catch (IOException e) {
             LOGGER.log(FINE,
-                    "Exception validating credentials on " + getApiUrl() + " with login '" + login + "' " + e,
+                    "Exception validating credentials on " + getApiUrl() + " with login '" + getLogin() + "' " + e,
                     e);
             return false;
         }
@@ -185,7 +170,7 @@ abstract class GitHubClient {
      */
     public boolean isAnonymous() {
         try {
-            return login == null && this.authorizationProvider.getEncodedAuthorization() == null;
+            return getLogin() == null && this.authorizationProvider.getEncodedAuthorization() == null;
         } catch (IOException e) {
             // An exception here means that the provider failed to provide authorization parameters,
             // basically meaning the same as "no auth"
@@ -319,7 +304,7 @@ abstract class GitHubClient {
      */
     public void checkApiUrlValidity() throws IOException {
         try {
-            fetch(GHApiInfo.class, "/").check(getApiUrl());
+            this.fetch(GHApiInfo.class, "/").check(getApiUrl());
         } catch (IOException e) {
             if (isPrivateModeEnabled()) {
                 throw (IOException) new IOException(
@@ -419,8 +404,8 @@ abstract class GitHubClient {
 
     private void logRequest(@Nonnull final GitHubRequest request) {
         LOGGER.log(FINE,
-                () -> "GitHub API request [" + (login == null ? "anonymous" : login) + "]: " + request.method() + " "
-                        + request.url().toString());
+                () -> "GitHub API request [" + (getLogin() == null ? "anonymous" : getLogin()) + "]: "
+                        + request.method() + " " + request.url().toString());
     }
 
     @Nonnull

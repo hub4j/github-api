@@ -62,7 +62,8 @@ public final class GHCheckRunBuilder {
 
     GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
         this(repo,
-                repo.root.createRequest()
+                repo.root()
+                        .createRequest()
                         .withPreview(Previews.ANTIOPE)
                         .method("POST")
                         .with("name", name)
@@ -72,7 +73,8 @@ public final class GHCheckRunBuilder {
 
     GHCheckRunBuilder(GHRepository repo, long checkId) {
         this(repo,
-                repo.root.createRequest()
+                repo.root()
+                        .createRequest()
                         .withPreview(Previews.ANTIOPE)
                         .method("PATCH")
                         .withUrlPath(repo.getApiTailUrl("check-runs/" + checkId)));
@@ -155,7 +157,8 @@ public final class GHCheckRunBuilder {
             int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);
             output2.annotations = extraAnnotations.subList(0, i);
             extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());
-            run = repo.root.createRequest()
+            run = repo.root()
+                    .createRequest()
                     .withPreview(Previews.ANTIOPE)
                     .method("PATCH")
                     .with("output", output2)

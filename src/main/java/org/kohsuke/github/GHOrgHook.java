@@ -16,8 +16,8 @@ class GHOrgHook extends GHHook {
     }
 
     @Override
-    GitHub getRoot() {
-        return organization.root;
+    GitHub root() {
+        return organization.root();
     }
 
     @Override

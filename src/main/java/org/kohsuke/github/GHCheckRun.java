@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.kohsuke.github.GHWorkflowRun.Conclusion;
-import org.kohsuke.github.GHWorkflowRun.Status;
 import org.kohsuke.github.internal.EnumUtils;
 import org.kohsuke.github.internal.Previews;
 
@@ -46,14 +44,12 @@ public class GHCheckRun extends GHObject {
 
     GHCheckRun wrap(GHRepository owner) {
         this.owner = owner;
-        wrap(owner.root);
+        wrap(owner.root());
         return this;
     }
 
     GHCheckRun wrap(GitHub root) {
-        this.root = root;
         if (owner != null) {
-            owner.wrap(root);
             for (GHPullRequest singlePull : pullRequests) {
                 singlePull.wrap(owner);
             }
@@ -64,9 +60,6 @@ public class GHCheckRun extends GHObject {
             } else {
                 checkSuite.wrap(root);
             }
-        }
-        if (app != null) {
-            app.wrapUp(root);
         }
 
         return this;

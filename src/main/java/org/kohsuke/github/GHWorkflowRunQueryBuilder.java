@@ -14,7 +14,7 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
     private final GHRepository repo;
 
     GHWorkflowRunQueryBuilder(GHRepository repo) {
-        super(repo.root);
+        super(repo.root());
         this.repo = repo;
     }
 

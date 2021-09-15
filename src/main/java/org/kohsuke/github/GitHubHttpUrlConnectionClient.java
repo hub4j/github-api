@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
@@ -38,15 +37,8 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            Consumer<GHMyself> myselfConsumer,
             AuthorizationProvider authorizationProvider) throws IOException {
-        super(apiUrl,
-                connector,
-                rateLimitHandler,
-                abuseLimitHandler,
-                rateLimitChecker,
-                myselfConsumer,
-                authorizationProvider);
+        super(apiUrl, connector, rateLimitHandler, abuseLimitHandler, rateLimitChecker, authorizationProvider);
     }
 
     @Nonnull

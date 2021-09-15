@@ -147,13 +147,6 @@ public class GHThread extends GHObject {
         return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));
     }
 
-    GHThread wrap(GitHub root) {
-        this.root = root;
-        if (this.repository != null)
-            this.repository.wrap(root);
-        return this;
-    }
-
     /**
      * Marks this thread as read.
      *
@@ -161,7 +154,7 @@ public class GHThread extends GHObject {
      *             the io exception
      */
     public void markAsRead() throws IOException {
-        root.createRequest().method("PATCH").withUrlPath(url).send();
+        root().createRequest().method("PATCH").withUrlPath(url).send();
     }
 
     /**
@@ -176,13 +169,12 @@ public class GHThread extends GHObject {
      *             the io exception
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .method("PUT")
                 .with("subscribed", subscribed)
                 .with("ignored", ignored)
                 .withUrlPath(subscription_url)
-                .fetch(GHSubscription.class)
-                .wrapUp(root);
+                .fetch(GHSubscription.class);
     }
 
     /**
@@ -194,11 +186,7 @@ public class GHThread extends GHObject {
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-            return root.createRequest()
-                    .method("POST")
-                    .withUrlPath(subscription_url)
-                    .fetch(GHSubscription.class)
-                    .wrapUp(root);
+            return root().createRequest().method("POST").withUrlPath(subscription_url).fetch(GHSubscription.class);
         } catch (FileNotFoundException e) {
             return null;
         }

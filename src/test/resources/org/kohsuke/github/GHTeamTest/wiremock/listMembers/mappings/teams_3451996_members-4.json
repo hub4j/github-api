@@ -1,0 +1,49 @@
+{
+  "id": "2fc9880e-cfe1-4e53-b4e3-3fbcdddbde28",
+  "name": "teams_3451996_members",
+  "request": {
+    "url": "/teams/3451996/members?role=all",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "teams_3451996_members-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 14 Sep 2021 19:47:11 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"e39c5fe75de36015576d95c20228bba704d43d323b1a06e09bb794ae6bb4684c\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Deprecation": "Sat, 01 Feb 2020 00:00:00 GMT",
+      "Sunset": "Mon, 01 Feb 2021 00:00:00 GMT",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4990",
+      "X-RateLimit-Reset": "1631652409",
+      "X-RateLimit-Used": "10",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D368:5F30:428577:54782C:6140FC3F",
+      "Link": "<https://developer.github.com/changes/2020-01-21-moving-the-team-api-endpoints/>; rel=\"deprecation\"; type=\"text/html\", <https://api.github.com/organizations/7544739/team/3451996/members>; rel=\"alternate\""
+    }
+  },
+  "uuid": "2fc9880e-cfe1-4e53-b4e3-3fbcdddbde28",
+  "persistent": true,
+  "insertionIndex": 4
+}

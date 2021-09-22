@@ -637,7 +637,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(hook2.getConfig().size(), equalTo(3));
             assertThat(hook2.isActive(), equalTo(true));
             hook2.ping();
-            hook2.delete();
+            r.deleteHook((int) hook.getId());
 
             hook = o.createWebHook(new URL("http://www.google.com/"));
             assertThat(hook.getName(), equalTo("web"));
@@ -653,7 +653,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(hook2.getConfig().size(), equalTo(3));
             assertThat(hook2.isActive(), equalTo(true));
             hook2.ping();
-            hook2.delete();
+            o.deleteHook((int) hook.getId());
 
             // System.out.println(hook);
         } finally {

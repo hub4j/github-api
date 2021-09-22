@@ -1649,6 +1649,18 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Deletes hook.
+     *
+     * @param id
+     *            the id
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteHook(int id) throws IOException {
+        GHHooks.repoContext(this, owner).deleteHook(id);
+    }
+
+    /**
      * Sets {@link #getCompare(String, String)} to return a {@link GHCompare} that uses a paginated commit list instead
      * of limiting to 250 results.
      *

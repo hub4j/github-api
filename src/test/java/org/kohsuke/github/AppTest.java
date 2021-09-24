@@ -290,6 +290,37 @@ public class AppTest extends AbstractGitHubWireMockTest {
         String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(closedIssues.get(0));
     }
 
+    @Test
+    public void testQueryIssues() throws IOException {
+        List<GHIssue> openBugIssues = gitHub.getOrganization("hub4j")
+                .getRepository("github-api")
+                .queryIssues()
+                .state(GHIssueState.OPEN)
+                .label("bug")
+                .creator("bitwiseman")
+                .list()
+                .toList();
+        assertThat(openBugIssues, is(not(empty())));
+
+        List<GHIssue> openIssuesWithAssignee = gitHub.getOrganization("hub4j")
+                .getRepository("github-api")
+                .queryIssues()
+                .state(GHIssueState.OPEN)
+                .assignee("WolverMinion")
+                .list()
+                .toList();
+        assertThat(openIssuesWithAssignee, is(not(empty())));
+
+        List<GHIssue> closedIssuesSince = gitHub.getOrganization("hub4j")
+                .getRepository("github-api")
+                .queryIssues()
+                .state(GHIssueState.CLOSED)
+                .since(1632411646L)
+                .list()
+                .toList();
+        assertThat(closedIssuesSince, is(not(empty())));
+    }
+
     private GHRepository getTestRepository() throws IOException {
         return getTempRepository(GITHUB_API_TEST_REPO);
     }

@@ -1,0 +1,48 @@
+{
+  "id": "094a20d2-33e9-4e1d-92fa-10dc900e2015",
+  "name": "repositories_617210_issues",
+  "request": {
+    "url": "/repositories/617210/issues?state=closed&since=1970-01-19T21%3A26%3A51Z&labels=&page=25",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_617210_issues-094a20d2-33e9-4e1d-92fa-10dc900e2015.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 24 Sep 2021 15:45:27 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"42f1b2a0b589bd4e5d05952e19fa759ae9e0552d62b241e6e9877ce7ec54ebcf\"",
+      "X-OAuth-Scopes": "public_repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2021-10-24 13:45:13 UTC",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4897",
+      "X-RateLimit-Reset": "1632499580",
+      "X-RateLimit-Used": "103",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C321:86F5:6893F43:6A9EEE9:614DF297",
+      "Link": "<https://api.github.com/repositories/617210/issues?state=closed&since=1970-01-19T21%3A26%3A51Z&labels=&page=24>; rel=\"prev\", <https://api.github.com/repositories/617210/issues?state=closed&since=1970-01-19T21%3A26%3A51Z&labels=&page=26>; rel=\"next\", <https://api.github.com/repositories/617210/issues?state=closed&since=1970-01-19T21%3A26%3A51Z&labels=&page=38>; rel=\"last\", <https://api.github.com/repositories/617210/issues?state=closed&since=1970-01-19T21%3A26%3A51Z&labels=&page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "094a20d2-33e9-4e1d-92fa-10dc900e2015",
+  "persistent": true,
+  "insertionIndex": 32
+}

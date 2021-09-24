@@ -2,7 +2,7 @@
   "id": "a70d05ac-5820-4749-8318-e422f0f6eaf5",
   "name": "repos_hub4j_github-api_issues",
   "request": {
-    "url": "/repos/hub4j/github-api/issues?state=closed",
+    "url": "/repos/hub4j/github-api/issues?state=closed&labels=",
     "method": "GET",
     "headers": {
       "Accept": {

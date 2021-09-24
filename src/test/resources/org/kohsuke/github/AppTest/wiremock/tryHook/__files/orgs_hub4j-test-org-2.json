@@ -20,7 +20,7 @@
   "is_verified": false,
   "has_organization_projects": true,
   "has_repository_projects": true,
-  "public_repos": 13,
+  "public_repos": 19,
   "public_gists": 0,
   "followers": 0,
   "following": 0,
@@ -31,7 +31,7 @@
   "total_private_repos": 2,
   "owned_private_repos": 2,
   "private_gists": 0,
-  "disk_usage": 152,
+  "disk_usage": 11979,
   "collaborators": 0,
   "billing_email": "kk@kohsuke.org",
   "default_repository_permission": "none",
@@ -44,7 +44,7 @@
     "name": "free",
     "space": 976562499,
     "private_repos": 10000,
-    "filled_seats": 22,
+    "filled_seats": 26,
     "seats": 3
   }
 }

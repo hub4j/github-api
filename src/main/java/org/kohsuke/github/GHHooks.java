@@ -87,6 +87,18 @@ class GHHooks {
             return wrap(hook);
         }
 
+        /**
+         * Deletes hook.
+         *
+         * @param id
+         *            the id
+         * @throws IOException
+         *             the io exception
+         */
+        public void deleteHook(int id) throws IOException {
+            root().createRequest().method("DELETE").withUrlPath(collection() + "/" + id).send();
+        }
+
         abstract String collection();
 
         abstract Class<? extends GHHook[]> collectionClass();

@@ -438,7 +438,9 @@ public class GHRepository extends GHObject {
      * @param state
      *            the state
      * @return the paged iterable
+     * @deprecated Use {@link #queryIssues()}
      */
+    @Deprecated
     public PagedIterable<GHIssue> listIssues(final GHIssueState state) {
         return queryIssues().state(state).list();
     }

@@ -641,6 +641,16 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * Deletes hook.
+     *
+     * @param id
+     * @throws IOException
+     */
+    public void deleteHook(int id) throws IOException {
+        GHHooks.orgContext(this).deleteHook(id);
+    }
+
+    /**
      * See https://api.github.com/hooks for possible names and their configuration scheme. TODO: produce type-safe
      * binding
      *

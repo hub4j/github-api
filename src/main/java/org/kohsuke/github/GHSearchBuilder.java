@@ -48,7 +48,7 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
 
         req.set("q", StringUtils.join(terms, " "));
         try {
-            return new PagedSearchIterable<>(root, req.build(), receiverType);
+            return new PagedSearchIterable<>(root(), req.build(), receiverType);
         } catch (MalformedURLException e) {
             throw new GHException("", e);
         }

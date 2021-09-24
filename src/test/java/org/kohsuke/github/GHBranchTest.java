@@ -2,8 +2,6 @@ package org.kohsuke.github;
 
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.hamcrest.Matchers.*;
 
 public class GHBranchTest extends AbstractGitHubWireMockTest {
@@ -17,10 +15,31 @@ public class GHBranchTest extends AbstractGitHubWireMockTest {
         repository = getTempRepository();
 
         String mainHead = repository.getRef("heads/main").getObject().getSha();
-        createRefAndPostContent(BRANCH_1, mainHead);
-        createRefAndPostContent(BRANCH_2, mainHead);
+        String branchName1 = "refs/heads/" + BRANCH_1;
+        repository.createRef(branchName1, mainHead);
+        repository.createContent()
+                .content(branchName1)
+                .message(branchName1)
+                .path(branchName1)
+                .branch(branchName1)
+                .commit();
 
+        String branchName2 = "refs/heads/" + BRANCH_2;
+        repository.createRef(branchName2, mainHead);
         GHBranch otherBranch = repository.getBranch(BRANCH_2);
+        assertThat(otherBranch.getSHA1(), equalTo(mainHead));
+        repository.createContent()
+                .content(branchName2)
+                .message(branchName2)
+                .path(branchName2)
+                .branch(branchName2)
+                .commit();
+
+        otherBranch = repository.getBranch(BRANCH_2);
+        assertThat(otherBranch.getSHA1(), not(equalTo(mainHead)));
+        assertThat(otherBranch.getOwner(), notNullValue());
+        assertThat(otherBranch.getOwner().getFullName(), equalTo(repository.getFullName()));
+
         String commitMessage = "merging " + BRANCH_2;
         GHCommit mergeCommit = repository.getBranch(BRANCH_1).merge(otherBranch, commitMessage);
         assertThat(mergeCommit, notNullValue());
@@ -37,11 +56,5 @@ public class GHBranchTest extends AbstractGitHubWireMockTest {
         mergeCommit = main.merge(mergeCommit.getSHA1(), commitMessage);
         // Should be null since all changes already merged
         assertThat(mergeCommit, nullValue());
-    }
-
-    private void createRefAndPostContent(String branchName, String sha) throws IOException {
-        String refName = "refs/heads/" + branchName;
-        repository.createRef(refName, sha);
-        repository.createContent().content(branchName).message(branchName).path(branchName).branch(branchName).commit();
     }
 }

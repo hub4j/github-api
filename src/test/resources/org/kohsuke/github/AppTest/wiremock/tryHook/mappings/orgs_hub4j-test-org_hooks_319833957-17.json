@@ -1,0 +1,39 @@
+{
+  "id": "1d1ef579-8c76-49ac-b72f-40de1f7d368a",
+  "name": "orgs_hub4j-test-org_hooks_319833957",
+  "request": {
+    "url": "/orgs/hub4j-test-org/hooks/319833957",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 24 Sep 2021 05:58:40 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org_hook",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4823",
+      "X-RateLimit-Reset": "1632465781",
+      "X-RateLimit-Used": "177",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "DBDE:8AA1:13C21BF:14F6189:614D6910"
+    }
+  },
+  "uuid": "1d1ef579-8c76-49ac-b72f-40de1f7d368a",
+  "persistent": true,
+  "insertionIndex": 17
+}

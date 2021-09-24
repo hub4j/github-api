@@ -12,7 +12,7 @@ public class GHBlobBuilder {
 
     GHBlobBuilder(GHRepository repo) {
         this.repo = repo;
-        req = repo.root.createRequest();
+        req = repo.root().createRequest();
     }
 
     /**

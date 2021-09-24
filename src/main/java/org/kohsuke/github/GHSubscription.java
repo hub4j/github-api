@@ -89,16 +89,11 @@ public class GHSubscription extends GitHubInteractiveObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(repo.getApiTailUrl("subscription")).send();
+        root().createRequest().method("DELETE").withUrlPath(repo.getApiTailUrl("subscription")).send();
     }
 
     GHSubscription wrapUp(GHRepository repo) {
         this.repo = repo;
-        return wrapUp(repo.root);
-    }
-
-    GHSubscription wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 }

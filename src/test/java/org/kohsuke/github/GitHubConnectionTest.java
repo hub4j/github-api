@@ -4,6 +4,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.junit.Assume;
 import org.junit.Test;
 import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
 
 import java.io.File;
@@ -295,7 +296,7 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         GitHub github = builder.build();
         // change this to get a request
         assertThat(github.getClient().getEncodedAuthorization(), equalTo("token bogus app token"));
-        assertThat(github.getClient().login, is(emptyString()));
+        assertThat(github.getClient().getLogin(), is(emptyString()));
     }
 
     @Test
@@ -324,6 +325,20 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         } catch (Exception e) {
             assertThat(e.getMessage(), containsString("This operation requires a credential"));
         }
+    }
+
+    @Test
+    public void testGitHubOAuthUserQuery() throws IOException {
+        snapshotNotAllowed();
+        mockGitHub.customizeRecordSpec(recordSpecBuilder -> recordSpecBuilder.captureHeader("Authorization"));
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken("super_secret_token"))
+                .build();
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+        assertThat(gitHub.getMyself(), notNullValue());
+        assertThat(gitHub.getMyself().root(), notNullValue());
+        assertThat(gitHub.getMyself().getLogin(), equalTo("bitwiseman"));
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
     }
 
     /*

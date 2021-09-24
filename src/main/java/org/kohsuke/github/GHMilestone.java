@@ -21,16 +21,6 @@ public class GHMilestone extends GHObject {
     protected String closed_at;
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Gets owner.
      *
      * @return the owner
@@ -48,7 +38,7 @@ public class GHMilestone extends GHObject {
      *             the io exception
      */
     public GHUser getCreator() throws IOException {
-        return root.intern(creator);
+        return root().intern(creator);
     }
 
     /**
@@ -158,11 +148,11 @@ public class GHMilestone extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -231,7 +221,6 @@ public class GHMilestone extends GHObject {
      */
     GHMilestone lateBind(GHRepository repo) {
         this.owner = repo;
-        this.root = repo.root;
         return this;
     }
 

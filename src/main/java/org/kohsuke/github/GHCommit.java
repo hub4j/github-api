@@ -458,7 +458,7 @@ public class GHCommit {
     private GHUser resolveUser(User author) throws IOException {
         if (author == null || author.login == null)
             return null;
-        return owner.root.getUser(author.login);
+        return owner.root().getUser(author.login);
     }
 
     /**
@@ -468,7 +468,8 @@ public class GHCommit {
      */
     @Preview(GROOT)
     public PagedIterable<GHPullRequest> listPullRequests() {
-        return owner.root.createRequest()
+        return owner.root()
+                .createRequest()
                 .withPreview(GROOT)
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/pulls", owner.getOwnerName(), owner.getName(), sha))
                 .toIterable(GHPullRequest[].class, item -> item.wrapUp(owner));
@@ -483,7 +484,8 @@ public class GHCommit {
      */
     @Preview(GROOT)
     public PagedIterable<GHBranch> listBranchesWhereHead() throws IOException {
-        return owner.root.createRequest()
+        return owner.root()
+                .createRequest()
                 .withPreview(GROOT)
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/branches-where-head",
                         owner.getOwnerName(),
@@ -519,7 +521,8 @@ public class GHCommit {
      *             if comment is not created
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-        GHCommitComment r = owner.root.createRequest()
+        GHCommitComment r = owner.root()
+                .createRequest()
                 .method("POST")
                 .with("body", body)
                 .with("path", path)
@@ -586,7 +589,7 @@ public class GHCommit {
      */
     void populate() throws IOException {
         if (files == null && stats == null)
-            owner.root.createRequest().withUrlPath(owner.getApiTailUrl("commits/" + sha)).fetchInto(this);
+            owner.root().createRequest().withUrlPath(owner.getApiTailUrl("commits/" + sha)).fetchInto(this);
     }
 
     GHCommit wrapUp(GHRepository owner) {

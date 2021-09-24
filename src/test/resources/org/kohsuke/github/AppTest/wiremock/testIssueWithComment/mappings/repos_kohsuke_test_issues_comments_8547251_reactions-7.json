@@ -1,0 +1,49 @@
+{
+  "id": "24e3f69b-df35-46f4-a20e-cd9f359c89af",
+  "name": "repos_kohsuke_test_issues_comments_8547251_reactions",
+  "request": {
+    "url": "/repos/kohsuke/test/issues/comments/8547251/reactions",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_kohsuke_test_issues_comments_8547251_reactions-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 11 Sep 2021 07:03:05 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"361404fe525aa0c8bfcfdba6d71d0ae779b39db1971f01ddf9cd916887f85b00\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.squirrel-girl-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4929",
+      "X-RateLimit-Reset": "1631346154",
+      "X-RateLimit-Used": "71",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D36E:60B8:79A830:7F41C7:613C54A9"
+    }
+  },
+  "uuid": "24e3f69b-df35-46f4-a20e-cd9f359c89af",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-kohsuke-test-issues-comments-8547251-reactions",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-repos-kohsuke-test-issues-comments-8547251-reactions-2",
+  "insertionIndex": 7
+}

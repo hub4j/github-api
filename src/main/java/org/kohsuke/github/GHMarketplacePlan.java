@@ -29,18 +29,6 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     private List<String> bullets;
 
     /**
-     * Wrap up gh marketplace plan.
-     *
-     * @param root
-     *            the root
-     * @return an instance of the GHMarketplacePlan class
-     */
-    GHMarketplacePlan wrapUp(GitHub root) {
-        this.root = root;
-        return this;
-    }
-
-    /**
      * Gets url.
      *
      * @return the url
@@ -178,6 +166,6 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
      *      all GitHub accounts (user or organization) on a specific plan</a>
      */
     public GHMarketplaceListAccountBuilder listAccounts() {
-        return new GHMarketplaceListAccountBuilder(root, this.id);
+        return new GHMarketplaceListAccountBuilder(root(), this.id);
     }
 }

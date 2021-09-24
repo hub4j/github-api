@@ -1,48 +1,54 @@
 {
-  "id": "7cb4f11b-01c1-4f10-b53f-a8be6ed9f5fe",
+  "id": "ab4f80a2-9005-4292-b7dc-afdfc3dfe294",
   "name": "repos_hub4j-test-org_github-api-test_milestones",
   "request": {
     "url": "/repos/hub4j-test-org/github-api-test/milestones",
     "method": "POST",
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"description\":\"Test Milestone\",\"title\":\"Test Milestone Title\"}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
-      }
-    ],
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
-    }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"description\":\"Test Milestone\",\"title\":\"Test Milestone Title3\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
   },
   "response": {
-    "status": 422,
-    "body": "{\"message\":\"Validation Failed\",\"errors\":[{\"resource\":\"Milestone\",\"code\":\"already_exists\",\"field\":\"title\"}],\"documentation_url\":\"https://developer.github.com/v3/issues/milestones/#create-a-milestone\"}",
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_github-api-test_milestones-3.json",
     "headers": {
-      "Date": "Wed, 02 Oct 2019 21:40:00 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "422 Unprocessable Entity",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4955",
-      "X-RateLimit-Reset": "1570055937",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "Date": "Sat, 11 Sep 2021 07:32:38 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"6247f3407e12b549963c5927175cbbe3fde3c35c271f742c9e26cd1ab8d4eb19\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "unknown, github.v3",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin": "*",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4893",
+      "X-RateLimit-Reset": "1631346154",
+      "X-RateLimit-Used": "107",
+      "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C2C1:361D:9BDE40:B8EE01:5D95192F"
+      "X-GitHub-Request-Id": "D390:32F3:2FD932:348606:613C5B95",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api-test/milestones/1"
     }
   },
-  "uuid": "7cb4f11b-01c1-4f10-b53f-a8be6ed9f5fe",
+  "uuid": "ab4f80a2-9005-4292-b7dc-afdfc3dfe294",
   "persistent": true,
   "insertionIndex": 3
 }

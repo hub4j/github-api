@@ -1,0 +1,19 @@
+{
+  "type": "Organization",
+  "id": 319833954,
+  "name": "web",
+  "active": true,
+  "events": [
+    "push"
+  ],
+  "config": {
+    "url": "http://www.google.com/",
+    "insecure_ssl": "0",
+    "content_type": "form"
+  },
+  "updated_at": "2021-09-24T05:58:39Z",
+  "created_at": "2021-09-24T05:58:39Z",
+  "url": "https://api.github.com/orgs/hub4j-test-org/hooks/319833954",
+  "ping_url": "https://api.github.com/orgs/hub4j-test-org/hooks/319833954/pings",
+  "deliveries_url": "https://api.github.com/orgs/hub4j-test-org/hooks/319833954/deliveries"
+}

@@ -523,15 +523,15 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void getUserTest() throws IOException {
         GHPullRequest p = getRepository().createPullRequest("getUserTest", "test/stable", "main", "## test");
         GHPullRequest prSingle = getRepository().getPullRequest(p.getNumber());
-        assertThat(prSingle.getUser().getRoot(), notNullValue());
+        assertThat(prSingle.getUser().root(), notNullValue());
         prSingle.getMergeable();
-        assertThat(prSingle.getUser().getRoot(), notNullValue());
+        assertThat(prSingle.getUser().root(), notNullValue());
 
         PagedIterable<GHPullRequest> ghPullRequests = getRepository().listPullRequests(GHIssueState.OPEN);
         for (GHPullRequest pr : ghPullRequests) {
-            assertThat(pr.getUser().getRoot(), notNullValue());
+            assertThat(pr.getUser().root(), notNullValue());
             pr.getMergeable();
-            assertThat(pr.getUser().getRoot(), notNullValue());
+            assertThat(pr.getUser().root(), notNullValue());
         }
     }
 

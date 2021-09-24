@@ -15,7 +15,7 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
 
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHTeamBuilder(GitHub root, String orgName, String name) {
-        this.root = root;
+        super(root);
         this.orgName = orgName;
         this.builder = root.createRequest();
         this.builder.with("name", name);
@@ -89,6 +89,6 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
      *             if team cannot be created
      */
     public GHTeam create() throws IOException {
-        return builder.method("POST").withUrlPath("/orgs/" + orgName + "/teams").fetch(GHTeam.class).wrapUp(root);
+        return builder.method("POST").withUrlPath("/orgs/" + orgName + "/teams").fetch(GHTeam.class).wrapUp(root());
     }
 }

@@ -104,8 +104,8 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
 
         @Override
         GHIssue[] getItems(GitHub root) {
-            for (GHIssue i : items)
-                i.wrap(root);
+            for (GHIssue i : items) {
+            }
             return items;
         }
     }

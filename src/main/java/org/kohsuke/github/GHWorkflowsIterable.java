@@ -21,14 +21,14 @@ class GHWorkflowsIterable extends PagedIterable<GHWorkflow> {
     @Override
     public PagedIterator<GHWorkflow> _iterator(int pageSize) {
         try {
-            GitHubRequest request = owner.getRoot()
+            GitHubRequest request = owner.root()
                     .createRequest()
                     .withUrlPath(owner.getApiTailUrl("actions/workflows"))
                     .build();
 
             return new PagedIterator<>(
                     adapt(GitHubPageIterator
-                            .create(owner.getRoot().getClient(), GHWorkflowsPage.class, request, pageSize)),
+                            .create(owner.root().getClient(), GHWorkflowsPage.class, request, pageSize)),
                     null);
         } catch (MalformedURLException e) {
             throw new GHException("Malformed URL", e);

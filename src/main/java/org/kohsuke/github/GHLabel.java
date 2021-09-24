@@ -36,7 +36,6 @@ public class GHLabel extends GitHubInteractiveObject {
 
     @JsonCreator
     private GHLabel(@JacksonInject @Nonnull GitHub root) {
-        this.root = root;
         url = "";
         name = "";
         color = "";
@@ -45,7 +44,7 @@ public class GHLabel extends GitHubInteractiveObject {
 
     @Nonnull
     GitHub getApiRoot() {
-        return Objects.requireNonNull(root);
+        return Objects.requireNonNull(root());
     }
 
     /**
@@ -179,7 +178,8 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     static GHLabel read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
-        return repository.root.createRequest()
+        return repository.root()
+                .createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"), name)
                 .fetch(GHLabel.class);
 
@@ -195,7 +195,8 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     static PagedIterable<GHLabel> readAll(@Nonnull final GHRepository repository) throws IOException {
-        return repository.root.createRequest()
+        return repository.root()
+                .createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"))
                 .toIterable(GHLabel[].class, null);
 
@@ -230,7 +231,7 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").setRawUrlPath(getUrl()).send();
+        root().createRequest().method("DELETE").setRawUrlPath(getUrl()).send();
     }
 
     @Override
@@ -283,7 +284,7 @@ public class GHLabel extends GitHubInteractiveObject {
     @BetaApi
     public static class Creator extends GHLabelBuilder<Creator> {
         private Creator(@Nonnull GHRepository repository) {
-            super(Creator.class, repository.root, null);
+            super(Creator.class, repository.root(), null);
             requester.method("POST").withUrlPath(repository.getApiTailUrl("labels"));
         }
     }

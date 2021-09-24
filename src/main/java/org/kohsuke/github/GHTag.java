@@ -17,7 +17,6 @@ public class GHTag extends GitHubInteractiveObject {
 
     GHTag wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
         if (commit != null)
             commit.wrapUp(owner);
         return this;
@@ -31,16 +30,6 @@ public class GHTag extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
-    }
-
-    /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root;
     }
 
     /**

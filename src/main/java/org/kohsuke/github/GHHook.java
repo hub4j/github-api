@@ -71,7 +71,7 @@ public abstract class GHHook extends GHObject {
      * @see <a href="https://developer.github.com/v3/repos/hooks/#ping-a-hook">Ping hook</a>
      */
     public void ping() throws IOException {
-        getRoot().createRequest().method("POST").withUrlPath(getApiRoute() + "/pings").send();
+        root().createRequest().method("POST").withUrlPath(getApiRoute() + "/pings").send();
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class GHHook extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        getRoot().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -92,7 +92,7 @@ public abstract class GHHook extends GHObject {
         return null;
     }
 
-    abstract GitHub getRoot();
+    abstract GitHub root();
 
     abstract String getApiRoute();
 }

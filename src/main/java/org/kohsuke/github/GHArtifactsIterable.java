@@ -27,7 +27,7 @@ class GHArtifactsIterable extends PagedIterable<GHArtifact> {
     @Override
     public PagedIterator<GHArtifact> _iterator(int pageSize) {
         return new PagedIterator<>(
-                adapt(GitHubPageIterator.create(owner.getRoot().getClient(), GHArtifactsPage.class, request, pageSize)),
+                adapt(GitHubPageIterator.create(owner.root().getClient(), GHArtifactsPage.class, request, pageSize)),
                 null);
     }
 

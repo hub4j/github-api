@@ -42,9 +42,6 @@ public class GHDeploymentStatus extends GHObject {
      */
     GHDeploymentStatus lateBind(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
-        if (creator != null)
-            creator.wrapUp(root);
         return this;
     }
 
@@ -119,5 +116,10 @@ public class GHDeploymentStatus extends GHObject {
     @Override
     public URL getHtmlUrl() {
         return null;
+    }
+
+    // test only
+    GHRepository getOwner() {
+        return owner;
     }
 }

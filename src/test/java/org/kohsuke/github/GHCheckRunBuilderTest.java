@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.*;
 public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
 
     protected GitHub getInstallationGithub() throws IOException {
-        return getAppInstallationWithTokenApp3().getRoot();
+        return getAppInstallationWithTokenApp3().root();
     }
 
     @Test

@@ -24,7 +24,7 @@ public class GHReleaseBuilder {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Acceptable risk")
     public GHReleaseBuilder(GHRepository ghRepository, String tag) {
         this.repo = ghRepository;
-        this.builder = repo.root.createRequest().method("POST");
+        this.builder = repo.root().createRequest().method("POST");
         builder.with("tag_name", tag);
     }
 

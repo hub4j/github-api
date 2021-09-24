@@ -445,7 +445,7 @@ class GitHubRequest {
         /**
          * With requester.
          *
-         * @param Map
+         * @param map
          *            map of key value pairs to add
          * @return the request builder
          */

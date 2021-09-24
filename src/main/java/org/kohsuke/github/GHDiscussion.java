@@ -111,14 +111,16 @@ public class GHDiscussion extends GHObject {
     }
 
     static GHDiscussion read(GHTeam team, long discussionNumber) throws IOException {
-        return team.root.createRequest()
+        return team.root()
+                .createRequest()
                 .setRawUrlPath(getRawUrlPath(team, discussionNumber))
                 .fetch(GHDiscussion.class)
                 .wrapUp(team);
     }
 
     static PagedIterable<GHDiscussion> readAll(GHTeam team) throws IOException {
-        return team.root.createRequest()
+        return team.root()
+                .createRequest()
                 .setRawUrlPath(getRawUrlPath(team, null))
                 .toIterable(GHDiscussion[].class, item -> item.wrapUp(team));
     }
@@ -152,7 +154,7 @@ public class GHDiscussion extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        team.root.createRequest().method("DELETE").setRawUrlPath(getRawUrlPath(team, number)).send();
+        team.root().createRequest().method("DELETE").setRawUrlPath(getRawUrlPath(team, number)).send();
     }
 
     private static String getRawUrlPath(@Nonnull GHTeam team, @CheckForNull Long discussionNumber) {

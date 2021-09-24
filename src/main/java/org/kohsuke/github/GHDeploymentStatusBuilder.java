@@ -34,7 +34,8 @@ public class GHDeploymentStatusBuilder {
     GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
-        this.builder = repo.root.createRequest()
+        this.builder = repo.root()
+                .createRequest()
                 .withPreview(Previews.ANT_MAN)
                 .withPreview(Previews.FLASH)
                 .method("POST");

@@ -94,8 +94,7 @@ public class GHBranchProtectionBuilder {
                 .withNullable("restrictions", restrictions)
                 .withNullable("enforce_admins", enforceAdmins)
                 .withUrlPath(branch.getProtectionUrl().toString())
-                .fetch(GHBranchProtection.class)
-                .wrap(branch);
+                .fetch(GHBranchProtection.class);
     }
 
     /**
@@ -353,7 +352,7 @@ public class GHBranchProtectionBuilder {
     }
 
     private Requester requester() {
-        return branch.getRoot().createRequest().withPreview(LUKE_CAGE);
+        return branch.root().createRequest().withPreview(LUKE_CAGE);
     }
 
     private static class Restrictions {

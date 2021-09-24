@@ -1,8 +1,8 @@
 {
-  "id": "5975003f-b63e-4402-be6e-04a3dbe40c18",
-  "name": "repos_hub4j-test-org_github-api_hooks_276991249_pings",
+  "id": "8f68dbbe-f256-4030-9349-1ce9f0d449ed",
+  "name": "orgs_hub4j-test-org_hooks_319833954_pings",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api/hooks/276991249/pings",
+    "url": "/orgs/hub4j-test-org/hooks/319833954/pings",
     "method": "POST",
     "headers": {
       "Accept": {
@@ -20,30 +20,27 @@
   "response": {
     "status": 204,
     "headers": {
-      "Date": "Fri, 22 Jan 2021 21:07:50 GMT",
       "Server": "GitHub.com",
-      "Status": "204 No Content",
+      "Date": "Fri, 24 Sep 2021 05:58:39 GMT",
       "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
-      "X-Accepted-OAuth-Scopes": "admin:repo_hook, public_repo, read:repo_hook, repo, write:repo_hook",
+      "X-Accepted-OAuth-Scopes": "admin:org_hook",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4870",
-      "X-RateLimit-Reset": "1611350375",
-      "x-ratelimit-used": "130",
+      "X-RateLimit-Remaining": "4827",
+      "X-RateLimit-Reset": "1632465781",
+      "X-RateLimit-Used": "173",
+      "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "Vary": [
-        "Accept-Encoding, Accept, X-Requested-With",
-        "Accept-Encoding"
-      ],
-      "X-GitHub-Request-Id": "C912:2DA2:50C35C:5DB96F:600B3EA5"
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "DBD6:2F22:24356C:319259:614D690F"
     }
   },
-  "uuid": "5975003f-b63e-4402-be6e-04a3dbe40c18",
+  "uuid": "8f68dbbe-f256-4030-9349-1ce9f0d449ed",
   "persistent": true,
-  "insertionIndex": 6
+  "insertionIndex": 13
 }

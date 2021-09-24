@@ -18,8 +18,8 @@
   "ping_url": "https://api.github.com/repos/hub4j-test-org/github-api/hooks/319833951/pings",
   "deliveries_url": "https://api.github.com/repos/hub4j-test-org/github-api/hooks/319833951/deliveries",
   "last_response": {
-    "code": null,
-    "status": "unused",
-    "message": null
+    "code": 413,
+    "status": null,
+    "message": "Invalid HTTP Response: 413"
   }
 }

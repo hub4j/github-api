@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -620,8 +621,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void tryHook() throws Exception {
-        GHOrganization o = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHRepository r = o.getRepository("github-api");
+        final GHOrganization o = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        final GHRepository r = o.getRepository("github-api");
         try {
             GHHook hook = r.createWebHook(new URL("http://www.google.com/"));
             assertThat(hook.getName(), equalTo("web"));
@@ -637,6 +638,15 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(hook2.getConfig().size(), equalTo(3));
             assertThat(hook2.isActive(), equalTo(true));
             hook2.ping();
+            hook2.delete();
+            final GHHook finalRepoHook = hook;
+            GHFileNotFoundException e = Assert.assertThrows(GHFileNotFoundException.class,
+                    () -> r.getHook((int) finalRepoHook.getId()));
+            assertThat(e.getMessage(),
+                    containsString("repos/hub4j-test-org/github-api/hooks/" + finalRepoHook.getId()));
+            assertThat(e.getMessage(), containsString("rest/reference/repos#get-a-repository-webhook"));
+
+            hook = r.createWebHook(new URL("http://www.google.com/"));
             r.deleteHook((int) hook.getId());
 
             hook = o.createWebHook(new URL("http://www.google.com/"));
@@ -653,13 +663,23 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(hook2.getConfig().size(), equalTo(3));
             assertThat(hook2.isActive(), equalTo(true));
             hook2.ping();
+            hook2.delete();
+
+            final GHHook finalOrgHook = hook;
+            GHFileNotFoundException e2 = Assert.assertThrows(GHFileNotFoundException.class,
+                    () -> o.getHook((int) finalOrgHook.getId()));
+            assertThat(e2.getMessage(), containsString("orgs/hub4j-test-org/hooks/" + finalOrgHook.getId()));
+            assertThat(e2.getMessage(), containsString("rest/reference/orgs#get-an-organization-webhook"));
+
+            hook = o.createWebHook(new URL("http://www.google.com/"));
             o.deleteHook((int) hook.getId());
 
             // System.out.println(hook);
         } finally {
             if (mockGitHub.isUseProxy()) {
-                r = getNonRecordingGitHub().getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
-                for (GHHook h : r.getHooks()) {
+                GHRepository cleanupRepo = getNonRecordingGitHub().getOrganization(GITHUB_API_TEST_ORG)
+                        .getRepository("github-api");
+                for (GHHook h : cleanupRepo.getHooks()) {
                     h.delete();
                 }
             }

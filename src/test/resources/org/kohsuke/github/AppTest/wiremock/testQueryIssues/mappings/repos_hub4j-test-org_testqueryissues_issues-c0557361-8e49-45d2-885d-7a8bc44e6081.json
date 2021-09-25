@@ -2,7 +2,7 @@
   "id": "c0557361-8e49-45d2-885d-7a8bc44e6081",
   "name": "repos_hub4j-test-org_testqueryissues_issues",
   "request": {
-    "url": "/repos/hub4j-test-org/testQueryIssues/issues?state=open&assignee=bloslo&labels=",
+    "url": "/repos/hub4j-test-org/testQueryIssues/issues?state=open&assignee=bloslo",
     "method": "GET",
     "headers": {
       "Accept": {

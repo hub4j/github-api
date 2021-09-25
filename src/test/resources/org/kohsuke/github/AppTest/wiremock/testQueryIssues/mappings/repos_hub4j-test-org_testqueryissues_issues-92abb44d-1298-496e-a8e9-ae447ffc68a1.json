@@ -2,7 +2,7 @@
   "id": "92abb44d-1298-496e-a8e9-ae447ffc68a1",
   "name": "repos_hub4j-test-org_testqueryissues_issues",
   "request": {
-    "url": "/repos/hub4j-test-org/testQueryIssues/issues?state=all&mentioned=bloslo&since=1970-01-19T21%3A26%3A51Z&sort=comments&direction=asc&labels=",
+    "url": "/repos/hub4j-test-org/testQueryIssues/issues?state=all&mentioned=bloslo&since=1970-01-19T21%3A26%3A51Z&sort=comments&direction=asc",
     "method": "GET",
     "headers": {
       "Accept": {

@@ -82,8 +82,9 @@ public class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
      * @return the gh issue query builder
      */
     public GHIssueQueryBuilder label(String label) {
-        if (label != null) {
+        if (label != null && !label.trim().isEmpty()) {
             labels.add(label);
+            req.with("labels", labels.stream().collect(Collectors.joining(",")));
         }
         return this;
     }
@@ -149,9 +150,7 @@ public class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
 
     @Override
     public PagedIterable<GHIssue> list() {
-        return req.with("labels", labels.stream().collect(Collectors.joining(",")))
-                .withUrlPath(repo.getApiTailUrl("issues"))
-                .toIterable(GHIssue[].class, item -> item.wrap(repo));
+        return req.withUrlPath(repo.getApiTailUrl("issues")).toIterable(GHIssue[].class, item -> item.wrap(repo));
     }
 
     /**

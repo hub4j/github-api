@@ -411,7 +411,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
-        return listIssues(state).toList();
+        return queryIssues().state(state).list().toList();
     }
 
     /**

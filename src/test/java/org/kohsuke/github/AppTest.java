@@ -293,33 +293,38 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testQueryIssues() throws IOException {
-        List<GHIssue> openBugIssues = gitHub.getOrganization("hub4j")
-                .getRepository("github-api")
+        List<GHIssue> openBugIssues = gitHub.getOrganization("hub4j-test-org")
+                .getRepository("testQueryIssues")
                 .queryIssues()
                 .state(GHIssueState.OPEN)
                 .label("bug")
-                .creator("bitwiseman")
+                .creator(gitHub.getMyself().getLogin())
+                .milestone("1")
+                .pageSize(10)
                 .list()
                 .toList();
         assertThat(openBugIssues, is(not(empty())));
 
-        List<GHIssue> openIssuesWithAssignee = gitHub.getOrganization("hub4j")
-                .getRepository("github-api")
+        List<GHIssue> openIssuesWithAssignee = gitHub.getOrganization("hub4j-test-org")
+                .getRepository("testQueryIssues")
                 .queryIssues()
                 .state(GHIssueState.OPEN)
-                .assignee("WolverMinion")
+                .assignee(gitHub.getMyself().getLogin())
                 .list()
                 .toList();
         assertThat(openIssuesWithAssignee, is(not(empty())));
 
-        List<GHIssue> closedIssuesSince = gitHub.getOrganization("hub4j")
-                .getRepository("github-api")
+        List<GHIssue> allIssuesSince = gitHub.getOrganization("hub4j-test-org")
+                .getRepository("testQueryIssues")
                 .queryIssues()
-                .state(GHIssueState.CLOSED)
+                .state(GHIssueState.ALL)
+                .mentioned(gitHub.getMyself().getLogin())
                 .since(1632411646L)
+                .sort(GHIssueQueryBuilder.Sort.COMMENTS)
+                .direction(GHDirection.ASC)
                 .list()
                 .toList();
-        assertThat(closedIssuesSince, is(not(empty())));
+        assertThat(allIssuesSince, is(not(empty())));
     }
 
     private GHRepository getTestRepository() throws IOException {

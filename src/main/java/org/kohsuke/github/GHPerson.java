@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Date;
@@ -115,15 +114,11 @@ public abstract class GHPerson extends GHObject {
     public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
         return () -> {
             final PagedIterator<GHRepository> pager;
-            try {
-                GitHubPageIterator<GHRepository[]> iterator = GitHubPageIterator.create(root().getClient(),
-                        GHRepository[].class,
-                        root().createRequest().withUrlPath("users", login, "repos").build(),
-                        pageSize);
-                pager = new PagedIterator<>(iterator, null);
-            } catch (MalformedURLException e) {
-                throw new GHException("Unable to build GitHub API URL", e);
-            }
+            GitHubPageIterator<GHRepository[]> iterator = GitHubPageIterator.create(root().getClient(),
+                    GHRepository[].class,
+                    root().createRequest().withUrlPath("users", login, "repos").build(),
+                    pageSize);
+            pager = new PagedIterator<>(iterator, null);
 
             return new Iterator<List<GHRepository>>() {
                 public boolean hasNext() {

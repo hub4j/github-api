@@ -30,7 +30,6 @@ import org.kohsuke.github.function.InputStreamFunction;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
@@ -151,11 +150,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * @return the {@link PagedIterable} for this builder.
      */
     public <R> PagedIterable<R> toIterable(Class<R[]> type, Consumer<R> itemInitializer) {
-        try {
-            return new GitHubPageContentsIterable<>(client, build(), type, itemInitializer);
-        } catch (MalformedURLException e) {
-            throw new GHException(e.getMessage(), e);
-        }
+        return new GitHubPageContentsIterable<>(client, build(), type, itemInitializer);
 
     }
 }

@@ -60,7 +60,7 @@ class GitHubRequest {
             @Nonnull String method,
             @Nonnull RateLimitTarget rateLimitTarget,
             @CheckForNull InputStream body,
-            boolean forceBody) throws MalformedURLException {
+            boolean forceBody) {
         this.args = Collections.unmodifiableList(new ArrayList<>(args));
         this.headers = Collections.unmodifiableMap(new LinkedHashMap<>(headers));
         this.injectedMappingValues = Collections.unmodifiableMap(new LinkedHashMap<>(injectedMappingValues));
@@ -85,17 +85,28 @@ class GitHubRequest {
 
     /**
      * Gets the final GitHub API URL.
+     *
+     * @throws GHException
+     *             wrapping a {@link MalformedURLException} if the GitHub API URL cannot be constructed
      */
     @Nonnull
-    static URL getApiURL(String apiUrl, String tailApiUrl) throws MalformedURLException {
-        if (tailApiUrl.startsWith("/")) {
-            if ("github.com".equals(apiUrl)) {// backward compatibility
-                return new URL(GitHubClient.GITHUB_URL + tailApiUrl);
+    static URL getApiURL(String apiUrl, String tailApiUrl) {
+        try {
+            if (tailApiUrl.startsWith("/")) {
+                if ("github.com".equals(apiUrl)) {// backward compatibility
+                    return new URL(GitHubClient.GITHUB_URL + tailApiUrl);
+                } else {
+                    return new URL(apiUrl + tailApiUrl);
+                }
             } else {
-                return new URL(apiUrl + tailApiUrl);
+                return new URL(tailApiUrl);
             }
-        } else {
-            return new URL(tailApiUrl);
+        } catch (MalformedURLException e) {
+            // The data going into constructing this URL should be controlled by the GitHub API framework,
+            // so a malformed URL here is a framework runtime error.
+            // All callers of this method ended up wrapping and throwing GHException,
+            // indicating the functionality should be moved to the common code path.
+            throw new GHException("Malformed URL ", e);
         }
     }
 
@@ -349,10 +360,10 @@ class GitHubRequest {
          * Builds a {@link GitHubRequest} from this builder.
          *
          * @return a {@link GitHubRequest}
-         * @throws MalformedURLException
-         *             if the GitHub API URL cannot be constructed
+         * @throws GHException
+         *             wrapping a {@link MalformedURLException} if the GitHub API URL cannot be constructed
          */
-        public GitHubRequest build() throws MalformedURLException {
+        public GitHubRequest build() {
             return new GitHubRequest(args,
                     headers,
                     injectedMappingValues,

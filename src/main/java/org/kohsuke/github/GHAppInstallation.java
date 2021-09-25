@@ -5,7 +5,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -123,11 +122,7 @@ public class GHAppInstallation extends GHObject {
     public PagedSearchIterable<GHRepository> listRepositories() {
         GitHubRequest request;
 
-        try {
-            request = root().createRequest().withPreview(MACHINE_MAN).withUrlPath("/installation/repositories").build();
-        } catch (MalformedURLException e) {
-            throw new GHException("", e);
-        }
+        request = root().createRequest().withPreview(MACHINE_MAN).withUrlPath("/installation/repositories").build();
 
         return new PagedSearchIterable<>(root(), request, GHAppInstallationRepositoryResult.class);
     }

@@ -17,6 +17,9 @@ public class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
     /**
      * Milestone gh issue query builder.
      *
+     * The milestone must be either an integer (the milestone number), the string * (issues with any milestone) or the
+     * string none (issues without milestone).
+     *
      * @param milestone
      *            the milestone
      * @return the gh issue request query builder

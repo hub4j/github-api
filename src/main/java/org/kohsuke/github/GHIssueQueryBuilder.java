@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
     private final GHRepository repo;
-    private List<String> labels = new ArrayList<>();
+    private final List<String> labels = new ArrayList<>();
 
     GHIssueQueryBuilder(GHRepository repo) {
         super(repo.root());

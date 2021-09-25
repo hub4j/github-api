@@ -1,8 +1,11 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.EnumUtils;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.net.URL;
@@ -10,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Represents a check run.
@@ -31,29 +35,24 @@ public class GHCheckRun extends GHObject {
     private String externalId;
     private String startedAt;
     private String completedAt;
-    private URL htmlUrl;
-    private URL detailsUrl;
+    private String htmlUrl;
+    private String detailsUrl;
     private Output output;
     private GHApp app;
-    private GHPullRequest[] pullRequests;
+    private GHPullRequest[] pullRequests = new GHPullRequest[0];
     private GHCheckSuite checkSuite;
 
     GHCheckRun wrap(GHRepository owner) {
         this.owner = owner;
-        wrap(owner.root);
+        wrap(owner.root());
         return this;
     }
 
     GHCheckRun wrap(GitHub root) {
-        this.root = root;
         if (owner != null) {
-            owner.wrap(root);
-            if (pullRequests != null && pullRequests.length != 0) {
-                for (GHPullRequest singlePull : pullRequests) {
-                    singlePull.wrap(owner);
-                }
+            for (GHPullRequest singlePull : pullRequests) {
+                singlePull.wrap(owner);
             }
-
         }
         if (checkSuite != null) {
             if (owner != null) {
@@ -62,15 +61,8 @@ public class GHCheckRun extends GHObject {
                 checkSuite.wrap(root);
             }
         }
-        if (app != null) {
-            app.wrapUp(root);
-        }
 
         return this;
-    }
-
-    GHPullRequest[] wrap() {
-        return pullRequests;
     }
 
     /**
@@ -79,12 +71,27 @@ public class GHCheckRun extends GHObject {
      * @return Status of the check run
      * @see Status
      */
-    public String getStatus() {
+    @WithBridgeMethods(value = String.class, adapterMethod = "statusAsStr")
+    public Status getStatus() {
+        return Status.from(status);
+    }
+
+    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getStatus")
+    private Object statusAsStr(Status status, Class type) {
         return status;
     }
 
     public static enum Status {
-        QUEUED, IN_PROGRESS, COMPLETED
+        QUEUED, IN_PROGRESS, COMPLETED, UNKNOWN;
+
+        public static Status from(String value) {
+            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);
+        }
+
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
     }
 
     /**
@@ -93,7 +100,13 @@ public class GHCheckRun extends GHObject {
      * @return Status of the check run
      * @see Conclusion
      */
-    public String getConclusion() {
+    @WithBridgeMethods(value = String.class, adapterMethod = "conclusionAsStr")
+    public Conclusion getConclusion() {
+        return Conclusion.from(conclusion);
+    }
+
+    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getConclusion")
+    private Object conclusionAsStr(Conclusion conclusion, Class type) {
         return conclusion;
     }
 
@@ -104,7 +117,16 @@ public class GHCheckRun extends GHObject {
      * Parameters - <code>conclusion</code></a>.
      */
     public static enum Conclusion {
-        SUCCESS, FAILURE, NEUTRAL, CANCELLED, TIMED_OUT, ACTION_REQUIRED, SKIPPED
+        ACTION_REQUIRED, CANCELLED, FAILURE, NEUTRAL, SUCCESS, SKIPPED, STALE, TIMED_OUT, UNKNOWN;
+
+        public static Conclusion from(String value) {
+            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);
+        }
+
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
     }
 
     /**
@@ -136,14 +158,11 @@ public class GHCheckRun extends GHObject {
      *             the io exception
      */
     public List<GHPullRequest> getPullRequests() throws IOException {
-        if (pullRequests != null && pullRequests.length != 0) {
-            for (GHPullRequest singlePull : pullRequests) {
-                // Only refresh if we haven't do so before
-                singlePull.refresh(singlePull.getTitle());
-            }
-            return Collections.unmodifiableList(Arrays.asList(pullRequests));
+        for (GHPullRequest singlePull : pullRequests) {
+            // Only refresh if we haven't do so before
+            singlePull.refresh(singlePull.getTitle());
         }
-        return Collections.emptyList();
+        return Collections.unmodifiableList(Arrays.asList(pullRequests));
     }
 
     /**
@@ -154,7 +173,7 @@ public class GHCheckRun extends GHObject {
      */
     @Override
     public URL getHtmlUrl() {
-        return htmlUrl;
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -182,7 +201,7 @@ public class GHCheckRun extends GHObject {
      * @return Details URL
      */
     public URL getDetailsUrl() {
-        return detailsUrl;
+        return GitHubClient.parseURL(detailsUrl);
     }
 
     /**
@@ -208,6 +227,7 @@ public class GHCheckRun extends GHObject {
      *
      * @return GitHub App
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHApp getApp() {
         return app;
     }
@@ -217,6 +237,7 @@ public class GHCheckRun extends GHObject {
      *
      * @return Check suite
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHCheckSuite getCheckSuite() {
         return checkSuite;
     }
@@ -226,6 +247,7 @@ public class GHCheckRun extends GHObject {
      *
      * @return Output of a check run
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public Output getOutput() {
         return output;
     }
@@ -240,7 +262,7 @@ public class GHCheckRun extends GHObject {
         private String summary;
         private String text;
         private int annotationsCount;
-        private URL annotationsUrl;
+        private String annotationsUrl;
 
         /**
          * Gets the title of check run.
@@ -284,7 +306,7 @@ public class GHCheckRun extends GHObject {
          * @return URL of annotations
          */
         public URL getAnnotationsUrl() {
-            return annotationsUrl;
+            return GitHubClient.parseURL(annotationsUrl);
         }
     }
 
@@ -298,7 +320,6 @@ public class GHCheckRun extends GHObject {
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
     @Preview(Previews.ANTIOPE)
-    @Deprecated
     public @NonNull GHCheckRunBuilder update() {
         return new GHCheckRunBuilder(owner, getId());
     }

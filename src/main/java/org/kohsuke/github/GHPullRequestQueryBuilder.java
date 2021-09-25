@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-import static org.kohsuke.github.Previews.SHADOW_CAT;
+import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
 /**
  * Lists up pull requests with some filtering and sorting.
@@ -12,7 +12,7 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
     private final GHRepository repo;
 
     GHPullRequestQueryBuilder(GHRepository repo) {
-        super(repo.root);
+        super(repo.root());
         this.repo = repo;
     }
 

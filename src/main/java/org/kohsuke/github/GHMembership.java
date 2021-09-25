@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
@@ -49,6 +51,7 @@ public class GHMembership extends GitHubInteractiveObject {
      *
      * @return the user
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getUser() {
         return user;
     }
@@ -58,6 +61,7 @@ public class GHMembership extends GitHubInteractiveObject {
      *
      * @return the organization
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHOrganization getOrganization() {
         return organization;
     }
@@ -70,15 +74,12 @@ public class GHMembership extends GitHubInteractiveObject {
      * @see GHMyself#getMembership(GHOrganization) GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-        root.createRequest().method("PATCH").with("state", State.ACTIVE).withUrlPath(url).fetchInto(this);
+        root().createRequest().method("PATCH").with("state", State.ACTIVE).withUrlPath(url).fetchInto(this);
     }
 
     GHMembership wrap(GitHub root) {
-        this.root = root;
         if (user != null)
-            user = root.getUser(user.wrapUp(root));
-        if (organization != null)
-            organization.wrapUp(root);
+            user = root.getUser(user);
         return this;
     }
 

@@ -118,13 +118,46 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
         return q("repo:" + v);
     }
 
+    /**
+     * Order gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder order(GHDirection v) {
+        req.with("order", v);
+        return this;
+    }
+
+    /**
+     * Sort gh content search builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder sort(GHContentSearchBuilder.Sort sort) {
+        if (Sort.BEST_MATCH.equals(sort)) {
+            req.remove("sort");
+        } else {
+            req.with("sort", sort);
+        }
+        return this;
+    }
+
+    /**
+     * The enum Sort.
+     */
+    public enum Sort {
+        BEST_MATCH, INDEXED
+    }
+
     private static class ContentSearchResult extends SearchResult<GHContent> {
         private GHContent[] items;
 
         @Override
         GHContent[] getItems(GitHub root) {
-            for (GHContent item : items)
-                item.wrap(root);
             return items;
         }
     }

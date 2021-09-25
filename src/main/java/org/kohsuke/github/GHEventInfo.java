@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Represents an event.
@@ -18,6 +18,16 @@ public class GHEventInfo extends GitHubInteractiveObject {
 
     private long id;
     private String created_at;
+
+    /**
+     * Representation of GitHub Event API Event Type.
+     *
+     * This is not the same as the values used for hook methods such as
+     * {@link GHRepository#createHook(String, Map, Collection, boolean)}.
+     *
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/github-event-types">GitHub event
+     *      types</a>
+     */
     private String type;
 
     // these are all shallow objects
@@ -40,25 +50,45 @@ public class GHEventInfo extends GitHubInteractiveObject {
         private String name; // owner/repo
     }
 
+    static final Map<String, GHEvent> mapTypeStringToEvent = createEventMap();
+
+    /**
+     * Map for GitHub Event API Event Type to GHEvent.
+     *
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/github-event-types">GitHub event
+     *      types</a>
+     */
+    private static Map<String, GHEvent> createEventMap() {
+        HashMap<String, GHEvent> map = new HashMap<>();
+        map.put("CommitCommentEvent", GHEvent.COMMIT_COMMENT);
+        map.put("CreateEvent", GHEvent.CREATE);
+        map.put("DeleteEvent", GHEvent.DELETE);
+        map.put("ForkEvent", GHEvent.FORK);
+        map.put("GollumEvent", GHEvent.GOLLUM);
+        map.put("IssueCommentEvent", GHEvent.ISSUE_COMMENT);
+        map.put("IssuesEvent", GHEvent.ISSUES);
+        map.put("MemberEvent", GHEvent.MEMBER);
+        map.put("PublicEvent", GHEvent.PUBLIC);
+        map.put("PullRequestEvent", GHEvent.PULL_REQUEST);
+        map.put("PullRequestReviewEvent", GHEvent.PULL_REQUEST_REVIEW);
+        map.put("PullRequestReviewCommentEvent", GHEvent.PULL_REQUEST_REVIEW_COMMENT);
+        map.put("PushEvent", GHEvent.PUSH);
+        map.put("ReleaseEvent", GHEvent.RELEASE);
+        map.put("WatchEvent", GHEvent.WATCH);
+        return Collections.unmodifiableMap(map);
+    }
+
+    static GHEvent transformTypeToGHEvent(String type) {
+        return mapTypeStringToEvent.getOrDefault(type, GHEvent.UNKNOWN);
+    }
+
     /**
      * Gets type.
      *
      * @return the type
      */
     public GHEvent getType() {
-        String t = type;
-        if (t.endsWith("Event"))
-            t = t.substring(0, t.length() - 5);
-        for (GHEvent e : GHEvent.values()) {
-            if (e.name().replace("_", "").equalsIgnoreCase(t))
-                return e;
-        }
-        return null; // unknown event type
-    }
-
-    GHEventInfo wrapUp(GitHub root) {
-        this.root = root;
-        return this;
+        return transformTypeToGHEvent(type);
     }
 
     /**
@@ -89,7 +119,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
     public GHRepository getRepository() throws IOException {
-        return root.getRepository(repo.name);
+        return root().getRepository(repo.name);
     }
 
     /**
@@ -102,7 +132,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
     public GHUser getActor() throws IOException {
-        return root.getUser(actor.getLogin());
+        return root().getUser(actor.getLogin());
     }
 
     /**
@@ -126,7 +156,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
     public GHOrganization getOrganization() throws IOException {
-        return (org == null || org.getLogin() == null) ? null : root.getOrganization(org.getLogin());
+        return (org == null || org.getLogin() == null) ? null : root().getOrganization(org.getLogin());
     }
 
     /**
@@ -142,8 +172,8 @@ public class GHEventInfo extends GitHubInteractiveObject {
      *             if payload cannot be parsed
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        T v = GitHubClient.getMappingObjectReader(root).readValue(payload.traverse(), type);
-        v.wrapUp(root);
+        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);
+        v.lateBind();
         return v;
     }
 }

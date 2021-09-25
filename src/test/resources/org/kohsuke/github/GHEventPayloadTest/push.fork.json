@@ -102,9 +102,9 @@
     "forks": 0,
     "open_issues": 5,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "stargazers": 0,
-    "master_branch": "master",
+    "master_branch": "main",
     "organization": "hub4j-test-org"
   },
   "pusher": {

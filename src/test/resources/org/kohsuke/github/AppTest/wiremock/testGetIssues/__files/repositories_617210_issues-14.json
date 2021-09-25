@@ -573,7 +573,7 @@
     "id": 59959411,
     "node_id": "MDU6SXNzdWU1OTk1OTQxMQ==",
     "number": 162,
-    "title": "GHContent#content always returns master version",
+    "title": "GHContent#content always returns main version",
     "user": {
       "login": "tilayealemu",
       "id": 11229217,
@@ -605,7 +605,7 @@
     "updated_at": "2015-03-22T17:21:23Z",
     "closed_at": "2015-03-22T17:21:09Z",
     "author_association": "NONE",
-    "body": "GHContent#content always returns content from the master branch. Included sample code. Content 1  comes from  master and 2 from the specified branch. Using github-api 1.62.\n\n```\n@Test\npublic void github_api_issue() throws Exception {\n    String branch = \"mybranch\";\n    GitHub github = GitHub.connectUsingPassword(\"myyser\", \"mypassword\");\n    GHRepository ghRepo = github.getRepository(\"myrepo\");\n    List<GHContent> contents = ghRepo.getDirectoryContent(\"myfolder\", \"heads/\" + branch);\n    for (GHContent content : contents) {\n        String content1 = content.getContent();\n        String content2 = ghRepo.getFileContent(content.getPath(), branch).getContent();\n        // System.out.println(\"Contents of \" + content.getPath());\n        // System.out.println(\"Content1\");\n        // System.out.println(content1);\n        // System.out.println(\"Content2\");\n        // System.out.println(content2);\n    }\n}\n```\n"
+    "body": "GHContent#content always returns content from the main branch. Included sample code. Content 1  comes from  main and 2 from the specified branch. Using github-api 1.62.\n\n```\n@Test\npublic void github_api_issue() throws Exception {\n    String branch = \"mybranch\";\n    GitHub github = GitHub.connectUsingPassword(\"myyser\", \"mypassword\");\n    GHRepository ghRepo = github.getRepository(\"myrepo\");\n    List<GHContent> contents = ghRepo.getDirectoryContent(\"myfolder\", \"heads/\" + branch);\n    for (GHContent content : contents) {\n        String content1 = content.getContent();\n        String content2 = ghRepo.getFileContent(content.getPath(), branch).getContent();\n        // System.out.println(\"Contents of \" + content.getPath());\n        // System.out.println(\"Content1\");\n        // System.out.println(content1);\n        // System.out.println(\"Content2\");\n        // System.out.println(content2);\n    }\n}\n```\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/161",
@@ -655,7 +655,7 @@
       "diff_url": "https://github.com/hub4j/github-api/pull/161.diff",
       "patch_url": "https://github.com/hub4j/github-api/pull/161.patch"
     },
-    "body": "Hi kohsuke\nI used your API to call Github API but I found that there isn't any method lists all languages using in repository. Therefore, I ask you to add it into your master code.\nThanks\n"
+    "body": "Hi kohsuke\nI used your API to call Github API but I found that there isn't any method lists all languages using in repository. Therefore, I ask you to add it into your main code.\nThanks\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/160",
@@ -1025,7 +1025,7 @@
     "updated_at": "2015-02-24T22:15:14Z",
     "closed_at": "2015-02-24T22:15:14Z",
     "author_association": "CONTRIBUTOR",
-    "body": "Hello,\nThanks for this wonderful library!\n\nI would like the library to support github trees, is it foreseen (https://developer.github.com/v3/git/trees/)?\nFor instance I need to retrieve this:\nhttps://api.github.com/repos/calipho-sib/nextprot-docs/git/trees/master?recursive=1\n\nIf you would like I can try to implement this feature and I make a pull request?\n"
+    "body": "Hello,\nThanks for this wonderful library!\n\nI would like the library to support github trees, is it foreseen (https://developer.github.com/v3/git/trees/)?\nFor instance I need to retrieve this:\nhttps://api.github.com/repos/calipho-sib/nextprot-docs/git/trees/main?recursive=1\n\nIf you would like I can try to implement this feature and I make a pull request?\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/152",

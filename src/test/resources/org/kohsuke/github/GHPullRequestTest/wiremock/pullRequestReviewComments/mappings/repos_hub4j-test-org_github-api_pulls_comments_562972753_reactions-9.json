@@ -1,0 +1,50 @@
+{
+  "id": "15fb671a-3ce3-420c-981c-0e0f6ae5e7b9",
+  "name": "repos_hub4j-test-org_github-api_pulls_comments_562972753_reactions",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/comments/562972753/reactions",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "[]",
+    "headers": {
+      "Date": "Fri, 22 Jan 2021 23:38:19 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"7d0253ca51c378ca4fa4839bfd5bb1ac338f28e5ac8f6810cbdc8553513d942f\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.squirrel-girl-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4808",
+      "X-RateLimit-Reset": "1611361294",
+      "x-ratelimit-used": "192",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D013:3B95:105845:1263E9:600B61EB"
+    }
+  },
+  "uuid": "15fb671a-3ce3-420c-981c-0e0f6ae5e7b9",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-github-api-pulls-comments-562972753-reactions",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-repos-hub4j-test-org-github-api-pulls-comments-562972753-reactions-2",
+  "insertionIndex": 9
+}

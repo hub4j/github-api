@@ -7,8 +7,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.*;
 
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     private static String REPO_NAME = "hub4j-test-org/GHTreeBuilderTest";
@@ -26,14 +27,14 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     private static byte[] CONTENT_DATA2 = { 0x04, 0x05, 0x06, 0x07 };
 
     private GHRepository repo;
-    private GHRef masterRef;
+    private GHRef mainRef;
     private GHTreeBuilder treeBuilder;
 
     @Before
     @After
     public void cleanup() throws Exception {
         if (mockGitHub.isUseProxy()) {
-            repo = getGitHubBeforeAfter().getRepository(REPO_NAME);
+            repo = getNonRecordingGitHub().getRepository(REPO_NAME);
             Arrays.asList(PATH_SCRIPT, PATH_README, PATH_DATA1, PATH_DATA2).forEach(path -> {
                 try {
                     GHContent content = repo.getFileContent(path);
@@ -49,9 +50,9 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     @Before
     public void setUp() throws Exception {
         repo = gitHub.getRepository(REPO_NAME);
-        masterRef = repo.getRef("heads/master");
-        String masterTreeSha = repo.getTreeRecursive("master", 1).getSha();
-        treeBuilder = repo.createTree().baseTree(masterTreeSha);
+        mainRef = repo.getRef("heads/main");
+        String mainTreeSha = repo.getTreeRecursive("main", 1).getSha();
+        treeBuilder = repo.createTree().baseTree(mainTreeSha);
     }
 
     @Test
@@ -62,8 +63,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
 
         updateTree();
 
-        assertEquals(CONTENT_SCRIPT.length(), getFileSize(PATH_SCRIPT));
-        assertEquals(CONTENT_README.length(), getFileSize(PATH_README));
+        assertThat(getFileSize(PATH_SCRIPT), equalTo(CONTENT_SCRIPT.length()));
+        assertThat(getFileSize(PATH_README), equalTo(CONTENT_README.length()));
     }
 
     @Test
@@ -76,8 +77,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
 
         updateTree();
 
-        assertEquals(CONTENT_DATA1.length, getFileSize(PATH_DATA1));
-        assertEquals(CONTENT_DATA2.length, getFileSize(PATH_DATA2));
+        assertThat(getFileSize(PATH_DATA1), equalTo((long) CONTENT_DATA1.length));
+        assertThat(getFileSize(PATH_DATA2), equalTo((long) CONTENT_DATA2.length));
     }
 
     @Test
@@ -87,22 +88,30 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         treeBuilder.add(PATH_DATA1, CONTENT_DATA1, false);
         treeBuilder.add(PATH_DATA2, CONTENT_DATA2, false);
 
-        updateTree();
+        GHCommit commit = updateTree();
 
-        assertEquals(CONTENT_SCRIPT.length(), getFileSize(PATH_SCRIPT));
-        assertEquals(CONTENT_README.length(), getFileSize(PATH_README));
-        assertEquals(CONTENT_DATA1.length, getFileSize(PATH_DATA1));
-        assertEquals(CONTENT_DATA2.length, getFileSize(PATH_DATA2));
+        assertThat(getFileSize(PATH_SCRIPT), equalTo((long) CONTENT_SCRIPT.length()));
+        assertThat(getFileSize(PATH_README), equalTo((long) CONTENT_README.length()));
+        assertThat(getFileSize(PATH_DATA1), equalTo((long) CONTENT_DATA1.length));
+        assertThat(getFileSize(PATH_DATA2), equalTo((long) CONTENT_DATA2.length));
+
+        assertThat(commit.getCommitShortInfo().getAuthor().getEmail(), equalTo("author@author.com"));
+        assertThat(commit.getCommitShortInfo().getCommitter().getEmail(), equalTo("committer@committer.com"));
+
     }
 
-    private void updateTree() throws IOException {
+    private GHCommit updateTree() throws IOException {
         String treeSha = treeBuilder.create().getSha();
-        String commitSha = new GHCommitBuilder(repo).message("Add files")
+        GHCommit commit = new GHCommitBuilder(repo).message("Add files")
                 .tree(treeSha)
-                .parent(masterRef.getObject().getSha())
-                .create()
-                .getSHA1();
-        masterRef.updateTo(commitSha);
+                .author("author", "author@author.com", new Date(1611433225969L))
+                .committer("committer", "committer@committer.com", new Date(1611433225968L))
+                .parent(mainRef.getObject().getSha())
+                .create();
+
+        String commitSha = commit.getSHA1();
+        mainRef.updateTo(commitSha);
+        return commit;
     }
 
     private long getFileSize(String path) throws IOException {

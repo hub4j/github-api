@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.internal.Previews;
+
 import java.net.URL;
 import java.util.Locale;
 
@@ -25,11 +27,21 @@ public class GHDeploymentStatus extends GHObject {
      *
      * @return the gh deployment status
      */
+    @Deprecated
     public GHDeploymentStatus wrap(GHRepository owner) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh deployment status.
+     *
+     * @param owner
+     *            the owner
+     *
+     * @return the gh deployment status
+     */
+    GHDeploymentStatus lateBind(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
-        if (creator != null)
-            creator.wrapUp(root);
         return this;
     }
 
@@ -54,7 +66,6 @@ public class GHDeploymentStatus extends GHObject {
      *
      * @return the target url
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public URL getLogUrl() {
         return GitHubClient.parseURL(log_url);
@@ -76,7 +87,6 @@ public class GHDeploymentStatus extends GHObject {
      *
      * @return the deployment environment url
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public URL getEnvironmentUrl() {
         return GitHubClient.parseURL(environment_url);
@@ -106,5 +116,10 @@ public class GHDeploymentStatus extends GHObject {
     @Override
     public URL getHtmlUrl() {
         return null;
+    }
+
+    // test only
+    GHRepository getOwner() {
+        return owner;
     }
 }

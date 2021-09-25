@@ -87,11 +87,12 @@
   "disabled": false,
   "open_issues_count": 0,
   "license": null,
+  "visibility": "public",
   "is_template": true,
   "forks": 0,
   "open_issues": 0,
   "watchers": 0,
-  "default_branch": "master",
+  "default_branch": "main",
   "permissions": {
     "admin": true,
     "push": true,

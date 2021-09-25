@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -47,7 +48,6 @@ import java.util.Locale;
  */
 @SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Jackson serializes these even without a getter")
 @Preview(Previews.ANTIOPE)
-@Deprecated
 public final class GHCheckRunBuilder {
 
     protected final GHRepository repo;
@@ -62,7 +62,8 @@ public final class GHCheckRunBuilder {
 
     GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
         this(repo,
-                repo.root.createRequest()
+                repo.root()
+                        .createRequest()
                         .withPreview(Previews.ANTIOPE)
                         .method("POST")
                         .with("name", name)
@@ -72,7 +73,8 @@ public final class GHCheckRunBuilder {
 
     GHCheckRunBuilder(GHRepository repo, long checkId) {
         this(repo,
-                repo.root.createRequest()
+                repo.root()
+                        .createRequest()
                         .withPreview(Previews.ANTIOPE)
                         .method("PATCH")
                         .withUrlPath(repo.getApiTailUrl("check-runs/" + checkId)));
@@ -151,11 +153,12 @@ public final class GHCheckRunBuilder {
         }
         GHCheckRun run = requester.with("output", output).with("actions", actions).fetch(GHCheckRun.class).wrap(repo);
         while (!extraAnnotations.isEmpty()) {
-            Output output2 = new Output(output.title, output.summary);
+            Output output2 = new Output(output.title, output.summary).withText(output.text);
             int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);
             output2.annotations = extraAnnotations.subList(0, i);
             extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());
-            run = repo.root.createRequest()
+            run = repo.root()
+                    .createRequest()
                     .withPreview(Previews.ANTIOPE)
                     .method("PATCH")
                     .with("output", output2)

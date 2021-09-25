@@ -1,0 +1,50 @@
+{
+  "id": "d14b8fc5-25cc-4be9-8dae-3abb9a7c5a1d",
+  "name": "repos_hub4j-test-org_github-api_hooks_319833951",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/hooks/319833951",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_hooks_319833951-5.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 24 Sep 2021 05:58:38 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"e14f3cb1b041c35bb16d849b285d4fa64e53d6b7d9e4956a103c2694ac51da2c\"",
+      "Last-Modified": "Fri, 24 Sep 2021 05:58:37 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:repo_hook, public_repo, read:repo_hook, repo, write:repo_hook",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4835",
+      "X-RateLimit-Reset": "1632465781",
+      "X-RateLimit-Used": "165",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DBC6:2ACD:2423FD6:25F0977:614D690E"
+    }
+  },
+  "uuid": "d14b8fc5-25cc-4be9-8dae-3abb9a7c5a1d",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-github-api-hooks-319833951",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-repos-hub4j-test-org-github-api-hooks-319833951-2",
+  "insertionIndex": 5
+}

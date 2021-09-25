@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.hamcrest.Matchers.equalTo;
+
 public class GHTeamBuilderTest extends AbstractGitHubWireMockTest {
 
     @Test
@@ -23,10 +25,10 @@ public class GHTeamBuilderTest extends AbstractGitHubWireMockTest {
                 .parentTeamId(parentTeam.getId())
                 .create();
 
-        assertEquals(description, childTeam.getDescription());
-        assertEquals(childTeamSlug, childTeam.getName());
-        assertEquals(childTeamSlug, childTeam.getSlug());
-        assertEquals(GHTeam.Privacy.CLOSED, childTeam.getPrivacy());
+        assertThat(childTeam.getDescription(), equalTo(description));
+        assertThat(childTeam.getName(), equalTo(childTeamSlug));
+        assertThat(childTeam.getSlug(), equalTo(childTeamSlug));
+        assertThat(childTeam.getPrivacy(), equalTo(GHTeam.Privacy.CLOSED));
 
     }
 }

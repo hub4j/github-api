@@ -1,12 +1,13 @@
 package org.kohsuke.github;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Gunnar Skjold
@@ -27,24 +28,24 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testCreatedCard() {
-        Assert.assertEquals("This is a card", card.getNote());
-        Assert.assertFalse(card.isArchived());
+        assertThat(card.getNote(), equalTo("This is a card"));
+        assertThat(card.isArchived(), is(false));
     }
 
     @Test
     public void testEditCardNote() throws IOException {
         card.setNote("New note");
         card = gitHub.getProjectCard(card.getId());
-        Assert.assertEquals("New note", card.getNote());
-        Assert.assertFalse(card.isArchived());
+        assertThat(card.getNote(), equalTo("New note"));
+        assertThat(card.isArchived(), is(false));
     }
 
     @Test
     public void testArchiveCard() throws IOException {
         card.setArchived(true);
         card = gitHub.getProjectCard(card.getId());
-        Assert.assertEquals("This is a card", card.getNote());
-        Assert.assertTrue(card.isArchived());
+        assertThat(card.getNote(), equalTo("This is a card"));
+        assertThat(card.isArchived(), is(true));
     }
 
     @Test
@@ -53,7 +54,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         try {
             GHIssue issue = repo.createIssue("new-issue").body("With body").create();
             GHProjectCard card = column.createCard(issue);
-            Assert.assertEquals(issue.getUrl(), card.getContentUrl());
+            assertThat(card.getContentUrl(), equalTo(issue.getUrl()));
         } finally {
             repo.delete();
         }
@@ -64,7 +65,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         card.delete();
         try {
             card = gitHub.getProjectCard(card.getId());
-            Assert.assertNull(card);
+            assertThat(card, nullValue());
         } catch (FileNotFoundException e) {
             card = null;
         }
@@ -74,7 +75,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     public void after() throws IOException {
         if (mockGitHub.isUseProxy()) {
             if (card != null) {
-                card = getGitHubBeforeAfter().getProjectCard(card.getId());
+                card = getNonRecordingGitHub().getProjectCard(card.getId());
                 try {
                     card.delete();
                     card = null;
@@ -83,7 +84,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
                 }
             }
             if (column != null) {
-                column = getGitHubBeforeAfter().getProjectColumn(column.getId());
+                column = getNonRecordingGitHub().getProjectColumn(column.getId());
                 try {
                     column.delete();
                     column = null;
@@ -92,7 +93,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
                 }
             }
             if (project != null) {
-                project = getGitHubBeforeAfter().getProject(project.getId());
+                project = getNonRecordingGitHub().getProject(project.getId());
                 try {
                     project.delete();
                     project = null;

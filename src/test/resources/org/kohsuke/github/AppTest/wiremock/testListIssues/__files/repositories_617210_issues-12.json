@@ -179,7 +179,7 @@
     "updated_at": "2019-10-26T02:20:02Z",
     "closed_at": "2019-10-26T02:20:02Z",
     "author_association": "NONE",
-    "body": "I have a use case in which I get a commit id for a particular branch in a repository, but when I try to get the file content from that particular branch, I get the content for the same file from the master branch.\r\n\r\nHow to get a branch and get the file content from that branch only. Also, is it possible to get the branch and file content on the basis of commit id. Below is my code I use to get the file content\r\n\r\n\r\n`\r\n\r\n\r\n        GHContent props = null;\r\n        try {\r\n            props = ghBranch.getOwner().getFileContent(\"props.json\");\r\n        } catch (IOException e) {\r\n            return Response.badRequest(\"Cannot find props.json at the root of project\");\r\n        }\r\n\r\n        CustomProps props = convertorService.getProperties(props);\r\n        return Response.ok(cloud);`\r\n"
+    "body": "I have a use case in which I get a commit id for a particular branch in a repository, but when I try to get the file content from that particular branch, I get the content for the same file from the main branch.\r\n\r\nHow to get a branch and get the file content from that branch only. Also, is it possible to get the branch and file content on the basis of commit id. Below is my code I use to get the file content\r\n\r\n\r\n`\r\n\r\n\r\n        GHContent props = null;\r\n        try {\r\n            props = ghBranch.getOwner().getFileContent(\"props.json\");\r\n        } catch (IOException e) {\r\n            return Response.badRequest(\"Cannot find props.json at the root of project\");\r\n        }\r\n\r\n        CustomProps props = convertorService.getProperties(props);\r\n        return Response.ok(cloud);`\r\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/370",
@@ -223,7 +223,7 @@
     "updated_at": "2019-11-07T22:56:39Z",
     "closed_at": "2019-11-07T22:56:39Z",
     "author_association": "NONE",
-    "body": "As of yesterday evening a jenkins job we have running using this repo has stopped working. We get a jackson deserialization error throwing a java IO exception here: https://github.com/kohsuke/github-api/blob/master/src/main/java/org/kohsuke/github/Requester.java#L608\r\n\r\nIt also mentions something about:  caused by: com.fasterxml.jackson.databind.JsonMappingException: Can not deserialize instance of java.lang.String out of START_OBJECT token\r\n at [Source: java.io.StringReader@5474ef58; line: 1, column: 4222] (through reference chain: org.kohsuke.github.GHRepository[\"homepage\"]))\r\n\r\nWe checked GHRepository homepage and this is a string but in our json from github homepage looks like:\r\n\"homepage\":{\"scheme\":\"http\",\"user\":null,\"password\":null,\"host\":\"xxxxx-xx.github.com\",\"port\":null,\"path\":\"/xxxx-xxxx/\",\"query\":null,\"fragment\":null}\r\n\r\nSo I think the issue is trying to put this object into a homepage string but we are not sure why this problem started suddenly. There have been no changes to the script we have.\r\n"
+    "body": "As of yesterday evening a jenkins job we have running using this repo has stopped working. We get a jackson deserialization error throwing a java IO exception here: https://github.com/kohsuke/github-api/blob/main/src/main/java/org/kohsuke/github/Requester.java#L608\r\n\r\nIt also mentions something about:  caused by: com.fasterxml.jackson.databind.JsonMappingException: Can not deserialize instance of java.lang.String out of START_OBJECT token\r\n at [Source: java.io.StringReader@5474ef58; line: 1, column: 4222] (through reference chain: org.kohsuke.github.GHRepository[\"homepage\"]))\r\n\r\nWe checked GHRepository homepage and this is a string but in our json from github homepage looks like:\r\n\"homepage\":{\"scheme\":\"http\",\"user\":null,\"password\":null,\"host\":\"xxxxx-xx.github.com\",\"port\":null,\"path\":\"/xxxx-xxxx/\",\"query\":null,\"fragment\":null}\r\n\r\nSo I think the issue is trying to put this object into a homepage string but we are not sure why this problem started suddenly. There have been no changes to the script we have.\r\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/369",
@@ -367,7 +367,7 @@
     "updated_at": "2017-07-28T17:36:12Z",
     "closed_at": "2017-07-28T17:35:59Z",
     "author_association": "NONE",
-    "body": "```\r\nGHPullRequest pull = repo.createPullRequest(\"Release $version\", \"master\", \"production\", body)\r\nwhile(!pull.getMergeable()) {\r\n      println \"PR not yet mergeable, retrying...\"\r\n      sleep 2\r\n}\r\npull.merge(\"Merged via Jenkins\", pull.getHead().getSha())\r\n```\r\n\r\nThe `pull.merge(...)` seemingly results in a no-op. No error. No merge. \r\n\r\nGenerally it's not immediately mergeable via `pull.getMergeable()` and it must pause a moment before that passes. But even accounting for that, I still get nothing. "
+    "body": "```\r\nGHPullRequest pull = repo.createPullRequest(\"Release $version\", \"main\", \"production\", body)\r\nwhile(!pull.getMergeable()) {\r\n      println \"PR not yet mergeable, retrying...\"\r\n      sleep 2\r\n}\r\npull.merge(\"Merged via Jenkins\", pull.getHead().getSha())\r\n```\r\n\r\nThe `pull.merge(...)` seemingly results in a no-op. No error. No merge. \r\n\r\nGenerally it's not immediately mergeable via `pull.getMergeable()` and it must pause a moment before that passes. But even accounting for that, I still get nothing. "
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/366",
@@ -1357,7 +1357,7 @@
       "diff_url": "https://github.com/hub4j/github-api/pull/343.diff",
       "patch_url": "https://github.com/hub4j/github-api/pull/343.patch"
     },
-    "body": "I already add the latest release, so please add to master and update version so that I can use in my project\r\nFix #341 \r\n\r\nPS  I don't know how to push my fixed module to the maven server so, please. @emlagowski \r\n\r\n\r\nThank you"
+    "body": "I already add the latest release, so please add to main and update version so that I can use in my project\r\nFix #341 \r\n\r\nPS  I don't know how to push my fixed module to the maven server so, please. @emlagowski \r\n\r\n\r\nThank you"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/342",

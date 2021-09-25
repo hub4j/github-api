@@ -66,7 +66,19 @@ public class GHDeployKey {
      *            the repo
      * @return the gh deploy key
      */
+    @Deprecated
     public GHDeployKey wrap(GHRepository repo) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh deploy key.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh deploy key
+     */
+    GHDeployKey lateBind(GHRepository repo) {
         this.owner = repo;
         return this;
     }
@@ -82,7 +94,8 @@ public class GHDeployKey {
      *             the io exception
      */
     public void delete() throws IOException {
-        owner.root.createRequest()
+        owner.root()
+                .createRequest()
                 .method("DELETE")
                 .withUrlPath(String.format("/repos/%s/%s/keys/%d", owner.getOwnerName(), owner.getName(), id))
                 .send();

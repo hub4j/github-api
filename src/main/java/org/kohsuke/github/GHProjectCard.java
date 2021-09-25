@@ -1,12 +1,13 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.INERTIA;
 
 /**
  * The type GHProjectCard.
@@ -33,8 +34,19 @@ public class GHProjectCard extends GHObject {
      *            the root
      * @return the gh project card
      */
+    @Deprecated
     public GHProjectCard wrap(GitHub root) {
-        this.root = root;
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh project card.
+     *
+     * @param root
+     *            the root
+     * @return the gh project card
+     */
+    GHProjectCard lateBind(GitHub root) {
         return this;
     }
 
@@ -45,20 +57,22 @@ public class GHProjectCard extends GHObject {
      *            the column
      * @return the gh project card
      */
+    @Deprecated
     public GHProjectCard wrap(GHProjectColumn column) {
-        this.column = column;
-        this.project = column.project;
-        this.root = column.root;
-        return this;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
-     * Gets root.
+     * Wrap gh project card.
      *
-     * @return the root
+     * @param column
+     *            the column
+     * @return the gh project card
      */
-    public GitHub getRoot() {
-        return root;
+    GHProjectCard lateBind(GHProjectColumn column) {
+        this.column = column;
+        this.project = column.project;
+        return lateBind(column.root());
     }
 
     /**
@@ -68,12 +82,12 @@ public class GHProjectCard extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHProject getProject() throws IOException {
         if (project == null) {
             try {
-                project = root.createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class).wrap(root);
+                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
             } catch (FileNotFoundException e) {
-                return null;
             }
         }
         return project;
@@ -86,15 +100,15 @@ public class GHProjectCard extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHProjectColumn getColumn() throws IOException {
         if (column == null) {
             try {
-                column = root.createRequest()
+                column = root().createRequest()
                         .withUrlPath(getColumnUrl().getPath())
                         .fetch(GHProjectColumn.class)
-                        .wrap(root);
+                        .lateBind(root());
             } catch (FileNotFoundException e) {
-                return null;
             }
         }
         return column;
@@ -112,12 +126,9 @@ public class GHProjectCard extends GHObject {
             return null;
         try {
             if (content_url.contains("/pulls")) {
-                return root.createRequest()
-                        .withUrlPath(getContentUrl().getPath())
-                        .fetch(GHPullRequest.class)
-                        .wrap(root);
+                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHPullRequest.class);
             } else {
-                return root.createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class).wrap(root);
+                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);
             }
         } catch (FileNotFoundException e) {
             return null;
@@ -138,6 +149,7 @@ public class GHProjectCard extends GHObject {
      *
      * @return the creator
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getCreator() {
         return creator;
     }
@@ -203,7 +215,7 @@ public class GHProjectCard extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
+        root().createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -222,6 +234,6 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
     }
 }

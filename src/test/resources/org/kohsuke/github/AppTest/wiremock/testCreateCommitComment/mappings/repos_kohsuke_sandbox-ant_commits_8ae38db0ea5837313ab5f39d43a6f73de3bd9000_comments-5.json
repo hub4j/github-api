@@ -1,55 +1,54 @@
 {
-  "id": "62d11eb1-6045-42a7-988a-aae9d9f3800b",
+  "id": "5a8912b4-7de9-4567-b12b-12a02d59064d",
   "name": "repos_kohsuke_sandbox-ant_commits_8ae38db0ea5837313ab5f39d43a6f73de3bd9000_comments",
   "request": {
     "url": "/repos/kohsuke/sandbox-ant/commits/8ae38db0ea5837313ab5f39d43a6f73de3bd9000/comments",
     "method": "POST",
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"body\":\"[testing](http://kohsuse.org/)\"}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
-      }
-    ],
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
-    }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"body\":\"[testing](http://kohsuse.org/)\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
   },
   "response": {
     "status": 201,
     "bodyFileName": "repos_kohsuke_sandbox-ant_commits_8ae38db0ea5837313ab5f39d43a6f73de3bd9000_comments-5.json",
     "headers": {
-      "Date": "Sat, 26 Oct 2019 01:28:59 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "201 Created",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4240",
-      "X-RateLimit-Reset": "1572055286",
+      "Date": "Mon, 28 Jun 2021 22:41:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"1ebfc3d7a9cbe1bfbab78c1636ef102a\"",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "ETag": "\"0370f56de2fb3daaa1930d56adba70e7db1be13f5fac58a2040e0666c12bdaab\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "Location": "https://api.github.com/repos/kohsuke/sandbox-ant/comments/35673784",
       "X-GitHub-Media-Type": "unknown, github.v3",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin": "*",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4935",
+      "X-RateLimit-Reset": "1624920219",
+      "X-RateLimit-Used": "65",
+      "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "CB24:8340:ED2399:116FE83:5DB3A15A"
+      "X-GitHub-Request-Id": "FF9E:9C39:2E5670:311D55:60DA5019",
+      "Location": "https://api.github.com/repos/kohsuke/sandbox-ant/comments/52782621"
     }
   },
-  "uuid": "62d11eb1-6045-42a7-988a-aae9d9f3800b",
+  "uuid": "5a8912b4-7de9-4567-b12b-12a02d59064d",
   "persistent": true,
   "insertionIndex": 5
 }

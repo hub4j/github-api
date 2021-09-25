@@ -1,0 +1,44 @@
+{
+  "id": "f4c3fbc7-2328-41ce-84f4-2070ced65691",
+  "name": "teams_3451996_members_rtyler",
+  "request": {
+    "url": "/teams/3451996/members/rtyler",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 14 Sep 2021 20:25:24 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Deprecation": "Sat, 01 Feb 2020 00:00:00 GMT",
+      "Sunset": "Mon, 01 Feb 2021 00:00:00 GMT",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4933",
+      "X-RateLimit-Reset": "1631652409",
+      "X-RateLimit-Used": "67",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "D37A:6ED1:39DBAA:3CBD90:61410534",
+      "Link": "<https://developer.github.com/changes/2020-01-21-moving-the-team-api-endpoints/>; rel=\"deprecation\"; type=\"text/html\", <https://api.github.com/organizations/7544739/team/3451996/members/rtyler>; rel=\"alternate\""
+    }
+  },
+  "uuid": "f4c3fbc7-2328-41ce-84f4-2070ced65691",
+  "persistent": true,
+  "insertionIndex": 13
+}

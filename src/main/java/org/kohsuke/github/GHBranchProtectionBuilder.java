@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.LUKE_CAGE;
 
 /**
  * Builder to configure the branch protection settings.
@@ -94,8 +94,7 @@ public class GHBranchProtectionBuilder {
                 .withNullable("restrictions", restrictions)
                 .withNullable("enforce_admins", enforceAdmins)
                 .withUrlPath(branch.getProtectionUrl().toString())
-                .fetch(GHBranchProtection.class)
-                .wrap(branch);
+                .fetch(GHBranchProtection.class);
     }
 
     /**
@@ -353,7 +352,7 @@ public class GHBranchProtectionBuilder {
     }
 
     private Requester requester() {
-        return branch.getRoot().createRequest().withPreview(LUKE_CAGE);
+        return branch.root().createRequest().withPreview(LUKE_CAGE);
     }
 
     private static class Restrictions {

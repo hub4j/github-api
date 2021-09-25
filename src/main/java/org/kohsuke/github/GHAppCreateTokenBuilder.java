@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.kohsuke.github.Previews.MACHINE_MAN;
+import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
 /**
  * Creates a access token for a GitHub App Installation
@@ -19,15 +19,13 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     private final String apiUrlTail;
 
     @BetaApi
-    @Deprecated
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {
-        this.root = root;
+        super(root);
         this.apiUrlTail = apiUrlTail;
         this.builder = root.createRequest();
     }
 
     @BetaApi
-    @Deprecated
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         this(root, apiUrlTail);
         permissions(permissions);
@@ -43,7 +41,6 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
      * @return a GHAppCreateTokenBuilder
      */
     @BetaApi
-    @Deprecated
     public GHAppCreateTokenBuilder repositoryIds(List<Long> repositoryIds) {
         this.builder.with("repository_ids", repositoryIds);
         return this;
@@ -58,7 +55,6 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
      * @return a GHAppCreateTokenBuilder
      */
     @BetaApi
-    @Deprecated
     public GHAppCreateTokenBuilder permissions(Map<String, GHPermissionType> permissions) {
         Map<String, String> retMap = new HashMap<>();
         for (Map.Entry<String, GHPermissionType> entry : permissions.entrySet()) {
@@ -78,13 +74,11 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
      *             on error
      */
     @Preview(MACHINE_MAN)
-    @Deprecated
     public GHAppInstallationToken create() throws IOException {
         return builder.method("POST")
                 .withPreview(MACHINE_MAN)
                 .withUrlPath(apiUrlTail)
-                .fetch(GHAppInstallationToken.class)
-                .wrapUp(root);
+                .fetch(GHAppInstallationToken.class);
     }
 
 }

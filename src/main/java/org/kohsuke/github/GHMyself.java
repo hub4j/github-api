@@ -70,7 +70,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHEmail> getEmails2() throws IOException {
-        return root.createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null).toList();
+        return root().createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null).toList();
     }
 
     /**
@@ -84,7 +84,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHKey> getPublicKeys() throws IOException {
-        return root.createRequest().withUrlPath("/user/keys").toIterable(GHKey[].class, null).toList();
+        return root().createRequest().withUrlPath("/user/keys").toIterable(GHKey[].class, null).toList();
     }
 
     /**
@@ -98,7 +98,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List<GHVerifiedKey> getPublicVerifiedKeys() throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .withUrlPath("/users/" + getLogin() + "/keys")
                 .toIterable(GHVerifiedKey[].class, null)
                 .toList();
@@ -114,12 +114,12 @@ public class GHMyself extends GHUser {
     public GHPersonSet<GHOrganization> getAllOrganizations() throws IOException {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root.createRequest()
+        for (GHOrganization o : root().createRequest()
                 .withUrlPath("/user/orgs")
                 .toIterable(GHOrganization[].class, null)
                 .toArray()) {
             if (names.add(o.getLogin())) // in case of rumoured duplicates in the data
-                orgs.add(root.getOrganization(o.getLogin()));
+                orgs.add(root().getOrganization(o.getLogin()));
         }
         return orgs;
     }
@@ -178,10 +178,10 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize, final RepositoryListFilter repoType) {
-        return root.createRequest()
+        return root().createRequest()
                 .with("type", repoType)
                 .withUrlPath("/user/repos")
-                .toIterable(GHRepository[].class, item -> item.wrap(root))
+                .toIterable(GHRepository[].class, null)
                 .withPageSize(pageSize);
     }
 
@@ -213,10 +213,10 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable<GHMembership> listOrgMemberships(final GHMembership.State state) {
-        return root.createRequest()
+        return root().createRequest()
                 .with("state", state)
                 .withUrlPath("/user/memberships/orgs")
-                .toIterable(GHMembership[].class, item -> item.wrap(root));
+                .toIterable(GHMembership[].class, item -> item.wrap(root()));
     }
 
     /**
@@ -229,14 +229,28 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public GHMembership getMembership(GHOrganization o) throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .withUrlPath("/user/memberships/orgs/" + o.getLogin())
                 .fetch(GHMembership.class)
-                .wrap(root);
+                .wrap(root());
     }
 
     // public void addEmails(Collection<String> emails) throws IOException {
     //// new Requester(root,ApiVersion.V3).withCredential().to("/user/emails");
     // root.retrieveWithAuth3()
     // }
+
+    /**
+     * Lists installations of your GitHub App that the authenticated user has explicit permission to access. You must
+     * use a user-to-server OAuth access token, created for a user who has authorized your GitHub App, to access this
+     * endpoint.
+     *
+     * @return the paged iterable
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/reference/apps#list-app-installations-accessible-to-the-user-access-token">List
+     *      app installations accessible to the user access token</a>
+     */
+    public PagedIterable<GHAppInstallation> getAppInstallations() {
+        return new GHAppInstallationsIterable(root());
+    }
 }

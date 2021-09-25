@@ -1,6 +1,8 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.extras.ImpatientHttpConnector;
 
 import java.io.File;
@@ -22,18 +24,18 @@ import javax.annotation.Nonnull;
  */
 public class GitHubBuilder implements Cloneable {
 
+    // for testing
+    static File HOME_DIRECTORY = null;
+
     // default scoped so unit tests can read them.
     /* private */ String endpoint = GitHubClient.GITHUB_URL;
-    /* private */ String user;
-    /* private */ String password;
-    /* private */ String oauthToken;
-    /* private */ String jwtToken;
 
     private HttpConnector connector;
 
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
     private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
     private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
+    /* private */ AuthorizationProvider authorizationProvider = AuthorizationProvider.ANONYMOUS;
 
     /**
      * Instantiates a new Git hub builder.
@@ -61,13 +63,13 @@ public class GitHubBuilder implements Cloneable {
 
         builder = fromEnvironment();
 
-        if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)
+        if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)
             return builder;
 
         try {
             builder = fromPropertyFile();
 
-            if (builder.oauthToken != null || builder.user != null || builder.jwtToken != null)
+            if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)
                 return builder;
         } catch (FileNotFoundException e) {
             // fall through
@@ -179,7 +181,7 @@ public class GitHubBuilder implements Cloneable {
      *             the io exception
      */
     public static GitHubBuilder fromPropertyFile() throws IOException {
-        File homeDir = new File(System.getProperty("user.home"));
+        File homeDir = HOME_DIRECTORY != null ? HOME_DIRECTORY : new File(System.getProperty("user.home"));
         File propertyFile = new File(homeDir, ".github");
         return fromPropertyFile(propertyFile.getPath());
     }
@@ -215,9 +217,20 @@ public class GitHubBuilder implements Cloneable {
      */
     public static GitHubBuilder fromProperties(Properties props) {
         GitHubBuilder self = new GitHubBuilder();
-        self.withOAuthToken(props.getProperty("oauth"), props.getProperty("login"));
-        self.withJwtToken(props.getProperty("jwt"));
-        self.withPassword(props.getProperty("login"), props.getProperty("password"));
+        String oauth = props.getProperty("oauth");
+        String jwt = props.getProperty("jwt");
+        String login = props.getProperty("login");
+        String password = props.getProperty("password");
+
+        if (oauth != null) {
+            self.withOAuthToken(oauth, login);
+        }
+        if (jwt != null) {
+            self.withJwtToken(jwt);
+        }
+        if (password != null) {
+            self.withPassword(login, password);
+        }
         self.withEndpoint(props.getProperty("endpoint", GitHubClient.GITHUB_URL));
         return self;
     }
@@ -247,9 +260,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withPassword(String user, String password) {
-        this.user = user;
-        this.password = password;
-        return this;
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromLoginAndPassword(user, password));
     }
 
     /**
@@ -260,7 +271,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withOAuthToken(String oauthToken) {
-        return withOAuthToken(oauthToken, null);
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken));
     }
 
     /**
@@ -273,8 +284,21 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withOAuthToken(String oauthToken, String user) {
-        this.oauthToken = oauthToken;
-        this.user = user;
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken, user));
+    }
+
+    /**
+     * Configures a {@link AuthorizationProvider} for this builder
+     *
+     * There can be only one authorization provider per client instance.
+     *
+     * @param authorizationProvider
+     *            the authorization provider
+     * @return the git hub builder
+     *
+     */
+    public GitHubBuilder withAuthorizationProvider(final AuthorizationProvider authorizationProvider) {
+        this.authorizationProvider = authorizationProvider;
         return this;
     }
 
@@ -287,7 +311,7 @@ public class GitHubBuilder implements Cloneable {
      * @see GHAppInstallation#createToken(java.util.Map) GHAppInstallation#createToken(java.util.Map)
      */
     public GitHubBuilder withAppInstallationToken(String appInstallationToken) {
-        return withOAuthToken(appInstallationToken, "");
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromAppInstallationToken(appInstallationToken));
     }
 
     /**
@@ -298,8 +322,7 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withJwtToken(String jwtToken) {
-        this.jwtToken = jwtToken;
-        return this;
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromJwtToken(jwtToken));
     }
 
     /**
@@ -421,14 +444,11 @@ public class GitHubBuilder implements Cloneable {
      */
     public GitHub build() throws IOException {
         return new GitHub(endpoint,
-                user,
-                oauthToken,
-                jwtToken,
-                password,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
-                rateLimitChecker);
+                rateLimitChecker,
+                authorizationProvider);
     }
 
     @Override

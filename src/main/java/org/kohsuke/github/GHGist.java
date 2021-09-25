@@ -1,8 +1,8 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -38,15 +38,12 @@ public class GHGist extends GHObject {
     private final Map<String, GHGistFile> files;
 
     @JsonCreator
-    private GHGist(@JacksonInject GitHub root,
-            @JsonProperty("owner") GHUser owner,
-            @JsonProperty("files") Map<String, GHGistFile> files) {
-        this.root = root;
+    private GHGist(@JsonProperty("owner") GHUser owner, @JsonProperty("files") Map<String, GHGistFile> files) {
         for (Entry<String, GHGistFile> e : files.entrySet()) {
             e.getValue().fileName = e.getKey();
         }
         this.files = Collections.unmodifiableMap(files);
-        this.owner = root.getUser(owner);
+        this.owner = owner.root().getUser(owner);
     }
 
     /**
@@ -80,6 +77,7 @@ public class GHGist extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getOwner() throws IOException {
         return owner;
     }
@@ -182,7 +180,7 @@ public class GHGist extends GHObject {
      * @return the files
      */
     public Map<String, GHGistFile> getFiles() {
-        return files;
+        return Collections.unmodifiableMap(files);
     }
 
     String getApiTailUrl(String tail) {
@@ -200,7 +198,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void star() throws IOException {
-        root.createRequest().method("PUT").withUrlPath(getApiTailUrl("star")).send();
+        root().createRequest().method("PUT").withUrlPath(getApiTailUrl("star")).send();
     }
 
     /**
@@ -210,7 +208,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void unstar() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(getApiTailUrl("star")).send();
+        root().createRequest().method("DELETE").withUrlPath(getApiTailUrl("star")).send();
     }
 
     /**
@@ -221,7 +219,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public boolean isStarred() throws IOException {
-        return root.createRequest().withUrlPath(getApiTailUrl("star")).fetchHttpStatusCode() / 100 == 2;
+        return root().createRequest().withUrlPath(getApiTailUrl("star")).fetchHttpStatusCode() / 100 == 2;
     }
 
     /**
@@ -232,7 +230,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public GHGist fork() throws IOException {
-        return root.createRequest().method("POST").withUrlPath(getApiTailUrl("forks")).fetch(GHGist.class);
+        return root().createRequest().method("POST").withUrlPath(getApiTailUrl("forks")).fetch(GHGist.class);
     }
 
     /**
@@ -241,7 +239,7 @@ public class GHGist extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHGist> listForks() {
-        return root.createRequest().withUrlPath(getApiTailUrl("forks")).toIterable(GHGist[].class, null);
+        return root().createRequest().withUrlPath(getApiTailUrl("forks")).toIterable(GHGist[].class, null);
     }
 
     /**
@@ -251,7 +249,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath("/gists/" + id).send();
+        root().createRequest().method("DELETE").withUrlPath("/gists/" + id).send();
     }
 
     /**

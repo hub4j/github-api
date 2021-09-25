@@ -170,12 +170,12 @@
         "forks": 0,
         "open_issues": 1,
         "watchers": 0,
-        "default_branch": "master"
+        "default_branch": "main"
       }
     },
     "base": {
-      "label": "hub4j-test-org:master",
-      "ref": "master",
+      "label": "hub4j-test-org:main",
+      "ref": "main",
       "sha": "912e2176a00e60e02196737e0ae4c218a14b5dcb",
       "user": {
         "login": "hub4j-test-org",
@@ -295,7 +295,7 @@
         "forks": 0,
         "open_issues": 1,
         "watchers": 0,
-        "default_branch": "master"
+        "default_branch": "main"
       }
     },
     "_links": {

@@ -1,0 +1,45 @@
+{
+  "id": "050b93b9-0d3b-4dd2-bde1-a220548659e4",
+  "name": "pomes_pomes_main_license",
+  "request": {
+    "url": "/pomes/pomes/main/LICENSE",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "pomes_pomes_main_license-1.txt",
+    "headers": {
+      "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+      "Strict-Transport-Security": "max-age=31536000",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "deny",
+      "X-XSS-Protection": "1; mode=block",
+      "ETag": "\"8371492840f9485d7baf719dc2ae3e4cb9e8c03b\"",
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "max-age=300",
+      "X-Geo-Block-List": "",
+      "X-GitHub-Request-Id": "D052:95E9:35B030:3EB19C:5D97BE56",
+      "Accept-Ranges": "bytes",
+      "Date": "Fri, 04 Oct 2019 21:51:06 GMT",
+      "Via": "1.1 varnish",
+      "Connection": "keep-alive",
+      "X-Served-By": "cache-sea1029-SEA",
+      "X-Cache": "HIT",
+      "X-Cache-Hits": "1",
+      "X-Timer": "S1570225867.643479,VS0,VE1",
+      "Vary": "Authorization,Accept-Encoding",
+      "Access-Control-Allow-Origin": "*",
+      "X-Fastly-Request-ID": "ed4498a6662707a954a7a5c0303bd74ec724215a",
+      "Expires": "Fri, 04 Oct 2019 21:56:06 GMT",
+      "Source-Age": "116"
+    }
+  },
+  "uuid": "050b93b9-0d3b-4dd2-bde1-a220548659e4",
+  "persistent": true,
+  "insertionIndex": 1
+}

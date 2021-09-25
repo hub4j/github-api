@@ -23,12 +23,14 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
-import static org.kohsuke.github.Previews.INERTIA;
+import static org.kohsuke.github.internal.Previews.INERTIA;
 
 /**
  * A GitHub project.
@@ -53,34 +55,23 @@ public class GHProject extends GHObject {
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Gets owner.
      *
      * @return the owner
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHObject getOwner() throws IOException {
         if (owner == null) {
             try {
                 if (owner_url.contains("/orgs/")) {
-                    owner = root.createRequest()
-                            .withUrlPath(getOwnerUrl().getPath())
-                            .fetch(GHOrganization.class)
-                            .wrapUp(root);
+                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHOrganization.class);
                 } else if (owner_url.contains("/users/")) {
-                    owner = root.createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class).wrapUp(root);
+                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class);
                 } else if (owner_url.contains("/repos/")) {
                     String[] pathElements = getOwnerUrl().getPath().split("/");
-                    owner = GHRepository.read(root, pathElements[1], pathElements[2]);
+                    owner = GHRepository.read(root(), pathElements[1], pathElements[2]);
                 }
             } catch (FileNotFoundException e) {
                 return null;
@@ -150,21 +141,9 @@ public class GHProject extends GHObject {
      *
      * @return the creator
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getCreator() {
         return creator;
-    }
-
-    /**
-     * Wrap gh project.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh project
-     */
-    public GHProject wrap(GHRepository repo) {
-        this.owner = repo;
-        this.root = repo.root;
-        return this;
     }
 
     /**
@@ -174,13 +153,37 @@ public class GHProject extends GHObject {
      *            the root
      * @return the gh project
      */
+    @Deprecated
     public GHProject wrap(GitHub root) {
-        this.root = root;
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh project
+     */
+    @Deprecated
+    public GHProject wrap(GHRepository repo) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh project
+     */
+    GHProject lateBind(GHRepository repo) {
+        this.owner = repo;
         return this;
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
+        root().createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -274,7 +277,7 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -286,10 +289,10 @@ public class GHProject extends GHObject {
      */
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
-        return root.createRequest()
+        return root().createRequest()
                 .withPreview(INERTIA)
                 .withUrlPath(String.format("/projects/%d/columns", getId()))
-                .toIterable(GHProjectColumn[].class, item -> item.wrap(project));
+                .toIterable(GHProjectColumn[].class, item -> item.lateBind(project));
     }
 
     /**
@@ -302,12 +305,12 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public GHProjectColumn createColumn(String name) throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .method("POST")
                 .withPreview(INERTIA)
                 .with("name", name)
                 .withUrlPath(String.format("/projects/%d/columns", getId()))
                 .fetch(GHProjectColumn.class)
-                .wrap(this);
+                .lateBind(this);
     }
 }

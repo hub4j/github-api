@@ -1,34 +1,20 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.InjectableValues;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.kohsuke.github.authorization.UserAuthorizationProvider;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.net.*;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
@@ -54,12 +40,6 @@ abstract class GitHubClient {
      * If timeout issues let's retry after milliseconds.
      */
     static final int retryTimeoutMillis = 100;
-    /* private */ final String login;
-
-    /**
-     * Value of the authorization header to be sent with the request.
-     */
-    /* private */ final String encodedAuthorization;
 
     // Cache of myself object.
     private final String apiUrl;
@@ -67,13 +47,12 @@ abstract class GitHubClient {
     protected final RateLimitHandler rateLimitHandler;
     protected final AbuseLimitHandler abuseLimitHandler;
     private final GitHubRateLimitChecker rateLimitChecker;
+    private final AuthorizationProvider authorizationProvider;
 
     private HttpConnector connector;
 
-    private final Object rateLimitLock = new Object();
-
     @Nonnull
-    private GHRateLimit rateLimit = GHRateLimit.DEFAULT;
+    private final AtomicReference<GHRateLimit> rateLimit = new AtomicReference<>(GHRateLimit.DEFAULT);
 
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
@@ -91,15 +70,11 @@ abstract class GitHubClient {
     }
 
     GitHubClient(String apiUrl,
-            String login,
-            String oauthAccessToken,
-            String jwtToken,
-            String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            Consumer<GHMyself> myselfConsumer) throws IOException {
+            AuthorizationProvider authorizationProvider) throws IOException {
 
         if (apiUrl.endsWith("/")) {
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
@@ -111,38 +86,31 @@ abstract class GitHubClient {
         this.apiUrl = apiUrl;
         this.connector = connector;
 
-        if (oauthAccessToken != null) {
-            encodedAuthorization = "token " + oauthAccessToken;
-        } else {
-            if (jwtToken != null) {
-                encodedAuthorization = "Bearer " + jwtToken;
-            } else if (password != null) {
-                String authorization = (login + ':' + password);
-                String charsetName = StandardCharsets.UTF_8.name();
-                encodedAuthorization = "Basic "
-                        + Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));
-            } else {// anonymous access
-                encodedAuthorization = null;
-            }
-        }
+        // Prefer credential configuration via provider
+        this.authorizationProvider = authorizationProvider;
 
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
         this.rateLimitChecker = rateLimitChecker;
+    }
 
-        if (login == null && encodedAuthorization != null && jwtToken == null) {
-            GHMyself myself = fetch(GHMyself.class, "/user");
-            login = myself.getLogin();
-            if (myselfConsumer != null) {
-                myselfConsumer.accept(myself);
+    String getLogin() {
+        try {
+            if (this.authorizationProvider instanceof UserAuthorizationProvider
+                    && this.authorizationProvider.getEncodedAuthorization() != null) {
+
+                UserAuthorizationProvider userAuthorizationProvider = (UserAuthorizationProvider) this.authorizationProvider;
+
+                return userAuthorizationProvider.getLogin();
             }
+        } catch (IOException e) {
         }
-        this.login = login;
+        return null;
     }
 
     private <T> T fetch(Class<T> type, String urlPath) throws IOException {
         GitHubRequest request = GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build();
-        return this.sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, type)).body();
+        return sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, type)).body();
     }
 
     /**
@@ -157,10 +125,9 @@ abstract class GitHubClient {
             getRateLimit();
             return true;
         } catch (IOException e) {
-            if (LOGGER.isLoggable(FINE))
-                LOGGER.log(FINE,
-                        "Exception validating credentials on " + getApiUrl() + " with login '" + login + "' " + e,
-                        e);
+            LOGGER.log(FINE,
+                    "Exception validating credentials on " + getApiUrl() + " with login '" + getLogin() + "' " + e,
+                    e);
             return false;
         }
     }
@@ -202,7 +169,13 @@ abstract class GitHubClient {
      * @return {@code true} if operations that require authentication will fail.
      */
     public boolean isAnonymous() {
-        return login == null && encodedAuthorization == null;
+        try {
+            return getLogin() == null && this.authorizationProvider.getEncodedAuthorization() == null;
+        } catch (IOException e) {
+            // An exception here means that the provider failed to provide authorization parameters,
+            // basically meaning the same as "no auth"
+            return false;
+        }
     }
 
     /**
@@ -222,6 +195,11 @@ abstract class GitHubClient {
     @Nonnull
     public GHRateLimit getRateLimit() throws IOException {
         return getRateLimit(RateLimitTarget.NONE);
+    }
+
+    @CheckForNull
+    protected String getEncodedAuthorization() throws IOException {
+        return authorizationProvider.getEncodedAuthorization();
     }
 
     @Nonnull
@@ -261,9 +239,7 @@ abstract class GitHubClient {
     @Nonnull
     @Deprecated
     GHRateLimit lastRateLimit() {
-        synchronized (rateLimitLock) {
-            return rateLimit;
-        }
+        return rateLimit.get();
     }
 
     /**
@@ -283,12 +259,19 @@ abstract class GitHubClient {
      */
     @Nonnull
     GHRateLimit rateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
-        synchronized (rateLimitLock) {
-            if (rateLimit.getRecord(rateLimitTarget).isExpired()) {
-                getRateLimit(rateLimitTarget);
+        GHRateLimit result = rateLimit.get();
+        // Most of the time rate limit is not expired, so try to avoid locking.
+        if (result.getRecord(rateLimitTarget).isExpired()) {
+            // if the rate limit is expired, synchronize to ensure
+            // only one call to getRateLimit() is made to refresh it.
+            synchronized (this) {
+                if (rateLimit.get().getRecord(rateLimitTarget).isExpired()) {
+                    getRateLimit(rateLimitTarget);
+                }
             }
-            return rateLimit;
+            result = rateLimit.get();
         }
+        return result;
     }
 
     /**
@@ -301,15 +284,9 @@ abstract class GitHubClient {
      *            {@link GHRateLimit.Record} constructed from the response header information
      */
     private GHRateLimit updateRateLimit(@Nonnull GHRateLimit observed) {
-        synchronized (rateLimitLock) {
-            observed = rateLimit.getMergedRateLimit(observed);
-
-            if (rateLimit != observed) {
-                rateLimit = observed;
-                LOGGER.log(FINE, "Rate limit now: {0}", rateLimit);
-            }
-            return rateLimit;
-        }
+        GHRateLimit result = rateLimit.accumulateAndGet(observed, (current, x) -> current.getMergedRateLimit(x));
+        LOGGER.log(FINEST, "Rate limit now: {0}", rateLimit.get());
+        return result;
     }
 
     /**
@@ -327,7 +304,7 @@ abstract class GitHubClient {
      */
     public void checkApiUrlValidity() throws IOException {
         try {
-            fetch(GHApiInfo.class, "/").check(getApiUrl());
+            this.fetch(GHApiInfo.class, "/").check(getApiUrl());
         } catch (IOException e) {
             if (isPrivateModeEnabled()) {
                 throw (IOException) new IOException(
@@ -389,12 +366,7 @@ abstract class GitHubClient {
             GitHubResponse.ResponseInfo responseInfo = null;
             try {
                 try {
-                    if (LOGGER.isLoggable(FINE)) {
-                        LOGGER.log(FINE,
-                                "GitHub API request [" + (login == null ? "anonymous" : login) + "]: "
-                                        + request.method() + " " + request.url().toString());
-                    }
-
+                    logRequest(request);
                     rateLimitChecker.checkRateLimit(this, request);
 
                     responseInfo = getResponseInfo(request);
@@ -430,6 +402,12 @@ abstract class GitHubClient {
         throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
     }
 
+    private void logRequest(@Nonnull final GitHubRequest request) {
+        LOGGER.log(FINE,
+                () -> "GitHub API request [" + (getLogin() == null ? "anonymous" : getLogin()) + "]: "
+                        + request.method() + " " + request.url().toString());
+    }
+
     @Nonnull
     protected abstract GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException;
 
@@ -443,20 +421,15 @@ abstract class GitHubClient {
             // special case handling for 304 unmodified, as the content will be ""
         } else if (responseInfo.statusCode() == HttpURLConnection.HTTP_ACCEPTED) {
 
-            // Response code 202 means data is being generated.
+            // Response code 202 means data is being generated or an action that can require some time is triggered.
             // This happens in specific cases:
             // statistics - See https://developer.github.com/v3/repos/statistics/#a-word-about-caching
             // fork creation - See https://developer.github.com/v3/repos/forks/#create-a-fork
+            // workflow run cancellation - See https://docs.github.com/en/rest/reference/actions#cancel-a-workflow-run
 
-            if (responseInfo.url().toString().endsWith("/forks")) {
-                LOGGER.log(INFO, "The fork is being created. Please try again in 5 seconds.");
-            } else if (responseInfo.url().toString().endsWith("/statistics")) {
-                LOGGER.log(INFO, "The statistics are being generated. Please try again in 5 seconds.");
-            } else {
-                LOGGER.log(INFO,
-                        "Received 202 from " + responseInfo.url().toString() + " . Please try again in 5 seconds.");
-            }
-            // Maybe throw an exception instead?
+            LOGGER.log(FINE,
+                    "Received HTTP_ACCEPTED(202) from " + responseInfo.url().toString()
+                            + " . Please try again in 5 seconds.");
         } else if (handler != null) {
             body = handler.apply(responseInfo);
         }
@@ -568,9 +541,7 @@ abstract class GitHubClient {
             GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo);
             updateRateLimit(GHRateLimit.fromRecord(observed, responseInfo.request().rateLimitTarget()));
         } catch (NumberFormatException | NullPointerException e) {
-            if (LOGGER.isLoggable(FINEST)) {
-                LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);
-            }
+            LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);
         }
     }
 
@@ -723,5 +694,13 @@ abstract class GitHubClient {
             injected.putAll(responseInfo.request().injectedMappingValues());
         }
         return MAPPER.reader(new InjectableValues.Std(injected));
+    }
+
+    static <K, V> Map<K, V> unmodifiableMapOrNull(Map<? extends K, ? extends V> map) {
+        return map == null ? null : Collections.unmodifiableMap(map);
+    }
+
+    static <T> List<T> unmodifiableListOrNull(List<? extends T> list) {
+        return list == null ? null : Collections.unmodifiableList(list);
     }
 }

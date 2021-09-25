@@ -7,9 +7,7 @@ import org.kohsuke.github.example.dataobject.ReadOnlyObjects;
 import java.io.IOException;
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
 
 /**
@@ -26,6 +24,22 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void getRepository() throws IOException {
+        GHRepository repo = gitHub.getRepository("hub4j/github-api");
+
+        assertThat(repo.getFullName(), equalTo("hub4j/github-api"));
+
+        GHRepository repo2 = gitHub.getRepositoryById(Long.toString(repo.getId()));
+        assertThat(repo2.getFullName(), equalTo("hub4j/github-api"));
+
+        try {
+            gitHub.getRepository("hub4j_github-api");
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), equalTo("Repository name must be in format owner/repo"));
+        }
+    }
+
+    @Test
     public void getOrgs() throws IOException {
         int iterations = 10;
         Set<Long> orgIds = new HashSet<Long>();
@@ -34,6 +48,18 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             // System.out.println(org.getName());
         }
         assertThat(orgIds.size(), equalTo(iterations));
+
+        GHOrganization org = gitHub.getOrganization("hub4j");
+        GHOrganization org2 = gitHub.getOrganization("hub4j");
+        assertThat(org.getLogin(), equalTo("hub4j"));
+        // caching
+        assertThat(org, sameInstance(org2));
+
+        gitHub.refreshCache();
+        org2 = gitHub.getOrganization("hub4j");
+        assertThat(org2.getLogin(), equalTo("hub4j"));
+        // cache cleared
+        assertThat(org, not(sameInstance(org2)));
     }
 
     @Test
@@ -41,19 +67,19 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         PagedSearchIterable<GHUser> r = gitHub.searchUsers().q("tom").repos(">42").followers(">1000").list();
         GHUser u = r.iterator().next();
         // System.out.println(u.getName());
-        assertNotNull(u.getId());
-        assertTrue(r.getTotalCount() > 0);
+        assertThat(u.getId(), notNullValue());
+        assertThat(r.getTotalCount(), greaterThan(0));
     }
 
     @Test
     public void testListAllRepositories() throws Exception {
         Iterator<GHRepository> itr = gitHub.listAllPublicRepositories().iterator();
         for (int i = 0; i < 115; i++) {
-            assertTrue(itr.hasNext());
+            assertThat(itr.hasNext(), is(true));
             GHRepository r = itr.next();
             // System.out.println(r.getFullName());
-            assertNotNull(r.getUrl());
-            assertNotEquals(0L, r.getId());
+            assertThat(r.getUrl(), notNullValue());
+            assertThat(r.getId(), not(0L));
         }
 
         // ensure the iterator throws as expected
@@ -72,13 +98,60 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                 .in("file")
                 .language("js")
                 .repo("jquery/jquery")
+                // ignored unless sort is also set
+                .order(GHDirection.DESC)
                 .list();
         GHContent c = r.iterator().next();
+
         // System.out.println(c.getName());
-        assertNotNull(c.getDownloadUrl());
-        assertNotNull(c.getOwner());
-        assertEquals("jquery/jquery", c.getOwner().getFullName());
-        assertTrue(r.getTotalCount() > 0);
+        assertThat(c.getDownloadUrl(), notNullValue());
+        assertThat(c.getOwner(), notNullValue());
+        assertThat(c.getOwner().getFullName(), equalTo("jquery/jquery"));
+        assertThat(r.getTotalCount(), greaterThan(5));
+
+        PagedSearchIterable<GHContent> r2 = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                // resets query sort back to default
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .sort(GHContentSearchBuilder.Sort.BEST_MATCH)
+                // ignored unless sort is also set to non-default
+                .order(GHDirection.ASC)
+                .list();
+
+        GHContent c2 = r2.iterator().next();
+        assertThat(c2.getPath(), equalTo(c.getPath()));
+        assertThat(r2.getTotalCount(), equalTo(r.getTotalCount()));
+
+        PagedSearchIterable<GHContent> r3 = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.ASC)
+                .list();
+
+        GHContent c3 = r3.iterator().next();
+        assertThat(c3.getPath(), not(equalTo(c2.getPath())));
+        assertThat(r3.getTotalCount(), equalTo(r2.getTotalCount()));
+
+        PagedSearchIterable<GHContent> r4 = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.DESC)
+                .list();
+
+        GHContent c4 = r4.iterator().next();
+        assertThat(c4.getPath(), not(equalTo(c2.getPath())));
+        assertThat(c4.getPath(), not(equalTo(c3.getPath())));
+        assertThat(r4.getTotalCount(), equalTo(r2.getTotalCount()));
+
     }
 
     @Test
@@ -86,20 +159,23 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         PagedIterable<GHAuthorization> list = gitHub.listMyAuthorizations();
 
         for (GHAuthorization auth : list) {
-            assertNotNull(auth.getAppName());
+            assertThat(auth.getAppName(), notNullValue());
         }
     }
 
     @Test
     public void getMeta() throws IOException {
         GHMeta meta = gitHub.getMeta();
-        assertTrue(meta.isVerifiablePasswordAuthentication());
-        assertEquals(19, meta.getApi().size());
-        assertEquals(19, meta.getGit().size());
-        assertEquals(3, meta.getHooks().size());
-        assertEquals(6, meta.getImporter().size());
-        assertEquals(6, meta.getPages().size());
-        assertEquals(19, meta.getWeb().size());
+        assertThat(meta.isVerifiablePasswordAuthentication(), is(true));
+        assertThat(meta.getApi().size(), equalTo(19));
+        assertThat(meta.getGit().size(), equalTo(36));
+        assertThat(meta.getHooks().size(), equalTo(4));
+        assertThat(meta.getImporter().size(), equalTo(3));
+        assertThat(meta.getPages().size(), equalTo(6));
+        assertThat(meta.getWeb().size(), equalTo(20));
+        assertThat(meta.getPackages().size(), equalTo(25));
+        assertThat(meta.getActions().size(), equalTo(1739));
+        assertThat(meta.getDependabot().size(), equalTo(3));
 
         // Also test examples here
         Class[] examples = new Class[]{ ReadOnlyObjects.GHMetaPublic.class, ReadOnlyObjects.GHMetaPackage.class,
@@ -110,58 +186,58 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             ReadOnlyObjects.GHMetaExample metaExample = gitHub.createRequest()
                     .withUrlPath("/meta")
                     .fetch((Class<ReadOnlyObjects.GHMetaExample>) metaClass);
-            assertTrue(metaExample.isVerifiablePasswordAuthentication());
-            assertEquals(19, metaExample.getApi().size());
-            assertEquals(19, metaExample.getGit().size());
-            assertEquals(3, metaExample.getHooks().size());
-            assertEquals(6, metaExample.getImporter().size());
-            assertEquals(6, metaExample.getPages().size());
-            assertEquals(19, metaExample.getWeb().size());
+            assertThat(metaExample.isVerifiablePasswordAuthentication(), is(true));
+            assertThat(metaExample.getApi().size(), equalTo(19));
+            assertThat(metaExample.getGit().size(), equalTo(36));
+            assertThat(metaExample.getHooks().size(), equalTo(4));
+            assertThat(metaExample.getImporter().size(), equalTo(3));
+            assertThat(metaExample.getPages().size(), equalTo(6));
+            assertThat(metaExample.getWeb().size(), equalTo(20));
         }
     }
 
     @Test
     public void getMyMarketplacePurchases() throws IOException {
         List<GHMarketplaceUserPurchase> userPurchases = gitHub.getMyMarketplacePurchases().toList();
-        assertEquals(2, userPurchases.size());
+        assertThat(userPurchases.size(), equalTo(2));
 
         for (GHMarketplaceUserPurchase userPurchase : userPurchases) {
-            assertFalse(userPurchase.isOnFreeTrial());
-            assertNull(userPurchase.getFreeTrialEndsOn());
-            assertEquals("monthly", userPurchase.getBillingCycle());
+            assertThat(userPurchase.isOnFreeTrial(), is(false));
+            assertThat(userPurchase.getFreeTrialEndsOn(), nullValue());
+            assertThat(userPurchase.getBillingCycle(), equalTo("monthly"));
 
             GHMarketplacePlan plan = userPurchase.getPlan();
             // GHMarketplacePlan - Non-nullable fields
-            assertNotNull(plan.getUrl());
-            assertNotNull(plan.getAccountsUrl());
-            assertNotNull(plan.getName());
-            assertNotNull(plan.getDescription());
-            assertNotNull(plan.getPriceModel());
-            assertNotNull(plan.getState());
+            assertThat(plan.getUrl(), notNullValue());
+            assertThat(plan.getAccountsUrl(), notNullValue());
+            assertThat(plan.getName(), notNullValue());
+            assertThat(plan.getDescription(), notNullValue());
+            assertThat(plan.getPriceModel(), notNullValue());
+            assertThat(plan.getState(), notNullValue());
 
             // GHMarketplacePlan - primitive fields
-            assertNotEquals(0L, plan.getId());
-            assertNotEquals(0L, plan.getNumber());
-            assertTrue(plan.getMonthlyPriceInCents() >= 0);
+            assertThat(plan.getId(), not(0L));
+            assertThat(plan.getNumber(), not(0L));
+            assertThat(plan.getMonthlyPriceInCents(), greaterThanOrEqualTo(0L));
 
             // GHMarketplacePlan - list
-            assertEquals(2, plan.getBullets().size());
+            assertThat(plan.getBullets().size(), equalTo(2));
 
             GHMarketplaceAccount account = userPurchase.getAccount();
             // GHMarketplaceAccount - Non-nullable fields
-            assertNotNull(account.getLogin());
-            assertNotNull(account.getUrl());
-            assertNotNull(account.getType());
+            assertThat(account.getLogin(), notNullValue());
+            assertThat(account.getUrl(), notNullValue());
+            assertThat(account.getType(), notNullValue());
 
             // GHMarketplaceAccount - primitive fields
-            assertNotEquals(0L, account.getId());
+            assertThat(account.getId(), not(0L));
 
             /* logical combination tests */
             // Rationale: organization_billing_email is only set when account type is ORGANIZATION.
             if (account.getType() == ORGANIZATION)
-                assertNotNull(account.getOrganizationBillingEmail());
+                assertThat(account.getOrganizationBillingEmail(), notNullValue());
             else
-                assertNull(account.getOrganizationBillingEmail());
+                assertThat(account.getOrganizationBillingEmail(), nullValue());
         }
     }
 
@@ -186,13 +262,11 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         // getResponseHeaderFields is deprecated but we'll use it for testing.
         assertThat(org.getResponseHeaderFields(), notNullValue());
 
-        // Header field names must be case-insensitive
-        assertThat(org.getResponseHeaderFields().containsKey("CacHe-ContrOl"), is(true));
+        assertThat("Header field names must be case-insensitive",
+                org.getResponseHeaderFields().containsKey("CacHe-ContrOl"));
 
-        // The KeySet from header fields should also be case-insensitive
-        assertThat(org.getResponseHeaderFields().keySet().contains("CacHe-ControL"), is(true));
-        assertThat(org.getResponseHeaderFields().keySet().contains("CacHe-ControL"), is(true));
-
+        assertThat("KeySet from header fields should also be case-insensitive",
+                org.getResponseHeaderFields().keySet().contains("CacHe-ControL"));
         assertThat(org.getResponseHeaderFields().get("cachE-cOntrol").get(0), is("private, max-age=60, s-maxage=60"));
 
         // GitHub has started changing their headers to all lowercase.

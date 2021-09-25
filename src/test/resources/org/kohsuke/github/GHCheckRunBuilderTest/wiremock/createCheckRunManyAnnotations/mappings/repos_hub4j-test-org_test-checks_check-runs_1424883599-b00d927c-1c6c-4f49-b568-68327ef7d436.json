@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"output\":{\"title\":\"Big Run\",\"summary\":\"Lots of stuff here »\",\"annotations\":[{\"path\":\"stuff.txt\",\"start_line\":1,\"end_line\":1,\"annotation_level\":\"notice\",\"message\":\"hello #100\"}]}}",
+        "equalToJson": "{\"output\":{\"title\":\"Big Run\",\"summary\":\"Lots of stuff here »\",\"text\":\"Hello Text!\",\"annotations\":[{\"path\":\"stuff.txt\",\"start_line\":1,\"end_line\":1,\"annotation_level\":\"notice\",\"message\":\"hello #100\"}]}}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

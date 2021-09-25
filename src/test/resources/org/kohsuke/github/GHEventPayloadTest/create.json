@@ -1,7 +1,7 @@
 {
   "ref": "0.0.1",
   "ref_type": "tag",
-  "master_branch": "master",
+  "master_branch": "main",
   "description": "",
   "pusher_type": "user",
   "repository": {
@@ -89,7 +89,7 @@
     "forks": 0,
     "open_issues": 2,
     "watchers": 0,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "sender": {
     "login": "baxterthehacker",

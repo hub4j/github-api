@@ -7,7 +7,7 @@
     "html_url": "https://github.com/baxterthehacker/public-repo/releases/tag/0.0.1",
     "id": 1261438,
     "tag_name": "0.0.1",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": null,
     "draft": false,
     "author": {
@@ -122,7 +122,7 @@
     "forks": 0,
     "open_issues": 2,
     "watchers": 0,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "sender": {
     "login": "baxterthehacker",

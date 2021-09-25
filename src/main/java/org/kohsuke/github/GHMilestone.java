@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
@@ -19,19 +21,11 @@ public class GHMilestone extends GHObject {
     protected String closed_at;
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Gets owner.
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }
@@ -44,7 +38,7 @@ public class GHMilestone extends GHObject {
      *             the io exception
      */
     public GHUser getCreator() throws IOException {
-        return root.intern(creator);
+        return root().intern(creator);
     }
 
     /**
@@ -154,11 +148,11 @@ public class GHMilestone extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -213,9 +207,21 @@ public class GHMilestone extends GHObject {
      *            the repo
      * @return the gh milestone
      */
+    @Deprecated
     public GHMilestone wrap(GHRepository repo) {
+        throw new RuntimeException("Do not use this method.");
+    }
+
+    /**
+     * Wrap gh milestone.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh milestone
+     */
+    GHMilestone lateBind(GHRepository repo) {
         this.owner = repo;
-        this.root = repo.root;
         return this;
     }
+
 }

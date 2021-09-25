@@ -229,7 +229,7 @@
     "updated_at": "2014-05-10T22:31:37Z",
     "closed_at": "2014-05-10T22:31:37Z",
     "author_association": "NONE",
-    "body": "`getRateLimit()` at https://github.com/kohsuke/github-api/blob/master/src/main/java/org/kohsuke/github/GitHub.java#L228 fails for GitHub Enterprise with a 404 status code, body of\n\n``` json\n{\n  \"message\": \"No rate limit for white listed users\"\n}\n```\n\nGitHub Enterprise users are considered white listed and so don't have rate limits.\n\nSee also janinko/ghprb#127\n"
+    "body": "`getRateLimit()` at https://github.com/kohsuke/github-api/blob/main/src/main/java/org/kohsuke/github/GitHub.java#L228 fails for GitHub Enterprise with a 404 status code, body of\n\n``` json\n{\n  \"message\": \"No rate limit for white listed users\"\n}\n```\n\nGitHub Enterprise users are considered white listed and so don't have rate limits.\n\nSee also janinko/ghprb#127\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/77",
@@ -873,7 +873,7 @@
     "updated_at": "2016-02-12T18:35:43Z",
     "closed_at": "2014-04-13T15:55:35Z",
     "author_association": "CONTRIBUTOR",
-    "body": "https://github.com/kohsuke/github-api/blob/master/src/main/java/org/kohsuke/github/Requester.java#L268\n\nWhen attempting to get the details of an empty repository, the github enterprise server returns an HTTP 409. This, in turn, causes Requester to throw an Error…\n\nCaused by: java.io.IOException: Server returned HTTP response code: 409 for URL: <redacted>\n\nAn Error, for those unfamiliar, is \"a subclass of Throwable that indicates serious problems that a reasonable application should not try to catch.\" I don't think an HTTP 409 response warrants throwing an Error, thereby dooming the client Java process to exit with status code 1.\n"
+    "body": "https://github.com/kohsuke/github-api/blob/main/src/main/java/org/kohsuke/github/Requester.java#L268\n\nWhen attempting to get the details of an empty repository, the github enterprise server returns an HTTP 409. This, in turn, causes Requester to throw an Error…\n\nCaused by: java.io.IOException: Server returned HTTP response code: 409 for URL: <redacted>\n\nAn Error, for those unfamiliar, is \"a subclass of Throwable that indicates serious problems that a reasonable application should not try to catch.\" I don't think an HTTP 409 response warrants throwing an Error, thereby dooming the client Java process to exit with status code 1.\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/64",
@@ -917,7 +917,7 @@
     "updated_at": "2014-05-10T22:23:12Z",
     "closed_at": "2014-05-10T22:23:12Z",
     "author_association": "CONTRIBUTOR",
-    "body": "https://github.com/kohsuke/github-api/blob/master/src/main/java/org/kohsuke/github/GHRepository.java#L96\n\nGHRepository doesn't take into account whether or not the client is speaking with the public github.com or if it's talking to a github enterprise instance. Consequently, when you call getGitTransportUrl() or gitHttpTransportUrl() it only ever returns a github.com URL, which won't work for github enterprise hosted repositories.\n"
+    "body": "https://github.com/kohsuke/github-api/blob/main/src/main/java/org/kohsuke/github/GHRepository.java#L96\n\nGHRepository doesn't take into account whether or not the client is speaking with the public github.com or if it's talking to a github enterprise instance. Consequently, when you call getGitTransportUrl() or gitHttpTransportUrl() it only ever returns a github.com URL, which won't work for github enterprise hosted repositories.\n"
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/63",

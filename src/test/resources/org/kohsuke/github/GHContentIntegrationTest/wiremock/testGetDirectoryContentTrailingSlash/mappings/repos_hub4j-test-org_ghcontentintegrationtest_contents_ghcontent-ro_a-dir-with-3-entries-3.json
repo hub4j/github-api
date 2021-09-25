@@ -2,7 +2,7 @@
   "id": "462ae734-fe48-4be5-b432-ddd9912ca0e5",
   "name": "repos_hub4j-test-org_ghcontentintegrationtest_contents_ghcontent-ro_a-dir-with-3-entries",
   "request": {
-    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-dir-with-3-entries?ref=master",
+    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-dir-with-3-entries?ref=main",
     "method": "GET",
     "headers": {
       "Accept": {

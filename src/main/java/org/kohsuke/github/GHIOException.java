@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class GHIOException extends IOException {
      */
     @CheckForNull
     public Map<String, List<String>> getResponseHeaderFields() {
-        return responseHeaderFields;
+        return Collections.unmodifiableMap(responseHeaderFields);
     }
 
     GHIOException withResponseHeaderFields(@Nonnull Map<String, List<String>> headerFields) {

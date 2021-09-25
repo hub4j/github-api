@@ -1,0 +1,25 @@
+{
+  "type": "Repository",
+  "id": 319833951,
+  "name": "web",
+  "active": true,
+  "events": [
+    "push"
+  ],
+  "config": {
+    "url": "http://www.google.com/",
+    "insecure_ssl": "0",
+    "content_type": "form"
+  },
+  "updated_at": "2021-09-24T05:58:37Z",
+  "created_at": "2021-09-24T05:58:37Z",
+  "url": "https://api.github.com/repos/hub4j-test-org/github-api/hooks/319833951",
+  "test_url": "https://api.github.com/repos/hub4j-test-org/github-api/hooks/319833951/test",
+  "ping_url": "https://api.github.com/repos/hub4j-test-org/github-api/hooks/319833951/pings",
+  "deliveries_url": "https://api.github.com/repos/hub4j-test-org/github-api/hooks/319833951/deliveries",
+  "last_response": {
+    "code": 413,
+    "status": null,
+    "message": "Invalid HTTP Response: 413"
+  }
+}

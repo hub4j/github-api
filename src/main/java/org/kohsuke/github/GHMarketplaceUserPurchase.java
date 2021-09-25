@@ -23,22 +23,6 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
     private GHMarketplacePlan plan;
 
     /**
-     * Wrap up GHMarketplaceUserPurchase.
-     *
-     * @param root
-     *            the root
-     * @return an instance of the GHMarketplaceUserPurchase class
-     */
-    GHMarketplaceUserPurchase wrapUp(GitHub root) {
-        this.root = root;
-        if (this.account != null)
-            this.account.wrapUp(this.root);
-        if (this.plan != null)
-            this.plan.wrapUp(this.root);
-        return this;
-    }
-
-    /**
      * Gets billing cycle.
      *
      * @return the billing cycle

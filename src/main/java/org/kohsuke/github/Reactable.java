@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
 /**
  * Those {@link GHObject}s that can have {@linkplain GHReaction reactions}.
@@ -10,7 +10,6 @@ import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
  * @author Kohsuke Kawaguchi
  */
 @Preview(SQUIRREL_GIRL)
-@Deprecated
 public interface Reactable {
     /**
      * List all the reactions left to this object.
@@ -18,7 +17,6 @@ public interface Reactable {
      * @return the paged iterable
      */
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     PagedIterable<GHReaction> listReactions();
 
     /**
@@ -31,6 +29,5 @@ public interface Reactable {
      *             the io exception
      */
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     GHReaction createReaction(ReactionContent content) throws IOException;
 }

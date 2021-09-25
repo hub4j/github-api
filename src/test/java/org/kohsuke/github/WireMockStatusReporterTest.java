@@ -4,10 +4,7 @@ import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
@@ -28,7 +25,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
         verifyAuthenticated(gitHub);
 
-        assertThat(gitHub.getClient().login, not(equalTo(STUBBED_USER_LOGIN)));
+        assertThat(gitHub.getClient().getLogin(), not(equalTo(STUBBED_USER_LOGIN)));
 
         // If this user query fails, either the proxying config has broken (unlikely)
         // or your auth settings are not being retrieved from the environment.
@@ -50,7 +47,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assumeFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
 
         verifyAuthenticated(gitHub);
-        assertThat(gitHub.getClient().login, equalTo(STUBBED_USER_LOGIN));
+        assertThat(gitHub.getClient().getLogin(), equalTo(STUBBED_USER_LOGIN));
 
         GHUser user = gitHub.getMyself();
         // NOTE: the stubbed user does not have to match the login provided from the github object
@@ -133,7 +130,7 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)",
                 mockGitHub.isTakeSnapshot());
 
-        assertTrue("When taking a snapshot, proxy should automatically be enabled", mockGitHub.isUseProxy());
+        assertThat("When taking a snapshot, proxy should automatically be enabled", mockGitHub.isUseProxy());
     }
 
     @Ignore("Not implemented yet")

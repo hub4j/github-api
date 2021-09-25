@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
@@ -344,7 +345,7 @@ public class GHRateLimit {
         private static final UnknownLimitRecord DEFAULT = new UnknownLimitRecord(Long.MIN_VALUE);
 
         // The starting current UnknownLimitRecord is an expired record.
-        private static UnknownLimitRecord current = DEFAULT;
+        private static final AtomicReference<UnknownLimitRecord> current = new AtomicReference<>(DEFAULT);
 
         /**
          * Create a new unknown record that resets at the specified time.
@@ -356,18 +357,20 @@ public class GHRateLimit {
             super(unknownLimit, unknownRemaining, resetEpochSeconds);
         }
 
-        static synchronized Record current() {
-            if (current.isExpired()) {
-                current = new UnknownLimitRecord(System.currentTimeMillis() / 1000L + unknownLimitResetSeconds);
+        static Record current() {
+            Record result = current.get();
+            if (result.isExpired()) {
+                current.set(new UnknownLimitRecord(System.currentTimeMillis() / 1000L + unknownLimitResetSeconds));
+                result = current.get();
             }
-            return current;
+            return result;
         }
 
         /**
          * Reset the current UnknownLimitRecord. For use during testing only.
          */
-        static synchronized void reset() {
-            current = DEFAULT;
+        static void reset() {
+            current.set(DEFAULT);
             unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
         }
     }

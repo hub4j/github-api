@@ -26,7 +26,6 @@
         "Accept",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"323592c0d9feaab7a8e4a4e2a555feec\"",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
       "Access-Control-Allow-Origin": "*",
@@ -41,5 +40,8 @@
   },
   "uuid": "2ce6df61-378a-43bd-9d37-d0851f8699bf",
   "persistent": true,
+  "scenarioName": "scenario-1",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-step-2",
   "insertionIndex": 1
 }

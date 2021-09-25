@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,21 +46,12 @@ public class GHAuthorization extends GHObject {
     // private GHUser user;
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Gets scopes.
      *
      * @return the scopes
      */
     public List<String> getScopes() {
-        return scopes;
+        return Collections.unmodifiableList(scopes);
     }
 
     /**
@@ -152,11 +144,6 @@ public class GHAuthorization extends GHObject {
      */
     public String getFingerprint() {
         return fingerprint;
-    }
-
-    GHAuthorization wrap(GitHub root) {
-        this.root = root;
-        return this;
     }
 
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },

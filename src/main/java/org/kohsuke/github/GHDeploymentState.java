@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.internal.Previews;
+
 /**
  * Represents the state of deployment
  */
@@ -14,7 +16,6 @@ public enum GHDeploymentState {
      *
      * @deprecated until preview feature has graduated to stable
      */
-    @Deprecated
     @Preview(Previews.FLASH)
     IN_PROGRESS,
 
@@ -23,7 +24,6 @@ public enum GHDeploymentState {
      *
      * @deprecated until preview feature has graduated to stable
      */
-    @Deprecated
     @Preview(Previews.FLASH)
     QUEUED,
 
@@ -32,7 +32,6 @@ public enum GHDeploymentState {
      *
      * @deprecated until preview feature has graduated to stable
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     INACTIVE
 }

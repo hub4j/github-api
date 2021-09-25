@@ -96,7 +96,7 @@
   "forks": 0,
   "open_issues": 0,
   "watchers": 0,
-  "default_branch": "master",
+  "default_branch": "main",
   "organization": {
     "login": "hub4j-test-org",
     "id": 7544739,
@@ -215,7 +215,7 @@
     "forks": 443,
     "open_issues": 56,
     "watchers": 585,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "source": {
     "id": 617210,
@@ -315,7 +315,7 @@
     "forks": 443,
     "open_issues": 56,
     "watchers": 585,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "network_count": 443,
   "subscribers_count": 0

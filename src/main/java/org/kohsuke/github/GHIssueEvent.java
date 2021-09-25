@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.Date;
 
 /**
@@ -21,6 +23,9 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     private GHMilestone milestone;
     private GHLabel label;
     private GHUser assignee;
+    private GHIssueRename rename;
+    private GHUser reviewRequester;
+    private GHUser requestedReviewer;
 
     private GHIssue issue;
 
@@ -56,6 +61,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      *
      * @return the actor
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getActor() {
         return actor;
     }
@@ -97,19 +103,11 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Gets issue.
      *
      * @return the issue
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHIssue getIssue() {
         return issue;
     }
@@ -120,6 +118,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      *
      * @return the milestone
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHMilestone getMilestone() {
         return milestone;
     }
@@ -130,6 +129,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      *
      * @return the label
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHLabel getLabel() {
         return label;
     }
@@ -140,18 +140,57 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      *
      * @return the user
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getAssignee() {
         return assignee;
     }
 
-    GHIssueEvent wrapUp(GitHub root) {
-        this.root = root;
-        return this;
+    /**
+     * Get the {@link GHIssueRename} that contains information about issue old and new name. Only present for event
+     * "renamed", <code>null</code> otherwise.
+     *
+     * @return the GHIssueRename
+     */
+    public GHIssueRename getRename() {
+        return this.rename;
+    }
+
+    /**
+     *
+     * Get the {@link GHUser} person who requested a review. Only present for events "review_requested",
+     * "review_request_removed", <code>null</code> otherwise.
+     *
+     * @return the GHUser
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_requested">review_requested</a>
+     *      and <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_request_removed">review_request_removed</a>
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getReviewRequester() {
+        return this.reviewRequester;
+    }
+
+    /**
+     *
+     * Get the {@link GHUser} person requested to review the pull request. Only present for events "review_requested",
+     * "review_request_removed", <code>null</code> otherwise.
+     *
+     * @return the GHUser
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_requested">review_requested</a>
+     *      and <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_request_removed">review_request_removed</a>
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getRequestedReviewer() {
+        return this.requestedReviewer;
     }
 
     GHIssueEvent wrapUp(GHIssue parent) {
         this.issue = parent;
-        this.root = parent.root;
         return this;
     }
 

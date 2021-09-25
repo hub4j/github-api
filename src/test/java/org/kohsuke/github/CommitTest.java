@@ -4,10 +4,12 @@ import com.google.common.collect.Iterables;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -16,7 +18,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     @Test // issue 152
     public void lastStatus() throws IOException {
         GHTag t = gitHub.getRepository("stapler/stapler").listTags().iterator().next();
-        assertNotNull(t.getCommit().getLastStatus());
+        assertThat(t.getCommit().getLastStatus(), notNullValue());
     }
 
     @Test // issue 230
@@ -25,8 +27,89 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         PagedIterable<GHCommit> commits = repo.queryCommits().path("pom.xml").list();
         for (GHCommit commit : Iterables.limit(commits, 10)) {
             GHCommit expected = repo.getCommit(commit.getSHA1());
-            assertEquals(expected.getFiles().size(), commit.getFiles().size());
+            assertThat(commit.getFiles().size(), equalTo(expected.getFiles().size()));
         }
+    }
+
+    @Test
+    public void testQueryCommits() throws Exception {
+        List<String> sha1 = new ArrayList<String>();
+        List<GHCommit> commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .since(1199174400000L)
+                .until(1201852800000L)
+                .path("pom.xml")
+                .pageSize(100)
+                .list()
+                .toList();
+
+        assertThat(commits.size(), equalTo(29));
+
+        GHCommit commit = commits.get(0);
+        assertThat(commit.getSHA1(), equalTo("1cccddb22e305397151b2b7b87b4b47d74ca337b"));
+
+        commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .since(new Date(1199174400000L))
+                .until(new Date(1201852800000L))
+                .path("pom.xml")
+                .pageSize(100)
+                .list()
+                .toList();
+
+        assertThat(commits.get(0).getSHA1(), equalTo("1cccddb22e305397151b2b7b87b4b47d74ca337b"));
+        assertThat(commits.get(15).getSHA1(), equalTo("a5259970acaec9813e2a12a91f37dfc7871a5ef5"));
+        assertThat(commits.size(), equalTo(29));
+
+        commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .since(new Date(1199174400000L))
+                .until(new Date(1201852800000L))
+                .path("pom.xml")
+                .from("a5259970acaec9813e2a12a91f37dfc7871a5ef5")
+                .list()
+                .toList();
+
+        assertThat(commits.get(0).getSHA1(), equalTo("a5259970acaec9813e2a12a91f37dfc7871a5ef5"));
+        assertThat(commits.size(), equalTo(14));
+
+        commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .until(new Date(1201852800000L))
+                .path("pom.xml")
+                .author("kohsuke")
+                .list()
+                .toList();
+
+        assertThat(commits, is(empty()));
+
+        commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .until(new Date(1201852800000L))
+                .path("pom.xml")
+                .pageSize(100)
+                .author("kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a")
+                .list()
+                .toList();
+
+        assertThat(commits.size(), equalTo(266));
+
+        commits = gitHub.getUser("jenkinsci")
+                .getRepository("jenkins")
+                .queryCommits()
+                .path("pom.xml")
+                .pageSize(100)
+                .author("kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a")
+                .list()
+                .toList();
+
+        assertThat(commits.size(), equalTo(648));
+
     }
 
     @Test
@@ -48,7 +131,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
 
         List<GHPullRequest> listedPrs = commit.listPullRequests().toList();
 
-        assertEquals(listedPrs.size(), 1);
+        assertThat(1, equalTo(listedPrs.size()));
 
         assertThat("Pull request " + prNumber + " not found by searching from commit.",
                 listedPrs.stream().findFirst().filter(it -> it.getNumber() == prNumber).isPresent());
@@ -63,7 +146,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
 
         List<GHPullRequest> listedPrs = commit.listPullRequests().toList();
 
-        assertEquals(listedPrs.size(), 2);
+        assertThat(2, equalTo(listedPrs.size()));
 
         listedPrs.stream()
                 .forEach(pr -> assertThat("PR#" + pr.getNumber() + " not expected to be matched.",
@@ -76,12 +159,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
 
         GHCommit commit = repo.getCommit("ab92e13c0fc844fd51a379a48a3ad0b18231215c");
 
-        assertThat("Commit which was supposed to be HEAD in the \"master\" branch was not found.",
+        assertThat("Commit which was supposed to be HEAD in the \"main\" branch was not found.",
                 commit.listBranchesWhereHead()
                         .toList()
                         .stream()
                         .findFirst()
-                        .filter(it -> it.getName().equals("master"))
+                        .filter(it -> it.getName().equals("main"))
                         .isPresent());
     }
 
@@ -91,9 +174,9 @@ public class CommitTest extends AbstractGitHubWireMockTest {
 
         GHCommit commit = repo.getCommit("ab92e13c0fc844fd51a379a48a3ad0b18231215c");
 
-        assertEquals("Commit which was supposed to be HEAD in 2 branches was not found as such.",
-                2,
-                commit.listBranchesWhereHead().toList().size());
+        assertThat("Commit which was supposed to be HEAD in 2 branches was not found as such.",
+                commit.listBranchesWhereHead().toList().size(),
+                equalTo(2));
     }
 
     @Test
@@ -112,14 +195,14 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         PagedIterable<GHCommit> commits = repo.queryCommits().path("pom.xml").list();
         for (GHCommit commit : Iterables.limit(commits, 10)) {
             GHCommit expected = repo.getCommit(commit.getSHA1());
-            assertEquals(expected.getCommitShortInfo().getVerification().isVerified(),
-                    commit.getCommitShortInfo().getVerification().isVerified());
-            assertEquals(expected.getCommitShortInfo().getVerification().getReason(),
-                    commit.getCommitShortInfo().getVerification().getReason());
-            assertEquals(expected.getCommitShortInfo().getVerification().getSignature(),
-                    commit.getCommitShortInfo().getVerification().getSignature());
-            assertEquals(expected.getCommitShortInfo().getVerification().getPayload(),
-                    commit.getCommitShortInfo().getVerification().getPayload());
+            assertThat(commit.getCommitShortInfo().getVerification().isVerified(),
+                    equalTo(expected.getCommitShortInfo().getVerification().isVerified()));
+            assertThat(commit.getCommitShortInfo().getVerification().getReason(),
+                    equalTo(expected.getCommitShortInfo().getVerification().getReason()));
+            assertThat(commit.getCommitShortInfo().getVerification().getSignature(),
+                    equalTo(expected.getCommitShortInfo().getVerification().getSignature()));
+            assertThat(commit.getCommitShortInfo().getVerification().getPayload(),
+                    equalTo(expected.getCommitShortInfo().getVerification().getPayload()));
         }
     }
 

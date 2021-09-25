@@ -22,7 +22,6 @@ public class GHTagObject extends GitHubInteractiveObject {
 
     GHTagObject wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
         return this;
     }
 
@@ -31,17 +30,9 @@ public class GHTagObject extends GitHubInteractiveObject {
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
-    }
-
-    /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-        return root;
     }
 
     /**

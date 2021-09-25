@@ -1,8 +1,8 @@
 [
   {
-    "ref": "refs/heads/master",
+    "ref": "refs/heads/main",
     "node_id": "MDM6UmVmMjMzMTMxOTEwOm1hc3Rlcg==",
-    "url": "https://api.github.com/repos/hub4j-test-org/temp-getRefsHeads/git/refs/heads/master",
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-getRefsHeads/git/refs/heads/main",
     "object": {
       "sha": "ec5cb63bbcc04415fe7371d8f0a03d4df9ea9e91",
       "type": "commit",

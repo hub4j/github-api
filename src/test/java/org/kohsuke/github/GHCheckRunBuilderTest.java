@@ -25,17 +25,18 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.GHCheckRun.Status;
 
 import java.io.IOException;
 import java.util.Date;
 
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.*;
 
 @SuppressWarnings("deprecation") // preview
 public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
 
     protected GitHub getInstallationGithub() throws IOException {
-        return getAppInstallationWithTokenApp3().getRoot();
+        return getAppInstallationWithTokenApp3().root();
     }
 
     @Test
@@ -48,7 +49,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .withExternalID("whatever")
                 .withStartedAt(new Date(999_999_000))
                 .withCompletedAt(new Date(999_999_999))
-                .add(new GHCheckRunBuilder.Output("Some Title", "what happened…")
+                .add(new GHCheckRunBuilder.Output("Some Title", "what happened…").withText("Hello Text!")
                         .add(new GHCheckRunBuilder.Annotation("stuff.txt",
                                 1,
                                 GHCheckRun.AnnotationLevel.NOTICE,
@@ -58,14 +59,17 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                                         .withCaption("Princess Unikitty")))
                 .add(new GHCheckRunBuilder.Action("Help", "what I need help with", "doit"))
                 .create();
-        assertEquals("completed", checkRun.getStatus());
-        assertEquals(1, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(1424883286, checkRun.getId());
+        assertThat(checkRun.getStatus(), equalTo(Status.COMPLETED));
+        assertThat(checkRun.getOutput().getAnnotationsCount(), equalTo(1));
+        assertThat(checkRun.getId(), equalTo(1424883286L));
+        assertThat(checkRun.getOutput().getText(), equalTo("Hello Text!"));
     }
 
     @Test
     public void createCheckRunManyAnnotations() throws Exception {
-        GHCheckRunBuilder.Output output = new GHCheckRunBuilder.Output("Big Run", "Lots of stuff here »");
+        GHCheckRunBuilder.Output output = new GHCheckRunBuilder.Output("Big Run", "Lots of stuff here »")
+                .withText("Hello Text!");
+
         for (int i = 0; i < 101; i++) {
             output.add(
                     new GHCheckRunBuilder.Annotation("stuff.txt", 1, GHCheckRun.AnnotationLevel.NOTICE, "hello #" + i));
@@ -75,11 +79,12 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .withConclusion(GHCheckRun.Conclusion.SUCCESS)
                 .add(output)
                 .create();
-        assertEquals("completed", checkRun.getStatus());
-        assertEquals("Big Run", checkRun.getOutput().getTitle());
-        assertEquals("Lots of stuff here »", checkRun.getOutput().getSummary());
-        assertEquals(101, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(1424883599, checkRun.getId());
+        assertThat(checkRun.getStatus(), equalTo(Status.COMPLETED));
+        assertThat(checkRun.getOutput().getTitle(), equalTo("Big Run"));
+        assertThat(checkRun.getOutput().getSummary(), equalTo("Lots of stuff here »"));
+        assertThat(checkRun.getOutput().getAnnotationsCount(), equalTo(101));
+        assertThat(checkRun.getOutput().getText(), equalTo("Hello Text!"));
+        assertThat(checkRun.getId(), equalTo(1424883599L));
     }
 
     @Test
@@ -89,9 +94,9 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .withConclusion(GHCheckRun.Conclusion.NEUTRAL)
                 .add(new GHCheckRunBuilder.Output("Quick note", "nothing more to see here"))
                 .create();
-        assertEquals("completed", checkRun.getStatus());
-        assertEquals(0, checkRun.getOutput().getAnnotationsCount());
-        assertEquals(1424883957, checkRun.getId());
+        assertThat(checkRun.getStatus(), equalTo(Status.COMPLETED));
+        assertThat(checkRun.getOutput().getAnnotationsCount(), equalTo(0));
+        assertThat(checkRun.getId(), equalTo(1424883957L));
     }
 
     @Test
@@ -100,9 +105,9 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .createCheckRun("outstanding", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
                 .withStatus(GHCheckRun.Status.IN_PROGRESS)
                 .create();
-        assertEquals("in_progress", checkRun.getStatus());
-        assertNull(checkRun.getConclusion());
-        assertEquals(1424883451, checkRun.getId());
+        assertThat(checkRun.getStatus(), equalTo(Status.IN_PROGRESS));
+        assertThat(checkRun.getConclusion(), nullValue());
+        assertThat(checkRun.getId(), equalTo(1424883451L));
     }
 
     @Test
@@ -114,8 +119,10 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                     .create();
             fail("should have been rejected");
         } catch (HttpException x) {
-            assertEquals(422, x.getResponseCode());
+            assertThat(x.getResponseCode(), equalTo(422));
             assertThat(x.getMessage(), containsString("\\\"conclusion\\\" wasn't supplied"));
+            assertThat(x.getUrl(), containsString("/repos/hub4j-test-org/test-checks/check-runs"));
+            assertThat(x.getResponseMessage(), equalTo("422 Unprocessable Entity"));
         }
     }
 
@@ -136,9 +143,9 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .withConclusion(GHCheckRun.Conclusion.SUCCESS)
                 .withCompletedAt(new Date(999_999_999))
                 .create();
-        assertEquals(updated.getStartedAt(), new Date(999_999_000));
-        assertEquals(updated.getName(), "foo");
-        assertEquals(1, checkRun.getOutput().getAnnotationsCount());
+        assertThat(new Date(999_999_000), equalTo(updated.getStartedAt()));
+        assertThat("foo", equalTo(updated.getName()));
+        assertThat(checkRun.getOutput().getAnnotationsCount(), equalTo(1));
     }
 
 }

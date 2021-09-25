@@ -1,6 +1,8 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,6 +42,7 @@ public class GHDiscussion extends GHObject {
      * @return the team for this discussion
      */
     @Nonnull
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHTeam getTeam() {
         return team;
     }
@@ -108,14 +111,16 @@ public class GHDiscussion extends GHObject {
     }
 
     static GHDiscussion read(GHTeam team, long discussionNumber) throws IOException {
-        return team.root.createRequest()
+        return team.root()
+                .createRequest()
                 .setRawUrlPath(getRawUrlPath(team, discussionNumber))
                 .fetch(GHDiscussion.class)
                 .wrapUp(team);
     }
 
     static PagedIterable<GHDiscussion> readAll(GHTeam team) throws IOException {
-        return team.root.createRequest()
+        return team.root()
+                .createRequest()
                 .setRawUrlPath(getRawUrlPath(team, null))
                 .toIterable(GHDiscussion[].class, item -> item.wrapUp(team));
     }
@@ -128,7 +133,6 @@ public class GHDiscussion extends GHObject {
      * @return a {@link GHDiscussion.Updater}
      */
     @Preview(Previews.SQUIRREL_GIRL)
-    @Deprecated
     public GHDiscussion.Updater update() {
         return new GHDiscussion.Updater(this);
     }
@@ -139,7 +143,6 @@ public class GHDiscussion extends GHObject {
      * @return a {@link GHDiscussion.Setter}
      */
     @Preview(Previews.SQUIRREL_GIRL)
-    @Deprecated
     public GHDiscussion.Setter set() {
         return new GHDiscussion.Setter(this);
     }
@@ -151,7 +154,7 @@ public class GHDiscussion extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        team.root.createRequest().method("DELETE").setRawUrlPath(getRawUrlPath(team, number)).send();
+        team.root().createRequest().method("DELETE").setRawUrlPath(getRawUrlPath(team, number)).send();
     }
 
     private static String getRawUrlPath(@Nonnull GHTeam team, @CheckForNull Long discussionNumber) {

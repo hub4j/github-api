@@ -2,7 +2,9 @@ package org.kohsuke.github;
 
 import org.junit.Test;
 
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
@@ -10,6 +12,10 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 
 /**
@@ -18,6 +24,34 @@ import static org.junit.Assert.fail;
  * @author Liam Newman
  */
 public class GitHubStaticTest extends AbstractGitHubWireMockTest {
+
+    @Test
+    public void testParseURL() throws Exception {
+        assertThat(GitHubClient.parseURL("https://api.github.com"), equalTo(new URL("https://api.github.com")));
+        assertThat(GitHubClient.parseURL(null), nullValue());
+
+        try {
+            GitHubClient.parseURL("bogus");
+            fail();
+        } catch (IllegalStateException e) {
+            assertThat(e.getMessage(), equalTo("Invalid URL: bogus"));
+        }
+    }
+
+    @Test
+    public void testParseInstant() throws Exception {
+        assertThat(GitHubClient.parseInstant(null), nullValue());
+    }
+
+    @Test
+    public void testRawUrlPathInvalid() throws Exception {
+        try {
+            gitHub.createRequest().setRawUrlPath("invalid.path.com");
+            fail();
+        } catch (GHException e) {
+            assertThat(e.getMessage(), equalTo("Raw URL must start with 'http'"));
+        }
+    }
 
     @Test
     public void timeRoundTrip() throws Exception {
@@ -76,6 +110,62 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         } catch (DateTimeParseException e) {
             assertThat(e.getMessage(), equalTo("Text '" + instantBadFormat + "' could not be parsed at index 0"));
         }
+    }
+
+    @Test
+    public void testFromRecord() throws Exception {
+        final long stableInstantEpochSeconds = 11610674762L;
+
+        GHRateLimit rateLimit_none = GHRateLimit.fromRecord(new GHRateLimit.Record(9876,
+                5432,
+                (stableInstantEpochSeconds + Duration.ofMinutes(30).toMillis()) / 1000L), RateLimitTarget.NONE);
+
+        GHRateLimit rateLimit_core = GHRateLimit.fromRecord(new GHRateLimit.Record(9876,
+                5432,
+                (stableInstantEpochSeconds + Duration.ofMinutes(30).toMillis()) / 1000L), RateLimitTarget.CORE);
+
+        GHRateLimit rateLimit_search = GHRateLimit.fromRecord(new GHRateLimit.Record(19876,
+                15432,
+                (stableInstantEpochSeconds + Duration.ofHours(1).toMillis()) / 1000L), RateLimitTarget.SEARCH);
+
+        GHRateLimit rateLimit_graphql = GHRateLimit.fromRecord(new GHRateLimit.Record(29876,
+                25432,
+                (stableInstantEpochSeconds + Duration.ofHours(2).toMillis()) / 1000L), RateLimitTarget.GRAPHQL);
+
+        GHRateLimit rateLimit_integration = GHRateLimit.fromRecord(
+                new GHRateLimit.Record(39876,
+                        35432,
+                        (stableInstantEpochSeconds + Duration.ofHours(3).toMillis()) / 1000L),
+                RateLimitTarget.INTEGRATION_MANIFEST);
+
+        assertThat(rateLimit_none, equalTo(rateLimit_core));
+        assertThat(rateLimit_none, not(sameInstance(rateLimit_core)));
+        assertThat(rateLimit_none.hashCode(), equalTo(rateLimit_core.hashCode()));
+        assertThat(rateLimit_none, equalTo(rateLimit_core));
+
+        assertThat(rateLimit_none, not(equalTo(rateLimit_search)));
+
+        assertThat(rateLimit_none.getCore(), not(sameInstance(rateLimit_core.getCore())));
+
+        assertThat(rateLimit_core.getRecord(RateLimitTarget.NONE), instanceOf(GHRateLimit.UnknownLimitRecord.class));
+        assertThat(rateLimit_core.getRecord(RateLimitTarget.NONE),
+                sameInstance(rateLimit_none.getRecord(RateLimitTarget.NONE)));
+
+        assertThat(rateLimit_core.getRecord(RateLimitTarget.SEARCH), sameInstance(rateLimit_search.getGraphQL()));
+        assertThat(rateLimit_search.getRecord(RateLimitTarget.GRAPHQL),
+                sameInstance(rateLimit_graphql.getIntegrationManifest()));
+        assertThat(rateLimit_graphql.getRecord(RateLimitTarget.INTEGRATION_MANIFEST),
+                sameInstance(rateLimit_integration.getCore()));
+        assertThat(rateLimit_integration.getRecord(RateLimitTarget.CORE), sameInstance(rateLimit_core.getSearch()));
+
+        assertThat(rateLimit_none.getRecord(RateLimitTarget.CORE).getLimit(), equalTo(9876));
+        assertThat(rateLimit_core.getRecord(RateLimitTarget.CORE).getLimit(), equalTo(9876));
+        assertThat(rateLimit_search.getRecord(RateLimitTarget.SEARCH).getLimit(), equalTo(19876));
+        assertThat(rateLimit_graphql.getRecord(RateLimitTarget.GRAPHQL).getLimit(), equalTo(29876));
+        assertThat(rateLimit_integration.getRecord(RateLimitTarget.INTEGRATION_MANIFEST).getLimit(), equalTo(39876));
+
+        assertThat(rateLimit_core.toString(), containsString("GHRateLimit {core {remaining=5432, limit=9876"));
+        assertThat(rateLimit_core.toString(), containsString("search {remaining=999999, limit=1000000"));
     }
 
     @Test
@@ -225,7 +315,7 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         // this makes sure they don't break.
 
         GHRepository repo = getTempRepository();
-        assertThat(repo.root, not(nullValue()));
+        assertThat(repo.root(), not(nullValue()));
         assertThat(repo.getResponseHeaderFields(), not(nullValue()));
 
         String repoString = GitHub.getMappingObjectWriter().writeValueAsString(repo);
@@ -237,13 +327,16 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
                 .readValue(repoString);
 
         // This should never happen if the internal method isn't used
-        assertThat(readRepo.root, nullValue());
+        final GHRepository readRepoFinal = readRepo;
+        assertThrows(NullPointerException.class, () -> readRepoFinal.getRoot());
+        assertThrows(NullPointerException.class, () -> readRepoFinal.root());
+        assertThat(readRepoFinal.isOffline(), is(true));
         assertThat(readRepo.getResponseHeaderFields(), nullValue());
 
         readRepo = GitHub.getMappingObjectReader().forType(GHRepository.class).readValue(repoString);
 
         // This should never happen if the internal method isn't used
-        assertThat(readRepo.root.getConnector(), equalTo(HttpConnector.OFFLINE));
+        assertThat(readRepo.getRoot().getConnector(), equalTo(HttpConnector.OFFLINE));
         assertThat(readRepo.getResponseHeaderFields(), nullValue());
 
         String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(readRepo);

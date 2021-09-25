@@ -7,7 +7,7 @@
     "id": 21786739,
     "node_id": "MDc6UmVsZWFzZTIxNzg2NzM5",
     "tag_name": "release_tag",
-    "target_commitish": "master",
+    "target_commitish": "main",
     "name": "Test Release",
     "draft": false,
     "author": {

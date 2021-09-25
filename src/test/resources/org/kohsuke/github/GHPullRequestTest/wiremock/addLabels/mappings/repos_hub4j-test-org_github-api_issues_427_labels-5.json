@@ -1,0 +1,55 @@
+{
+  "id": "3eb12555-549d-40a4-a2a2-768a52f19f45",
+  "name": "repos_hub4j-test-org_github-api_issues_427_labels",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/427/labels",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"labels\":[\"addLabels_label_name_1\"]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": "[{\"id\":2806272360,\"node_id\":\"MDU6TGFiZWwyODA2MjcyMzYw\",\"url\":\"https://api.github.com/repos/hub4j-test-org/github-api/labels/addLabels_label_name_1\",\"name\":\"addLabels_label_name_1\",\"color\":\"ededed\",\"default\":false,\"description\":null}]",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 13 Mar 2021 01:53:59 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"5ee589724d8bcbfb03a8177190eb68d2ad8592678e9f6960177ae5a8fb8015c7\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4975",
+      "X-RateLimit-Reset": "1615604003",
+      "X-RateLimit-Used": "25",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C596:3EFB:4DAB68:5330F0:604C1B37"
+    }
+  },
+  "uuid": "3eb12555-549d-40a4-a2a2-768a52f19f45",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-github-api-issues-427-labels",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-repos-hub4j-test-org-github-api-issues-427-labels-2",
+  "insertionIndex": 5
+}

@@ -23,10 +23,12 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
 /**
  * Comment to the issue
@@ -51,6 +53,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      *
      * @return the parent
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHIssue getParent() {
         return owner;
     }
@@ -82,7 +85,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-        return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());
+        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());
     }
 
     @Override
@@ -108,7 +111,8 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-        owner.root.createRequest()
+        owner.root()
+                .createRequest()
                 .method("PATCH")
                 .with("body", body)
                 .withUrlPath(getApiRoute())
@@ -123,28 +127,27 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void delete() throws IOException {
-        owner.root.createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+        owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return owner.root.createRequest()
+        return owner.root()
+                .createRequest()
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getApiRoute() + "/reactions")
-                .fetch(GHReaction.class)
-                .wrap(owner.root);
+                .fetch(GHReaction.class);
     }
 
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return owner.root.createRequest()
+        return owner.root()
+                .createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiRoute() + "/reactions")
-                .toIterable(GHReaction[].class, item -> item.wrap(owner.root));
+                .toIterable(GHReaction[].class, item -> owner.root());
     }
 
     private String getApiRoute() {

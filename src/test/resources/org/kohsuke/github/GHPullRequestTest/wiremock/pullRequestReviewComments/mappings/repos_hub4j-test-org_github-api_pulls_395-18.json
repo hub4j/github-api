@@ -1,0 +1,54 @@
+{
+  "id": "c6d050b9-3c21-4665-9755-dd4239b1bdec",
+  "name": "repos_hub4j-test-org_github-api_pulls_395",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/395",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"state\":\"closed\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_pulls_395-18.json",
+    "headers": {
+      "Date": "Fri, 22 Jan 2021 23:38:23 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"90509bd8d9725f0f0f27ec990a077b0d7ae666d44e41b40df88021d9431f07b9\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4799",
+      "X-RateLimit-Reset": "1611361294",
+      "x-ratelimit-used": "201",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D013:3B95:105872:12641A:600B61EE"
+    }
+  },
+  "uuid": "c6d050b9-3c21-4665-9755-dd4239b1bdec",
+  "persistent": true,
+  "insertionIndex": 18
+}

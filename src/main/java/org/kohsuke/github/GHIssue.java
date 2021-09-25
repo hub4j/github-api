@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import static org.kohsuke.github.Previews.SQUIRREL_GIRL;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
 /**
  * Represents an issue on GitHub.
@@ -75,20 +75,7 @@ public class GHIssue extends GHObject implements Reactable {
     GHIssue wrap(GHRepository owner) {
         this.owner = owner;
         if (milestone != null)
-            milestone.wrap(owner);
-        return wrap(owner.root);
-    }
-
-    GHIssue wrap(GitHub root) {
-        this.root = root;
-        if (assignee != null)
-            assignee.wrapUp(root);
-        if (assignees != null)
-            GHUser.wrap(assignees, root);
-        if (user != null)
-            user.wrapUp(root);
-        if (closed_by != null)
-            closed_by.wrapUp(root);
+            milestone.lateBind(owner);
         return this;
     }
 
@@ -97,6 +84,7 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
         return owner;
     }
@@ -192,7 +180,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void lock() throws IOException {
-        root.createRequest().method("PUT").withUrlPath(getApiRoute() + "/lock").send();
+        root().createRequest().method("PUT").withUrlPath(getApiRoute() + "/lock").send();
     }
 
     /**
@@ -202,7 +190,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void unlock() throws IOException {
-        root.createRequest().method("PUT").withUrlPath(getApiRoute() + "/lock").send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute() + "/lock").send();
     }
 
     /**
@@ -216,7 +204,7 @@ public class GHIssue extends GHObject implements Reactable {
      */
     @WithBridgeMethods(void.class)
     public GHIssueComment comment(String message) throws IOException {
-        GHIssueComment r = root.createRequest()
+        GHIssueComment r = root().createRequest()
                 .method("POST")
                 .with("body", message)
                 .withUrlPath(getIssuesApiRoute() + "/comments")
@@ -225,18 +213,18 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root.createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
     /**
      * Identical to edit(), but allows null for the value.
      */
     private void editNullable(String key, Object value) throws IOException {
-        root.createRequest().withNullable(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+        root().createRequest().withNullable(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
     private void editIssue(String key, Object value) throws IOException {
-        root.createRequest().withNullable(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
+        root().createRequest().withNullable(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
     }
 
     /**
@@ -312,7 +300,7 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Sets labels.
+     * Sets labels on the target to a specific list.
      *
      * @param labels
      *            the labels
@@ -326,100 +314,137 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * Adds labels to the issue.
      *
+     * Labels that are already present on the target are ignored.
+     *
+     * @return the complete list of labels including the new additions
      * @param names
      *            Names of the label
      * @throws IOException
      *             the io exception
      */
-    public void addLabels(String... names) throws IOException {
-        _addLabels(Arrays.asList(names));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> addLabels(String... names) throws IOException {
+        return _addLabels(Arrays.asList(names));
     }
 
     /**
      * Add labels.
      *
+     * Labels that are already present on the target are ignored.
+     *
+     * @return the complete list of labels including the new additions
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      */
-    public void addLabels(GHLabel... labels) throws IOException {
-        addLabels(Arrays.asList(labels));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> addLabels(GHLabel... labels) throws IOException {
+        return addLabels(Arrays.asList(labels));
     }
 
     /**
      * Add labels.
      *
+     * Labels that are already present on the target are ignored.
+     *
+     * @return the complete list of labels including the new additions
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      */
-    public void addLabels(Collection<GHLabel> labels) throws IOException {
-        _addLabels(GHLabel.toNames(labels));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> addLabels(Collection<GHLabel> labels) throws IOException {
+        return _addLabels(GHLabel.toNames(labels));
     }
 
-    private void _addLabels(Collection<String> names) throws IOException {
-        List<String> newLabels = new ArrayList<String>();
-
-        for (GHLabel label : getLabels()) {
-            newLabels.add(label.getName());
-        }
-        for (String name : names) {
-            if (!newLabels.contains(name)) {
-                newLabels.add(name);
-            }
-        }
-        setLabels(newLabels.toArray(new String[0]));
+    private List<GHLabel> _addLabels(Collection<String> names) throws IOException {
+        return Arrays.asList(root().createRequest()
+                .with("labels", names)
+                .method("POST")
+                .withUrlPath(getIssuesApiRoute() + "/labels")
+                .fetch(GHLabel[].class));
     }
 
     /**
-     * Remove a given label by name from this issue.
+     * Remove a single label.
      *
+     * Attempting to remove a label that is not present throws {@link GHFileNotFoundException}.
+     *
+     * @return the remaining list of labels
+     * @param name
+     *            the name
+     * @throws IOException
+     *             the io exception, throws {@link GHFileNotFoundException} if label was not present.
+     */
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> removeLabel(String name) throws IOException {
+        return Arrays.asList(root().createRequest()
+                .method("DELETE")
+                .withUrlPath(getIssuesApiRoute() + "/labels", name)
+                .fetch(GHLabel[].class));
+    }
+
+    /**
+     * Remove a collection of labels.
+     *
+     * Attempting to remove labels that are not present on the target are ignored.
+     *
+     * @return the remaining list of labels
      * @param names
      *            the names
      * @throws IOException
      *             the io exception
      */
-    public void removeLabels(String... names) throws IOException {
-        _removeLabels(Arrays.asList(names));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> removeLabels(String... names) throws IOException {
+        return _removeLabels(Arrays.asList(names));
     }
 
     /**
-     * Remove labels.
+     * Remove a collection of labels.
      *
+     * Attempting to remove labels that are not present on the target are ignored.
+     *
+     * @return the remaining list of labels
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      * @see #removeLabels(String...) #removeLabels(String...)
      */
-    public void removeLabels(GHLabel... labels) throws IOException {
-        removeLabels(Arrays.asList(labels));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> removeLabels(GHLabel... labels) throws IOException {
+        return removeLabels(Arrays.asList(labels));
     }
 
     /**
-     * Remove labels.
+     * Remove a collection of labels.
      *
+     * Attempting to remove labels that are not present on the target are ignored.
+     *
+     * @return the remaining list of labels
      * @param labels
      *            the labels
      * @throws IOException
      *             the io exception
      */
-    public void removeLabels(Collection<GHLabel> labels) throws IOException {
-        _removeLabels(GHLabel.toNames(labels));
+    @WithBridgeMethods(void.class)
+    public List<GHLabel> removeLabels(Collection<GHLabel> labels) throws IOException {
+        return _removeLabels(GHLabel.toNames(labels));
     }
 
-    private void _removeLabels(Collection<String> names) throws IOException {
-        List<String> newLabels = new ArrayList<String>();
-
-        for (GHLabel l : getLabels()) {
-            if (!names.contains(l.getName())) {
-                newLabels.add(l.getName());
+    private List<GHLabel> _removeLabels(Collection<String> names) throws IOException {
+        List<GHLabel> remainingLabels = Collections.emptyList();
+        for (String name : names) {
+            try {
+                remainingLabels = removeLabel(name);
+            } catch (GHFileNotFoundException e) {
+                // when trying to remove multiple labels, we ignore already removed
             }
         }
-
-        setLabels(newLabels.toArray(new String[0]));
+        return remainingLabels;
     }
 
     /**
@@ -442,30 +467,27 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .withUrlPath(getIssuesApiRoute() + "/comments")
                 .toIterable(GHIssueComment[].class, item -> item.wrapUp(this));
     }
 
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getApiRoute() + "/reactions")
-                .fetch(GHReaction.class)
-                .wrap(root);
+                .fetch(GHReaction.class);
     }
 
     @Preview(SQUIRREL_GIRL)
-    @Deprecated
     public PagedIterable<GHReaction> listReactions() {
-        return root.createRequest()
+        return root().createRequest()
                 .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiRoute() + "/reactions")
-                .toIterable(GHReaction[].class, item -> item.wrap(root));
+                .toIterable(GHReaction[].class, null);
     }
 
     /**
@@ -489,7 +511,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        root.createRequest()
+        root().createRequest()
                 .method("POST")
                 .with(ASSIGNEES, getLogins(assignees))
                 .withUrlPath(getIssuesApiRoute() + "/assignees")
@@ -517,7 +539,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void setAssignees(Collection<GHUser> assignees) throws IOException {
-        root.createRequest()
+        root().createRequest()
                 .method("PATCH")
                 .with(ASSIGNEES, getLogins(assignees))
                 .withUrlPath(getIssuesApiRoute())
@@ -545,7 +567,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public void removeAssignees(Collection<GHUser> assignees) throws IOException {
-        root.createRequest()
+        root().createRequest()
                 .method("DELETE")
                 .with(ASSIGNEES, getLogins(assignees))
                 .inBody()
@@ -571,7 +593,7 @@ public class GHIssue extends GHObject implements Reactable {
         if (owner == null) {
             // Issues returned from search to do not have an owner. Attempt to use url.
             final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), ""), "/");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
         }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/issues/" + number;
     }
@@ -584,7 +606,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public GHUser getAssignee() throws IOException {
-        return root.intern(assignee);
+        return root().intern(assignee);
     }
 
     /**
@@ -604,7 +626,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-        return root.intern(user);
+        return root().intern(user);
     }
 
     /**
@@ -626,7 +648,7 @@ public class GHIssue extends GHObject implements Reactable {
         /*
          * if (closed_by==null) { closed_by = owner.getIssue(number).getClosed_by(); }
          */
-        return root.intern(closed_by);
+        return root().intern(closed_by);
     }
 
     /**
@@ -661,6 +683,7 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * @return the milestone
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHMilestone getMilestone() {
         return milestone;
     }
@@ -668,8 +691,7 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * The type PullRequest.
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },
-            justification = "JSON API")
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class PullRequest {
         private String diff_url, patch_url, html_url;
 
@@ -717,7 +739,7 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      */
     public PagedIterable<GHIssueEvent> listEvents() throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .withUrlPath(owner.getApiTailUrl(String.format("/issues/%s/events", number)))
                 .toIterable(GHIssueEvent[].class, item -> item.wrapUp(this));
     }

@@ -379,7 +379,7 @@
     "updated_at": "2019-11-04T22:54:55Z",
     "closed_at": "2019-11-04T22:54:55Z",
     "author_association": "NONE",
-    "body": "According to https://github.com/square/okhttp/blob/master/CHANGELOG.md#version-3140. `OkUrlFactory` was removed from okhttp 3.14.0, making the upgrade impossible when your application requires okhttp as the default mechanism for HTTP requests."
+    "body": "According to https://github.com/square/okhttp/blob/main/CHANGELOG.md#version-3140. `OkUrlFactory` was removed from okhttp 3.14.0, making the upgrade impossible when your application requires okhttp as the default mechanism for HTTP requests."
   },
   {
     "url": "https://api.github.com/repos/hub4j/github-api/issues/505",

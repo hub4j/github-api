@@ -3443,7 +3443,7 @@
       "site_admin": false
     },
     "html_url": "https://github.com/mattetti/ruby-on-rails-tmbundle",
-    "description": "Ruby on Rails TextMate bundle [master branch is svn trunk; patches to drnicwilliams@gmail.com]",
+    "description": "Ruby on Rails TextMate bundle [main branch is svn trunk; patches to drnicwilliams@gmail.com]",
     "fork": true,
     "url": "https://api.github.com/repos/mattetti/ruby-on-rails-tmbundle",
     "forks_url": "https://api.github.com/repos/mattetti/ruby-on-rails-tmbundle/forks",
@@ -4850,7 +4850,7 @@
       "site_admin": false
     },
     "html_url": "https://github.com/simonjefford/ruby-on-rails-tmbundle",
-    "description": "Ruby on Rails TextMate bundle [master branch is svn trunk; patches to drnicwilliams@gmail.com]",
+    "description": "Ruby on Rails TextMate bundle [main branch is svn trunk; patches to drnicwilliams@gmail.com]",
     "fork": true,
     "url": "https://api.github.com/repos/simonjefford/ruby-on-rails-tmbundle",
     "forks_url": "https://api.github.com/repos/simonjefford/ruby-on-rails-tmbundle/forks",

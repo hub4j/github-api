@@ -1,0 +1,47 @@
+{
+  "id": "79f2a793-5e4a-4207-b566-54f13bc183ef",
+  "name": "repos_hub4j-test-org_ghcontentintegrationtest_commits_e0cef483cb2da847c7c229edea354db50f287e36",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/commits/e0cef483cb2da847c7c229edea354db50f287e36",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_ghcontentintegrationtest_commits_e0cef483cb2da847c7c229edea354db50f287e36-15.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 28 Jun 2021 20:37:51 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"e02af5af86cbc786b7d1ae5d5d291db167caefcf38337fc7b595656f4588f53d\"",
+      "Last-Modified": "Mon, 28 Jun 2021 20:37:51 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4752",
+      "X-RateLimit-Reset": "1624914877",
+      "X-RateLimit-Used": "248",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF59:9A01:1A5F7F:1C3375:60DA331F"
+    }
+  },
+  "uuid": "79f2a793-5e4a-4207-b566-54f13bc183ef",
+  "persistent": true,
+  "insertionIndex": 15
+}

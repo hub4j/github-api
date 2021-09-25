@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.kohsuke.github.Previews.ANTIOPE;
-import static org.kohsuke.github.Previews.GROOT;
+import static org.kohsuke.github.internal.Previews.ANTIOPE;
+import static org.kohsuke.github.internal.Previews.GROOT;
 
 /**
  * A commit in a repository.
@@ -281,6 +281,7 @@ public class GHCommit {
      *
      * @return the repository that contains the commit.
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }
@@ -352,6 +353,15 @@ public class GHCommit {
     }
 
     /**
+     * Gets url.
+     *
+     * @return API URL of this object.
+     */
+    public URL getUrl() {
+        return GitHubClient.parseURL(url);
+    }
+
+    /**
      * List of files changed/added/removed in this commit.
      *
      * @return Can be empty but never null.
@@ -392,6 +402,7 @@ public class GHCommit {
      *             on error
      */
     public List<GHCommit> getParents() throws IOException {
+        populate();
         List<GHCommit> r = new ArrayList<GHCommit>();
         for (String sha1 : getParentSHA1s())
             r.add(owner.getCommit(sha1));
@@ -406,6 +417,7 @@ public class GHCommit {
      *             the io exception
      */
     public GHUser getAuthor() throws IOException {
+        populate();
         return resolveUser(author);
     }
 
@@ -428,6 +440,7 @@ public class GHCommit {
      *             the io exception
      */
     public GHUser getCommitter() throws IOException {
+        populate();
         return resolveUser(committer);
     }
 
@@ -445,7 +458,7 @@ public class GHCommit {
     private GHUser resolveUser(User author) throws IOException {
         if (author == null || author.login == null)
             return null;
-        return owner.root.getUser(author.login);
+        return owner.root().getUser(author.login);
     }
 
     /**
@@ -454,9 +467,9 @@ public class GHCommit {
      * @return {@link PagedIterable} with the pull requests which contain this commit
      */
     @Preview(GROOT)
-    @Deprecated
     public PagedIterable<GHPullRequest> listPullRequests() {
-        return owner.root.createRequest()
+        return owner.root()
+                .createRequest()
                 .withPreview(GROOT)
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/pulls", owner.getOwnerName(), owner.getName(), sha))
                 .toIterable(GHPullRequest[].class, item -> item.wrapUp(owner));
@@ -470,9 +483,9 @@ public class GHCommit {
      *             the io exception
      */
     @Preview(GROOT)
-    @Deprecated
     public PagedIterable<GHBranch> listBranchesWhereHead() throws IOException {
-        return owner.root.createRequest()
+        return owner.root()
+                .createRequest()
                 .withPreview(GROOT)
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/branches-where-head",
                         owner.getOwnerName(),
@@ -487,10 +500,7 @@ public class GHCommit {
      * @return {@link PagedIterable} with all the commit comments in this repository.
      */
     public PagedIterable<GHCommitComment> listComments() {
-        return owner.root.createRequest()
-                .withUrlPath(
-                        String.format("/repos/%s/%s/commits/%s/comments", owner.getOwnerName(), owner.getName(), sha))
-                .toIterable(GHCommitComment[].class, item -> item.wrap(owner));
+        return owner.listCommitComments(sha);
     }
 
     /**
@@ -511,7 +521,8 @@ public class GHCommit {
      *             if comment is not created
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-        GHCommitComment r = owner.root.createRequest()
+        GHCommitComment r = owner.root()
+                .createRequest()
                 .method("POST")
                 .with("body", body)
                 .with("path", path)
@@ -566,7 +577,6 @@ public class GHCommit {
      *             on error
      */
     @Preview(ANTIOPE)
-    @Deprecated
     public PagedIterable<GHCheckRun> getCheckRuns() throws IOException {
         return owner.getCheckRuns(sha);
     }
@@ -579,7 +589,7 @@ public class GHCommit {
      */
     void populate() throws IOException {
         if (files == null && stats == null)
-            owner.root.createRequest().withUrlPath(owner.getApiTailUrl("commits/" + sha)).fetchInto(this);
+            owner.root().createRequest().withUrlPath(owner.getApiTailUrl("commits/" + sha)).fetchInto(this);
     }
 
     GHCommit wrapUp(GHRepository owner) {

@@ -18,7 +18,7 @@
     "payload": {
       "ref": "branch-8855a329",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -222,7 +222,7 @@
     "payload": {
       "ref": "branch-e08f46fa",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -249,7 +249,7 @@
       "push_id": 4176854891,
       "size": 2,
       "distinct_size": 2,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "d3108b1a65697a4d495da409b90c01949487a028",
       "before": "b6149875bc527d31618a9e49513966cd52129ada",
       "commits": [
@@ -523,12 +523,12 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "gridu:master",
-          "ref": "master",
+          "label": "gridu:main",
+          "ref": "main",
           "sha": "b3b4fd9e4a2e1aa505cb9d3b7f019f8431e495da",
           "user": {
             "login": "gridu",
@@ -642,7 +642,7 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -716,7 +716,7 @@
       "push_id": 4176854890,
       "size": 11,
       "distinct_size": 11,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "6c05258cfd1a6156ee587923fb2ac0f55d84e482",
       "before": "e63bc6b2efce3bc6525e020fba6085654ddd3f49",
       "commits": [
@@ -736,7 +736,7 @@
             "email": "nobody@nowhere.nul",
             "name": "Coursera Learner"
           },
-          "message": "Merge branch 'master' of https://github.com/gszlan/DukeC-programming\n\ndone",
+          "message": "Merge branch 'main' of https://github.com/gszlan/DukeC-programming\n\ndone",
           "distinct": true,
           "url": "https://api.github.com/repos/gszlan/DukeC-programming/commits/7807e29af8106aa4a6c01538c9a745c52db52155"
         },
@@ -746,7 +746,7 @@
             "email": "nobody@nowhere.nul",
             "name": "Coursera Learner"
           },
-          "message": "Merge branch 'master' of https://github.com/gszlan/DukeC-programming\n\ndone",
+          "message": "Merge branch 'main' of https://github.com/gszlan/DukeC-programming\n\ndone",
           "distinct": true,
           "url": "https://api.github.com/repos/gszlan/DukeC-programming/commits/c19074a391ed36dd451f792c3f003d6bff670a70"
         },
@@ -766,7 +766,7 @@
             "email": "nobody@nowhere.nul",
             "name": "Coursera Learner"
           },
-          "message": "Merge branch 'master' of https://github.com/gszlan/DukeC-programming\n\naaa",
+          "message": "Merge branch 'main' of https://github.com/gszlan/DukeC-programming\n\naaa",
           "distinct": true,
           "url": "https://api.github.com/repos/gszlan/DukeC-programming/commits/2812192ddc013f7e75b3f1845649eb5ccb8baaea"
         },
@@ -786,7 +786,7 @@
             "email": "nobody@nowhere.nul",
             "name": "Coursera Learner"
           },
-          "message": "Merge branch 'master' of https://github.com/gszlan/DukeC-programming",
+          "message": "Merge branch 'main' of https://github.com/gszlan/DukeC-programming",
           "distinct": true,
           "url": "https://api.github.com/repos/gszlan/DukeC-programming/commits/07ea94f84ae40ae341de1158f0a5c1c4804dae8c"
         },
@@ -806,7 +806,7 @@
             "email": "nobody@nowhere.nul",
             "name": "Coursera Learner"
           },
-          "message": "Merge branch 'master' of https://github.com/gszlan/DukeC-programming",
+          "message": "Merge branch 'main' of https://github.com/gszlan/DukeC-programming",
           "distinct": true,
           "url": "https://api.github.com/repos/gszlan/DukeC-programming/commits/9d9d8e3ff80b91b6fe30732b36dee7b5b88196d5"
         },
@@ -904,7 +904,7 @@
       "push_id": 4176854889,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "30555b249ec8d391669c5e0986633c81ae0074e4",
       "before": "be176ad97e275562df0352855aa7d1f0d06786ce",
       "commits": [
@@ -950,7 +950,7 @@
       "push_id": 4176854884,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "61a4f6c6a093379eb8a5c8212c4fd59c2b6583f4",
       "before": "371b9b4cc0a641cb7dd1b1c5e67b920ff267e6ee",
       "commits": [
@@ -1069,7 +1069,7 @@
         "updated_at": "2019-10-21T21:54:48Z",
         "closed_at": null,
         "author_association": "NONE",
-        "body": "## Welcome!\n\nHello and welcome! In this course you will learn how you can get your best work done in pull requests.  You'll learn when and how to request a review, how to review someone else's code, and how to respond to reviews. To do this, we'll be playing around with the code in this repository that makes a simple Tetris game.\n\nIf you'd like, you can use [GitHub Pages](https://pages.github.com/) to host your Tetris game. Just go to the **Settings** tab of this repository. Scroll down to **GitHub Pages**. Select `master` as a **Source**, and click **Save**. \n\n### New to GitHub?\n\nFor this course, you'll need some background knowledge. If you need a refresher on the GitHub flow, check out [the Introduction to GitHub course](https://lab.github.com/courses/introduction-to-github).\n\n## Pull Requests Reviews 101\n\nReviewing a pull request is an opportunity to examine another contributor's changes. While reviewing a pull request, you can extrapolate how someone else solved a problem. It's an awesome opportunity to learn more about how the code works and how others solve problems. Reviewing a pull request is a great learning opportunity!\n\n## Step 1: Add assignees for issues and pull requests\n\nAssignees on issues and pull requests let other team members know who is responsible. The assignee oversees the issue or pull request in an accessible and visible way.\n\n### :keyboard: Activity: Assign yourself to this issue\n\n1. On the right side of the screen, click the `assign yourself` text under the **Assignees** section\n\n<hr>\n<h3 align=\"center\">I'll respond below for your next step</h3>\n\n> _Sometimes I respond too fast for the page to update! If you perform an expected action and don't see a response, wait a few seconds and refresh the page for your next steps._\n"
+        "body": "## Welcome!\n\nHello and welcome! In this course you will learn how you can get your best work done in pull requests.  You'll learn when and how to request a review, how to review someone else's code, and how to respond to reviews. To do this, we'll be playing around with the code in this repository that makes a simple Tetris game.\n\nIf you'd like, you can use [GitHub Pages](https://pages.github.com/) to host your Tetris game. Just go to the **Settings** tab of this repository. Scroll down to **GitHub Pages**. Select `main` as a **Source**, and click **Save**. \n\n### New to GitHub?\n\nFor this course, you'll need some background knowledge. If you need a refresher on the GitHub flow, check out [the Introduction to GitHub course](https://lab.github.com/courses/introduction-to-github).\n\n## Pull Requests Reviews 101\n\nReviewing a pull request is an opportunity to examine another contributor's changes. While reviewing a pull request, you can extrapolate how someone else solved a problem. It's an awesome opportunity to learn more about how the code works and how others solve problems. Reviewing a pull request is a great learning opportunity!\n\n## Step 1: Add assignees for issues and pull requests\n\nAssignees on issues and pull requests let other team members know who is responsible. The assignee oversees the issue or pull request in an accessible and visible way.\n\n### :keyboard: Activity: Assign yourself to this issue\n\n1. On the right side of the screen, click the `assign yourself` text under the **Assignees** section\n\n<hr>\n<h3 align=\"center\">I'll respond below for your next step</h3>\n\n> _Sometimes I respond too fast for the page to update! If you perform an expected action and don't see a response, wait a few seconds and refresh the page for your next steps._\n"
       },
       "comment": {
         "url": "https://api.github.com/repos/rcordeirotmu/reviewing-a-pull-request/issues/comments/544724566",
@@ -1296,12 +1296,12 @@
             "forks": 0,
             "open_issues": 0,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "dekkerglen:master",
-          "ref": "master",
+          "label": "dekkerglen:main",
+          "ref": "main",
           "sha": "f25ddd94644152d3bb6f2641e552b05108d13475",
           "user": {
             "login": "dekkerglen",
@@ -1421,7 +1421,7 @@
             "forks": 28,
             "open_issues": 126,
             "watchers": 39,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -1507,7 +1507,7 @@
       "push_id": 4176854881,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "b826329617c6f44caaac3be82a3147d082e404b7",
       "before": "4ff7211da7ee2bfa13e742c6332d78b228a4f4dc",
       "commits": [
@@ -1553,7 +1553,7 @@
       "push_id": 4176854876,
       "size": 2,
       "distinct_size": 2,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "f4b6567d15dfe6709d3eecd304877e4ca32ac308",
       "before": "0d0b5abb37eae9421cf0cbdcc63e37e2cd0f1a06",
       "commits": [
@@ -1573,7 +1573,7 @@
             "email": "adrir@adrir.com",
             "name": "Adrir"
           },
-          "message": "Merge branch 'master' of https://github.com/Adrir/comp120-tinkering-graphics",
+          "message": "Merge branch 'main' of https://github.com/Adrir/comp120-tinkering-graphics",
           "distinct": true,
           "url": "https://api.github.com/repos/Adrir/comp120-tinkering-graphics/commits/f4b6567d15dfe6709d3eecd304877e4ca32ac308"
         }
@@ -1602,7 +1602,7 @@
       "push_id": 4176854871,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "ccc9ca4e384c48c6543b66801cb9dc8df3fd2178",
       "before": "6bcfc18c475e5ab4de1f89a5a588ea628367ea38",
       "commits": [
@@ -1805,12 +1805,12 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "dm-group-trakd:master",
-          "ref": "master",
+          "label": "dm-group-trakd:main",
+          "ref": "main",
           "sha": "4586bdd4aba94009ee60a2d01710f50493f60fd7",
           "user": {
             "login": "dm-group-trakd",
@@ -1924,7 +1924,7 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -2017,7 +2017,7 @@
       "push_id": 4176854878,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "6ce7de98689be2a91f3455f0fe83754252658073",
       "before": "2d14bcf9d9906d1ef9aa124b3ed168e926b45334",
       "commits": [
@@ -2226,12 +2226,12 @@
             "forks": 0,
             "open_issues": 0,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "envoyproxy:master",
-          "ref": "master",
+          "label": "envoyproxy:main",
+          "ref": "main",
           "sha": "4bd38639fe0332c55961505d4e091f72895b7f73",
           "user": {
             "login": "envoyproxy",
@@ -2351,7 +2351,7 @@
             "forks": 26,
             "open_issues": 66,
             "watchers": 61,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -2608,8 +2608,8 @@
         "comments_url": "https://api.github.com/repos/cyberark/conjur/issues/1209/comments",
         "statuses_url": "https://api.github.com/repos/cyberark/conjur/statuses/d16c40c290d4f1ac139b101cd089a1635f20db29",
         "head": {
-          "label": "AndrewCopeland:master",
-          "ref": "master",
+          "label": "AndrewCopeland:main",
+          "ref": "main",
           "sha": "d16c40c290d4f1ac139b101cd089a1635f20db29",
           "user": {
             "login": "AndrewCopeland",
@@ -2729,12 +2729,12 @@
             "forks": 0,
             "open_issues": 0,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "cyberark:master",
-          "ref": "master",
+          "label": "cyberark:main",
+          "ref": "main",
           "sha": "ccf74318168be925bd62753926ae6b46ccce67aa",
           "user": {
             "login": "cyberark",
@@ -2854,7 +2854,7 @@
             "forks": 63,
             "open_issues": 260,
             "watchers": 320,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -2916,7 +2916,7 @@
       "push_id": 4176854863,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "2282592b49f3c60b07f84135ddfd8d7199d93e2a",
       "before": "f393ac03494aa2e71988f93d73243c6887bf1541",
       "commits": [
@@ -2954,7 +2954,7 @@
     "payload": {
       "ref": "steveDesktop",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -2981,7 +2981,7 @@
       "push_id": 4176854859,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "908784246be05f222167f3f463e1423885f54ac5",
       "before": "9e030787665d1dbf6f75f4020c52cb842d3cd17b",
       "commits": [
@@ -3109,7 +3109,7 @@
         "forks": 0,
         "open_issues": 0,
         "watchers": 0,
-        "default_branch": "master",
+        "default_branch": "main",
         "public": true
       }
     },
@@ -3165,7 +3165,7 @@
       "push_id": 4176854855,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "c8c067d90454baf99eb4cb1f02306b6de748a2b7",
       "before": "35f44d43437cfe431fc2ee4ad42cb2a790c9a789",
       "commits": [
@@ -3452,12 +3452,12 @@
             "forks": 0,
             "open_issues": 0,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "ampproject:master",
-          "ref": "master",
+          "label": "ampproject:main",
+          "ref": "main",
           "sha": "9e8a075958f4a7995ba8190c5becc32ef3108f89",
           "user": {
             "login": "ampproject",
@@ -3577,7 +3577,7 @@
             "forks": 3217,
             "open_issues": 1641,
             "watchers": 13177,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -3803,12 +3803,12 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "AvalancheOfFox:master",
-          "ref": "master",
+          "label": "AvalancheOfFox:main",
+          "ref": "main",
           "sha": "8809925097f56d47aba7203acbfa5420b5f9ed61",
           "user": {
             "login": "AvalancheOfFox",
@@ -3922,7 +3922,7 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -4032,9 +4032,9 @@
       "url": "https://api.github.com/repos/carlosgon1/Carlos-Gonzalez"
     },
     "payload": {
-      "ref": "master",
+      "ref": "main",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },

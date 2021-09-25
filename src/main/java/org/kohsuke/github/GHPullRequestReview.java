@@ -58,6 +58,7 @@ public class GHPullRequestReview extends GHObject {
      *
      * @return the parent
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHPullRequest getParent() {
         return owner;
     }
@@ -79,7 +80,7 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-        return owner.root.getUser(user.getLogin());
+        return owner.root().getUser(user.getLogin());
     }
 
     /**
@@ -162,7 +163,8 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-        owner.root.createRequest()
+        owner.root()
+                .createRequest()
                 .method("POST")
                 .with("body", body)
                 .with("event", event.action())
@@ -179,7 +181,7 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        owner.root.createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+        owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -191,7 +193,8 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public void dismiss(String message) throws IOException {
-        owner.root.createRequest()
+        owner.root()
+                .createRequest()
                 .method("PUT")
                 .with("message", message)
                 .withUrlPath(getApiRoute() + "/dismissals")
@@ -207,7 +210,8 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return owner.root.createRequest()
+        return owner.root()
+                .createRequest()
                 .withUrlPath(getApiRoute() + "/comments")
                 .toIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(owner));
     }

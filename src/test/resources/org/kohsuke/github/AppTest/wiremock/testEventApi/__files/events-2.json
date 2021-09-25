@@ -98,7 +98,7 @@
           "type": "User",
           "site_admin": false
         },
-        "body": "<!-- DO NOT DELETE THIS TEMPLATE -->\r\n\r\n## Description\r\n\r\nCurrently waagent relies on explicit configuration (`Provisioning.UseCloudInit` to be set, and `Provisioning.Enabled` to be falsy). This can pose an interesting problem with the introduction of cloud-init. When waagent and cloud-init live side-by-side, they will contend with each other to be the provisioning agent. Image maintainers need to explicitly set configuration (above) so that waagent allows cloud-init to be the provisioning agent. With maintainers possibly not knowing about this behavior, they could unknowing cause provisioning issues.\r\n\r\nThis PR changes that behavior by deprecating `Provisioning.UseCloudInit` and `Provisioning.Enabled` configuration options and introduces a new configuration setting: `Provisioning.Agent`. The following values change the behavior of which provisioning agent to use:\r\n\r\n* `auto` (default) - Allow waagent to autodetect to see if cloud-init is enabled. If so, use cloud-init as the provisioning agent. If not, use waagent as the provisioning agent.\r\n* `waagent` - Force waagent as the provisioning agent.\r\n* `cloud-init` - Force cloud-init as the provisioning agent.\r\n* `disabled` - Disable all provisioning.\r\n\r\n---\r\n\r\n### PR information\r\n- [x] The title of the PR is clear and informative.\r\n- [x] There are a small number of commits, each of which has an informative message. This means that previously merged commits do not appear in the history of the PR. For information on cleaning up the commits in your pull request, [see this page](https://github.com/Azure/azure-powershell/blob/master/documentation/development-docs/cleaning-up-commits.md).\r\n- [x] Except for special cases involving multiple contributors, the PR is started from a fork of the main repository, not a branch.\r\n- [x] If applicable, the PR references the bug/issue that it fixes in the description.\r\n- [x] New Unit tests were added for the changes made and Travis.CI is passing.\r\n\r\n### Quality of Code and Contribution Guidelines\r\n- [x] I have read the [contribution guidelines](https://github.com/Azure/WALinuxAgent/blob/master/.github/CONTRIBUTING.md).\r\n\r\n<!-- Reviewable:start -->\r\n---\r\nThis change is [<img src=\"https://reviewable.io/review_button.svg\" height=\"34\" align=\"absmiddle\" alt=\"Reviewable\"/>](https://reviewable.io/reviews/azure/walinuxagent/1633)\r\n<!-- Reviewable:end -->\r\n",
+        "body": "<!-- DO NOT DELETE THIS TEMPLATE -->\r\n\r\n## Description\r\n\r\nCurrently waagent relies on explicit configuration (`Provisioning.UseCloudInit` to be set, and `Provisioning.Enabled` to be falsy). This can pose an interesting problem with the introduction of cloud-init. When waagent and cloud-init live side-by-side, they will contend with each other to be the provisioning agent. Image maintainers need to explicitly set configuration (above) so that waagent allows cloud-init to be the provisioning agent. With maintainers possibly not knowing about this behavior, they could unknowing cause provisioning issues.\r\n\r\nThis PR changes that behavior by deprecating `Provisioning.UseCloudInit` and `Provisioning.Enabled` configuration options and introduces a new configuration setting: `Provisioning.Agent`. The following values change the behavior of which provisioning agent to use:\r\n\r\n* `auto` (default) - Allow waagent to autodetect to see if cloud-init is enabled. If so, use cloud-init as the provisioning agent. If not, use waagent as the provisioning agent.\r\n* `waagent` - Force waagent as the provisioning agent.\r\n* `cloud-init` - Force cloud-init as the provisioning agent.\r\n* `disabled` - Disable all provisioning.\r\n\r\n---\r\n\r\n### PR information\r\n- [x] The title of the PR is clear and informative.\r\n- [x] There are a small number of commits, each of which has an informative message. This means that previously merged commits do not appear in the history of the PR. For information on cleaning up the commits in your pull request, [see this page](https://github.com/Azure/azure-powershell/blob/main/documentation/development-docs/cleaning-up-commits.md).\r\n- [x] Except for special cases involving multiple contributors, the PR is started from a fork of the main repository, not a branch.\r\n- [x] If applicable, the PR references the bug/issue that it fixes in the description.\r\n- [x] New Unit tests were added for the changes made and Travis.CI is passing.\r\n\r\n### Quality of Code and Contribution Guidelines\r\n- [x] I have read the [contribution guidelines](https://github.com/Azure/WALinuxAgent/blob/main/.github/CONTRIBUTING.md).\r\n\r\n<!-- Reviewable:start -->\r\n---\r\nThis change is [<img src=\"https://reviewable.io/review_button.svg\" height=\"34\" align=\"absmiddle\" alt=\"Reviewable\"/>](https://reviewable.io/reviews/azure/walinuxagent/1633)\r\n<!-- Reviewable:end -->\r\n",
         "created_at": "2019-09-13T15:12:48Z",
         "updated_at": "2019-10-21T21:54:52Z",
         "closed_at": null,
@@ -525,7 +525,7 @@
       "push_id": 4176855091,
       "size": 2,
       "distinct_size": 2,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "a5d076457b88b544a7e7ca9351854fe40c2c8596",
       "before": "9b6089c7a2e4483181fd96bd0ff77ffe49eac51b",
       "commits": [
@@ -545,7 +545,7 @@
             "email": "bruno7kp@outlook.com",
             "name": "Bruno"
           },
-          "message": "Merge remote-tracking branch 'origin/master'",
+          "message": "Merge remote-tracking branch 'origin/main'",
           "distinct": true,
           "url": "https://api.github.com/repos/Bruno7kp/webPythonProjetoEstudo2019_02/commits/a5d076457b88b544a7e7ca9351854fe40c2c8596"
         }
@@ -638,7 +638,7 @@
       "push_id": 4176855087,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "230d1a6c4e090efb647ab1fb9e8fb8db91d652ab",
       "before": "0dc96f40d477ffd4f9838c2ab68ea462364a6581",
       "commits": [
@@ -676,7 +676,7 @@
     "payload": {
       "ref": "test.phpbranch1",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": "Develop our code skills",
       "pusher_type": "user"
     },
@@ -742,7 +742,7 @@
       "push_id": 4176855086,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "f3e302ebb90aece032608a8e29fd36c136636a6f",
       "before": "430ea4bf98dcee88235f556a2b89237552ef1be4",
       "commits": [
@@ -883,7 +883,7 @@
         "forks": 0,
         "open_issues": 0,
         "watchers": 0,
-        "default_branch": "master",
+        "default_branch": "main",
         "public": true
       }
     },
@@ -940,7 +940,7 @@
             "email": "sebastien@eustace.io",
             "name": "Sébastien Eustace"
           },
-          "message": "Merge branch 'master' into develop",
+          "message": "Merge branch 'main' into develop",
           "distinct": false,
           "url": "https://api.github.com/repos/steinnes/poetry/commits/329b334be25fcd6af876372958633325ce9ca4ae"
         },
@@ -970,7 +970,7 @@
             "email": "sebastien@eustace.io",
             "name": "Sébastien Eustace"
           },
-          "message": "Merge branch 'master' into develop",
+          "message": "Merge branch 'main' into develop",
           "distinct": false,
           "url": "https://api.github.com/repos/steinnes/poetry/commits/832e8fea6d85c35a645cf4b0d37e0f1c3216c280"
         },
@@ -1080,7 +1080,7 @@
             "email": "sebastien@eustace.io",
             "name": "Sébastien Eustace"
           },
-          "message": "Merge branch 'master' into develop\n\n# Conflicts:\n#\tCHANGELOG.md\n#\tpoetry.lock\n#\tpoetry/__version__.py\n#\tpyproject.toml\n#\ttests/packages/test_locker.py",
+          "message": "Merge branch 'main' into develop\n\n# Conflicts:\n#\tCHANGELOG.md\n#\tpoetry.lock\n#\tpoetry/__version__.py\n#\tpyproject.toml\n#\ttests/packages/test_locker.py",
           "distinct": false,
           "url": "https://api.github.com/repos/steinnes/poetry/commits/dbe13102facbb5886c4e1d431db7eb125fe475c4"
         },
@@ -1149,7 +1149,7 @@
         "number": 20,
         "state": "closed",
         "locked": false,
-        "title": "[pull] master from lerna:master",
+        "title": "[pull] main from lerna:main",
         "user": {
           "login": "pull[bot]",
           "id": 39814207,
@@ -1197,8 +1197,8 @@
         "comments_url": "https://api.github.com/repos/daddyfatstacksBIG/lerna/issues/20/comments",
         "statuses_url": "https://api.github.com/repos/daddyfatstacksBIG/lerna/statuses/4872459be7bf88e5900ff907b07279e9516d333c",
         "head": {
-          "label": "lerna:master",
-          "ref": "master",
+          "label": "lerna:main",
+          "ref": "main",
           "sha": "4872459be7bf88e5900ff907b07279e9516d333c",
           "user": {
             "login": "lerna",
@@ -1318,12 +1318,12 @@
             "forks": 1208,
             "open_issues": 230,
             "watchers": 19472,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "daddyfatstacksBIG:master",
-          "ref": "master",
+          "label": "daddyfatstacksBIG:main",
+          "ref": "main",
           "sha": "99425f7e3df4d081c51f9850e71ad93e83dc30c4",
           "user": {
             "login": "daddyfatstacksBIG",
@@ -1443,7 +1443,7 @@
             "forks": 0,
             "open_issues": 0,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -1603,7 +1603,7 @@
     "payload": {
       "ref": "dependabot/npm_and_yarn/vue-shop/mixin-deep-1.3.2",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": "实战商城",
       "pusher_type": "user"
     },
@@ -1630,7 +1630,7 @@
       "push_id": 4176855075,
       "size": 5,
       "distinct_size": 5,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "4872459be7bf88e5900ff907b07279e9516d333c",
       "before": "99425f7e3df4d081c51f9850e71ad93e83dc30c4",
       "commits": [
@@ -1812,7 +1812,7 @@
     "payload": {
       "ref": null,
       "ref_type": "repository",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -1836,9 +1836,9 @@
       "url": "https://api.github.com/repos/NathanPG/TCP_GuessGame"
     },
     "payload": {
-      "ref": "master",
+      "ref": "main",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },
@@ -1904,7 +1904,7 @@
       "push_id": 4176855068,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "3099a4b8091293fd480a6e64da5b01e385fcfa06",
       "before": "0f4de10752e6dc72e179caaeddcf3a1d522b2099",
       "commits": [
@@ -1989,7 +1989,7 @@
       "push_id": 4176855060,
       "size": 0,
       "distinct_size": 0,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "3b4fe7970049252f77fc6068371e59c48bc1cddf",
       "before": "3b4fe7970049252f77fc6068371e59c48bc1cddf",
       "commits": []
@@ -2024,7 +2024,7 @@
       "push_id": 4176855066,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "f3cf80bd829569dcc690663965465e8dc0ef6f50",
       "before": "d4d97bd2ff211b55c603298f8ca75c6ab43b69d9",
       "commits": [
@@ -2063,7 +2063,7 @@
       "push_id": 4176855063,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "969d8090a16f7452a895965009ba7f6a4edc9c82",
       "before": "481b4f5fd37451b9e9d2102f44f13bc9d18c599f",
       "commits": [
@@ -2268,7 +2268,7 @@
         "created_at": "2019-10-21T21:54:51Z",
         "updated_at": "2019-10-21T21:54:51Z",
         "author_association": "CONTRIBUTOR",
-        "body": "[APPROVALNOTIFIER] This PR is **APPROVED**\n\nThis pull-request has been approved by: *<a href=\"https://github.com/kubernetes/test-infra/pull/14895#issuecomment-544724506\" title=\"Approved\">BenTheElder</a>*, *<a href=\"https://github.com/kubernetes/test-infra/pull/14895#\" title=\"Author self-approved\">Katharine</a>*\n\nThe full list of commands accepted by this bot can be found [here](https://go.k8s.io/bot-commands?repo=kubernetes%2Ftest-infra).\n\nThe pull request process is described [here](https://git.k8s.io/community/contributors/guide/owners.md#the-code-review-process)\n\n<details >\nNeeds approval from an approver in each of these files:\n\n- ~~[gopherage/OWNERS](https://github.com/kubernetes/test-infra/blob/master/gopherage/OWNERS)~~ [BenTheElder,Katharine]\n\nApprovers can indicate their approval by writing `/approve` in a comment\nApprovers can cancel approval by writing `/approve cancel` in a comment\n</details>\n<!-- META={\"approvers\":[]} -->"
+        "body": "[APPROVALNOTIFIER] This PR is **APPROVED**\n\nThis pull-request has been approved by: *<a href=\"https://github.com/kubernetes/test-infra/pull/14895#issuecomment-544724506\" title=\"Approved\">BenTheElder</a>*, *<a href=\"https://github.com/kubernetes/test-infra/pull/14895#\" title=\"Author self-approved\">Katharine</a>*\n\nThe full list of commands accepted by this bot can be found [here](https://go.k8s.io/bot-commands?repo=kubernetes%2Ftest-infra).\n\nThe pull request process is described [here](https://git.k8s.io/community/contributors/guide/owners.md#the-code-review-process)\n\n<details >\nNeeds approval from an approver in each of these files:\n\n- ~~[gopherage/OWNERS](https://github.com/kubernetes/test-infra/blob/main/gopherage/OWNERS)~~ [BenTheElder,Katharine]\n\nApprovers can indicate their approval by writing `/approve` in a comment\nApprovers can cancel approval by writing `/approve cancel` in a comment\n</details>\n<!-- META={\"approvers\":[]} -->"
       }
     },
     "public": true,
@@ -2475,7 +2475,7 @@
       "push_id": 4176855048,
       "size": 1,
       "distinct_size": 1,
-      "ref": "refs/heads/master",
+      "ref": "refs/heads/main",
       "head": "9de940141ce125243ac37fe144388fc8e903afef",
       "before": "cfe209f4e31cbd22bd86a9c5f2329b832efc5e53",
       "commits": [
@@ -2684,12 +2684,12 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "base": {
-          "label": "liuzhuzhu:master",
-          "ref": "master",
+          "label": "liuzhuzhu:main",
+          "ref": "main",
           "sha": "f56c08f6925dfa7def6e51f4f361295480f32603",
           "user": {
             "login": "liuzhuzhu",
@@ -2809,7 +2809,7 @@
             "forks": 0,
             "open_issues": 1,
             "watchers": 0,
-            "default_branch": "master"
+            "default_branch": "main"
           }
         },
         "_links": {
@@ -2873,9 +2873,9 @@
       "url": "https://api.github.com/repos/VARUN2197/zodiacApp"
     },
     "payload": {
-      "ref": "master",
+      "ref": "main",
       "ref_type": "branch",
-      "master_branch": "master",
+      "master_branch": "main",
       "description": null,
       "pusher_type": "user"
     },

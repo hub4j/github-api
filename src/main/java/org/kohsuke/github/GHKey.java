@@ -51,26 +51,12 @@ public class GHKey extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-        return root;
-    }
-
-    /**
      * Is verified boolean.
      *
      * @return the boolean
      */
     public boolean isVerified() {
         return verified;
-    }
-
-    GHKey wrap(GitHub root) {
-        this.root = root;
-        return this;
     }
 
     public String toString() {

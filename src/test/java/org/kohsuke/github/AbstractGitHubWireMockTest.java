@@ -4,10 +4,9 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.helpers.HandlebarsCurrentDateHelper;
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.hamcrest.StringDescription;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,13 +20,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
  * @author Liam Newman
  */
-public abstract class AbstractGitHubWireMockTest extends Assert {
+public abstract class AbstractGitHubWireMockTest {
 
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
@@ -45,7 +45,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
      */
     protected GitHub gitHub;
 
-    private GitHub gitHubBeforeAfter;
+    private GitHub nonRecordingGitHub;
 
     protected final String baseFilesClassPath = this.getClass().getName().replace('.', '/');
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
@@ -100,7 +100,6 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
             // This sets the user and password to a placeholder for wiremock testing
             // This makes the tests believe they are running with permissions
             // The recorded stubs will behave like they running with permissions
-            builder.oauthToken = null;
             builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
         }
 
@@ -116,9 +115,9 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         }
 
         if (mockGitHub.isUseProxy()) {
-            gitHubBeforeAfter = getGitHubBuilder().withEndpoint("https://api.github.com/").build();
+            nonRecordingGitHub = getGitHubBuilder().withEndpoint("https://api.github.com/").build();
         } else {
-            gitHubBeforeAfter = null;
+            nonRecordingGitHub = null;
         }
     }
 
@@ -211,7 +210,7 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         if (mockGitHub.isUseProxy()) {
             tempGitHubRepositories.add(fullName);
             try {
-                GHRepository repository = getGitHubBeforeAfter().getRepository(fullName);
+                GHRepository repository = getNonRecordingGitHub().getRepository(fullName);
                 if (repository != null) {
                     repository.delete();
                 }
@@ -228,22 +227,22 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
      *
      * @return a github instance after checking Authentication
      */
-    public GitHub getGitHubBeforeAfter() {
-        verifyAuthenticated(gitHubBeforeAfter);
-        return gitHubBeforeAfter;
+    public GitHub getNonRecordingGitHub() {
+        verifyAuthenticated(nonRecordingGitHub);
+        return nonRecordingGitHub;
     }
 
     protected void kohsuke() {
         // No-op for now
         // Generally this means the test is doing something that requires additional access rights
         // Not always clear which ones.
-        // TODO: Add helpers that assert the expected rights using gitHubBeforeAfter and only when proxy is enabled
+        // TODO: Add helpers that assert the expected rights using nonRecordingGitHub and only when proxy is enabled
         // String login = getUserTest().getLogin();
         // assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
     }
 
     private GHCreateRepositoryBuilder getCreateBuilder(String name) throws IOException {
-        GitHub github = getGitHubBeforeAfter();
+        GitHub github = getNonRecordingGitHub();
 
         if (mockGitHub.isTestWithOrg()) {
             return github.getOrganization(GITHUB_API_TEST_ORG).createRepository(name);
@@ -256,52 +255,23 @@ public abstract class AbstractGitHubWireMockTest extends Assert {
         return mockGitHub.isTestWithOrg() ? GITHUB_API_TEST_ORG : gitHub.getMyself().getLogin();
     }
 
+    public static void fail() {
+        Assert.fail();
+    }
+    public static void fail(String reason) {
+        Assert.fail(reason);
+    }
+
     public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
-        assertThat("", actual, matcher);
+        MatcherAssert.assertThat("", actual, matcher);
     }
 
     public static <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {
-        if (!matcher.matches(actual)) {
-            Description description = new StringDescription();
-            description.appendText(reason)
-                    .appendText(System.lineSeparator())
-                    .appendText("Expected: ")
-                    .appendDescriptionOf(matcher)
-                    .appendText(System.lineSeparator())
-                    .appendText("     but: ");
-            matcher.describeMismatch(actual, description);
-            throw new AssertionError(description.toString());
-        }
+        MatcherAssert.assertThat(reason, actual, matcher);
     }
 
     public static void assertThat(String reason, boolean assertion) {
-        if (!assertion) {
-            throw new AssertionError(reason);
-        }
-    }
-
-    public static void assertEquals(Object expected, Object actual) {
-        assertThat(actual, Matchers.equalTo(expected));
-    }
-
-    public static void assertNotEquals(Object expected, Object actual) {
-        assertThat(actual, Matchers.not(expected));
-    }
-
-    public static void assertNotNull(Object actual) {
-        assertThat(actual, Matchers.notNullValue());
-    }
-
-    public static void assertNull(Object actual) {
-        assertThat(actual, Matchers.nullValue());
-    }
-
-    public static void assertTrue(Boolean condition) {
-        assertThat(condition, Matchers.is(true));
-    }
-
-    public static void assertFalse(Boolean condition) {
-        assertThat(condition, Matchers.is(false));
+        MatcherAssert.assertThat(reason, assertion);
     }
 
     protected static class TemplatingHelper {

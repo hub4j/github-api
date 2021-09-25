@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +23,11 @@ import javax.annotation.Nonnull;
  */
 public class GHLabel extends GitHubInteractiveObject {
 
+    private long id;
+    private String nodeId;
+    @JsonProperty("default")
+    private boolean default_;
+
     @Nonnull
     private String url, name, color;
 
@@ -30,7 +36,6 @@ public class GHLabel extends GitHubInteractiveObject {
 
     @JsonCreator
     private GHLabel(@JacksonInject @Nonnull GitHub root) {
-        this.root = root;
         url = "";
         name = "";
         color = "";
@@ -39,7 +44,25 @@ public class GHLabel extends GitHubInteractiveObject {
 
     @Nonnull
     GitHub getApiRoot() {
-        return Objects.requireNonNull(root);
+        return Objects.requireNonNull(root());
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * Gets node id.
+     *
+     * @return the node id.
+     */
+    public String getNodeId() {
+        return nodeId;
     }
 
     /**
@@ -80,6 +103,15 @@ public class GHLabel extends GitHubInteractiveObject {
     @CheckForNull
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * If the label is one of the default labels created by GitHub automatically.
+     *
+     * @return true if the label is a default one
+     */
+    public boolean isDefault() {
+        return default_;
     }
 
     /**
@@ -130,7 +162,6 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     @BetaApi
-    @Deprecated
     static Creator create(GHRepository repository) throws IOException {
         return new Creator(repository);
     }
@@ -147,7 +178,8 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     static GHLabel read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
-        return repository.root.createRequest()
+        return repository.root()
+                .createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"), name)
                 .fetch(GHLabel.class);
 
@@ -163,7 +195,8 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     static PagedIterable<GHLabel> readAll(@Nonnull final GHRepository repository) throws IOException {
-        return repository.root.createRequest()
+        return repository.root()
+                .createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"))
                 .toIterable(GHLabel[].class, null);
 
@@ -177,7 +210,6 @@ public class GHLabel extends GitHubInteractiveObject {
      * @return a {@link Updater}
      */
     @BetaApi
-    @Deprecated
     public Updater update() {
         return new Updater(this);
     }
@@ -188,7 +220,6 @@ public class GHLabel extends GitHubInteractiveObject {
      * @return a {@link Setter}
      */
     @BetaApi
-    @Deprecated
     public Setter set() {
         return new Setter(this);
     }
@@ -200,7 +231,7 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").setRawUrlPath(getUrl()).send();
+        root().createRequest().method("DELETE").setRawUrlPath(getUrl()).send();
     }
 
     @Override
@@ -225,7 +256,6 @@ public class GHLabel extends GitHubInteractiveObject {
      * {@link #done()} is called automatically after the property is set.
      */
     @BetaApi
-    @Deprecated
     public static class Setter extends GHLabelBuilder<GHLabel> {
         private Setter(@Nonnull GHLabel base) {
             super(GHLabel.class, base.getApiRoot(), base);
@@ -239,7 +269,6 @@ public class GHLabel extends GitHubInteractiveObject {
      * Consumer must call {@link #done()} to commit changes.
      */
     @BetaApi
-    @Deprecated
     public static class Updater extends GHLabelBuilder<Updater> {
         private Updater(@Nonnull GHLabel base) {
             super(Updater.class, base.getApiRoot(), base);
@@ -253,10 +282,9 @@ public class GHLabel extends GitHubInteractiveObject {
      * Consumer must call {@link #done()} to create the new instance.
      */
     @BetaApi
-    @Deprecated
     public static class Creator extends GHLabelBuilder<Creator> {
         private Creator(@Nonnull GHRepository repository) {
-            super(Creator.class, repository.root, null);
+            super(Creator.class, repository.root(), null);
             requester.method("POST").withUrlPath(repository.getApiTailUrl("labels"));
         }
     }

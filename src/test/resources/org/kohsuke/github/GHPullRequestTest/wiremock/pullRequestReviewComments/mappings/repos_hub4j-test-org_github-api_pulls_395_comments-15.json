@@ -1,0 +1,50 @@
+{
+  "id": "81772b1c-7882-41b9-b776-130f43fe8063",
+  "name": "repos_hub4j-test-org_github-api_pulls_395_comments",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/395/comments",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_pulls_395_comments-15.json",
+    "headers": {
+      "Date": "Fri, 22 Jan 2021 23:38:21 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"0a5c27e886e58db538a4db32443d2c437fe13c344b71d5ded73f375e20ed7bc0\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4802",
+      "X-RateLimit-Reset": "1611361294",
+      "x-ratelimit-used": "198",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D013:3B95:105862:12640A:600B61ED"
+    }
+  },
+  "uuid": "81772b1c-7882-41b9-b776-130f43fe8063",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-pulls-395-comments",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-github-api-pulls-395-comments-4",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-pulls-395-comments-5",
+  "insertionIndex": 15
+}

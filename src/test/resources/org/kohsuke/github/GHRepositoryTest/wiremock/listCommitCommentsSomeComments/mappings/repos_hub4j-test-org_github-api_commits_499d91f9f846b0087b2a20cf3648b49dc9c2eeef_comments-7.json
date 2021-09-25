@@ -1,0 +1,48 @@
+{
+  "id": "8c4240d2-e930-4448-a76e-45f3b1a1f1c9",
+  "name": "repos_hub4j-test-org_github-api_commits_499d91f9f846b0087b2a20cf3648b49dc9c2eeef_comments",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/commits/499d91f9f846b0087b2a20cf3648b49dc9c2eeef/comments",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_commits_499d91f9f846b0087b2a20cf3648b49dc9c2eeef_comments-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 28 Jun 2021 22:40:41 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"b904ef2a38c321e36e031606bd35a19c67e1824e51034b4aad11b8588cc84bc0\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4949",
+      "X-RateLimit-Reset": "1624920219",
+      "X-RateLimit-Used": "51",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF82:544E:16D438C:186B1E6:60DA4FE9"
+    }
+  },
+  "uuid": "8c4240d2-e930-4448-a76e-45f3b1a1f1c9",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-github-api-commits-499d91f9f846b0087b2a20cf3648b49dc9c2eeef-comments",
+  "requiredScenarioState": "scenario-2-repos-hub4j-test-org-github-api-commits-499d91f9f846b0087b2a20cf3648b49dc9c2eeef-comments-2",
+  "insertionIndex": 7
+}

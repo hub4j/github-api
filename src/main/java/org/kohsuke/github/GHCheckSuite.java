@@ -30,29 +30,24 @@ public class GHCheckSuite extends GHObject {
     private String before;
     private String after;
     private int latestCheckRunsCount;
-    private URL checkRunsUrl;
+    private String checkRunsUrl;
     private HeadCommit headCommit;
     private GHApp app;
     private GHPullRequest[] pullRequests;
 
     GHCheckSuite wrap(GHRepository owner) {
         this.owner = owner;
-        this.wrap(owner.root);
+        this.wrap(owner.root());
         return this;
     }
 
     GHCheckSuite wrap(GitHub root) {
-        this.root = root;
         if (owner != null) {
-            owner.wrap(root);
             if (pullRequests != null && pullRequests.length != 0) {
                 for (GHPullRequest singlePull : pullRequests) {
                     singlePull.wrap(owner);
                 }
             }
-        }
-        if (app != null) {
-            app.wrapUp(root);
         }
         return this;
     }
@@ -142,7 +137,7 @@ public class GHCheckSuite extends GHObject {
      * @return url containing all check runs
      */
     public URL getCheckRunsUrl() {
-        return checkRunsUrl;
+        return GitHubClient.parseURL(checkRunsUrl);
     }
 
     /**
@@ -159,6 +154,7 @@ public class GHCheckSuite extends GHObject {
      *
      * @return GitHub App
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHApp getApp() {
         return app;
     }

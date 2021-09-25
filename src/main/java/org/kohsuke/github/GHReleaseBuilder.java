@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 
 /**
@@ -19,9 +21,10 @@ public class GHReleaseBuilder {
      * @param tag
      *            the tag
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Acceptable risk")
     public GHReleaseBuilder(GHRepository ghRepository, String tag) {
         this.repo = ghRepository;
-        this.builder = repo.root.createRequest().method("POST");
+        this.builder = repo.root().createRequest().method("POST");
         builder.with("tag_name", tag);
     }
 
@@ -41,7 +44,7 @@ public class GHReleaseBuilder {
      * Specifies the commitish value that determines where the Git tag is created from. Can be any branch or commit SHA.
      *
      * @param commitish
-     *            Defaults to the repository’s default branch (usually "master"). Unused if the Git tag already exists.
+     *            Defaults to the repository’s default branch (usually "main"). Unused if the Git tag already exists.
      * @return the gh release builder
      */
     public GHReleaseBuilder commitish(String commitish) {
@@ -84,6 +87,18 @@ public class GHReleaseBuilder {
      */
     public GHReleaseBuilder prerelease(boolean prerelease) {
         builder.with("prerelease", prerelease);
+        return this;
+    }
+
+    /**
+     * Optional
+     *
+     * @param categoryName
+     *            the category of the discussion to be created for the release. Category should already exist
+     * @return the gh release builder
+     */
+    public GHReleaseBuilder categoryName(String categoryName) {
+        builder.with("discussion_category_name", categoryName);
         return this;
     }
 

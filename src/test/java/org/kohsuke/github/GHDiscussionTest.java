@@ -26,7 +26,7 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
     public void cleanupDiscussions() throws Exception {
         // only need to clean up if we're pointing to the live site
         if (mockGitHub.isUseProxy()) {
-            for (GHDiscussion discussion : getGitHubBeforeAfter().getOrganization(GITHUB_API_TEST_ORG)
+            for (GHDiscussion discussion : getNonRecordingGitHub().getOrganization(GITHUB_API_TEST_ORG)
                     .getTeamBySlug(TEAM_SLUG)
                     .listDiscussions()) {
                 discussion.delete();

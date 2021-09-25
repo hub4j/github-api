@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.internal.Previews;
+
 import java.io.IOException;
 
 /**
@@ -32,7 +34,8 @@ public class GHDeploymentStatusBuilder {
     GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
-        this.builder = repo.root.createRequest()
+        this.builder = repo.root()
+                .createRequest()
                 .withPreview(Previews.ANT_MAN)
                 .withPreview(Previews.FLASH)
                 .method("POST");
@@ -51,7 +54,6 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview({ Previews.ANT_MAN, Previews.FLASH })
     public GHDeploymentStatusBuilder autoInactive(boolean autoInactive) {
         this.builder.with("auto_inactive", autoInactive);
@@ -81,7 +83,6 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview(Previews.FLASH)
     public GHDeploymentStatusBuilder environment(String environment) {
         this.builder.with("environment", environment);
@@ -98,7 +99,6 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder environmentUrl(String environmentUrl) {
         this.builder.with("environment_url", environmentUrl);
@@ -117,7 +117,6 @@ public class GHDeploymentStatusBuilder {
      *
      * @return the gh deployment status builder
      */
-    @Deprecated
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
         this.builder.with("log_url", logUrl);
@@ -151,6 +150,6 @@ public class GHDeploymentStatusBuilder {
     public GHDeploymentStatus create() throws IOException {
         return builder.withUrlPath(repo.getApiTailUrl("deployments/" + deploymentId + "/statuses"))
                 .fetch(GHDeploymentStatus.class)
-                .wrap(repo);
+                .lateBind(repo);
     }
 }

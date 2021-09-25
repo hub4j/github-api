@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 
 /**
@@ -42,9 +44,10 @@ public class GHCommitPointer {
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getUser() throws IOException {
         if (user != null)
-            return user.root.intern(user);
+            return user.root().intern(user);
         return user;
     }
 
@@ -53,6 +56,7 @@ public class GHCommitPointer {
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
         return repo;
     }
@@ -95,10 +99,4 @@ public class GHCommitPointer {
         return getRepository().getCommit(getSha());
     }
 
-    void wrapUp(GitHub root) {
-        if (user != null)
-            user.root = root;
-        if (repo != null)
-            repo.wrap(root);
-    }
 }

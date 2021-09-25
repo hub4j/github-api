@@ -13,13 +13,14 @@ import java.util.stream.StreamSupport;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
 
     private enum Type implements Predicate<GHIssueEvent>, Consumer<GHIssueEvent> {
-        milestone(e -> assertNotNull(e.getMilestone()), "milestoned", "demilestoned"),
-        label(e -> assertNotNull(e.getLabel()), "labeled", "unlabeled"),
-        assignment(e -> assertNotNull(e.getAssignee()), "assigned", "unassigned");
+        milestone(e -> assertThat(e.getMilestone(), notNullValue()), "milestoned", "demilestoned"),
+        label(e -> assertThat(e.getLabel(), notNullValue()), "labeled", "unlabeled"),
+        assignment(e -> assertThat(e.getAssignee(), notNullValue()), "assigned", "unassigned");
 
         private final Consumer<GHIssueEvent> assertion;
         private final Set<String> subtypes;

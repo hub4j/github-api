@@ -1,11 +1,14 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +37,16 @@ public class GHRelease extends GHObject {
     private Date published_at;
     private String tarball_url;
     private String zipball_url;
+    private String discussion_url;
+
+    /**
+     * Gets discussion url. Only present if a discussion relating to the release exists
+     *
+     * @return the discussion url
+     */
+    public String getDiscussionUrl() {
+        return discussion_url;
+    }
 
     /**
      * Gets assets url.
@@ -105,6 +118,7 @@ public class GHRelease extends GHObject {
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }
@@ -114,9 +128,11 @@ public class GHRelease extends GHObject {
      *
      * @param owner
      *            the owner
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setOwner(GHRepository owner) {
-        this.owner = owner;
+        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -135,15 +151,6 @@ public class GHRelease extends GHObject {
      */
     public Date getPublished_at() {
         return new Date(published_at.getTime());
-    }
-
-    /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-        return root;
     }
 
     /**
@@ -193,7 +200,6 @@ public class GHRelease extends GHObject {
 
     GHRelease wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
         return this;
     }
 
@@ -241,7 +247,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
-        Requester builder = owner.root.createRequest().method("POST");
+        Requester builder = owner.root().createRequest().method("POST");
         String url = getUploadUrl();
         // strip the helpful garbage from the url
         url = url.substring(0, url.indexOf('{'));
@@ -260,7 +266,7 @@ public class GHRelease extends GHObject {
      */
     @Deprecated
     public List<GHAsset> assets() {
-        return assets;
+        return Collections.unmodifiableList(assets);
     }
 
     /**
@@ -286,7 +292,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public PagedIterable<GHAsset> listAssets() throws IOException {
-        Requester builder = owner.root.createRequest();
+        Requester builder = owner.root().createRequest();
         return builder.withUrlPath(getApiTailUrl("assets")).toIterable(GHAsset[].class, item -> item.wrap(this));
     }
 
@@ -297,7 +303,7 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + getId())).send();
+        root().createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + getId())).send();
     }
 
     /**

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.function.FunctionThrows;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -194,24 +195,11 @@ class GitHubResponse<T> {
     /**
      * Represents a supplier of results that can throw.
      *
-     * <p>
-     * This is a <a href="package-summary.html">functional interface</a> whose functional method is
-     * {@link #apply(ResponseInfo)}.
-     *
      * @param <T>
      *            the type of results supplied by this supplier
      */
     @FunctionalInterface
-    interface BodyHandler<T> {
-
-        /**
-         * Gets a result.
-         *
-         * @return a result
-         * @throws IOException
-         *             if an I/O Exception occurs.
-         */
-        T apply(ResponseInfo input) throws IOException;
+    interface BodyHandler<T> extends FunctionThrows<ResponseInfo, T, IOException> {
     }
 
     /**

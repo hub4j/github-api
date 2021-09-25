@@ -21,6 +21,7 @@ public class GHStargazer {
      *
      * @return the starred repository
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
         return repository;
     }
@@ -40,12 +41,12 @@ public class GHStargazer {
      *
      * @return the stargazer user
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getUser() {
         return user;
     }
 
     void wrapUp(GHRepository repository) {
         this.repository = repository;
-        user.wrapUp(repository.root);
     }
 }

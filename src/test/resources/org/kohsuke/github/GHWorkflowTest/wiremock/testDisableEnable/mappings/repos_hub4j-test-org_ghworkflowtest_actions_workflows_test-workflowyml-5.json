@@ -1,0 +1,48 @@
+{
+  "id": "c0cfd9a0-5f2e-458f-b5c5-a54b9a48fb42",
+  "name": "repos_hub4j-test-org_ghworkflowtest_actions_workflows_test-workflowyml",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/test-workflow.yml",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_ghworkflowtest_actions_workflows_test-workflowyml-5.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 25 Mar 2021 10:36:24 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"3d726b68299d37d058c6065a1d2b90d43900b2a5c48e94d86bb0bd6a390515c6\"",
+      "X-OAuth-Scopes": "repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4992",
+      "X-RateLimit-Reset": "1616672182",
+      "X-RateLimit-Used": "8",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D598:12325:427F2C8:4381E21:605C67A8"
+    }
+  },
+  "uuid": "c0cfd9a0-5f2e-458f-b5c5-a54b9a48fb42",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHWorkflowTest-actions-workflows-test-workflow.yml",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowTest-actions-workflows-test-workflow.yml-2",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowTest-actions-workflows-test-workflow.yml-3",
+  "insertionIndex": 5
+}

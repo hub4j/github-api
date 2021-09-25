@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
@@ -33,25 +33,12 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 class GitHubHttpUrlConnectionClient extends GitHubClient {
 
     GitHubHttpUrlConnectionClient(String apiUrl,
-            String login,
-            String oauthAccessToken,
-            String jwtToken,
-            String password,
             HttpConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            Consumer<GHMyself> myselfConsumer) throws IOException {
-        super(apiUrl,
-                login,
-                oauthAccessToken,
-                jwtToken,
-                password,
-                connector,
-                rateLimitHandler,
-                abuseLimitHandler,
-                rateLimitChecker,
-                myselfConsumer);
+            AuthorizationProvider authorizationProvider) throws IOException {
+        super(apiUrl, connector, rateLimitHandler, abuseLimitHandler, rateLimitChecker, authorizationProvider);
     }
 
     @Nonnull
@@ -114,8 +101,12 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
 
             // if the authentication is needed but no credential is given, try it anyway (so that some calls
             // that do work with anonymous access in the reduced form should still work.)
-            if (client.encodedAuthorization != null)
-                connection.setRequestProperty("Authorization", client.encodedAuthorization);
+            if (!request.headers().containsKey("Authorization")) {
+                String authorization = client.getEncodedAuthorization();
+                if (authorization != null) {
+                    connection.setRequestProperty("Authorization", client.getEncodedAuthorization());
+                }
+            }
 
             setRequestMethod(request.method(), connection);
             buildRequest(request, connection);

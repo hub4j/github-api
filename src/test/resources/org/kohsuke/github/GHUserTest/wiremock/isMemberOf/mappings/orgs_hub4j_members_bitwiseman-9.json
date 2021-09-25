@@ -1,0 +1,39 @@
+{
+  "id": "54eb94e7-2afb-41ef-84c5-b7a62a818f88",
+  "name": "orgs_hub4j_members_bitwiseman",
+  "request": {
+    "url": "/orgs/hub4j/members/bitwiseman",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 14 Sep 2021 20:25:24 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "read:org, repo, user",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4937",
+      "X-RateLimit-Reset": "1631652409",
+      "X-RateLimit-Used": "63",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "D372:0480:1C5CCCD:1DF0A29:61410533"
+    }
+  },
+  "uuid": "54eb94e7-2afb-41ef-84c5-b7a62a818f88",
+  "persistent": true,
+  "insertionIndex": 9
+}

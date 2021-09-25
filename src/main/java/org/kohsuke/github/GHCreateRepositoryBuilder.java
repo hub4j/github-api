@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 
-import static org.kohsuke.github.Previews.BAPTISTE;
+import static org.kohsuke.github.internal.Previews.BAPTISTE;
 
 /**
  * Creates a repository
@@ -115,7 +115,6 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @see <a href="https://developer.github.com/v3/previews/">GitHub API Previews</a>
      */
     @Preview(BAPTISTE)
-    @Deprecated
     public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
         requester.withPreview(BAPTISTE).withUrlPath("/repos/" + templateOwner + "/" + templateRepo + "/generate");
         return this;

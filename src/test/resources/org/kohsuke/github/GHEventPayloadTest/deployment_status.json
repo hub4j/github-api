@@ -33,7 +33,7 @@
     "url": "https://api.github.com/repos/baxterthehacker/public-repo/deployments/710692",
     "id": 710692,
     "sha": "9049f1265b7d61be4a8904a9a27120d2064dab3b",
-    "ref": "master",
+    "ref": "main",
     "task": "deploy",
     "payload": {},
     "environment": "production",
@@ -147,7 +147,7 @@
     "forks": 0,
     "open_issues": 2,
     "watchers": 0,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "sender": {
     "login": "baxterthehacker",

@@ -12,6 +12,7 @@ import java.util.Locale;
 public enum GHEvent {
     CHECK_RUN,
     CHECK_SUITE,
+    CODE_SCANNING_ALERT,
     COMMIT_COMMENT,
     CONTENT_REFERENCE,
     CREATE,
@@ -19,6 +20,8 @@ public enum GHEvent {
     DEPLOY_KEY,
     DEPLOYMENT,
     DEPLOYMENT_STATUS,
+    DISCUSSION,
+    DISCUSSION_COMMENT,
     DOWNLOAD,
     FOLLOW,
     FORK,
@@ -35,6 +38,7 @@ public enum GHEvent {
     MARKETPLACE_PURCHASE,
     MEMBER,
     MEMBERSHIP,
+    MERGE_QUEUE_ENTRY,
     META,
     MILESTONE,
     ORGANIZATION,
@@ -49,6 +53,7 @@ public enum GHEvent {
     PULL_REQUEST,
     PULL_REQUEST_REVIEW,
     PULL_REQUEST_REVIEW_COMMENT,
+    PULL_REQUEST_REVIEW_THREAD,
     PUSH,
     REGISTRY_PACKAGE,
     RELEASE,
@@ -56,6 +61,7 @@ public enum GHEvent {
     REPOSITORY,
     REPOSITORY_IMPORT,
     REPOSITORY_VULNERABILITY_ALERT,
+    SCHEDULE,
     SECURITY_ADVISORY,
     STAR,
     STATUS,
@@ -64,6 +70,11 @@ public enum GHEvent {
     WATCH,
     WORKFLOW_DISPATCH,
     WORKFLOW_RUN,
+
+    /**
+     * Special event type that means we haven't found an enum value corresponding to the event.
+     */
+    UNKNOWN,
 
     /**
      * Special event type that means "every possible event"

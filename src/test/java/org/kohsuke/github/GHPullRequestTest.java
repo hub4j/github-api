@@ -5,12 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -25,7 +24,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             return;
         }
 
-        for (GHPullRequest pr : getRepository(this.getGitHubBeforeAfter()).getPullRequests(GHIssueState.OPEN)) {
+        for (GHPullRequest pr : getRepository(this.getNonRecordingGitHub()).getPullRequests(GHIssueState.OPEN)) {
             pr.close();
         }
     }
@@ -34,8 +33,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void createPullRequest() throws Exception {
         String name = "createPullRequest";
         GHRepository repo = getRepository();
-        GHPullRequest p = repo.createPullRequest(name, "test/stable", "master", "## test");
-        assertEquals(name, p.getTitle());
+        GHPullRequest p = repo.createPullRequest(name, "test/stable", "main", "## test");
+        assertThat(p.getTitle(), equalTo(name));
         assertThat(p.canMaintainerModify(), is(false));
         assertThat(p.isDraft(), is(false));
     }
@@ -44,8 +43,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void createDraftPullRequest() throws Exception {
         String name = "createDraftPullRequest";
         GHRepository repo = getRepository();
-        GHPullRequest p = repo.createPullRequest(name, "test/stable", "master", "## test", false, true);
-        assertEquals(name, p.getTitle());
+        GHPullRequest p = repo.createPullRequest(name, "test/stable", "main", "## test", false, true);
+        assertThat(p.getTitle(), equalTo(name));
         assertThat(p.canMaintainerModify(), is(false));
         assertThat(p.isDraft(), is(true));
 
@@ -67,25 +66,25 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     @Test
     public void createPullRequestComment() throws Exception {
         String name = "createPullRequestComment";
-        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
         p.comment("Some comment");
     }
 
     @Test
     public void closePullRequest() throws Exception {
         String name = "closePullRequest";
-        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
         // System.out.println(p.getUrl());
-        assertEquals(name, p.getTitle());
-        assertEquals(GHIssueState.OPEN, getRepository().getPullRequest(p.getNumber()).getState());
+        assertThat(p.getTitle(), equalTo(name));
+        assertThat(getRepository().getPullRequest(p.getNumber()).getState(), equalTo(GHIssueState.OPEN));
         p.close();
-        assertEquals(GHIssueState.CLOSED, getRepository().getPullRequest(p.getNumber()).getState());
+        assertThat(getRepository().getPullRequest(p.getNumber()).getState(), equalTo(GHIssueState.CLOSED));
     }
 
     @Test
     public void pullRequestReviews() throws Exception {
         String name = "testPullRequestReviews";
-        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
         GHPullRequestReview draftReview = p.createReview()
                 .body("Some draft review")
                 .comment("Some niggle", "README.md", 1)
@@ -101,9 +100,9 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(review.getCommitId(), notNullValue());
         draftReview.submit("Some review comment", GHPullRequestReviewEvent.COMMENT);
         List<GHPullRequestReviewComment> comments = review.listReviewComments().toList();
-        assertEquals(1, comments.size());
+        assertThat(comments.size(), equalTo(1));
         GHPullRequestReviewComment comment = comments.get(0);
-        assertEquals("Some niggle", comment.getBody());
+        assertThat(comment.getBody(), equalTo("Some niggle"));
         draftReview = p.createReview().body("Some new review").comment("Some niggle", "README.md", 1).create();
         draftReview.delete();
     }
@@ -111,50 +110,74 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     @Test
     public void pullRequestReviewComments() throws Exception {
         String name = "pullRequestReviewComments";
-        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
-        // System.out.println(p.getUrl());
-        assertTrue(p.listReviewComments().toList().isEmpty());
-        p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
-        List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
-        assertEquals(1, comments.size());
-        GHPullRequestReviewComment comment = comments.get(0);
-        assertEquals("Sample review comment", comment.getBody());
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
+        try {
+            // System.out.println(p.getUrl());
+            assertThat(p.listReviewComments().toList(), is(empty()));
+            p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
+            List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
+            assertThat(comments.size(), equalTo(1));
+            GHPullRequestReviewComment comment = comments.get(0);
+            assertThat(comment.getBody(), equalTo("Sample review comment"));
+            assertThat(comment.getInReplyToId(), equalTo(-1L));
+            assertThat(comment.getPath(), equalTo("README.md"));
+            assertThat(comment.getPosition(), equalTo(1));
+            assertThat(comment.getUser(), notNullValue());
+            // Assert htmlUrl is not null
+            assertThat(comment.getHtmlUrl(), notNullValue());
+            assertThat(comment.getHtmlUrl().toString(),
+                    containsString("hub4j-test-org/github-api/pull/" + p.getNumber()));
 
-        // Assert htmlUrl is not null
-        assertNotNull(comment.getHtmlUrl());
-        assertEquals(new URL("https://github.com/hub4j-test-org/github-api/pull/266#discussion_r321995146"),
-                comment.getHtmlUrl());
+            List<GHReaction> reactions = comment.listReactions().toList();
+            assertThat(reactions, is(empty()));
 
-        comment.update("Updated review comment");
-        comments = p.listReviewComments().toList();
-        assertEquals(1, comments.size());
-        comment = comments.get(0);
-        assertEquals("Updated review comment", comment.getBody());
+            GHReaction reaction = comment.createReaction(ReactionContent.CONFUSED);
+            assertThat(reaction.getContent(), equalTo(ReactionContent.CONFUSED));
 
-        comment.delete();
-        comments = p.listReviewComments().toList();
-        assertTrue(comments.isEmpty());
+            reactions = comment.listReactions().toList();
+            assertThat(reactions.size(), equalTo(1));
+
+            GHPullRequestReviewComment reply = comment.reply("This is a reply.");
+            assertThat(reply.getInReplyToId(), equalTo(comment.getId()));
+            comments = p.listReviewComments().toList();
+
+            assertThat(comments.size(), equalTo(2));
+
+            comment.update("Updated review comment");
+            comments = p.listReviewComments().toList();
+            comment = comments.get(0);
+            assertThat(comment.getBody(), equalTo("Updated review comment"));
+
+            comment.delete();
+            comments = p.listReviewComments().toList();
+            // Reply is still present after delete of original comment, but no longer has replyToId
+            assertThat(comments.size(), equalTo(1));
+            assertThat(comments.get(0).getId(), equalTo(reply.getId()));
+            assertThat(comments.get(0).getInReplyToId(), equalTo(-1L));
+        } finally {
+            p.close();
+        }
     }
 
     @Test
     public void testPullRequestReviewRequests() throws Exception {
         String name = "testPullRequestReviewRequests";
-        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
         // System.out.println(p.getUrl());
-        assertTrue(p.getRequestedReviewers().isEmpty());
+        assertThat(p.getRequestedReviewers(), is(empty()));
 
         GHUser kohsuke2 = gitHub.getUser("kohsuke2");
         p.requestReviewers(Collections.singletonList(kohsuke2));
         p.refresh();
-        assertFalse(p.getRequestedReviewers().isEmpty());
+        assertThat(p.getRequestedReviewers(), is(not(empty())));
     }
 
     @Test
     public void testPullRequestTeamReviewRequests() throws Exception {
         String name = "testPullRequestTeamReviewRequests";
-        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "master", "## test");
+        GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
         // System.out.println(p.getUrl());
-        assertTrue(p.getRequestedReviewers().isEmpty());
+        assertThat(p.getRequestedReviewers(), is(empty()));
 
         GHOrganization testOrg = gitHub.getOrganization("hub4j-test-org");
         GHTeam testTeam = testOrg.getTeamBySlug("dummy-team");
@@ -182,7 +205,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void mergeCommitSHA() throws Exception {
         String name = "mergeCommitSHA";
         GHRepository repo = getRepository();
-        GHPullRequest p = repo.createPullRequest(name, "test/mergeable_branch", "master", "## test");
+        GHPullRequest p = repo.createPullRequest(name, "test/mergeable_branch", "main", "## test");
         int baseRequestCount = mockGitHub.getRequestCount();
         assertThat(p.getMergeableNoRefresh(), nullValue());
         assertThat("Used existing value", mockGitHub.getRequestCount() - baseRequestCount, equalTo(0));
@@ -197,7 +220,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
                 // make sure commit exists
                 GHCommit commit = repo.getCommit(p.getMergeCommitSha());
-                assertNotNull(commit);
+                assertThat(commit, notNullValue());
 
                 assertThat("Asked for PR information", mockGitHub.getRequestCount() - baseRequestCount, equalTo(i + 1));
 
@@ -214,33 +237,33 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     @Test
     public void setBaseBranch() throws Exception {
         String prName = "testSetBaseBranch";
-        String originalBaseBranch = "master";
+        String originalBaseBranch = "main";
         String newBaseBranch = "gh-pages";
 
-        GHPullRequest pullRequest = getRepository().createPullRequest(prName, "test/stable", "master", "## test");
+        GHPullRequest pullRequest = getRepository().createPullRequest(prName, "test/stable", "main", "## test");
 
-        assertEquals("Pull request base branch is supposed to be " + originalBaseBranch,
-                originalBaseBranch,
-                pullRequest.getBase().getRef());
+        assertThat("Pull request base branch is supposed to be " + originalBaseBranch,
+                pullRequest.getBase().getRef(),
+                equalTo(originalBaseBranch));
 
         GHPullRequest responsePullRequest = pullRequest.setBaseBranch(newBaseBranch);
 
-        assertEquals("Pull request base branch is supposed to be " + newBaseBranch,
-                newBaseBranch,
-                responsePullRequest.getBase().getRef());
+        assertThat("Pull request base branch is supposed to be " + newBaseBranch,
+                responsePullRequest.getBase().getRef(),
+                equalTo(newBaseBranch));
     }
 
     @Test
     public void setBaseBranchNonExisting() throws Exception {
         String prName = "testSetBaseBranchNonExisting";
-        String originalBaseBranch = "master";
+        String originalBaseBranch = "main";
         String newBaseBranch = "non-existing";
 
-        GHPullRequest pullRequest = getRepository().createPullRequest(prName, "test/stable", "master", "## test");
+        GHPullRequest pullRequest = getRepository().createPullRequest(prName, "test/stable", "main", "## test");
 
-        assertEquals("Pull request base branch is supposed to be " + originalBaseBranch,
-                originalBaseBranch,
-                pullRequest.getBase().getRef());
+        assertThat("Pull request base branch is supposed to be " + originalBaseBranch,
+                pullRequest.getBase().getRef(),
+                equalTo(originalBaseBranch));
 
         try {
             pullRequest.setBaseBranch(newBaseBranch);
@@ -261,16 +284,16 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHRef outdatedRef = repository.getRef(outdatedRefName);
         outdatedRef.updateTo("6440189369f9f33b2366556a94dbc26f2cfdd969", true);
 
-        GHPullRequest outdatedPullRequest = repository.createPullRequest(prName, "outdated", "master", "## test");
+        GHPullRequest outdatedPullRequest = repository.createPullRequest(prName, "outdated", "main", "## test");
 
         do {
             Thread.sleep(5000);
             outdatedPullRequest.refresh();
         } while (outdatedPullRequest.getMergeableState().equalsIgnoreCase("unknown"));
 
-        assertEquals("Pull request is supposed to be not up to date",
-                "behind",
-                outdatedPullRequest.getMergeableState());
+        assertThat("Pull request is supposed to be not up to date",
+                outdatedPullRequest.getMergeableState(),
+                equalTo("behind"));
 
         outdatedRef.updateTo("f567328eb81270487864963b7d7446953353f2b5", true);
 
@@ -292,21 +315,21 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
         repository.getRef(outdatedRefName).updateTo("6440189369f9f33b2366556a94dbc26f2cfdd969", true);
 
-        GHPullRequest outdatedPullRequest = repository.createPullRequest(prName, "outdated", "master", "## test");
+        GHPullRequest outdatedPullRequest = repository.createPullRequest(prName, "outdated", "main", "## test");
 
         do {
             Thread.sleep(5000);
             outdatedPullRequest.refresh();
         } while (outdatedPullRequest.getMergeableState().equalsIgnoreCase("unknown"));
 
-        assertEquals("Pull request is supposed to be not up to date",
-                "behind",
-                outdatedPullRequest.getMergeableState());
+        assertThat("Pull request is supposed to be not up to date",
+                outdatedPullRequest.getMergeableState(),
+                equalTo("behind"));
 
         outdatedPullRequest.updateBranch();
         outdatedPullRequest.refresh();
 
-        assertNotEquals("Pull request is supposed to be up to date", "behind", outdatedPullRequest.getMergeableState());
+        assertThat("Pull request is supposed to be up to date", outdatedPullRequest.getMergeableState(), not("behind"));
 
         outdatedPullRequest.close();
     }
@@ -315,12 +338,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void squashMerge() throws Exception {
         String name = "squashMerge";
         String branchName = "test/" + name;
-        GHRef masterRef = getRepository().getRef("heads/master");
-        GHRef branchRef = getRepository().createRef("refs/heads/" + branchName, masterRef.getObject().getSha());
+        GHRef mainRef = getRepository().getRef("heads/main");
+        GHRef branchRef = getRepository().createRef("refs/heads/" + branchName, mainRef.getObject().getSha());
 
         getRepository().createContent(name, name, name, branchName);
         Thread.sleep(1000);
-        GHPullRequest p = getRepository().createPullRequest(name, branchName, "master", "## test squash");
+        GHPullRequest p = getRepository().createPullRequest(name, branchName, "main", "## test squash");
         Thread.sleep(1000);
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
     }
@@ -330,8 +353,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         String name = "updateContentSquashMerge";
         String branchName = "test/" + name;
 
-        GHRef masterRef = getRepository().getRef("heads/master");
-        GHRef branchRef = getRepository().createRef("refs/heads/" + branchName, masterRef.getObject().getSha());
+        GHRef mainRef = getRepository().getRef("heads/main");
+        GHRef branchRef = getRepository().createRef("refs/heads/" + branchName, mainRef.getObject().getSha());
 
         GHContentUpdateResponse response = getRepository().createContent(name, name, name, branchName);
         Thread.sleep(1000);
@@ -343,7 +366,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                 .message(name)
                 .sha(response.getContent().getSha())
                 .commit();
-        GHPullRequest p = getRepository().createPullRequest(name, branchName, "master", "## test squash");
+        GHPullRequest p = getRepository().createPullRequest(name, branchName, "main", "## test squash");
         Thread.sleep(1000);
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
     }
@@ -351,76 +374,164 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     @Test
     public void queryPullRequestsQualifiedHead() throws Exception {
         GHRepository repo = getRepository();
-        // Create PRs from two different branches to master
-        repo.createPullRequest("queryPullRequestsQualifiedHead_stable", "test/stable", "master", null);
-        repo.createPullRequest("queryPullRequestsQualifiedHead_rc", "test/rc", "master", null);
+        // Create PRs from two different branches to main
+        repo.createPullRequest("queryPullRequestsQualifiedHead_stable", "test/stable", "main", null);
+        repo.createPullRequest("queryPullRequestsQualifiedHead_rc", "test/rc", "main", null);
 
         // Query by one of the heads and make sure we only get that branch's PR back.
         List<GHPullRequest> prs = repo.queryPullRequests()
                 .state(GHIssueState.OPEN)
                 .head("hub4j-test-org:test/stable")
-                .base("master")
+                .base("main")
                 .list()
                 .toList();
-        assertNotNull(prs);
-        assertEquals(1, prs.size());
-        assertEquals("test/stable", prs.get(0).getHead().getRef());
+        assertThat(prs, notNullValue());
+        assertThat(prs.size(), equalTo(1));
+        assertThat(prs.get(0).getHead().getRef(), equalTo("test/stable"));
     }
 
     @Test
     public void queryPullRequestsUnqualifiedHead() throws Exception {
         GHRepository repo = getRepository();
-        // Create PRs from two different branches to master
-        repo.createPullRequest("queryPullRequestsUnqualifiedHead_stable", "test/stable", "master", null);
-        repo.createPullRequest("queryPullRequestsUnqualifiedHead_rc", "test/rc", "master", null);
+        // Create PRs from two different branches to main
+        repo.createPullRequest("queryPullRequestsUnqualifiedHead_stable", "test/stable", "main", null);
+        repo.createPullRequest("queryPullRequestsUnqualifiedHead_rc", "test/rc", "main", null);
 
         // Query by one of the heads and make sure we only get that branch's PR back.
         List<GHPullRequest> prs = repo.queryPullRequests()
                 .state(GHIssueState.OPEN)
                 .head("test/stable")
-                .base("master")
+                .base("main")
                 .list()
                 .toList();
-        assertNotNull(prs);
-        assertEquals(1, prs.size());
-        assertEquals("test/stable", prs.get(0).getHead().getRef());
+        assertThat(prs, notNullValue());
+        assertThat(prs.size(), equalTo(1));
+        assertThat(prs.get(0).getHead().getRef(), equalTo("test/stable"));
     }
 
     @Test
     // Requires push access to the test repo to pass
     public void setLabels() throws Exception {
-        GHPullRequest p = getRepository().createPullRequest("setLabels", "test/stable", "master", "## test");
+        GHPullRequest p = getRepository().createPullRequest("setLabels", "test/stable", "main", "## test");
         String label = "setLabels_label_name";
         p.setLabels(label);
 
         Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
-        assertEquals(1, labels.size());
-        assertEquals(label, labels.iterator().next().getName());
+        assertThat(labels.size(), equalTo(1));
+        GHLabel savedLabel = labels.iterator().next();
+        assertThat(savedLabel.getName(), equalTo(label));
+        assertThat(savedLabel.getId(), notNullValue());
+        assertThat(savedLabel.getNodeId(), notNullValue());
+        assertThat(savedLabel.isDefault(), is(false));
+    }
+
+    @Test
+    // Requires push access to the test repo to pass
+    public void addLabels() throws Exception {
+        GHPullRequest p = getRepository().createPullRequest("addLabels", "test/stable", "main", "## test");
+        String addedLabel1 = "addLabels_label_name_1";
+        String addedLabel2 = "addLabels_label_name_2";
+        String addedLabel3 = "addLabels_label_name_3";
+
+        List<GHLabel> resultingLabels = p.addLabels(addedLabel1);
+        assertThat(resultingLabels.size(), equalTo(1));
+        GHLabel ghLabel = resultingLabels.get(0);
+        assertThat(ghLabel.getName(), equalTo(addedLabel1));
+
+        int requestCount = mockGitHub.getRequestCount();
+        resultingLabels = p.addLabels(addedLabel2, addedLabel3);
+        // multiple labels can be added with one api call
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 1));
+
+        assertThat(resultingLabels.size(), equalTo(3));
+        assertThat(resultingLabels,
+                containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),
+                        hasProperty("name", equalTo(addedLabel2)),
+                        hasProperty("name", equalTo(addedLabel3))));
+
+        // Adding a label which is already present does not throw an error
+        resultingLabels = p.addLabels(ghLabel);
+        assertThat(resultingLabels.size(), equalTo(3));
+    }
+
+    @Test
+    // Requires push access to the test repo to pass
+    public void addLabelsConcurrencyIssue() throws Exception {
+        String addedLabel1 = "addLabelsConcurrencyIssue_label_name_1";
+        String addedLabel2 = "addLabelsConcurrencyIssue_label_name_2";
+
+        GHPullRequest p1 = getRepository()
+                .createPullRequest("addLabelsConcurrencyIssue", "test/stable", "main", "## test");
+        p1.getLabels();
+
+        GHPullRequest p2 = getRepository().getPullRequest(p1.getNumber());
+        p2.addLabels(addedLabel2);
+
+        Collection<GHLabel> labels = p1.addLabels(addedLabel1);
+
+        assertThat(labels.size(), equalTo(2));
+        assertThat(labels,
+                containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),
+                        hasProperty("name", equalTo(addedLabel2))));
+    }
+
+    @Test
+    // Requires push access to the test repo to pass
+    public void removeLabels() throws Exception {
+        GHPullRequest p = getRepository().createPullRequest("removeLabels", "test/stable", "main", "## test");
+        String label1 = "removeLabels_label_name_1";
+        String label2 = "removeLabels_label_name_2";
+        String label3 = "removeLabels_label_name_3";
+        p.setLabels(label1, label2, label3);
+
+        Collection<GHLabel> labels = getRepository().getPullRequest(p.getNumber()).getLabels();
+        assertThat(labels.size(), equalTo(3));
+        GHLabel ghLabel3 = labels.stream().filter(label -> label3.equals(label.getName())).findFirst().get();
+
+        int requestCount = mockGitHub.getRequestCount();
+        List<GHLabel> resultingLabels = p.removeLabels(label2, label3);
+        // each label deleted is a separate api call
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 2));
+
+        assertThat(resultingLabels.size(), equalTo(1));
+        assertThat(resultingLabels.get(0).getName(), equalTo(label1));
+
+        // Removing some labels that are not present does not throw
+        // This is consistent with earlier behavior and with addLabels()
+        p.removeLabels(ghLabel3);
+
+        // Calling removeLabel() on label that is not present will throw
+        try {
+            p.removeLabel(label3);
+            fail("Expected GHFileNotFoundException");
+        } catch (GHFileNotFoundException e) {
+            assertThat(e.getMessage(), containsString("Label does not exist"));
+        }
     }
 
     @Test
     // Requires push access to the test repo to pass
     public void setAssignee() throws Exception {
-        GHPullRequest p = getRepository().createPullRequest("setAssignee", "test/stable", "master", "## test");
+        GHPullRequest p = getRepository().createPullRequest("setAssignee", "test/stable", "main", "## test");
         GHMyself user = gitHub.getMyself();
         p.assignTo(user);
 
-        assertEquals(user, getRepository().getPullRequest(p.getNumber()).getAssignee());
+        assertThat(getRepository().getPullRequest(p.getNumber()).getAssignee(), equalTo(user));
     }
 
     @Test
     public void getUserTest() throws IOException {
-        GHPullRequest p = getRepository().createPullRequest("getUserTest", "test/stable", "master", "## test");
+        GHPullRequest p = getRepository().createPullRequest("getUserTest", "test/stable", "main", "## test");
         GHPullRequest prSingle = getRepository().getPullRequest(p.getNumber());
-        assertNotNull(prSingle.getUser().root);
+        assertThat(prSingle.getUser().root(), notNullValue());
         prSingle.getMergeable();
-        assertNotNull(prSingle.getUser().root);
+        assertThat(prSingle.getUser().root(), notNullValue());
 
         PagedIterable<GHPullRequest> ghPullRequests = getRepository().listPullRequests(GHIssueState.OPEN);
         for (GHPullRequest pr : ghPullRequests) {
-            assertNotNull(pr.getUser().root);
+            assertThat(pr.getUser().root(), notNullValue());
             pr.getMergeable();
-            assertNotNull(pr.getUser().root);
+            assertThat(pr.getUser().root(), notNullValue());
         }
     }
 

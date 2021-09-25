@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static org.hamcrest.Matchers.equalTo;
+
 public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
     public static int MAX_ITERATIONS = 3;
@@ -25,7 +27,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         // check the statistics are accurate
         List<GHRepositoryStatistics.ContributorStats> list = stats.toList();
-        assertEquals(99, list.size());
+        assertThat(list.size(), equalTo(99));
 
         // find a particular developer
         // TODO: Add an accessor method for this instead of having use a loop.
@@ -33,19 +35,22 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         final String authorLogin = "kohsuke";
         for (GHRepositoryStatistics.ContributorStats statsForAuthor : list) {
             if (authorLogin.equals(statsForAuthor.getAuthor().getLogin())) {
-                assertEquals(715, statsForAuthor.getTotal());
+                assertThat(statsForAuthor.getTotal(), equalTo(715));
+                assertThat(statsForAuthor.toString(), equalTo("kohsuke made 715 contributions over 494 weeks"));
 
                 List<GHRepositoryStatistics.ContributorStats.Week> weeks = statsForAuthor.getWeeks();
-                assertEquals(494, weeks.size());
+                assertThat(weeks.size(), equalTo(494));
 
                 try {
                     // check a particular week
                     // TODO: Maybe add a convenience method to get the week
                     // containing a certain date (Java.Util.Date).
                     GHRepositoryStatistics.ContributorStats.Week week = statsForAuthor.getWeek(1541289600);
-                    assertEquals(63, week.getNumberOfAdditions());
-                    assertEquals(56, week.getNumberOfDeletions());
-                    assertEquals(5, week.getNumberOfCommits());
+                    assertThat(week.getNumberOfAdditions(), equalTo(63));
+                    assertThat(week.getNumberOfDeletions(), equalTo(56));
+                    assertThat(week.getNumberOfCommits(), equalTo(5));
+                    assertThat(week.toString(),
+                            equalTo("Week starting 1541289600 - Additions: 63, Deletions: 56, Commits: 5"));
                 } catch (NoSuchElementException e) {
                     fail("Did not find week 1546128000");
                 }
@@ -54,7 +59,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
             }
         }
 
-        assertTrue("Did not find author " + authorLogin, developerFound);
+        assertThat("Did not find author " + authorLogin, developerFound);
     }
 
     @Test
@@ -86,20 +91,20 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         Boolean foundWeek = false;
         for (GHRepositoryStatistics.CommitActivity item : list) {
             if (item.getWeek() == 1566691200) {
-                assertEquals(6, item.getTotal());
+                assertThat(item.getTotal(), equalTo(6));
                 List<Integer> days = item.getDays();
-                assertEquals(0, (long) days.get(0));
-                assertEquals(0, (long) days.get(1));
-                assertEquals(1, (long) days.get(2));
-                assertEquals(0, (long) days.get(3));
-                assertEquals(0, (long) days.get(4));
-                assertEquals(1, (long) days.get(5));
-                assertEquals(4, (long) days.get(6));
+                assertThat((long) days.get(0), equalTo(0L));
+                assertThat((long) days.get(1), equalTo(0L));
+                assertThat((long) days.get(2), equalTo(1L));
+                assertThat((long) days.get(3), equalTo(0L));
+                assertThat((long) days.get(4), equalTo(0L));
+                assertThat((long) days.get(5), equalTo(1L));
+                assertThat((long) days.get(6), equalTo(4L));
                 foundWeek = true;
                 break;
             }
         }
-        assertTrue("Could not find week starting 1546128000", foundWeek);
+        assertThat("Could not find week starting 1546128000", foundWeek);
     }
 
     @Test
@@ -129,13 +134,14 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         Boolean foundWeek = false;
         for (GHRepositoryStatistics.CodeFrequency item : stats) {
             if (item.getWeekTimestamp() == 1535241600) {
-                assertEquals(185, item.getAdditions());
-                assertEquals(-243, item.getDeletions());
+                assertThat(item.getAdditions(), equalTo(185L));
+                assertThat(item.getDeletions(), equalTo(-243L));
+                assertThat(item.toString(), equalTo("Week starting 1535241600 has 185 additions and 243 deletions"));
                 foundWeek = true;
                 break;
             }
         }
-        assertTrue("Could not find week starting 1535241600", foundWeek);
+        assertThat("Could not find week starting 1535241600", foundWeek);
     }
 
     @Test
@@ -160,11 +166,11 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
         // check the statistics are accurate
         List<Integer> allCommits = stats.getAllCommits();
-        assertEquals(52, allCommits.size());
-        assertEquals(2, (int) allCommits.get(2));
+        assertThat(allCommits.size(), equalTo(52));
+        assertThat((int) allCommits.get(2), equalTo(2));
 
         List<Integer> ownerCommits = stats.getOwnerCommits();
-        assertEquals(52, ownerCommits.size());
+        assertThat(ownerCommits.size(), equalTo(52));
         // The values depend on who is running the test.
     }
 
@@ -195,12 +201,13 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
             if (item.getDayOfWeek() == 2 && item.getHourOfDay() == 10) {
                 // TODO: Make an easier access method. Perhaps wrap in an
                 // object and have a method such as GetCommits(1, 16).
-                assertEquals(16, item.getNumberOfCommits());
+                assertThat(item.getNumberOfCommits(), equalTo(16L));
+                assertThat(item.toString(), equalTo("Day 2 Hour 10: 16 commits"));
                 hourFound = true;
                 break;
             }
         }
-        assertTrue("Hour 10 for Day 2 not found.", hourFound);
+        assertThat("Hour 10 for Day 2 not found.", hourFound);
     }
 
     protected GHRepository getRepository() throws IOException {

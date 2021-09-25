@@ -2,14 +2,17 @@ package org.kohsuke.github;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.kohsuke.github.GHCheckRun.Conclusion;
+import org.kohsuke.github.GHCheckRun.Status;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.List;
 import java.util.TimeZone;
 
-import static java.lang.Boolean.TRUE;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThrows;
 
 public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
@@ -22,7 +25,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void commit_comment() throws Exception {
-        GHEventPayload.CommitComment event = GitHub.offline()
+        final GHEventPayload.CommitComment event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.CommitComment.class);
         assertThat(event.getAction(), is("created"));
         assertThat(event.getComment().getSHA1(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
@@ -30,15 +33,24 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+
+        assertThat(event.getComment().getOwner(), sameInstance(event.getRepository()));
+
+        assertThrows(RuntimeException.class, () -> event.setComment(null));
+
+        // EventPayload checks
+        assertThrows(RuntimeException.class, () -> event.setOrganization(null));
+        assertThrows(RuntimeException.class, () -> event.setRepository(null));
+        assertThrows(RuntimeException.class, () -> event.setSender(null));
     }
 
     @Test
     public void create() throws Exception {
-        GHEventPayload.Create event = GitHub.offline()
+        final GHEventPayload.Create event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Create.class);
         assertThat(event.getRef(), is("0.0.1"));
         assertThat(event.getRefType(), is("tag"));
-        assertThat(event.getMasterBranch(), is("master"));
+        assertThat(event.getMasterBranch(), is("main"));
         assertThat(event.getDescription(), is(""));
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
@@ -47,7 +59,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void delete() throws Exception {
-        GHEventPayload.Delete event = GitHub.offline()
+        final GHEventPayload.Delete event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Delete.class);
         assertThat(event.getRef(), is("simple-tag"));
         assertThat(event.getRefType(), is("tag"));
@@ -58,7 +70,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void deployment() throws Exception {
-        GHEventPayload.Deployment event = GitHub.offline()
+        final GHEventPayload.Deployment event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Deployment.class);
         assertThat(event.getDeployment().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getDeployment().getEnvironment(), is("production"));
@@ -66,11 +78,13 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+
+        assertThat(event.getDeployment().getOwner(), sameInstance(event.getRepository()));
     }
 
     @Test
     public void deployment_status() throws Exception {
-        GHEventPayload.DeploymentStatus event = GitHub.offline()
+        final GHEventPayload.DeploymentStatus event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.DeploymentStatus.class);
         assertThat(event.getDeploymentStatus().getState(), is(GHDeploymentState.SUCCESS));
         assertThat(event.getDeploymentStatus().getTargetUrl(), nullValue());
@@ -80,16 +94,25 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+
+        assertThat(event.getDeployment().getOwner(), sameInstance(event.getRepository()));
+        assertThat(event.getDeploymentStatus().getOwner(), sameInstance(event.getRepository()));
+
+        assertThrows(RuntimeException.class, () -> event.setDeployment(null));
+        assertThrows(RuntimeException.class, () -> event.setDeploymentStatus(null));
     }
 
     @Test
     public void fork() throws Exception {
-        GHEventPayload.Fork event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Fork.class);
+        final GHEventPayload.Fork event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Fork.class);
         assertThat(event.getForkee().getName(), is("public-repo"));
         assertThat(event.getForkee().getOwner().getLogin(), is("baxterandthehackers"));
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterandthehackers"));
+
+        assertThrows(RuntimeException.class, () -> event.setForkee(null));
     }
 
     // TODO uncomment when we have GHPage implemented
@@ -112,7 +135,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void issue_comment() throws Exception {
-        GHEventPayload.IssueComment event = GitHub.offline()
+        final GHEventPayload.IssueComment event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.IssueComment.class);
         assertThat(event.getAction(), is("created"));
         assertThat(event.getIssue().getNumber(), is(2));
@@ -125,11 +148,18 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+
+        assertThat(event.getIssue().getRepository(), sameInstance(event.getRepository()));
+        assertThat(event.getComment().getParent(), sameInstance(event.getIssue()));
+
+        assertThrows(RuntimeException.class, () -> event.setComment(null));
+        assertThrows(RuntimeException.class, () -> event.setIssue(null));
     }
 
     @Test
     public void issues() throws Exception {
-        GHEventPayload.Issue event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
+        final GHEventPayload.Issue event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
         assertThat(event.getAction(), is("opened"));
         assertThat(event.getIssue().getNumber(), is(2));
         assertThat(event.getIssue().getTitle(), is("Spelling error in the README file"));
@@ -139,6 +169,51 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+
+        assertThat(event.getIssue().getRepository(), sameInstance(event.getRepository()));
+    }
+
+    @Test
+    public void issue_labeled() throws Exception {
+        final GHEventPayload.Issue event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
+        assertThat(event.getAction(), is("labeled"));
+        assertThat(event.getIssue().getNumber(), is(42));
+        assertThat(event.getIssue().getTitle(), is("Test GHEventPayload.Issue label/unlabel"));
+        assertThat(event.getIssue().getLabels().size(), is(1));
+        assertThat(event.getIssue().getLabels().iterator().next().getName(), is("enhancement"));
+        assertThat(event.getLabel().getName(), is("enhancement"));
+    }
+
+    @Test
+    public void issue_unlabeled() throws Exception {
+        final GHEventPayload.Issue event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
+        assertThat(event.getAction(), is("unlabeled"));
+        assertThat(event.getIssue().getNumber(), is(42));
+        assertThat(event.getIssue().getTitle(), is("Test GHEventPayload.Issue label/unlabel"));
+        assertThat(event.getIssue().getLabels().size(), is(0));
+        assertThat(event.getLabel().getName(), is("enhancement"));
+    }
+
+    @Test
+    public void issue_title_edited() throws Exception {
+        final GHEventPayload.Issue event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
+        assertThat(event.getAction(), is("edited"));
+        assertThat(event.getIssue().getNumber(), is(43));
+        assertThat(event.getIssue().getTitle(), is("Test GHEventPayload.Issue changes [updated]"));
+        assertThat(event.getChanges().getTitle().getFrom(), is("Test GHEventPayload.Issue changes"));
+    }
+
+    @Test
+    public void issue_body_edited() throws Exception {
+        final GHEventPayload.Issue event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
+        assertThat(event.getAction(), is("edited"));
+        assertThat(event.getIssue().getNumber(), is(43));
+        assertThat(event.getIssue().getBody(), is("Description [updated]."));
+        assertThat(event.getChanges().getBody().getFrom(), is("Description."));
     }
 
     // TODO implement support classes and write test
@@ -163,7 +238,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void ping() throws Exception {
-        GHEventPayload.Ping event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Ping.class);
+        final GHEventPayload.Ping event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Ping.class);
 
         assertThat(event.getAction(), nullValue());
         assertThat(event.getSender().getLogin(), is("seregamorph"));
@@ -174,7 +250,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     @Test
     @Payload("public")
     public void public_() throws Exception {
-        GHEventPayload.Public event = GitHub.offline()
+        final GHEventPayload.Public event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Public.class);
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
@@ -183,22 +259,22 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void pull_request() throws Exception {
-        GHEventPayload.PullRequest event = GitHub.offline()
+        final GHEventPayload.PullRequest event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
         assertThat(event.getAction(), is("opened"));
         assertThat(event.getNumber(), is(1));
         assertThat(event.getPullRequest().getNumber(), is(1));
         assertThat(event.getPullRequest().getTitle(), is("Update the README with new information"));
         assertThat(event.getPullRequest().getBody(),
-                is("This is a pretty simple change that we need to pull into " + "master."));
+                is("This is a pretty simple change that we need to pull into " + "main."));
         assertThat(event.getPullRequest().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getRef(), is("changes"));
         assertThat(event.getPullRequest().getHead().getLabel(), is("baxterthehacker:changes"));
         assertThat(event.getPullRequest().getHead().getSha(), is("0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c"));
         assertThat(event.getPullRequest().getBase().getUser().getLogin(), is("baxterthehacker"));
-        assertThat(event.getPullRequest().getBase().getRef(), is("master"));
-        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:master"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("main"));
+        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:main"));
         assertThat(event.getPullRequest().getBase().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getPullRequest().isMerged(), is(false));
         assertThat(event.getPullRequest().getMergeable(), nullValue());
@@ -212,11 +288,13 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+
+        assertThat(event.getPullRequest().getRepository(), sameInstance(event.getRepository()));
     }
 
     @Test
     public void pull_request_edited_base() throws Exception {
-        GHEventPayload.PullRequest event = GitHub.offline()
+        final GHEventPayload.PullRequest event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
 
         assertThat(event.getAction(), is("edited"));
@@ -231,7 +309,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void pull_request_edited_title() throws Exception {
-        GHEventPayload.PullRequest event = GitHub.offline()
+        final GHEventPayload.PullRequest event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
 
         assertThat(event.getAction(), is("edited"));
@@ -245,7 +323,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void pull_request_labeled() throws Exception {
-        GHEventPayload.PullRequest event = GitHub.offline()
+        final GHEventPayload.PullRequest event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.PullRequest.class);
         assertThat(event.getAction(), is("labeled"));
         assertThat(event.getNumber(), is(79));
@@ -263,7 +341,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getBase().getLabel(), is("trilogy-group:3.10"));
         assertThat(event.getPullRequest().getBase().getSha(), is("7a735f17d686c6a1fc7df5b9d395e5863868f364"));
         assertThat(event.getPullRequest().isMerged(), is(false));
-        assertThat(event.getPullRequest().getMergeable(), is(TRUE));
+        assertThat(event.getPullRequest().getMergeable(), is(true));
         assertThat(event.getPullRequest().getMergeableState(), is("draft"));
         assertThat(event.getPullRequest().getMergedBy(), nullValue());
         assertThat(event.getPullRequest().getCommentsCount(), is(1));
@@ -285,7 +363,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void pull_request_review() throws Exception {
-        GHEventPayload.PullRequestReview event = GitHub.offline()
+        final GHEventPayload.PullRequestReview event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.PullRequestReview.class);
         assertThat(event.getAction(), is("submitted"));
 
@@ -304,19 +382,22 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getHead().getLabel(), is("skalnik:patch-2"));
         assertThat(event.getPullRequest().getHead().getSha(), is("b7a1f9c27caa4e03c14a88feb56e2d4f7500aa63"));
         assertThat(event.getPullRequest().getBase().getUser().getLogin(), is("baxterthehacker"));
-        assertThat(event.getPullRequest().getBase().getRef(), is("master"));
-        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:master"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("main"));
+        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:main"));
         assertThat(event.getPullRequest().getBase().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
 
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
 
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+
+        assertThat(event.getPullRequest().getRepository(), sameInstance(event.getRepository()));
+        assertThat(event.getReview().getParent(), sameInstance(event.getPullRequest()));
     }
 
     @Test
     public void pull_request_review_comment() throws Exception {
-        GHEventPayload.PullRequestReviewComment event = GitHub.offline()
+        final GHEventPayload.PullRequestReviewComment event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.PullRequestReviewComment.class);
         assertThat(event.getAction(), is("created"));
 
@@ -325,26 +406,30 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getNumber(), is(1));
         assertThat(event.getPullRequest().getTitle(), is("Update the README with new information"));
         assertThat(event.getPullRequest().getBody(),
-                is("This is a pretty simple change that we need to pull into master."));
+                is("This is a pretty simple change that we need to pull into main."));
         assertThat(event.getPullRequest().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getPullRequest().getHead().getRef(), is("changes"));
         assertThat(event.getPullRequest().getHead().getLabel(), is("baxterthehacker:changes"));
         assertThat(event.getPullRequest().getHead().getSha(), is("0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c"));
         assertThat(event.getPullRequest().getBase().getUser().getLogin(), is("baxterthehacker"));
-        assertThat(event.getPullRequest().getBase().getRef(), is("master"));
-        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:master"));
+        assertThat(event.getPullRequest().getBase().getRef(), is("main"));
+        assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:main"));
         assertThat(event.getPullRequest().getBase().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
 
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
 
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
+
+        assertThat(event.getPullRequest().getRepository(), sameInstance(event.getRepository()));
+        assertThat(event.getComment().getParent(), sameInstance(event.getPullRequest()));
     }
 
     @Test
     public void push() throws Exception {
-        GHEventPayload.Push event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Push.class);
+        final GHEventPayload.Push event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Push.class);
         assertThat(event.getRef(), is("refs/heads/changes"));
         assertThat(event.getBefore(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getHead(), is("0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c"));
@@ -361,6 +446,9 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getCommits().get(0).getRemoved().size(), is(0));
         assertThat(event.getCommits().get(0).getModified().size(), is(1));
         assertThat(event.getCommits().get(0).getModified().get(0), is("README.md"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertThat(formatter.format(event.getCommits().get(0).getTimestamp()), is("2015-05-05T23:40:15Z"));
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwnerName(), is("baxterthehacker"));
         assertThat(event.getRepository().getUrl().toExternalForm(),
@@ -370,6 +458,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
         assertThat(event.getCompare(),
                 is("https://github.com/baxterthehacker/public-repo/compare/9049f1265b7d...0d1a26e67d8f"));
+
+        assertThrows(RuntimeException.class, () -> event.setPusher(null));
+        assertThrows(RuntimeException.class, () -> event.getPusher().setEmail(null));
+        assertThrows(RuntimeException.class, () -> event.getPusher().setName(null));
+
     }
 
     @Test
@@ -377,7 +470,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     public void pushToFork() throws Exception {
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
 
-        GHEventPayload.Push event = GitHub.offline().parseEventPayload(payload.asReader(), GHEventPayload.Push.class);
+        final GHEventPayload.Push event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Push.class);
         assertThat(event.getRef(), is("refs/heads/changes"));
         assertThat(event.getBefore(), is("85c44b352958bf6d81b74ab8b21920f1d313a287"));
         assertThat(event.getHead(), is("1393706f1364742defbc28ba459082630ca979af"));
@@ -411,34 +505,39 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 is("https://github.com/hub4j-test-org/github-api.git"));
 
         // Test repository populate
-        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
-        assertThat(event.getRepository().getUrl().toString(), is("https://github.com/hub4j-test-org/github-api"));
-        assertThat(event.getRepository().getHttpTransportUrl(), is("https://github.com/hub4j-test-org/github-api.git"));
+        final GHEventPayload.Push event2 = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub),
+                GHEventPayload.Push.class);
+        assertThat(event2.getRepository().getUrl().toString(), is("https://github.com/hub4j-test-org/github-api"));
+        assertThat(event2.getRepository().getHttpTransportUrl(),
+                is("https://github.com/hub4j-test-org/github-api.git"));
 
-        event.getRepository().populate();
+        event2.getRepository().populate();
 
         // After populate the url is fixed to point to the correct API endpoint
-        assertThat(event.getRepository().getUrl().toString(),
+        assertThat(event2.getRepository().getUrl().toString(),
                 is(mockGitHub.apiServer().baseUrl() + "/repos/hub4j-test-org/github-api"));
-        assertThat(event.getRepository().getHttpTransportUrl(), is("https://github.com/hub4j-test-org/github-api.git"));
+        assertThat(event2.getRepository().getHttpTransportUrl(),
+                is("https://github.com/hub4j-test-org/github-api.git"));
 
         // ensure that root has been bound after populate
-        event.getRepository().getSource().getRef("heads/master");
-        event.getRepository().getParent().getRef("heads/master");
+        event2.getRepository().getSource().getRef("heads/main");
+        event2.getRepository().getParent().getRef("heads/main");
 
         // Source
-        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
-        assertThat(event.getRepository().getSource().getFullName(), is("hub4j/github-api"));
+        final GHEventPayload.Push event3 = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub),
+                GHEventPayload.Push.class);
+        assertThat(event3.getRepository().getSource().getFullName(), is("hub4j/github-api"));
 
         // Parent
-        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.Push.class);
-        assertThat(event.getRepository().getParent().getFullName(), is("hub4j/github-api"));
+        final GHEventPayload.Push event4 = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub),
+                GHEventPayload.Push.class);
+        assertThat(event4.getRepository().getParent().getFullName(), is("hub4j/github-api"));
 
     }
 
     @Test
     public void release_published() throws Exception {
-        GHEventPayload.Release event = GitHub.offline()
+        final GHEventPayload.Release event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Release.class);
 
         assertThat(event.getAction(), is("published"));
@@ -449,11 +548,13 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRelease().getName(), is("4.2"));
         assertThat(event.getRelease().getTagName(), is("rest-api-framework-4.2"));
         assertThat(event.getRelease().getBody(), is("REST-269 - unique test executions (#86) Sergey Chernov"));
+
+        assertThrows(RuntimeException.class, () -> event.setRelease(null));
     }
 
     @Test
     public void repository() throws Exception {
-        GHEventPayload.Repository event = GitHub.offline()
+        final GHEventPayload.Repository event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Repository.class);
         assertThat(event.getAction(), is("created"));
         assertThat(event.getRepository().getName(), is("new-repository"));
@@ -464,21 +565,27 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void status() throws Exception {
-        GHEventPayload.Status event = GitHub.offline()
+        final GHEventPayload.Status event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Status.class);
         assertThat(event.getContext(), is("default"));
         assertThat(event.getDescription(), is("status description"));
         assertThat(event.getState(), is(GHCommitState.SUCCESS));
         assertThat(event.getCommit().getSHA1(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
-        assertNull(event.getTargetUrl());
+        assertThat(event.getTargetUrl(), nullValue());
+        assertThat(event.getCommit().getOwner(), sameInstance(event.getRepository()));
+
+        assertThrows(RuntimeException.class, () -> event.setCommit(null));
+        assertThrows(RuntimeException.class, () -> event.setState(GHCommitState.ERROR));
     }
 
     @Test
     public void status2() throws Exception {
-        GHEventPayload.Status event = GitHub.offline()
+        final GHEventPayload.Status event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Status.class);
         assertThat(event.getTargetUrl(), is("https://www.wikipedia.org/"));
+
+        assertThat(event.getCommit().getOwner(), sameInstance(event.getRepository()));
     }
 
     // TODO implement support classes and write test
@@ -492,35 +599,40 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     @Test
     @Payload("check-run")
     public void checkRunEvent() throws Exception {
-        GHEventPayload.CheckRun event = GitHub.offline()
+        final GHEventPayload.CheckRun event = GitHub.offline()
                 .parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.CheckRun.class);
-        GHCheckRun checkRun = verifyBasicCheckRunEvent(event);
+        final GHCheckRun checkRun = verifyBasicCheckRunEvent(event);
         assertThat("pull body not populated offline", checkRun.getPullRequests().get(0).getBody(), nullValue());
         assertThat("using offline github", mockGitHub.getRequestCount(), equalTo(0));
+        assertThat(checkRun.getPullRequests().get(0).getRepository(), sameInstance(event.getRepository()));
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
-        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.CheckRun.class);
-        checkRun = verifyBasicCheckRunEvent(event);
+        final GHEventPayload.CheckRun event2 = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub),
+                GHEventPayload.CheckRun.class);
+        final GHCheckRun checkRun2 = verifyBasicCheckRunEvent(event2);
 
         int expectedRequestCount = mockGitHub.isUseProxy() ? 3 : 2;
         assertThat("pull body should be populated",
-                checkRun.getPullRequests().get(0).getBody(),
-                equalTo("This is a pretty simple change that we need to pull into master."));
+                checkRun2.getPullRequests().get(0).getBody(),
+                equalTo("This is a pretty simple change that we need to pull into main."));
         assertThat("multiple getPullRequests() calls are made, the pull is populated only once",
                 mockGitHub.getRequestCount(),
                 equalTo(expectedRequestCount));
     }
 
-    private GHCheckRun verifyBasicCheckRunEvent(GHEventPayload.CheckRun event) throws IOException {
+    private GHCheckRun verifyBasicCheckRunEvent(final GHEventPayload.CheckRun event) throws IOException {
         assertThat(event.getRepository().getName(), is("Hello-World"));
         assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
         assertThat(event.getAction(), is("created"));
+        assertThat(event.getRequestedAction(), nullValue());
+        assertThrows(RuntimeException.class, () -> event.setCheckRun(null));
+        assertThrows(RuntimeException.class, () -> event.setRequestedAction(null));
 
         // Checks the deserialization of check_run
-        GHCheckRun checkRun = event.getCheckRun();
+        final GHCheckRun checkRun = event.getCheckRun();
         assertThat(checkRun.getName(), is("Octocoders-linter"));
         assertThat(checkRun.getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
-        assertThat(checkRun.getStatus(), is("completed"));
+        assertThat(checkRun.getStatus(), is(Status.COMPLETED));
         assertThat(checkRun.getNodeId(), is("MDg6Q2hlY2tSdW4xMjg2MjAyMjg="));
         assertThat(checkRun.getExternalId(), is(""));
 
@@ -529,7 +641,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(formatter.format(checkRun.getStartedAt()), is("2019-05-15T15:21:12Z"));
         assertThat(formatter.format(checkRun.getCompletedAt()), is("2019-05-15T20:22:22Z"));
 
-        assertThat(checkRun.getConclusion(), is("success"));
+        assertThat(checkRun.getConclusion(), is(Conclusion.SUCCESS));
         assertThat(checkRun.getUrl().toString(), endsWith("/repos/Codertocat/Hello-World/check-runs/128620228"));
         assertThat(checkRun.getHtmlUrl().toString(),
                 endsWith("https://github.com/Codertocat/Hello-World/runs/128620228"));
@@ -555,34 +667,35 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     @Test
     @Payload("check-suite")
     public void checkSuiteEvent() throws Exception {
-        GHEventPayload.CheckSuite event = GitHub.offline()
+        final GHEventPayload.CheckSuite event = GitHub.offline()
                 .parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub), GHEventPayload.CheckSuite.class);
-        GHCheckSuite checkSuite = verifyBasicCheckSuiteEvent(event);
+        final GHCheckSuite checkSuite = verifyBasicCheckSuiteEvent(event);
         assertThat("pull body not populated offline", checkSuite.getPullRequests().get(0).getBody(), nullValue());
         assertThat("using offline github", mockGitHub.getRequestCount(), equalTo(0));
+        assertThat(checkSuite.getPullRequests().get(0).getRepository(), sameInstance(event.getRepository()));
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
-        event = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub),
+        final GHEventPayload.CheckSuite event2 = gitHub.parseEventPayload(payload.asReader(mockGitHub::mapToMockGitHub),
                 GHEventPayload.CheckSuite.class);
-        checkSuite = verifyBasicCheckSuiteEvent(event);
+        final GHCheckSuite checkSuite2 = verifyBasicCheckSuiteEvent(event2);
 
         int expectedRequestCount = mockGitHub.isUseProxy() ? 3 : 2;
         assertThat("pull body should be populated",
-                checkSuite.getPullRequests().get(0).getBody(),
-                equalTo("This is a pretty simple change that we need to pull into master."));
+                checkSuite2.getPullRequests().get(0).getBody(),
+                equalTo("This is a pretty simple change that we need to pull into main."));
         assertThat("multiple getPullRequests() calls are made, the pull is populated only once",
                 mockGitHub.getRequestCount(),
                 lessThanOrEqualTo(expectedRequestCount));
     }
 
-    private GHCheckSuite verifyBasicCheckSuiteEvent(GHEventPayload.CheckSuite event) throws IOException {
+    private GHCheckSuite verifyBasicCheckSuiteEvent(final GHEventPayload.CheckSuite event) throws IOException {
         assertThat(event.getRepository().getName(), is("Hello-World"));
         assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
         assertThat(event.getAction(), is("completed"));
         assertThat(event.getSender().getId(), is(21031067L));
 
         // Checks the deserialization of check_suite
-        GHCheckSuite checkSuite = event.getCheckSuite();
+        final GHCheckSuite checkSuite = event.getCheckSuite();
         assertThat(checkSuite.getNodeId(), is("MDEwOkNoZWNrU3VpdGUxMTg1NzgxNDc="));
         assertThat(checkSuite.getHeadBranch(), is("changes"));
         assertThat(checkSuite.getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
@@ -614,7 +727,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     @Test
     @Payload("installation_repositories")
     public void InstallationRepositoriesEvent() throws Exception {
-        GHEventPayload.InstallationRepositories event = GitHub.offline()
+        final GHEventPayload.InstallationRepositories event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.InstallationRepositories.class);
 
         assertThat(event.getAction(), is("added"));
@@ -635,7 +748,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     @Test
     @Payload("installation")
     public void InstallationEvent() throws Exception {
-        GHEventPayload.Installation event = GitHub.offline()
+        final GHEventPayload.Installation event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Installation.class);
 
         assertThat(event.getAction(), is("deleted"));
@@ -649,5 +762,161 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepositories().get(0).isPrivate(), is(false));
 
         assertThat(event.getSender().getLogin(), is("octocat"));
+    }
+
+    @Test
+    public void workflow_dispatch() throws Exception {
+        final GHEventPayload.WorkflowDispatch workflowDispatchPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.WorkflowDispatch.class);
+
+        assertThat(workflowDispatchPayload.getRef(), is("refs/heads/main"));
+        assertThat(workflowDispatchPayload.getAction(), is(nullValue()));
+        assertThat(workflowDispatchPayload.getWorkflow(), is(".github/workflows/main.yml"));
+        assertThat(workflowDispatchPayload.getInputs(), aMapWithSize(1));
+        assertThat(workflowDispatchPayload.getInputs().keySet(), contains("logLevel"));
+        assertThat(workflowDispatchPayload.getInputs().values(), contains("warning"));
+        assertThat(workflowDispatchPayload.getRepository().getName(), is("quarkus-bot-java-playground"));
+        assertThat(workflowDispatchPayload.getSender().getLogin(), is("gsmet"));
+    }
+
+    @Test
+    public void workflow_run() throws Exception {
+        final GHEventPayload.WorkflowRun workflowRunPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.WorkflowRun.class);
+
+        assertThat(workflowRunPayload.getAction(), is("completed"));
+        assertThat(workflowRunPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(workflowRunPayload.getSender().getLogin(), is("gsmet"));
+
+        GHWorkflow workflow = workflowRunPayload.getWorkflow();
+        assertThat(workflow.getId(), is(7087581L));
+        assertThat(workflow.getName(), is("CI"));
+        assertThat(workflow.getPath(), is(".github/workflows/main.yml"));
+        assertThat(workflow.getState(), is("active"));
+        assertThat(workflow.getUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/workflows/7087581"));
+        assertThat(workflow.getHtmlUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/blob/main/.github/workflows/main.yml"));
+        assertThat(workflow.getBadgeUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/workflows/CI/badge.svg"));
+
+        GHWorkflowRun workflowRun = workflowRunPayload.getWorkflowRun();
+        assertThat(workflowRun.getId(), is(680604745L));
+        assertThat(workflowRun.getName(), is("CI"));
+        assertThat(workflowRun.getHeadBranch(), is("main"));
+        assertThat(workflowRun.getHeadSha(), is("dbea8d8b6ed2cf764dfd84a215f3f9040b3d4423"));
+        assertThat(workflowRun.getRunNumber(), is(6L));
+        assertThat(workflowRun.getEvent(), is(GHEvent.WORKFLOW_DISPATCH));
+        assertThat(workflowRun.getStatus(), is(GHWorkflowRun.Status.COMPLETED));
+        assertThat(workflowRun.getConclusion(), is(GHWorkflowRun.Conclusion.SUCCESS));
+        assertThat(workflowRun.getWorkflowId(), is(7087581L));
+        assertThat(workflowRun.getUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745"));
+        assertThat(workflowRun.getHtmlUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/actions/runs/680604745"));
+        assertThat(workflowRun.getJobsUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/jobs"));
+        assertThat(workflowRun.getLogsUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/logs"));
+        assertThat(workflowRun.getCheckSuiteUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/check-suites/2327154397"));
+        assertThat(workflowRun.getArtifactsUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/artifacts"));
+        assertThat(workflowRun.getCancelUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/cancel"));
+        assertThat(workflowRun.getRerunUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/rerun"));
+        assertThat(workflowRun.getWorkflowUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/workflows/7087581"));
+        assertThat(workflowRun.getCreatedAt().getTime(), is(1616524526000L));
+        assertThat(workflowRun.getUpdatedAt().getTime(), is(1616524543000L));
+        assertThat(workflowRun.getHeadCommit().getId(), is("dbea8d8b6ed2cf764dfd84a215f3f9040b3d4423"));
+        assertThat(workflowRun.getHeadCommit().getTreeId(), is("b17089e6a2574ec1002566fe980923e62dce3026"));
+        assertThat(workflowRun.getHeadCommit().getMessage(), is("Update main.yml"));
+        assertThat(workflowRun.getHeadCommit().getTimestamp().getTime(), is(1616523390000L));
+        assertThat(workflowRun.getHeadCommit().getAuthor().getName(), is("Guillaume Smet"));
+        assertThat(workflowRun.getHeadCommit().getAuthor().getEmail(), is("guillaume.smet@gmail.com"));
+        assertThat(workflowRun.getHeadCommit().getCommitter().getName(), is("GitHub"));
+        assertThat(workflowRun.getHeadCommit().getCommitter().getEmail(), is("noreply@github.com"));
+        assertThat(workflowRun.getHeadRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(workflowRun.getRepository(), sameInstance(workflowRunPayload.getRepository()));
+    }
+
+    @Test
+    public void workflow_run_pull_request() throws Exception {
+        final GHEventPayload.WorkflowRun workflowRunPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.WorkflowRun.class);
+
+        List<GHPullRequest> pullRequests = workflowRunPayload.getWorkflowRun().getPullRequests();
+        assertThat(pullRequests.size(), is(1));
+
+        GHPullRequest pullRequest = pullRequests.get(0);
+        assertThat(pullRequest.getId(), is(599098265L));
+        assertThat(pullRequest.getRepository(), sameInstance(workflowRunPayload.getRepository()));
+
+    }
+
+    @Test
+    public void workflow_run_other_repository() throws Exception {
+        final GHEventPayload.WorkflowRun workflowRunPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.WorkflowRun.class);
+        GHWorkflowRun workflowRun = workflowRunPayload.getWorkflowRun();
+
+        assertThat(workflowRunPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(workflowRun.getHeadRepository().getFullName(),
+                is("gsmet-bot-playground/quarkus-bot-java-playground"));
+        assertThat(workflowRun.getRepository(), sameInstance(workflowRunPayload.getRepository()));
+        assertThat(workflowRunPayload.getWorkflow().getRepository(), sameInstance(workflowRunPayload.getRepository()));
+    }
+
+    @Test
+    public void label_created() throws Exception {
+        final GHEventPayload.Label labelPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Label.class);
+        GHLabel label = labelPayload.getLabel();
+
+        assertThat(labelPayload.getAction(), is("created"));
+        assertThat(labelPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(label.getId(), is(2901546662L));
+        assertThat(label.getNodeId(), is("MDU6TGFiZWwyOTAxNTQ2NjYy"));
+        assertThat(label.getName(), is("new-label"));
+        assertThat(label.getColor(), is("f9d0c4"));
+        assertThat(label.isDefault(), is(false));
+        assertThat(label.getDescription(), is("description"));
+    }
+
+    @Test
+    public void label_edited() throws Exception {
+        final GHEventPayload.Label labelPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Label.class);
+        GHLabel label = labelPayload.getLabel();
+
+        assertThat(labelPayload.getAction(), is("edited"));
+        assertThat(labelPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(label.getId(), is(2901546662L));
+        assertThat(label.getNodeId(), is("MDU6TGFiZWwyOTAxNTQ2NjYy"));
+        assertThat(label.getName(), is("new-label-updated"));
+        assertThat(label.getColor(), is("4AE686"));
+        assertThat(label.isDefault(), is(false));
+        assertThat(label.getDescription(), is("description"));
+
+        assertThat(labelPayload.getChanges().getName().getFrom(), is("new-label"));
+        assertThat(labelPayload.getChanges().getColor().getFrom(), is("f9d0c4"));
+    }
+
+    @Test
+    public void label_deleted() throws Exception {
+        GHEventPayload.Label labelPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Label.class);
+        GHLabel label = labelPayload.getLabel();
+
+        assertThat(labelPayload.getAction(), is("deleted"));
+        assertThat(labelPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(label.getId(), is(2901546662L));
+        assertThat(label.getNodeId(), is("MDU6TGFiZWwyOTAxNTQ2NjYy"));
+        assertThat(label.getName(), is("new-label-updated"));
+        assertThat(label.getColor(), is("4AE686"));
+        assertThat(label.isDefault(), is(false));
+        assertThat(label.getDescription(), is("description"));
     }
 }

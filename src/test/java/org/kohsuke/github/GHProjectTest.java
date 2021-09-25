@@ -1,12 +1,13 @@
 package org.kohsuke.github;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Gunnar Skjold
@@ -20,38 +21,40 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testCreatedProject() {
-        Assert.assertNotNull(project);
-        Assert.assertEquals("test-project", project.getName());
-        Assert.assertEquals("This is a test project", project.getBody());
-        Assert.assertEquals(GHProject.ProjectState.OPEN, project.getState());
+    public void testCreatedProject() throws IOException {
+        assertThat(project, notNullValue());
+        assertThat(project.getName(), equalTo("test-project"));
+        assertThat(project.getBody(), equalTo("This is a test project"));
+        assertThat(project.getState(), equalTo(GHProject.ProjectState.OPEN));
+        assertThat(project.getHtmlUrl().toString(), containsString("/orgs/hub4j-test-org/projects/"));
+        assertThat(project.getUrl().toString(), containsString("/projects/"));
     }
 
     @Test
     public void testEditProjectName() throws IOException {
         project.setName("new-name");
         project = gitHub.getProject(project.getId());
-        Assert.assertEquals("new-name", project.getName());
-        Assert.assertEquals("This is a test project", project.getBody());
-        Assert.assertEquals(GHProject.ProjectState.OPEN, project.getState());
+        assertThat(project.getName(), equalTo("new-name"));
+        assertThat(project.getBody(), equalTo("This is a test project"));
+        assertThat(project.getState(), equalTo(GHProject.ProjectState.OPEN));
     }
 
     @Test
     public void testEditProjectBody() throws IOException {
         project.setBody("New body");
         project = gitHub.getProject(project.getId());
-        Assert.assertEquals("test-project", project.getName());
-        Assert.assertEquals("New body", project.getBody());
-        Assert.assertEquals(GHProject.ProjectState.OPEN, project.getState());
+        assertThat(project.getName(), equalTo("test-project"));
+        assertThat(project.getBody(), equalTo("New body"));
+        assertThat(project.getState(), equalTo(GHProject.ProjectState.OPEN));
     }
 
     @Test
     public void testEditProjectState() throws IOException {
         project.setState(GHProject.ProjectState.CLOSED);
         project = gitHub.getProject(project.getId());
-        Assert.assertEquals("test-project", project.getName());
-        Assert.assertEquals("This is a test project", project.getBody());
-        Assert.assertEquals(GHProject.ProjectState.CLOSED, project.getState());
+        assertThat(project.getName(), equalTo("test-project"));
+        assertThat(project.getBody(), equalTo("This is a test project"));
+        assertThat(project.getState(), equalTo(GHProject.ProjectState.CLOSED));
     }
 
     @Test
@@ -59,7 +62,7 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
         project.delete();
         try {
             project = gitHub.getProject(project.getId());
-            Assert.assertNull(project);
+            assertThat(project, nullValue());
         } catch (FileNotFoundException e) {
             project = null;
         }
@@ -69,7 +72,7 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     public void after() throws IOException {
         if (mockGitHub.isUseProxy()) {
             if (project != null) {
-                project = getGitHubBeforeAfter().getProject(project.getId());
+                project = getNonRecordingGitHub().getProject(project.getId());
                 try {
                     project.delete();
                     project = null;

@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.util.Date;
 
@@ -75,6 +77,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
         return repo;
     }
@@ -86,16 +89,11 @@ public class GHSubscription extends GitHubInteractiveObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root.createRequest().method("DELETE").withUrlPath(repo.getApiTailUrl("subscription")).send();
+        root().createRequest().method("DELETE").withUrlPath(repo.getApiTailUrl("subscription")).send();
     }
 
     GHSubscription wrapUp(GHRepository repo) {
         this.repo = repo;
-        return wrapUp(repo.root);
-    }
-
-    GHSubscription wrapUp(GitHub root) {
-        this.root = root;
         return this;
     }
 }

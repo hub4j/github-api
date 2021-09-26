@@ -116,7 +116,7 @@ class GHHooks {
                     ea.add(e.symbol());
             }
 
-            GHHook hook = root.createRequest()
+            GHHook hook = root().createRequest()
                     .method("PATCH")
                     .with("name", name)
                     .with("active", active)

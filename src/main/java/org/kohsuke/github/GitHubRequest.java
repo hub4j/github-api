@@ -92,21 +92,19 @@ class GitHubRequest {
     @Nonnull
     static URL getApiURL(String apiUrl, String tailApiUrl) {
         try {
-            if (tailApiUrl.startsWith("/")) {
-                if ("github.com".equals(apiUrl)) {// backward compatibility
-                    return new URL(GitHubClient.GITHUB_URL + tailApiUrl);
-                } else {
-                    return new URL(apiUrl + tailApiUrl);
-                }
-            } else {
-                return new URL(tailApiUrl);
+            if (!tailApiUrl.startsWith("/")) {
+                apiUrl = "";
+            } else if ("github.com".equals(apiUrl)) {
+                // backward compatibility
+                apiUrl = GitHubClient.GITHUB_URL;
             }
-        } catch (MalformedURLException e) {
+            return new URL(apiUrl + tailApiUrl);
+        } catch (Exception e) {
             // The data going into constructing this URL should be controlled by the GitHub API framework,
             // so a malformed URL here is a framework runtime error.
             // All callers of this method ended up wrapping and throwing GHException,
             // indicating the functionality should be moved to the common code path.
-            throw new GHException("Malformed URL ", e);
+            throw new GHException("Unable to build GitHub API URL", e);
         }
     }
 

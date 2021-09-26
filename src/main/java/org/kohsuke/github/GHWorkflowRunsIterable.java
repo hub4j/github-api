@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.net.MalformedURLException;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
@@ -16,11 +15,7 @@ class GHWorkflowRunsIterable extends PagedIterable<GHWorkflowRun> {
 
     public GHWorkflowRunsIterable(GHRepository owner, GitHubRequest.Builder<?> requestBuilder) {
         this.owner = owner;
-        try {
-            this.request = requestBuilder.build();
-        } catch (MalformedURLException e) {
-            throw new GHException("Malformed URL", e);
-        }
+        this.request = requestBuilder.build();
     }
 
     @Nonnull

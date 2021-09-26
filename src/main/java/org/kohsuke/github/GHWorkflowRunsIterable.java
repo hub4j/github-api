@@ -13,9 +13,9 @@ class GHWorkflowRunsIterable extends PagedIterable<GHWorkflowRun> {
 
     private GHWorkflowRunsPage result;
 
-    public GHWorkflowRunsIterable(GHRepository owner, GitHubRequest request) {
+    public GHWorkflowRunsIterable(GHRepository owner, GitHubRequest.Builder<?> requestBuilder) {
         this.owner = owner;
-        this.request = request;
+        this.request = requestBuilder.build();
     }
 
     @Nonnull

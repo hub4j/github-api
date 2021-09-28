@@ -13,14 +13,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [ 16 ]
+        java: [ 16, 17 ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'adopt'
+          distribution: 'zulu'
       - name: Cached .m2
         uses: actions/cache@v2.1.6
         with:
@@ -39,14 +39,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu, windows ]
-        java: [ 8, 11, 16 ]
+        java: [ 8.0.192, 8, 11, 11.0.3, 16, 17 ]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.java }}
-        distribution: 'adopt'
+        distribution: 'zulu'
     - uses: actions/cache@v2.1.6
       with:
         path: ~/.m2/repository

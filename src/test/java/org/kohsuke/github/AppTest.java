@@ -296,10 +296,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
         List<GHIssue> openBugIssues = gitHub.getOrganization("hub4j-test-org")
                 .getRepository("testQueryIssues")
                 .queryIssues()
+                .milestone("1")
+                .creator(gitHub.getMyself().getLogin())
                 .state(GHIssueState.OPEN)
                 .label("bug")
-                .creator(gitHub.getMyself().getLogin())
-                .milestone("1")
                 .pageSize(10)
                 .list()
                 .toList();
@@ -308,8 +308,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
         List<GHIssue> openIssuesWithAssignee = gitHub.getOrganization("hub4j-test-org")
                 .getRepository("testQueryIssues")
                 .queryIssues()
-                .state(GHIssueState.OPEN)
                 .assignee(gitHub.getMyself().getLogin())
+                .state(GHIssueState.OPEN)
                 .list()
                 .toList();
         assertThat(openIssuesWithAssignee, is(not(empty())));
@@ -317,8 +317,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
         List<GHIssue> allIssuesSince = gitHub.getOrganization("hub4j-test-org")
                 .getRepository("testQueryIssues")
                 .queryIssues()
-                .state(GHIssueState.ALL)
                 .mentioned(gitHub.getMyself().getLogin())
+                .state(GHIssueState.ALL)
                 .since(1632411646L)
                 .sort(GHIssueQueryBuilder.Sort.COMMENTS)
                 .direction(GHDirection.ASC)

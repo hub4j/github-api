@@ -5,28 +5,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
-    private final GHRepository repo;
+public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
     private final List<String> labels = new ArrayList<>();
 
-    GHIssueQueryBuilder(GHRepository repo) {
-        super(repo.root());
-        this.repo = repo;
-    }
-
-    /**
-     * Milestone gh issue query builder.
-     *
-     * The milestone must be either an integer (the milestone number), the string * (issues with any milestone) or the
-     * string none (issues without milestone).
-     *
-     * @param milestone
-     *            the milestone
-     * @return the gh issue request query builder
-     */
-    public GHIssueQueryBuilder milestone(String milestone) {
-        req.with("milestone", milestone);
-        return this;
+    GHIssueQueryBuilder(GitHub root) {
+        super(root);
     }
 
     /**
@@ -38,42 +21,6 @@ public class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
      */
     public GHIssueQueryBuilder state(GHIssueState state) {
         req.with("state", state);
-        return this;
-    }
-
-    /**
-     * Assignee gh issue query builder.
-     *
-     * @param assignee
-     *            the assignee
-     * @return the gh issue query builder
-     */
-    public GHIssueQueryBuilder assignee(String assignee) {
-        req.with("assignee", assignee);
-        return this;
-    }
-
-    /**
-     * Creator gh issue query builder.
-     *
-     * @param creator
-     *            the creator
-     * @return the gh issue query builder
-     */
-    public GHIssueQueryBuilder creator(String creator) {
-        req.with("creator", creator);
-        return this;
-    }
-
-    /**
-     * Mentioned gh issue query builder.
-     *
-     * @param mentioned
-     *            the mentioned
-     * @return the gh issue query builder
-     */
-    public GHIssueQueryBuilder mentioned(String mentioned) {
-        req.with("mentioned", mentioned);
         return this;
     }
 
@@ -151,15 +98,18 @@ public class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
         return this;
     }
 
-    @Override
-    public PagedIterable<GHIssue> list() {
-        return req.withUrlPath(repo.getApiTailUrl("issues")).toIterable(GHIssue[].class, item -> item.wrap(repo));
-    }
-
     /**
      * The enum Sort.
      */
     public enum Sort {
         CREATED, UPDATED, COMMENTS
     }
+
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
+    public abstract String getApiUrl();
+
 }

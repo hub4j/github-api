@@ -426,8 +426,8 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHIssue> getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
-        return queryIssues().state(state)
-                .milestone(milestone == null ? "none" : "" + milestone.getNumber())
+        return queryIssues().milestone(milestone == null ? "none" : "" + milestone.getNumber())
+                .state(state)
                 .list()
                 .toList();
     }
@@ -450,8 +450,8 @@ public class GHRepository extends GHObject {
      *
      * @return the gh issue query builder
      */
-    public GHIssueQueryBuilder queryIssues() {
-        return new GHIssueQueryBuilder(this);
+    public GHIssueQueryBuilderForRepository queryIssues() {
+        return new GHIssueQueryBuilderForRepository(this);
     }
 
     /**

@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
     private final List<String> labels = new ArrayList<>();
@@ -34,7 +33,7 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
     public GHIssueQueryBuilder label(String label) {
         if (label != null && !label.trim().isEmpty()) {
             labels.add(label);
-            req.with("labels", labels.stream().collect(Collectors.joining(",")));
+            req.with("labels", String.join(",", labels));
         }
         return this;
     }

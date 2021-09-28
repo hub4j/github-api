@@ -450,8 +450,8 @@ public class GHRepository extends GHObject {
      *
      * @return the gh issue query builder
      */
-    public GHIssueQueryBuilderForRepository queryIssues() {
-        return new GHIssueQueryBuilderForRepository(this);
+    public GHIssueQueryBuilder.ForRepository queryIssues() {
+        return new GHIssueQueryBuilder.ForRepository(this);
     }
 
     /**

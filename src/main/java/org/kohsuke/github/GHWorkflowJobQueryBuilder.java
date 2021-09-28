@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import java.net.MalformedURLException;
-
 /**
  * Lists up jobs of a workflow run with some filtering.
  *
@@ -38,10 +36,6 @@ public class GHWorkflowJobQueryBuilder extends GHQueryBuilder<GHWorkflowJob> {
 
     @Override
     public PagedIterable<GHWorkflowJob> list() {
-        try {
-            return new GHWorkflowJobsIterable(repo, req.build());
-        } catch (MalformedURLException e) {
-            throw new GHException(e.getMessage(), e);
-        }
+        return new GHWorkflowJobsIterable(repo, req.build());
     }
 }

@@ -302,14 +302,23 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .pageSize(10)
                 .list()
                 .toList();
+        GHIssue issueWithMilestone = openBugIssues.get(0);
         assertThat(openBugIssues, is(not(empty())));
+        assertThat(openBugIssues, hasSize(1));
+        assertThat(issueWithMilestone.getTitle(), is("Issue with milestone"));
+        assertThat(issueWithMilestone.getAssignee().getLogin(), is("bloslo"));
+        assertThat(issueWithMilestone.getBody(), containsString("@bloslo"));
 
         List<GHIssue> openIssuesWithAssignee = repo.queryIssues()
                 .assignee(gitHub.getMyself().getLogin())
                 .state(GHIssueState.OPEN)
                 .list()
                 .toList();
+        GHIssue issueWithAssignee = openIssuesWithAssignee.get(0);
         assertThat(openIssuesWithAssignee, is(not(empty())));
+        assertThat(openIssuesWithAssignee, hasSize(1));
+        assertThat(issueWithAssignee.getLabels(), hasSize(2));
+        assertThat(issueWithAssignee.getMilestone(), is(notNullValue()));
 
         List<GHIssue> allIssuesSince = repo.queryIssues()
                 .mentioned(gitHub.getMyself().getLogin())
@@ -319,7 +328,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .direction(GHDirection.ASC)
                 .list()
                 .toList();
+        GHIssue issueSince = allIssuesSince.get(3);
         assertThat(allIssuesSince, is(not(empty())));
+        assertThat(allIssuesSince, hasSize(4));
+        assertThat(issueSince.getBody(), is("Test closed issue @bloslo"));
+        assertThat(issueSince.getState(), is(GHIssueState.CLOSED));
     }
 
     private GHRepository getTestRepository() throws IOException {

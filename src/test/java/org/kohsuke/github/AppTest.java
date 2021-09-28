@@ -293,9 +293,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testQueryIssues() throws IOException {
-        List<GHIssue> openBugIssues = gitHub.getOrganization("hub4j-test-org")
-                .getRepository("testQueryIssues")
-                .queryIssues()
+        final GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("testQueryIssues");
+        List<GHIssue> openBugIssues = repo.queryIssues()
                 .milestone("1")
                 .creator(gitHub.getMyself().getLogin())
                 .state(GHIssueState.OPEN)
@@ -305,18 +304,14 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .toList();
         assertThat(openBugIssues, is(not(empty())));
 
-        List<GHIssue> openIssuesWithAssignee = gitHub.getOrganization("hub4j-test-org")
-                .getRepository("testQueryIssues")
-                .queryIssues()
+        List<GHIssue> openIssuesWithAssignee = repo.queryIssues()
                 .assignee(gitHub.getMyself().getLogin())
                 .state(GHIssueState.OPEN)
                 .list()
                 .toList();
         assertThat(openIssuesWithAssignee, is(not(empty())));
 
-        List<GHIssue> allIssuesSince = gitHub.getOrganization("hub4j-test-org")
-                .getRepository("testQueryIssues")
-                .queryIssues()
+        List<GHIssue> allIssuesSince = repo.queryIssues()
                 .mentioned(gitHub.getMyself().getLogin())
                 .state(GHIssueState.ALL)
                 .since(1632411646L)

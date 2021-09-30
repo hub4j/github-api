@@ -412,7 +412,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
-        return listIssues(state).toList();
+        return queryIssues().state(state).list().toList();
     }
 
     /**
@@ -427,11 +427,9 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHIssue> getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
-        Requester requester = root().createRequest()
-                .with("state", state)
-                .with("milestone", milestone == null ? "none" : "" + milestone.getNumber());
-        return requester.withUrlPath(getApiTailUrl("issues"))
-                .toIterable(GHIssue[].class, item -> item.wrap(this))
+        return queryIssues().milestone(milestone == null ? "none" : "" + milestone.getNumber())
+                .state(state)
+                .list()
                 .toList();
     }
 
@@ -441,12 +439,20 @@ public class GHRepository extends GHObject {
      * @param state
      *            the state
      * @return the paged iterable
+     * @deprecated Use {@link #queryIssues()}
      */
+    @Deprecated
     public PagedIterable<GHIssue> listIssues(final GHIssueState state) {
-        return root().createRequest()
-                .with("state", state)
-                .withUrlPath(getApiTailUrl("issues"))
-                .toIterable(GHIssue[].class, item -> item.wrap(this));
+        return queryIssues().state(state).list();
+    }
+
+    /**
+     * Retrieves issues.
+     *
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder.ForRepository queryIssues() {
+        return new GHIssueQueryBuilder.ForRepository(this);
     }
 
     /**

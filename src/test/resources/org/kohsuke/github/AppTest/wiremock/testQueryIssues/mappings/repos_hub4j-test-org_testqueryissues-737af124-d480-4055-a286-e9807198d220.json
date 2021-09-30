@@ -1,0 +1,51 @@
+{
+  "id": "737af124-d480-4055-a286-e9807198d220",
+  "name": "repos_hub4j-test-org_testqueryissues",
+  "request": {
+    "url": "/repos/hub4j-test-org/testQueryIssues",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_testqueryissues-737af124-d480-4055-a286-e9807198d220.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 25 Sep 2021 08:48:58 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"86d77e788a6b37fd498f4ed3d2680c7bc3144262673926434bc4f56b739e3888\"",
+      "Last-Modified": "Sat, 25 Sep 2021 07:12:07 GMT",
+      "X-OAuth-Scopes": "public_repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2021-10-24 13:45:13 UTC",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4996",
+      "X-RateLimit-Reset": "1632563336",
+      "X-RateLimit-Used": "4",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D3A9:D682:7D4727:8A411C:614EE27A"
+    }
+  },
+  "uuid": "737af124-d480-4055-a286-e9807198d220",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-testQueryIssues",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-testQueryIssues-2",
+  "insertionIndex": 3
+}

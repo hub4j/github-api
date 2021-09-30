@@ -1,0 +1,46 @@
+{
+  "id": "bec01dd6-87de-4b13-ae20-e3ff67224dc1",
+  "name": "repos_mxandeco_temp-createdispatcheventwithclientpayload_dispatches",
+  "request": {
+    "url": "/repos/mxandeco/temp-createDispatchEventWithClientPayload/dispatches",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"event_type\":\"test\",\"client_payload\":{\"name\":\"joe.doe\",\"list\":[]}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 30 Sep 2021 12:14:44 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4978",
+      "X-RateLimit-Reset": "1633006817",
+      "X-RateLimit-Used": "22",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "DB12:E725:29EDE6:2B6567:6155AA34"
+    }
+  },
+  "uuid": "bec01dd6-87de-4b13-ae20-e3ff67224dc1",
+  "persistent": true,
+  "insertionIndex": 3
+}

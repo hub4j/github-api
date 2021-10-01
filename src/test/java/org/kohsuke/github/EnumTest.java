@@ -80,6 +80,8 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHTeam.Privacy.values().length, equalTo(2));
 
         assertThat(GHUserSearchBuilder.Sort.values().length, equalTo(3));
+
+        assertThat(GHIssueQueryBuilder.Sort.values().length, equalTo(3));
     }
 
 }

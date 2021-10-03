@@ -79,6 +79,15 @@ public class GHIssue extends GHObject implements Reactable {
         return this;
     }
 
+    String getRepositoryUrlPath() {
+        String url = getUrl().toString();
+        int index = url.indexOf("/issues");
+        if (index == -1) {
+            index = url.indexOf("/pulls");
+        }
+        return url.substring(0, index);
+    }
+
     /**
      * Repository to which the issue belongs.
      *

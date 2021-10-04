@@ -647,6 +647,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * The status of auto merging a {@linkplain GHPullRequest}.
      *
      */
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     public static class AutoMerge {
 
         private GHUser enabled_by;
@@ -669,7 +670,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          *
          * @return the {@linkplain MergeMethod}
          */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
         public MergeMethod getMergeMethod() {
             return merge_method;
         }
@@ -679,7 +679,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          *
          * @return the title of the commit
          */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
         public String getCommitTitle() {
             return commit_title;
         }
@@ -689,7 +688,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          *
          * @return the message of the commit
          */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
         public String getCommitMessage() {
             return commit_message;
         }

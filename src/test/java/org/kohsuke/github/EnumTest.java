@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.GHPullRequest.MergeMethod;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -55,7 +56,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHProject.ProjectState.values().length, equalTo(2));
         assertThat(GHProject.ProjectStateFilter.values().length, equalTo(3));
 
-        assertThat(GHPullRequest.MergeMethod.values().length, equalTo(3));
+        assertThat(MergeMethod.values().length, equalTo(3));
 
         assertThat(GHPullRequestQueryBuilder.Sort.values().length, equalTo(4));
 

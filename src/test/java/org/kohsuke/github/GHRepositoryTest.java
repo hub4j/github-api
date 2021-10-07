@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -985,6 +986,21 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(compare.getTotalCommits(), is(283));
         assertThat(actualCount, is(283));
         assertThat(mockGitHub.getRequestCount(), equalTo(startingCount + 4));
+    }
+
+    @Test
+    public void createDispatchEventWithoutClientPayload() throws Exception {
+        GHRepository repository = getTempRepository();
+        repository.dispatch("test", null);
+    }
+
+    @Test
+    public void createDispatchEventWithClientPayload() throws Exception {
+        GHRepository repository = getTempRepository();
+        Map<String, Object> clientPayload = new HashMap<>();
+        clientPayload.put("name", "joe.doe");
+        clientPayload.put("list", new ArrayList<>());
+        repository.dispatch("test", clientPayload);
     }
 
 }

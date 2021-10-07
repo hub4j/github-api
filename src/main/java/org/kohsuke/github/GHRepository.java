@@ -57,6 +57,7 @@ import java.util.TreeMap;
 import java.util.WeakHashMap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
@@ -3209,6 +3210,26 @@ public class GHRepository extends GHObject {
      */
     public <T> T readTar(InputStreamFunction<T> streamFunction, String ref) throws IOException {
         return downloadArchive("tar", ref, streamFunction);
+    }
+
+    /**
+     * Create a repository dispatch event, which can be used to start a workflow/action from outside github, as
+     * described on https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event
+     *
+     * @param eventType
+     *            the eventType
+     * @param clientPayload
+     *            a custom payload , can be nullable
+     * @throws IOException
+     *             the io exception
+     */
+    public <T> void dispatch(String eventType, @Nullable T clientPayload) throws IOException {
+        root().createRequest()
+                .method("POST")
+                .withUrlPath(getApiTailUrl("dispatches"))
+                .with("event_type", eventType)
+                .with("client_payload", clientPayload)
+                .send();
     }
 
     private <T> T downloadArchive(@Nonnull String type,

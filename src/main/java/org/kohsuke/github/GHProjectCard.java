@@ -131,8 +131,9 @@ public class GHProjectCard extends GHObject {
             } else {
                 issue = root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);
             }
-            GHRepository repository =
-                root().createRequest().withUrlPath(issue.getRepositoryUrlPath()).fetch(GHRepository.class);
+            GHRepository repository = root().createRequest()
+                    .withUrlPath(issue.getRepositoryUrlPath())
+                    .fetch(GHRepository.class);
             issue.wrap(repository);
             return issue;
         } catch (FileNotFoundException e) {

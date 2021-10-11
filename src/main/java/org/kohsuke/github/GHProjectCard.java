@@ -115,7 +115,7 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets content. May be a {@link GHPullRequest} or a {@link GHIssue}.
+     * Gets content if present. Might be a {@link GHPullRequest} or a {@link GHIssue}.
      *
      * @return the content
      * @throws IOException
@@ -125,17 +125,11 @@ public class GHProjectCard extends GHObject {
         if (StringUtils.isEmpty(content_url))
             return null;
         try {
-            GHIssue issue;
             if (content_url.contains("/pulls")) {
-                issue = root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHPullRequest.class);
+                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHPullRequest.class);
             } else {
-                issue = root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);
+                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);
             }
-            GHRepository repository = root().createRequest()
-                    .withUrlPath(issue.getRepositoryUrlPath())
-                    .fetch(GHRepository.class);
-            issue.wrap(repository);
-            return issue;
         } catch (FileNotFoundException e) {
             return null;
         }

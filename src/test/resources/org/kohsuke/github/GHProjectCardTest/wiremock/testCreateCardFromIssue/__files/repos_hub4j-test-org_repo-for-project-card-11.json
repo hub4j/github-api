@@ -85,14 +85,14 @@
   "mirror_url": null,
   "archived": false,
   "disabled": false,
-  "open_issues_count": 0,
+  "open_issues_count": 1,
   "license": null,
   "allow_forking": true,
   "is_template": false,
   "topics": [],
   "visibility": "public",
   "forks": 0,
-  "open_issues": 0,
+  "open_issues": 1,
   "watchers": 0,
   "default_branch": "main",
   "permissions": {
@@ -102,6 +102,7 @@
     "triage": true,
     "pull": true
   },
+  "temp_clone_token": "",
   "allow_squash_merge": true,
   "allow_merge_commit": true,
   "allow_rebase_merge": true,
@@ -128,5 +129,5 @@
     "site_admin": false
   },
   "network_count": 0,
-  "subscribers_count": 0
+  "subscribers_count": 15
 }

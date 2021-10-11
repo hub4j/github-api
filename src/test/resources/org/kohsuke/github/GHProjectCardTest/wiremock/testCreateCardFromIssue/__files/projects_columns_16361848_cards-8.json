@@ -1,9 +1,9 @@
 {
-  "url": "https://api.github.com/projects/columns/cards/27353274",
-  "project_url": "https://api.github.com/projects/3312449",
-  "id": 27353274,
-  "node_id": "MDExOlByb2plY3RDYXJkMjczNTMyNzQ=",
-  "note": "This is a card",
+  "url": "https://api.github.com/projects/columns/cards/70575566",
+  "project_url": "https://api.github.com/projects/13495086",
+  "id": 70575566,
+  "node_id": "PRC_lADOAHMfo84AzesuzgQ05c4",
+  "note": null,
   "archived": false,
   "creator": {
     "login": "bitwiseman",
@@ -25,7 +25,8 @@
     "type": "User",
     "site_admin": false
   },
-  "created_at": "2019-10-04T17:25:11Z",
-  "updated_at": "2019-10-04T17:25:11Z",
-  "column_url": "https://api.github.com/projects/columns/6706803"
+  "created_at": "2021-10-11T15:43:41Z",
+  "updated_at": "2021-10-11T15:43:41Z",
+  "column_url": "https://api.github.com/projects/columns/16361848",
+  "content_url": "https://api.github.com/repos/hub4j-test-org/repo-for-project-card/issues/1"
 }

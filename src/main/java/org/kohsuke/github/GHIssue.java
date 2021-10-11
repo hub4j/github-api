@@ -79,7 +79,7 @@ public class GHIssue extends GHObject implements Reactable {
         return this;
     }
 
-    String getRepositoryUrlPath() {
+    private String getRepositoryUrlPath() {
         String url = getUrl().toString();
         int index = url.indexOf("/issues");
         if (index == -1) {
@@ -95,6 +95,14 @@ public class GHIssue extends GHObject implements Reactable {
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
+        try {
+            if (owner == null) {
+                String repositoryUrlPath = getRepositoryUrlPath();
+                wrap(root().createRequest().withUrlPath(repositoryUrlPath).fetch(GHRepository.class));
+            }
+        } catch (IOException e) {
+            throw new GHException("Failed to fetch repository", e);
+        }
         return owner;
     }
 

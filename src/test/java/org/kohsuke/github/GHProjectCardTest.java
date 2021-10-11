@@ -55,8 +55,8 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
             GHIssue issue = repo.createIssue("new-issue").body("With body").create();
             GHProjectCard card = column.createCard(issue);
             assertThat(card.getContentUrl(), equalTo(issue.getUrl()));
-            assertThat(card.getContent(), notNullValue());
-            assertThat(card.getContent().getRepository(), notNullValue());
+            assertThat(card.getContent().getUrl(), equalTo(issue.getUrl()));
+            assertThat(card.getContent().getRepository().getUrl(), equalTo(repo.getUrl()));
         } finally {
             repo.delete();
         }

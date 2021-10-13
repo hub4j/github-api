@@ -96,9 +96,11 @@ public class GHIssue extends GHObject implements Reactable {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
         try {
-            if (owner == null) {
-                String repositoryUrlPath = getRepositoryUrlPath();
-                wrap(root().createRequest().withUrlPath(repositoryUrlPath).fetch(GHRepository.class));
+            synchronized (this) {
+                if (owner == null) {
+                    String repositoryUrlPath = getRepositoryUrlPath();
+                    wrap(root().createRequest().withUrlPath(repositoryUrlPath).fetch(GHRepository.class));
+                }
             }
         } catch (IOException e) {
             throw new GHException("Failed to fetch repository", e);
@@ -612,7 +614,8 @@ public class GHIssue extends GHObject implements Reactable {
             final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
             return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
         }
-        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/issues/" + number;
+        GHRepository repo = getRepository();
+        return "/repos/" + repo.getOwnerName() + "/" + repo.getName() + "/issues/" + number;
     }
 
     /**
@@ -757,7 +760,7 @@ public class GHIssue extends GHObject implements Reactable {
      */
     public PagedIterable<GHIssueEvent> listEvents() throws IOException {
         return root().createRequest()
-                .withUrlPath(owner.getApiTailUrl(String.format("/issues/%s/events", number)))
+                .withUrlPath(getRepository().getApiTailUrl(String.format("/issues/%s/events", number)))
                 .toIterable(GHIssueEvent[].class, item -> item.wrapUp(this));
     }
 }

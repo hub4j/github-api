@@ -1,0 +1,55 @@
+{
+  "id": "49169238-37a9-4aeb-8f60-9f6ea6d41a9d",
+  "name": "orgs_hub4j-test-org_repos",
+  "request": {
+    "url": "/orgs/hub4j-test-org/repos",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"auto_init\":true,\"name\":\"repo-for-project-card\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "orgs_hub4j-test-org_repos-6.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 21 Oct 2021 06:17:49 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"586763064fd0ba0fc72f3415d4a04b059d8fa4ab284675c79e46c5c2d6b575a4\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "public_repo, repo",
+      "github-authentication-token-expiration": "2022-01-19 07:08:40 UTC",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4828",
+      "X-RateLimit-Reset": "1634798069",
+      "X-RateLimit-Used": "172",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DA08:9770:187ABBA:19A9F81:6171060C",
+      "Location": "https://api.github.com/repos/hub4j-test-org/repo-for-project-card"
+    }
+  },
+  "uuid": "49169238-37a9-4aeb-8f60-9f6ea6d41a9d",
+  "persistent": true,
+  "insertionIndex": 6
+}

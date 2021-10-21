@@ -1,6 +1,6 @@
 {
-  "id": 415990154,
-  "node_id": "R_kgDOGMuBig",
+  "id": 419604238,
+  "node_id": "R_kgDOGQKnDg",
   "name": "repo-for-project-card",
   "full_name": "hub4j-test-org/repo-for-project-card",
   "private": false,
@@ -64,9 +64,9 @@
   "labels_url": "https://api.github.com/repos/hub4j-test-org/repo-for-project-card/labels{/name}",
   "releases_url": "https://api.github.com/repos/hub4j-test-org/repo-for-project-card/releases{/id}",
   "deployments_url": "https://api.github.com/repos/hub4j-test-org/repo-for-project-card/deployments",
-  "created_at": "2021-10-11T15:43:39Z",
-  "updated_at": "2021-10-11T15:43:39Z",
-  "pushed_at": "2021-10-11T15:43:39Z",
+  "created_at": "2021-10-21T06:17:48Z",
+  "updated_at": "2021-10-21T06:17:48Z",
+  "pushed_at": "2021-10-21T06:17:49Z",
   "git_url": "git://github.com/hub4j-test-org/repo-for-project-card.git",
   "ssh_url": "git@github.com:hub4j-test-org/repo-for-project-card.git",
   "clone_url": "https://github.com/hub4j-test-org/repo-for-project-card.git",
@@ -128,5 +128,5 @@
     "site_admin": false
   },
   "network_count": 0,
-  "subscribers_count": 0
+  "subscribers_count": 7
 }

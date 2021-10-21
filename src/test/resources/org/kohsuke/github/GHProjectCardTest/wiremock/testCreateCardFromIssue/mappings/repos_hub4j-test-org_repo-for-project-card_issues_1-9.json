@@ -1,43 +1,37 @@
 {
-  "id": "ce593eac-ae9c-43e9-a27d-6c6e38f8df53",
-  "name": "orgs_hub4j-test-org_repos",
+  "id": "066e0774-c83e-4c22-b881-3b9152bbf79a",
+  "name": "repos_hub4j-test-org_repo-for-project-card_issues_1",
   "request": {
-    "url": "/orgs/hub4j-test-org/repos",
-    "method": "POST",
+    "url": "/repos/hub4j-test-org/repo-for-project-card/issues/1",
+    "method": "GET",
     "headers": {
       "Accept": {
         "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
       }
-    },
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"name\":\"repo-for-project-card\"}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": false
-      }
-    ]
+    }
   },
   "response": {
-    "status": 201,
-    "bodyFileName": "orgs_hub4j-test-org_repos-6.json",
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_repo-for-project-card_issues_1-9.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Mon, 11 Oct 2021 15:43:40 GMT",
+      "Date": "Mon, 11 Oct 2021 15:43:41 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"d7062e6a4eb83f14eba7f572c36ab00f005b8bf9b194f21d9801a2bc1964b494\"",
+      "ETag": "W/\"f7e4fb89178a13a9b60d313a7e73f6d3b37e51b16860bc436b08b1c20df12a69\"",
+      "Last-Modified": "Mon, 11 Oct 2021 15:43:40 GMT",
       "X-OAuth-Scopes": "admin:org, delete_repo, repo",
-      "X-Accepted-OAuth-Scopes": "public_repo, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
       "github-authentication-token-expiration": "2021-11-10 16:10:38 UTC",
       "X-GitHub-Media-Type": "unknown, github.v3",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4982",
+      "X-RateLimit-Remaining": "4979",
       "X-RateLimit-Reset": "1633970441",
-      "X-RateLimit-Used": "18",
+      "X-RateLimit-Used": "21",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -45,11 +39,13 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "EED5:33E4:1E1BB2B:393C4A1:61645BAB",
-      "Location": "https://api.github.com/repos/hub4j-test-org/repo-for-project-card"
+      "X-GitHub-Request-Id": "EED8:742C:4D6EF7:10F300E:61645BAD"
     }
   },
-  "uuid": "ce593eac-ae9c-43e9-a27d-6c6e38f8df53",
+  "uuid": "066e0774-c83e-4c22-b881-3b9152bbf79a",
   "persistent": true,
-  "insertionIndex": 6
+  "scenarioName": "scenario-1-repos-hub4j-test-org-repo-for-project-card-issues-1",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-repo-for-project-card-issues-1-2",
+  "insertionIndex": 9
 }

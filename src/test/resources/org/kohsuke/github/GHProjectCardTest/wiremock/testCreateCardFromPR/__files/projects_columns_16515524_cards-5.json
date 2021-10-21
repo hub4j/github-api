@@ -1,19 +1,15 @@
 {
-  "owner_url": "https://api.github.com/orgs/hub4j-test-org",
-  "url": "https://api.github.com/projects/13495086",
-  "html_url": "https://github.com/orgs/hub4j-test-org/projects/32",
-  "columns_url": "https://api.github.com/projects/13495086/columns",
-  "id": 13495086,
-  "node_id": "PRO_kwDOAHMfo84Azesu",
-  "name": "test-project",
-  "body": "This is a test project",
-  "number": 32,
-  "state": "open",
+  "url": "https://api.github.com/projects/columns/cards/71268713",
+  "project_url": "https://api.github.com/projects/13577338",
+  "id": 71268713,
+  "node_id": "PRC_lADOAHMfo84Azyx6zgQ_eWk",
+  "note": "This is a card",
+  "archived": false,
   "creator": {
     "login": "bitwiseman",
     "id": 1958953,
     "node_id": "MDQ6VXNlcjE5NTg5NTM=",
-    "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1958953?v=4",
     "gravatar_id": "",
     "url": "https://api.github.com/users/bitwiseman",
     "html_url": "https://github.com/bitwiseman",
@@ -29,8 +25,7 @@
     "type": "User",
     "site_admin": false
   },
-  "created_at": "2021-10-11T15:43:37Z",
-  "updated_at": "2021-10-11T15:43:37Z",
-  "organization_permission": "write",
-  "private": true
+  "created_at": "2021-10-21T06:17:47Z",
+  "updated_at": "2021-10-21T06:17:47Z",
+  "column_url": "https://api.github.com/projects/columns/16515524"
 }

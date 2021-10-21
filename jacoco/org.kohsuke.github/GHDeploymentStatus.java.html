@@ -27,12 +27,22 @@ import java.util.Locale;
      *
      * @return the gh deployment status
      */
+    @Deprecated
     public GHDeploymentStatus wrap(GHRepository owner) {
-<span class="fc" id="L31">        this.owner = owner;</span>
-<span class="fc" id="L32">        this.root = owner.root;</span>
-<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (creator != null)</span>
-<span class="fc" id="L34">            creator.wrapUp(root);</span>
-<span class="fc" id="L35">        return this;</span>
+<span class="nc" id="L32">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
+
+    /**
+     * Wrap gh deployment status.
+     *
+     * @param owner
+     *            the owner
+     *
+     * @return the gh deployment status
+     */
+    GHDeploymentStatus lateBind(GHRepository owner) {
+<span class="fc" id="L44">        this.owner = owner;</span>
+<span class="fc" id="L45">        return this;</span>
     }
 
     /**
@@ -44,7 +54,7 @@ import java.util.Locale;
      */
     @Deprecated
     public URL getTargetUrl() {
-<span class="fc" id="L47">        return GitHubClient.parseURL(target_url);</span>
+<span class="fc" id="L57">        return GitHubClient.parseURL(target_url);</span>
     }
 
     /**
@@ -58,7 +68,7 @@ import java.util.Locale;
      */
     @Preview(Previews.ANT_MAN)
     public URL getLogUrl() {
-<span class="fc" id="L61">        return GitHubClient.parseURL(log_url);</span>
+<span class="fc" id="L71">        return GitHubClient.parseURL(log_url);</span>
     }
 
     /**
@@ -67,7 +77,7 @@ import java.util.Locale;
      * @return the deployment url
      */
     public URL getDeploymentUrl() {
-<span class="fc" id="L70">        return GitHubClient.parseURL(deployment_url);</span>
+<span class="fc" id="L80">        return GitHubClient.parseURL(deployment_url);</span>
     }
 
     /**
@@ -79,7 +89,7 @@ import java.util.Locale;
      */
     @Preview(Previews.ANT_MAN)
     public URL getEnvironmentUrl() {
-<span class="nc" id="L82">        return GitHubClient.parseURL(environment_url);</span>
+<span class="nc" id="L92">        return GitHubClient.parseURL(environment_url);</span>
     }
 
     /**
@@ -88,7 +98,7 @@ import java.util.Locale;
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-<span class="fc" id="L91">        return GitHubClient.parseURL(repository_url);</span>
+<span class="fc" id="L101">        return GitHubClient.parseURL(repository_url);</span>
     }
 
     /**
@@ -97,7 +107,7 @@ import java.util.Locale;
      * @return the state
      */
     public GHDeploymentState getState() {
-<span class="fc" id="L100">        return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L110">        return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -105,7 +115,12 @@ import java.util.Locale;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L108">        return null;</span>
+<span class="nc" id="L118">        return null;</span>
+    }
+
+    // test only
+    GHRepository getOwner() {
+<span class="fc" id="L123">        return owner;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

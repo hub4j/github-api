@@ -14,8 +14,8 @@ import java.util.Map;
 <span class="nc" id="L14">class GHHooks {</span>
     static abstract class Context extends GitHubInteractiveObject {
 
-<span class="fc" id="L17">        private Context(GitHub root) {</span>
-<span class="fc" id="L18">            this.root = root;</span>
+        private Context(GitHub root) {
+<span class="fc" id="L18">            super(root);</span>
 <span class="fc" id="L19">        }</span>
 
         /**
@@ -27,8 +27,8 @@ import java.util.Map;
          */
         public List&lt;GHHook&gt; getHooks() throws IOException {
 
-<span class="fc" id="L30">            GHHook[] hookArray = root.createRequest().withUrlPath(collection()).fetch(collectionClass()); // jdk/eclipse</span>
-                                                                                                          // bug
+            // jdk/eclipse bug
+<span class="fc" id="L31">            GHHook[] hookArray = root().createRequest().withUrlPath(collection()).fetch(collectionClass());</span>
             // requires this
             // to be on separate line
 <span class="fc" id="L34">            List&lt;GHHook&gt; list = new ArrayList&lt;GHHook&gt;(Arrays.asList(hookArray));</span>
@@ -47,7 +47,7 @@ import java.util.Map;
          *             the io exception
          */
         public GHHook getHook(int id) throws IOException {
-<span class="fc" id="L50">            GHHook hook = root.createRequest().withUrlPath(collection() + &quot;/&quot; + id).fetch(clazz());</span>
+<span class="fc" id="L50">            GHHook hook = root().createRequest().withUrlPath(collection() + &quot;/&quot; + id).fetch(clazz());</span>
 <span class="fc" id="L51">            return wrap(hook);</span>
         }
 
@@ -75,7 +75,7 @@ import java.util.Map;
 <span class="nc" id="L75">                    ea.add(e.symbol());</span>
             }
 
-<span class="fc" id="L78">            GHHook hook = root.createRequest()</span>
+<span class="fc" id="L78">            GHHook hook = root().createRequest()</span>
 <span class="fc" id="L79">                    .method(&quot;POST&quot;)</span>
 <span class="fc" id="L80">                    .with(&quot;name&quot;, name)</span>
 <span class="fc" id="L81">                    .with(&quot;active&quot;, active)</span>
@@ -86,6 +86,18 @@ import java.util.Map;
 
 <span class="fc" id="L87">            return wrap(hook);</span>
         }
+
+        /**
+         * Deletes hook.
+         *
+         * @param id
+         *            the id
+         * @throws IOException
+         *             the io exception
+         */
+        public void deleteHook(int id) throws IOException {
+<span class="fc" id="L99">            root().createRequest().method(&quot;DELETE&quot;).withUrlPath(collection() + &quot;/&quot; + id).send();</span>
+<span class="fc" id="L100">        }</span>
 
         abstract String collection();
 
@@ -101,29 +113,29 @@ import java.util.Map;
         private final GHUser owner;
 
         private RepoContext(GHRepository repository, GHUser owner) {
-<span class="fc" id="L104">            super(repository.root);</span>
-<span class="fc" id="L105">            this.repository = repository;</span>
-<span class="fc" id="L106">            this.owner = owner;</span>
-<span class="fc" id="L107">        }</span>
+<span class="fc" id="L116">            super(repository.root());</span>
+<span class="fc" id="L117">            this.repository = repository;</span>
+<span class="fc" id="L118">            this.owner = owner;</span>
+<span class="fc" id="L119">        }</span>
 
         @Override
         String collection() {
-<span class="fc" id="L111">            return String.format(&quot;/repos/%s/%s/hooks&quot;, owner.getLogin(), repository.getName());</span>
+<span class="fc" id="L123">            return String.format(&quot;/repos/%s/%s/hooks&quot;, owner.getLogin(), repository.getName());</span>
         }
 
         @Override
         Class&lt;? extends GHHook[]&gt; collectionClass() {
-<span class="fc" id="L116">            return GHRepoHook[].class;</span>
+<span class="fc" id="L128">            return GHRepoHook[].class;</span>
         }
 
         @Override
         Class&lt;? extends GHHook&gt; clazz() {
-<span class="fc" id="L121">            return GHRepoHook.class;</span>
+<span class="fc" id="L133">            return GHRepoHook.class;</span>
         }
 
         @Override
         GHHook wrap(GHHook hook) {
-<span class="fc" id="L126">            return ((GHRepoHook) hook).wrap(repository);</span>
+<span class="fc" id="L138">            return ((GHRepoHook) hook).wrap(repository);</span>
         }
     }
 
@@ -131,37 +143,37 @@ import java.util.Map;
         private final GHOrganization organization;
 
         private OrgContext(GHOrganization organization) {
-<span class="fc" id="L134">            super(organization.root);</span>
-<span class="fc" id="L135">            this.organization = organization;</span>
-<span class="fc" id="L136">        }</span>
+<span class="fc" id="L146">            super(organization.root());</span>
+<span class="fc" id="L147">            this.organization = organization;</span>
+<span class="fc" id="L148">        }</span>
 
         @Override
         String collection() {
-<span class="fc" id="L140">            return String.format(&quot;/orgs/%s/hooks&quot;, organization.getLogin());</span>
+<span class="fc" id="L152">            return String.format(&quot;/orgs/%s/hooks&quot;, organization.getLogin());</span>
         }
 
         @Override
         Class&lt;? extends GHHook[]&gt; collectionClass() {
-<span class="nc" id="L145">            return GHOrgHook[].class;</span>
+<span class="nc" id="L157">            return GHOrgHook[].class;</span>
         }
 
         @Override
         Class&lt;? extends GHHook&gt; clazz() {
-<span class="fc" id="L150">            return GHOrgHook.class;</span>
+<span class="fc" id="L162">            return GHOrgHook.class;</span>
         }
 
         @Override
         GHHook wrap(GHHook hook) {
-<span class="fc" id="L155">            return ((GHOrgHook) hook).wrap(organization);</span>
+<span class="fc" id="L167">            return ((GHOrgHook) hook).wrap(organization);</span>
         }
     }
 
     static Context repoContext(GHRepository repository, GHUser owner) {
-<span class="fc" id="L160">        return new RepoContext(repository, owner);</span>
+<span class="fc" id="L172">        return new RepoContext(repository, owner);</span>
     }
 
     static Context orgContext(GHOrganization organization) {
-<span class="fc" id="L164">        return new OrgContext(organization);</span>
+<span class="fc" id="L176">        return new OrgContext(organization);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

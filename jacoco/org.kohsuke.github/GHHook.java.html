@@ -71,7 +71,7 @@ import java.util.Map;
      * @see &lt;a href=&quot;https://developer.github.com/v3/repos/hooks/#ping-a-hook&quot;&gt;Ping hook&lt;/a&gt;
      */
     public void ping() throws IOException {
-<span class="fc" id="L74">        getRoot().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute() + &quot;/pings&quot;).send();</span>
+<span class="fc" id="L74">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute() + &quot;/pings&quot;).send();</span>
 <span class="fc" id="L75">    }</span>
 
     /**
@@ -81,7 +81,7 @@ import java.util.Map;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L84">        getRoot().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L84">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
 <span class="fc" id="L85">    }</span>
 
     /**
@@ -92,7 +92,7 @@ import java.util.Map;
 <span class="nc" id="L92">        return null;</span>
     }
 
-    abstract GitHub getRoot();
+    abstract GitHub root();
 
     abstract String getApiRoute();
 }

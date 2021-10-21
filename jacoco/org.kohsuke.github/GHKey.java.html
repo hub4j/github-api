@@ -51,30 +51,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
     }
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-<span class="nc" id="L59">        return root;</span>
-    }
-
-    /**
      * Is verified boolean.
      *
      * @return the boolean
      */
     public boolean isVerified() {
-<span class="fc" id="L68">        return verified;</span>
-    }
-
-    GHKey wrap(GitHub root) {
-<span class="nc" id="L72">        this.root = root;</span>
-<span class="nc" id="L73">        return this;</span>
+<span class="fc" id="L59">        return verified;</span>
     }
 
     public String toString() {
-<span class="fc" id="L77">        return new ToStringBuilder(this).append(&quot;title&quot;, title).append(&quot;id&quot;, id).append(&quot;key&quot;, key).toString();</span>
+<span class="fc" id="L63">        return new ToStringBuilder(this).append(&quot;title&quot;, title).append(&quot;id&quot;, id).append(&quot;key&quot;, key).toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

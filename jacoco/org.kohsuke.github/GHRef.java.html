@@ -65,14 +65,13 @@ import java.net.URL;
      *             the io exception
      */
     public void updateTo(String sha, Boolean force) throws IOException {
-<span class="fc" id="L68">        root.createRequest()</span>
+<span class="fc" id="L68">        root().createRequest()</span>
 <span class="fc" id="L69">                .method(&quot;PATCH&quot;)</span>
 <span class="fc" id="L70">                .with(&quot;sha&quot;, sha)</span>
 <span class="fc" id="L71">                .with(&quot;force&quot;, force)</span>
 <span class="fc" id="L72">                .withUrlPath(url)</span>
-<span class="fc" id="L73">                .fetch(GHRef.class)</span>
-<span class="fc" id="L74">                .wrap(root);</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L73">                .fetch(GHRef.class);</span>
+<span class="fc" id="L74">    }</span>
 
     /**
      * Deletes this ref from the repository using the GitHub API.
@@ -81,13 +80,8 @@ import java.net.URL;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L84">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(url).send();</span>
-<span class="fc" id="L85">    }</span>
-
-    GHRef wrap(GitHub root) {
-<span class="fc" id="L88">        this.root = root;</span>
-<span class="fc" id="L89">        return this;</span>
-    }
+<span class="fc" id="L83">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(url).send();</span>
+<span class="fc" id="L84">    }</span>
 
     /**
      * Retrive a ref of the given type for the current GitHub repository.
@@ -102,37 +96,37 @@ import java.net.URL;
      */
     static GHRef read(GHRepository repository, String refName) throws IOException {
         // Also accept e.g. &quot;refs/heads/branch&quot; for consistency with createRef().
-<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (refName.startsWith(&quot;refs/&quot;)) {</span>
-<span class="fc" id="L106">            refName = refName.replaceFirst(&quot;refs/&quot;, &quot;&quot;);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (refName.startsWith(&quot;refs/&quot;)) {</span>
+<span class="fc" id="L100">            refName = refName.replaceFirst(&quot;refs/&quot;, &quot;&quot;);</span>
         }
 
         // We would expect this to use `git/ref/%s` but some versions of GHE seem to not support it
         // Instead use `git/refs/%s` and check the result actually matches the ref
-<span class="fc" id="L111">        GHRef result = null;</span>
+<span class="fc" id="L105">        GHRef result = null;</span>
         try {
-<span class="fc" id="L113">            result = repository.root.createRequest()</span>
-<span class="fc" id="L114">                    .withUrlPath(repository.getApiTailUrl(String.format(&quot;git/refs/%s&quot;, refName)))</span>
-<span class="fc" id="L115">                    .fetch(GHRef.class)</span>
-<span class="fc" id="L116">                    .wrap(repository.root);</span>
-<span class="fc" id="L117">        } catch (IOException e) {</span>
+<span class="fc" id="L107">            result = repository.root()</span>
+<span class="fc" id="L108">                    .createRequest()</span>
+<span class="fc" id="L109">                    .withUrlPath(repository.getApiTailUrl(String.format(&quot;git/refs/%s&quot;, refName)))</span>
+<span class="fc" id="L110">                    .fetch(GHRef.class);</span>
+<span class="fc" id="L111">        } catch (IOException e) {</span>
             // If the parse exception is due to the above returning an array instead of a single ref
             // that means the individual ref did not exist. Handled by result check below.
             // Otherwise, rethrow.
-<span class="fc bfc" id="L121" title="All 2 branches covered.">            if (!(e.getCause() instanceof JsonMappingException)) {</span>
-<span class="fc" id="L122">                throw e;</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            if (!(e.getCause() instanceof JsonMappingException)) {</span>
+<span class="fc" id="L116">                throw e;</span>
             }
-<span class="fc" id="L124">        }</span>
+<span class="fc" id="L118">        }</span>
 
         // Verify that the ref returned is the one requested
         // Used .endsWith(refName) instead of .equals(&quot;refs/&quot; + refName) to workaround a GitBucket
         // issue where the &quot;ref&quot; field omits the &quot;refs/&quot; prefix. &quot;endsWith()&quot; is functionally
         // the same for this scenario - the server refs matching is prefix-based, so
         // a ref that ends with the correct string will always be the correct one.
-<span class="pc bpc" id="L131" title="1 of 4 branches missed.">        if (result == null || !result.getRef().endsWith(refName)) {</span>
-<span class="fc" id="L132">            throw new GHFileNotFoundException(String.format(&quot;git/refs/%s&quot;, refName)</span>
+<span class="pc bpc" id="L125" title="1 of 4 branches missed.">        if (result == null || !result.getRef().endsWith(refName)) {</span>
+<span class="fc" id="L126">            throw new GHFileNotFoundException(String.format(&quot;git/refs/%s&quot;, refName)</span>
                     + &quot; {\&quot;message\&quot;:\&quot;Not Found\&quot;,\&quot;documentation_url\&quot;:\&quot;https://developer.github.com/v3/git/refs/#get-a-reference\&quot;}&quot;);
         }
-<span class="fc" id="L135">        return result;</span>
+<span class="fc" id="L129">        return result;</span>
     }
 
     /**
@@ -147,18 +141,16 @@ import java.net.URL;
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     static PagedIterable&lt;GHRef&gt; readMatching(GHRepository repository, String refType) throws IOException {
-<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (refType.startsWith(&quot;refs/&quot;)) {</span>
-<span class="fc" id="L151">            refType = refType.replaceFirst(&quot;refs/&quot;, &quot;&quot;);</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (refType.startsWith(&quot;refs/&quot;)) {</span>
+<span class="fc" id="L145">            refType = refType.replaceFirst(&quot;refs/&quot;, &quot;&quot;);</span>
         }
 
-<span class="fc" id="L154">        String url = repository.getApiTailUrl(String.format(&quot;git/refs/%s&quot;, refType));</span>
+<span class="fc" id="L148">        String url = repository.getApiTailUrl(String.format(&quot;git/refs/%s&quot;, refType));</span>
         // if no types, do not end with slash just to be safe.
-<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (refType.equals(&quot;&quot;)) {</span>
-<span class="fc" id="L157">            url = url.substring(0, url.length() - 1);</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (refType.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L151">            url = url.substring(0, url.length() - 1);</span>
         }
-<span class="fc" id="L159">        return repository.root.createRequest()</span>
-<span class="fc" id="L160">                .withUrlPath(url)</span>
-<span class="fc" id="L161">                .toIterable(GHRef[].class, item -&gt; item.wrap(repository.root));</span>
+<span class="fc" id="L153">        return repository.root().createRequest().withUrlPath(url).toIterable(GHRef[].class, item -&gt; repository.root());</span>
     }
 
     /**
@@ -167,7 +159,7 @@ import java.net.URL;
     @SuppressFBWarnings(
             value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
             justification = &quot;JSON API&quot;)
-<span class="fc" id="L170">    public static class GHObject {</span>
+<span class="fc" id="L162">    public static class GHObject {</span>
         private String type, sha, url;
 
         /**
@@ -176,7 +168,7 @@ import java.net.URL;
          * @return the type
          */
         public String getType() {
-<span class="nc" id="L179">            return type;</span>
+<span class="fc" id="L171">            return type;</span>
         }
 
         /**
@@ -185,7 +177,7 @@ import java.net.URL;
          * @return the sha
          */
         public String getSha() {
-<span class="fc" id="L188">            return sha;</span>
+<span class="fc" id="L180">            return sha;</span>
         }
 
         /**
@@ -195,7 +187,7 @@ import java.net.URL;
          * @return the url
          */
         public URL getUrl() {
-<span class="nc" id="L198">            return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L190">            return GitHubClient.parseURL(url);</span>
         }
     }
 }

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHIssueQueryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHIssueQueryBuilder.java</span></div><h1>GHIssueQueryBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public abstract class GHIssueQueryBuilder extends GHQueryBuilder&lt;GHIssue&gt; {
+<span class="fc" id="L8">    private final List&lt;String&gt; labels = new ArrayList&lt;&gt;();</span>
+
+    GHIssueQueryBuilder(GitHub root) {
+<span class="fc" id="L11">        super(root);</span>
+<span class="fc" id="L12">    }</span>
+
+    /**
+     * State gh issue query builder.
+     *
+     * @param state
+     *            the state
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder state(GHIssueState state) {
+<span class="fc" id="L22">        req.with(&quot;state&quot;, state);</span>
+<span class="fc" id="L23">        return this;</span>
+    }
+
+    /**
+     * Labels gh issue query builder.
+     *
+     * @param label
+     *            the labels
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder label(String label) {
+<span class="fc bfc" id="L34" title="All 4 branches covered.">        if (label != null &amp;&amp; !label.trim().isEmpty()) {</span>
+<span class="fc" id="L35">            labels.add(label);</span>
+<span class="fc" id="L36">            req.with(&quot;labels&quot;, String.join(&quot;,&quot;, labels));</span>
+        }
+<span class="fc" id="L38">        return this;</span>
+    }
+
+    /**
+     * Sort gh issue query builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder sort(Sort sort) {
+<span class="fc" id="L49">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L50">        return this;</span>
+    }
+
+    /**
+     * Direction gh issue query builder.
+     *
+     * @param direction
+     *            the direction
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder direction(GHDirection direction) {
+<span class="fc" id="L61">        req.with(&quot;direction&quot;, direction);</span>
+<span class="fc" id="L62">        return this;</span>
+    }
+
+    /**
+     * Only issues after this date will be returned.
+     *
+     * @param date
+     *            the date
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder since(Date date) {
+<span class="fc" id="L73">        req.with(&quot;since&quot;, GitHubClient.printDate(date));</span>
+<span class="fc" id="L74">        return this;</span>
+    }
+
+    /**
+     * Only issues after this date will be returned.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder since(long timestamp) {
+<span class="fc" id="L85">        return since(new Date(timestamp));</span>
+    }
+
+    /**
+     * Page size gh issue query builder.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder pageSize(int pageSize) {
+<span class="fc" id="L96">        req.with(&quot;per_page&quot;, pageSize);</span>
+<span class="fc" id="L97">        return this;</span>
+    }
+
+    /**
+     * The enum Sort.
+     */
+<span class="fc" id="L103">    public enum Sort {</span>
+<span class="fc" id="L104">        CREATED, UPDATED, COMMENTS</span>
+    }
+
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
+    public abstract String getApiUrl();
+
+    public static class ForRepository extends GHIssueQueryBuilder {
+        private final GHRepository repo;
+
+        ForRepository(final GHRepository repo) {
+<span class="fc" id="L118">            super(repo.root());</span>
+<span class="fc" id="L119">            this.repo = repo;</span>
+<span class="fc" id="L120">        }</span>
+
+        /**
+         * Milestone gh issue query builder.
+         * &lt;p&gt;
+         * The milestone must be either an integer (the milestone number), the string * (issues with any milestone) or
+         * the string none (issues without milestone).
+         *
+         * @param milestone
+         *            the milestone
+         * @return the gh issue request query builder
+         */
+        public ForRepository milestone(String milestone) {
+<span class="fc" id="L133">            req.with(&quot;milestone&quot;, milestone);</span>
+<span class="fc" id="L134">            return this;</span>
+        }
+
+        /**
+         * Assignee gh issue query builder.
+         *
+         * @param assignee
+         *            the assignee
+         * @return the gh issue query builder
+         */
+        public ForRepository assignee(String assignee) {
+<span class="fc" id="L145">            req.with(&quot;assignee&quot;, assignee);</span>
+<span class="fc" id="L146">            return this;</span>
+        }
+
+        /**
+         * Creator gh issue query builder.
+         *
+         * @param creator
+         *            the creator
+         * @return the gh issue query builder
+         */
+        public ForRepository creator(String creator) {
+<span class="fc" id="L157">            req.with(&quot;creator&quot;, creator);</span>
+<span class="fc" id="L158">            return this;</span>
+        }
+
+        /**
+         * Mentioned gh issue query builder.
+         *
+         * @param mentioned
+         *            the mentioned
+         * @return the gh issue query builder
+         */
+        public ForRepository mentioned(String mentioned) {
+<span class="fc" id="L169">            req.with(&quot;mentioned&quot;, mentioned);</span>
+<span class="fc" id="L170">            return this;</span>
+        }
+
+        @Override
+        public String getApiUrl() {
+<span class="fc" id="L175">            return repo.getApiTailUrl(&quot;issues&quot;);</span>
+        }
+
+        @Override
+        public PagedIterable&lt;GHIssue&gt; list() {
+<span class="fc" id="L180">            return req.withUrlPath(getApiUrl()).toIterable(GHIssue[].class, item -&gt; item.wrap(repo));</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

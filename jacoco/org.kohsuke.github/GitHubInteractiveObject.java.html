@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubInteractiveObject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GitHubInteractiveObject.java</span></div><h1>GitHubInteractiveObject.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.util.Objects;
 
 /**
  * Defines a base class that all classes in this library that interact with GitHub inherit from.
@@ -11,18 +16,48 @@ import com.fasterxml.jackson.annotation.JacksonInject;
  */
 abstract class GitHubInteractiveObject {
     @JacksonInject
-    /* package almost final */ transient GitHub root;
+    @CheckForNull
+    private transient final GitHub root;
 
-<span class="fc" id="L16">    GitHubInteractiveObject() {</span>
-<span class="fc" id="L17">        root = null;</span>
-<span class="fc" id="L18">    }</span>
+<span class="fc" id="L22">    GitHubInteractiveObject() {</span>
+<span class="fc" id="L23">        root = null;</span>
+<span class="fc" id="L24">    }</span>
 
-<span class="fc" id="L20">    GitHubInteractiveObject(GitHub root) {</span>
-<span class="fc" id="L21">        this.root = root;</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L26">    GitHubInteractiveObject(GitHub root) {</span>
+<span class="fc" id="L27">        this.root = root;</span>
+<span class="fc" id="L28">    }</span>
 
-    GitHub getRoot() {
-<span class="fc" id="L25">        return root;</span>
+    /**
+     * Get the root {@link GitHub} instance for this object.
+     *
+     * @return the root {@link GitHub} instance
+     *
+     * @deprecated For access to the {@link GitHub} instance, use a local copy instead of pulling it out of objects.
+     */
+    @Deprecated
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GitHub getRoot() {
+<span class="fc" id="L40">        return root();</span>
+    }
+
+    /**
+     * Get the root {@link GitHub} instance for this object.
+     *
+     * @return the root {@link GitHub} instance
+     */
+    @NonNull
+    GitHub root() {
+<span class="fc" id="L50">        return Objects.requireNonNull(root,</span>
+                &quot;The root GitHub reference for this instance is null. Probably caused by deserializing this class without using a GitHub instance. If you must do this, use the MappingObjectReader from GitHub.getMappingObjectReader().&quot;);
+    }
+
+    /**
+     * Object is offline.
+     *
+     * @return true if GitHub instance is null or offline.
+     */
+    boolean isOffline() {
+<span class="fc bfc" id="L60" title="All 4 branches covered.">        return root == null || root.isOffline();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

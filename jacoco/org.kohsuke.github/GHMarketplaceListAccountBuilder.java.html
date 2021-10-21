@@ -12,8 +12,8 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
     private final Requester builder;
     private final long planId;
 
-<span class="fc" id="L15">    GHMarketplaceListAccountBuilder(GitHub root, long planId) {</span>
-<span class="fc" id="L16">        this.root = root;</span>
+    GHMarketplaceListAccountBuilder(GitHub root, long planId) {
+<span class="fc" id="L16">        super(root);</span>
 <span class="fc" id="L17">        this.builder = root.createRequest();</span>
 <span class="fc" id="L18">        this.planId = planId;</span>
 <span class="fc" id="L19">    }</span>
@@ -64,7 +64,7 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
      */
     public PagedIterable&lt;GHMarketplaceAccountPlan&gt; createRequest() throws IOException {
 <span class="fc" id="L66">        return builder.withUrlPath(String.format(&quot;/marketplace_listing/plans/%d/accounts&quot;, this.planId))</span>
-<span class="fc" id="L67">                .toIterable(GHMarketplaceAccountPlan[].class, item -&gt; item.wrapUp(root));</span>
+<span class="fc" id="L67">                .toIterable(GHMarketplaceAccountPlan[].class, null);</span>
     }
 
 }

@@ -23,11 +23,6 @@ import java.net.URL;
     private String permissions;
     private String html_url;
 
-    GHInvitation wrapUp(GitHub root) {
-<span class="nc" id="L27">        this.root = root;</span>
-<span class="nc" id="L28">        return this;</span>
-    }
-
     /**
      * Accept a repository invitation.
      *
@@ -35,8 +30,8 @@ import java.net.URL;
      *             the io exception
      */
     public void accept() throws IOException {
-<span class="nc" id="L38">        root.createRequest().method(&quot;PATCH&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
-<span class="nc" id="L39">    }</span>
+<span class="nc" id="L33">        root().createRequest().method(&quot;PATCH&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
+<span class="nc" id="L34">    }</span>
 
     /**
      * Decline a repository invitation.
@@ -45,12 +40,12 @@ import java.net.URL;
      *             the io exception
      */
     public void decline() throws IOException {
-<span class="nc" id="L48">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
-<span class="nc" id="L49">    }</span>
+<span class="nc" id="L43">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
+<span class="nc" id="L44">    }</span>
 
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L53">        return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L48">        return GitHubClient.parseURL(html_url);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

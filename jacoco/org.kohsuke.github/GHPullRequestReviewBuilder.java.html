@@ -17,7 +17,7 @@ public class GHPullRequestReviewBuilder {
 
 <span class="fc" id="L18">    GHPullRequestReviewBuilder(GHPullRequest pr) {</span>
 <span class="fc" id="L19">        this.pr = pr;</span>
-<span class="fc" id="L20">        this.builder = pr.root.createRequest();</span>
+<span class="fc" id="L20">        this.builder = pr.root().createRequest();</span>
 <span class="fc" id="L21">    }</span>
 
     // public GHPullRequestReview createReview(@Nullable String commitId, String body, GHPullRequestReviewEvent event,

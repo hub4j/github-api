@@ -2,8 +2,6 @@
 
 import org.kohsuke.github.GHWorkflowRun.Status;
 
-import java.net.MalformedURLException;
-
 /**
  * Lists up workflow runs with some filtering and sorting.
  *
@@ -14,9 +12,9 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
     private final GHRepository repo;
 
     GHWorkflowRunQueryBuilder(GHRepository repo) {
-<span class="fc" id="L17">        super(repo.root);</span>
-<span class="fc" id="L18">        this.repo = repo;</span>
-<span class="fc" id="L19">    }</span>
+<span class="fc" id="L15">        super(repo.root());</span>
+<span class="fc" id="L16">        this.repo = repo;</span>
+<span class="fc" id="L17">    }</span>
 
     /**
      * Actor workflow run query builder.
@@ -26,8 +24,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder actor(String actor) {
-<span class="nc" id="L29">        req.with(&quot;actor&quot;, actor);</span>
-<span class="nc" id="L30">        return this;</span>
+<span class="nc" id="L27">        req.with(&quot;actor&quot;, actor);</span>
+<span class="nc" id="L28">        return this;</span>
     }
 
     /**
@@ -38,8 +36,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder actor(GHUser actor) {
-<span class="nc" id="L41">        req.with(&quot;actor&quot;, actor.getLogin());</span>
-<span class="nc" id="L42">        return this;</span>
+<span class="nc" id="L39">        req.with(&quot;actor&quot;, actor.getLogin());</span>
+<span class="nc" id="L40">        return this;</span>
     }
 
     /**
@@ -50,8 +48,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder branch(String branch) {
-<span class="fc" id="L53">        req.with(&quot;branch&quot;, branch);</span>
-<span class="fc" id="L54">        return this;</span>
+<span class="fc" id="L51">        req.with(&quot;branch&quot;, branch);</span>
+<span class="fc" id="L52">        return this;</span>
     }
 
     /**
@@ -62,8 +60,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder event(GHEvent event) {
-<span class="fc" id="L65">        req.with(&quot;event&quot;, event.symbol());</span>
-<span class="fc" id="L66">        return this;</span>
+<span class="fc" id="L63">        req.with(&quot;event&quot;, event.symbol());</span>
+<span class="fc" id="L64">        return this;</span>
     }
 
     /**
@@ -74,8 +72,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder event(String event) {
-<span class="nc" id="L77">        req.with(&quot;event&quot;, event);</span>
-<span class="nc" id="L78">        return this;</span>
+<span class="nc" id="L75">        req.with(&quot;event&quot;, event);</span>
+<span class="nc" id="L76">        return this;</span>
     }
 
     /**
@@ -86,17 +84,13 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder status(Status status) {
-<span class="fc" id="L89">        req.with(&quot;status&quot;, status.toString());</span>
-<span class="fc" id="L90">        return this;</span>
+<span class="fc" id="L87">        req.with(&quot;status&quot;, status.toString());</span>
+<span class="fc" id="L88">        return this;</span>
     }
 
     @Override
     public PagedIterable&lt;GHWorkflowRun&gt; list() {
-        try {
-<span class="fc" id="L96">            return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl(&quot;actions/runs&quot;)).build());</span>
-<span class="nc" id="L97">        } catch (MalformedURLException e) {</span>
-<span class="nc" id="L98">            throw new GHException(e.getMessage(), e);</span>
-        }
+<span class="fc" id="L93">        return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl(&quot;actions/runs&quot;)));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

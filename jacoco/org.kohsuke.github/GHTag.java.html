@@ -17,10 +17,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
     GHTag wrap(GHRepository owner) {
 <span class="fc" id="L19">        this.owner = owner;</span>
-<span class="fc" id="L20">        this.root = owner.root;</span>
-<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if (commit != null)</span>
-<span class="fc" id="L22">            commit.wrapUp(owner);</span>
-<span class="fc" id="L23">        return this;</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if (commit != null)</span>
+<span class="fc" id="L21">            commit.wrapUp(owner);</span>
+<span class="fc" id="L22">        return this;</span>
     }
 
     /**
@@ -28,17 +27,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
 <span class="nc" id="L32">        return owner;</span>
-    }
-
-    /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-<span class="nc" id="L41">        return root;</span>
     }
 
     /**
@@ -47,7 +38,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the name
      */
     public String getName() {
-<span class="nc" id="L50">        return name;</span>
+<span class="nc" id="L41">        return name;</span>
     }
 
     /**
@@ -55,8 +46,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      *
      * @return the commit
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHCommit getCommit() {
-<span class="fc" id="L59">        return commit;</span>
+<span class="fc" id="L51">        return commit;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

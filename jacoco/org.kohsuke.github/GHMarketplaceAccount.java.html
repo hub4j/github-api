@@ -18,24 +18,12 @@ import java.net.URL;
     private GHMarketplaceAccountType type;
 
     /**
-     * Wrap up gh marketplace account.
-     *
-     * @param root
-     *            the root
-     * @return an instance of the GHMarketplaceAccount class
-     */
-    GHMarketplaceAccount wrapUp(GitHub root) {
-<span class="fc" id="L28">        this.root = root;</span>
-<span class="fc" id="L29">        return this;</span>
-    }
-
-    /**
      * Gets url.
      *
      * @return the url
      */
     public URL getUrl() {
-<span class="fc" id="L38">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L26">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -44,7 +32,7 @@ import java.net.URL;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L47">        return id;</span>
+<span class="fc" id="L35">        return id;</span>
     }
 
     /**
@@ -53,7 +41,7 @@ import java.net.URL;
      * @return the login
      */
     public String getLogin() {
-<span class="fc" id="L56">        return login;</span>
+<span class="fc" id="L44">        return login;</span>
     }
 
     /**
@@ -62,7 +50,7 @@ import java.net.URL;
      * @return the email
      */
     public String getEmail() {
-<span class="nc" id="L65">        return email;</span>
+<span class="nc" id="L53">        return email;</span>
     }
 
     /**
@@ -71,7 +59,7 @@ import java.net.URL;
      * @return the organization billing email
      */
     public String getOrganizationBillingEmail() {
-<span class="fc" id="L74">        return organizationBillingEmail;</span>
+<span class="fc" id="L62">        return organizationBillingEmail;</span>
     }
 
     /**
@@ -80,7 +68,7 @@ import java.net.URL;
      * @return the type
      */
     public GHMarketplaceAccountType getType() {
-<span class="fc" id="L83">        return type;</span>
+<span class="fc" id="L71">        return type;</span>
     }
 
 }

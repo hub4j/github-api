@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHIssueEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHIssueEvent.java</span></div><h1>GHIssueEvent.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.Date;
 
 /**
@@ -9,7 +11,7 @@ import java.util.Date;
  *
  * @author Martin van Zijl
  */
-<span class="fc" id="L12">public class GHIssueEvent extends GitHubInteractiveObject {</span>
+<span class="fc" id="L14">public class GHIssueEvent extends GitHubInteractiveObject {</span>
     private long id;
     private String node_id;
     private String url;
@@ -22,6 +24,8 @@ import java.util.Date;
     private GHLabel label;
     private GHUser assignee;
     private GHIssueRename rename;
+    private GHUser reviewRequester;
+    private GHUser requestedReviewer;
 
     private GHIssue issue;
 
@@ -31,7 +35,7 @@ import java.util.Date;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L34">        return id;</span>
+<span class="fc" id="L38">        return id;</span>
     }
 
     /**
@@ -40,7 +44,7 @@ import java.util.Date;
      * @return the node id
      */
     public String getNodeId() {
-<span class="nc" id="L43">        return node_id;</span>
+<span class="nc" id="L47">        return node_id;</span>
     }
 
     /**
@@ -49,7 +53,7 @@ import java.util.Date;
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L52">        return url;</span>
+<span class="nc" id="L56">        return url;</span>
     }
 
     /**
@@ -57,8 +61,9 @@ import java.util.Date;
      *
      * @return the actor
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getActor() {
-<span class="nc" id="L61">        return actor;</span>
+<span class="nc" id="L66">        return actor;</span>
     }
 
     /**
@@ -67,7 +72,7 @@ import java.util.Date;
      * @return the event
      */
     public String getEvent() {
-<span class="fc" id="L70">        return event;</span>
+<span class="fc" id="L75">        return event;</span>
     }
 
     /**
@@ -76,7 +81,7 @@ import java.util.Date;
      * @return the commit id
      */
     public String getCommitId() {
-<span class="nc" id="L79">        return commit_id;</span>
+<span class="nc" id="L84">        return commit_id;</span>
     }
 
     /**
@@ -85,7 +90,7 @@ import java.util.Date;
      * @return the commit url
      */
     public String getCommitUrl() {
-<span class="nc" id="L88">        return commit_url;</span>
+<span class="nc" id="L93">        return commit_url;</span>
     }
 
     /**
@@ -94,16 +99,7 @@ import java.util.Date;
      * @return the created at
      */
     public Date getCreatedAt() {
-<span class="fc" id="L97">        return GitHubClient.parseDate(created_at);</span>
-    }
-
-    /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-<span class="nc" id="L106">        return root;</span>
+<span class="fc" id="L102">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -111,8 +107,9 @@ import java.util.Date;
      *
      * @return the issue
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHIssue getIssue() {
-<span class="fc" id="L115">        return issue;</span>
+<span class="fc" id="L112">        return issue;</span>
     }
 
     /**
@@ -121,8 +118,9 @@ import java.util.Date;
      *
      * @return the milestone
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHMilestone getMilestone() {
-<span class="fc" id="L125">        return milestone;</span>
+<span class="fc" id="L123">        return milestone;</span>
     }
 
     /**
@@ -131,8 +129,9 @@ import java.util.Date;
      *
      * @return the label
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHLabel getLabel() {
-<span class="fc" id="L135">        return label;</span>
+<span class="fc" id="L134">        return label;</span>
     }
 
     /**
@@ -141,6 +140,7 @@ import java.util.Date;
      *
      * @return the user
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getAssignee() {
 <span class="fc" id="L145">        return assignee;</span>
     }
@@ -155,24 +155,52 @@ import java.util.Date;
 <span class="fc" id="L155">        return this.rename;</span>
     }
 
-    GHIssueEvent wrapUp(GitHub root) {
-<span class="fc" id="L159">        this.root = root;</span>
-<span class="fc" id="L160">        return this;</span>
+    /**
+     *
+     * Get the {@link GHUser} person who requested a review. Only present for events &quot;review_requested&quot;,
+     * &quot;review_request_removed&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
+     *
+     * @return the GHUser
+     *
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_requested&quot;&gt;review_requested&lt;/a&gt;
+     *      and &lt;a href=
+     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_request_removed&quot;&gt;review_request_removed&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHUser getReviewRequester() {
+<span class="fc" id="L172">        return this.reviewRequester;</span>
+    }
+
+    /**
+     *
+     * Get the {@link GHUser} person requested to review the pull request. Only present for events &quot;review_requested&quot;,
+     * &quot;review_request_removed&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
+     *
+     * @return the GHUser
+     *
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_requested&quot;&gt;review_requested&lt;/a&gt;
+     *      and &lt;a href=
+     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_request_removed&quot;&gt;review_request_removed&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHUser getRequestedReviewer() {
+<span class="fc" id="L189">        return this.requestedReviewer;</span>
     }
 
     GHIssueEvent wrapUp(GHIssue parent) {
-<span class="fc" id="L164">        this.issue = parent;</span>
-<span class="fc" id="L165">        this.root = parent.root;</span>
-<span class="fc" id="L166">        return this;</span>
+<span class="fc" id="L193">        this.issue = parent;</span>
+<span class="fc" id="L194">        return this;</span>
     }
 
     @Override
     public String toString() {
-<span class="nc" id="L171">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
-<span class="nc" id="L172">                getIssue().getNumber(),</span>
-<span class="nc" id="L173">                getEvent(),</span>
-<span class="nc" id="L174">                getActor().getLogin(),</span>
-<span class="nc" id="L175">                getCreatedAt().toString());</span>
+<span class="nc" id="L199">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
+<span class="nc" id="L200">                getIssue().getNumber(),</span>
+<span class="nc" id="L201">                getEvent(),</span>
+<span class="nc" id="L202">                getActor().getLogin(),</span>
+<span class="nc" id="L203">                getCreatedAt().toString());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

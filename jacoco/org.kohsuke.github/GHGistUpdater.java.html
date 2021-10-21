@@ -19,7 +19,7 @@ public class GHGistUpdater {
 
 <span class="fc" id="L20">    GHGistUpdater(GHGist base) {</span>
 <span class="fc" id="L21">        this.base = base;</span>
-<span class="fc" id="L22">        this.builder = base.root.createRequest();</span>
+<span class="fc" id="L22">        this.builder = base.root().createRequest();</span>
 
 <span class="fc" id="L24">        files = new LinkedHashMap&lt;&gt;();</span>
 <span class="fc" id="L25">    }</span>

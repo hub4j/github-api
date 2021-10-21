@@ -16,30 +16,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
     private GHMarketplacePurchase marketplacePurchase;
 
     /**
-     * Wrap up gh marketplace account.
-     *
-     * @param root
-     *            the root
-     * @return an instance of the GHMarketplaceAccount class
-     */
-    GHMarketplaceAccountPlan wrapUp(GitHub root) {
-<span class="fc" id="L26">        super.wrapUp(root);</span>
-<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (this.marketplacePendingChange != null)</span>
-<span class="fc" id="L28">            this.marketplacePendingChange.wrapUp(this.root);</span>
-
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (this.marketplacePurchase != null)</span>
-<span class="fc" id="L31">            this.marketplacePurchase.wrapUp(this.root);</span>
-
-<span class="fc" id="L33">        return this;</span>
-    }
-
-    /**
      * Gets marketplace pending change.
      *
      * @return the marketplace pending change
      */
     public GHMarketplacePendingChange getMarketplacePendingChange() {
-<span class="fc" id="L42">        return marketplacePendingChange;</span>
+<span class="fc" id="L24">        return marketplacePendingChange;</span>
     }
 
     /**
@@ -48,7 +30,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the marketplace purchase
      */
     public GHMarketplacePurchase getMarketplacePurchase() {
-<span class="fc" id="L51">        return marketplacePurchase;</span>
+<span class="fc" id="L33">        return marketplacePurchase;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 
 /**
@@ -30,7 +32,7 @@ import java.io.IOException;
  *
  * @author Kohsuke Kawaguchi
  */
-<span class="fc" id="L33">public class GHCommitPointer {</span>
+<span class="fc" id="L35">public class GHCommitPointer {</span>
     private String ref, sha, label;
     private GHUser user;
     private GHRepository repo;
@@ -42,10 +44,11 @@ import java.io.IOException;
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getUser() throws IOException {
-<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (user != null)</span>
-<span class="fc" id="L47">            return user.root.intern(user);</span>
-<span class="nc" id="L48">        return user;</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (user != null)</span>
+<span class="fc" id="L50">            return user.root().intern(user);</span>
+<span class="nc" id="L51">        return user;</span>
     }
 
     /**
@@ -53,8 +56,9 @@ import java.io.IOException;
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="nc" id="L57">        return repo;</span>
+<span class="nc" id="L61">        return repo;</span>
     }
 
     /**
@@ -63,7 +67,7 @@ import java.io.IOException;
      * @return the ref
      */
     public String getRef() {
-<span class="fc" id="L66">        return ref;</span>
+<span class="fc" id="L70">        return ref;</span>
     }
 
     /**
@@ -72,7 +76,7 @@ import java.io.IOException;
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L75">        return sha;</span>
+<span class="fc" id="L79">        return sha;</span>
     }
 
     /**
@@ -81,7 +85,7 @@ import java.io.IOException;
      * @return the label
      */
     public String getLabel() {
-<span class="fc" id="L84">        return label;</span>
+<span class="fc" id="L88">        return label;</span>
     }
 
     /**
@@ -92,14 +96,8 @@ import java.io.IOException;
      *             the io exception
      */
     public GHCommit getCommit() throws IOException {
-<span class="nc" id="L95">        return getRepository().getCommit(getSha());</span>
+<span class="nc" id="L99">        return getRepository().getCommit(getSha());</span>
     }
 
-    void wrapUp(GitHub root) {
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (user != null)</span>
-<span class="fc" id="L100">            user.root = root;</span>
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (repo != null)</span>
-<span class="fc" id="L102">            repo.wrap(root);</span>
-<span class="fc" id="L103">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

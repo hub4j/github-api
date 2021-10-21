@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,8 @@ import java.util.Map;
  * @see &lt;a href=&quot;https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads&quot;&gt;Webhook events
  *      and payloads&lt;/a&gt;
  */
-@SuppressWarnings(&quot;UnusedDeclaration&quot;)
-@SuppressFBWarnings(&quot;UWF_UNWRITTEN_FIELD&quot;)
-public class GHEventPayload extends GitHubInteractiveObject {
+@SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
+public abstract class GHEventPayload extends GitHubInteractiveObject {
     // https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#webhook-payload-object-common-properties
     // Webhook payload object common properties: action, sender, repository, organization, installation
     private String action;
@@ -46,8 +46,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @return the sender or {@code null} if accessed via the events API.
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
     public GHUser getSender() {
-<span class="fc" id="L50">        return sender;</span>
+<span class="fc" id="L51">        return sender;</span>
     }
 
     /**
@@ -55,18 +56,21 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @param sender
      *            the sender
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setSender(GHUser sender) {
-<span class="nc" id="L60">        this.sender = sender;</span>
-<span class="nc" id="L61">    }</span>
+<span class="fc" id="L63">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
 
     /**
      * Gets repository.
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L69">        return repository;</span>
+<span class="fc" id="L73">        return repository;</span>
     }
 
     /**
@@ -74,18 +78,21 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @param repository
      *            the repository
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setRepository(GHRepository repository) {
-<span class="nc" id="L79">        this.repository = repository;</span>
-<span class="nc" id="L80">    }</span>
+<span class="fc" id="L85">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
 
     /**
      * Gets organization.
      *
      * @return the organization
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
     public GHOrganization getOrganization() {
-<span class="fc" id="L88">        return organization;</span>
+<span class="fc" id="L95">        return organization;</span>
     }
 
     /**
@@ -93,35 +100,22 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *
      * @param organization
      *            the organization
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setOrganization(GHOrganization organization) {
-<span class="nc" id="L98">        this.organization = organization;</span>
-<span class="nc" id="L99">    }</span>
+<span class="fc" id="L107">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
 
     /**
      * Gets installation
      *
      * @return the installation
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
     public GHAppInstallation getInstallation() {
-<span class="fc" id="L107">        return installation;</span>
+<span class="fc" id="L117">        return installation;</span>
     }
-
-    void wrapUp(GitHub root) {
-<span class="fc" id="L111">        this.root = root;</span>
-<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (sender != null) {</span>
-<span class="fc" id="L113">            sender.wrapUp(root);</span>
-        }
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (repository != null) {</span>
-<span class="fc" id="L116">            repository.wrap(root);</span>
-        }
-<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (organization != null) {</span>
-<span class="fc" id="L119">            organization.wrapUp(root);</span>
-        }
-<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (installation != null) {</span>
-<span class="fc" id="L122">            installation.wrapUp(root);</span>
-        }
-<span class="fc" id="L124">    }</span>
 
     // List of events that still need to be added:
     // ContentReferenceEvent
@@ -131,6 +125,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
     // ProjectCardEvent ProjectColumnEvent ProjectEvent RepositoryDispatchEvent RepositoryImportEvent
     // RepositoryVulnerabilityAlertEvent SecurityAdvisoryEvent StarEvent StatusEvent TeamEvent TeamAddEvent WatchEvent
 
+    void lateBind() {
+<span class="fc" id="L129">    }</span>
+
     /**
      * A check run event has been created, rerequested, completed, or has a requested_action.
      *
@@ -138,7 +135,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      check_run event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/checks#check-runs&quot;&gt;Check Runs&lt;/a&gt;
      */
-<span class="fc" id="L141">    public static class CheckRun extends GHEventPayload {</span>
+<span class="fc" id="L138">    public static class CheckRun extends GHEventPayload {</span>
         private int number;
         private GHCheckRun checkRun;
         private GHRequestedAction requestedAction;
@@ -149,7 +146,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the number
          */
         public int getNumber() {
-<span class="nc" id="L152">            return number;</span>
+<span class="nc" id="L149">            return number;</span>
         }
 
         /**
@@ -157,16 +154,19 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param currentCheckRun
          *            the check run object
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setCheckRun(GHCheckRun currentCheckRun) {
-<span class="nc" id="L162">            this.checkRun = currentCheckRun;</span>
-<span class="nc" id="L163">        }</span>
+<span class="fc" id="L161">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         /**
          * Gets Check Run object
          *
          * @return the current checkRun object
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHCheckRun getCheckRun() {
 <span class="fc" id="L171">            return checkRun;</span>
         }
@@ -176,33 +176,36 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param currentRequestedAction
          *            the current action
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
-        public void setCheckRun(GHRequestedAction currentRequestedAction) {
-<span class="nc" id="L181">            this.requestedAction = currentRequestedAction;</span>
-<span class="nc" id="L182">        }</span>
+        @Deprecated
+        public void setRequestedAction(GHRequestedAction currentRequestedAction) {
+<span class="fc" id="L183">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         /**
          * Gets the Requested Action object
          *
          * @return the requested action
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHRequestedAction getRequestedAction() {
-<span class="fc" id="L190">            return requestedAction;</span>
+<span class="fc" id="L193">            return requestedAction;</span>
         }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L195">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L196" title="1 of 2 branches missed.">            if (checkRun == null)</span>
-<span class="nc" id="L197">                throw new IllegalStateException(</span>
+        void lateBind() {
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">            if (checkRun == null)</span>
+<span class="nc" id="L199">                throw new IllegalStateException(</span>
                         &quot;Expected check_run payload, but got something else. Maybe we've got another type of event?&quot;);
-<span class="fc" id="L199">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L200" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L201">                checkRun.wrap(repository);</span>
+<span class="fc" id="L201">            super.lateBind();</span>
+<span class="fc" id="L202">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L204">                checkRun.wrap(repository);</span>
             } else {
-<span class="nc" id="L203">                checkRun.wrap(root);</span>
+<span class="nc" id="L206">                checkRun.wrap(root());</span>
             }
-<span class="fc" id="L205">        }</span>
+<span class="fc" id="L208">        }</span>
     }
 
     /**
@@ -212,7 +215,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      check_suite event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/checks#check-suites&quot;&gt;Check Suites&lt;/a&gt;
      */
-<span class="fc" id="L215">    public static class CheckSuite extends GHEventPayload {</span>
+<span class="fc" id="L218">    public static class CheckSuite extends GHEventPayload {</span>
         private GHCheckSuite checkSuite;
 
         /**
@@ -220,23 +223,24 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the Check Suite object
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHCheckSuite getCheckSuite() {
-<span class="fc" id="L224">            return checkSuite;</span>
+<span class="fc" id="L228">            return checkSuite;</span>
         }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L229">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L230" title="1 of 2 branches missed.">            if (checkSuite == null)</span>
-<span class="nc" id="L231">                throw new IllegalStateException(</span>
+        void lateBind() {
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">            if (checkSuite == null)</span>
+<span class="nc" id="L234">                throw new IllegalStateException(</span>
                         &quot;Expected check_suite payload, but got something else. Maybe we've got another type of event?&quot;);
-<span class="fc" id="L233">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L234" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L235">                checkSuite.wrap(repository);</span>
+<span class="fc" id="L236">            super.lateBind();</span>
+<span class="fc" id="L237">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L239">                checkSuite.wrap(repository);</span>
             } else {
-<span class="nc" id="L237">                checkSuite.wrap(root);</span>
+<span class="nc" id="L241">                checkSuite.wrap(root());</span>
             }
-<span class="fc" id="L239">        }</span>
+<span class="fc" id="L243">        }</span>
     }
 
     /**
@@ -247,7 +251,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      installation event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/apps#installations&quot;&gt;GitHub App Installation&lt;/a&gt;
      */
-<span class="fc" id="L250">    public static class Installation extends GHEventPayload {</span>
+<span class="fc" id="L254">    public static class Installation extends GHEventPayload {</span>
         private List&lt;GHRepository&gt; repositories;
 
         /**
@@ -256,28 +260,26 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the repositories
          */
         public List&lt;GHRepository&gt; getRepositories() {
-<span class="fc" id="L259">            return repositories;</span>
+<span class="fc" id="L263">            return Collections.unmodifiableList(repositories);</span>
         };
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L264">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L265" title="1 of 2 branches missed.">            if (getInstallation() == null) {</span>
-<span class="nc" id="L266">                throw new IllegalStateException(</span>
+        void lateBind() {
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">            if (getInstallation() == null) {</span>
+<span class="nc" id="L269">                throw new IllegalStateException(</span>
                         &quot;Expected check_suite payload, but got something else. Maybe we've got another type of event?&quot;);
             }
-
-<span class="pc bpc" id="L270" title="2 of 4 branches missed.">            if (repositories != null &amp;&amp; !repositories.isEmpty()) {</span>
+<span class="fc" id="L272">            super.lateBind();</span>
+<span class="pc bpc" id="L273" title="2 of 4 branches missed.">            if (repositories != null &amp;&amp; !repositories.isEmpty()) {</span>
                 try {
-<span class="fc bfc" id="L272" title="All 2 branches covered.">                    for (GHRepository singleRepo : repositories) { // warp each of the repository</span>
-<span class="fc" id="L273">                        singleRepo.wrap(root);</span>
-<span class="fc" id="L274">                        singleRepo.populate();</span>
-<span class="fc" id="L275">                    }</span>
-<span class="nc" id="L276">                } catch (IOException e) {</span>
-<span class="nc" id="L277">                    throw new GHException(&quot;Failed to refresh repositories&quot;, e);</span>
-<span class="fc" id="L278">                }</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">                    for (GHRepository singleRepo : repositories) { // warp each of the repository</span>
+<span class="fc" id="L276">                        singleRepo.populate();</span>
+<span class="fc" id="L277">                    }</span>
+<span class="nc" id="L278">                } catch (IOException e) {</span>
+<span class="nc" id="L279">                    throw new GHException(&quot;Failed to refresh repositories&quot;, e);</span>
+<span class="fc" id="L280">                }</span>
             }
-<span class="fc" id="L280">        }</span>
+<span class="fc" id="L282">        }</span>
     }
 
     /**
@@ -288,7 +290,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      installation_repositories event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/apps#installations&quot;&gt;GitHub App installation&lt;/a&gt;
      */
-<span class="fc" id="L291">    public static class InstallationRepositories extends GHEventPayload {</span>
+<span class="fc" id="L293">    public static class InstallationRepositories extends GHEventPayload {</span>
         private String repositorySelection;
         private List&lt;GHRepository&gt; repositoriesAdded;
         private List&lt;GHRepository&gt; repositoriesRemoved;
@@ -299,7 +301,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the installation selection
          */
         public String getRepositorySelection() {
-<span class="fc" id="L302">            return repositorySelection;</span>
+<span class="fc" id="L304">            return repositorySelection;</span>
         }
 
         /**
@@ -308,7 +310,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the repositories
          */
         public List&lt;GHRepository&gt; getRepositoriesAdded() {
-<span class="fc" id="L311">            return repositoriesAdded;</span>
+<span class="fc" id="L313">            return Collections.unmodifiableList(repositoriesAdded);</span>
         }
 
         /**
@@ -317,27 +319,25 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the repositories
          */
         public List&lt;GHRepository&gt; getRepositoriesRemoved() {
-<span class="fc" id="L320">            return repositoriesRemoved;</span>
+<span class="fc" id="L322">            return Collections.unmodifiableList(repositoriesRemoved);</span>
         }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L325">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L326" title="1 of 2 branches missed.">            if (getInstallation() == null) {</span>
-<span class="nc" id="L327">                throw new IllegalStateException(</span>
+        void lateBind() {
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">            if (getInstallation() == null) {</span>
+<span class="nc" id="L328">                throw new IllegalStateException(</span>
                         &quot;Expected check_suite payload, but got something else. Maybe we've got another type of event?&quot;);
             }
-
+<span class="fc" id="L331">            super.lateBind();</span>
             List&lt;GHRepository&gt; repositories;
-<span class="pc bpc" id="L332" title="1 of 2 branches missed.">            if (&quot;added&quot;.equals(getAction()))</span>
-<span class="fc" id="L333">                repositories = repositoriesAdded;</span>
+<span class="pc bpc" id="L333" title="1 of 2 branches missed.">            if (&quot;added&quot;.equals(getAction()))</span>
+<span class="fc" id="L334">                repositories = repositoriesAdded;</span>
             else // action == &quot;removed&quot;
-<span class="nc" id="L335">                repositories = repositoriesRemoved;</span>
+<span class="nc" id="L336">                repositories = repositoriesRemoved;</span>
 
-<span class="pc bpc" id="L337" title="2 of 4 branches missed.">            if (repositories != null &amp;&amp; !repositories.isEmpty()) {</span>
+<span class="pc bpc" id="L338" title="2 of 4 branches missed.">            if (repositories != null &amp;&amp; !repositories.isEmpty()) {</span>
                 try {
-<span class="fc bfc" id="L339" title="All 2 branches covered.">                    for (GHRepository singleRepo : repositories) { // warp each of the repository</span>
-<span class="fc" id="L340">                        singleRepo.wrap(root);</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">                    for (GHRepository singleRepo : repositories) { // warp each of the repository</span>
 <span class="fc" id="L341">                        singleRepo.populate();</span>
 <span class="fc" id="L342">                    }</span>
 <span class="nc" id="L343">                } catch (IOException e) {</span>
@@ -376,8 +376,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the pull request
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHPullRequest getPullRequest() {
-<span class="fc" id="L380">            pullRequest.root = root;</span>
 <span class="fc" id="L381">            return pullRequest;</span>
         }
 
@@ -386,8 +386,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return label the added or removed label
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHLabel getLabel() {
-<span class="fc" id="L390">            return label;</span>
+<span class="fc" id="L391">            return label;</span>
         }
 
         /**
@@ -395,21 +396,20 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return changes
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHPullRequestChanges getChanges() {
-<span class="fc" id="L399">            return changes;</span>
+<span class="fc" id="L401">            return changes;</span>
         }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L404">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L405" title="1 of 2 branches missed.">            if (pullRequest == null)</span>
-<span class="nc" id="L406">                throw new IllegalStateException(</span>
+        void lateBind() {
+<span class="pc bpc" id="L406" title="1 of 2 branches missed.">            if (pullRequest == null)</span>
+<span class="nc" id="L407">                throw new IllegalStateException(</span>
                         &quot;Expected pull_request payload, but got something else. Maybe we've got another type of event?&quot;);
-<span class="fc" id="L408">            GHRepository repository = getRepository();</span>
-<span class="fc bfc" id="L409" title="All 2 branches covered.">            if (repository != null) {</span>
-<span class="fc" id="L410">                pullRequest.wrapUp(repository);</span>
-            } else {
-<span class="fc" id="L412">                pullRequest.wrapUp(root);</span>
+<span class="fc" id="L409">            super.lateBind();</span>
+<span class="fc" id="L410">            GHRepository repository = getRepository();</span>
+<span class="fc bfc" id="L411" title="All 2 branches covered.">            if (repository != null) {</span>
+<span class="fc" id="L412">                pullRequest.wrapUp(repository);</span>
             }
 <span class="fc" id="L414">        }</span>
     }
@@ -431,8 +431,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the review
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHPullRequestReview getReview() {
-<span class="fc" id="L435">            return review;</span>
+<span class="fc" id="L436">            return review;</span>
         }
 
         /**
@@ -440,24 +441,23 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the pull request
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHPullRequest getPullRequest() {
-<span class="fc" id="L444">            return pullRequest;</span>
+<span class="fc" id="L446">            return pullRequest;</span>
         }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L449">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L450" title="1 of 2 branches missed.">            if (review == null)</span>
-<span class="nc" id="L451">                throw new IllegalStateException(</span>
+        void lateBind() {
+<span class="pc bpc" id="L451" title="1 of 2 branches missed.">            if (review == null)</span>
+<span class="nc" id="L452">                throw new IllegalStateException(</span>
                         &quot;Expected pull_request_review payload, but got something else. Maybe we've got another type of event?&quot;);
+<span class="fc" id="L454">            super.lateBind();</span>
 
-<span class="fc" id="L454">            review.wrapUp(pullRequest);</span>
+<span class="fc" id="L456">            review.wrapUp(pullRequest);</span>
 
-<span class="fc" id="L456">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L457" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L458">                pullRequest.wrapUp(repository);</span>
-            } else {
-<span class="nc" id="L460">                pullRequest.wrapUp(root);</span>
+<span class="fc" id="L458">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L459" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L460">                pullRequest.wrapUp(repository);</span>
             }
 <span class="fc" id="L462">        }</span>
     }
@@ -479,8 +479,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the comment
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHPullRequestReviewComment getComment() {
-<span class="fc" id="L483">            return comment;</span>
+<span class="fc" id="L484">            return comment;</span>
         }
 
         /**
@@ -488,26 +489,24 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the pull request
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHPullRequest getPullRequest() {
-<span class="fc" id="L492">            return pullRequest;</span>
+<span class="fc" id="L494">            return pullRequest;</span>
         }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L497">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L498" title="1 of 2 branches missed.">            if (comment == null)</span>
-<span class="nc" id="L499">                throw new IllegalStateException(</span>
+        void lateBind() {
+<span class="pc bpc" id="L499" title="1 of 2 branches missed.">            if (comment == null)</span>
+<span class="nc" id="L500">                throw new IllegalStateException(</span>
                         &quot;Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?&quot;);
+<span class="fc" id="L502">            super.lateBind();</span>
+<span class="fc" id="L503">            comment.wrapUp(pullRequest);</span>
 
-<span class="fc" id="L502">            comment.wrapUp(pullRequest);</span>
-
-<span class="fc" id="L504">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L505" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L506">                pullRequest.wrapUp(repository);</span>
-            } else {
-<span class="nc" id="L508">                pullRequest.wrapUp(root);</span>
+<span class="fc" id="L505">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L506" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L507">                pullRequest.wrapUp(repository);</span>
             }
-<span class="fc" id="L510">        }</span>
+<span class="fc" id="L509">        }</span>
     }
 
     /**
@@ -518,7 +517,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      issues events&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/issues#comments&quot;&gt;Issues Comments&lt;/a&gt;
      */
-<span class="fc" id="L521">    public static class Issue extends GHEventPayload {</span>
+<span class="fc" id="L520">    public static class Issue extends GHEventPayload {</span>
         private GHIssue issue;
 
         private GHLabel label;
@@ -530,6 +529,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the issue
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHIssue getIssue() {
 <span class="fc" id="L534">            return issue;</span>
         }
@@ -539,18 +539,21 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param issue
          *            the issue
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setIssue(GHIssue issue) {
-<span class="nc" id="L544">            this.issue = issue;</span>
-<span class="nc" id="L545">        }</span>
+<span class="nc" id="L546">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         /**
          * Gets the added or removed label for labeled/unlabeled events.
          *
          * @return label the added or removed label
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHLabel getLabel() {
-<span class="fc" id="L553">            return label;</span>
+<span class="fc" id="L556">            return label;</span>
         }
 
         /**
@@ -558,20 +561,19 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return changes
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHIssueChanges getChanges() {
-<span class="fc" id="L562">            return changes;</span>
+<span class="fc" id="L566">            return changes;</span>
         }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L567">            super.wrapUp(root);</span>
-<span class="fc" id="L568">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L569" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L570">                issue.wrap(repository);</span>
-            } else {
-<span class="nc" id="L572">                issue.wrap(root);</span>
+        void lateBind() {
+<span class="fc" id="L571">            super.lateBind();</span>
+<span class="fc" id="L572">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L573" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L574">                issue.wrap(repository);</span>
             }
-<span class="fc" id="L574">        }</span>
+<span class="fc" id="L576">        }</span>
     }
 
     /**
@@ -582,7 +584,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      issue_comment event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/issues#comments&quot;&gt;Issue Comments&lt;/a&gt;
      */
-<span class="fc" id="L585">    public static class IssueComment extends GHEventPayload {</span>
+<span class="fc" id="L587">    public static class IssueComment extends GHEventPayload {</span>
         private GHIssueComment comment;
         private GHIssue issue;
 
@@ -591,8 +593,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the comment
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHIssueComment getComment() {
-<span class="fc" id="L595">            return comment;</span>
+<span class="fc" id="L598">            return comment;</span>
         }
 
         /**
@@ -600,18 +603,21 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param comment
          *            the comment
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setComment(GHIssueComment comment) {
-<span class="nc" id="L605">            this.comment = comment;</span>
-<span class="nc" id="L606">        }</span>
+<span class="fc" id="L610">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         /**
          * Gets issue.
          *
          * @return the issue
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHIssue getIssue() {
-<span class="fc" id="L614">            return issue;</span>
+<span class="fc" id="L620">            return issue;</span>
         }
 
         /**
@@ -619,22 +625,22 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param issue
          *            the issue
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setIssue(GHIssue issue) {
-<span class="nc" id="L624">            this.issue = issue;</span>
-<span class="nc" id="L625">        }</span>
+<span class="fc" id="L632">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L629">            super.wrapUp(root);</span>
-<span class="fc" id="L630">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L631" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L632">                issue.wrap(repository);</span>
-            } else {
-<span class="nc" id="L634">                issue.wrap(root);</span>
+        void lateBind() {
+<span class="fc" id="L637">            super.lateBind();</span>
+<span class="fc" id="L638">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L639" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L640">                issue.wrap(repository);</span>
             }
-<span class="fc" id="L636">            comment.wrapUp(issue);</span>
-<span class="fc" id="L637">        }</span>
+<span class="fc" id="L642">            comment.wrapUp(issue);</span>
+<span class="fc" id="L643">        }</span>
     }
 
     /**
@@ -645,7 +651,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      commit comment&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#comments&quot;&gt;Comments&lt;/a&gt;
      */
-<span class="fc" id="L648">    public static class CommitComment extends GHEventPayload {</span>
+<span class="fc" id="L654">    public static class CommitComment extends GHEventPayload {</span>
         private GHCommitComment comment;
 
         /**
@@ -653,8 +659,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the comment
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHCommitComment getComment() {
-<span class="fc" id="L657">            return comment;</span>
+<span class="fc" id="L664">            return comment;</span>
         }
 
         /**
@@ -662,19 +669,21 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param comment
          *            the comment
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setComment(GHCommitComment comment) {
-<span class="nc" id="L667">            this.comment = comment;</span>
-<span class="nc" id="L668">        }</span>
+<span class="fc" id="L676">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L672">            super.wrapUp(root);</span>
-<span class="fc" id="L673">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L674" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L675">                comment.wrap(repository);</span>
+        void lateBind() {
+<span class="fc" id="L681">            super.lateBind();</span>
+<span class="fc" id="L682">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L683" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L684">                comment.wrap(repository);</span>
             }
-<span class="fc" id="L677">        }</span>
+<span class="fc" id="L686">        }</span>
     }
 
     /**
@@ -684,7 +693,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      create event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/git&quot;&gt;Git data&lt;/a&gt;
      */
-<span class="fc" id="L687">    public static class Create extends GHEventPayload {</span>
+<span class="fc" id="L696">    public static class Create extends GHEventPayload {</span>
         private String ref;
         private String refType;
         private String masterBranch;
@@ -695,9 +704,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the ref
          */
-        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getRef() {
-<span class="fc" id="L700">            return ref;</span>
+<span class="fc" id="L708">            return ref;</span>
         }
 
         /**
@@ -705,9 +713,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the ref type
          */
-        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getRefType() {
-<span class="fc" id="L710">            return refType;</span>
+<span class="fc" id="L717">            return refType;</span>
         }
 
         /**
@@ -717,9 +724,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the default branch
          */
-        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getMasterBranch() {
-<span class="fc" id="L722">            return masterBranch;</span>
+<span class="fc" id="L728">            return masterBranch;</span>
         }
 
         /**
@@ -727,9 +733,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the description
          */
-        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getDescription() {
-<span class="fc" id="L732">            return description;</span>
+<span class="fc" id="L737">            return description;</span>
         }
     }
 
@@ -740,7 +745,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      delete event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/git&quot;&gt;Git data&lt;/a&gt;
      */
-<span class="fc" id="L743">    public static class Delete extends GHEventPayload {</span>
+<span class="fc" id="L748">    public static class Delete extends GHEventPayload {</span>
         private String ref;
         private String refType;
 
@@ -749,9 +754,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the ref
          */
-        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getRef() {
-<span class="fc" id="L754">            return ref;</span>
+<span class="fc" id="L758">            return ref;</span>
         }
 
         /**
@@ -759,9 +763,8 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the ref type
          */
-        @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Comes from JSON deserialization&quot;)
         public String getRefType() {
-<span class="fc" id="L764">            return refType;</span>
+<span class="fc" id="L767">            return refType;</span>
         }
     }
 
@@ -772,7 +775,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      deployment event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#deployments&quot;&gt;Deployments&lt;/a&gt;
      */
-<span class="fc" id="L775">    public static class Deployment extends GHEventPayload {</span>
+<span class="fc" id="L778">    public static class Deployment extends GHEventPayload {</span>
         private GHDeployment deployment;
 
         /**
@@ -780,8 +783,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the deployment
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHDeployment getDeployment() {
-<span class="fc" id="L784">            return deployment;</span>
+<span class="fc" id="L788">            return deployment;</span>
         }
 
         /**
@@ -789,19 +793,21 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param deployment
          *            the deployment
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setDeployment(GHDeployment deployment) {
-<span class="nc" id="L794">            this.deployment = deployment;</span>
-<span class="nc" id="L795">        }</span>
+<span class="nc" id="L800">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L799">            super.wrapUp(root);</span>
-<span class="fc" id="L800">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L801" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L802">                deployment.wrap(repository);</span>
+        void lateBind() {
+<span class="fc" id="L805">            super.lateBind();</span>
+<span class="fc" id="L806">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L807" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L808">                deployment.wrap(repository);</span>
             }
-<span class="fc" id="L804">        }</span>
+<span class="fc" id="L810">        }</span>
     }
 
     /**
@@ -812,7 +818,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      deployment_status event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#deployments&quot;&gt;Deployments&lt;/a&gt;
      */
-<span class="fc" id="L815">    public static class DeploymentStatus extends GHEventPayload {</span>
+<span class="fc" id="L821">    public static class DeploymentStatus extends GHEventPayload {</span>
         private GHDeploymentStatus deploymentStatus;
         private GHDeployment deployment;
 
@@ -821,8 +827,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the deployment status
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHDeploymentStatus getDeploymentStatus() {
-<span class="fc" id="L825">            return deploymentStatus;</span>
+<span class="fc" id="L832">            return deploymentStatus;</span>
         }
 
         /**
@@ -830,18 +837,21 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param deploymentStatus
          *            the deployment status
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setDeploymentStatus(GHDeploymentStatus deploymentStatus) {
-<span class="nc" id="L835">            this.deploymentStatus = deploymentStatus;</span>
-<span class="nc" id="L836">        }</span>
+<span class="fc" id="L844">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         /**
          * Gets deployment.
          *
          * @return the deployment
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHDeployment getDeployment() {
-<span class="fc" id="L844">            return deployment;</span>
+<span class="fc" id="L854">            return deployment;</span>
         }
 
         /**
@@ -849,20 +859,22 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param deployment
          *            the deployment
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setDeployment(GHDeployment deployment) {
-<span class="nc" id="L854">            this.deployment = deployment;</span>
-<span class="nc" id="L855">        }</span>
+<span class="fc" id="L866">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L859">            super.wrapUp(root);</span>
-<span class="fc" id="L860">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L861" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L862">                deployment.wrap(repository);</span>
-<span class="fc" id="L863">                deploymentStatus.wrap(repository);</span>
+        void lateBind() {
+<span class="fc" id="L871">            super.lateBind();</span>
+<span class="fc" id="L872">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L873" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L874">                deployment.wrap(repository);</span>
+<span class="fc" id="L875">                deploymentStatus.lateBind(repository);</span>
             }
-<span class="fc" id="L865">        }</span>
+<span class="fc" id="L877">        }</span>
     }
 
     /**
@@ -872,7 +884,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#forks&quot;&gt;Forks&lt;/a&gt;
      */
-<span class="fc" id="L875">    public static class Fork extends GHEventPayload {</span>
+<span class="fc" id="L887">    public static class Fork extends GHEventPayload {</span>
         private GHRepository forkee;
 
         /**
@@ -880,8 +892,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the forkee
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHRepository getForkee() {
-<span class="fc" id="L884">            return forkee;</span>
+<span class="fc" id="L897">            return forkee;</span>
         }
 
         /**
@@ -889,16 +902,12 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param forkee
          *            the forkee
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setForkee(GHRepository forkee) {
-<span class="nc" id="L894">            this.forkee = forkee;</span>
-<span class="nc" id="L895">        }</span>
-
-        @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L899">            super.wrapUp(root);</span>
-<span class="fc" id="L900">            forkee.wrap(root);</span>
-<span class="fc" id="L901">        }</span>
+<span class="fc" id="L909">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
     }
 
     /**
@@ -907,8 +916,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * &lt;a href=&quot;https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#ping&quot;&gt; ping
      * event&lt;/a&gt;
      */
-<span class="fc" id="L910">    public static class Ping extends GHEventPayload {</span>
-
+<span class="fc" id="L919">    public static class Ping extends GHEventPayload {</span>
     }
 
     /**
@@ -917,8 +925,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @see &lt;a href=&quot;https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#public&quot;&gt;
      *      public event&lt;/a&gt;
      */
-<span class="fc" id="L920">    public static class Public extends GHEventPayload {</span>
-
+<span class="fc" id="L928">    public static class Public extends GHEventPayload {</span>
     }
 
     /**
@@ -927,7 +934,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @see &lt;a href=&quot;https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#push&quot;&gt; push
      *      event&lt;/a&gt;
      */
-<span class="fc" id="L930">    public static class Push extends GHEventPayload {</span>
+<span class="fc" id="L937">    public static class Push extends GHEventPayload {</span>
         private String head, before;
         private boolean created, deleted, forced;
         private String ref;
@@ -942,7 +949,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the head
          */
         public String getHead() {
-<span class="fc" id="L945">            return head;</span>
+<span class="fc" id="L952">            return head;</span>
         }
 
         /**
@@ -952,13 +959,13 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the before
          */
         public String getBefore() {
-<span class="fc" id="L955">            return before;</span>
+<span class="fc" id="L962">            return before;</span>
         }
 
         @JsonSetter // alias
         private void setAfter(String after) {
-<span class="fc" id="L960">            head = after;</span>
-<span class="fc" id="L961">        }</span>
+<span class="fc" id="L967">            head = after;</span>
+<span class="fc" id="L968">        }</span>
 
         /**
          * The full Git ref that was pushed. Example: “refs/heads/main”
@@ -966,7 +973,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the ref
          */
         public String getRef() {
-<span class="fc" id="L969">            return ref;</span>
+<span class="fc" id="L976">            return ref;</span>
         }
 
         /**
@@ -975,7 +982,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the size
          */
         public int getSize() {
-<span class="nc" id="L978">            return size;</span>
+<span class="nc" id="L985">            return size;</span>
         }
 
         /**
@@ -984,7 +991,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isCreated() {
-<span class="fc" id="L987">            return created;</span>
+<span class="fc" id="L994">            return created;</span>
         }
 
         /**
@@ -993,7 +1000,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isDeleted() {
-<span class="fc" id="L996">            return deleted;</span>
+<span class="fc" id="L1003">            return deleted;</span>
         }
 
         /**
@@ -1002,7 +1009,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isForced() {
-<span class="fc" id="L1005">            return forced;</span>
+<span class="fc" id="L1012">            return forced;</span>
         }
 
         /**
@@ -1011,7 +1018,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the commits
          */
         public List&lt;PushCommit&gt; getCommits() {
-<span class="fc" id="L1014">            return commits;</span>
+<span class="fc" id="L1021">            return Collections.unmodifiableList(commits);</span>
         }
 
         /**
@@ -1019,8 +1026,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the pusher
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public Pusher getPusher() {
-<span class="fc" id="L1023">            return pusher;</span>
+<span class="fc" id="L1031">            return pusher;</span>
         }
 
         /**
@@ -1028,10 +1036,12 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param pusher
          *            the pusher
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setPusher(Pusher pusher) {
-<span class="nc" id="L1033">            this.pusher = pusher;</span>
-<span class="nc" id="L1034">        }</span>
+<span class="fc" id="L1043">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         /**
          * Gets compare.
@@ -1039,13 +1049,13 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return compare
          */
         public String getCompare() {
-<span class="fc" id="L1042">            return compare;</span>
+<span class="fc" id="L1052">            return compare;</span>
         }
 
         /**
          * The type Pusher.
          */
-<span class="fc" id="L1048">        public static class Pusher {</span>
+<span class="fc" id="L1058">        public static class Pusher {</span>
             private String name, email;
 
             /**
@@ -1054,7 +1064,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the name
              */
             public String getName() {
-<span class="fc" id="L1057">                return name;</span>
+<span class="fc" id="L1067">                return name;</span>
             }
 
             /**
@@ -1062,10 +1072,12 @@ public class GHEventPayload extends GitHubInteractiveObject {
              *
              * @param name
              *            the name
+             * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
              */
+            @Deprecated
             public void setName(String name) {
-<span class="nc" id="L1067">                this.name = name;</span>
-<span class="nc" id="L1068">            }</span>
+<span class="fc" id="L1079">                throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+            }
 
             /**
              * Gets email.
@@ -1073,7 +1085,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the email
              */
             public String getEmail() {
-<span class="fc" id="L1076">                return email;</span>
+<span class="fc" id="L1088">                return email;</span>
             }
 
             /**
@@ -1081,16 +1093,18 @@ public class GHEventPayload extends GitHubInteractiveObject {
              *
              * @param email
              *            the email
+             * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
              */
+            @Deprecated
             public void setEmail(String email) {
-<span class="nc" id="L1086">                this.email = email;</span>
-<span class="nc" id="L1087">            }</span>
+<span class="fc" id="L1100">                throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+            }
         }
 
         /**
          * Commit in a push. Note: sha is an alias for id.
          */
-<span class="fc" id="L1093">        public static class PushCommit {</span>
+<span class="fc" id="L1107">        public static class PushCommit {</span>
             private GitUser author;
             private GitUser committer;
             private String url, sha, message, timestamp;
@@ -1103,7 +1117,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the author
              */
             public GitUser getAuthor() {
-<span class="fc" id="L1106">                return author;</span>
+<span class="fc" id="L1120">                return author;</span>
             }
 
             /**
@@ -1112,7 +1126,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the committer
              */
             public GitUser getCommitter() {
-<span class="fc" id="L1115">                return committer;</span>
+<span class="fc" id="L1129">                return committer;</span>
             }
 
             /**
@@ -1121,7 +1135,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the url
              */
             public String getUrl() {
-<span class="nc" id="L1124">                return url;</span>
+<span class="nc" id="L1138">                return url;</span>
             }
 
             /**
@@ -1130,13 +1144,13 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the sha
              */
             public String getSha() {
-<span class="fc" id="L1133">                return sha;</span>
+<span class="fc" id="L1147">                return sha;</span>
             }
 
             @JsonSetter
             private void setId(String id) {
-<span class="fc" id="L1138">                sha = id;</span>
-<span class="fc" id="L1139">            }</span>
+<span class="fc" id="L1152">                sha = id;</span>
+<span class="fc" id="L1153">            }</span>
 
             /**
              * Gets message.
@@ -1144,7 +1158,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the message
              */
             public String getMessage() {
-<span class="nc" id="L1147">                return message;</span>
+<span class="nc" id="L1161">                return message;</span>
             }
 
             /**
@@ -1153,7 +1167,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the boolean
              */
             public boolean isDistinct() {
-<span class="nc" id="L1156">                return distinct;</span>
+<span class="nc" id="L1170">                return distinct;</span>
             }
 
             /**
@@ -1162,7 +1176,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the added
              */
             public List&lt;String&gt; getAdded() {
-<span class="fc" id="L1165">                return added;</span>
+<span class="fc" id="L1179">                return Collections.unmodifiableList(added);</span>
             }
 
             /**
@@ -1171,7 +1185,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the removed
              */
             public List&lt;String&gt; getRemoved() {
-<span class="fc" id="L1174">                return removed;</span>
+<span class="fc" id="L1188">                return Collections.unmodifiableList(removed);</span>
             }
 
             /**
@@ -1180,7 +1194,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the modified
              */
             public List&lt;String&gt; getModified() {
-<span class="fc" id="L1183">                return modified;</span>
+<span class="fc" id="L1197">                return Collections.unmodifiableList(modified);</span>
             }
 
             /**
@@ -1189,7 +1203,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
              * @return the timestamp
              */
             public Date getTimestamp() {
-<span class="fc" id="L1192">                return GitHubClient.parseDate(timestamp);</span>
+<span class="fc" id="L1206">                return GitHubClient.parseDate(timestamp);</span>
             }
         }
     }
@@ -1203,7 +1217,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
             justification = &quot;Constructed by JSON deserialization&quot;)
-<span class="fc" id="L1206">    public static class Release extends GHEventPayload {</span>
+<span class="fc" id="L1220">    public static class Release extends GHEventPayload {</span>
         private GHRelease release;
 
         /**
@@ -1211,8 +1225,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the release
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHRelease getRelease() {
-<span class="fc" id="L1215">            return release;</span>
+<span class="fc" id="L1230">            return release;</span>
         }
 
         /**
@@ -1220,10 +1235,12 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param release
          *            the release
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setRelease(GHRelease release) {
-<span class="nc" id="L1225">            this.release = release;</span>
-<span class="nc" id="L1226">        }</span>
+<span class="fc" id="L1242">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
     }
 
     /**
@@ -1233,7 +1250,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      repository event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos&quot;&gt;Repositories&lt;/a&gt;
      */
-<span class="fc" id="L1236">    public static class Repository extends GHEventPayload {</span>
+<span class="fc" id="L1253">    public static class Repository extends GHEventPayload {</span>
 
     }
 
@@ -1244,7 +1261,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      status event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/repos#statuses&quot;&gt;Repository Statuses&lt;/a&gt;
      */
-<span class="fc" id="L1247">    public static class Status extends GHEventPayload {</span>
+<span class="fc" id="L1264">    public static class Status extends GHEventPayload {</span>
         private String context;
         private String description;
         private GHCommitState state;
@@ -1257,7 +1274,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return status content
          */
         public String getContext() {
-<span class="fc" id="L1260">            return context;</span>
+<span class="fc" id="L1277">            return context;</span>
         }
 
         /**
@@ -1266,7 +1283,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return a url
          */
         public String getTargetUrl() {
-<span class="fc" id="L1269">            return targetUrl;</span>
+<span class="fc" id="L1286">            return targetUrl;</span>
         }
 
         /**
@@ -1275,7 +1292,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return status description
          */
         public String getDescription() {
-<span class="fc" id="L1278">            return description;</span>
+<span class="fc" id="L1295">            return description;</span>
         }
 
         /**
@@ -1284,7 +1301,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return status state
          */
         public GHCommitState getState() {
-<span class="fc" id="L1287">            return state;</span>
+<span class="fc" id="L1304">            return state;</span>
         }
 
         /**
@@ -1292,18 +1309,21 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param state
          *            status state
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setState(GHCommitState state) {
-<span class="nc" id="L1297">            this.state = state;</span>
-<span class="nc" id="L1298">        }</span>
+<span class="fc" id="L1316">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         /**
          * Gets the commit associated with the status event.
          *
          * @return commit
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHCommit getCommit() {
-<span class="fc" id="L1306">            return commit;</span>
+<span class="fc" id="L1326">            return commit;</span>
         }
 
         /**
@@ -1311,23 +1331,27 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @param commit
          *            commit
+         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
+        @Deprecated
         public void setCommit(GHCommit commit) {
-<span class="nc" id="L1316">            this.commit = commit;</span>
-<span class="nc" id="L1317">        }</span>
+<span class="fc" id="L1338">            throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+        }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L1321">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L1322" title="1 of 2 branches missed.">            if (state == null) {</span>
-<span class="nc" id="L1323">                throw new IllegalStateException(</span>
+        void lateBind() {
+
+<span class="pc bpc" id="L1344" title="1 of 2 branches missed.">            if (state == null) {</span>
+<span class="nc" id="L1345">                throw new IllegalStateException(</span>
                         &quot;Expected status payload, but got something else. Maybe we've got another type of event?&quot;);
             }
-<span class="fc" id="L1326">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L1327" title="1 of 2 branches missed.">            if (repository != null) {</span>
-<span class="fc" id="L1328">                commit.wrapUp(repository);</span>
+<span class="fc" id="L1348">            super.lateBind();</span>
+
+<span class="fc" id="L1350">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L1351" title="1 of 2 branches missed.">            if (repository != null) {</span>
+<span class="fc" id="L1352">                commit.wrapUp(repository);</span>
             }
-<span class="fc" id="L1330">        }</span>
+<span class="fc" id="L1354">        }</span>
     }
 
     /**
@@ -1341,7 +1365,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      &quot;https://docs.github.com/en/actions/reference/events-that-trigger-workflows#workflow_dispatch&quot;&gt;Events that
      *      trigger workflows&lt;/a&gt;
      */
-<span class="fc" id="L1344">    public static class WorkflowDispatch extends GHEventPayload {</span>
+<span class="fc" id="L1368">    public static class WorkflowDispatch extends GHEventPayload {</span>
         private Map&lt;String, Object&gt; inputs;
         private String ref;
         private String workflow;
@@ -1352,7 +1376,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the map of input parameters
          */
         public Map&lt;String, Object&gt; getInputs() {
-<span class="fc" id="L1355">            return inputs;</span>
+<span class="fc" id="L1379">            return Collections.unmodifiableMap(inputs);</span>
         }
 
         /**
@@ -1361,7 +1385,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the ref of the branch
          */
         public String getRef() {
-<span class="fc" id="L1364">            return ref;</span>
+<span class="fc" id="L1388">            return ref;</span>
         }
 
         /**
@@ -1370,7 +1394,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return the path of the workflow file
          */
         public String getWorkflow() {
-<span class="fc" id="L1373">            return workflow;</span>
+<span class="fc" id="L1397">            return workflow;</span>
         }
     }
 
@@ -1382,7 +1406,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      *      workflow run event&lt;/a&gt;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/actions#workflow-runs&quot;&gt;Actions Workflow Runs&lt;/a&gt;
      */
-<span class="fc" id="L1385">    public static class WorkflowRun extends GHEventPayload {</span>
+<span class="fc" id="L1409">    public static class WorkflowRun extends GHEventPayload {</span>
         private GHWorkflowRun workflowRun;
         private GHWorkflow workflow;
 
@@ -1391,8 +1415,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the workflow run
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHWorkflowRun getWorkflowRun() {
-<span class="fc" id="L1395">            return workflowRun;</span>
+<span class="fc" id="L1420">            return workflowRun;</span>
         }
 
         /**
@@ -1400,24 +1425,25 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the associated workflow
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHWorkflow getWorkflow() {
-<span class="fc" id="L1404">            return workflow;</span>
+<span class="fc" id="L1430">            return workflow;</span>
         }
 
         @Override
-        void wrapUp(GitHub root) {
-<span class="fc" id="L1409">            super.wrapUp(root);</span>
-<span class="pc bpc" id="L1410" title="2 of 4 branches missed.">            if (workflowRun == null || workflow == null) {</span>
-<span class="nc" id="L1411">                throw new IllegalStateException(</span>
+        void lateBind() {
+<span class="pc bpc" id="L1435" title="2 of 4 branches missed.">            if (workflowRun == null || workflow == null) {</span>
+<span class="nc" id="L1436">                throw new IllegalStateException(</span>
                         &quot;Expected workflow and workflow_run payload, but got something else. Maybe we've got another type of event?&quot;);
             }
-<span class="fc" id="L1414">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L1415" title="1 of 2 branches missed.">            if (repository == null) {</span>
-<span class="nc" id="L1416">                throw new IllegalStateException(&quot;Repository must not be null&quot;);</span>
+<span class="fc" id="L1439">            super.lateBind();</span>
+<span class="fc" id="L1440">            GHRepository repository = getRepository();</span>
+<span class="pc bpc" id="L1441" title="1 of 2 branches missed.">            if (repository == null) {</span>
+<span class="nc" id="L1442">                throw new IllegalStateException(&quot;Repository must not be null&quot;);</span>
             }
-<span class="fc" id="L1418">            workflowRun.wrapUp(repository);</span>
-<span class="fc" id="L1419">            workflow.wrapUp(repository);</span>
-<span class="fc" id="L1420">        }</span>
+<span class="fc" id="L1444">            workflowRun.wrapUp(repository);</span>
+<span class="fc" id="L1445">            workflow.wrapUp(repository);</span>
+<span class="fc" id="L1446">        }</span>
     }
 
     /**
@@ -1426,7 +1452,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
      * @see &lt;a href= &quot;https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#label&quot;&gt;
      *      label event&lt;/a&gt;
      */
-<span class="fc" id="L1429">    public static class Label extends GHEventPayload {</span>
+<span class="fc" id="L1455">    public static class Label extends GHEventPayload {</span>
 
         private GHLabel label;
 
@@ -1437,8 +1463,9 @@ public class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the label
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
         public GHLabel getLabel() {
-<span class="fc" id="L1441">            return label;</span>
+<span class="fc" id="L1468">            return label;</span>
         }
 
         /**
@@ -1447,7 +1474,7 @@ public class GHEventPayload extends GitHubInteractiveObject {
          * @return changes
          */
         public GHLabelChanges getChanges() {
-<span class="fc" id="L1450">            return changes;</span>
+<span class="fc" id="L1477">            return changes;</span>
         }
     }
 }

@@ -104,8 +104,8 @@ public class GHIssueSearchBuilder extends GHSearchBuilder&lt;GHIssue&gt; {
 
         @Override
         GHIssue[] getItems(GitHub root) {
-<span class="fc bfc" id="L107" title="All 2 branches covered.">            for (GHIssue i : items)</span>
-<span class="fc" id="L108">                i.wrap(root);</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            for (GHIssue i : items) {</span>
+            }
 <span class="fc" id="L109">            return items;</span>
         }
     }

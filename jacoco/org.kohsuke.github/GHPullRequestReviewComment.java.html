@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -38,16 +40,16 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  * @see GHPullRequest#createReviewComment(String, String, String, int) GHPullRequest#createReviewComment(String, String,
  *      String, int)
  */
-<span class="fc" id="L41">public class GHPullRequestReviewComment extends GHObject implements Reactable {</span>
+<span class="fc" id="L43">public class GHPullRequestReviewComment extends GHObject implements Reactable {</span>
     GHPullRequest owner;
 
     private String body;
     private GHUser user;
     private String path;
     private String html_url;
-<span class="fc" id="L48">    private int position = -1;</span>
-<span class="fc" id="L49">    private int original_position = -1;</span>
-<span class="fc" id="L50">    private long in_reply_to_id = -1L;</span>
+<span class="fc" id="L50">    private int position = -1;</span>
+<span class="fc" id="L51">    private int original_position = -1;</span>
+<span class="fc" id="L52">    private long in_reply_to_id = -1L;</span>
 
     /**
      * Draft gh pull request review comment.
@@ -63,16 +65,16 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @Deprecated
     public static GHPullRequestReviewComment draft(String body, String path, int position) {
-<span class="nc" id="L66">        GHPullRequestReviewComment result = new GHPullRequestReviewComment();</span>
-<span class="nc" id="L67">        result.body = body;</span>
-<span class="nc" id="L68">        result.path = path;</span>
-<span class="nc" id="L69">        result.position = position;</span>
-<span class="nc" id="L70">        return result;</span>
+<span class="nc" id="L68">        GHPullRequestReviewComment result = new GHPullRequestReviewComment();</span>
+<span class="nc" id="L69">        result.body = body;</span>
+<span class="nc" id="L70">        result.path = path;</span>
+<span class="nc" id="L71">        result.position = position;</span>
+<span class="nc" id="L72">        return result;</span>
     }
 
     GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
-<span class="fc" id="L74">        this.owner = owner;</span>
-<span class="fc" id="L75">        return this;</span>
+<span class="fc" id="L76">        this.owner = owner;</span>
+<span class="fc" id="L77">        return this;</span>
     }
 
     /**
@@ -80,8 +82,9 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *
      * @return the parent
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHPullRequest getParent() {
-<span class="nc" id="L84">        return owner;</span>
+<span class="fc" id="L87">        return owner;</span>
     }
 
     /**
@@ -90,7 +93,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L93">        return body;</span>
+<span class="fc" id="L96">        return body;</span>
     }
 
     /**
@@ -101,7 +104,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-<span class="fc" id="L104">        return owner.root.getUser(user.getLogin());</span>
+<span class="fc" id="L107">        return owner.root().getUser(user.getLogin());</span>
     }
 
     /**
@@ -110,7 +113,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the path
      */
     public String getPath() {
-<span class="fc" id="L113">        return path;</span>
+<span class="fc" id="L116">        return path;</span>
     }
 
     /**
@@ -120,7 +123,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @CheckForNull
     public int getPosition() {
-<span class="fc" id="L123">        return position;</span>
+<span class="fc" id="L126">        return position;</span>
     }
 
     /**
@@ -129,7 +132,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the original position
      */
     public int getOriginalPosition() {
-<span class="nc" id="L132">        return original_position;</span>
+<span class="nc" id="L135">        return original_position;</span>
     }
 
     /**
@@ -139,12 +142,12 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @CheckForNull
     public long getInReplyToId() {
-<span class="fc" id="L142">        return in_reply_to_id;</span>
+<span class="fc" id="L145">        return in_reply_to_id;</span>
     }
 
     @Override
     public URL getHtmlUrl() {
-<span class="fc" id="L147">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L150">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -153,7 +156,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L156">        return getApiRoute(false);</span>
+<span class="fc" id="L159">        return getApiRoute(false);</span>
     }
 
     /**
@@ -165,8 +168,8 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the api route
      */
     protected String getApiRoute(boolean includePullNumber) {
-<span class="fc" id="L168">        return &quot;/repos/&quot; + owner.getRepository().getFullName() + &quot;/pulls&quot;</span>
-<span class="fc bfc" id="L169" title="All 2 branches covered.">                + (includePullNumber ? &quot;/&quot; + owner.getNumber() : &quot;&quot;) + &quot;/comments/&quot; + getId();</span>
+<span class="fc" id="L171">        return &quot;/repos/&quot; + owner.getRepository().getFullName() + &quot;/pulls&quot;</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">                + (includePullNumber ? &quot;/&quot; + owner.getNumber() : &quot;&quot;) + &quot;/comments/&quot; + getId();</span>
     }
 
     /**
@@ -178,9 +181,9 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void update(String body) throws IOException {
-<span class="fc" id="L181">        owner.root.createRequest().method(&quot;PATCH&quot;).with(&quot;body&quot;, body).withUrlPath(getApiRoute()).fetchInto(this);</span>
-<span class="fc" id="L182">        this.body = body;</span>
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L184">        owner.root().createRequest().method(&quot;PATCH&quot;).with(&quot;body&quot;, body).withUrlPath(getApiRoute()).fetchInto(this);</span>
+<span class="fc" id="L185">        this.body = body;</span>
+<span class="fc" id="L186">    }</span>
 
     /**
      * Deletes this review comment.
@@ -189,8 +192,8 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L192">        owner.root.createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L193">    }</span>
+<span class="fc" id="L195">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L196">    }</span>
 
     /**
      * Create a new comment that replies to this comment.
@@ -202,31 +205,33 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public GHPullRequestReviewComment reply(String body) throws IOException {
-<span class="fc" id="L205">        return owner.root.createRequest()</span>
-<span class="fc" id="L206">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L207">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L208">                .withUrlPath(getApiRoute(true) + &quot;/replies&quot;)</span>
-<span class="fc" id="L209">                .fetch(GHPullRequestReviewComment.class)</span>
-<span class="fc" id="L210">                .wrapUp(owner);</span>
+<span class="fc" id="L208">        return owner.root()</span>
+<span class="fc" id="L209">                .createRequest()</span>
+<span class="fc" id="L210">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L211">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L212">                .withUrlPath(getApiRoute(true) + &quot;/replies&quot;)</span>
+<span class="fc" id="L213">                .fetch(GHPullRequestReviewComment.class)</span>
+<span class="fc" id="L214">                .wrapUp(owner);</span>
     }
 
     @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="fc" id="L215">        return owner.root.createRequest()</span>
-<span class="fc" id="L216">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L217">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L218">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="fc" id="L219">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L220">                .fetch(GHReaction.class)</span>
-<span class="fc" id="L221">                .wrap(owner.root);</span>
+<span class="fc" id="L219">        return owner.root()</span>
+<span class="fc" id="L220">                .createRequest()</span>
+<span class="fc" id="L221">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L222">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L223">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="fc" id="L224">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L225">                .fetch(GHReaction.class);</span>
     }
 
     @Preview(SQUIRREL_GIRL)
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L226">        return owner.root.createRequest()</span>
-<span class="fc" id="L227">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L228">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L229">                .toIterable(GHReaction[].class, item -&gt; item.wrap(owner.root));</span>
+<span class="fc" id="L230">        return owner.root()</span>
+<span class="fc" id="L231">                .createRequest()</span>
+<span class="fc" id="L232">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L233">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L234">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

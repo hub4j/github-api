@@ -34,7 +34,7 @@ public class GHCommitBuilder {
 
 <span class="fc" id="L35">    GHCommitBuilder(GHRepository repo) {</span>
 <span class="fc" id="L36">        this.repo = repo;</span>
-<span class="fc" id="L37">        req = repo.root.createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L37">        req = repo.root().createRequest().method(&quot;POST&quot;);</span>
 <span class="fc" id="L38">    }</span>
 
     /**

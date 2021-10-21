@@ -24,7 +24,7 @@ public class GHCommitQueryBuilder {
 
 <span class="fc" id="L25">    GHCommitQueryBuilder(GHRepository repo) {</span>
 <span class="fc" id="L26">        this.repo = repo;</span>
-<span class="fc" id="L27">        this.req = repo.root.createRequest(); // requester to build up</span>
+<span class="fc" id="L27">        this.req = repo.root().createRequest(); // requester to build up</span>
 <span class="fc" id="L28">    }</span>
 
     /**

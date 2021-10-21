@@ -19,8 +19,8 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     private final String apiUrlTail;
 
     @BetaApi
-<span class="fc" id="L22">    GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {</span>
-<span class="fc" id="L23">        this.root = root;</span>
+    GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {
+<span class="fc" id="L23">        super(root);</span>
 <span class="fc" id="L24">        this.apiUrlTail = apiUrlTail;</span>
 <span class="fc" id="L25">        this.builder = root.createRequest();</span>
 <span class="fc" id="L26">    }</span>
@@ -78,8 +78,7 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
 <span class="fc" id="L78">        return builder.method(&quot;POST&quot;)</span>
 <span class="fc" id="L79">                .withPreview(MACHINE_MAN)</span>
 <span class="fc" id="L80">                .withUrlPath(apiUrlTail)</span>
-<span class="fc" id="L81">                .fetch(GHAppInstallationToken.class)</span>
-<span class="fc" id="L82">                .wrapUp(root);</span>
+<span class="fc" id="L81">                .fetch(GHAppInstallationToken.class);</span>
     }
 
 }

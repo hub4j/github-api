@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHWorkflowJob.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHWorkflowJob.java</span></div><h1>GHWorkflowJob.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.GHWorkflowRun.Conclusion;
 import org.kohsuke.github.GHWorkflowRun.Status;
@@ -8,10 +9,7 @@ import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static java.util.Objects.requireNonNull;
 
@@ -20,7 +18,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Guillaume Smet
  */
-<span class="fc" id="L23">public class GHWorkflowJob extends GHObject {</span>
+<span class="fc" id="L21">public class GHWorkflowJob extends GHObject {</span>
 
     // Not provided by the API.
     @JsonIgnore
@@ -41,7 +39,7 @@ import static java.util.Objects.requireNonNull;
     private String htmlUrl;
     private String checkRunUrl;
 
-<span class="fc" id="L44">    private List&lt;Step&gt; steps = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L42">    private List&lt;Step&gt; steps = new ArrayList&lt;&gt;();</span>
 
     /**
      * The name of the job.
@@ -49,7 +47,7 @@ import static java.util.Objects.requireNonNull;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L52">        return name;</span>
+<span class="fc" id="L50">        return name;</span>
     }
 
     /**
@@ -58,7 +56,7 @@ import static java.util.Objects.requireNonNull;
      * @return sha for the HEAD commit
      */
     public String getHeadSha() {
-<span class="fc" id="L61">        return headSha;</span>
+<span class="fc" id="L59">        return headSha;</span>
     }
 
     /**
@@ -67,7 +65,7 @@ import static java.util.Objects.requireNonNull;
      * @return start date
      */
     public Date getStartedAt() {
-<span class="fc" id="L70">        return GitHubClient.parseDate(startedAt);</span>
+<span class="fc" id="L68">        return GitHubClient.parseDate(startedAt);</span>
     }
 
     /**
@@ -76,7 +74,7 @@ import static java.util.Objects.requireNonNull;
      * @return completion date
      */
     public Date getCompletedAt() {
-<span class="fc" id="L79">        return GitHubClient.parseDate(completedAt);</span>
+<span class="fc" id="L77">        return GitHubClient.parseDate(completedAt);</span>
     }
 
     /**
@@ -87,7 +85,7 @@ import static java.util.Objects.requireNonNull;
      * @return status of the job
      */
     public Status getStatus() {
-<span class="fc" id="L90">        return Status.from(status);</span>
+<span class="fc" id="L88">        return Status.from(status);</span>
     }
 
     /**
@@ -98,7 +96,7 @@ import static java.util.Objects.requireNonNull;
      * @return conclusion of the job
      */
     public Conclusion getConclusion() {
-<span class="fc" id="L101">        return Conclusion.from(conclusion);</span>
+<span class="fc" id="L99">        return Conclusion.from(conclusion);</span>
     }
 
     /**
@@ -107,12 +105,12 @@ import static java.util.Objects.requireNonNull;
      * @return the run id
      */
     public long getRunId() {
-<span class="fc" id="L110">        return runId;</span>
+<span class="fc" id="L108">        return runId;</span>
     }
 
     @Override
     public URL getHtmlUrl() {
-<span class="fc" id="L115">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L113">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -121,7 +119,7 @@ import static java.util.Objects.requireNonNull;
      * @return the check run url
      */
     public URL getCheckRunUrl() {
-<span class="fc" id="L124">        return GitHubClient.parseURL(checkRunUrl);</span>
+<span class="fc" id="L122">        return GitHubClient.parseURL(checkRunUrl);</span>
     }
 
     /**
@@ -130,7 +128,7 @@ import static java.util.Objects.requireNonNull;
      * @return the execution steps
      */
     public List&lt;Step&gt; getSteps() {
-<span class="fc" id="L133">        return steps;</span>
+<span class="fc" id="L131">        return Collections.unmodifiableList(steps);</span>
     }
 
     /**
@@ -138,8 +136,9 @@ import static java.util.Objects.requireNonNull;
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L142">        return owner;</span>
+<span class="fc" id="L141">        return owner;</span>
     }
 
     /**
@@ -156,35 +155,27 @@ import static java.util.Objects.requireNonNull;
      * @return the result of reading the stream.
      */
     public &lt;T&gt; T downloadLogs(InputStreamFunction&lt;T&gt; streamFunction) throws IOException {
-<span class="fc" id="L159">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
+<span class="fc" id="L158">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
 
-<span class="fc" id="L161">        return root.createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchStream(streamFunction);</span>
+<span class="fc" id="L160">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchStream(streamFunction);</span>
     }
 
     private String getApiRoute() {
-<span class="pc bpc" id="L165" title="1 of 2 branches missed.">        if (owner == null) {</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (owner == null) {</span>
             // Workflow runs returned from search to do not have an owner. Attempt to use url.
-<span class="nc" id="L167">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="nc" id="L168">            return StringUtils.prependIfMissing(url.toString().replace(root.getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="nc" id="L166">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L167">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
 
         }
-<span class="fc" id="L171">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/jobs/&quot; + getId();</span>
+<span class="fc" id="L170">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/jobs/&quot; + getId();</span>
     }
 
     GHWorkflowJob wrapUp(GHRepository owner) {
-<span class="fc" id="L175">        this.owner = owner;</span>
-<span class="fc" id="L176">        return wrapUp(owner.root);</span>
+<span class="fc" id="L174">        this.owner = owner;</span>
+<span class="fc" id="L175">        return this;</span>
     }
 
-    GHWorkflowJob wrapUp(GitHub root) {
-<span class="fc" id="L180">        this.root = root;</span>
-<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        if (owner != null) {</span>
-<span class="fc" id="L182">            owner.wrap(root);</span>
-        }
-<span class="fc" id="L184">        return this;</span>
-    }
-
-<span class="fc" id="L187">    public static class Step {</span>
+<span class="fc" id="L178">    public static class Step {</span>
 
         private String name;
         private int number;
@@ -201,7 +192,7 @@ import static java.util.Objects.requireNonNull;
          * @return name
          */
         public String getName() {
-<span class="fc" id="L204">            return name;</span>
+<span class="fc" id="L195">            return name;</span>
         }
 
         /**
@@ -210,7 +201,7 @@ import static java.util.Objects.requireNonNull;
          * @return number
          */
         public int getNumber() {
-<span class="fc" id="L213">            return number;</span>
+<span class="fc" id="L204">            return number;</span>
         }
 
         /**
@@ -219,7 +210,7 @@ import static java.util.Objects.requireNonNull;
          * @return start date
          */
         public Date getStartedAt() {
-<span class="fc" id="L222">            return GitHubClient.parseDate(startedAt);</span>
+<span class="fc" id="L213">            return GitHubClient.parseDate(startedAt);</span>
         }
 
         /**
@@ -228,7 +219,7 @@ import static java.util.Objects.requireNonNull;
          * @return completion date
          */
         public Date getCompletedAt() {
-<span class="fc" id="L231">            return GitHubClient.parseDate(completedAt);</span>
+<span class="fc" id="L222">            return GitHubClient.parseDate(completedAt);</span>
         }
 
         /**
@@ -239,7 +230,7 @@ import static java.util.Objects.requireNonNull;
          * @return status of the step
          */
         public Status getStatus() {
-<span class="fc" id="L242">            return Status.from(status);</span>
+<span class="fc" id="L233">            return Status.from(status);</span>
         }
 
         /**
@@ -250,7 +241,7 @@ import static java.util.Objects.requireNonNull;
          * @return conclusion of the step
          */
         public Conclusion getConclusion() {
-<span class="fc" id="L253">            return Conclusion.from(conclusion);</span>
+<span class="fc" id="L244">            return Conclusion.from(conclusion);</span>
         }
     }
 }

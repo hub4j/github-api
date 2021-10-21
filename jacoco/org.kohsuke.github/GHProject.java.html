@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -36,7 +38,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
  * @author Martin van Zijl
  * @see &lt;a href=&quot;https://developer.github.com/v3/projects/&quot;&gt;Projects&lt;/a&gt;
  */
-<span class="fc" id="L39">public class GHProject extends GHObject {</span>
+<span class="fc" id="L41">public class GHProject extends GHObject {</span>
     protected GHObject owner;
 
     private String owner_url;
@@ -49,16 +51,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
 
     @Override
     public URL getHtmlUrl() throws IOException {
-<span class="nc" id="L52">        return GitHubClient.parseURL(html_url);</span>
-    }
-
-    /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-<span class="nc" id="L61">        return root;</span>
+<span class="fc" id="L54">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -68,25 +61,23 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @throws IOException
      *             the io exception
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHObject getOwner() throws IOException {
-<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (owner == null) {</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (owner == null) {</span>
             try {
-<span class="nc bnc" id="L74" title="All 2 branches missed.">                if (owner_url.contains(&quot;/orgs/&quot;)) {</span>
-<span class="nc" id="L75">                    owner = root.createRequest()</span>
-<span class="nc" id="L76">                            .withUrlPath(getOwnerUrl().getPath())</span>
-<span class="nc" id="L77">                            .fetch(GHOrganization.class)</span>
-<span class="nc" id="L78">                            .wrapUp(root);</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/users/&quot;)) {</span>
-<span class="nc" id="L80">                    owner = root.createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class).wrapUp(root);</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/repos/&quot;)) {</span>
-<span class="nc" id="L82">                    String[] pathElements = getOwnerUrl().getPath().split(&quot;/&quot;);</span>
-<span class="nc" id="L83">                    owner = GHRepository.read(root, pathElements[1], pathElements[2]);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                if (owner_url.contains(&quot;/orgs/&quot;)) {</span>
+<span class="nc" id="L69">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHOrganization.class);</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/users/&quot;)) {</span>
+<span class="nc" id="L71">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/repos/&quot;)) {</span>
+<span class="nc" id="L73">                    String[] pathElements = getOwnerUrl().getPath().split(&quot;/&quot;);</span>
+<span class="nc" id="L74">                    owner = GHRepository.read(root(), pathElements[1], pathElements[2]);</span>
                 }
-<span class="nc" id="L85">            } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L86">                return null;</span>
-<span class="nc" id="L87">            }</span>
+<span class="nc" id="L76">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L77">                return null;</span>
+<span class="nc" id="L78">            }</span>
         }
-<span class="nc" id="L89">        return owner;</span>
+<span class="nc" id="L80">        return owner;</span>
     }
 
     /**
@@ -95,7 +86,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the owner url
      */
     public URL getOwnerUrl() {
-<span class="nc" id="L98">        return GitHubClient.parseURL(owner_url);</span>
+<span class="nc" id="L89">        return GitHubClient.parseURL(owner_url);</span>
     }
 
     /**
@@ -106,7 +97,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Deprecated
     public String getNode_id() {
-<span class="nc" id="L109">        return getNodeId();</span>
+<span class="nc" id="L100">        return getNodeId();</span>
     }
 
     /**
@@ -115,7 +106,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L118">        return name;</span>
+<span class="fc" id="L109">        return name;</span>
     }
 
     /**
@@ -124,7 +115,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L127">        return body;</span>
+<span class="fc" id="L118">        return body;</span>
     }
 
     /**
@@ -133,7 +124,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the number
      */
     public int getNumber() {
-<span class="nc" id="L136">        return number;</span>
+<span class="nc" id="L127">        return number;</span>
     }
 
     /**
@@ -142,7 +133,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the state
      */
     public ProjectState getState() {
-<span class="fc" id="L145">        return Enum.valueOf(ProjectState.class, state.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L136">        return Enum.valueOf(ProjectState.class, state.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -150,21 +141,9 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *
      * @return the creator
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getCreator() {
-<span class="nc" id="L154">        return creator;</span>
-    }
-
-    /**
-     * Wrap gh project.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh project
-     */
-    public GHProject wrap(GHRepository repo) {
-<span class="nc" id="L165">        this.owner = repo;</span>
-<span class="nc" id="L166">        this.root = repo.root;</span>
-<span class="nc" id="L167">        return this;</span>
+<span class="nc" id="L146">        return creator;</span>
     }
 
     /**
@@ -174,14 +153,38 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *            the root
      * @return the gh project
      */
+    @Deprecated
     public GHProject wrap(GitHub root) {
-<span class="fc" id="L178">        this.root = root;</span>
-<span class="fc" id="L179">        return this;</span>
+<span class="nc" id="L158">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh project
+     */
+    @Deprecated
+    public GHProject wrap(GHRepository repo) {
+<span class="nc" id="L170">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh project
+     */
+    GHProject lateBind(GHRepository repo) {
+<span class="nc" id="L181">        this.owner = repo;</span>
+<span class="nc" id="L182">        return this;</span>
     }
 
     private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L183">        root.createRequest().method(&quot;PATCH&quot;).withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L184">    }</span>
+<span class="fc" id="L186">        root().createRequest().method(&quot;PATCH&quot;).withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L187">    }</span>
 
     /**
      * Gets api route.
@@ -189,7 +192,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L192">        return &quot;/projects/&quot; + getId();</span>
+<span class="fc" id="L195">        return &quot;/projects/&quot; + getId();</span>
     }
 
     /**
@@ -201,8 +204,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void setName(String name) throws IOException {
-<span class="fc" id="L204">        edit(&quot;name&quot;, name);</span>
-<span class="fc" id="L205">    }</span>
+<span class="fc" id="L207">        edit(&quot;name&quot;, name);</span>
+<span class="fc" id="L208">    }</span>
 
     /**
      * Sets body.
@@ -213,14 +216,14 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void setBody(String body) throws IOException {
-<span class="fc" id="L216">        edit(&quot;body&quot;, body);</span>
-<span class="fc" id="L217">    }</span>
+<span class="fc" id="L219">        edit(&quot;body&quot;, body);</span>
+<span class="fc" id="L220">    }</span>
 
     /**
      * The enum ProjectState.
      */
-<span class="fc" id="L222">    public enum ProjectState {</span>
-<span class="fc" id="L223">        OPEN, CLOSED</span>
+<span class="fc" id="L225">    public enum ProjectState {</span>
+<span class="fc" id="L226">        OPEN, CLOSED</span>
     }
 
     /**
@@ -232,14 +235,14 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void setState(ProjectState state) throws IOException {
-<span class="fc" id="L235">        edit(&quot;state&quot;, state.toString().toLowerCase());</span>
-<span class="fc" id="L236">    }</span>
+<span class="fc" id="L238">        edit(&quot;state&quot;, state.toString().toLowerCase());</span>
+<span class="fc" id="L239">    }</span>
 
     /**
      * The enum ProjectStateFilter.
      */
-<span class="fc" id="L241">    public static enum ProjectStateFilter {</span>
-<span class="fc" id="L242">        ALL, OPEN, CLOSED</span>
+<span class="fc" id="L244">    public static enum ProjectStateFilter {</span>
+<span class="fc" id="L245">        ALL, OPEN, CLOSED</span>
     }
 
     /**
@@ -252,8 +255,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void setOrganizationPermission(GHPermissionType permission) throws IOException {
-<span class="nc" id="L255">        edit(&quot;organization_permission&quot;, permission.toString().toLowerCase());</span>
-<span class="nc" id="L256">    }</span>
+<span class="nc" id="L258">        edit(&quot;organization_permission&quot;, permission.toString().toLowerCase());</span>
+<span class="nc" id="L259">    }</span>
 
     /**
      * Sets visibility of the project within the organization. Only applicable for organization-owned projects.
@@ -264,8 +267,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void setPublic(boolean isPublic) throws IOException {
-<span class="nc" id="L267">        edit(&quot;public&quot;, isPublic);</span>
-<span class="nc" id="L268">    }</span>
+<span class="nc" id="L270">        edit(&quot;public&quot;, isPublic);</span>
+<span class="nc" id="L271">    }</span>
 
     /**
      * Delete.
@@ -274,8 +277,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L277">        root.createRequest().withPreview(INERTIA).method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L278">    }</span>
+<span class="fc" id="L280">        root().createRequest().withPreview(INERTIA).method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L281">    }</span>
 
     /**
      * List columns paged iterable.
@@ -285,11 +288,11 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHProjectColumn&gt; listColumns() throws IOException {
-<span class="nc" id="L288">        final GHProject project = this;</span>
-<span class="nc" id="L289">        return root.createRequest()</span>
-<span class="nc" id="L290">                .withPreview(INERTIA)</span>
-<span class="nc" id="L291">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
-<span class="nc" id="L292">                .toIterable(GHProjectColumn[].class, item -&gt; item.wrap(project));</span>
+<span class="nc" id="L291">        final GHProject project = this;</span>
+<span class="nc" id="L292">        return root().createRequest()</span>
+<span class="nc" id="L293">                .withPreview(INERTIA)</span>
+<span class="nc" id="L294">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
+<span class="nc" id="L295">                .toIterable(GHProjectColumn[].class, item -&gt; item.lateBind(project));</span>
     }
 
     /**
@@ -302,13 +305,13 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHProjectColumn createColumn(String name) throws IOException {
-<span class="fc" id="L305">        return root.createRequest()</span>
-<span class="fc" id="L306">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L307">                .withPreview(INERTIA)</span>
-<span class="fc" id="L308">                .with(&quot;name&quot;, name)</span>
-<span class="fc" id="L309">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
-<span class="fc" id="L310">                .fetch(GHProjectColumn.class)</span>
-<span class="fc" id="L311">                .wrap(this);</span>
+<span class="fc" id="L308">        return root().createRequest()</span>
+<span class="fc" id="L309">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L310">                .withPreview(INERTIA)</span>
+<span class="fc" id="L311">                .with(&quot;name&quot;, name)</span>
+<span class="fc" id="L312">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
+<span class="fc" id="L313">                .fetch(GHProjectColumn.class)</span>
+<span class="fc" id="L314">                .lateBind(this);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

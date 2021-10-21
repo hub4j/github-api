@@ -66,13 +66,25 @@ import java.io.IOException;
      *            the repo
      * @return the gh deploy key
      */
+    @Deprecated
     public GHDeployKey wrap(GHRepository repo) {
-<span class="nc" id="L70">        this.owner = repo;</span>
-<span class="nc" id="L71">        return this;</span>
+<span class="nc" id="L71">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
+
+    /**
+     * Wrap gh deploy key.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh deploy key
+     */
+    GHDeployKey lateBind(GHRepository repo) {
+<span class="nc" id="L82">        this.owner = repo;</span>
+<span class="nc" id="L83">        return this;</span>
     }
 
     public String toString() {
-<span class="nc" id="L75">        return new ToStringBuilder(this).append(&quot;title&quot;, title).append(&quot;id&quot;, id).append(&quot;key&quot;, key).toString();</span>
+<span class="nc" id="L87">        return new ToStringBuilder(this).append(&quot;title&quot;, title).append(&quot;id&quot;, id).append(&quot;key&quot;, key).toString();</span>
     }
 
     /**
@@ -82,10 +94,11 @@ import java.io.IOException;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="nc" id="L85">        owner.root.createRequest()</span>
-<span class="nc" id="L86">                .method(&quot;DELETE&quot;)</span>
-<span class="nc" id="L87">                .withUrlPath(String.format(&quot;/repos/%s/%s/keys/%d&quot;, owner.getOwnerName(), owner.getName(), id))</span>
-<span class="nc" id="L88">                .send();</span>
-<span class="nc" id="L89">    }</span>
+<span class="nc" id="L97">        owner.root()</span>
+<span class="nc" id="L98">                .createRequest()</span>
+<span class="nc" id="L99">                .method(&quot;DELETE&quot;)</span>
+<span class="nc" id="L100">                .withUrlPath(String.format(&quot;/repos/%s/%s/keys/%d&quot;, owner.getOwnerName(), owner.getName(), id))</span>
+<span class="nc" id="L101">                .send();</span>
+<span class="nc" id="L102">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -65,8 +65,9 @@ public class GHThread extends GHObject {
      *
      * @return the repository
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L69">        return repository;</span>
+<span class="fc" id="L70">        return repository;</span>
     }
 
     // TODO: how to expose the subject?
@@ -77,7 +78,7 @@ public class GHThread extends GHObject {
      * @return the boolean
      */
     public boolean isRead() {
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        return !unread;</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        return !unread;</span>
     }
 
     /**
@@ -86,7 +87,7 @@ public class GHThread extends GHObject {
      * @return the title
      */
     public String getTitle() {
-<span class="fc" id="L89">        return subject.title;</span>
+<span class="fc" id="L90">        return subject.title;</span>
     }
 
     /**
@@ -95,7 +96,7 @@ public class GHThread extends GHObject {
      * @return the type
      */
     public String getType() {
-<span class="fc" id="L98">        return subject.type;</span>
+<span class="fc" id="L99">        return subject.type;</span>
     }
 
     /**
@@ -104,7 +105,7 @@ public class GHThread extends GHObject {
      * @return the last comment url
      */
     public String getLastCommentUrl() {
-<span class="fc" id="L107">        return subject.latest_comment_url;</span>
+<span class="fc" id="L108">        return subject.latest_comment_url;</span>
     }
 
     /**
@@ -115,9 +116,9 @@ public class GHThread extends GHObject {
      *             the io exception
      */
     public GHIssue getBoundIssue() throws IOException {
-<span class="nc bnc" id="L118" title="All 4 branches missed.">        if (!&quot;Issue&quot;.equals(subject.type) &amp;&amp; &quot;PullRequest&quot;.equals(subject.type))</span>
-<span class="nc" id="L119">            return null;</span>
-<span class="nc" id="L120">        return repository.getIssue(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));</span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">        if (!&quot;Issue&quot;.equals(subject.type) &amp;&amp; &quot;PullRequest&quot;.equals(subject.type))</span>
+<span class="nc" id="L120">            return null;</span>
+<span class="nc" id="L121">        return repository.getIssue(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));</span>
     }
 
     /**
@@ -128,9 +129,9 @@ public class GHThread extends GHObject {
      *             the io exception
      */
     public GHPullRequest getBoundPullRequest() throws IOException {
-<span class="nc bnc" id="L131" title="All 2 branches missed.">        if (!&quot;PullRequest&quot;.equals(subject.type))</span>
-<span class="nc" id="L132">            return null;</span>
-<span class="nc" id="L133">        return repository.getPullRequest(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (!&quot;PullRequest&quot;.equals(subject.type))</span>
+<span class="nc" id="L133">            return null;</span>
+<span class="nc" id="L134">        return repository.getPullRequest(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));</span>
     }
 
     /**
@@ -141,16 +142,9 @@ public class GHThread extends GHObject {
      *             the io exception
      */
     public GHCommit getBoundCommit() throws IOException {
-<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (!&quot;Commit&quot;.equals(subject.type))</span>
-<span class="nc" id="L145">            return null;</span>
-<span class="nc" id="L146">        return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));</span>
-    }
-
-    GHThread wrap(GitHub root) {
-<span class="fc" id="L150">        this.root = root;</span>
-<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (this.repository != null)</span>
-<span class="fc" id="L152">            this.repository.wrap(root);</span>
-<span class="fc" id="L153">        return this;</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (!&quot;Commit&quot;.equals(subject.type))</span>
+<span class="nc" id="L146">            return null;</span>
+<span class="nc" id="L147">        return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));</span>
     }
 
     /**
@@ -160,8 +154,8 @@ public class GHThread extends GHObject {
      *             the io exception
      */
     public void markAsRead() throws IOException {
-<span class="fc" id="L163">        root.createRequest().method(&quot;PATCH&quot;).withUrlPath(url).send();</span>
-<span class="fc" id="L164">    }</span>
+<span class="fc" id="L157">        root().createRequest().method(&quot;PATCH&quot;).withUrlPath(url).send();</span>
+<span class="fc" id="L158">    }</span>
 
     /**
      * Subscribes to this conversation to get notifications.
@@ -175,13 +169,12 @@ public class GHThread extends GHObject {
      *             the io exception
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-<span class="nc" id="L178">        return root.createRequest()</span>
-<span class="nc" id="L179">                .method(&quot;PUT&quot;)</span>
-<span class="nc" id="L180">                .with(&quot;subscribed&quot;, subscribed)</span>
-<span class="nc" id="L181">                .with(&quot;ignored&quot;, ignored)</span>
-<span class="nc" id="L182">                .withUrlPath(subscription_url)</span>
-<span class="nc" id="L183">                .fetch(GHSubscription.class)</span>
-<span class="nc" id="L184">                .wrapUp(root);</span>
+<span class="nc" id="L172">        return root().createRequest()</span>
+<span class="nc" id="L173">                .method(&quot;PUT&quot;)</span>
+<span class="nc" id="L174">                .with(&quot;subscribed&quot;, subscribed)</span>
+<span class="nc" id="L175">                .with(&quot;ignored&quot;, ignored)</span>
+<span class="nc" id="L176">                .withUrlPath(subscription_url)</span>
+<span class="nc" id="L177">                .fetch(GHSubscription.class);</span>
     }
 
     /**
@@ -193,13 +186,9 @@ public class GHThread extends GHObject {
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-<span class="nc" id="L196">            return root.createRequest()</span>
-<span class="nc" id="L197">                    .method(&quot;POST&quot;)</span>
-<span class="nc" id="L198">                    .withUrlPath(subscription_url)</span>
-<span class="nc" id="L199">                    .fetch(GHSubscription.class)</span>
-<span class="nc" id="L200">                    .wrapUp(root);</span>
-<span class="nc" id="L201">        } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L202">            return null;</span>
+<span class="nc" id="L189">            return root().createRequest().method(&quot;POST&quot;).withUrlPath(subscription_url).fetch(GHSubscription.class);</span>
+<span class="nc" id="L190">        } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L191">            return null;</span>
         }
     }
 }

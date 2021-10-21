@@ -4,9 +4,7 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A Github App Installation Token.
@@ -14,21 +12,12 @@ import java.util.Map;
  * @author Paulo Miguel Almeida
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  */
-<span class="fc" id="L17">public class GHAppInstallationToken extends GitHubInteractiveObject {</span>
+<span class="fc" id="L15">public class GHAppInstallationToken extends GitHubInteractiveObject {</span>
     private String token;
     protected String expires_at;
     private Map&lt;String, String&gt; permissions;
     private List&lt;GHRepository&gt; repositories;
     private GHRepositorySelection repositorySelection;
-
-    /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-<span class="nc" id="L30">        return root;</span>
-    }
 
     /**
      * Sets root.
@@ -39,8 +28,8 @@ import java.util.Map;
      */
     @Deprecated
     public void setRoot(GitHub root) {
-<span class="nc" id="L42">        this.root = root;</span>
-<span class="nc" id="L43">    }</span>
+<span class="fc" id="L31">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
 
     /**
      * Gets permissions.
@@ -48,7 +37,7 @@ import java.util.Map;
      * @return the permissions
      */
     public Map&lt;String, String&gt; getPermissions() {
-<span class="fc" id="L51">        return permissions;</span>
+<span class="fc" id="L40">        return Collections.unmodifiableMap(permissions);</span>
     }
 
     /**
@@ -60,8 +49,8 @@ import java.util.Map;
      */
     @Deprecated
     public void setPermissions(Map&lt;String, String&gt; permissions) {
-<span class="nc" id="L63">        this.permissions = permissions;</span>
-<span class="nc" id="L64">    }</span>
+<span class="fc" id="L52">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
 
     /**
      * Gets token.
@@ -69,7 +58,7 @@ import java.util.Map;
      * @return the token
      */
     public String getToken() {
-<span class="fc" id="L72">        return token;</span>
+<span class="fc" id="L61">        return token;</span>
     }
 
     /**
@@ -81,8 +70,8 @@ import java.util.Map;
      */
     @Deprecated
     public void setToken(String token) {
-<span class="nc" id="L84">        this.token = token;</span>
-<span class="nc" id="L85">    }</span>
+<span class="nc" id="L73">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
 
     /**
      * Gets repositories.
@@ -90,7 +79,7 @@ import java.util.Map;
      * @return the repositories
      */
     public List&lt;GHRepository&gt; getRepositories() {
-<span class="fc" id="L93">        return repositories;</span>
+<span class="fc" id="L82">        return GitHubClient.unmodifiableListOrNull(repositories);</span>
     }
 
     /**
@@ -102,8 +91,8 @@ import java.util.Map;
      */
     @Deprecated
     public void setRepositories(List&lt;GHRepository&gt; repositories) {
-<span class="nc" id="L105">        this.repositories = repositories;</span>
-<span class="nc" id="L106">    }</span>
+<span class="fc" id="L94">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
 
     /**
      * Gets repository selection.
@@ -111,7 +100,7 @@ import java.util.Map;
      * @return the repository selection
      */
     public GHRepositorySelection getRepositorySelection() {
-<span class="fc" id="L114">        return repositorySelection;</span>
+<span class="fc" id="L103">        return repositorySelection;</span>
     }
 
     /**
@@ -123,8 +112,8 @@ import java.util.Map;
      */
     @Deprecated
     public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-<span class="nc" id="L126">        this.repositorySelection = repositorySelection;</span>
-<span class="nc" id="L127">    }</span>
+<span class="fc" id="L115">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
 
     /**
      * Gets expires at.
@@ -135,17 +124,12 @@ import java.util.Map;
      */
     @WithBridgeMethods(value = String.class, adapterMethod = &quot;expiresAtStr&quot;)
     public Date getExpiresAt() throws IOException {
-<span class="fc" id="L138">        return GitHubClient.parseDate(expires_at);</span>
+<span class="fc" id="L127">        return GitHubClient.parseDate(expires_at);</span>
     }
 
     @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;, justification = &quot;Bridge method of getExpiresAt&quot;)
     private Object expiresAtStr(Date id, Class type) {
-<span class="nc" id="L143">        return expires_at;</span>
-    }
-
-    GHAppInstallationToken wrapUp(GitHub root) {
-<span class="fc" id="L147">        this.root = root;</span>
-<span class="fc" id="L148">        return this;</span>
+<span class="nc" id="L132">        return expires_at;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

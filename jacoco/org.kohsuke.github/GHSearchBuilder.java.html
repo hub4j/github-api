@@ -2,7 +2,6 @@
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
  * @author Kohsuke Kawaguchi
  */
 public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
-<span class="fc" id="L17">    protected final List&lt;String&gt; terms = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L16">    protected final List&lt;String&gt; terms = new ArrayList&lt;String&gt;();</span>
 
     /**
      * Data transfer object that receives the result of search.
@@ -22,11 +21,11 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
     private final Class&lt;? extends SearchResult&lt;T&gt;&gt; receiverType;
 
     GHSearchBuilder(GitHub root, Class&lt;? extends SearchResult&lt;T&gt;&gt; receiverType) {
-<span class="fc" id="L25">        super(root);</span>
-<span class="fc" id="L26">        this.receiverType = receiverType;</span>
-<span class="fc" id="L27">        req.withUrlPath(getApiUrl());</span>
-<span class="fc" id="L28">        req.rateLimit(RateLimitTarget.SEARCH);</span>
-<span class="fc" id="L29">    }</span>
+<span class="fc" id="L24">        super(root);</span>
+<span class="fc" id="L25">        this.receiverType = receiverType;</span>
+<span class="fc" id="L26">        req.withUrlPath(getApiUrl());</span>
+<span class="fc" id="L27">        req.rateLimit(RateLimitTarget.SEARCH);</span>
+<span class="fc" id="L28">    }</span>
 
     /**
      * Search terms.
@@ -36,8 +35,8 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
      * @return the gh query builder
      */
     public GHQueryBuilder&lt;T&gt; q(String term) {
-<span class="fc" id="L39">        terms.add(term);</span>
-<span class="fc" id="L40">        return this;</span>
+<span class="fc" id="L38">        terms.add(term);</span>
+<span class="fc" id="L39">        return this;</span>
     }
 
     /**
@@ -46,12 +45,8 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
     @Override
     public PagedSearchIterable&lt;T&gt; list() {
 
-<span class="fc" id="L49">        req.set(&quot;q&quot;, StringUtils.join(terms, &quot; &quot;));</span>
-        try {
-<span class="fc" id="L51">            return new PagedSearchIterable&lt;&gt;(root, req.build(), receiverType);</span>
-<span class="nc" id="L52">        } catch (MalformedURLException e) {</span>
-<span class="nc" id="L53">            throw new GHException(&quot;&quot;, e);</span>
-        }
+<span class="fc" id="L48">        req.set(&quot;q&quot;, StringUtils.join(terms, &quot; &quot;));</span>
+<span class="fc" id="L49">        return new PagedSearchIterable&lt;&gt;(root(), req.build(), receiverType);</span>
     }
 
     /**

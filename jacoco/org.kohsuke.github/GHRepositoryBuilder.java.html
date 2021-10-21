@@ -238,7 +238,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
 
     @Override
     public GHRepository done() throws IOException {
-<span class="fc" id="L241">        return super.done().wrap(this.root);</span>
+<span class="fc" id="L241">        return super.done();</span>
     }
 
     S archive() throws IOException {

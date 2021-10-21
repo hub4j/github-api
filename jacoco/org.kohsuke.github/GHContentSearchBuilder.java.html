@@ -158,15 +158,13 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
 
         @Override
         GHContent[] getItems(GitHub root) {
-<span class="fc bfc" id="L161" title="All 2 branches covered.">            for (GHContent item : items)</span>
-<span class="fc" id="L162">                item.wrap(root);</span>
-<span class="fc" id="L163">            return items;</span>
+<span class="fc" id="L161">            return items;</span>
         }
     }
 
     @Override
     protected String getApiUrl() {
-<span class="fc" id="L169">        return &quot;/search/code&quot;;</span>
+<span class="fc" id="L167">        return &quot;/search/code&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

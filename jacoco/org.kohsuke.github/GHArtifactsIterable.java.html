@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHArtifactsIterable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHArtifactsIterable.java</span></div><h1>GHArtifactsIterable.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
-import java.net.MalformedURLException;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
@@ -14,35 +13,31 @@ class GHArtifactsIterable extends PagedIterable&lt;GHArtifact&gt; {
 
     private GHArtifactsPage result;
 
-<span class="fc" id="L17">    public GHArtifactsIterable(GHRepository owner, GitHubRequest.Builder&lt;?&gt; requestBuilder) {</span>
-<span class="fc" id="L18">        this.owner = owner;</span>
-        try {
-<span class="fc" id="L20">            this.request = requestBuilder.build();</span>
-<span class="nc" id="L21">        } catch (MalformedURLException e) {</span>
-<span class="nc" id="L22">            throw new GHException(&quot;Malformed URL&quot;, e);</span>
-<span class="fc" id="L23">        }</span>
-<span class="fc" id="L24">    }</span>
+<span class="fc" id="L16">    public GHArtifactsIterable(GHRepository owner, GitHubRequest.Builder&lt;?&gt; requestBuilder) {</span>
+<span class="fc" id="L17">        this.owner = owner;</span>
+<span class="fc" id="L18">        this.request = requestBuilder.build();</span>
+<span class="fc" id="L19">    }</span>
 
     @Nonnull
     @Override
     public PagedIterator&lt;GHArtifact&gt; _iterator(int pageSize) {
-<span class="fc" id="L29">        return new PagedIterator&lt;&gt;(</span>
-<span class="fc" id="L30">                adapt(GitHubPageIterator.create(owner.getRoot().getClient(), GHArtifactsPage.class, request, pageSize)),</span>
+<span class="fc" id="L24">        return new PagedIterator&lt;&gt;(</span>
+<span class="fc" id="L25">                adapt(GitHubPageIterator.create(owner.root().getClient(), GHArtifactsPage.class, request, pageSize)),</span>
                 null);
     }
 
     protected Iterator&lt;GHArtifact[]&gt; adapt(final Iterator&lt;GHArtifactsPage&gt; base) {
-<span class="fc" id="L35">        return new Iterator&lt;GHArtifact[]&gt;() {</span>
+<span class="fc" id="L30">        return new Iterator&lt;GHArtifact[]&gt;() {</span>
             public boolean hasNext() {
-<span class="fc" id="L37">                return base.hasNext();</span>
+<span class="fc" id="L32">                return base.hasNext();</span>
             }
 
             public GHArtifact[] next() {
-<span class="fc" id="L41">                GHArtifactsPage v = base.next();</span>
-<span class="pc bpc" id="L42" title="1 of 2 branches missed.">                if (result == null) {</span>
-<span class="fc" id="L43">                    result = v;</span>
+<span class="fc" id="L36">                GHArtifactsPage v = base.next();</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">                if (result == null) {</span>
+<span class="fc" id="L38">                    result = v;</span>
                 }
-<span class="fc" id="L45">                return v.getArtifacts(owner);</span>
+<span class="fc" id="L40">                return v.getArtifacts(owner);</span>
             }
         };
     }

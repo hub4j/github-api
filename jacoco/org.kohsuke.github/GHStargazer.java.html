@@ -21,8 +21,9 @@ import java.util.Date;
      *
      * @return the starred repository
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L25">        return repository;</span>
+<span class="fc" id="L26">        return repository;</span>
     }
 
     /**
@@ -32,7 +33,7 @@ import java.util.Date;
      * @return the date the stargazer was added
      */
     public Date getStarredAt() {
-<span class="fc" id="L35">        return GitHubClient.parseDate(starred_at);</span>
+<span class="fc" id="L36">        return GitHubClient.parseDate(starred_at);</span>
     }
 
     /**
@@ -40,13 +41,13 @@ import java.util.Date;
      *
      * @return the stargazer user
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getUser() {
-<span class="fc" id="L44">        return user;</span>
+<span class="fc" id="L46">        return user;</span>
     }
 
     void wrapUp(GHRepository repository) {
-<span class="fc" id="L48">        this.repository = repository;</span>
-<span class="fc" id="L49">        user.wrapUp(repository.root);</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L50">        this.repository = repository;</span>
+<span class="fc" id="L51">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -31,7 +31,7 @@ class GHDiscussionBuilder&lt;S&gt; extends AbstractBuilder&lt;GHDiscussion, S&gt
     protected GHDiscussionBuilder(@Nonnull Class&lt;S&gt; intermediateReturnType,
             @Nonnull GHTeam team,
             @CheckForNull GHDiscussion baseInstance) {
-<span class="fc" id="L34">        super(GHDiscussion.class, intermediateReturnType, team.root, baseInstance);</span>
+<span class="fc" id="L34">        super(GHDiscussion.class, intermediateReturnType, team.root(), baseInstance);</span>
 
 <span class="fc" id="L36">        this.team = team;</span>
 

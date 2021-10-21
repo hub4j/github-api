@@ -14,27 +14,19 @@ import java.net.URL;
 
     GHRequestedAction wrap(GHRepository owner) {
 <span class="nc" id="L16">        this.owner = owner;</span>
-<span class="nc" id="L17">        wrap(owner.root);</span>
-<span class="nc" id="L18">        return this;</span>
-    }
-    GHRequestedAction wrap(GitHub root) {
-<span class="nc" id="L21">        this.root = root;</span>
-<span class="nc bnc" id="L22" title="All 2 branches missed.">        if (owner != null) {</span>
-<span class="nc" id="L23">            owner.wrap(root);</span>
-        }
-<span class="nc" id="L25">        return this;</span>
+<span class="nc" id="L17">        return this;</span>
     }
 
     String getIdentifier() {
-<span class="nc" id="L29">        return identifier;</span>
+<span class="nc" id="L21">        return identifier;</span>
     }
 
     String getLabel() {
-<span class="nc" id="L33">        return label;</span>
+<span class="nc" id="L25">        return label;</span>
     }
 
     String getDescription() {
-<span class="nc" id="L37">        return description;</span>
+<span class="nc" id="L29">        return description;</span>
     }
 
     /**
@@ -42,7 +34,7 @@ import java.net.URL;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L45">        return null;</span>
+<span class="nc" id="L37">        return null;</span>
     }
 
 }

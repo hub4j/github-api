@@ -26,7 +26,7 @@ public class ImmutableAuthorizationProvider implements AuthorizationProvider {
      *         oauthAccessToken
      */
     public static AuthorizationProvider fromOauthToken(String oauthAccessToken) {
-<span class="nc" id="L29">        return new UserProvider(String.format(&quot;token %s&quot;, oauthAccessToken));</span>
+<span class="fc" id="L29">        return new UserProvider(String.format(&quot;token %s&quot;, oauthAccessToken));</span>
     }
 
     /**
@@ -105,8 +105,8 @@ public class ImmutableAuthorizationProvider implements AuthorizationProvider {
         private final String login;
 
         UserProvider(String authorization) {
-<span class="nc" id="L108">            this(authorization, null);</span>
-<span class="nc" id="L109">        }</span>
+<span class="fc" id="L108">            this(authorization, null);</span>
+<span class="fc" id="L109">        }</span>
 
         UserProvider(String authorization, String login) {
 <span class="fc" id="L112">            super(authorization);</span>

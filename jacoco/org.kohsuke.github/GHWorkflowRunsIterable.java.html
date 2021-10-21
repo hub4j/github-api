@@ -13,32 +13,31 @@ class GHWorkflowRunsIterable extends PagedIterable&lt;GHWorkflowRun&gt; {
 
     private GHWorkflowRunsPage result;
 
-<span class="fc" id="L16">    public GHWorkflowRunsIterable(GHRepository owner, GitHubRequest request) {</span>
+<span class="fc" id="L16">    public GHWorkflowRunsIterable(GHRepository owner, GitHubRequest.Builder&lt;?&gt; requestBuilder) {</span>
 <span class="fc" id="L17">        this.owner = owner;</span>
-<span class="fc" id="L18">        this.request = request;</span>
+<span class="fc" id="L18">        this.request = requestBuilder.build();</span>
 <span class="fc" id="L19">    }</span>
 
     @Nonnull
     @Override
     public PagedIterator&lt;GHWorkflowRun&gt; _iterator(int pageSize) {
 <span class="fc" id="L24">        return new PagedIterator&lt;&gt;(</span>
-<span class="fc" id="L25">                adapt(GitHubPageIterator</span>
-<span class="fc" id="L26">                        .create(owner.getRoot().getClient(), GHWorkflowRunsPage.class, request, pageSize)),</span>
+<span class="fc" id="L25">                adapt(GitHubPageIterator.create(owner.root().getClient(), GHWorkflowRunsPage.class, request, pageSize)),</span>
                 null);
     }
 
     protected Iterator&lt;GHWorkflowRun[]&gt; adapt(final Iterator&lt;GHWorkflowRunsPage&gt; base) {
-<span class="fc" id="L31">        return new Iterator&lt;GHWorkflowRun[]&gt;() {</span>
+<span class="fc" id="L30">        return new Iterator&lt;GHWorkflowRun[]&gt;() {</span>
             public boolean hasNext() {
-<span class="fc" id="L33">                return base.hasNext();</span>
+<span class="fc" id="L32">                return base.hasNext();</span>
             }
 
             public GHWorkflowRun[] next() {
-<span class="fc" id="L37">                GHWorkflowRunsPage v = base.next();</span>
-<span class="pc bpc" id="L38" title="1 of 2 branches missed.">                if (result == null) {</span>
-<span class="fc" id="L39">                    result = v;</span>
+<span class="fc" id="L36">                GHWorkflowRunsPage v = base.next();</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">                if (result == null) {</span>
+<span class="fc" id="L38">                    result = v;</span>
                 }
-<span class="fc" id="L41">                return v.getWorkflowRuns(owner);</span>
+<span class="fc" id="L40">                return v.getWorkflowRuns(owner);</span>
             }
         };
     }

@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCompare.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCompare.java</span></div><h1>GHCompare.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Iterator;
+
+import javax.annotation.Nonnull;
 
 /**
  * The model user for comparing 2 commits in the GitHub API.
  *
  * @author Michael Clarke
  */
-<span class="nc" id="L13">public class GHCompare {</span>
+<span class="fc" id="L20">public class GHCompare {</span>
 
     private String url, html_url, permalink_url, diff_url, patch_url;
-    public Status status;
+    private Status status;
     private int ahead_by, behind_by, total_commits;
     private Commit base_commit, merge_base_commit;
     private Commit[] commits;
@@ -21,13 +28,16 @@ import java.net.URL;
 
     private GHRepository owner;
 
+    @JacksonInject(&quot;GHCompare_usePaginatedCommits&quot;)
+    private boolean usePaginatedCommits;
+
     /**
      * Gets url.
      *
      * @return the url
      */
     public URL getUrl() {
-<span class="nc" id="L30">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L40">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -36,7 +46,7 @@ import java.net.URL;
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="nc" id="L39">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L49">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -45,7 +55,7 @@ import java.net.URL;
      * @return the permalink url
      */
     public URL getPermalinkUrl() {
-<span class="nc" id="L48">        return GitHubClient.parseURL(permalink_url);</span>
+<span class="fc" id="L58">        return GitHubClient.parseURL(permalink_url);</span>
     }
 
     /**
@@ -54,7 +64,7 @@ import java.net.URL;
      * @return the diff url
      */
     public URL getDiffUrl() {
-<span class="nc" id="L57">        return GitHubClient.parseURL(diff_url);</span>
+<span class="fc" id="L67">        return GitHubClient.parseURL(diff_url);</span>
     }
 
     /**
@@ -63,7 +73,7 @@ import java.net.URL;
      * @return the patch url
      */
     public URL getPatchUrl() {
-<span class="nc" id="L66">        return GitHubClient.parseURL(patch_url);</span>
+<span class="fc" id="L76">        return GitHubClient.parseURL(patch_url);</span>
     }
 
     /**
@@ -72,7 +82,7 @@ import java.net.URL;
      * @return the status
      */
     public Status getStatus() {
-<span class="nc" id="L75">        return status;</span>
+<span class="fc" id="L85">        return status;</span>
     }
 
     /**
@@ -81,7 +91,7 @@ import java.net.URL;
      * @return the ahead by
      */
     public int getAheadBy() {
-<span class="nc" id="L84">        return ahead_by;</span>
+<span class="fc" id="L94">        return ahead_by;</span>
     }
 
     /**
@@ -90,7 +100,7 @@ import java.net.URL;
      * @return the behind by
      */
     public int getBehindBy() {
-<span class="nc" id="L93">        return behind_by;</span>
+<span class="fc" id="L103">        return behind_by;</span>
     }
 
     /**
@@ -99,7 +109,7 @@ import java.net.URL;
      * @return the total commits
      */
     public int getTotalCommits() {
-<span class="nc" id="L102">        return total_commits;</span>
+<span class="fc" id="L112">        return total_commits;</span>
     }
 
     /**
@@ -107,8 +117,9 @@ import java.net.URL;
      *
      * @return the base commit
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public Commit getBaseCommit() {
-<span class="nc" id="L111">        return base_commit;</span>
+<span class="fc" id="L122">        return base_commit;</span>
     }
 
     /**
@@ -116,30 +127,71 @@ import java.net.URL;
      *
      * @return the merge base commit
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public Commit getMergeBaseCommit() {
-<span class="nc" id="L120">        return merge_base_commit;</span>
+<span class="fc" id="L132">        return merge_base_commit;</span>
     }
 
     /**
      * Gets an array of commits.
+     *
+     * By default, the commit list is limited to 250 results.
+     *
+     * Since
+     * &lt;a href=&quot;https://github.blog/changelog/2021-03-22-compare-rest-api-now-supports-pagination/&quot;&gt;2021-03-22&lt;/a&gt;,
+     * compare supports pagination of commits. This makes the initial {@link GHCompare} response return faster and
+     * supports comparisons with more than 250 commits. To read commits progressively using pagination, set
+     * {@link GHRepository#setCompareUsePaginatedCommits(boolean)} to true before calling
+     * {@link GHRepository#getCompare(String, String)}.
      *
      * @return A copy of the array being stored in the class.
      */
     public Commit[] getCommits() {
-<span class="nc" id="L129">        Commit[] newValue = new Commit[commits.length];</span>
-<span class="nc" id="L130">        System.arraycopy(commits, 0, newValue, 0, commits.length);</span>
-<span class="nc" id="L131">        return newValue;</span>
+        try {
+<span class="fc" id="L151">            return listCommits().withPageSize(100).toArray();</span>
+<span class="nc" id="L152">        } catch (IOException e) {</span>
+<span class="nc" id="L153">            throw new GHException(e.getMessage(), e);</span>
+        }
     }
 
     /**
-     * Gets an array of commits.
+     * Iterable of commits for this comparison.
+     *
+     * By default, the commit list is limited to 250 results.
+     *
+     * Since
+     * &lt;a href=&quot;https://github.blog/changelog/2021-03-22-compare-rest-api-now-supports-pagination/&quot;&gt;2021-03-22&lt;/a&gt;,
+     * compare supports pagination of commits. This makes the initial {@link GHCompare} response return faster and
+     * supports comparisons with more than 250 commits. To read commits progressively using pagination, set
+     * {@link GHRepository#setCompareUsePaginatedCommits(boolean)} to true before calling
+     * {@link GHRepository#getCompare(String, String)}.
+     *
+     * @return iterable of commits
+     */
+    public PagedIterable&lt;Commit&gt; listCommits() {
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (usePaginatedCommits) {</span>
+<span class="fc" id="L173">            return new GHCompareCommitsIterable();</span>
+        } else {
+            // if not using paginated commits, adapt the returned commits array
+<span class="fc" id="L176">            return new PagedIterable&lt;Commit&gt;() {</span>
+                @NotNull
+                @Override
+                public PagedIterator&lt;Commit&gt; _iterator(int pageSize) {
+<span class="fc" id="L180">                    return new PagedIterator&lt;&gt;(Collections.singleton(commits).iterator(), null);</span>
+                }
+            };
+        }
+    }
+
+    /**
+     * Gets an array of files.
      *
      * @return A copy of the array being stored in the class.
      */
     public GHCommit.File[] getFiles() {
-<span class="nc" id="L140">        GHCommit.File[] newValue = new GHCommit.File[files.length];</span>
-<span class="nc" id="L141">        System.arraycopy(files, 0, newValue, 0, files.length);</span>
-<span class="nc" id="L142">        return newValue;</span>
+<span class="fc" id="L192">        GHCommit.File[] newValue = new GHCommit.File[files.length];</span>
+<span class="fc" id="L193">        System.arraycopy(files, 0, newValue, 0, files.length);</span>
+<span class="fc" id="L194">        return newValue;</span>
     }
 
     /**
@@ -149,14 +201,26 @@ import java.net.URL;
      *            the owner
      * @return the gh compare
      */
+    @Deprecated
     public GHCompare wrap(GHRepository owner) {
-<span class="nc" id="L153">        this.owner = owner;</span>
-<span class="nc bnc" id="L154" title="All 2 branches missed.">        for (Commit commit : commits) {</span>
-<span class="nc" id="L155">            commit.wrapUp(owner);</span>
+<span class="nc" id="L206">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
+
+    /**
+     * Wrap gh compare.
+     *
+     * @param owner
+     *            the owner
+     * @return the gh compare
+     */
+    GHCompare lateBind(GHRepository owner) {
+<span class="fc" id="L217">        this.owner = owner;</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">        for (Commit commit : commits) {</span>
+<span class="fc" id="L219">            commit.wrapUp(owner);</span>
         }
-<span class="nc" id="L157">        merge_base_commit.wrapUp(owner);</span>
-<span class="nc" id="L158">        base_commit.wrapUp(owner);</span>
-<span class="nc" id="L159">        return this;</span>
+<span class="fc" id="L221">        merge_base_commit.wrapUp(owner);</span>
+<span class="fc" id="L222">        base_commit.wrapUp(owner);</span>
+<span class="fc" id="L223">        return this;</span>
     }
 
     /**
@@ -165,7 +229,7 @@ import java.net.URL;
      */
     @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; },
             justification = &quot;JSON API&quot;)
-<span class="nc" id="L168">    public static class Commit extends GHCommit {</span>
+<span class="fc" id="L232">    public static class Commit extends GHCommit {</span>
 
         private InnerCommit commit;
 
@@ -175,14 +239,14 @@ import java.net.URL;
          * @return the commit
          */
         public InnerCommit getCommit() {
-<span class="nc" id="L178">            return commit;</span>
+<span class="fc" id="L242">            return commit;</span>
         }
     }
 
     /**
      * The type InnerCommit.
      */
-<span class="nc" id="L185">    public static class InnerCommit {</span>
+<span class="fc" id="L249">    public static class InnerCommit {</span>
         private String url, sha, message;
         private User author, committer;
         private Tree tree;
@@ -193,7 +257,7 @@ import java.net.URL;
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L196">            return url;</span>
+<span class="fc" id="L260">            return url;</span>
         }
 
         /**
@@ -202,7 +266,7 @@ import java.net.URL;
          * @return the sha
          */
         public String getSha() {
-<span class="nc" id="L205">            return sha;</span>
+<span class="fc" id="L269">            return sha;</span>
         }
 
         /**
@@ -211,7 +275,7 @@ import java.net.URL;
          * @return the message
          */
         public String getMessage() {
-<span class="nc" id="L214">            return message;</span>
+<span class="fc" id="L278">            return message;</span>
         }
 
         /**
@@ -221,7 +285,7 @@ import java.net.URL;
          */
         @WithBridgeMethods(value = User.class, castRequired = true)
         public GitUser getAuthor() {
-<span class="nc" id="L224">            return author;</span>
+<span class="fc" id="L288">            return author;</span>
         }
 
         /**
@@ -231,7 +295,7 @@ import java.net.URL;
          */
         @WithBridgeMethods(value = User.class, castRequired = true)
         public GitUser getCommitter() {
-<span class="nc" id="L234">            return committer;</span>
+<span class="fc" id="L298">            return committer;</span>
         }
 
         /**
@@ -240,14 +304,14 @@ import java.net.URL;
          * @return the tree
          */
         public Tree getTree() {
-<span class="nc" id="L243">            return tree;</span>
+<span class="fc" id="L307">            return tree;</span>
         }
     }
 
     /**
      * The type Tree.
      */
-<span class="nc" id="L250">    public static class Tree {</span>
+<span class="fc" id="L314">    public static class Tree {</span>
         private String url, sha;
 
         /**
@@ -256,7 +320,7 @@ import java.net.URL;
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L259">            return url;</span>
+<span class="fc" id="L323">            return url;</span>
         }
 
         /**
@@ -265,7 +329,7 @@ import java.net.URL;
          * @return the sha
          */
         public String getSha() {
-<span class="nc" id="L268">            return sha;</span>
+<span class="fc" id="L332">            return sha;</span>
         }
     }
 
@@ -274,14 +338,59 @@ import java.net.URL;
      *
      * @deprecated use {@link GitUser} instead.
      */
-<span class="nc" id="L277">    public static class User extends GitUser {</span>
+<span class="fc" id="L341">    public static class User extends GitUser {</span>
     }
 
     /**
      * The enum Status.
      */
-<span class="fc" id="L283">    public static enum Status {</span>
-<span class="fc" id="L284">        behind, ahead, identical, diverged</span>
+<span class="fc" id="L347">    public static enum Status {</span>
+<span class="fc" id="L348">        behind, ahead, identical, diverged</span>
+    }
+
+    /**
+     * Iterable for commit listing.
+     */
+    class GHCompareCommitsIterable extends PagedIterable&lt;Commit&gt; {
+
+        private GHCompare result;
+
+<span class="fc" id="L358">        public GHCompareCommitsIterable() {</span>
+<span class="fc" id="L359">        }</span>
+
+        @Nonnull
+        @Override
+        public PagedIterator&lt;Commit&gt; _iterator(int pageSize) {
+<span class="fc" id="L364">            GitHubRequest request = owner.root()</span>
+<span class="fc" id="L365">                    .createRequest()</span>
+<span class="fc" id="L366">                    .injectMappingValue(&quot;GHCompare_usePaginatedCommits&quot;, usePaginatedCommits)</span>
+<span class="fc" id="L367">                    .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf(&quot;/compare/&quot;))))</span>
+<span class="fc" id="L368">                    .build();</span>
+
+            // page_size must be set for GHCompare commit pagination
+<span class="pc bpc" id="L371" title="1 of 2 branches missed.">            if (pageSize == 0) {</span>
+<span class="nc" id="L372">                pageSize = 10;</span>
+            }
+<span class="fc" id="L374">            return new PagedIterator&lt;&gt;(</span>
+<span class="fc" id="L375">                    adapt(GitHubPageIterator.create(owner.root().getClient(), GHCompare.class, request, pageSize)),</span>
+<span class="fc" id="L376">                    item -&gt; item.wrapUp(owner));</span>
+        }
+
+        protected Iterator&lt;Commit[]&gt; adapt(final Iterator&lt;GHCompare&gt; base) {
+<span class="fc" id="L380">            return new Iterator&lt;Commit[]&gt;() {</span>
+                public boolean hasNext() {
+<span class="fc" id="L382">                    return base.hasNext();</span>
+                }
+
+                public Commit[] next() {
+<span class="fc" id="L386">                    GHCompare v = base.next();</span>
+<span class="fc bfc" id="L387" title="All 2 branches covered.">                    if (result == null) {</span>
+<span class="fc" id="L388">                        result = v;</span>
+                    }
+<span class="fc" id="L390">                    return v.commits;</span>
+                }
+            };
+        }
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

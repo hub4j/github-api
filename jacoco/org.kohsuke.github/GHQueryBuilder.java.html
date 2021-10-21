@@ -10,8 +10,8 @@
 public abstract class GHQueryBuilder&lt;T&gt; extends GitHubInteractiveObject {
     protected final Requester req;
 
-<span class="fc" id="L13">    GHQueryBuilder(GitHub root) {</span>
-<span class="fc" id="L14">        this.root = root;</span>
+    GHQueryBuilder(GitHub root) {
+<span class="fc" id="L14">        super(root);</span>
 <span class="fc" id="L15">        this.req = root.createRequest();</span>
 <span class="fc" id="L16">    }</span>
 

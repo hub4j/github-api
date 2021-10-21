@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHReleaseBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHReleaseBuilder.java</span></div><h1>GHReleaseBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 
 /**
@@ -19,11 +21,12 @@ public class GHReleaseBuilder {
      * @param tag
      *            the tag
      */
-<span class="fc" id="L22">    public GHReleaseBuilder(GHRepository ghRepository, String tag) {</span>
-<span class="fc" id="L23">        this.repo = ghRepository;</span>
-<span class="fc" id="L24">        this.builder = repo.root.createRequest().method(&quot;POST&quot;);</span>
-<span class="fc" id="L25">        builder.with(&quot;tag_name&quot;, tag);</span>
-<span class="fc" id="L26">    }</span>
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Acceptable risk&quot;)
+<span class="fc" id="L25">    public GHReleaseBuilder(GHRepository ghRepository, String tag) {</span>
+<span class="fc" id="L26">        this.repo = ghRepository;</span>
+<span class="fc" id="L27">        this.builder = repo.root().createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L28">        builder.with(&quot;tag_name&quot;, tag);</span>
+<span class="fc" id="L29">    }</span>
 
     /**
      * Body gh release builder.
@@ -33,8 +36,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder body(String body) {
-<span class="fc" id="L36">        builder.with(&quot;body&quot;, body);</span>
-<span class="fc" id="L37">        return this;</span>
+<span class="fc" id="L39">        builder.with(&quot;body&quot;, body);</span>
+<span class="fc" id="L40">        return this;</span>
     }
 
     /**
@@ -45,8 +48,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder commitish(String commitish) {
-<span class="nc" id="L48">        builder.with(&quot;target_commitish&quot;, commitish);</span>
-<span class="nc" id="L49">        return this;</span>
+<span class="nc" id="L51">        builder.with(&quot;target_commitish&quot;, commitish);</span>
+<span class="nc" id="L52">        return this;</span>
     }
 
     /**
@@ -58,8 +61,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder draft(boolean draft) {
-<span class="nc" id="L61">        builder.with(&quot;draft&quot;, draft);</span>
-<span class="nc" id="L62">        return this;</span>
+<span class="nc" id="L64">        builder.with(&quot;draft&quot;, draft);</span>
+<span class="nc" id="L65">        return this;</span>
     }
 
     /**
@@ -70,8 +73,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder name(String name) {
-<span class="fc" id="L73">        builder.with(&quot;name&quot;, name);</span>
-<span class="fc" id="L74">        return this;</span>
+<span class="fc" id="L76">        builder.with(&quot;name&quot;, name);</span>
+<span class="fc" id="L77">        return this;</span>
     }
 
     /**
@@ -83,8 +86,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder prerelease(boolean prerelease) {
-<span class="fc" id="L86">        builder.with(&quot;prerelease&quot;, prerelease);</span>
-<span class="fc" id="L87">        return this;</span>
+<span class="fc" id="L89">        builder.with(&quot;prerelease&quot;, prerelease);</span>
+<span class="fc" id="L90">        return this;</span>
     }
 
     /**
@@ -95,8 +98,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder categoryName(String categoryName) {
-<span class="fc" id="L98">        builder.with(&quot;discussion_category_name&quot;, categoryName);</span>
-<span class="fc" id="L99">        return this;</span>
+<span class="fc" id="L101">        builder.with(&quot;discussion_category_name&quot;, categoryName);</span>
+<span class="fc" id="L102">        return this;</span>
     }
 
     /**
@@ -107,7 +110,7 @@ public class GHReleaseBuilder {
      *             the io exception
      */
     public GHRelease create() throws IOException {
-<span class="fc" id="L110">        return builder.withUrlPath(repo.getApiTailUrl(&quot;releases&quot;)).fetch(GHRelease.class).wrap(repo);</span>
+<span class="fc" id="L113">        return builder.withUrlPath(repo.getApiTailUrl(&quot;releases&quot;)).fetch(GHRelease.class).wrap(repo);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

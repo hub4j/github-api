@@ -70,7 +70,7 @@ import java.util.TreeMap;
      *             the io exception
      */
     public List&lt;GHEmail&gt; getEmails2() throws IOException {
-<span class="nc" id="L73">        return root.createRequest().withUrlPath(&quot;/user/emails&quot;).toIterable(GHEmail[].class, null).toList();</span>
+<span class="nc" id="L73">        return root().createRequest().withUrlPath(&quot;/user/emails&quot;).toIterable(GHEmail[].class, null).toList();</span>
     }
 
     /**
@@ -84,7 +84,7 @@ import java.util.TreeMap;
      *             the io exception
      */
     public List&lt;GHKey&gt; getPublicKeys() throws IOException {
-<span class="nc" id="L87">        return root.createRequest().withUrlPath(&quot;/user/keys&quot;).toIterable(GHKey[].class, null).toList();</span>
+<span class="nc" id="L87">        return root().createRequest().withUrlPath(&quot;/user/keys&quot;).toIterable(GHKey[].class, null).toList();</span>
     }
 
     /**
@@ -98,7 +98,7 @@ import java.util.TreeMap;
      *             the io exception
      */
     public List&lt;GHVerifiedKey&gt; getPublicVerifiedKeys() throws IOException {
-<span class="nc" id="L101">        return root.createRequest()</span>
+<span class="nc" id="L101">        return root().createRequest()</span>
 <span class="nc" id="L102">                .withUrlPath(&quot;/users/&quot; + getLogin() + &quot;/keys&quot;)</span>
 <span class="nc" id="L103">                .toIterable(GHVerifiedKey[].class, null)</span>
 <span class="nc" id="L104">                .toList();</span>
@@ -114,12 +114,12 @@ import java.util.TreeMap;
     public GHPersonSet&lt;GHOrganization&gt; getAllOrganizations() throws IOException {
 <span class="nc" id="L115">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
 <span class="nc" id="L116">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
-<span class="nc" id="L117">        for (GHOrganization o : root.createRequest()</span>
+<span class="nc" id="L117">        for (GHOrganization o : root().createRequest()</span>
 <span class="nc" id="L118">                .withUrlPath(&quot;/user/orgs&quot;)</span>
 <span class="nc" id="L119">                .toIterable(GHOrganization[].class, null)</span>
 <span class="nc bnc" id="L120" title="All 2 branches missed.">                .toArray()) {</span>
 <span class="nc bnc" id="L121" title="All 2 branches missed.">            if (names.add(o.getLogin())) // in case of rumoured duplicates in the data</span>
-<span class="nc" id="L122">                orgs.add(root.getOrganization(o.getLogin()));</span>
+<span class="nc" id="L122">                orgs.add(root().getOrganization(o.getLogin()));</span>
         }
 <span class="nc" id="L124">        return orgs;</span>
     }
@@ -178,10 +178,10 @@ import java.util.TreeMap;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize, final RepositoryListFilter repoType) {
-<span class="fc" id="L181">        return root.createRequest()</span>
+<span class="fc" id="L181">        return root().createRequest()</span>
 <span class="fc" id="L182">                .with(&quot;type&quot;, repoType)</span>
 <span class="fc" id="L183">                .withUrlPath(&quot;/user/repos&quot;)</span>
-<span class="fc" id="L184">                .toIterable(GHRepository[].class, item -&gt; item.wrap(root))</span>
+<span class="fc" id="L184">                .toIterable(GHRepository[].class, null)</span>
 <span class="fc" id="L185">                .withPageSize(pageSize);</span>
     }
 
@@ -213,10 +213,10 @@ import java.util.TreeMap;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHMembership&gt; listOrgMemberships(final GHMembership.State state) {
-<span class="fc" id="L216">        return root.createRequest()</span>
+<span class="fc" id="L216">        return root().createRequest()</span>
 <span class="fc" id="L217">                .with(&quot;state&quot;, state)</span>
 <span class="fc" id="L218">                .withUrlPath(&quot;/user/memberships/orgs&quot;)</span>
-<span class="fc" id="L219">                .toIterable(GHMembership[].class, item -&gt; item.wrap(root));</span>
+<span class="fc" id="L219">                .toIterable(GHMembership[].class, item -&gt; item.wrap(root()));</span>
     }
 
     /**
@@ -229,10 +229,10 @@ import java.util.TreeMap;
      *             the io exception
      */
     public GHMembership getMembership(GHOrganization o) throws IOException {
-<span class="nc" id="L232">        return root.createRequest()</span>
+<span class="nc" id="L232">        return root().createRequest()</span>
 <span class="nc" id="L233">                .withUrlPath(&quot;/user/memberships/orgs/&quot; + o.getLogin())</span>
 <span class="nc" id="L234">                .fetch(GHMembership.class)</span>
-<span class="nc" id="L235">                .wrap(root);</span>
+<span class="nc" id="L235">                .wrap(root());</span>
     }
 
     // public void addEmails(Collection&lt;String&gt; emails) throws IOException {
@@ -251,7 +251,7 @@ import java.util.TreeMap;
      *      app installations accessible to the user access token&lt;/a&gt;
      */
     public PagedIterable&lt;GHAppInstallation&gt; getAppInstallations() {
-<span class="fc" id="L254">        return new GHAppInstallationsIterable(root);</span>
+<span class="fc" id="L254">        return new GHAppInstallationsIterable(root());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

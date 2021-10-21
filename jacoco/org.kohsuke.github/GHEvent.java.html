@@ -38,54 +38,56 @@ import java.util.Locale;
 <span class="fc" id="L38">    MARKETPLACE_PURCHASE,</span>
 <span class="fc" id="L39">    MEMBER,</span>
 <span class="fc" id="L40">    MEMBERSHIP,</span>
-<span class="fc" id="L41">    META,</span>
-<span class="fc" id="L42">    MILESTONE,</span>
-<span class="fc" id="L43">    ORGANIZATION,</span>
-<span class="fc" id="L44">    ORG_BLOCK,</span>
-<span class="fc" id="L45">    PACKAGE,</span>
-<span class="fc" id="L46">    PAGE_BUILD,</span>
-<span class="fc" id="L47">    PROJECT_CARD,</span>
-<span class="fc" id="L48">    PROJECT_COLUMN,</span>
-<span class="fc" id="L49">    PROJECT,</span>
-<span class="fc" id="L50">    PING,</span>
-<span class="fc" id="L51">    PUBLIC,</span>
-<span class="fc" id="L52">    PULL_REQUEST,</span>
-<span class="fc" id="L53">    PULL_REQUEST_REVIEW,</span>
-<span class="fc" id="L54">    PULL_REQUEST_REVIEW_COMMENT,</span>
-<span class="fc" id="L55">    PUSH,</span>
-<span class="fc" id="L56">    REGISTRY_PACKAGE,</span>
-<span class="fc" id="L57">    RELEASE,</span>
-<span class="fc" id="L58">    REPOSITORY_DISPATCH, // only valid for org hooks</span>
-<span class="fc" id="L59">    REPOSITORY,</span>
-<span class="fc" id="L60">    REPOSITORY_IMPORT,</span>
-<span class="fc" id="L61">    REPOSITORY_VULNERABILITY_ALERT,</span>
-<span class="fc" id="L62">    SCHEDULE,</span>
-<span class="fc" id="L63">    SECURITY_ADVISORY,</span>
-<span class="fc" id="L64">    STAR,</span>
-<span class="fc" id="L65">    STATUS,</span>
-<span class="fc" id="L66">    TEAM,</span>
-<span class="fc" id="L67">    TEAM_ADD,</span>
-<span class="fc" id="L68">    WATCH,</span>
-<span class="fc" id="L69">    WORKFLOW_DISPATCH,</span>
-<span class="fc" id="L70">    WORKFLOW_RUN,</span>
+<span class="fc" id="L41">    MERGE_QUEUE_ENTRY,</span>
+<span class="fc" id="L42">    META,</span>
+<span class="fc" id="L43">    MILESTONE,</span>
+<span class="fc" id="L44">    ORGANIZATION,</span>
+<span class="fc" id="L45">    ORG_BLOCK,</span>
+<span class="fc" id="L46">    PACKAGE,</span>
+<span class="fc" id="L47">    PAGE_BUILD,</span>
+<span class="fc" id="L48">    PROJECT_CARD,</span>
+<span class="fc" id="L49">    PROJECT_COLUMN,</span>
+<span class="fc" id="L50">    PROJECT,</span>
+<span class="fc" id="L51">    PING,</span>
+<span class="fc" id="L52">    PUBLIC,</span>
+<span class="fc" id="L53">    PULL_REQUEST,</span>
+<span class="fc" id="L54">    PULL_REQUEST_REVIEW,</span>
+<span class="fc" id="L55">    PULL_REQUEST_REVIEW_COMMENT,</span>
+<span class="fc" id="L56">    PULL_REQUEST_REVIEW_THREAD,</span>
+<span class="fc" id="L57">    PUSH,</span>
+<span class="fc" id="L58">    REGISTRY_PACKAGE,</span>
+<span class="fc" id="L59">    RELEASE,</span>
+<span class="fc" id="L60">    REPOSITORY_DISPATCH, // only valid for org hooks</span>
+<span class="fc" id="L61">    REPOSITORY,</span>
+<span class="fc" id="L62">    REPOSITORY_IMPORT,</span>
+<span class="fc" id="L63">    REPOSITORY_VULNERABILITY_ALERT,</span>
+<span class="fc" id="L64">    SCHEDULE,</span>
+<span class="fc" id="L65">    SECURITY_ADVISORY,</span>
+<span class="fc" id="L66">    STAR,</span>
+<span class="fc" id="L67">    STATUS,</span>
+<span class="fc" id="L68">    TEAM,</span>
+<span class="fc" id="L69">    TEAM_ADD,</span>
+<span class="fc" id="L70">    WATCH,</span>
+<span class="fc" id="L71">    WORKFLOW_DISPATCH,</span>
+<span class="fc" id="L72">    WORKFLOW_RUN,</span>
 
     /**
      * Special event type that means we haven't found an enum value corresponding to the event.
      */
-<span class="fc" id="L75">    UNKNOWN,</span>
+<span class="fc" id="L77">    UNKNOWN,</span>
 
     /**
      * Special event type that means &quot;every possible event&quot;
      */
-<span class="fc" id="L80">    ALL;</span>
+<span class="fc" id="L82">    ALL;</span>
 
     /**
      * Returns GitHub's internal representation of this event.
      */
     String symbol() {
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (this == ALL)</span>
-<span class="fc" id="L87">            return &quot;*&quot;;</span>
-<span class="fc" id="L88">        return name().toLowerCase(Locale.ENGLISH);</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (this == ALL)</span>
+<span class="fc" id="L89">            return &quot;*&quot;;</span>
+<span class="fc" id="L90">        return name().toLowerCase(Locale.ENGLISH);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

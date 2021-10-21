@@ -3,6 +3,7 @@
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +29,7 @@ import javax.annotation.Nonnull;
  * @see org.kohsuke.github.GHMeta
  * @see &lt;a href=&quot;https://developer.github.com/v3/meta/#meta&quot;&gt;Get Meta&lt;/a&gt;
  */
-<span class="nc" id="L31">public final class ReadOnlyObjects {</span>
+<span class="nc" id="L32">public final class ReadOnlyObjects {</span>
 
     /**
      * All GHMeta data objects should expose these values.
@@ -97,7 +98,7 @@ import javax.annotation.Nonnull;
      * &lt;/ul&gt;
      * Con:
      * &lt;ul&gt;
-     * &lt;li&gt;Exposes public setters for fields that should not be changed&lt;/li&gt;
+     * &lt;li&gt;Exposes public setters for fields that should not be changed, flagged by spotbugs&lt;/li&gt;
      * &lt;li&gt;Lists modifiable when they should not be changed&lt;/li&gt;
      * &lt;li&gt;Jackson generally doesn't call the setters, it just sets the fields directly&lt;/li&gt;
      * &lt;/ul&gt;
@@ -105,7 +106,7 @@ import javax.annotation.Nonnull;
      * @author Paulo Miguel Almeida
      * @see org.kohsuke.github.GHMeta
      */
-<span class="fc" id="L108">    public static class GHMetaPublic implements GHMetaExample {</span>
+<span class="fc" id="L109">    public static class GHMetaPublic implements GHMetaExample {</span>
 
         @JsonProperty(&quot;verifiable_password_authentication&quot;)
         private boolean verifiablePasswordAuthentication;
@@ -117,7 +118,7 @@ import javax.annotation.Nonnull;
         private List&lt;String&gt; importer;
 
         public boolean isVerifiablePasswordAuthentication() {
-<span class="fc" id="L120">            return verifiablePasswordAuthentication;</span>
+<span class="fc" id="L121">            return verifiablePasswordAuthentication;</span>
         }
 
         /**
@@ -127,11 +128,12 @@ import javax.annotation.Nonnull;
          *            the verifiable password authentication
          */
         public void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
-<span class="nc" id="L130">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
-<span class="nc" id="L131">        }</span>
+<span class="nc" id="L131">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
+<span class="nc" id="L132">        }</span>
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getHooks() {
-<span class="fc" id="L134">            return hooks;</span>
+<span class="fc" id="L136">            return hooks;</span>
         }
 
         /**
@@ -140,12 +142,14 @@ import javax.annotation.Nonnull;
          * @param hooks
          *            the hooks
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Spotbugs also doesn't like this&quot;)
         public void setHooks(List&lt;String&gt; hooks) {
-<span class="nc" id="L144">            this.hooks = hooks;</span>
-<span class="nc" id="L145">        }</span>
+<span class="nc" id="L147">            this.hooks = hooks;</span>
+<span class="nc" id="L148">        }</span>
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getGit() {
-<span class="fc" id="L148">            return git;</span>
+<span class="fc" id="L152">            return git;</span>
         }
 
         /**
@@ -154,12 +158,14 @@ import javax.annotation.Nonnull;
          * @param git
          *            the git
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Spotbugs also doesn't like this&quot;)
         public void setGit(List&lt;String&gt; git) {
-<span class="nc" id="L158">            this.git = git;</span>
-<span class="nc" id="L159">        }</span>
+<span class="nc" id="L163">            this.git = git;</span>
+<span class="nc" id="L164">        }</span>
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getWeb() {
-<span class="fc" id="L162">            return web;</span>
+<span class="fc" id="L168">            return web;</span>
         }
 
         /**
@@ -168,12 +174,14 @@ import javax.annotation.Nonnull;
          * @param web
          *            the web
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Spotbugs also doesn't like this&quot;)
         public void setWeb(List&lt;String&gt; web) {
-<span class="nc" id="L172">            this.web = web;</span>
-<span class="nc" id="L173">        }</span>
+<span class="nc" id="L179">            this.web = web;</span>
+<span class="nc" id="L180">        }</span>
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getApi() {
-<span class="fc" id="L176">            return api;</span>
+<span class="fc" id="L184">            return api;</span>
         }
 
         /**
@@ -182,12 +190,14 @@ import javax.annotation.Nonnull;
          * @param api
          *            the api
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Spotbugs also doesn't like this&quot;)
         public void setApi(List&lt;String&gt; api) {
-<span class="nc" id="L186">            this.api = api;</span>
-<span class="nc" id="L187">        }</span>
+<span class="nc" id="L195">            this.api = api;</span>
+<span class="nc" id="L196">        }</span>
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getPages() {
-<span class="fc" id="L190">            return pages;</span>
+<span class="fc" id="L200">            return pages;</span>
         }
 
         /**
@@ -196,12 +206,14 @@ import javax.annotation.Nonnull;
          * @param pages
          *            the pages
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Spotbugs also doesn't like this&quot;)
         public void setPages(List&lt;String&gt; pages) {
-<span class="nc" id="L200">            this.pages = pages;</span>
-<span class="nc" id="L201">        }</span>
+<span class="nc" id="L211">            this.pages = pages;</span>
+<span class="nc" id="L212">        }</span>
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getImporter() {
-<span class="fc" id="L204">            return importer;</span>
+<span class="fc" id="L216">            return importer;</span>
         }
 
         /**
@@ -210,9 +222,10 @@ import javax.annotation.Nonnull;
          * @param importer
          *            the importer
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Spotbugs also doesn't like this&quot;)
         public void setImporter(List&lt;String&gt; importer) {
-<span class="nc" id="L214">            this.importer = importer;</span>
-<span class="nc" id="L215">        }</span>
+<span class="nc" id="L227">            this.importer = importer;</span>
+<span class="nc" id="L228">        }</span>
 
     }
 
@@ -236,7 +249,7 @@ import javax.annotation.Nonnull;
      * @author Liam Newman
      * @see org.kohsuke.github.GHMeta
      */
-<span class="fc" id="L239">    public static class GHMetaPackage implements GHMetaExample {</span>
+<span class="fc" id="L252">    public static class GHMetaPackage implements GHMetaExample {</span>
 
         private boolean verifiablePasswordAuthentication;
         private List&lt;String&gt; hooks;
@@ -253,16 +266,17 @@ import javax.annotation.Nonnull;
 
         @JsonProperty(&quot;verifiable_password_authentication&quot;)
         public boolean isVerifiablePasswordAuthentication() {
-<span class="fc" id="L256">            return verifiablePasswordAuthentication;</span>
+<span class="fc" id="L269">            return verifiablePasswordAuthentication;</span>
         }
 
         private void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
-<span class="fc" id="L260">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
-<span class="fc" id="L261">        }</span>
+<span class="fc" id="L273">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
+<span class="fc" id="L274">        }</span>
 
         @JsonProperty
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getHooks() {
-<span class="fc" id="L265">            return hooks;</span>
+<span class="fc" id="L279">            return hooks;</span>
         }
 
         /**
@@ -273,11 +287,12 @@ import javax.annotation.Nonnull;
          *            list of hooks
          */
         private void setHooks(List&lt;String&gt; hooks) {
-<span class="fc" id="L276">            this.hooks = hooks;</span>
-<span class="fc" id="L277">        }</span>
+<span class="fc" id="L290">            this.hooks = hooks;</span>
+<span class="fc" id="L291">        }</span>
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getGit() {
-<span class="fc" id="L280">            return git;</span>
+<span class="fc" id="L295">            return git;</span>
         }
 
         /**
@@ -289,11 +304,12 @@ import javax.annotation.Nonnull;
          */
         @JsonSetter
         void setGit(List&lt;String&gt; git) {
-<span class="fc" id="L292">            this.git = git;</span>
-<span class="fc" id="L293">        }</span>
+<span class="fc" id="L307">            this.git = git;</span>
+<span class="fc" id="L308">        }</span>
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getWeb() {
-<span class="fc" id="L296">            return web;</span>
+<span class="fc" id="L312">            return web;</span>
         }
 
         /**
@@ -303,34 +319,37 @@ import javax.annotation.Nonnull;
          *            list of web addresses
          */
         void setWeb(List&lt;String&gt; web) {
-<span class="nc" id="L306">            this.web = web;</span>
-<span class="nc" id="L307">        }</span>
+<span class="nc" id="L322">            this.web = web;</span>
+<span class="nc" id="L323">        }</span>
 
         @JsonProperty
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getApi() {
-<span class="fc" id="L311">            return api;</span>
+<span class="fc" id="L328">            return api;</span>
         }
 
         void setApi(List&lt;String&gt; api) {
-<span class="fc" id="L315">            this.api = api;</span>
-<span class="fc" id="L316">        }</span>
+<span class="fc" id="L332">            this.api = api;</span>
+<span class="fc" id="L333">        }</span>
 
         @JsonProperty
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getPages() {
-<span class="fc" id="L320">            return pages;</span>
+<span class="fc" id="L338">            return pages;</span>
         }
 
         void setPages(List&lt;String&gt; pages) {
-<span class="fc" id="L324">            this.pages = pages;</span>
-<span class="fc" id="L325">        }</span>
+<span class="fc" id="L342">            this.pages = pages;</span>
+<span class="fc" id="L343">        }</span>
 
         /**
          * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
          *
          * @return list of importer addresses
          */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Noted above&quot;)
         public List&lt;String&gt; getImporter() {
-<span class="fc" id="L333">            return importer;</span>
+<span class="fc" id="L352">            return importer;</span>
         }
 
         /**
@@ -340,8 +359,8 @@ import javax.annotation.Nonnull;
          *            list of importer addresses
          */
         void setImporter(List&lt;String&gt; importer) {
-<span class="nc" id="L343">            this.importer = importer;</span>
-<span class="nc" id="L344">        }</span>
+<span class="nc" id="L362">            this.importer = importer;</span>
+<span class="nc" id="L363">        }</span>
 
     }
 
@@ -367,7 +386,7 @@ import javax.annotation.Nonnull;
      * @author Liam Newman
      * @see org.kohsuke.github.GHMeta
      */
-<span class="fc" id="L370">    public static class GHMetaGettersUnmodifiable implements GHMetaExample {</span>
+<span class="fc" id="L389">    public static class GHMetaGettersUnmodifiable implements GHMetaExample {</span>
 
         @JsonProperty(&quot;verifiable_password_authentication&quot;)
         private boolean verifiablePasswordAuthentication;
@@ -379,34 +398,34 @@ import javax.annotation.Nonnull;
         /**
          * If this were an optional member, we could fill it with an empty list by default.
          */
-<span class="fc" id="L382">        private List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L401">        private List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
 
         public boolean isVerifiablePasswordAuthentication() {
-<span class="fc" id="L385">            return verifiablePasswordAuthentication;</span>
+<span class="fc" id="L404">            return verifiablePasswordAuthentication;</span>
         }
 
         public List&lt;String&gt; getHooks() {
-<span class="fc" id="L389">            return Collections.unmodifiableList(hooks);</span>
+<span class="fc" id="L408">            return Collections.unmodifiableList(hooks);</span>
         }
 
         public List&lt;String&gt; getGit() {
-<span class="fc" id="L393">            return Collections.unmodifiableList(git);</span>
+<span class="fc" id="L412">            return Collections.unmodifiableList(git);</span>
         }
 
         public List&lt;String&gt; getWeb() {
-<span class="fc" id="L397">            return Collections.unmodifiableList(web);</span>
+<span class="fc" id="L416">            return Collections.unmodifiableList(web);</span>
         }
 
         public List&lt;String&gt; getApi() {
-<span class="fc" id="L401">            return Collections.unmodifiableList(api);</span>
+<span class="fc" id="L420">            return Collections.unmodifiableList(api);</span>
         }
 
         public List&lt;String&gt; getPages() {
-<span class="fc" id="L405">            return Collections.unmodifiableList(pages);</span>
+<span class="fc" id="L424">            return Collections.unmodifiableList(pages);</span>
         }
 
         public List&lt;String&gt; getImporter() {
-<span class="fc" id="L409">            return Collections.unmodifiableList(importer);</span>
+<span class="fc" id="L428">            return Collections.unmodifiableList(importer);</span>
         }
     }
 
@@ -432,46 +451,46 @@ import javax.annotation.Nonnull;
     public static class GHMetaGettersFinal implements GHMetaExample {
 
         private final boolean verifiablePasswordAuthentication;
-<span class="fc" id="L435">        private final List&lt;String&gt; hooks = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L436">        private final List&lt;String&gt; git = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L437">        private final List&lt;String&gt; web = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L438">        private final List&lt;String&gt; api = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L439">        private final List&lt;String&gt; pages = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L440">        private final List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L454">        private final List&lt;String&gt; hooks = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L455">        private final List&lt;String&gt; git = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L456">        private final List&lt;String&gt; web = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L457">        private final List&lt;String&gt; api = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L458">        private final List&lt;String&gt; pages = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L459">        private final List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
 
         @JsonCreator
         private GHMetaGettersFinal(
-<span class="fc" id="L444">                @JsonProperty(&quot;verifiable_password_authentication&quot;) boolean verifiablePasswordAuthentication) {</span>
+<span class="fc" id="L463">                @JsonProperty(&quot;verifiable_password_authentication&quot;) boolean verifiablePasswordAuthentication) {</span>
             // boolean fields when final seem to be really final, so we have to switch to constructor
-<span class="fc" id="L446">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
-<span class="fc" id="L447">        }</span>
+<span class="fc" id="L465">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
+<span class="fc" id="L466">        }</span>
 
         public boolean isVerifiablePasswordAuthentication() {
-<span class="fc" id="L450">            return verifiablePasswordAuthentication;</span>
+<span class="fc" id="L469">            return verifiablePasswordAuthentication;</span>
         }
 
         public List&lt;String&gt; getHooks() {
-<span class="fc" id="L454">            return Collections.unmodifiableList(hooks);</span>
+<span class="fc" id="L473">            return Collections.unmodifiableList(hooks);</span>
         }
 
         public List&lt;String&gt; getGit() {
-<span class="fc" id="L458">            return Collections.unmodifiableList(git);</span>
+<span class="fc" id="L477">            return Collections.unmodifiableList(git);</span>
         }
 
         public List&lt;String&gt; getWeb() {
-<span class="fc" id="L462">            return Collections.unmodifiableList(web);</span>
+<span class="fc" id="L481">            return Collections.unmodifiableList(web);</span>
         }
 
         public List&lt;String&gt; getApi() {
-<span class="fc" id="L466">            return Collections.unmodifiableList(api);</span>
+<span class="fc" id="L485">            return Collections.unmodifiableList(api);</span>
         }
 
         public List&lt;String&gt; getPages() {
-<span class="fc" id="L470">            return Collections.unmodifiableList(pages);</span>
+<span class="fc" id="L489">            return Collections.unmodifiableList(pages);</span>
         }
 
         public List&lt;String&gt; getImporter() {
-<span class="fc" id="L474">            return Collections.unmodifiableList(importer);</span>
+<span class="fc" id="L493">            return Collections.unmodifiableList(importer);</span>
         }
     }
 
@@ -533,46 +552,52 @@ import javax.annotation.Nonnull;
                 @Nonnull @JsonProperty(&quot;api&quot;) List&lt;String&gt; api,
                 @Nonnull @JsonProperty(&quot;pages&quot;) List&lt;String&gt; pages,
                 @Nonnull @JsonProperty(&quot;importer&quot;) List&lt;String&gt; importer,
-<span class="fc" id="L536">                @JsonProperty(&quot;verifiable_password_authentication&quot;) boolean verifiablePasswordAuthentication) {</span>
+<span class="fc" id="L555">                @JsonProperty(&quot;verifiable_password_authentication&quot;) boolean verifiablePasswordAuthentication) {</span>
 
             // to ensure a value is actually not null we still have to do a null check
-<span class="fc" id="L539">            Objects.requireNonNull(hooks);</span>
+<span class="fc" id="L558">            Objects.requireNonNull(hooks);</span>
 
-<span class="fc" id="L541">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
-<span class="fc" id="L542">            this.hooks = Collections.unmodifiableList(hooks);</span>
-<span class="fc" id="L543">            this.git = Collections.unmodifiableList(git);</span>
-<span class="fc" id="L544">            this.web = Collections.unmodifiableList(web);</span>
-<span class="fc" id="L545">            this.api = Collections.unmodifiableList(api);</span>
-<span class="fc" id="L546">            this.pages = Collections.unmodifiableList(pages);</span>
-<span class="fc" id="L547">            this.importer = Collections.unmodifiableList(importer);</span>
-<span class="fc" id="L548">        }</span>
+<span class="fc" id="L560">            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;</span>
+<span class="fc" id="L561">            this.hooks = Collections.unmodifiableList(hooks);</span>
+<span class="fc" id="L562">            this.git = Collections.unmodifiableList(git);</span>
+<span class="fc" id="L563">            this.web = Collections.unmodifiableList(web);</span>
+<span class="fc" id="L564">            this.api = Collections.unmodifiableList(api);</span>
+<span class="fc" id="L565">            this.pages = Collections.unmodifiableList(pages);</span>
+<span class="fc" id="L566">            this.importer = Collections.unmodifiableList(importer);</span>
+<span class="fc" id="L567">        }</span>
 
         public boolean isVerifiablePasswordAuthentication() {
-<span class="fc" id="L551">            return verifiablePasswordAuthentication;</span>
+<span class="fc" id="L570">            return verifiablePasswordAuthentication;</span>
         }
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable but spotbugs doesn't detect&quot;)
         public List&lt;String&gt; getHooks() {
-<span class="fc" id="L555">            return hooks;</span>
+<span class="fc" id="L575">            return hooks;</span>
         }
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable but spotbugs doesn't detect&quot;)
         public List&lt;String&gt; getGit() {
-<span class="fc" id="L559">            return git;</span>
+<span class="fc" id="L580">            return git;</span>
         }
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable but spotbugs doesn't detect&quot;)
         public List&lt;String&gt; getWeb() {
-<span class="fc" id="L563">            return web;</span>
+<span class="fc" id="L585">            return web;</span>
         }
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable but spotbugs doesn't detect&quot;)
         public List&lt;String&gt; getApi() {
-<span class="fc" id="L567">            return api;</span>
+<span class="fc" id="L590">            return api;</span>
         }
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable but spotbugs doesn't detect&quot;)
         public List&lt;String&gt; getPages() {
-<span class="fc" id="L571">            return pages;</span>
+<span class="fc" id="L595">            return pages;</span>
         }
 
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable but spotbugs doesn't detect&quot;)
         public List&lt;String&gt; getImporter() {
-<span class="fc" id="L575">            return importer;</span>
+<span class="fc" id="L600">            return importer;</span>
         }
     }
 }

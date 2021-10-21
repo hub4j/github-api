@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRelease.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRelease.java</span></div><h1>GHRelease.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +21,7 @@ import static java.lang.String.*;
  * @see GHRepository#listReleases() () GHRepository#listReleases()
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
-<span class="fc" id="L21">public class GHRelease extends GHObject {</span>
+<span class="fc" id="L24">public class GHRelease extends GHObject {</span>
     GHRepository owner;
 
     private String html_url;
@@ -42,7 +45,7 @@ import static java.lang.String.*;
      * @return the discussion url
      */
     public String getDiscussionUrl() {
-<span class="fc" id="L45">        return discussion_url;</span>
+<span class="fc" id="L48">        return discussion_url;</span>
     }
 
     /**
@@ -51,7 +54,7 @@ import static java.lang.String.*;
      * @return the assets url
      */
     public String getAssetsUrl() {
-<span class="nc" id="L54">        return assets_url;</span>
+<span class="nc" id="L57">        return assets_url;</span>
     }
 
     /**
@@ -60,7 +63,7 @@ import static java.lang.String.*;
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L63">        return body;</span>
+<span class="fc" id="L66">        return body;</span>
     }
 
     /**
@@ -69,7 +72,7 @@ import static java.lang.String.*;
      * @return the boolean
      */
     public boolean isDraft() {
-<span class="nc" id="L72">        return draft;</span>
+<span class="nc" id="L75">        return draft;</span>
     }
 
     /**
@@ -84,11 +87,11 @@ import static java.lang.String.*;
      */
     @Deprecated
     public GHRelease setDraft(boolean draft) throws IOException {
-<span class="nc" id="L87">        return update().draft(draft).update();</span>
+<span class="nc" id="L90">        return update().draft(draft).update();</span>
     }
 
     public URL getHtmlUrl() {
-<span class="fc" id="L91">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L94">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -97,7 +100,7 @@ import static java.lang.String.*;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L100">        return name;</span>
+<span class="fc" id="L103">        return name;</span>
     }
 
     /**
@@ -107,16 +110,17 @@ import static java.lang.String.*;
      *            the name
      */
     public void setName(String name) {
-<span class="nc" id="L110">        this.name = name;</span>
-<span class="nc" id="L111">    }</span>
+<span class="nc" id="L113">        this.name = name;</span>
+<span class="nc" id="L114">    }</span>
 
     /**
      * Gets owner.
      *
      * @return the owner
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L119">        return owner;</span>
+<span class="fc" id="L123">        return owner;</span>
     }
 
     /**
@@ -124,10 +128,12 @@ import static java.lang.String.*;
      *
      * @param owner
      *            the owner
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
      */
+    @Deprecated
     public void setOwner(GHRepository owner) {
-<span class="nc" id="L129">        this.owner = owner;</span>
-<span class="nc" id="L130">    }</span>
+<span class="nc" id="L135">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
 
     /**
      * Is prerelease boolean.
@@ -135,7 +141,7 @@ import static java.lang.String.*;
      * @return the boolean
      */
     public boolean isPrerelease() {
-<span class="fc" id="L138">        return prerelease;</span>
+<span class="fc" id="L144">        return prerelease;</span>
     }
 
     /**
@@ -144,16 +150,7 @@ import static java.lang.String.*;
      * @return the published at
      */
     public Date getPublished_at() {
-<span class="nc" id="L147">        return new Date(published_at.getTime());</span>
-    }
-
-    /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-<span class="nc" id="L156">        return root;</span>
+<span class="nc" id="L153">        return new Date(published_at.getTime());</span>
     }
 
     /**
@@ -162,7 +159,7 @@ import static java.lang.String.*;
      * @return the tag name
      */
     public String getTagName() {
-<span class="fc" id="L165">        return tag_name;</span>
+<span class="fc" id="L162">        return tag_name;</span>
     }
 
     /**
@@ -171,7 +168,7 @@ import static java.lang.String.*;
      * @return the target commitish
      */
     public String getTargetCommitish() {
-<span class="fc" id="L174">        return target_commitish;</span>
+<span class="fc" id="L171">        return target_commitish;</span>
     }
 
     /**
@@ -180,7 +177,7 @@ import static java.lang.String.*;
      * @return the upload url
      */
     public String getUploadUrl() {
-<span class="fc" id="L183">        return upload_url;</span>
+<span class="fc" id="L180">        return upload_url;</span>
     }
 
     /**
@@ -189,7 +186,7 @@ import static java.lang.String.*;
      * @return the zipball url
      */
     public String getZipballUrl() {
-<span class="fc" id="L192">        return zipball_url;</span>
+<span class="fc" id="L189">        return zipball_url;</span>
     }
 
     /**
@@ -198,20 +195,19 @@ import static java.lang.String.*;
      * @return the tarball url
      */
     public String getTarballUrl() {
-<span class="fc" id="L201">        return tarball_url;</span>
+<span class="fc" id="L198">        return tarball_url;</span>
     }
 
     GHRelease wrap(GHRepository owner) {
-<span class="fc" id="L205">        this.owner = owner;</span>
-<span class="fc" id="L206">        this.root = owner.root;</span>
-<span class="fc" id="L207">        return this;</span>
+<span class="fc" id="L202">        this.owner = owner;</span>
+<span class="fc" id="L203">        return this;</span>
     }
 
     static GHRelease[] wrap(GHRelease[] releases, GHRepository owner) {
-<span class="nc bnc" id="L211" title="All 2 branches missed.">        for (GHRelease release : releases) {</span>
-<span class="nc" id="L212">            release.wrap(owner);</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        for (GHRelease release : releases) {</span>
+<span class="nc" id="L208">            release.wrap(owner);</span>
         }
-<span class="nc" id="L214">        return releases;</span>
+<span class="nc" id="L210">        return releases;</span>
     }
 
     /**
@@ -229,11 +225,11 @@ import static java.lang.String.*;
      *             the io exception
      */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {
-<span class="fc" id="L232">        FileInputStream s = new FileInputStream(file);</span>
+<span class="fc" id="L228">        FileInputStream s = new FileInputStream(file);</span>
         try {
-<span class="fc" id="L234">            return uploadAsset(file.getName(), s, contentType);</span>
+<span class="fc" id="L230">            return uploadAsset(file.getName(), s, contentType);</span>
         } finally {
-<span class="fc" id="L236">            s.close();</span>
+<span class="fc" id="L232">            s.close();</span>
         }
     }
 
@@ -251,12 +247,12 @@ import static java.lang.String.*;
      *             the io exception
      */
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
-<span class="fc" id="L254">        Requester builder = owner.root.createRequest().method(&quot;POST&quot;);</span>
-<span class="fc" id="L255">        String url = getUploadUrl();</span>
+<span class="fc" id="L250">        Requester builder = owner.root().createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L251">        String url = getUploadUrl();</span>
         // strip the helpful garbage from the url
-<span class="fc" id="L257">        url = url.substring(0, url.indexOf('{'));</span>
-<span class="fc" id="L258">        url += &quot;?name=&quot; + URLEncoder.encode(filename, &quot;UTF-8&quot;);</span>
-<span class="fc" id="L259">        return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);</span>
+<span class="fc" id="L253">        url = url.substring(0, url.indexOf('{'));</span>
+<span class="fc" id="L254">        url += &quot;?name=&quot; + URLEncoder.encode(filename, &quot;UTF-8&quot;);</span>
+<span class="fc" id="L255">        return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);</span>
     }
 
     /**
@@ -270,7 +266,7 @@ import static java.lang.String.*;
      */
     @Deprecated
     public List&lt;GHAsset&gt; assets() {
-<span class="fc" id="L273">        return assets;</span>
+<span class="fc" id="L269">        return Collections.unmodifiableList(assets);</span>
     }
 
     /**
@@ -285,7 +281,7 @@ import static java.lang.String.*;
      */
     @Deprecated
     public List&lt;GHAsset&gt; getAssets() throws IOException {
-<span class="fc" id="L288">        return listAssets().toList();</span>
+<span class="fc" id="L284">        return listAssets().toList();</span>
     }
 
     /**
@@ -296,8 +292,8 @@ import static java.lang.String.*;
      *             the io exception
      */
     public PagedIterable&lt;GHAsset&gt; listAssets() throws IOException {
-<span class="fc" id="L299">        Requester builder = owner.root.createRequest();</span>
-<span class="fc" id="L300">        return builder.withUrlPath(getApiTailUrl(&quot;assets&quot;)).toIterable(GHAsset[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L295">        Requester builder = owner.root().createRequest();</span>
+<span class="fc" id="L296">        return builder.withUrlPath(getApiTailUrl(&quot;assets&quot;)).toIterable(GHAsset[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -307,8 +303,8 @@ import static java.lang.String.*;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L310">        root.createRequest().method(&quot;DELETE&quot;).withUrlPath(owner.getApiTailUrl(&quot;releases/&quot; + getId())).send();</span>
-<span class="fc" id="L311">    }</span>
+<span class="fc" id="L306">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(owner.getApiTailUrl(&quot;releases/&quot; + getId())).send();</span>
+<span class="fc" id="L307">    }</span>
 
     /**
      * Updates this release via a builder.
@@ -316,11 +312,11 @@ import static java.lang.String.*;
      * @return the gh release updater
      */
     public GHReleaseUpdater update() {
-<span class="fc" id="L319">        return new GHReleaseUpdater(this);</span>
+<span class="fc" id="L315">        return new GHReleaseUpdater(this);</span>
     }
 
     private String getApiTailUrl(String end) {
-<span class="fc" id="L323">        return owner.getApiTailUrl(format(&quot;releases/%s/%s&quot;, getId(), end));</span>
+<span class="fc" id="L319">        return owner.getApiTailUrl(format(&quot;releases/%s/%s&quot;, getId(), end));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

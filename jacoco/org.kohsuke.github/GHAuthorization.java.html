@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  * @see GitHub#createToken(Collection, String, String) GitHub#createToken(Collection, String, String)
  * @see &lt;a href=&quot;http://developer.github.com/v3/oauth/#create-a-new-authorization&quot;&gt;API documentation&lt;/a&gt;
  */
-<span class="fc" id="L16">public class GHAuthorization extends GHObject {</span>
+<span class="fc" id="L17">public class GHAuthorization extends GHObject {</span>
     public static final String USER = &quot;user&quot;;
     public static final String USER_EMAIL = &quot;user:email&quot;;
     public static final String USER_FOLLOW = &quot;user:follow&quot;;
@@ -45,21 +46,12 @@ import java.util.List;
     // private GHUser user;
 
     /**
-     * Gets root.
-     *
-     * @return the root
-     */
-    public GitHub getRoot() {
-<span class="nc" id="L53">        return root;</span>
-    }
-
-    /**
      * Gets scopes.
      *
      * @return the scopes
      */
     public List&lt;String&gt; getScopes() {
-<span class="fc" id="L62">        return scopes;</span>
+<span class="fc" id="L54">        return Collections.unmodifiableList(scopes);</span>
     }
 
     /**
@@ -68,7 +60,7 @@ import java.util.List;
      * @return the token
      */
     public String getToken() {
-<span class="fc" id="L71">        return token;</span>
+<span class="fc" id="L63">        return token;</span>
     }
 
     /**
@@ -77,7 +69,7 @@ import java.util.List;
      * @return the token last eight
      */
     public String getTokenLastEight() {
-<span class="fc" id="L80">        return token_last_eight;</span>
+<span class="fc" id="L72">        return token_last_eight;</span>
     }
 
     /**
@@ -86,7 +78,7 @@ import java.util.List;
      * @return the hashed token
      */
     public String getHashedToken() {
-<span class="fc" id="L89">        return hashed_token;</span>
+<span class="fc" id="L81">        return hashed_token;</span>
     }
 
     /**
@@ -95,7 +87,7 @@ import java.util.List;
      * @return the app url
      */
     public URL getAppUrl() {
-<span class="fc" id="L98">        return GitHubClient.parseURL(app.url);</span>
+<span class="fc" id="L90">        return GitHubClient.parseURL(app.url);</span>
     }
 
     /**
@@ -104,7 +96,7 @@ import java.util.List;
      * @return the app name
      */
     public String getAppName() {
-<span class="fc" id="L107">        return app.name;</span>
+<span class="fc" id="L99">        return app.name;</span>
     }
 
     /**
@@ -116,7 +108,7 @@ import java.util.List;
     @Deprecated
     @SuppressFBWarnings(value = &quot;NM_CONFUSING&quot;, justification = &quot;It's a part of the library API, cannot be changed&quot;)
     public URL getApiURL() {
-<span class="nc" id="L119">        return getUrl();</span>
+<span class="nc" id="L111">        return getUrl();</span>
     }
 
     /**
@@ -124,7 +116,7 @@ import java.util.List;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="fc" id="L127">        return null;</span>
+<span class="fc" id="L119">        return null;</span>
     }
 
     /**
@@ -133,7 +125,7 @@ import java.util.List;
      * @return the note
      */
     public String getNote() {
-<span class="fc" id="L136">        return note;</span>
+<span class="fc" id="L128">        return note;</span>
     }
 
     /**
@@ -142,7 +134,7 @@ import java.util.List;
      * @return the note url
      */
     public URL getNoteUrl() {
-<span class="fc" id="L145">        return GitHubClient.parseURL(note_url);</span>
+<span class="fc" id="L137">        return GitHubClient.parseURL(note_url);</span>
     }
 
     /**
@@ -151,12 +143,7 @@ import java.util.List;
      * @return the fingerprint
      */
     public String getFingerprint() {
-<span class="fc" id="L154">        return fingerprint;</span>
-    }
-
-    GHAuthorization wrap(GitHub root) {
-<span class="fc" id="L158">        this.root = root;</span>
-<span class="fc" id="L159">        return this;</span>
+<span class="fc" id="L146">        return fingerprint;</span>
     }
 
     @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; },

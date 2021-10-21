@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMembership.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMembership.java</span></div><h1>GHMembership.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
@@ -10,7 +12,7 @@ import java.util.Locale;
  * @author Kohsuke Kawaguchi
  * @see GHMyself#listOrgMemberships() GHMyself#listOrgMemberships()
  */
-<span class="fc" id="L13">public class GHMembership extends GitHubInteractiveObject {</span>
+<span class="fc" id="L15">public class GHMembership extends GitHubInteractiveObject {</span>
     String url;
     String state;
     String role;
@@ -23,7 +25,7 @@ import java.util.Locale;
      * @return the url
      */
     public URL getUrl() {
-<span class="nc" id="L26">        return GitHubClient.parseURL(url);</span>
+<span class="nc" id="L28">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -32,7 +34,7 @@ import java.util.Locale;
      * @return the state
      */
     public State getState() {
-<span class="fc" id="L35">        return Enum.valueOf(State.class, state.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L37">        return Enum.valueOf(State.class, state.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -41,7 +43,7 @@ import java.util.Locale;
      * @return the role
      */
     public Role getRole() {
-<span class="fc" id="L44">        return Enum.valueOf(Role.class, role.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L46">        return Enum.valueOf(Role.class, role.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -49,8 +51,9 @@ import java.util.Locale;
      *
      * @return the user
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getUser() {
-<span class="fc" id="L53">        return user;</span>
+<span class="fc" id="L56">        return user;</span>
     }
 
     /**
@@ -58,8 +61,9 @@ import java.util.Locale;
      *
      * @return the organization
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHOrganization getOrganization() {
-<span class="nc" id="L62">        return organization;</span>
+<span class="nc" id="L66">        return organization;</span>
     }
 
     /**
@@ -70,37 +74,34 @@ import java.util.Locale;
      * @see GHMyself#getMembership(GHOrganization) GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-<span class="nc" id="L73">        root.createRequest().method(&quot;PATCH&quot;).with(&quot;state&quot;, State.ACTIVE).withUrlPath(url).fetchInto(this);</span>
-<span class="nc" id="L74">    }</span>
+<span class="nc" id="L77">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;state&quot;, State.ACTIVE).withUrlPath(url).fetchInto(this);</span>
+<span class="nc" id="L78">    }</span>
 
     GHMembership wrap(GitHub root) {
-<span class="fc" id="L77">        this.root = root;</span>
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (user != null)</span>
-<span class="fc" id="L79">            user = root.getUser(user.wrapUp(root));</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (organization != null)</span>
-<span class="fc" id="L81">            organization.wrapUp(root);</span>
-<span class="fc" id="L82">        return this;</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (user != null)</span>
+<span class="fc" id="L82">            user = root.getUser(user);</span>
+<span class="fc" id="L83">        return this;</span>
     }
 
     /**
      * Role of a user in an organization.
      */
-<span class="fc" id="L88">    public enum Role {</span>
+<span class="fc" id="L89">    public enum Role {</span>
         /**
          * Organization owner.
          */
-<span class="fc" id="L92">        ADMIN,</span>
+<span class="fc" id="L93">        ADMIN,</span>
         /**
          * Non-owner organization member.
          */
-<span class="fc" id="L96">        MEMBER;</span>
+<span class="fc" id="L97">        MEMBER;</span>
     }
 
     /**
      * Whether a role is currently active or waiting for acceptance (pending)
      */
-<span class="fc" id="L102">    public enum State {</span>
-<span class="fc" id="L103">        ACTIVE, PENDING;</span>
+<span class="fc" id="L103">    public enum State {</span>
+<span class="fc" id="L104">        ACTIVE, PENDING;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -12,7 +12,7 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder&lt;GHPullRequest&g
     private final GHRepository repo;
 
     GHPullRequestQueryBuilder(GHRepository repo) {
-<span class="fc" id="L15">        super(repo.root);</span>
+<span class="fc" id="L15">        super(repo.root());</span>
 <span class="fc" id="L16">        this.repo = repo;</span>
 <span class="fc" id="L17">    }</span>
 

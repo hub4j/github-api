@@ -257,8 +257,8 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
 
         @Override
         GHRepository[] getItems(GitHub root) {
-<span class="fc bfc" id="L260" title="All 2 branches covered.">            for (GHRepository item : items)</span>
-<span class="fc" id="L261">                item.wrap(root);</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">            for (GHRepository item : items) {</span>
+            }
 <span class="fc" id="L262">            return items;</span>
         }
     }

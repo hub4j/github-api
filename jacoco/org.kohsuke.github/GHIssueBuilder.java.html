@@ -17,7 +17,7 @@ public class GHIssueBuilder {
 
 <span class="fc" id="L18">    GHIssueBuilder(GHRepository repo, String title) {</span>
 <span class="fc" id="L19">        this.repo = repo;</span>
-<span class="fc" id="L20">        this.builder = repo.root.createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L20">        this.builder = repo.root().createRequest().method(&quot;POST&quot;);</span>
 <span class="fc" id="L21">        builder.with(&quot;title&quot;, title);</span>
 <span class="fc" id="L22">    }</span>
 

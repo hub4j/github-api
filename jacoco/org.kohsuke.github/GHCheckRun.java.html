@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.kohsuke.github.GHWorkflowRun.Conclusion;
-import org.kohsuke.github.GHWorkflowRun.Status;
 import org.kohsuke.github.internal.EnumUtils;
 import org.kohsuke.github.internal.Previews;
 
@@ -24,7 +22,7 @@ import java.util.Locale;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;, &quot;URF_UNREAD_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="fc" id="L27">public class GHCheckRun extends GHObject {</span>
+<span class="fc" id="L25">public class GHCheckRun extends GHObject {</span>
 
     @JsonProperty(&quot;repository&quot;)
     GHRepository owner;
@@ -37,46 +35,34 @@ import java.util.Locale;
     private String externalId;
     private String startedAt;
     private String completedAt;
-    private URL htmlUrl;
-    private URL detailsUrl;
+    private String htmlUrl;
+    private String detailsUrl;
     private Output output;
     private GHApp app;
-    private GHPullRequest[] pullRequests;
+<span class="fc" id="L42">    private GHPullRequest[] pullRequests = new GHPullRequest[0];</span>
     private GHCheckSuite checkSuite;
 
     GHCheckRun wrap(GHRepository owner) {
-<span class="fc" id="L48">        this.owner = owner;</span>
-<span class="fc" id="L49">        wrap(owner.root);</span>
-<span class="fc" id="L50">        return this;</span>
+<span class="fc" id="L46">        this.owner = owner;</span>
+<span class="fc" id="L47">        wrap(owner.root());</span>
+<span class="fc" id="L48">        return this;</span>
     }
 
     GHCheckRun wrap(GitHub root) {
-<span class="fc" id="L54">        this.root = root;</span>
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (owner != null) {</span>
-<span class="fc" id="L56">            owner.wrap(root);</span>
-<span class="pc bpc" id="L57" title="1 of 4 branches missed.">            if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="fc bfc" id="L58" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
-<span class="fc" id="L59">                    singlePull.wrap(owner);</span>
-                }
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (owner != null) {</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="fc" id="L54">                singlePull.wrap(owner);</span>
             }
-
         }
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (checkSuite != null) {</span>
-<span class="pc bpc" id="L65" title="1 of 2 branches missed.">            if (owner != null) {</span>
-<span class="fc" id="L66">                checkSuite.wrap(owner);</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (checkSuite != null) {</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">            if (owner != null) {</span>
+<span class="fc" id="L59">                checkSuite.wrap(owner);</span>
             } else {
-<span class="nc" id="L68">                checkSuite.wrap(root);</span>
+<span class="nc" id="L61">                checkSuite.wrap(root);</span>
             }
         }
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (app != null) {</span>
-<span class="fc" id="L72">            app.wrapUp(root);</span>
-        }
 
-<span class="fc" id="L75">        return this;</span>
-    }
-
-    GHPullRequest[] wrap() {
-<span class="nc" id="L79">        return pullRequests;</span>
+<span class="fc" id="L65">        return this;</span>
     }
 
     /**
@@ -87,24 +73,24 @@ import java.util.Locale;
      */
     @WithBridgeMethods(value = String.class, adapterMethod = &quot;statusAsStr&quot;)
     public Status getStatus() {
-<span class="fc" id="L90">        return Status.from(status);</span>
+<span class="fc" id="L76">        return Status.from(status);</span>
     }
 
     @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;, justification = &quot;Bridge method of getStatus&quot;)
     private Object statusAsStr(Status status, Class type) {
-<span class="nc" id="L95">        return status;</span>
+<span class="nc" id="L81">        return status;</span>
     }
 
-<span class="fc" id="L98">    public static enum Status {</span>
-<span class="fc" id="L99">        QUEUED, IN_PROGRESS, COMPLETED, UNKNOWN;</span>
+<span class="fc" id="L84">    public static enum Status {</span>
+<span class="fc" id="L85">        QUEUED, IN_PROGRESS, COMPLETED, UNKNOWN;</span>
 
         public static Status from(String value) {
-<span class="fc" id="L102">            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);</span>
+<span class="fc" id="L88">            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);</span>
         }
 
         @Override
         public String toString() {
-<span class="fc" id="L107">            return name().toLowerCase(Locale.ROOT);</span>
+<span class="fc" id="L93">            return name().toLowerCase(Locale.ROOT);</span>
         }
     }
 
@@ -116,12 +102,12 @@ import java.util.Locale;
      */
     @WithBridgeMethods(value = String.class, adapterMethod = &quot;conclusionAsStr&quot;)
     public Conclusion getConclusion() {
-<span class="fc" id="L119">        return Conclusion.from(conclusion);</span>
+<span class="fc" id="L105">        return Conclusion.from(conclusion);</span>
     }
 
     @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;, justification = &quot;Bridge method of getConclusion&quot;)
     private Object conclusionAsStr(Conclusion conclusion, Class type) {
-<span class="nc" id="L124">        return conclusion;</span>
+<span class="nc" id="L110">        return conclusion;</span>
     }
 
     /**
@@ -130,16 +116,16 @@ import java.util.Locale;
      * From &lt;a href=&quot;https://docs.github.com/en/rest/reference/checks#create-a-check-run--parameters&quot;&gt;Check Run
      * Parameters - &lt;code&gt;conclusion&lt;/code&gt;&lt;/a&gt;.
      */
-<span class="fc" id="L133">    public static enum Conclusion {</span>
-<span class="fc" id="L134">        ACTION_REQUIRED, CANCELLED, FAILURE, NEUTRAL, SUCCESS, SKIPPED, STALE, TIMED_OUT, UNKNOWN;</span>
+<span class="fc" id="L119">    public static enum Conclusion {</span>
+<span class="fc" id="L120">        ACTION_REQUIRED, CANCELLED, FAILURE, NEUTRAL, SUCCESS, SKIPPED, STALE, TIMED_OUT, UNKNOWN;</span>
 
         public static Conclusion from(String value) {
-<span class="fc" id="L137">            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);</span>
+<span class="fc" id="L123">            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);</span>
         }
 
         @Override
         public String toString() {
-<span class="fc" id="L142">            return name().toLowerCase(Locale.ROOT);</span>
+<span class="fc" id="L128">            return name().toLowerCase(Locale.ROOT);</span>
         }
     }
 
@@ -149,7 +135,7 @@ import java.util.Locale;
      * @return Name of the check run
      */
     public String getName() {
-<span class="fc" id="L152">        return name;</span>
+<span class="fc" id="L138">        return name;</span>
     }
 
     /**
@@ -158,7 +144,7 @@ import java.util.Locale;
      * @return sha for the HEAD commit
      */
     public String getHeadSha() {
-<span class="fc" id="L161">        return headSha;</span>
+<span class="fc" id="L147">        return headSha;</span>
     }
 
     /**
@@ -172,14 +158,11 @@ import java.util.Locale;
      *             the io exception
      */
     public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
-<span class="pc bpc" id="L175" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="fc bfc" id="L176" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
-                // Only refresh if we haven't do so before
-<span class="fc" id="L178">                singlePull.refresh(singlePull.getTitle());</span>
-            }
-<span class="fc" id="L180">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        for (GHPullRequest singlePull : pullRequests) {</span>
+            // Only refresh if we haven't do so before
+<span class="fc" id="L163">            singlePull.refresh(singlePull.getTitle());</span>
         }
-<span class="nc" id="L182">        return Collections.emptyList();</span>
+<span class="fc" id="L165">        return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
     }
 
     /**
@@ -190,7 +173,7 @@ import java.util.Locale;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="fc" id="L193">        return htmlUrl;</span>
+<span class="fc" id="L176">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -200,7 +183,7 @@ import java.util.Locale;
      * @return Global node id
      */
     public String getNodeId() {
-<span class="fc" id="L203">        return nodeId;</span>
+<span class="fc" id="L186">        return nodeId;</span>
     }
 
     /**
@@ -209,7 +192,7 @@ import java.util.Locale;
      * @return Reference id
      */
     public String getExternalId() {
-<span class="fc" id="L212">        return externalId;</span>
+<span class="fc" id="L195">        return externalId;</span>
     }
 
     /**
@@ -218,7 +201,7 @@ import java.util.Locale;
      * @return Details URL
      */
     public URL getDetailsUrl() {
-<span class="fc" id="L221">        return detailsUrl;</span>
+<span class="fc" id="L204">        return GitHubClient.parseURL(detailsUrl);</span>
     }
 
     /**
@@ -227,7 +210,7 @@ import java.util.Locale;
      * @return Timestamp of the start time
      */
     public Date getStartedAt() {
-<span class="fc" id="L230">        return GitHubClient.parseDate(startedAt);</span>
+<span class="fc" id="L213">        return GitHubClient.parseDate(startedAt);</span>
     }
 
     /**
@@ -236,7 +219,7 @@ import java.util.Locale;
      * @return Timestamp of the completed time
      */
     public Date getCompletedAt() {
-<span class="fc" id="L239">        return GitHubClient.parseDate(completedAt);</span>
+<span class="fc" id="L222">        return GitHubClient.parseDate(completedAt);</span>
     }
 
     /**
@@ -244,8 +227,9 @@ import java.util.Locale;
      *
      * @return GitHub App
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
     public GHApp getApp() {
-<span class="fc" id="L248">        return app;</span>
+<span class="fc" id="L232">        return app;</span>
     }
 
     /**
@@ -253,8 +237,9 @@ import java.util.Locale;
      *
      * @return Check suite
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
     public GHCheckSuite getCheckSuite() {
-<span class="fc" id="L257">        return checkSuite;</span>
+<span class="fc" id="L242">        return checkSuite;</span>
     }
 
     /**
@@ -262,8 +247,9 @@ import java.util.Locale;
      *
      * @return Output of a check run
      */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
     public Output getOutput() {
-<span class="fc" id="L266">        return output;</span>
+<span class="fc" id="L252">        return output;</span>
     }
 
     /**
@@ -271,12 +257,12 @@ import java.util.Locale;
      *
      * @see &lt;a href=&quot;https://developer.github.com/v3/checks/runs/#output-object&quot;&gt;documentation&lt;/a&gt;
      */
-<span class="fc" id="L274">    public static class Output {</span>
+<span class="fc" id="L260">    public static class Output {</span>
         private String title;
         private String summary;
         private String text;
         private int annotationsCount;
-        private URL annotationsUrl;
+        private String annotationsUrl;
 
         /**
          * Gets the title of check run.
@@ -284,7 +270,7 @@ import java.util.Locale;
          * @return title of check run
          */
         public String getTitle() {
-<span class="fc" id="L287">            return title;</span>
+<span class="fc" id="L273">            return title;</span>
         }
 
         /**
@@ -293,7 +279,7 @@ import java.util.Locale;
          * @return summary of check run
          */
         public String getSummary() {
-<span class="fc" id="L296">            return summary;</span>
+<span class="fc" id="L282">            return summary;</span>
         }
 
         /**
@@ -302,7 +288,7 @@ import java.util.Locale;
          * @return Details of the check run
          */
         public String getText() {
-<span class="fc" id="L305">            return text;</span>
+<span class="fc" id="L291">            return text;</span>
         }
 
         /**
@@ -311,7 +297,7 @@ import java.util.Locale;
          * @return annotation count of a check run
          */
         public int getAnnotationsCount() {
-<span class="fc" id="L314">            return annotationsCount;</span>
+<span class="fc" id="L300">            return annotationsCount;</span>
         }
 
         /**
@@ -320,12 +306,12 @@ import java.util.Locale;
          * @return URL of annotations
          */
         public URL getAnnotationsUrl() {
-<span class="fc" id="L323">            return annotationsUrl;</span>
+<span class="fc" id="L309">            return GitHubClient.parseURL(annotationsUrl);</span>
         }
     }
 
-<span class="fc" id="L327">    public static enum AnnotationLevel {</span>
-<span class="fc" id="L328">        NOTICE, WARNING, FAILURE</span>
+<span class="fc" id="L313">    public static enum AnnotationLevel {</span>
+<span class="fc" id="L314">        NOTICE, WARNING, FAILURE</span>
     }
 
     /**
@@ -335,7 +321,7 @@ import java.util.Locale;
      */
     @Preview(Previews.ANTIOPE)
     public @NonNull GHCheckRunBuilder update() {
-<span class="fc" id="L338">        return new GHCheckRunBuilder(owner, getId());</span>
+<span class="fc" id="L324">        return new GHCheckRunBuilder(owner, getId());</span>
     }
 
 }

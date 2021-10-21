@@ -91,18 +91,13 @@ import java.util.*;
 <span class="fc" id="L91">        return transformTypeToGHEvent(type);</span>
     }
 
-    GHEventInfo wrapUp(GitHub root) {
-<span class="fc" id="L95">        this.root = root;</span>
-<span class="fc" id="L96">        return this;</span>
-    }
-
     /**
      * Gets id.
      *
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L105">        return id;</span>
+<span class="fc" id="L100">        return id;</span>
     }
 
     /**
@@ -111,7 +106,7 @@ import java.util.*;
      * @return the created at
      */
     public Date getCreatedAt() {
-<span class="fc" id="L114">        return GitHubClient.parseDate(created_at);</span>
+<span class="fc" id="L109">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -124,7 +119,7 @@ import java.util.*;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHRepository getRepository() throws IOException {
-<span class="fc" id="L127">        return root.getRepository(repo.name);</span>
+<span class="fc" id="L122">        return root().getRepository(repo.name);</span>
     }
 
     /**
@@ -137,7 +132,7 @@ import java.util.*;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHUser getActor() throws IOException {
-<span class="nc" id="L140">        return root.getUser(actor.getLogin());</span>
+<span class="nc" id="L135">        return root().getUser(actor.getLogin());</span>
     }
 
     /**
@@ -148,7 +143,7 @@ import java.util.*;
      *             on error
      */
     public String getActorLogin() throws IOException {
-<span class="fc" id="L151">        return actor.getLogin();</span>
+<span class="fc" id="L146">        return actor.getLogin();</span>
     }
 
     /**
@@ -161,7 +156,7 @@ import java.util.*;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHOrganization getOrganization() throws IOException {
-<span class="pc bpc" id="L164" title="3 of 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root.getOrganization(org.getLogin());</span>
+<span class="pc bpc" id="L159" title="3 of 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root().getOrganization(org.getLogin());</span>
     }
 
     /**
@@ -177,9 +172,9 @@ import java.util.*;
      *             if payload cannot be parsed
      */
     public &lt;T extends GHEventPayload&gt; T getPayload(Class&lt;T&gt; type) throws IOException {
-<span class="fc" id="L180">        T v = GitHubClient.getMappingObjectReader(root).readValue(payload.traverse(), type);</span>
-<span class="fc" id="L181">        v.wrapUp(root);</span>
-<span class="fc" id="L182">        return v;</span>
+<span class="fc" id="L175">        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);</span>
+<span class="fc" id="L176">        v.lateBind();</span>
+<span class="fc" id="L177">        return v;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

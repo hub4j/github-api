@@ -20,7 +20,7 @@ public final class GHContentBuilder {
 
 <span class="fc" id="L21">    GHContentBuilder(GHRepository repo) {</span>
 <span class="fc" id="L22">        this.repo = repo;</span>
-<span class="fc" id="L23">        this.req = repo.root.createRequest().method(&quot;PUT&quot;);</span>
+<span class="fc" id="L23">        this.req = repo.root().createRequest().method(&quot;PUT&quot;);</span>
 <span class="fc" id="L24">    }</span>
 
     /**

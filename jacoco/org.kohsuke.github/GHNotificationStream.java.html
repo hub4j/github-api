@@ -29,8 +29,8 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
     private String apiUrl;
 <span class="fc" id="L30">    private boolean nonBlocking = false;</span>
 
-<span class="fc" id="L32">    GHNotificationStream(GitHub root, String apiUrl) {</span>
-<span class="fc" id="L33">        this.root = root;</span>
+    GHNotificationStream(GitHub root, String apiUrl) {
+<span class="fc" id="L33">        super(root);</span>
 <span class="fc" id="L34">        this.apiUrl = apiUrl;</span>
 <span class="fc" id="L35">    }</span>
 
@@ -99,7 +99,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      */
     public Iterator&lt;GHThread&gt; iterator() {
         // capture the configuration setting here
-<span class="fc" id="L102">        final Requester req = root.createRequest()</span>
+<span class="fc" id="L102">        final Requester req = root().createRequest()</span>
 <span class="fc" id="L103">                .with(&quot;all&quot;, all)</span>
 <span class="fc" id="L104">                .with(&quot;participating&quot;, participating)</span>
 <span class="fc" id="L105">                .with(&quot;since&quot;, since);</span>
@@ -160,7 +160,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
 <span class="fc" id="L160">                            long nt = n.getUpdatedAt().getTime();</span>
 <span class="fc bfc" id="L161" title="All 2 branches covered.">                            if (nt &gt;= lastUpdated) {</span>
 <span class="fc" id="L162">                                lastUpdated = nt;</span>
-<span class="fc" id="L163">                                return n.wrap(root);</span>
+<span class="fc" id="L163">                                return n;</span>
                             }
 <span class="fc" id="L165">                        }</span>
 
@@ -228,7 +228,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      *             the io exception
      */
     public void markAsRead(long timestamp) throws IOException {
-<span class="fc" id="L231">        final Requester req = root.createRequest();</span>
+<span class="fc" id="L231">        final Requester req = root().createRequest();</span>
 <span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (timestamp &gt;= 0)</span>
 <span class="nc" id="L233">            req.with(&quot;last_read_at&quot;, GitHubClient.printDate(new Date(timestamp)));</span>
 <span class="fc" id="L234">        req.withUrlPath(apiUrl).fetchHttpStatusCode();</span>

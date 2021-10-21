@@ -20,27 +20,12 @@ import java.util.Date;
     private String effectiveDate;
 
     /**
-     * Wrap up gh marketplace pending change.
-     *
-     * @param root
-     *            the root
-     * @return an instance of the GHMarketplacePendingChange class
-     */
-    GHMarketplacePendingChange wrapUp(GitHub root) {
-<span class="fc" id="L30">        this.root = root;</span>
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (plan != null) { // sanity check</span>
-<span class="fc" id="L32">            this.plan.wrapUp(this.root);</span>
-        }
-<span class="fc" id="L34">        return this;</span>
-    }
-
-    /**
      * Gets id.
      *
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L43">        return id;</span>
+<span class="fc" id="L28">        return id;</span>
     }
 
     /**
@@ -49,7 +34,7 @@ import java.util.Date;
      * @return the unit count
      */
     public Long getUnitCount() {
-<span class="fc" id="L52">        return unitCount;</span>
+<span class="fc" id="L37">        return unitCount;</span>
     }
 
     /**
@@ -58,7 +43,7 @@ import java.util.Date;
      * @return the plan
      */
     public GHMarketplacePlan getPlan() {
-<span class="fc" id="L61">        return plan;</span>
+<span class="fc" id="L46">        return plan;</span>
     }
 
     /**
@@ -67,7 +52,7 @@ import java.util.Date;
      * @return the effective date
      */
     public Date getEffectiveDate() {
-<span class="fc" id="L70">        return GitHubClient.parseDate(effectiveDate);</span>
+<span class="fc" id="L55">        return GitHubClient.parseDate(effectiveDate);</span>
     }
 
 }

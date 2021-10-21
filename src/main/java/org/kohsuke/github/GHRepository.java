@@ -3220,6 +3220,8 @@ public class GHRepository extends GHObject {
      *            the eventType
      * @param clientPayload
      *            a custom payload , can be nullable
+     * @param <T>
+     *            type of client payload
      * @throws IOException
      *             the io exception
      */

@@ -72,16 +72,12 @@ class GitHubPageIterator<T> implements Iterator<T> {
      */
     static <T> GitHubPageIterator<T> create(GitHubClient client, Class<T> type, GitHubRequest request, int pageSize) {
 
-        try {
-            if (pageSize > 0) {
-                GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
-                request = builder.build();
-            }
-
-            return new GitHubPageIterator<>(client, type, request);
-        } catch (MalformedURLException e) {
-            throw new GHException("Unable to build GitHub API URL", e);
+        if (pageSize > 0) {
+            GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
+            request = builder.build();
         }
+
+        return new GitHubPageIterator<>(client, type, request);
     }
 
     /**

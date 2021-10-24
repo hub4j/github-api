@@ -136,6 +136,15 @@ public class GHWorkflow extends GHObject {
         requester.fetchHttpStatusCode();
     }
 
+    /**
+     * Lists the workflow runs belong to this workflow.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHWorkflowRun> listRuns() {
+        return new GHWorkflowRunsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), "runs"));
+    }
+
     private String getApiRoute() {
         if (owner == null) {
             // Workflow runs returned from search to do not have an owner. Attempt to use url.

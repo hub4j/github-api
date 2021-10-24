@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.kohsuke.github.GHPullRequest.AutoMerge;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -37,6 +38,14 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(p.getTitle(), equalTo(name));
         assertThat(p.canMaintainerModify(), is(false));
         assertThat(p.isDraft(), is(false));
+
+        // Check auto merge status of the pull request
+        final AutoMerge autoMerge = p.getAutoMerge();
+        assertThat(autoMerge, is(notNullValue()));
+        assertThat(autoMerge.getCommitMessage(), equalTo("This is a auto merged squash commit message"));
+        assertThat(autoMerge.getCommitTitle(), equalTo("This is a auto merged squash commit"));
+        assertThat(autoMerge.getMergeMethod(), equalTo(GHPullRequest.MergeMethod.SQUASH));
+        assertThat(autoMerge.getEnabledBy(), is(notNullValue()));
     }
 
     @Test
@@ -60,7 +69,6 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         p = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").list().toList().get(0);
         assertThat(p2.getNumber(), is(p.getNumber()));
         assertThat(p.isDraft(), is(true));
-
     }
 
     @Test

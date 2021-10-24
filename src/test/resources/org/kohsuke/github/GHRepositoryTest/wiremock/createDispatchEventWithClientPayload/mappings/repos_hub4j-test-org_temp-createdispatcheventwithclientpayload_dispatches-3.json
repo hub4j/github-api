@@ -1,0 +1,46 @@
+{
+  "id": "bd959614-1104-415e-b9a1-8ac9533d82f7",
+  "name": "repos_hub4j-test-org_temp-createdispatcheventwithclientpayload_dispatches",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-createDispatchEventWithClientPayload/dispatches",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"event_type\":\"test\",\"client_payload\":{\"name\":\"joe.doe\",\"list\":[]}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 30 Sep 2021 12:34:49 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4939",
+      "X-RateLimit-Reset": "1633006817",
+      "X-RateLimit-Used": "61",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "DEB7:0B4B:3073ED:320304:6155AEE9"
+    }
+  },
+  "uuid": "bd959614-1104-415e-b9a1-8ac9533d82f7",
+  "persistent": true,
+  "insertionIndex": 3
+}

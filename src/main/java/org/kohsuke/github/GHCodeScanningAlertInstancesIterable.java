@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.net.MalformedURLException;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
@@ -10,13 +9,9 @@ public class GHCodeScanningAlertInstancesIterable extends PagedIterable<GHCodeSc
     private final GitHubRequest request;
     private GHCodeScanningAlertInstance[] result;
 
-    public GHCodeScanningAlertInstancesIterable(GHCodeScanningAlert owner, GitHubRequest.Builder<?> requestBuilder) {
+    GHCodeScanningAlertInstancesIterable(GHCodeScanningAlert owner, GitHubRequest request) {
         this.owner = owner;
-        try {
-            this.request = requestBuilder.build();
-        } catch (MalformedURLException e) {
-            throw new GHException("Malformed URL", e);
-        }
+        this.request = request;
     }
 
     @Nonnull
@@ -24,7 +19,7 @@ public class GHCodeScanningAlertInstancesIterable extends PagedIterable<GHCodeSc
     public PagedIterator<GHCodeScanningAlertInstance> _iterator(int pageSize) {
         return new PagedIterator<>(
                 adapt(GitHubPageIterator
-                        .create(owner.getRoot().getClient(), GHCodeScanningAlertInstance[].class, request, pageSize)),
+                        .create(owner.root().getClient(), GHCodeScanningAlertInstance[].class, request, pageSize)),
                 null);
     }
 

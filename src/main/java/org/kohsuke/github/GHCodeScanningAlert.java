@@ -29,14 +29,6 @@ public class GHCodeScanningAlert extends GHObject {
 
     GHCodeScanningAlert wrap(GHRepository owner) {
         this.owner = owner;
-        return wrap(owner.root);
-    }
-
-    GHCodeScanningAlert wrap(GitHub root) {
-        this.root = root;
-        if (owner != null) {
-            owner.wrap(root);
-        }
         return this;
     }
 
@@ -79,6 +71,7 @@ public class GHCodeScanningAlert extends GHObject {
      *
      * @return the user
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getDismissedBy() {
         return dismissed_by;
     }
@@ -134,7 +127,8 @@ public class GHCodeScanningAlert extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHCodeScanningAlertInstance> listAlertInstances() {
-        return new GHCodeScanningAlertInstancesIterable(this, root.createRequest().withUrlPath(instances_url));
+        return new GHCodeScanningAlertInstancesIterable(this,
+                root().createRequest().withUrlPath(instances_url).build());
     }
 
     @Override

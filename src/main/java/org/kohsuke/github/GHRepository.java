@@ -3544,7 +3544,7 @@ public class GHRepository extends GHObject {
 
     private PagedIterable<GHCodeScanningAlert> listCodeScanningAlerts(Map<String, Object> filters) {
         return new GHCodeScanningAlertsIterable(this,
-                root.createRequest().withUrlPath(getApiTailUrl("code-scanning/alerts")).with(filters));
+                root().createRequest().withUrlPath(getApiTailUrl("code-scanning/alerts")).with(filters).build());
     }
 
     /**
@@ -3557,7 +3557,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHCodeScanningAlert getCodeScanningAlert(long id) throws IOException {
-        return root.createRequest()
+        return root().createRequest()
                 .withUrlPath(getApiTailUrl("code-scanning/alerts"), String.valueOf(id))
                 .fetch(GHCodeScanningAlert.class)
                 .wrap(this);

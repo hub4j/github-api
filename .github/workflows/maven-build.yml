@@ -1,6 +1,14 @@
 name: CI
 
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+      - main
+      - '!/refs/heads/dependabot/*'
+  pull_request:
+    branches:
+      - '*'
+      - '!/refs/heads/patch*'
 
 # this is required by spotless for JDK 16+
 env:

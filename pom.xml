@@ -37,7 +37,7 @@
     <spotbugs.version>4.4.2</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
-    <okhttp3.version>4.4.1</okhttp3.version>
+    <okhttp3.version>4.8.1</okhttp3.version>
     <okio.version>2.10.0</okio.version>
     <!-- Using this as the minimum bar for code coverage.  Adding methods without covering them will fail this. -->
     <jacoco.coverage.target.bundle.method>0.70</jacoco.coverage.target.bundle.method>

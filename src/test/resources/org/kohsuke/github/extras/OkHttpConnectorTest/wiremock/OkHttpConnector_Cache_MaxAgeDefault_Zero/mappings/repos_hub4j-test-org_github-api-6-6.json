@@ -6,7 +6,7 @@
     "method": "GET",
     "headers": {
       "If-None-Match": {
-        "equalTo": "\"295ae3430c604f3d10b6eb145fe511b5\""
+        "matches": "^(W/)?\"295ae3430c604f3d10b6eb145fe511b5\"$"
       }
     }
   },

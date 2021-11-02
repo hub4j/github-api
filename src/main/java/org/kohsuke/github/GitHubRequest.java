@@ -12,15 +12,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -38,6 +30,9 @@ import static java.util.Arrays.asList;
  * </p>
  */
 class GitHubRequest {
+
+    private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
+            .nullsFirst(String.CASE_INSENSITIVE_ORDER);
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
     private final List<Entry> args;
@@ -62,7 +57,9 @@ class GitHubRequest {
             @CheckForNull InputStream body,
             boolean forceBody) {
         this.args = Collections.unmodifiableList(new ArrayList<>(args));
-        this.headers = Collections.unmodifiableMap(new LinkedHashMap<>(headers));
+        TreeMap<String, String> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
+        caseInsensitiveMap.putAll(headers);
+        this.headers = Collections.unmodifiableMap(caseInsensitiveMap);
         this.injectedMappingValues = Collections.unmodifiableMap(new LinkedHashMap<>(injectedMappingValues));
         this.apiUrl = apiUrl;
         this.urlPath = urlPath;
@@ -324,7 +321,7 @@ class GitHubRequest {
          */
         protected Builder() {
             this(new ArrayList<>(),
-                    new LinkedHashMap<>(),
+                    new TreeMap<>(nullableCaseInsensitiveComparator),
                     new LinkedHashMap<>(),
                     GitHubClient.GITHUB_URL,
                     "/",
@@ -344,7 +341,9 @@ class GitHubRequest {
                 @CheckForNull @WillClose InputStream body,
                 boolean forceBody) {
             this.args = new ArrayList<>(args);
-            this.headers = new LinkedHashMap<>(headers);
+            TreeMap<String, String> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
+            caseInsensitiveMap.putAll(headers);
+            this.headers = caseInsensitiveMap;
             this.injectedMappingValues = new LinkedHashMap<>(injectedMappingValues);
             this.apiUrl = apiUrl;
             this.urlPath = urlPath;

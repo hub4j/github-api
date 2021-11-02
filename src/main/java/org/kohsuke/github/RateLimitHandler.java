@@ -12,6 +12,31 @@ import java.net.HttpURLConnection;
  * @see AbuseLimitHandler
  */
 public abstract class RateLimitHandler {
+
+    /**
+     * Called when the library encounters HTTP error indicating that the API rate limit has been exceeded.
+     *
+     * <p>
+     * Any exception thrown from this method will cause the request to fail, and the caller of github-api will receive
+     * an exception. If this method returns normally, another request will be attempted. For that to make sense, the
+     * implementation needs to wait for some time.
+     *
+     * @param responseInfo
+     *            Response information for this request.
+     *            
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
+     */
+    void onError(GitHubResponse.ResponseInfo responseInfo) throws IOException {
+        GHIOException e = new HttpException("Rate limit violation",
+                responseInfo.statusCode(),
+                responseInfo.headerField("Status"),
+                responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
+        onError(e, new GitHubResponseInfoHttpURLConnectionAdapter(responseInfo));
+    }
+
+
     /**
      * Called when the library encounters HTTP error indicating that the API rate limit is reached.
      *

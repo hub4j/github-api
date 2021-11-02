@@ -44,8 +44,8 @@ abstract class GitHubClient {
     // Cache of myself object.
     private final String apiUrl;
 
-    protected final RateLimitHandler rateLimitHandler;
-    protected final AbuseLimitHandler abuseLimitHandler;
+    private final RateLimitHandler rateLimitHandler;
+    private final AbuseLimitHandler abuseLimitHandler;
     private final GitHubRateLimitChecker rateLimitChecker;
     private final AuthorizationProvider authorizationProvider;
 
@@ -413,7 +413,13 @@ abstract class GitHubClient {
     @Nonnull
     protected abstract GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException;
 
-    protected abstract void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException;
+    private void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException {
+        if (isRateLimitResponse(responseInfo)) {
+            rateLimitHandler.onError(responseInfo);
+        } else if (isAbuseLimitResponse(responseInfo)) {
+            abuseLimitHandler.onError(responseInfo);
+        }
+    }
 
     @Nonnull
     private static <T> GitHubResponse<T> createResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo,

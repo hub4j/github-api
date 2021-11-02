@@ -14,11 +14,7 @@ import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -177,8 +173,9 @@ class GitHubResponse<T> {
     @CheckForNull
     public String headerField(String name) {
         String result = null;
-        if (headers.containsKey(name)) {
-            result = headers.get(name).get(0);
+        List<String> rawResult = headers.get(name);
+        if (rawResult != null) {
+            result = rawResult.get(0);
         }
         return result;
     }
@@ -203,8 +200,12 @@ class GitHubResponse<T> {
     }
 
     /**
-     * Initial response information supplied to a {@link BodyHandler} when a response is initially received and before
+     * Response information supplied to a {@link BodyHandler} when a response is received and before
      * the body is processed.
+     *
+     * Instances of this class are closed once the response is done being processed. This means that contents
+     * of the body stream will not be readable after a call is completed. Status code, response headers,
+     * and request details will still be readable.
      */
     static abstract class ResponseInfo implements Closeable {
 
@@ -244,6 +245,19 @@ class GitHubResponse<T> {
                 result = headers.get(name).get(0);
             }
             return result;
+        }
+
+        /**
+         * Gets the value of a header field for this response.
+         *
+         * @param index
+         *            the name of the header field.
+         * @return the value of the header field, or {@code null} if the header isn't set.
+         */
+        @CheckForNull
+        String headerFieldKey(int index) {
+            List<String> keys = new ArrayList<>(headers.keySet());
+            return keys.get(index);
         }
 
         /**

@@ -129,8 +129,8 @@ public class GitHub {
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();
 
-        this.client = new GitHubHttpUrlConnectionClient(apiUrl,
-                connector,
+        this.client = new GitHubClient(apiUrl,
+                connector == null ? null : new GitHubHttpUrlConnectionClient(connector),
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,

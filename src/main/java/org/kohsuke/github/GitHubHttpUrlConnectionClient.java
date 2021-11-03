@@ -30,22 +30,19 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  * GitHubHttpUrlConnectionClient gets a new {@link HttpURLConnection} for each call to send.
  * </p>
  */
-class GitHubHttpUrlConnectionClient extends GitHubClient {
+class GitHubHttpUrlConnectionClient implements ResponseConnector {
+    final HttpConnector httpConnector;
 
-    GitHubHttpUrlConnectionClient(String apiUrl,
-            HttpConnector connector,
-            RateLimitHandler rateLimitHandler,
-            AbuseLimitHandler abuseLimitHandler,
-            GitHubRateLimitChecker rateLimitChecker,
-            AuthorizationProvider authorizationProvider) throws IOException {
-        super(apiUrl, connector, rateLimitHandler, abuseLimitHandler, rateLimitChecker, authorizationProvider);
+    GitHubHttpUrlConnectionClient(HttpConnector httpConnector) {
+        this.httpConnector = httpConnector;
     }
 
     @Nonnull
-    protected ResponseInfo getResponseInfo(GitHubRequest request) throws IOException {
+    @Override
+    public ResponseInfo getResponseInfo(GitHubRequest request, AuthorizationProvider authorizationProvider) throws IOException {
         HttpURLConnection connection;
         try {
-            connection = HttpURLConnectionResponseInfo.setupConnection(this, request);
+            connection = HttpURLConnectionResponseInfo.setupConnection(httpConnector, authorizationProvider, request);
         } catch (IOException e) {
             // An error in here should be wrapped to bypass http exception wrapping.
             throw new GHIOException(e.getMessage(), e);
@@ -79,16 +76,16 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
         }
 
         @Nonnull
-        static HttpURLConnection setupConnection(@Nonnull GitHubClient client, @Nonnull GitHubRequest request)
+        static HttpURLConnection setupConnection(@Nonnull HttpConnector httpConnector, AuthorizationProvider authorizationProvider, @Nonnull GitHubRequest request)
                 throws IOException {
-            HttpURLConnection connection = client.getConnector().connect(request.url());
+            HttpURLConnection connection = httpConnector.connect(request.url());
 
             // if the authentication is needed but no credential is given, try it anyway (so that some calls
             // that do work with anonymous access in the reduced form should still work.)
             if (!request.headers().containsKey("Authorization")) {
-                String authorization = client.getEncodedAuthorization();
+                String authorization = authorizationProvider.getEncodedAuthorization();
                 if (authorization != null) {
-                    connection.setRequestProperty("Authorization", client.getEncodedAuthorization());
+                    connection.setRequestProperty("Authorization", authorization);
                 }
             }
 
@@ -128,7 +125,7 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
                         for (GitHubRequest.Entry e : request.args()) {
                             json.put(e.key, e.value);
                         }
-                        getMappingObjectWriter().writeValue(connection.getOutputStream(), json);
+                        GitHubClient.getMappingObjectWriter().writeValue(connection.getOutputStream(), json);
                     }
                 }
             }

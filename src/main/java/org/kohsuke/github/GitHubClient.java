@@ -33,7 +33,7 @@ import static java.util.logging.Level.*;
  * to send multiple requests. GitHubClient also track some GitHub API information such as {@link GHRateLimit}.
  * </p>
  */
-abstract class GitHubClient {
+final class GitHubClient {
 
     static final int CONNECTION_ERROR_RETRIES = 2;
     /**
@@ -49,7 +49,7 @@ abstract class GitHubClient {
     private final GitHubRateLimitChecker rateLimitChecker;
     private final AuthorizationProvider authorizationProvider;
 
-    private HttpConnector connector;
+    private ResponseConnector connector;
 
     @Nonnull
     private final AtomicReference<GHRateLimit> rateLimit = new AtomicReference<>(GHRateLimit.DEFAULT);
@@ -70,7 +70,7 @@ abstract class GitHubClient {
     }
 
     GitHubClient(String apiUrl,
-            HttpConnector connector,
+            ResponseConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
@@ -81,7 +81,7 @@ abstract class GitHubClient {
         }
 
         if (null == connector) {
-            connector = HttpConnector.DEFAULT;
+            connector = new GitHubHttpUrlConnectionClient(HttpConnector.DEFAULT);
         }
         this.apiUrl = apiUrl;
         this.connector = connector;
@@ -147,7 +147,11 @@ abstract class GitHubClient {
      * @return the connector
      */
     public HttpConnector getConnector() {
-        return connector;
+        if (connector instanceof GitHubHttpUrlConnectionClient) {
+            return ((GitHubHttpUrlConnectionClient) connector).httpConnector;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -160,7 +164,7 @@ abstract class GitHubClient {
     @Deprecated
     public void setConnector(HttpConnector connector) {
         LOGGER.warning("Connector should not be changed. Please file an issue describing your use case.");
-        this.connector = connector;
+        this.connector = new GitHubHttpUrlConnectionClient(connector);
     }
 
     /**
@@ -409,7 +413,9 @@ abstract class GitHubClient {
     }
 
     @Nonnull
-    protected abstract ResponseInfo getResponseInfo(GitHubRequest request) throws IOException;
+    protected ResponseInfo getResponseInfo(GitHubRequest request) throws IOException {
+        return connector.getResponseInfo(request, authorizationProvider);
+    }
 
     protected void handleLimitingErrors(@Nonnull ResponseInfo responseInfo) throws IOException {
         if (isRateLimitResponse(responseInfo)) {

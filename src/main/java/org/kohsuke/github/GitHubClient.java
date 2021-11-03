@@ -411,7 +411,21 @@ abstract class GitHubClient {
     @Nonnull
     protected abstract GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException;
 
-    protected abstract void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException;
+    protected void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException {
+        if (isRateLimitResponse(responseInfo)) {
+            GHIOException e = new HttpException("Rate limit violation",
+                    responseInfo.statusCode(),
+                    responseInfo.headerField("Status"),
+                    responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
+            rateLimitHandler.onError(e, responseInfo);
+        } else if (isAbuseLimitResponse(responseInfo)) {
+            GHIOException e = new HttpException("Abuse limit violation",
+                    responseInfo.statusCode(),
+                    responseInfo.headerField("Status"),
+                    responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
+            abuseLimitHandler.onError(e, responseInfo);
+        }
+    }
 
     @Nonnull
     private static <T> GitHubResponse<T> createResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo,

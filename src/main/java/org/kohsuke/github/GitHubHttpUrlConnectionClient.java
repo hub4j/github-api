@@ -59,22 +59,6 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
         return new HttpURLConnectionResponseInfo(request, statusCode, headers, connection);
     }
 
-    protected void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException {
-        if (isRateLimitResponse(responseInfo)) {
-            GHIOException e = new HttpException("Rate limit violation",
-                    responseInfo.statusCode(),
-                    responseInfo.headerField("Status"),
-                    responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
-            rateLimitHandler.onError(e, responseInfo);
-        } else if (isAbuseLimitResponse(responseInfo)) {
-            GHIOException e = new HttpException("Abuse limit violation",
-                    responseInfo.statusCode(),
-                    responseInfo.headerField("Status"),
-                    responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
-            abuseLimitHandler.onError(e, responseInfo);
-        }
-    }
-
     /**
      * Initial response information supplied to a {@link GitHubResponse.BodyHandler} when a response is initially
      * received and before the body is processed.

@@ -42,7 +42,7 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
     }
 
     @Nonnull
-    protected GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException {
+    protected ResponseInfo getResponseInfo(GitHubRequest request) throws IOException {
         HttpURLConnection connection;
         try {
             connection = HttpURLConnectionResponseInfo.setupConnection(this, request);
@@ -65,7 +65,7 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
      *
      * Implementation specific to {@link HttpURLConnection}.
      */
-    static class HttpURLConnectionResponseInfo extends GitHubResponse.ResponseInfo {
+    static class HttpURLConnectionResponseInfo extends ResponseInfo {
 
         @Nonnull
         private final HttpURLConnection connection;

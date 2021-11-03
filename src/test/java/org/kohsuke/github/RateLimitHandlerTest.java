@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -115,7 +114,7 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withRateLimitHandler(new RateLimitHandler() {
                     @Override
-                    public void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException {
+                    public void onError(IOException e, ResponseInfo uc) throws IOException {
                     }
                 })
                 .build();

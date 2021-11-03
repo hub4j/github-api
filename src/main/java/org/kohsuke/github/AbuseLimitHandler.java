@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.net.HttpURLConnection;
 
 /**
  * Pluggable strategy to determine what to do when the API abuse limit is hit.
@@ -34,14 +33,14 @@ public abstract class AbuseLimitHandler {
      *      with abuse rate limits</a>
      *
      */
-    public abstract void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException;
+    public abstract void onError(IOException e, ResponseInfo uc) throws IOException;
 
     /**
      * Wait until the API abuse "wait time" is passed.
      */
     public static final AbuseLimitHandler WAIT = new AbuseLimitHandler() {
         @Override
-        public void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException {
+        public void onError(IOException e, ResponseInfo uc) throws IOException {
             try {
                 Thread.sleep(parseWaitTime(uc));
             } catch (InterruptedException ex) {
@@ -49,7 +48,7 @@ public abstract class AbuseLimitHandler {
             }
         }
 
-        private long parseWaitTime(GitHubResponse.ResponseInfo uc) {
+        private long parseWaitTime(ResponseInfo uc) {
             String v = uc.headerField("Retry-After");
             if (v == null)
                 return 60 * 1000; // can't tell, return 1 min
@@ -63,7 +62,7 @@ public abstract class AbuseLimitHandler {
      */
     public static final AbuseLimitHandler FAIL = new AbuseLimitHandler() {
         @Override
-        public void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException {
+        public void onError(IOException e, ResponseInfo uc) throws IOException {
             throw (IOException) new IOException("Abuse limit reached").initCause(e);
         }
     };

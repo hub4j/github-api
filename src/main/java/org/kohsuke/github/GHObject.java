@@ -40,10 +40,10 @@ public abstract class GHObject extends GitHubInteractiveObject {
      * Called by Jackson
      *
      * @param responseInfo
-     *            the {@link GitHubResponse.ResponseInfo} to get headers from.
+     *            the {@link ResponseInfo} to get headers from.
      */
     @JacksonInject
-    protected void setResponseHeaderFields(@CheckForNull GitHubResponse.ResponseInfo responseInfo) {
+    protected void setResponseHeaderFields(@CheckForNull ResponseInfo responseInfo) {
         if (responseInfo != null) {
             responseHeaderFields = responseInfo.headers();
         }

@@ -363,7 +363,7 @@ abstract class GitHubClient {
         do {
             // if we fail to create a connection we do not retry and we do not wrap
 
-            GitHubResponse.ResponseInfo responseInfo = null;
+            ResponseInfo responseInfo = null;
             try {
                 try {
                     logRequest(request);
@@ -409,9 +409,9 @@ abstract class GitHubClient {
     }
 
     @Nonnull
-    protected abstract GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException;
+    protected abstract ResponseInfo getResponseInfo(GitHubRequest request) throws IOException;
 
-    protected void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException {
+    protected void handleLimitingErrors(@Nonnull ResponseInfo responseInfo) throws IOException {
         if (isRateLimitResponse(responseInfo)) {
             GHIOException e = new HttpException("Rate limit violation",
                     responseInfo.statusCode(),
@@ -428,7 +428,7 @@ abstract class GitHubClient {
     }
 
     @Nonnull
-    private static <T> GitHubResponse<T> createResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo,
+    private static <T> GitHubResponse<T> createResponse(@Nonnull ResponseInfo responseInfo,
             @CheckForNull GitHubResponse.BodyHandler<T> handler) throws IOException {
         T body = null;
         if (responseInfo.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
@@ -455,7 +455,7 @@ abstract class GitHubClient {
      */
     private static IOException interpretApiError(IOException e,
             @Nonnull GitHubRequest request,
-            @CheckForNull GitHubResponse.ResponseInfo responseInfo) throws IOException {
+            @CheckForNull ResponseInfo responseInfo) throws IOException {
         // If we're already throwing a GHIOException, pass through
         if (e instanceof GHIOException) {
             return e;
@@ -489,12 +489,12 @@ abstract class GitHubClient {
         return e;
     }
 
-    protected static boolean isRateLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
+    protected static boolean isRateLimitResponse(@Nonnull ResponseInfo responseInfo) {
         return responseInfo.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
                 && "0".equals(responseInfo.headerField("X-RateLimit-Remaining"));
     }
 
-    protected static boolean isAbuseLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
+    protected static boolean isAbuseLimitResponse(@Nonnull ResponseInfo responseInfo) {
         return responseInfo.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
                 && responseInfo.headerField("Retry-After") != null;
     }
@@ -517,7 +517,7 @@ abstract class GitHubClient {
         return false;
     }
 
-    private static boolean isInvalidCached404Response(GitHubResponse.ResponseInfo responseInfo) {
+    private static boolean isInvalidCached404Response(ResponseInfo responseInfo) {
         // WORKAROUND FOR ISSUE #669:
         // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
         // is bogus and would cause cache corruption), try the query again with new request header
@@ -539,7 +539,7 @@ abstract class GitHubClient {
         return false;
     }
 
-    private void noteRateLimit(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
+    private void noteRateLimit(@Nonnull ResponseInfo responseInfo) {
         try {
             String limitString = Objects.requireNonNull(responseInfo.headerField("X-RateLimit-Limit"),
                     "Missing X-RateLimit-Limit");
@@ -559,7 +559,7 @@ abstract class GitHubClient {
         }
     }
 
-    private static void detectOTPRequired(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws GHIOException {
+    private static void detectOTPRequired(@Nonnull ResponseInfo responseInfo) throws GHIOException {
         // 401 Unauthorized == bad creds or OTP request
         if (responseInfo.statusCode() == HTTP_UNAUTHORIZED) {
             // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
@@ -667,7 +667,7 @@ abstract class GitHubClient {
     }
 
     /**
-     * Helper for {@link #getMappingObjectReader(GitHubResponse.ResponseInfo)}
+     * Helper for {@link #getMappingObjectReader(ResponseInfo)}
      *
      * @param root
      *            the root GitHub object for this reader
@@ -676,7 +676,7 @@ abstract class GitHubClient {
      */
     @Nonnull
     static ObjectReader getMappingObjectReader(@Nonnull GitHub root) {
-        ObjectReader reader = getMappingObjectReader((GitHubResponse.ResponseInfo) null);
+        ObjectReader reader = getMappingObjectReader((ResponseInfo) null);
         ((InjectableValues.Std) reader.getInjectableValues()).addValue(GitHub.class, root);
         return reader;
     }
@@ -691,20 +691,20 @@ abstract class GitHubClient {
      * it is sufficient for this first cut.
      *
      * @param responseInfo
-     *            the {@link GitHubResponse.ResponseInfo} to inject for this reader.
+     *            the {@link ResponseInfo} to inject for this reader.
      *
      * @return an {@link ObjectReader} instance that can be further configured.
      */
     @Nonnull
-    static ObjectReader getMappingObjectReader(@CheckForNull GitHubResponse.ResponseInfo responseInfo) {
+    static ObjectReader getMappingObjectReader(@CheckForNull ResponseInfo responseInfo) {
         Map<String, Object> injected = new HashMap<>();
 
         // Required or many things break
-        injected.put(GitHubResponse.ResponseInfo.class.getName(), null);
+        injected.put(ResponseInfo.class.getName(), null);
         injected.put(GitHub.class.getName(), null);
 
         if (responseInfo != null) {
-            injected.put(GitHubResponse.ResponseInfo.class.getName(), responseInfo);
+            injected.put(ResponseInfo.class.getName(), responseInfo);
             injected.putAll(responseInfo.request().injectedMappingValues());
         }
         return MAPPER.reader(new InjectableValues.Std(injected));

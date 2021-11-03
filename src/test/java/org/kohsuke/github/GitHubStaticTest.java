@@ -324,7 +324,7 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         assertThat(repoString, not(nullValue()));
         assertThat(repoString, containsString("testMappingReaderWriter"));
 
-        GHRepository readRepo = GitHubClient.getMappingObjectReader((GitHubResponse.ResponseInfo) null)
+        GHRepository readRepo = GitHubClient.getMappingObjectReader((ResponseInfo) null)
                 .forType(GHRepository.class)
                 .readValue(repoString);
 

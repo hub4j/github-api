@@ -118,7 +118,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * Helper function to make it easy to pull streams.
      *
      * Copies an input stream to an in-memory input stream. The performance on this is not great but
-     * {@link GitHubResponse.ResponseInfo#bodyStream()} is closed at the end of every call to
+     * {@link ResponseInfo#bodyStream()} is closed at the end of every call to
      * {@link GitHubClient#sendRequest(GitHubRequest, GitHubResponse.BodyHandler)}, so any reads to the original input
      * stream must be completed before then. There are a number of deprecated methods that return {@link InputStream}.
      * This method keeps all of them using the same code path.

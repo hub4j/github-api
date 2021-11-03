@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.net.HttpURLConnection;
 
 /**
  * Pluggable strategy to determine what to do when the API rate limit is reached.
@@ -29,14 +28,14 @@ public abstract class RateLimitHandler {
      *             the io exception
      * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      */
-    public abstract void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException;
+    public abstract void onError(IOException e, ResponseInfo uc) throws IOException;
 
     /**
      * Block until the API rate limit is reset. Useful for long-running batch processing.
      */
     public static final RateLimitHandler WAIT = new RateLimitHandler() {
         @Override
-        public void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException {
+        public void onError(IOException e, ResponseInfo uc) throws IOException {
             try {
                 Thread.sleep(parseWaitTime(uc));
             } catch (InterruptedException x) {
@@ -44,7 +43,7 @@ public abstract class RateLimitHandler {
             }
         }
 
-        private long parseWaitTime(GitHubResponse.ResponseInfo uc) {
+        private long parseWaitTime(ResponseInfo uc) {
             String v = uc.headerField("X-RateLimit-Reset");
             if (v == null)
                 return 10000; // can't tell
@@ -58,7 +57,7 @@ public abstract class RateLimitHandler {
      */
     public static final RateLimitHandler FAIL = new RateLimitHandler() {
         @Override
-        public void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException {
+        public void onError(IOException e, ResponseInfo uc) throws IOException {
             throw (IOException) new IOException("API rate limit reached").initCause(e);
         }
     };

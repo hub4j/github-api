@@ -443,7 +443,7 @@ public class GHRateLimit {
         Record(@JsonProperty(value = "limit", required = true) int limit,
                 @JsonProperty(value = "remaining", required = true) int remaining,
                 @JsonProperty(value = "reset", required = true) long resetEpochSeconds,
-                @JacksonInject @CheckForNull GitHubResponse.ResponseInfo responseInfo) {
+                @JacksonInject @CheckForNull ResponseInfo responseInfo) {
             this.limit = limit;
             this.remaining = remaining;
             this.resetEpochSeconds = resetEpochSeconds;

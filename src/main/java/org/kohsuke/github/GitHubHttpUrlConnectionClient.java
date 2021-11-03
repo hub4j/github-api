@@ -65,13 +65,13 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
                     responseInfo.statusCode(),
                     responseInfo.headerField("Status"),
                     responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
-            rateLimitHandler.onError(e, ((HttpURLConnectionResponseInfo) responseInfo).connection);
+            rateLimitHandler.onError(e, responseInfo);
         } else if (isAbuseLimitResponse(responseInfo)) {
             GHIOException e = new HttpException("Abuse limit violation",
                     responseInfo.statusCode(),
                     responseInfo.headerField("Status"),
                     responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
-            abuseLimitHandler.onError(e, ((HttpURLConnectionResponseInfo) responseInfo).connection);
+            abuseLimitHandler.onError(e, responseInfo);
         }
     }
 

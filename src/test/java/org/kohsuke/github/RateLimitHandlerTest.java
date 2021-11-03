@@ -115,7 +115,7 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withRateLimitHandler(new RateLimitHandler() {
                     @Override
-                    public void onError(IOException e, HttpURLConnection uc) throws IOException {
+                    public void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException {
                     }
                 })
                 .build();

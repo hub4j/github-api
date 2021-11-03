@@ -34,14 +34,14 @@ public abstract class AbuseLimitHandler {
      *      with abuse rate limits</a>
      *
      */
-    public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
+    public abstract void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException;
 
     /**
      * Wait until the API abuse "wait time" is passed.
      */
     public static final AbuseLimitHandler WAIT = new AbuseLimitHandler() {
         @Override
-        public void onError(IOException e, HttpURLConnection uc) throws IOException {
+        public void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException {
             try {
                 Thread.sleep(parseWaitTime(uc));
             } catch (InterruptedException ex) {
@@ -49,8 +49,8 @@ public abstract class AbuseLimitHandler {
             }
         }
 
-        private long parseWaitTime(HttpURLConnection uc) {
-            String v = uc.getHeaderField("Retry-After");
+        private long parseWaitTime(GitHubResponse.ResponseInfo uc) {
+            String v = uc.headerField("Retry-After");
             if (v == null)
                 return 60 * 1000; // can't tell, return 1 min
 
@@ -63,7 +63,7 @@ public abstract class AbuseLimitHandler {
      */
     public static final AbuseLimitHandler FAIL = new AbuseLimitHandler() {
         @Override
-        public void onError(IOException e, HttpURLConnection uc) throws IOException {
+        public void onError(IOException e, GitHubResponse.ResponseInfo uc) throws IOException {
             throw (IOException) new IOException("Abuse limit reached").initCause(e);
         }
     };

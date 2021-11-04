@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.internal.Previews;
 
@@ -146,8 +147,9 @@ public class GitHubRequest {
      * The arguments for this request. Depending on the {@link #method()} and {@code #inBody()} these maybe added to the
      * url or to the request body.
      *
-     * @return the {@link List<Entry>} of arguments
+     * @return the {@link List} of arguments
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Collections.unmodifiableList")
     @Nonnull
     public List<Entry> args() {
         return args;
@@ -158,6 +160,7 @@ public class GitHubRequest {
      *
      * @return the {@link Map} of headers
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Collections.unmodifiableMap")
     @Nonnull
     public Map<String, String> headers() {
         return headers;
@@ -168,6 +171,7 @@ public class GitHubRequest {
      *
      * @return the {@link Map} of headers
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Collections.unmodifiableMap")
     @Nonnull
     public Map<String, Object> injectedMappingValues() {
         return injectedMappingValues;

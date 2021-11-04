@@ -1,10 +1,12 @@
 package org.kohsuke.github.extras.okhttp3;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.Okio;
@@ -27,6 +29,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 public class OkHttpResponseConnector implements ResponseConnector {
     private final OkHttpClient client;
 
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Acceptable")
     public OkHttpResponseConnector(OkHttpClient client) {
         this.client = client;
     }
@@ -97,7 +100,11 @@ public class OkHttpResponseConnector implements ResponseConnector {
         return new ResponseInfo(request, response.code(), response.headers().toMultimap()) {
             @Override
             protected InputStream bodyStream() throws IOException {
-                InputStream stream = response.body().byteStream();
+                ResponseBody body = response.body();
+                if (body == null) {
+                    return new Buffer().inputStream();
+                }
+                InputStream stream = body.byteStream();
                 if ("gzip".equals(response.header("Content-Encoding"))) {
                     return new GZIPInputStream(stream);
                 } else {

@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 
 import java.io.Closeable;
@@ -116,6 +117,7 @@ public abstract class ResponseInfo implements Closeable {
      * @return the headers for this response.
      */
     @Nonnull
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Collections.unmodifiableMap")
     public Map<String, List<String>> headers() {
         return headers;
     }

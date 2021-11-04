@@ -110,7 +110,7 @@ public class GitHub {
      *            a authorization provider
      */
     GitHub(String apiUrl,
-            HttpConnector connector,
+            ResponseConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
@@ -130,7 +130,7 @@ public class GitHub {
         orgs = new ConcurrentHashMap<>();
 
         this.client = new GitHubClient(apiUrl,
-                connector == null ? null : new GitHubHttpUrlConnectionClient(connector),
+                connector,
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,

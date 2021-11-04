@@ -30,7 +30,7 @@ public class GitHubBuilder implements Cloneable {
     // default scoped so unit tests can read them.
     /* private */ String endpoint = GitHubClient.GITHUB_URL;
 
-    private HttpConnector connector;
+    private ResponseConnector connector;
 
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
     private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
@@ -333,6 +333,17 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withConnector(HttpConnector connector) {
+        return withConnector(new GitHubHttpUrlConnectionClient(connector));
+    }
+
+    /**
+     * With connector git hub builder.
+     *
+     * @param connector
+     *            the connector
+     * @return the git hub builder
+     */
+    public GitHubBuilder withConnector(ResponseConnector connector) {
         this.connector = connector;
         return this;
     }
@@ -346,7 +357,7 @@ public class GitHubBuilder implements Cloneable {
      * </p>
      * <p>
      * When the remaining number of requests reaches zero, the next request will return an error. If this happens,
-     * {@link RateLimitHandler#onError(IOException, HttpURLConnection)} will be called.
+     * {@link RateLimitHandler#onError(IOException, ResponseInfo)} will be called.
      * </p>
      * <p>
      * NOTE: GitHub treats clients that exceed their rate limit very harshly. If possible, clients should avoid
@@ -369,7 +380,7 @@ public class GitHubBuilder implements Cloneable {
      * <p>
      * When a client sends too many requests in a short time span, GitHub may return an error and set a header telling
      * the client to not make any more request for some period of time. If this happens,
-     * {@link AbuseLimitHandler#onError(IOException, HttpURLConnection)} will be called.
+     * {@link AbuseLimitHandler#onError(IOException, ResponseInfo)} will be called.
      * </p>
      *
      * @param handler

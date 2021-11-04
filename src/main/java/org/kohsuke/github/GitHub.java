@@ -935,7 +935,7 @@ public class GitHub {
      *             the io exception
      */
     public <T extends GHEventPayload> T parseEventPayload(Reader r, Class<T> type) throws IOException {
-        T t = GitHubClient.getMappingObjectReader(this).forType(type).readValue(r);
+        T t = ResponseInfo.getMappingObjectReader(this).forType(type).readValue(r);
         t.lateBind();
         return t;
     }
@@ -1349,7 +1349,7 @@ public class GitHub {
      */
     @Nonnull
     public static ObjectWriter getMappingObjectWriter() {
-        return GitHubClient.getMappingObjectWriter();
+        return ResponseInfo.getMappingObjectWriter();
     }
 
     /**
@@ -1366,7 +1366,7 @@ public class GitHub {
      */
     @Nonnull
     public static ObjectReader getMappingObjectReader() {
-        return GitHubClient.getMappingObjectReader(GitHub.offline());
+        return ResponseInfo.getMappingObjectReader(GitHub.offline());
     }
 
     @Nonnull

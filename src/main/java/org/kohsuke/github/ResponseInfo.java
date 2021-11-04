@@ -1,5 +1,9 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import org.apache.commons.io.IOUtils;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,16 +12,20 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import org.apache.commons.io.IOUtils;
+
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 /**
- * Initial response information supplied to a {@link GitHubResponse.BodyHandler} when a response is initially received and before
- * the body is processed.
+ * Initial response information supplied to a {@link GitHubResponse.BodyHandler} when a response is initially received
+ * and before the body is processed.
  */
 public abstract class ResponseInfo implements Closeable {
 
@@ -30,9 +38,7 @@ public abstract class ResponseInfo implements Closeable {
     @Nonnull
     private final Map<String, List<String>> headers;
 
-    protected ResponseInfo(@Nonnull GitHubRequest request,
-                           int statusCode,
-                           @Nonnull Map<String, List<String>> headers) {
+    protected ResponseInfo(@Nonnull GitHubRequest request, int statusCode, @Nonnull Map<String, List<String>> headers) {
         this.request = request;
         this.statusCode = statusCode;
 
@@ -46,7 +52,8 @@ public abstract class ResponseInfo implements Closeable {
     /**
      * Gets the value of a header field for this response.
      *
-     * @param name the name of the header field.
+     * @param name
+     *            the name of the header field.
      * @return the value of the header field, or {@code null} if the header isn't set.
      */
     @CheckForNull
@@ -62,16 +69,17 @@ public abstract class ResponseInfo implements Closeable {
      * The response body as an {@link InputStream}.
      *
      * @return the response body
-     * @throws IOException if an I/O Exception occurs.
+     * @throws IOException
+     *             if an I/O Exception occurs.
      */
-    abstract InputStream bodyStream() throws IOException;
+    protected abstract InputStream bodyStream() throws IOException;
 
     /**
      * The error message for this response.
      *
      * @return if there is an error with some error string, that is returned. If not, {@code null}.
      */
-    abstract String errorMessage();
+    protected abstract String errorMessage();
 
     /**
      * The {@link URL} for this response.
@@ -116,11 +124,75 @@ public abstract class ResponseInfo implements Closeable {
      * Gets the body of the response as a {@link String}.
      *
      * @return the body of the response as a {@link String}.
-     * @throws IOException if an I/O Exception occurs.
+     * @throws IOException
+     *             if an I/O Exception occurs.
      */
     @Nonnull
     String getBodyAsString() throws IOException {
         InputStreamReader r = new InputStreamReader(this.bodyStream(), StandardCharsets.UTF_8);
         return IOUtils.toString(r);
+    }
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    static {
+        MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
+        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+    }
+
+    /**
+     * Gets an {@link ObjectWriter}.
+     *
+     * @return an {@link ObjectWriter} instance that can be further configured.
+     */
+    @Nonnull
+    public static ObjectWriter getMappingObjectWriter() {
+        return MAPPER.writer();
+    }
+
+    /**
+     * Helper for {@link #getMappingObjectReader(ResponseInfo)}
+     *
+     * @param root
+     *            the root GitHub object for this reader
+     *
+     * @return an {@link ObjectReader} instance that can be further configured.
+     */
+    @Nonnull
+    static ObjectReader getMappingObjectReader(@Nonnull GitHub root) {
+        ObjectReader reader = getMappingObjectReader((ResponseInfo) null);
+        ((InjectableValues.Std) reader.getInjectableValues()).addValue(GitHub.class, root);
+        return reader;
+    }
+
+    /**
+     * Gets an {@link ObjectReader}.
+     *
+     * Members of {@link InjectableValues} must be present even if {@code null}, otherwise classes expecting those
+     * values will fail to read. This differs from regular JSONProperties which provide defaults instead of failing.
+     *
+     * Having one spot to create readers and having it take all injectable values is not a great long term solution but
+     * it is sufficient for this first cut.
+     *
+     * @param responseInfo
+     *            the {@link ResponseInfo} to inject for this reader.
+     *
+     * @return an {@link ObjectReader} instance that can be further configured.
+     */
+    @Nonnull
+    static ObjectReader getMappingObjectReader(@CheckForNull ResponseInfo responseInfo) {
+        Map<String, Object> injected = new HashMap<>();
+
+        // Required or many things break
+        injected.put(ResponseInfo.class.getName(), null);
+        injected.put(GitHub.class.getName(), null);
+
+        if (responseInfo != null) {
+            injected.put(ResponseInfo.class.getName(), responseInfo);
+            injected.putAll(responseInfo.request().injectedMappingValues());
+        }
+        return MAPPER.reader(new InjectableValues.Std(injected));
     }
 }

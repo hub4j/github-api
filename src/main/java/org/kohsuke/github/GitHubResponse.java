@@ -86,7 +86,7 @@ class GitHubResponse<T> {
             InjectableValues.Std inject = new InjectableValues.Std();
             inject.addValue(ResponseInfo.class, responseInfo);
 
-            return GitHubClient.getMappingObjectReader(responseInfo).forType(type).readValue(data);
+            return ResponseInfo.getMappingObjectReader(responseInfo).forType(type).readValue(data);
         } catch (JsonMappingException | JsonParseException e) {
             String message = "Failed to deserialize: " + data;
             LOGGER.log(Level.FINE, message);
@@ -112,7 +112,7 @@ class GitHubResponse<T> {
 
         String data = responseInfo.getBodyAsString();
         try {
-            return GitHubClient.getMappingObjectReader(responseInfo).withValueToUpdate(instance).readValue(data);
+            return ResponseInfo.getMappingObjectReader(responseInfo).withValueToUpdate(instance).readValue(data);
         } catch (JsonMappingException | JsonParseException e) {
             String message = "Failed to deserialize: " + data;
             LOGGER.log(Level.FINE, message);

@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
@@ -21,8 +19,6 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.net.ssl.SSLHandshakeException;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.util.logging.Level.*;
 
@@ -56,18 +52,10 @@ final class GitHubClient {
 
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
     static final String GITHUB_URL = "https://api.github.com";
 
     private static final DateTimeFormatter DATE_TIME_PARSER_SLASHES = DateTimeFormatter
             .ofPattern("yyyy/MM/dd HH:mm:ss Z");
-
-    static {
-        MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
-        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-    }
 
     GitHubClient(String apiUrl,
             ResponseConnector connector,
@@ -660,60 +648,6 @@ final class GitHubClient {
 
     static String printDate(Date dt) {
         return DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(dt.getTime()).truncatedTo(ChronoUnit.SECONDS));
-    }
-
-    /**
-     * Gets an {@link ObjectWriter}.
-     *
-     * @return an {@link ObjectWriter} instance that can be further configured.
-     */
-    @Nonnull
-    static ObjectWriter getMappingObjectWriter() {
-        return MAPPER.writer();
-    }
-
-    /**
-     * Helper for {@link #getMappingObjectReader(ResponseInfo)}
-     *
-     * @param root
-     *            the root GitHub object for this reader
-     *
-     * @return an {@link ObjectReader} instance that can be further configured.
-     */
-    @Nonnull
-    static ObjectReader getMappingObjectReader(@Nonnull GitHub root) {
-        ObjectReader reader = getMappingObjectReader((ResponseInfo) null);
-        ((InjectableValues.Std) reader.getInjectableValues()).addValue(GitHub.class, root);
-        return reader;
-    }
-
-    /**
-     * Gets an {@link ObjectReader}.
-     *
-     * Members of {@link InjectableValues} must be present even if {@code null}, otherwise classes expecting those
-     * values will fail to read. This differs from regular JSONProperties which provide defaults instead of failing.
-     *
-     * Having one spot to create readers and having it take all injectable values is not a great long term solution but
-     * it is sufficient for this first cut.
-     *
-     * @param responseInfo
-     *            the {@link ResponseInfo} to inject for this reader.
-     *
-     * @return an {@link ObjectReader} instance that can be further configured.
-     */
-    @Nonnull
-    static ObjectReader getMappingObjectReader(@CheckForNull ResponseInfo responseInfo) {
-        Map<String, Object> injected = new HashMap<>();
-
-        // Required or many things break
-        injected.put(ResponseInfo.class.getName(), null);
-        injected.put(GitHub.class.getName(), null);
-
-        if (responseInfo != null) {
-            injected.put(ResponseInfo.class.getName(), responseInfo);
-            injected.putAll(responseInfo.request().injectedMappingValues());
-        }
-        return MAPPER.reader(new InjectableValues.Std(injected));
     }
 
     static <K, V> Map<K, V> unmodifiableMapOrNull(Map<? extends K, ? extends V> map) {

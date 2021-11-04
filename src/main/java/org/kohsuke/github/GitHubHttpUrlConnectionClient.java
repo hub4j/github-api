@@ -125,7 +125,7 @@ class GitHubHttpUrlConnectionClient implements ResponseConnector {
                         for (GitHubRequest.Entry e : request.args()) {
                             json.put(e.key, e.value);
                         }
-                        GitHubClient.getMappingObjectWriter().writeValue(connection.getOutputStream(), json);
+                        getMappingObjectWriter().writeValue(connection.getOutputStream(), json);
                     }
                 }
             }
@@ -165,14 +165,16 @@ class GitHubHttpUrlConnectionClient implements ResponseConnector {
         /**
          * {@inheritDoc}
          */
-        InputStream bodyStream() throws IOException {
+        @Override
+        protected InputStream bodyStream() throws IOException {
             return wrapStream(connection.getInputStream());
         }
 
         /**
          * {@inheritDoc}
          */
-        String errorMessage() {
+        @Override
+        protected String errorMessage() {
             String result = null;
             InputStream stream = null;
             try {
@@ -212,5 +214,4 @@ class GitHubHttpUrlConnectionClient implements ResponseConnector {
             IOUtils.closeQuietly(connection.getInputStream());
         }
     }
-
 }

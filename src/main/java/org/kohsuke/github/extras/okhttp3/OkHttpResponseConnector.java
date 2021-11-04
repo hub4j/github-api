@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.Buffer;
 import okio.BufferedSink;
 import okio.Okio;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
 
 import static java.util.logging.Level.FINER;
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -95,13 +97,20 @@ public class OkHttpResponseConnector implements ResponseConnector {
         return new ResponseInfo(request, response.code(), response.headers().toMultimap()) {
             @Override
             protected InputStream bodyStream() throws IOException {
-                return response.body().byteStream();
+                InputStream stream = response.body().byteStream();
+                if ("gzip".equals(response.header("Content-Encoding"))) {
+                    return new GZIPInputStream(stream);
+                } else {
+                    return stream;
+                }
             }
 
             @Override
             protected String errorMessage() {
                 try {
-                    return response.body().byteString().utf8();
+                    Buffer buffer = new Buffer();
+                    buffer.writeAll(Okio.source(bodyStream()));
+                    return buffer.readUtf8();
                 } catch (IOException e) {
                     LOGGER.log(FINER, "Ignored exception get error message", e);
                     return null;

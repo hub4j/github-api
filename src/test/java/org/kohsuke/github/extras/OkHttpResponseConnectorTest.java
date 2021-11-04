@@ -1,20 +1,22 @@
 package org.kohsuke.github.extras;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.OkUrlFactory;
+import com.squareup.okhttp.CacheControl;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
 import org.kohsuke.github.GHRateLimit;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
+import org.kohsuke.github.extras.okhttp3.OkHttpResponseConnector;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.nullValue;
@@ -23,7 +25,7 @@ import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
- * Test showing the behavior of OkHttpConnector with and without cache.
+ * Test showing the behavior of OkHttpResponseConnector with and without cache.
  * <p>
  * Key take aways:
  *
@@ -85,6 +87,25 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    private OkHttpResponseConnector responseConnectorMaxAge(OkHttpClient client, int cacheMaxAge) {
+        String maxAgeHeaderValue;
+        if (cacheMaxAge >= 0 && client.cache() != null) {
+            maxAgeHeaderValue = new CacheControl.Builder().maxAge(cacheMaxAge, TimeUnit.SECONDS).build().toString();
+        } else {
+            maxAgeHeaderValue = null;
+        }
+        return new OkHttpResponseConnector(client) {
+            @Override
+            protected Request.Builder newRequestBuilder() {
+                Request.Builder builder = new Request.Builder();
+                if (maxAgeHeaderValue != null) {
+                    builder.header("Cache-Control", maxAgeHeaderValue);
+                }
+                return builder;
+            }
+        };
+    }
+
     @Test
     public void DefaultConnector() throws Exception {
 
@@ -103,7 +124,7 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
     public void OkHttpConnector_NoCache() throws Exception {
 
         OkHttpClient client = createClient(false);
-        OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));
+        OkHttpResponseConnector connector = new OkHttpResponseConnector(client);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -117,7 +138,7 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
 
         checkRequestAndLimit(okhttpNetworkRequestCount, okhttpRateLimitUsed);
 
-        Cache cache = client.getCache();
+        Cache cache = client.cache();
         assertThat("Cache", cache, is(nullValue()));
     }
 
@@ -129,7 +150,7 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), -1);
+        OkHttpResponseConnector connector = responseConnectorMaxAge(client, -1);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -144,11 +165,11 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
 
         checkRequestAndLimit(maxAgeNoneNetworkRequestCount, maxAgeNoneRateLimitUsed);
 
-        Cache cache = client.getCache();
+        Cache cache = client.cache();
 
         // NOTE: this is actually bad.
         // This elevated hit count is the stale requests returning bad data took longer to detect a change.
-        assertThat("getHitCount", cache.getHitCount(), is(maxAgeNoneHitCount));
+        assertThat("getHitCount", cache.hitCount(), is(maxAgeNoneHitCount));
     }
 
     @Test
@@ -160,7 +181,7 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
         assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", mockGitHub.isUseProxy());
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client), 3);
+        OkHttpResponseConnector connector = responseConnectorMaxAge(client, 3);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -173,11 +194,10 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
 
         checkRequestAndLimit(maxAgeThreeNetworkRequestCount, maxAgeThreeRateLimitUsed);
 
-        Cache cache = client.getCache();
-        assertThat("getHitCount", cache.getHitCount(), is(maxAgeThreeHitCount));
+        Cache cache = client.cache();
+        assertThat("getHitCount", cache.hitCount(), is(maxAgeThreeHitCount));
     }
 
-    @Ignore("ISSUE #597 - Correctly formatted Last-Modified headers cause this test to fail")
     @Test
     public void OkHttpConnector_Cache_MaxAgeDefault_Zero() throws Exception {
         // The responses were recorded from github, but the Date headers
@@ -186,7 +206,7 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(new OkUrlFactory(client));
+        OkHttpResponseConnector connector = responseConnectorMaxAge(client, 0);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -200,8 +220,8 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
 
         checkRequestAndLimit(maxAgeZeroNetworkRequestCount, maxAgeZeroRateLimitUsed);
 
-        Cache cache = client.getCache();
-        assertThat("getHitCount", cache.getHitCount(), is(maxAgeZeroHitCount));
+        Cache cache = client.cache();
+        assertThat("getHitCount", cache.hitCount(), is(maxAgeZeroHitCount));
     }
 
     private void checkRequestAndLimit(int networkRequestCount, int rateLimitUsed) throws IOException {
@@ -216,7 +236,7 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
     }
 
     private OkHttpClient createClient(boolean useCache) throws IOException {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient.Builder client = new OkHttpClient.Builder();
 
         if (useCache) {
             File cacheDir = new File("target/cache/" + baseFilesClassPath + "/" + mockGitHub.getMethodName());
@@ -224,10 +244,10 @@ public class OkHttpResponseConnectorTest extends AbstractGitHubWireMockTest {
             FileUtils.cleanDirectory(cacheDir);
             Cache cache = new Cache(cacheDir, 100 * 1024L * 1024L);
 
-            client.setCache(cache);
+            client.cache(cache);
         }
 
-        return client;
+        return client.build();
     }
 
     /**

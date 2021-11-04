@@ -168,6 +168,11 @@
                       <exclude>org.kohsuke.github.GHPerson.1</exclude>
                       <exclude>org.kohsuke.github.GHCompare.User</exclude>
 
+                      <!-- TODO: Has coverage from `OkHttpResponseConnectorTest`
+                           but its coverage data gets exluded by slow-or-flaky-tests.txt -->
+                      <exclude>org.kohsuke.github.extras.okhttp3.OkHttpResponseConnector</exclude>
+                      <exclude>org.kohsuke.github.extras.okhttp3.OkHttpResponseConnector.1</exclude>
+
                       <!-- TODO: Some coverage, but more needed -->
                       <exclude>org.kohsuke.github.GHPullRequestReviewBuilder.DraftReviewComment</exclude>
                       <exclude>org.kohsuke.github.GHIssue.PullRequest</exclude>

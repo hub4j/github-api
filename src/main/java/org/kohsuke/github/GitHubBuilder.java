@@ -30,7 +30,7 @@ public class GitHubBuilder implements Cloneable {
     // default scoped so unit tests can read them.
     /* private */ String endpoint = GitHubClient.GITHUB_URL;
 
-    private HttpConnector connector;
+    private GitHubConnector connector;
 
     private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
     private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
@@ -333,6 +333,17 @@ public class GitHubBuilder implements Cloneable {
      * @return the git hub builder
      */
     public GitHubBuilder withConnector(HttpConnector connector) {
+        return withConnector(GitHubConnectorHttpConnectorAdapter.adapt(connector));
+    }
+
+    /**
+     * With connector git hub builder.
+     *
+     * @param connector
+     *            the connector
+     * @return the git hub builder
+     */
+    public GitHubBuilder withConnector(GitHubConnector connector) {
         this.connector = connector;
         return this;
     }

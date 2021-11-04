@@ -6,9 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InterruptedIOException;
+import java.io.*;
 import java.net.*;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +23,7 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.util.logging.Level.*;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * A GitHub API Client
@@ -33,7 +32,7 @@ import static java.util.logging.Level.*;
  * to send multiple requests. GitHubClient also track some GitHub API information such as {@link GHRateLimit}.
  * </p>
  */
-abstract class GitHubClient {
+class GitHubClient {
 
     static final int CONNECTION_ERROR_RETRIES = 2;
     /**
@@ -49,7 +48,7 @@ abstract class GitHubClient {
     private final GitHubRateLimitChecker rateLimitChecker;
     private final AuthorizationProvider authorizationProvider;
 
-    private HttpConnector connector;
+    private GitHubConnector connector;
 
     @Nonnull
     private final AtomicReference<GHRateLimit> rateLimit = new AtomicReference<>(GHRateLimit.DEFAULT);
@@ -70,7 +69,7 @@ abstract class GitHubClient {
     }
 
     GitHubClient(String apiUrl,
-            HttpConnector connector,
+            GitHubConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
@@ -81,7 +80,7 @@ abstract class GitHubClient {
         }
 
         if (null == connector) {
-            connector = HttpConnector.DEFAULT;
+            connector = GitHubConnector.DEFAULT;
         }
         this.apiUrl = apiUrl;
         this.connector = connector;
@@ -138,7 +137,7 @@ abstract class GitHubClient {
      * @return {@code true} if this is an always offline "connection".
      */
     public boolean isOffline() {
-        return getConnector() == HttpConnector.OFFLINE;
+        return getConnector() == GitHubConnector.OFFLINE;
     }
 
     /**
@@ -158,7 +157,7 @@ abstract class GitHubClient {
      * @deprecated HttpConnector should not be changed.
      */
     @Deprecated
-    public void setConnector(HttpConnector connector) {
+    public void setConnector(GitHubConnector connector) {
         LOGGER.warning("Connector should not be changed. Please file an issue describing your use case.");
         this.connector = connector;
     }
@@ -359,9 +358,7 @@ abstract class GitHubClient {
     public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull GitHubResponse.BodyHandler<T> handler)
             throws IOException {
         int retries = CONNECTION_ERROR_RETRIES;
-        if (request.headers().get("Accept") == null) {
-            request = request.toBuilder().withHeader("Accept", "application/vnd.github.v3+json").build();
-        }
+        request = prepareRequest(request);
         do {
             // if we fail to create a connection we do not retry and we do not wrap
 
@@ -370,8 +367,8 @@ abstract class GitHubClient {
                 try {
                     logRequest(request);
                     rateLimitChecker.checkRateLimit(this, request);
-
-                    responseInfo = getResponseInfo(request);
+                    resetRequest(request, retries);
+                    responseInfo = connector.send(request);
                     noteRateLimit(responseInfo);
                     detectOTPRequired(responseInfo);
 
@@ -404,14 +401,46 @@ abstract class GitHubClient {
         throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
     }
 
+    private GitHubRequest prepareRequest(GitHubRequest request) throws IOException {
+        GitHubRequest.Builder<?> builder = request.toBuilder();
+        // if the authentication is needed but no credential is given, try it anyway (so that some calls
+        // that do work with anonymous access in the reduced form should still work.)
+        if (!request.headers().containsKey("Authorization")) {
+            String authorization = getEncodedAuthorization();
+            if (authorization != null) {
+                builder.setHeader("Authorization", authorization);
+            }
+        }
+        builder.setHeader("Accept-Encoding", "gzip");
+
+        if (request.inBody()) {
+            if (request.body() != null) {
+                builder.contentType(defaultString(request.contentType(), "application/x-www-form-urlencoded"));
+            } else {
+                builder.contentType("application/json");
+                Map<String, Object> json = new HashMap<>();
+                for (GitHubRequest.Entry e : request.args()) {
+                    json.put(e.key, e.value);
+                }
+                builder.with(new ByteArrayInputStream(getMappingObjectWriter().writeValueAsBytes(json)));
+            }
+
+        }
+
+        return builder.build();
+    }
+
+    private void resetRequest(GitHubRequest request, int retries) throws IOException {
+        if (retries != CONNECTION_ERROR_RETRIES && request.inBody()) {
+            request.body().reset();
+        }
+    }
+
     private void logRequest(@Nonnull final GitHubRequest request) {
         LOGGER.log(FINE,
                 () -> "GitHub API request [" + (getLogin() == null ? "anonymous" : getLogin()) + "]: "
                         + request.method() + " " + request.url().toString());
     }
-
-    @Nonnull
-    protected abstract GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException;
 
     private void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException {
         if (isRateLimitResponse(responseInfo)) {

@@ -76,7 +76,7 @@ class GitHubRequest {
      *
      * @return a new {@link Builder}.
      */
-    public static Builder<?> newBuilder() {
+    static Builder<?> newBuilder() {
         return new Builder<>();
     }
 
@@ -236,7 +236,7 @@ class GitHubRequest {
      *
      * @return a {@link Builder} based on this request.
      */
-    public Builder<?> toBuilder() {
+    Builder<?> toBuilder() {
         return new Builder<>(args,
                 headers,
                 injectedMappingValues,

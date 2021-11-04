@@ -29,20 +29,17 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public void setFixedLengthStreamingMode(int contentLength) {
-        throw new UnsupportedOperationException(
-                "Setting streaming mode is not supported by " + this.getClass());
+        throw new UnsupportedOperationException("Setting streaming mode is not supported by " + this.getClass());
     }
 
     @Override
     public void setFixedLengthStreamingMode(long contentLength) {
-        throw new UnsupportedOperationException(
-                "Setting streaming mode is not supported by " + this.getClass());
+        throw new UnsupportedOperationException("Setting streaming mode is not supported by " + this.getClass());
     }
 
     @Override
     public void setChunkedStreamingMode(int chunklen) {
-        throw new UnsupportedOperationException(
-                "Setting streaming mode is not supported by " + this.getClass());
+        throw new UnsupportedOperationException("Setting streaming mode is not supported by " + this.getClass());
     }
 
     @Override
@@ -178,7 +175,8 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
         String value = getHeaderField(name);
         try {
             return Integer.parseInt(value);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return defaultValue;
     }
 
@@ -187,7 +185,8 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
         String value = getHeaderField(name);
         try {
             return Long.parseLong(value);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return defaultValue;
     }
 
@@ -196,15 +195,15 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
         return super.getContent();
     }
 
-//    @Override
-//    public Object getContent(Class<?>[] classes) throws IOException {
-//        return super.getContent(classes);
-//    }
-//
-//    @Override
-//    public InputStream getInputStream() throws IOException {
-//        return responseInfo.bodyStream();
-//    }
+    // @Override
+    // public Object getContent(Class<?>[] classes) throws IOException {
+    // return super.getContent(classes);
+    // }
+    //
+    // @Override
+    // public InputStream getInputStream() throws IOException {
+    // return responseInfo.bodyStream();
+    // }
 
     @Override
     public OutputStream getOutputStream() throws IOException {
@@ -259,7 +258,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
     @Override
     public long getIfModifiedSince() {
         String modifiedSince = responseInfo.request().headers().get("If-Modified-Since");
-        if(modifiedSince != null) {
+        if (modifiedSince != null) {
             return GitHubClient.parseDate(modifiedSince).getTime();
         } else {
             return 0;
@@ -289,8 +288,9 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
     @Override
     public Map<String, List<String>> getRequestProperties() {
         TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
-        responseInfo.request().headers().forEach(
-                (key, value) -> caseInsensitiveMap.put(key, Collections.singletonList(value)) );
+        responseInfo.request()
+                .headers()
+                .forEach((key, value) -> caseInsensitiveMap.put(key, Collections.singletonList(value)));
 
         return Collections.unmodifiableMap(caseInsensitiveMap);
     }

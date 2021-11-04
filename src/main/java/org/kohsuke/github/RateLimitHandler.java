@@ -23,7 +23,7 @@ public abstract class RateLimitHandler {
      *
      * @param responseInfo
      *            Response information for this request.
-     *            
+     *
      * @throws IOException
      *             the io exception
      * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
@@ -35,7 +35,6 @@ public abstract class RateLimitHandler {
                 responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
         onError(e, new GitHubResponseInfoHttpURLConnectionAdapter(responseInfo));
     }
-
 
     /**
      * Called when the library encounters HTTP error indicating that the API rate limit is reached.

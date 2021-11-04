@@ -200,12 +200,12 @@ class GitHubResponse<T> {
     }
 
     /**
-     * Response information supplied to a {@link BodyHandler} when a response is received and before
-     * the body is processed.
+     * Response information supplied to a {@link BodyHandler} when a response is received and before the body is
+     * processed.
      *
-     * Instances of this class are closed once the response is done being processed. This means that contents
-     * of the body stream will not be readable after a call is completed. Status code, response headers,
-     * and request details will still be readable.
+     * Instances of this class are closed once the response is done being processed. This means that contents of the
+     * body stream will not be readable after a call is completed. Status code, response headers, and request details
+     * will still be readable.
      */
     static abstract class ResponseInfo implements Closeable {
 

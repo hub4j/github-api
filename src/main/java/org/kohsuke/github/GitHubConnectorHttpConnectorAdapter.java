@@ -1,15 +1,15 @@
 package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
-import org.kohsuke.github.authorization.AuthorizationProvider;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -18,34 +18,51 @@ import java.util.zip.GZIPInputStream;
 import javax.annotation.Nonnull;
 
 import static java.util.logging.Level.*;
-import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * A GitHub API Client for HttpUrlConnection
  * <p>
- * A GitHubClient can be used to send requests and retrieve their responses. GitHubClient is thread-safe and can be used
- * to send multiple requests. GitHubClient also track some GitHub API information such as {@link GHRateLimit}.
+ * A GitHubConnectorHttpConnectorAdapter can be used to send requests and retrieve their responses. GitHubClient is
+ * thread-safe and can be used to send multiple requests. GitHubClient also track some GitHub API information such as
+ * {@link GHRateLimit}.
  * </p>
  * <p>
  * GitHubHttpUrlConnectionClient gets a new {@link HttpURLConnection} for each call to send.
  * </p>
  */
-class GitHubHttpUrlConnectionClient extends GitHubClient {
+class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
 
-    GitHubHttpUrlConnectionClient(String apiUrl,
-            HttpConnector connector,
-            RateLimitHandler rateLimitHandler,
-            AbuseLimitHandler abuseLimitHandler,
-            GitHubRateLimitChecker rateLimitChecker,
-            AuthorizationProvider authorizationProvider) throws IOException {
-        super(apiUrl, connector, rateLimitHandler, abuseLimitHandler, rateLimitChecker, authorizationProvider);
+    final HttpConnector httpConnector;
+
+    public GitHubConnectorHttpConnectorAdapter(HttpConnector httpConnector) {
+        this.httpConnector = httpConnector;
+    }
+
+    @NotNull
+    public static GitHubConnector adapt(HttpConnector connector) {
+        GitHubConnector gitHubConnector;
+        if (connector == HttpConnector.DEFAULT) {
+            gitHubConnector = GitHubConnector.DEFAULT;
+        } else if (connector == HttpConnector.OFFLINE) {
+            gitHubConnector = GitHubConnector.OFFLINE;
+        } else if (connector instanceof GitHubConnector) {
+            gitHubConnector = (GitHubConnector) connector;
+        } else {
+            gitHubConnector = new GitHubConnectorHttpConnectorAdapter(connector);
+        }
+        return gitHubConnector;
+    }
+
+    @Override
+    public HttpURLConnection connect(URL url) throws IOException {
+        return this.httpConnector.connect(url);
     }
 
     @Nonnull
-    protected GitHubResponse.ResponseInfo getResponseInfo(GitHubRequest request) throws IOException {
+    public GitHubResponse.ResponseInfo send(GitHubRequest request) throws IOException {
         HttpURLConnection connection;
         try {
-            connection = HttpURLConnectionResponseInfo.setupConnection(this, request);
+            connection = HttpURLConnectionResponseInfo.setupConnection(httpConnector, request);
         } catch (IOException e) {
             // An error in here should be wrapped to bypass http exception wrapping.
             throw new GHIOException(e.getMessage(), e);
@@ -79,19 +96,9 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
         }
 
         @Nonnull
-        static HttpURLConnection setupConnection(@Nonnull GitHubClient client, @Nonnull GitHubRequest request)
+        static HttpURLConnection setupConnection(@Nonnull HttpConnector connector, @Nonnull GitHubRequest request)
                 throws IOException {
-            HttpURLConnection connection = client.getConnector().connect(request.url());
-
-            // if the authentication is needed but no credential is given, try it anyway (so that some calls
-            // that do work with anonymous access in the reduced form should still work.)
-            if (!request.headers().containsKey("Authorization")) {
-                String authorization = client.getEncodedAuthorization();
-                if (authorization != null) {
-                    connection.setRequestProperty("Authorization", client.getEncodedAuthorization());
-                }
-            }
-
+            HttpURLConnection connection = connector.connect(request.url());
             setRequestMethod(request.method(), connection);
             buildRequest(request, connection);
 
@@ -107,28 +114,14 @@ class GitHubHttpUrlConnectionClient extends GitHubClient {
                 if (v != null)
                     connection.setRequestProperty(e.getKey(), v);
             }
-            connection.setRequestProperty("Accept-Encoding", "gzip");
 
             if (request.inBody()) {
                 connection.setDoOutput(true);
-
                 try (InputStream body = request.body()) {
-                    if (body != null) {
-                        connection.setRequestProperty("Content-type",
-                                defaultString(request.contentType(), "application/x-www-form-urlencoded"));
-                        byte[] bytes = new byte[32768];
-                        int read;
-                        while ((read = body.read(bytes)) != -1) {
-                            connection.getOutputStream().write(bytes, 0, read);
-                        }
-                    } else {
-                        connection.setRequestProperty("Content-type",
-                                defaultString(request.contentType(), "application/json"));
-                        Map<String, Object> json = new HashMap<>();
-                        for (GitHubRequest.Entry e : request.args()) {
-                            json.put(e.key, e.value);
-                        }
-                        getMappingObjectWriter().writeValue(connection.getOutputStream(), json);
+                    byte[] bytes = new byte[32768];
+                    int read;
+                    while ((read = body.read(bytes)) != -1) {
+                        connection.getOutputStream().write(bytes, 0, read);
                     }
                 }
             }

@@ -110,7 +110,7 @@ public class GitHub {
      *            a authorization provider
      */
     GitHub(String apiUrl,
-            HttpConnector connector,
+            GitHubConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
@@ -129,7 +129,7 @@ public class GitHub {
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();
 
-        this.client = new GitHubHttpUrlConnectionClient(apiUrl,
+        this.client = new GitHubClient(apiUrl,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
@@ -441,7 +441,7 @@ public class GitHub {
     public static GitHub offline() {
         try {
             return new GitHubBuilder().withEndpoint("https://api.github.invalid")
-                    .withConnector(HttpConnector.OFFLINE)
+                    .withConnector(GitHubConnector.OFFLINE)
                     .build();
         } catch (IOException e) {
             throw new IllegalStateException("The offline implementation constructor should not connect", e);
@@ -484,7 +484,7 @@ public class GitHub {
      */
     @Deprecated
     public void setConnector(HttpConnector connector) {
-        client.setConnector(connector);
+        client.setConnector(GitHubConnectorHttpConnectorAdapter.adapt(connector));
     }
 
     /**

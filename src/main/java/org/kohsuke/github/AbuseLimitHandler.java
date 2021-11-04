@@ -40,7 +40,6 @@ public abstract class AbuseLimitHandler {
         onError(e, new GitHubResponseInfoHttpURLConnectionAdapter(responseInfo));
     }
 
-
     /**
      * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
      *

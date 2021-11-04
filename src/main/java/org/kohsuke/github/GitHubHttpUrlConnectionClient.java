@@ -39,7 +39,8 @@ class GitHubHttpUrlConnectionClient implements ResponseConnector {
 
     @Nonnull
     @Override
-    public ResponseInfo getResponseInfo(GitHubRequest request, AuthorizationProvider authorizationProvider) throws IOException {
+    public ResponseInfo getResponseInfo(GitHubRequest request, AuthorizationProvider authorizationProvider)
+            throws IOException {
         HttpURLConnection connection;
         try {
             connection = HttpURLConnectionResponseInfo.setupConnection(httpConnector, authorizationProvider, request);
@@ -76,8 +77,9 @@ class GitHubHttpUrlConnectionClient implements ResponseConnector {
         }
 
         @Nonnull
-        static HttpURLConnection setupConnection(@Nonnull HttpConnector httpConnector, AuthorizationProvider authorizationProvider, @Nonnull GitHubRequest request)
-                throws IOException {
+        static HttpURLConnection setupConnection(@Nonnull HttpConnector httpConnector,
+                AuthorizationProvider authorizationProvider,
+                @Nonnull GitHubRequest request) throws IOException {
             HttpURLConnection connection = httpConnector.connect(request.url());
 
             // if the authentication is needed but no credential is given, try it anyway (so that some calls

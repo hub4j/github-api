@@ -37,7 +37,7 @@ import static java.util.Arrays.asList;
  * not specified until late in the building process, so this is still untyped.
  * </p>
  */
-class GitHubRequest {
+public class GitHubRequest {
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
     private final List<Entry> args;
@@ -738,9 +738,9 @@ class GitHubRequest {
         }
     }
 
-    protected static class Entry {
-        final String key;
-        final Object value;
+    public static class Entry {
+        public final String key;
+        public final Object value;
 
         protected Entry(String key, Object value) {
             this.key = key;

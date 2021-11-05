@@ -1,5 +1,8 @@
 package org.kohsuke.github;
 
+import okhttp3.OkHttpClient;
+import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -33,7 +36,9 @@ public interface GitHubConnector extends HttpConnector {
     /**
      * Default implementation that uses {@link URL#openConnection()}.
      */
-    GitHubConnector DEFAULT = new GitHubConnectorHttpConnectorAdapter(HttpConnector.DEFAULT);
+    GitHubConnector DEFAULT = (System.getProperty("test.github.useOkHttp", "false") != "false")
+            ? new OkHttpConnector(new OkHttpClient.Builder().build())
+            : new GitHubConnectorHttpConnectorAdapter(HttpConnector.DEFAULT);
 
     GitHubConnector OFFLINE = new GitHubConnectorHttpConnectorAdapter(HttpConnector.OFFLINE);
 }

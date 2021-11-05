@@ -153,10 +153,6 @@
                       </limit>
                     </limits>
                     <excludes>
-                      <!-- Code implemented externally -->
-                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
-                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
-
                       <!-- Sample only -->
                       <exclude>org.kohsuke.github.example.*</exclude>
 
@@ -575,6 +571,17 @@
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <executions>
+              <execution>
+                <id>okhttp-test</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.useOkHttp</argLine>
+                </configuration>
+              </execution>
               <execution>
                 <id>slow-or-flaky-test</id>
                 <phase>test</phase>

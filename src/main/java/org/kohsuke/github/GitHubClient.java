@@ -410,6 +410,9 @@ class GitHubClient {
                 builder.setHeader("Authorization", authorization);
             }
         }
+        if (request.header("Accept") == null) {
+            builder.setHeader("Accept", "application/vnd.github.v3+json");
+        }
         builder.setHeader("Accept-Encoding", "gzip");
 
         if (request.inBody()) {

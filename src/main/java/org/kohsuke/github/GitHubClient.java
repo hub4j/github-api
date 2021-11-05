@@ -359,7 +359,9 @@ abstract class GitHubClient {
     public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull GitHubResponse.BodyHandler<T> handler)
             throws IOException {
         int retries = CONNECTION_ERROR_RETRIES;
-
+        if (request.headers().get("Accept") == null) {
+            request = request.toBuilder().withHeader("Accept", "application/vnd.github.v3+json").build();
+        }
         do {
             // if we fail to create a connection we do not retry and we do not wrap
 

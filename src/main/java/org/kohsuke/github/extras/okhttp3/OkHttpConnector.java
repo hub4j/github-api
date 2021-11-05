@@ -17,6 +17,7 @@ import java.util.zip.GZIPInputStream;
 import javax.annotation.Nonnull;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.util.logging.Level.FINER;
 
 /**
@@ -81,7 +82,7 @@ public class OkHttpConnector implements GitHubConnector {
         for (Map.Entry<String, List<String>> e : request.allHeaders().entrySet()) {
             List<String> v = e.getValue();
             if (v != null) {
-                v.forEach(item -> builder.addHeader(e.getKey(), item));
+                builder.addHeader(e.getKey(), String.join(", ", v));
             }
         }
 
@@ -120,8 +121,17 @@ public class OkHttpConnector implements GitHubConnector {
          * {@inheritDoc}
          */
         public InputStream bodyStream() throws IOException {
-            if (response.code() >= HTTP_BAD_REQUEST)
-                throw new FileNotFoundException(request().url().toString());
+            if (response.code() >= HTTP_BAD_REQUEST) {
+                if (response.code() == HTTP_NOT_FOUND) {
+                    throw new FileNotFoundException(request().url().toString());
+                } else {
+                    throw new HttpException(errorMessage(),
+                            response.code(),
+                            response.message(),
+                            request().url().toString());
+                }
+            }
+
             ResponseBody body = response.body();
             InputStream bytes = body != null ? body.byteStream() : null;
             return wrapStream(bytes);

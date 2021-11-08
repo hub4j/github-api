@@ -5,6 +5,7 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -39,13 +40,13 @@ public abstract class GHObject extends GitHubInteractiveObject {
     /**
      * Called by Jackson
      *
-     * @param responseInfo
-     *            the {@link GitHubResponse.ResponseInfo} to get headers from.
+     * @param connectorResponse
+     *            the {@link GitHubConnectorResponse} to get headers from.
      */
     @JacksonInject
-    protected void setResponseHeaderFields(@CheckForNull GitHubResponse.ResponseInfo responseInfo) {
-        if (responseInfo != null) {
-            responseHeaderFields = responseInfo.allHeaders();
+    protected void setResponseHeaderFields(@CheckForNull GitHubConnectorResponse connectorResponse) {
+        if (connectorResponse != null) {
+            responseHeaderFields = connectorResponse.allHeaders();
         }
     }
 

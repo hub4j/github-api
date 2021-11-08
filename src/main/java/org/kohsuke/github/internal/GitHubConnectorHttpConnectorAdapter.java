@@ -1,7 +1,11 @@
-package org.kohsuke.github;
+package org.kohsuke.github.internal;
 
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
+import org.kohsuke.github.*;
+import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.connector.GitHubConnectorRequest;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +34,7 @@ import static java.util.logging.Level.*;
  * GitHubHttpUrlConnectionClient gets a new {@link HttpURLConnection} for each call to send.
  * </p>
  */
-class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
+public class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, HttpConnector {
 
     final HttpConnector httpConnector;
 
@@ -53,13 +57,13 @@ class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
         return gitHubConnector;
     }
 
-    @Override
+    @Nonnull
     public HttpURLConnection connect(URL url) throws IOException {
         return this.httpConnector.connect(url);
     }
 
     @Nonnull
-    public GitHubResponse.ResponseInfo send(GitHubRequest request) throws IOException {
+    public GitHubConnectorResponse send(GitHubConnectorRequest request) throws IOException {
         HttpURLConnection connection;
         try {
             connection = setupConnection(httpConnector, request);
@@ -73,11 +77,11 @@ class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
         int statusCode = connection.getResponseCode();
         Map<String, List<String>> headers = connection.getHeaderFields();
 
-        return new HttpURLConnectionResponseInfo(request, statusCode, headers, connection);
+        return new HttpURLConnectionGitHubConnectorResponse(request, statusCode, headers, connection);
     }
 
     @Nonnull
-    static HttpURLConnection setupConnection(@Nonnull HttpConnector connector, @Nonnull GitHubRequest request)
+    static HttpURLConnection setupConnection(@Nonnull HttpConnector connector, @Nonnull GitHubConnectorRequest request)
             throws IOException {
         HttpURLConnection connection = connector.connect(request.url());
         setRequestMethod(request.method(), connection);
@@ -89,14 +93,14 @@ class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
     /**
      * Set up the request parameters or POST payload.
      */
-    private static void buildRequest(GitHubRequest request, HttpURLConnection connection) throws IOException {
+    private static void buildRequest(GitHubConnectorRequest request, HttpURLConnection connection) throws IOException {
         for (Map.Entry<String, List<String>> e : request.allHeaders().entrySet()) {
             List<String> v = e.getValue();
             if (v != null)
                 connection.setRequestProperty(e.getKey(), String.join(", ", v));
         }
 
-        if (request.inBody()) {
+        if (request.hasBody()) {
             connection.setDoOutput(true);
             IOUtils.copyLarge(request.body(), connection.getOutputStream());
         }
@@ -134,17 +138,17 @@ class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
     }
 
     /**
-     * Initial response information supplied to a {@link GitHubResponse.BodyHandler} when a response is initially
-     * received and before the body is processed.
+     * Initial response information supplied to a {@link org.kohsuke.github.function.BodyHandler} when a response is
+     * initially received and before the body is processed.
      *
      * Implementation specific to {@link HttpURLConnection}.
      */
-    static class HttpURLConnectionResponseInfo extends GitHubResponse.ResponseInfo {
+    static class HttpURLConnectionGitHubConnectorResponse extends GitHubConnectorResponse {
 
         @Nonnull
         private final HttpURLConnection connection;
 
-        HttpURLConnectionResponseInfo(@Nonnull GitHubRequest request,
+        HttpURLConnectionGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
                 int statusCode,
                 @Nonnull Map<String, List<String>> headers,
                 @Nonnull HttpURLConnection connection) {
@@ -195,7 +199,7 @@ class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
             throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
         }
 
-        private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
+        private static final Logger LOGGER = Logger.getLogger(GitHub.class.getName());
 
         @Override
         public void close() throws IOException {

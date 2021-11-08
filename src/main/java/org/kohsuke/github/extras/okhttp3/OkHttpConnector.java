@@ -3,6 +3,9 @@ package org.kohsuke.github.extras.okhttp3;
 import okhttp3.*;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.*;
+import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.connector.GitHubConnectorRequest;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -67,7 +70,7 @@ public class OkHttpConnector implements GitHubConnector {
     }
 
     @Override
-    public GitHubResponse.ResponseInfo send(GitHubRequest request) throws IOException {
+    public GitHubConnectorResponse send(GitHubConnectorRequest request) throws IOException {
         Request.Builder builder = new Request.Builder().url(request.url());
         if (maxAgeHeaderValue != null && request.header(HEADER_NAME) == null) {
             // By default OkHttp honors max-age, meaning it will use local cache
@@ -87,14 +90,14 @@ public class OkHttpConnector implements GitHubConnector {
         }
 
         RequestBody body = null;
-        if (request.inBody()) {
+        if (request.hasBody()) {
             body = RequestBody.create(IOUtils.toByteArray(request.body()));
         }
         builder.method(request.method(), body);
         Request okhttpRequest = builder.build();
         Response okhttpResponse = client.newCall(okhttpRequest).execute();
 
-        return new OkHttpResponseInfo(request, okhttpResponse);
+        return new OkHttpGitHubConnectorResponse(request, okhttpResponse);
     }
 
     /** Returns connection spec with TLS v1.2 in it */
@@ -107,12 +110,12 @@ public class OkHttpConnector implements GitHubConnector {
      *
      * Implementation specific to {@link okhttp3.Response}.
      */
-    static class OkHttpResponseInfo extends GitHubResponse.ResponseInfo {
+    static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse {
 
         @Nonnull
         private final Response response;
 
-        OkHttpResponseInfo(@Nonnull GitHubRequest request, @Nonnull Response response) {
+        OkHttpGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request, @Nonnull Response response) {
             super(request, response.code(), response.headers().toMultimap());
             this.response = response;
         }

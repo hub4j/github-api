@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.internal.Previews;
 
 import java.io.ByteArrayInputStream;
@@ -33,7 +34,7 @@ import static java.util.Arrays.asList;
  * not specified until late in the building process, so this is still untyped.
  * </p>
  */
-public class GitHubRequest {
+public class GitHubRequest implements GitHubConnectorRequest {
 
     private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
             .nullsFirst(String.CASE_INSENSITIVE_ORDER);
@@ -130,6 +131,7 @@ public class GitHubRequest {
      *
      * @return the request method.
      */
+    @Override
     @Nonnull
     public String method() {
         return method;
@@ -149,7 +151,7 @@ public class GitHubRequest {
      * The arguments for this request. Depending on the {@link #method()} and {@code #inBody()} these maybe added to the
      * url or to the request body.
      *
-     * @return the {@link List<Entry>} of arguments
+     * @return the list of arguments
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Already unmodifiable")
     @Nonnull
@@ -162,6 +164,7 @@ public class GitHubRequest {
      *
      * @return the {@link Map} of headers
      */
+    @Override
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable Map of unmodifiable lists")
     @Nonnull
     public Map<String, List<String>> allHeaders() {
@@ -221,6 +224,7 @@ public class GitHubRequest {
      *
      * @return the content type.
      */
+    @Override
     public String contentType() {
         return header("Content-type");
     }
@@ -230,6 +234,7 @@ public class GitHubRequest {
      *
      * @return the {@link InputStream}.
      */
+    @Override
     @CheckForNull
     public InputStream body() {
         return body != null ? new ByteArrayInputStream(body) : null;
@@ -240,6 +245,7 @@ public class GitHubRequest {
      *
      * @return the request {@link URL}
      */
+    @Override
     @Nonnull
     public URL url() {
         return url;
@@ -250,7 +256,8 @@ public class GitHubRequest {
      *
      * @return true if the arguements should be sent in the body of the request.
      */
-    public boolean inBody() {
+    @Override
+    public boolean hasBody() {
         return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
@@ -274,7 +281,7 @@ public class GitHubRequest {
 
     private String buildTailApiUrl() {
         String tailApiUrl = urlPath;
-        if (!inBody() && !args.isEmpty() && tailApiUrl.startsWith("/")) {
+        if (!hasBody() && !args.isEmpty() && tailApiUrl.startsWith("/")) {
             try {
                 StringBuilder argString = new StringBuilder();
                 boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;

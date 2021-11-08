@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.connector.GitHubConnectorResponse;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,16 +18,17 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
     private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
             .nullsFirst(String.CASE_INSENSITIVE_ORDER);
 
-    private final GitHubResponse.ResponseInfo responseInfo;
+    private final GitHubConnectorResponse connectorResponse;
 
-    GitHubResponseInfoHttpURLConnectionAdapter(GitHubResponse.ResponseInfo responseInfo) {
-        super(responseInfo.url());
-        this.responseInfo = responseInfo;
+    public GitHubResponseInfoHttpURLConnectionAdapter(GitHubConnectorResponse connectorResponse) {
+        super(connectorResponse.url());
+        this.connectorResponse = connectorResponse;
     }
 
     @Override
     public String getHeaderFieldKey(int n) {
-        return responseInfo.headerFieldKey(n);
+        List<String> keys = new ArrayList<>(connectorResponse.allHeaders().keySet());
+        return keys.get(n);
     }
 
     @Override
@@ -45,7 +48,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String getHeaderField(int n) {
-        return responseInfo.header(responseInfo.headerFieldKey(n));
+        return connectorResponse.header(getHeaderFieldKey(n));
     }
 
     @Override
@@ -65,17 +68,17 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String getRequestMethod() {
-        return responseInfo.request().method();
+        return connectorResponse.request().method();
     }
 
     @Override
     public int getResponseCode() throws IOException {
-        return responseInfo.statusCode();
+        return connectorResponse.statusCode();
     }
 
     @Override
     public String getResponseMessage() throws IOException {
-        return responseInfo.header("Status");
+        return connectorResponse.header("Status");
     }
 
     @Override
@@ -95,7 +98,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public InputStream getErrorStream() {
-        return new ByteArrayInputStream(responseInfo.errorMessage().getBytes(StandardCharsets.UTF_8));
+        return new ByteArrayInputStream(connectorResponse.errorMessage().getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -120,7 +123,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public URL getURL() {
-        return responseInfo.url();
+        return connectorResponse.url();
     }
 
     @Override
@@ -138,12 +141,12 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String getContentType() {
-        return responseInfo.header("content-type");
+        return connectorResponse.header("content-type");
     }
 
     @Override
     public String getContentEncoding() {
-        return responseInfo.header("content-encoding");
+        return connectorResponse.header("content-encoding");
     }
 
     @Override
@@ -163,12 +166,12 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String getHeaderField(String name) {
-        return responseInfo.header(name);
+        return connectorResponse.header(name);
     }
 
     @Override
     public Map<String, List<String>> getHeaderFields() {
-        return responseInfo.allHeaders();
+        return connectorResponse.allHeaders();
     }
 
     @Override
@@ -203,7 +206,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
     //
     // @Override
     // public InputStream getInputStream() throws IOException {
-    // return responseInfo.bodyStream();
+    // return connectorResponse.bodyStream();
     // }
 
     @Override
@@ -213,7 +216,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String toString() {
-        return responseInfo.toString();
+        return connectorResponse.toString();
     }
 
     @Override
@@ -258,7 +261,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public long getIfModifiedSince() {
-        String modifiedSince = responseInfo.request().header("If-Modified-Since");
+        String modifiedSince = connectorResponse.request().header("If-Modified-Since");
         if (modifiedSince != null) {
             return GitHubClient.parseDate(modifiedSince).getTime();
         } else {
@@ -283,12 +286,12 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String getRequestProperty(String key) {
-        return responseInfo.request().header(key);
+        return connectorResponse.request().header(key);
     }
 
     @Override
     public Map<String, List<String>> getRequestProperties() {
-        return responseInfo.request().allHeaders();
+        return connectorResponse.request().allHeaders();
     }
 
     @Override

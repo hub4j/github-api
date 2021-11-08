@@ -107,20 +107,20 @@ class GitHubRateLimitChecker {
      *
      * @param client
      *            the {@link GitHubClient} to check
-     * @param request
-     *            the {@link GitHubRequest} to check against
+     * @param rateLimitTarget
+     *            the {@link RateLimitTarget} to check against
      * @throws IOException
      *             if there is an I/O error
      */
-    void checkRateLimit(GitHubClient client, GitHubRequest request) throws IOException {
-        RateLimitChecker guard = selectChecker(request.rateLimitTarget());
+    void checkRateLimit(GitHubClient client, @Nonnull RateLimitTarget rateLimitTarget) throws IOException {
+        RateLimitChecker guard = selectChecker(rateLimitTarget);
         if (guard == RateLimitChecker.NONE) {
             return;
         }
 
         // For the first rate limit, accept the current limit if a valid one is already present.
-        GHRateLimit rateLimit = client.rateLimit(request.rateLimitTarget());
-        GHRateLimit.Record rateLimitRecord = rateLimit.getRecord(request.rateLimitTarget());
+        GHRateLimit rateLimit = client.rateLimit(rateLimitTarget);
+        GHRateLimit.Record rateLimitRecord = rateLimit.getRecord(rateLimitTarget);
         long waitCount = 0;
         try {
             while (guard.checkRateLimit(rateLimitRecord, waitCount)) {
@@ -133,8 +133,8 @@ class GitHubRateLimitChecker {
                 Thread.sleep(1000);
 
                 // After the first wait, always request a new rate limit from the server.
-                rateLimit = client.getRateLimit(request.rateLimitTarget());
-                rateLimitRecord = rateLimit.getRecord(request.rateLimitTarget());
+                rateLimit = client.getRateLimit(rateLimitTarget);
+                rateLimitRecord = rateLimit.getRecord(rateLimitTarget);
             }
         } catch (InterruptedException e) {
             throw (IOException) new InterruptedIOException(e.getMessage()).initCause(e);

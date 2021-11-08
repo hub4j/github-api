@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.connector.GitHubConnectorResponse;
+
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
@@ -22,7 +24,7 @@ public abstract class AbuseLimitHandler {
      * an exception. If this method returns normally, another request will be attempted. For that to make sense, the
      * implementation needs to wait for some time.
      *
-     * @param responseInfo
+     * @param connectorResponse
      *            Response information for this request.
      * @throws IOException
      *             on failure
@@ -32,12 +34,12 @@ public abstract class AbuseLimitHandler {
      *      with abuse rate limits</a>
      *
      */
-    void onError(GitHubResponse.ResponseInfo responseInfo) throws IOException {
+    void onError(GitHubConnectorResponse connectorResponse) throws IOException {
         GHIOException e = new HttpException("Abuse limit violation",
-                responseInfo.statusCode(),
-                responseInfo.header("Status"),
-                responseInfo.url().toString()).withResponseHeaderFields(responseInfo.allHeaders());
-        onError(e, new GitHubResponseInfoHttpURLConnectionAdapter(responseInfo));
+                connectorResponse.statusCode(),
+                connectorResponse.header("Status"),
+                connectorResponse.url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());
+        onError(e, new GitHubResponseInfoHttpURLConnectionAdapter(connectorResponse));
     }
 
     /**

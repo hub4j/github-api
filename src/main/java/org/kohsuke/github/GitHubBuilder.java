@@ -3,7 +3,9 @@ package org.kohsuke.github;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
+import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.extras.ImpatientHttpConnector;
+import org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter;
 
 import java.io.File;
 import java.io.FileInputStream;

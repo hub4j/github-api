@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
+import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
+import org.kohsuke.github.function.BodyHandler;
 
 import java.io.*;
 import java.net.*;
@@ -109,7 +112,7 @@ class GitHubClient {
 
     private <T> T fetch(Class<T> type, String urlPath) throws IOException {
         GitHubRequest request = GitHubRequest.newBuilder().withApiUrl(getApiUrl()).withUrlPath(urlPath).build();
-        return sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, type)).body();
+        return sendRequest(request, (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, type)).body();
     }
 
     /**
@@ -137,7 +140,7 @@ class GitHubClient {
      * @return {@code true} if this is an always offline "connection".
      */
     public boolean isOffline() {
-        return getConnector() == GitHubConnector.OFFLINE;
+        return connector == GitHubConnector.OFFLINE;
     }
 
     /**
@@ -145,8 +148,15 @@ class GitHubClient {
      *
      * @return the connector
      */
+    @Deprecated
     public HttpConnector getConnector() {
-        return connector;
+        if (!(connector instanceof HttpConnector)) {
+            throw new UnsupportedOperationException("This GitHubConnector does not support HttpConnector.connect().");
+        }
+
+        LOGGER.warning(
+                "HttpConnector and getConnector() are deprecated. " + "Please file an issue describing your use case.");
+        return (HttpConnector) connector;
     }
 
     /**
@@ -197,7 +207,7 @@ class GitHubClient {
     }
 
     @CheckForNull
-    protected String getEncodedAuthorization() throws IOException {
+    String getEncodedAuthorization() throws IOException {
         return authorizationProvider.getEncodedAuthorization();
     }
 
@@ -211,7 +221,8 @@ class GitHubClient {
                     .withUrlPath("/rate_limit")
                     .build();
             result = this
-                    .sendRequest(request, (responseInfo) -> GitHubResponse.parseBody(responseInfo, JsonRateLimit.class))
+                    .sendRequest(request,
+                            (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, JsonRateLimit.class))
                     .body().resources;
         } catch (FileNotFoundException e) {
             // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
@@ -318,9 +329,8 @@ class GitHubClient {
     }
 
     /**
-     * Builds a {@link GitHubRequest}, sends the {@link GitHubRequest} to the server, and uses the
-     * {@link GitHubResponse.BodyHandler} to parse the response info and response body data into an instance of
-     * {@link T}.
+     * Builds a {@link GitHubRequest}, sends the {@link GitHubRequest} to the server, and uses the {@link BodyHandler}
+     * to parse the response info and response body data into an instance of {@link T}.
      *
      * @param builder
      *            used to build the request that will be sent to the server.
@@ -335,13 +345,13 @@ class GitHubClient {
      */
     @Nonnull
     public <T> GitHubResponse<T> sendRequest(@Nonnull GitHubRequest.Builder<?> builder,
-            @CheckForNull GitHubResponse.BodyHandler<T> handler) throws IOException {
+            @CheckForNull BodyHandler<T> handler) throws IOException {
         return sendRequest(builder.build(), handler);
     }
 
     /**
-     * Sends the {@link GitHubRequest} to the server, and uses the {@link GitHubResponse.BodyHandler} to parse the
-     * response info and response body data into an instance of {@link T}.
+     * Sends the {@link GitHubRequest} to the server, and uses the {@link BodyHandler} to parse the response info and
+     * response body data into an instance of {@link T}.
      *
      * @param request
      *            the request that will be sent to the server.
@@ -355,31 +365,31 @@ class GitHubClient {
      *             if an I/O Exception occurs
      */
     @Nonnull
-    public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull GitHubResponse.BodyHandler<T> handler)
+    public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull BodyHandler<T> handler)
             throws IOException {
         int retries = CONNECTION_ERROR_RETRIES;
         request = prepareRequest(request);
         do {
             // if we fail to create a connection we do not retry and we do not wrap
 
-            GitHubResponse.ResponseInfo responseInfo = null;
+            GitHubConnectorResponse connectorResponse = null;
             try {
                 try {
                     logRequest(request);
-                    rateLimitChecker.checkRateLimit(this, request);
-                    responseInfo = connector.send(request);
-                    noteRateLimit(responseInfo);
-                    detectOTPRequired(responseInfo);
+                    rateLimitChecker.checkRateLimit(this, request.rateLimitTarget());
+                    connectorResponse = connector.send(request);
+                    noteRateLimit(request.rateLimitTarget(), connectorResponse);
+                    detectOTPRequired(connectorResponse);
 
-                    if (isInvalidCached404Response(responseInfo)) {
+                    if (isInvalidCached404Response(connectorResponse)) {
                         // Setting "Cache-Control" to "no-cache" stops the cache from supplying
                         // "If-Modified-Since" or "If-None-Match" values.
                         // This makes GitHub give us current data (not incorrectly cached data)
                         request = request.toBuilder().setHeader("Cache-Control", "no-cache").build();
                         continue;
                     }
-                    if (!(isRateLimitResponse(responseInfo) || isAbuseLimitResponse(responseInfo))) {
-                        return createResponse(responseInfo, handler);
+                    if (!(isRateLimitResponse(connectorResponse) || isAbuseLimitResponse(connectorResponse))) {
+                        return createResponse(connectorResponse, handler);
                     }
                 } catch (IOException e) {
                     // For transient errors, retry
@@ -387,12 +397,12 @@ class GitHubClient {
                         continue;
                     }
 
-                    throw interpretApiError(e, request, responseInfo);
+                    throw interpretApiError(e, request, connectorResponse);
                 }
 
-                handleLimitingErrors(responseInfo);
+                handleLimitingErrors(connectorResponse);
             } finally {
-                IOUtils.closeQuietly(responseInfo);
+                IOUtils.closeQuietly(connectorResponse);
             }
 
         } while (--retries >= 0);
@@ -415,7 +425,7 @@ class GitHubClient {
         }
         builder.setHeader("Accept-Encoding", "gzip");
 
-        if (request.inBody()) {
+        if (request.hasBody()) {
             if (request.body() != null) {
                 builder.contentType(defaultString(request.contentType(), "application/x-www-form-urlencoded"));
             } else {
@@ -438,21 +448,21 @@ class GitHubClient {
                         + request.method() + " " + request.url().toString());
     }
 
-    private void handleLimitingErrors(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws IOException {
-        if (isRateLimitResponse(responseInfo)) {
-            rateLimitHandler.onError(responseInfo);
-        } else if (isAbuseLimitResponse(responseInfo)) {
-            abuseLimitHandler.onError(responseInfo);
+    private void handleLimitingErrors(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
+        if (isRateLimitResponse(connectorResponse)) {
+            rateLimitHandler.onError(connectorResponse);
+        } else if (isAbuseLimitResponse(connectorResponse)) {
+            abuseLimitHandler.onError(connectorResponse);
         }
     }
 
     @Nonnull
-    private static <T> GitHubResponse<T> createResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo,
-            @CheckForNull GitHubResponse.BodyHandler<T> handler) throws IOException {
+    private static <T> GitHubResponse<T> createResponse(@Nonnull GitHubConnectorResponse connectorResponse,
+            @CheckForNull BodyHandler<T> handler) throws IOException {
         T body = null;
-        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
+        if (connectorResponse.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
             // special case handling for 304 unmodified, as the content will be ""
-        } else if (responseInfo.statusCode() == HttpURLConnection.HTTP_ACCEPTED) {
+        } else if (connectorResponse.statusCode() == HttpURLConnection.HTTP_ACCEPTED) {
 
             // Response code 202 means data is being generated or an action that can require some time is triggered.
             // This happens in specific cases:
@@ -461,12 +471,12 @@ class GitHubClient {
             // workflow run cancellation - See https://docs.github.com/en/rest/reference/actions#cancel-a-workflow-run
 
             LOGGER.log(FINE,
-                    "Received HTTP_ACCEPTED(202) from " + responseInfo.url().toString()
+                    "Received HTTP_ACCEPTED(202) from " + connectorResponse.url().toString()
                             + " . Please try again in 5 seconds.");
         } else if (handler != null) {
-            body = handler.apply(responseInfo);
+            body = handler.apply(connectorResponse);
         }
-        return new GitHubResponse<>(responseInfo, body);
+        return new GitHubResponse<>(connectorResponse, body);
     }
 
     /**
@@ -474,7 +484,7 @@ class GitHubClient {
      */
     private static IOException interpretApiError(IOException e,
             @Nonnull GitHubRequest request,
-            @CheckForNull GitHubResponse.ResponseInfo responseInfo) throws IOException {
+            @CheckForNull GitHubConnectorResponse connectorResponse) throws IOException {
         // If we're already throwing a GHIOException, pass through
         if (e instanceof GHIOException) {
             return e;
@@ -485,11 +495,11 @@ class GitHubClient {
         Map<String, List<String>> headers = new HashMap<>();
         String errorMessage = null;
 
-        if (responseInfo != null) {
-            statusCode = responseInfo.statusCode();
-            message = responseInfo.header("Status");
-            headers = responseInfo.allHeaders();
-            errorMessage = responseInfo.errorMessage();
+        if (connectorResponse != null) {
+            statusCode = connectorResponse.statusCode();
+            message = connectorResponse.header("Status");
+            headers = connectorResponse.allHeaders();
+            errorMessage = connectorResponse.errorMessage();
         }
 
         if (errorMessage != null) {
@@ -508,14 +518,14 @@ class GitHubClient {
         return e;
     }
 
-    protected static boolean isRateLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
-        return responseInfo.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
-                && "0".equals(responseInfo.header("X-RateLimit-Remaining"));
+    protected static boolean isRateLimitResponse(@Nonnull GitHubConnectorResponse connectorResponse) {
+        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
+                && "0".equals(connectorResponse.header("X-RateLimit-Remaining"));
     }
 
-    protected static boolean isAbuseLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
-        return responseInfo.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
-                && responseInfo.header("Retry-After") != null;
+    protected static boolean isAbuseLimitResponse(@Nonnull GitHubConnectorResponse connectorResponse) {
+        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
+                && connectorResponse.header("Retry-After") != null;
     }
 
     private static boolean retryConnectionError(IOException e, URL url, int retries) throws IOException {
@@ -536,7 +546,7 @@ class GitHubClient {
         return false;
     }
 
-    private static boolean isInvalidCached404Response(GitHubResponse.ResponseInfo responseInfo) {
+    private static boolean isInvalidCached404Response(GitHubConnectorResponse connectorResponse) {
         // WORKAROUND FOR ISSUE #669:
         // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
         // is bogus and would cause cache corruption), try the query again with new request header
@@ -547,44 +557,45 @@ class GitHubClient {
         // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
         // their 404 responses, this will result in at worst two requests being made for each 404
         // responses. However, only the second request will count against rate limit.
-        if (responseInfo.statusCode() == 404 && Objects.equals(responseInfo.request().method(), "GET")
-                && responseInfo.header("ETag") != null
-                && !Objects.equals(responseInfo.request().header("Cache-Control"), "no-cache")) {
+        if (connectorResponse.statusCode() == 404 && Objects.equals(connectorResponse.request().method(), "GET")
+                && connectorResponse.header("ETag") != null
+                && !Objects.equals(connectorResponse.request().header("Cache-Control"), "no-cache")) {
             LOGGER.log(FINE,
-                    "Encountered GitHub invalid cached 404 from " + responseInfo.url()
+                    "Encountered GitHub invalid cached 404 from " + connectorResponse.url()
                             + ". Retrying with \"Cache-Control\"=\"no-cache\"...");
             return true;
         }
         return false;
     }
 
-    private void noteRateLimit(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
+    private void noteRateLimit(@Nonnull RateLimitTarget rateLimitTarget,
+            @Nonnull GitHubConnectorResponse connectorResponse) {
         try {
-            String limitString = Objects.requireNonNull(responseInfo.header("X-RateLimit-Limit"),
+            String limitString = Objects.requireNonNull(connectorResponse.header("X-RateLimit-Limit"),
                     "Missing X-RateLimit-Limit");
-            String remainingString = Objects.requireNonNull(responseInfo.header("X-RateLimit-Remaining"),
+            String remainingString = Objects.requireNonNull(connectorResponse.header("X-RateLimit-Remaining"),
                     "Missing X-RateLimit-Remaining");
-            String resetString = Objects.requireNonNull(responseInfo.header("X-RateLimit-Reset"),
+            String resetString = Objects.requireNonNull(connectorResponse.header("X-RateLimit-Reset"),
                     "Missing X-RateLimit-Reset");
             int limit, remaining;
             long reset;
             limit = Integer.parseInt(limitString);
             remaining = Integer.parseInt(remainingString);
             reset = Long.parseLong(resetString);
-            GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, responseInfo);
-            updateRateLimit(GHRateLimit.fromRecord(observed, responseInfo.request().rateLimitTarget()));
+            GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, connectorResponse);
+            updateRateLimit(GHRateLimit.fromRecord(observed, rateLimitTarget));
         } catch (NumberFormatException | NullPointerException e) {
             LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);
         }
     }
 
-    private static void detectOTPRequired(@Nonnull GitHubResponse.ResponseInfo responseInfo) throws GHIOException {
+    private static void detectOTPRequired(@Nonnull GitHubConnectorResponse connectorResponse) throws GHIOException {
         // 401 Unauthorized == bad creds or OTP request
-        if (responseInfo.statusCode() == HTTP_UNAUTHORIZED) {
+        if (connectorResponse.statusCode() == HTTP_UNAUTHORIZED) {
             // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
             // will be returned indicating the user needs to respond with an otp
-            if (responseInfo.header("X-GitHub-OTP") != null) {
-                throw new GHOTPRequiredException().withResponseHeaderFields(responseInfo.allHeaders());
+            if (connectorResponse.header("X-GitHub-OTP") != null) {
+                throw new GHOTPRequiredException().withResponseHeaderFields(connectorResponse.allHeaders());
             }
         }
     }
@@ -686,7 +697,7 @@ class GitHubClient {
     }
 
     /**
-     * Helper for {@link #getMappingObjectReader(GitHubResponse.ResponseInfo)}
+     * Helper for {@link #getMappingObjectReader(GitHubConnectorResponse)}
      *
      * @param root
      *            the root GitHub object for this reader
@@ -695,7 +706,7 @@ class GitHubClient {
      */
     @Nonnull
     static ObjectReader getMappingObjectReader(@Nonnull GitHub root) {
-        ObjectReader reader = getMappingObjectReader((GitHubResponse.ResponseInfo) null);
+        ObjectReader reader = getMappingObjectReader((GitHubConnectorResponse) null);
         ((InjectableValues.Std) reader.getInjectableValues()).addValue(GitHub.class, root);
         return reader;
     }
@@ -709,22 +720,22 @@ class GitHubClient {
      * Having one spot to create readers and having it take all injectable values is not a great long term solution but
      * it is sufficient for this first cut.
      *
-     * @param responseInfo
-     *            the {@link GitHubResponse.ResponseInfo} to inject for this reader.
+     * @param connectorResponse
+     *            the {@link GitHubConnectorResponse} to inject for this reader.
      *
      * @return an {@link ObjectReader} instance that can be further configured.
      */
     @Nonnull
-    static ObjectReader getMappingObjectReader(@CheckForNull GitHubResponse.ResponseInfo responseInfo) {
+    static ObjectReader getMappingObjectReader(@CheckForNull GitHubConnectorResponse connectorResponse) {
         Map<String, Object> injected = new HashMap<>();
 
         // Required or many things break
-        injected.put(GitHubResponse.ResponseInfo.class.getName(), null);
+        injected.put(GitHubConnectorResponse.class.getName(), null);
         injected.put(GitHub.class.getName(), null);
 
-        if (responseInfo != null) {
-            injected.put(GitHubResponse.ResponseInfo.class.getName(), responseInfo);
-            injected.putAll(responseInfo.request().injectedMappingValues());
+        if (connectorResponse != null) {
+            injected.put(GitHubConnectorResponse.class.getName(), connectorResponse);
+            injected.putAll(connectorResponse.request().injectedMappingValues());
         }
         return MAPPER.reader(new InjectableValues.Std(injected));
     }

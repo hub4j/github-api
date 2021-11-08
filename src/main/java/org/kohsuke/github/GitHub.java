@@ -30,6 +30,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
+import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter;
 import org.kohsuke.github.internal.Previews;
 
 import java.io.*;
@@ -470,7 +472,10 @@ public class GitHub {
      * Gets connector.
      *
      * @return the connector
+     * @deprecated HttpConnector has been replaced by GitHubConnector which is generally not useful outside of this
+     *             library. If you are using
      */
+    @Deprecated
     public HttpConnector getConnector() {
         return client.getConnector();
     }

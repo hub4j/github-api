@@ -24,24 +24,31 @@ import javax.annotation.Nonnull;
 import static java.util.logging.Level.*;
 
 /**
- * A GitHub API Client for HttpUrlConnection
- * <p>
- * A GitHubConnectorHttpConnectorAdapter can be used to send requests and retrieve their responses. GitHubClient is
- * thread-safe and can be used to send multiple requests. GitHubClient also track some GitHub API information such as
- * {@link GHRateLimit}.
- * </p>
- * <p>
- * GitHubHttpUrlConnectionClient gets a new {@link HttpURLConnection} for each call to send.
- * </p>
+ * Adapts an HttpConnector to be usable as GitHubConnector.
  */
 public class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, HttpConnector {
 
     final HttpConnector httpConnector;
 
+    /**
+     * Constructor.
+     *
+     * @param httpConnector
+     *            the HttpConnector to be adapted.
+     */
     public GitHubConnectorHttpConnectorAdapter(HttpConnector httpConnector) {
         this.httpConnector = httpConnector;
     }
 
+    /**
+     * Creates a GitHubConnector for an HttpConnector.
+     *
+     * If a well-known static HttpConnector is passed, a corresponding static GitHubConnector is returned.
+     *
+     * @param connector
+     *            the HttpConnector to be adapted.
+     * @return a GitHubConnector that calls into the provided HttpConnector.
+     */
     @NotNull
     public static GitHubConnector adapt(HttpConnector connector) {
         GitHubConnector gitHubConnector;
@@ -66,7 +73,7 @@ public class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, Htt
     public GitHubConnectorResponse send(GitHubConnectorRequest request) throws IOException {
         HttpURLConnection connection;
         try {
-            connection = setupConnection(httpConnector, request);
+            connection = setupConnection(this, request);
         } catch (IOException e) {
             // An error in here should be wrapped to bypass http exception wrapping.
             throw new GHIOException(e.getMessage(), e);
@@ -81,8 +88,8 @@ public class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, Htt
     }
 
     @Nonnull
-    static HttpURLConnection setupConnection(@Nonnull HttpConnector connector, @Nonnull GitHubConnectorRequest request)
-            throws IOException {
+    private static HttpURLConnection setupConnection(@Nonnull HttpConnector connector,
+            @Nonnull GitHubConnectorRequest request) throws IOException {
         HttpURLConnection connection = connector.connect(request.url());
         setRequestMethod(request.method(), connection);
         buildRequest(request, connection);

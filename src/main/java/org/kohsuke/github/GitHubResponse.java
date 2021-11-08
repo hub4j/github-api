@@ -4,14 +4,12 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
-import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
@@ -36,9 +34,6 @@ class GitHubResponse<T> {
     private final int statusCode;
 
     @Nonnull
-    private final GitHubConnectorRequest request;
-
-    @Nonnull
     private final Map<String, List<String>> headers;
 
     @CheckForNull
@@ -46,14 +41,12 @@ class GitHubResponse<T> {
 
     GitHubResponse(GitHubResponse<T> response, @CheckForNull T body) {
         this.statusCode = response.statusCode();
-        this.request = response.request();
         this.headers = response.headers;
         this.body = body;
     }
 
     GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {
         this.statusCode = connectorResponse.statusCode();
-        this.request = connectorResponse.request();
         this.headers = connectorResponse.allHeaders();
         this.body = body;
     }
@@ -136,26 +129,6 @@ class GitHubResponse<T> {
         InputStreamReader r = null;
         r = new InputStreamReader(connectorResponse.bodyStream(), StandardCharsets.UTF_8);
         return IOUtils.toString(r);
-    }
-
-    /**
-     * The {@link URL} for this response.
-     *
-     * @return the {@link URL} for this response.
-     */
-    @Nonnull
-    public URL url() {
-        return request.url();
-    }
-
-    /**
-     * The {@link GitHubConnectorRequest} for this response.
-     *
-     * @return the {@link GitHubConnectorRequest} for this response.
-     */
-    @Nonnull
-    public GitHubConnectorRequest request() {
-        return request;
     }
 
     /**

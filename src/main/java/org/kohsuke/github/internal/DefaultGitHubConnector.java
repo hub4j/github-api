@@ -5,7 +5,28 @@ import org.kohsuke.github.HttpConnector;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
 
+/**
+ * Internal class that selects what kind of {@link GitHubConnector} will be the default.
+ *
+ * Allow behavior to be changed for different version of Java, such as supporting Java 11 HttpClient.
+ */
 public class DefaultGitHubConnector {
+
+    /**
+     * Creates a {@link GitHubConnector} that will be used as the default connector.
+     *
+     * This method currently defaults to returning an instance of {@link GitHubConnectorHttpConnectorAdapter}. This
+     * preserves backward compatibility with {@link HttpConnector}.
+     *
+     * <p>
+     * For testing purposes, the system property {@code test.github.connector} can be set to change the default.
+     * Possible values: {@code default}, {@code okhttp}, {@code httpconnector}.
+     *
+     * <p>
+     * Should only be called to set {@link GitHubConnector#DEFAULT}.
+     *
+     * @return a GitHubConnector
+     */
     public static GitHubConnector create() {
         String defaultConnectorProperty = System.getProperty("test.github.connector", "default");
         if (defaultConnectorProperty.equalsIgnoreCase("okhttp")) {

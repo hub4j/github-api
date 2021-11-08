@@ -473,7 +473,7 @@ public class GitHub {
      *
      * @return the connector
      * @deprecated HttpConnector has been replaced by GitHubConnector which is generally not useful outside of this
-     *             library. If you are using
+     *             library. If you are using this method, file an issue describing your use case.
      */
     @Deprecated
     public HttpConnector getConnector() {

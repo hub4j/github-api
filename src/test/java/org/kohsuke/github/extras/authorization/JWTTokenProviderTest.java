@@ -1,9 +1,7 @@
 package org.kohsuke.github.extras.authorization;
 
 import org.junit.Test;
-import org.kohsuke.github.AbstractGitHubWireMockTest;
-import org.kohsuke.github.GitHub;
-import org.kohsuke.github.HttpException;
+import org.kohsuke.github.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,10 +30,22 @@ import static org.hamcrest.Matchers.*;
  * with a private key and a random nonce, so it will never be the same (under normal conditions). For more
  * information on the format of a JWT token, see: https://jwt.io/introduction/
  */
-public class JWTTokenProviderTest extends AbstractGitHubWireMockTest {
+public class JWTTokenProviderTest extends AbstractGHAppInstallationTest {
 
     private static String TEST_APP_ID_2 = "83009";
     private static String PRIVATE_KEY_FILE_APP_2 = "/ghapi-test-app-2.private-key.pem";
+
+    @Test
+    public void testCachingValidAuthorization() throws IOException {
+        assertThat(jwtProvider1, instanceOf(JWTTokenProvider.class));
+        JWTTokenProvider provider = (JWTTokenProvider) jwtProvider1;
+
+        assertThat(provider.isNotValid(), is(true));
+        String authorization = provider.getEncodedAuthorization();
+        assertThat(provider.isNotValid(), is(false));
+        String authorizationRefresh = provider.getEncodedAuthorization();
+        assertThat(authorizationRefresh, sameInstance(authorization));
+    }
 
     @Test
     public void testAuthorizationHeaderPattern() throws GeneralSecurityException, IOException {

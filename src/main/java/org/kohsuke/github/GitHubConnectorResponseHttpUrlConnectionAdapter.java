@@ -8,20 +8,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.Permission;
 import java.util.*;
 
-class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
+class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection {
 
     private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
             .nullsFirst(String.CASE_INSENSITIVE_ORDER);
 
     private final GitHubConnectorResponse connectorResponse;
 
-    public GitHubResponseInfoHttpURLConnectionAdapter(GitHubConnectorResponse connectorResponse) {
-        super(connectorResponse.url());
+    public GitHubConnectorResponseHttpUrlConnectionAdapter(GitHubConnectorResponse connectorResponse) {
+        super(connectorResponse.request().url());
         this.connectorResponse = connectorResponse;
     }
 
@@ -119,11 +118,6 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
     @Override
     public int getReadTimeout() {
         return super.getReadTimeout();
-    }
-
-    @Override
-    public URL getURL() {
-        return connectorResponse.url();
     }
 
     @Override

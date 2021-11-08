@@ -1,24 +1,21 @@
 package org.kohsuke.github.connector;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.kohsuke.github.GitHubRequest;
-import org.kohsuke.github.function.BodyHandler;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.*;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
- * Response information supplied to a {@link BodyHandler} when a response is received and before the body is processed.
+ * Response information supplied when a response is received and before the body is processed.
  * <p>
  * Instances of this class are closed once the response is done being processed. This means that contents of the body
  * stream will not be readable after a call is completed. Status code, response headers, and request details will still
- * be readable.
+ * be readable but it is recommended that consumers copy any information they need rather than retaining a reference.
  */
 public abstract class GitHubConnectorResponse implements Closeable {
 
@@ -26,6 +23,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
             .nullsFirst(String.CASE_INSENSITIVE_ORDER);
 
     private final int statusCode;
+
     @Nonnull
     private final GitHubConnectorRequest request;
     @Nonnull
@@ -78,19 +76,9 @@ public abstract class GitHubConnectorResponse implements Closeable {
     public abstract String errorMessage();
 
     /**
-     * The {@link URL} for this response.
+     * Gets the {@link GitHubConnectorRequest} for this response.
      *
-     * @return the {@link URL} for this response.
-     */
-    @Nonnull
-    public URL url() {
-        return request.url();
-    }
-
-    /**
-     * Gets the {@link GitHubRequest} for this response.
-     *
-     * @return the {@link GitHubRequest} for this response.
+     * @return the {@link GitHubConnectorRequest} for this response.
      */
     @Nonnull
     public GitHubConnectorRequest request() {

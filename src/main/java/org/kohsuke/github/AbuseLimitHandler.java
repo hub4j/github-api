@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 
+import javax.annotation.Nonnull;
+
 /**
  * Pluggable strategy to determine what to do when the API abuse limit is hit.
  *
@@ -34,12 +36,12 @@ public abstract class AbuseLimitHandler {
      *      with abuse rate limits</a>
      *
      */
-    void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+    public void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
         GHIOException e = new HttpException("Abuse limit violation",
                 connectorResponse.statusCode(),
                 connectorResponse.header("Status"),
-                connectorResponse.url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());
-        onError(e, new GitHubResponseInfoHttpURLConnectionAdapter(connectorResponse));
+                connectorResponse.request().url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());
+        onError(e, new GitHubConnectorResponseHttpUrlConnectionAdapter(connectorResponse));
     }
 
     /**
@@ -63,7 +65,9 @@ public abstract class AbuseLimitHandler {
      *      with abuse rate limits</a>
      *
      */
-    public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
+    @Deprecated
+    public void onError(IOException e, HttpURLConnection uc) throws IOException {
+    }
 
     /**
      * Wait until the API abuse "wait time" is passed.

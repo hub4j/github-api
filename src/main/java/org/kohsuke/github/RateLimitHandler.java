@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 
+import javax.annotation.Nonnull;
+
 /**
  * Pluggable strategy to determine what to do when the API rate limit is reached.
  *
@@ -30,12 +32,12 @@ public abstract class RateLimitHandler {
      *             the io exception
      * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      */
-    void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+    public void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
         GHIOException e = new HttpException("Rate limit violation",
                 connectorResponse.statusCode(),
                 connectorResponse.header("Status"),
-                connectorResponse.url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());
-        onError(e, new GitHubResponseInfoHttpURLConnectionAdapter(connectorResponse));
+                connectorResponse.request().url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());
+        onError(e, new GitHubConnectorResponseHttpUrlConnectionAdapter(connectorResponse));
     }
 
     /**
@@ -55,7 +57,9 @@ public abstract class RateLimitHandler {
      *             the io exception
      * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      */
-    public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
+    @Deprecated
+    public void onError(IOException e, HttpURLConnection uc) throws IOException {
+    }
 
     /**
      * Block until the API rate limit is reset. Useful for long-running batch processing.

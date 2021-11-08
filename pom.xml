@@ -165,7 +165,7 @@
                       <exclude>org.kohsuke.github.GHCompare.User</exclude>
 
                       <!-- TODO: Some coverage, but more needed -->
-                      <exclude>org.kohsuke.github.GitHubResponseInfoHttpURLConnectionAdapter</exclude>
+                      <exclude>org.kohsuke.github.GitHubConnectorResponseHttpUrlConnectionAdapter</exclude>
                       <exclude>org.kohsuke.github.GHPullRequestReviewBuilder.DraftReviewComment</exclude>
                       <exclude>org.kohsuke.github.GHIssue.PullRequest</exclude>
                       <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>

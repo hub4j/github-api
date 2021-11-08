@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.kohsuke.github.function.BodyHandler;
 
@@ -368,16 +369,17 @@ class GitHubClient {
     public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull BodyHandler<T> handler)
             throws IOException {
         int retries = CONNECTION_ERROR_RETRIES;
-        request = prepareRequest(request);
+        GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);
+
         do {
             // if we fail to create a connection we do not retry and we do not wrap
 
             GitHubConnectorResponse connectorResponse = null;
             try {
                 try {
-                    logRequest(request);
+                    logRequest(connectorRequest);
                     rateLimitChecker.checkRateLimit(this, request.rateLimitTarget());
-                    connectorResponse = connector.send(request);
+                    connectorResponse = connector.send(connectorRequest);
                     noteRateLimit(request.rateLimitTarget(), connectorResponse);
                     detectOTPRequired(connectorResponse);
 
@@ -385,7 +387,8 @@ class GitHubClient {
                         // Setting "Cache-Control" to "no-cache" stops the cache from supplying
                         // "If-Modified-Since" or "If-None-Match" values.
                         // This makes GitHub give us current data (not incorrectly cached data)
-                        request = request.toBuilder().setHeader("Cache-Control", "no-cache").build();
+                        connectorRequest = prepareConnectorRequest(
+                                request.toBuilder().setHeader("Cache-Control", "no-cache").build());
                         continue;
                     }
                     if (!(isRateLimitResponse(connectorResponse) || isAbuseLimitResponse(connectorResponse))) {
@@ -397,7 +400,7 @@ class GitHubClient {
                         continue;
                     }
 
-                    throw interpretApiError(e, request, connectorResponse);
+                    throw interpretApiError(e, connectorRequest, connectorResponse);
                 }
 
                 handleLimitingErrors(connectorResponse);
@@ -410,7 +413,7 @@ class GitHubClient {
         throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
     }
 
-    private GitHubRequest prepareRequest(GitHubRequest request) throws IOException {
+    private GitHubConnectorRequest prepareConnectorRequest(GitHubRequest request) throws IOException {
         GitHubRequest.Builder<?> builder = request.toBuilder();
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
@@ -442,7 +445,7 @@ class GitHubClient {
         return builder.build();
     }
 
-    private void logRequest(@Nonnull final GitHubRequest request) {
+    private void logRequest(@Nonnull final GitHubConnectorRequest request) {
         LOGGER.log(FINE,
                 () -> "GitHub API request [" + (getLogin() == null ? "anonymous" : getLogin()) + "]: "
                         + request.method() + " " + request.url().toString());
@@ -471,7 +474,7 @@ class GitHubClient {
             // workflow run cancellation - See https://docs.github.com/en/rest/reference/actions#cancel-a-workflow-run
 
             LOGGER.log(FINE,
-                    "Received HTTP_ACCEPTED(202) from " + connectorResponse.url().toString()
+                    "Received HTTP_ACCEPTED(202) from " + connectorResponse.request().url().toString()
                             + " . Please try again in 5 seconds.");
         } else if (handler != null) {
             body = handler.apply(connectorResponse);
@@ -483,7 +486,7 @@ class GitHubClient {
      * Handle API error by either throwing it or by returning normally to retry.
      */
     private static IOException interpretApiError(IOException e,
-            @Nonnull GitHubRequest request,
+            @Nonnull GitHubConnectorRequest connectorRequest,
             @CheckForNull GitHubConnectorResponse connectorResponse) throws IOException {
         // If we're already throwing a GHIOException, pass through
         if (e instanceof GHIOException) {
@@ -508,12 +511,12 @@ class GitHubClient {
                 e = new GHFileNotFoundException(e.getMessage() + " " + errorMessage, e)
                         .withResponseHeaderFields(headers);
             } else if (statusCode >= 0) {
-                e = new HttpException(errorMessage, statusCode, message, request.url().toString(), e);
+                e = new HttpException(errorMessage, statusCode, message, connectorRequest.url().toString(), e);
             } else {
                 e = new GHIOException(errorMessage).withResponseHeaderFields(headers);
             }
         } else if (!(e instanceof FileNotFoundException)) {
-            e = new HttpException(statusCode, message, request.url().toString(), e);
+            e = new HttpException(statusCode, message, connectorRequest.url().toString(), e);
         }
         return e;
     }
@@ -548,7 +551,7 @@ class GitHubClient {
 
     private static boolean isInvalidCached404Response(GitHubConnectorResponse connectorResponse) {
         // WORKAROUND FOR ISSUE #669:
-        // When the Requester detects a 404 response with an ETag (only happpens when the server's 304
+        // When the Requester detects a 404 response with an ETag (only happens when the server's 304
         // is bogus and would cause cache corruption), try the query again with new request header
         // that forces the server to not return 304 and return new data instead.
         //
@@ -561,7 +564,7 @@ class GitHubClient {
                 && connectorResponse.header("ETag") != null
                 && !Objects.equals(connectorResponse.request().header("Cache-Control"), "no-cache")) {
             LOGGER.log(FINE,
-                    "Encountered GitHub invalid cached 404 from " + connectorResponse.url()
+                    "Encountered GitHub invalid cached 404 from " + connectorResponse.request().url()
                             + ". Retrying with \"Cache-Control\"=\"no-cache\"...");
             return true;
         }
@@ -735,7 +738,11 @@ class GitHubClient {
 
         if (connectorResponse != null) {
             injected.put(GitHubConnectorResponse.class.getName(), connectorResponse);
-            injected.putAll(connectorResponse.request().injectedMappingValues());
+            GitHubConnectorRequest request = connectorResponse.request();
+            // This is cheating, but it is an acceptable cheat for now.
+            if (request instanceof GitHubRequest) {
+                injected.putAll(((GitHubRequest) connectorResponse.request()).injectedMappingValues());
+            }
         }
         return MAPPER.reader(new InjectableValues.Std(injected));
     }

@@ -1,12 +1,12 @@
 {
-  "id": "d30d6520-52dd-4f0c-9254-59fcdd4eeb86",
+  "id": "968aee6a-7e5a-4e58-a04b-5cf87e692efa",
   "name": "repos_jenkinsci_jenkins_git_trees_d96a6e8b7231571b49af150a683177f37a180f04",
   "request": {
     "url": "/repos/jenkinsci/jenkins/git/trees/d96a6e8b7231571b49af150a683177f37a180f04",
     "method": "GET",
     "headers": {
       "Accept": {
-        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+        "equalTo": "application/vnd.github.v3+json"
       }
     }
   },
@@ -14,35 +14,35 @@
     "status": 200,
     "bodyFileName": "repos_jenkinsci_jenkins_git_trees_d96a6e8b7231571b49af150a683177f37a180f04-6.json",
     "headers": {
-      "Date": "Sat, 26 Oct 2019 01:28:42 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4285",
-      "X-RateLimit-Reset": "1572055286",
-      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Date": "Mon, 08 Nov 2021 03:25:43 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=86400, s-maxage=86400",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"f58ef0149d3b35957c18ea74df832bda\"",
-      "Last-Modified": "Sat, 26 Oct 2019 01:07:22 GMT",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "ETag": "W/\"16a913e6f6f23763ca7bfa031b26c47d021889da5b60d101af2cf40cf818fbf5\"",
+      "Last-Modified": "Mon, 08 Nov 2021 02:22:33 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "X-GitHub-Media-Type": "unknown, github.v3",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin": "*",
+      "github-authentication-token-expiration": "2022-01-19 07:08:40 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4984",
+      "X-RateLimit-Reset": "1636345515",
+      "X-RateLimit-Used": "16",
+      "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "CB0D:1CC2:1A2408:1EF387:5DB3A14A"
+      "X-GitHub-Request-Id": "D62E:3894:49BCB7:51C66E:618898B7"
     }
   },
-  "uuid": "d30d6520-52dd-4f0c-9254-59fcdd4eeb86",
+  "uuid": "968aee6a-7e5a-4e58-a04b-5cf87e692efa",
   "persistent": true,
   "insertionIndex": 6
 }

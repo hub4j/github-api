@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.*;
 
 import javax.annotation.CheckForNull;
@@ -41,6 +42,19 @@ public abstract class GitHubConnectorResponse implements Closeable {
             caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList<>(entry.getValue())));
         }
         this.headers = Collections.unmodifiableMap(caseInsensitiveMap);
+    }
+
+    /**
+     * Get this response as a {@link HttpURLConnection}.
+     *
+     * @return an object that implements at least the response related methods of {@link HttpURLConnection}.
+     */
+    @Deprecated
+    @Nonnull
+    public HttpURLConnection toHttpURLConnection() {
+        HttpURLConnection connection;
+        connection = new GitHubConnectorResponseHttpUrlConnectionAdapter(this);
+        return connection;
     }
 
     /**

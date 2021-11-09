@@ -1,26 +1,21 @@
-package org.kohsuke.github;
-
-import org.kohsuke.github.connector.GitHubConnectorResponse;
+package org.kohsuke.github.connector;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.nio.charset.StandardCharsets;
 import java.security.Permission;
 import java.util.*;
 
 class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection {
 
-    private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
-            .nullsFirst(String.CASE_INSENSITIVE_ORDER);
-
     private final GitHubConnectorResponse connectorResponse;
 
     public GitHubConnectorResponseHttpUrlConnectionAdapter(GitHubConnectorResponse connectorResponse) {
         super(connectorResponse.request().url());
+        this.connected = true;
         this.connectorResponse = connectorResponse;
     }
 
@@ -28,21 +23,6 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
     public String getHeaderFieldKey(int n) {
         List<String> keys = new ArrayList<>(connectorResponse.allHeaders().keySet());
         return keys.get(n);
-    }
-
-    @Override
-    public void setFixedLengthStreamingMode(int contentLength) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setFixedLengthStreamingMode(long contentLength) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setChunkedStreamingMode(int chunklen) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -57,11 +37,6 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public boolean getInstanceFollowRedirects() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setRequestMethod(String method) throws ProtocolException {
         throw new UnsupportedOperationException();
     }
 
@@ -210,21 +185,11 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public String toString() {
-        return connectorResponse.toString();
-    }
-
-    @Override
-    public void setDoInput(boolean doinput) {
-        throw new UnsupportedOperationException();
+        return this.getClass().getName() + ": " + connectorResponse.toString();
     }
 
     @Override
     public boolean getDoInput() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setDoOutput(boolean dooutput) {
         throw new UnsupportedOperationException();
     }
 
@@ -234,22 +199,7 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
     }
 
     @Override
-    public void setAllowUserInteraction(boolean allowuserinteraction) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setUseCaches(boolean usecaches) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean getUseCaches() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setIfModifiedSince(long ifmodifiedsince) {
         throw new UnsupportedOperationException();
     }
 
@@ -264,23 +214,8 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
     }
 
     @Override
-    public void setRequestProperty(String key, String value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addRequestProperty(String key, String value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public String getRequestProperty(String key) {
         return connectorResponse.request().header(key);
-    }
-
-    @Override
-    public Map<String, List<String>> getRequestProperties() {
-        throw new IllegalStateException("Already connected");
     }
 
     @Override
@@ -305,6 +240,6 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public void connect() throws IOException {
-        throw new UnsupportedOperationException();
+        // no op
     }
 }

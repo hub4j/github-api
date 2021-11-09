@@ -11,7 +11,10 @@ import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
  *
  * Allow behavior to be changed for different version of Java, such as supporting Java 11 HttpClient.
  */
-public class DefaultGitHubConnector {
+public final class DefaultGitHubConnector {
+
+    private DefaultGitHubConnector() {
+    }
 
     /**
      * Creates a {@link GitHubConnector} that will be used as the default connector.

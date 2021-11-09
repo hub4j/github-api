@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
@@ -102,13 +103,25 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
 
                         Assert.assertThrows(IllegalStateException.class, () -> uc.getRequestProperties());
 
-                        // disconnect does nothing, never throws
-                        uc.disconnect();
-                        uc.disconnect();
+                        // Actions that are not allowed because connection already opened.
+                        Assert.assertThrows(IllegalStateException.class, () -> uc.addRequestProperty("bogus", "item"));
 
-                        if (uc instanceof GitHubConnectorResponseHttpUrlConnectionAdapter) {
-                            Assert.assertThrows(UnsupportedOperationException.class, () -> uc.connect());
+                        Assert.assertThrows(IllegalStateException.class, () -> uc.setAllowUserInteraction(true));
+                        Assert.assertThrows(IllegalStateException.class, () -> uc.setChunkedStreamingMode(1));
+                        Assert.assertThrows(IllegalStateException.class, () -> uc.setDoInput(true));
+                        Assert.assertThrows(IllegalStateException.class, () -> uc.setDoOutput(true));
+                        Assert.assertThrows(IllegalStateException.class, () -> uc.setFixedLengthStreamingMode(1));
+                        Assert.assertThrows(IllegalStateException.class, () -> uc.setFixedLengthStreamingMode(1L));
+                        Assert.assertThrows(IllegalStateException.class, () -> uc.setIfModifiedSince(1L));
+                        Assert.assertThrows(IllegalStateException.class, () -> uc.setRequestProperty("bogus", "thing"));
+                        Assert.assertThrows(IllegalStateException.class, () -> uc.setUseCaches(true));
 
+                        boolean isAdapter = false;
+                        if (uc.toString().contains("GitHubConnectorResponseHttpUrlConnectionAdapter")) {
+                            isAdapter = true;
+                        }
+
+                        if (isAdapter) {
                             Assert.assertThrows(UnsupportedOperationException.class,
                                     () -> uc.getAllowUserInteraction());
                             Assert.assertThrows(UnsupportedOperationException.class, () -> uc.getConnectTimeout());
@@ -125,32 +138,33 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                             Assert.assertThrows(UnsupportedOperationException.class, () -> uc.getUseCaches());
                             Assert.assertThrows(UnsupportedOperationException.class, () -> uc.usingProxy());
 
-                            Assert.assertThrows(UnsupportedOperationException.class,
-                                    () -> uc.addRequestProperty("bogus", "item"));
-                            Assert.assertThrows(UnsupportedOperationException.class,
-                                    () -> uc.setAllowUserInteraction(true));
-                            Assert.assertThrows(UnsupportedOperationException.class,
-                                    () -> uc.setChunkedStreamingMode(1));
                             Assert.assertThrows(UnsupportedOperationException.class, () -> uc.setConnectTimeout(10));
                             Assert.assertThrows(UnsupportedOperationException.class,
                                     () -> uc.setDefaultUseCaches(true));
-                            Assert.assertThrows(UnsupportedOperationException.class, () -> uc.setDoInput(true));
-                            Assert.assertThrows(UnsupportedOperationException.class, () -> uc.setDoOutput(true));
-                            Assert.assertThrows(UnsupportedOperationException.class,
-                                    () -> uc.setFixedLengthStreamingMode(1));
-                            Assert.assertThrows(UnsupportedOperationException.class,
-                                    () -> uc.setFixedLengthStreamingMode(1L));
-                            Assert.assertThrows(UnsupportedOperationException.class, () -> uc.setIfModifiedSince(1L));
+
                             Assert.assertThrows(UnsupportedOperationException.class,
                                     () -> uc.setInstanceFollowRedirects(true));
                             Assert.assertThrows(UnsupportedOperationException.class, () -> uc.setReadTimeout(10));
-                            Assert.assertThrows(UnsupportedOperationException.class, () -> uc.setRequestMethod("GET"));
-                            Assert.assertThrows(UnsupportedOperationException.class,
-                                    () -> uc.setRequestProperty("bogus", "thing"));
-                            Assert.assertThrows(UnsupportedOperationException.class, () -> uc.setUseCaches(true));
+                            Assert.assertThrows(ProtocolException.class, () -> uc.setRequestMethod("GET"));
+                        } else {
+                            uc.getDefaultUseCaches();
+                            assertThat(uc.getDoInput(), is(true));
+
+                            // Depending on the underlying implementation, this may throw or not
+                            // Assert.assertThrows(IllegalStateException.class, () -> uc.setRequestMethod("GET"));
                         }
 
-                        RateLimitHandler.FAIL.onError(e, uc);
+                        // ignored
+                        uc.connect();
+
+                        // disconnect does nothing, never throws
+                        uc.disconnect();
+                        uc.disconnect();
+
+                        // ignored
+                        uc.connect();
+
+                        AbuseLimitHandler.FAIL.onError(e, uc);
                     }
                 })
                 .build();

@@ -234,7 +234,9 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" },
                 justification = "Internal implementation class. Should not be used externally.")
         @Nonnull
-        public HttpURLConnection getConnection() {
+        @Override
+        @Deprecated
+        public HttpURLConnection toHttpURLConnection() {
             return connection;
         }
 

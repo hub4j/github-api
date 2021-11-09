@@ -113,7 +113,7 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(new RateLimitHandler() {
+                .withAbuseLimitHandler(new AbuseLimitHandler() {
                     @Override
                     public void onError(IOException e, HttpURLConnection uc) throws IOException {
                     }

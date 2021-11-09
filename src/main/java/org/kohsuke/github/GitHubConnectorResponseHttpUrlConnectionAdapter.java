@@ -32,17 +32,17 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public void setFixedLengthStreamingMode(int contentLength) {
-        throw new UnsupportedOperationException("Setting streaming mode is not supported by " + this.getClass());
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setFixedLengthStreamingMode(long contentLength) {
-        throw new UnsupportedOperationException("Setting streaming mode is not supported by " + this.getClass());
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setChunkedStreamingMode(int chunklen) {
-        throw new UnsupportedOperationException("Setting streaming mode is not supported by " + this.getClass());
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -52,17 +52,17 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public void setInstanceFollowRedirects(boolean followRedirects) {
-        super.setInstanceFollowRedirects(followRedirects);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean getInstanceFollowRedirects() {
-        return super.getInstanceFollowRedirects();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setRequestMethod(String method) throws ProtocolException {
-        super.setRequestMethod(method);
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -84,7 +84,7 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
     public long getHeaderFieldDate(String name, long defaultValue) {
         String dateString = getHeaderField(name);
         try {
-            return GitHubClient.parseDate(dateString).getTime();
+            return Date.parse(dateString);
         } catch (Exception e) {
         }
         return defaultValue;
@@ -107,7 +107,7 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public int getConnectTimeout() {
-        return super.getConnectTimeout();
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -117,7 +117,7 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public int getReadTimeout() {
-        return super.getReadTimeout();
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -190,18 +190,18 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public Object getContent() throws IOException {
-        return super.getContent();
+        throw new UnsupportedOperationException();
     }
 
-    // @Override
-    // public Object getContent(Class<?>[] classes) throws IOException {
-    // return super.getContent(classes);
-    // }
-    //
-    // @Override
-    // public InputStream getInputStream() throws IOException {
-    // return connectorResponse.bodyStream();
-    // }
+    @Override
+    public Object getContent(Class[] classes) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public InputStream getInputStream() throws IOException {
+        return connectorResponse.bodyStream();
+    }
 
     @Override
     public OutputStream getOutputStream() throws IOException {
@@ -215,67 +215,62 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public void setDoInput(boolean doinput) {
-        throw new IllegalStateException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean getDoInput() {
-        return super.getDoInput();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setDoOutput(boolean dooutput) {
-        throw new IllegalStateException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean getDoOutput() {
-        return super.getDoOutput();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setAllowUserInteraction(boolean allowuserinteraction) {
-        super.setAllowUserInteraction(allowuserinteraction);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setUseCaches(boolean usecaches) {
-        throw new IllegalStateException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean getUseCaches() {
-        return super.getUseCaches();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setIfModifiedSince(long ifmodifiedsince) {
-        throw new IllegalStateException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public long getIfModifiedSince() {
-        String modifiedSince = connectorResponse.request().header("If-Modified-Since");
-        if (modifiedSince != null) {
-            return GitHubClient.parseDate(modifiedSince).getTime();
-        } else {
-            return 0;
-        }
+        return getHeaderFieldDate("If-Modified-Since", 0);
     }
 
     @Override
     public void setDefaultUseCaches(boolean defaultusecaches) {
-        throw new IllegalStateException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setRequestProperty(String key, String value) {
-        throw new IllegalStateException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void addRequestProperty(String key, String value) {
-        throw new IllegalStateException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -305,7 +300,7 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public boolean usingProxy() {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override

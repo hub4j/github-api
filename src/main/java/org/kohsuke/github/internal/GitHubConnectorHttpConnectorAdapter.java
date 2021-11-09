@@ -7,6 +7,7 @@ import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -152,6 +153,11 @@ public class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, Htt
      */
     static class HttpURLConnectionGitHubConnectorResponse extends GitHubConnectorResponse {
 
+        private boolean inputStreamRead = false;
+        private byte[] inputBytes = null;
+        private boolean errorStreamRead = false;
+        private String errorString = null;
+
         @Nonnull
         private final HttpURLConnection connection;
 
@@ -167,7 +173,18 @@ public class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, Htt
          * {@inheritDoc}
          */
         public InputStream bodyStream() throws IOException {
-            return wrapStream(connection.getInputStream());
+            synchronized (this) {
+                if (!inputStreamRead) {
+                    try (InputStream stream = wrapStream(connection.getInputStream())) {
+                        if (stream != null) {
+                            inputBytes = IOUtils.toByteArray(stream);
+                            inputStreamRead = true;
+                        }
+                    }
+                }
+            }
+
+            return inputBytes == null ? null : new ByteArrayInputStream(inputBytes);
         }
 
         /**
@@ -175,16 +192,22 @@ public class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, Htt
          */
         public String errorMessage() {
             String result = null;
-            InputStream stream = null;
             try {
-                stream = connection.getErrorStream();
-                if (stream != null) {
-                    result = IOUtils.toString(wrapStream(stream), StandardCharsets.UTF_8);
+                synchronized (this) {
+                    if (!errorStreamRead) {
+                        try (InputStream stream = wrapStream(connection.getErrorStream())) {
+                            if (stream != null) {
+                                errorString = new String(IOUtils.toByteArray(stream), StandardCharsets.UTF_8);
+                                errorStreamRead = true;
+                            }
+                        }
+                    }
+                }
+                if (errorString != null) {
+                    result = errorString;
                 }
             } catch (Exception e) {
                 LOGGER.log(FINER, "Ignored exception get error message", e);
-            } finally {
-                IOUtils.closeQuietly(stream);
             }
             return result;
         }

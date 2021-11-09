@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
  * @param <T>
  *            the type of the data parsed from the body of a {@link ResponseInfo}.
  */
-class GitHubResponse<T> {
+public class GitHubResponse<T> {
 
     private static final Logger LOGGER = Logger.getLogger(GitHubResponse.class.getName());
 
@@ -48,14 +48,14 @@ class GitHubResponse<T> {
     GitHubResponse(GitHubResponse<T> response, @CheckForNull T body) {
         this.statusCode = response.statusCode();
         this.request = response.request();
-        this.headers = response.headers();
+        this.headers = response.headers;
         this.body = body;
     }
 
     GitHubResponse(ResponseInfo responseInfo, @CheckForNull T body) {
         this.statusCode = responseInfo.statusCode();
         this.request = responseInfo.request();
-        this.headers = responseInfo.headers();
+        this.headers = responseInfo.allHeaders();
         this.body = body;
     }
 
@@ -159,8 +159,8 @@ class GitHubResponse<T> {
      * @return the headers for this response.
      */
     @Nonnull
-    public Map<String, List<String>> headers() {
-        return headers;
+    public List<String> headers(String field) {
+        return headers.get(field);
     }
 
     /**
@@ -171,7 +171,7 @@ class GitHubResponse<T> {
      * @return the value of the header field, or {@code null} if the header isn't set.
      */
     @CheckForNull
-    public String headerField(String name) {
+    public String header(String name) {
         String result = null;
         List<String> rawResult = headers.get(name);
         if (rawResult != null) {
@@ -207,7 +207,7 @@ class GitHubResponse<T> {
      * body stream will not be readable after a call is completed. Status code, response headers, and request details
      * will still be readable.
      */
-    static abstract class ResponseInfo implements Closeable {
+    public static abstract class ResponseInfo implements Closeable {
 
         private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
                 .nullsFirst(String.CASE_INSENSITIVE_ORDER);
@@ -239,7 +239,7 @@ class GitHubResponse<T> {
          * @return the value of the header field, or {@code null} if the header isn't set.
          */
         @CheckForNull
-        public String headerField(String name) {
+        public String header(String name) {
             String result = null;
             if (headers.containsKey(name)) {
                 result = headers.get(name).get(0);
@@ -267,14 +267,14 @@ class GitHubResponse<T> {
          * @throws IOException
          *             if an I/O Exception occurs.
          */
-        abstract InputStream bodyStream() throws IOException;
+        public abstract InputStream bodyStream() throws IOException;
 
         /**
          * The error message for this response.
          *
          * @return if there is an error with some error string, that is returned. If not, {@code null}.
          */
-        abstract String errorMessage();
+        public abstract String errorMessage();
 
         /**
          * The {@link URL} for this response.
@@ -311,7 +311,7 @@ class GitHubResponse<T> {
          * @return the headers for this response.
          */
         @Nonnull
-        public Map<String, List<String>> headers() {
+        Map<String, List<String>> allHeaders() {
             return headers;
         }
 

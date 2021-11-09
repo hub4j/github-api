@@ -1,9 +1,13 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.internal.Previews;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -29,36 +33,38 @@ import static java.util.Arrays.asList;
  * not specified until late in the building process, so this is still untyped.
  * </p>
  */
-class GitHubRequest {
+public class GitHubRequest {
 
     private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
             .nullsFirst(String.CASE_INSENSITIVE_ORDER);
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
     private final List<Entry> args;
-    private final Map<String, String> headers;
+    private final Map<String, List<String>> headers;
     private final Map<String, Object> injectedMappingValues;
     private final String apiUrl;
     private final String urlPath;
     private final String method;
     private final RateLimitTarget rateLimitTarget;
-    private final InputStream body;
+    private final byte[] body;
     private final boolean forceBody;
 
     private final URL url;
 
     private GitHubRequest(@Nonnull List<Entry> args,
-            @Nonnull Map<String, String> headers,
+            @Nonnull Map<String, List<String>> headers,
             @Nonnull Map<String, Object> injectedMappingValues,
             @Nonnull String apiUrl,
             @Nonnull String urlPath,
             @Nonnull String method,
             @Nonnull RateLimitTarget rateLimitTarget,
-            @CheckForNull InputStream body,
+            @CheckForNull byte[] body,
             boolean forceBody) {
         this.args = Collections.unmodifiableList(new ArrayList<>(args));
-        TreeMap<String, String> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
-        caseInsensitiveMap.putAll(headers);
+        TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList<>(entry.getValue())));
+        }
         this.headers = Collections.unmodifiableMap(caseInsensitiveMap);
         this.injectedMappingValues = Collections.unmodifiableMap(new LinkedHashMap<>(injectedMappingValues));
         this.apiUrl = apiUrl;
@@ -145,6 +151,7 @@ class GitHubRequest {
      *
      * @return the {@link List<Entry>} of arguments
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Already unmodifiable")
     @Nonnull
     public List<Entry> args() {
         return args;
@@ -155,9 +162,26 @@ class GitHubRequest {
      *
      * @return the {@link Map} of headers
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable Map of unmodifiable lists")
     @Nonnull
-    public Map<String, String> headers() {
+    public Map<String, List<String>> allHeaders() {
         return headers;
+    }
+
+    /**
+     * Gets the first value of a header field for this request.
+     *
+     * @param name
+     *            the name of the header field.
+     * @return the value of the header field, or {@code null} if the header isn't set.
+     */
+    @CheckForNull
+    public String header(String name) {
+        List<String> values = headers.get(name);
+        if (values != null) {
+            return values.get(0);
+        }
+        return null;
     }
 
     /**
@@ -165,6 +189,7 @@ class GitHubRequest {
      *
      * @return the {@link Map} of headers
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Already unmodifiable")
     @Nonnull
     public Map<String, Object> injectedMappingValues() {
         return injectedMappingValues;
@@ -196,9 +221,8 @@ class GitHubRequest {
      *
      * @return the content type.
      */
-    @Nonnull
     public String contentType() {
-        return headers.get("Content-type");
+        return header("Content-type");
     }
 
     /**
@@ -208,7 +232,7 @@ class GitHubRequest {
      */
     @CheckForNull
     public InputStream body() {
-        return body;
+        return body != null ? new ByteArrayInputStream(body) : null;
     }
 
     /**
@@ -288,7 +312,7 @@ class GitHubRequest {
          * The header values for this request.
          */
         @Nonnull
-        private final Map<String, String> headers;
+        private final Map<String, List<String>> headers;
 
         /**
          * Injected local data map
@@ -313,7 +337,7 @@ class GitHubRequest {
         @Nonnull
         private RateLimitTarget rateLimitTarget;
 
-        private InputStream body;
+        private byte[] body;
         private boolean forceBody;
 
         /**
@@ -332,17 +356,19 @@ class GitHubRequest {
         }
 
         private Builder(@Nonnull List<Entry> args,
-                @Nonnull Map<String, String> headers,
+                @Nonnull Map<String, List<String>> headers,
                 @Nonnull Map<String, Object> injectedMappingValues,
                 @Nonnull String apiUrl,
                 @Nonnull String urlPath,
                 @Nonnull String method,
                 @Nonnull RateLimitTarget rateLimitTarget,
-                @CheckForNull @WillClose InputStream body,
+                @CheckForNull byte[] body,
                 boolean forceBody) {
             this.args = new ArrayList<>(args);
-            TreeMap<String, String> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
-            caseInsensitiveMap.putAll(headers);
+            TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
+            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+                caseInsensitiveMap.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+            }
             this.headers = caseInsensitiveMap;
             this.injectedMappingValues = new LinkedHashMap<>(injectedMappingValues);
             this.apiUrl = apiUrl;
@@ -396,7 +422,9 @@ class GitHubRequest {
          * @return the request builder
          */
         public B setHeader(String name, String value) {
-            headers.put(name, value);
+            List<String> field = new ArrayList<>();
+            field.add(value);
+            headers.put(name, field);
             return (B) this;
         }
 
@@ -410,11 +438,13 @@ class GitHubRequest {
          * @return the request builder
          */
         public B withHeader(String name, String value) {
-            String oldValue = headers.get(name);
-            if (!StringUtils.isBlank(oldValue)) {
-                value = oldValue + ", " + value;
+            List<String> field = headers.get(name);
+            if (field == null) {
+                setHeader(name, value);
+            } else {
+                field.add(value);
             }
-            return setHeader(name, value);
+            return (B) this;
         }
 
         /**
@@ -565,8 +595,9 @@ class GitHubRequest {
          *            the body
          * @return the request builder
          */
-        public B with(@WillClose /* later */ InputStream body) {
-            this.body = body;
+        public B with(@WillClose InputStream body) throws IOException {
+            this.body = IOUtils.toByteArray(body);
+            IOUtils.closeQuietly(body);
             return (B) this;
         }
 
@@ -665,7 +696,7 @@ class GitHubRequest {
          * @return the request builder
          */
         public B contentType(String contentType) {
-            this.headers.put("Content-type", contentType);
+            this.setHeader("Content-type", contentType);
             return (B) this;
         }
 

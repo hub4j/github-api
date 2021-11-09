@@ -62,7 +62,7 @@ class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
     public GitHubResponse.ResponseInfo send(GitHubRequest request) throws IOException {
         HttpURLConnection connection;
         try {
-            connection = HttpURLConnectionResponseInfo.setupConnection(httpConnector, request);
+            connection = setupConnection(httpConnector, request);
         } catch (IOException e) {
             // An error in here should be wrapped to bypass http exception wrapping.
             throw new GHIOException(e.getMessage(), e);
@@ -74,6 +74,63 @@ class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
         Map<String, List<String>> headers = connection.getHeaderFields();
 
         return new HttpURLConnectionResponseInfo(request, statusCode, headers, connection);
+    }
+
+    @Nonnull
+    static HttpURLConnection setupConnection(@Nonnull HttpConnector connector, @Nonnull GitHubRequest request)
+            throws IOException {
+        HttpURLConnection connection = connector.connect(request.url());
+        setRequestMethod(request.method(), connection);
+        buildRequest(request, connection);
+
+        return connection;
+    }
+
+    /**
+     * Set up the request parameters or POST payload.
+     */
+    private static void buildRequest(GitHubRequest request, HttpURLConnection connection) throws IOException {
+        for (Map.Entry<String, List<String>> e : request.allHeaders().entrySet()) {
+            List<String> v = e.getValue();
+            if (v != null)
+                connection.setRequestProperty(e.getKey(), String.join(", ", v));
+        }
+
+        if (request.inBody()) {
+            connection.setDoOutput(true);
+            IOUtils.copyLarge(request.body(), connection.getOutputStream());
+        }
+    }
+
+    private static void setRequestMethod(String method, HttpURLConnection connection) throws IOException {
+        try {
+            connection.setRequestMethod(method);
+        } catch (ProtocolException e) {
+            // JDK only allows one of the fixed set of verbs. Try to override that
+            try {
+                Field $method = HttpURLConnection.class.getDeclaredField("method");
+                $method.setAccessible(true);
+                $method.set(connection, method);
+            } catch (Exception x) {
+                throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
+            }
+            // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
+            try {
+                Field $delegate = connection.getClass().getDeclaredField("delegate");
+                $delegate.setAccessible(true);
+                Object delegate = $delegate.get(connection);
+                if (delegate instanceof HttpURLConnection) {
+                    HttpURLConnection nested = (HttpURLConnection) delegate;
+                    setRequestMethod(method, nested);
+                }
+            } catch (NoSuchFieldException x) {
+                // no problem
+            } catch (IllegalAccessException x) {
+                throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
+            }
+        }
+        if (!connection.getRequestMethod().equals(method))
+            throw new IllegalStateException("Failed to set the request method to " + method);
     }
 
     /**
@@ -95,80 +152,17 @@ class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
             this.connection = connection;
         }
 
-        @Nonnull
-        static HttpURLConnection setupConnection(@Nonnull HttpConnector connector, @Nonnull GitHubRequest request)
-                throws IOException {
-            HttpURLConnection connection = connector.connect(request.url());
-            setRequestMethod(request.method(), connection);
-            buildRequest(request, connection);
-
-            return connection;
-        }
-
-        /**
-         * Set up the request parameters or POST payload.
-         */
-        private static void buildRequest(GitHubRequest request, HttpURLConnection connection) throws IOException {
-            for (Map.Entry<String, String> e : request.headers().entrySet()) {
-                String v = e.getValue();
-                if (v != null)
-                    connection.setRequestProperty(e.getKey(), v);
-            }
-
-            if (request.inBody()) {
-                connection.setDoOutput(true);
-                try (InputStream body = request.body()) {
-                    byte[] bytes = new byte[32768];
-                    int read;
-                    while ((read = body.read(bytes)) != -1) {
-                        connection.getOutputStream().write(bytes, 0, read);
-                    }
-                }
-            }
-        }
-
-        private static void setRequestMethod(String method, HttpURLConnection connection) throws IOException {
-            try {
-                connection.setRequestMethod(method);
-            } catch (ProtocolException e) {
-                // JDK only allows one of the fixed set of verbs. Try to override that
-                try {
-                    Field $method = HttpURLConnection.class.getDeclaredField("method");
-                    $method.setAccessible(true);
-                    $method.set(connection, method);
-                } catch (Exception x) {
-                    throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
-                }
-                // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
-                try {
-                    Field $delegate = connection.getClass().getDeclaredField("delegate");
-                    $delegate.setAccessible(true);
-                    Object delegate = $delegate.get(connection);
-                    if (delegate instanceof HttpURLConnection) {
-                        HttpURLConnection nested = (HttpURLConnection) delegate;
-                        setRequestMethod(method, nested);
-                    }
-                } catch (NoSuchFieldException x) {
-                    // no problem
-                } catch (IllegalAccessException x) {
-                    throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
-                }
-            }
-            if (!connection.getRequestMethod().equals(method))
-                throw new IllegalStateException("Failed to set the request method to " + method);
-        }
-
         /**
          * {@inheritDoc}
          */
-        InputStream bodyStream() throws IOException {
+        public InputStream bodyStream() throws IOException {
             return wrapStream(connection.getInputStream());
         }
 
         /**
          * {@inheritDoc}
          */
-        String errorMessage() {
+        public String errorMessage() {
             String result = null;
             InputStream stream = null;
             try {
@@ -192,7 +186,7 @@ class GitHubConnectorHttpConnectorAdapter implements GitHubConnector {
          *
          */
         private InputStream wrapStream(InputStream stream) throws IOException {
-            String encoding = headerField("Content-Encoding");
+            String encoding = header("Content-Encoding");
             if (encoding == null || stream == null)
                 return stream;
             if (encoding.equals("gzip"))

@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.Permission;
 import java.util.*;
 
@@ -44,7 +45,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String getHeaderField(int n) {
-        return responseInfo.headerField(responseInfo.headerFieldKey(n));
+        return responseInfo.header(responseInfo.headerFieldKey(n));
     }
 
     @Override
@@ -74,7 +75,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String getResponseMessage() throws IOException {
-        return responseInfo.headerField("Status");
+        return responseInfo.header("Status");
     }
 
     @Override
@@ -94,7 +95,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public InputStream getErrorStream() {
-        return new ByteArrayInputStream(responseInfo.errorMessage().getBytes());
+        return new ByteArrayInputStream(responseInfo.errorMessage().getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -137,12 +138,12 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String getContentType() {
-        return responseInfo.headerField("content-type");
+        return responseInfo.header("content-type");
     }
 
     @Override
     public String getContentEncoding() {
-        return responseInfo.headerField("content-encoding");
+        return responseInfo.header("content-encoding");
     }
 
     @Override
@@ -162,12 +163,12 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String getHeaderField(String name) {
-        return responseInfo.headerField(name);
+        return responseInfo.header(name);
     }
 
     @Override
     public Map<String, List<String>> getHeaderFields() {
-        return responseInfo.headers();
+        return responseInfo.allHeaders();
     }
 
     @Override
@@ -257,7 +258,7 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public long getIfModifiedSince() {
-        String modifiedSince = responseInfo.request().headers().get("If-Modified-Since");
+        String modifiedSince = responseInfo.request().header("If-Modified-Since");
         if (modifiedSince != null) {
             return GitHubClient.parseDate(modifiedSince).getTime();
         } else {
@@ -282,17 +283,12 @@ class GitHubResponseInfoHttpURLConnectionAdapter extends HttpURLConnection {
 
     @Override
     public String getRequestProperty(String key) {
-        return responseInfo.request().headers().get(key);
+        return responseInfo.request().header(key);
     }
 
     @Override
     public Map<String, List<String>> getRequestProperties() {
-        TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
-        responseInfo.request()
-                .headers()
-                .forEach((key, value) -> caseInsensitiveMap.put(key, Collections.singletonList(value)));
-
-        return Collections.unmodifiableMap(caseInsensitiveMap);
+        return responseInfo.request().allHeaders();
     }
 
     @Override

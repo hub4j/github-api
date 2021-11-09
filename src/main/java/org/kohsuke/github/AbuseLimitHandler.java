@@ -35,8 +35,8 @@ public abstract class AbuseLimitHandler {
     void onError(GitHubResponse.ResponseInfo responseInfo) throws IOException {
         GHIOException e = new HttpException("Abuse limit violation",
                 responseInfo.statusCode(),
-                responseInfo.headerField("Status"),
-                responseInfo.url().toString()).withResponseHeaderFields(responseInfo.headers());
+                responseInfo.header("Status"),
+                responseInfo.url().toString()).withResponseHeaderFields(responseInfo.allHeaders());
         onError(e, new GitHubResponseInfoHttpURLConnectionAdapter(responseInfo));
     }
 

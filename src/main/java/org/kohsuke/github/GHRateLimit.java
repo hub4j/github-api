@@ -449,7 +449,7 @@ public class GHRateLimit {
             this.resetEpochSeconds = resetEpochSeconds;
             String updatedAt = null;
             if (responseInfo != null) {
-                updatedAt = responseInfo.headerField("Date");
+                updatedAt = responseInfo.header("Date");
             }
             this.resetDate = calculateResetDate(updatedAt);
         }

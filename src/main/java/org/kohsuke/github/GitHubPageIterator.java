@@ -157,7 +157,7 @@ class GitHubPageIterator<T> implements Iterator<T> {
      */
     private GitHubRequest findNextURL(GitHubResponse<T> nextResponse) throws MalformedURLException {
         GitHubRequest result = null;
-        String link = nextResponse.headerField("Link");
+        String link = nextResponse.header("Link");
         if (link != null) {
             for (String token : link.split(", ")) {
                 if (token.endsWith("rel=\"next\"")) {

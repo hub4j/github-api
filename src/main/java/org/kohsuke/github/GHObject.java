@@ -45,7 +45,7 @@ public abstract class GHObject extends GitHubInteractiveObject {
     @JacksonInject
     protected void setResponseHeaderFields(@CheckForNull GitHubResponse.ResponseInfo responseInfo) {
         if (responseInfo != null) {
-            responseHeaderFields = responseInfo.headers();
+            responseHeaderFields = responseInfo.allHeaders();
         }
     }
 

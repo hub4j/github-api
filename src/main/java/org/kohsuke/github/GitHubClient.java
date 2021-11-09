@@ -367,7 +367,6 @@ class GitHubClient {
                 try {
                     logRequest(request);
                     rateLimitChecker.checkRateLimit(this, request);
-                    resetRequest(request, retries);
                     responseInfo = connector.send(request);
                     noteRateLimit(responseInfo);
                     detectOTPRequired(responseInfo);
@@ -405,7 +404,7 @@ class GitHubClient {
         GitHubRequest.Builder<?> builder = request.toBuilder();
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
-        if (!request.headers().containsKey("Authorization")) {
+        if (!request.allHeaders().containsKey("Authorization")) {
             String authorization = getEncodedAuthorization();
             if (authorization != null) {
                 builder.setHeader("Authorization", authorization);
@@ -428,12 +427,6 @@ class GitHubClient {
         }
 
         return builder.build();
-    }
-
-    private void resetRequest(GitHubRequest request, int retries) throws IOException {
-        if (retries != CONNECTION_ERROR_RETRIES && request.inBody()) {
-            request.body().reset();
-        }
     }
 
     private void logRequest(@Nonnull final GitHubRequest request) {
@@ -491,8 +484,8 @@ class GitHubClient {
 
         if (responseInfo != null) {
             statusCode = responseInfo.statusCode();
-            message = responseInfo.headerField("Status");
-            headers = responseInfo.headers();
+            message = responseInfo.header("Status");
+            headers = responseInfo.allHeaders();
             errorMessage = responseInfo.errorMessage();
         }
 
@@ -514,12 +507,12 @@ class GitHubClient {
 
     protected static boolean isRateLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
         return responseInfo.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
-                && "0".equals(responseInfo.headerField("X-RateLimit-Remaining"));
+                && "0".equals(responseInfo.header("X-RateLimit-Remaining"));
     }
 
     protected static boolean isAbuseLimitResponse(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
         return responseInfo.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
-                && responseInfo.headerField("Retry-After") != null;
+                && responseInfo.header("Retry-After") != null;
     }
 
     private static boolean retryConnectionError(IOException e, URL url, int retries) throws IOException {
@@ -552,8 +545,8 @@ class GitHubClient {
         // their 404 responses, this will result in at worst two requests being made for each 404
         // responses. However, only the second request will count against rate limit.
         if (responseInfo.statusCode() == 404 && Objects.equals(responseInfo.request().method(), "GET")
-                && responseInfo.headerField("ETag") != null
-                && !Objects.equals(responseInfo.request().headers().get("Cache-Control"), "no-cache")) {
+                && responseInfo.header("ETag") != null
+                && !Objects.equals(responseInfo.request().header("Cache-Control"), "no-cache")) {
             LOGGER.log(FINE,
                     "Encountered GitHub invalid cached 404 from " + responseInfo.url()
                             + ". Retrying with \"Cache-Control\"=\"no-cache\"...");
@@ -564,11 +557,11 @@ class GitHubClient {
 
     private void noteRateLimit(@Nonnull GitHubResponse.ResponseInfo responseInfo) {
         try {
-            String limitString = Objects.requireNonNull(responseInfo.headerField("X-RateLimit-Limit"),
+            String limitString = Objects.requireNonNull(responseInfo.header("X-RateLimit-Limit"),
                     "Missing X-RateLimit-Limit");
-            String remainingString = Objects.requireNonNull(responseInfo.headerField("X-RateLimit-Remaining"),
+            String remainingString = Objects.requireNonNull(responseInfo.header("X-RateLimit-Remaining"),
                     "Missing X-RateLimit-Remaining");
-            String resetString = Objects.requireNonNull(responseInfo.headerField("X-RateLimit-Reset"),
+            String resetString = Objects.requireNonNull(responseInfo.header("X-RateLimit-Reset"),
                     "Missing X-RateLimit-Reset");
             int limit, remaining;
             long reset;
@@ -587,8 +580,8 @@ class GitHubClient {
         if (responseInfo.statusCode() == HTTP_UNAUTHORIZED) {
             // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
             // will be returned indicating the user needs to respond with an otp
-            if (responseInfo.headerField("X-GitHub-OTP") != null) {
-                throw new GHOTPRequiredException().withResponseHeaderFields(responseInfo.headers());
+            if (responseInfo.header("X-GitHub-OTP") != null) {
+                throw new GHOTPRequiredException().withResponseHeaderFields(responseInfo.allHeaders());
             }
         }
     }
@@ -642,7 +635,7 @@ class GitHubClient {
     private boolean isPrivateModeEnabled() {
         try {
             GitHubResponse<?> response = sendRequest(GitHubRequest.newBuilder().withApiUrl(getApiUrl()), null);
-            return response.statusCode() == HTTP_UNAUTHORIZED && response.headerField("X-GitHub-Media-Type") != null;
+            return response.statusCode() == HTTP_UNAUTHORIZED && response.header("X-GitHub-Media-Type") != null;
         } catch (IOException e) {
             return false;
         }

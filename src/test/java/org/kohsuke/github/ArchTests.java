@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import java.io.Closeable;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
@@ -114,9 +115,11 @@ public class ArchTests {
                         targetMethodIs(ReflectionToStringBuilder.class, "accept", Field.class),
                         targetMethodIs(IOUtils.class, "closeQuietly", InputStream.class),
                         targetMethodIs(IOUtils.class, "closeQuietly", Closeable.class),
+                        targetMethodIs(IOUtils.class, "copyLarge", InputStream.class, OutputStream.class),
                         targetMethodIs(IOUtils.class, "toString", InputStream.class, Charset.class),
                         targetMethodIs(IOUtils.class, "toString", Reader.class),
-                        targetMethodIs(IOUtils.class, "toByteArray", InputStream.class)))
+                        targetMethodIs(IOUtils.class, "toByteArray", InputStream.class),
+                        targetMethodIs(IOUtils.class, "write", byte[].class, OutputStream.class)))
                 .because(
                         "Commons methods must be manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier.");
 

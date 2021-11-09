@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.extras.ImpatientHttpConnector;
-import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
+import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
 import org.mockito.Mockito;
 
 import java.io.ByteArrayOutputStream;
@@ -86,7 +86,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
                 .connectionPool(new ConnectionPool(2, 100, TimeUnit.MILLISECONDS))
                 .build();
 
-        OkHttpConnector connector = new OkHttpConnector(client);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client);
 
         for (int x = 0; x < 100; x++) {
 

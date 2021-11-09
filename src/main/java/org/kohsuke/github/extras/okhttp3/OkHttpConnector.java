@@ -1,27 +1,16 @@
 package org.kohsuke.github.extras.okhttp3;
 
-import okhttp3.*;
-import org.apache.commons.io.IOUtils;
-import org.kohsuke.github.*;
-import org.kohsuke.github.connector.GitHubConnector;
-import org.kohsuke.github.connector.GitHubConnectorRequest;
-import org.kohsuke.github.connector.GitHubConnectorResponse;
+import okhttp3.CacheControl;
+import okhttp3.ConnectionSpec;
+import okhttp3.OkHttpClient;
+import org.kohsuke.github.HttpConnector;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-import java.util.zip.GZIPInputStream;
-
-import javax.annotation.Nonnull;
-
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static java.util.logging.Level.FINER;
 
 /**
  * {@link HttpConnector} for {@link OkHttpClient}.
@@ -31,12 +20,15 @@ import static java.util.logging.Level.FINER;
  *
  * @author Liam Newman
  * @author Kohsuke Kawaguchi
+ * @deprecated Use OkHttpGitHubConnector instead.
  */
-public class OkHttpConnector implements GitHubConnector {
+@Deprecated
+public class OkHttpConnector implements HttpConnector {
     private static final String HEADER_NAME = "Cache-Control";
     private final String maxAgeHeaderValue;
 
     private final OkHttpClient client;
+    private final ObsoleteUrlFactory urlFactory;
 
     /**
      * Instantiates a new Ok http connector.
@@ -67,117 +59,26 @@ public class OkHttpConnector implements GitHubConnector {
         } else {
             maxAgeHeaderValue = null;
         }
+        this.urlFactory = new ObsoleteUrlFactory(this.client);
     }
 
-    @Override
-    public GitHubConnectorResponse send(GitHubConnectorRequest request) throws IOException {
-        Request.Builder builder = new Request.Builder().url(request.url());
-        if (maxAgeHeaderValue != null && request.header(HEADER_NAME) == null) {
+    public HttpURLConnection connect(URL url) throws IOException {
+        HttpURLConnection urlConnection = urlFactory.open(url);
+        if (maxAgeHeaderValue != null) {
             // By default OkHttp honors max-age, meaning it will use local cache
             // without checking the network within that timeframe.
             // However, that can result in stale data being returned during that time so
             // we force network-based checking no matter how often the query is made.
             // OkHttp still automatically does ETag checking and returns cached data when
             // GitHub reports 304, but those do not count against rate limit.
-            builder.header(HEADER_NAME, maxAgeHeaderValue);
+            urlConnection.setRequestProperty(HEADER_NAME, maxAgeHeaderValue);
         }
 
-        for (Map.Entry<String, List<String>> e : request.allHeaders().entrySet()) {
-            List<String> v = e.getValue();
-            if (v != null) {
-                builder.addHeader(e.getKey(), String.join(", ", v));
-            }
-        }
-
-        RequestBody body = null;
-        if (request.hasBody()) {
-            body = RequestBody.create(IOUtils.toByteArray(request.body()));
-        }
-        builder.method(request.method(), body);
-        Request okhttpRequest = builder.build();
-        Response okhttpResponse = client.newCall(okhttpRequest).execute();
-
-        return new OkHttpGitHubConnectorResponse(request, okhttpResponse);
+        return urlConnection;
     }
 
     /** Returns connection spec with TLS v1.2 in it */
     private List<ConnectionSpec> TlsConnectionSpecs() {
         return Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT);
-    }
-
-    /**
-     * Initial response information when a response is initially received and before the body is processed.
-     *
-     * Implementation specific to {@link okhttp3.Response}.
-     */
-    static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse {
-
-        @Nonnull
-        private final Response response;
-
-        OkHttpGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request, @Nonnull Response response) {
-            super(request, response.code(), response.headers().toMultimap());
-            this.response = response;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public InputStream bodyStream() throws IOException {
-            if (response.code() >= HTTP_BAD_REQUEST) {
-                if (response.code() == HTTP_NOT_FOUND) {
-                    throw new FileNotFoundException(request().url().toString());
-                } else {
-                    throw new HttpException(errorMessage(),
-                            response.code(),
-                            response.message(),
-                            request().url().toString());
-                }
-            }
-
-            ResponseBody body = response.body();
-            InputStream bytes = body != null ? body.byteStream() : null;
-            return wrapStream(bytes);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public String errorMessage() {
-            String result = null;
-            try {
-                if (!response.isSuccessful()) {
-                    ResponseBody body = response.body();
-                    result = body != null ? body.string() : null;
-                }
-            } catch (Exception e) {
-                LOGGER.log(FINER, "Ignored exception get error message", e);
-            }
-            return result;
-        }
-
-        /**
-         * Handles the "Content-Encoding" header.
-         *
-         * @param stream
-         *            the stream to possibly wrap
-         *
-         */
-        private InputStream wrapStream(InputStream stream) throws IOException {
-            String encoding = header("Content-Encoding");
-            if (encoding == null || stream == null)
-                return stream;
-            if (encoding.equals("gzip"))
-                return new GZIPInputStream(stream);
-
-            throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
-        }
-
-        @Override
-        public void close() throws IOException {
-            response.close();
-        }
-
-        private static final Logger LOGGER = Logger.getLogger(OkHttpConnector.class.getName());
     }
 }

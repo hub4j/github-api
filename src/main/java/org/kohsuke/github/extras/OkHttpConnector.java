@@ -5,6 +5,7 @@ import com.squareup.okhttp.ConnectionSpec;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
 import org.kohsuke.github.HttpConnector;
+import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -26,9 +27,8 @@ import javax.net.ssl.SSLSocketFactory;
  *
  * @author Roberto Tyley
  * @author Kohsuke Kawaguchi
- * @deprecated This class depends on an unsupported version of OkHttp. Switch to
- *             {@link org.kohsuke.github.extras.okhttp3.OkHttpConnector}.
- * @see org.kohsuke.github.extras.okhttp3.OkHttpConnector
+ * @deprecated This class depends on an unsupported version of OkHttp. Switch to {@link OkHttpGitHubConnector}.
+ * @see OkHttpGitHubConnector
  */
 @Deprecated
 public class OkHttpConnector implements HttpConnector {

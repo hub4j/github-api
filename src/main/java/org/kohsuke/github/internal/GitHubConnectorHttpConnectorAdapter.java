@@ -26,8 +26,10 @@ import static java.util.logging.Level.*;
 
 /**
  * Adapts an HttpConnector to be usable as GitHubConnector.
+ *
+ * For internal use only.
  */
-public class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, HttpConnector {
+public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, HttpConnector {
 
     final HttpConnector httpConnector;
 
@@ -149,9 +151,11 @@ public class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, Htt
      * Initial response information supplied to a {@link org.kohsuke.github.function.BodyHandler} when a response is
      * initially received and before the body is processed.
      *
-     * Implementation specific to {@link HttpURLConnection}.
+     * Implementation specific to {@link HttpURLConnection}. For internal use only.
+     *
+     *
      */
-    static class HttpURLConnectionGitHubConnectorResponse extends GitHubConnectorResponse {
+    public final static class HttpURLConnectionGitHubConnectorResponse extends GitHubConnectorResponse {
 
         private boolean inputStreamRead = false;
         private byte[] inputBytes = null;

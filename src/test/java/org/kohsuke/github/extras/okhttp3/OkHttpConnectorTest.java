@@ -24,7 +24,7 @@ import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
- * Test showing the behavior of OkHttpConnector with and without cache.
+ * Test showing the behavior of OkHttpGitHubConnector with and without cache.
  * <p>
  * Key take aways:
  *
@@ -115,7 +115,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     public void OkHttpConnector_NoCache() throws Exception {
 
         OkHttpClient client = createClient(false);
-        OkHttpConnector connector = new OkHttpConnector(client);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -140,7 +140,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(client, -1);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client, -1);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -169,7 +169,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", mockGitHub.isUseProxy());
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(client, 3);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client, 3);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -193,7 +193,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(client);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)

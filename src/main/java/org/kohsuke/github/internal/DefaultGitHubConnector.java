@@ -3,7 +3,7 @@ package org.kohsuke.github.internal;
 import okhttp3.OkHttpClient;
 import org.kohsuke.github.HttpConnector;
 import org.kohsuke.github.connector.GitHubConnector;
-import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
+import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
 
 /**
  * Internal class that selects what kind of {@link GitHubConnector} will be the default.
@@ -30,7 +30,7 @@ public class DefaultGitHubConnector {
     public static GitHubConnector create() {
         String defaultConnectorProperty = System.getProperty("test.github.connector", "default");
         if (defaultConnectorProperty.equalsIgnoreCase("okhttp")) {
-            return new OkHttpConnector(new OkHttpClient.Builder().build());
+            return new OkHttpGitHubConnector(new OkHttpClient.Builder().build());
         } else if (defaultConnectorProperty.equalsIgnoreCase("httpconnector")) {
             return new GitHubConnectorHttpConnectorAdapter(HttpConnector.DEFAULT);
         } else if (defaultConnectorProperty.equalsIgnoreCase("default")) {

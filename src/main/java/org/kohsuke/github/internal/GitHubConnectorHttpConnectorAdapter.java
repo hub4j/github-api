@@ -1,13 +1,14 @@
 package org.kohsuke.github.internal;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.NotNull;
 import org.kohsuke.github.*;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -22,6 +23,8 @@ import java.util.zip.GZIPInputStream;
 
 import javax.annotation.Nonnull;
 
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.util.logging.Level.*;
 
 /**
@@ -31,6 +34,9 @@ import static java.util.logging.Level.*;
  */
 public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, HttpConnector {
 
+    /**
+     * Internal for testing.
+     */
     final HttpConnector httpConnector;
 
     /**
@@ -52,8 +58,8 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
      *            the HttpConnector to be adapted.
      * @return a GitHubConnector that calls into the provided HttpConnector.
      */
-    @NotNull
-    public static GitHubConnector adapt(HttpConnector connector) {
+    @Nonnull
+    public static GitHubConnector adapt(@Nonnull HttpConnector connector) {
         GitHubConnector gitHubConnector;
         if (connector == HttpConnector.DEFAULT) {
             gitHubConnector = GitHubConnector.DEFAULT;
@@ -152,8 +158,6 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
      * initially received and before the body is processed.
      *
      * Implementation specific to {@link HttpURLConnection}. For internal use only.
-     *
-     *
      */
     public final static class HttpURLConnectionGitHubConnectorResponse extends GitHubConnectorResponse {
 
@@ -177,14 +181,25 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
          * {@inheritDoc}
          */
         public InputStream bodyStream() throws IOException {
+            if (connection.getResponseCode() >= HTTP_BAD_REQUEST) {
+                if (connection.getResponseCode() == HTTP_NOT_FOUND) {
+                    throw new FileNotFoundException(request().url().toString());
+                } else {
+                    throw new HttpException(errorMessage(),
+                            connection.getResponseCode(),
+                            connection.getResponseMessage(),
+                            connection.getURL().toString());
+                }
+            }
+
             synchronized (this) {
                 if (!inputStreamRead) {
                     try (InputStream stream = wrapStream(connection.getInputStream())) {
                         if (stream != null) {
                             inputBytes = IOUtils.toByteArray(stream);
-                            inputStreamRead = true;
                         }
                     }
+                    inputStreamRead = true;
                 }
             }
 
@@ -202,9 +217,9 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
                         try (InputStream stream = wrapStream(connection.getErrorStream())) {
                             if (stream != null) {
                                 errorString = new String(IOUtils.toByteArray(stream), StandardCharsets.UTF_8);
-                                errorStreamRead = true;
                             }
                         }
+                        errorStreamRead = true;
                     }
                 }
                 if (errorString != null) {
@@ -214,6 +229,13 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
                 LOGGER.log(FINER, "Ignored exception get error message", e);
             }
             return result;
+        }
+
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" },
+                justification = "Internal implementation class. Should not be used externally.")
+        @Nonnull
+        public HttpURLConnection getConnection() {
+            return connection;
         }
 
         /**

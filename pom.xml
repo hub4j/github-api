@@ -162,15 +162,13 @@
 
 
                       <!-- Deprecated -->
-                      <exclude>org.kohsuke.github.extras.okhttp3.OkHttpConnector</exclude>
-                      <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
+                      <exclude>org.kohsuke.github.extras.OkHttpConnector</exclude>
                       <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
                       <exclude>org.kohsuke.github.EnforcementLevel</exclude>
                       <exclude>org.kohsuke.github.GHPerson.1</exclude>
                       <exclude>org.kohsuke.github.GHCompare.User</exclude>
 
                       <!-- TODO: Some coverage, but more needed -->
-                      <exclude>org.kohsuke.github.GitHubConnectorResponseHttpUrlConnectionAdapter</exclude>
                       <exclude>org.kohsuke.github.GHPullRequestReviewBuilder.DraftReviewComment</exclude>
                       <exclude>org.kohsuke.github.GHIssue.PullRequest</exclude>
                       <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
@@ -585,6 +583,17 @@
                 <configuration>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
                   <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttp</argLine>
+                </configuration>
+              </execution>
+              <execution>
+                <id>okhttpconnector-test</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttpconnector</argLine>
                 </configuration>
               </execution>
               <execution>

@@ -334,7 +334,7 @@ public class GitHubBuilder implements Cloneable {
      *            the connector
      * @return the git hub builder
      */
-    public GitHubBuilder withConnector(HttpConnector connector) {
+    public GitHubBuilder withConnector(@Nonnull HttpConnector connector) {
         return withConnector(GitHubConnectorHttpConnectorAdapter.adapt(connector));
     }
 

@@ -16,7 +16,6 @@ import org.kohsuke.github.GitHub;
 import java.io.File;
 import java.io.IOException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -24,7 +23,7 @@ import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
- * Test showing the behavior of OkHttpConnector with and without cache.
+ * Test showing the behavior of OkHttpGitHubConnector with and without cache.
  * <p>
  * Key take aways:
  *
@@ -43,9 +42,9 @@ import static org.junit.Assume.assumeTrue;
  *
  * @author Liam Newman
  */
-public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
+public class OkHttpGitHubConnectorTest extends AbstractGitHubWireMockTest {
 
-    public OkHttpConnectorTest() {
+    public OkHttpGitHubConnectorTest() {
         useDefaultGitHub = false;
     }
 
@@ -74,7 +73,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     protected WireMockConfiguration getWireMockOptions() {
         return super.getWireMockOptions()
                 // Use the same data files as the 2.x test
-                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
+                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/OkHttpGitHubConnector", "/OkHttpConnector"))
                 .extensions(templating.newResponseTransformer());
     }
 
@@ -115,7 +114,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     public void OkHttpConnector_NoCache() throws Exception {
 
         OkHttpClient client = createClient(false);
-        OkHttpConnector connector = new OkHttpConnector(client);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -140,7 +139,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(client, -1);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client, -1);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -169,7 +168,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable)", mockGitHub.isUseProxy());
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(client, 3);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client, 3);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -193,7 +192,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(client);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)

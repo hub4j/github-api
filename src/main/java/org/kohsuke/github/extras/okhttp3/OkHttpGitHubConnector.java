@@ -7,9 +7,11 @@ import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -112,6 +114,9 @@ public class OkHttpGitHubConnector implements GitHubConnector {
      */
     static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse {
 
+        private boolean bodyBytesRead = false;
+        private byte[] bodyBytes = null;
+
         @Nonnull
         private final Response response;
 
@@ -135,9 +140,27 @@ public class OkHttpGitHubConnector implements GitHubConnector {
                 }
             }
 
-            ResponseBody body = response.body();
-            InputStream bytes = body != null ? body.byteStream() : null;
-            return wrapStream(bytes);
+            readBodyBytes();
+            InputStream stream = bodyBytes == null ? null : new ByteArrayInputStream(bodyBytes);
+            return stream;
+        }
+
+        private void readBodyBytes() throws IOException {
+            synchronized (this) {
+                if (!bodyBytesRead) {
+                    try (ResponseBody body = response.body()) {
+                        if (body != null) {
+                            try (InputStream stream = wrapStream(body.byteStream())) {
+                                if (stream != null) {
+                                    bodyBytes = IOUtils.toByteArray(stream);
+                                }
+                            }
+                        }
+                    }
+                    bodyBytesRead = true;
+                }
+
+            }
         }
 
         /**
@@ -147,8 +170,8 @@ public class OkHttpGitHubConnector implements GitHubConnector {
             String result = null;
             try {
                 if (!response.isSuccessful()) {
-                    ResponseBody body = response.body();
-                    result = body != null ? body.string() : null;
+                    readBodyBytes();
+                    result = bodyBytes == null ? null : new String(bodyBytes, StandardCharsets.UTF_8);
                 }
             } catch (Exception e) {
                 LOGGER.log(FINER, "Ignored exception get error message", e);

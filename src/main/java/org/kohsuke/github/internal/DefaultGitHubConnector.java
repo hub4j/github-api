@@ -3,6 +3,7 @@ package org.kohsuke.github.internal;
 import okhttp3.OkHttpClient;
 import org.kohsuke.github.HttpConnector;
 import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
 import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
 
 /**
@@ -29,15 +30,21 @@ public class DefaultGitHubConnector {
      */
     public static GitHubConnector create() {
         String defaultConnectorProperty = System.getProperty("test.github.connector", "default");
+        return create(defaultConnectorProperty);
+    }
+
+    static GitHubConnector create(String defaultConnectorProperty) {
+
         if (defaultConnectorProperty.equalsIgnoreCase("okhttp")) {
             return new OkHttpGitHubConnector(new OkHttpClient.Builder().build());
-        } else if (defaultConnectorProperty.equalsIgnoreCase("httpconnector")) {
-            return new GitHubConnectorHttpConnectorAdapter(HttpConnector.DEFAULT);
-        } else if (defaultConnectorProperty.equalsIgnoreCase("default")) {
+        } else if (defaultConnectorProperty.equalsIgnoreCase("okhttpconnector")) {
+            return new GitHubConnectorHttpConnectorAdapter(new OkHttpConnector(new OkHttpClient.Builder().build()));
+        } else if (defaultConnectorProperty.equalsIgnoreCase("urlconnection")
+                || defaultConnectorProperty.equalsIgnoreCase("default")) {
             return new GitHubConnectorHttpConnectorAdapter(HttpConnector.DEFAULT);
         } else {
             throw new IllegalStateException(
-                    "Property 'test.github.connector' must reference a valid built-in connector - okhttp, httpconnector, or default.");
+                    "Property 'test.github.connector' must reference a valid built-in connector - okhttp, okhttpconnector, urlconnection, or default.");
         }
     }
 }

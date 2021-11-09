@@ -280,7 +280,7 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public Map<String, List<String>> getRequestProperties() {
-        return connectorResponse.request().allHeaders();
+        throw new IllegalStateException("Already connected");
     }
 
     @Override

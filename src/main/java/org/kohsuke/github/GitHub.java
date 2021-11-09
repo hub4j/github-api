@@ -488,7 +488,7 @@ public class GitHub {
      * @deprecated HttpConnector should not be changed. If you find yourself needing to do this, file an issue.
      */
     @Deprecated
-    public void setConnector(HttpConnector connector) {
+    public void setConnector(@Nonnull HttpConnector connector) {
         client.setConnector(GitHubConnectorHttpConnectorAdapter.adapt(connector));
     }
 

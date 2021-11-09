@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.kohsuke.github.connector.GitHubConnectorResponse;
+import org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -41,7 +42,14 @@ public abstract class AbuseLimitHandler {
                 connectorResponse.statusCode(),
                 connectorResponse.header("Status"),
                 connectorResponse.request().url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());
-        onError(e, new GitHubConnectorResponseHttpUrlConnectionAdapter(connectorResponse));
+        HttpURLConnection connection;
+        if (connectorResponse instanceof GitHubConnectorHttpConnectorAdapter.HttpURLConnectionGitHubConnectorResponse) {
+            connection = ((GitHubConnectorHttpConnectorAdapter.HttpURLConnectionGitHubConnectorResponse) connectorResponse)
+                    .getConnection();
+        } else {
+            connection = new GitHubConnectorResponseHttpUrlConnectionAdapter(connectorResponse);
+        }
+        onError(e, connection);
     }
 
     /**

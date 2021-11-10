@@ -34,7 +34,7 @@ public class JWTTokenProvider implements AuthorizationProvider {
     @Nonnull
     private Instant validUntil = Instant.MIN;
 
-    private String token;
+    private String authorization;
 
     /**
      * The identifier for the application
@@ -61,11 +61,28 @@ public class JWTTokenProvider implements AuthorizationProvider {
     @Override
     public String getEncodedAuthorization() throws IOException {
         synchronized (this) {
-            if (Instant.now().isAfter(validUntil)) {
-                token = refreshJWT();
+            if (isNotValid()) {
+                String token = refreshJWT();
+                authorization = String.format("Bearer %s", token);;
             }
-            return String.format("Bearer %s", token);
+            return authorization;
         }
+    }
+
+    /**
+     * Indicates whether the token considered valid.
+     *
+     * <p>
+     * This is not the same as whether the token is expired. The token is considered not valid before it actually
+     * expires to prevent access denied errors.
+     *
+     * <p>
+     * Made internal for testing
+     *
+     * @return false if the the token has been refreshed within the required window, otherwise true
+     */
+    boolean isNotValid() {
+        return Instant.now().isAfter(validUntil);
     }
 
     /**

@@ -268,17 +268,5 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertThat("KeySet from header fields should also be case-insensitive",
                 org.getResponseHeaderFields().keySet().contains("CacHe-ControL"));
         assertThat(org.getResponseHeaderFields().get("cachE-cOntrol").get(0), is("private, max-age=60, s-maxage=60"));
-
-        // GitHub has started changing their headers to all lowercase.
-        // For this test we want the field names to be with mixed-case (harder to do comparison).
-        // Ensure that it remains that way, if test resources are ever refreshed.
-        boolean found = false;
-        for (String key : org.getResponseHeaderFields().keySet()) {
-            if (Objects.equals("Cache-Control", key)) {
-                found = true;
-                break;
-            }
-        }
-        assertThat("Must have the literal expected string 'Cache-Control' for header field name", found);
     }
 }

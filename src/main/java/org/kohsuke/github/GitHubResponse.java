@@ -4,21 +4,14 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
-import org.kohsuke.github.function.FunctionThrows;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 
-import java.io.Closeable;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,16 +25,13 @@ import javax.annotation.Nonnull;
  * </p>
  *
  * @param <T>
- *            the type of the data parsed from the body of a {@link ResponseInfo}.
+ *            the type of the data parsed from the body of a {@link GitHubConnectorResponse}.
  */
 class GitHubResponse<T> {
 
     private static final Logger LOGGER = Logger.getLogger(GitHubResponse.class.getName());
 
     private final int statusCode;
-
-    @Nonnull
-    private final GitHubRequest request;
 
     @Nonnull
     private final Map<String, List<String>> headers;
@@ -51,22 +41,20 @@ class GitHubResponse<T> {
 
     GitHubResponse(GitHubResponse<T> response, @CheckForNull T body) {
         this.statusCode = response.statusCode();
-        this.request = response.request();
-        this.headers = response.headers();
+        this.headers = response.headers;
         this.body = body;
     }
 
-    GitHubResponse(ResponseInfo responseInfo, @CheckForNull T body) {
-        this.statusCode = responseInfo.statusCode();
-        this.request = responseInfo.request();
-        this.headers = responseInfo.headers();
+    GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {
+        this.statusCode = connectorResponse.statusCode();
+        this.headers = connectorResponse.allHeaders();
         this.body = body;
     }
 
     /**
-     * Parses a {@link ResponseInfo} body into a new instance of {@link T}.
+     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@link T}.
      *
-     * @param responseInfo
+     * @param connectorResponse
      *            response info to parse.
      * @param type
      *            the type to be constructed.
@@ -77,9 +65,9 @@ class GitHubResponse<T> {
      *             if there is an I/O Exception.
      */
     @CheckForNull
-    static <T> T parseBody(ResponseInfo responseInfo, Class<T> type) throws IOException {
+    static <T> T parseBody(GitHubConnectorResponse connectorResponse, Class<T> type) throws IOException {
 
-        if (responseInfo.statusCode() == HttpURLConnection.HTTP_NO_CONTENT) {
+        if (connectorResponse.statusCode() == HttpURLConnection.HTTP_NO_CONTENT) {
             if (type != null && type.isArray()) {
                 // no content for array should be empty array
                 return type.cast(Array.newInstance(type.getComponentType(), 0));
@@ -89,12 +77,12 @@ class GitHubResponse<T> {
             }
         }
 
-        String data = responseInfo.getBodyAsString();
+        String data = getBodyAsString(connectorResponse);
         try {
             InjectableValues.Std inject = new InjectableValues.Std();
-            inject.addValue(ResponseInfo.class, responseInfo);
+            inject.addValue(GitHubConnectorResponse.class, connectorResponse);
 
-            return GitHubClient.getMappingObjectReader(responseInfo).forType(type).readValue(data);
+            return GitHubClient.getMappingObjectReader(connectorResponse).forType(type).readValue(data);
         } catch (JsonMappingException | JsonParseException e) {
             String message = "Failed to deserialize: " + data;
             LOGGER.log(Level.FINE, message);
@@ -103,9 +91,9 @@ class GitHubResponse<T> {
     }
 
     /**
-     * Parses a {@link ResponseInfo} body into a new instance of {@link T}.
+     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@link T}.
      *
-     * @param responseInfo
+     * @param connectorResponse
      *            response info to parse.
      * @param instance
      *            the object to fill with data parsed from body
@@ -116,11 +104,11 @@ class GitHubResponse<T> {
      *             if there is an I/O Exception.
      */
     @CheckForNull
-    static <T> T parseBody(ResponseInfo responseInfo, T instance) throws IOException {
+    static <T> T parseBody(GitHubConnectorResponse connectorResponse, T instance) throws IOException {
 
-        String data = responseInfo.getBodyAsString();
+        String data = getBodyAsString(connectorResponse);
         try {
-            return GitHubClient.getMappingObjectReader(responseInfo).withValueToUpdate(instance).readValue(data);
+            return GitHubClient.getMappingObjectReader(connectorResponse).withValueToUpdate(instance).readValue(data);
         } catch (JsonMappingException | JsonParseException e) {
             String message = "Failed to deserialize: " + data;
             LOGGER.log(Level.FINE, message);
@@ -129,23 +117,18 @@ class GitHubResponse<T> {
     }
 
     /**
-     * The {@link URL} for this response.
+     * Gets the body of the response as a {@link String}.
      *
-     * @return the {@link URL} for this response.
+     * @return the body of the response as a {@link String}.
+     * @throws IOException
+     *             if an I/O Exception occurs.
+     * @param connectorResponse
      */
     @Nonnull
-    public URL url() {
-        return request.url();
-    }
-
-    /**
-     * The {@link GitHubRequest} for this response.
-     *
-     * @return the {@link GitHubRequest} for this response.
-     */
-    @Nonnull
-    public GitHubRequest request() {
-        return request;
+    static String getBodyAsString(GitHubConnectorResponse connectorResponse) throws IOException {
+        InputStreamReader r = null;
+        r = new InputStreamReader(connectorResponse.bodyStream(), StandardCharsets.UTF_8);
+        return IOUtils.toString(r);
     }
 
     /**
@@ -163,8 +146,8 @@ class GitHubResponse<T> {
      * @return the headers for this response.
      */
     @Nonnull
-    public Map<String, List<String>> headers() {
-        return headers;
+    public List<String> headers(String field) {
+        return headers.get(field);
     }
 
     /**
@@ -175,10 +158,11 @@ class GitHubResponse<T> {
      * @return the value of the header field, or {@code null} if the header isn't set.
      */
     @CheckForNull
-    public String headerField(String name) {
+    public String header(String name) {
         String result = null;
-        if (headers.containsKey(name)) {
-            result = headers.get(name).get(0);
+        List<String> rawResult = headers.get(name);
+        if (rawResult != null) {
+            result = rawResult.get(0);
         }
         return result;
     }
@@ -190,130 +174,6 @@ class GitHubResponse<T> {
      */
     public T body() {
         return body;
-    }
-
-    /**
-     * Represents a supplier of results that can throw.
-     *
-     * @param <T>
-     *            the type of results supplied by this supplier
-     */
-    @FunctionalInterface
-    interface BodyHandler<T> extends FunctionThrows<ResponseInfo, T, IOException> {
-    }
-
-    /**
-     * Initial response information supplied to a {@link BodyHandler} when a response is initially received and before
-     * the body is processed.
-     */
-    static abstract class ResponseInfo implements Closeable {
-
-        private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
-                .nullsFirst(String.CASE_INSENSITIVE_ORDER);
-
-        private final int statusCode;
-        @Nonnull
-        private final GitHubRequest request;
-        @Nonnull
-        private final Map<String, List<String>> headers;
-
-        protected ResponseInfo(@Nonnull GitHubRequest request,
-                int statusCode,
-                @Nonnull Map<String, List<String>> headers) {
-            this.request = request;
-            this.statusCode = statusCode;
-
-            // Response header field names must be case-insensitive.
-            TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
-            caseInsensitiveMap.putAll(headers);
-
-            this.headers = Collections.unmodifiableMap(caseInsensitiveMap);
-        }
-
-        /**
-         * Gets the value of a header field for this response.
-         *
-         * @param name
-         *            the name of the header field.
-         * @return the value of the header field, or {@code null} if the header isn't set.
-         */
-        @CheckForNull
-        public String headerField(String name) {
-            String result = null;
-            if (headers.containsKey(name)) {
-                result = headers.get(name).get(0);
-            }
-            return result;
-        }
-
-        /**
-         * The response body as an {@link InputStream}.
-         *
-         * @return the response body
-         * @throws IOException
-         *             if an I/O Exception occurs.
-         */
-        abstract InputStream bodyStream() throws IOException;
-
-        /**
-         * The error message for this response.
-         *
-         * @return if there is an error with some error string, that is returned. If not, {@code null}.
-         */
-        abstract String errorMessage();
-
-        /**
-         * The {@link URL} for this response.
-         *
-         * @return the {@link URL} for this response.
-         */
-        @Nonnull
-        public URL url() {
-            return request.url();
-        }
-
-        /**
-         * Gets the {@link GitHubRequest} for this response.
-         *
-         * @return the {@link GitHubRequest} for this response.
-         */
-        @Nonnull
-        public GitHubRequest request() {
-            return request;
-        }
-
-        /**
-         * The status code for this response.
-         *
-         * @return the status code for this response.
-         */
-        public int statusCode() {
-            return statusCode;
-        }
-
-        /**
-         * The headers for this response.
-         *
-         * @return the headers for this response.
-         */
-        @Nonnull
-        public Map<String, List<String>> headers() {
-            return headers;
-        }
-
-        /**
-         * Gets the body of the response as a {@link String}.
-         *
-         * @return the body of the response as a {@link String}.
-         * @throws IOException
-         *             if an I/O Exception occurs.
-         */
-        @Nonnull
-        String getBodyAsString() throws IOException {
-            InputStreamReader r = null;
-            r = new InputStreamReader(this.bodyStream(), StandardCharsets.UTF_8);
-            return IOUtils.toString(r);
-        }
     }
 
 }

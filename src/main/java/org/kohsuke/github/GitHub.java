@@ -30,6 +30,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
+import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter;
 import org.kohsuke.github.internal.Previews;
 
 import java.io.*;
@@ -110,7 +112,7 @@ public class GitHub {
      *            a authorization provider
      */
     GitHub(String apiUrl,
-            HttpConnector connector,
+            GitHubConnector connector,
             RateLimitHandler rateLimitHandler,
             AbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
@@ -129,7 +131,7 @@ public class GitHub {
         users = new ConcurrentHashMap<>();
         orgs = new ConcurrentHashMap<>();
 
-        this.client = new GitHubHttpUrlConnectionClient(apiUrl,
+        this.client = new GitHubClient(apiUrl,
                 connector,
                 rateLimitHandler,
                 abuseLimitHandler,
@@ -441,7 +443,7 @@ public class GitHub {
     public static GitHub offline() {
         try {
             return new GitHubBuilder().withEndpoint("https://api.github.invalid")
-                    .withConnector(HttpConnector.OFFLINE)
+                    .withConnector(GitHubConnector.OFFLINE)
                     .build();
         } catch (IOException e) {
             throw new IllegalStateException("The offline implementation constructor should not connect", e);
@@ -470,7 +472,10 @@ public class GitHub {
      * Gets connector.
      *
      * @return the connector
+     * @deprecated HttpConnector has been replaced by GitHubConnector which is generally not useful outside of this
+     *             library. If you are using this method, file an issue describing your use case.
      */
+    @Deprecated
     public HttpConnector getConnector() {
         return client.getConnector();
     }
@@ -483,8 +488,8 @@ public class GitHub {
      * @deprecated HttpConnector should not be changed. If you find yourself needing to do this, file an issue.
      */
     @Deprecated
-    public void setConnector(HttpConnector connector) {
-        client.setConnector(connector);
+    public void setConnector(@Nonnull HttpConnector connector) {
+        client.setConnector(GitHubConnectorHttpConnectorAdapter.adapt(connector));
     }
 
     /**

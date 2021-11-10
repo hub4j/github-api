@@ -23,7 +23,7 @@ import java.io.IOException;
 import static org.junit.Assert.fail;
 
 /**
- * Test showing the behavior of OkHttpConnector cache with GitHub 404 responses.
+ * Test showing the behavior of OkHttpGitHubConnector cache with GitHub 404 responses.
  *
  * @author Liam Newman
  */

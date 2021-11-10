@@ -1,9 +1,14 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.internal.Previews;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -12,15 +17,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -37,32 +34,39 @@ import static java.util.Arrays.asList;
  * not specified until late in the building process, so this is still untyped.
  * </p>
  */
-class GitHubRequest {
+public class GitHubRequest implements GitHubConnectorRequest {
+
+    private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
+            .nullsFirst(String.CASE_INSENSITIVE_ORDER);
 
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
     private final List<Entry> args;
-    private final Map<String, String> headers;
+    private final Map<String, List<String>> headers;
     private final Map<String, Object> injectedMappingValues;
     private final String apiUrl;
     private final String urlPath;
     private final String method;
     private final RateLimitTarget rateLimitTarget;
-    private final InputStream body;
+    private final byte[] body;
     private final boolean forceBody;
 
     private final URL url;
 
     private GitHubRequest(@Nonnull List<Entry> args,
-            @Nonnull Map<String, String> headers,
+            @Nonnull Map<String, List<String>> headers,
             @Nonnull Map<String, Object> injectedMappingValues,
             @Nonnull String apiUrl,
             @Nonnull String urlPath,
             @Nonnull String method,
             @Nonnull RateLimitTarget rateLimitTarget,
-            @CheckForNull InputStream body,
+            @CheckForNull byte[] body,
             boolean forceBody) {
         this.args = Collections.unmodifiableList(new ArrayList<>(args));
-        this.headers = Collections.unmodifiableMap(new LinkedHashMap<>(headers));
+        TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList<>(entry.getValue())));
+        }
+        this.headers = Collections.unmodifiableMap(caseInsensitiveMap);
         this.injectedMappingValues = Collections.unmodifiableMap(new LinkedHashMap<>(injectedMappingValues));
         this.apiUrl = apiUrl;
         this.urlPath = urlPath;
@@ -79,7 +83,7 @@ class GitHubRequest {
      *
      * @return a new {@link Builder}.
      */
-    public static Builder<?> newBuilder() {
+    static Builder<?> newBuilder() {
         return new Builder<>();
     }
 
@@ -127,6 +131,7 @@ class GitHubRequest {
      *
      * @return the request method.
      */
+    @Override
     @Nonnull
     public String method() {
         return method;
@@ -146,8 +151,9 @@ class GitHubRequest {
      * The arguments for this request. Depending on the {@link #method()} and {@code #inBody()} these maybe added to the
      * url or to the request body.
      *
-     * @return the {@link List<Entry>} of arguments
+     * @return the list of arguments
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Already unmodifiable")
     @Nonnull
     public List<Entry> args() {
         return args;
@@ -158,9 +164,27 @@ class GitHubRequest {
      *
      * @return the {@link Map} of headers
      */
+    @Override
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable Map of unmodifiable lists")
     @Nonnull
-    public Map<String, String> headers() {
+    public Map<String, List<String>> allHeaders() {
         return headers;
+    }
+
+    /**
+     * Gets the first value of a header field for this request.
+     *
+     * @param name
+     *            the name of the header field.
+     * @return the value of the header field, or {@code null} if the header isn't set.
+     */
+    @CheckForNull
+    public String header(String name) {
+        List<String> values = headers.get(name);
+        if (values != null) {
+            return values.get(0);
+        }
+        return null;
     }
 
     /**
@@ -168,6 +192,7 @@ class GitHubRequest {
      *
      * @return the {@link Map} of headers
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Already unmodifiable")
     @Nonnull
     public Map<String, Object> injectedMappingValues() {
         return injectedMappingValues;
@@ -199,9 +224,9 @@ class GitHubRequest {
      *
      * @return the content type.
      */
-    @Nonnull
+    @Override
     public String contentType() {
-        return headers.get("Content-type");
+        return header("Content-type");
     }
 
     /**
@@ -209,9 +234,10 @@ class GitHubRequest {
      *
      * @return the {@link InputStream}.
      */
+    @Override
     @CheckForNull
     public InputStream body() {
-        return body;
+        return body != null ? new ByteArrayInputStream(body) : null;
     }
 
     /**
@@ -219,6 +245,7 @@ class GitHubRequest {
      *
      * @return the request {@link URL}
      */
+    @Override
     @Nonnull
     public URL url() {
         return url;
@@ -229,7 +256,8 @@ class GitHubRequest {
      *
      * @return true if the arguements should be sent in the body of the request.
      */
-    public boolean inBody() {
+    @Override
+    public boolean hasBody() {
         return forceBody || !METHODS_WITHOUT_BODY.contains(method);
     }
 
@@ -239,7 +267,7 @@ class GitHubRequest {
      *
      * @return a {@link Builder} based on this request.
      */
-    public Builder<?> toBuilder() {
+    Builder<?> toBuilder() {
         return new Builder<>(args,
                 headers,
                 injectedMappingValues,
@@ -253,7 +281,7 @@ class GitHubRequest {
 
     private String buildTailApiUrl() {
         String tailApiUrl = urlPath;
-        if (!inBody() && !args.isEmpty() && tailApiUrl.startsWith("/")) {
+        if (!hasBody() && !args.isEmpty() && tailApiUrl.startsWith("/")) {
             try {
                 StringBuilder argString = new StringBuilder();
                 boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
@@ -291,7 +319,7 @@ class GitHubRequest {
          * The header values for this request.
          */
         @Nonnull
-        private final Map<String, String> headers;
+        private final Map<String, List<String>> headers;
 
         /**
          * Injected local data map
@@ -316,7 +344,7 @@ class GitHubRequest {
         @Nonnull
         private RateLimitTarget rateLimitTarget;
 
-        private InputStream body;
+        private byte[] body;
         private boolean forceBody;
 
         /**
@@ -324,7 +352,7 @@ class GitHubRequest {
          */
         protected Builder() {
             this(new ArrayList<>(),
-                    new LinkedHashMap<>(),
+                    new TreeMap<>(nullableCaseInsensitiveComparator),
                     new LinkedHashMap<>(),
                     GitHubClient.GITHUB_URL,
                     "/",
@@ -335,16 +363,20 @@ class GitHubRequest {
         }
 
         private Builder(@Nonnull List<Entry> args,
-                @Nonnull Map<String, String> headers,
+                @Nonnull Map<String, List<String>> headers,
                 @Nonnull Map<String, Object> injectedMappingValues,
                 @Nonnull String apiUrl,
                 @Nonnull String urlPath,
                 @Nonnull String method,
                 @Nonnull RateLimitTarget rateLimitTarget,
-                @CheckForNull @WillClose InputStream body,
+                @CheckForNull byte[] body,
                 boolean forceBody) {
             this.args = new ArrayList<>(args);
-            this.headers = new LinkedHashMap<>(headers);
+            TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
+            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+                caseInsensitiveMap.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+            }
+            this.headers = caseInsensitiveMap;
             this.injectedMappingValues = new LinkedHashMap<>(injectedMappingValues);
             this.apiUrl = apiUrl;
             this.urlPath = urlPath;
@@ -397,7 +429,9 @@ class GitHubRequest {
          * @return the request builder
          */
         public B setHeader(String name, String value) {
-            headers.put(name, value);
+            List<String> field = new ArrayList<>();
+            field.add(value);
+            headers.put(name, field);
             return (B) this;
         }
 
@@ -411,11 +445,13 @@ class GitHubRequest {
          * @return the request builder
          */
         public B withHeader(String name, String value) {
-            String oldValue = headers.get(name);
-            if (!StringUtils.isBlank(oldValue)) {
-                value = oldValue + ", " + value;
+            List<String> field = headers.get(name);
+            if (field == null) {
+                setHeader(name, value);
+            } else {
+                field.add(value);
             }
-            return setHeader(name, value);
+            return (B) this;
         }
 
         /**
@@ -566,8 +602,9 @@ class GitHubRequest {
          *            the body
          * @return the request builder
          */
-        public B with(@WillClose /* later */ InputStream body) {
-            this.body = body;
+        public B with(@WillClose InputStream body) throws IOException {
+            this.body = IOUtils.toByteArray(body);
+            IOUtils.closeQuietly(body);
             return (B) this;
         }
 
@@ -666,7 +703,7 @@ class GitHubRequest {
          * @return the request builder
          */
         public B contentType(String contentType) {
-            this.headers.put("Content-type", contentType);
+            this.setHeader("Content-type", contentType);
             return (B) this;
         }
 

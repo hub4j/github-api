@@ -20,7 +20,9 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Liam Newman
  * @author Kohsuke Kawaguchi
+ * @deprecated Use OkHttpGitHubConnector instead.
  */
+@Deprecated
 public class OkHttpConnector implements HttpConnector {
     private static final String HEADER_NAME = "Cache-Control";
     private final String maxAgeHeaderValue;

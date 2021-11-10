@@ -270,7 +270,6 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
-
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <executions>
@@ -575,6 +574,28 @@
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <executions>
+              <execution>
+                <id>okhttp-test</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttp</argLine>
+                </configuration>
+              </execution>
+              <execution>
+                <id>okhttpconnector-test</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttpconnector</argLine>
+                </configuration>
+              </execution>
               <execution>
                 <id>slow-or-flaky-test</id>
                 <phase>test</phase>

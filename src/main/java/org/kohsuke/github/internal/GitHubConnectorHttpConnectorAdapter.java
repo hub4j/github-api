@@ -193,6 +193,9 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
             return inputBytes == null ? null : new ByteArrayInputStream(inputBytes);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" },
                 justification = "Internal implementation class. Should not be used externally.")
         @Nonnull

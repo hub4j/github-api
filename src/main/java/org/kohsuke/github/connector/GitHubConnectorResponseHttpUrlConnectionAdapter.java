@@ -9,6 +9,14 @@ import java.net.HttpURLConnection;
 import java.security.Permission;
 import java.util.*;
 
+/**
+ * Adapter class for {@link org.kohsuke.github.connector.GitHubConnectorResponse} to be usable as a
+ * {@link HttpURLConnection}.
+ *
+ * Behavior is equivalent to a {@link HttpURLConnection} after {@link HttpURLConnection#connect()} has been called.
+ * Methods that make no sense throw {@link UnsupportedOperationException}.
+ */
+@Deprecated
 class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection {
 
     private final GitHubConnectorResponse connectorResponse;
@@ -17,6 +25,16 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
         super(connectorResponse.request().url());
         this.connected = true;
         this.connectorResponse = connectorResponse;
+    }
+
+    /**
+     * Readable to support {@link GitHubConnectorResponse#fromHttpURLConnectionAdapter(HttpURLConnection)} which only
+     * exist for testing.
+     *
+     * @return
+     */
+    GitHubConnectorResponse connectorResponse() {
+        return connectorResponse;
     }
 
     @Override

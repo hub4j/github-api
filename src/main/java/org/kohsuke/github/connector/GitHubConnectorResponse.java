@@ -113,4 +113,25 @@ public abstract class GitHubConnectorResponse implements Closeable {
         return headers;
     }
 
+    /**
+     * Unwraps a {@link GitHubConnectorResponse} from a {@link HttpURLConnection} adapter.
+     *
+     * Only works on the internal {@link GitHubConnectorResponseHttpUrlConnectionAdapter}.
+     *
+     * @param connection
+     *            the connection to unwrap.
+     * @return an unwrapped response from an adapter.
+     * @throws UnsupportedOperationException
+     *             if the connection is not an adapter.
+     * @deprecated Only preset for testing and interaction with deprecated HttpURLConnection components.
+     */
+    @Deprecated
+    public final static GitHubConnectorResponse fromHttpURLConnectionAdapter(HttpURLConnection connection) {
+        if (connection instanceof GitHubConnectorResponseHttpUrlConnectionAdapter) {
+            return ((GitHubConnectorResponseHttpUrlConnectionAdapter) connection).connectorResponse();
+        } else {
+            throw new UnsupportedOperationException(
+                    "Cannot unwrap GitHubConnectorResponse from " + connection.getClass().getName());
+        }
+    }
 }

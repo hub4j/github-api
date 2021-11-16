@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
@@ -126,9 +127,26 @@ class GitHubResponse<T> {
      */
     @Nonnull
     static String getBodyAsString(GitHubConnectorResponse connectorResponse) throws IOException {
-        InputStreamReader r = null;
-        r = new InputStreamReader(connectorResponse.bodyStream(), StandardCharsets.UTF_8);
-        return IOUtils.toString(r);
+        InputStream inputStream = connectorResponse.bodyStream();
+        try (InputStreamReader r = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+            return IOUtils.toString(r);
+        }
+    }
+
+    /**
+     * Gets the body of the response as a {@link String}.
+     *
+     * @return the body of the response as a {@link String}.
+     * @throws IOException
+     *             if an I/O Exception occurs.
+     * @param connectorResponse
+     */
+    static String getBodyAsStringOrNull(GitHubConnectorResponse connectorResponse) {
+        try {
+            return getBodyAsString(connectorResponse);
+        } catch (NullPointerException | IOException e) {
+        }
+        return null;
     }
 
     /**

@@ -48,6 +48,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
      * Get this response as a {@link HttpURLConnection}.
      *
      * @return an object that implements at least the response related methods of {@link HttpURLConnection}.
+     * @deprecated This method is present only to provide backward compatibility with other deprecated components.
      */
     @Deprecated
     @Nonnull
@@ -81,13 +82,6 @@ public abstract class GitHubConnectorResponse implements Closeable {
      *             if an I/O Exception occurs.
      */
     public abstract InputStream bodyStream() throws IOException;
-
-    /**
-     * The error message for this response.
-     *
-     * @return if there is an error with some error string, that is returned. If not, {@code null}.
-     */
-    public abstract String errorMessage();
 
     /**
      * Gets the {@link GitHubConnectorRequest} for this response.

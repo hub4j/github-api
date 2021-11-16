@@ -25,6 +25,7 @@ import javax.net.ssl.SSLHandshakeException;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.util.logging.Level.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -47,8 +48,8 @@ class GitHubClient {
     // Cache of myself object.
     private final String apiUrl;
 
-    private final RateLimitHandler rateLimitHandler;
-    private final AbuseLimitHandler abuseLimitHandler;
+    private final GitHubRateLimitHandler rateLimitHandler;
+    private final GitHubAbuseLimitHandler abuseLimitHandler;
     private final GitHubRateLimitChecker rateLimitChecker;
     private final AuthorizationProvider authorizationProvider;
 
@@ -74,8 +75,8 @@ class GitHubClient {
 
     GitHubClient(String apiUrl,
             GitHubConnector connector,
-            RateLimitHandler rateLimitHandler,
-            AbuseLimitHandler abuseLimitHandler,
+            GitHubRateLimitHandler rateLimitHandler,
+            GitHubAbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
             AuthorizationProvider authorizationProvider) throws IOException {
 
@@ -372,45 +373,51 @@ class GitHubClient {
         GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);
 
         do {
-            // if we fail to create a connection we do not retry and we do not wrap
-
             GitHubConnectorResponse connectorResponse = null;
             try {
-                try {
-                    logRequest(connectorRequest);
-                    rateLimitChecker.checkRateLimit(this, request.rateLimitTarget());
-                    connectorResponse = connector.send(connectorRequest);
-                    noteRateLimit(request.rateLimitTarget(), connectorResponse);
-                    detectOTPRequired(connectorResponse);
-
-                    if (isInvalidCached404Response(connectorResponse)) {
-                        // Setting "Cache-Control" to "no-cache" stops the cache from supplying
-                        // "If-Modified-Since" or "If-None-Match" values.
-                        // This makes GitHub give us current data (not incorrectly cached data)
-                        connectorRequest = prepareConnectorRequest(
-                                request.toBuilder().setHeader("Cache-Control", "no-cache").build());
-                        continue;
-                    }
-                    if (!(isRateLimitResponse(connectorResponse) || isAbuseLimitResponse(connectorResponse))) {
-                        return createResponse(connectorResponse, handler);
-                    }
-                } catch (IOException e) {
-                    // For transient errors, retry
-                    if (retryConnectionError(e, request.url(), retries)) {
-                        continue;
-                    }
-
-                    throw interpretApiError(e, connectorRequest, connectorResponse);
+                logRequest(connectorRequest);
+                rateLimitChecker.checkRateLimit(this, request.rateLimitTarget());
+                connectorResponse = connector.send(connectorRequest);
+                noteRateLimit(request.rateLimitTarget(), connectorResponse);
+                detectKnownErrors(connectorResponse, request, handler != null);
+                return createResponse(connectorResponse, handler);
+            } catch (RetryRequestException e) {
+                // retry requested by requested by error handler (rate limit handler for example)
+                if (retries > 0 && e.connectorRequest != null) {
+                    connectorRequest = e.connectorRequest;
                 }
-
-                handleLimitingErrors(connectorResponse);
+            } catch (SocketException | SocketTimeoutException | SSLHandshakeException e) {
+                // These transient errors the
+                if (retries > 0) {
+                    logRetryConnectionError(e, request.url(), retries);
+                    continue;
+                }
+                throw interpretApiError(e, connectorRequest, connectorResponse);
+            } catch (IOException e) {
+                throw interpretApiError(e, connectorRequest, connectorResponse);
             } finally {
                 IOUtils.closeQuietly(connectorResponse);
             }
-
         } while (--retries >= 0);
 
         throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
+    }
+
+    private void detectKnownErrors(GitHubConnectorResponse connectorResponse,
+            GitHubRequest request,
+            boolean detectStatusCodeError) throws IOException {
+        detectOTPRequired(connectorResponse);
+        detectInvalidCached404Response(connectorResponse, request);
+        if (rateLimitHandler.isError(connectorResponse)) {
+            rateLimitHandler.onError(connectorResponse);
+            throw new RetryRequestException();
+        } else if (abuseLimitHandler.isError(connectorResponse)) {
+            abuseLimitHandler.onError(connectorResponse);
+            throw new RetryRequestException();
+        } else if (detectStatusCodeError
+                && GitHubConnectorResponseErrorHandler.STATUS_HTTP_BAD_REQUEST_OR_GREATER.isError(connectorResponse)) {
+            GitHubConnectorResponseErrorHandler.STATUS_HTTP_BAD_REQUEST_OR_GREATER.onError(connectorResponse);
+        }
     }
 
     private GitHubConnectorRequest prepareConnectorRequest(GitHubRequest request) throws IOException {
@@ -451,20 +458,22 @@ class GitHubClient {
                         + request.method() + " " + request.url().toString());
     }
 
-    private void handleLimitingErrors(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
-        if (isRateLimitResponse(connectorResponse)) {
-            rateLimitHandler.onError(connectorResponse);
-        } else if (isAbuseLimitResponse(connectorResponse)) {
-            abuseLimitHandler.onError(connectorResponse);
-        }
-    }
-
     @Nonnull
     private static <T> GitHubResponse<T> createResponse(@Nonnull GitHubConnectorResponse connectorResponse,
             @CheckForNull BodyHandler<T> handler) throws IOException {
         T body = null;
+        if (handler != null) {
+            if (!shouldIgnoreBody(connectorResponse)) {
+                body = handler.apply(connectorResponse);
+            }
+        }
+        return new GitHubResponse<>(connectorResponse, body);
+    }
+
+    private static boolean shouldIgnoreBody(@Nonnull GitHubConnectorResponse connectorResponse) {
         if (connectorResponse.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
             // special case handling for 304 unmodified, as the content will be ""
+            return true;
         } else if (connectorResponse.statusCode() == HttpURLConnection.HTTP_ACCEPTED) {
 
             // Response code 202 means data is being generated or an action that can require some time is triggered.
@@ -476,10 +485,10 @@ class GitHubClient {
             LOGGER.log(FINE,
                     "Received HTTP_ACCEPTED(202) from " + connectorResponse.request().url().toString()
                             + " . Please try again in 5 seconds.");
-        } else if (handler != null) {
-            body = handler.apply(connectorResponse);
+            return true;
+        } else {
+            return false;
         }
-        return new GitHubResponse<>(connectorResponse, body);
     }
 
     /**
@@ -502,7 +511,9 @@ class GitHubClient {
             statusCode = connectorResponse.statusCode();
             message = connectorResponse.header("Status");
             headers = connectorResponse.allHeaders();
-            errorMessage = connectorResponse.errorMessage();
+            if (connectorResponse.statusCode() >= HTTP_BAD_REQUEST) {
+                errorMessage = GitHubResponse.getBodyAsStringOrNull(connectorResponse);
+            }
         }
 
         if (errorMessage != null) {
@@ -521,35 +532,20 @@ class GitHubClient {
         return e;
     }
 
-    protected static boolean isRateLimitResponse(@Nonnull GitHubConnectorResponse connectorResponse) {
-        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
-                && "0".equals(connectorResponse.header("X-RateLimit-Remaining"));
-    }
-
-    protected static boolean isAbuseLimitResponse(@Nonnull GitHubConnectorResponse connectorResponse) {
-        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
-                && connectorResponse.header("Retry-After") != null;
-    }
-
-    private static boolean retryConnectionError(IOException e, URL url, int retries) throws IOException {
+    private static void logRetryConnectionError(IOException e, URL url, int retries) throws IOException {
         // There are a range of connection errors where we want to wait a moment and just automatically retry
-        boolean connectionError = e instanceof SocketException || e instanceof SocketTimeoutException
-                || e instanceof SSLHandshakeException;
-        if (connectionError && retries > 0) {
-            LOGGER.log(INFO,
-                    e.getMessage() + " while connecting to " + url + ". Sleeping " + GitHubClient.retryTimeoutMillis
-                            + " milliseconds before retrying... ; will try " + retries + " more time(s)");
-            try {
-                Thread.sleep(GitHubClient.retryTimeoutMillis);
-            } catch (InterruptedException ie) {
-                throw (IOException) new InterruptedIOException().initCause(e);
-            }
-            return true;
+        LOGGER.log(INFO,
+                e.getMessage() + " while connecting to " + url + ". Sleeping " + GitHubClient.retryTimeoutMillis
+                        + " milliseconds before retrying... ; will try " + retries + " more time(s)");
+        try {
+            Thread.sleep(GitHubClient.retryTimeoutMillis);
+        } catch (InterruptedException ie) {
+            throw (IOException) new InterruptedIOException().initCause(e);
         }
-        return false;
     }
 
-    private static boolean isInvalidCached404Response(GitHubConnectorResponse connectorResponse) {
+    private void detectInvalidCached404Response(GitHubConnectorResponse connectorResponse, GitHubRequest request)
+            throws IOException {
         // WORKAROUND FOR ISSUE #669:
         // When the Requester detects a 404 response with an ETag (only happens when the server's 304
         // is bogus and would cause cache corruption), try the query again with new request header
@@ -566,9 +562,12 @@ class GitHubClient {
             LOGGER.log(FINE,
                     "Encountered GitHub invalid cached 404 from " + connectorResponse.request().url()
                             + ". Retrying with \"Cache-Control\"=\"no-cache\"...");
-            return true;
+            // Setting "Cache-Control" to "no-cache" stops the cache from supplying
+            // "If-Modified-Since" or "If-None-Match" values.
+            // This makes GitHub give us current data (not incorrectly cached data)
+            throw new RetryRequestException(
+                    prepareConnectorRequest(request.toBuilder().setHeader("Cache-Control", "no-cache").build()));
         }
-        return false;
     }
 
     private void noteRateLimit(@Nonnull RateLimitTarget rateLimitTarget,
@@ -753,5 +752,16 @@ class GitHubClient {
 
     static <T> List<T> unmodifiableListOrNull(List<? extends T> list) {
         return list == null ? null : Collections.unmodifiableList(list);
+    }
+
+    static class RetryRequestException extends IOException {
+        final GitHubConnectorRequest connectorRequest;
+        RetryRequestException() {
+            this(null);
+        }
+
+        RetryRequestException(GitHubConnectorRequest connectorRequest) {
+            this.connectorRequest = connectorRequest;
+        }
     }
 }

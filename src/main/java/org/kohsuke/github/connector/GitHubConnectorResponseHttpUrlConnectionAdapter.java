@@ -1,11 +1,11 @@
 package org.kohsuke.github.connector;
 
-import java.io.ByteArrayInputStream;
+import org.kohsuke.github.HttpException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
 import java.security.Permission;
 import java.util.*;
 
@@ -72,7 +72,13 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public InputStream getErrorStream() {
-        return new ByteArrayInputStream(connectorResponse.errorMessage().getBytes(StandardCharsets.UTF_8));
+        try {
+            if (connectorResponse.statusCode() >= HTTP_BAD_REQUEST) {
+                return connectorResponse.bodyStream();
+            }
+        } catch (IOException e) {
+        }
+        return null;
     }
 
     @Override
@@ -175,6 +181,10 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public InputStream getInputStream() throws IOException {
+        // This should only be possible in abuse or rate limit scenario
+        if (connectorResponse.statusCode() >= HTTP_BAD_REQUEST) {
+            throw new HttpException(connectorResponse);
+        }
         return connectorResponse.bodyStream();
     }
 

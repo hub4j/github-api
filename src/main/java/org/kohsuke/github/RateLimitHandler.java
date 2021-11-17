@@ -12,10 +12,12 @@ import javax.annotation.Nonnull;
  * Pluggable strategy to determine what to do when the API rate limit is reached.
  *
  * @author Kohsuke Kawaguchi
- * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler) GitHubBuilder#withRateLimitHandler(RateLimitHandler)
+ * @see GitHubBuilder#withRateLimitHandler(GitHubRateLimitHandler)
+ *      GitHubBuilder#withRateLimitHandler(GitHubRateLimitHandler)
  * @see AbuseLimitHandler
  */
-public abstract class RateLimitHandler {
+@Deprecated
+public abstract class RateLimitHandler extends GitHubRateLimitHandler {
 
     /**
      * Called when the library encounters HTTP error indicating that the API rate limit has been exceeded.
@@ -33,7 +35,7 @@ public abstract class RateLimitHandler {
      * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      */
     public void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
-        GHIOException e = new HttpException("Rate limit violation",
+        GHIOException e = new HttpException("API rate limit reached",
                 connectorResponse.statusCode(),
                 connectorResponse.header("Status"),
                 connectorResponse.request().url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());
@@ -58,12 +60,12 @@ public abstract class RateLimitHandler {
      * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      */
     @Deprecated
-    public void onError(IOException e, HttpURLConnection uc) throws IOException {
-    }
+    public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
 
     /**
      * Block until the API rate limit is reset. Useful for long-running batch processing.
      */
+    @Deprecated
     public static final RateLimitHandler WAIT = new RateLimitHandler() {
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
@@ -86,10 +88,11 @@ public abstract class RateLimitHandler {
     /**
      * Fail immediately.
      */
+    @Deprecated
     public static final RateLimitHandler FAIL = new RateLimitHandler() {
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
-            throw (IOException) new IOException("API rate limit reached").initCause(e);
+            throw e;
         }
     };
 }

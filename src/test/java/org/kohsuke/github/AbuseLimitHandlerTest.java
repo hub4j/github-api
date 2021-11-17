@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,6 +60,13 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                     @Override
                     public void onError(IOException e, HttpURLConnection uc) throws IOException {
 
+                        GitHubConnectorResponse connectorResponse = null;
+                        try {
+                            connectorResponse = GitHubConnectorResponse.fromHttpURLConnectionAdapter(uc);
+                        } catch (UnsupportedOperationException ex) {
+                            assertThat(ex.getMessage(), startsWith("Cannot unwrap GitHubConnectorResponse"));
+                        }
+
                         // Verify
                         assertThat(uc.getDate(), Matchers.greaterThanOrEqualTo(new Date().getTime() - 10000));
                         assertThat(uc.getExpiration(), equalTo(0L));
@@ -86,6 +94,12 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         assertThat(errorStream, notNullValue());
                         String error = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
                         assertThat(error, containsString("Must have push access to repository"));
+
+                        if (connectorResponse != null) {
+                            String connectorBody = IOUtils.toString(connectorResponse.bodyStream(),
+                                    StandardCharsets.UTF_8);
+                            assertThat(connectorBody, containsString("Must have push access to repository"));
+                        }
 
                         // calling again should still error
                         ioEx = Assert.assertThrows(IOException.class, () -> uc.getInputStream());
@@ -116,12 +130,10 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         Assert.assertThrows(IllegalStateException.class, () -> uc.setRequestProperty("bogus", "thing"));
                         Assert.assertThrows(IllegalStateException.class, () -> uc.setUseCaches(true));
 
-                        boolean isAdapter = false;
-                        if (uc.toString().contains("GitHubConnectorResponseHttpUrlConnectionAdapter")) {
-                            isAdapter = true;
-                        }
+                        if (connectorResponse != null) {
+                            assertThat(uc.toString(),
+                                    containsString("GitHubConnectorResponseHttpUrlConnectionAdapter"));
 
-                        if (isAdapter) {
                             Assert.assertThrows(UnsupportedOperationException.class,
                                     () -> uc.getAllowUserInteraction());
                             Assert.assertThrows(UnsupportedOperationException.class, () -> uc.getConnectTimeout());
@@ -176,8 +188,8 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
             getTempRepository();
             fail();
         } catch (Exception e) {
-            assertThat(e, instanceOf(IOException.class));
-            assertThat(e.getCause(), instanceOf(HttpException.class));
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.getMessage(), equalTo("Abuse limit reached"));
         }
 
         assertThat(mockGitHub.getRequestCount(), equalTo(2));
@@ -203,8 +215,8 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
 
             fail();
         } catch (Exception e) {
-            assertThat(e, instanceOf(IOException.class));
-            assertThat(e.getCause(), instanceOf(HttpException.class));
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.getMessage(), equalTo("Abuse limit reached"));
         }
 
         assertThat(mockGitHub.getRequestCount(), equalTo(2));

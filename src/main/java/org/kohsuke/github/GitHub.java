@@ -113,8 +113,8 @@ public class GitHub {
      */
     GitHub(String apiUrl,
             GitHubConnector connector,
-            RateLimitHandler rateLimitHandler,
-            AbuseLimitHandler abuseLimitHandler,
+            GitHubRateLimitHandler rateLimitHandler,
+            GitHubAbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
             AuthorizationProvider authorizationProvider) throws IOException {
         if (authorizationProvider instanceof DependentAuthorizationProvider) {

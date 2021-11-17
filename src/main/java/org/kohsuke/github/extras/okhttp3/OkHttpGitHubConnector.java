@@ -8,10 +8,8 @@ import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +18,6 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 import javax.annotation.Nonnull;
-
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static java.util.logging.Level.FINER;
 
 /**
  * {@link HttpConnector} for {@link OkHttpClient}.
@@ -129,17 +123,6 @@ public class OkHttpGitHubConnector implements GitHubConnector {
          * {@inheritDoc}
          */
         public InputStream bodyStream() throws IOException {
-            if (response.code() >= HTTP_BAD_REQUEST) {
-                if (response.code() == HTTP_NOT_FOUND) {
-                    throw new FileNotFoundException(request().url().toString());
-                } else {
-                    throw new HttpException(errorMessage(),
-                            response.code(),
-                            response.message(),
-                            request().url().toString());
-                }
-            }
-
             readBodyBytes();
             InputStream stream = bodyBytes == null ? null : new ByteArrayInputStream(bodyBytes);
             return stream;
@@ -159,24 +142,7 @@ public class OkHttpGitHubConnector implements GitHubConnector {
                     }
                     bodyBytesRead = true;
                 }
-
             }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public String errorMessage() {
-            String result = null;
-            try {
-                if (!response.isSuccessful()) {
-                    readBodyBytes();
-                    result = bodyBytes == null ? null : new String(bodyBytes, StandardCharsets.UTF_8);
-                }
-            } catch (Exception e) {
-                LOGGER.log(FINER, "Ignored exception get error message", e);
-            }
-            return result;
         }
 
         /**

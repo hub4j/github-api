@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.kohsuke.github.extras.ImpatientHttpConnector;
 import org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter;
 
@@ -34,8 +35,8 @@ public class GitHubBuilder implements Cloneable {
 
     private GitHubConnector connector;
 
-    private RateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
-    private AbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
+    private GitHubRateLimitHandler rateLimitHandler = RateLimitHandler.WAIT;
+    private GitHubAbuseLimitHandler abuseLimitHandler = AbuseLimitHandler.WAIT;
     private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
     /* private */ AuthorizationProvider authorizationProvider = AuthorizationProvider.ANONYMOUS;
 
@@ -334,6 +335,7 @@ public class GitHubBuilder implements Cloneable {
      *            the connector
      * @return the git hub builder
      */
+    @Deprecated
     public GitHubBuilder withConnector(@Nonnull HttpConnector connector) {
         return withConnector(GitHubConnectorHttpConnectorAdapter.adapt(connector));
     }
@@ -373,6 +375,32 @@ public class GitHubBuilder implements Cloneable {
      * @see #withRateLimitChecker(RateLimitChecker)
      */
     public GitHubBuilder withRateLimitHandler(RateLimitHandler handler) {
+        return withRateLimitHandler((GitHubRateLimitHandler) handler);
+    }
+
+    /**
+     * Adds a {@link GitHubRateLimitHandler} to this {@link GitHubBuilder}.
+     * <p>
+     * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
+     * number of requests remaining is returned in the response header and can also be requested using
+     * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the "rate limit".
+     * </p>
+     * <p>
+     * When the remaining number of requests reaches zero, the next request will return an error. If this happens,
+     * {@link GitHubRateLimitHandler#onError(GitHubConnectorResponse)} will be called.
+     * </p>
+     * <p>
+     * NOTE: GitHub treats clients that exceed their rate limit very harshly. If possible, clients should avoid
+     * exceeding their rate limit. Consider adding a {@link RateLimitChecker} to automatically check the rate limit for
+     * each request and wait if needed.
+     * </p>
+     *
+     * @param handler
+     *            the handler
+     * @return the git hub builder
+     * @see #withRateLimitChecker(RateLimitChecker)
+     */
+    public GitHubBuilder withRateLimitHandler(GitHubRateLimitHandler handler) {
         this.rateLimitHandler = handler;
         return this;
     }
@@ -389,7 +417,24 @@ public class GitHubBuilder implements Cloneable {
      *            the handler
      * @return the git hub builder
      */
+    @Deprecated
     public GitHubBuilder withAbuseLimitHandler(AbuseLimitHandler handler) {
+        return withAbuseLimitHandler((GitHubAbuseLimitHandler) handler);
+    }
+
+    /**
+     * Adds a {@link GitHubAbuseLimitHandler} to this {@link GitHubBuilder}.
+     * <p>
+     * When a client sends too many requests in a short time span, GitHub may return an error and set a header telling
+     * the client to not make any more request for some period of time. If this happens,
+     * {@link GitHubAbuseLimitHandler#onError(GitHubConnectorResponse)} will be called.
+     * </p>
+     *
+     * @param handler
+     *            the handler
+     * @return the git hub builder
+     */
+    public GitHubBuilder withAbuseLimitHandler(GitHubAbuseLimitHandler handler) {
         this.abuseLimitHandler = handler;
         return this;
     }

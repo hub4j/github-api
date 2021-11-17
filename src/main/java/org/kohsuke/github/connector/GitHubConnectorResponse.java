@@ -48,6 +48,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
      * Get this response as a {@link HttpURLConnection}.
      *
      * @return an object that implements at least the response related methods of {@link HttpURLConnection}.
+     * @deprecated This method is present only to provide backward compatibility with other deprecated components.
      */
     @Deprecated
     @Nonnull
@@ -83,13 +84,6 @@ public abstract class GitHubConnectorResponse implements Closeable {
     public abstract InputStream bodyStream() throws IOException;
 
     /**
-     * The error message for this response.
-     *
-     * @return if there is an error with some error string, that is returned. If not, {@code null}.
-     */
-    public abstract String errorMessage();
-
-    /**
      * Gets the {@link GitHubConnectorRequest} for this response.
      *
      * @return the {@link GitHubConnectorRequest} for this response.
@@ -119,4 +113,25 @@ public abstract class GitHubConnectorResponse implements Closeable {
         return headers;
     }
 
+    /**
+     * Unwraps a {@link GitHubConnectorResponse} from a {@link HttpURLConnection} adapter.
+     *
+     * Only works on the internal {@link GitHubConnectorResponseHttpUrlConnectionAdapter}.
+     *
+     * @param connection
+     *            the connection to unwrap.
+     * @return an unwrapped response from an adapter.
+     * @throws UnsupportedOperationException
+     *             if the connection is not an adapter.
+     * @deprecated Only preset for testing and interaction with deprecated HttpURLConnection components.
+     */
+    @Deprecated
+    public final static GitHubConnectorResponse fromHttpURLConnectionAdapter(HttpURLConnection connection) {
+        if (connection instanceof GitHubConnectorResponseHttpUrlConnectionAdapter) {
+            return ((GitHubConnectorResponseHttpUrlConnectionAdapter) connection).connectorResponse();
+        } else {
+            throw new UnsupportedOperationException(
+                    "Cannot unwrap GitHubConnectorResponse from " + connection.getClass().getName());
+        }
+    }
 }

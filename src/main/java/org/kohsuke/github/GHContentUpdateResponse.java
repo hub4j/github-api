@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -7,7 +9,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class GHContentUpdateResponse {
     private GHContent content;
-    private GHCommit commit;
+    private GitCommit commit;
 
     /**
      * Gets content.
@@ -25,7 +27,13 @@ public class GHContentUpdateResponse {
      * @return the commit
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHCommit getCommit() {
+    @WithBridgeMethods(value = GHCommit.class, adapterMethod = "castToGHCommit")
+    public GitCommit getCommit() {
         return commit;
     }
+
+    private Object castToGHCommit(GitCommit commit, Class targetType) {
+        shortInfo = GHCommit.ShortInfo()
+    }
+
 }

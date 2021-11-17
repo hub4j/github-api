@@ -34,68 +34,9 @@ public class GHCommit {
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
                     "UWF_UNWRITTEN_FIELD" },
             justification = "JSON API")
-    public static class ShortInfo {
-        private GHAuthor author;
-        private GHAuthor committer;
-
-        private String message;
+    public static class ShortInfo extends GitCommit {
 
         private int comment_count;
-
-        private GHVerification verification;
-
-        static class Tree {
-            String sha;
-        }
-
-        private Tree tree;
-
-        /**
-         * Gets author.
-         *
-         * @return the author
-         */
-        @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
-        public GitUser getAuthor() {
-            return author;
-        }
-
-        /**
-         * Gets authored date.
-         *
-         * @return the authored date
-         */
-        public Date getAuthoredDate() {
-            return author.getDate();
-        }
-
-        /**
-         * Gets committer.
-         *
-         * @return the committer
-         */
-        @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
-        public GitUser getCommitter() {
-            return committer;
-        }
-
-        /**
-         * Gets commit date.
-         *
-         * @return the commit date
-         */
-        public Date getCommitDate() {
-            return committer.getDate();
-        }
-
-        /**
-         * Gets message.
-         *
-         * @return Commit message.
-         */
-        public String getMessage() {
-            return message;
-        }
 
         /**
          * Gets comment count.
@@ -103,25 +44,12 @@ public class GHCommit {
          * @return the comment count
          */
         public int getCommentCount() {
+            if (comment_count < 0) {
+                throw new GHException("Not available on this endpoint.");
+            }
             return comment_count;
         }
 
-        /**
-         * Gets Verification Status.
-         *
-         * @return the Verification status
-         */
-        public GHVerification getVerification() {
-            return verification;
-        }
-    }
-
-    /**
-     * The type GHAuthor.
-     *
-     * @deprecated Use {@link GitUser} instead.
-     */
-    public static class GHAuthor extends GitUser {
     }
 
     /**
@@ -330,7 +258,7 @@ public class GHCommit {
      *             on error
      */
     public GHTree getTree() throws IOException {
-        return owner.getTree(getCommitShortInfo().tree.sha);
+        return owner.getTree(getCommitShortInfo().getTree().sha);
     }
 
     /**

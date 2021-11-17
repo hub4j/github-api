@@ -119,6 +119,7 @@ public class GHRepository extends GHObject {
     private String default_branch, language;
 
     private Map<String, GHCommit> commits = new WeakHashMap<String, GHCommit>();
+    private Map<String, GitCommit> gitCommits = new WeakHashMap<String, GitCommit>();
 
     @SkipFromToString
     private GHRepoPermission permissions;
@@ -1933,6 +1934,27 @@ public class GHRepository extends GHObject {
                     .fetch(GHCommit.class)
                     .wrapUp(this);
             commits.put(sha1, c);
+        }
+        return c;
+    }
+
+    /**
+     * Gets a commit object in this repository.
+     *
+     * @param sha1
+     *            the sha 1
+     * @return the commit
+     * @throws IOException
+     *             the io exception
+     */
+    public GitCommit getGitCommit(String sha1) throws IOException {
+        GitCommit c = gitCommits.get(sha1);
+        if (c == null) {
+            c = root().createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/git/commits/%s", getOwnerName(), name, sha1))
+                .fetch(GitCommit.class)
+                .wrapUp(this);
+            gitCommits.put(sha1, c);
         }
         return c;
     }

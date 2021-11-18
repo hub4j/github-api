@@ -44,12 +44,22 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
     /**
      * Fork gh content search builder.
      *
-     * @param v
-     *            the v
+     * @param fork
+     *            search mode for forks
+     *
      * @return the gh content search builder
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-in-forks">Searching
+     *      in forks</a>
      */
-    public GHContentSearchBuilder fork(String v) {
-        return q("fork:" + v);
+    public GHContentSearchBuilder fork(GHFork fork) {
+        if (GHFork.PARENT_ONLY.equals(fork)) {
+            this.terms.removeIf(term -> term.contains("fork:"));
+            return this;
+        }
+
+        return q("fork:" + fork);
     }
 
     /**

@@ -83,7 +83,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.2</version>
+          <version>3.0.0-M5</version>
           <configuration>
             <!-- SUREFIRE-1226 workaround -->
             <trimStackTrace>false</trimStackTrace>
@@ -111,7 +111,9 @@
               <configuration>
                 <propertyName>jacoco.surefire.argLine</propertyName>
                 <!-- no need to get data about external code. It dramatically reduces performance of JaCoCo for nothing -->
-                <include>org.kohsuke.*</include>
+                <includes>
+                  <include>org.kohsuke.*</include>
+                </includes>
               </configuration>
             </execution>
             <!-- attached to Maven test phase -->
@@ -289,7 +291,9 @@
             <version>1.0</version>
           </signature>
           <ignores>
-            java.net.http.HttpClient
+            <!-- This is not idea, but we need to allow java.net.http.* in java11 module -->
+            <!-- Also, we still have a Java 8 CI build that protects against misuse -->
+            java.net.http.*
           </ignores>
         </configuration>
         <executions>
@@ -729,7 +733,7 @@
     <profile>
       <id>multirelease</id>
       <activation>
-	<jdk>[11,)</jdk>
+	    <jdk>[11,)</jdk>
       </activation>
       <build>
         <plugins>
@@ -745,10 +749,36 @@
                 </goals>
                 <configuration>
                   <release>11</release>
+                  <source>11</source>
+                  <target>11</target>
                   <compileSourceRoots>
                     <compileSourceRoot>${project.basedir}/src/main/java11</compileSourceRoot>
                   </compileSourceRoots>
                   <multiReleaseOutput>true</multiReleaseOutput>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+              <execution>
+                <phase>
+                  process-test-classes
+                </phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <!-- Copy production classes into folder for running tests -->
+                    <mkdir dir="${basedir}/target/classes-test-java11" />
+                    <copy todir="${basedir}/target/classes-test-java11">
+                      <fileset dir="${basedir}/target/classes" includes="**/*" />
+                      <fileset dir="${basedir}/target/classes/META-INF/versions/11" includes="org/**/*" />
+                    </copy>
+                  </target>
                 </configuration>
               </execution>
             </executions>
@@ -763,9 +793,10 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <classesDirectory>${project.build.outputDirectory}/classes</classesDirectory>
+                  <classesDirectory>${project.basedir}/target/classes-test-java11</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=default</argLine>
                 </configuration>
               </execution>
             </executions>

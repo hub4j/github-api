@@ -543,6 +543,22 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    @Test
+    public void checkNonExistentReviewerTest() throws IOException {
+        final GHRepository repository = getRepository();
+        final GHPullRequest pullRequest = repository.getPullRequest(1);
+
+        assertThat(pullRequest.getRequestedReviewers(), is(empty()));
+    }
+
+    @Test
+    public void checkNonExistentUserTest() throws IOException {
+        final GHRepository repository = getRepository();
+        final GHPullRequest pullRequest = repository.getPullRequest(2);
+
+        assertThat(pullRequest.getUser().login, is("ghost"));
+    }
+
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }

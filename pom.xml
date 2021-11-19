@@ -801,8 +801,48 @@
       <build>
         <plugins>
           <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+              <execution>
+                <phase>
+                  process-test-classes
+                </phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <!-- Copy production classes into folder for running tests -->
+                    <mkdir dir="${basedir}/target/classes-test-java11" />
+                    <delete>
+                      <fileset dir="${basedir}/target/classes-test-java11" includes="**/*"/>
+                    </delete>
+                    <copy todir="${basedir}/target/classes-test-java11">
+                      <fileset dir="${basedir}/target/classes" includes="org/**/*" />
+                      <fileset dir="${basedir}/target/classes/META-INF/versions/11" includes="org/**/*" />
+                    </copy>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <executions>
+              <execution>
+                <id>java11-test</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/classes-test-java11</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
+                </configuration>
+              </execution>
               <execution>
                 <id>java11-jar-test</id>
                 <phase>integration-test</phase>

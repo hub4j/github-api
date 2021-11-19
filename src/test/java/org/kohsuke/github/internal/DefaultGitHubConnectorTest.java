@@ -8,8 +8,8 @@ import org.kohsuke.github.HttpConnector;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
+import org.kohsuke.github.extras.HttpClientGitHubConnector;
 import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
-import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
 
 import java.io.IOException;
 
@@ -26,10 +26,26 @@ public class DefaultGitHubConnectorTest extends AbstractGitHubWireMockTest {
         GitHubConnector connector;
         GitHubConnectorHttpConnectorAdapter adapter;
 
+        boolean usingHttpClient = false;
+        try {
+            connector = DefaultGitHubConnector.create("httpclient");
+            assertThat(connector, instanceOf(HttpClientGitHubConnector.class));
+            usingHttpClient = true;
+        } catch (UnsupportedOperationException e) {
+            assertThat(e.getMessage(), equalTo("java.net.http.HttpClient is only supported in Java 11+."));
+        }
+
         connector = DefaultGitHubConnector.create("default");
-        assertThat(connector, instanceOf(GitHubConnectorHttpConnectorAdapter.class));
-        adapter = (GitHubConnectorHttpConnectorAdapter) connector;
-        assertThat(adapter.httpConnector, equalTo(HttpConnector.DEFAULT));
+
+        // Current implementation never uses httpclient for default.
+        usingHttpClient = false;
+        if (usingHttpClient) {
+            assertThat(connector, instanceOf(HttpClientGitHubConnector.class));
+        } else {
+            assertThat(connector, instanceOf(GitHubConnectorHttpConnectorAdapter.class));
+            adapter = (GitHubConnectorHttpConnectorAdapter) connector;
+            assertThat(adapter.httpConnector, equalTo(HttpConnector.DEFAULT));
+        }
 
         connector = DefaultGitHubConnector.create("urlconnection");
         assertThat(connector, instanceOf(GitHubConnectorHttpConnectorAdapter.class));
@@ -42,7 +58,6 @@ public class DefaultGitHubConnectorTest extends AbstractGitHubWireMockTest {
         assertThat(adapter.httpConnector, instanceOf(OkHttpConnector.class));
 
         connector = DefaultGitHubConnector.create("okhttp");
-        assertThat(connector, instanceOf(OkHttpGitHubConnector.class));
 
         Assert.assertThrows(IllegalStateException.class, () -> DefaultGitHubConnector.create(""));
 

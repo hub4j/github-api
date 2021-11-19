@@ -44,7 +44,6 @@ public class ArchTests {
 
     private static final JavaClasses classFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.DoNotIncludeTests())
-            .withImportOption(new ImportOption.DoNotIncludeJars())
             .importPackages("org.kohsuke.github");
 
     private static final JavaClasses apacheCommons = new ClassFileImporter().importPackages("org.apache.commons.lang3");

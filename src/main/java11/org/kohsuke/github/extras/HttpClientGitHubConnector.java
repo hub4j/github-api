@@ -63,7 +63,7 @@ public class HttpClientGitHubConnector implements GitHubConnector {
 
         HttpRequest.BodyPublisher publisher = HttpRequest.BodyPublishers.noBody();
         if (connectorRequest.hasBody()) {
-            publisher = HttpRequest.BodyPublishers.ofInputStream(() -> connectorRequest.body());
+            publisher = HttpRequest.BodyPublishers.ofByteArray(IOUtils.toByteArray(connectorRequest.body()));
         }
         builder.method(connectorRequest.method(), publisher);
 

@@ -83,7 +83,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M5</version>
+          <version>2.22.2</version>
           <configuration>
             <!-- SUREFIRE-1226 workaround -->
             <trimStackTrace>false</trimStackTrace>
@@ -734,6 +734,9 @@
       <id>multirelease</id>
       <activation>
 	    <jdk>[11,)</jdk>
+        <property>
+          <name>!test</name>
+        </property>
       </activation>
       <build>
         <plugins>
@@ -760,6 +763,31 @@
             </executions>
           </plugin>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.2.0</version>
+            <configuration>
+              <archive>
+                <manifestEntries>
+                  <Multi-Release>true</Multi-Release>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>multirelease-test</id>
+      <activation>
+        <jdk>[11,)</jdk>
+        <property>
+          <name>!test</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
             <version>3.0.0</version>
             <executions>
@@ -774,8 +802,11 @@
                   <target>
                     <!-- Copy production classes into folder for running tests -->
                     <mkdir dir="${basedir}/target/classes-test-java11" />
+                    <delete>
+                      <fileset dir="${basedir}/target/classes-test-java11" includes="**/*"/>
+                    </delete>
                     <copy todir="${basedir}/target/classes-test-java11">
-                      <fileset dir="${basedir}/target/classes" includes="**/*" />
+                      <fileset dir="${basedir}/target/classes" includes="org/**/*" />
                       <fileset dir="${basedir}/target/classes/META-INF/versions/11" includes="org/**/*" />
                     </copy>
                   </target>
@@ -796,26 +827,28 @@
                   <classesDirectory>${project.basedir}/target/classes-test-java11</classesDirectory>
                   <useSystemClassLoader>false</useSystemClassLoader>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=default</argLine>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
+                </configuration>
+              </execution>
+              <execution>
+                <id>java11-jar-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
                 </configuration>
               </execution>
             </executions>
           </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.2.0</version>
-            <configuration>
-              <archive>
-                <manifestEntries>
-                  <Multi-Release>true</Multi-Release>
-                </manifestEntries>
-              </archive>
-            </configuration>
-          </plugin>
         </plugins>
       </build>
     </profile>
+
   </profiles>
   <reporting>
     <plugins>

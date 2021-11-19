@@ -111,7 +111,15 @@
               <configuration>
                 <propertyName>jacoco.surefire.argLine</propertyName>
                 <!-- no need to get data about external code. It dramatically reduces performance of JaCoCo for nothing -->
-                <include>org.kohsuke.*</include>
+                <includes>
+                  <include>org.kohsuke.*</include>
+                  <include>org/kohsuke/*</include>
+                </includes>
+                <excludes>
+                  <exclude>org/kohsuke/github/extras/HttpClientGitHubConnector*</exclude>
+                  <exclude>org/kohsuke/github/extras/HttpClientGitHubConnector*.*</exclude>
+                  <exclude>META-INF/versions/11/org/kohsuke/github/extras/HttpClientGitHubConnector*.*</exclude>
+                </excludes>
               </configuration>
             </execution>
             <!-- attached to Maven test phase -->
@@ -153,13 +161,16 @@
                       </limit>
                     </limits>
                     <excludes>
+                      <!-- Java 11 multi-release overlay problems -->
+                      <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector.**</exclude>
+                      <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector</exclude>
+
                       <!-- Code implemented externally -->
                       <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
                       <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
 
                       <!-- Sample only -->
                       <exclude>org.kohsuke.github.example.*</exclude>
-
 
                       <!-- Deprecated -->
                       <exclude>org.kohsuke.github.extras.OkHttpConnector</exclude>
@@ -292,6 +303,11 @@
             <artifactId>java18</artifactId>
             <version>1.0</version>
           </signature>
+          <ignores>
+            <!-- This is not idea, but we need to allow java.net.http.* in java11 module -->
+            <!-- Also, we still have a Java 8 CI build that protects against misuse -->
+            java.net.http.*
+          </ignores>
         </configuration>
         <executions>
           <execution>
@@ -586,17 +602,6 @@
                 </configuration>
               </execution>
               <execution>
-                <id>okhttpconnector-test</id>
-                <phase>test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttpconnector</argLine>
-                </configuration>
-              </execution>
-              <execution>
                 <id>slow-or-flaky-test</id>
                 <phase>test</phase>
                 <goals>
@@ -738,6 +743,85 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>multirelease</id>
+      <activation>
+	    <jdk>[11,)</jdk>
+        <property>
+          <name>!test</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+            <executions>
+              <execution>
+                <id>compile-java-11</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>compile</goal>
+                </goals>
+                <configuration>
+                  <release>11</release>
+                  <source>11</source>
+                  <target>11</target>
+                  <compileSourceRoots>
+                    <compileSourceRoot>${project.basedir}/src/main/java11</compileSourceRoot>
+                  </compileSourceRoots>
+                  <multiReleaseOutput>true</multiReleaseOutput>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.2.0</version>
+            <configuration>
+              <archive>
+                <manifestEntries>
+                  <Multi-Release>true</Multi-Release>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>multirelease-test</id>
+      <activation>
+        <jdk>[11,)</jdk>
+        <property>
+          <name>!test</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>java11-jar-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
   </profiles>
   <reporting>
     <plugins>

@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 import javax.annotation.Nonnull;
@@ -106,7 +105,7 @@ public class OkHttpGitHubConnector implements GitHubConnector {
      *
      * Implementation specific to {@link okhttp3.Response}.
      */
-    static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse {
+    private static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse {
 
         private boolean bodyBytesRead = false;
         private byte[] bodyBytes = null;
@@ -122,6 +121,7 @@ public class OkHttpGitHubConnector implements GitHubConnector {
         /**
          * {@inheritDoc}
          */
+        @Override
         public InputStream bodyStream() throws IOException {
             readBodyBytes();
             InputStream stream = bodyBytes == null ? null : new ByteArrayInputStream(bodyBytes);
@@ -150,7 +150,6 @@ public class OkHttpGitHubConnector implements GitHubConnector {
          *
          * @param stream
          *            the stream to possibly wrap
-         *
          */
         private InputStream wrapStream(InputStream stream) throws IOException {
             String encoding = header("Content-Encoding");
@@ -166,7 +165,5 @@ public class OkHttpGitHubConnector implements GitHubConnector {
         public void close() throws IOException {
             response.close();
         }
-
-        private static final Logger LOGGER = Logger.getLogger(OkHttpGitHubConnector.class.getName());
     }
 }

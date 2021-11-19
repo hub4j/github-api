@@ -32,8 +32,9 @@ public class GHContentUpdateResponse {
         return commit;
     }
 
-    private Object castToGHCommit(GitCommit commit, Class targetType) {
-        shortInfo = GHCommit.ShortInfo()
+    private GHCommit castToGHCommit(GitCommit commit, Class targetType) {
+        // if (targetType == GHCommit.class) {
+        return new GHCommit(commit.getOwner(), commit.getCommitShortInfo());
     }
 
 }

@@ -31,6 +31,10 @@ public class GitCommit {
             return url;
         }
 
+        public String getSha() {
+            return sha;
+        }
+
 
     }
 

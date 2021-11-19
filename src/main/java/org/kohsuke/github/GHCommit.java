@@ -50,6 +50,12 @@ public class GHCommit {
             return comment_count;
         }
 
+        public ShortInfo(GitCommit commit) {
+            commit.getCommitShortInfo();
+
+
+        }
+
     }
 
     /**
@@ -190,6 +196,11 @@ public class GHCommit {
     Stats stats;
     List<Parent> parents;
     User author, committer;
+
+    public GHCommit(GHRepository repo, ShortInfo shortInfo) {
+        owner = repo;
+        commit = shortInfo;
+    }
 
     /**
      * Gets commit short info.

@@ -113,7 +113,13 @@
                 <!-- no need to get data about external code. It dramatically reduces performance of JaCoCo for nothing -->
                 <includes>
                   <include>org.kohsuke.*</include>
+                  <include>org/kohsuke/*</include>
                 </includes>
+                <excludes>
+                  <exclude>org/kohsuke/github/extras/HttpClientGitHubConnector*</exclude>
+                  <exclude>org/kohsuke/github/extras/HttpClientGitHubConnector*.*</exclude>
+                  <exclude>META-INF/versions/11/org/kohsuke/github/extras/HttpClientGitHubConnector*.*</exclude>
+                </excludes>
               </configuration>
             </execution>
             <!-- attached to Maven test phase -->
@@ -155,9 +161,16 @@
                       </limit>
                     </limits>
                     <excludes>
+                      <!-- Java 11 multi-release overlay problems -->
+                      <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector.**</exclude>
+                      <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector</exclude>
+
+                      <!-- Code implemented externally -->
+                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
+                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
+
                       <!-- Sample only -->
                       <exclude>org.kohsuke.github.example.*</exclude>
-
 
                       <!-- Deprecated -->
                       <exclude>org.kohsuke.github.extras.OkHttpConnector</exclude>

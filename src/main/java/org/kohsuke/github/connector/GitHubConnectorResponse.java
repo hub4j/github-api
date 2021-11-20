@@ -86,8 +86,9 @@ public abstract class GitHubConnectorResponse implements Closeable {
      *
      * @return the response body
      * @throws IOException
-     *             if an I/O Exception occurs.
+     *             if response stream is null or an I/O Exception occurs.
      */
+    @Nonnull
     public abstract InputStream bodyStream() throws IOException;
 
     /**
@@ -121,7 +122,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
-     * Handles the "Content-Encoding" header.
+     * Handles wrapping the body stream if indicated by the "Content-Encoding" header.
      *
      * @param stream
      *            the stream to possibly wrap
@@ -137,6 +138,24 @@ public abstract class GitHubConnectorResponse implements Closeable {
             return new GZIPInputStream(stream);
 
         throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
+    }
+
+    /**
+     * Parse a header value as a signed decimal integer.
+     *
+     * @param name
+     *            the header field to parse
+     * @return integer value of the header field
+     * @throws NumberFormatException
+     *             if the header is missing or does not contain a parsable integer.
+     */
+    public final int parseInt(String name) throws NumberFormatException {
+        try {
+            String headerValue = header(name);
+            return Integer.parseInt(headerValue);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException(name + ": " + e.getMessage());
+        }
     }
 
     public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
@@ -155,6 +174,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
          * {@inheritDoc}
          */
         @Override
+        @Nonnull
         public InputStream bodyStream() throws IOException {
             if (isClosed) {
                 throw new IOException("Response is closed");
@@ -171,7 +191,11 @@ public abstract class GitHubConnectorResponse implements Closeable {
                 }
             }
 
-            return inputBytes == null ? null : new ByteArrayInputStream(inputBytes);
+            if (inputBytes == null) {
+                throw new IOException("Response body missing, stream null");
+            }
+
+            return new ByteArrayInputStream(inputBytes);
         }
 
         /**

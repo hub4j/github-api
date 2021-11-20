@@ -103,40 +103,36 @@
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>0.8.7</version>
+          <configuration>
+            <!-- no need to get data about external code. It dramatically reduces performance of JaCoCo for nothing -->
+            <excludes>
+              <exclude>/org/kohsuke/github/extras/HttpClient*</exclude>
+            </excludes>
+          </configuration>
           <executions>
             <execution>
               <goals>
-                <goal>prepare-agent</goal>
+                <goal>prepare-agent-integration</goal>
               </goals>
               <configuration>
                 <propertyName>jacoco.surefire.argLine</propertyName>
-                <!-- no need to get data about external code. It dramatically reduces performance of JaCoCo for nothing -->
-                <includes>
-                  <include>org.kohsuke.*</include>
-                  <include>org/kohsuke/*</include>
-                </includes>
-                <excludes>
-                  <exclude>org/kohsuke/github/extras/HttpClientGitHubConnector*</exclude>
-                  <exclude>org/kohsuke/github/extras/HttpClientGitHubConnector*.*</exclude>
-                  <exclude>META-INF/versions/11/org/kohsuke/github/extras/HttpClientGitHubConnector*.*</exclude>
-                </excludes>
               </configuration>
             </execution>
             <!-- attached to Maven test phase -->
             <execution>
               <id>report</id>
-              <phase>test</phase>
               <goals>
-                <goal>report</goal>
+                <goal>report-integration</goal>
               </goals>
             </execution>
             <execution>
               <id>check</id>
-              <phase>test</phase>
+              <phase>verify</phase>
               <goals>
                 <goal>check</goal>
               </goals>
               <configuration>
+                <dataFile>${project.build.directory}/jacoco-it.exec</dataFile>
                 <rules>
                   <rule>
                     <element>BUNDLE</element>
@@ -231,6 +227,27 @@
             <autoReleaseAfterClose>true</autoReleaseAfterClose>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>animal-sniffer-maven-plugin</artifactId>
+          <version>1.20</version>
+          <configuration>
+            <signature>
+              <groupId>org.codehaus.mojo.signature</groupId>
+              <artifactId>java18</artifactId>
+              <version>1.0</version>
+            </signature>
+          </configuration>
+          <executions>
+            <execution>
+              <id>ensure-java-1.8-class-library</id>
+              <phase>test</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -296,28 +313,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>1.20</version>
-        <configuration>
-          <signature>
-            <groupId>org.codehaus.mojo.signature</groupId>
-            <artifactId>java18</artifactId>
-            <version>1.0</version>
-          </signature>
-          <ignores>
-            <!-- This is not idea, but we need to allow java.net.http.* in java11 module -->
-            <!-- Also, we still have a Java 8 CI build that protects against misuse -->
-            java.net.http.*
-          </ignores>
-        </configuration>
-        <executions>
-          <execution>
-            <id>ensure-java-1.8-class-library</id>
-            <phase>test</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>com.infradna.tool</groupId>
@@ -592,22 +587,24 @@
             <executions>
               <execution>
                 <id>okhttp-test</id>
-                <phase>test</phase>
+                <phase>integration-test</phase>
                 <goals>
                   <goal>test</goal>
                 </goals>
                 <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
                   <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttp</argLine>
                 </configuration>
               </execution>
               <execution>
                 <id>slow-or-flaky-test</id>
-                <phase>test</phase>
+                <phase>integration-test</phase>
                 <goals>
                   <goal>test</goal>
                 </goals>
                 <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
                   <rerunFailingTestsCount>2</rerunFailingTestsCount>
                   <!-- There are some tests that take longer or are a little
                     flaky. Run them here. -->
@@ -677,7 +674,7 @@
                   <rules>
                     <requireFilesExist>
                       <files>
-                        <file>${project.build.directory}/jacoco.exec</file>
+                        <file>${project.build.directory}/jacoco-it.exec</file>
                       </files>
                     </requireFilesExist>
                   </rules>
@@ -747,12 +744,18 @@
       <id>multirelease</id>
       <activation>
 	    <jdk>[11,)</jdk>
-        <property>
-          <name>!test</name>
-        </property>
       </activation>
       <build>
         <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>animal-sniffer-maven-plugin</artifactId>
+            <configuration>
+              <ignores>
+                java.net.http.*
+              </ignores>
+            </configuration>
+          </plugin>
           <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.8.1</version>
@@ -804,7 +807,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <executions>
               <execution>
-                <id>java11-jar-test</id>
+                <id>java11-test</id>
                 <phase>integration-test</phase>
                 <goals>
                   <goal>test</goal>

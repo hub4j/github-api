@@ -162,7 +162,6 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                 .sort(GHContentSearchBuilder.Sort.INDEXED)
                 .order(GHDirection.DESC)
                 .list();
-        final GHContent topRepo1 = results.iterator().next();
 
         final PagedSearchIterable<GHContent> resultsWithForks = gitHub.searchContent()
                 .q("addClass")
@@ -171,9 +170,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                 .order(GHDirection.DESC)
                 .fork(GHFork.PARENT_AND_FORKS)
                 .list();
-        final GHContent topRepo2 = resultsWithForks.iterator().next();
 
-        assertThat(topRepo1.getUrl(), not(equalTo(topRepo2.getUrl())));
         assertThat(results.getTotalCount(), lessThan(resultsWithForks.getTotalCount()));
     }
 

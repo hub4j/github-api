@@ -1,12 +1,15 @@
 package org.kohsuke.github.connector;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.*;
+import java.util.zip.GZIPInputStream;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -14,9 +17,13 @@ import javax.annotation.Nonnull;
 /**
  * Response information supplied when a response is received and before the body is processed.
  * <p>
- * Instances of this class are closed once the response is done being processed. This means that contents of the body
- * stream will not be readable after a call is completed. Status code, response headers, and request details will still
- * be readable but it is recommended that consumers copy any information they need rather than retaining a reference.
+ * Instances of this class are closed once the response is done being processed. This means that {@link #bodyStream()}
+ * will not be readable after a call is completed.
+ *
+ * {@link #statusCode()}, {@link #allHeaders()}, and {@link #request()} will still be readable but it is recommended
+ * that consumers copy any information they need rather than retaining a reference to {@link GitHubConnectorResponse}.
+ *
+ * @author Liam Newman
  */
 public abstract class GitHubConnectorResponse implements Closeable {
 
@@ -111,5 +118,79 @@ public abstract class GitHubConnectorResponse implements Closeable {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable map of unmodifiable lists")
     public Map<String, List<String>> allHeaders() {
         return headers;
+    }
+
+    /**
+     * Handles the "Content-Encoding" header.
+     *
+     * @param stream
+     *            the stream to possibly wrap
+     * @return an input stream potentially wrapped to decode gzip input
+     * @throws IOException
+     *             if an I/O Exception occurs.
+     */
+    protected InputStream wrapStream(InputStream stream) throws IOException {
+        String encoding = header("Content-Encoding");
+        if (encoding == null || stream == null)
+            return stream;
+        if (encoding.equals("gzip"))
+            return new GZIPInputStream(stream);
+
+        throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
+    }
+
+    public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
+
+        private boolean inputStreamRead = false;
+        private byte[] inputBytes = null;
+        private boolean isClosed = false;
+
+        protected ByteArrayResponse(@Nonnull GitHubConnectorRequest request,
+                int statusCode,
+                @Nonnull Map<String, List<String>> headers) {
+            super(request, statusCode, headers);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public InputStream bodyStream() throws IOException {
+            if (isClosed) {
+                throw new IOException("Response is closed");
+            }
+            synchronized (this) {
+                if (!inputStreamRead) {
+                    InputStream rawStream = rawBodyStream();
+                    try (InputStream stream = wrapStream(rawStream)) {
+                        if (stream != null) {
+                            inputBytes = IOUtils.toByteArray(stream);
+                        }
+                    }
+                    inputStreamRead = true;
+                }
+            }
+
+            return inputBytes == null ? null : new ByteArrayInputStream(inputBytes);
+        }
+
+        /**
+         * Get the raw implementation specific body stream for this response.
+         *
+         * This method will only be called once to completion. If an exception is thrown, it may be called multiple
+         * times.
+         *
+         * @return the stream for the raw response
+         * @throws IOException
+         *             if an I/O Exception occurs.
+         */
+        @CheckForNull
+        protected abstract InputStream rawBodyStream() throws IOException;
+
+        @Override
+        public void close() throws IOException {
+            isClosed = true;
+            this.inputBytes = null;
+        }
     }
 }

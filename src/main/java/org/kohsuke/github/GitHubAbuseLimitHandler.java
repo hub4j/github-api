@@ -13,6 +13,8 @@ import javax.annotation.Nonnull;
  * @author Kohsuke Kawaguchi
  * @see GitHubBuilder#withAbuseLimitHandler(AbuseLimitHandler) GitHubBuilder#withRateLimitHandler(AbuseLimitHandler)
  * @see GitHubRateLimitHandler
+ *
+ * @author Liam Newman
  */
 public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler {
 

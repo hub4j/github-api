@@ -3,12 +3,17 @@ package org.kohsuke.github.authorization;
 import java.io.IOException;
 
 /**
- * Provides a functional interface that returns a valid encodedAuthorization. This strategy allows for a provider that
- * dynamically changes the credentials. Each request will request the credentials from the provider.
+ * Provides a functional interface that returns a valid encodedAuthorization.
+ *
+ * This interface support the creation of providers based on immutable credentials or dynamic credentials which change
+ * of time. Each {@link org.kohsuke.github.connector.GitHubConnectorRequest} will call
+ * {@link #getEncodedAuthorization()} on the provider.
+ *
+ * @author Liam Newman
  */
 public interface AuthorizationProvider {
     /**
-     * An static instance for an ANONYMOUS authorization provider
+     * A static instance for an ANONYMOUS authorization provider
      */
     AuthorizationProvider ANONYMOUS = new AnonymousAuthorizationProvider();
 
@@ -27,17 +32,8 @@ public interface AuthorizationProvider {
      *
      * @return encoded authorization string, can be null
      * @throws IOException
-     *             on any error that prevents the provider from getting a valid authorization
+     *             on any error that prevents the provider from returning a valid authorization
      */
     String getEncodedAuthorization() throws IOException;
 
-    /**
-     * A {@link AuthorizationProvider} that ensures that no credentials are returned
-     */
-    class AnonymousAuthorizationProvider implements AuthorizationProvider {
-        @Override
-        public String getEncodedAuthorization() throws IOException {
-            return null;
-        }
-    }
 }

@@ -37,6 +37,8 @@ import javax.annotation.Nonnull;
  * @param <S>
  *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link R}, this builder will commit changes after each call to {@link #with(String, Object)}.
+ *
+ * @author Liam Newman
  */
 abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
 

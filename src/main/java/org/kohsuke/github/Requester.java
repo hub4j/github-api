@@ -26,7 +26,6 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
-import org.kohsuke.github.function.BodyHandler;
 import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.ByteArrayInputStream;
@@ -123,9 +122,9 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *
      * Copies an input stream to an in-memory input stream. The performance on this is not great but
      * {@link GitHubConnectorResponse#bodyStream()} is closed at the end of every call to
-     * {@link GitHubClient#sendRequest(GitHubRequest, BodyHandler)}, so any reads to the original input stream must be
-     * completed before then. There are a number of deprecated methods that return {@link InputStream}. This method
-     * keeps all of them using the same code path.
+     * {@link GitHubClient#sendRequest(GitHubRequest, GitHubClient.BodyHandler)}, so any reads to the original input
+     * stream must be completed before then. There are a number of deprecated methods that return {@link InputStream}.
+     * This method keeps all of them using the same code path.
      *
      * @param inputStream
      *            the input stream to be copied

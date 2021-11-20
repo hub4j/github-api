@@ -8,7 +8,7 @@ import org.kohsuke.github.authorization.UserAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
-import org.kohsuke.github.function.BodyHandler;
+import org.kohsuke.github.function.FunctionThrows;
 
 import java.io.*;
 import java.net.*;
@@ -33,9 +33,14 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 /**
  * A GitHub API Client
  * <p>
- * A GitHubClient can be used to send requests and retrieve their responses. GitHubClient is thread-safe and can be used
- * to send multiple requests. GitHubClient also track some GitHub API information such as {@link GHRateLimit}.
+ * A GitHubClient can be used to send requests and retrieve their responses. Uses {@link GitHubConnector} as a pluggable
+ * component to communicate using differing HTTP client libraries.
+ * <p>
+ * GitHubClient is thread-safe and can be used to send multiple requests simultaneously. GitHubClient also tracks some
+ * GitHub API information such as {@link GHRateLimit}.
  * </p>
+ *
+ * @author Liam Newman
  */
 class GitHubClient {
 
@@ -763,5 +768,15 @@ class GitHubClient {
         RetryRequestException(GitHubConnectorRequest connectorRequest) {
             this.connectorRequest = connectorRequest;
         }
+    }
+
+    /**
+     * Represents a supplier of results that can throw.
+     *
+     * @param <T>
+     *            the type of results supplied by this supplier
+     */
+    @FunctionalInterface
+    interface BodyHandler<T> extends FunctionThrows<GitHubConnectorResponse, T, IOException> {
     }
 }

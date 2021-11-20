@@ -16,6 +16,8 @@ import java.util.logging.Logger;
  * {@link RateLimitChecker} is called before each request to check the rate limit and wait if the checker criteria are
  * met.
  * </p>
+ *
+ * @author Liam Newman
  */
 public abstract class RateLimitChecker {
 

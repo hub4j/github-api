@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
  * @see GitHubBuilder#withRateLimitHandler(GitHubRateLimitHandler)
  *      GitHubBuilder#withRateLimitHandler(GitHubRateLimitHandler)
  * @see AbuseLimitHandler
+ * @deprecated Switch to {@link GitHubRateLimitHandler} or even better provide {@link RateLimitChecker}s.
  */
 @Deprecated
 public abstract class RateLimitHandler extends GitHubRateLimitHandler {

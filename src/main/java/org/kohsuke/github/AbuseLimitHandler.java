@@ -16,6 +16,7 @@ import javax.annotation.Nonnull;
  *      GitHubBuilder#withAbuseLimitHandler(GitHubAbuseLimitHandler)
  * @see <a href="https://developer.github.com/v3/#abuse-rate-limits">documentation</a>
  * @see RateLimitHandler
+ * @deprecated Switch to {@link GitHubAbuseLimitHandler}.
  */
 @Deprecated
 public abstract class AbuseLimitHandler extends GitHubAbuseLimitHandler {

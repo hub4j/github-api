@@ -9,15 +9,17 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
- * A request passed to {@link GitHubConnector#send(GitHubConnectorRequest)} to get a {@link GitHubConnectorResponse}.\
+ * A request passed to {@link GitHubConnector#send(GitHubConnectorRequest)} to get a {@link GitHubConnectorResponse}.
  *
  * Implementers of {@link GitHubConnector#send(GitHubConnectorRequest)} process the information from a
  * {@link GitHubConnectorRequest} to open an HTTP connection and retrieve a response. They then return a class that
- * extends {@link GitHubConnectorResponse} for their response data.
+ * extends {@link GitHubConnectorResponse} corresponding their response data.
  *
  * Clients should not implement their own {@link GitHubConnectorRequest}. The {@link GitHubConnectorRequest} provided by
  * the caller of {@link GitHubConnector#send(GitHubConnectorRequest)} should be passed to the constructor of
  * {@link GitHubConnectorResponse}.
+ *
+ * @author Liam Newman
  */
 public interface GitHubConnectorRequest {
 

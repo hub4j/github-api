@@ -53,12 +53,13 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
     public void testHandler_Fail() throws Exception {
         // Customized response that templates the date to keep things working
         snapshotNotAllowed();
+        final HttpURLConnection[] savedConnection = new HttpURLConnection[1];
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withAbuseLimitHandler(new AbuseLimitHandler() {
                     @Override
                     public void onError(IOException e, HttpURLConnection uc) throws IOException {
-
+                        savedConnection[0] = uc;
                         // Verify
                         assertThat(uc.getDate(), Matchers.greaterThanOrEqualTo(new Date().getTime() - 10000));
                         assertThat(uc.getExpiration(), equalTo(0L));
@@ -103,7 +104,6 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                                 assertThat(errorStream, notNullValue());
                                 String errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
                                 fail();
-                                assertThat(errorString, containsString("Must have push access to repository"));
                             } catch (IOException ex) {
                                 assertThat(ex, notNullValue());
                                 assertThat(ex.getMessage(), containsString("stream is closed"));
@@ -194,6 +194,11 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
         } catch (Exception e) {
             assertThat(e, instanceOf(HttpException.class));
             assertThat(e.getMessage(), equalTo("Abuse limit reached"));
+        }
+
+        if (savedConnection[0].toString().contains("GitHubConnectorResponseHttpUrlConnectionAdapter")) {
+            // error stream is non-null above. null here because response has been closed.
+            assertThat(savedConnection[0].getErrorStream(), nullValue());
         }
 
         assertThat(mockGitHub.getRequestCount(), equalTo(2));

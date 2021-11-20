@@ -26,6 +26,8 @@ import javax.annotation.Nonnull;
  * allows for a wide range of {@link RateLimitChecker} implementations, including complex throttling strategies and
  * polling.
  * </p>
+ *
+ * @author Liam Newman
  */
 class GitHubRateLimitChecker {
 

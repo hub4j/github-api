@@ -7,7 +7,7 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 import java.io.IOException;
 
 /**
- * {@link GitHubConnector} wrapper that sets timeout
+ * {@link GitHubConnector} for platforms that do not support Java 11 HttpClient.
  *
  * @author Liam Newman
  */

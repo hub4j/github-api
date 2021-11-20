@@ -10,7 +10,9 @@ import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
 /**
  * Internal class that selects what kind of {@link GitHubConnector} will be the default.
  *
- * Allow behavior to be changed for different version of Java, such as supporting Java 11 HttpClient.
+ * Allows behavior to be changed for different versions of Java, such as supporting Java 11 HttpClient.
+ *
+ * @author Liam Newman
  */
 public final class DefaultGitHubConnector {
 

@@ -122,10 +122,11 @@ class GitHubResponse<T> {
     /**
      * Gets the body of the response as a {@link String}.
      *
+     * @param connectorResponse
+     *            the response to read
      * @return the body of the response as a {@link String}.
      * @throws IOException
      *             if an I/O Exception occurs.
-     * @param connectorResponse
      */
     @Nonnull
     static String getBodyAsString(GitHubConnectorResponse connectorResponse) throws IOException {
@@ -138,15 +139,16 @@ class GitHubResponse<T> {
     /**
      * Gets the body of the response as a {@link String}.
      *
+     * @param connectorResponse
+     *            the response to read
      * @return the body of the response as a {@link String}.
      * @throws IOException
      *             if an I/O Exception occurs.
-     * @param connectorResponse
      */
     static String getBodyAsStringOrNull(GitHubConnectorResponse connectorResponse) {
         try {
             return getBodyAsString(connectorResponse);
-        } catch (NullPointerException | IOException e) {
+        } catch (IOException e) {
         }
         return null;
     }

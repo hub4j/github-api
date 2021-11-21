@@ -578,20 +578,12 @@ class GitHubClient {
     private void noteRateLimit(@Nonnull RateLimitTarget rateLimitTarget,
             @Nonnull GitHubConnectorResponse connectorResponse) {
         try {
-            String limitString = Objects.requireNonNull(connectorResponse.header("X-RateLimit-Limit"),
-                    "Missing X-RateLimit-Limit");
-            String remainingString = Objects.requireNonNull(connectorResponse.header("X-RateLimit-Remaining"),
-                    "Missing X-RateLimit-Remaining");
-            String resetString = Objects.requireNonNull(connectorResponse.header("X-RateLimit-Reset"),
-                    "Missing X-RateLimit-Reset");
-            int limit, remaining;
-            long reset;
-            limit = Integer.parseInt(limitString);
-            remaining = Integer.parseInt(remainingString);
-            reset = Long.parseLong(resetString);
+            int limit = connectorResponse.parseInt("X-RateLimit-Limit");
+            int remaining = connectorResponse.parseInt("X-RateLimit-Remaining");
+            int reset = connectorResponse.parseInt("X-RateLimit-Reset");
             GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, connectorResponse);
             updateRateLimit(GHRateLimit.fromRecord(observed, rateLimitTarget));
-        } catch (NumberFormatException | NullPointerException e) {
+        } catch (NumberFormatException e) {
             LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);
         }
     }

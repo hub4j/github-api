@@ -7,7 +7,7 @@ import org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter;
 import java.io.IOException;
 
 /**
- * Pluggability for customizing HTTP request behaviors or using altogether different library.
+ * Interface for customizing HTTP request behaviors or using any HTTP client library for interacting with GitHub.
  *
  * @author Liam Newman
  */
@@ -15,10 +15,11 @@ import java.io.IOException;
 public interface GitHubConnector {
 
     /**
+     * Sends a request and retrieves a raw response for processing.
      *
      * Implementers of {@link GitHubConnector#send(GitHubConnectorRequest)} process the information from a
-     * {@link GitHubConnectorRequest} to open an HTTP connection and retrieve a response. They then return a class that
-     * extends {@link GitHubConnectorResponse} for their response data.
+     * {@link GitHubConnectorRequest} to open an HTTP connection and retrieve a raw response. They then return a class
+     * that extends {@link GitHubConnectorResponse} corresponding their response data.
      *
      * Clients should not implement their own {@link GitHubConnectorRequest}. The {@link GitHubConnectorRequest}
      * provided by the caller of {@link GitHubConnector#send(GitHubConnectorRequest)} should be passed to the
@@ -29,16 +30,18 @@ public interface GitHubConnector {
      * @return a GitHubConnectorResponse for the request
      * @throws IOException
      *             if there is an I/O error
+     *
+     * @author Liam Newman
      */
     GitHubConnectorResponse send(GitHubConnectorRequest connectorRequest) throws IOException;
 
     /**
      * Default implementation used when connector is not set by user.
      *
-     * This calls {@link DefaultGitHubConnector#create} to get the default connector instance. The output of that method
-     * may differ depending on Java version and system properties.
+     * This calls {@link DefaultGitHubConnector#create()} to get the default connector instance. The output of that
+     * method may differ depending on Java version and system properties.
      *
-     * @see DefaultGitHubConnector#create
+     * @see DefaultGitHubConnector#create() DefaultGitHubConnector#create()
      */
     GitHubConnector DEFAULT = DefaultGitHubConnector.create();
 

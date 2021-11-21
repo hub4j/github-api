@@ -69,7 +69,7 @@ public enum GHEvent {
     TEAM,
     TEAM_ADD,
     WATCH,
-    WEBHOOK_JOB,
+    WORKFLOW_JOB,
     WORKFLOW_DISPATCH,
     WORKFLOW_RUN,
 

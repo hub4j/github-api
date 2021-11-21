@@ -28,6 +28,11 @@ import static org.hamcrest.Matchers.*;
 public class AppTest extends AbstractGitHubWireMockTest {
     static final String GITHUB_API_TEST_REPO = "github-api-test";
 
+    /**
+     * This is a java doc
+     *
+     * @throws Exception this is an exception
+     */
     @Test
     public void testRepoCRUD() throws Exception {
         String targetName = "github-api-test-rename2";

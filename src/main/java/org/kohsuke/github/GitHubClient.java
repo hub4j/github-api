@@ -391,7 +391,7 @@ class GitHubClient {
                     connectorRequest = e.connectorRequest;
                 }
             } catch (SocketException | SocketTimeoutException | SSLHandshakeException e) {
-                // These transient errors the
+                // These transient errors thrown by HttpURLConnection
                 if (retries > 0) {
                     logRetryConnectionError(e, request.url(), retries);
                     continue;

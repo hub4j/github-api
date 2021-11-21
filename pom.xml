@@ -825,6 +825,19 @@
                   <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
                 </configuration>
               </execution>
+              <execution>
+                <id>java11-urlconnection-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=urlconnection</argLine>
+                </configuration>
+              </execution>
             </executions>
           </plugin>
         </plugins>

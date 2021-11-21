@@ -28,10 +28,10 @@ public class HttpClientGitHubConnector implements GitHubConnector {
     private final HttpClient client;
 
     /**
-     * Instantiates a new HttpClientGitHubConnector with a defaut HttpClient.
+     * Instantiates a new HttpClientGitHubConnector with a default HttpClient.
      */
     public HttpClientGitHubConnector() {
-        this(HttpClient.newHttpClient());
+        this(HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build());
     }
 
     /**

@@ -6,20 +6,16 @@ package org.kohsuke.github;
 public enum GHFork {
 
     /**
-     * Search in the parent repository and in forks
-     * with more stars than the parent repository.
+     * Search in the parent repository and in forks with more stars than the parent repository.
      *
-     * Forks with the same or fewer stars than
-     * the parent repository are still ignored.
+     * Forks with the same or fewer stars than the parent repository are still ignored.
      */
     PARENT_AND_FORKS("true"),
 
     /**
-     * Search only in forks with more stars than
-     * the parent repository.
+     * Search only in forks with more stars than the parent repository.
      *
-     * The parent repository is ignored. If no forks
-     * have more stars than the parent, no results will be returned.
+     * The parent repository is ignored. If no forks have more stars than the parent, no results will be returned.
      */
     FORKS_ONLY("only"),
 

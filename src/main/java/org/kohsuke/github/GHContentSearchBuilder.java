@@ -44,6 +44,18 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
     /**
      * Fork gh content search builder.
      *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    @Deprecated
+    public GHContentSearchBuilder fork(String v) {
+        return q("fork:" + v);
+    }
+
+    /**
+     * Fork gh content search builder.
+     *
      * @param fork
      *            search mode for forks
      *

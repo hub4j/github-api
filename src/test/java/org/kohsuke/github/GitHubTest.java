@@ -161,6 +161,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                 .language("js")
                 .sort(GHContentSearchBuilder.Sort.INDEXED)
                 .order(GHDirection.DESC)
+                .fork(GHFork.PARENT_ONLY)
                 .list();
 
         final PagedSearchIterable<GHContent> resultsWithForks = gitHub.searchContent()

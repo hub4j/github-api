@@ -1,5 +1,5 @@
 {
-  "id": "b264f2c8-9780-4d39-8f59-39adb461e042",
+  "id": "e66f46d2-2827-412a-a0c6-89f8370c34ac",
   "name": "search_code",
   "request": {
     "url": "/search/code?sort=indexed&order=desc&q=addClass+language%3Ajs",
@@ -15,7 +15,7 @@
     "bodyFileName": "search_code-2.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Sun, 21 Nov 2021 13:04:45 GMT",
+      "Date": "Mon, 22 Nov 2021 10:03:26 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-cache",
       "Vary": [
@@ -28,7 +28,7 @@
       "X-GitHub-Media-Type": "github.v3; format=json",
       "X-RateLimit-Limit": "30",
       "X-RateLimit-Remaining": "29",
-      "X-RateLimit-Reset": "1637499943",
+      "X-RateLimit-Reset": "1637575463",
       "X-RateLimit-Used": "1",
       "X-RateLimit-Resource": "search",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
@@ -37,11 +37,11 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D5C0:1F74:CD3CA9:DC0F7D:619A43EA",
+      "X-GitHub-Request-Id": "EB6C:1F74:1390213:14C0A7E:619B6AEB",
       "Link": "<https://api.github.com/search/code?sort=indexed&order=desc&q=addClass+language%3Ajs&page=2>; rel=\"next\", <https://api.github.com/search/code?sort=indexed&order=desc&q=addClass+language%3Ajs&page=34>; rel=\"last\""
     }
   },
-  "uuid": "b264f2c8-9780-4d39-8f59-39adb461e042",
+  "uuid": "e66f46d2-2827-412a-a0c6-89f8370c34ac",
   "persistent": true,
   "insertionIndex": 2
 }

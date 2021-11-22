@@ -424,7 +424,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
                 .user("t0m4uk1991")
                 .visibility(GHRepository.Visibility.PUBLIC)
-                .fork(GHRepositorySearchBuilder.Fork.PARENT_AND_FORKS)
+                .fork(GHFork.PARENT_AND_FORKS)
                 .list();
         List<GHRepository> u = list.toList();
         assertThat(u.size(), is(14));
@@ -437,7 +437,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
                 .user("t0m4uk1991")
                 .visibility(GHRepository.Visibility.PUBLIC)
-                .fork(GHRepositorySearchBuilder.Fork.FORKS_ONLY)
+                .fork(GHFork.FORKS_ONLY)
                 .list();
         List<GHRepository> u = list.toList();
         assertThat(u.size(), is(2));
@@ -467,6 +467,22 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void ghRepositorySearchBuilderForkDefaultResetForksSearchTerms() {
         GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
+
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHFork.PARENT_AND_FORKS);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
+
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHFork.FORKS_ONLY);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:only")).count(), is(1L));
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
+
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHFork.PARENT_ONLY);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
+    }
+
+    @Test
+    public void ghRepositorySearchBuilderForkDeprecatedEnum() {
+        GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
         ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_AND_FORKS);
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
@@ -476,6 +492,21 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
 
         ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_ONLY);
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
+    }
+
+    @Test
+    public void ghRepositorySearchBuilderForkDeprecatedString() {
+        GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(GHFork.PARENT_AND_FORKS.toString());
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
+
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(GHFork.FORKS_ONLY.toString());
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:only")).count(), is(1L));
+        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
+
+        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(null);
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
     }
 

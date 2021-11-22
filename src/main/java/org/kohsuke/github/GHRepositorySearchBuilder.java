@@ -12,10 +12,20 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * Search terms.
+     * {@inheritDoc}
      */
+    @Override
     public GHRepositorySearchBuilder q(String term) {
         super.q(term);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    GHRepositorySearchBuilder q(String qualifier, String value) {
+        super.q(qualifier, value);
         return this;
     }
 
@@ -47,9 +57,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      * @param v
      *            the v
      * @return the gh repository search builder
+     * @deprecated use {@link #fork(GHFork)} instead.
      */
+    @Deprecated
     public GHRepositorySearchBuilder forks(String v) {
-        return q("forks:" + v);
+        return q("fork", v);
     }
 
     /**
@@ -74,16 +86,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      * @see <a href=
      *      "https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-in-forks">Searching
      *      in forks</a>
-     *
+     * @deprecated use {@link #fork(GHFork)} instead.
      */
     @Deprecated
     public GHRepositorySearchBuilder fork(Fork fork) {
-        if (Fork.PARENT_ONLY.equals(fork)) {
-            this.terms.removeIf(term -> term.contains("fork:"));
-            return this;
-        }
-
-        return q("fork:" + fork);
+        return q("fork", fork.toString());
     }
 
     /**
@@ -111,12 +118,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      *
      */
     public GHRepositorySearchBuilder fork(GHFork fork) {
-        if (GHFork.PARENT_ONLY.equals(fork)) {
-            this.terms.removeIf(term -> term.contains("fork:"));
-            return this;
-        }
-
-        return q("fork:" + fork);
+        return q("fork", fork.toString());
     }
 
     /**
@@ -251,7 +253,9 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * The enum for Fork search mode. Note: Kept for backward compatibility. Use GHFork instead.
+     * The enum for Fork search mode.
+     *
+     * @deprecated Kept for backward compatibility. Use {@link GHFork} instead.
      */
     @Deprecated
     public enum Fork {

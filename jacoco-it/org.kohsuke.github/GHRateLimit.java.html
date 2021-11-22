@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRateLimit.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRateLimit.java</span></div><h1>GHRateLimit.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
+
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+import static java.util.logging.Level.FINEST;
+
+/**
+ * Rate limit.
+ *
+ * @author Liam Newman
+ */
+@SuppressFBWarnings(value = &quot;URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD&quot;, justification = &quot;JSON API&quot;)
+public class GHRateLimit {
+
+    /**
+     * Remaining calls that can be made.
+     *
+     * @deprecated This field should never have been made public. Use {@link #getRemaining()}
+     */
+    @Deprecated
+    public int remaining;
+
+    /**
+     * Allotted API call per hour.
+     *
+     * @deprecated This field should never have been made public. Use {@link #getLimit()}
+     */
+    @Deprecated
+    public int limit;
+
+    /**
+     * The time at which the current rate limit window resets in UTC epoch seconds. WARNING: this field was implemented
+     * using {@link Date#Date(long)} which expects UTC epoch milliseconds, so this Date instance is meaningless as a
+     * date. To use this field in any meaningful way, it must be converted to a long using {@link Date#getTime()}
+     * multiplied by 1000.
+     *
+     * @deprecated This field should never have been made public. Use {@link #getResetDate()}
+     */
+    @Deprecated
+    public Date reset;
+
+    @Nonnull
+    private final Record core;
+
+    @Nonnull
+    private final Record search;
+
+    @Nonnull
+    private final Record graphql;
+
+    @Nonnull
+    private final Record integrationManifest;
+
+    /**
+     * The default GHRateLimit provided to new {@link GitHubClient}s.
+     *
+     * Contains all expired records that will cause {@link GitHubClient#rateLimit(RateLimitTarget)} to refresh with new
+     * data when called.
+     *
+     * Private, but made internal for testing.
+     */
+    @Nonnull
+<span class="fc" id="L80">    static final GHRateLimit DEFAULT = new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L81">            UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L82">            UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L83">            UnknownLimitRecord.DEFAULT);</span>
+
+    /**
+     * Creates a new {@link GHRateLimit} from a single record for the specified endpoint with place holders for other
+     * records.
+     *
+     * This is used to create {@link GHRateLimit} instances that can merged with other instances.
+     *
+     * @param record
+     *            the rate limit record. Can be a regular {@link Record} constructed from header information or an
+     *            {@link UnknownLimitRecord} placeholder.
+     * @param rateLimitTarget
+     *            which rate limit record to fill
+     * @return a new {@link GHRateLimit} instance containing the supplied record
+     */
+    @Nonnull
+    static GHRateLimit fromRecord(@Nonnull Record record, @Nonnull RateLimitTarget rateLimitTarget) {
+<span class="fc bfc" id="L100" title="All 4 branches covered.">        if (rateLimitTarget == RateLimitTarget.CORE || rateLimitTarget == RateLimitTarget.NONE) {</span>
+<span class="fc" id="L101">            return new GHRateLimit(record,</span>
+<span class="fc" id="L102">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L103">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L104">                    UnknownLimitRecord.DEFAULT);</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
+<span class="fc" id="L106">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
+                    record,
+<span class="fc" id="L108">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L109">                    UnknownLimitRecord.DEFAULT);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
+<span class="fc" id="L111">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L112">                    UnknownLimitRecord.DEFAULT,</span>
+                    record,
+<span class="fc" id="L114">                    UnknownLimitRecord.DEFAULT);</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
+<span class="fc" id="L116">            return new GHRateLimit(UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L117">                    UnknownLimitRecord.DEFAULT,</span>
+<span class="fc" id="L118">                    UnknownLimitRecord.DEFAULT,</span>
+                    record);
+        } else {
+<span class="nc" id="L121">            throw new IllegalArgumentException(&quot;Unknown rate limit target: &quot; + rateLimitTarget.toString());</span>
+        }
+    }
+
+    @JsonCreator
+    GHRateLimit(@Nonnull @JsonProperty(&quot;core&quot;) Record core,
+            @Nonnull @JsonProperty(&quot;search&quot;) Record search,
+            @Nonnull @JsonProperty(&quot;graphql&quot;) Record graphql,
+<span class="fc" id="L129">            @Nonnull @JsonProperty(&quot;integration_manifest&quot;) Record integrationManifest) {</span>
+        // The Nonnull annotation is ignored by Jackson, we have to check manually
+<span class="fc" id="L131">        Objects.requireNonNull(core);</span>
+<span class="fc" id="L132">        Objects.requireNonNull(search);</span>
+<span class="fc" id="L133">        Objects.requireNonNull(graphql);</span>
+<span class="fc" id="L134">        Objects.requireNonNull(integrationManifest);</span>
+
+<span class="fc" id="L136">        this.core = core;</span>
+<span class="fc" id="L137">        this.search = search;</span>
+<span class="fc" id="L138">        this.graphql = graphql;</span>
+<span class="fc" id="L139">        this.integrationManifest = integrationManifest;</span>
+
+        // Deprecated fields
+<span class="fc" id="L142">        this.remaining = core.getRemaining();</span>
+<span class="fc" id="L143">        this.limit = core.getLimit();</span>
+        // This is wrong but is how this was implemented. Kept for backward compat.
+<span class="fc" id="L145">        this.reset = new Date(core.getResetEpochSeconds());</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Returns the date at which the Core API rate limit will reset.
+     *
+     * @return the calculated date at which the rate limit has or will reset.
+     */
+    @Nonnull
+    public Date getResetDate() {
+<span class="fc" id="L155">        return getCore().getResetDate();</span>
+    }
+
+    /**
+     * Gets the remaining number of Core APIs requests allowed before this connection will be throttled.
+     *
+     * @return an integer
+     * @since 1.100
+     */
+    public int getRemaining() {
+<span class="fc" id="L165">        return getCore().getRemaining();</span>
+    }
+
+    /**
+     * Gets the total number of Core API calls per hour allotted for this connection.
+     *
+     * @return an integer
+     * @since 1.100
+     */
+    public int getLimit() {
+<span class="fc" id="L175">        return getCore().getLimit();</span>
+    }
+
+    /**
+     * Gets the time in epoch seconds when the Core API rate limit will reset.
+     *
+     * @return a long
+     * @since 1.100
+     */
+    public long getResetEpochSeconds() {
+<span class="fc" id="L185">        return getCore().getResetEpochSeconds();</span>
+    }
+
+    /**
+     * Whether the reset date for the Core API rate limit has passed.
+     *
+     * @return true if the rate limit reset date has passed. Otherwise false.
+     * @since 1.100
+     */
+    public boolean isExpired() {
+<span class="fc" id="L195">        return getCore().isExpired();</span>
+    }
+
+    /**
+     * The core object provides the rate limit status for all non-search-related resources in the REST API.
+     *
+     * @return a rate limit record
+     * @since 1.100
+     */
+    @Nonnull
+    public Record getCore() {
+<span class="fc" id="L206">        return core;</span>
+    }
+
+    /**
+     * The search record provides the rate limit status for the Search API.
+     *
+     * @return a rate limit record
+     * @since 1.115
+     */
+    @Nonnull
+    public Record getSearch() {
+<span class="fc" id="L217">        return search;</span>
+    }
+
+    /**
+     * The graphql record provides the rate limit status for the GraphQL API.
+     *
+     * @return a rate limit record
+     * @since 1.115
+     */
+    @Nonnull
+    public Record getGraphQL() {
+<span class="fc" id="L228">        return graphql;</span>
+    }
+
+    /**
+     * The integration manifest record provides the rate limit status for the GitHub App Manifest code conversion
+     * endpoint.
+     *
+     * @return a rate limit record
+     * @since 1.115
+     */
+    @Nonnull
+    public Record getIntegrationManifest() {
+<span class="fc" id="L240">        return integrationManifest;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L245">        return &quot;GHRateLimit {&quot; + &quot;core &quot; + getCore().toString() + &quot;, search &quot; + getSearch().toString() + &quot;, graphql &quot;</span>
+<span class="fc" id="L246">                + getGraphQL().toString() + &quot;, integrationManifest &quot; + getIntegrationManifest().toString() + &quot;}&quot;;</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L252">            return true;</span>
+        }
+<span class="pc bpc" id="L254" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L255">            return false;</span>
+        }
+<span class="fc" id="L257">        GHRateLimit rateLimit = (GHRateLimit) o;</span>
+<span class="fc bfc" id="L258" title="All 4 branches covered.">        return getCore().equals(rateLimit.getCore()) &amp;&amp; getSearch().equals(rateLimit.getSearch())</span>
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">                &amp;&amp; getGraphQL().equals(rateLimit.getGraphQL())</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">                &amp;&amp; getIntegrationManifest().equals(rateLimit.getIntegrationManifest());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L265">        return Objects.hash(getCore(), getSearch(), getGraphQL(), getIntegrationManifest());</span>
+    }
+
+    /**
+     * Merge a {@link GHRateLimit} with another one to create a new {@link GHRateLimit} keeping the latest
+     * {@link Record}s from each.
+     *
+     * @param newLimit
+     *            {@link GHRateLimit} with potentially updated {@link Record}s.
+     * @return a merged {@link GHRateLimit} with the latest {@link Record}s from these two instances. If the merged
+     *         instance is equal to the current instance, the current instance is returned.
+     */
+    @Nonnull
+    GHRateLimit getMergedRateLimit(@Nonnull GHRateLimit newLimit) {
+
+<span class="fc" id="L280">        GHRateLimit merged = new GHRateLimit(getCore().currentOrUpdated(newLimit.getCore()),</span>
+<span class="fc" id="L281">                getSearch().currentOrUpdated(newLimit.getSearch()),</span>
+<span class="fc" id="L282">                getGraphQL().currentOrUpdated(newLimit.getGraphQL()),</span>
+<span class="fc" id="L283">                getIntegrationManifest().currentOrUpdated(newLimit.getIntegrationManifest()));</span>
+
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (merged.equals(this)) {</span>
+<span class="fc" id="L286">            merged = this;</span>
+        }
+
+<span class="fc" id="L289">        return merged;</span>
+    }
+
+    /**
+     * Gets the specified {@link Record}.
+     *
+     * {@link RateLimitTarget#NONE} will return {@link UnknownLimitRecord#DEFAULT} to prevent any clients from
+     * accidentally waiting on that record to reset before continuing.
+     *
+     * @param rateLimitTarget
+     *            the target rate limit record
+     * @return the target {@link Record} from this instance.
+     */
+    @Nonnull
+    Record getRecord(@Nonnull RateLimitTarget rateLimitTarget) {
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        if (rateLimitTarget == RateLimitTarget.CORE) {</span>
+<span class="fc" id="L305">            return getCore();</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
+<span class="fc" id="L307">            return getSearch();</span>
+<span class="fc bfc" id="L308" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
+<span class="fc" id="L309">            return getGraphQL();</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
+<span class="fc" id="L311">            return getIntegrationManifest();</span>
+<span class="pc bpc" id="L312" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.NONE) {</span>
+<span class="fc" id="L313">            return UnknownLimitRecord.DEFAULT;</span>
+        } else {
+<span class="nc" id="L315">            throw new IllegalArgumentException(&quot;Unknown rate limit target: &quot; + rateLimitTarget.toString());</span>
+        }
+    }
+
+    /**
+     * A limit record used as a placeholder when the the actual limit is not known.
+     *
+     * @since 1.100
+     */
+    public static class UnknownLimitRecord extends Record {
+
+<span class="fc" id="L326">        private static final long defaultUnknownLimitResetSeconds = Duration.ofSeconds(30).getSeconds();</span>
+
+        /**
+         * The number of seconds until a {@link UnknownLimitRecord} will expire.
+         *
+         * This is set to a somewhat short duration, rather than a long one. This avoids
+         * {@link {@link GitHubClient#rateLimit(RateLimitTarget)}} requesting rate limit updates continuously, but also
+         * avoids holding on to stale unknown records indefinitely.
+         *
+         * When merging {@link GHRateLimit} instances, {@link UnknownLimitRecord}s will be superseded by incoming
+         * regular {@link Record}s.
+         *
+         * @see GHRateLimit#getMergedRateLimit(GHRateLimit)
+         */
+<span class="fc" id="L340">        static long unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;</span>
+
+        static final int unknownLimit = 1000000;
+        static final int unknownRemaining = 999999;
+
+        // The default UnknownLimitRecord is an expired record.
+<span class="fc" id="L346">        private static final UnknownLimitRecord DEFAULT = new UnknownLimitRecord(Long.MIN_VALUE);</span>
+
+        // The starting current UnknownLimitRecord is an expired record.
+<span class="fc" id="L349">        private static final AtomicReference&lt;UnknownLimitRecord&gt; current = new AtomicReference&lt;&gt;(DEFAULT);</span>
+
+        /**
+         * Create a new unknown record that resets at the specified time.
+         *
+         * @param resetEpochSeconds
+         *            the epoch second time when this record will expire.
+         */
+        private UnknownLimitRecord(long resetEpochSeconds) {
+<span class="fc" id="L358">            super(unknownLimit, unknownRemaining, resetEpochSeconds);</span>
+<span class="fc" id="L359">        }</span>
+
+        static Record current() {
+<span class="fc" id="L362">            Record result = current.get();</span>
+<span class="fc bfc" id="L363" title="All 2 branches covered.">            if (result.isExpired()) {</span>
+<span class="fc" id="L364">                current.set(new UnknownLimitRecord(System.currentTimeMillis() / 1000L + unknownLimitResetSeconds));</span>
+<span class="fc" id="L365">                result = current.get();</span>
+            }
+<span class="fc" id="L367">            return result;</span>
+        }
+
+        /**
+         * Reset the current UnknownLimitRecord. For use during testing only.
+         */
+        static void reset() {
+<span class="fc" id="L374">            current.set(DEFAULT);</span>
+<span class="fc" id="L375">            unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;</span>
+<span class="fc" id="L376">        }</span>
+    }
+
+    /**
+     * A rate limit record.
+     *
+     * @since 1.100
+     * @author Liam Newman
+     */
+    public static class Record {
+        /**
+         * Remaining calls that can be made.
+         */
+        private final int remaining;
+
+        /**
+         * Allotted API call per time period.
+         */
+        private final int limit;
+
+        /**
+         * The time at which the current rate limit window resets in UTC epoch seconds.
+         */
+        private final long resetEpochSeconds;
+
+        /**
+         * EpochSeconds time (UTC) at which this instance was created.
+         */
+<span class="fc" id="L404">        private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;</span>
+
+        /**
+         * The date at which the rate limit will reset, adjusted to local machine time if the local machine's clock not
+         * synchronized with to the same clock as the GitHub server.
+         *
+         * @see #calculateResetDate(String)
+         * @see #getResetDate()
+         */
+        @Nonnull
+        private final Date resetDate;
+
+        /**
+         * Instantiates a new Record.
+         *
+         * @param limit
+         *            the limit
+         * @param remaining
+         *            the remaining
+         * @param resetEpochSeconds
+         *            the reset epoch seconds
+         */
+        public Record(@JsonProperty(value = &quot;limit&quot;, required = true) int limit,
+                @JsonProperty(value = &quot;remaining&quot;, required = true) int remaining,
+                @JsonProperty(value = &quot;reset&quot;, required = true) long resetEpochSeconds) {
+<span class="fc" id="L429">            this(limit, remaining, resetEpochSeconds, null);</span>
+<span class="fc" id="L430">        }</span>
+
+        /**
+         * Instantiates a new Record. Called by Jackson data binding or during header parsing.
+         *
+         * @param limit
+         *            the limit
+         * @param remaining
+         *            the remaining
+         * @param resetEpochSeconds
+         *            the reset epoch seconds
+         * @param connectorResponse
+         *            the response info
+         */
+        @JsonCreator
+        Record(@JsonProperty(value = &quot;limit&quot;, required = true) int limit,
+                @JsonProperty(value = &quot;remaining&quot;, required = true) int remaining,
+                @JsonProperty(value = &quot;reset&quot;, required = true) long resetEpochSeconds,
+<span class="fc" id="L448">                @JacksonInject @CheckForNull GitHubConnectorResponse connectorResponse) {</span>
+<span class="fc" id="L449">            this.limit = limit;</span>
+<span class="fc" id="L450">            this.remaining = remaining;</span>
+<span class="fc" id="L451">            this.resetEpochSeconds = resetEpochSeconds;</span>
+<span class="fc" id="L452">            String updatedAt = null;</span>
+<span class="fc bfc" id="L453" title="All 2 branches covered.">            if (connectorResponse != null) {</span>
+<span class="fc" id="L454">                updatedAt = connectorResponse.header(&quot;Date&quot;);</span>
+            }
+<span class="fc" id="L456">            this.resetDate = calculateResetDate(updatedAt);</span>
+<span class="fc" id="L457">        }</span>
+
+        /**
+         * Determine if the current {@link Record} is outdated compared to another. Rate Limit dates are only accurate
+         * to the second, so we look at other information in the record as well.
+         *
+         * {@link Record}s with earlier {@link #getResetEpochSeconds()} are replaced by those with later.
+         * {@link Record}s with the same {@link #getResetEpochSeconds()} are replaced by those with less remaining
+         * count.
+         *
+         * {@link UnknownLimitRecord}s compare with each other like regular {@link Record}s.
+         *
+         * {@link Record}s are replaced by {@link UnknownLimitRecord}s only when the current {@link Record} is expired
+         * and the {@link UnknownLimitRecord} is not. Otherwise Regular {@link Record}s are not replaced by
+         * {@link UnknownLimitRecord}s.
+         *
+         * Expiration is only considered after other checks, meaning expired records may sometimes be replaced by other
+         * expired records.
+         *
+         * @param other
+         *            the other {@link Record}
+         * @return the {@link Record} that is most current
+         */
+        Record currentOrUpdated(@Nonnull Record other) {
+            // This set of checks avoids most calls to isExpired()
+            // Depends on UnknownLimitRecord.current() to prevent continuous updating of GHRateLimit rateLimit()
+<span class="fc bfc" id="L483" title="All 2 branches covered.">            if (getResetEpochSeconds() &gt; other.getResetEpochSeconds()</span>
+<span class="fc bfc" id="L484" title="All 2 branches covered.">                    || (getResetEpochSeconds() == other.getResetEpochSeconds()</span>
+<span class="fc bfc" id="L485" title="All 2 branches covered.">                            &amp;&amp; getRemaining() &lt;= other.getRemaining())) {</span>
+                // If the current record has a later reset
+                // or the current record has the same reset and fewer or same requests remaining
+                // Then it is most recent
+<span class="fc" id="L489">                return this;</span>
+<span class="fc bfc" id="L490" title="All 2 branches covered.">            } else if (!(other instanceof UnknownLimitRecord)) {</span>
+                // If the above is not the case that means other has a later reset
+                // or the same resent and fewer requests remaining.
+                // If the other record is not an unknown record, the the other is more recent
+<span class="fc" id="L494">                return other;</span>
+<span class="fc bfc" id="L495" title="All 4 branches covered.">            } else if (this.isExpired() &amp;&amp; !other.isExpired()) {</span>
+                // The other is an unknown record.
+                // If the current record has expired and the other hasn't, return the other.
+<span class="fc" id="L498">                return other;</span>
+            }
+
+            // If none of the above, the current record is most valid.
+<span class="fc" id="L502">            return this;</span>
+        }
+
+        /**
+         * Recalculates the {@link #resetDate} relative to the local machine clock.
+         * &lt;p&gt;
+         * {@link RateLimitChecker}s and {@link RateLimitHandler}s use {@link #getResetDate()} to make decisions about
+         * how long to wait for until for the rate limit to reset. That means that {@link #getResetDate()} needs to be
+         * calculated based on the local machine clock.
+         * &lt;/p&gt;
+         * &lt;p&gt;
+         * When we say that the clock on two machines is &quot;synchronized&quot;, we mean that the UTC time returned from
+         * {@link System#currentTimeMillis()} on each machine is basically the same. For the purposes of rate limits an
+         * differences of up to a second can be ignored.
+         * &lt;/p&gt;
+         * &lt;p&gt;
+         * When the clock on the local machine is synchronized to the same time as the clock on the GitHub server (via a
+         * time service for example), the {@link #resetDate} generated directly from {@link #resetEpochSeconds} will be
+         * accurate for the local machine as well.
+         * &lt;/p&gt;
+         * &lt;p&gt;
+         * When the clock on the local machine is not synchronized with the server, the {@link #resetDate} must be
+         * recalculated relative to the local machine clock. This is done by taking the number of seconds between the
+         * response &quot;Date&quot; header and {@link #resetEpochSeconds} and then adding that to this record's
+         * {@link #createdAtEpochSeconds}.
+         *
+         * @param updatedAt
+         *            a string date in RFC 1123
+         * @return reset date based on the passed date
+         */
+        @Nonnull
+        private Date calculateResetDate(@CheckForNull String updatedAt) {
+<span class="fc" id="L534">            long updatedAtEpochSeconds = createdAtEpochSeconds;</span>
+<span class="fc bfc" id="L535" title="All 2 branches covered.">            if (!StringUtils.isBlank(updatedAt)) {</span>
+                try {
+                    // Get the server date and reset data, will always return a time in GMT
+<span class="fc" id="L538">                    updatedAtEpochSeconds = ZonedDateTime.parse(updatedAt, DateTimeFormatter.RFC_1123_DATE_TIME)</span>
+<span class="fc" id="L539">                            .toEpochSecond();</span>
+<span class="nc" id="L540">                } catch (DateTimeParseException e) {</span>
+<span class="nc bnc" id="L541" title="All 2 branches missed.">                    if (LOGGER.isLoggable(FINEST)) {</span>
+<span class="nc" id="L542">                        LOGGER.log(FINEST, &quot;Malformed Date header value &quot; + updatedAt, e);</span>
+                    }
+<span class="fc" id="L544">                }</span>
+            }
+
+            // This may seem odd but it results in an accurate or slightly pessimistic reset date
+            // based on system time rather than assuming the system time synchronized with the server
+<span class="fc" id="L549">            long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;</span>
+<span class="fc" id="L550">            return new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);</span>
+        }
+
+        /**
+         * Gets the remaining number of requests allowed before this connection will be throttled.
+         *
+         * @return an integer
+         */
+        public int getRemaining() {
+<span class="fc" id="L559">            return remaining;</span>
+        }
+
+        /**
+         * Gets the total number of API calls per hour allotted for this connection.
+         *
+         * @return an integer
+         */
+        public int getLimit() {
+<span class="fc" id="L568">            return limit;</span>
+        }
+
+        /**
+         * Gets the time in epoch seconds when the rate limit will reset.
+         *
+         * This is the raw value returned by the server. This value is not adjusted if local machine time is not
+         * synchronized with server time. If attempting to check when the rate limit will reset, use
+         * {@link #getResetDate()} or implement a {@link RateLimitChecker} instead.
+         *
+         * @return a long representing the time in epoch seconds when the rate limit will reset
+         * @see #getResetDate()
+         */
+        public long getResetEpochSeconds() {
+<span class="fc" id="L582">            return resetEpochSeconds;</span>
+        }
+
+        /**
+         * Whether the rate limit reset date indicated by this instance is expired
+         *
+         * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
+         *
+         * @return true if the rate limit reset date has passed. Otherwise false.
+         */
+        public boolean isExpired() {
+<span class="fc bfc" id="L593" title="All 2 branches covered.">            return getResetDate().getTime() &lt; System.currentTimeMillis();</span>
+        }
+
+        /**
+         * The date at which the rate limit will reset, adjusted to local machine time if the local machine's clock not
+         * synchronized with to the same clock as the GitHub server.
+         *
+         * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
+         *
+         * @return the calculated date at which the rate limit has or will reset.
+         */
+        @Nonnull
+        public Date getResetDate() {
+<span class="fc" id="L606">            return new Date(resetDate.getTime());</span>
+        }
+
+        @Override
+        public String toString() {
+<span class="fc" id="L611">            return &quot;{&quot; + &quot;remaining=&quot; + getRemaining() + &quot;, limit=&quot; + getLimit() + &quot;, resetDate=&quot; + getResetDate()</span>
+                    + '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+<span class="fc bfc" id="L617" title="All 2 branches covered.">            if (this == o) {</span>
+<span class="fc" id="L618">                return true;</span>
+            }
+<span class="pc bpc" id="L620" title="1 of 4 branches missed.">            if (o == null || getClass() != o.getClass()) {</span>
+<span class="fc" id="L621">                return false;</span>
+            }
+<span class="fc" id="L623">            Record record = (Record) o;</span>
+<span class="pc bpc" id="L624" title="1 of 4 branches missed.">            return getRemaining() == record.getRemaining() &amp;&amp; getLimit() == record.getLimit()</span>
+<span class="fc bfc" id="L625" title="All 2 branches covered.">                    &amp;&amp; getResetEpochSeconds() == record.getResetEpochSeconds()</span>
+<span class="pc bpc" id="L626" title="1 of 2 branches missed.">                    &amp;&amp; getResetDate().equals(record.getResetDate());</span>
+        }
+
+        @Override
+        public int hashCode() {
+<span class="fc" id="L631">            return Objects.hash(getRemaining(), getLimit(), getResetEpochSeconds(), getResetDate());</span>
+        }
+    }
+
+<span class="fc" id="L635">    private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

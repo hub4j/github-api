@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbuseLimitHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">AbuseLimitHandler.java</span></div><h1>AbuseLimitHandler.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import org.kohsuke.github.connector.GitHubConnectorResponse;
+
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.HttpURLConnection;
+
+import javax.annotation.Nonnull;
+
+/**
+ * Pluggable strategy to determine what to do when the API abuse limit is hit.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GitHubBuilder#withAbuseLimitHandler(GitHubAbuseLimitHandler)
+ *      GitHubBuilder#withAbuseLimitHandler(GitHubAbuseLimitHandler)
+ * @see &lt;a href=&quot;https://developer.github.com/v3/#abuse-rate-limits&quot;&gt;documentation&lt;/a&gt;
+ * @see RateLimitHandler
+ * @deprecated Switch to {@link GitHubAbuseLimitHandler}.
+ */
+@Deprecated
+<span class="fc" id="L22">public abstract class AbuseLimitHandler extends GitHubAbuseLimitHandler {</span>
+
+    /**
+     * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
+     *
+     * &lt;p&gt;
+     * Any exception thrown from this method will cause the request to fail, and the caller of github-api will receive
+     * an exception. If this method returns normally, another request will be attempted. For that to make sense, the
+     * implementation needs to wait for some time.
+     *
+     * @param connectorResponse
+     *            Response information for this request.
+     * @throws IOException
+     *             on failure
+     * @see &lt;a href=&quot;https://developer.github.com/v3/#abuse-rate-limits&quot;&gt;API documentation from GitHub&lt;/a&gt;
+     * @see &lt;a href=
+     *      &quot;https://developer.github.com/v3/guides/best-practices-for-integrators/#dealing-with-abuse-rate-limits&quot;&gt;Dealing
+     *      with abuse rate limits&lt;/a&gt;
+     *
+     */
+    public void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
+<span class="fc" id="L43">        GHIOException e = new HttpException(&quot;Abuse limit reached&quot;,</span>
+<span class="fc" id="L44">                connectorResponse.statusCode(),</span>
+<span class="fc" id="L45">                connectorResponse.header(&quot;Status&quot;),</span>
+<span class="fc" id="L46">                connectorResponse.request().url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());</span>
+<span class="fc" id="L47">        onError(e, connectorResponse.toHttpURLConnection());</span>
+<span class="fc" id="L48">    }</span>
+
+    /**
+     * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
+     *
+     * &lt;p&gt;
+     * Any exception thrown from this method will cause the request to fail, and the caller of github-api will receive
+     * an exception. If this method returns normally, another request will be attempted. For that to make sense, the
+     * implementation needs to wait for some time.
+     *
+     * @param e
+     *            Exception from Java I/O layer. If you decide to fail the processing, you can throw this exception (or
+     *            wrap this exception into another exception and throw it).
+     * @param uc
+     *            Connection that resulted in an error. Useful for accessing other response headers.
+     * @throws IOException
+     *             on failure
+     * @see &lt;a href=&quot;https://developer.github.com/v3/#abuse-rate-limits&quot;&gt;API documentation from GitHub&lt;/a&gt;
+     * @see &lt;a href=
+     *      &quot;https://developer.github.com/v3/guides/best-practices-for-integrators/#dealing-with-abuse-rate-limits&quot;&gt;Dealing
+     *      with abuse rate limits&lt;/a&gt;
+     *
+     */
+    @Deprecated
+    public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
+
+    /**
+     * Wait until the API abuse &quot;wait time&quot; is passed.
+     */
+    @Deprecated
+<span class="fc" id="L78">    public static final AbuseLimitHandler WAIT = new AbuseLimitHandler() {</span>
+        @Override
+        public void onError(IOException e, HttpURLConnection uc) throws IOException {
+            try {
+<span class="fc" id="L82">                Thread.sleep(parseWaitTime(uc));</span>
+<span class="nc" id="L83">            } catch (InterruptedException ex) {</span>
+<span class="nc" id="L84">                throw (InterruptedIOException) new InterruptedIOException().initCause(e);</span>
+<span class="fc" id="L85">            }</span>
+<span class="fc" id="L86">        }</span>
+
+        private long parseWaitTime(HttpURLConnection uc) {
+<span class="fc" id="L89">            String v = uc.getHeaderField(&quot;Retry-After&quot;);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (v == null)</span>
+<span class="nc" id="L91">                return 60 * 1000; // can't tell, return 1 min</span>
+
+<span class="fc" id="L93">            return Math.max(1000, Long.parseLong(v) * 1000);</span>
+        }
+    };
+
+    /**
+     * Fail immediately.
+     */
+    @Deprecated
+<span class="fc" id="L101">    public static final AbuseLimitHandler FAIL = new AbuseLimitHandler() {</span>
+        @Override
+        public void onError(IOException e, HttpURLConnection uc) throws IOException {
+<span class="fc" id="L104">            throw e;</span>
+        }
+    };
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

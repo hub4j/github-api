@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DefaultGitHubConnector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.internal</a> &gt; <span class="el_source">DefaultGitHubConnector.java</span></div><h1>DefaultGitHubConnector.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.internal;
+
+import okhttp3.OkHttpClient;
+import org.kohsuke.github.HttpConnector;
+import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.extras.HttpClientGitHubConnector;
+import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
+import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
+
+/**
+ * Internal class that selects what kind of {@link GitHubConnector} will be the default.
+ *
+ * Allows behavior to be changed for different versions of Java, such as supporting Java 11 HttpClient.
+ *
+ * @author Liam Newman
+ */
+public final class DefaultGitHubConnector {
+
+    private DefaultGitHubConnector() {
+    }
+
+    /**
+     * Creates a {@link GitHubConnector} that will be used as the default connector.
+     *
+     * This method currently defaults to returning an instance of {@link GitHubConnectorHttpConnectorAdapter}. This
+     * preserves backward compatibility with {@link HttpConnector}.
+     *
+     * &lt;p&gt;
+     * For testing purposes, the system property {@code test.github.connector} can be set to change the default.
+     * Possible values: {@code default}, {@code okhttp}, {@code httpconnector}.
+     *
+     * &lt;p&gt;
+     * Should only be called to set {@link GitHubConnector#DEFAULT}.
+     *
+     * @return a GitHubConnector
+     */
+    public static GitHubConnector create() {
+<span class="fc" id="L38">        String defaultConnectorProperty = System.getProperty(&quot;test.github.connector&quot;, &quot;default&quot;);</span>
+<span class="fc" id="L39">        return create(defaultConnectorProperty);</span>
+    }
+
+    static GitHubConnector create(String defaultConnectorProperty) {
+
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (defaultConnectorProperty.equalsIgnoreCase(&quot;okhttp&quot;)) {</span>
+<span class="fc" id="L45">            return new OkHttpGitHubConnector(new OkHttpClient.Builder().build());</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        } else if (defaultConnectorProperty.equalsIgnoreCase(&quot;okhttpconnector&quot;)) {</span>
+<span class="fc" id="L47">            return new GitHubConnectorHttpConnectorAdapter(new OkHttpConnector(new OkHttpClient.Builder().build()));</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        } else if (defaultConnectorProperty.equalsIgnoreCase(&quot;urlconnection&quot;)) {</span>
+<span class="fc" id="L49">            return new GitHubConnectorHttpConnectorAdapter(HttpConnector.DEFAULT);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        } else if (defaultConnectorProperty.equalsIgnoreCase(&quot;httpclient&quot;)) {</span>
+<span class="fc" id="L51">            return new HttpClientGitHubConnector();</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        } else if (defaultConnectorProperty.equalsIgnoreCase(&quot;default&quot;)) {</span>
+            try {
+<span class="fc" id="L54">                return new HttpClientGitHubConnector();</span>
+<span class="nc" id="L55">            } catch (UnsupportedOperationException | LinkageError e) {</span>
+<span class="nc" id="L56">                return new GitHubConnectorHttpConnectorAdapter(HttpConnector.DEFAULT);</span>
+            }
+        } else {
+<span class="fc" id="L59">            throw new IllegalStateException(</span>
+                    &quot;Property 'test.github.connector' must reference a valid built-in connector - okhttp, okhttpconnector, urlconnection, or default.&quot;);
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

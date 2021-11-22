@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OkHttpGitHubConnector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.extras.okhttp3</a> &gt; <span class="el_source">OkHttpGitHubConnector.java</span></div><h1>OkHttpGitHubConnector.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.extras.okhttp3;
+
+import okhttp3.*;
+import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.*;
+import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.connector.GitHubConnectorRequest;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+/**
+ * {@link GitHubConnector} for {@link OkHttpClient}.
+ * &lt;p&gt;
+ * Unlike {@link #DEFAULT}, OkHttp supports response caching. Making a conditional request against GitHub API and
+ * receiving a 304 response does not count against the rate limit. See
+ * http://developer.github.com/v3/#conditional-requests
+ *
+ * @author Liam Newman
+ */
+public class OkHttpGitHubConnector implements GitHubConnector {
+    private static final String HEADER_NAME = &quot;Cache-Control&quot;;
+    private final String maxAgeHeaderValue;
+
+    private final OkHttpClient client;
+
+    /**
+     * Instantiates a new Ok http connector.
+     *
+     * @param client
+     *            the client
+     */
+    public OkHttpGitHubConnector(OkHttpClient client) {
+<span class="fc" id="L42">        this(client, 0);</span>
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * Instantiates a new Ok http connector.
+     *
+     * @param client
+     *            the client
+     * @param cacheMaxAge
+     *            the cache max age
+     */
+<span class="fc" id="L53">    public OkHttpGitHubConnector(OkHttpClient client, int cacheMaxAge) {</span>
+
+<span class="fc" id="L55">        OkHttpClient.Builder builder = client.newBuilder();</span>
+
+<span class="fc" id="L57">        builder.connectionSpecs(TlsConnectionSpecs());</span>
+<span class="fc" id="L58">        this.client = builder.build();</span>
+<span class="pc bpc" id="L59" title="1 of 6 branches missed.">        if (cacheMaxAge &gt;= 0 &amp;&amp; this.client != null &amp;&amp; this.client.cache() != null) {</span>
+<span class="fc" id="L60">            maxAgeHeaderValue = new CacheControl.Builder().maxAge(cacheMaxAge, TimeUnit.SECONDS).build().toString();</span>
+        } else {
+<span class="fc" id="L62">            maxAgeHeaderValue = null;</span>
+        }
+<span class="fc" id="L64">    }</span>
+
+    @Override
+    public GitHubConnectorResponse send(GitHubConnectorRequest request) throws IOException {
+<span class="fc" id="L68">        Request.Builder builder = new Request.Builder().url(request.url());</span>
+<span class="fc bfc" id="L69" title="All 4 branches covered.">        if (maxAgeHeaderValue != null &amp;&amp; request.header(HEADER_NAME) == null) {</span>
+            // By default OkHttp honors max-age, meaning it will use local cache
+            // without checking the network within that timeframe.
+            // However, that can result in stale data being returned during that time so
+            // we force network-based checking no matter how often the query is made.
+            // OkHttp still automatically does ETag checking and returns cached data when
+            // GitHub reports 304, but those do not count against rate limit.
+<span class="fc" id="L76">            builder.header(HEADER_NAME, maxAgeHeaderValue);</span>
+        }
+
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; e : request.allHeaders().entrySet()) {</span>
+<span class="fc" id="L80">            List&lt;String&gt; v = e.getValue();</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            if (v != null) {</span>
+<span class="fc" id="L82">                builder.addHeader(e.getKey(), String.join(&quot;, &quot;, v));</span>
+            }
+<span class="fc" id="L84">        }</span>
+
+<span class="fc" id="L86">        RequestBody body = null;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (request.hasBody()) {</span>
+<span class="fc" id="L88">            body = RequestBody.create(IOUtils.toByteArray(request.body()));</span>
+        }
+<span class="fc" id="L90">        builder.method(request.method(), body);</span>
+<span class="fc" id="L91">        Request okhttpRequest = builder.build();</span>
+<span class="fc" id="L92">        Response okhttpResponse = client.newCall(okhttpRequest).execute();</span>
+
+<span class="fc" id="L94">        return new OkHttpGitHubConnectorResponse(request, okhttpResponse);</span>
+    }
+
+    /** Returns connection spec with TLS v1.2 in it */
+    private List&lt;ConnectionSpec&gt; TlsConnectionSpecs() {
+<span class="fc" id="L99">        return Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT);</span>
+    }
+
+    /**
+     * Initial response information when a response is initially received and before the body is processed.
+     *
+     * Implementation specific to {@link okhttp3.Response}.
+     */
+    private static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse.ByteArrayResponse {
+
+        @Nonnull
+        private final Response response;
+
+        OkHttpGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request, @Nonnull Response response) {
+<span class="fc" id="L113">            super(request, response.code(), response.headers().toMultimap());</span>
+<span class="fc" id="L114">            this.response = response;</span>
+<span class="fc" id="L115">        }</span>
+
+        @CheckForNull
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+<span class="fc" id="L120">            ResponseBody body = response.body();</span>
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">            if (body != null) {</span>
+<span class="fc" id="L122">                return body.byteStream();</span>
+            } else {
+<span class="nc" id="L124">                return null;</span>
+            }
+        }
+
+        @Override
+        public void close() throws IOException {
+<span class="fc" id="L130">            super.close();</span>
+<span class="fc" id="L131">            response.close();</span>
+<span class="fc" id="L132">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHObject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHObject.java</span></div><h1>GHObject.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.CheckForNull;
+
+/**
+ * Most (all?) domain objects in GitHub seems to have these 4 properties.
+ */
+@SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+        justification = &quot;JSON API&quot;)
+public abstract class GHObject extends GitHubInteractiveObject {
+    /**
+     * Capture response HTTP headers on the state object.
+     */
+    protected transient Map&lt;String, List&lt;String&gt;&gt; responseHeaderFields;
+
+    private String url;
+
+    private long id;
+    private String nodeId;
+    private String createdAt;
+    private String updatedAt;
+
+<span class="fc" id="L37">    GHObject() {</span>
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * Called by Jackson
+     *
+     * @param connectorResponse
+     *            the {@link GitHubConnectorResponse} to get headers from.
+     */
+    @JacksonInject
+    protected void setResponseHeaderFields(@CheckForNull GitHubConnectorResponse connectorResponse) {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (connectorResponse != null) {</span>
+<span class="fc" id="L49">            responseHeaderFields = connectorResponse.allHeaders();</span>
+        }
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Returns the HTTP response headers given along with the state of this object.
+     *
+     * &lt;p&gt;
+     * Some of the HTTP headers have nothing to do with the object, for example &quot;Cache-Control&quot; and others are different
+     * depending on how this object was retrieved.
+     * &lt;p&gt;
+     * This method was added as a kind of hack to allow the caller to retrieve OAuth scopes and such. Use with caution.
+     * The method might be removed in the future.
+     *
+     * @return a map of header names to value lists
+     */
+    @CheckForNull
+    @Deprecated
+    public Map&lt;String, List&lt;String&gt;&gt; getResponseHeaderFields() {
+<span class="fc" id="L68">        return GitHubClient.unmodifiableMapOrNull(responseHeaderFields);</span>
+    }
+
+    /**
+     * When was this resource created?
+     *
+     * @return date created
+     * @throws IOException
+     *             on error
+     */
+    @WithBridgeMethods(value = String.class, adapterMethod = &quot;createdAtStr&quot;)
+    public Date getCreatedAt() throws IOException {
+<span class="fc" id="L80">        return GitHubClient.parseDate(createdAt);</span>
+    }
+
+    @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;, justification = &quot;Bridge method of getCreatedAt&quot;)
+    private Object createdAtStr(Date id, Class type) {
+<span class="nc" id="L85">        return createdAt;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return API URL of this object.
+     */
+    @WithBridgeMethods(value = String.class, adapterMethod = &quot;urlToString&quot;)
+    public URL getUrl() {
+<span class="fc" id="L95">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * Gets html url.
+     *
+     * @return URL of this object for humans, which renders some HTML.
+     * @throws IOException
+     *             on error
+     */
+    @WithBridgeMethods(value = String.class, adapterMethod = &quot;urlToString&quot;)
+    public abstract URL getHtmlUrl() throws IOException;
+
+    /**
+     * When was this resource last updated?
+     *
+     * @return updated date
+     * @throws IOException
+     *             on error
+     */
+    public Date getUpdatedAt() throws IOException {
+<span class="fc" id="L116">        return GitHubClient.parseDate(updatedAt);</span>
+    }
+
+    /**
+     * Get Global node_id from Github object.
+     *
+     * @see &lt;a href=&quot;https://developer.github.com/v4/guides/using-global-node-ids/&quot;&gt;Using Global Node IDs&lt;/a&gt;
+     *
+     * @return Global Node ID.
+     */
+    public String getNodeId() {
+<span class="fc" id="L127">        return nodeId;</span>
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return Unique ID number of this resource.
+     */
+    @WithBridgeMethods(value = { String.class, int.class }, adapterMethod = &quot;longToStringOrInt&quot;)
+    public long getId() {
+<span class="fc" id="L137">        return id;</span>
+    }
+
+    @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;, justification = &quot;Bridge method of getId&quot;)
+    private Object longToStringOrInt(long id, Class type) {
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (type == String.class)</span>
+<span class="nc" id="L143">            return String.valueOf(id);</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (type == int.class)</span>
+<span class="nc" id="L145">            return (int) id;</span>
+<span class="nc" id="L146">        throw new AssertionError(&quot;Unexpected type: &quot; + type);</span>
+    }
+
+    @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;, justification = &quot;Bridge method of getHtmlUrl&quot;)
+    private Object urlToString(URL url, Class type) {
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        return url == null ? null : url.toString();</span>
+    }
+
+    /**
+     * String representation to assist debugging and inspection. The output format of this string is not a committed
+     * part of the API and is subject to change.
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L160">        return new ReflectionToStringBuilder(this, TOSTRING_STYLE, null, null, false, false) {</span>
+            @Override
+            protected boolean accept(Field field) {
+<span class="pc bpc" id="L163" title="1 of 4 branches missed.">                return super.accept(field) &amp;&amp; !field.isAnnotationPresent(SkipFromToString.class);</span>
+            }
+<span class="fc" id="L165">        }.toString();</span>
+    }
+
+<span class="fc" id="L168">    private static final ToStringStyle TOSTRING_STYLE = new ToStringStyle() {</span>
+        {
+<span class="fc" id="L170">            this.setUseShortClassName(true);</span>
+<span class="fc" id="L171">        }</span>
+
+        @Override
+        public void append(StringBuffer buffer, String fieldName, Object value, Boolean fullDetail) {
+            // skip unimportant properties. '_' is a heuristics as important properties tend to have short names
+<span class="fc bfc" id="L176" title="All 2 branches covered.">            if (fieldName.contains(&quot;_&quot;))</span>
+<span class="fc" id="L177">                return;</span>
+            // avoid recursing other GHObject
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">            if (value instanceof GHObject)</span>
+<span class="nc" id="L180">                return;</span>
+            // likewise no point in showing root
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">            if (value instanceof GitHub)</span>
+<span class="nc" id="L183">                return;</span>
+
+<span class="fc" id="L185">            super.append(buffer, fieldName, value, fullDetail);</span>
+<span class="fc" id="L186">        }</span>
+    };
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

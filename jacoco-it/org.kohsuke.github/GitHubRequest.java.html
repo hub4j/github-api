@@ -1,0 +1,806 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GitHubRequest.java</span></div><h1>GitHubRequest.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.connector.GitHubConnectorRequest;
+import org.kohsuke.github.internal.Previews;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.WillClose;
+
+import static java.util.Arrays.asList;
+
+/**
+ * Class {@link GitHubRequest} represents an immutable instance used by the client to determine what information to
+ * retrieve from a GitHub server. Use the {@link Builder} to construct a {@link GitHubRequest}.
+ * &lt;p&gt;
+ * NOTE: {@link GitHubRequest} should include the data type to be returned. Any use cases where the same request should
+ * be used to return different types of data could be handled in some other way. However, the return type is currently
+ * not specified until late in the building process, so this is still untyped.
+ * &lt;/p&gt;
+ *
+ * @author Liam Newman
+ */
+public class GitHubRequest implements GitHubConnectorRequest {
+
+<span class="fc" id="L41">    private static final Comparator&lt;String&gt; nullableCaseInsensitiveComparator = Comparator</span>
+<span class="fc" id="L42">            .nullsFirst(String.CASE_INSENSITIVE_ORDER);</span>
+
+<span class="fc" id="L44">    private static final List&lt;String&gt; METHODS_WITHOUT_BODY = asList(&quot;GET&quot;, &quot;DELETE&quot;);</span>
+    private final List&lt;Entry&gt; args;
+    private final Map&lt;String, List&lt;String&gt;&gt; headers;
+    private final Map&lt;String, Object&gt; injectedMappingValues;
+    private final String apiUrl;
+    private final String urlPath;
+    private final String method;
+    private final RateLimitTarget rateLimitTarget;
+    private final byte[] body;
+    private final boolean forceBody;
+
+    private final URL url;
+
+    private GitHubRequest(@Nonnull List&lt;Entry&gt; args,
+            @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers,
+            @Nonnull Map&lt;String, Object&gt; injectedMappingValues,
+            @Nonnull String apiUrl,
+            @Nonnull String urlPath,
+            @Nonnull String method,
+            @Nonnull RateLimitTarget rateLimitTarget,
+            @CheckForNull byte[] body,
+<span class="fc" id="L65">            boolean forceBody) {</span>
+<span class="fc" id="L66">        this.args = Collections.unmodifiableList(new ArrayList&lt;&gt;(args));</span>
+<span class="fc" id="L67">        TreeMap&lt;String, List&lt;String&gt;&gt; caseInsensitiveMap = new TreeMap&lt;&gt;(nullableCaseInsensitiveComparator);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; entry : headers.entrySet()) {</span>
+<span class="fc" id="L69">            caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList&lt;&gt;(entry.getValue())));</span>
+<span class="fc" id="L70">        }</span>
+<span class="fc" id="L71">        this.headers = Collections.unmodifiableMap(caseInsensitiveMap);</span>
+<span class="fc" id="L72">        this.injectedMappingValues = Collections.unmodifiableMap(new LinkedHashMap&lt;&gt;(injectedMappingValues));</span>
+<span class="fc" id="L73">        this.apiUrl = apiUrl;</span>
+<span class="fc" id="L74">        this.urlPath = urlPath;</span>
+<span class="fc" id="L75">        this.method = method;</span>
+<span class="fc" id="L76">        this.rateLimitTarget = rateLimitTarget;</span>
+<span class="fc" id="L77">        this.body = body;</span>
+<span class="fc" id="L78">        this.forceBody = forceBody;</span>
+<span class="fc" id="L79">        String tailApiUrl = buildTailApiUrl();</span>
+<span class="fc" id="L80">        url = getApiURL(apiUrl, tailApiUrl);</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Create a new {@link Builder}.
+     *
+     * @return a new {@link Builder}.
+     */
+    static Builder&lt;?&gt; newBuilder() {
+<span class="fc" id="L89">        return new Builder&lt;&gt;();</span>
+    }
+
+    /**
+     * Gets the final GitHub API URL.
+     *
+     * @throws GHException
+     *             wrapping a {@link MalformedURLException} if the GitHub API URL cannot be constructed
+     */
+    @Nonnull
+    static URL getApiURL(String apiUrl, String tailApiUrl) {
+        try {
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            if (!tailApiUrl.startsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L102">                apiUrl = &quot;&quot;;</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">            } else if (&quot;github.com&quot;.equals(apiUrl)) {</span>
+                // backward compatibility
+<span class="fc" id="L105">                apiUrl = GitHubClient.GITHUB_URL;</span>
+            }
+<span class="fc" id="L107">            return new URL(apiUrl + tailApiUrl);</span>
+<span class="fc" id="L108">        } catch (Exception e) {</span>
+            // The data going into constructing this URL should be controlled by the GitHub API framework,
+            // so a malformed URL here is a framework runtime error.
+            // All callers of this method ended up wrapping and throwing GHException,
+            // indicating the functionality should be moved to the common code path.
+<span class="fc" id="L113">            throw new GHException(&quot;Unable to build GitHub API URL&quot;, e);</span>
+        }
+    }
+
+    /**
+     * Transform Java Enum into Github constants given its conventions
+     *
+     * @param en
+     *            Enum to be transformed
+     * @return a String containing the value of a Github constant
+     */
+    static String transformEnum(Enum&lt;?&gt; en) {
+        // by convention Java constant names are upper cases, but github uses
+        // lower-case constants. GitHub also uses '-', which in Java we always
+        // replace with '_'
+<span class="fc" id="L128">        return en.toString().toLowerCase(Locale.ENGLISH).replace('_', '-');</span>
+    }
+
+    /**
+     * The method for this request, such as &quot;GET&quot;, &quot;PATCH&quot;, or &quot;DELETE&quot;.
+     *
+     * @return the request method.
+     */
+    @Override
+    @Nonnull
+    public String method() {
+<span class="fc" id="L139">        return method;</span>
+    }
+
+    /**
+     * The rate limit target for this request.
+     *
+     * @return the rate limit to use for this request.
+     */
+    @Nonnull
+    public RateLimitTarget rateLimitTarget() {
+<span class="fc" id="L149">        return rateLimitTarget;</span>
+    }
+
+    /**
+     * The arguments for this request. Depending on the {@link #method()} and {@code #inBody()} these maybe added to the
+     * url or to the request body.
+     *
+     * @return the list of arguments
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Already unmodifiable&quot;)
+    @Nonnull
+    public List&lt;Entry&gt; args() {
+<span class="fc" id="L161">        return args;</span>
+    }
+
+    /**
+     * The headers for this request.
+     *
+     * @return the {@link Map} of headers
+     */
+    @Override
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable Map of unmodifiable lists&quot;)
+    @Nonnull
+    public Map&lt;String, List&lt;String&gt;&gt; allHeaders() {
+<span class="fc" id="L173">        return headers;</span>
+    }
+
+    /**
+     * Gets the first value of a header field for this request.
+     *
+     * @param name
+     *            the name of the header field.
+     * @return the value of the header field, or {@code null} if the header isn't set.
+     */
+    @CheckForNull
+    public String header(String name) {
+<span class="fc" id="L185">        List&lt;String&gt; values = headers.get(name);</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (values != null) {</span>
+<span class="fc" id="L187">            return values.get(0);</span>
+        }
+<span class="fc" id="L189">        return null;</span>
+    }
+
+    /**
+     * The headers for this request.
+     *
+     * @return the {@link Map} of headers
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Already unmodifiable&quot;)
+    @Nonnull
+    public Map&lt;String, Object&gt; injectedMappingValues() {
+<span class="fc" id="L200">        return injectedMappingValues;</span>
+    }
+
+    /**
+     * The base GitHub API URL for this request represented as a {@link String}
+     *
+     * @return the url string
+     */
+    @Nonnull
+    public String apiUrl() {
+<span class="nc" id="L210">        return apiUrl;</span>
+    }
+
+    /**
+     * The url path to be added to the {@link #apiUrl()} for this request. If this does not start with a &quot;/&quot;, it instead
+     * represents the full url string for this request.
+     *
+     * @return a url path or full url string
+     */
+    @Nonnull
+    public String urlPath() {
+<span class="nc" id="L221">        return urlPath;</span>
+    }
+
+    /**
+     * The content type to to be sent by this request.
+     *
+     * @return the content type.
+     */
+    @Override
+    public String contentType() {
+<span class="fc" id="L231">        return header(&quot;Content-type&quot;);</span>
+    }
+
+    /**
+     * The {@link InputStream} to be sent as the body of this request.
+     *
+     * @return the {@link InputStream}.
+     */
+    @Override
+    @CheckForNull
+    public InputStream body() {
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        return body != null ? new ByteArrayInputStream(body) : null;</span>
+    }
+
+    /**
+     * The {@link URL} for this request. This is the actual URL the {@link GitHubClient} will send this request to.
+     *
+     * @return the request {@link URL}
+     */
+    @Override
+    @Nonnull
+    public URL url() {
+<span class="fc" id="L253">        return url;</span>
+    }
+
+    /**
+     * Whether arguments for this request should be included in the URL or in the body of the request.
+     *
+     * @return true if the arguements should be sent in the body of the request.
+     */
+    @Override
+    public boolean hasBody() {
+<span class="fc bfc" id="L263" title="All 4 branches covered.">        return forceBody || !METHODS_WITHOUT_BODY.contains(method);</span>
+    }
+
+    /**
+     * Create a {@link Builder} from this request. Initial values of the builder will be the same as this
+     * {@link GitHubRequest}.
+     *
+     * @return a {@link Builder} based on this request.
+     */
+    Builder&lt;?&gt; toBuilder() {
+<span class="fc" id="L273">        return new Builder&lt;&gt;(args,</span>
+                headers,
+                injectedMappingValues,
+                apiUrl,
+                urlPath,
+                method,
+                rateLimitTarget,
+                body,
+                forceBody);
+    }
+
+    private String buildTailApiUrl() {
+<span class="fc" id="L285">        String tailApiUrl = urlPath;</span>
+<span class="fc bfc" id="L286" title="All 6 branches covered.">        if (!hasBody() &amp;&amp; !args.isEmpty() &amp;&amp; tailApiUrl.startsWith(&quot;/&quot;)) {</span>
+            try {
+<span class="fc" id="L288">                StringBuilder argString = new StringBuilder();</span>
+<span class="pc bpc" id="L289" title="1 of 2 branches missed.">                boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;</span>
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">                argString.append(questionMarkFound ? '&amp;' : '?');</span>
+
+<span class="fc bfc" id="L292" title="All 2 branches covered.">                for (Iterator&lt;Entry&gt; it = args.listIterator(); it.hasNext();) {</span>
+<span class="fc" id="L293">                    Entry arg = it.next();</span>
+<span class="fc" id="L294">                    argString.append(URLEncoder.encode(arg.key, StandardCharsets.UTF_8.name()));</span>
+<span class="fc" id="L295">                    argString.append('=');</span>
+<span class="fc" id="L296">                    argString.append(URLEncoder.encode(arg.value.toString(), StandardCharsets.UTF_8.name()));</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">                    if (it.hasNext()) {</span>
+<span class="fc" id="L298">                        argString.append('&amp;');</span>
+                    }
+<span class="fc" id="L300">                }</span>
+<span class="fc" id="L301">                tailApiUrl += argString;</span>
+<span class="nc" id="L302">            } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L303">                throw new GHException(&quot;UTF-8 encoding required&quot;, e);</span>
+<span class="fc" id="L304">            }</span>
+        }
+<span class="fc" id="L306">        return tailApiUrl;</span>
+    }
+
+    /**
+     * Class {@link Builder} follows the builder pattern for {@link GitHubRequest}.
+     *
+     * @param &lt;B&gt;
+     *            The type of {@link Builder} to return from the various &quot;with*&quot; methods.
+     */
+    static class Builder&lt;B extends Builder&lt;B&gt;&gt; {
+
+        @Nonnull
+        private final List&lt;Entry&gt; args;
+
+        /**
+         * The header values for this request.
+         */
+        @Nonnull
+        private final Map&lt;String, List&lt;String&gt;&gt; headers;
+
+        /**
+         * Injected local data map
+         */
+        @Nonnull
+        private final Map&lt;String, Object&gt; injectedMappingValues;
+
+        /**
+         * The base GitHub API for this request.
+         */
+        @Nonnull
+        private String apiUrl;
+
+        @Nonnull
+        private String urlPath;
+        /**
+         * Request method.
+         */
+        @Nonnull
+        private String method;
+
+        @Nonnull
+        private RateLimitTarget rateLimitTarget;
+
+        private byte[] body;
+        private boolean forceBody;
+
+        /**
+         * Create a new {@link GitHubRequest.Builder}
+         */
+        protected Builder() {
+<span class="fc" id="L356">            this(new ArrayList&lt;&gt;(),</span>
+<span class="fc" id="L357">                    new TreeMap&lt;&gt;(nullableCaseInsensitiveComparator),</span>
+                    new LinkedHashMap&lt;&gt;(),
+                    GitHubClient.GITHUB_URL,
+                    &quot;/&quot;,
+                    &quot;GET&quot;,
+                    RateLimitTarget.CORE,
+                    null,
+                    false);
+<span class="fc" id="L365">        }</span>
+
+        private Builder(@Nonnull List&lt;Entry&gt; args,
+                @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers,
+                @Nonnull Map&lt;String, Object&gt; injectedMappingValues,
+                @Nonnull String apiUrl,
+                @Nonnull String urlPath,
+                @Nonnull String method,
+                @Nonnull RateLimitTarget rateLimitTarget,
+                @CheckForNull byte[] body,
+<span class="fc" id="L375">                boolean forceBody) {</span>
+<span class="fc" id="L376">            this.args = new ArrayList&lt;&gt;(args);</span>
+<span class="fc" id="L377">            TreeMap&lt;String, List&lt;String&gt;&gt; caseInsensitiveMap = new TreeMap&lt;&gt;(nullableCaseInsensitiveComparator);</span>
+<span class="fc bfc" id="L378" title="All 2 branches covered.">            for (Map.Entry&lt;String, List&lt;String&gt;&gt; entry : headers.entrySet()) {</span>
+<span class="fc" id="L379">                caseInsensitiveMap.put(entry.getKey(), new ArrayList&lt;&gt;(entry.getValue()));</span>
+<span class="fc" id="L380">            }</span>
+<span class="fc" id="L381">            this.headers = caseInsensitiveMap;</span>
+<span class="fc" id="L382">            this.injectedMappingValues = new LinkedHashMap&lt;&gt;(injectedMappingValues);</span>
+<span class="fc" id="L383">            this.apiUrl = apiUrl;</span>
+<span class="fc" id="L384">            this.urlPath = urlPath;</span>
+<span class="fc" id="L385">            this.method = method;</span>
+<span class="fc" id="L386">            this.rateLimitTarget = rateLimitTarget;</span>
+<span class="fc" id="L387">            this.body = body;</span>
+<span class="fc" id="L388">            this.forceBody = forceBody;</span>
+<span class="fc" id="L389">        }</span>
+
+        /**
+         * Builds a {@link GitHubRequest} from this builder.
+         *
+         * @return a {@link GitHubRequest}
+         * @throws GHException
+         *             wrapping a {@link MalformedURLException} if the GitHub API URL cannot be constructed
+         */
+        public GitHubRequest build() {
+<span class="fc" id="L399">            return new GitHubRequest(args,</span>
+                    headers,
+                    injectedMappingValues,
+                    apiUrl,
+                    urlPath,
+                    method,
+                    rateLimitTarget,
+                    body,
+                    forceBody);
+        }
+
+        /**
+         * With header requester.
+         *
+         * @param url
+         *            the url
+         * @return the request builder
+         */
+        public B withApiUrl(String url) {
+<span class="fc" id="L418">            this.apiUrl = url;</span>
+<span class="fc" id="L419">            return (B) this;</span>
+        }
+
+        /**
+         * Sets the request HTTP header.
+         * &lt;p&gt;
+         * If a header of the same name is already set, this method overrides it.
+         *
+         * @param name
+         *            the name
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B setHeader(String name, String value) {
+<span class="fc" id="L434">            List&lt;String&gt; field = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L435">            field.add(value);</span>
+<span class="fc" id="L436">            headers.put(name, field);</span>
+<span class="fc" id="L437">            return (B) this;</span>
+        }
+
+        /**
+         * With header requester.
+         *
+         * @param name
+         *            the name
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B withHeader(String name, String value) {
+<span class="fc" id="L450">            List&lt;String&gt; field = headers.get(name);</span>
+<span class="fc bfc" id="L451" title="All 2 branches covered.">            if (field == null) {</span>
+<span class="fc" id="L452">                setHeader(name, value);</span>
+            } else {
+<span class="fc" id="L454">                field.add(value);</span>
+            }
+<span class="fc" id="L456">            return (B) this;</span>
+        }
+
+        /**
+         * Object to inject into binding.
+         *
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B injectMappingValue(@NonNull Object value) {
+<span class="fc" id="L467">            return injectMappingValue(value.getClass().getName(), value);</span>
+        }
+
+        /**
+         * Object to inject into binding.
+         *
+         * @param name
+         *            the name
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B injectMappingValue(@NonNull String name, Object value) {
+<span class="fc" id="L480">            this.injectedMappingValues.put(name, value);</span>
+<span class="fc" id="L481">            return (B) this;</span>
+        }
+
+        public B withPreview(String name) {
+<span class="fc" id="L485">            return withHeader(&quot;Accept&quot;, name);</span>
+        }
+
+        public B withPreview(Previews preview) {
+<span class="fc" id="L489">            return withPreview(preview.mediaType());</span>
+        }
+
+        /**
+         * With requester.
+         *
+         * @param map
+         *            map of key value pairs to add
+         * @return the request builder
+         */
+        public B with(Map&lt;String, Object&gt; map) {
+<span class="nc bnc" id="L500" title="All 2 branches missed.">            for (Map.Entry&lt;String, Object&gt; entry : map.entrySet()) {</span>
+<span class="nc" id="L501">                with(entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L502">            }</span>
+
+<span class="nc" id="L504">            return (B) this;</span>
+        }
+
+        /**
+         * With requester.
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B with(String key, int value) {
+<span class="fc" id="L517">            return with(key, (Object) value);</span>
+        }
+
+        /**
+         * With requester.
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B with(String key, long value) {
+<span class="fc" id="L530">            return with(key, (Object) value);</span>
+        }
+
+        /**
+         * With requester.
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B with(String key, boolean value) {
+<span class="fc" id="L543">            return with(key, (Object) value);</span>
+        }
+
+        /**
+         * With requester.
+         *
+         * @param key
+         *            the key
+         * @param e
+         *            the e
+         * @return the request builder
+         */
+        public B with(String key, Enum&lt;?&gt; e) {
+<span class="fc bfc" id="L556" title="All 2 branches covered.">            if (e == null)</span>
+<span class="fc" id="L557">                return with(key, (Object) null);</span>
+<span class="fc" id="L558">            return with(key, transformEnum(e));</span>
+        }
+
+        /**
+         * With requester.
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B with(String key, String value) {
+<span class="fc" id="L571">            return with(key, (Object) value);</span>
+        }
+
+        /**
+         * With requester.
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B with(String key, Collection&lt;?&gt; value) {
+<span class="fc" id="L584">            return with(key, (Object) value);</span>
+        }
+
+        /**
+         * With requester.
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B with(String key, Map&lt;?, ?&gt; value) {
+<span class="fc" id="L597">            return with(key, (Object) value);</span>
+        }
+
+        /**
+         * With requester.
+         *
+         * @param body
+         *            the body
+         * @return the request builder
+         */
+        public B with(@WillClose InputStream body) throws IOException {
+<span class="fc" id="L608">            this.body = IOUtils.toByteArray(body);</span>
+<span class="fc" id="L609">            IOUtils.closeQuietly(body);</span>
+<span class="fc" id="L610">            return (B) this;</span>
+        }
+
+        /**
+         * With nullable requester.
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B withNullable(String key, Object value) {
+<span class="fc" id="L623">            args.add(new Entry(key, value));</span>
+<span class="fc" id="L624">            return (B) this;</span>
+        }
+
+        /**
+         * With requester.
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B with(String key, Object value) {
+<span class="fc bfc" id="L637" title="All 2 branches covered.">            if (value != null) {</span>
+<span class="fc" id="L638">                args.add(new Entry(key, value));</span>
+            }
+<span class="fc" id="L640">            return (B) this;</span>
+        }
+
+        /**
+         * Unlike {@link #with(String, String)}, overrides the existing value
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         * @return the request builder
+         */
+        public B set(String key, Object value) {
+<span class="fc" id="L653">            remove(key);</span>
+<span class="fc" id="L654">            return with(key, value);</span>
+
+        }
+
+        /**
+         * Removes all arg entries for a specific key.
+         *
+         * @param key
+         *            the key
+         * @return the request builder
+         */
+        public B remove(String key) {
+<span class="fc bfc" id="L666" title="All 2 branches covered.">            for (int index = 0; index &lt; args.size();) {</span>
+<span class="fc bfc" id="L667" title="All 2 branches covered.">                if (args.get(index).key.equals(key)) {</span>
+<span class="fc" id="L668">                    args.remove(index);</span>
+                } else {
+<span class="fc" id="L670">                    index++;</span>
+                }
+            }
+<span class="fc" id="L673">            return (B) this;</span>
+        }
+
+        /**
+         * Method requester.
+         *
+         * @param method
+         *            the method
+         * @return the request builder
+         */
+        public B method(@Nonnull String method) {
+<span class="fc" id="L684">            this.method = method;</span>
+<span class="fc" id="L685">            return (B) this;</span>
+        }
+
+        /**
+         * Method requester.
+         *
+         * @param rateLimitTarget
+         *            the rate limit target for this request. Default is {@link RateLimitTarget#CORE}.
+         * @return the request builder
+         */
+        public B rateLimit(@Nonnull RateLimitTarget rateLimitTarget) {
+<span class="fc" id="L696">            this.rateLimitTarget = rateLimitTarget;</span>
+<span class="fc" id="L697">            return (B) this;</span>
+        }
+
+        /**
+         * Content type requester.
+         *
+         * @param contentType
+         *            the content type
+         * @return the request builder
+         */
+        public B contentType(String contentType) {
+<span class="fc" id="L708">            this.setHeader(&quot;Content-type&quot;, contentType);</span>
+<span class="fc" id="L709">            return (B) this;</span>
+        }
+
+        /**
+         * NOT FOR PUBLIC USE. Do not make this method public.
+         * &lt;p&gt;
+         * Sets the path component of api URL without URI encoding.
+         * &lt;p&gt;
+         * Should only be used when passing a literal URL field from a GHObject, such as {@link GHContent#refresh()} or
+         * when needing to set query parameters on requests methods that don't usually have them, such as
+         * {@link GHRelease#uploadAsset(String, InputStream, String)}.
+         *
+         * @param rawUrlPath
+         *            the content type
+         * @return the request builder
+         */
+        B setRawUrlPath(@Nonnull String rawUrlPath) {
+<span class="fc" id="L726">            Objects.requireNonNull(rawUrlPath);</span>
+            // This method should only work for full urls, which must start with &quot;http&quot;
+<span class="fc bfc" id="L728" title="All 2 branches covered.">            if (!rawUrlPath.startsWith(&quot;http&quot;)) {</span>
+<span class="fc" id="L729">                throw new GHException(&quot;Raw URL must start with 'http'&quot;);</span>
+            }
+<span class="fc" id="L731">            this.urlPath = rawUrlPath;</span>
+<span class="fc" id="L732">            return (B) this;</span>
+        }
+
+        /**
+         * Path component of api URL. Appended to api url.
+         * &lt;p&gt;
+         * If urlPath starts with a slash, it will be URI encoded as a path. If it starts with anything else, it will be
+         * used as is.
+         *
+         * @param urlPathItems
+         *            the content type
+         * @return the request builder
+         */
+        public B withUrlPath(@Nonnull String urlPath, @Nonnull String... urlPathItems) {
+            // full url may be set and reset as needed
+<span class="fc bfc" id="L747" title="All 4 branches covered.">            if (urlPathItems.length == 0 &amp;&amp; !urlPath.startsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L748">                return setRawUrlPath(urlPath);</span>
+            }
+
+            // Once full url is set, do not allow path setting
+<span class="pc bpc" id="L752" title="1 of 2 branches missed.">            if (!this.urlPath.startsWith(&quot;/&quot;)) {</span>
+<span class="nc" id="L753">                throw new GHException(&quot;Cannot append to url path after setting a full url&quot;);</span>
+            }
+
+<span class="fc" id="L756">            String tailUrlPath = urlPath;</span>
+<span class="fc bfc" id="L757" title="All 2 branches covered.">            if (urlPathItems.length != 0) {</span>
+<span class="fc" id="L758">                tailUrlPath += &quot;/&quot; + String.join(&quot;/&quot;, urlPathItems);</span>
+            }
+
+<span class="fc" id="L761">            tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, &quot;/&quot;);</span>
+
+<span class="fc" id="L763">            this.urlPath = urlPathEncode(tailUrlPath);</span>
+<span class="fc" id="L764">            return (B) this;</span>
+        }
+
+        /**
+         * Small number of GitHub APIs use HTTP methods somewhat inconsistently, and use a body where it's not expected.
+         * Normally whether parameters go as query parameters or a body depends on the HTTP verb in use, but this method
+         * forces the parameters to be sent as a body.
+         *
+         * @return the request builder
+         */
+        public B inBody() {
+<span class="fc" id="L775">            forceBody = true;</span>
+<span class="fc" id="L776">            return (B) this;</span>
+        }
+    }
+
+    protected static class Entry {
+        final String key;
+        final Object value;
+
+<span class="fc" id="L784">        protected Entry(String key, Object value) {</span>
+<span class="fc" id="L785">            this.key = key;</span>
+<span class="fc" id="L786">            this.value = value;</span>
+<span class="fc" id="L787">        }</span>
+    }
+
+    /**
+     * Encode the path to url safe string.
+     *
+     * @param value
+     *            string to be path encoded.
+     * @return The encoded string.
+     */
+    private static String urlPathEncode(String value) {
+        try {
+<span class="fc" id="L799">            return new URI(null, null, value, null, null).toASCIIString();</span>
+<span class="nc" id="L800">        } catch (URISyntaxException ex) {</span>
+<span class="nc" id="L801">            throw new AssertionError(ex);</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

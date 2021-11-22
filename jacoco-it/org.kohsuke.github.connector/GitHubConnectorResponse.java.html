@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubConnectorResponse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.connector</a> &gt; <span class="el_source">GitHubConnectorResponse.java</span></div><h1>GitHubConnectorResponse.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.connector;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.util.*;
+import java.util.zip.GZIPInputStream;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+/**
+ * Response information supplied when a response is received and before the body is processed.
+ * &lt;p&gt;
+ * Instances of this class are closed once the response is done being processed. This means that {@link #bodyStream()}
+ * will not be readable after a call is completed.
+ *
+ * {@link #statusCode()}, {@link #allHeaders()}, and {@link #request()} will still be readable but it is recommended
+ * that consumers copy any information they need rather than retaining a reference to {@link GitHubConnectorResponse}.
+ *
+ * @author Liam Newman
+ */
+public abstract class GitHubConnectorResponse implements Closeable {
+
+<span class="fc" id="L30">    private static final Comparator&lt;String&gt; nullableCaseInsensitiveComparator = Comparator</span>
+<span class="fc" id="L31">            .nullsFirst(String.CASE_INSENSITIVE_ORDER);</span>
+
+    private final int statusCode;
+
+    @Nonnull
+    private final GitHubConnectorRequest request;
+    @Nonnull
+    private final Map&lt;String, List&lt;String&gt;&gt; headers;
+
+    protected GitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
+            int statusCode,
+<span class="fc" id="L42">            @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers) {</span>
+<span class="fc" id="L43">        this.request = request;</span>
+<span class="fc" id="L44">        this.statusCode = statusCode;</span>
+
+        // Response header field names must be case-insensitive.
+<span class="fc" id="L47">        TreeMap&lt;String, List&lt;String&gt;&gt; caseInsensitiveMap = new TreeMap&lt;&gt;(nullableCaseInsensitiveComparator);</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; entry : headers.entrySet()) {</span>
+<span class="fc" id="L49">            caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList&lt;&gt;(entry.getValue())));</span>
+<span class="fc" id="L50">        }</span>
+<span class="fc" id="L51">        this.headers = Collections.unmodifiableMap(caseInsensitiveMap);</span>
+<span class="fc" id="L52">    }</span>
+
+    /**
+     * Get this response as a {@link HttpURLConnection}.
+     *
+     * @return an object that implements at least the response related methods of {@link HttpURLConnection}.
+     * @deprecated This method is present only to provide backward compatibility with other deprecated components.
+     */
+    @Deprecated
+    @Nonnull
+    public HttpURLConnection toHttpURLConnection() {
+        HttpURLConnection connection;
+<span class="fc" id="L64">        connection = new GitHubConnectorResponseHttpUrlConnectionAdapter(this);</span>
+<span class="fc" id="L65">        return connection;</span>
+    }
+
+    /**
+     * Gets the value of a header field for this response.
+     *
+     * @param name
+     *            the name of the header field.
+     * @return the value of the header field, or {@code null} if the header isn't set.
+     */
+    @CheckForNull
+    public String header(String name) {
+<span class="fc" id="L77">        String result = null;</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (headers.containsKey(name)) {</span>
+<span class="fc" id="L79">            result = headers.get(name).get(0);</span>
+        }
+<span class="fc" id="L81">        return result;</span>
+    }
+
+    /**
+     * The response body as an {@link InputStream}.
+     *
+     * @return the response body
+     * @throws IOException
+     *             if response stream is null or an I/O Exception occurs.
+     */
+    @Nonnull
+    public abstract InputStream bodyStream() throws IOException;
+
+    /**
+     * Gets the {@link GitHubConnectorRequest} for this response.
+     *
+     * @return the {@link GitHubConnectorRequest} for this response.
+     */
+    @Nonnull
+    public GitHubConnectorRequest request() {
+<span class="fc" id="L101">        return request;</span>
+    }
+
+    /**
+     * The status code for this response.
+     *
+     * @return the status code for this response.
+     */
+    public int statusCode() {
+<span class="fc" id="L110">        return statusCode;</span>
+    }
+
+    /**
+     * The headers for this response.
+     *
+     * @return the headers for this response.
+     */
+    @Nonnull
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable map of unmodifiable lists&quot;)
+    public Map&lt;String, List&lt;String&gt;&gt; allHeaders() {
+<span class="fc" id="L121">        return headers;</span>
+    }
+
+    /**
+     * Handles wrapping the body stream if indicated by the &quot;Content-Encoding&quot; header.
+     *
+     * @param stream
+     *            the stream to possibly wrap
+     * @return an input stream potentially wrapped to decode gzip input
+     * @throws IOException
+     *             if an I/O Exception occurs.
+     */
+    protected InputStream wrapStream(InputStream stream) throws IOException {
+<span class="fc" id="L134">        String encoding = header(&quot;Content-Encoding&quot;);</span>
+<span class="pc bpc" id="L135" title="1 of 4 branches missed.">        if (encoding == null || stream == null)</span>
+<span class="fc" id="L136">            return stream;</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (encoding.equals(&quot;gzip&quot;))</span>
+<span class="fc" id="L138">            return new GZIPInputStream(stream);</span>
+
+<span class="nc" id="L140">        throw new UnsupportedOperationException(&quot;Unexpected Content-Encoding: &quot; + encoding);</span>
+    }
+
+    /**
+     * Parse a header value as a signed decimal integer.
+     *
+     * @param name
+     *            the header field to parse
+     * @return integer value of the header field
+     * @throws NumberFormatException
+     *             if the header is missing or does not contain a parsable integer.
+     */
+    public final int parseInt(String name) throws NumberFormatException {
+        try {
+<span class="fc" id="L154">            String headerValue = header(name);</span>
+<span class="fc" id="L155">            return Integer.parseInt(headerValue);</span>
+<span class="fc" id="L156">        } catch (NumberFormatException e) {</span>
+<span class="fc" id="L157">            throw new NumberFormatException(name + &quot;: &quot; + e.getMessage());</span>
+        }
+    }
+
+    public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
+
+<span class="fc" id="L163">        private boolean inputStreamRead = false;</span>
+<span class="fc" id="L164">        private byte[] inputBytes = null;</span>
+<span class="fc" id="L165">        private boolean isClosed = false;</span>
+
+        protected ByteArrayResponse(@Nonnull GitHubConnectorRequest request,
+                int statusCode,
+                @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers) {
+<span class="fc" id="L170">            super(request, statusCode, headers);</span>
+<span class="fc" id="L171">        }</span>
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @Nonnull
+        public InputStream bodyStream() throws IOException {
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            if (isClosed) {</span>
+<span class="fc" id="L180">                throw new IOException(&quot;Response is closed&quot;);</span>
+            }
+<span class="fc" id="L182">            synchronized (this) {</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">                if (!inputStreamRead) {</span>
+<span class="fc" id="L184">                    InputStream rawStream = rawBodyStream();</span>
+<span class="fc" id="L185">                    try (InputStream stream = wrapStream(rawStream)) {</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">                        if (stream != null) {</span>
+<span class="fc" id="L187">                            inputBytes = IOUtils.toByteArray(stream);</span>
+                        }
+                    }
+<span class="fc" id="L190">                    inputStreamRead = true;</span>
+                }
+<span class="fc" id="L192">            }</span>
+
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">            if (inputBytes == null) {</span>
+<span class="nc" id="L195">                throw new IOException(&quot;Response body missing, stream null&quot;);</span>
+            }
+
+<span class="fc" id="L198">            return new ByteArrayInputStream(inputBytes);</span>
+        }
+
+        /**
+         * Get the raw implementation specific body stream for this response.
+         *
+         * This method will only be called once to completion. If an exception is thrown, it may be called multiple
+         * times.
+         *
+         * @return the stream for the raw response
+         * @throws IOException
+         *             if an I/O Exception occurs.
+         */
+        @CheckForNull
+        protected abstract InputStream rawBodyStream() throws IOException;
+
+        @Override
+        public void close() throws IOException {
+<span class="fc" id="L216">            isClosed = true;</span>
+<span class="fc" id="L217">            this.inputBytes = null;</span>
+<span class="fc" id="L218">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

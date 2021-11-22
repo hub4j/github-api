@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubAbuseLimitHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GitHubAbuseLimitHandler.java</span></div><h1>GitHubAbuseLimitHandler.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import org.kohsuke.github.connector.GitHubConnectorResponse;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+
+import javax.annotation.Nonnull;
+
+/**
+ * Pluggable strategy to determine what to do when the API rate limit is reached.
+ *
+ * @author Kohsuke Kawaguchi
+ * @see GitHubBuilder#withAbuseLimitHandler(AbuseLimitHandler) GitHubBuilder#withRateLimitHandler(AbuseLimitHandler)
+ * @see GitHubRateLimitHandler
+ *
+ * @author Liam Newman
+ */
+<span class="fc" id="L19">public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler {</span>
+
+    @Override
+    boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">                &amp;&amp; connectorResponse.header(&quot;Retry-After&quot;) != null;</span>
+    }
+
+    /**
+     * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
+     *
+     * &lt;p&gt;
+     * Any exception thrown from this method will cause the request to fail, and the caller of github-api will receive
+     * an exception. If this method returns normally, another request will be attempted. For that to make sense, the
+     * implementation needs to wait for some time.
+     *
+     * @param connectorResponse
+     *            Response information for this request.
+     * @throws IOException
+     *             on failure
+     * @see &lt;a href=&quot;https://developer.github.com/v3/#abuse-rate-limits&quot;&gt;API documentation from GitHub&lt;/a&gt;
+     * @see &lt;a href=
+     *      &quot;https://developer.github.com/v3/guides/best-practices-for-integrators/#dealing-with-abuse-rate-limits&quot;&gt;Dealing
+     *      with abuse rate limits&lt;/a&gt;
+     *
+     */
+    public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubConnectorHttpConnectorAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.internal</a> &gt; <span class="el_source">GitHubConnectorHttpConnectorAdapter.java</span></div><h1>GitHubConnectorHttpConnectorAdapter.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.internal;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.io.IOUtils;
+import org.kohsuke.github.*;
+import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.connector.GitHubConnectorRequest;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+/**
+ * Adapts an HttpConnector to be usable as GitHubConnector.
+ *
+ * For internal use only.
+ *
+ * @author Liam Newman
+ */
+public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, HttpConnector {
+
+    /**
+     * Internal for testing.
+     */
+    final HttpConnector httpConnector;
+
+    /**
+     * Constructor.
+     *
+     * @param httpConnector
+     *            the HttpConnector to be adapted.
+     */
+<span class="fc" id="L42">    public GitHubConnectorHttpConnectorAdapter(HttpConnector httpConnector) {</span>
+<span class="fc" id="L43">        this.httpConnector = httpConnector;</span>
+<span class="fc" id="L44">    }</span>
+
+    /**
+     * Creates a GitHubConnector for an HttpConnector.
+     *
+     * If a well-known static HttpConnector is passed, a corresponding static GitHubConnector is returned.
+     *
+     * @param connector
+     *            the HttpConnector to be adapted.
+     * @return a GitHubConnector that calls into the provided HttpConnector.
+     */
+    @Nonnull
+    public static GitHubConnector adapt(@Nonnull HttpConnector connector) {
+        GitHubConnector gitHubConnector;
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (connector == HttpConnector.DEFAULT) {</span>
+<span class="fc" id="L59">            gitHubConnector = GitHubConnector.DEFAULT;</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        } else if (connector == HttpConnector.OFFLINE) {</span>
+<span class="fc" id="L61">            gitHubConnector = GitHubConnector.OFFLINE;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        } else if (connector instanceof GitHubConnector) {</span>
+<span class="fc" id="L63">            gitHubConnector = (GitHubConnector) connector;</span>
+        } else {
+<span class="fc" id="L65">            gitHubConnector = new GitHubConnectorHttpConnectorAdapter(connector);</span>
+        }
+<span class="fc" id="L67">        return gitHubConnector;</span>
+    }
+
+    @Nonnull
+    public HttpURLConnection connect(URL url) throws IOException {
+<span class="fc" id="L72">        return this.httpConnector.connect(url);</span>
+    }
+
+    @Nonnull
+    public GitHubConnectorResponse send(GitHubConnectorRequest request) throws IOException {
+        HttpURLConnection connection;
+        try {
+<span class="fc" id="L79">            connection = setupConnection(this, request);</span>
+<span class="fc" id="L80">        } catch (IOException e) {</span>
+            // An error in here should be wrapped to bypass http exception wrapping.
+<span class="fc" id="L82">            throw new GHIOException(e.getMessage(), e);</span>
+<span class="fc" id="L83">        }</span>
+
+        // HttpUrlConnection is nuts. This call opens the connection and gets a response.
+        // Putting this on it's own line for ease of debugging if needed.
+<span class="fc" id="L87">        int statusCode = connection.getResponseCode();</span>
+<span class="fc" id="L88">        Map&lt;String, List&lt;String&gt;&gt; headers = connection.getHeaderFields();</span>
+
+<span class="fc" id="L90">        return new HttpURLConnectionGitHubConnectorResponse(request, statusCode, headers, connection);</span>
+    }
+
+    @Nonnull
+    private static HttpURLConnection setupConnection(@Nonnull HttpConnector connector,
+            @Nonnull GitHubConnectorRequest request) throws IOException {
+<span class="fc" id="L96">        HttpURLConnection connection = connector.connect(request.url());</span>
+<span class="fc" id="L97">        setRequestMethod(request.method(), connection);</span>
+<span class="fc" id="L98">        buildRequest(request, connection);</span>
+
+<span class="fc" id="L100">        return connection;</span>
+    }
+
+    /**
+     * Set up the request parameters or POST payload.
+     */
+    private static void buildRequest(GitHubConnectorRequest request, HttpURLConnection connection) throws IOException {
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; e : request.allHeaders().entrySet()) {</span>
+<span class="fc" id="L108">            List&lt;String&gt; v = e.getValue();</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            if (v != null)</span>
+<span class="fc" id="L110">                connection.setRequestProperty(e.getKey(), String.join(&quot;, &quot;, v));</span>
+<span class="fc" id="L111">        }</span>
+
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (request.hasBody()) {</span>
+<span class="fc" id="L114">            connection.setDoOutput(true);</span>
+<span class="fc" id="L115">            IOUtils.copyLarge(request.body(), connection.getOutputStream());</span>
+        }
+<span class="fc" id="L117">    }</span>
+
+    private static void setRequestMethod(String method, HttpURLConnection connection) throws IOException {
+        try {
+<span class="fc" id="L121">            connection.setRequestMethod(method);</span>
+<span class="fc" id="L122">        } catch (ProtocolException e) {</span>
+            // JDK only allows one of the fixed set of verbs. Try to override that
+            try {
+<span class="fc" id="L125">                Field $method = HttpURLConnection.class.getDeclaredField(&quot;method&quot;);</span>
+<span class="fc" id="L126">                $method.setAccessible(true);</span>
+<span class="fc" id="L127">                $method.set(connection, method);</span>
+<span class="nc" id="L128">            } catch (Exception x) {</span>
+<span class="nc" id="L129">                throw (IOException) new IOException(&quot;Failed to set the custom verb&quot;).initCause(x);</span>
+<span class="fc" id="L130">            }</span>
+            // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
+            try {
+<span class="nc" id="L133">                Field $delegate = connection.getClass().getDeclaredField(&quot;delegate&quot;);</span>
+<span class="nc" id="L134">                $delegate.setAccessible(true);</span>
+<span class="nc" id="L135">                Object delegate = $delegate.get(connection);</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">                if (delegate instanceof HttpURLConnection) {</span>
+<span class="nc" id="L137">                    HttpURLConnection nested = (HttpURLConnection) delegate;</span>
+<span class="nc" id="L138">                    setRequestMethod(method, nested);</span>
+                }
+<span class="fc" id="L140">            } catch (NoSuchFieldException x) {</span>
+                // no problem
+<span class="nc" id="L142">            } catch (IllegalAccessException x) {</span>
+<span class="nc" id="L143">                throw (IOException) new IOException(&quot;Failed to set the custom verb&quot;).initCause(x);</span>
+<span class="pc" id="L144">            }</span>
+<span class="fc" id="L145">        }</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (!connection.getRequestMethod().equals(method))</span>
+<span class="nc" id="L147">            throw new IllegalStateException(&quot;Failed to set the request method to &quot; + method);</span>
+<span class="fc" id="L148">    }</span>
+
+    /**
+     * Initial response information supplied when a response is received but before the body is processed.
+     *
+     * Implementation specific to {@link HttpURLConnection}. For internal use only.
+     */
+    public final static class HttpURLConnectionGitHubConnectorResponse
+            extends
+                GitHubConnectorResponse.ByteArrayResponse {
+
+        @Nonnull
+        private final HttpURLConnection connection;
+
+        HttpURLConnectionGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
+                int statusCode,
+                @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers,
+                @Nonnull HttpURLConnection connection) {
+<span class="fc" id="L166">            super(request, statusCode, headers);</span>
+<span class="fc" id="L167">            this.connection = connection;</span>
+<span class="fc" id="L168">        }</span>
+
+        @CheckForNull
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+<span class="fc" id="L173">            InputStream rawStream = connection.getErrorStream();</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            if (rawStream == null) {</span>
+<span class="fc" id="L175">                rawStream = connection.getInputStream();</span>
+            }
+<span class="fc" id="L177">            return rawStream;</span>
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; },
+                justification = &quot;Internal implementation class. Should not be used externally.&quot;)
+        @Nonnull
+        @Override
+        @Deprecated
+        public HttpURLConnection toHttpURLConnection() {
+<span class="fc" id="L189">            return connection;</span>
+        }
+
+        @Override
+        public void close() throws IOException {
+<span class="fc" id="L194">            super.close();</span>
+            try {
+<span class="fc" id="L196">                IOUtils.closeQuietly(connection.getInputStream());</span>
+<span class="fc" id="L197">            } catch (IOException e) {</span>
+<span class="fc" id="L198">            }</span>
+<span class="fc" id="L199">        }</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubConnectorResponseHttpUrlConnectionAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.connector</a> &gt; <span class="el_source">GitHubConnectorResponseHttpUrlConnectionAdapter.java</span></div><h1>GitHubConnectorResponseHttpUrlConnectionAdapter.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.connector;
+
+import org.kohsuke.github.HttpException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.security.Permission;
+import java.util.*;
+
+/**
+ * Adapter class for {@link org.kohsuke.github.connector.GitHubConnectorResponse} to be usable as a
+ * {@link HttpURLConnection}.
+ *
+ * Behavior is equivalent to a {@link HttpURLConnection} after {@link HttpURLConnection#connect()} has been called.
+ * Methods that make no sense throw {@link UnsupportedOperationException}.
+ *
+ * @author Liam Newman
+ */
+@Deprecated
+class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection {
+
+    private final GitHubConnectorResponse connectorResponse;
+
+    public GitHubConnectorResponseHttpUrlConnectionAdapter(GitHubConnectorResponse connectorResponse) {
+<span class="fc" id="L27">        super(connectorResponse.request().url());</span>
+<span class="fc" id="L28">        this.connected = true;</span>
+<span class="fc" id="L29">        this.connectorResponse = connectorResponse;</span>
+<span class="fc" id="L30">    }</span>
+
+    @Override
+    public String getHeaderFieldKey(int n) {
+<span class="fc" id="L34">        List&lt;String&gt; keys = new ArrayList&lt;&gt;(connectorResponse.allHeaders().keySet());</span>
+<span class="fc" id="L35">        return keys.get(n);</span>
+    }
+
+    @Override
+    public String getHeaderField(int n) {
+<span class="fc" id="L40">        return connectorResponse.header(getHeaderFieldKey(n));</span>
+    }
+
+    @Override
+    public void setInstanceFollowRedirects(boolean followRedirects) {
+<span class="fc" id="L45">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public boolean getInstanceFollowRedirects() {
+<span class="fc" id="L50">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public String getRequestMethod() {
+<span class="fc" id="L55">        return connectorResponse.request().method();</span>
+    }
+
+    @Override
+    public int getResponseCode() throws IOException {
+<span class="fc" id="L60">        return connectorResponse.statusCode();</span>
+    }
+
+    @Override
+    public String getResponseMessage() throws IOException {
+<span class="fc" id="L65">        return connectorResponse.header(&quot;Status&quot;);</span>
+    }
+
+    @Override
+    public long getHeaderFieldDate(String name, long defaultValue) {
+<span class="fc" id="L70">        String dateString = getHeaderField(name);</span>
+        try {
+<span class="fc" id="L72">            return Date.parse(dateString);</span>
+<span class="fc" id="L73">        } catch (Exception e) {</span>
+        }
+<span class="fc" id="L75">        return defaultValue;</span>
+    }
+
+    @Override
+    public Permission getPermission() throws IOException {
+<span class="fc" id="L80">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public InputStream getErrorStream() {
+        try {
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">            if (connectorResponse.statusCode() &gt;= HTTP_BAD_REQUEST) {</span>
+<span class="fc" id="L87">                return connectorResponse.bodyStream();</span>
+            }
+<span class="fc" id="L89">        } catch (IOException e) {</span>
+<span class="nc" id="L90">        }</span>
+<span class="fc" id="L91">        return null;</span>
+    }
+
+    @Override
+    public void setConnectTimeout(int timeout) {
+<span class="fc" id="L96">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public int getConnectTimeout() {
+<span class="fc" id="L101">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public void setReadTimeout(int timeout) {
+<span class="fc" id="L106">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public int getReadTimeout() {
+<span class="fc" id="L111">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public int getContentLength() {
+<span class="fc" id="L116">        long l = getContentLengthLong();</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (l &gt; Integer.MAX_VALUE)</span>
+<span class="nc" id="L118">            return -1;</span>
+<span class="fc" id="L119">        return (int) l;</span>
+    }
+
+    @Override
+    public long getContentLengthLong() {
+<span class="fc" id="L124">        return getHeaderFieldLong(&quot;content-length&quot;, -1);</span>
+    }
+
+    @Override
+    public String getContentType() {
+<span class="fc" id="L129">        return connectorResponse.header(&quot;content-type&quot;);</span>
+    }
+
+    @Override
+    public String getContentEncoding() {
+<span class="fc" id="L134">        return connectorResponse.header(&quot;content-encoding&quot;);</span>
+    }
+
+    @Override
+    public long getExpiration() {
+<span class="fc" id="L139">        return getHeaderFieldDate(&quot;expires&quot;, 0);</span>
+    }
+
+    @Override
+    public long getDate() {
+<span class="fc" id="L144">        return getHeaderFieldDate(&quot;date&quot;, 0);</span>
+    }
+
+    @Override
+    public long getLastModified() {
+<span class="fc" id="L149">        return getHeaderFieldDate(&quot;last-modified&quot;, 0);</span>
+    }
+
+    @Override
+    public String getHeaderField(String name) {
+<span class="fc" id="L154">        return connectorResponse.header(name);</span>
+    }
+
+    @Override
+    public Map&lt;String, List&lt;String&gt;&gt; getHeaderFields() {
+<span class="fc" id="L159">        return connectorResponse.allHeaders();</span>
+    }
+
+    @Override
+    public int getHeaderFieldInt(String name, int defaultValue) {
+<span class="fc" id="L164">        String value = getHeaderField(name);</span>
+        try {
+<span class="fc" id="L166">            return Integer.parseInt(value);</span>
+<span class="fc" id="L167">        } catch (Exception e) {</span>
+        }
+<span class="fc" id="L169">        return defaultValue;</span>
+    }
+
+    @Override
+    public long getHeaderFieldLong(String name, long defaultValue) {
+<span class="fc" id="L174">        String value = getHeaderField(name);</span>
+        try {
+<span class="fc" id="L176">            return Long.parseLong(value);</span>
+<span class="fc" id="L177">        } catch (Exception e) {</span>
+        }
+<span class="fc" id="L179">        return defaultValue;</span>
+    }
+
+    @Override
+    public Object getContent() throws IOException {
+<span class="fc" id="L184">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public Object getContent(Class[] classes) throws IOException {
+<span class="fc" id="L189">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public InputStream getInputStream() throws IOException {
+        // This should only be possible in abuse or rate limit scenario
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (connectorResponse.statusCode() &gt;= HTTP_BAD_REQUEST) {</span>
+<span class="fc" id="L196">            throw new HttpException(connectorResponse);</span>
+        }
+<span class="nc" id="L198">        return connectorResponse.bodyStream();</span>
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+<span class="fc" id="L203">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L208">        return this.getClass().getName() + &quot;: &quot; + connectorResponse.toString();</span>
+    }
+
+    @Override
+    public boolean getDoInput() {
+<span class="fc" id="L213">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public boolean getDoOutput() {
+<span class="fc" id="L218">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public boolean getUseCaches() {
+<span class="fc" id="L223">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public long getIfModifiedSince() {
+<span class="fc" id="L228">        return getHeaderFieldDate(&quot;If-Modified-Since&quot;, 0);</span>
+    }
+
+    @Override
+    public void setDefaultUseCaches(boolean defaultusecaches) {
+<span class="fc" id="L233">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public String getRequestProperty(String key) {
+<span class="fc" id="L238">        return connectorResponse.request().header(key);</span>
+    }
+
+    @Override
+    public boolean getAllowUserInteraction() {
+<span class="fc" id="L243">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public boolean getDefaultUseCaches() {
+<span class="fc" id="L248">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public void disconnect() {
+        // ignored
+<span class="fc" id="L254">    }</span>
+
+    @Override
+    public boolean usingProxy() {
+<span class="fc" id="L258">        throw new UnsupportedOperationException();</span>
+    }
+
+    @Override
+    public void connect() throws IOException {
+        // no op
+<span class="fc" id="L264">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

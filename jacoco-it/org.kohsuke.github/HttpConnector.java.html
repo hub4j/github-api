@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HttpConnector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">HttpConnector.java</span></div><h1>HttpConnector.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import org.kohsuke.github.extras.ImpatientHttpConnector;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+/**
+ * Pluggability for customizing HTTP request behaviors or using altogether different library.
+ *
+ * &lt;p&gt;
+ * For example, you can implement this to st custom timeouts.
+ *
+ * @deprecated Use {@link org.kohsuke.github.connector.GitHubConnector} instead.
+ * @author Kohsuke Kawaguchi
+ */
+@FunctionalInterface
+@Deprecated
+public interface HttpConnector {
+    /**
+     * Opens a connection to the given URL.
+     *
+     * @param url
+     *            the url
+     * @return the http url connection
+     * @throws IOException
+     *             the io exception
+     */
+    HttpURLConnection connect(URL url) throws IOException;
+
+    /**
+     * Default implementation that uses {@link URL#openConnection()}.
+     */
+<span class="fc" id="L35">    HttpConnector DEFAULT = new ImpatientHttpConnector(url -&gt; (HttpURLConnection) url.openConnection());</span>
+
+    /**
+     * Stub implementation that is always off-line.
+     */
+<span class="fc" id="L40">    HttpConnector OFFLINE = url -&gt; {</span>
+<span class="fc" id="L41">        throw new IOException(&quot;Offline&quot;);</span>
+    };
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

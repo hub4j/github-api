@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubPageIterator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GitHubPageIterator.java</span></div><h1>GitHubPageIterator.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import javax.annotation.Nonnull;
+
+/**
+ * May be used for any item that has pagination information. Iterates over paginated {@link T} objects (not the items
+ * inside the page). Also exposes {@link #finalResponse()} to allow getting a full {@link GitHubResponse&lt;T&gt;} after
+ * iterating completes.
+ *
+ * Works for array responses, also works for search results which are single instances with an array of items inside.
+ *
+ * This class is not thread-safe. Any one instance should only be called from a single thread.
+ *
+ * @param &lt;T&gt;
+ *            type of each page (not the items in the page).
+ *
+ * @author Liam Newman
+ */
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">class GitHubPageIterator&lt;T&gt; implements Iterator&lt;T&gt; {</span>
+
+    private final GitHubClient client;
+    private final Class&lt;T&gt; type;
+
+    /**
+     * The page that will be returned when {@link #next()} is called.
+     *
+     * &lt;p&gt;
+     * Will be {@code null} after {@link #next()} is called.
+     * &lt;/p&gt;
+     * &lt;p&gt;
+     * Will not be {@code null} after {@link #fetch()} is called if a new page was fetched.
+     * &lt;/p&gt;
+     */
+    private T next;
+
+    /**
+     * The request that will be sent when to get a new response page if {@link #next} is {@code null}. Will be
+     * {@code null} when there are no more pages to fetch.
+     */
+    private GitHubRequest nextRequest;
+
+    /**
+     * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
+     * response that was retrieved.
+     */
+<span class="fc" id="L52">    private GitHubResponse&lt;T&gt; finalResponse = null;</span>
+
+<span class="fc" id="L54">    private GitHubPageIterator(GitHubClient client, Class&lt;T&gt; type, GitHubRequest request) {</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (!&quot;GET&quot;.equals(request.method())) {</span>
+<span class="nc" id="L56">            throw new IllegalStateException(&quot;Request method \&quot;GET\&quot; is required for page iterator.&quot;);</span>
+        }
+
+<span class="fc" id="L59">        this.client = client;</span>
+<span class="fc" id="L60">        this.type = type;</span>
+<span class="fc" id="L61">        this.nextRequest = request;</span>
+<span class="fc" id="L62">    }</span>
+
+    /**
+     * Loads paginated resources.
+     *
+     * @param client
+     *            the {@link GitHubClient} from which to request responses
+     * @param type
+     *            type of each page (not the items in the page).
+     * @param &lt;T&gt;
+     *            type of each page (not the items in the page).
+     * @return iterator
+     */
+    static &lt;T&gt; GitHubPageIterator&lt;T&gt; create(GitHubClient client, Class&lt;T&gt; type, GitHubRequest request, int pageSize) {
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (pageSize &gt; 0) {</span>
+<span class="fc" id="L78">            GitHubRequest.Builder&lt;?&gt; builder = request.toBuilder().with(&quot;per_page&quot;, pageSize);</span>
+<span class="fc" id="L79">            request = builder.build();</span>
+        }
+
+<span class="fc" id="L82">        return new GitHubPageIterator&lt;&gt;(client, type, request);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasNext() {
+<span class="fc" id="L89">        fetch();</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        return next != null;</span>
+    }
+
+    /**
+     * Gets the next page.
+     *
+     * @return the next page.
+     */
+    @Nonnull
+    public T next() {
+<span class="fc" id="L100">        fetch();</span>
+<span class="fc" id="L101">        T result = next;</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (result == null)</span>
+<span class="nc" id="L103">            throw new NoSuchElementException();</span>
+        // If this is the last page, keep the response
+<span class="fc" id="L105">        next = null;</span>
+<span class="fc" id="L106">        return result;</span>
+    }
+
+    /**
+     * On rare occasions the final response from iterating is needed.
+     *
+     * @return the final response of the iterator.
+     */
+    public GitHubResponse&lt;T&gt; finalResponse() {
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (hasNext()) {</span>
+<span class="nc" id="L116">            throw new GHException(&quot;Final response is not available until after iterator is done.&quot;);</span>
+        }
+<span class="fc" id="L118">        return finalResponse;</span>
+    }
+
+    /**
+     * Fetch is called at the start of {@link #hasNext()} or {@link #next()} to fetch another page of data if it is
+     * needed.
+     * &lt;p&gt;
+     * If {@link #next} is not {@code null}, no further action is needed. If {@link #next} is {@code null} and
+     * {@link #nextRequest} is {@code null}, there are no more pages to fetch.
+     * &lt;/p&gt;
+     * &lt;p&gt;
+     * Otherwise, a new response page is fetched using {@link #nextRequest}. The response is then checked to see if
+     * there is a page after it and {@link #nextRequest} is updated to point to it. If there are no pages available
+     * after the current response, {@link #nextRequest} is set to {@code null}.
+     * &lt;/p&gt;
+     */
+    private void fetch() {
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        if (next != null)</span>
+<span class="fc" id="L136">            return; // already fetched</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (nextRequest == null)</span>
+<span class="fc" id="L138">            return; // no more data to fetch</span>
+
+<span class="fc" id="L140">        URL url = nextRequest.url();</span>
+        try {
+<span class="fc" id="L142">            GitHubResponse&lt;T&gt; nextResponse = client.sendRequest(nextRequest,</span>
+<span class="fc" id="L143">                    (connectorResponse) -&gt; GitHubResponse.parseBody(connectorResponse, type));</span>
+<span class="pc bpc" id="L144" title="2 of 4 branches missed.">            assert nextResponse.body() != null;</span>
+<span class="fc" id="L145">            next = nextResponse.body();</span>
+<span class="fc" id="L146">            nextRequest = findNextURL(nextRequest, nextResponse);</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            if (nextRequest == null) {</span>
+<span class="fc" id="L148">                finalResponse = nextResponse;</span>
+            }
+<span class="fc" id="L150">        } catch (IOException e) {</span>
+            // Iterators do not throw IOExceptions, so we wrap any IOException
+            // in a runtime GHException to bubble out if needed.
+<span class="fc" id="L153">            throw new GHException(&quot;Failed to retrieve &quot; + url, e);</span>
+<span class="fc" id="L154">        }</span>
+<span class="fc" id="L155">    }</span>
+
+    /**
+     * Locate the next page from the pagination &quot;Link&quot; tag.
+     */
+    private GitHubRequest findNextURL(GitHubRequest nextRequest, GitHubResponse&lt;T&gt; nextResponse)
+            throws MalformedURLException {
+<span class="fc" id="L162">        GitHubRequest result = null;</span>
+<span class="fc" id="L163">        String link = nextResponse.header(&quot;Link&quot;);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (link != null) {</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">            for (String token : link.split(&quot;, &quot;)) {</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">                if (token.endsWith(&quot;rel=\&quot;next\&quot;&quot;)) {</span>
+                    // found the next page. This should look something like
+                    // &lt;https://api.github.com/repos?page=3&amp;per_page=100&gt;; rel=&quot;next&quot;
+<span class="fc" id="L169">                    int idx = token.indexOf('&gt;');</span>
+<span class="fc" id="L170">                    result = nextRequest.toBuilder().setRawUrlPath(token.substring(1, idx)).build();</span>
+<span class="fc" id="L171">                    break;</span>
+                }
+            }
+        }
+<span class="fc" id="L175">        return result;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

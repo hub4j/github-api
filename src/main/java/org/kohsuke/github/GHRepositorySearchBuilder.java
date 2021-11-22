@@ -251,8 +251,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * The enum for Fork search mode
-     * Note: Kept for backward compatibility. Use GHFork instead.
+     * The enum for Fork search mode. Note: Kept for backward compatibility. Use GHFork instead.
      */
     @Deprecated
     public enum Fork {

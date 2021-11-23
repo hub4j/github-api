@@ -565,6 +565,17 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(pullRequest.getUser().login, is("ghost"));
     }
 
+    @Test
+    public void checkPullRequestReviewer() throws IOException {
+        // PR id is based on https://github.com/sahansera/TestRepo/pull/6
+        final GHPullRequest pullRequest = getRepository().getPullRequest(6);
+        final Optional<GHPullRequestReview> review = pullRequest.listReviews().toList().stream().findFirst();
+        final GHUser reviewer = review.get().getUser();
+
+        assertThat(review, notNullValue());
+        assertThat(reviewer, notNullValue());
+    }
+
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }

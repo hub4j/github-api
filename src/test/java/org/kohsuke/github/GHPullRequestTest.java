@@ -545,7 +545,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void checkNonExistentReviewer() throws IOException, NullPointerException {
+    public void checkNonExistentReviewer() throws IOException {
         // PR id is based on https://github.com/sahansera/TestRepo/pull/1
         final GHPullRequest pullRequest = getRepository().getPullRequest(1);
         final Optional<GHPullRequestReview> review = pullRequest.listReviews().toList().stream().findFirst();
@@ -557,10 +557,11 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void checkNonExistentUser() throws IOException {
-        final GHRepository repository = getRepository();
-        final GHPullRequest pullRequest = repository.getPullRequest(2);
+    public void checkNonExistentAuthor() throws IOException {
+        // PR id is based on https://github.com/sahansera/TestRepo/pull/2
+        final GHPullRequest pullRequest = getRepository().getPullRequest(2);
 
+        assertThat(pullRequest.getUser(), is(notNullValue()));
         assertThat(pullRequest.getUser().login, is("ghost"));
     }
 

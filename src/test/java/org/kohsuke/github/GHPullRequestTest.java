@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
 
@@ -544,15 +545,19 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void checkNonExistentReviewerTest() throws IOException {
-        final GHRepository repository = getRepository();
-        final GHPullRequest pullRequest = repository.getPullRequest(1);
+    public void checkNonExistentReviewer() throws IOException, NullPointerException {
+        // PR id is based on https://github.com/sahansera/TestRepo/pull/1
+        final GHPullRequest pullRequest = getRepository().getPullRequest(1);
+        final Optional<GHPullRequestReview> review = pullRequest.listReviews().toList().stream().findFirst();
+        final GHUser reviewer = review.get().getUser();
 
         assertThat(pullRequest.getRequestedReviewers(), is(empty()));
+        assertThat(review, notNullValue());
+        assertThat(reviewer, is(nullValue()));
     }
 
     @Test
-    public void checkNonExistentUserTest() throws IOException {
+    public void checkNonExistentUser() throws IOException {
         final GHRepository repository = getRepository();
         final GHPullRequest pullRequest = repository.getPullRequest(2);
 

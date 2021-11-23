@@ -80,7 +80,10 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-        return owner.root().getUser(user.getLogin());
+        if (user != null) {
+            return owner.root().getUser(user.getLogin());
+        }
+        return null;
     }
 
     /**

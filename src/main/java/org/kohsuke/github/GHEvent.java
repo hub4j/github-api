@@ -69,6 +69,7 @@ public enum GHEvent {
     TEAM,
     TEAM_ADD,
     WATCH,
+    WORKFLOW_JOB,
     WORKFLOW_DISPATCH,
     WORKFLOW_RUN,
 

@@ -7,30 +7,24 @@ import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
-import java.util.zip.GZIPInputStream;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static java.util.logging.Level.*;
 
 /**
  * Adapts an HttpConnector to be usable as GitHubConnector.
  *
  * For internal use only.
+ *
+ * @author Liam Newman
  */
 public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, HttpConnector {
 
@@ -154,17 +148,13 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
     }
 
     /**
-     * Initial response information supplied to a {@link org.kohsuke.github.function.BodyHandler} when a response is
-     * initially received and before the body is processed.
+     * Initial response information supplied when a response is received but before the body is processed.
      *
      * Implementation specific to {@link HttpURLConnection}. For internal use only.
      */
-    public final static class HttpURLConnectionGitHubConnectorResponse extends GitHubConnectorResponse {
-
-        private boolean inputStreamRead = false;
-        private byte[] inputBytes = null;
-        private boolean errorStreamRead = false;
-        private String errorString = null;
+    public final static class HttpURLConnectionGitHubConnectorResponse
+            extends
+                GitHubConnectorResponse.ByteArrayResponse {
 
         @Nonnull
         private final HttpURLConnection connection;
@@ -177,60 +167,19 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
             this.connection = connection;
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        public InputStream bodyStream() throws IOException {
-            if (connection.getResponseCode() >= HTTP_BAD_REQUEST) {
-                if (connection.getResponseCode() == HTTP_NOT_FOUND) {
-                    throw new FileNotFoundException(request().url().toString());
-                } else {
-                    throw new HttpException(errorMessage(),
-                            connection.getResponseCode(),
-                            connection.getResponseMessage(),
-                            connection.getURL().toString());
-                }
+        @CheckForNull
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+            InputStream rawStream = connection.getErrorStream();
+            if (rawStream == null) {
+                rawStream = connection.getInputStream();
             }
-
-            synchronized (this) {
-                if (!inputStreamRead) {
-                    try (InputStream stream = wrapStream(connection.getInputStream())) {
-                        if (stream != null) {
-                            inputBytes = IOUtils.toByteArray(stream);
-                        }
-                    }
-                    inputStreamRead = true;
-                }
-            }
-
-            return inputBytes == null ? null : new ByteArrayInputStream(inputBytes);
+            return rawStream;
         }
 
         /**
          * {@inheritDoc}
          */
-        public String errorMessage() {
-            String result = null;
-            try {
-                synchronized (this) {
-                    if (!errorStreamRead) {
-                        try (InputStream stream = wrapStream(connection.getErrorStream())) {
-                            if (stream != null) {
-                                errorString = new String(IOUtils.toByteArray(stream), StandardCharsets.UTF_8);
-                            }
-                        }
-                        errorStreamRead = true;
-                    }
-                }
-                if (errorString != null) {
-                    result = errorString;
-                }
-            } catch (Exception e) {
-                LOGGER.log(FINER, "Ignored exception get error message", e);
-            }
-            return result;
-        }
-
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" },
                 justification = "Internal implementation class. Should not be used externally.")
         @Nonnull
@@ -240,28 +189,13 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
             return connection;
         }
 
-        /**
-         * Handles the "Content-Encoding" header.
-         *
-         * @param stream
-         *            the stream to possibly wrap
-         *
-         */
-        private InputStream wrapStream(InputStream stream) throws IOException {
-            String encoding = header("Content-Encoding");
-            if (encoding == null || stream == null)
-                return stream;
-            if (encoding.equals("gzip"))
-                return new GZIPInputStream(stream);
-
-            throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
-        }
-
-        private static final Logger LOGGER = Logger.getLogger(GitHub.class.getName());
-
         @Override
         public void close() throws IOException {
-            IOUtils.closeQuietly(connection.getInputStream());
+            super.close();
+            try {
+                IOUtils.closeQuietly(connection.getInputStream());
+            } catch (IOException e) {
+            }
         }
     }
 

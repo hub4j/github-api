@@ -53,12 +53,13 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
     public void testHandler_Fail() throws Exception {
         // Customized response that templates the date to keep things working
         snapshotNotAllowed();
+        final HttpURLConnection[] savedConnection = new HttpURLConnection[1];
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withAbuseLimitHandler(new AbuseLimitHandler() {
                     @Override
                     public void onError(IOException e, HttpURLConnection uc) throws IOException {
-
+                        savedConnection[0] = uc;
                         // Verify
                         assertThat(uc.getDate(), Matchers.greaterThanOrEqualTo(new Date().getTime() - 10000));
                         assertThat(uc.getExpiration(), equalTo(0L));
@@ -82,13 +83,32 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         // getting an input stream in an error case should throw
                         IOException ioEx = Assert.assertThrows(IOException.class, () -> uc.getInputStream());
 
-                        InputStream errorStream = uc.getErrorStream();
-                        assertThat(errorStream, notNullValue());
-                        String error = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
-                        assertThat(error, containsString("Must have push access to repository"));
+                        try (InputStream errorStream = uc.getErrorStream()) {
+                            assertThat(errorStream, notNullValue());
+                            String errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
+                            assertThat(errorString, containsString("Must have push access to repository"));
+                        }
 
                         // calling again should still error
                         ioEx = Assert.assertThrows(IOException.class, () -> uc.getInputStream());
+
+                        // calling again on a GitHubConnectorResponse should yield the same value
+                        if (uc.toString().contains("GitHubConnectorResponseHttpUrlConnectionAdapter")) {
+                            try (InputStream errorStream = uc.getErrorStream()) {
+                                assertThat(errorStream, notNullValue());
+                                String errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
+                                assertThat(errorString, containsString("Must have push access to repository"));
+                            }
+                        } else {
+                            try (InputStream errorStream = uc.getErrorStream()) {
+                                assertThat(errorStream, notNullValue());
+                                String errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
+                                fail();
+                            } catch (IOException ex) {
+                                assertThat(ex, notNullValue());
+                                assertThat(ex.getMessage(), containsString("stream is closed"));
+                            }
+                        }
 
                         assertThat(uc.getHeaderFields(), instanceOf(Map.class));
                         assertThat(uc.getHeaderFields().size(), Matchers.greaterThan(25));
@@ -116,12 +136,8 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         Assert.assertThrows(IllegalStateException.class, () -> uc.setRequestProperty("bogus", "thing"));
                         Assert.assertThrows(IllegalStateException.class, () -> uc.setUseCaches(true));
 
-                        boolean isAdapter = false;
                         if (uc.toString().contains("GitHubConnectorResponseHttpUrlConnectionAdapter")) {
-                            isAdapter = true;
-                        }
 
-                        if (isAdapter) {
                             Assert.assertThrows(UnsupportedOperationException.class,
                                     () -> uc.getAllowUserInteraction());
                             Assert.assertThrows(UnsupportedOperationException.class, () -> uc.getConnectTimeout());
@@ -176,8 +192,13 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
             getTempRepository();
             fail();
         } catch (Exception e) {
-            assertThat(e, instanceOf(IOException.class));
-            assertThat(e.getCause(), instanceOf(HttpException.class));
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.getMessage(), equalTo("Abuse limit reached"));
+        }
+
+        if (savedConnection[0].toString().contains("GitHubConnectorResponseHttpUrlConnectionAdapter")) {
+            // error stream is non-null above. null here because response has been closed.
+            assertThat(savedConnection[0].getErrorStream(), nullValue());
         }
 
         assertThat(mockGitHub.getRequestCount(), equalTo(2));
@@ -203,8 +224,8 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
 
             fail();
         } catch (Exception e) {
-            assertThat(e, instanceOf(IOException.class));
-            assertThat(e.getCause(), instanceOf(HttpException.class));
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.getMessage(), equalTo("Abuse limit reached"));
         }
 
         assertThat(mockGitHub.getRequestCount(), equalTo(2));

@@ -7,32 +7,24 @@ import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-import java.util.zip.GZIPInputStream;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static java.util.logging.Level.FINER;
-
 /**
- * {@link HttpConnector} for {@link OkHttpClient}.
+ * {@link GitHubConnector} for {@link OkHttpClient}.
  * <p>
- * Unlike {@link #DEFAULT}, OkHttp does response caching. Making a conditional request against GitHubAPI and receiving a
- * 304 response does not count against the rate limit. See http://developer.github.com/v3/#conditional-requests
+ * Unlike {@link #DEFAULT}, OkHttp supports response caching. Making a conditional request against GitHub API and
+ * receiving a 304 response does not count against the rate limit. See
+ * http://developer.github.com/v3/#conditional-requests
  *
  * @author Liam Newman
- * @author Kohsuke Kawaguchi
  */
 public class OkHttpGitHubConnector implements GitHubConnector {
     private static final String HEADER_NAME = "Cache-Control";
@@ -112,10 +104,7 @@ public class OkHttpGitHubConnector implements GitHubConnector {
      *
      * Implementation specific to {@link okhttp3.Response}.
      */
-    static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse {
-
-        private boolean bodyBytesRead = false;
-        private byte[] bodyBytes = null;
+    private static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse.ByteArrayResponse {
 
         @Nonnull
         private final Response response;
@@ -125,82 +114,21 @@ public class OkHttpGitHubConnector implements GitHubConnector {
             this.response = response;
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        public InputStream bodyStream() throws IOException {
-            if (response.code() >= HTTP_BAD_REQUEST) {
-                if (response.code() == HTTP_NOT_FOUND) {
-                    throw new FileNotFoundException(request().url().toString());
-                } else {
-                    throw new HttpException(errorMessage(),
-                            response.code(),
-                            response.message(),
-                            request().url().toString());
-                }
+        @CheckForNull
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+            ResponseBody body = response.body();
+            if (body != null) {
+                return body.byteStream();
+            } else {
+                return null;
             }
-
-            readBodyBytes();
-            InputStream stream = bodyBytes == null ? null : new ByteArrayInputStream(bodyBytes);
-            return stream;
-        }
-
-        private void readBodyBytes() throws IOException {
-            synchronized (this) {
-                if (!bodyBytesRead) {
-                    try (ResponseBody body = response.body()) {
-                        if (body != null) {
-                            try (InputStream stream = wrapStream(body.byteStream())) {
-                                if (stream != null) {
-                                    bodyBytes = IOUtils.toByteArray(stream);
-                                }
-                            }
-                        }
-                    }
-                    bodyBytesRead = true;
-                }
-
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public String errorMessage() {
-            String result = null;
-            try {
-                if (!response.isSuccessful()) {
-                    readBodyBytes();
-                    result = bodyBytes == null ? null : new String(bodyBytes, StandardCharsets.UTF_8);
-                }
-            } catch (Exception e) {
-                LOGGER.log(FINER, "Ignored exception get error message", e);
-            }
-            return result;
-        }
-
-        /**
-         * Handles the "Content-Encoding" header.
-         *
-         * @param stream
-         *            the stream to possibly wrap
-         *
-         */
-        private InputStream wrapStream(InputStream stream) throws IOException {
-            String encoding = header("Content-Encoding");
-            if (encoding == null || stream == null)
-                return stream;
-            if (encoding.equals("gzip"))
-                return new GZIPInputStream(stream);
-
-            throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
         }
 
         @Override
         public void close() throws IOException {
+            super.close();
             response.close();
         }
-
-        private static final Logger LOGGER = Logger.getLogger(OkHttpGitHubConnector.class.getName());
     }
 }

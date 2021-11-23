@@ -19,6 +19,8 @@ import javax.annotation.Nonnull;
  *
  * @param <T>
  *            type of each page (not the items in the page).
+ *
+ * @author Liam Newman
  */
 class GitHubPageIterator<T> implements Iterator<T> {
 

@@ -1,14 +1,24 @@
 package org.kohsuke.github.connector;
 
-import java.io.ByteArrayInputStream;
+import org.kohsuke.github.HttpException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
 import java.security.Permission;
 import java.util.*;
 
+/**
+ * Adapter class for {@link org.kohsuke.github.connector.GitHubConnectorResponse} to be usable as a
+ * {@link HttpURLConnection}.
+ *
+ * Behavior is equivalent to a {@link HttpURLConnection} after {@link HttpURLConnection#connect()} has been called.
+ * Methods that make no sense throw {@link UnsupportedOperationException}.
+ *
+ * @author Liam Newman
+ */
+@Deprecated
 class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection {
 
     private final GitHubConnectorResponse connectorResponse;
@@ -72,7 +82,13 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public InputStream getErrorStream() {
-        return new ByteArrayInputStream(connectorResponse.errorMessage().getBytes(StandardCharsets.UTF_8));
+        try {
+            if (connectorResponse.statusCode() >= HTTP_BAD_REQUEST) {
+                return connectorResponse.bodyStream();
+            }
+        } catch (IOException e) {
+        }
+        return null;
     }
 
     @Override
@@ -175,6 +191,10 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
 
     @Override
     public InputStream getInputStream() throws IOException {
+        // This should only be possible in abuse or rate limit scenario
+        if (connectorResponse.statusCode() >= HTTP_BAD_REQUEST) {
+            throw new HttpException(connectorResponse);
+        }
         return connectorResponse.bodyStream();
     }
 

@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.google.common.collect.Iterables;
+import org.junit.Assert;
 import org.junit.Test;
 import org.kohsuke.github.example.dataobject.ReadOnlyObjects;
 
@@ -138,20 +139,69 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertThat(c3.getPath(), not(equalTo(c2.getPath())));
         assertThat(r3.getTotalCount(), equalTo(r2.getTotalCount()));
 
-        PagedSearchIterable<GHContent> r4 = gitHub.searchContent()
+        GHContentSearchBuilder searchBuilder = gitHub.searchContent()
                 .q("addClass")
                 .in("file")
                 .language("js")
                 .repo("jquery/jquery")
                 .sort(GHContentSearchBuilder.Sort.INDEXED)
-                .order(GHDirection.DESC)
-                .list();
+                .order(GHDirection.DESC);
+
+        PagedSearchIterable<GHContent> r4 = searchBuilder.list();
 
         GHContent c4 = r4.iterator().next();
         assertThat(c4.getPath(), not(equalTo(c2.getPath())));
         assertThat(c4.getPath(), not(equalTo(c3.getPath())));
         assertThat(r4.getTotalCount(), equalTo(r2.getTotalCount()));
 
+        // Verify qualifier not allowed to be empty
+        IllegalArgumentException e = Assert.assertThrows(IllegalArgumentException.class,
+                () -> searchBuilder.q("", "not valid"));
+        assertThat(e.getMessage(), equalTo("qualifier cannot be null or empty"));
+    }
+
+    @Test
+    public void searchContentWithForks() {
+        final PagedSearchIterable<GHContent> results = gitHub.searchContent()
+                .q("addClass")
+                .language("js")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.DESC)
+                .fork(GHFork.PARENT_ONLY)
+                .list();
+
+        final PagedSearchIterable<GHContent> resultsWithForks = gitHub.searchContent()
+                .q("addClass")
+                .language("js")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.DESC)
+                .fork(GHFork.PARENT_AND_FORKS)
+                .list();
+
+        assertThat(results.getTotalCount(), lessThan(resultsWithForks.getTotalCount()));
+
+        // Do not record these.
+        // This will verify that the queries for the deprecated path are identical to the ones above.
+        if (!mockGitHub.isTakeSnapshot()) {
+            final PagedSearchIterable<GHContent> resultsDeprecated = gitHub.searchContent()
+                    .q("addClass")
+                    .language("js")
+                    .sort(GHContentSearchBuilder.Sort.INDEXED)
+                    .order(GHDirection.DESC)
+                    .fork(GHFork.PARENT_ONLY.toString())
+                    .list();
+
+            final PagedSearchIterable<GHContent> resultsWithForksDeprecated = gitHub.searchContent()
+                    .q("addClass")
+                    .language("js")
+                    .sort(GHContentSearchBuilder.Sort.INDEXED)
+                    .order(GHDirection.DESC)
+                    .fork(GHFork.PARENT_AND_FORKS.toString())
+                    .list();
+
+            assertThat(resultsDeprecated.getTotalCount(), equalTo(results.getTotalCount()));
+            assertThat(resultsWithForksDeprecated.getTotalCount(), equalTo(resultsWithForks.getTotalCount()));
+        }
     }
 
     @Test

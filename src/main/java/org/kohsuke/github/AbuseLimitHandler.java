@@ -12,11 +12,14 @@ import javax.annotation.Nonnull;
  * Pluggable strategy to determine what to do when the API abuse limit is hit.
  *
  * @author Kohsuke Kawaguchi
- * @see GitHubBuilder#withAbuseLimitHandler(AbuseLimitHandler) GitHubBuilder#withAbuseLimitHandler(AbuseLimitHandler)
+ * @see GitHubBuilder#withAbuseLimitHandler(GitHubAbuseLimitHandler)
+ *      GitHubBuilder#withAbuseLimitHandler(GitHubAbuseLimitHandler)
  * @see <a href="https://developer.github.com/v3/#abuse-rate-limits">documentation</a>
  * @see RateLimitHandler
+ * @deprecated Switch to {@link GitHubAbuseLimitHandler}.
  */
-public abstract class AbuseLimitHandler {
+@Deprecated
+public abstract class AbuseLimitHandler extends GitHubAbuseLimitHandler {
 
     /**
      * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
@@ -37,7 +40,7 @@ public abstract class AbuseLimitHandler {
      *
      */
     public void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
-        GHIOException e = new HttpException("Abuse limit violation",
+        GHIOException e = new HttpException("Abuse limit reached",
                 connectorResponse.statusCode(),
                 connectorResponse.header("Status"),
                 connectorResponse.request().url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());
@@ -66,12 +69,12 @@ public abstract class AbuseLimitHandler {
      *
      */
     @Deprecated
-    public void onError(IOException e, HttpURLConnection uc) throws IOException {
-    }
+    public abstract void onError(IOException e, HttpURLConnection uc) throws IOException;
 
     /**
      * Wait until the API abuse "wait time" is passed.
      */
+    @Deprecated
     public static final AbuseLimitHandler WAIT = new AbuseLimitHandler() {
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
@@ -94,10 +97,11 @@ public abstract class AbuseLimitHandler {
     /**
      * Fail immediately.
      */
+    @Deprecated
     public static final AbuseLimitHandler FAIL = new AbuseLimitHandler() {
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
-            throw (IOException) new IOException("Abuse limit reached").initCause(e);
+            throw e;
         }
     };
 }

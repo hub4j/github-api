@@ -1,0 +1,13 @@
+#
+#Tue Nov 23 15:54:38 PST 2021
+List\ of\ public\ or\ protected\ methods\ should\ only\ change\ intentionally=abe87755-30ea-46ed-966c-6490cf46f35a
+List\ of\ Public\ or\ Protected\ classes\ should\ not\ change,\ because\ All\ changes\ surface\ area\ of\ the\ library\ should\ be\ well\ understood.=d16ee197-f446-46bd-a2c6-43ff6eba5793
+List\ of\ public\ or\ protected\ classes\ should\ only\ change\ intentionally=b1de4497-de03-44b0-9cf5-7c823c73a54b
+List\ of\ Public\ or\ Protected\ classes\ should\ not\ change,\ because\ Changes\ to\ surface\ area\ of\ the\ library\ should\ be\ well\ understood.=49df4712-c1cc-431f-9e21-30572f797856
+List\ of\ public\ or\ protected\ methods\ on\ public\ or\ protected\ classes\ should\ not\ change,\ because\ All\ changes\ surface\ area\ of\ the\ library\ should\ be\ well\ understood.=bd766e8e-97c5-4f77-8628-6085ae867719
+List\ of\ public\ or\ protected\ classes\ should\ not\ change,\ because\ changes\ to\ surface\ area\ of\ the\ library\ should\ be\ well\ understood.=d8bc3c95-f5a9-4082-b83b-a9c870d58758
+List\ of\ public\ or\ protected\ fields\ should\ not\ change,\ because\ Changes\ to\ surface\ area\ of\ the\ library\ should\ be\ well\ understood.=96e11dab-1142-411e-8b96-b5aeb72b54a9
+List\ of\ public\ or\ protected\ methods\ on\ public\ or\ protected\ classes\ should\ not\ change,\ because\ changes\ to\ surface\ area\ of\ the\ library\ should\ be\ well\ understood.=641c6017-68c4-473d-a981-77186fd24ccb
+List\ of\ public\ or\ protected\ methods\ on\ public\ or\ protected\ classes\ should\ not\ change,\ because\ Changes\ to\ surface\ area\ of\ the\ library\ should\ be\ well\ understood.=a7741621-6987-4582-8d6b-bb971b15f407
+List\ of\ public\ or\ protected\ fields\ should\ not\ change,\ because\ changes\ to\ surface\ area\ of\ the\ library\ should\ be\ well\ understood.=4a04e21c-fe6b-4354-b4af-8e67c8a78836
+List\ of\ public\ or\ protected\ fields\ should\ only\ change\ intentionally=10f102cd-764d-4b0f-8a31-0e567a6cea3e

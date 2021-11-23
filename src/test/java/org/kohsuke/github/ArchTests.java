@@ -8,6 +8,8 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
+import com.tngtech.archunit.library.freeze.FreezingArchRule;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -28,32 +30,41 @@ import java.util.Arrays;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.*;
 import static com.tngtech.archunit.core.domain.JavaClass.namesOf;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameContaining;
 import static com.tngtech.archunit.core.domain.properties.HasOwner.Predicates.With.owner;
 import static com.tngtech.archunit.core.domain.properties.HasParameterTypes.Predicates.rawParameterTypes;
 import static com.tngtech.archunit.lang.conditions.ArchConditions.*;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
 public class ArchTests {
 
-    private static final JavaClasses classFiles = new ClassFileImporter()
-            .withImportOption(new ImportOption.DoNotIncludeTests())
-            .importPackages("org.kohsuke.github");
+    private final static boolean takeSnapshot = System.getProperty("test.github.takeSnapshot", "false") != "false";
 
-    private static final JavaClasses apacheCommons = new ClassFileImporter().importPackages("org.apache.commons.lang3");
+    private static final JavaClasses classFiles = getJavaClasses();
 
-    private static final JavaClasses testClassFiles = new ClassFileImporter()
+    private static JavaClasses getJavaClasses() {
+        // if taking a snapshot, set these system properties to allow testApiStability()
+        // to refresh known results
+        if (takeSnapshot) {
+            System.setProperty("archunit.freeze.refreeze", "true");
+            System.setProperty("archunit.freeze.store.default.allowStoreUpdate", "true");
+        }
+
+        return new ClassFileImporter().withImportOption(new ImportOption.DoNotIncludeTests())
+                .importPackages("org.kohsuke.github");
+    }
+
+    private final JavaClasses testClassFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.OnlyIncludeTests())
             .withImportOption(new ImportOption.DoNotIncludeJars())
             .importPackages("org.kohsuke.github");
 
-    private static final DescribedPredicate<JavaAnnotation<?>> previewAnnotationWithNoMediaType = new DescribedPredicate<JavaAnnotation<?>>(
+    private final DescribedPredicate<JavaAnnotation<?>> previewAnnotationWithNoMediaType = new DescribedPredicate<JavaAnnotation<?>>(
             "preview has no required media types defined") {
 
         @Override
@@ -89,6 +100,61 @@ public class ArchTests {
         assertThat("OkHttpConnector must implement HttpConnector",
                 Arrays.asList(OkHttpConnector.class.getInterfaces()),
                 Matchers.containsInAnyOrder(HttpConnector.class));
+
+        final ArchRule publicClasses = FreezingArchRule.freeze(ArchRuleDefinition.noClasses()
+                .should()
+                .bePublic()
+                .orShould()
+                .beProtected()
+                .as("List of public or protected classes should only change intentionally"));
+
+        final ArchRule publicMethods = FreezingArchRule.freeze(ArchRuleDefinition.noMethods()
+                .that()
+                // in public or protected classes
+                .areDeclaredInClassesThat()
+                .arePublic()
+                .or()
+                .areDeclaredInClassesThat()
+                .areProtected()
+                // verify public or protected methods
+                .should()
+                .bePublic()
+                .orShould()
+                .beProtected()
+                .as("List of public or protected methods should only change intentionally"));
+
+        final ArchRule publicFields = FreezingArchRule.freeze(ArchRuleDefinition.noFields()
+                .that()
+                // in public or protected classes
+                .areDeclaredInClassesThat()
+                .arePublic()
+                .or()
+                .areDeclaredInClassesThat()
+                .areProtected()
+                // verify public or protected methods
+                .should()
+                .bePublic()
+                .orShould()
+                .beProtected()
+                .as("List of public or protected fields should only change intentionally"));
+
+        try {
+            publicClasses.check(classFiles);
+            publicMethods.check(classFiles);
+            publicFields.check(classFiles);
+        } catch (AssertionError | Exception e) {
+            String message = "New public surface area added.\n"
+                    + "Review changes and run this test with '-Dtest.github.takeSnapshot' to refresh the known surface area.";
+            if (e instanceof AssertionError) {
+                message += "\n" + ((AssertionError) e).getMessage();
+            } else if (e.toString().contains("StoreUpdateFailedException")) {
+                message += "Public surface area decreased.";
+            }
+            AssertionError assertion = new AssertionError(message, e);
+            assertion.setStackTrace(e.getStackTrace());
+            throw assertion;
+        }
+
     }
 
     @Test
@@ -138,7 +204,7 @@ public class ArchTests {
     public static ArchCondition<JavaClass> notCallMethodsInPackageUnless(final String packageIdentifier,
             final DescribedPredicate<JavaCall<?>>... unlessPredicates) {
         DescribedPredicate<JavaCall<?>> restrictedPackageCalls = target(
-                HasOwner.Predicates.With.<JavaClass>owner(resideInAPackage(packageIdentifier)));
+                HasOwner.Predicates.With.owner(JavaClass.Predicates.resideInAPackage(packageIdentifier)));
 
         if (unlessPredicates.length > 0) {
             DescribedPredicate<JavaCall<?>> allowed = unlessPredicates[0];

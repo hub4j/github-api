@@ -13,14 +13,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
 
 import java.io.Closeable;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
@@ -40,7 +44,6 @@ public class ArchTests {
 
     private static final JavaClasses classFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.DoNotIncludeTests())
-            .withImportOption(new ImportOption.DoNotIncludeJars())
             .importPackages("org.kohsuke.github");
 
     private static final JavaClasses apacheCommons = new ClassFileImporter().importPackages("org.apache.commons.lang3");
@@ -82,6 +85,13 @@ public class ArchTests {
     }
 
     @Test
+    public void testApiStability() {
+        assertThat("OkHttpConnector must implement HttpConnector",
+                Arrays.asList(OkHttpConnector.class.getInterfaces()),
+                Matchers.containsInAnyOrder(HttpConnector.class));
+    }
+
+    @Test
     public void testRequireUseOfOnlySpecificApacheCommons() {
 
         final ArchRule onlyApprovedApacheCommonsMethods = classes()
@@ -114,9 +124,11 @@ public class ArchTests {
                         targetMethodIs(ReflectionToStringBuilder.class, "accept", Field.class),
                         targetMethodIs(IOUtils.class, "closeQuietly", InputStream.class),
                         targetMethodIs(IOUtils.class, "closeQuietly", Closeable.class),
+                        targetMethodIs(IOUtils.class, "copyLarge", InputStream.class, OutputStream.class),
                         targetMethodIs(IOUtils.class, "toString", InputStream.class, Charset.class),
                         targetMethodIs(IOUtils.class, "toString", Reader.class),
-                        targetMethodIs(IOUtils.class, "toByteArray", InputStream.class)))
+                        targetMethodIs(IOUtils.class, "toByteArray", InputStream.class),
+                        targetMethodIs(IOUtils.class, "write", byte[].class, OutputStream.class)))
                 .because(
                         "Commons methods must be manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier.");
 

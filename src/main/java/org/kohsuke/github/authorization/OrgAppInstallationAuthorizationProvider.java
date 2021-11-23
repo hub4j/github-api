@@ -13,13 +13,13 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 
 /**
- * Provides an AuthorizationProvider that performs automatic token refresh.
+ * An AuthorizationProvider that performs automatic token refresh for an organization's AppInstallation.
  */
 public class OrgAppInstallationAuthorizationProvider extends GitHub.DependentAuthorizationProvider {
 
     private final String organizationName;
 
-    private String latestToken;
+    private String authorization;
 
     @Nonnull
     private Instant validUntil = Instant.MIN;
@@ -44,19 +44,20 @@ public class OrgAppInstallationAuthorizationProvider extends GitHub.DependentAut
     @Override
     public String getEncodedAuthorization() throws IOException {
         synchronized (this) {
-            if (latestToken == null || Instant.now().isAfter(this.validUntil)) {
-                refreshToken();
+            if (authorization == null || Instant.now().isAfter(this.validUntil)) {
+                String token = refreshToken();
+                authorization = String.format("token %s", token);
             }
-            return String.format("token %s", latestToken);
+            return authorization;
         }
     }
 
-    private void refreshToken() throws IOException {
+    private String refreshToken() throws IOException {
         GitHub gitHub = this.gitHub();
         GHAppInstallation installationByOrganization = gitHub.getApp()
                 .getInstallationByOrganization(this.organizationName);
         GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();
         this.validUntil = ghAppInstallationToken.getExpiresAt().toInstant().minus(Duration.ofMinutes(5));
-        this.latestToken = Objects.requireNonNull(ghAppInstallationToken.getToken());
+        return Objects.requireNonNull(ghAppInstallationToken.getToken());
     }
 }

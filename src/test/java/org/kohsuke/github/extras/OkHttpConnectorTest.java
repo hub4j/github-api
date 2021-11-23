@@ -20,7 +20,7 @@ import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 /**
- * Test showing the behavior of OkHttpConnector with and without cache.
+ * Test showing the behavior of OkHttpGitHubConnector with and without cache.
  * <p>
  * Key take aways:
  *

@@ -12,10 +12,20 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * Search terms.
+     * {@inheritDoc}
      */
+    @Override
     public GHRepositorySearchBuilder q(String term) {
         super.q(term);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    GHRepositorySearchBuilder q(String qualifier, String value) {
+        super.q(qualifier, value);
         return this;
     }
 
@@ -47,9 +57,40 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      * @param v
      *            the v
      * @return the gh repository search builder
+     * @deprecated use {@link #fork(GHFork)} instead.
      */
+    @Deprecated
     public GHRepositorySearchBuilder forks(String v) {
-        return q("forks:" + v);
+        return q("fork", v);
+    }
+
+    /**
+     * Searching in forks
+     *
+     * The default search mode is {@link Fork#PARENT_ONLY}. In that mode, forks are not included in search results.
+     *
+     * <p>
+     * Passing {@link Fork#PARENT_AND_FORKS} or {@link Fork#FORKS_ONLY} will show results from forks, but only if they
+     * have more stars than the parent repository.
+     *
+     * <p>
+     * IMPORTANT: Regardless of this setting, no search results will ever be returned for forks with equal or fewer
+     * stars than the parent repository. Forks with less stars than the parent repository are not included in the index
+     * for code searching.
+     *
+     * @param fork
+     *            search mode for forks
+     *
+     * @return the gh repository search builder
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-in-forks">Searching
+     *      in forks</a>
+     * @deprecated use {@link #fork(GHFork)} instead.
+     */
+    @Deprecated
+    public GHRepositorySearchBuilder fork(Fork fork) {
+        return q("fork", fork.toString());
     }
 
     /**
@@ -76,13 +117,8 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      *      in forks</a>
      *
      */
-    public GHRepositorySearchBuilder fork(Fork fork) {
-        if (Fork.PARENT_ONLY.equals(fork)) {
-            this.terms.removeIf(term -> term.contains("fork:"));
-            return this;
-        }
-
-        return q("fork:" + fork);
+    public GHRepositorySearchBuilder fork(GHFork fork) {
+        return q("fork", fork.toString());
     }
 
     /**
@@ -217,8 +253,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * The enum for Fork search mode
+     * The enum for Fork search mode.
+     *
+     * @deprecated Kept for backward compatibility. Use {@link GHFork} instead.
      */
+    @Deprecated
     public enum Fork {
 
         /**
@@ -243,10 +282,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
         PARENT_ONLY("");
 
         private String filterMode;
-        Fork(String mode) {
+        Fork(final String mode) {
             this.filterMode = mode;
         }
 
+        @Override
         public String toString() {
             return filterMode;
         }

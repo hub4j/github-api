@@ -4,11 +4,14 @@ import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.kohsuke.github.extras.HttpClientGitHubConnector;
 import org.kohsuke.github.extras.ImpatientHttpConnector;
-import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
+import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
+import org.kohsuke.github.internal.DefaultGitHubConnector;
 import org.mockito.Mockito;
 
 import java.io.ByteArrayOutputStream;
@@ -78,7 +81,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         attachLogCapturer();
     }
 
-    @Ignore("Used okhttp3 and this to verify connection closing. To variable for CI system.")
+    @Ignore("Used okhttp3 and this to verify connection closing. Too flaky for CI system.")
     @Test
     public void testGitHubIsApiUrlValid() throws Exception {
 
@@ -86,7 +89,7 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
                 .connectionPool(new ConnectionPool(2, 100, TimeUnit.MILLISECONDS))
                 .build();
 
-        OkHttpConnector connector = new OkHttpConnector(client);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client);
 
         for (int x = 0; x < 100; x++) {
 
@@ -109,6 +112,9 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     // Issue #539
     @Test
     public void testSocketConnectionAndRetry() throws Exception {
+        // Only implemented for HttpURLConnection connectors
+        Assume.assumeThat(DefaultGitHubConnector.create(), not(instanceOf(HttpClientGitHubConnector.class)));
+
         // CONNECTION_RESET_BY_PEER errors result in two requests each
         // to get this failure for "3" tries we have to do 6 queries.
         this.mockGitHub.apiServer()
@@ -136,6 +142,9 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     // Issue #539
     @Test
     public void testSocketConnectionAndRetry_StatusCode() throws Exception {
+        // Only implemented for HttpURLConnection connectors
+        Assume.assumeThat(DefaultGitHubConnector.create(), not(instanceOf(HttpClientGitHubConnector.class)));
+
         // CONNECTION_RESET_BY_PEER errors result in two requests each
         // to get this failure for "3" tries we have to do 6 queries.
         this.mockGitHub.apiServer()
@@ -164,6 +173,9 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testSocketConnectionAndRetry_Success() throws Exception {
+        // Only implemented for HttpURLConnection connectors
+        Assume.assumeThat(DefaultGitHubConnector.create(), not(instanceOf(HttpClientGitHubConnector.class)));
+
         // CONNECTION_RESET_BY_PEER errors result in two requests each
         // to get this failure for "3" tries we have to do 6 queries.
         // If there are only 5 errors we succeed.

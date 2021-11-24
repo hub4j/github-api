@@ -37,8 +37,6 @@ public class DefaultGitHubConnectorTest extends AbstractGitHubWireMockTest {
 
         connector = DefaultGitHubConnector.create("default");
 
-        // Current implementation never uses httpclient for default.
-        usingHttpClient = false;
         if (usingHttpClient) {
             assertThat(connector, instanceOf(HttpClientGitHubConnector.class));
         } else {

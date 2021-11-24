@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
 
@@ -541,6 +542,38 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             pr.getMergeable();
             assertThat(pr.getUser().root(), notNullValue());
         }
+    }
+
+    @Test
+    public void checkNonExistentReviewer() throws IOException {
+        // PR id is based on https://github.com/sahansera/TestRepo/pull/1
+        final GHPullRequest pullRequest = getRepository().getPullRequest(1);
+        final Optional<GHPullRequestReview> review = pullRequest.listReviews().toList().stream().findFirst();
+        final GHUser reviewer = review.get().getUser();
+
+        assertThat(pullRequest.getRequestedReviewers(), is(empty()));
+        assertThat(review, notNullValue());
+        assertThat(reviewer, is(nullValue()));
+    }
+
+    @Test
+    public void checkNonExistentAuthor() throws IOException {
+        // PR id is based on https://github.com/sahansera/TestRepo/pull/2
+        final GHPullRequest pullRequest = getRepository().getPullRequest(2);
+
+        assertThat(pullRequest.getUser(), is(notNullValue()));
+        assertThat(pullRequest.getUser().login, is("ghost"));
+    }
+
+    @Test
+    public void checkPullRequestReviewer() throws IOException {
+        // PR id is based on https://github.com/sahansera/TestRepo/pull/6
+        final GHPullRequest pullRequest = getRepository().getPullRequest(6);
+        final Optional<GHPullRequestReview> review = pullRequest.listReviews().toList().stream().findFirst();
+        final GHUser reviewer = review.get().getUser();
+
+        assertThat(review, notNullValue());
+        assertThat(reviewer, notNullValue());
     }
 
     protected GHRepository getRepository() throws IOException {

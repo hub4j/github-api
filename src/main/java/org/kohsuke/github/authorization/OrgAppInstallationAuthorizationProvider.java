@@ -13,7 +13,7 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 
 /**
- * Provides an AuthorizationProvider that performs automatic token refresh.
+ * An AuthorizationProvider that performs automatic token refresh for an organization's AppInstallation.
  */
 public class OrgAppInstallationAuthorizationProvider extends GitHub.DependentAuthorizationProvider {
 

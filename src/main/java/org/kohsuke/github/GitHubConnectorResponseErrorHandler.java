@@ -12,8 +12,7 @@ import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 /**
- * Pluggable strategy to determine what to detect and choose what to do when various errors occur during an http
- * request.
+ * Pluggable strategy to detect and choose what to do when errors occur during an http request.
  *
  * @author Liam Newman
  */

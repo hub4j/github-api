@@ -8,7 +8,7 @@ import org.kohsuke.github.authorization.UserAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
-import org.kohsuke.github.function.BodyHandler;
+import org.kohsuke.github.function.FunctionThrows;
 
 import java.io.*;
 import java.net.*;
@@ -25,17 +25,21 @@ import javax.net.ssl.SSLHandshakeException;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+import static java.net.HttpURLConnection.*;
 import static java.util.logging.Level.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * A GitHub API Client
  * <p>
- * A GitHubClient can be used to send requests and retrieve their responses. GitHubClient is thread-safe and can be used
- * to send multiple requests. GitHubClient also track some GitHub API information such as {@link GHRateLimit}.
+ * A GitHubClient can be used to send requests and retrieve their responses. Uses {@link GitHubConnector} as a pluggable
+ * component to communicate using differing HTTP client libraries.
+ * <p>
+ * GitHubClient is thread-safe and can be used to send multiple requests simultaneously. GitHubClient also tracks some
+ * GitHub API information such as {@link GHRateLimit}.
  * </p>
+ *
+ * @author Liam Newman
  */
 class GitHubClient {
 
@@ -387,7 +391,7 @@ class GitHubClient {
                     connectorRequest = e.connectorRequest;
                 }
             } catch (SocketException | SocketTimeoutException | SSLHandshakeException e) {
-                // These transient errors the
+                // These transient errors thrown by HttpURLConnection
                 if (retries > 0) {
                     logRetryConnectionError(e, request.url(), retries);
                     continue;
@@ -408,6 +412,7 @@ class GitHubClient {
             boolean detectStatusCodeError) throws IOException {
         detectOTPRequired(connectorResponse);
         detectInvalidCached404Response(connectorResponse, request);
+        detectRedirect(connectorResponse);
         if (rateLimitHandler.isError(connectorResponse)) {
             rateLimitHandler.onError(connectorResponse);
             throw new RetryRequestException();
@@ -417,6 +422,19 @@ class GitHubClient {
         } else if (detectStatusCodeError
                 && GitHubConnectorResponseErrorHandler.STATUS_HTTP_BAD_REQUEST_OR_GREATER.isError(connectorResponse)) {
             GitHubConnectorResponseErrorHandler.STATUS_HTTP_BAD_REQUEST_OR_GREATER.onError(connectorResponse);
+        }
+    }
+
+    private void detectRedirect(GitHubConnectorResponse connectorResponse) throws IOException {
+        if (connectorResponse.statusCode() == HTTP_MOVED_PERM || connectorResponse.statusCode() == HTTP_MOVED_TEMP) {
+            // GitHubClient depends on GitHubConnector implementations to follow any redirects automatically
+            // If this is not done and a redirect is requested, throw in order to maintain security and consistency
+            throw new HttpException(
+                    "GitHubConnnector did not automatically follow redirect.\n"
+                            + "Change your http client configuration to automatically follow redirects as appropriate.",
+                    connectorResponse.statusCode(),
+                    "Redirect",
+                    connectorResponse.request().url().toString());
         }
     }
 
@@ -573,20 +591,12 @@ class GitHubClient {
     private void noteRateLimit(@Nonnull RateLimitTarget rateLimitTarget,
             @Nonnull GitHubConnectorResponse connectorResponse) {
         try {
-            String limitString = Objects.requireNonNull(connectorResponse.header("X-RateLimit-Limit"),
-                    "Missing X-RateLimit-Limit");
-            String remainingString = Objects.requireNonNull(connectorResponse.header("X-RateLimit-Remaining"),
-                    "Missing X-RateLimit-Remaining");
-            String resetString = Objects.requireNonNull(connectorResponse.header("X-RateLimit-Reset"),
-                    "Missing X-RateLimit-Reset");
-            int limit, remaining;
-            long reset;
-            limit = Integer.parseInt(limitString);
-            remaining = Integer.parseInt(remainingString);
-            reset = Long.parseLong(resetString);
+            int limit = connectorResponse.parseInt("X-RateLimit-Limit");
+            int remaining = connectorResponse.parseInt("X-RateLimit-Remaining");
+            int reset = connectorResponse.parseInt("X-RateLimit-Reset");
             GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, connectorResponse);
             updateRateLimit(GHRateLimit.fromRecord(observed, rateLimitTarget));
-        } catch (NumberFormatException | NullPointerException e) {
+        } catch (NumberFormatException e) {
             LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);
         }
     }
@@ -763,5 +773,15 @@ class GitHubClient {
         RetryRequestException(GitHubConnectorRequest connectorRequest) {
             this.connectorRequest = connectorRequest;
         }
+    }
+
+    /**
+     * Represents a supplier of results that can throw.
+     *
+     * @param <T>
+     *            the type of results supplied by this supplier
+     */
+    @FunctionalInterface
+    interface BodyHandler<T> extends FunctionThrows<GitHubConnectorResponse, T, IOException> {
     }
 }

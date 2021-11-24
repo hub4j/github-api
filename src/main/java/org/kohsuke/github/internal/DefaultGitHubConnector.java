@@ -10,7 +10,9 @@ import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
 /**
  * Internal class that selects what kind of {@link GitHubConnector} will be the default.
  *
- * Allow behavior to be changed for different version of Java, such as supporting Java 11 HttpClient.
+ * Allows behavior to be changed for different versions of Java, such as supporting Java 11 HttpClient.
+ *
+ * @author Liam Newman
  */
 public final class DefaultGitHubConnector {
 
@@ -48,11 +50,11 @@ public final class DefaultGitHubConnector {
         } else if (defaultConnectorProperty.equalsIgnoreCase("httpclient")) {
             return new HttpClientGitHubConnector();
         } else if (defaultConnectorProperty.equalsIgnoreCase("default")) {
-            // try {
-            // return new HttpClientGitHubConnector();
-            // } catch (UnsupportedOperationException | LinkageError e) {
-            return new GitHubConnectorHttpConnectorAdapter(HttpConnector.DEFAULT);
-            // }
+            try {
+                return new HttpClientGitHubConnector();
+            } catch (UnsupportedOperationException | LinkageError e) {
+                return new GitHubConnectorHttpConnectorAdapter(HttpConnector.DEFAULT);
+            }
         } else {
             throw new IllegalStateException(
                     "Property 'test.github.connector' must reference a valid built-in connector - okhttp, okhttpconnector, urlconnection, or default.");

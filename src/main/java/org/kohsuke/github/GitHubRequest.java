@@ -27,12 +27,14 @@ import static java.util.Arrays.asList;
 
 /**
  * Class {@link GitHubRequest} represents an immutable instance used by the client to determine what information to
- * retrieve from a GitHub server. Use the {@link Builder} construct a {@link GitHubRequest}.
+ * retrieve from a GitHub server. Use the {@link Builder} to construct a {@link GitHubRequest}.
  * <p>
  * NOTE: {@link GitHubRequest} should include the data type to be returned. Any use cases where the same request should
  * be used to return different types of data could be handled in some other way. However, the return type is currently
  * not specified until late in the building process, so this is still untyped.
  * </p>
+ *
+ * @author Liam Newman
  */
 public class GitHubRequest implements GitHubConnectorRequest {
 

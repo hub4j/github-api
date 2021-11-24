@@ -7,7 +7,6 @@ import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -16,17 +15,16 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
-import java.util.zip.GZIPInputStream;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
-import static java.util.logging.Level.*;
 
 /**
  * Adapts an HttpConnector to be usable as GitHubConnector.
  *
  * For internal use only.
+ *
+ * @author Liam Newman
  */
 public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnector, HttpConnector {
 
@@ -150,15 +148,13 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
     }
 
     /**
-     * Initial response information supplied to a {@link org.kohsuke.github.function.BodyHandler} when a response is
-     * initially received and before the body is processed.
+     * Initial response information supplied when a response is received but before the body is processed.
      *
      * Implementation specific to {@link HttpURLConnection}. For internal use only.
      */
-    public final static class HttpURLConnectionGitHubConnectorResponse extends GitHubConnectorResponse {
-
-        private boolean inputStreamRead = false;
-        private byte[] inputBytes = null;
+    public final static class HttpURLConnectionGitHubConnectorResponse
+            extends
+                GitHubConnectorResponse.ByteArrayResponse {
 
         @Nonnull
         private final HttpURLConnection connection;
@@ -171,26 +167,14 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
             this.connection = connection;
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        public InputStream bodyStream() throws IOException {
-            synchronized (this) {
-                if (!inputStreamRead) {
-                    InputStream rawStream = connection.getErrorStream();
-                    if (rawStream == null) {
-                        rawStream = connection.getInputStream();
-                    }
-                    try (InputStream stream = wrapStream(rawStream)) {
-                        if (stream != null) {
-                            inputBytes = IOUtils.toByteArray(stream);
-                        }
-                    }
-                    inputStreamRead = true;
-                }
+        @CheckForNull
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+            InputStream rawStream = connection.getErrorStream();
+            if (rawStream == null) {
+                rawStream = connection.getInputStream();
             }
-
-            return inputBytes == null ? null : new ByteArrayInputStream(inputBytes);
+            return rawStream;
         }
 
         /**
@@ -205,28 +189,13 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
             return connection;
         }
 
-        /**
-         * Handles the "Content-Encoding" header.
-         *
-         * @param stream
-         *            the stream to possibly wrap
-         *
-         */
-        private InputStream wrapStream(InputStream stream) throws IOException {
-            String encoding = header("Content-Encoding");
-            if (encoding == null || stream == null)
-                return stream;
-            if (encoding.equals("gzip"))
-                return new GZIPInputStream(stream);
-
-            throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
-        }
-
-        private static final Logger LOGGER = Logger.getLogger(GitHub.class.getName());
-
         @Override
         public void close() throws IOException {
-            IOUtils.closeQuietly(connection.getInputStream());
+            super.close();
+            try {
+                IOUtils.closeQuietly(connection.getInputStream());
+            } catch (IOException e) {
+            }
         }
     }
 

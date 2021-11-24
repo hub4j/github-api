@@ -1,13 +1,10 @@
 package org.kohsuke.github.extras;
 
+import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
-import org.apache.commons.io.IOUtils;
-
-import javax.annotation.Nonnull;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
@@ -17,10 +14,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
- * {@link GitHubConnector} wrapper that sets timeout
+ * {@link GitHubConnector} for {@link HttpClient}.
  *
  * @author Liam Newman
  */
@@ -29,17 +28,17 @@ public class HttpClientGitHubConnector implements GitHubConnector {
     private final HttpClient client;
 
     /**
-     * Instantiates a new HttpClientGitHubConnector.
+     * Instantiates a new HttpClientGitHubConnector with a default HttpClient.
      */
     public HttpClientGitHubConnector() {
-        this(HttpClient.newHttpClient());
+        this(HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build());
     }
 
     /**
      * Instantiates a new HttpClientGitHubConnector.
      *
      * @param client
-     *            the base
+     *            the HttpClient to be used
      */
     public HttpClientGitHubConnector(HttpClient client) {
         this.client = client;
@@ -73,7 +72,7 @@ public class HttpClientGitHubConnector implements GitHubConnector {
             HttpResponse<InputStream> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
             return new HttpClientGitHubConnectorResponse(connectorRequest, httpResponse);
         } catch (InterruptedException e) {
-            throw (InterruptedIOException)new InterruptedIOException(e.getMessage()).initCause(e);
+            throw (InterruptedIOException) new InterruptedIOException(e.getMessage()).initCause(e);
         }
     }
 
@@ -82,61 +81,27 @@ public class HttpClientGitHubConnector implements GitHubConnector {
      *
      * Implementation specific to {@link HttpResponse}.
      */
-    private static class HttpClientGitHubConnectorResponse extends GitHubConnectorResponse {
-        private boolean bodyBytesRead = false;
-        private byte[] bodyBytes = null;
+    private static class HttpClientGitHubConnectorResponse extends GitHubConnectorResponse.ByteArrayResponse {
 
         @Nonnull
         private final HttpResponse<InputStream> response;
 
-        protected HttpClientGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request, @Nonnull HttpResponse<InputStream> response) {
+        protected HttpClientGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
+                @Nonnull HttpResponse<InputStream> response) {
             super(request, response.statusCode(), response.headers().map());
             this.response = response;
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @CheckForNull
         @Override
-        public InputStream bodyStream() throws IOException {
-            readBodyBytes();
-            InputStream stream = bodyBytes == null ? null : new ByteArrayInputStream(bodyBytes);
-            return stream;
-        }
-
-        private void readBodyBytes() throws IOException {
-            synchronized (this) {
-                if (!bodyBytesRead) {
-                    try (InputStream stream = wrapStream(response.body())) {
-                        if (stream != null) {
-                            bodyBytes = IOUtils.toByteArray(stream);
-                        }
-                    }
-                    bodyBytesRead = true;
-                }
-            }
-        }
-
-        /**
-         * Handles the "Content-Encoding" header.
-         *
-         * @param stream
-         *            the stream to possibly wrap
-         *
-         */
-        private InputStream wrapStream(InputStream stream) throws IOException {
-            String encoding = header("Content-Encoding");
-            if (encoding == null || stream == null)
-                return stream;
-            if (encoding.equals("gzip"))
-                return new GZIPInputStream(stream);
-
-            throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
+        protected InputStream rawBodyStream() throws IOException {
+            return response.body();
         }
 
         @Override
         public void close() throws IOException {
-             IOUtils.closeQuietly(response.body());
+            super.close();
+            IOUtils.closeQuietly(response.body());
         }
     }
 }

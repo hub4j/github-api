@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
  *
  * @param <T>
  *            the type of items on each page
+ *
+ * @author Liam Newman
  */
 class GitHubPageContentsIterable<T> extends PagedIterable<T> {
 

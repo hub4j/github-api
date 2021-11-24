@@ -15,6 +15,8 @@ import java.util.*;
  *
  * Behavior is equivalent to a {@link HttpURLConnection} after {@link HttpURLConnection#connect()} has been called.
  * Methods that make no sense throw {@link UnsupportedOperationException}.
+ *
+ * @author Liam Newman
  */
 @Deprecated
 class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection {
@@ -25,16 +27,6 @@ class GitHubConnectorResponseHttpUrlConnectionAdapter extends HttpURLConnection 
         super(connectorResponse.request().url());
         this.connected = true;
         this.connectorResponse = connectorResponse;
-    }
-
-    /**
-     * Readable to support {@link GitHubConnectorResponse#fromHttpURLConnectionAdapter(HttpURLConnection)} which only
-     * exist for testing.
-     *
-     * @return
-     */
-    GitHubConnectorResponse connectorResponse() {
-        return connectorResponse;
     }
 
     @Override

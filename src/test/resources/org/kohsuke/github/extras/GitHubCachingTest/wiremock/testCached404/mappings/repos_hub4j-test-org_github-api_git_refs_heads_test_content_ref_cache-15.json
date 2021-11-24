@@ -6,7 +6,7 @@
     "method": "GET",
     "headers": {
       "If-None-Match": {
-        "equalTo": "W/\"d3be5b35b8d84ef7ac03c0cc9c94ed81\""
+        "matches": "^(W/)?\"d3be5b35b8d84ef7ac03c0cc9c94ed81\"$"
       },
       "Cache-Control": {
         "equalTo": "max-age=0"

@@ -19,6 +19,8 @@ import javax.annotation.Nonnull;
  *
  * @param <T>
  *            type of each page (not the items in the page).
+ *
+ * @author Liam Newman
  */
 class GitHubPageIterator<T> implements Iterator<T> {
 
@@ -72,16 +74,12 @@ class GitHubPageIterator<T> implements Iterator<T> {
      */
     static <T> GitHubPageIterator<T> create(GitHubClient client, Class<T> type, GitHubRequest request, int pageSize) {
 
-        try {
-            if (pageSize > 0) {
-                GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
-                request = builder.build();
-            }
-
-            return new GitHubPageIterator<>(client, type, request);
-        } catch (MalformedURLException e) {
-            throw new GHException("Unable to build GitHub API URL", e);
+        if (pageSize > 0) {
+            GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
+            request = builder.build();
         }
+
+        return new GitHubPageIterator<>(client, type, request);
     }
 
     /**
@@ -142,10 +140,10 @@ class GitHubPageIterator<T> implements Iterator<T> {
         URL url = nextRequest.url();
         try {
             GitHubResponse<T> nextResponse = client.sendRequest(nextRequest,
-                    (responseInfo) -> GitHubResponse.parseBody(responseInfo, type));
+                    (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, type));
             assert nextResponse.body() != null;
             next = nextResponse.body();
-            nextRequest = findNextURL(nextResponse);
+            nextRequest = findNextURL(nextRequest, nextResponse);
             if (nextRequest == null) {
                 finalResponse = nextResponse;
             }
@@ -159,16 +157,17 @@ class GitHubPageIterator<T> implements Iterator<T> {
     /**
      * Locate the next page from the pagination "Link" tag.
      */
-    private GitHubRequest findNextURL(GitHubResponse<T> nextResponse) throws MalformedURLException {
+    private GitHubRequest findNextURL(GitHubRequest nextRequest, GitHubResponse<T> nextResponse)
+            throws MalformedURLException {
         GitHubRequest result = null;
-        String link = nextResponse.headerField("Link");
+        String link = nextResponse.header("Link");
         if (link != null) {
             for (String token : link.split(", ")) {
                 if (token.endsWith("rel=\"next\"")) {
                     // found the next page. This should look something like
                     // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
                     int idx = token.indexOf('>');
-                    result = nextResponse.request().toBuilder().setRawUrlPath(token.substring(1, idx)).build();
+                    result = nextRequest.toBuilder().setRawUrlPath(token.substring(1, idx)).build();
                     break;
                 }
             }

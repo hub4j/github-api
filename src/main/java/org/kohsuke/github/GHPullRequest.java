@@ -67,8 +67,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     private String mergeable_state;
     private int changed_files;
     private String merge_commit_sha;
+    private AutoMerge auto_merge;
 
     // pull request reviewers
+
     private GHUser[] requested_reviewers;
     private GHTeam[] requested_teams;
 
@@ -83,9 +85,17 @@ public class GHPullRequest extends GHIssue implements Refreshable {
             // Issues returned from search to do not have an owner. Attempt to use url.
             final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
             return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
-
         }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/pulls/" + number;
+    }
+
+    /**
+     * The status of auto merging a pull request.
+     *
+     * @return the {@linkplain AutoMerge} or {@code null} if no auto merge is set.
+     */
+    public AutoMerge getAutoMerge() {
+        return auto_merge;
     }
 
     /**
@@ -267,9 +277,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         return mergeable;
     }
 
-    /**
-     * for test purposes only
-     */
+    /** for test purposes only */
     @Deprecated
     Boolean getMergeableNoRefresh() throws IOException {
         return mergeable;
@@ -350,6 +358,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     /**
      * Fully populate the data by retrieving missing data.
      *
+     * <p>
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     private void populate() throws IOException {
@@ -358,9 +367,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         refresh();
     }
 
-    /**
-     * Repopulates this object.
-     */
+    /** Repopulates this object. */
     public void refresh() throws IOException {
         if (isOffline()) {
             return; // cannot populate, will have to live with what we have
@@ -377,7 +384,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * default.
      *
      * @return the paged iterable
-     *
      * @see <a href="https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files">List pull requests
      *      files</a>
      */
@@ -626,6 +632,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     /**
      * Merge this pull request.
+     *
      * <p>
      * The equivalent of the big green "Merge pull request" button.
      *
@@ -640,6 +647,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     /**
      * Merge this pull request.
+     *
      * <p>
      * The equivalent of the big green "Merge pull request" button.
      *
@@ -656,6 +664,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     /**
      * Merge this pull request, using the specified merge method.
+     *
      * <p>
      * The equivalent of the big green "Merge pull request" button.
      *
@@ -678,11 +687,58 @@ public class GHPullRequest extends GHIssue implements Refreshable {
                 .send();
     }
 
-    /**
-     * The enum MergeMethod.
-     */
+    /** The enum MergeMethod. */
     public enum MergeMethod {
         MERGE, SQUASH, REBASE
     }
 
+    /**
+     * The status of auto merging a {@linkplain GHPullRequest}.
+     *
+     */
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
+    public static class AutoMerge {
+
+        private GHUser enabled_by;
+        private MergeMethod merge_method;
+        private String commit_title;
+        private String commit_message;
+
+        /**
+         * The user who enabled the auto merge of the pull request.
+         *
+         * @return the {@linkplain GHUser}
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+        public GHUser getEnabledBy() {
+            return enabled_by;
+        }
+
+        /**
+         * The merge method of the auto merge.
+         *
+         * @return the {@linkplain MergeMethod}
+         */
+        public MergeMethod getMergeMethod() {
+            return merge_method;
+        }
+
+        /**
+         * the title of the commit, if e.g. {@linkplain MergeMethod#SQUASH} is used for the auto merge.
+         *
+         * @return the title of the commit
+         */
+        public String getCommitTitle() {
+            return commit_title;
+        }
+
+        /**
+         * the message of the commit, if e.g. {@linkplain MergeMethod#SQUASH} is used for the auto merge.
+         *
+         * @return the message of the commit
+         */
+        public String getCommitMessage() {
+            return commit_message;
+        }
+    }
 }

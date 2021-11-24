@@ -1,7 +1,11 @@
 package org.kohsuke.github;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -322,7 +326,7 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         assertThat(repoString, not(nullValue()));
         assertThat(repoString, containsString("testMappingReaderWriter"));
 
-        GHRepository readRepo = GitHubClient.getMappingObjectReader((GitHubResponse.ResponseInfo) null)
+        GHRepository readRepo = GitHubClient.getMappingObjectReader((GitHubConnectorResponse) null)
                 .forType(GHRepository.class)
                 .readValue(repoString);
 
@@ -336,11 +340,43 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         readRepo = GitHub.getMappingObjectReader().forType(GHRepository.class).readValue(repoString);
 
         // This should never happen if the internal method isn't used
-        assertThat(readRepo.getRoot().getConnector(), equalTo(HttpConnector.OFFLINE));
+        assertThat(readRepo.getRoot().getConnector(), equalTo(GitHubConnector.OFFLINE));
         assertThat(readRepo.getResponseHeaderFields(), nullValue());
 
         String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(readRepo);
         assertThat(readRepoString, equalTo(repoString));
+
+    }
+
+    @Test
+    public void testGitHubRequest_getApiURL() throws Exception {
+        assertThat(GitHubRequest.getApiURL("github.com", "/endpoint").toString(),
+                equalTo("https://api.github.com/endpoint"));
+
+        // This URL is completely invalid but doesn't throw
+        assertThat(GitHubRequest.getApiURL("github.com", "//endpoint&?").toString(),
+                equalTo("https://api.github.com//endpoint&?"));
+
+        assertThat(GitHubRequest.getApiURL("ftp://whoa.github.com", "/endpoint").toString(),
+                equalTo("ftp://whoa.github.com/endpoint"));
+        assertThat(GitHubRequest.getApiURL(null, "ftp://api.test.github.com/endpoint").toString(),
+                equalTo("ftp://api.test.github.com/endpoint"));
+
+        GHException e;
+        e = Assert.assertThrows(GHException.class,
+                () -> GitHubRequest.getApiURL("gopher://whoa.github.com", "/endpoint"));
+        assertThat(e.getMessage(), equalTo("Unable to build GitHub API URL"));
+        assertThat(e.getCause(), instanceOf(MalformedURLException.class));
+        assertThat(e.getCause().getMessage(), equalTo("unknown protocol: gopher"));
+
+        e = Assert.assertThrows(GHException.class, () -> GitHubRequest.getApiURL("bogus", "/endpoint"));
+        assertThat(e.getCause(), instanceOf(MalformedURLException.class));
+        assertThat(e.getCause().getMessage(), equalTo("no protocol: bogus/endpoint"));
+
+        e = Assert.assertThrows(GHException.class,
+                () -> GitHubRequest.getApiURL(null, "gopher://api.test.github.com/endpoint"));
+        assertThat(e.getCause(), instanceOf(MalformedURLException.class));
+        assertThat(e.getCause().getMessage(), equalTo("unknown protocol: gopher"));
 
     }
 

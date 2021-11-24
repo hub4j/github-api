@@ -22,7 +22,7 @@ import java.io.IOException;
 import static org.junit.Assert.fail;
 
 /**
- * Test showing the behavior of OkHttpConnector cache with GitHub 404 responses.
+ * Test showing the behavior of OkHttpGitHubConnector cache with GitHub 404 responses.
  *
  * @author Liam Newman
  */
@@ -64,7 +64,7 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         OkHttpClient client = createClient(true);
-        OkHttpConnector connector = new OkHttpConnector(client);
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client);
 
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
@@ -73,7 +73,7 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         // Alternate client also doing caching but staying in a good state
         // We use this to do sanity checks and other information gathering
         GitHub gitHub2 = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withConnector(new OkHttpConnector(createClient(true)))
+                .withConnector(new OkHttpGitHubConnector(createClient(true)))
                 .build();
 
         // Create a branch from a known conflicting branch

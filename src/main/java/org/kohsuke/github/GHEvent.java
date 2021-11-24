@@ -10,6 +10,7 @@ import java.util.Locale;
  * @see <a href="https://developer.github.com/v3/activity/events/types/">Event type reference</a>
  */
 public enum GHEvent {
+    BRANCH_PROTECTION_RULE,
     CHECK_RUN,
     CHECK_SUITE,
     CODE_SCANNING_ALERT,
@@ -68,6 +69,7 @@ public enum GHEvent {
     TEAM,
     TEAM_ADD,
     WATCH,
+    WORKFLOW_JOB,
     WORKFLOW_DISPATCH,
     WORKFLOW_RUN,
 

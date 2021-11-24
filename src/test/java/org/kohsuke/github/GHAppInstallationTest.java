@@ -11,7 +11,7 @@ public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
 
     @Test
     public void testListRepositoriesTwoRepos() throws IOException {
-        GHAppInstallation appInstallation = getAppInstallationWithTokenApp1();
+        GHAppInstallation appInstallation = getAppInstallationWithToken(jwtProvider1.getEncodedAuthorization());
 
         List<GHRepository> repositories = appInstallation.listRepositories().toList();
 
@@ -22,7 +22,7 @@ public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
 
     @Test
     public void testListRepositoriesNoPermissions() throws IOException {
-        GHAppInstallation appInstallation = getAppInstallationWithTokenApp2();
+        GHAppInstallation appInstallation = getAppInstallationWithToken(jwtProvider2.getEncodedAuthorization());
 
         assertThat("App does not have permissions and should have 0 repositories",
                 appInstallation.listRepositories().toList().isEmpty());

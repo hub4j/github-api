@@ -19,8 +19,9 @@ import java.util.concurrent.TimeUnit;
  * 304 response does not count against the rate limit. See http://developer.github.com/v3/#conditional-requests
  *
  * @author Liam Newman
- * @author Kohsuke Kawaguchi
+ * @deprecated Use {@link OkHttpGitHubConnector} instead.
  */
+@Deprecated
 public class OkHttpConnector implements HttpConnector {
     private static final String HEADER_NAME = "Cache-Control";
     private final String maxAgeHeaderValue;

@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.GHPullRequest.MergeMethod;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -27,7 +28,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
 
         assertThat(GHDirection.values().length, equalTo(2));
 
-        assertThat(GHEvent.values().length, equalTo(62));
+        assertThat(GHEvent.values().length, equalTo(64));
         assertThat(GHEvent.ALL.symbol(), equalTo("*"));
         assertThat(GHEvent.PULL_REQUEST.symbol(), equalTo(GHEvent.PULL_REQUEST.toString().toLowerCase()));
 
@@ -55,7 +56,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHProject.ProjectState.values().length, equalTo(2));
         assertThat(GHProject.ProjectStateFilter.values().length, equalTo(3));
 
-        assertThat(GHPullRequest.MergeMethod.values().length, equalTo(3));
+        assertThat(MergeMethod.values().length, equalTo(3));
 
         assertThat(GHPullRequestQueryBuilder.Sort.values().length, equalTo(4));
 
@@ -80,6 +81,8 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHTeam.Privacy.values().length, equalTo(2));
 
         assertThat(GHUserSearchBuilder.Sort.values().length, equalTo(3));
+
+        assertThat(GHIssueQueryBuilder.Sort.values().length, equalTo(3));
     }
 
 }

@@ -1,0 +1,55 @@
+{
+  "id": "515b511a-0929-4166-88d3-c22cf89c10a1",
+  "name": "projects_13495086_columns",
+  "request": {
+    "url": "/projects/13495086/columns",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.inertia-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"column-one\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "projects_13495086_columns-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 11 Oct 2021 15:43:38 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"8d17a5788b132ce2adf1ed68fb0ecad3fc5dc8994f67709db2267acd8513fded\"",
+      "X-OAuth-Scopes": "admin:org, delete_repo, repo",
+      "X-Accepted-OAuth-Scopes": "repo, write:org",
+      "github-authentication-token-expiration": "2021-11-10 16:10:38 UTC",
+      "X-GitHub-Media-Type": "github.v3; param=inertia-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4984",
+      "X-RateLimit-Reset": "1633970441",
+      "X-RateLimit-Used": "16",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EED3:66FC:1D34192:3AC9492:61645BAA",
+      "Location": "https://api.github.com/projects/columns/16361848"
+    }
+  },
+  "uuid": "515b511a-0929-4166-88d3-c22cf89c10a1",
+  "persistent": true,
+  "insertionIndex": 4
+}

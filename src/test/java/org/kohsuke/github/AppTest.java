@@ -291,6 +291,77 @@ public class AppTest extends AbstractGitHubWireMockTest {
         String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(closedIssues.get(0));
     }
 
+    @Test
+    public void testQueryIssues() throws IOException {
+        final GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("testQueryIssues");
+        List<GHIssue> openBugIssues = repo.queryIssues()
+                .milestone("1")
+                .creator(gitHub.getMyself().getLogin())
+                .state(GHIssueState.OPEN)
+                .label("bug")
+                .pageSize(10)
+                .list()
+                .toList();
+        GHIssue issueWithMilestone = openBugIssues.get(0);
+        assertThat(openBugIssues, is(not(empty())));
+        assertThat(openBugIssues, hasSize(1));
+        assertThat(issueWithMilestone.getTitle(), is("Issue with milestone"));
+        assertThat(issueWithMilestone.getAssignee().getLogin(), is("bloslo"));
+        assertThat(issueWithMilestone.getBody(), containsString("@bloslo"));
+
+        List<GHIssue> openIssuesWithAssignee = repo.queryIssues()
+                .assignee(gitHub.getMyself().getLogin())
+                .state(GHIssueState.OPEN)
+                .list()
+                .toList();
+        GHIssue issueWithAssignee = openIssuesWithAssignee.get(0);
+        assertThat(openIssuesWithAssignee, is(not(empty())));
+        assertThat(openIssuesWithAssignee, hasSize(1));
+        assertThat(issueWithAssignee.getLabels(), hasSize(2));
+        assertThat(issueWithAssignee.getMilestone(), is(notNullValue()));
+
+        List<GHIssue> allIssuesSince = repo.queryIssues()
+                .mentioned(gitHub.getMyself().getLogin())
+                .state(GHIssueState.ALL)
+                .since(1632411646L)
+                .sort(GHIssueQueryBuilder.Sort.COMMENTS)
+                .direction(GHDirection.ASC)
+                .list()
+                .toList();
+        GHIssue issueSince = allIssuesSince.get(3);
+        assertThat(allIssuesSince, is(not(empty())));
+        assertThat(allIssuesSince, hasSize(4));
+        assertThat(issueSince.getBody(), is("Test closed issue @bloslo"));
+        assertThat(issueSince.getState(), is(GHIssueState.CLOSED));
+
+        List<GHIssue> allIssuesWithLabels = repo.queryIssues()
+                .label("bug")
+                .label("test-label")
+                .state(GHIssueState.ALL)
+                .list()
+                .toList();
+        GHIssue issueWithLabel = allIssuesWithLabels.get(0);
+        assertThat(allIssuesWithLabels, is(not(empty())));
+        assertThat(allIssuesWithLabels, hasSize(5));
+        assertThat(issueWithLabel.getComments(), hasSize(2));
+        assertThat(issueWithLabel.getTitle(), is("Issue with comments"));
+
+        List<GHIssue> issuesWithLabelNull = repo.queryIssues().label(null).list().toList();
+        GHIssue issueWithLabelNull = issuesWithLabelNull.get(2);
+        assertThat(issuesWithLabelNull, is(not(empty())));
+        assertThat(issuesWithLabelNull, hasSize(6));
+        assertThat(issueWithLabelNull.getTitle(), is("Closed issue"));
+        assertThat(issueWithLabelNull.getBody(), is("Test closed issue @bloslo"));
+        assertThat(issueWithLabelNull.getState(), is(GHIssueState.OPEN));
+
+        List<GHIssue> issuesWithLabelEmptyString = repo.queryIssues().label("").state(GHIssueState.ALL).list().toList();
+        GHIssue issueWithLabelEmptyString = issuesWithLabelEmptyString.get(0);
+        assertThat(issuesWithLabelEmptyString, is(not(empty())));
+        assertThat(issuesWithLabelEmptyString, hasSize(8));
+        assertThat(issueWithLabelEmptyString.getTitle(), is("Closed issue"));
+        assertThat(issueWithLabelEmptyString.getBody(), is("Test closed issue @bloslo"));
+    }
+
     private GHRepository getTestRepository() throws IOException {
         return getTempRepository(GITHUB_API_TEST_REPO);
     }

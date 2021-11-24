@@ -3,10 +3,8 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Iterator;
@@ -175,7 +173,7 @@ public class GHCompare {
         } else {
             // if not using paginated commits, adapt the returned commits array
             return new PagedIterable<Commit>() {
-                @NotNull
+                @Nonnull
                 @Override
                 public PagedIterator<Commit> _iterator(int pageSize) {
                     return new PagedIterator<>(Collections.singleton(commits).iterator(), null);
@@ -362,23 +360,19 @@ public class GHCompare {
         @Nonnull
         @Override
         public PagedIterator<Commit> _iterator(int pageSize) {
-            try {
-                GitHubRequest request = owner.root()
-                        .createRequest()
-                        .injectMappingValue("GHCompare_usePaginatedCommits", usePaginatedCommits)
-                        .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf("/compare/"))))
-                        .build();
+            GitHubRequest request = owner.root()
+                    .createRequest()
+                    .injectMappingValue("GHCompare_usePaginatedCommits", usePaginatedCommits)
+                    .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf("/compare/"))))
+                    .build();
 
-                // page_size must be set for GHCompare commit pagination
-                if (pageSize == 0) {
-                    pageSize = 10;
-                }
-                return new PagedIterator<>(
-                        adapt(GitHubPageIterator.create(owner.root().getClient(), GHCompare.class, request, pageSize)),
-                        item -> item.wrapUp(owner));
-            } catch (MalformedURLException e) {
-                throw new GHException("Malformed URL", e);
+            // page_size must be set for GHCompare commit pagination
+            if (pageSize == 0) {
+                pageSize = 10;
             }
+            return new PagedIterator<>(
+                    adapt(GitHubPageIterator.create(owner.root().getClient(), GHCompare.class, request, pageSize)),
+                    item -> item.wrapUp(owner));
         }
 
         protected Iterator<Commit[]> adapt(final Iterator<GHCompare> base) {

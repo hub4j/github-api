@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
@@ -67,6 +68,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     private static int maxAgeNoneHitCount = 11;
 
     private GHRateLimit rateLimitBefore;
+    private Cache cache = null;
 
     @Override
     protected WireMockConfiguration getWireMockOptions() {
@@ -85,6 +87,13 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
             // Let things settle a bit between tests when working against the live site
             Thread.sleep(5000);
             userRequestCount = 1;
+        }
+    }
+
+    @After
+    public void deleteCache() throws IOException {
+        if (cache != null) {
+            cache.delete();
         }
     }
 
@@ -120,7 +129,6 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
         checkRequestAndLimit(okhttpNetworkRequestCount, okhttpRateLimitUsed);
 
-        Cache cache = client.cache();
         assertThat("Cache", cache, is(nullValue()));
     }
 
@@ -146,8 +154,6 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         assertThat(getRepository(gitHub).getDescription(), is(mockGitHub.getMethodName()));
 
         checkRequestAndLimit(maxAgeNoneNetworkRequestCount, maxAgeNoneRateLimitUsed);
-
-        Cache cache = client.cache();
 
         // NOTE: this is actually bad.
         // This elevated hit count is the stale requests returning bad data took longer to detect a change.
@@ -176,7 +182,6 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
         checkRequestAndLimit(maxAgeThreeNetworkRequestCount, maxAgeThreeRateLimitUsed);
 
-        Cache cache = client.cache();
         assertThat("getHitCount", cache.hitCount(), is(maxAgeThreeHitCount));
     }
 
@@ -202,7 +207,6 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
         checkRequestAndLimit(maxAgeZeroNetworkRequestCount, maxAgeZeroRateLimitUsed);
 
-        Cache cache = client.cache();
         assertThat("getHitCount", cache.hitCount(), is(maxAgeZeroHitCount));
     }
 
@@ -228,7 +232,7 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
             File cacheDir = new File("target/cache/" + baseFilesClassPath + "/" + mockGitHub.getMethodName());
             cacheDir.mkdirs();
             FileUtils.cleanDirectory(cacheDir);
-            Cache cache = new Cache(cacheDir, 100 * 1024L * 1024L);
+            cache = new Cache(cacheDir, 100 * 1024L * 1024L);
 
             builder.cache(cache);
         }

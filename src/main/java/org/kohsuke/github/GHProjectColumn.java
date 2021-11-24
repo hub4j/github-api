@@ -186,10 +186,11 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public GHProjectCard createCard(GHIssue issue) throws IOException {
+        String contentType = issue instanceof GHPullRequest ? "PullRequest" : "Issue";
         return root().createRequest()
                 .method("POST")
                 .withPreview(INERTIA)
-                .with("content_type", issue instanceof GHPullRequest ? "PullRequest" : "Issue")
+                .with("content_type", contentType)
                 .with("content_id", issue.getId())
                 .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
                 .fetch(GHProjectCard.class)

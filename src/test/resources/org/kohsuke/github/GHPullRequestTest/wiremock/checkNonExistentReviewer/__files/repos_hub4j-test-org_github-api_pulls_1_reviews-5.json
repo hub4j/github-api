@@ -1,0 +1,22 @@
+[
+  {
+    "id": 793823252,
+    "node_id": "PRR_kwDOGTtftM4vUMgU",
+    "user": null,
+    "body": "LGTM! 👍 ",
+    "state": "APPROVED",
+    "html_url": "https://github.com/hub4j-test-org/github-api/pull/1#pullrequestreview-793823252",
+    "pull_request_url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/1",
+    "author_association": "NONE",
+    "_links": {
+      "html": {
+        "href": "https://github.com/hub4j-test-org/github-api/pull/1#pullrequestreview-793823252"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/1"
+      }
+    },
+    "submitted_at": "2021-11-01T03:15:32Z",
+    "commit_id": "427887c52303ad158651fbe3894f70beabaddd2f"
+  }
+]

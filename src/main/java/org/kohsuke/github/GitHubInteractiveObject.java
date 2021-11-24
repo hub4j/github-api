@@ -13,6 +13,8 @@ import java.util.Objects;
  * Ensures that all data references to GitHub connection are transient.
  *
  * Classes that do not need to interact with GitHub after they are instantiated do not need to inherit from this class.
+ *
+ * @author Liam Newman
  */
 abstract class GitHubInteractiveObject {
     @JacksonInject

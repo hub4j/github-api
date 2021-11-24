@@ -3,12 +3,11 @@
     <artifactId>qreview-backend</artifactId>
     <groupId>com.skylandsoft.qreview</groupId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>..</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.134-SNAPSHOT</version>
+  <version>1.134-QREVIEW</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>

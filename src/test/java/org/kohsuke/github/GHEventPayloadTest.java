@@ -157,6 +157,15 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void issue_comment_edited() throws Exception {
+        final GHEventPayload.IssueComment event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.IssueComment.class);
+        assertThat(event.getAction(), is("edited"));
+        assertThat(event.getComment().getBody(), is("This is the issue comment AFTER edit."));
+        assertThat(event.getChanges().getBody().getFrom(), is("This is the issue comment BEFORE edit."));
+    }
+
+    @Test
     public void issues() throws Exception {
         final GHEventPayload.Issue event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
@@ -424,6 +433,16 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
         assertThat(event.getPullRequest().getRepository(), sameInstance(event.getRepository()));
         assertThat(event.getComment().getParent(), sameInstance(event.getPullRequest()));
+    }
+
+    @Test
+    public void pull_request_review_comment_edited() throws Exception {
+        final GHEventPayload.PullRequestReviewComment event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.PullRequestReviewComment.class);
+        assertThat(event.getAction(), is("edited"));
+        assertThat(event.getPullRequest().getNumber(), is(4));
+        assertThat(event.getComment().getBody(), is("This is the pull request review comment AFTER edit."));
+        assertThat(event.getChanges().getBody().getFrom(), is("This is the pull request review comment BEFORE edit."));
     }
 
     @Test

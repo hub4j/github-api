@@ -473,6 +473,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     public static class PullRequestReviewComment extends GHEventPayload {
         private GHPullRequestReviewComment comment;
         private GHPullRequest pullRequest;
+        private GHCommentChanges changes;
 
         /**
          * Gets comment.
@@ -482,6 +483,15 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHPullRequestReviewComment getComment() {
             return comment;
+        }
+
+        /**
+         * Get changes (for action="edited")
+         *
+         * @return changes
+         */
+        public GHCommentChanges getChanges() {
+            return changes;
         }
 
         /**
@@ -587,6 +597,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     public static class IssueComment extends GHEventPayload {
         private GHIssueComment comment;
         private GHIssue issue;
+        private GHCommentChanges changes;
 
         /**
          * Gets comment.
@@ -596,6 +607,15 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHIssueComment getComment() {
             return comment;
+        }
+
+        /**
+         * Get changes (for action="edited")
+         *
+         * @return changes
+         */
+        public GHCommentChanges getChanges() {
+            return changes;
         }
 
         /**

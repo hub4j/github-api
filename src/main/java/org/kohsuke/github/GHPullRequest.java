@@ -26,7 +26,6 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,6 +34,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import javax.annotation.CheckForNull;
 
 import static org.kohsuke.github.internal.Previews.LYDIAN;
 import static org.kohsuke.github.internal.Previews.SHADOW_CAT;

@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import okhttp3.OkHttpClient;
 import okhttp3.OkUrlFactory;
 import org.kohsuke.github.HttpConnector;
+import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -17,7 +18,7 @@ import java.net.URL;
  *
  * @author Roberto Tyley
  * @author Kohsuke Kawaguchi
- * @see org.kohsuke.github.extras.okhttp3.OkHttpConnector
+ * @see OkHttpGitHubConnector
  */
 @Deprecated
 @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Deprecated")
@@ -31,7 +32,7 @@ public class OkHttp3Connector implements HttpConnector {
      *            the url factory
      */
     /*
-     * @see org.kohsuke.github.extras.okhttp3.OkHttpConnector
+     * @see org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector
      */
     @Deprecated
     public OkHttp3Connector(OkUrlFactory urlFactory) {

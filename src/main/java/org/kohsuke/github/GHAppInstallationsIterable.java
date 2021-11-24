@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.net.MalformedURLException;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
@@ -20,14 +19,10 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
     @Nonnull
     @Override
     public PagedIterator<GHAppInstallation> _iterator(int pageSize) {
-        try {
-            final GitHubRequest request = root.createRequest().withUrlPath(APP_INSTALLATIONS_URL).build();
-            return new PagedIterator<>(
-                    adapt(GitHubPageIterator.create(root.getClient(), GHAppInstallationsPage.class, request, pageSize)),
-                    null);
-        } catch (MalformedURLException e) {
-            throw new GHException("Malformed URL", e);
-        }
+        final GitHubRequest request = root.createRequest().withUrlPath(APP_INSTALLATIONS_URL).build();
+        return new PagedIterator<>(
+                adapt(GitHubPageIterator.create(root.getClient(), GHAppInstallationsPage.class, request, pageSize)),
+                null);
     }
 
     protected Iterator<GHAppInstallation[]> adapt(final Iterator<GHAppInstallationsPage> base) {

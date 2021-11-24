@@ -115,7 +115,7 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets content.
+     * Gets content if present. Might be a {@link GHPullRequest} or a {@link GHIssue}.
      *
      * @return the content
      * @throws IOException

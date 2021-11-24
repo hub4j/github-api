@@ -6,7 +6,7 @@
     "method": "DELETE",
     "headers": {
       "Accept": {
-        "equalTo": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2"
+        "equalTo": "application/vnd.github.v3+json"
       }
     }
   },

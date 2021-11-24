@@ -3,11 +3,13 @@ package org.kohsuke.github;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.kohsuke.github.GHPullRequest.AutoMerge;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
 
@@ -37,6 +39,14 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(p.getTitle(), equalTo(name));
         assertThat(p.canMaintainerModify(), is(false));
         assertThat(p.isDraft(), is(false));
+
+        // Check auto merge status of the pull request
+        final AutoMerge autoMerge = p.getAutoMerge();
+        assertThat(autoMerge, is(notNullValue()));
+        assertThat(autoMerge.getCommitMessage(), equalTo("This is a auto merged squash commit message"));
+        assertThat(autoMerge.getCommitTitle(), equalTo("This is a auto merged squash commit"));
+        assertThat(autoMerge.getMergeMethod(), equalTo(GHPullRequest.MergeMethod.SQUASH));
+        assertThat(autoMerge.getEnabledBy(), is(notNullValue()));
     }
 
     @Test
@@ -60,7 +70,6 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         p = repo.queryPullRequests().state(GHIssueState.OPEN).head("test/stable").list().toList().get(0);
         assertThat(p2.getNumber(), is(p.getNumber()));
         assertThat(p.isDraft(), is(true));
-
     }
 
     @Test
@@ -533,6 +542,38 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             pr.getMergeable();
             assertThat(pr.getUser().root(), notNullValue());
         }
+    }
+
+    @Test
+    public void checkNonExistentReviewer() throws IOException {
+        // PR id is based on https://github.com/sahansera/TestRepo/pull/1
+        final GHPullRequest pullRequest = getRepository().getPullRequest(1);
+        final Optional<GHPullRequestReview> review = pullRequest.listReviews().toList().stream().findFirst();
+        final GHUser reviewer = review.get().getUser();
+
+        assertThat(pullRequest.getRequestedReviewers(), is(empty()));
+        assertThat(review, notNullValue());
+        assertThat(reviewer, is(nullValue()));
+    }
+
+    @Test
+    public void checkNonExistentAuthor() throws IOException {
+        // PR id is based on https://github.com/sahansera/TestRepo/pull/2
+        final GHPullRequest pullRequest = getRepository().getPullRequest(2);
+
+        assertThat(pullRequest.getUser(), is(notNullValue()));
+        assertThat(pullRequest.getUser().login, is("ghost"));
+    }
+
+    @Test
+    public void checkPullRequestReviewer() throws IOException {
+        // PR id is based on https://github.com/sahansera/TestRepo/pull/6
+        final GHPullRequest pullRequest = getRepository().getPullRequest(6);
+        final Optional<GHPullRequestReview> review = pullRequest.listReviews().toList().stream().findFirst();
+        final GHUser reviewer = review.get().getUser();
+
+        assertThat(review, notNullValue());
+        assertThat(reviewer, notNullValue());
     }
 
     protected GHRepository getRepository() throws IOException {

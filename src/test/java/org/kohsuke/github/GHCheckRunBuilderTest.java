@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.*;
 public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
 
     protected GitHub getInstallationGithub() throws IOException {
-        return getAppInstallationWithTokenApp3().root();
+        return getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization()).root();
     }
 
     @Test
@@ -122,7 +122,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
             assertThat(x.getResponseCode(), equalTo(422));
             assertThat(x.getMessage(), containsString("\\\"conclusion\\\" wasn't supplied"));
             assertThat(x.getUrl(), containsString("/repos/hub4j-test-org/test-checks/check-runs"));
-            assertThat(x.getResponseMessage(), equalTo("422 Unprocessable Entity"));
+            assertThat(x.getResponseMessage(), containsString("Unprocessable Entity"));
         }
     }
 

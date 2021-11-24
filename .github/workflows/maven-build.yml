@@ -1,6 +1,14 @@
 name: CI
 
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+      - main
+      - '!/refs/heads/dependabot/*'
+  pull_request:
+    branches:
+      - '*'
+      - '!/refs/heads/patch*'
 
 # this is required by spotless for JDK 16+
 env:
@@ -13,14 +21,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [ 16 ]
+        java: [ 16, 17 ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'adopt'
+          distribution: 'zulu'
       - name: Cached .m2
         uses: actions/cache@v2.1.6
         with:
@@ -32,6 +40,28 @@ jobs:
         env:
           MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
         run: mvn -B clean install -DskipTests --file pom.xml
+  site:
+    name: site (Java ${{ matrix.java }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [ 8, 11 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'adopt'
+      - uses: actions/cache@v2.1.6
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Maven Site
+        run: mvn -B  clean site -D enable-ci --file pom.xml
   test:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
     runs-on: ${{ matrix.os }}-latest
@@ -39,14 +69,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu, windows ]
-        java: [ 8, 11, 16 ]
+        java: [ 8.0.192, 8, 11.0.3, 11, 16, 17 ]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.java }}
-        distribution: 'adopt'
+        distribution: 'zulu'
     - uses: actions/cache@v2.1.6
       with:
         path: ~/.m2/repository
@@ -55,22 +85,22 @@ jobs:
           ${{ runner.os }}-maven-
     # JDK 8
     - name: Maven Install without Code Coverage
-      if: matrix.os == 'windows' && matrix.java == '8'
+      if: matrix.os == 'windows' && startsWith(matrix.java, '8')
       run: mvn -B clean install --file pom.xml
     - name: Maven Install with Code Coverage
-      if: matrix.os != 'windows' && matrix.java == '8'
+      if: matrix.os != 'windows' && startsWith(matrix.java, '8')
       run: mvn -B clean install -D enable-ci --file pom.xml
     - name: Codecov Report 
-      if: matrix.os != 'windows' && matrix.java == '8'
-      uses: codecov/codecov-action@v2.0.3  
+      if: matrix.os != 'windows' && startsWith(matrix.java, '8')
+      uses: codecov/codecov-action@v2.1.0  
     # JDK 11+
     - name: Maven Install without Code Coverage
-      if: matrix.os == 'windows' && matrix.java != '8'
+      if: matrix.os == 'windows' && !startsWith(matrix.java, '8')
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Maven Install with Code Coverage
-      if: matrix.os != 'windows' && matrix.java != '8'
+      if: matrix.os != 'windows' && !startsWith(matrix.java, '8')
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"

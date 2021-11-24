@@ -192,7 +192,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                         idx = threads.length - 1;
 
                         nextCheckTime = calcNextCheckTime(response);
-                        lastModified = response.headerField("Last-Modified");
+                        lastModified = response.header("Last-Modified");
                     }
                 } catch (IOException | InterruptedException e) {
                     throw new RuntimeException(e);
@@ -200,7 +200,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
             }
 
             private long calcNextCheckTime(GitHubResponse<GHThread[]> response) {
-                String v = response.headerField("X-Poll-Interval");
+                String v = response.header("X-Poll-Interval");
                 if (v == null)
                     v = "60";
                 long seconds = Integer.parseInt(v);

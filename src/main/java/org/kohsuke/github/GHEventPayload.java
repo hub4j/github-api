@@ -1477,4 +1477,39 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             return changes;
         }
     }
+
+    /**
+     * A discussion was created, edited, deleted, pinned, unpinned, locked, unlocked, transferred, category_changed,
+     * answered, or unanswered.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion">
+     *      discussion event</a>
+     */
+    public static class Discussion extends GHEventPayload {
+
+        private GHRepositoryDiscussion discussion;
+
+        private GHLabel label;
+
+        /**
+         * Gets discussion.
+         *
+         * @return the discussion
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHRepositoryDiscussion getDiscussion() {
+            return discussion;
+        }
+
+        /**
+         * Gets the added or removed label for labeled/unlabeled events.
+         *
+         * @return label the added or removed label
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHLabel getLabel() {
+            return label;
+        }
+    }
 }

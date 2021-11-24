@@ -2190,7 +2190,7 @@ Method <org.kohsuke.github.example.dataobject.ReadOnlyObjects$GHMetaPublic.setIm
 Method <org.kohsuke.github.example.dataobject.ReadOnlyObjects$GHMetaPublic.setPages(java.util.List)> has modifier PUBLIC in (ReadOnlyObjects.java:211)
 Method <org.kohsuke.github.example.dataobject.ReadOnlyObjects$GHMetaPublic.setVerifiablePasswordAuthentication(boolean)> has modifier PUBLIC in (ReadOnlyObjects.java:131)
 Method <org.kohsuke.github.example.dataobject.ReadOnlyObjects$GHMetaPublic.setWeb(java.util.List)> has modifier PUBLIC in (ReadOnlyObjects.java:179)
-Method <org.kohsuke.github.extras.HttpClientGitHubConnector.send(org.kohsuke.github.connector.GitHubConnectorRequest)> has modifier PUBLIC in (HttpClientGitHubConnector.java:25)
+Method <org.kohsuke.github.extras.HttpClientGitHubConnector.send(org.kohsuke.github.connector.GitHubConnectorRequest)> has modifier PUBLIC in (HttpClientGitHubConnector.java:49)
 Method <org.kohsuke.github.extras.ImpatientHttpConnector.connect(java.net.URL)> has modifier PUBLIC in (ImpatientHttpConnector.java:59)
 Method <org.kohsuke.github.extras.OkHttp3Connector.connect(java.net.URL)> has modifier PUBLIC in (OkHttp3Connector.java:43)
 Method <org.kohsuke.github.extras.OkHttpConnector.connect(java.net.URL)> has modifier PUBLIC in (OkHttpConnector.java:69)

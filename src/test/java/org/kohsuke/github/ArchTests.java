@@ -16,8 +16,11 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hamcrest.Matchers;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.extras.HttpClientGitHubConnector;
 import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
 
 import java.io.Closeable;
@@ -40,6 +43,7 @@ import static com.tngtech.archunit.lang.conditions.ArchConditions.*;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.instanceOf;
 
 public class ArchTests {
 
@@ -100,6 +104,12 @@ public class ArchTests {
         assertThat("OkHttpConnector must implement HttpConnector",
                 Arrays.asList(OkHttpConnector.class.getInterfaces()),
                 Matchers.containsInAnyOrder(HttpConnector.class));
+    }
+
+    @Test
+    public void testPublicSurfaceArea() {
+        // This will only be true when running Java 11+
+        Assume.assumeThat(GitHubConnector.DEFAULT, instanceOf(HttpClientGitHubConnector.class));
 
         final ArchRule publicClasses = FreezingArchRule.freeze(ArchRuleDefinition.noClasses()
                 .should()
@@ -131,30 +141,21 @@ public class ArchTests {
                 .or()
                 .areDeclaredInClassesThat()
                 .areProtected()
-                // verify public or protected methods
+                // verify public or protected fields
                 .should()
                 .bePublic()
                 .orShould()
                 .beProtected()
                 .as("List of public or protected fields should only change intentionally"));
 
-        try {
-            publicClasses.check(classFiles);
-            publicMethods.check(classFiles);
-            publicFields.check(classFiles);
-        } catch (AssertionError | Exception e) {
-            String message = "New public surface area added.\n"
-                    + "Review changes and run this test with '-Dtest.github.takeSnapshot' to refresh the known surface area.";
-            if (e instanceof AssertionError) {
-                message += "\n" + ((AssertionError) e).getMessage();
-            } else if (e.toString().contains("StoreUpdateFailedException")) {
-                message += "Public surface area decreased.";
-            }
-            AssertionError assertion = new AssertionError(message, e);
-            assertion.setStackTrace(e.getStackTrace());
-            throw assertion;
-        }
-
+        // These tests should never fail.
+        // They are used exclusively to check whether the public surface of the library has changed.
+        // All public and protected API surface is logged as violations and saved to files.
+        // Any change to those files that is not committed as part of a PR, will be detected by the CI build as a
+        // failure.
+        publicClasses.check(classFiles);
+        publicMethods.check(classFiles);
+        publicFields.check(classFiles);
     }
 
     @Test

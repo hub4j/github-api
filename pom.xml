@@ -847,7 +847,39 @@
         </plugins>
       </build>
     </profile>
-
+    <profile>
+      <id>verify-public-api-profile</id>
+      <activation>
+        <jdk>[11,)</jdk>
+        <property>
+          <name>enable-ci</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-scm-plugin</artifactId>
+            <version>1.12.0</version>
+            <executions>
+              <execution>
+                <id>verify-public-api</id>
+                <goals>
+                  <goal>check-local-modification</goal>
+                </goals>
+                <phase>verify</phase>
+                <configuration>
+                  <errorMessage>Local file changes detected. Please run 'mvn install -Denable-ci' on Java 11 or later and commit any resulting changes.</errorMessage>
+                </configuration>
+              </execution>
+            </executions>
+            <configuration>
+              <connectionType>connection</connectionType>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
   <reporting>
     <plugins>

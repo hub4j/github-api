@@ -463,6 +463,43 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
+     * Wrapper for changes on issue and pull request review comments action="edited"
+     *
+     * @see GHEventPayload.IssueComment
+     * @see GHEventPayload.PullRequestReviewComment
+     */
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JSON API")
+    public static class CommentChanges {
+
+        private GHFrom body;
+
+        /**
+         * Gets the previous comment body.
+         *
+         * @return previous comment body (or null if not changed)
+         */
+        public GHFrom getBody() {
+            return body;
+        }
+
+        /**
+         * Wrapper for changed values.
+         */
+        public static class GHFrom {
+            private String from;
+
+            /**
+             * Previous comment value that was changed.
+             *
+             * @return previous value
+             */
+            public String getFrom() {
+                return from;
+            }
+        }
+    }
+
+    /**
      * A review comment was added to a pull request
      *
      * @see <a href=
@@ -473,7 +510,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     public static class PullRequestReviewComment extends GHEventPayload {
         private GHPullRequestReviewComment comment;
         private GHPullRequest pullRequest;
-        private GHCommentChanges changes;
+        private CommentChanges changes;
 
         /**
          * Gets comment.
@@ -490,7 +527,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return changes
          */
-        public GHCommentChanges getChanges() {
+        public CommentChanges getChanges() {
             return changes;
         }
 
@@ -597,7 +634,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     public static class IssueComment extends GHEventPayload {
         private GHIssueComment comment;
         private GHIssue issue;
-        private GHCommentChanges changes;
+        private CommentChanges changes;
 
         /**
          * Gets comment.
@@ -614,7 +651,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return changes
          */
-        public GHCommentChanges getChanges() {
+        public CommentChanges getChanges() {
             return changes;
         }
 

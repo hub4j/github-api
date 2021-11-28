@@ -1968,10 +1968,6 @@ public class GHRepository extends GHObject {
         return new GHCommitBuilder(this);
     }
 
-    public GitCommitBuilder createCommit() {
-        return new GitCommitBuilder(this);
-    }
-
     /**
      * Lists all the commits.
      *

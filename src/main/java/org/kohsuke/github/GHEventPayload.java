@@ -463,6 +463,43 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
+     * Wrapper for changes on issue and pull request review comments action="edited"
+     *
+     * @see GHEventPayload.IssueComment
+     * @see GHEventPayload.PullRequestReviewComment
+     */
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JSON API")
+    public static class CommentChanges {
+
+        private GHFrom body;
+
+        /**
+         * Gets the previous comment body.
+         *
+         * @return previous comment body (or null if not changed)
+         */
+        public GHFrom getBody() {
+            return body;
+        }
+
+        /**
+         * Wrapper for changed values.
+         */
+        public static class GHFrom {
+            private String from;
+
+            /**
+             * Previous comment value that was changed.
+             *
+             * @return previous value
+             */
+            public String getFrom() {
+                return from;
+            }
+        }
+    }
+
+    /**
      * A review comment was added to a pull request
      *
      * @see <a href=
@@ -473,6 +510,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     public static class PullRequestReviewComment extends GHEventPayload {
         private GHPullRequestReviewComment comment;
         private GHPullRequest pullRequest;
+        private CommentChanges changes;
 
         /**
          * Gets comment.
@@ -482,6 +520,15 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHPullRequestReviewComment getComment() {
             return comment;
+        }
+
+        /**
+         * Get changes (for action="edited")
+         *
+         * @return changes
+         */
+        public CommentChanges getChanges() {
+            return changes;
         }
 
         /**
@@ -587,6 +634,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     public static class IssueComment extends GHEventPayload {
         private GHIssueComment comment;
         private GHIssue issue;
+        private CommentChanges changes;
 
         /**
          * Gets comment.
@@ -596,6 +644,15 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHIssueComment getComment() {
             return comment;
+        }
+
+        /**
+         * Get changes (for action="edited")
+         *
+         * @return changes
+         */
+        public CommentChanges getChanges() {
+            return changes;
         }
 
         /**
@@ -1475,6 +1532,41 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         public GHLabelChanges getChanges() {
             return changes;
+        }
+    }
+
+    /**
+     * A discussion was created, edited, deleted, pinned, unpinned, locked, unlocked, transferred, category_changed,
+     * answered, or unanswered.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion">
+     *      discussion event</a>
+     */
+    public static class Discussion extends GHEventPayload {
+
+        private GHRepositoryDiscussion discussion;
+
+        private GHLabel label;
+
+        /**
+         * Gets discussion.
+         *
+         * @return the discussion
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHRepositoryDiscussion getDiscussion() {
+            return discussion;
+        }
+
+        /**
+         * Gets the added or removed label for labeled/unlabeled events.
+         *
+         * @return label the added or removed label
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHLabel getLabel() {
+            return label;
         }
     }
 }

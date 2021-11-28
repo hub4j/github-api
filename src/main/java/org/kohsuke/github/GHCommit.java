@@ -192,9 +192,10 @@ public class GHCommit {
     User author, committer;
 
     public GHCommit() {
-        
+
     }
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "acceptable")
     public GHCommit(GHRepository repo, ShortInfo shortInfo) {
         owner = repo;
         commit = shortInfo;

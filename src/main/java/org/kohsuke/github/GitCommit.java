@@ -8,8 +8,7 @@ import java.util.Date;
 /**
  * A commit in a repository.
  *
- * @author Emily Xia-Reinert
- * TODO: update @see (what are these)
+ * @author Emily Xia-Reinert TODO: update @see (what are these)
  * @see GHCommitComment#getCommit() GHCommitComment#getCommit()
  */
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
@@ -35,7 +34,6 @@ public class GitCommit {
             return sha;
         }
 
-
     }
 
     private Tree tree;
@@ -50,7 +48,7 @@ public class GitCommit {
         return owner;
     }
 
-        /**
+    /**
      * Gets SHA1.
      *
      * @return The SHA1 of this commit
@@ -153,6 +151,5 @@ public class GitCommit {
         this.owner = owner;
         return this;
     }
-
 
 }

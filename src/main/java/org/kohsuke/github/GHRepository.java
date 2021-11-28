@@ -1951,9 +1951,9 @@ public class GHRepository extends GHObject {
         GitCommit c = gitCommits.get(sha1);
         if (c == null) {
             c = root().createRequest()
-                .withUrlPath(String.format("/repos/%s/%s/git/commits/%s", getOwnerName(), name, sha1))
-                .fetch(GitCommit.class)
-                .wrapUp(this);
+                    .withUrlPath(String.format("/repos/%s/%s/git/commits/%s", getOwnerName(), name, sha1))
+                    .fetch(GitCommit.class)
+                    .wrapUp(this);
             gitCommits.put(sha1, c);
         }
         return c;
@@ -1966,6 +1966,10 @@ public class GHRepository extends GHObject {
      */
     public GHCommitBuilder createCommit() {
         return new GHCommitBuilder(this);
+    }
+
+    public GitCommitBuilder createCommit() {
+        return new GitCommitBuilder(this);
     }
 
     /**

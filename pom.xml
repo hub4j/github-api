@@ -339,7 +339,7 @@
             <importOrder>
               <file>${basedir}/src/build/eclipse/eclipse.importorder</file>
             </importOrder>
-            <removeUnusedImports />
+            <!-- <removeUnusedImports /> -->
 
             <trimTrailingWhitespace />
             <endWithNewline />

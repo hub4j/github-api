@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -32,8 +31,8 @@ public class GHContentUpdateResponse {
         return commit;
     }
 
+    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "bridge method of getCommit")
     private GHCommit castToGHCommit(GitCommit commit, Class targetType) {
-        // if (targetType == GHCommit.class) {
         return new GHCommit(commit.getOwner(), commit.getCommitShortInfo());
     }
 

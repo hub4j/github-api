@@ -40,7 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [ 8, 11 ]
+        java: [ 11 ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
@@ -68,23 +68,22 @@ jobs:
         distribution: 'zulu'
         cache: 'maven'
     # JDK 8
-    - name: Maven Install without Code Coverage
-      if: matrix.os == 'windows' && startsWith(matrix.java, '8')
+    - name: Maven Install without Code Coverage (Java 8)
+      if: startsWith(matrix.java, '8')
       run: mvn -B clean install --file pom.xml
-    - name: Maven Install with Code Coverage
-      if: matrix.os != 'windows' && startsWith(matrix.java, '8')
-      run: mvn -B clean install -D enable-ci --file pom.xml
-    - name: Codecov Report 
-      if: matrix.os != 'windows' && startsWith(matrix.java, '8')
-      uses: codecov/codecov-action@v2.1.0  
-    # JDK 11+
-    - name: Maven Install without Code Coverage
+    # Windows with Java 11+
+    - name: Maven Install without Code Coverage (Windows)
       if: matrix.os == 'windows' && !startsWith(matrix.java, '8')
-      env:
+      env: 
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
+    # Linux with Java 11+
     - name: Maven Install with Code Coverage
       if: matrix.os != 'windows' && !startsWith(matrix.java, '8')
-      env:
+      env: 
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
+    # Report code coverage only from non-windows Java 11 build
+    - name: Codecov Report (Non-windows, Java 11)
+      if: matrix.os != 'windows' && matrix.java == '11')
+      uses: codecov/codecov-action@v2.1.0  

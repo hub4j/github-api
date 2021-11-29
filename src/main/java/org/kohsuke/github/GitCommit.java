@@ -39,12 +39,13 @@ public class GitCommit {
     private Tree tree;
 
     public GitCommit(){
-        
+
     };
 
     public GitCommit(GitCommit commit) {
         this.owner = commit.getOwner();
         this.sha = commit.getSha();
+        this.url = commit.getUrl();
         this.author = commit.getAuthor();
         this.committer = commit.getCommitter();
         this.message = commit.getMessage();

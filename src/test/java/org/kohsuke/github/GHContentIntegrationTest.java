@@ -121,25 +121,23 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
         
-        // initialize to make compiler happy
+        // initialize to satisfy compiler; using getContent to avoid false negatives
         Method bridgeMethod = created.getClass().getMethod("getContent", null);
         Method[] methods = created.getClass().getMethods();
         for (Method method : methods) {
-            System.out.println(method.getName() + " " + method.getReturnType());
             if (method.getName() == "getCommit" && method.getReturnType() == GHCommit.class) {
                 bridgeMethod = method;                
             }
         }
         GHCommit ghcommit = (GHCommit) bridgeMethod.invoke(created);
-        System.out.println(ghcommit.toString());
 
-        // assertThat(ghcommit, notNullValue());
-        // assertThat(ghcommit.getSHA1(), notNullValue());
-        // assertThat(ghcommit.getUrl().toString(),
-                // endsWith(
-                //         "/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + created.getCommit().getSHA1()));
+        assertThat(ghcommit, notNullValue());
+        assertThat(ghcommit.getSHA1(), notNullValue());
+        assertThat(ghcommit.getUrl().toString(),
+                endsWith(
+                        "/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + created.getCommit().getSHA1()));
 
-        // assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
         
         
 

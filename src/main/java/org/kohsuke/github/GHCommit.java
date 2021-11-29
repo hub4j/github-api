@@ -203,6 +203,9 @@ public class GHCommit {
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "acceptable")
     public GHCommit(GHRepository repo, ShortInfo shortInfo) {
         owner = repo;
+        url = shortInfo.getUrl();
+        // map html url properly
+        sha = shortInfo.getSha();
         commit = shortInfo;
     }
 
@@ -539,5 +542,5 @@ public class GHCommit {
         this.owner = owner;
         return this;
     }
-    
+
 }

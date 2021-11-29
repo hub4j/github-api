@@ -26,14 +26,14 @@ public class GHContentUpdateResponse {
      * @return the commit
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    @WithBridgeMethods(value = GHCommit.class, adapterMethod = "castToGHCommit")
+    @WithBridgeMethods(value = GHCommit.class, adapterMethod = "gitCommitToGHCommit")
     public GitCommit getCommit() {
         return commit;
     }
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "bridge method of getCommit")
-    private GHCommit castToGHCommit(GitCommit commit, Class targetType) {
-        return new GHCommit(commit.getOwner(), commit.getCommitShortInfo());
+    public Object gitCommitToGHCommit(GitCommit commit, Class targetType) {
+        return new GHCommit(commit.getOwner(), new GHCommit.ShortInfo(commit));
     }
 
 }

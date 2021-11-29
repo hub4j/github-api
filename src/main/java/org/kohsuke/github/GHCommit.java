@@ -50,6 +50,11 @@ public class GHCommit {
             return comment_count;
         }
 
+        public ShortInfo(GitCommit commit) {
+            super(commit);
+            comment_count = -1;
+        }
+
     }
 
     /**
@@ -534,4 +539,5 @@ public class GHCommit {
         this.owner = owner;
         return this;
     }
+    
 }

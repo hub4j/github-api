@@ -30,7 +30,7 @@ public class BridgeMethodTest extends Assert {
         // verifyBridgeMethods(new GHCommit(), "getAuthor", GHCommit.GHAuthor.class, GitUser.class);
         // verifyBridgeMethods(new GHCommit(), "getCommitter", GHCommit.GHAuthor.class, GitUser.class);
 
-        verifyBridgeMethods(GHIssue.class, "getCreatedAt", Date.class, String.class);
+        // verifyBridgeMethods(GHIssue.class, "getCreatedAt", Date.class, String.class);
         verifyBridgeMethods(GHIssue.class, "getId", int.class, long.class, String.class);
         verifyBridgeMethods(GHIssue.class, "getUrl", String.class, URL.class);
         verifyBridgeMethods(GHIssue.class, "comment", 1, void.class, GHIssueComment.class);
@@ -50,7 +50,7 @@ public class BridgeMethodTest extends Assert {
         verifyBridgeMethods(GHUser.class, "getId", int.class, long.class, String.class);
 
         verifyBridgeMethods(GHTeam.class, "getId", int.class, long.class, String.class);
-
+        
         // verifyBridgeMethods(GitHub.class, "getMyself", GHMyself.class, GHUser.class);
 
     }

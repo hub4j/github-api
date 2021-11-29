@@ -38,6 +38,20 @@ public class GitCommit {
 
     private Tree tree;
 
+    public GitCommit(){
+        
+    };
+
+    public GitCommit(GitCommit commit) {
+        this.owner = commit.getOwner();
+        this.sha = commit.getSha();
+        this.author = commit.getAuthor();
+        this.committer = commit.getCommitter();
+        this.message = commit.getMessage();
+        this.verification = commit.getVerification();
+        this.tree = commit.getTree();
+    }
+
     /**
      * Gets owner.
      *
@@ -133,10 +147,6 @@ public class GitCommit {
 
     public Tree getTree() {
         return tree;
-    }
-
-    public GHCommit.ShortInfo getCommitShortInfo() {
-        return (GHCommit.ShortInfo) this;
     }
 
     /**

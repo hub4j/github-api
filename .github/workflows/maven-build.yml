@@ -85,5 +85,5 @@ jobs:
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     # Report code coverage only from non-windows Java 11 build
     - name: Codecov Report (Non-windows, Java 11)
-      if: matrix.os != 'windows' && matrix.java == '11')
+      if: matrix.os != 'windows' && matrix.java == '11'
       uses: codecov/codecov-action@v2.1.0  

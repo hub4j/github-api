@@ -11,9 +11,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * TODO: update this
  * A commit in a repository.
  *
- * @author Emily Xia-Reinert TODO: update @see (what are these)
+ * @author Kohsuke Kawaguchi
+ * @see GHRepository#getCommit(String) GHRepository#getCommit(String)
  * @see GHCommitComment#getCommit() GHCommitComment#getCommit()
  */
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")

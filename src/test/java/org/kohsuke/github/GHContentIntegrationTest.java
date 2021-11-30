@@ -117,6 +117,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(created.getCommit().getUrl().toString(),
                 endsWith(
                         "/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + created.getCommit().getSHA1()));
+        assertThat(created.getCommit().getMessage(), equalTo("Creating a file for integration tests."));
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
         assertThat(created.getCommit().getParents(), hasSize(greaterThan(0)));
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
@@ -137,7 +138,9 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 endsWith(
                         "/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + created.getCommit().getSHA1()));
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-        assertThat(created.getCommit().getParents(), hasSize(greaterThan(0)));
+        assertThat(ghcommit.getCommitShortInfo().getParents(), hasSize(greaterThan(0)));
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+        assertThat(ghcommit.getCommitShortInfo().getMessage(), equalTo("Creating a file for integration tests."));
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
         GHContent content = repo.getFileContent(createdFilename);

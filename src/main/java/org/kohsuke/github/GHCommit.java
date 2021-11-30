@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -50,6 +49,8 @@ public class GHCommit {
             return comment_count;
         }
 
+        public ShortInfo() {
+        };
         public ShortInfo(GitCommit commit) {
             super(commit);
             comment_count = -1;
@@ -169,6 +170,7 @@ public class GHCommit {
         public String getSha() {
             return sha;
         }
+
     }
 
     /**
@@ -197,16 +199,16 @@ public class GHCommit {
     User author, committer;
 
     public GHCommit() {
-
     }
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "acceptable")
     public GHCommit(GHRepository repo, ShortInfo shortInfo) {
         owner = repo;
         url = shortInfo.getUrl();
-        // map html url properly
+        html_url = shortInfo.getHtmlUrl();
         sha = shortInfo.getSha();
         commit = shortInfo;
+        parents = shortInfo.getRawParents();
     }
 
     /**

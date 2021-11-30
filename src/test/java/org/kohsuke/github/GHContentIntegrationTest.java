@@ -3,8 +3,8 @@ package org.kohsuke.github;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -110,7 +110,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(createdContent.getContent(), notNullValue());
         assertThat(createdContent.getContent(), equalTo("this is an awesome file I created\n"));
 
-        ;
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
 
         assertThat(created.getCommit().getSHA1(), notNullValue());
@@ -118,15 +117,16 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(created.getCommit().getUrl().toString(),
                 endsWith(
                         "/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + created.getCommit().getSHA1()));
-
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-        
+        assertThat(created.getCommit().getParents(), hasSize(greaterThan(0)));
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
         // initialize to satisfy compiler; using getContent to avoid false negatives
         Method bridgeMethod = created.getClass().getMethod("getContent", null);
         Method[] methods = created.getClass().getMethods();
         for (Method method : methods) {
             if (method.getName() == "getCommit" && method.getReturnType() == GHCommit.class) {
-                bridgeMethod = method;                
+                bridgeMethod = method;
             }
         }
         GHCommit ghcommit = (GHCommit) bridgeMethod.invoke(created);
@@ -136,10 +136,9 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(ghcommit.getUrl().toString(),
                 endsWith(
                         "/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + created.getCommit().getSHA1()));
-
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-        
-        
+        assertThat(created.getCommit().getParents(), hasSize(greaterThan(0)));
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
         GHContent content = repo.getFileContent(createdFilename);
         assertThat(content, is(notNullValue()));
@@ -164,10 +163,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
-        assertThat(updatedContentResponse.getCommit(), notNullValue());
-
-
-
         assertThat(updatedContentResponse.getContent(), notNullValue());
 
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
@@ -186,8 +181,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
-        assertThat(updatedContentResponse.getCommit().getMessage(),
-                equalTo("Updated file for integration tests."));
+        assertThat(updatedContentResponse.getCommit().getMessage(), equalTo("Updated file for integration tests."));
 
         // assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
 
@@ -208,7 +202,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/"
                         + updatedContentResponse.getCommit().getTree().getSha()));
 
-        // assertThat("Resolving GHTree is not cached", mockGitHub.getRequestCount(), equalTo(expectedRequestCount + 2));
+        // assertThat("Resolving GHTree is not cached", mockGitHub.getRequestCount(), equalTo(expectedRequestCount +
+        // 2));
 
         GHContentUpdateResponse deleteResponse = updatedContent.delete("Enough of this foolishness!");
 

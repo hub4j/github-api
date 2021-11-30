@@ -50,8 +50,8 @@ public class BridgeMethodTest extends Assert {
         verifyBridgeMethods(GHUser.class, "getId", int.class, long.class, String.class);
 
         verifyBridgeMethods(GHTeam.class, "getId", int.class, long.class, String.class);
-        
-        // verifyBridgeMethods(GitHub.class, "getMyself", GHMyself.class, GHUser.class);
+
+        verifyBridgeMethods(GitHub.class, "getMyself", GHMyself.class, GHUser.class);
 
     }
 

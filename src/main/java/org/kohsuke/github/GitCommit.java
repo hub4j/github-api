@@ -3,7 +3,12 @@ package org.kohsuke.github;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.io.IOException;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A commit in a repository.
@@ -14,7 +19,7 @@ import java.util.Date;
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GitCommit {
     private GHRepository owner;
-    private String sha, url;
+    private String sha, node_id, url, html_url;
     private GitUser author;
     private GitUser committer;
 
@@ -38,19 +43,24 @@ public class GitCommit {
 
     private Tree tree;
 
-    public GitCommit(){
+    private List<GHCommit.Parent> parents;
+
+    public GitCommit() {
 
     };
 
     public GitCommit(GitCommit commit) {
         this.owner = commit.getOwner();
         this.sha = commit.getSha();
+        this.node_id = commit.getNodeId();
+        this.html_url = commit.getHtmlUrl();
         this.url = commit.getUrl();
         this.author = commit.getAuthor();
         this.committer = commit.getCommitter();
         this.message = commit.getMessage();
         this.verification = commit.getVerification();
         this.tree = commit.getTree();
+        this.parents = commit.getRawParents();
     }
 
     /**
@@ -82,12 +92,30 @@ public class GitCommit {
     }
 
     /**
+     * Gets node id.
+     *
+     * @return The node id of this commit
+     */
+    public String getNodeId() {
+        return node_id;
+    }
+
+    /**
      * Gets URL.
      *
      * @return The URL of this commit
      */
     public String getUrl() {
         return url;
+    }
+
+    /**
+     * Gets HTML URL.
+     *
+     * @return The HTML URL of this commit
+     */
+    public String getHtmlUrl() {
+        return html_url;
     }
 
     /**
@@ -148,6 +176,34 @@ public class GitCommit {
 
     public Tree getTree() {
         return tree;
+    }
+
+    public List<GHCommit> getParents() throws IOException {
+        List<GHCommit> r = new ArrayList<GHCommit>();
+        for (String sha1 : getParentSHA1s())
+            r.add(owner.getCommit(sha1));
+        return r;
+    }
+
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
+    public List<GHCommit.Parent> getRawParents() {
+        return parents;
+    }
+
+    public List<String> getParentSHA1s() {
+        if (parents == null)
+            return Collections.emptyList();
+        return new AbstractList<String>() {
+            @Override
+            public String get(int index) {
+                return parents.get(index).sha;
+            }
+
+            @Override
+            public int size() {
+                return parents.size();
+            }
+        };
     }
 
     /**

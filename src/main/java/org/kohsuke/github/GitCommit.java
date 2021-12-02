@@ -176,8 +176,8 @@ public class GitCommit {
         return verification;
     }
 
-    public Tree getTree() {
-        return tree;
+    public String getTreeSHA1() {
+        return tree.sha;
     }
 
     public List<GHCommit> getParents() throws IOException {

@@ -208,14 +208,6 @@ public class GitCommit {
         };
     }
 
-    /**
-     * The type GHAuthor.
-     *
-     * @deprecated Use {@link GitUser} instead.
-     */
-    public static class GHAuthor extends GitUser {
-    }
-
     GitCommit wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;

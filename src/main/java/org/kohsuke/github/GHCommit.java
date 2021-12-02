@@ -35,7 +35,7 @@ public class GHCommit {
             justification = "JSON API")
     public static class ShortInfo extends GitCommit {
 
-        private int comment_count;
+        private int comment_count = -1;
 
         /**
          * Gets comment count.
@@ -53,10 +53,16 @@ public class GHCommit {
         };
         public ShortInfo(GitCommit commit) {
             super(commit);
-            comment_count = -1;
         }
 
     }
+    
+        /**
+     * The type GHAuthor.
+     *
+     * @deprecated Use {@link GitUser} instead.
+     */
+    public static class GHAuthor extends GitUser {
 
     /**
      * The type Stats.

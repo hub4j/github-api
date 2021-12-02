@@ -12,9 +12,9 @@ import java.util.List;
 
 /**
  * TODO: update this
- * A commit in a repository.
  *
- * @author Kohsuke Kawaguchi
+ *
+ * @author Emily Xia-Reinert
  * @see GHRepository#getCommit(String) GHRepository#getCommit(String)
  * @see GHCommitComment#getCommit() GHCommitComment#getCommit()
  */

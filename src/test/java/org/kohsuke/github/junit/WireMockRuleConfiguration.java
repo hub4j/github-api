@@ -188,4 +188,17 @@ public class WireMockRuleConfiguration implements Options {
     public boolean getStubCorsEnabled() {
         return parent.getStubCorsEnabled();
     }
+
+    public long timeout() {
+        return parent.timeout();
+    }
+
+    public boolean getDisableOptimizeXmlFactoriesLoading() {
+        return parent.getDisableOptimizeXmlFactoriesLoading();
+    }
+
+    public boolean getDisableStrictHttpHeaders() {
+        return parent.getDisableStrictHttpHeaders();
+    }
+
 }

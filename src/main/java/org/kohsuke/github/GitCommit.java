@@ -180,12 +180,6 @@ public class GitCommit {
         return tree.sha;
     }
 
-    public List<GHCommit> getParents() throws IOException {
-        List<GHCommit> r = new ArrayList<GHCommit>();
-        for (String sha1 : getParentSHA1s())
-            r.add(owner.getCommit(sha1));
-        return r;
-    }
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
     List<GHCommit.Parent> getRawParents() {

@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
@@ -174,7 +173,7 @@ public class GHCompare {
         } else {
             // if not using paginated commits, adapt the returned commits array
             return new PagedIterable<Commit>() {
-                @NotNull
+                @Nonnull
                 @Override
                 public PagedIterator<Commit> _iterator(int pageSize) {
                     return new PagedIterator<>(Collections.singleton(commits).iterator(), null);

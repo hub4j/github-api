@@ -80,6 +80,7 @@ import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
  * code will be shorter, easier to read, and you'll be able to use interceptors.
  */
 @SuppressFBWarnings(value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" }, justification = "Deprecated external code")
+@Deprecated
 public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Cloneable {
     static final String SELECTED_PROTOCOL = "ObsoleteUrlFactory-Selected-Protocol";
 

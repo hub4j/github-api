@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -23,7 +24,7 @@ import static java.util.logging.Level.FINEST;
 /**
  * Rate limit.
  *
- * @author Kohsuke Kawaguchi
+ * @author Liam Newman
  */
 @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHRateLimit {
@@ -379,6 +380,7 @@ public class GHRateLimit {
      * A rate limit record.
      *
      * @since 1.100
+     * @author Liam Newman
      */
     public static class Record {
         /**
@@ -436,20 +438,20 @@ public class GHRateLimit {
          *            the remaining
          * @param resetEpochSeconds
          *            the reset epoch seconds
-         * @param responseInfo
+         * @param connectorResponse
          *            the response info
          */
         @JsonCreator
         Record(@JsonProperty(value = "limit", required = true) int limit,
                 @JsonProperty(value = "remaining", required = true) int remaining,
                 @JsonProperty(value = "reset", required = true) long resetEpochSeconds,
-                @JacksonInject @CheckForNull GitHubResponse.ResponseInfo responseInfo) {
+                @JacksonInject @CheckForNull GitHubConnectorResponse connectorResponse) {
             this.limit = limit;
             this.remaining = remaining;
             this.resetEpochSeconds = resetEpochSeconds;
             String updatedAt = null;
-            if (responseInfo != null) {
-                updatedAt = responseInfo.headerField("Date");
+            if (connectorResponse != null) {
+                updatedAt = connectorResponse.header("Date");
             }
             this.resetDate = calculateResetDate(updatedAt);
         }

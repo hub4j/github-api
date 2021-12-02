@@ -12,9 +12,11 @@ import java.net.URL;
  * <p>
  * For example, you can implement this to st custom timeouts.
  *
+ * @deprecated Use {@link org.kohsuke.github.connector.GitHubConnector} instead.
  * @author Kohsuke Kawaguchi
  */
 @FunctionalInterface
+@Deprecated
 public interface HttpConnector {
     /**
      * Opens a connection to the given URL.

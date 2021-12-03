@@ -3,9 +3,7 @@ package org.kohsuke.github;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.io.IOException;
 import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -62,7 +60,7 @@ public class GitCommit {
         this.message = commit.getMessage();
         this.verification = commit.getVerification();
         this.tree = commit.getTree();
-        this.parents = commit.getRawParents();
+        this.parents = commit.getParents();
     }
 
     /**
@@ -125,7 +123,7 @@ public class GitCommit {
      *
      * @return the author
      */
-    @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
+    @WithBridgeMethods(value = GHCommit.GHAuthor.class, castRequired = true)
     public GitUser getAuthor() {
         return author;
     }
@@ -144,7 +142,7 @@ public class GitCommit {
      *
      * @return the committer
      */
-    @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
+    @WithBridgeMethods(value = GHCommit.GHAuthor.class, castRequired = true)
     public GitUser getCommitter() {
         return committer;
     }
@@ -176,13 +174,17 @@ public class GitCommit {
         return verification;
     }
 
+    Tree getTree() {
+        return tree;
+    }
+
     public String getTreeSHA1() {
         return tree.sha;
     }
 
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
-    List<GHCommit.Parent> getRawParents() {
+    List<GHCommit.Parent> getParents() {
         return parents;
     }
 

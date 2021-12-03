@@ -51,8 +51,21 @@ public class GHCommit {
 
         public ShortInfo() {
         };
+
         public ShortInfo(GitCommit commit) {
             super(commit);
+        }
+
+        @Override
+        public List<String> getParentSHA1s() {
+            List<String> shortInfoParents = super.getParentSHA1s();
+            if (shortInfoParents == null) {
+                throw new GHException(
+                    "Not available on this endpoint. "
+                    + "Try calling getParentSHA1s from outer class."
+                );
+            }
+            return null;
         }
 
     }
@@ -63,6 +76,7 @@ public class GHCommit {
      * @deprecated Use {@link GitUser} instead.
      */
     public static class GHAuthor extends GitUser {
+    }
 
     /**
      * The type Stats.
@@ -214,7 +228,7 @@ public class GHCommit {
         html_url = shortInfo.getHtmlUrl();
         sha = shortInfo.getSha();
         commit = shortInfo;
-        parents = shortInfo.getRawParents();
+        parents = shortInfo.getParents();
     }
 
     /**

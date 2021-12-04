@@ -9,13 +9,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * TODO: update this
- *
- *
  * @author Emily Xia-Reinert
- * @see GHRepository#getCommit(String) GHRepository#getCommit(String)
- * @see GHCommitComment#getCommit() GHCommitComment#getCommit()
+ * @see GHContentUpdateResponse#getCommit() GHContentUpdateResponse#getCommit()
  */
+
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GitCommit {
     private GHRepository owner;
@@ -46,15 +43,14 @@ public class GitCommit {
     private List<GHCommit.Parent> parents;
 
     public GitCommit() {
-
     };
 
     public GitCommit(GitCommit commit) {
         this.owner = commit.getOwner();
         this.sha = commit.getSha();
         this.node_id = commit.getNodeId();
-        this.html_url = commit.getHtmlUrl();
         this.url = commit.getUrl();
+        this.html_url = commit.getHtmlUrl();
         this.author = commit.getAuthor();
         this.committer = commit.getCommitter();
         this.message = commit.getMessage();
@@ -179,9 +175,12 @@ public class GitCommit {
     }
 
     public String getTreeSHA1() {
-        return tree.sha;
+        return tree.getSha();
     }
 
+    public String getTreeUrl() {
+        return tree.getUrl();
+    }
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
     List<GHCommit.Parent> getParents() {

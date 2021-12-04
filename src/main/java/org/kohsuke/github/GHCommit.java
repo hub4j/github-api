@@ -60,17 +60,14 @@ public class GHCommit {
         public List<String> getParentSHA1s() {
             List<String> shortInfoParents = super.getParentSHA1s();
             if (shortInfoParents == null) {
-                throw new GHException(
-                    "Not available on this endpoint. "
-                    + "Try calling getParentSHA1s from outer class."
-                );
+                throw new GHException("Not available on this endpoint. Try calling getParentSHA1s from outer class.");
             }
             return null;
         }
 
     }
-    
-        /**
+
+    /**
      * The type GHAuthor.
      *
      * @deprecated Use {@link GitUser} instead.
@@ -190,7 +187,6 @@ public class GHCommit {
         public String getSha() {
             return sha;
         }
-
     }
 
     /**
@@ -222,13 +218,13 @@ public class GHCommit {
     }
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "acceptable")
-    public GHCommit(GHRepository repo, ShortInfo shortInfo) {
-        owner = repo;
-        url = shortInfo.getUrl();
-        html_url = shortInfo.getHtmlUrl();
-        sha = shortInfo.getSha();
+    public GHCommit(ShortInfo shortInfo) {
         commit = shortInfo;
-        parents = shortInfo.getParents();
+        owner = commit.getOwner();
+        url = commit.getUrl();
+        html_url = commit.getHtmlUrl();
+        sha = commit.getSha();
+        parents = commit.getParents();
     }
 
     /**
@@ -298,7 +294,7 @@ public class GHCommit {
      *             on error
      */
     public GHTree getTree() throws IOException {
-        return owner.getTree(getCommitShortInfo().getTree().sha);
+        return owner.getTree(getCommitShortInfo().getTreeSHA1());
     }
 
     /**

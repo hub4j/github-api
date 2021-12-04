@@ -33,7 +33,7 @@ public class GHContentUpdateResponse {
 
     @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "bridge method of getCommit")
     public Object gitCommitToGHCommit(GitCommit commit, Class targetType) {
-        return new GHCommit(commit.getOwner(), new GHCommit.ShortInfo(commit));
+        return new GHCommit(new GHCommit.ShortInfo(commit));
     }
 
 }

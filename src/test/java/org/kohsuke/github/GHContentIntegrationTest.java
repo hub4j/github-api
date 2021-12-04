@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -49,7 +50,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    @Ignore
     public void testGetRepository() throws Exception {
         GHRepository testRepo = gitHub.getRepositoryById(repo.getId());
         assertThat(testRepo.getName(), equalTo(repo.getName()));
@@ -58,7 +58,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    @Ignore
     public void testGetFileContent() throws Exception {
         repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
         GHContent content = repo.getFileContent("ghcontent-ro/a-file-with-content");
@@ -68,7 +67,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    @Ignore
     public void testGetEmptyFileContent() throws Exception {
         GHContent content = repo.getFileContent("ghcontent-ro/an-empty-file");
 
@@ -77,7 +75,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    @Ignore
     public void testGetDirectoryContent() throws Exception {
         List<GHContent> entries = repo.getDirectoryContent("ghcontent-ro/a-dir-with-3-entries");
 
@@ -85,7 +82,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    @Ignore
     public void testGetDirectoryContentTrailingSlash() throws Exception {
         // Used to truncate the ?ref=main, see gh-224 https://github.com/kohsuke/github-api/pull/224
         List<GHContent> entries = repo.getDirectoryContent("ghcontent-ro/a-dir-with-3-entries/", "main");
@@ -100,6 +96,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 return (GHCommit) method.invoke(resp);
             }
         }
+        System.out.println("Unable to find bridge method");
         return null;
     }
 
@@ -176,11 +173,15 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    int checkCreatedCommits(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
+    int checkCreatedCommits(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount)
+            throws IOException, ParseException {
         expectedRequestCount = checkBasicCommitInfo(gitCommit, ghCommit, expectedRequestCount);
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
         assertThat(gitCommit.getMessage(), equalTo("Creating a file for integration tests."));
+        assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:49Z")));
+        assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:49Z")));
+
         assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Creating a file for integration tests."));
         assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
@@ -196,12 +197,15 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     int checkUpdatedContentResponseCommits(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount)
-            throws IOException {
+            throws IOException, ParseException {
 
         expectedRequestCount = checkBasicCommitInfo(gitCommit, ghCommit, expectedRequestCount);
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
         assertThat(gitCommit.getMessage(), equalTo("Updated file for integration tests."));
+        assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:51Z")));
+        assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:51Z")));
+
         assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Updated file for integration tests."));
         assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
@@ -221,6 +225,10 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(gitCommit.getSHA1(), notNullValue());
         assertThat(gitCommit.getUrl().toString(),
                 endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + gitCommit.getSHA1()));
+        assertThat(gitCommit.getNodeId(), notNullValue());
+        assertThat(gitCommit.getHtmlUrl().toString(),
+                equalTo("https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/" + gitCommit.getSHA1()));
+        assertThat(gitCommit.getVerification(), notNullValue());
 
         assertThat(ghCommit, notNullValue());
         assertThat(ghCommit.getSHA1(), notNullValue());
@@ -230,7 +238,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         return expectedRequestCount;
     }
 
-    int checkCommitUserInfo(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
+    int checkCommitUserInfo(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount)
+            throws IOException, ParseException {
         assertThat(gitCommit.getAuthor().getName(), equalTo("Liam Newman"));
         assertThat(gitCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
         assertThat(gitCommit.getCommitter().getName(), equalTo("Liam Newman"));
@@ -262,8 +271,13 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         return expectedRequestCount;
     }
 
+    int checkCommitParents(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
+        assertThat(gitCommit.getParentSHA1s(), hasSize(greaterThan(0)));
+        assertThat(ghCommit.getParentSHA1s(), hasSize(greaterThan(0)));
+        return expectedRequestCount;
+    }
+
     @Test
-    @Ignore
     public void testMIMESmall() throws IOException {
         GHRepository ghRepository = getTempRepository();
         GHContentBuilder ghContentBuilder = ghRepository.createContent();
@@ -274,7 +288,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    @Ignore
     public void testMIMELong() throws IOException {
         GHRepository ghRepository = getTempRepository();
         GHContentBuilder ghContentBuilder = ghRepository.createContent();
@@ -284,7 +297,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         ghContentBuilder.commit();
     }
     @Test
-    @Ignore
     public void testMIMELonger() throws IOException {
         GHRepository ghRepository = getTempRepository();
         GHContentBuilder ghContentBuilder = ghRepository.createContent();
@@ -298,7 +310,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    @Ignore
     public void testGetFileContentWithNonAsciiPath() throws Exception {
         final GHRepository repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
         final GHContent fileContent = repo.getFileContent("ghcontent-ro/a-file-with-\u00F6");

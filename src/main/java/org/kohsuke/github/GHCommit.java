@@ -62,7 +62,7 @@ public class GHCommit {
             if (shortInfoParents == null) {
                 throw new GHException("Not available on this endpoint. Try calling getParentSHA1s from outer class.");
             }
-            return null;
+            return shortInfoParents;
         }
 
     }
@@ -220,10 +220,11 @@ public class GHCommit {
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "acceptable")
     public GHCommit(ShortInfo shortInfo) {
         commit = shortInfo;
+
         owner = commit.getOwner();
-        url = commit.getUrl();
         html_url = commit.getHtmlUrl();
         sha = commit.getSha();
+        url = commit.getUrl();
         parents = commit.getParents();
     }
 

@@ -953,6 +953,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         GHRepositoryDiscussion.Category category = discussion.getCategory();
 
         assertThat(category.getId(), is(33522033L));
+        assertThat(category.getNodeId(), is("DIC_kwDOEq3cwc4B_4Fx"));
         assertThat(category.getEmoji(), is(":pray:"));
         assertThat(category.getName(), is("Q&A"));
         assertThat(category.getDescription(), is("Ask the community for help"));
@@ -1000,6 +1001,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         GHRepositoryDiscussion.Category category = discussion.getCategory();
 
         assertThat(category.getId(), is(33522033L));
+        assertThat(category.getNodeId(), is("DIC_kwDOEq3cwc4B_4Fx"));
         assertThat(category.getEmoji(), is(":pray:"));
         assertThat(category.getName(), is("Q&A"));
         assertThat(category.getDescription(), is("Ask the community for help"));
@@ -1048,6 +1050,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         GHRepositoryDiscussion.Category category = discussion.getCategory();
 
         assertThat(category.getId(), is(33522033L));
+        assertThat(category.getNodeId(), is("DIC_kwDOEq3cwc4B_4Fx"));
         assertThat(category.getEmoji(), is(":pray:"));
         assertThat(category.getName(), is("Q&A"));
         assertThat(category.getDescription(), is("Ask the community for help"));

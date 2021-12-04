@@ -113,6 +113,7 @@ public class GHRepositoryDiscussion extends GHObject {
     public static class Category {
 
         private long id;
+        private String nodeId;
         private long repositoryId;
         private String emoji;
         private String name;
@@ -124,6 +125,10 @@ public class GHRepositoryDiscussion extends GHObject {
 
         public long getId() {
             return id;
+        }
+
+        public String getNodeId() {
+            return nodeId;
         }
 
         public long getRepositoryId() {

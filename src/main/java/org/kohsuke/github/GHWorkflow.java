@@ -122,12 +122,14 @@ public class GHWorkflow extends GHObject {
      *            default properties configured in the workflow file will be used when inputs are omitted.
      * @throws IOException
      *             the io exception
+     * @throws IllegalArgumentException
+     *             the illegal argument exception
      */
-    public void dispatch(String ref, Map<String, Object> inputs) throws IOException {
+    public void dispatch(String ref, Map<String, Object> inputs) throws IOException, IllegalArgumentException {
         if (ref == null || ref.length() == 0) {
-            throw new GHIOException("ref is null or empty.");
+            throw new IllegalArgumentException("ref cannot be null or empty");
         }
-        
+
         Requester requester = root().createRequest()
                 .method("POST")
                 .withUrlPath(getApiRoute(), "dispatches")

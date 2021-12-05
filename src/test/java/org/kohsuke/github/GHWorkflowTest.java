@@ -78,16 +78,16 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testDispatch() throws IOException {
+    public void testDispatch() throws IOException, IllegalArgumentException {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
 
-        String expectedMessage = "ref is null or empty.";
-        GHIOException nullException = assertThrows(GHIOException.class, () -> {
+        String expectedMessage = "ref cannot be null or empty";
+        IllegalArgumentException nullException = assertThrows(IllegalArgumentException.class, () -> {
             workflow.dispatch(null);
         });
         assertThat(nullException.getMessage(), equalTo(expectedMessage));
 
-        GHIOException emptyException = assertThrows(GHIOException.class, () -> {
+        IllegalArgumentException emptyException = assertThrows(IllegalArgumentException.class, () -> {
             workflow.dispatch("");
         });
         assertThat(emptyException.getMessage(), equalTo(expectedMessage));

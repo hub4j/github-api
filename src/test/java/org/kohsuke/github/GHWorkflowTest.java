@@ -14,6 +14,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThrows;
 
 public class GHWorkflowTest extends AbstractGitHubWireMockTest {
 
@@ -79,6 +80,17 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     @Test
     public void testDispatch() throws IOException {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
+
+        String expectedMessage = "ref is null or empty.";
+        GHIOException nullException = assertThrows(GHIOException.class, () -> {
+            workflow.dispatch(null);
+        });
+        assertThat(nullException.getMessage(), equalTo(expectedMessage));
+
+        GHIOException emptyException = assertThrows(GHIOException.class, () -> {
+            workflow.dispatch("");
+        });
+        assertThat(emptyException.getMessage(), equalTo(expectedMessage));
 
         workflow.dispatch("main");
         verify(postRequestedFor(

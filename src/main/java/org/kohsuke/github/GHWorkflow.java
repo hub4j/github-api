@@ -139,7 +139,7 @@ public class GHWorkflow extends GHObject {
             requester.with("inputs", inputs);
         }
 
-        requester.fetchHttpStatusCode();
+        requester.send();
     }
 
     /**

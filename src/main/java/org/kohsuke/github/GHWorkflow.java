@@ -125,7 +125,7 @@ public class GHWorkflow extends GHObject {
      * @throws IllegalArgumentException
      *             the illegal argument exception
      */
-    public void dispatch(String ref, Map<String, Object> inputs) throws IOException, IllegalArgumentException {
+    public void dispatch(String ref, Map<String, Object> inputs) throws IOException {
         if (ref == null || ref.length() == 0) {
             throw new IllegalArgumentException("ref cannot be null or empty");
         }

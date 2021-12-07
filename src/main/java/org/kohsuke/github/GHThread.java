@@ -135,6 +135,32 @@ public class GHThread extends GHObject {
     }
 
     /**
+     * If this thread is about an issue, return the issue number.
+     *
+     * @return -1 if this thread is not about an issue.
+     * @throws IOException
+     *              the io exception
+     */
+    public int getIssueNumber() throws IOException {
+        final GHIssue ghIssue = getBoundIssue();
+
+        return ghIssue == null ? -1 : ghIssue.getNumber();
+    }
+
+    /**
+     * If this thread is about a pull request, return the pull request number.
+     *
+     * @return -1 if this thread is not about a pull request.
+     * @throws IOException
+     *              the io exception
+     */
+    public int getPullNumber() throws IOException {
+        final GHPullRequest ghPullRequest = getBoundPullRequest();
+
+        return ghPullRequest == null ? -1 : ghPullRequest.getNumber();
+    }
+
+    /**
      * If this thread is about a commit, return that commit.
      *
      * @return null if this thread is not about a commit.

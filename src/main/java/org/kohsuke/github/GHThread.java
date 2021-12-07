@@ -139,7 +139,7 @@ public class GHThread extends GHObject {
      *
      * @return -1 if this thread is not about an issue.
      * @throws IOException
-     *              the io exception
+     *             the io exception
      */
     public int getIssueNumber() throws IOException {
         final GHIssue ghIssue = getBoundIssue();
@@ -152,7 +152,7 @@ public class GHThread extends GHObject {
      *
      * @return -1 if this thread is not about a pull request.
      * @throws IOException
-     *              the io exception
+     *             the io exception
      */
     public int getPullNumber() throws IOException {
         final GHPullRequest ghPullRequest = getBoundPullRequest();

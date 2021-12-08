@@ -1235,6 +1235,19 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(t.getUpdatedAt(), notNullValue());
             assertThat(t.getType(), oneOf("Issue", "PullRequest"));
 
+            // Test issue number and pull number of each GHThread.
+            if (t.getBoundIssue() == null) {
+                assertThat(t.getIssueNumber(),  is(-1));
+            } else {
+                assertThat(t.getIssueNumber(), not(-1));
+            }
+
+            if (t.getBoundPullRequest() == null) {
+                assertThat(t.getPullNumber(), is(-1));
+            } else {
+                assertThat(t.getPullNumber(), not(-1));
+            }
+
             // both thread an unread are included
             // assertThat(t.getLastReadAt(), notNullValue());
             // assertThat(t.isRead(), equalTo(true));

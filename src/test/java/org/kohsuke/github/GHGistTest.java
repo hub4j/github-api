@@ -157,4 +157,5 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
         // test truncate and content value
         assertThat(gist.getFile("greater1MB.txt").getContent(), equalTo(strLess1MB));
     }
+
 }

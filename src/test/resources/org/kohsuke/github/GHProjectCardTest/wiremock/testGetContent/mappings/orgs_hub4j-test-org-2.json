@@ -2,7 +2,7 @@
   "id": "a73c2760-fcb1-4ad6-a379-508ae8bd6a92",
   "name": "orgs_hub4j-test-org",
   "request": {
-    "url": "/orgs/hub4j-test-org",
+    "url": "/api/v3/orgs/hub4j-test-org",
     "method": "GET",
     "headers": {
       "Accept": {

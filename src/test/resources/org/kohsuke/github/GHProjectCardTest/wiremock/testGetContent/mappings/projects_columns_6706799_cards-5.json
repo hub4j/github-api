@@ -2,7 +2,7 @@
   "id": "0a15ceb0-700f-41b0-8a07-ac04dcdcd13f",
   "name": "projects_columns_6706799_cards",
   "request": {
-    "url": "/projects/columns/6706799/cards",
+    "url": "/api/v3/projects/columns/6706799/cards",
     "method": "POST",
     "bodyPatterns": [
       {

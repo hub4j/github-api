@@ -2,7 +2,7 @@
   "id": "264f75eb-2b63-4727-9470-21079137ecf4",
   "name": "projects_3312442_columns",
   "request": {
-    "url": "/projects/3312442/columns",
+    "url": "/api/v3/projects/3312442/columns",
     "method": "POST",
     "bodyPatterns": [
       {

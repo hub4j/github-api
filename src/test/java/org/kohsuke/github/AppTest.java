@@ -1237,7 +1237,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
             // Test issue number and pull number of each GHThread.
             if (t.getBoundIssue() == null) {
-                assertThat(t.getIssueNumber(),  is(-1));
+                assertThat(t.getIssueNumber(), is(-1));
             } else {
                 assertThat(t.getIssueNumber(), not(-1));
             }

@@ -78,7 +78,11 @@ public class GHCommit {
      *
      * @deprecated Use {@link GitUser} instead.
      */
+    @Deprecated
     public static class GHAuthor extends GitUser {
+        public GHAuthor(GitUser user) {
+            super(user);
+        }
     }
 
     /**

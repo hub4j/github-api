@@ -2,7 +2,7 @@
   "id": "fd95c811-2dc4-458b-a18f-72b93e2cfac7",
   "name": "orgs_hub4j-test-org_projects",
   "request": {
-    "url": "orgs/hub4j-test-org/projects",
+    "url": "/orgs/hub4j-test-org/projects",
     "method": "POST",
     "bodyPatterns": [
       {

@@ -1,7 +1,7 @@
 {
-  "url": "https://api.github.com/projects/columns/6706799",
-  "project_url": "https://api.github.com/projects/3312442",
-  "cards_url": "https://api.github.com/projects/columns/6706799/cards",
+  "url": "https://api.github.com/api/v3/projects/columns/6706799",
+  "project_url": "https://api.github.com/api/v3/projects/3312442",
+  "cards_url": "https://api.github.com/api/v3/projects/columns/6706799/cards",
   "id": 6706799,
   "node_id": "MDEzOlByb2plY3RDb2x1bW42NzA2Nzk5",
   "name": "column-one",

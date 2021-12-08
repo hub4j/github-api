@@ -43,9 +43,12 @@ public class GitCommit {
     private List<GHCommit.Parent> parents;
 
     public GitCommit() {
+        // empty constructor for Jackson binding
     };
 
-    public GitCommit(GitCommit commit) {
+    GitCommit(GitCommit commit) {
+        // copy constructor used to cast to GitCommit.ShortInfo and from there
+        // to GHCommit, for GHContentUpdateResponse bridge method to GHCommit
         this.owner = commit.getOwner();
         this.sha = commit.getSha();
         this.node_id = commit.getNodeId();

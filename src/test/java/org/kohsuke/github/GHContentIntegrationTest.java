@@ -92,7 +92,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     GHCommit getGHCommit(GHContentUpdateResponse resp)
             throws GHException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         for (Method method : resp.getClass().getMethods()) {
-            if (method.getName() == "getCommit" && method.getReturnType() == GHCommit.class) {
+            if (method.getName().equals("getCommit") && method.getReturnType().equals(GHCommit.class)) {
                 return (GHCommit) method.invoke(resp);
             }
         }

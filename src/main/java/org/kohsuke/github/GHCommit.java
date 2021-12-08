@@ -49,10 +49,16 @@ public class GHCommit {
             return comment_count;
         }
 
+        /**
+         * Creates instance of {@link GHCommit.ShortInfo}.
+         */
         public ShortInfo() {
+            // Empty constructor required for Jackson binding
         };
 
-        public ShortInfo(GitCommit commit) {
+        ShortInfo(GitCommit commit) {
+            // Inherited copy constructor, used for bridge method from {@link GitCommit},
+            // which is used in {@link GHContentUpdateResponse}) to {@link GHCommit}.
             super(commit);
         }
 
@@ -214,11 +220,18 @@ public class GHCommit {
     List<Parent> parents;
     User author, committer;
 
+    /**
+     * Creates an instance of {@link GHCommit}.
+     */
     public GHCommit() {
+        // empty constructor needed for Jackson binding
     }
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "acceptable")
-    public GHCommit(ShortInfo shortInfo) {
+    GHCommit(ShortInfo shortInfo) {
+        // Constructs a (relatively sparse) GHCommit from a GitCommit. Used for
+        // bridge method from {@link GitCommit}, which is used in
+        // {@link GHContentUpdateResponse}) to {@link GHCommit}.
         commit = shortInfo;
 
         owner = commit.getOwner();

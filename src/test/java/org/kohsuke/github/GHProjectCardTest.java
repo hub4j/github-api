@@ -61,6 +61,13 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void testGetContent() throws IOException {
+        card.getContent();
+        assertThat(card.getNote(), equalTo("This is a card"));
+        assertThat(card.isArchived(), is(false));
+    }
+
+    @Test
     public void testDeleteCard() throws IOException {
         card.delete();
         try {

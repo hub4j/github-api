@@ -86,7 +86,11 @@ public class GHProjectCard extends GHObject {
     public GHProject getProject() throws IOException {
         if (project == null) {
             try {
-                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
+                if(getProjectUrl().getPath().contains("/api/v3")) {
+                    project = root().createRequest().withUrlPath(getProjectUrl().getPath().replace("/api/v3", "")).fetch(GHProject.class);
+                } else {
+                    project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
+                }
             } catch (FileNotFoundException e) {
             }
         }
@@ -104,10 +108,17 @@ public class GHProjectCard extends GHObject {
     public GHProjectColumn getColumn() throws IOException {
         if (column == null) {
             try {
-                column = root().createRequest()
-                        .withUrlPath(getColumnUrl().getPath())
-                        .fetch(GHProjectColumn.class)
-                        .lateBind(root());
+                if(getProjectUrl().getPath().contains("/api/v3")) {
+                    column = root().createRequest()
+                            .withUrlPath(getColumnUrl().getPath().replace("/api/v3", ""))
+                            .fetch(GHProjectColumn.class)
+                            .lateBind(root());
+                } else {
+                    column = root().createRequest()
+                            .withUrlPath(getColumnUrl().getPath())
+                            .fetch(GHProjectColumn.class)
+                            .lateBind(root());
+                }
             } catch (FileNotFoundException e) {
             }
         }
@@ -125,10 +136,14 @@ public class GHProjectCard extends GHObject {
         if (StringUtils.isEmpty(content_url))
             return null;
         try {
+            String path = getContentUrl().getPath();
+            if (path.contains("/api/v3")) {
+                path.replace("/api/v3", "");
+            }
             if (content_url.contains("/pulls")) {
-                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHPullRequest.class);
+                return root().createRequest().withUrlPath(path).fetch(GHPullRequest.class);
             } else {
-                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);
+                return root().createRequest().withUrlPath(path).fetch(GHIssue.class);
             }
         } catch (FileNotFoundException e) {
             return null;

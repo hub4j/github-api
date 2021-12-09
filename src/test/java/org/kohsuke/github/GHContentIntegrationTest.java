@@ -302,8 +302,10 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     int checkCommitParents(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
-        assertThat(gitCommit.getParentSHA1s(), hasSize(greaterThan(0)));
-        assertThat(ghCommit.getParentSHA1s(), hasSize(greaterThan(0)));
+        assertThat(gitCommit.getParentSHA1s().size(), is(greaterThan(0)));
+        assertThat(ghCommit.getParentSHA1s().size(), is(greaterThan(0)));
+        assertThat(gitCommit.getParentSHA1s().get(0), notNullValue());
+        assertThat(ghCommit.getParentSHA1s().get(0), notNullValue());
         return expectedRequestCount;
     }
 

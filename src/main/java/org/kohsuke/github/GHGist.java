@@ -29,6 +29,8 @@ public class GHGist extends GHObject {
     @JsonProperty("public")
     private boolean _public;
 
+    private boolean truncated;
+
     private String description;
 
     private int comments;
@@ -39,11 +41,12 @@ public class GHGist extends GHObject {
 
     @JsonCreator
     private GHGist(@JsonProperty("owner") GHUser owner, @JsonProperty("files") Map<String, GHGistFile> files) {
+        this.owner = owner.root().getUser(owner);
         for (Entry<String, GHGistFile> e : files.entrySet()) {
             e.getValue().fileName = e.getKey();
+            e.getValue().wrapUp(this);
         }
         this.files = Collections.unmodifiableMap(files);
-        this.owner = owner.root().getUser(owner);
     }
 
     /**
@@ -134,6 +137,15 @@ public class GHGist extends GHObject {
      */
     public boolean isPublic() {
         return _public;
+    }
+
+    /**
+     * Is Gist file list truncated to be 300 files at maximum.
+     *
+     * @return whether file list get truncated
+     */
+    public boolean isTruncated() {
+        return truncated;
     }
 
     /**

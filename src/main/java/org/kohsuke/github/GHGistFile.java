@@ -1,5 +1,11 @@
 package org.kohsuke.github;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+
 /**
  * A file inside {@link GHGist}
  *
@@ -13,6 +19,7 @@ public class GHGistFile {
     private int size;
     private String raw_url, type, language, content;
     private boolean truncated;
+    private GHGist owner;
 
     /**
      * Gets file name.
@@ -62,10 +69,26 @@ public class GHGistFile {
     /**
      * Content of this file.
      *
+     * Content is lazy downloaded and cached locally the first time this method is called.
+     *
      * @return the content
      */
     public String getContent() {
-        return content;
+        if (this.content == null) {
+            if (this.size == 0) {
+                this.content = "";
+            } else {
+                try (InputStream inputStream = this.owner.root()
+                        .createRequest()
+                        .setRawUrlPath(raw_url)
+                        .fetchStream(Requester::copyInputStream)) {
+                    this.content = IOUtils.toString(inputStream, Charset.defaultCharset());
+                } catch (IOException e) {
+                    throw new GHException("Failed to retrieve the gist file content", e);
+                }
+            }
+        }
+        return this.content;
     }
 
     /**
@@ -75,5 +98,15 @@ public class GHGistFile {
      */
     public boolean isTruncated() {
         return truncated;
+    }
+
+    /**
+     * set the owner object of the GHGistFile.
+     *
+     * @param owner
+     *            the object stores owner information
+     */
+    public void wrapUp(GHGist owner) {
+        this.owner = owner;
     }
 }

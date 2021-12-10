@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 
@@ -140,5 +141,36 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
         assertThat(f.getType(), equalTo("text/markdown"));
         assertThat(f.getLanguage(), equalTo("Markdown"));
         assertThat(f.getContent(), containsString("### Keybase proof"));
+    }
+
+    /**
+     * Test file content of GHGistFile from listGists(). Test corresponding to
+     * <a href="https://github.com/hub4j/github-api/issues/1325">issue #1325</a>.
+     *
+     * @throws Exception
+     *             happens during the test run
+     */
+    @Test
+    public void listGistFile() throws Exception {
+        List<GHGist> gistList = getNonRecordingGitHub().getMyself().listGists().toList();
+
+        assertThat(gistList.size(), equalTo(1));
+
+        GHGist gist = gistList.get(0);
+
+        assertThat(gist.isTruncated(), equalTo(false));
+        assertThat(gist.getFiles().size(), equalTo(2));
+
+        GHGistFile gistFileWithContent = gist.getFile("test_github_gist.md");
+        GHGistFile emptyGistFile = gist.getFile("test_empty_github_gist.md");
+
+        assertThat(gistFileWithContent.getFileName(), equalTo("test_github_gist.md"));
+        // first time lazy download the file content and cache it
+        assertThat(gistFileWithContent.getContent(), equalTo("Test github gist file content"));
+        // second time directly load from cache
+        assertThat(gistFileWithContent.getContent(), equalTo("Test github gist file content"));
+
+        assertThat(emptyGistFile.getFileName(), equalTo("test_empty_github_gist.md"));
+        assertThat(emptyGistFile.getContent(), equalTo(""));
     }
 }

@@ -180,6 +180,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
         expectedRequestCount = checkCommitTree(gitCommit, ghCommit, expectedRequestCount);
 
+        expectedRequestCount = checkCommitParents(gitCommit, ghCommit, expectedRequestCount);
+
         return expectedRequestCount;
     }
 

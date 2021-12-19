@@ -795,6 +795,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
+                  <Automatic-Module-Name>org.kohsuke.github.api</Automatic-Module-Name>
                   <Multi-Release>true</Multi-Release>
                 </manifestEntries>
               </archive>

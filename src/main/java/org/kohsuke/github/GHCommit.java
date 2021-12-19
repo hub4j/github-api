@@ -361,7 +361,7 @@ public class GHCommit {
      * @return SHA1 of parent commit objects.
      */
     public List<String> getParentSHA1s() {
-        if (parents == null)
+        if (parents == null || parents.size() == 0)
             return Collections.emptyList();
         return new AbstractList<String>() {
             @Override

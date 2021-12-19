@@ -354,7 +354,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    @Ignore
     public void testGetFileContentWithSymlink() throws Exception {
         final GHRepository repo = gitHub.getRepository("hub4j-test-org/GHContentIntegrationTest");
 

@@ -42,7 +42,7 @@ public class GHCommit {
          *
          * @return the comment count
          */
-        public int getCommentCount() {
+        public int getCommentCount() throws GHException {
             if (comment_count < 0) {
                 throw new GHException("Not available on this endpoint.");
             }

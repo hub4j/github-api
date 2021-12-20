@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -311,6 +310,11 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         return expectedRequestCount;
     }
 
+    // @Test
+    // public void testGitCommit2GHCommitExceptions() {
+
+    // }
+
     @Test
     public void testMIMESmall() throws IOException {
         GHRepository ghRepository = getTempRepository();
@@ -341,6 +345,13 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 + "123456789012345678901234567890123456789012345678901234567890"
                 + "123456789012345678901234567890123456789012345678901234567890");
         ghContentBuilder.commit();
+    }
+
+    @Test(expected = GHException.class)
+    public void testGetCommentCountFailsFromGitCommit() throws Exception {
+        GitCommit gitCommit = new GitCommit();
+        GHCommit ghCommit = new GHCommit(new GHCommit.ShortInfo(gitCommit));
+        ghCommit.getCommitShortInfo().getCommentCount();
     }
 
     @Test

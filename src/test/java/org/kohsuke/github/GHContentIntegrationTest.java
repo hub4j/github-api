@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -170,6 +171,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
         assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Creating a file for integration tests."));
         assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+        Assert.assertThrows(GHException.class, () -> ghCommit.getCommitShortInfo().getCommentCount());
 
         ghCommit.populate();
         assertThat("Populate GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
@@ -345,13 +347,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 + "123456789012345678901234567890123456789012345678901234567890"
                 + "123456789012345678901234567890123456789012345678901234567890");
         ghContentBuilder.commit();
-    }
-
-    @Test(expected = GHException.class)
-    public void testGetCommentCountFailsFromGitCommit() throws Exception {
-        GitCommit gitCommit = new GitCommit();
-        GHCommit ghCommit = new GHCommit(new GHCommit.ShortInfo(gitCommit));
-        ghCommit.getCommitShortInfo().getCommentCount();
     }
 
     @Test

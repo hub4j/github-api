@@ -38,6 +38,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), equalTo("Repository name must be in format owner/repo"));
         }
+
+        try {
+            gitHub.getRepository("hub4j/github/api");
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), equalTo("Repository name must be in format owner/repo"));
+        }
     }
 
     @Test

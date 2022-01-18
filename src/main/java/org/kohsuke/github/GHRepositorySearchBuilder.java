@@ -222,6 +222,17 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
+     * Org gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder org(String v) {
+        return q("org:" + v);
+    }
+
+    /**
      * Order gh repository search builder.
      *
      * @param v

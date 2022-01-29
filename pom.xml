@@ -33,7 +33,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>4.5.0.0</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.5.3.0</spotbugs-maven-plugin.version>
     <spotbugs.version>4.5.3</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
@@ -60,7 +60,7 @@
       <extension>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>1.12.0</version>
+        <version>1.12.2</version>
       </extension>
       <!-- Doing site publishing manually for now -->
 <!--

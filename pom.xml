@@ -55,7 +55,7 @@
       <extension>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-gitexe</artifactId>
-        <version>1.12.0</version>
+        <version>1.12.2</version>
       </extension>
       <extension>
         <groupId>org.apache.maven.scm</groupId>

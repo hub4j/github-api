@@ -24,7 +24,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -2978,7 +2977,7 @@ public class GHRepository extends GHObject {
         if (tail.length() > 0 && !tail.startsWith("/")) {
             tail = '/' + tail;
         }
-        return "/repos/" + getOwnerName() + "/" + name + tail;
+        return "/repos/" + full_name + tail;
     }
 
     /**
@@ -3257,29 +3256,13 @@ public class GHRepository extends GHObject {
             return; // can't populate if the root is offline
         }
 
-        final URL url = requireNonNull(getUrl(), "Missing instance URL!");
+        // We don't take the URL provided in the JSON as it is not reliable in some cases:
+        // There is bug in Push event payloads that returns the wrong url.
+        // All other occurrences of "url" take the form "https://api.github.com/...".
+        // For Push event repository records, they take the form "https://github.com/{fullName}".
+        // And also for Installation event payloads, the URL is not provided at all.
 
-        try {
-            // IMPORTANT: the url for repository records does not reliably point to the API url.
-            // There is bug in Push event payloads that returns the wrong url.
-            // All other occurrences of "url" take the form "https://api.github.com/...".
-            // For Push event repository records, they take the form "https://github.com/{fullName}".
-            root().createRequest()
-                    .withPreview(BAPTISTE)
-                    .withPreview(NEBULA)
-                    .setRawUrlPath(url.toString())
-                    .fetchInto(this);
-        } catch (HttpException e) {
-            if (e.getCause() instanceof JsonParseException) {
-                root().createRequest()
-                        .withPreview(BAPTISTE)
-                        .withPreview(NEBULA)
-                        .withUrlPath("/repos/" + full_name)
-                        .fetchInto(this);
-            } else {
-                throw e;
-            }
-        }
+        root().createRequest().withPreview(BAPTISTE).withPreview(NEBULA).withUrlPath(getApiTailUrl("")).fetchInto(this);
     }
 
     /**

@@ -267,12 +267,15 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         void lateBind() {
             if (getInstallation() == null) {
                 throw new IllegalStateException(
-                        "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+                        "Expected installation payload, but got something else. Maybe we've got another type of event?");
             }
             super.lateBind();
             if (repositories != null && !repositories.isEmpty()) {
                 try {
-                    for (GHRepository singleRepo : repositories) { // warp each of the repository
+                    for (GHRepository singleRepo : repositories) {
+                        // wrap each of the repository
+                        // be careful, the repository information provided here is very limited
+                        // typically, it doesn't contain the URL but only the full name
                         singleRepo.populate();
                     }
                 } catch (IOException e) {
@@ -326,7 +329,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         void lateBind() {
             if (getInstallation() == null) {
                 throw new IllegalStateException(
-                        "Expected check_suite payload, but got something else. Maybe we've got another type of event?");
+                        "Expected installation_repositories payload, but got something else. Maybe we've got another type of event?");
             }
             super.lateBind();
             List<GHRepository> repositories;

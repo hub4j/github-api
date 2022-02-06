@@ -2981,12 +2981,11 @@ public class GHRepository extends GHObject {
         return "/repos/" + getOwnerName() + "/" + name + tail;
     }
 
-    String getApiHeadUrl(String...strings) {
-        String head = StringUtils.join(strings, "/");
-        if (head.length() > 0 && !head.startsWith("/")) {
+    String getApiHeadUrl(String head) {
+        if (head.length() > 0 && !head.endsWith("/")) {
             head = '/' + head;
         }
-        return head + getOwnerName() + "/" + name;
+        return "/user/" + head + getOwnerName() + "/" + name;
     }
 
     /**
@@ -3313,8 +3312,8 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void star()  throws IOException {
-        root().createRequest().method("PUT").withUrlPath(getApiHeadUrl("user","starred")).send();
+    public void star() throws IOException {
+        root().createRequest().method("PUT").withUrlPath(getApiHeadUrl("starred")).send();
     }
 
     /**
@@ -3323,8 +3322,8 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void unstar()  throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiHeadUrl("user","starred")).send();
+    public void unstar() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiHeadUrl("starred")).send();
     }
 
     /**

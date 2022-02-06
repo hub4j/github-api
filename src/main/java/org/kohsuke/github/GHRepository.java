@@ -2981,6 +2981,14 @@ public class GHRepository extends GHObject {
         return "/repos/" + getOwnerName() + "/" + name + tail;
     }
 
+    String getApiHeadUrl(String...strings) {
+        String head = StringUtils.join(strings, "/");
+        if (head.length() > 0 && !head.startsWith("/")) {
+            head = '/' + head;
+        }
+        return head + getOwnerName() + "/" + name;
+    }
+
     /**
      * Get all issue events for this repository. See
      * https://developer.github.com/v3/issues/events/#list-events-for-a-repository
@@ -3297,6 +3305,26 @@ public class GHRepository extends GHObject {
 
             requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
         }
+    }
+
+    /**
+     * Star a repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void star()  throws IOException {
+        root().createRequest().method("PUT").withUrlPath(getApiHeadUrl("user","starred")).send();
+    }
+
+    /**
+     * Unstar a repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void unstar()  throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiHeadUrl("user","starred")).send();
     }
 
     /**

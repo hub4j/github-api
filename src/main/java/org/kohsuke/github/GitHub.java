@@ -667,7 +667,7 @@ public class GitHub {
      */
     public GHRepository getRepository(String name) throws IOException {
         String[] tokens = name.split("/");
-        if (tokens.length < 2) {
+        if (tokens.length != 2) {
             throw new IllegalArgumentException("Repository name must be in format owner/repo");
         }
         return GHRepository.read(this, tokens[0], tokens[1]);

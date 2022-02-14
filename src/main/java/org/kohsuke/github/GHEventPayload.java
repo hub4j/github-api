@@ -274,7 +274,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
                 try {
                     for (GHRepository singleRepo : repositories) {
                         // populate each repository
-                        // the repository information provided here is so limited 
+                        // the repository information provided here is so limited
                         // as to be unusable without populating, so we do it eagerly
                         singleRepo.populate();
                     }

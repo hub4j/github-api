@@ -290,6 +290,10 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
         return wireMockServer.getServeEvents();
     }
 
+    public GetServeEventsResult getServeEvents(ServeEventQuery serveEventQuery) {
+        return wireMockServer.getServeEvents(serveEventQuery);
+    }
+
     public SingleServedStubResult getServedStub(UUID id) {
         return wireMockServer.getServedStub(id);
     }

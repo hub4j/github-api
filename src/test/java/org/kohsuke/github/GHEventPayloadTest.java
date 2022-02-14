@@ -630,7 +630,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 GHEventPayload.CheckRun.class);
         final GHCheckRun checkRun2 = verifyBasicCheckRunEvent(event2);
 
-        int expectedRequestCount = mockGitHub.isUseProxy() ? 3 : 2;
+        int expectedRequestCount = 2;
         assertThat("pull body should be populated",
                 checkRun2.getPullRequests().get(0).getBody(),
                 equalTo("This is a pretty simple change that we need to pull into main."));
@@ -767,7 +767,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     @Test
     @Payload("installation")
     public void InstallationEvent() throws Exception {
-        final GHEventPayload.Installation event = GitHub.offline()
+        final GHEventPayload.Installation event = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .build()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Installation.class);
 
         assertThat(event.getAction(), is("deleted"));
@@ -775,10 +776,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getInstallation().getAccount().getLogin(), is("octocat"));
 
         assertThat(event.getRepositories().get(0).getId(), is(1296269L));
-        assertThat(event.getRepositories().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxODY4NTMwMDc="));
+        assertThat(event.getRepositories().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxMjk2MjY5"));
         assertThat(event.getRepositories().get(0).getName(), is("Hello-World"));
         assertThat(event.getRepositories().get(0).getFullName(), is("octocat/Hello-World"));
         assertThat(event.getRepositories().get(0).isPrivate(), is(false));
+        assertThat(event.getRepositories().get(0).getOwner().getLogin(), is("octocat"));
 
         assertThat(event.getSender().getLogin(), is("octocat"));
     }
@@ -953,6 +955,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         GHRepositoryDiscussion.Category category = discussion.getCategory();
 
         assertThat(category.getId(), is(33522033L));
+        assertThat(category.getNodeId(), is("DIC_kwDOEq3cwc4B_4Fx"));
         assertThat(category.getEmoji(), is(":pray:"));
         assertThat(category.getName(), is("Q&A"));
         assertThat(category.getDescription(), is("Ask the community for help"));
@@ -1000,6 +1003,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         GHRepositoryDiscussion.Category category = discussion.getCategory();
 
         assertThat(category.getId(), is(33522033L));
+        assertThat(category.getNodeId(), is("DIC_kwDOEq3cwc4B_4Fx"));
         assertThat(category.getEmoji(), is(":pray:"));
         assertThat(category.getName(), is("Q&A"));
         assertThat(category.getDescription(), is("Ask the community for help"));
@@ -1048,6 +1052,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         GHRepositoryDiscussion.Category category = discussion.getCategory();
 
         assertThat(category.getId(), is(33522033L));
+        assertThat(category.getNodeId(), is("DIC_kwDOEq3cwc4B_4Fx"));
         assertThat(category.getEmoji(), is(":pray:"));
         assertThat(category.getName(), is("Q&A"));
         assertThat(category.getDescription(), is("Ask the community for help"));

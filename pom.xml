@@ -33,8 +33,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>4.5.0.0</spotbugs-maven-plugin.version>
-    <spotbugs.version>4.5.0</spotbugs.version>
+    <spotbugs-maven-plugin.version>4.5.3.0</spotbugs-maven-plugin.version>
+    <spotbugs.version>4.5.3</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.9.2</okhttp3.version>
@@ -55,12 +55,12 @@
       <extension>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-gitexe</artifactId>
-        <version>1.12.0</version>
+        <version>1.12.2</version>
       </extension>
       <extension>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>1.12.0</version>
+        <version>1.12.2</version>
       </extension>
       <!-- Doing site publishing manually for now -->
 <!--
@@ -258,7 +258,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.9.1</version>
+        <version>3.10.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -289,7 +289,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>3.9.0</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -321,7 +321,7 @@
       <plugin>
         <groupId>com.infradna.tool</groupId>
         <artifactId>bridge-method-injector</artifactId>
-        <version>1.18</version>
+        <version>1.23</version>
         <executions>
           <execution>
             <goals>
@@ -333,7 +333,7 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.17.3</version>
+        <version>2.20.0</version>
         <executions>
           <execution>
             <id>spotless-check</id>
@@ -442,7 +442,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.13.0</version>
+      <version>2.13.1</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -452,7 +452,7 @@
     <dependency>
       <groupId>com.infradna.tool</groupId>
       <artifactId>bridge-method-annotation</artifactId>
-      <version>1.21</version>
+      <version>1.23</version>
       <optional>true</optional>
     </dependency>
     <!-- for stapler-jetty -->
@@ -485,7 +485,7 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>5.13.0.202109080827-r</version>
+      <version>6.0.0.202111291000-r</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -541,7 +541,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>4.1.0</version>
+      <version>4.3.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -553,7 +553,7 @@
     <dependency>
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock-jre8-standalone</artifactId>
-      <version>2.31.0</version>
+      <version>2.32.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -565,7 +565,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.32</version>
+      <version>1.7.35</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -768,7 +768,7 @@
           </plugin>
           <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.1</version>
+            <version>3.9.0</version>
             <executions>
               <execution>
                 <id>compile-java-11</id>
@@ -791,10 +791,11 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>3.2.2</version>
             <configuration>
               <archive>
                 <manifestEntries>
+                  <Automatic-Module-Name>org.kohsuke.github.api</Automatic-Module-Name>
                   <Multi-Release>true</Multi-Release>
                 </manifestEntries>
               </archive>

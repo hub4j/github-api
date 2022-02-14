@@ -3256,11 +3256,11 @@ public class GHRepository extends GHObject {
             return; // can't populate if the root is offline
         }
 
-        // We don't take the URL provided in the JSON as it is not reliable in some cases:
-        // There is bug in Push event payloads that returns the wrong url.
-        // All other occurrences of "url" take the form "https://api.github.com/...".
+        // We don't use the URL provided in the JSON because it is not reliable:
+        // 1. There is bug in Push event payloads that returns the wrong url.
         // For Push event repository records, they take the form "https://github.com/{fullName}".
-        // And also for Installation event payloads, the URL is not provided at all.
+        // All other occurrences of "url" take the form "https://api.github.com/...".
+        // 2. For Installation event payloads, the URL is not provided at all.
 
         root().createRequest().withPreview(BAPTISTE).withPreview(NEBULA).withUrlPath(getApiTailUrl("")).fetchInto(this);
     }

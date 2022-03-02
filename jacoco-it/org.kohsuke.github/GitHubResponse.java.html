@@ -112,10 +112,10 @@ class GitHubResponse&lt;T&gt; {
 <span class="fc" id="L112">        String data = getBodyAsString(connectorResponse);</span>
         try {
 <span class="fc" id="L114">            return GitHubClient.getMappingObjectReader(connectorResponse).withValueToUpdate(instance).readValue(data);</span>
-<span class="fc" id="L115">        } catch (JsonMappingException | JsonParseException e) {</span>
-<span class="fc" id="L116">            String message = &quot;Failed to deserialize: &quot; + data;</span>
-<span class="fc" id="L117">            LOGGER.log(Level.FINE, message);</span>
-<span class="fc" id="L118">            throw e;</span>
+<span class="nc" id="L115">        } catch (JsonMappingException | JsonParseException e) {</span>
+<span class="nc" id="L116">            String message = &quot;Failed to deserialize: &quot; + data;</span>
+<span class="nc" id="L117">            LOGGER.log(Level.FINE, message);</span>
+<span class="nc" id="L118">            throw e;</span>
         }
     }
 

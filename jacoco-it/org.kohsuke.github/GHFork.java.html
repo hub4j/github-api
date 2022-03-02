@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHFork.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHFork.java</span></div><h1>GHFork.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+/**
+ * The enum for Fork search mode
+ */
+<span class="fc" id="L6">public enum GHFork {</span>
+
+    /**
+     * Search in the parent repository and in forks with more stars than the parent repository.
+     *
+     * Forks with the same or fewer stars than the parent repository are still ignored.
+     */
+<span class="fc" id="L13">    PARENT_AND_FORKS(&quot;true&quot;),</span>
+
+    /**
+     * Search only in forks with more stars than the parent repository.
+     *
+     * The parent repository is ignored. If no forks have more stars than the parent, no results will be returned.
+     */
+<span class="fc" id="L20">    FORKS_ONLY(&quot;only&quot;),</span>
+
+    /**
+     * (Default) Search only the parent repository.
+     *
+     * Forks are ignored.
+     */
+<span class="fc" id="L27">    PARENT_ONLY(&quot;&quot;);</span>
+
+    private String filterMode;
+<span class="fc" id="L30">    GHFork(final String mode) {</span>
+<span class="fc" id="L31">        this.filterMode = mode;</span>
+<span class="fc" id="L32">    }</span>
+
+    @Override
+    public String toString() {
+<span class="fc" id="L36">        return filterMode;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

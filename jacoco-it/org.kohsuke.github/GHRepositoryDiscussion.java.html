@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepositoryDiscussion.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRepositoryDiscussion.java</span></div><h1>GHRepositoryDiscussion.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import org.kohsuke.github.internal.EnumUtils;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Date;
+
+/**
+ * A discussion in the repository.
+ * &lt;p&gt;
+ * This is different from Teams discussions (see {@link GHDiscussion}).
+ * &lt;p&gt;
+ * The discussion event exposes the GraphQL object (more or less - the ids are handled differently for instance)
+ * directly. The new Discussions API is only available through GraphQL so for now you cannot execute any actions on this
+ * object.
+ *
+ * @author Guillaume Smet
+ * @see &lt;a href=&quot;https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussion&quot;&gt;The GraphQL
+ *      API for Discussions&lt;/a&gt;
+ */
+<span class="fc" id="L22">public class GHRepositoryDiscussion extends GHObject {</span>
+
+    private Category category;
+
+    private String answerHtmlUrl;
+
+    private String answerChosenAt;
+    private GHUser answerChosenBy;
+    private String htmlUrl;
+
+    private int number;
+    private String title;
+    private GHUser user;
+    private String state;
+    private boolean locked;
+    private int comments;
+    private GHCommentAuthorAssociation authorAssociation;
+    private String activeLockReason;
+    private String body;
+    private String timelineUrl;
+
+    public Category getCategory() {
+<span class="fc" id="L44">        return category;</span>
+    }
+
+    public URL getAnswerHtmlUrl() {
+<span class="fc" id="L48">        return GitHubClient.parseURL(answerHtmlUrl);</span>
+    }
+
+    public Date getAnswerChosenAt() {
+<span class="fc" id="L52">        return GitHubClient.parseDate(answerChosenAt);</span>
+    }
+
+    public GHUser getAnswerChosenBy() throws IOException {
+<span class="fc" id="L56">        return root().intern(answerChosenBy);</span>
+    }
+
+    public URL getHtmlUrl() {
+<span class="fc" id="L60">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    public int getNumber() {
+<span class="fc" id="L64">        return number;</span>
+    }
+
+    public String getTitle() {
+<span class="fc" id="L68">        return title;</span>
+    }
+
+    public GHUser getUser() throws IOException {
+<span class="fc" id="L72">        return root().intern(user);</span>
+    }
+
+    public State getState() {
+<span class="fc" id="L76">        return EnumUtils.getEnumOrDefault(State.class, state, State.UNKNOWN);</span>
+    }
+
+    public boolean isLocked() {
+<span class="fc" id="L80">        return locked;</span>
+    }
+
+    public int getComments() {
+<span class="fc" id="L84">        return comments;</span>
+    }
+
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+<span class="fc" id="L88">        return authorAssociation;</span>
+    }
+
+    public String getActiveLockReason() {
+<span class="fc" id="L92">        return activeLockReason;</span>
+    }
+
+    public String getBody() {
+<span class="fc" id="L96">        return body;</span>
+    }
+
+    public String getTimelineUrl() {
+<span class="nc" id="L100">        return timelineUrl;</span>
+    }
+
+    /**
+     * Category of a discussion.
+     * &lt;p&gt;
+     * Note that while it is relatively close to the GraphQL objects, some of the fields such as the id are handled
+     * differently.
+     *
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussioncategory&quot;&gt;The
+     *      GraphQL API for Discussions&lt;/a&gt;
+     */
+<span class="fc" id="L113">    public static class Category {</span>
+
+        private long id;
+        private String nodeId;
+        private long repositoryId;
+        private String emoji;
+        private String name;
+        private String description;
+        private String createdAt;
+        private String updatedAt;
+        private String slug;
+        private boolean isAnswerable;
+
+        public long getId() {
+<span class="fc" id="L127">            return id;</span>
+        }
+
+        public String getNodeId() {
+<span class="fc" id="L131">            return nodeId;</span>
+        }
+
+        public long getRepositoryId() {
+<span class="nc" id="L135">            return repositoryId;</span>
+        }
+
+        public String getEmoji() {
+<span class="fc" id="L139">            return emoji;</span>
+        }
+
+        public String getName() {
+<span class="fc" id="L143">            return name;</span>
+        }
+
+        public String getDescription() {
+<span class="fc" id="L147">            return description;</span>
+        }
+
+        public Date getCreatedAt() {
+<span class="fc" id="L151">            return GitHubClient.parseDate(createdAt);</span>
+        }
+
+        public Date getUpdatedAt() {
+<span class="fc" id="L155">            return GitHubClient.parseDate(updatedAt);</span>
+        }
+
+        public String getSlug() {
+<span class="fc" id="L159">            return slug;</span>
+        }
+
+        public boolean isAnswerable() {
+<span class="fc" id="L163">            return isAnswerable;</span>
+        }
+    }
+
+<span class="fc" id="L167">    public enum State {</span>
+<span class="fc" id="L168">        OPEN, LOCKED, UNKNOWN;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

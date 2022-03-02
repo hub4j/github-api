@@ -12,11 +12,21 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
 <span class="fc" id="L12">    }</span>
 
     /**
-     * Search terms.
+     * {@inheritDoc}
      */
+    @Override
     public GHContentSearchBuilder q(String term) {
-<span class="fc" id="L18">        super.q(term);</span>
-<span class="fc" id="L19">        return this;</span>
+<span class="fc" id="L19">        super.q(term);</span>
+<span class="fc" id="L20">        return this;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    GHContentSearchBuilder q(String qualifier, String value) {
+<span class="fc" id="L28">        super.q(qualifier, value);</span>
+<span class="fc" id="L29">        return this;</span>
     }
 
     /**
@@ -27,7 +37,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder in(String v) {
-<span class="fc" id="L30">        return q(&quot;in:&quot; + v);</span>
+<span class="fc" id="L40">        return q(&quot;in:&quot; + v);</span>
     }
 
     /**
@@ -38,7 +48,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder language(String v) {
-<span class="fc" id="L41">        return q(&quot;language:&quot; + v);</span>
+<span class="fc" id="L51">        return q(&quot;language:&quot; + v);</span>
     }
 
     /**
@@ -47,9 +57,27 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @param v
      *            the v
      * @return the gh content search builder
+     * @deprecated use {@link #fork(GHFork)}.
      */
+    @Deprecated
     public GHContentSearchBuilder fork(String v) {
-<span class="nc" id="L52">        return q(&quot;fork:&quot; + v);</span>
+<span class="fc" id="L64">        return q(&quot;fork&quot;, v);</span>
+    }
+
+    /**
+     * Fork gh content search builder.
+     *
+     * @param fork
+     *            search mode for forks
+     *
+     * @return the gh content search builder
+     *
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-in-forks&quot;&gt;Searching
+     *      in forks&lt;/a&gt;
+     */
+    public GHContentSearchBuilder fork(GHFork fork) {
+<span class="fc" id="L80">        return q(&quot;fork&quot;, fork.toString());</span>
     }
 
     /**
@@ -60,7 +88,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder size(String v) {
-<span class="nc" id="L63">        return q(&quot;size:&quot; + v);</span>
+<span class="nc" id="L91">        return q(&quot;size:&quot; + v);</span>
     }
 
     /**
@@ -71,7 +99,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder path(String v) {
-<span class="nc" id="L74">        return q(&quot;path:&quot; + v);</span>
+<span class="nc" id="L102">        return q(&quot;path:&quot; + v);</span>
     }
 
     /**
@@ -82,7 +110,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder filename(String v) {
-<span class="nc" id="L85">        return q(&quot;filename:&quot; + v);</span>
+<span class="nc" id="L113">        return q(&quot;filename:&quot; + v);</span>
     }
 
     /**
@@ -93,7 +121,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder extension(String v) {
-<span class="nc" id="L96">        return q(&quot;extension:&quot; + v);</span>
+<span class="nc" id="L124">        return q(&quot;extension:&quot; + v);</span>
     }
 
     /**
@@ -104,7 +132,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder user(String v) {
-<span class="nc" id="L107">        return q(&quot;user:&quot; + v);</span>
+<span class="nc" id="L135">        return q(&quot;user:&quot; + v);</span>
     }
 
     /**
@@ -115,7 +143,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder repo(String v) {
-<span class="fc" id="L118">        return q(&quot;repo:&quot; + v);</span>
+<span class="fc" id="L146">        return q(&quot;repo:&quot; + v);</span>
     }
 
     /**
@@ -126,8 +154,8 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder order(GHDirection v) {
-<span class="fc" id="L129">        req.with(&quot;order&quot;, v);</span>
-<span class="fc" id="L130">        return this;</span>
+<span class="fc" id="L157">        req.with(&quot;order&quot;, v);</span>
+<span class="fc" id="L158">        return this;</span>
     }
 
     /**
@@ -138,19 +166,19 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder sort(GHContentSearchBuilder.Sort sort) {
-<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (Sort.BEST_MATCH.equals(sort)) {</span>
-<span class="fc" id="L142">            req.remove(&quot;sort&quot;);</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (Sort.BEST_MATCH.equals(sort)) {</span>
+<span class="fc" id="L170">            req.remove(&quot;sort&quot;);</span>
         } else {
-<span class="fc" id="L144">            req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L172">            req.with(&quot;sort&quot;, sort);</span>
         }
-<span class="fc" id="L146">        return this;</span>
+<span class="fc" id="L174">        return this;</span>
     }
 
     /**
      * The enum Sort.
      */
-<span class="fc" id="L152">    public enum Sort {</span>
-<span class="fc" id="L153">        BEST_MATCH, INDEXED</span>
+<span class="fc" id="L180">    public enum Sort {</span>
+<span class="fc" id="L181">        BEST_MATCH, INDEXED</span>
     }
 
     private static class ContentSearchResult extends SearchResult&lt;GHContent&gt; {
@@ -158,13 +186,13 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
 
         @Override
         GHContent[] getItems(GitHub root) {
-<span class="fc" id="L161">            return items;</span>
+<span class="fc" id="L189">            return items;</span>
         }
     }
 
     @Override
     protected String getApiUrl() {
-<span class="fc" id="L167">        return &quot;/search/code&quot;;</span>
+<span class="fc" id="L195">        return &quot;/search/code&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

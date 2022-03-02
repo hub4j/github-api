@@ -5,6 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 /**
  * Base class for various search builders.
  *
@@ -13,7 +16,7 @@ import java.util.List;
  * @author Kohsuke Kawaguchi
  */
 public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
-<span class="fc" id="L16">    protected final List&lt;String&gt; terms = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L19">    protected final List&lt;String&gt; terms = new ArrayList&lt;String&gt;();</span>
 
     /**
      * Data transfer object that receives the result of search.
@@ -21,11 +24,11 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
     private final Class&lt;? extends SearchResult&lt;T&gt;&gt; receiverType;
 
     GHSearchBuilder(GitHub root, Class&lt;? extends SearchResult&lt;T&gt;&gt; receiverType) {
-<span class="fc" id="L24">        super(root);</span>
-<span class="fc" id="L25">        this.receiverType = receiverType;</span>
-<span class="fc" id="L26">        req.withUrlPath(getApiUrl());</span>
-<span class="fc" id="L27">        req.rateLimit(RateLimitTarget.SEARCH);</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L27">        super(root);</span>
+<span class="fc" id="L28">        this.receiverType = receiverType;</span>
+<span class="fc" id="L29">        req.withUrlPath(getApiUrl());</span>
+<span class="fc" id="L30">        req.rateLimit(RateLimitTarget.SEARCH);</span>
+<span class="fc" id="L31">    }</span>
 
     /**
      * Search terms.
@@ -35,8 +38,32 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
      * @return the gh query builder
      */
     public GHQueryBuilder&lt;T&gt; q(String term) {
-<span class="fc" id="L38">        terms.add(term);</span>
-<span class="fc" id="L39">        return this;</span>
+<span class="fc" id="L41">        terms.add(term);</span>
+<span class="fc" id="L42">        return this;</span>
+    }
+
+    /**
+     * Add a search term with qualifier.
+     *
+     * If {@code value} is empty or {@code null}, all terms with the current qualifier will be removed.
+     *
+     * @param qualifier
+     *            the qualifier for this term
+     * @param value
+     *            the value for this term. If empty or null, all terms with the current qualifier will be removed.
+     * @return the gh query builder
+     */
+    GHQueryBuilder&lt;T&gt; q(@Nonnull final String qualifier, @CheckForNull final String value) {
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (StringUtils.isEmpty(qualifier)) {</span>
+<span class="fc" id="L58">            throw new IllegalArgumentException(&quot;qualifier cannot be null or empty&quot;);</span>
+        }
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (StringUtils.isEmpty(value)) {</span>
+<span class="fc" id="L61">            final String removeQualifier = qualifier + &quot;:&quot;;</span>
+<span class="fc" id="L62">            terms.removeIf(term -&gt; term.startsWith(removeQualifier));</span>
+<span class="fc" id="L63">        } else {</span>
+<span class="fc" id="L64">            terms.add(qualifier + &quot;:&quot; + value);</span>
+        }
+<span class="fc" id="L66">        return this;</span>
     }
 
     /**
@@ -45,8 +72,8 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
     @Override
     public PagedSearchIterable&lt;T&gt; list() {
 
-<span class="fc" id="L48">        req.set(&quot;q&quot;, StringUtils.join(terms, &quot; &quot;));</span>
-<span class="fc" id="L49">        return new PagedSearchIterable&lt;&gt;(root(), req.build(), receiverType);</span>
+<span class="fc" id="L75">        req.set(&quot;q&quot;, StringUtils.join(terms, &quot; &quot;));</span>
+<span class="fc" id="L76">        return new PagedSearchIterable&lt;&gt;(root(), req.build(), receiverType);</span>
     }
 
     /**

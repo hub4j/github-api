@@ -667,7 +667,7 @@ public class GitHub {
      */
     public GHRepository getRepository(String name) throws IOException {
 <span class="fc" id="L669">        String[] tokens = name.split(&quot;/&quot;);</span>
-<span class="fc bfc" id="L670" title="All 2 branches covered.">        if (tokens.length &lt; 2) {</span>
+<span class="fc bfc" id="L670" title="All 2 branches covered.">        if (tokens.length != 2) {</span>
 <span class="fc" id="L671">            throw new IllegalArgumentException(&quot;Repository name must be in format owner/repo&quot;);</span>
         }
 <span class="fc" id="L673">        return GHRepository.read(this, tokens[0], tokens[1]);</span>
@@ -1391,8 +1391,8 @@ public class GitHub {
     }
 
     GHUser intern(GHUser user) throws IOException {
-<span class="pc bpc" id="L1394" title="1 of 2 branches missed.">        if (user == null)</span>
-<span class="nc" id="L1395">            return user;</span>
+<span class="fc bfc" id="L1394" title="All 2 branches covered.">        if (user == null)</span>
+<span class="fc" id="L1395">            return user;</span>
 
         // if we already have this user in our map, use it
 <span class="fc" id="L1398">        GHUser u = users.get(user.getLogin());</span>

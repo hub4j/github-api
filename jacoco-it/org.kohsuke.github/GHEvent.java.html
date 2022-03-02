@@ -69,26 +69,27 @@ import java.util.Locale;
 <span class="fc" id="L69">    TEAM,</span>
 <span class="fc" id="L70">    TEAM_ADD,</span>
 <span class="fc" id="L71">    WATCH,</span>
-<span class="fc" id="L72">    WORKFLOW_DISPATCH,</span>
-<span class="fc" id="L73">    WORKFLOW_RUN,</span>
+<span class="fc" id="L72">    WORKFLOW_JOB,</span>
+<span class="fc" id="L73">    WORKFLOW_DISPATCH,</span>
+<span class="fc" id="L74">    WORKFLOW_RUN,</span>
 
     /**
      * Special event type that means we haven't found an enum value corresponding to the event.
      */
-<span class="fc" id="L78">    UNKNOWN,</span>
+<span class="fc" id="L79">    UNKNOWN,</span>
 
     /**
      * Special event type that means &quot;every possible event&quot;
      */
-<span class="fc" id="L83">    ALL;</span>
+<span class="fc" id="L84">    ALL;</span>
 
     /**
      * Returns GitHub's internal representation of this event.
      */
     String symbol() {
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (this == ALL)</span>
-<span class="fc" id="L90">            return &quot;*&quot;;</span>
-<span class="fc" id="L91">        return name().toLowerCase(Locale.ENGLISH);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (this == ALL)</span>
+<span class="fc" id="L91">            return &quot;*&quot;;</span>
+<span class="fc" id="L92">        return name().toLowerCase(Locale.ENGLISH);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

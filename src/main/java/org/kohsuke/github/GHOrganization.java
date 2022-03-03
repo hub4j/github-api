@@ -448,10 +448,26 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * The enum Permission.
+     * Permissions (roles) for teams and collaborators.
      */
-    public enum Permission {
-        ADMIN, MAINTAIN, PUSH, TRIAGE, PULL
+    public static class Permission {
+        // pre-canned permissions/roles
+        public static final Permission ADMIN = new Permission("admin");
+        public static final Permission MAINTAIN = new Permission("maintain");
+        public static final Permission PULL = new Permission("pull");
+        public static final Permission PUSH = new Permission("push");
+        public static final Permission TRIAGE = new Permission("triage");
+
+        private final String permission;
+
+        public Permission(String permission) {
+            this.permission = permission;
+        }
+
+        @Override
+        public String toString() {
+            return permission;
+        }
     }
 
     /**

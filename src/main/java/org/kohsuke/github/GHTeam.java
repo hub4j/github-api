@@ -314,7 +314,7 @@ public class GHTeam extends GHObject implements Refreshable {
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
         root().createRequest()
                 .method("PUT")
-                .with("permission", permission)
+                .with("permission", permission == null ? null : permission.toString())
                 .withUrlPath(api("/repos/" + r.getOwnerName() + '/' + r.getName()))
                 .send();
     }

@@ -91,7 +91,9 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testSetPrivacy() throws IOException {
-        String teamSlug = "dummy-team";
+        // we need to use a team that doesn't have child teams
+        // as secret privacy is not supported for parent teams
+        String teamSlug = "simple-team";
         Privacy privacy = Privacy.CLOSED;
 
         // Set the privacy.

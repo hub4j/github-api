@@ -21,6 +21,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThrows;
 
 /**
  * Unit test for simple App.
@@ -444,15 +445,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void testShouldFetchTeam() throws Exception {
+    @SuppressWarnings("deprecation")
+    public void testFetchingTeamFromGitHubInstanceThrowsException() throws Exception {
         GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
         GHTeam teamByName = organization.getTeams().get("Core Developers");
 
-        GHTeam teamById = gitHub.getTeam((int) teamByName.getId());
-        assertThat(teamById, notNullValue());
-
-        assertThat(teamById.getId(), equalTo(teamByName.getId()));
-        assertThat(teamById.getDescription(), equalTo(teamByName.getDescription()));
+        assertThrows(UnsupportedOperationException.class, () -> gitHub.getTeam((int) teamByName.getId()));
     }
 
     @Test

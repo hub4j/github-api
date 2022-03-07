@@ -19,9 +19,9 @@ jobs:
     name: build-only (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
-        java: [ 16, 17 ]
+        java: [ 17 ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
@@ -40,7 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [ 8, 11 ]
+        java: [ 11 ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
@@ -51,14 +51,14 @@ jobs:
           cache: 'maven'
       - name: Maven Site
         run: mvn -B  clean site -D enable-ci --file pom.xml
-  test:
-    name: test (${{ matrix.os }}, Java ${{ matrix.java }})
+  test-8:
+    name: test (${{ matrix.os }}, Java 8)
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu, windows ]
-        java: [ 8.0.192, 8, 11.0.3, 11, 16, 17 ]
+        os: [ ubuntu ]
+        java: [ 8.0.192, 8 ]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK
@@ -68,23 +68,34 @@ jobs:
         distribution: 'zulu'
         cache: 'maven'
     # JDK 8
-    - name: Maven Install without Code Coverage
-      if: matrix.os == 'windows' && startsWith(matrix.java, '8')
-      run: mvn -B clean install --file pom.xml
     - name: Maven Install with Code Coverage
-      if: matrix.os != 'windows' && startsWith(matrix.java, '8')
-      run: mvn -B clean install -D enable-ci --file pom.xml
+      run: mvn -B clean install -D enable-ci -Djapicmp.skip --file pom.xml
     - name: Codecov Report 
-      if: matrix.os != 'windows' && startsWith(matrix.java, '8')
-      uses: codecov/codecov-action@v2.1.0  
+      uses: codecov/codecov-action@v2.1.0
+  test:
+    name: test (${{ matrix.os }}, Java ${{ matrix.java }})
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu, windows ]
+        java: [ 11.0.3, 11, 17 ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: 'zulu'
+        cache: 'maven'
     # JDK 11+
     - name: Maven Install without Code Coverage
-      if: matrix.os == 'windows' && !startsWith(matrix.java, '8')
+      if: matrix.os == 'windows'
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-      run: mvn -B clean install --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
+      run: mvn -B clean install -Djapicmp.skip --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Maven Install with Code Coverage
-      if: matrix.os != 'windows' && !startsWith(matrix.java, '8')
+      if: matrix.os != 'windows'
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"

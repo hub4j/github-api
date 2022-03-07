@@ -1,0 +1,48 @@
+{
+  "id": "0f1142df-fdad-4509-9365-4215a3c30048",
+  "name": "orgs_app-sre_teams",
+  "request": {
+    "url": "/orgs/app-sre/teams",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_app-sre_teams-18.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 09:08:03 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"d4fa9217dcc9487b9826434b4be74ed18540075d306960d2335344385b5da413\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4982",
+      "X-RateLimit-Reset": "1646388479",
+      "X-RateLimit-Used": "18",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "B58C:61AD:3CB5615:3DC34DC:6221D6F3"
+    }
+  },
+  "uuid": "0f1142df-fdad-4509-9365-4215a3c30048",
+  "persistent": true,
+  "scenarioName": "scenario-1-orgs-app-sre-teams",
+  "requiredScenarioState": "scenario-1-orgs-app-sre-teams-6",
+  "insertionIndex": 18
+}

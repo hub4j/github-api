@@ -1,5 +1,5 @@
 {
-  "id": "9612754b-b224-4549-902b-4931e7b4420b",
+  "id": "6ae69aab-1adb-442a-9db9-a07a2e8337cd",
   "name": "users_rtyler",
   "request": {
     "url": "/users/rtyler",
@@ -15,22 +15,22 @@
     "bodyFileName": "users_rtyler-11.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Tue, 14 Sep 2021 20:25:24 GMT",
+      "Date": "Fri, 04 Mar 2022 13:41:56 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"c23938c2ced08692261decc4011c5f7de685bc09cbf85c5d9bc918c4f21f4bfa\"",
-      "Last-Modified": "Fri, 13 Aug 2021 17:27:38 GMT",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "ETag": "W/\"73d0e3cb1a2d48d8ba8b50aea46c242c38c85d1e2fe80323a9fed360b6f1fd2b\"",
+      "Last-Modified": "Mon, 03 Jan 2022 20:12:07 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-GitHub-Media-Type": "github.v3; format=json",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4935",
-      "X-RateLimit-Reset": "1631652409",
-      "X-RateLimit-Used": "65",
+      "X-RateLimit-Remaining": "4989",
+      "X-RateLimit-Reset": "1646404914",
+      "X-RateLimit-Used": "11",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -38,10 +38,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D376:488A:1956F5:235F60:61410534"
+      "X-GitHub-Request-Id": "BA7A:03D4:32B8B3B:33C35E7:62221724"
     }
   },
-  "uuid": "9612754b-b224-4549-902b-4931e7b4420b",
+  "uuid": "6ae69aab-1adb-442a-9db9-a07a2e8337cd",
   "persistent": true,
   "insertionIndex": 11
 }

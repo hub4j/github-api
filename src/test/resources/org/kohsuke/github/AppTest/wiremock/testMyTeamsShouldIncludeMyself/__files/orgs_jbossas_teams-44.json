@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Elytron Push",
+    "id": 2610981,
+    "node_id": "MDQ6VGVhbTI2MTA5ODE=",
+    "slug": "elytron-push",
+    "description": "",
+    "privacy": "closed",
+    "url": "https://api.github.com/organizations/326816/team/2610981",
+    "html_url": "https://github.com/orgs/jbossas/teams/elytron-push",
+    "members_url": "https://api.github.com/organizations/326816/team/2610981/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/326816/team/2610981/repos",
+    "permission": "pull",
+    "parent": null
+  },
+  {
+    "name": "Protean Push",
+    "id": 3040999,
+    "node_id": "MDQ6VGVhbTMwNDA5OTk=",
+    "slug": "protean-push",
+    "description": "Members of the protean team that can push into repositories",
+    "privacy": "secret",
+    "url": "https://api.github.com/organizations/326816/team/3040999",
+    "html_url": "https://github.com/orgs/jbossas/teams/protean-push",
+    "members_url": "https://api.github.com/organizations/326816/team/3040999/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/326816/team/3040999/repos",
+    "permission": "pull",
+    "parent": null
+  },
+  {
+    "name": "EAP QS Push",
+    "id": 3693886,
+    "node_id": "MDQ6VGVhbTM2OTM4ODY=",
+    "slug": "eap-qs-push",
+    "description": "",
+    "privacy": "closed",
+    "url": "https://api.github.com/organizations/326816/team/3693886",
+    "html_url": "https://github.com/orgs/jbossas/teams/eap-qs-push",
+    "members_url": "https://api.github.com/organizations/326816/team/3693886/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/326816/team/3693886/repos",
+    "permission": "pull",
+    "parent": null
+  },
+  {
+    "name": "EAP WF-To-Product",
+    "id": 3693963,
+    "node_id": "MDQ6VGVhbTM2OTM5NjM=",
+    "slug": "eap-wf-to-product",
+    "description": "",
+    "privacy": "closed",
+    "url": "https://api.github.com/organizations/326816/team/3693963",
+    "html_url": "https://github.com/orgs/jbossas/teams/eap-wf-to-product",
+    "members_url": "https://api.github.com/organizations/326816/team/3693963/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/326816/team/3693963/repos",
+    "permission": "pull",
+    "parent": null
+  }
+]

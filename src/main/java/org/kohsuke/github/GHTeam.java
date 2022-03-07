@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -211,7 +212,7 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public boolean hasMember(GHUser user) {
         try {
-            root().createRequest().withUrlPath("/teams/" + getId() + "/members/" + user.getLogin()).send();
+            root().createRequest().withUrlPath(api("/memberships/" + user.getLogin())).send();
             return true;
         } catch (IOException ignore) {
             return false;
@@ -345,7 +346,13 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     private String api(String tail) {
-        return "/teams/" + getId() + tail;
+        if (organization == null) {
+            // Teams returned from pull requests to do not have an organization. Attempt to use url.
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/") + tail;
+        }
+
+        return "/organizations/" + organization.getId() + "/team/" + getId() + tail;
     }
 
     /**

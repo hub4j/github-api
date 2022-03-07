@@ -82,6 +82,83 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>org.revapi</groupId>
+          <artifactId>revapi-maven-plugin</artifactId>
+          <version>0.14.6</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.revapi</groupId>
+              <artifactId>revapi-java</artifactId>
+              <version>0.26.1</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <failCriticality>error</failCriticality>
+            <analysisConfiguration>
+              <revapi.differences>
+                <differences>
+                    <item>
+                        <regex>true</regex>
+                        <code> java.method.exception.runtime(Added|Removed)</code>
+                        <ignore>true</ignore>
+                        <justification>This may be concerning, but is something a reviewer can easily spot.</justification>
+                    </item>
+
+                    <!-- RevApi doesn't seem to understand optional dependencies very well. Ignoring these specfically.-->
+                    <item>
+                        <regex>true</regex>
+                        <code>java.missing.(old|new)Class</code>
+                        <old>missing-class com.fasterxml.jackson.databind.Object(Reader|Writer)</old>
+                        <new>missing-class com.fasterxml.jackson.databind.Object(Reader|Writer)</new>
+                        <ignore>true</ignore>
+                        <justification>Existing problem</justification>
+                    </item>
+                    <!-- RevApi doesn't seem to understand optional dependencies very well. Ignoring these specfically. -->
+                    <item>
+                        <regex>true</regex>
+                        <code>java.missing.(old|new)Class</code>
+                        <old>missing-class com.squareup.okhttp.OkUrlFactory</old>
+                        <new>missing-class com.squareup.okhttp.OkUrlFactory</new>
+                        <ignore>true</ignore>
+                        <justification>Existing problem</justification>
+                    </item>
+                    <!-- RevApi doesn't seem to understand optional dependencies very well. Ignoring these specfically. -->
+                    <item>
+                        <regex>true</regex>
+                        <code>java.missing.(old|new)Class</code>
+                        <old>missing-class okhttp3.(OkHttpClient|OkUrlFactory)</old>
+                        <old>missing-class okhttp3.(OkHttpClient|OkUrlFactory)</old>
+                        <ignore>true</ignore>
+                        <justification>Existing problem</justification>
+                    </item>
+                    <!-- This is an actual problem, but we're starting by reporting only. Fix later. -->
+                    <item>
+                        <code>java.class.nonPublicPartOfAPI</code>
+                        <old>class org.kohsuke.github.Requester</old>
+                        <new>class org.kohsuke.github.Requester</new>
+                        <ignore>true</ignore>
+                        <justification>Existing problem</justification>
+                    </item>
+                    <!-- This is an actual problem, but we're starting by reporting only. Fix later. -->
+                    <item>
+                        <code>java.class.nonPublicPartOfAPI</code>
+                        <old>class org.kohsuke.github.SearchResult&lt;T&gt;</old>
+                        <new>class org.kohsuke.github.SearchResult&lt;T&gt;</new>
+                        <ignore>true</ignore>
+                        <justification>Existing problem</justification>
+                    </item>
+                </differences>
+              </revapi.differences>
+            </analysisConfiguration>
+          </configuration>
+          <executions>
+              <execution>
+                  <id>api-check</id>
+                  <goals><goal>check</goal></goals>
+              </execution>
+          </executions>
+        </plugin>
+        <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.2</version>
           <configuration>
@@ -366,6 +443,10 @@
 
           </java>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.revapi</groupId>
+        <artifactId>revapi-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>

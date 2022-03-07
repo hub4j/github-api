@@ -19,7 +19,7 @@ jobs:
     name: build-only (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         java: [ 17 ]
     steps:
@@ -58,7 +58,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu ]
-        java: [ 8.0.192, 8 ]
+        java: [ 8 ]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK
@@ -93,7 +93,7 @@ jobs:
       if: matrix.os == 'windows'
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-      run: mvn -B clean install -Djapicmp.skip --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
+      run: mvn -B clean install -D japicmp.skip=true --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Maven Install with Code Coverage
       if: matrix.os != 'windows'
       env:

@@ -1,0 +1,46 @@
+{
+  "id": "0b2d3815-7a6b-4d8f-9c51-2d20a152f39e",
+  "name": "organizations_7544739_team_3451996_memberships_bitwiseman",
+  "request": {
+    "url": "/organizations/7544739/team/3451996/memberships/bitwiseman",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"state\":\"active\",\"role\":\"maintainer\",\"url\":\"https://api.github.com/organizations/7544739/team/3451996/memberships/bitwiseman\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 13:41:55 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"2614a5da49e2c1b0d9e34e71e36009af7296274a514a8424e29a1b94ce126f7e\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, write:org",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4995",
+      "X-RateLimit-Reset": "1646404914",
+      "X-RateLimit-Used": "5",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BA6E:58CB:4339B5:44DBC9:62221723"
+    }
+  },
+  "uuid": "0b2d3815-7a6b-4d8f-9c51-2d20a152f39e",
+  "persistent": true,
+  "insertionIndex": 5
+}

@@ -550,6 +550,14 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.getTotalCount(), greaterThan(0));
     }
 
+    @Test
+    public void searchOrgForRepositories() throws Exception {
+        PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().org("hub4j-test-org").list();
+        GHRepository u = r.iterator().next();
+        assertThat(u.getOwnerName(), equalTo("hub4j-test-org"));
+        assertThat(r.getTotalCount(), greaterThan(0));
+    }
+
     @Test // issue #162
     public void testIssue162() throws Exception {
         GHRepository r = gitHub.getRepository("hub4j/github-api");

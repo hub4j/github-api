@@ -1,0 +1,41 @@
+{
+  "id": "130c8bda-6623-4c8d-b0db-9e307f1e69ab",
+  "name": "orgs_hub4j-test-org_public_members_bitwiseman",
+  "request": {
+    "url": "/orgs/hub4j-test-org/public_members/bitwiseman",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"User does not exist or is not a public member of the organization\",\"documentation_url\":\"https://docs.github.com/rest/reference/orgs#check-public-organization-membership-for-a-user\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 13:41:55 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4994",
+      "X-RateLimit-Reset": "1646404914",
+      "X-RateLimit-Used": "6",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "BA70:361E:476368B:4893072:62221723"
+    }
+  },
+  "uuid": "130c8bda-6623-4c8d-b0db-9e307f1e69ab",
+  "persistent": true,
+  "insertionIndex": 6
+}

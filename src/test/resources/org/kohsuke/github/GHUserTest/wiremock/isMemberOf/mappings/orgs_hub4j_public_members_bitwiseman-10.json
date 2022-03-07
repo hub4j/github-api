@@ -1,5 +1,5 @@
 {
-  "id": "b6e26132-39c4-4d39-9747-88d23d6437c0",
+  "id": "094f35e6-369d-4287-8e83-16c7217400f4",
   "name": "orgs_hub4j_public_members_bitwiseman",
   "request": {
     "url": "/orgs/hub4j/public_members/bitwiseman",
@@ -14,14 +14,14 @@
     "status": 204,
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Tue, 14 Sep 2021 20:25:24 GMT",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "Date": "Fri, 04 Mar 2022 13:41:56 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-GitHub-Media-Type": "github.v3; format=json",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4936",
-      "X-RateLimit-Reset": "1631652409",
-      "X-RateLimit-Used": "64",
+      "X-RateLimit-Remaining": "4990",
+      "X-RateLimit-Reset": "1646404914",
+      "X-RateLimit-Used": "10",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -30,10 +30,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Vary": "Accept-Encoding, Accept, X-Requested-With",
-      "X-GitHub-Request-Id": "D374:26AE:194521A:1AB474E:61410534"
+      "X-GitHub-Request-Id": "BA78:03D4:32B8AF5:33C35A9:62221724"
     }
   },
-  "uuid": "b6e26132-39c4-4d39-9747-88d23d6437c0",
+  "uuid": "094f35e6-369d-4287-8e83-16c7217400f4",
   "persistent": true,
   "insertionIndex": 10
 }

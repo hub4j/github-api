@@ -1,0 +1,47 @@
+{
+  "id": "bd28b363-b114-4e33-8d7a-09257a5ed9d9",
+  "name": "orgs_redhat-developer",
+  "request": {
+    "url": "/orgs/redhat-developer",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_redhat-developer-46.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 09:08:09 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"390d92fc10a7848282593aa9c80ace4704ffff14d49ca5780582f599f16ea4f9\"",
+      "Last-Modified": "Thu, 05 Mar 2020 16:09:31 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4954",
+      "X-RateLimit-Reset": "1646388479",
+      "X-RateLimit-Used": "46",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "B5C8:050B:2C9A335:2D8E14F:6221D6F9"
+    }
+  },
+  "uuid": "bd28b363-b114-4e33-8d7a-09257a5ed9d9",
+  "persistent": true,
+  "insertionIndex": 46
+}

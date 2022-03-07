@@ -1,0 +1,41 @@
+{
+  "id": "6fbabd7c-2d5d-41c8-ab59-4e84dbe2a23d",
+  "name": "orgs_hub4j_public_members_rtyler",
+  "request": {
+    "url": "/orgs/hub4j/public_members/rtyler",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"User does not exist or is not a public member of the organization\",\"documentation_url\":\"https://docs.github.com/rest/reference/orgs#check-public-organization-membership-for-a-user\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 13:41:57 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4985",
+      "X-RateLimit-Reset": "1646404914",
+      "X-RateLimit-Used": "15",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "BA82:89C7:2E73C7E:2F45063:62221725"
+    }
+  },
+  "uuid": "6fbabd7c-2d5d-41c8-ab59-4e84dbe2a23d",
+  "persistent": true,
+  "insertionIndex": 15
+}

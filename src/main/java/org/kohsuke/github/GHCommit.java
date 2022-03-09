@@ -80,6 +80,10 @@ public class GHCommit {
      */
     @Deprecated
     public static class GHAuthor extends GitUser {
+        public GHAuthor() {
+            super();
+        }
+
         public GHAuthor(GitUser user) {
             super(user);
         }

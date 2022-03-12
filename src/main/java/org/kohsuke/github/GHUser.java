@@ -37,6 +37,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
  */
 public class GHUser extends GHPerson {
 
+    protected String ldap_dn;
+
     /**
      * Gets keys.
      *
@@ -240,6 +242,19 @@ public class GHUser extends GHPerson {
         return root().createRequest()
                 .withUrlPath(String.format("/users/%s/gists", login))
                 .toIterable(GHGist[].class, null);
+    }
+
+    /**
+     * Gets LDAP information for user.
+     *
+     * @return The LDAP information
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public Optional<String> getLdap() throws IOException {
+        super.populate();
+        return Optional.ofNullable(ldap_dn);
     }
 
     @Override

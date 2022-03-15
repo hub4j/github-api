@@ -55,4 +55,16 @@ public class GitUser {
     public Date getDate() {
         return GitHubClient.parseDate(date);
     }
+
+    public GitUser() {
+        // Empty constructor for Jackson binding
+    }
+
+    public GitUser(GitUser user) {
+        // Copy constructor to convert to GHCommit.GHAuthor
+        name = user.getName();
+        email = user.getEmail();
+        date = user.getDate().toString();
+        username = user.getUsername();
+    }
 }

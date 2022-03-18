@@ -1060,14 +1060,31 @@ public class GHRepository extends GHObject {
     /**
      * Add collaborators.
      *
-     * @param users
-     *            the users
      * @param permission
      *            the permission level
+     * @param users
+     *            the users
+     * @throws IOException
+     *             the io exception
+     * @deprecated #addCollaborators(GHOrganization.RolePermission, GHUser)
+     */
+    @Deprecated
+    public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
+        addCollaborators(asList(users), permission);
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param permission
+     *            the permission level
+     * @param users
+     *            the users
+     *
      * @throws IOException
      *             the io exception
      */
-    public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
+    public void addCollaborators(GHOrganization.RepositoryRole permission, GHUser... users) throws IOException {
         addCollaborators(asList(users), permission);
     }
 
@@ -1092,7 +1109,23 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void addCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "PUT", null);
+        modifyCollaborators(users, "PUT", (GHOrganization.Permission) null);
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
+     * @param permission
+     *            the permission level
+     * @throws IOException
+     *             the io exception
+     * @deprecated #addCollaborators(Collection, GHOrganization.RolePermission)
+     */
+    @Deprecated
+    public void addCollaborators(Collection<GHUser> users, GHOrganization.Permission permission) throws IOException {
+        modifyCollaborators(users, "PUT", permission);
     }
 
     /**
@@ -1105,7 +1138,8 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void addCollaborators(Collection<GHUser> users, GHOrganization.Permission permission) throws IOException {
+    public void addCollaborators(Collection<GHUser> users, GHOrganization.RepositoryRole permission)
+            throws IOException {
         modifyCollaborators(users, "PUT", permission);
     }
 
@@ -1130,7 +1164,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void removeCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "DELETE", null);
+        modifyCollaborators(users, "DELETE", (GHOrganization.Permission) null);
     }
 
     private void modifyCollaborators(@NonNull Collection<GHUser> users,
@@ -1142,7 +1176,21 @@ public class GHRepository extends GHObject {
         }
 
         // Make sure that the users collection doesn't have any duplicates
-        for (GHUser user : new LinkedHashSet<GHUser>(users)) {
+        for (GHUser user : new LinkedHashSet<>(users)) {
+            requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
+        }
+    }
+
+    private void modifyCollaborators(@NonNull Collection<GHUser> users,
+            @NonNull String method,
+            @CheckForNull GHOrganization.RepositoryRole permission) throws IOException {
+        Requester requester = root().createRequest().method(method);
+        if (permission != null) {
+            requester = requester.with("permission", permission.toString()).inBody();
+        }
+
+        // Make sure that the users collection doesn't have any duplicates
+        for (GHUser user : new LinkedHashSet<>(users)) {
             requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
         }
     }
@@ -1156,7 +1204,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setEmailServiceHook(String address) throws IOException {
-        Map<String, String> config = new HashMap<String, String>();
+        Map<String, String> config = new HashMap<>();
         config.put("address", address);
         root().createRequest()
                 .method("POST")

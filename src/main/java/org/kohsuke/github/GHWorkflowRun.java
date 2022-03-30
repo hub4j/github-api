@@ -32,6 +32,9 @@ public class GHWorkflowRun extends GHObject {
     private long runNumber;
     private long workflowId;
 
+    private long runAttempt;
+    private String runStartedAt;
+
     private String htmlUrl;
     private String jobsUrl;
     private String logsUrl;
@@ -77,6 +80,26 @@ public class GHWorkflowRun extends GHObject {
      */
     public long getWorkflowId() {
         return workflowId;
+    }
+
+    /**
+     * The run attempt.
+     *
+     * @return the run attempt
+     */
+    public long getRunAttempt() {
+        return runAttempt;
+    }
+
+    /**
+     * When was this run triggered?
+     *
+     * @return run triggered
+     * @throws IOException
+     *             on error
+     */
+    public Date getRunStartedAt() throws IOException {
+        return GitHubClient.parseDate(runStartedAt);
     }
 
     @Override

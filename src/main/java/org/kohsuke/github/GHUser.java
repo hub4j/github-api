@@ -249,10 +249,12 @@ public class GHUser extends GHPerson {
      *
      * @return The LDAP information
      *
+     * @see <a href=https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap>Github LDAP</a>
+     *
      * @throws IOException
      *             the io exception
      */
-    public Optional<String> getLdap() throws IOException {
+    public Optional<String> getLdapDn() throws IOException {
         super.populate();
         return Optional.ofNullable(ldap_dn);
     }

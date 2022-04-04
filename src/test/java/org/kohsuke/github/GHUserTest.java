@@ -7,6 +7,7 @@ import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -161,5 +162,11 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         assertThat(u.getFollowingCount(), equalTo(3));
         assertThat(u.getPublicGistCount(), equalTo(4));
         assertThat(u.getPublicRepoCount(), equalTo(96));
+    }
+
+    @Test
+    public void verifyLdapDn() throws IOException {
+        GHUser u = gitHub.getUser("kartikpatodi");
+        assertThat(u.getLdapDn().orElse(""), not(emptyString()));
     }
 }

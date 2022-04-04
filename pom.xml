@@ -33,8 +33,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>4.5.3.0</spotbugs-maven-plugin.version>
-    <spotbugs.version>4.5.3</spotbugs.version>
+    <spotbugs-maven-plugin.version>4.6.0.0</spotbugs-maven-plugin.version>
+    <spotbugs.version>4.6.0</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.9.2</okhttp3.version>
@@ -289,7 +289,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.0</version>
+        <version>3.10.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -462,7 +462,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.13.1</version>
+      <version>2.13.2.2</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -561,7 +561,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>4.3.1</version>
+      <version>4.4.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -788,7 +788,7 @@
           </plugin>
           <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.10.0</version>
+            <version>3.10.1</version>
             <executions>
               <execution>
                 <id>compile-java-11</id>

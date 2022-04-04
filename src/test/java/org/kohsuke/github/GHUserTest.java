@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;

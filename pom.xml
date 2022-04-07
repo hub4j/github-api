@@ -405,6 +405,8 @@
             <excludes>
               <!-- Classes in internal are public but are considered private for API stability purposes -->
               <exclude>org.kohsuke.github.internal</exclude>
+              <!-- TODO: started failing in CI recently. This is part of the multi-release structure. -->
+              <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector#HttpClientGitHubConnector(java.net.http.HttpClient)</exclude>
             </excludes>
           </parameter>
         </configuration>

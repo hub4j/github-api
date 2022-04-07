@@ -1109,7 +1109,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void addCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "PUT", (GHOrganization.Permission) null);
+        modifyCollaborators(users, "PUT", null);
     }
 
     /**
@@ -1125,7 +1125,7 @@ public class GHRepository extends GHObject {
      */
     @Deprecated
     public void addCollaborators(Collection<GHUser> users, GHOrganization.Permission permission) throws IOException {
-        modifyCollaborators(users, "PUT", permission);
+        modifyCollaborators(users, "PUT", GHOrganization.RepositoryRole.from(permission));
     }
 
     /**
@@ -1164,21 +1164,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void removeCollaborators(Collection<GHUser> users) throws IOException {
-        modifyCollaborators(users, "DELETE", (GHOrganization.Permission) null);
-    }
-
-    private void modifyCollaborators(@NonNull Collection<GHUser> users,
-            @NonNull String method,
-            @CheckForNull GHOrganization.Permission permission) throws IOException {
-        Requester requester = root().createRequest().method(method);
-        if (permission != null) {
-            requester = requester.with("permission", permission).inBody();
-        }
-
-        // Make sure that the users collection doesn't have any duplicates
-        for (GHUser user : new LinkedHashSet<>(users)) {
-            requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
-        }
+        modifyCollaborators(users, "DELETE", null);
     }
 
     private void modifyCollaborators(@NonNull Collection<GHUser> users,

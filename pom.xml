@@ -402,6 +402,10 @@
             <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
             <onlyModified>true</onlyModified>
             <includeSynthetic>true</includeSynthetic>
+            <excludes>
+              <!-- Classes in internal are public but are considered private for API stability purposes -->
+              <exclude>org.kohsuke.github.internal</exclude>
+            </excludes>
           </parameter>
         </configuration>
         <executions>

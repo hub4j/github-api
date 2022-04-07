@@ -851,6 +851,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/workflows/7087581"));
         assertThat(workflowRun.getCreatedAt().getTime(), is(1616524526000L));
         assertThat(workflowRun.getUpdatedAt().getTime(), is(1616524543000L));
+        assertThat(workflowRun.getRunAttempt(), is(1L));
+        assertThat(workflowRun.getRunStartedAt().getTime(), is(1616524526000L));
         assertThat(workflowRun.getHeadCommit().getId(), is("dbea8d8b6ed2cf764dfd84a215f3f9040b3d4423"));
         assertThat(workflowRun.getHeadCommit().getTreeId(), is("b17089e6a2574ec1002566fe980923e62dce3026"));
         assertThat(workflowRun.getHeadCommit().getMessage(), is("Update main.yml"));

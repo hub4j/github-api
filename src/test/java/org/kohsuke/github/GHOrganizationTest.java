@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.GHOrganization.Permission;
+import org.kohsuke.github.GHOrganization.RepositoryRole;
 
 import java.io.IOException;
 import java.util.List;
@@ -194,6 +195,75 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         GHTeam team = org.createTeam(TEAM_NAME_CREATE, GHOrganization.Permission.PUSH, repo);
         assertThat(team.getRepositories().containsKey(REPO_NAME), is(true));
         assertThat(team.getPermission(), equalTo(Permission.PUSH.toString().toLowerCase()));
+    }
+
+    @Test
+    public void testCreateTeamWithNullPerm() throws Exception {
+        String REPO_NAME = "github-api";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository repo = org.getRepository(REPO_NAME);
+
+        // Create team with access to repository. Check access was granted.
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE).create();
+
+        team.add(repo);
+
+        assertThat(
+                repo.getTeams()
+                        .stream()
+                        .filter(t -> TEAM_NAME_CREATE.equals(t.getName()))
+                        .findFirst()
+                        .get()
+                        .getPermission(),
+                equalTo(Permission.PULL.toString().toLowerCase()));
+    }
+
+    @Test
+    public void testCreateTeamWithRepoPerm() throws Exception {
+        String REPO_NAME = "github-api";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository repo = org.getRepository(REPO_NAME);
+
+        // Create team with access to repository. Check access was granted.
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE).create();
+
+        team.add(repo, GHOrganization.Permission.PUSH);
+
+        assertThat(
+                repo.getTeams()
+                        .stream()
+                        .filter(t -> TEAM_NAME_CREATE.equals(t.getName()))
+                        .findFirst()
+                        .get()
+                        .getPermission(),
+                equalTo(Permission.PUSH.toString().toLowerCase()));
+
+    }
+
+    @Test
+    public void testCreateTeamWithRepoRole() throws IOException {
+        String REPO_NAME = "github-api";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository repo = org.getRepository(REPO_NAME);
+
+        // Create team with access to repository. Check access was granted.
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE).create();
+
+        RepositoryRole role = RepositoryRole.from(GHOrganization.Permission.TRIAGE);
+        team.add(repo, role);
+
+        // 'getPermission' does not return triage even though the UI shows that value
+        // assertThat(
+        // repo.getTeams()
+        // .stream()
+        // .filter(t -> TEAM_NAME_CREATE.equals(t.getName()))
+        // .findFirst()
+        // .get()
+        // .getPermission(),
+        // equalTo(role.toString()));
     }
 
     @Test

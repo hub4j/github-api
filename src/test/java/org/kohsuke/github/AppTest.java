@@ -183,7 +183,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
                             ReactionContent.HOORAY,
                             ReactionContent.ROCKET));
 
-            reaction.delete();
+            // test retired delete reaction API throws UnsupportedOperationException
+            final GHReaction reactionToDelete = reaction;
+            assertThrows(UnsupportedOperationException.class, () -> reactionToDelete.delete());
+
+            // test new delete reaction API
+            v.get(1).deleteReaction(reaction);
             reaction = null;
             v = i.getComments();
             reactions = v.get(1).listReactions().toList();
@@ -191,7 +196,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
                     containsInAnyOrder(ReactionContent.EYES, ReactionContent.HOORAY, ReactionContent.ROCKET));
         } finally {
             if (reaction != null) {
-                reaction.delete();
+                v.get(1).deleteReaction(reaction);
+                reaction = null;
             }
         }
     }
@@ -683,6 +689,20 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
             assertThat(commit.getCommitShortInfo().getCommentCount(), equalTo(31));
 
+            // testing reactions
+            List<GHReaction> reactions = c.listReactions().toList();
+            assertThat(reactions, is(empty()));
+
+            GHReaction reaction = c.createReaction(ReactionContent.CONFUSED);
+            assertThat(reaction.getContent(), equalTo(ReactionContent.CONFUSED));
+
+            reactions = c.listReactions().toList();
+            assertThat(reactions.size(), equalTo(1));
+
+            c.deleteReaction(reaction);
+
+            reactions = c.listReactions().toList();
+            assertThat(reactions.size(), equalTo(0));
         } finally {
             c.delete();
         }
@@ -1273,7 +1293,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         a = i.createReaction(ReactionContent.HOORAY);
         assertThat(a.getUser().getLogin(), is(gitHub.getMyself().getLogin()));
         assertThat(a.getContent(), is(ReactionContent.HOORAY));
-        a.delete();
+        i.deleteReaction(a);
 
         l = i.listReactions().toList();
         assertThat(l.size(), equalTo(1));
@@ -1307,10 +1327,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(l.get(4).getUser().getLogin(), is(gitHub.getMyself().getLogin()));
         assertThat(l.get(4).getContent(), is(ReactionContent.ROCKET));
 
-        l.get(1).delete();
-        l.get(2).delete();
-        l.get(3).delete();
-        l.get(4).delete();
+        i.deleteReaction(l.get(1));
+        i.deleteReaction(l.get(2));
+        i.deleteReaction(l.get(3));
+        i.deleteReaction(l.get(4));
 
         l = i.listReactions().toList();
         assertThat(l.size(), equalTo(1));

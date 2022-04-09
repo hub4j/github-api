@@ -30,4 +30,14 @@ public interface Reactable {
      */
     @Preview(SQUIRREL_GIRL)
     GHReaction createReaction(ReactionContent content) throws IOException;
+
+    /**
+     * Delete a reaction from this object.
+     *
+     * @param reaction
+     *            the reaction to delete
+     * @throws IOException
+     *             the io exception
+     */
+    void deleteReaction(GHReaction reaction) throws IOException;
 }

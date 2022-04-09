@@ -146,6 +146,11 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             reactions = comment.listReactions().toList();
             assertThat(reactions.size(), equalTo(1));
 
+            comment.deleteReaction(reaction);
+
+            reactions = comment.listReactions().toList();
+            assertThat(reactions.size(), equalTo(0));
+
             GHPullRequestReviewComment reply = comment.reply("This is a reply.");
             assertThat(reply.getInReplyToId(), equalTo(comment.getId()));
             comments = p.listReviewComments().toList();

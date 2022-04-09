@@ -225,6 +225,14 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
                 .fetch(GHReaction.class);
     }
 
+    public void deleteReaction(GHReaction reaction) throws IOException {
+        owner.root()
+                .createRequest()
+                .method("DELETE")
+                .withUrlPath(getApiRoute(), "reactions", String.valueOf(reaction.getId()))
+                .send();
+    }
+
     @Preview(SQUIRREL_GIRL)
     public PagedIterable<GHReaction> listReactions() {
         return owner.root()

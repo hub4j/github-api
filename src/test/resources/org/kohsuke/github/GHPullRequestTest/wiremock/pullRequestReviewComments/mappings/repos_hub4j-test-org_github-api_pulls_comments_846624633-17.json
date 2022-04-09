@@ -1,0 +1,39 @@
+{
+  "id": "415948c0-a8be-4ea1-8941-320544683414",
+  "name": "repos_hub4j-test-org_github-api_pulls_comments_846624633",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/comments/846624633",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 09 Apr 2022 12:15:18 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4966",
+      "X-RateLimit-Reset": "1649510049",
+      "X-RateLimit-Used": "34",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "BF4A:E0D5:8A2CAF:8F753C:625178D5"
+    }
+  },
+  "uuid": "415948c0-a8be-4ea1-8941-320544683414",
+  "persistent": true,
+  "insertionIndex": 17
+}

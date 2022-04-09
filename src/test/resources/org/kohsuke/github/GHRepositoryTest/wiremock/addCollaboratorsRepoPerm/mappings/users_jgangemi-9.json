@@ -1,0 +1,48 @@
+{
+  "id": "a38d6471-c0b3-43d9-994e-bd253670bea3",
+  "name": "users_jgangemi",
+  "request": {
+    "url": "/users/jgangemi",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "users_jgangemi-9.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 06 Apr 2022 13:45:50 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"65ac0e73527e3adc4df6bbbde94bb21480926587df8832f0bab8a5fc1bc746c9\"",
+      "Last-Modified": "Wed, 09 Mar 2022 12:59:44 GMT",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-05-06 06:00:00 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4943",
+      "X-RateLimit-Reset": "1649254722",
+      "X-RateLimit-Used": "57",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CF43:6B70:374C2E:67A0E8:624D998E"
+    }
+  },
+  "uuid": "a38d6471-c0b3-43d9-994e-bd253670bea3",
+  "persistent": true,
+  "insertionIndex": 9
+}

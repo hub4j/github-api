@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -214,7 +215,7 @@ public class GHTeam extends GHObject implements Refreshable {
         try {
             root().createRequest().withUrlPath(api("/memberships/" + user.getLogin())).send();
             return true;
-        } catch (IOException ignore) {
+        } catch (@SuppressWarnings("unused") IOException ignore) {
             return false;
         }
     }
@@ -227,7 +228,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public Map<String, GHRepository> getRepositories() throws IOException {
-        Map<String, GHRepository> m = new TreeMap<String, GHRepository>();
+        Map<String, GHRepository> m = new TreeMap<>();
         for (GHRepository r : listRepositories()) {
             m.put(r.getName(), r);
         }
@@ -299,7 +300,23 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void add(GHRepository r) throws IOException {
-        add(r, null);
+        add(r, (GHOrganization.RepositoryRole) null);
+    }
+
+    /**
+     * * Add.
+     *
+     * @param r
+     *            the r
+     * @param permission
+     *            the permission
+     * @throws IOException
+     *             the io exception
+     * @deprecated use {@link GHTeam#add(GHRepository, org.kohsuke.github.GHOrganization.RepositoryRole)}
+     */
+    @Deprecated
+    public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
+        add(r, GHOrganization.RepositoryRole.from(permission));
     }
 
     /**
@@ -312,10 +329,11 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
+    public void add(GHRepository r, GHOrganization.RepositoryRole permission) throws IOException {
         root().createRequest()
                 .method("PUT")
-                .with("permission", permission)
+                .with("permission",
+                        Optional.ofNullable(permission).map(GHOrganization.RepositoryRole::toString).orElse(null))
                 .withUrlPath(api("/repos/" + r.getOwnerName() + '/' + r.getName()))
                 .send();
     }

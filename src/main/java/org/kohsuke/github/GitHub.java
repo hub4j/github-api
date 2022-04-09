@@ -1396,16 +1396,14 @@ public class GitHub {
     }
 
     GHUser intern(GHUser user) throws IOException {
-        if (user == null)
-            return user;
-
-        // if we already have this user in our map, use it
-        GHUser u = users.get(user.getLogin());
-        if (u != null)
-            return u;
-
-        // if not, remember this new user
-        users.putIfAbsent(user.getLogin(), user);
+        if (user != null) {
+            // if we already have this user in our map, get it
+            // if not, remember this new user
+            GHUser existingUser = users.putIfAbsent(user.getLogin(), user);
+            if (existingUser != null) {
+                user = existingUser;
+            }
+        }
         return user;
     }
 

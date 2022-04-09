@@ -106,7 +106,7 @@ public class GHGistFile {
      * @param owner
      *            the object stores owner information
      */
-    public void wrapUp(GHGist owner) {
+    void wrapUp(GHGist owner) {
         this.owner = owner;
     }
 }

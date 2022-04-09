@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.kohsuke.github.GHCheckRun.Conclusion;
+import org.kohsuke.github.GHOrganization.RepositoryRole;
 import org.kohsuke.github.GHRepository.Visibility;
 
 import java.io.ByteArrayInputStream;
@@ -340,15 +341,28 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void addCollaborators() throws Exception {
         GHRepository repo = getRepository();
         GHUser user = getUser();
-        List<GHUser> users = new ArrayList<GHUser>();
+        List<GHUser> users = new ArrayList<>();
 
         users.add(user);
         users.add(gitHub.getUser("jimmysombrero2"));
         repo.addCollaborators(users, GHOrganization.Permission.PUSH);
 
         GHPersonSet<GHUser> collabs = repo.getCollaborators();
-
         GHUser colabUser = collabs.byLogin("jimmysombrero");
+
+        assertThat(user.getName(), equalTo(colabUser.getName()));
+    }
+
+    @Test
+    public void addCollaboratorsRepoPerm() throws Exception {
+        GHRepository repo = getRepository();
+        GHUser user = getUser();
+
+        RepositoryRole role = RepositoryRole.from(GHOrganization.Permission.PULL);
+        repo.addCollaborators(role, user);
+
+        GHPersonSet<GHUser> collabs = repo.getCollaborators();
+        GHUser colabUser = collabs.byLogin("jgangemi");
 
         assertThat(user.getName(), equalTo(colabUser.getName()));
     }

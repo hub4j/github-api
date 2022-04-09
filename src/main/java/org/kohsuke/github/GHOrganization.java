@@ -86,7 +86,6 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Starts a builder that creates a new repository.
-     *
      * <p>
      * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()} to
      * finally create a repository.
@@ -135,7 +134,6 @@ public class GHOrganization extends GHPerson {
      * @return the team
      * @throws IOException
      *             the io exception
-     *
      * @deprecated Use {@link GHOrganization#getTeam(long)}
      */
     @Deprecated
@@ -151,7 +149,6 @@ public class GHOrganization extends GHPerson {
      * @return the team
      * @throws IOException
      *             the io exception
-     *
      * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
      */
     public GHTeam getTeam(long teamId) throws IOException {
@@ -449,9 +446,35 @@ public class GHOrganization extends GHPerson {
 
     /**
      * The enum Permission.
+     *
+     * @see RepositoryRole
      */
     public enum Permission {
         ADMIN, MAINTAIN, PUSH, TRIAGE, PULL
+    }
+
+    /**
+     * Repository permissions (roles) for teams and collaborators.
+     */
+    public static class RepositoryRole {
+        private final String permission;
+
+        private RepositoryRole(String permission) {
+            this.permission = permission;
+        }
+
+        public static RepositoryRole custom(String permission) {
+            return new RepositoryRole(permission);
+        }
+
+        public static RepositoryRole from(Permission permission) {
+            return custom(permission.toString().toLowerCase());
+        }
+
+        @Override
+        public String toString() {
+            return permission;
+        }
     }
 
     /**
@@ -542,7 +565,6 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Starts a builder that creates a new team.
-     *
      * <p>
      * You use the returned builder to set various properties, then call {@link GHTeamBuilder#create()} to finally
      * create a team.
@@ -604,9 +626,8 @@ public class GHOrganization extends GHPerson {
      * Lists up all the repositories using the specified page size.
      *
      * @param pageSize
-     *            size for each page of items returned by GitHub. Maximum page size is 100.
-     *
-     *            Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
+     *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
      */
     @Override
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {

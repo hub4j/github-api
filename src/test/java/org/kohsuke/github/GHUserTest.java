@@ -165,7 +165,7 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void verifyLdapDn() throws IOException {
+    public void verifyLdapdn() throws IOException {
         GHUser u = gitHub.getUser("kartikpatodi");
         assertThat(u.getLdapDn().orElse(""), not(emptyString()));
     }

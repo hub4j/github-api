@@ -50,6 +50,10 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     private int position = -1;
     private int original_position = -1;
     private long in_reply_to_id = -1L;
+    private String diff_hunk;
+    private String commit_id;
+    private String original_commit_id;
+    private GHCommentAuthorAssociation author_association;
 
     /**
      * Draft gh pull request review comment.
@@ -133,6 +137,42 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      */
     public int getOriginalPosition() {
         return original_position;
+    }
+
+    /**
+     * Gets diff hunk.
+     *
+     * @return the diff hunk
+     */
+    public String getDiffHunk() {
+        return diff_hunk;
+    }
+
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
+    public String getCommitId() {
+        return commit_id;
+    }
+
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
+    public String getOriginalCommitId() {
+        return original_commit_id;
+    }
+
+    /**
+     * Gets the author association to the project.
+     *
+     * @return the author association to the project
+     */
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+        return author_association;
     }
 
     /**

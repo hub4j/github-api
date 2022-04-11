@@ -131,6 +131,10 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             assertThat(comment.getInReplyToId(), equalTo(-1L));
             assertThat(comment.getPath(), equalTo("README.md"));
             assertThat(comment.getPosition(), equalTo(1));
+            assertThat(comment.getDiffHunk(), equalTo("@@ -1,3 +1,4 @@\n-Java API for GitHub"));
+            assertThat(comment.getCommitId(), equalTo("1f40fdf4acf1adb246c109c21a22f617e4bd1ca8"));
+            assertThat(comment.getOriginalCommitId(), equalTo("1f40fdf4acf1adb246c109c21a22f617e4bd1ca8"));
+            assertThat(comment.getAuthorAssociation(), equalTo(GHCommentAuthorAssociation.MEMBER));
             assertThat(comment.getUser(), notNullValue());
             // Assert htmlUrl is not null
             assertThat(comment.getHtmlUrl(), notNullValue());

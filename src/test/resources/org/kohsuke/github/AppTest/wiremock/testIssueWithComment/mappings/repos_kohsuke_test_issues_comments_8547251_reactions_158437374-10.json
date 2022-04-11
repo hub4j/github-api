@@ -1,0 +1,39 @@
+{
+  "id": "18c445b5-46fc-4331-b8b6-1e9a410ac7ae",
+  "name": "repos_kohsuke_test_issues_comments_8547251_reactions_158437374",
+  "request": {
+    "url": "/repos/kohsuke/test/issues/comments/8547251/reactions/158437374",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 08 Apr 2022 17:53:04 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4916",
+      "X-RateLimit-Reset": "1649442146",
+      "X-RateLimit-Used": "84",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "BEBE:ECF2:E5334:EAEB7:62507680"
+    }
+  },
+  "uuid": "18c445b5-46fc-4331-b8b6-1e9a410ac7ae",
+  "persistent": true,
+  "insertionIndex": 10
+}

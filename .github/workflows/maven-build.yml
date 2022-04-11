@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
           distribution: 'zulu'
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
           distribution: 'adopt'
@@ -62,7 +62,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: ${{ matrix.java }}
         distribution: 'zulu'
@@ -83,7 +83,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: ${{ matrix.java }}
         distribution: 'zulu'

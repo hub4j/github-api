@@ -1043,6 +1043,36 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Check if a user has at least the given permission in this repository.
+     *
+     * @param user
+     *            a {@link GHUser#getLogin}
+     * @param permission
+     *            the permission to check
+     * @return true if the user has at least this permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean hasPermission(String user, GHPermissionType permission) throws IOException {
+        return getPermission(user).implies(permission);
+    }
+
+    /**
+     * Check if a user has at least the given permission in this repository.
+     *
+     * @param user
+     *            the user
+     * @param permission
+     *            the permission to check
+     * @return true if the user has at least this permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean hasPermission(GHUser user, GHPermissionType permission) throws IOException {
+        return hasPermission(user.getLogin(), permission);
+    }
+
+    /**
      * If this repository belongs to an organization, return a set of teams.
      *
      * @return the teams

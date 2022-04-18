@@ -326,6 +326,35 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void hasPermission() throws Exception {
+        kohsuke();
+        GHRepository publicRepository = gitHub.getRepository("hub4j-test-org/test-permission");
+        assertThat(publicRepository.hasPermission("kohsuke", GHPermissionType.ADMIN), equalTo(true));
+        assertThat(publicRepository.hasPermission("kohsuke", GHPermissionType.WRITE), equalTo(true));
+        assertThat(publicRepository.hasPermission("kohsuke", GHPermissionType.READ), equalTo(true));
+        assertThat(publicRepository.hasPermission("kohsuke", GHPermissionType.NONE), equalTo(false));
+
+        assertThat(publicRepository.hasPermission("dude", GHPermissionType.ADMIN), equalTo(false));
+        assertThat(publicRepository.hasPermission("dude", GHPermissionType.WRITE), equalTo(false));
+        assertThat(publicRepository.hasPermission("dude", GHPermissionType.READ), equalTo(true));
+        assertThat(publicRepository.hasPermission("dude", GHPermissionType.NONE), equalTo(false));
+
+        // also check the GHUser method
+        GHUser kohsuke = gitHub.getUser("kohsuke");
+        assertThat(publicRepository.hasPermission(kohsuke, GHPermissionType.ADMIN), equalTo(true));
+        assertThat(publicRepository.hasPermission(kohsuke, GHPermissionType.WRITE), equalTo(true));
+        assertThat(publicRepository.hasPermission(kohsuke, GHPermissionType.READ), equalTo(true));
+        assertThat(publicRepository.hasPermission(kohsuke, GHPermissionType.NONE), equalTo(false));
+
+        // check NONE on a private project
+        GHRepository privateRepository = gitHub.getRepository("hub4j-test-org/test-permission-private");
+        assertThat(privateRepository.hasPermission("dude", GHPermissionType.ADMIN), equalTo(false));
+        assertThat(privateRepository.hasPermission("dude", GHPermissionType.WRITE), equalTo(false));
+        assertThat(privateRepository.hasPermission("dude", GHPermissionType.READ), equalTo(false));
+        assertThat(privateRepository.hasPermission("dude", GHPermissionType.NONE), equalTo(true));
+    }
+
+    @Test
     public void LatestRepositoryExist() {
         try {
             // add the repository that have latest release

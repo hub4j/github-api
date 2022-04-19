@@ -131,6 +131,10 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             assertThat(comment.getInReplyToId(), equalTo(-1L));
             assertThat(comment.getPath(), equalTo("README.md"));
             assertThat(comment.getPosition(), equalTo(1));
+            assertThat(comment.getDiffHunk(), equalTo("@@ -1,3 +1,4 @@\n-Java API for GitHub"));
+            assertThat(comment.getCommitId(), equalTo("07374fe73aff1c2024a8d4114b32406c7a8e89b7"));
+            assertThat(comment.getOriginalCommitId(), equalTo("07374fe73aff1c2024a8d4114b32406c7a8e89b7"));
+            assertThat(comment.getAuthorAssociation(), equalTo(GHCommentAuthorAssociation.MEMBER));
             assertThat(comment.getUser(), notNullValue());
             // Assert htmlUrl is not null
             assertThat(comment.getHtmlUrl(), notNullValue());
@@ -145,6 +149,11 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
             reactions = comment.listReactions().toList();
             assertThat(reactions.size(), equalTo(1));
+
+            comment.deleteReaction(reaction);
+
+            reactions = comment.listReactions().toList();
+            assertThat(reactions.size(), equalTo(0));
 
             GHPullRequestReviewComment reply = comment.reply("This is a reply.");
             assertThat(reply.getInReplyToId(), equalTo(comment.getId()));

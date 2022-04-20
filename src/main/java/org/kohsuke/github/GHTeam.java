@@ -288,7 +288,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void remove(GHUser u) throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(api("/members/" + u.getLogin())).send();
+        root().createRequest().method("DELETE").withUrlPath(api("/memberships/" + u.getLogin())).send();
     }
 
     /**

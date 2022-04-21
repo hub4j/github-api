@@ -53,6 +53,8 @@ jobs:
           distribution: 'adopt'
           cache: 'maven'
       - name: Maven Site
+        env:
+          MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
         run: mvn -B  clean site -D enable-ci --file pom.xml
   test-8:
     name: test (${{ matrix.os }}, Java 8)

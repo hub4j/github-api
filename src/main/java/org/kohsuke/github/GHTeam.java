@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -149,6 +150,19 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public PagedIterable<GHUser> listMembers(String role) throws IOException {
         return root().createRequest().withUrlPath(api("/members")).with("role", role).toIterable(GHUser[].class, null);
+    }
+
+    /**
+     * List members with specified role paged iterable.
+     *
+     * @param role
+     *            the role
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listMembers(Role role) throws IOException {
+        return listMembers(role.name().toLowerCase(Locale.ROOT));
     }
 
     /**

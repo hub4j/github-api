@@ -13,6 +13,8 @@ import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
 
+import static org.kohsuke.github.GitHubRequest.transformEnum;
+
 /**
  * A team in GitHub organization.
  *
@@ -152,6 +154,19 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
+     * List members with specified role paged iterable.
+     *
+     * @param role
+     *            the role
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listMembers(Role role) throws IOException {
+        return listMembers(transformEnum(role));
+    }
+
+    /**
      * Gets a single discussion by ID.
      *
      * @param discussionNumber
@@ -288,7 +303,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void remove(GHUser u) throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(api("/members/" + u.getLogin())).send();
+        root().createRequest().method("DELETE").withUrlPath(api("/memberships/" + u.getLogin())).send();
     }
 
     /**

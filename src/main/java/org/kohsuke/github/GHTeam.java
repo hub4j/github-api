@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,6 +12,8 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
+
+import static org.kohsuke.github.GitHubRequest.transformEnum;
 
 /**
  * A team in GitHub organization.
@@ -162,7 +163,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public PagedIterable<GHUser> listMembers(Role role) throws IOException {
-        return listMembers(role.name().toLowerCase(Locale.ROOT));
+        return listMembers(transformEnum(role));
     }
 
     /**

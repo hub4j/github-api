@@ -740,6 +740,15 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void getPublicKey() throws Exception {
+        GHRepository repo = getTempRepository();
+        GHRepositoryPublicKey publicKey = repo.getPublicKey();
+        assertThat(publicKey, notNullValue());
+        assertThat(publicKey.getKey(), equalTo("test-key"));
+        assertThat(publicKey.getKeyId(), equalTo("key-id"));
+    }
+
+    @Test
     public void getRefsHeads() throws Exception {
         GHRepository repo = getTempRepository();
         GHRef[] refs = repo.getRefs("heads");
@@ -1085,4 +1094,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         repository.dispatch("test", clientPayload);
     }
 
+    @Test
+    public void createSecret() throws Exception {
+        GHRepository repo = getTempRepository();
+        repo.createSecret("secret", "encrypted", "public");
+    }
 }

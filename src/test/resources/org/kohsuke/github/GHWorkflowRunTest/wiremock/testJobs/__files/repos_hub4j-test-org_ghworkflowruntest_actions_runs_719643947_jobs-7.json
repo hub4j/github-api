@@ -40,7 +40,10 @@
           "completed_at": "2021-04-05T17:42:57.000+02:00"
         }
       ],
-      "check_run_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/check-runs/2270858576"
+      "check_run_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/check-runs/2270858576",
+      "labels": [
+        "ubuntu-latest"
+      ]
     },
     {
       "id": 2270858630,
@@ -81,7 +84,10 @@
           "completed_at": "2021-04-05T17:42:59.000+02:00"
         }
       ],
-      "check_run_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/check-runs/2270858630"
+      "check_run_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/check-runs/2270858630",
+      "labels": [
+        "ubuntu-latest"
+      ]
     }
   ]
 }

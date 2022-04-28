@@ -9,7 +9,11 @@ import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -40,6 +44,8 @@ public class GHWorkflowJob extends GHObject {
     private String checkRunUrl;
 
     private List<Step> steps = new ArrayList<>();
+
+    private List<String> labels = new ArrayList<>();
 
     /**
      * The name of the job.
@@ -129,6 +135,15 @@ public class GHWorkflowJob extends GHObject {
      */
     public List<Step> getSteps() {
         return Collections.unmodifiableList(steps);
+    }
+
+    /**
+     * Gets the labels of the job.
+     *
+     * @return the labels
+     */
+    public List<String> getLabels() {
+        return Collections.unmodifiableList(labels);
     }
 
     /**

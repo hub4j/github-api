@@ -99,7 +99,7 @@ public class GHArtifact extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).fetchHttpStatusCode();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**

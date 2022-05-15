@@ -1,0 +1,49 @@
+{
+  "id": "2fd0184f-f742-4f92-ac3f-c380327a0d38",
+  "name": "repos_hub4j-test-org_ghworkflowtest_actions_workflows_test-workflowyml",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/test-workflow.yml",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_ghworkflowtest_actions_workflows_test-workflowyml-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 12 May 2022 12:43:11 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"b5a65bb26d8ce0947086056b322ab71b496d1beec4cabb1ff40d091a6e518706\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4943",
+      "X-RateLimit-Reset": "1652362924",
+      "X-RateLimit-Used": "57",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C902:B0CB:1A052B7:1A9678A:627D00DE"
+    }
+  },
+  "uuid": "2fd0184f-f742-4f92-ac3f-c380327a0d38",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHWorkflowTest-actions-workflows-test-workflow.yml",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowTest-actions-workflows-test-workflow.yml-2",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowTest-actions-workflows-test-workflow.yml-3",
+  "insertionIndex": 4
+}

@@ -1,0 +1,49 @@
+{
+  "id": "1e2e0c5e-2e96-4a39-bb7e-517c7d30d55d",
+  "name": "repos_hub4j-test-org_test-permission_collaborators_dude_permission",
+  "request": {
+    "url": "/repos/hub4j-test-org/test-permission/collaborators/dude/permission",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_test-permission_collaborators_dude_permission-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 18 Apr 2022 19:55:02 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"1cc3cc5489c97f91330041a79e27736832eaa8c8a53d3ef48479ea73bce528d8\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4967",
+      "X-RateLimit-Reset": "1650312871",
+      "X-RateLimit-Used": "33",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C7AC:13A5F:E053B5:E834BA:625DC216"
+    }
+  },
+  "uuid": "1e2e0c5e-2e96-4a39-bb7e-517c7d30d55d",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-test-permission-collaborators-dude-permission",
+  "requiredScenarioState": "scenario-2-repos-hub4j-test-org-test-permission-collaborators-dude-permission-2",
+  "newScenarioState": "scenario-2-repos-hub4j-test-org-test-permission-collaborators-dude-permission-3",
+  "insertionIndex": 7
+}

@@ -1,0 +1,39 @@
+{
+  "id": "1b440ab0-a70b-43a3-8295-b69f335f3e0b",
+  "name": "organizations_7544739_team_3451996_memberships_gsmet",
+  "request": {
+    "url": "/organizations/7544739/team/3451996/memberships/gsmet",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 21 Apr 2022 10:56:53 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, repo",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4974",
+      "X-RateLimit-Reset": "1650541694",
+      "X-RateLimit-Used": "26",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "C190:B3FE:1268AB0:12B21EB:62613874"
+    }
+  },
+  "uuid": "1b440ab0-a70b-43a3-8295-b69f335f3e0b",
+  "persistent": true,
+  "insertionIndex": 9
+}

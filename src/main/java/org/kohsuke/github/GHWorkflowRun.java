@@ -32,6 +32,9 @@ public class GHWorkflowRun extends GHObject {
     private long runNumber;
     private long workflowId;
 
+    private long runAttempt;
+    private String runStartedAt;
+
     private String htmlUrl;
     private String jobsUrl;
     private String logsUrl;
@@ -77,6 +80,26 @@ public class GHWorkflowRun extends GHObject {
      */
     public long getWorkflowId() {
         return workflowId;
+    }
+
+    /**
+     * The run attempt.
+     *
+     * @return the run attempt
+     */
+    public long getRunAttempt() {
+        return runAttempt;
+    }
+
+    /**
+     * When was this run triggered?
+     *
+     * @return run triggered
+     * @throws IOException
+     *             on error
+     */
+    public Date getRunStartedAt() throws IOException {
+        return GitHubClient.parseDate(runStartedAt);
     }
 
     @Override
@@ -253,7 +276,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void cancel() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").fetchHttpStatusCode();
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").send();
     }
 
     /**
@@ -263,7 +286,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).fetchHttpStatusCode();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -273,7 +296,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void rerun() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").fetchHttpStatusCode();
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").send();
     }
 
     /**
@@ -313,7 +336,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void deleteLogs() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").fetchHttpStatusCode();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").send();
     }
 
     /**

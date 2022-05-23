@@ -874,7 +874,9 @@ public class GitHub {
     }
 
     /**
-     * Gets a sigle team by ID.
+     * Gets a single team by ID.
+     * <p>
+     * This method is no longer supported and throws an UnsupportedOperationException.
      *
      * @param id
      *            the id
@@ -883,11 +885,14 @@ public class GitHub {
      *             the io exception
      *
      * @deprecated Use {@link GHOrganization#getTeam(long)}
-     * @see <a href= "https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
+     * @see <a href="https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
+     * @see <a href="https://github.blog/changelog/2022-02-22-sunset-notice-deprecated-teams-api-endpoints/">sunset
+     *      notice</a>
      */
     @Deprecated
     public GHTeam getTeam(int id) throws IOException {
-        return createRequest().withUrlPath("/teams/" + id).fetch(GHTeam.class).wrapUp(this);
+        throw new UnsupportedOperationException(
+                "This method is not supported anymore. Please use GHOrganization#getTeam(long).");
     }
 
     /**
@@ -1391,16 +1396,14 @@ public class GitHub {
     }
 
     GHUser intern(GHUser user) throws IOException {
-        if (user == null)
-            return user;
-
-        // if we already have this user in our map, use it
-        GHUser u = users.get(user.getLogin());
-        if (u != null)
-            return u;
-
-        // if not, remember this new user
-        users.putIfAbsent(user.getLogin(), user);
+        if (user != null) {
+            // if we already have this user in our map, get it
+            // if not, remember this new user
+            GHUser existingUser = users.putIfAbsent(user.getLogin(), user);
+            if (existingUser != null) {
+                user = existingUser;
+            }
+        }
         return user;
     }
 

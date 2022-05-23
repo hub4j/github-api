@@ -1,0 +1,47 @@
+{
+  "id": "daaad445-3cb0-4b71-bafb-7384cb932b2e",
+  "name": "users_kohsuke",
+  "request": {
+    "url": "/users/kohsuke",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "users_kohsuke-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 08 Apr 2022 17:53:02 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"6feec589e2e6b6718e1831548a9ce491c3a1cdb88805e0aaec0151a4f0acf7c2\"",
+      "Last-Modified": "Fri, 18 Mar 2022 23:13:10 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4922",
+      "X-RateLimit-Reset": "1649442146",
+      "X-RateLimit-Used": "78",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BEB2:39A9:7F918:84A84:6250767E"
+    }
+  },
+  "uuid": "daaad445-3cb0-4b71-bafb-7384cb932b2e",
+  "persistent": true,
+  "insertionIndex": 4
+}

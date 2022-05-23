@@ -1,5 +1,15 @@
 # Contributing
 
+## Make sure it's spotless
+
+Run `mvn spotless:apply` to fix any formatting, etc issues.
+
+## Make sure you pass CI
+
+If the following does not succeed, you will not pass the pull request checks.
+
+`mvn -D enable-ci clean install site` 
+
 ## Using WireMock and Snapshots
 
 This project has started converting to using WireMock to stub out http responses instead of use live data.

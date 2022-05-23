@@ -2,12 +2,18 @@ package org.kohsuke.github;
 
 import org.junit.Test;
 import org.kohsuke.github.GHTeam.Privacy;
+import org.kohsuke.github.GHTeam.Role;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class GHTeamTest extends AbstractGitHubWireMockTest {
 
@@ -91,7 +97,9 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
 
     @Test
     public void testSetPrivacy() throws IOException {
-        String teamSlug = "dummy-team";
+        // we need to use a team that doesn't have child teams
+        // as secret privacy is not supported for parent teams
+        String teamSlug = "simple-team";
         Privacy privacy = Privacy.CLOSED;
 
         // Set the privacy.
@@ -135,4 +143,66 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         assertThat(result, is(empty()));
     }
 
+    @Test
+    public void addRemoveMember() throws IOException {
+        String teamSlug = "dummy-team";
+
+        GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+
+        List<GHUser> members = team.listMembers().toList();
+
+        assertThat(members, notNullValue());
+        assertThat("One admin in dummy team", members.size(), equalTo(1));
+        assertThat("Specific user in admin team",
+                members.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
+
+        GHUser user = gitHub.getUser("gsmet");
+
+        try {
+            team.add(user, Role.MAINTAINER);
+
+            // test all
+            members = team.listMembers().toList();
+
+            assertThat(members, notNullValue());
+            assertThat("Two members for all roles in dummy team", members.size(), equalTo(2));
+            assertThat("Specific users in team",
+                    members,
+                    containsInAnyOrder(hasProperty("login", equalTo("bitwiseman")),
+                            hasProperty("login", equalTo("gsmet"))));
+
+            // test maintainer role filter
+            members = team.listMembers(Role.MAINTAINER).toList();
+
+            assertThat(members, notNullValue());
+            assertThat("Two members for all roles in dummy team", members.size(), equalTo(2));
+            assertThat("Specific users in team",
+                    members,
+                    containsInAnyOrder(hasProperty("login", equalTo("bitwiseman")),
+                            hasProperty("login", equalTo("gsmet"))));
+
+            // test member role filter
+            // it's hard to test this as owner of the org are automatically made maintainer
+            // so let's just test that we don't have any members around
+            members = team.listMembers(Role.MEMBER).toList();
+
+            assertThat(members, notNullValue());
+            assertThat("No members in dummy team", members.size(), equalTo(0));
+
+            // test removing the user has effect
+            team.remove(user);
+
+            members = team.listMembers().toList();
+
+            assertThat(members, notNullValue());
+            assertThat("One member for all roles in dummy team", members.size(), equalTo(1));
+            assertThat("Specific user in team",
+                    members,
+                    containsInAnyOrder(hasProperty("login", equalTo("bitwiseman"))));
+        } finally {
+            if (team.hasMember(user)) {
+                team.remove(user);
+            }
+        }
+    }
 }

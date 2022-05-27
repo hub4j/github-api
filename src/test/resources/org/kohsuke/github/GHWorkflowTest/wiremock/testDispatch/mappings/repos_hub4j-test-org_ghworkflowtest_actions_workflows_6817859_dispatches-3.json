@@ -1,5 +1,5 @@
 {
-  "id": "11698859-4fbc-406c-8d4a-0029b3105a34",
+  "id": "bdb66b3d-7d11-432f-96c1-eba701ebad1e",
   "name": "repos_hub4j-test-org_ghworkflowtest_actions_workflows_6817859_dispatches",
   "request": {
     "url": "/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/6817859/dispatches",
@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"ref\":\"main\",\"inputs\":{\"parameter\":\"value\"}}",
+        "equalToJson": "{\"ref\":\"main\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }
@@ -26,9 +26,9 @@
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4933",
+      "X-RateLimit-Remaining": "4934",
       "X-RateLimit-Reset": "1652362924",
-      "X-RateLimit-Used": "67",
+      "X-RateLimit-Used": "66",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -37,10 +37,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Vary": "Accept-Encoding, Accept, X-Requested-With",
-      "X-GitHub-Request-Id": "C90E:2242:349E0E:3B2269:627D00E1"
+      "X-GitHub-Request-Id": "C90C:EB05:1A93FF9:1B23DE4:627D00E1"
     }
   },
-  "uuid": "11698859-4fbc-406c-8d4a-0029b3105a34",
+  "uuid": "bdb66b3d-7d11-432f-96c1-eba701ebad1e",
   "persistent": true,
-  "insertionIndex": 4
+  "insertionIndex": 3
 }

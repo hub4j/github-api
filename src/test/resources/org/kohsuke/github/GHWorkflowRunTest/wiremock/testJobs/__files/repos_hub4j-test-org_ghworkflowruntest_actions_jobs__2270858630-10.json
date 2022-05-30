@@ -40,5 +40,9 @@
   "check_run_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/check-runs/2270858630",
   "labels": [
     "ubuntu-latest"
-  ]
+  ],
+  "runner_id": 1,
+  "runner_name": "my runner",
+  "runner_group_id": 2,
+  "runner_group_name": "my runner group"
 }

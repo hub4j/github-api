@@ -478,6 +478,10 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(job.getUrl().getPath(), containsString("/actions/jobs/"));
         assertThat(job.getHtmlUrl().getPath(), containsString("/runs/" + job.getId()));
         assertThat(job.getCheckRunUrl().getPath(), containsString("/check-runs/"));
+        assertThat(job.getRunnerId(), is(1));
+        assertThat(job.getRunnerName(), containsString("my runner"));
+        assertThat(job.getRunnerGroupId(), is(2));
+        assertThat(job.getRunnerGroupName(), containsString("my runner group"));
 
         // we only test the step we have control over, the others are added by GitHub
         Optional<Step> step = job.getSteps()

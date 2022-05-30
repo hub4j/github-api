@@ -43,6 +43,11 @@ public class GHWorkflowJob extends GHObject {
     private String htmlUrl;
     private String checkRunUrl;
 
+    private int runnerId;
+    private String runnerName;
+    private int runnerGroupId;
+    private String runnerGroupName;
+
     private List<Step> steps = new ArrayList<>();
 
     private List<String> labels = new ArrayList<>();
@@ -144,6 +149,42 @@ public class GHWorkflowJob extends GHObject {
      */
     public List<String> getLabels() {
         return Collections.unmodifiableList(labels);
+    }
+
+    /**
+     * the runner id.
+     *
+     * @return runnerId
+     */
+    public int getRunnerId() {
+        return runnerId;
+    }
+
+    /**
+     * the runner name.
+     *
+     * @return runnerName
+     */
+    public String getRunnerName() {
+        return runnerName;
+    }
+
+    /**
+     * the runner group id.
+     *
+     * @return runnerGroupId
+     */
+    public int getRunnerGroupId() {
+        return runnerGroupId;
+    }
+
+    /**
+     * the runner group name.
+     *
+     * @return runnerGroupName
+     */
+    public String getRunnerGroupName() {
+        return runnerGroupName;
     }
 
     /**

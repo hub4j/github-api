@@ -1507,6 +1507,43 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
+     * A workflow job has been queued, is in progress, or has been completed.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#workflow_job">
+     *      workflow job event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/actions#workflow-jobs">Actions Workflow Jobs</a>
+     */
+    public static class WorkflowJob extends GHEventPayload {
+
+        private GHWorkflowJob workflowJob;
+
+        /**
+         * Gets the workflow job.
+         *
+         * @return the workflow job
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHWorkflowJob getWorkflowJob() {
+            return workflowJob;
+        }
+
+        @Override
+        void lateBind() {
+            if (workflowJob == null) {
+                throw new IllegalStateException(
+                        "Expected workflow_job payload, but got something else.  Maybe we've got another type of event?");
+            }
+            super.lateBind();
+            GHRepository repository = getRepository();
+            if (repository == null) {
+                throw new IllegalStateException("Repository must not be null");
+            }
+            workflowJob.wrapUp(repository);
+        }
+    }
+
+    /**
      * A label was created, edited or deleted.
      *
      * @see <a href= "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#label">

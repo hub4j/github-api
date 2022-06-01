@@ -1572,4 +1572,25 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             return label;
         }
     }
+
+    /**
+     * A star was created or deleted on a repository.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star">star
+     *      event</a>
+     */
+    public static class Star extends GHEventPayload {
+
+        private String starredAt;
+
+        /**
+         * Gets the date when the star is added. Is null when the star is deleted.
+         *
+         * @return the date when the star is added
+         */
+        public Date getStarredAt() {
+            return GitHubClient.parseDate(starredAt);
+        }
+    }
 }

@@ -1097,4 +1097,15 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(label.isDefault(), is(false));
         assertThat(label.getDescription(), is(nullValue()));
     }
+
+    @Test
+    public void starred() throws Exception {
+        final GHEventPayload.Star starPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Star.class);
+
+        assertThat(starPayload.getAction(), is("created"));
+        assertThat(starPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(starPayload.getSender().getLogin(), is("gsmet"));
+        assertThat(starPayload.getStarredAt().getTime(), is(1654017876000L));
+    }
 }

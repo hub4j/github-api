@@ -1,0 +1,49 @@
+{
+  "id": "be8ab32b-e885-4806-b87f-3db5973ef7e4",
+  "name": "repos_hub4j-test-org_github-api_pulls_comments_902875759_reactions",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/comments/902875759/reactions",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_pulls_comments_902875759_reactions-23.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 21 Jun 2022 17:18:29 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"b6ff492e1af9b061cffc7f5c9a251fbd428c9ebb996765012582d54b8799977a\"",
+      "X-OAuth-Scopes": "admin:gpg_key, notifications, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-07-17 15:27:30 UTC",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4973",
+      "X-RateLimit-Reset": "1655835493",
+      "X-RateLimit-Used": "27",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "AF8A:6280:3800FF:398241:62B1FD65"
+    }
+  },
+  "uuid": "be8ab32b-e885-4806-b87f-3db5973ef7e4",
+  "persistent": true,
+  "scenarioName": "scenario-3-repos-hub4j-test-org-github-api-pulls-comments-902875759-reactions",
+  "requiredScenarioState": "scenario-3-repos-hub4j-test-org-github-api-pulls-comments-902875759-reactions-3",
+  "insertionIndex": 23
+}

@@ -94,6 +94,20 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void isDisabled() throws Exception {
+        GHRepository r = getRepository();
+
+        assertThat(r.isDisabled(), is(false));
+    }
+
+    @Test
+    public void isDisabledTrue() throws Exception {
+        GHRepository r = getRepository();
+
+        assertThat(r.isDisabled(), is(true));
+    }
+
+    @Test
     public void getBranch_URLEncoded() throws Exception {
         GHRepository repo = getRepository();
         GHBranch branch = repo.getBranch("test/#UrlEncode");

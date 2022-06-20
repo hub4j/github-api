@@ -94,7 +94,7 @@ public class GHRepository extends GHObject {
 
     private GHUser owner; // not fully populated. beware.
 
-    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, has_projects;
+    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, disabled, has_projects;
 
     private boolean allow_squash_merge;
 
@@ -658,6 +658,15 @@ public class GHRepository extends GHObject {
      */
     public boolean isArchived() {
         return archived;
+    }
+
+    /**
+     * Is disabled boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isDisabled() {
+        return disabled;
     }
 
     /**

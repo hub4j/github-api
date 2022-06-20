@@ -39,6 +39,7 @@ public class GHWorkflowJob extends GHObject {
     private String conclusion;
 
     private long runId;
+    private int runAttempt;
 
     private String htmlUrl;
     private String checkRunUrl;
@@ -117,6 +118,15 @@ public class GHWorkflowJob extends GHObject {
      */
     public long getRunId() {
         return runId;
+    }
+
+    /**
+     * Attempt number of the associated workflow run, 1 for first attempt and higher if the workflow was re-run.
+     *
+     * @return attempt number
+     */
+    public int getRunAttempt() {
+        return runAttempt;
     }
 
     @Override

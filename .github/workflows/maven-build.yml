@@ -82,7 +82,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu, windows ]
-        java: [ 11.0.3, 11, 17 ]
+        java: [ 11, 17 ]
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK

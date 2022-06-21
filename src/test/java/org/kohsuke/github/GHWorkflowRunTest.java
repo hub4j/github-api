@@ -39,6 +39,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     private static final String MULTI_JOBS_WORKFLOW_PATH = "multi-jobs-workflow.yml";
     private static final String MULTI_JOBS_WORKFLOW_NAME = "Multi jobs workflow";
     private static final String RUN_A_ONE_LINE_SCRIPT_STEP_NAME = "Run a one-line script";
+    private static final String UBUNTU_LABEL = "ubuntu-latest";
 
     private GHRepository repo;
 
@@ -477,6 +478,10 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(job.getUrl().getPath(), containsString("/actions/jobs/"));
         assertThat(job.getHtmlUrl().getPath(), containsString("/runs/" + job.getId()));
         assertThat(job.getCheckRunUrl().getPath(), containsString("/check-runs/"));
+        assertThat(job.getRunnerId(), is(1));
+        assertThat(job.getRunnerName(), containsString("my runner"));
+        assertThat(job.getRunnerGroupId(), is(2));
+        assertThat(job.getRunnerGroupName(), containsString("my runner group"));
 
         // we only test the step we have control over, the others are added by GitHub
         Optional<Step> step = job.getSteps()
@@ -485,6 +490,11 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 .findFirst();
         if (!step.isPresent()) {
             fail("Unable to find " + RUN_A_ONE_LINE_SCRIPT_STEP_NAME + " step");
+        }
+
+        Optional<String> labelOptional = job.getLabels().stream().filter(s -> s.equals(UBUNTU_LABEL)).findFirst();
+        if (!labelOptional.isPresent()) {
+            fail("Unable to find " + UBUNTU_LABEL + " label");
         }
 
         checkStepProperties(step.get(), RUN_A_ONE_LINE_SCRIPT_STEP_NAME, 2);

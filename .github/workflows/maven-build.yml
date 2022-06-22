@@ -14,6 +14,9 @@ on:
 env:
   JAVA_11_PLUS_MAVEN_OPTS: "--add-opens jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: build-only (Java ${{ matrix.java }})
@@ -71,7 +74,7 @@ jobs:
     - name: Maven Install with Code Coverage
       run: mvn -B clean install -D enable-ci -Djapicmp.skip --file pom.xml
     - name: Codecov Report 
-      uses: codecov/codecov-action@v3.0.0
+      uses: codecov/codecov-action@v3.1.0
   test:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
     runs-on: ${{ matrix.os }}-latest
@@ -79,7 +82,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu, windows ]
-        java: [ 11.0.3, 11, 17 ]
+        java: [ 11, 17 ]
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK

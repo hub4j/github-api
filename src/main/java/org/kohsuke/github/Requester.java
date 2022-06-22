@@ -50,7 +50,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
-     * Sends a request to the specified URL and checks that it is sucessful.
+     * Sends a request to the specified URL and checks that it is successful.
      *
      * @throws IOException
      *             the io exception

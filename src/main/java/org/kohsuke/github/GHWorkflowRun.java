@@ -276,7 +276,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void cancel() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").fetchHttpStatusCode();
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").send();
     }
 
     /**
@@ -286,7 +286,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).fetchHttpStatusCode();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -296,7 +296,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void rerun() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").fetchHttpStatusCode();
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").send();
     }
 
     /**
@@ -336,7 +336,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void deleteLogs() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").fetchHttpStatusCode();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").send();
     }
 
     /**

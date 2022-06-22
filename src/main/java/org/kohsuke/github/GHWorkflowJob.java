@@ -9,7 +9,11 @@ import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -35,11 +39,19 @@ public class GHWorkflowJob extends GHObject {
     private String conclusion;
 
     private long runId;
+    private int runAttempt;
 
     private String htmlUrl;
     private String checkRunUrl;
 
+    private int runnerId;
+    private String runnerName;
+    private int runnerGroupId;
+    private String runnerGroupName;
+
     private List<Step> steps = new ArrayList<>();
+
+    private List<String> labels = new ArrayList<>();
 
     /**
      * The name of the job.
@@ -108,6 +120,15 @@ public class GHWorkflowJob extends GHObject {
         return runId;
     }
 
+    /**
+     * Attempt number of the associated workflow run, 1 for first attempt and higher if the workflow was re-run.
+     *
+     * @return attempt number
+     */
+    public int getRunAttempt() {
+        return runAttempt;
+    }
+
     @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
@@ -129,6 +150,51 @@ public class GHWorkflowJob extends GHObject {
      */
     public List<Step> getSteps() {
         return Collections.unmodifiableList(steps);
+    }
+
+    /**
+     * Gets the labels of the job.
+     *
+     * @return the labels
+     */
+    public List<String> getLabels() {
+        return Collections.unmodifiableList(labels);
+    }
+
+    /**
+     * the runner id.
+     *
+     * @return runnerId
+     */
+    public int getRunnerId() {
+        return runnerId;
+    }
+
+    /**
+     * the runner name.
+     *
+     * @return runnerName
+     */
+    public String getRunnerName() {
+        return runnerName;
+    }
+
+    /**
+     * the runner group id.
+     *
+     * @return runnerGroupId
+     */
+    public int getRunnerGroupId() {
+        return runnerGroupId;
+    }
+
+    /**
+     * the runner group name.
+     *
+     * @return runnerGroupName
+     */
+    public String getRunnerGroupName() {
+        return runnerGroupName;
     }
 
     /**

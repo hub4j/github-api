@@ -1025,15 +1025,15 @@ public class GHRepository extends GHObject {
     /**
      * Checks if the given user is a collaborator for this repository.
      *
-     * @param u
-     *            the u
-     * @return the boolean
+     * @param user
+     *            a {@link GHUser}
+     * @return true if the user is a collaborator for this repository
      * @throws IOException
      *             the io exception
      */
-    public boolean isCollaborator(GHUser u) throws IOException {
+    public boolean isCollaborator(GHUser user) throws IOException {
         return root().createRequest()
-                .withUrlPath(getApiTailUrl("collaborators/" + u.getLogin()))
+                .withUrlPath(getApiTailUrl("collaborators/" + user.getLogin()))
                 .fetchHttpStatusCode() == 204;
     }
 

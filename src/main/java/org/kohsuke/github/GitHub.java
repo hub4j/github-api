@@ -920,6 +920,22 @@ public class GitHub {
     }
 
     /**
+     * Gets a List of all GHGist objects
+     *
+     * @return the list
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHGist> listGists() throws IOException {
+        List<GHGist> list = new ArrayList<>();
+        assert myself != null;
+        for(GHGist ghGist : myself.listGists().toList()) {
+            list.add(getGist(ghGist.getGistId()));
+        }
+        return list;
+    }
+
+    /**
      * Create gist gh gist builder.
      *
      * @return the gh gist builder

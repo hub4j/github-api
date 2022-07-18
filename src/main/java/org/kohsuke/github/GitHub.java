@@ -38,6 +38,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -927,12 +928,12 @@ public class GitHub {
      *             the io exception
      */
     public List<GHGist> listGists() throws IOException {
-        List<GHGist> list = new ArrayList<>();
+        CopyOnWriteArrayList<GHGist> list = new CopyOnWriteArrayList<>();
         assert myself != null;
-        for(GHGist ghGist : myself.listGists().toList()) {
+        for (GHGist ghGist : myself.listGists().toList()) {
             list.add(getGist(ghGist.getGistId()));
         }
-        return list;
+        return new ArrayList<>(list);
     }
 
     /**

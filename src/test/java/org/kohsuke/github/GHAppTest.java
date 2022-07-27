@@ -146,6 +146,27 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         assertThat(installationToken2.getRepositories(), nullValue());;
     }
 
+    @Test
+    public void createTokenWithRepositories() throws IOException {
+        GHApp app = gitHub.getApp();
+        GHAppInstallation installation = app.getInstallationByUser("bogus");
+
+        // Create token specifying repositories (not repository_ids!)
+        GHAppInstallationToken installationToken = installation.createToken()
+                .repositories(Collections.singletonList("bogus"))
+                .create();
+
+        assertThat(installationToken.getToken(), is("bogus"));
+        assertThat(installationToken.getPermissions().entrySet(), hasSize(4));
+        assertThat(installationToken.getRepositorySelection(), is(GHRepositorySelection.SELECTED));
+        assertThat(installationToken.getExpiresAt(), is(GitHubClient.parseDate("2022-07-27T21:38:33Z")));
+
+        GHRepository repository = installationToken.getRepositories().get(0);
+        assertThat(installationToken.getRepositories().size(), is(1));
+        assertThat(repository.getId(), is((long) 11111111));
+        assertThat(repository.getName(), is("bogus"));
+    }
+
     private void testAppInstallation(GHAppInstallation appInstallation) throws IOException {
         Map<String, GHPermissionType> appPermissions = appInstallation.getPermissions();
         GHUser appAccount = appInstallation.getAccount();

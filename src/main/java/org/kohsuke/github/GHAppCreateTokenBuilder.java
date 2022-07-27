@@ -47,6 +47,20 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     }
 
     /**
+     * By default the installation token has access to all repositories that the installation can access. To restrict
+     * the access to specific repositories, you can provide repository names when creating the token.
+     *
+     * @param repositories
+     *            Array containing the repository names
+     * @return a GHAppCreateTokenBuilder
+     */
+    @BetaApi
+    public GHAppCreateTokenBuilder repositories(List<String> repositories) {
+        this.builder.with("repositories", repositories);
+        return this;
+    }
+
+    /**
      * Set the permissions granted to the access token. The permissions object includes the permission names and their
      * access type.
      *

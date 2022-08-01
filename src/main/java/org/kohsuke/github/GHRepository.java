@@ -1741,7 +1741,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Gets a single repository secret without revealing its encrypted value.
-     * https://docs.github.com/en/rest/actions/secrets#get-a-repository-secret
+     * "https://docs.github.com/en/rest/actions/secrets#get-a-repository-secret"
      *
      * @param secretName
      *            the name of the secret

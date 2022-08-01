@@ -1740,20 +1740,8 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * List up all the repository secrets.
-     *
-     * @return the paged iterable of repository secrets
-     * @throws IOException
-     *             the io exception
-     */
-    public PagedIterable<GHRepoSecret> listSecrets() throws IOException {
-        return root().createRequest()
-                .withUrlPath(String.format("/repos/%s/%s/actions/secrets", getOwnerName(), name))
-                .toIterable(GHRepoSecret[].class, item -> item.wrapUp(this));
-    }
-
-    /**
-     * Gets specified secret.
+     * Gets a single repository secret without revealing its encrypted value.
+     * https://docs.github.com/en/rest/actions/secrets#get-a-repository-secret
      *
      * @param secretName
      *            the name of the secret
@@ -1769,7 +1757,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Set/Update a repository secret
+     * Creates or updates a repository secret with an encrypted value.
      * "https://docs.github.com/rest/reference/actions#create-or-update-a-repository-secret"
      *
      * @param secretName
@@ -1786,6 +1774,22 @@ public class GHRepository extends GHObject {
                 .method("PUT")
                 .with("encrypted_value", encryptedValue)
                 .with("key_id", publicKeyId)
+                .withUrlPath(String.format("/repos/%s/%s/actions/secrets/%s", getOwnerName(), name, secretName))
+                .send();
+    }
+
+    /**
+     * Deletes a secret in a repository using the secret name.
+     * "https://docs.github.com/rest/reference/actions#delete-a-repository-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteSecret(String secretName) throws IOException {
+        root().createRequest()
+                .method("DELETE")
                 .withUrlPath(String.format("/repos/%s/%s/actions/secrets/%s", getOwnerName(), name, secretName))
                 .send();
     }

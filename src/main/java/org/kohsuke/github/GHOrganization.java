@@ -723,7 +723,8 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Gets the organization's public key
+     * Gets an organization public key, which is needed to encrypt secrets.
+     * "https://docs.github.com/en/rest/actions/secrets#get-an-organization-public-key"
      *
      * @return the public key
      * @throws IOException
@@ -734,20 +735,8 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * List up all the organization secrets.
-     *
-     * @return the paged iterable of organization secrets
-     * @throws IOException
-     *             the io exception
-     */
-    public PagedIterable<GHOrgSecret> listSecrets() throws IOException {
-        return root().createRequest()
-                .withUrlPath(String.format("/orgs/%s/actions/secrets", login))
-                .toIterable(GHOrgSecret[].class, item -> item.wrapUp(this));
-    }
-
-    /**
-     * Gets specified secret.
+     * Gets a single organization secret without revealing its encrypted value.
+     * "https://docs.github.com/rest/actions/secrets#get-an-organization-secret"
      *
      * @param secretName
      *            the name of the secret
@@ -763,7 +752,7 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Set/Update an organization secret
+     * Creates or updates an organization secret with an encrypted value.
      * "https://docs.github.com/rest/reference/actions#create-or-update-an-organization-secret"
      *
      * @param secretName
@@ -801,7 +790,7 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Set/Update an organization secret
+     * Creates or updates an organization secret with an encrypted value.
      * "https://docs.github.com/rest/reference/actions#create-or-update-an-organization-secret"
      *
      * @param secretName
@@ -827,6 +816,22 @@ public class GHOrganization extends GHPerson {
                 .with("encrypted_value", encryptedValue)
                 .with("key_id", publicKeyId)
                 .with("visibility", visibility)
+                .withUrlPath(String.format("/orgs/%s/actions/secrets/%s", login, secretName))
+                .send();
+    }
+
+    /**
+     * Deletes a secret in an organization using the secret name.
+     * "https://docs.github.com/rest/actions/secrets#delete-an-organization-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteSecret(String secretName) throws IOException {
+        root().createRequest()
+                .method("DELETE")
                 .withUrlPath(String.format("/orgs/%s/actions/secrets/%s", login, secretName))
                 .send();
     }

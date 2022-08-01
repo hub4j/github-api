@@ -1740,6 +1740,57 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * List up all the repository secrets.
+     *
+     * @return the paged iterable of repository secrets
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHRepoSecret> listSecrets() throws IOException {
+        return root().createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/actions/secrets", getOwnerName(), name))
+                .toIterable(GHRepoSecret[].class, item -> item.wrapUp(this));
+    }
+
+    /**
+     * Gets specified secret.
+     *
+     * @param secretName
+     *            the name of the secret
+     * @return the secret
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepoSecret getSecret(String secretName) throws IOException {
+        return root().createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/actions/secrets/%s", getOwnerName(), name, secretName))
+                .fetch(GHRepoSecret.class)
+                .wrapUp(this);
+    }
+
+    /**
+     * Set/Update a repository secret
+     * "https://docs.github.com/rest/reference/actions#create-or-update-a-repository-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @param encryptedValue
+     *            The encrypted value for this secret
+     * @param publicKeyId
+     *            The id of the Public Key used to encrypt this secret
+     * @throws IOException
+     *             the io exception
+     */
+    public void createSecret(String secretName, String encryptedValue, String publicKeyId) throws IOException {
+        root().createRequest()
+                .method("PUT")
+                .with("encrypted_value", encryptedValue)
+                .with("key_id", publicKeyId)
+                .withUrlPath(String.format("/repos/%s/%s/actions/secrets/%s", getOwnerName(), name, secretName))
+                .send();
+    }
+
+    /**
      * Sets {@link #getCompare(String, String)} to return a {@link GHCompare} that uses a paginated commit list instead
      * of limiting to 250 results.
      *

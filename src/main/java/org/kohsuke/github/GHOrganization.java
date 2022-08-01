@@ -721,4 +721,15 @@ public class GHOrganization extends GHPerson {
     public GHHook createWebHook(URL url) throws IOException {
         return createWebHook(url, null);
     }
+
+    /**
+     * Gets the organization's public key
+     *
+     * @return the public key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPublicKey getPublicKey() throws IOException {
+        return GHPublicKeys.orgContext(this).getPublicKey();
+    }
 }

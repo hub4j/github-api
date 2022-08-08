@@ -11,7 +11,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThrows;
 
 public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
@@ -876,7 +887,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         GHPullRequest pullRequest = pullRequests.get(0);
         assertThat(pullRequest.getId(), is(599098265L));
         assertThat(pullRequest.getRepository(), sameInstance(workflowRunPayload.getRepository()));
-
     }
 
     @Test
@@ -890,6 +900,40 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 is("gsmet-bot-playground/quarkus-bot-java-playground"));
         assertThat(workflowRun.getRepository(), sameInstance(workflowRunPayload.getRepository()));
         assertThat(workflowRunPayload.getWorkflow().getRepository(), sameInstance(workflowRunPayload.getRepository()));
+    }
+
+    @Test
+    public void workflow_job() throws Exception {
+        final GHEventPayload.WorkflowJob workflowJobPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.WorkflowJob.class);
+
+        assertThat(workflowJobPayload.getAction(), is("completed"));
+        assertThat(workflowJobPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(workflowJobPayload.getSender().getLogin(), is("gsmet"));
+
+        GHWorkflowJob workflowJob = workflowJobPayload.getWorkflowJob();
+        assertThat(workflowJob.getId(), is(6653410527L));
+        assertThat(workflowJob.getRunId(), is(2408553341L));
+        assertThat(workflowJob.getRunAttempt(), is(1));
+        assertThat(workflowJob.getUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/jobs/6653410527"));
+        assertThat(workflowJob.getHtmlUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/runs/6653410527?check_suite_focus=true"));
+        assertThat(workflowJob.getNodeId(), is("CR_kwDOEq3cwc8AAAABjJL83w"));
+        assertThat(workflowJob.getHeadSha(), is("5dd2dadfbdc2a722c08a8ad42ae4e26e3e731042"));
+        assertThat(workflowJob.getStatus(), is(GHWorkflowRun.Status.COMPLETED));
+        assertThat(workflowJob.getConclusion(), is(GHWorkflowRun.Conclusion.FAILURE));
+        assertThat(workflowJob.getStartedAt().getTime(), is(1653908125000L));
+        assertThat(workflowJob.getCompletedAt().getTime(), is(1653908157000L));
+        assertThat(workflowJob.getName(), is("JVM Tests - JDK JDK16"));
+        assertThat(workflowJob.getSteps(),
+                contains(hasProperty("name", is("Set up job")),
+                        hasProperty("name", is("Run actions/checkout@v2")),
+                        hasProperty("name", is("Build with Maven")),
+                        hasProperty("name", is("Post Run actions/checkout@v2")),
+                        hasProperty("name", is("Complete job"))));
+        assertThat(workflowJob.getCheckRunUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/check-runs/6653410527"));
     }
 
     @Test
@@ -1096,5 +1140,16 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(label.getColor(), is("ededed"));
         assertThat(label.isDefault(), is(false));
         assertThat(label.getDescription(), is(nullValue()));
+    }
+
+    @Test
+    public void starred() throws Exception {
+        final GHEventPayload.Star starPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Star.class);
+
+        assertThat(starPayload.getAction(), is("created"));
+        assertThat(starPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(starPayload.getSender().getLogin(), is("gsmet"));
+        assertThat(starPayload.getStarredAt().getTime(), is(1654017876000L));
     }
 }

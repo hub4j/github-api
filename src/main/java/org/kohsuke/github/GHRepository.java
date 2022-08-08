@@ -94,7 +94,7 @@ public class GHRepository extends GHObject {
 
     private GHUser owner; // not fully populated. beware.
 
-    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, has_projects;
+    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, disabled, has_projects;
 
     private boolean allow_squash_merge;
 
@@ -113,11 +113,11 @@ public class GHRepository extends GHObject {
 
     private String pushed_at;
 
-    private Map<Integer, GHMilestone> milestones = new WeakHashMap<Integer, GHMilestone>();
+    private Map<Integer, GHMilestone> milestones = Collections.synchronizedMap(new WeakHashMap<>());
 
     private String default_branch, language;
 
-    private Map<String, GHCommit> commits = new WeakHashMap<String, GHCommit>();
+    private Map<String, GHCommit> commits = Collections.synchronizedMap(new WeakHashMap<>());
 
     @SkipFromToString
     private GHRepoPermission permissions;
@@ -658,6 +658,15 @@ public class GHRepository extends GHObject {
      */
     public boolean isArchived() {
         return archived;
+    }
+
+    /**
+     * Is disabled boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isDisabled() {
+        return disabled;
     }
 
     /**
@@ -3182,6 +3191,20 @@ public class GHRepository extends GHObject {
                 .wrapUp(this);
     }
 
+    /**
+     * Gets the public key for the given repo
+     *
+     * @return the public key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepositoryPublicKey getPublicKey() throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("/actions/secrets/public-key"))
+                .fetch(GHRepositoryPublicKey.class)
+                .wrapUp(this);
+    }
+
     // Only used within listTopics().
     private static class Topics {
         public List<String> names;
@@ -3221,6 +3244,27 @@ public class GHRepository extends GHObject {
                 .send();
     }
 
+    /**
+     * Set/Update a repository secret
+     * "https://docs.github.com/rest/reference/actions#create-or-update-a-repository-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @param encryptedValue
+     *            The encrypted value for this secret
+     * @param publicKeyId
+     *            The id of the Public Key used to encrypt this secret
+     * @throws IOException
+     *             the io exception
+     */
+    public void createSecret(String secretName, String encryptedValue, String publicKeyId) throws IOException {
+        root().createRequest()
+                .method("PUT")
+                .with("encrypted_value", encryptedValue)
+                .with("key_id", publicKeyId)
+                .withUrlPath(getApiTailUrl("actions/secrets") + "/" + secretName)
+                .send();
+    }
     /**
      * Create a tag. See https://developer.github.com/v3/git/tags/#create-a-tag-object
      *

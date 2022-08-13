@@ -929,8 +929,7 @@ public class GitHub {
      */
     public List<GHGist> listGists() throws IOException {
         CopyOnWriteArrayList<GHGist> list = new CopyOnWriteArrayList<>();
-        assert myself != null;
-        for (GHGist ghGist : myself.listGists().toList()) {
+        for (GHGist ghGist : getMyself().listGists().toList()) {
             list.add(getGist(ghGist.getGistId()));
         }
         return new ArrayList<>(list);

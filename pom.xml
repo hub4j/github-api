@@ -34,7 +34,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spotbugs-maven-plugin.version>4.7.0.0</spotbugs-maven-plugin.version>
-    <spotbugs.version>4.6.0</spotbugs.version>
+    <spotbugs.version>4.7.1</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.9.2</okhttp3.version>

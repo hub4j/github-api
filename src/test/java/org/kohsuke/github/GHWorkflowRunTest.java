@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import org.awaitility.Awaitility;
 import org.junit.Before;
 import org.junit.Test;
+import org.kohsuke.github.GHPullRequestQueryBuilder.Sort;
 import org.kohsuke.github.GHWorkflowJob.Step;
 import org.kohsuke.github.GHWorkflowRun.Conclusion;
 import org.kohsuke.github.GHWorkflowRun.Status;
@@ -362,16 +363,55 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(allJobs.size(), greaterThanOrEqualTo(2));
     }
 
-    private void await(Function<GHRepository, Boolean> condition) throws IOException {
+    @Test
+    public void testApproval() throws IOException {
+        List<GHPullRequest> pullRequests = repo.queryPullRequests()
+                .base(MAIN_BRANCH)
+                .sort(Sort.CREATED)
+                .direction(GHDirection.DESC)
+                .state(GHIssueState.OPEN)
+                .list()
+                .toList();
+
+        assertThat(pullRequests.size(), greaterThanOrEqualTo(1));
+        GHPullRequest pullRequest = pullRequests.get(0);
+
+        await("Waiting for workflow run to be pending",
+                (nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                        FAST_WORKFLOW_NAME,
+                        MAIN_BRANCH,
+                        Conclusion.ACTION_REQUIRED).isPresent());
+
+        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME, MAIN_BRANCH, Conclusion.ACTION_REQUIRED)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        workflowRun.approve();
+
+        await("Waiting for workflow run to be approved",
+                (nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                        FAST_WORKFLOW_NAME,
+                        pullRequest.getHead().getRef(),
+                        Conclusion.SUCCESS).isPresent());
+
+        workflowRun = repo.getWorkflowRun(workflowRun.getId());
+
+        assertThat(workflowRun.getConclusion(), is(Conclusion.SUCCESS));
+    }
+
+    private void await(String alias, Function<GHRepository, Boolean> condition) throws IOException {
         if (!mockGitHub.isUseProxy()) {
             return;
         }
 
         GHRepository nonRecordingRepo = getNonRecordingGitHub().getRepository(REPO_NAME);
 
-        Awaitility.await().pollInterval(Duration.ofSeconds(5)).atMost(Duration.ofSeconds(60)).until(() -> {
+        Awaitility.await(alias).pollInterval(Duration.ofSeconds(5)).atMost(Duration.ofSeconds(60)).until(() -> {
             return condition.apply(nonRecordingRepo);
         });
+    }
+
+    private void await(Function<GHRepository, Boolean> condition) throws IOException {
+        await(null, condition);
     }
 
     private long getLatestPreexistingWorkflowRunId() {
@@ -405,6 +445,31 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
             Status status,
             long latestPreexistingWorkflowRunId) {
         return getWorkflowRun(this.repo, workflowName, branch, status, latestPreexistingWorkflowRunId);
+    }
+
+    private static Optional<GHWorkflowRun> getWorkflowRun(GHRepository repository,
+            String workflowName,
+            String branch,
+            Conclusion conclusion) {
+        List<GHWorkflowRun> workflowRuns = repository.queryWorkflowRuns()
+                .branch(branch)
+                .conclusion(conclusion)
+                .event(GHEvent.PULL_REQUEST)
+                .list()
+                .withPageSize(20)
+                .iterator()
+                .nextPage();
+
+        for (GHWorkflowRun workflowRun : workflowRuns) {
+            if (workflowRun.getName().equals(workflowName)) {
+                return Optional.of(workflowRun);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<GHWorkflowRun> getWorkflowRun(String workflowName, String branch, Conclusion conclusion) {
+        return getWorkflowRun(this.repo, workflowName, branch, conclusion);
     }
 
     private static Status getWorkflowRunStatus(GHRepository repository, long workflowRunId) {

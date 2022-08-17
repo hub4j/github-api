@@ -300,6 +300,16 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
+     * Approve the workflow run.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void approve() throws IOException {
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "approve").send();
+    }
+
+    /**
      * Lists the artifacts attached to this workflow run.
      *
      * @return the paged iterable

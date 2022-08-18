@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.GHWorkflowRun.Conclusion;
 import org.kohsuke.github.GHWorkflowRun.Status;
 
 /**
@@ -85,6 +86,20 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
      */
     public GHWorkflowRunQueryBuilder status(Status status) {
         req.with("status", status.toString());
+        return this;
+    }
+
+    /**
+     * Conclusion workflow run query builder.
+     * <p>
+     * The GitHub API is also using the status field to search by conclusion.
+     *
+     * @param conclusion
+     *            the conclusion
+     * @return the gh workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder conclusion(Conclusion conclusion) {
+        req.with("status", conclusion.toString());
         return this;
     }
 

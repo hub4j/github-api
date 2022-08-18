@@ -944,6 +944,13 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void userIsCollaborator() throws Exception {
+        GHRepository repo = getRepository();
+        GHUser collaborator = repo.listCollaborators().toList().get(0);
+        assertThat(repo.isCollaborator(collaborator), is(true));
+    }
+
+    @Test
     public void getCheckRuns() throws Exception {
         final int expectedCount = 8;
         // Use github-api repository as it has checks set up

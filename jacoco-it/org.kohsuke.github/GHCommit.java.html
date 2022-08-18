@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCommit.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCommit.java</span></div><h1>GHCommit.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -22,7 +21,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
  * @see GHCommitComment#getCommit() GHCommitComment#getCommit()
  */
 @SuppressFBWarnings(value = { &quot;NP_UNWRITTEN_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
-<span class="fc" id="L25">public class GHCommit {</span>
+public class GHCommit {
     private GHRepository owner;
 
     private ShortInfo commit;
@@ -34,86 +33,44 @@ import static org.kohsuke.github.internal.Previews.GROOT;
             value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
                     &quot;UWF_UNWRITTEN_FIELD&quot; },
             justification = &quot;JSON API&quot;)
-<span class="fc" id="L37">    public static class ShortInfo {</span>
-        private GHAuthor author;
-        private GHAuthor committer;
+    public static class ShortInfo extends GitCommit {
 
-        private String message;
-
-        private int comment_count;
-
-        private GHVerification verification;
-
-<span class="fc" id="L47">        static class Tree {</span>
-            String sha;
-        }
-
-        private Tree tree;
-
-        /**
-         * Gets author.
-         *
-         * @return the author
-         */
-        @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
-        public GitUser getAuthor() {
-<span class="fc" id="L60">            return author;</span>
-        }
-
-        /**
-         * Gets authored date.
-         *
-         * @return the authored date
-         */
-        public Date getAuthoredDate() {
-<span class="fc" id="L69">            return author.getDate();</span>
-        }
-
-        /**
-         * Gets committer.
-         *
-         * @return the committer
-         */
-        @WithBridgeMethods(value = GHAuthor.class, castRequired = true)
-        public GitUser getCommitter() {
-<span class="fc" id="L79">            return committer;</span>
-        }
-
-        /**
-         * Gets commit date.
-         *
-         * @return the commit date
-         */
-        public Date getCommitDate() {
-<span class="fc" id="L88">            return committer.getDate();</span>
-        }
-
-        /**
-         * Gets message.
-         *
-         * @return Commit message.
-         */
-        public String getMessage() {
-<span class="fc" id="L97">            return message;</span>
-        }
+<span class="fc" id="L38">        private int comment_count = -1;</span>
 
         /**
          * Gets comment count.
          *
          * @return the comment count
          */
-        public int getCommentCount() {
-<span class="fc" id="L106">            return comment_count;</span>
+        public int getCommentCount() throws GHException {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (comment_count &lt; 0) {</span>
+<span class="fc" id="L47">                throw new GHException(&quot;Not available on this endpoint.&quot;);</span>
+            }
+<span class="fc" id="L49">            return comment_count;</span>
         }
 
         /**
-         * Gets Verification Status.
-         *
-         * @return the Verification status
+         * Creates instance of {@link GHCommit.ShortInfo}.
          */
-        public GHVerification getVerification() {
-<span class="fc" id="L115">            return verification;</span>
+<span class="fc" id="L55">        public ShortInfo() {</span>
+            // Empty constructor required for Jackson binding
+<span class="fc" id="L57">        };</span>
+
+        ShortInfo(GitCommit commit) {
+            // Inherited copy constructor, used for bridge method from {@link GitCommit},
+            // which is used in {@link GHContentUpdateResponse}) to {@link GHCommit}.
+<span class="fc" id="L62">            super(commit);</span>
+<span class="fc" id="L63">        }</span>
+
+        @Override
+        public List&lt;String&gt; getParentSHA1s() {
+<span class="nc" id="L67">            List&lt;String&gt; shortInfoParents = super.getParentSHA1s();</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            if (shortInfoParents == null) {</span>
+<span class="nc" id="L69">                throw new GHException(&quot;Not available on this endpoint. Try calling getParentSHA1s from outer class.&quot;);</span>
+            }
+<span class="nc" id="L71">            return shortInfoParents;</span>
         }
+
     }
 
     /**
@@ -121,13 +78,21 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *
      * @deprecated Use {@link GitUser} instead.
      */
-<span class="fc" id="L124">    public static class GHAuthor extends GitUser {</span>
+    @Deprecated
+    public static class GHAuthor extends GitUser {
+        public GHAuthor() {
+<span class="nc" id="L84">            super();</span>
+<span class="nc" id="L85">        }</span>
+
+        public GHAuthor(GitUser user) {
+<span class="fc" id="L88">            super(user);</span>
+<span class="fc" id="L89">        }</span>
     }
 
     /**
      * The type Stats.
      */
-<span class="fc" id="L130">    public static class Stats {</span>
+<span class="fc" id="L95">    public static class Stats {</span>
         int total, additions, deletions;
     }
 
@@ -135,7 +100,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      * A file that was modified.
      */
     @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;It's being initilized by JSON deserialization&quot;)
-<span class="fc" id="L138">    public static class File {</span>
+<span class="fc" id="L103">    public static class File {</span>
         String status;
         int changes, additions, deletions;
         String raw_url, blob_url, sha, patch;
@@ -147,7 +112,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
          * @return Number of lines added + removed.
          */
         public int getLinesChanged() {
-<span class="fc" id="L150">            return changes;</span>
+<span class="fc" id="L115">            return changes;</span>
         }
 
         /**
@@ -156,7 +121,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
          * @return Number of lines added.
          */
         public int getLinesAdded() {
-<span class="fc" id="L159">            return additions;</span>
+<span class="fc" id="L124">            return additions;</span>
         }
 
         /**
@@ -165,7 +130,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
          * @return Number of lines removed.
          */
         public int getLinesDeleted() {
-<span class="fc" id="L168">            return deletions;</span>
+<span class="fc" id="L133">            return deletions;</span>
         }
 
         /**
@@ -174,7 +139,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
          * @return &quot;modified&quot;, &quot;added&quot;, or &quot;removed&quot;
          */
         public String getStatus() {
-<span class="fc" id="L177">            return status;</span>
+<span class="fc" id="L142">            return status;</span>
         }
 
         /**
@@ -185,7 +150,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
         @SuppressFBWarnings(value = &quot;NM_CONFUSING&quot;,
                 justification = &quot;It's a part of the library's API and cannot be renamed&quot;)
         public String getFileName() {
-<span class="fc" id="L188">            return filename;</span>
+<span class="fc" id="L153">            return filename;</span>
         }
 
         /**
@@ -194,7 +159,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
          * @return Previous path, in case file has moved.
          */
         public String getPreviousFilename() {
-<span class="fc" id="L197">            return previous_filename;</span>
+<span class="fc" id="L162">            return previous_filename;</span>
         }
 
         /**
@@ -203,7 +168,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
          * @return The actual change.
          */
         public String getPatch() {
-<span class="fc" id="L206">            return patch;</span>
+<span class="fc" id="L171">            return patch;</span>
         }
 
         /**
@@ -214,7 +179,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
          *         resolves to the actual content of the file.
          */
         public URL getRawUrl() {
-<span class="fc" id="L217">            return GitHubClient.parseURL(raw_url);</span>
+<span class="fc" id="L182">            return GitHubClient.parseURL(raw_url);</span>
         }
 
         /**
@@ -225,7 +190,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
          *         that resolves to the HTML page that describes this file.
          */
         public URL getBlobUrl() {
-<span class="fc" id="L228">            return GitHubClient.parseURL(blob_url);</span>
+<span class="fc" id="L193">            return GitHubClient.parseURL(blob_url);</span>
         }
 
         /**
@@ -234,20 +199,20 @@ import static org.kohsuke.github.internal.Previews.GROOT;
          * @return [0 -9a-f]{40} SHA1 checksum.
          */
         public String getSha() {
-<span class="fc" id="L237">            return sha;</span>
+<span class="fc" id="L202">            return sha;</span>
         }
     }
 
     /**
      * The type Parent.
      */
-<span class="fc" id="L244">    public static class Parent {</span>
+<span class="fc" id="L209">    public static class Parent {</span>
         @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
         String url;
         String sha;
     }
 
-<span class="fc" id="L250">    static class User {</span>
+<span class="fc" id="L215">    static class User {</span>
         // TODO: what if someone who doesn't have an account on GitHub makes a commit?
         @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
         String url, avatar_url, gravatar_id;
@@ -264,6 +229,27 @@ import static org.kohsuke.github.internal.Previews.GROOT;
     User author, committer;
 
     /**
+     * Creates an instance of {@link GHCommit}.
+     */
+<span class="fc" id="L234">    public GHCommit() {</span>
+        // empty constructor needed for Jackson binding
+<span class="fc" id="L236">    }</span>
+
+    @SuppressFBWarnings(value = &quot;EI_EXPOSE_REP2&quot;, justification = &quot;acceptable&quot;)
+<span class="fc" id="L239">    GHCommit(ShortInfo shortInfo) {</span>
+        // Constructs a (relatively sparse) GHCommit from a GitCommit. Used for
+        // bridge method from {@link GitCommit}, which is used in
+        // {@link GHContentUpdateResponse}) to {@link GHCommit}.
+<span class="fc" id="L243">        commit = shortInfo;</span>
+
+<span class="fc" id="L245">        owner = commit.getOwner();</span>
+<span class="fc" id="L246">        html_url = commit.getHtmlUrl();</span>
+<span class="fc" id="L247">        sha = commit.getSha();</span>
+<span class="fc" id="L248">        url = commit.getUrl();</span>
+<span class="fc" id="L249">        parents = commit.getParents();</span>
+<span class="fc" id="L250">    }</span>
+
+    /**
      * Gets commit short info.
      *
      * @return the commit short info
@@ -271,9 +257,9 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             the io exception
      */
     public ShortInfo getCommitShortInfo() throws IOException {
-<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (commit == null)</span>
-<span class="fc" id="L275">            populate();</span>
-<span class="fc" id="L276">        return commit;</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (commit == null)</span>
+<span class="fc" id="L261">            populate();</span>
+<span class="fc" id="L262">        return commit;</span>
     }
 
     /**
@@ -283,7 +269,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L286">        return owner;</span>
+<span class="fc" id="L272">        return owner;</span>
     }
 
     /**
@@ -294,8 +280,8 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             if the field was not populated and refresh fails
      */
     public int getLinesChanged() throws IOException {
-<span class="fc" id="L297">        populate();</span>
-<span class="fc" id="L298">        return stats.total;</span>
+<span class="fc" id="L283">        populate();</span>
+<span class="fc" id="L284">        return stats.total;</span>
     }
 
     /**
@@ -306,8 +292,8 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             if the field was not populated and refresh fails
      */
     public int getLinesAdded() throws IOException {
-<span class="fc" id="L309">        populate();</span>
-<span class="fc" id="L310">        return stats.additions;</span>
+<span class="fc" id="L295">        populate();</span>
+<span class="fc" id="L296">        return stats.additions;</span>
     }
 
     /**
@@ -318,8 +304,8 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             if the field was not populated and refresh fails
      */
     public int getLinesDeleted() throws IOException {
-<span class="fc" id="L321">        populate();</span>
-<span class="fc" id="L322">        return stats.deletions;</span>
+<span class="fc" id="L307">        populate();</span>
+<span class="fc" id="L308">        return stats.deletions;</span>
     }
 
     /**
@@ -330,7 +316,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             on error
      */
     public GHTree getTree() throws IOException {
-<span class="fc" id="L333">        return owner.getTree(getCommitShortInfo().tree.sha);</span>
+<span class="fc" id="L319">        return owner.getTree(getCommitShortInfo().getTreeSHA1());</span>
     }
 
     /**
@@ -340,7 +326,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *         &quot;https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000&quot;
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L343">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L329">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -349,7 +335,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      * @return [0 -9a-f]{40} SHA1 checksum.
      */
     public String getSHA1() {
-<span class="fc" id="L352">        return sha;</span>
+<span class="fc" id="L338">        return sha;</span>
     }
 
     /**
@@ -358,7 +344,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      * @return API URL of this object.
      */
     public URL getUrl() {
-<span class="fc" id="L361">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L347">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -369,8 +355,8 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             on error
      */
     public List&lt;File&gt; getFiles() throws IOException {
-<span class="fc" id="L372">        populate();</span>
-<span class="pc bpc" id="L373" title="1 of 2 branches missed.">        return files != null ? Collections.unmodifiableList(files) : Collections.&lt;File&gt;emptyList();</span>
+<span class="fc" id="L358">        populate();</span>
+<span class="pc bpc" id="L359" title="1 of 2 branches missed.">        return files != null ? Collections.unmodifiableList(files) : Collections.&lt;File&gt;emptyList();</span>
     }
 
     /**
@@ -379,17 +365,17 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      * @return SHA1 of parent commit objects.
      */
     public List&lt;String&gt; getParentSHA1s() {
-<span class="pc bpc" id="L382" title="1 of 2 branches missed.">        if (parents == null)</span>
-<span class="nc" id="L383">            return Collections.emptyList();</span>
-<span class="fc" id="L384">        return new AbstractList&lt;String&gt;() {</span>
+<span class="pc bpc" id="L368" title="2 of 4 branches missed.">        if (parents == null || parents.size() == 0)</span>
+<span class="nc" id="L369">            return Collections.emptyList();</span>
+<span class="fc" id="L370">        return new AbstractList&lt;String&gt;() {</span>
             @Override
             public String get(int index) {
-<span class="fc" id="L387">                return parents.get(index).sha;</span>
+<span class="fc" id="L373">                return parents.get(index).sha;</span>
             }
 
             @Override
             public int size() {
-<span class="fc" id="L392">                return parents.size();</span>
+<span class="fc" id="L378">                return parents.size();</span>
             }
         };
     }
@@ -402,11 +388,11 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             on error
      */
     public List&lt;GHCommit&gt; getParents() throws IOException {
-<span class="fc" id="L405">        populate();</span>
-<span class="fc" id="L406">        List&lt;GHCommit&gt; r = new ArrayList&lt;GHCommit&gt;();</span>
-<span class="fc bfc" id="L407" title="All 2 branches covered.">        for (String sha1 : getParentSHA1s())</span>
-<span class="fc" id="L408">            r.add(owner.getCommit(sha1));</span>
-<span class="fc" id="L409">        return r;</span>
+<span class="fc" id="L391">        populate();</span>
+<span class="fc" id="L392">        List&lt;GHCommit&gt; r = new ArrayList&lt;GHCommit&gt;();</span>
+<span class="fc bfc" id="L393" title="All 2 branches covered.">        for (String sha1 : getParentSHA1s())</span>
+<span class="fc" id="L394">            r.add(owner.getCommit(sha1));</span>
+<span class="fc" id="L395">        return r;</span>
     }
 
     /**
@@ -417,8 +403,8 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             the io exception
      */
     public GHUser getAuthor() throws IOException {
-<span class="fc" id="L420">        populate();</span>
-<span class="fc" id="L421">        return resolveUser(author);</span>
+<span class="fc" id="L406">        populate();</span>
+<span class="fc" id="L407">        return resolveUser(author);</span>
     }
 
     /**
@@ -429,7 +415,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             if the information was not already fetched and an attempt at fetching the information failed.
      */
     public Date getAuthoredDate() throws IOException {
-<span class="fc" id="L432">        return getCommitShortInfo().getAuthoredDate();</span>
+<span class="fc" id="L418">        return getCommitShortInfo().getAuthoredDate();</span>
     }
 
     /**
@@ -440,8 +426,8 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             the io exception
      */
     public GHUser getCommitter() throws IOException {
-<span class="fc" id="L443">        populate();</span>
-<span class="fc" id="L444">        return resolveUser(committer);</span>
+<span class="fc" id="L429">        populate();</span>
+<span class="fc" id="L430">        return resolveUser(committer);</span>
     }
 
     /**
@@ -452,13 +438,13 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             if the information was not already fetched and an attempt at fetching the information failed.
      */
     public Date getCommitDate() throws IOException {
-<span class="fc" id="L455">        return getCommitShortInfo().getCommitDate();</span>
+<span class="fc" id="L441">        return getCommitShortInfo().getCommitDate();</span>
     }
 
     private GHUser resolveUser(User author) throws IOException {
-<span class="pc bpc" id="L459" title="2 of 4 branches missed.">        if (author == null || author.login == null)</span>
-<span class="nc" id="L460">            return null;</span>
-<span class="fc" id="L461">        return owner.root().getUser(author.login);</span>
+<span class="pc bpc" id="L445" title="2 of 4 branches missed.">        if (author == null || author.login == null)</span>
+<span class="nc" id="L446">            return null;</span>
+<span class="fc" id="L447">        return owner.root().getUser(author.login);</span>
     }
 
     /**
@@ -468,11 +454,11 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      */
     @Preview(GROOT)
     public PagedIterable&lt;GHPullRequest&gt; listPullRequests() {
-<span class="fc" id="L471">        return owner.root()</span>
-<span class="fc" id="L472">                .createRequest()</span>
-<span class="fc" id="L473">                .withPreview(GROOT)</span>
-<span class="fc" id="L474">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/pulls&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
-<span class="fc" id="L475">                .toIterable(GHPullRequest[].class, item -&gt; item.wrapUp(owner));</span>
+<span class="fc" id="L457">        return owner.root()</span>
+<span class="fc" id="L458">                .createRequest()</span>
+<span class="fc" id="L459">                .withPreview(GROOT)</span>
+<span class="fc" id="L460">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/pulls&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="fc" id="L461">                .toIterable(GHPullRequest[].class, item -&gt; item.wrapUp(owner));</span>
     }
 
     /**
@@ -484,14 +470,14 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      */
     @Preview(GROOT)
     public PagedIterable&lt;GHBranch&gt; listBranchesWhereHead() throws IOException {
-<span class="fc" id="L487">        return owner.root()</span>
-<span class="fc" id="L488">                .createRequest()</span>
-<span class="fc" id="L489">                .withPreview(GROOT)</span>
-<span class="fc" id="L490">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/branches-where-head&quot;,</span>
-<span class="fc" id="L491">                        owner.getOwnerName(),</span>
-<span class="fc" id="L492">                        owner.getName(),</span>
+<span class="fc" id="L473">        return owner.root()</span>
+<span class="fc" id="L474">                .createRequest()</span>
+<span class="fc" id="L475">                .withPreview(GROOT)</span>
+<span class="fc" id="L476">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/branches-where-head&quot;,</span>
+<span class="fc" id="L477">                        owner.getOwnerName(),</span>
+<span class="fc" id="L478">                        owner.getName(),</span>
                         sha))
-<span class="fc" id="L494">                .toIterable(GHBranch[].class, item -&gt; item.wrap(owner));</span>
+<span class="fc" id="L480">                .toIterable(GHBranch[].class, item -&gt; item.wrap(owner));</span>
     }
 
     /**
@@ -500,7 +486,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      * @return {@link PagedIterable} with all the commit comments in this repository.
      */
     public PagedIterable&lt;GHCommitComment&gt; listComments() {
-<span class="fc" id="L503">        return owner.listCommitComments(sha);</span>
+<span class="fc" id="L489">        return owner.listCommitComments(sha);</span>
     }
 
     /**
@@ -521,17 +507,17 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             if comment is not created
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-<span class="fc" id="L524">        GHCommitComment r = owner.root()</span>
-<span class="fc" id="L525">                .createRequest()</span>
-<span class="fc" id="L526">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L527">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L528">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L529">                .with(&quot;line&quot;, line)</span>
-<span class="fc" id="L530">                .with(&quot;position&quot;, position)</span>
-<span class="fc" id="L531">                .withUrlPath(</span>
-<span class="fc" id="L532">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
-<span class="fc" id="L533">                .fetch(GHCommitComment.class);</span>
-<span class="fc" id="L534">        return r.wrap(owner);</span>
+<span class="fc" id="L510">        GHCommitComment r = owner.root()</span>
+<span class="fc" id="L511">                .createRequest()</span>
+<span class="fc" id="L512">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L513">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L514">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L515">                .with(&quot;line&quot;, line)</span>
+<span class="fc" id="L516">                .with(&quot;position&quot;, position)</span>
+<span class="fc" id="L517">                .withUrlPath(</span>
+<span class="fc" id="L518">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="fc" id="L519">                .fetch(GHCommitComment.class);</span>
+<span class="fc" id="L520">        return r.wrap(owner);</span>
     }
 
     /**
@@ -544,7 +530,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             the io exception
      */
     public GHCommitComment createComment(String body) throws IOException {
-<span class="fc" id="L547">        return createComment(body, null, null, null);</span>
+<span class="fc" id="L533">        return createComment(body, null, null, null);</span>
     }
 
     /**
@@ -555,7 +541,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             if statuses cannot be read
      */
     public PagedIterable&lt;GHCommitStatus&gt; listStatuses() throws IOException {
-<span class="nc" id="L558">        return owner.listCommitStatuses(sha);</span>
+<span class="nc" id="L544">        return owner.listCommitStatuses(sha);</span>
     }
 
     /**
@@ -566,7 +552,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             on error
      */
     public GHCommitStatus getLastStatus() throws IOException {
-<span class="fc" id="L569">        return owner.getLastCommitStatus(sha);</span>
+<span class="fc" id="L555">        return owner.getLastCommitStatus(sha);</span>
     }
 
     /**
@@ -578,7 +564,7 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      */
     @Preview(ANTIOPE)
     public PagedIterable&lt;GHCheckRun&gt; getCheckRuns() throws IOException {
-<span class="nc" id="L581">        return owner.getCheckRuns(sha);</span>
+<span class="nc" id="L567">        return owner.getCheckRuns(sha);</span>
     }
 
     /**
@@ -588,13 +574,14 @@ import static org.kohsuke.github.internal.Previews.GROOT;
      *             on error
      */
     void populate() throws IOException {
-<span class="pc bpc" id="L591" title="1 of 4 branches missed.">        if (files == null &amp;&amp; stats == null)</span>
-<span class="fc" id="L592">            owner.root().createRequest().withUrlPath(owner.getApiTailUrl(&quot;commits/&quot; + sha)).fetchInto(this);</span>
-<span class="fc" id="L593">    }</span>
+<span class="pc bpc" id="L577" title="1 of 4 branches missed.">        if (files == null &amp;&amp; stats == null)</span>
+<span class="fc" id="L578">            owner.root().createRequest().withUrlPath(owner.getApiTailUrl(&quot;commits/&quot; + sha)).fetchInto(this);</span>
+<span class="fc" id="L579">    }</span>
 
     GHCommit wrapUp(GHRepository owner) {
-<span class="fc" id="L596">        this.owner = owner;</span>
-<span class="fc" id="L597">        return this;</span>
+<span class="fc" id="L582">        this.owner = owner;</span>
+<span class="fc" id="L583">        return this;</span>
     }
+
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

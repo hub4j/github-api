@@ -37,6 +37,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
  */
 <span class="fc" id="L38">public class GHUser extends GHPerson {</span>
 
+    protected String ldap_dn;
+
     /**
      * Gets keys.
      *
@@ -45,7 +47,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public List&lt;GHKey&gt; getKeys() throws IOException {
-<span class="fc" id="L48">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;keys&quot;)).toIterable(GHKey[].class, null).toList();</span>
+<span class="fc" id="L50">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;keys&quot;)).toIterable(GHKey[].class, null).toList();</span>
     }
 
     /**
@@ -55,8 +57,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void follow() throws IOException {
-<span class="nc" id="L58">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
-<span class="nc" id="L59">    }</span>
+<span class="nc" id="L60">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
+<span class="nc" id="L61">    }</span>
 
     /**
      * Unfollow this user.
@@ -65,8 +67,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void unfollow() throws IOException {
-<span class="nc" id="L68">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
-<span class="nc" id="L69">    }</span>
+<span class="nc" id="L70">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
+<span class="nc" id="L71">    }</span>
 
     /**
      * Lists the users that this user is following
@@ -77,7 +79,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet&lt;GHUser&gt; getFollows() throws IOException {
-<span class="nc" id="L80">        return new GHPersonSet&lt;GHUser&gt;(listFollows().toList());</span>
+<span class="nc" id="L82">        return new GHPersonSet&lt;GHUser&gt;(listFollows().toList());</span>
     }
 
     /**
@@ -86,7 +88,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHUser&gt; listFollows() {
-<span class="fc" id="L89">        return listUser(&quot;following&quot;);</span>
+<span class="fc" id="L91">        return listUser(&quot;following&quot;);</span>
     }
 
     /**
@@ -98,7 +100,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet&lt;GHUser&gt; getFollowers() throws IOException {
-<span class="nc" id="L101">        return new GHPersonSet&lt;GHUser&gt;(listFollowers().toList());</span>
+<span class="nc" id="L103">        return new GHPersonSet&lt;GHUser&gt;(listFollowers().toList());</span>
     }
 
     /**
@@ -107,11 +109,11 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHUser&gt; listFollowers() {
-<span class="fc" id="L110">        return listUser(&quot;followers&quot;);</span>
+<span class="fc" id="L112">        return listUser(&quot;followers&quot;);</span>
     }
 
     private PagedIterable&lt;GHUser&gt; listUser(final String suffix) {
-<span class="fc" id="L114">        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);</span>
+<span class="fc" id="L116">        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);</span>
     }
 
     /**
@@ -122,7 +124,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listSubscriptions() {
-<span class="nc" id="L125">        return listRepositories(&quot;subscriptions&quot;);</span>
+<span class="nc" id="L127">        return listRepositories(&quot;subscriptions&quot;);</span>
     }
 
     /**
@@ -131,7 +133,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listStarredRepositories() {
-<span class="nc" id="L134">        return listRepositories(&quot;starred&quot;);</span>
+<span class="nc" id="L136">        return listRepositories(&quot;starred&quot;);</span>
     }
 
     /**
@@ -143,14 +145,14 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Preview(INERTIA)
     public PagedIterable&lt;GHProject&gt; listProjects() {
-<span class="fc" id="L146">        return root().createRequest()</span>
-<span class="fc" id="L147">                .withPreview(INERTIA)</span>
-<span class="fc" id="L148">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
-<span class="fc" id="L149">                .toIterable(GHProject[].class, null);</span>
+<span class="fc" id="L148">        return root().createRequest()</span>
+<span class="fc" id="L149">                .withPreview(INERTIA)</span>
+<span class="fc" id="L150">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
+<span class="fc" id="L151">                .toIterable(GHProject[].class, null);</span>
     }
 
     private PagedIterable&lt;GHRepository&gt; listRepositories(final String suffix) {
-<span class="nc" id="L153">        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHRepository[].class, null);</span>
+<span class="nc" id="L155">        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHRepository[].class, null);</span>
     }
 
     /**
@@ -161,7 +163,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the boolean
      */
     public boolean isMemberOf(GHOrganization org) {
-<span class="fc" id="L164">        return org.hasMember(this);</span>
+<span class="fc" id="L166">        return org.hasMember(this);</span>
     }
 
     /**
@@ -172,7 +174,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the boolean
      */
     public boolean isMemberOf(GHTeam team) {
-<span class="fc" id="L175">        return team.hasMember(this);</span>
+<span class="fc" id="L177">        return team.hasMember(this);</span>
     }
 
     /**
@@ -183,7 +185,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the boolean
      */
     public boolean isPublicMemberOf(GHOrganization org) {
-<span class="fc" id="L186">        return org.hasPublicMember(this);</span>
+<span class="fc" id="L188">        return org.hasPublicMember(this);</span>
     }
 
     /**
@@ -192,11 +194,11 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return if the user is marked as hireable
      */
     public boolean isHireable() {
-<span class="fc" id="L195">        return hireable;</span>
+<span class="fc" id="L197">        return hireable;</span>
     }
 
     public String getBio() {
-<span class="fc" id="L199">        return bio;</span>
+<span class="fc" id="L201">        return bio;</span>
     }
 
     /**
@@ -208,25 +210,25 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet&lt;GHOrganization&gt; getOrganizations() throws IOException {
-<span class="fc" id="L211">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
-<span class="fc" id="L212">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
-<span class="fc" id="L213">        for (GHOrganization o : root().createRequest()</span>
-<span class="fc" id="L214">                .withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
-<span class="fc" id="L215">                .toIterable(GHOrganization[].class, null)</span>
-<span class="fc bfc" id="L216" title="All 2 branches covered.">                .toArray()) {</span>
-<span class="pc bpc" id="L217" title="1 of 2 branches missed.">            if (names.add(o.getLogin())) // I've seen some duplicates in the data</span>
-<span class="fc" id="L218">                orgs.add(root().getOrganization(o.getLogin()));</span>
+<span class="fc" id="L213">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
+<span class="fc" id="L214">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
+<span class="fc" id="L215">        for (GHOrganization o : root().createRequest()</span>
+<span class="fc" id="L216">                .withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
+<span class="fc" id="L217">                .toIterable(GHOrganization[].class, null)</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">                .toArray()) {</span>
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">            if (names.add(o.getLogin())) // I've seen some duplicates in the data</span>
+<span class="fc" id="L220">                orgs.add(root().getOrganization(o.getLogin()));</span>
         }
-<span class="fc" id="L220">        return orgs;</span>
+<span class="fc" id="L222">        return orgs;</span>
     }
 
     /**
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      */
     public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
-<span class="nc" id="L227">        return root().createRequest()</span>
-<span class="nc" id="L228">                .withUrlPath(String.format(&quot;/users/%s/events&quot;, login))</span>
-<span class="nc" id="L229">                .toIterable(GHEventInfo[].class, null);</span>
+<span class="nc" id="L229">        return root().createRequest()</span>
+<span class="nc" id="L230">                .withUrlPath(String.format(&quot;/users/%s/events&quot;, login))</span>
+<span class="nc" id="L231">                .toIterable(GHEventInfo[].class, null);</span>
     }
 
     /**
@@ -237,29 +239,46 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHGist&gt; listGists() throws IOException {
-<span class="nc" id="L240">        return root().createRequest()</span>
-<span class="nc" id="L241">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
-<span class="nc" id="L242">                .toIterable(GHGist[].class, null);</span>
+<span class="nc" id="L242">        return root().createRequest()</span>
+<span class="nc" id="L243">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
+<span class="nc" id="L244">                .toIterable(GHGist[].class, null);</span>
+    }
+
+    /**
+     * Gets LDAP information for user.
+     *
+     * @return The LDAP information
+     *
+     * @see &lt;a
+     *      href=https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap&gt;Github
+     *      LDAP&lt;/a&gt;
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public Optional&lt;String&gt; getLdapDn() throws IOException {
+<span class="fc" id="L260">        super.populate();</span>
+<span class="fc" id="L261">        return Optional.ofNullable(ldap_dn);</span>
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L247">        return login.hashCode();</span>
+<span class="fc" id="L266">        return login.hashCode();</span>
     }
 
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L252" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
-<span class="fc" id="L253">            GHUser that = (GHUser) obj;</span>
-<span class="fc" id="L254">            return this.login.equals(that.login);</span>
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
+<span class="fc" id="L272">            GHUser that = (GHUser) obj;</span>
+<span class="fc" id="L273">            return this.login.equals(that.login);</span>
         }
-<span class="nc" id="L256">        return false;</span>
+<span class="nc" id="L275">        return false;</span>
     }
 
     String getApiTailUrl(String tail) {
-<span class="pc bpc" id="L260" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
-<span class="fc" id="L261">            tail = '/' + tail;</span>
-<span class="fc" id="L262">        return &quot;/users/&quot; + login + tail;</span>
+<span class="pc bpc" id="L279" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
+<span class="fc" id="L280">            tail = '/' + tail;</span>
+<span class="fc" id="L281">        return &quot;/users/&quot; + login + tail;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

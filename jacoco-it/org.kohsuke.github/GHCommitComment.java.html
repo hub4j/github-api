@@ -125,22 +125,30 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
     @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="nc" id="L128">        return owner.root()</span>
-<span class="nc" id="L129">                .createRequest()</span>
-<span class="nc" id="L130">                .method(&quot;POST&quot;)</span>
-<span class="nc" id="L131">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="nc" id="L132">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="nc" id="L133">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
-<span class="nc" id="L134">                .fetch(GHReaction.class);</span>
+<span class="fc" id="L128">        return owner.root()</span>
+<span class="fc" id="L129">                .createRequest()</span>
+<span class="fc" id="L130">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L131">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L132">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="fc" id="L133">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L134">                .fetch(GHReaction.class);</span>
     }
+
+    public void deleteReaction(GHReaction reaction) throws IOException {
+<span class="fc" id="L138">        owner.root()</span>
+<span class="fc" id="L139">                .createRequest()</span>
+<span class="fc" id="L140">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L141">                .withUrlPath(getApiTail(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
+<span class="fc" id="L142">                .send();</span>
+<span class="fc" id="L143">    }</span>
 
     @Preview(SQUIRREL_GIRL)
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L139">        return owner.root()</span>
-<span class="fc" id="L140">                .createRequest()</span>
-<span class="fc" id="L141">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L142">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
-<span class="pc" id="L143">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
+<span class="fc" id="L147">        return owner.root()</span>
+<span class="fc" id="L148">                .createRequest()</span>
+<span class="fc" id="L149">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L150">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L151">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
     }
 
     /**
@@ -150,16 +158,16 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L153">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTail()).send();</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L161">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTail()).send();</span>
+<span class="fc" id="L162">    }</span>
 
     private String getApiTail() {
-<span class="fc" id="L157">        return String.format(&quot;/repos/%s/%s/comments/%s&quot;, owner.getOwnerName(), owner.getName(), getId());</span>
+<span class="fc" id="L165">        return String.format(&quot;/repos/%s/%s/comments/%s&quot;, owner.getOwnerName(), owner.getName(), getId());</span>
     }
 
     GHCommitComment wrap(GHRepository owner) {
-<span class="fc" id="L161">        this.owner = owner;</span>
-<span class="fc" id="L162">        return this;</span>
+<span class="fc" id="L169">        this.owner = owner;</span>
+<span class="fc" id="L170">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

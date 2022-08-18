@@ -34,7 +34,7 @@ class GHWorkflowRunsIterable extends PagedIterable&lt;GHWorkflowRun&gt; {
 
             public GHWorkflowRun[] next() {
 <span class="fc" id="L36">                GHWorkflowRunsPage v = base.next();</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">                if (result == null) {</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">                if (result == null) {</span>
 <span class="fc" id="L38">                    result = v;</span>
                 }
 <span class="fc" id="L40">                return v.getWorkflowRuns(owner);</span>
@@ -42,4 +42,4 @@ class GHWorkflowRunsIterable extends PagedIterable&lt;GHWorkflowRun&gt; {
         };
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

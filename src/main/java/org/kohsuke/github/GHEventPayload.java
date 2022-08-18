@@ -1630,4 +1630,26 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             return GitHubClient.parseDate(starredAt);
         }
     }
+
+    /**
+     * A project v2 item was archived, converted, created, edited, restored, deleted, or reordered.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#projects_v2_item">star
+     *      event</a>
+     */
+    public static class ProjectsV2Item extends GHEventPayload {
+
+        private GHProjectsV2Item projectsV2Item;
+        private GHProjectsV2ItemChanges changes;
+
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHProjectsV2Item getProjectsV2Item() {
+            return projectsV2Item;
+        }
+
+        public GHProjectsV2ItemChanges getChanges() {
+            return changes;
+        }
+    }
 }

@@ -72,7 +72,8 @@ public class PagedIterator<T> implements Iterator<T> {
      */
     public boolean hasNext() {
         fetch();
-        return currentPage.length > nextItemIndex;
+        //https://github.com/hub4j/github-api/issues/1503
+        return (currentPage != null && currentPage.length > nextItemIndex);
     }
 
     /**

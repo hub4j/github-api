@@ -32,9 +32,6 @@ import static java.util.Objects.requireNonNull;
     private long runNumber;
     private long workflowId;
 
-    private long runAttempt;
-    private String runStartedAt;
-
     private String htmlUrl;
     private String jobsUrl;
     private String logsUrl;
@@ -61,7 +58,7 @@ import static java.util.Objects.requireNonNull;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L64">        return name;</span>
+<span class="fc" id="L61">        return name;</span>
     }
 
     /**
@@ -70,7 +67,7 @@ import static java.util.Objects.requireNonNull;
      * @return the run number
      */
     public long getRunNumber() {
-<span class="fc" id="L73">        return runNumber;</span>
+<span class="fc" id="L70">        return runNumber;</span>
     }
 
     /**
@@ -79,32 +76,12 @@ import static java.util.Objects.requireNonNull;
      * @return the workflow id
      */
     public long getWorkflowId() {
-<span class="fc" id="L82">        return workflowId;</span>
-    }
-
-    /**
-     * The run attempt.
-     *
-     * @return the run attempt
-     */
-    public long getRunAttempt() {
-<span class="fc" id="L91">        return runAttempt;</span>
-    }
-
-    /**
-     * When was this run triggered?
-     *
-     * @return run triggered
-     * @throws IOException
-     *             on error
-     */
-    public Date getRunStartedAt() throws IOException {
-<span class="fc" id="L102">        return GitHubClient.parseDate(runStartedAt);</span>
+<span class="fc" id="L79">        return workflowId;</span>
     }
 
     @Override
     public URL getHtmlUrl() throws IOException {
-<span class="fc" id="L107">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L84">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -113,7 +90,7 @@ import static java.util.Objects.requireNonNull;
      * @return the jobs url
      */
     public URL getJobsUrl() {
-<span class="fc" id="L116">        return GitHubClient.parseURL(jobsUrl);</span>
+<span class="fc" id="L93">        return GitHubClient.parseURL(jobsUrl);</span>
     }
 
     /**
@@ -122,7 +99,7 @@ import static java.util.Objects.requireNonNull;
      * @return the logs url
      */
     public URL getLogsUrl() {
-<span class="fc" id="L125">        return GitHubClient.parseURL(logsUrl);</span>
+<span class="fc" id="L102">        return GitHubClient.parseURL(logsUrl);</span>
     }
 
     /**
@@ -131,7 +108,7 @@ import static java.util.Objects.requireNonNull;
      * @return the check suite url
      */
     public URL getCheckSuiteUrl() {
-<span class="fc" id="L134">        return GitHubClient.parseURL(checkSuiteUrl);</span>
+<span class="fc" id="L111">        return GitHubClient.parseURL(checkSuiteUrl);</span>
     }
 
     /**
@@ -140,7 +117,7 @@ import static java.util.Objects.requireNonNull;
      * @return the artifacts url
      */
     public URL getArtifactsUrl() {
-<span class="fc" id="L143">        return GitHubClient.parseURL(artifactsUrl);</span>
+<span class="fc" id="L120">        return GitHubClient.parseURL(artifactsUrl);</span>
     }
 
     /**
@@ -149,7 +126,7 @@ import static java.util.Objects.requireNonNull;
      * @return the cancel url
      */
     public URL getCancelUrl() {
-<span class="fc" id="L152">        return GitHubClient.parseURL(cancelUrl);</span>
+<span class="fc" id="L129">        return GitHubClient.parseURL(cancelUrl);</span>
     }
 
     /**
@@ -158,7 +135,7 @@ import static java.util.Objects.requireNonNull;
      * @return the rerun url
      */
     public URL getRerunUrl() {
-<span class="fc" id="L161">        return GitHubClient.parseURL(rerunUrl);</span>
+<span class="fc" id="L138">        return GitHubClient.parseURL(rerunUrl);</span>
     }
 
     /**
@@ -167,7 +144,7 @@ import static java.util.Objects.requireNonNull;
      * @return the workflow url
      */
     public URL getWorkflowUrl() {
-<span class="fc" id="L170">        return GitHubClient.parseURL(workflowUrl);</span>
+<span class="fc" id="L147">        return GitHubClient.parseURL(workflowUrl);</span>
     }
 
     /**
@@ -176,7 +153,7 @@ import static java.util.Objects.requireNonNull;
      * @return head branch name
      */
     public String getHeadBranch() {
-<span class="fc" id="L179">        return headBranch;</span>
+<span class="fc" id="L156">        return headBranch;</span>
     }
 
     /**
@@ -185,7 +162,7 @@ import static java.util.Objects.requireNonNull;
      * @return sha for the HEAD commit
      */
     public String getHeadSha() {
-<span class="fc" id="L188">        return headSha;</span>
+<span class="fc" id="L165">        return headSha;</span>
     }
 
     /**
@@ -194,7 +171,7 @@ import static java.util.Objects.requireNonNull;
      * @return head commit
      */
     public HeadCommit getHeadCommit() {
-<span class="fc" id="L197">        return headCommit;</span>
+<span class="fc" id="L174">        return headCommit;</span>
     }
 
     /**
@@ -204,7 +181,7 @@ import static java.util.Objects.requireNonNull;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getHeadRepository() {
-<span class="fc" id="L207">        return headRepository;</span>
+<span class="fc" id="L184">        return headRepository;</span>
     }
 
     /**
@@ -213,7 +190,7 @@ import static java.util.Objects.requireNonNull;
      * @return type of event
      */
     public GHEvent getEvent() {
-<span class="fc" id="L216">        return EnumUtils.getNullableEnumOrDefault(GHEvent.class, event, GHEvent.UNKNOWN);</span>
+<span class="fc" id="L193">        return EnumUtils.getNullableEnumOrDefault(GHEvent.class, event, GHEvent.UNKNOWN);</span>
     }
 
     /**
@@ -224,7 +201,7 @@ import static java.util.Objects.requireNonNull;
      * @return status of the workflow run
      */
     public Status getStatus() {
-<span class="fc" id="L227">        return Status.from(status);</span>
+<span class="fc" id="L204">        return Status.from(status);</span>
     }
 
     /**
@@ -235,7 +212,7 @@ import static java.util.Objects.requireNonNull;
      * @return conclusion of the workflow run
      */
     public Conclusion getConclusion() {
-<span class="fc" id="L238">        return Conclusion.from(conclusion);</span>
+<span class="fc" id="L215">        return Conclusion.from(conclusion);</span>
     }
 
     /**
@@ -245,7 +222,7 @@ import static java.util.Objects.requireNonNull;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L248">        return owner;</span>
+<span class="fc" id="L225">        return owner;</span>
     }
 
     /**
@@ -259,14 +236,14 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
-<span class="pc bpc" id="L262" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="fc bfc" id="L263" title="All 2 branches covered.">            for (GHPullRequest pullRequest : pullRequests) {</span>
+<span class="pc bpc" id="L239" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">            for (GHPullRequest pullRequest : pullRequests) {</span>
                 // Only refresh if we haven't do so before
-<span class="fc" id="L265">                pullRequest.refresh(pullRequest.getTitle());</span>
+<span class="fc" id="L242">                pullRequest.refresh(pullRequest.getTitle());</span>
             }
-<span class="fc" id="L267">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
+<span class="fc" id="L244">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
         }
-<span class="nc" id="L269">        return Collections.emptyList();</span>
+<span class="nc" id="L246">        return Collections.emptyList();</span>
     }
 
     /**
@@ -276,8 +253,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public void cancel() throws IOException {
-<span class="fc" id="L279">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;cancel&quot;).send();</span>
-<span class="fc" id="L280">    }</span>
+<span class="fc" id="L256">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;cancel&quot;).fetchHttpStatusCode();</span>
+<span class="fc" id="L257">    }</span>
 
     /**
      * Delete the workflow run.
@@ -286,8 +263,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L289">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L290">    }</span>
+<span class="fc" id="L266">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).fetchHttpStatusCode();</span>
+<span class="fc" id="L267">    }</span>
 
     /**
      * Rerun the workflow run.
@@ -296,18 +273,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public void rerun() throws IOException {
-<span class="fc" id="L299">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;rerun&quot;).send();</span>
-<span class="fc" id="L300">    }</span>
-
-    /**
-     * Approve the workflow run.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void approve() throws IOException {
-<span class="fc" id="L309">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;approve&quot;).send();</span>
-<span class="fc" id="L310">    }</span>
+<span class="fc" id="L276">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;rerun&quot;).fetchHttpStatusCode();</span>
+<span class="fc" id="L277">    }</span>
 
     /**
      * Lists the artifacts attached to this workflow run.
@@ -315,7 +282,7 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHArtifact&gt; listArtifacts() {
-<span class="fc" id="L318">        return new GHArtifactsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), &quot;artifacts&quot;));</span>
+<span class="fc" id="L285">        return new GHArtifactsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), &quot;artifacts&quot;));</span>
     }
 
     /**
@@ -334,9 +301,9 @@ import static java.util.Objects.requireNonNull;
      * @return the result of reading the stream.
      */
     public &lt;T&gt; T downloadLogs(InputStreamFunction&lt;T&gt; streamFunction) throws IOException {
-<span class="fc" id="L337">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
+<span class="fc" id="L304">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
 
-<span class="fc" id="L339">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchStream(streamFunction);</span>
+<span class="fc" id="L306">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchStream(streamFunction);</span>
     }
 
     /**
@@ -346,8 +313,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public void deleteLogs() throws IOException {
-<span class="fc" id="L349">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).send();</span>
-<span class="fc" id="L350">    }</span>
+<span class="fc" id="L316">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchHttpStatusCode();</span>
+<span class="fc" id="L317">    }</span>
 
     /**
      * Returns the list of jobs of this workflow run for the last execution.
@@ -355,7 +322,7 @@ import static java.util.Objects.requireNonNull;
      * @return list of jobs from the last execution
      */
     public PagedIterable&lt;GHWorkflowJob&gt; listJobs() {
-<span class="fc" id="L358">        return new GHWorkflowJobQueryBuilder(this).latest().list();</span>
+<span class="fc" id="L325">        return new GHWorkflowJobQueryBuilder(this).latest().list();</span>
     }
 
     /**
@@ -364,36 +331,36 @@ import static java.util.Objects.requireNonNull;
      * @return list of jobs from all the executions
      */
     public PagedIterable&lt;GHWorkflowJob&gt; listAllJobs() {
-<span class="fc" id="L367">        return new GHWorkflowJobQueryBuilder(this).all().list();</span>
+<span class="fc" id="L334">        return new GHWorkflowJobQueryBuilder(this).all().list();</span>
     }
 
     private String getApiRoute() {
-<span class="pc bpc" id="L371" title="1 of 2 branches missed.">        if (owner == null) {</span>
+<span class="pc bpc" id="L338" title="1 of 2 branches missed.">        if (owner == null) {</span>
             // Workflow runs returned from search to do not have an owner. Attempt to use url.
-<span class="nc" id="L373">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="nc" id="L374">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="nc" id="L340">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L341">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
 
         }
-<span class="fc" id="L377">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/runs/&quot; + getId();</span>
+<span class="fc" id="L344">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/runs/&quot; + getId();</span>
     }
 
     GHWorkflowRun wrapUp(GHRepository owner) {
-<span class="fc" id="L381">        this.owner = owner;</span>
-<span class="fc" id="L382">        return wrapUp(owner.root());</span>
+<span class="fc" id="L348">        this.owner = owner;</span>
+<span class="fc" id="L349">        return wrapUp(owner.root());</span>
     }
 
     GHWorkflowRun wrapUp(GitHub root) {
-<span class="pc bpc" id="L386" title="1 of 2 branches missed.">        if (owner != null) {</span>
-<span class="pc bpc" id="L387" title="1 of 2 branches missed.">            if (pullRequests != null) {</span>
-<span class="fc bfc" id="L388" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
-<span class="fc" id="L389">                    singlePull.wrap(owner);</span>
+<span class="pc bpc" id="L353" title="1 of 2 branches missed.">        if (owner != null) {</span>
+<span class="pc bpc" id="L354" title="1 of 2 branches missed.">            if (pullRequests != null) {</span>
+<span class="fc bfc" id="L355" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="fc" id="L356">                    singlePull.wrap(owner);</span>
                 }
             }
         }
-<span class="fc" id="L393">        return this;</span>
+<span class="fc" id="L360">        return this;</span>
     }
 
-<span class="fc" id="L396">    public static class HeadCommit {</span>
+<span class="fc" id="L363">    public static class HeadCommit {</span>
         private String id;
         private String treeId;
         private String message;
@@ -407,7 +374,7 @@ import static java.util.Objects.requireNonNull;
          * @return id of the commit
          */
         public String getId() {
-<span class="fc" id="L410">            return id;</span>
+<span class="fc" id="L377">            return id;</span>
         }
 
         /**
@@ -416,7 +383,7 @@ import static java.util.Objects.requireNonNull;
          * @return id of the tree
          */
         public String getTreeId() {
-<span class="fc" id="L419">            return treeId;</span>
+<span class="fc" id="L386">            return treeId;</span>
         }
 
         /**
@@ -425,7 +392,7 @@ import static java.util.Objects.requireNonNull;
          * @return commit message.
          */
         public String getMessage() {
-<span class="fc" id="L428">            return message;</span>
+<span class="fc" id="L395">            return message;</span>
         }
 
         /**
@@ -434,7 +401,7 @@ import static java.util.Objects.requireNonNull;
          * @return timestamp of the commit
          */
         public Date getTimestamp() {
-<span class="fc" id="L437">            return GitHubClient.parseDate(timestamp);</span>
+<span class="fc" id="L404">            return GitHubClient.parseDate(timestamp);</span>
         }
 
         /**
@@ -443,7 +410,7 @@ import static java.util.Objects.requireNonNull;
          * @return the author
          */
         public GitUser getAuthor() {
-<span class="fc" id="L446">            return author;</span>
+<span class="fc" id="L413">            return author;</span>
         }
 
         /**
@@ -452,34 +419,34 @@ import static java.util.Objects.requireNonNull;
          * @return the committer
          */
         public GitUser getCommitter() {
-<span class="fc" id="L455">            return committer;</span>
+<span class="fc" id="L422">            return committer;</span>
         }
     }
 
-<span class="fc" id="L459">    public static enum Status {</span>
-<span class="fc" id="L460">        QUEUED, IN_PROGRESS, COMPLETED, UNKNOWN;</span>
+<span class="fc" id="L426">    public static enum Status {</span>
+<span class="fc" id="L427">        QUEUED, IN_PROGRESS, COMPLETED, UNKNOWN;</span>
 
         public static Status from(String value) {
-<span class="fc" id="L463">            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);</span>
+<span class="fc" id="L430">            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);</span>
         }
 
         @Override
         public String toString() {
-<span class="fc" id="L468">            return name().toLowerCase(Locale.ROOT);</span>
+<span class="fc" id="L435">            return name().toLowerCase(Locale.ROOT);</span>
         }
     }
 
-<span class="fc" id="L472">    public static enum Conclusion {</span>
-<span class="fc" id="L473">        ACTION_REQUIRED, CANCELLED, FAILURE, NEUTRAL, SUCCESS, SKIPPED, STALE, TIMED_OUT, UNKNOWN;</span>
+<span class="fc" id="L439">    public static enum Conclusion {</span>
+<span class="fc" id="L440">        ACTION_REQUIRED, CANCELLED, FAILURE, NEUTRAL, SUCCESS, SKIPPED, STALE, TIMED_OUT, UNKNOWN;</span>
 
         public static Conclusion from(String value) {
-<span class="fc" id="L476">            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);</span>
+<span class="fc" id="L443">            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);</span>
         }
 
         @Override
         public String toString() {
-<span class="fc" id="L481">            return name().toLowerCase(Locale.ROOT);</span>
+<span class="nc" id="L448">            return name().toLowerCase(Locale.ROOT);</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

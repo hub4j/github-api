@@ -51,14 +51,9 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *
      * @throws IOException
      *             the io exception
-     * @deprecated this API is no longer supported by GitHub, keeping it as is for old versions of GitHub Enterprise
-     * @see &lt;a href=&quot;https://github.blog/changelog/2022-02-11-legacy-delete-reactions-rest-api-removed/&quot;&gt;Legacy Delete
-     *      reactions REST API removed&lt;/a&gt;
      */
-    @Deprecated
     public void delete() throws IOException {
-<span class="fc" id="L60">        throw new UnsupportedOperationException(</span>
-                &quot;This method is not supported anymore. Please use Reactable#deleteReaction(GHReaction).&quot;);
-    }
+<span class="fc" id="L56">        root().createRequest().method(&quot;DELETE&quot;).withPreview(SQUIRREL_GIRL).withUrlPath(&quot;/reactions/&quot; + getId()).send();</span>
+<span class="fc" id="L57">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

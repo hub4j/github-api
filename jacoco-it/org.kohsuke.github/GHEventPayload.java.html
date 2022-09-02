@@ -1507,49 +1507,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
-     * A workflow job has been queued, is in progress, or has been completed.
-     *
-     * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#workflow_job&quot;&gt;
-     *      workflow job event&lt;/a&gt;
-     * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/actions#workflow-jobs&quot;&gt;Actions Workflow Jobs&lt;/a&gt;
-     */
-<span class="fc" id="L1517">    public static class WorkflowJob extends GHEventPayload {</span>
-
-        private GHWorkflowJob workflowJob;
-
-        /**
-         * Gets the workflow job.
-         *
-         * @return the workflow job
-         */
-        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
-        public GHWorkflowJob getWorkflowJob() {
-<span class="fc" id="L1528">            return workflowJob;</span>
-        }
-
-        @Override
-        void lateBind() {
-<span class="pc bpc" id="L1533" title="1 of 2 branches missed.">            if (workflowJob == null) {</span>
-<span class="nc" id="L1534">                throw new IllegalStateException(</span>
-                        &quot;Expected workflow_job payload, but got something else.  Maybe we've got another type of event?&quot;);
-            }
-<span class="fc" id="L1537">            super.lateBind();</span>
-<span class="fc" id="L1538">            GHRepository repository = getRepository();</span>
-<span class="pc bpc" id="L1539" title="1 of 2 branches missed.">            if (repository == null) {</span>
-<span class="nc" id="L1540">                throw new IllegalStateException(&quot;Repository must not be null&quot;);</span>
-            }
-<span class="fc" id="L1542">            workflowJob.wrapUp(repository);</span>
-<span class="fc" id="L1543">        }</span>
-    }
-
-    /**
      * A label was created, edited or deleted.
      *
      * @see &lt;a href= &quot;https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#label&quot;&gt;
      *      label event&lt;/a&gt;
      */
-<span class="fc" id="L1552">    public static class Label extends GHEventPayload {</span>
+<span class="fc" id="L1515">    public static class Label extends GHEventPayload {</span>
 
         private GHLabel label;
 
@@ -1562,7 +1525,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
         public GHLabel getLabel() {
-<span class="fc" id="L1565">            return label;</span>
+<span class="fc" id="L1528">            return label;</span>
         }
 
         /**
@@ -1571,7 +1534,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          * @return changes
          */
         public GHLabelChanges getChanges() {
-<span class="fc" id="L1574">            return changes;</span>
+<span class="fc" id="L1537">            return changes;</span>
         }
     }
 
@@ -1583,7 +1546,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      *      &quot;https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion&quot;&gt;
      *      discussion event&lt;/a&gt;
      */
-<span class="fc" id="L1586">    public static class Discussion extends GHEventPayload {</span>
+<span class="fc" id="L1549">    public static class Discussion extends GHEventPayload {</span>
 
         private GHRepositoryDiscussion discussion;
 
@@ -1596,7 +1559,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHRepositoryDiscussion getDiscussion() {
-<span class="fc" id="L1599">            return discussion;</span>
+<span class="fc" id="L1562">            return discussion;</span>
         }
 
         /**
@@ -1606,51 +1569,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHLabel getLabel() {
-<span class="fc" id="L1609">            return label;</span>
-        }
-    }
-
-    /**
-     * A star was created or deleted on a repository.
-     *
-     * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star&quot;&gt;star
-     *      event&lt;/a&gt;
-     */
-<span class="fc" id="L1620">    public static class Star extends GHEventPayload {</span>
-
-        private String starredAt;
-
-        /**
-         * Gets the date when the star is added. Is null when the star is deleted.
-         *
-         * @return the date when the star is added
-         */
-        public Date getStarredAt() {
-<span class="fc" id="L1630">            return GitHubClient.parseDate(starredAt);</span>
-        }
-    }
-
-    /**
-     * A project v2 item was archived, converted, created, edited, restored, deleted, or reordered.
-     *
-     * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#projects_v2_item&quot;&gt;star
-     *      event&lt;/a&gt;
-     */
-<span class="fc" id="L1641">    public static class ProjectsV2Item extends GHEventPayload {</span>
-
-        private GHProjectsV2Item projectsV2Item;
-        private GHProjectsV2ItemChanges changes;
-
-        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
-        public GHProjectsV2Item getProjectsV2Item() {
-<span class="fc" id="L1648">            return projectsV2Item;</span>
-        }
-
-        public GHProjectsV2ItemChanges getChanges() {
-<span class="fc" id="L1652">            return changes;</span>
+<span class="fc" id="L1572">            return label;</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

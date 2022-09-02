@@ -1,0 +1,9 @@
+org.kohsuke.github
+org.kohsuke.github.authorization
+org.kohsuke.github.connector
+org.kohsuke.github.example.dataobject
+org.kohsuke.github.extras
+org.kohsuke.github.extras.authorization
+org.kohsuke.github.extras.okhttp3
+org.kohsuke.github.function
+org.kohsuke.github.internal

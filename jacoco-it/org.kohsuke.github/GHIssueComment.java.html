@@ -141,26 +141,18 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 <span class="fc" id="L141">                .fetch(GHReaction.class);</span>
     }
 
-    public void deleteReaction(GHReaction reaction) throws IOException {
-<span class="fc" id="L145">        owner.root()</span>
-<span class="fc" id="L146">                .createRequest()</span>
-<span class="fc" id="L147">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L148">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
-<span class="fc" id="L149">                .send();</span>
-<span class="fc" id="L150">    }</span>
-
     @Preview(SQUIRREL_GIRL)
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L154">        return owner.root()</span>
-<span class="fc" id="L155">                .createRequest()</span>
-<span class="fc" id="L156">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L157">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L158">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
+<span class="fc" id="L146">        return owner.root()</span>
+<span class="fc" id="L147">                .createRequest()</span>
+<span class="fc" id="L148">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L149">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L150">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
     }
 
     private String getApiRoute() {
-<span class="fc" id="L162">        return &quot;/repos/&quot; + owner.getRepository().getOwnerName() + &quot;/&quot; + owner.getRepository().getName()</span>
-<span class="fc" id="L163">                + &quot;/issues/comments/&quot; + getId();</span>
+<span class="fc" id="L154">        return &quot;/repos/&quot; + owner.getRepository().getOwnerName() + &quot;/&quot; + owner.getRepository().getName()</span>
+<span class="fc" id="L155">                + &quot;/issues/comments/&quot; + getId();</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

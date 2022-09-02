@@ -16,7 +16,7 @@ import javax.annotation.CheckForNull;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-public class GitUser {
+<span class="fc" id="L19">public class GitUser {</span>
     private String name, email, date, username;
 
     /**
@@ -55,17 +55,5 @@ public class GitUser {
     public Date getDate() {
 <span class="fc" id="L56">        return GitHubClient.parseDate(date);</span>
     }
-
-<span class="fc" id="L59">    public GitUser() {</span>
-        // Empty constructor for Jackson binding
-<span class="fc" id="L61">    }</span>
-
-<span class="fc" id="L63">    public GitUser(GitUser user) {</span>
-        // Copy constructor to convert to GHCommit.GHAuthor
-<span class="fc" id="L65">        name = user.getName();</span>
-<span class="fc" id="L66">        email = user.getEmail();</span>
-<span class="fc" id="L67">        date = user.getDate().toString();</span>
-<span class="fc" id="L68">        username = user.getUsername();</span>
-<span class="fc" id="L69">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

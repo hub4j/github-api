@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHContentUpdateResponse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHContentUpdateResponse.java</span></div><h1>GHContentUpdateResponse.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * The response that is returned when updating repository content.
  */
-<span class="fc" id="L9">public class GHContentUpdateResponse {</span>
+<span class="fc" id="L8">public class GHContentUpdateResponse {</span>
     private GHContent content;
-    private GitCommit commit;
+    private GHCommit commit;
 
     /**
      * Gets content.
@@ -17,7 +16,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHContent getContent() {
-<span class="fc" id="L20">        return content;</span>
+<span class="fc" id="L19">        return content;</span>
     }
 
     /**
@@ -26,15 +25,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the commit
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    @WithBridgeMethods(value = GHCommit.class, adapterMethod = &quot;gitCommitToGHCommit&quot;)
-    public GitCommit getCommit() {
-<span class="fc" id="L31">        return commit;</span>
+    public GHCommit getCommit() {
+<span class="fc" id="L29">        return commit;</span>
     }
-
-    @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;, justification = &quot;bridge method of getCommit&quot;)
-    private Object gitCommitToGHCommit(GitCommit commit, Class targetType) {
-<span class="fc" id="L36">        return new GHCommit(new GHCommit.ShortInfo(commit));</span>
-    }
-
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

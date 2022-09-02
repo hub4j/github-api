@@ -87,7 +87,7 @@ import java.util.Objects;
      *             the io exception
      */
     public void disable() throws IOException {
-<span class="fc" id="L90">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;disable&quot;).send();</span>
+<span class="fc" id="L90">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;disable&quot;).fetchHttpStatusCode();</span>
 <span class="fc" id="L91">    }</span>
 
     /**
@@ -97,7 +97,7 @@ import java.util.Objects;
      *             the io exception
      */
     public void enable() throws IOException {
-<span class="fc" id="L100">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;enable&quot;).send();</span>
+<span class="fc" id="L100">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;enable&quot;).fetchHttpStatusCode();</span>
 <span class="fc" id="L101">    }</span>
 
     /**
@@ -133,7 +133,7 @@ import java.util.Objects;
 <span class="fc" id="L133">            requester.with(&quot;inputs&quot;, inputs);</span>
         }
 
-<span class="fc" id="L136">        requester.send();</span>
+<span class="fc" id="L136">        requester.fetchHttpStatusCode();</span>
 <span class="fc" id="L137">    }</span>
 
     /**
@@ -161,4 +161,4 @@ import java.util.Objects;
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

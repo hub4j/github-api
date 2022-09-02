@@ -6,21 +6,6 @@
  * @author Kohsuke Kawaguchi
  */
 <span class="fc" id="L8">public enum GHPermissionType {</span>
-<span class="fc" id="L9">    ADMIN(30), WRITE(20), READ(10), NONE(0);</span>
-
-    private final int level;
-
-<span class="fc" id="L13">    GHPermissionType(int level) {</span>
-<span class="fc" id="L14">        this.level = level;</span>
-<span class="fc" id="L15">    }</span>
-
-    boolean implies(GHPermissionType other) {
-        // NONE is a special case
-<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (other == NONE) {</span>
-<span class="fc bfc" id="L20" title="All 2 branches covered.">            return this == NONE;</span>
-        }
-
-<span class="fc bfc" id="L23" title="All 2 branches covered.">        return this.level &gt;= other.level;</span>
-    }
+<span class="fc" id="L9">    ADMIN, WRITE, READ, NONE</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

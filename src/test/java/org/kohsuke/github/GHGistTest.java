@@ -141,4 +141,5 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
         assertThat(f.getLanguage(), equalTo("Markdown"));
         assertThat(f.getContent(), containsString("### Keybase proof"));
     }
+
 }

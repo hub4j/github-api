@@ -1,6 +1,8 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
@@ -25,7 +27,10 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
  * @see GHApp#getInstallationByUser(String) GHApp#getInstallationByUser(String)
  */
 public class GHAppInstallation extends GHObject {
-    private GHUser account;
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+    @JsonSubTypes({ @JsonSubTypes.Type(value = GHUser.class, name = "User"),
+            @JsonSubTypes.Type(value = GHOrganization.class, name = "Organization") })
+    private GHPerson account;
 
     @JsonProperty("access_tokens_url")
     private String accessTokenUrl;
@@ -67,7 +72,7 @@ public class GHAppInstallation extends GHObject {
      * @return the account
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getAccount() {
+    public GHPerson getAccount() {
         return account;
     }
 

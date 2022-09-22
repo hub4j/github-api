@@ -6,8 +6,10 @@ import org.junit.Test;
 import org.kohsuke.github.GHPullRequest.AutoMerge;
 
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,10 +75,80 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
-    public void createPullRequestComment() throws Exception {
+    public void pullRequestComment() throws Exception {
         String name = "createPullRequestComment";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
-        p.comment("Some comment");
+
+        List<GHIssueComment> comments;
+        comments = p.listComments().toList();
+        assertThat(comments, hasSize(0));
+        comments = p.queryComments().list().toList();
+        assertThat(comments, hasSize(0));
+
+        GHIssueComment firstComment = p.comment("First comment");
+        Date firstCommentCreatedAt = firstComment.getCreatedAt();
+        Date firstCommentCreatedAtPlus1Second = Date
+                .from(firstComment.getCreatedAt().toInstant().plus(1, ChronoUnit.SECONDS));
+
+        comments = p.listComments().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("First comment"))));
+        comments = p.queryComments().list().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("First comment"))));
+
+        // Test "since"
+        comments = p.queryComments().since(firstCommentCreatedAt).list().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("First comment"))));
+        comments = p.queryComments().since(firstCommentCreatedAtPlus1Second).list().toList();
+        assertThat(comments, hasSize(0));
+
+        // "since" is only precise up to the second,
+        // so if we want to differentiate comments, we need to be completely sure they're created
+        // at least 1 second from each other.
+        // Waiting 2 seconds to avoid edge cases.
+        Thread.sleep(2000);
+
+        GHIssueComment secondComment = p.comment("Second comment");
+        Date secondCommentCreatedAt = secondComment.getCreatedAt();
+        Date secondCommentCreatedAtPlus1Second = Date
+                .from(secondComment.getCreatedAt().toInstant().plus(1, ChronoUnit.SECONDS));
+        assertThat(
+                "There's an error in the setup of this test; please fix it."
+                        + " The second comment should be created at least one second after the first one.",
+                firstCommentCreatedAtPlus1Second.getTime() <= secondCommentCreatedAt.getTime());
+
+        comments = p.listComments().toList();
+        assertThat(comments, hasSize(2));
+        assertThat(comments,
+                contains(hasProperty("body", equalTo("First comment")),
+                        hasProperty("body", equalTo("Second comment"))));
+        comments = p.queryComments().list().toList();
+        assertThat(comments, hasSize(2));
+        assertThat(comments,
+                contains(hasProperty("body", equalTo("First comment")),
+                        hasProperty("body", equalTo("Second comment"))));
+
+        // Test "since"
+        comments = p.queryComments().since(firstCommentCreatedAt).list().toList();
+        assertThat(comments, hasSize(2));
+        assertThat(comments,
+                contains(hasProperty("body", equalTo("First comment")),
+                        hasProperty("body", equalTo("Second comment"))));
+        comments = p.queryComments().since(firstCommentCreatedAtPlus1Second).list().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
+        comments = p.queryComments().since(secondCommentCreatedAt).list().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
+        comments = p.queryComments().since(secondCommentCreatedAtPlus1Second).list().toList();
+        assertThat(comments, hasSize(0));
+
+        // Test "since" with timestamp instead of Date
+        comments = p.queryComments().since(secondCommentCreatedAt.getTime()).list().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
     }
 
     @Test

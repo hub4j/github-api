@@ -37,6 +37,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(app.getOwner().getId(), is((long) 7544739));
         assertThat(app.getOwner().getLogin(), is("hub4j-test-org"));
         assertThat(app.getName(), is("GHApi Test app 1"));
+        assertThat(app.getSlug(), is("ghapi-test-app-1"));
         assertThat(app.getDescription(), is(""));
         assertThat(app.getExternalUrl(), is("http://localhost"));
         assertThat(app.getHtmlUrl().toString(), is("https://github.com/apps/ghapi-test-app-1"));

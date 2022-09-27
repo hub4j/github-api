@@ -16,15 +16,17 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
     /** The max iterations. */
     public static int MAX_ITERATIONS = 3;
-    
+
     /** The sleep interval. */
     public static int SLEEP_INTERVAL = 5000;
 
     /**
      * Test contributor stats.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws InterruptedException the interrupted exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
     public void testContributorStats() throws IOException, InterruptedException {
@@ -78,8 +80,10 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
     /**
      * Test commit activity.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws InterruptedException the interrupted exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
     @SuppressWarnings("SleepWhileInLoop")
@@ -129,8 +133,10 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
     /**
      * Test code frequency.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws InterruptedException the interrupted exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
     @SuppressWarnings("SleepWhileInLoop")
@@ -172,8 +178,10 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
     /**
      * Test participation.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws InterruptedException the interrupted exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
     public void testParticipation() throws IOException, InterruptedException {
@@ -208,8 +216,10 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
     /**
      * Test punch card.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws InterruptedException the interrupted exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
     @SuppressWarnings("SleepWhileInLoop")
@@ -251,7 +261,8 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
      * Gets the repository.
      *
      * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);

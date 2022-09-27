@@ -30,7 +30,8 @@ public class GHAuthenticatedAppInstallationTest extends AbstractGHAppInstallatio
     /**
      * Test list repositories two repos.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testListRepositoriesTwoRepos() throws IOException {

@@ -17,7 +17,8 @@ public class GHBranchTest extends AbstractGitHubWireMockTest {
     /**
      * Test merge branch.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testMergeBranch() throws Exception {

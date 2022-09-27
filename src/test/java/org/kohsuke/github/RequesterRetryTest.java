@@ -49,10 +49,10 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
                                                                                 // class
     private static OutputStream logCapturingStream;
     private static StreamHandler customLogHandler;
-    
+
     /** The connection. */
     HttpURLConnection connection;
-    
+
     /** The base request count. */
     int baseRequestCount;
 
@@ -67,7 +67,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
      * Gets the repository.
      *
      * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
@@ -92,7 +93,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
      * Gets the test captured log.
      *
      * @return the test captured log
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public String getTestCapturedLog() throws IOException {
         customLogHandler.flush();
@@ -102,7 +104,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * Reset test captured log.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public void resetTestCapturedLog() throws IOException {
         Logger.getLogger(GitHubClient.class.getName()).removeHandler(customLogHandler);
@@ -114,7 +117,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub is api url valid.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Used okhttp3 and this to verify connection closing. Too flaky for CI system.")
     @Test
@@ -147,7 +151,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * Test socket connection and retry.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     // Issue #539
     @Test
@@ -182,7 +187,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * Test socket connection and retry status code.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     // Issue #539
     @Test
@@ -219,7 +225,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * Test socket connection and retry success.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testSocketConnectionAndRetry_Success() throws Exception {
@@ -277,7 +284,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * Test response code failure exceptions.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testResponseCodeFailureExceptions() throws Exception {
@@ -329,7 +337,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * Test input stream failure exceptions.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testInputStreamFailureExceptions() throws Exception {
@@ -393,7 +402,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * Test response code connection exceptions.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testResponseCodeConnectionExceptions() throws Exception {
@@ -420,7 +430,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * Test input stream connection exceptions.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testInputStreamConnectionExceptions() throws Exception {
@@ -495,14 +506,16 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * The Class ResponseCodeThrowingHttpConnector.
      *
-     * @param <E> the element type
+     * @param <E>
+     *            the element type
      */
     class ResponseCodeThrowingHttpConnector<E extends IOException> extends ImpatientHttpConnector {
 
         /**
          * Instantiates a new response code throwing http connector.
          *
-         * @param thrower the thrower
+         * @param thrower
+         *            the thrower
          */
         ResponseCodeThrowingHttpConnector(final Thrower<E> thrower) {
             super(new HttpConnector() {
@@ -537,14 +550,16 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * The Class InputStreamThrowingHttpConnector.
      *
-     * @param <E> the element type
+     * @param <E>
+     *            the element type
      */
     class InputStreamThrowingHttpConnector<E extends IOException> extends ImpatientHttpConnector {
 
         /**
          * Instantiates a new input stream throwing http connector.
          *
-         * @param thrower the thrower
+         * @param thrower
+         *            the thrower
          */
         InputStreamThrowingHttpConnector(final Thrower<E> thrower) {
             super(new HttpConnector() {
@@ -579,15 +594,17 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     /**
      * The Interface Thrower.
      *
-     * @param <E> the element type
+     * @param <E>
+     *            the element type
      */
     @FunctionalInterface
     public interface Thrower<E extends Throwable> {
-        
+
         /**
          * Throw error.
          *
-         * @throws E the e
+         * @throws E
+         *             the e
          */
         void throwError() throws E;
     }
@@ -604,8 +621,10 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Instantiates a new http URL connection wrapper.
          *
-         * @param url the url
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @param url
+         *            the url
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         HttpURLConnectionWrapper(URL url) throws IOException {
             super(new URL("http://nonexistant"));
@@ -615,7 +634,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Connect.
          *
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         public void connect() throws IOException {
             httpURLConnection.connect();
@@ -624,7 +644,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the connect timeout.
          *
-         * @param timeout the new connect timeout
+         * @param timeout
+         *            the new connect timeout
          */
         public void setConnectTimeout(int timeout) {
             httpURLConnection.setConnectTimeout(timeout);
@@ -642,7 +663,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the read timeout.
          *
-         * @param timeout the new read timeout
+         * @param timeout
+         *            the new read timeout
          */
         public void setReadTimeout(int timeout) {
             httpURLConnection.setReadTimeout(timeout);
@@ -732,7 +754,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Gets the header field.
          *
-         * @param name the name
+         * @param name
+         *            the name
          * @return the header field
          */
         public String getHeaderField(String name) {
@@ -751,8 +774,10 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Gets the header field int.
          *
-         * @param name the name
-         * @param Default the default
+         * @param name
+         *            the name
+         * @param Default
+         *            the default
          * @return the header field int
          */
         public int getHeaderFieldInt(String name, int Default) {
@@ -762,8 +787,10 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Gets the header field long.
          *
-         * @param name the name
-         * @param Default the default
+         * @param name
+         *            the name
+         * @param Default
+         *            the default
          * @return the header field long
          */
         public long getHeaderFieldLong(String name, long Default) {
@@ -774,7 +801,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
          * Gets the content.
          *
          * @return the content
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         public Object getContent() throws IOException {
             return httpURLConnection.getContent();
@@ -783,9 +811,11 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Gets the content.
          *
-         * @param classes the classes
+         * @param classes
+         *            the classes
          * @return the content
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         @Override
         public Object getContent(Class[] classes) throws IOException {
@@ -796,7 +826,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
          * Gets the input stream.
          *
          * @return the input stream
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         public InputStream getInputStream() throws IOException {
             return httpURLConnection.getInputStream();
@@ -806,7 +837,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
          * Gets the output stream.
          *
          * @return the output stream
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         public OutputStream getOutputStream() throws IOException {
             return httpURLConnection.getOutputStream();
@@ -824,7 +856,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the do input.
          *
-         * @param doinput the new do input
+         * @param doinput
+         *            the new do input
          */
         public void setDoInput(boolean doinput) {
             httpURLConnection.setDoInput(doinput);
@@ -842,7 +875,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the do output.
          *
-         * @param dooutput the new do output
+         * @param dooutput
+         *            the new do output
          */
         public void setDoOutput(boolean dooutput) {
             httpURLConnection.setDoOutput(dooutput);
@@ -860,7 +894,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the allow user interaction.
          *
-         * @param allowuserinteraction the new allow user interaction
+         * @param allowuserinteraction
+         *            the new allow user interaction
          */
         public void setAllowUserInteraction(boolean allowuserinteraction) {
             httpURLConnection.setAllowUserInteraction(allowuserinteraction);
@@ -878,7 +913,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the use caches.
          *
-         * @param usecaches the new use caches
+         * @param usecaches
+         *            the new use caches
          */
         public void setUseCaches(boolean usecaches) {
             httpURLConnection.setUseCaches(usecaches);
@@ -896,7 +932,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the if modified since.
          *
-         * @param ifmodifiedsince the new if modified since
+         * @param ifmodifiedsince
+         *            the new if modified since
          */
         public void setIfModifiedSince(long ifmodifiedsince) {
             httpURLConnection.setIfModifiedSince(ifmodifiedsince);
@@ -923,7 +960,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the default use caches.
          *
-         * @param defaultusecaches the new default use caches
+         * @param defaultusecaches
+         *            the new default use caches
          */
         public void setDefaultUseCaches(boolean defaultusecaches) {
             httpURLConnection.setDefaultUseCaches(defaultusecaches);
@@ -932,8 +970,10 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the request property.
          *
-         * @param key the key
-         * @param value the value
+         * @param key
+         *            the key
+         * @param value
+         *            the value
          */
         public void setRequestProperty(String key, String value) {
             httpURLConnection.setRequestProperty(key, value);
@@ -942,8 +982,10 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Adds the request property.
          *
-         * @param key the key
-         * @param value the value
+         * @param key
+         *            the key
+         * @param value
+         *            the value
          */
         public void addRequestProperty(String key, String value) {
             httpURLConnection.addRequestProperty(key, value);
@@ -952,7 +994,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Gets the request property.
          *
-         * @param key the key
+         * @param key
+         *            the key
          * @return the request property
          */
         public String getRequestProperty(String key) {
@@ -971,7 +1014,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Gets the header field key.
          *
-         * @param n the n
+         * @param n
+         *            the n
          * @return the header field key
          */
         public String getHeaderFieldKey(int n) {
@@ -981,7 +1025,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the fixed length streaming mode.
          *
-         * @param contentLength the new fixed length streaming mode
+         * @param contentLength
+         *            the new fixed length streaming mode
          */
         public void setFixedLengthStreamingMode(int contentLength) {
             httpURLConnection.setFixedLengthStreamingMode(contentLength);
@@ -990,7 +1035,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the fixed length streaming mode.
          *
-         * @param contentLength the new fixed length streaming mode
+         * @param contentLength
+         *            the new fixed length streaming mode
          */
         public void setFixedLengthStreamingMode(long contentLength) {
             httpURLConnection.setFixedLengthStreamingMode(contentLength);
@@ -999,7 +1045,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the chunked streaming mode.
          *
-         * @param chunklen the new chunked streaming mode
+         * @param chunklen
+         *            the new chunked streaming mode
          */
         public void setChunkedStreamingMode(int chunklen) {
             httpURLConnection.setChunkedStreamingMode(chunklen);
@@ -1008,7 +1055,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Gets the header field.
          *
-         * @param n the n
+         * @param n
+         *            the n
          * @return the header field
          */
         public String getHeaderField(int n) {
@@ -1018,7 +1066,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the instance follow redirects.
          *
-         * @param followRedirects the new instance follow redirects
+         * @param followRedirects
+         *            the new instance follow redirects
          */
         public void setInstanceFollowRedirects(boolean followRedirects) {
             httpURLConnection.setInstanceFollowRedirects(followRedirects);
@@ -1036,8 +1085,10 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Sets the request method.
          *
-         * @param method the new request method
-         * @throws ProtocolException the protocol exception
+         * @param method
+         *            the new request method
+         * @throws ProtocolException
+         *             the protocol exception
          */
         public void setRequestMethod(String method) throws ProtocolException {
             httpURLConnection.setRequestMethod(method);
@@ -1056,7 +1107,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
          * Gets the response code.
          *
          * @return the response code
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         public int getResponseCode() throws IOException {
             return httpURLConnection.getResponseCode();
@@ -1066,7 +1118,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
          * Gets the response message.
          *
          * @return the response message
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         public String getResponseMessage() throws IOException {
             return httpURLConnection.getResponseMessage();
@@ -1075,8 +1128,10 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         /**
          * Gets the header field date.
          *
-         * @param name the name
-         * @param Default the default
+         * @param name
+         *            the name
+         * @param Default
+         *            the default
          * @return the header field date
          */
         public long getHeaderFieldDate(String name, long Default) {
@@ -1103,7 +1158,8 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
          * Gets the permission.
          *
          * @return the permission
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         public Permission getPermission() throws IOException {
             return httpURLConnection.getPermission();

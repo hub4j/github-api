@@ -17,7 +17,8 @@ public class GHPullRequestMockTest {
     /**
      * Should mock GH pull request.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void shouldMockGHPullRequest() throws IOException {

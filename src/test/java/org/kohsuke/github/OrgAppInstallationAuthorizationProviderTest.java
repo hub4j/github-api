@@ -25,7 +25,8 @@ public class OrgAppInstallationAuthorizationProviderTest extends AbstractGHAppIn
     /**
      * Invalid JWT token raises exception.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test(expected = HttpException.class)
     public void invalidJWTTokenRaisesException() throws IOException {
@@ -42,7 +43,8 @@ public class OrgAppInstallationAuthorizationProviderTest extends AbstractGHAppIn
     /**
      * Valid JWT token allows oauth token request.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void validJWTTokenAllowsOauthTokenRequest() throws IOException {

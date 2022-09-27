@@ -23,7 +23,8 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -34,7 +35,8 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test enable branch protections.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testEnableBranchProtections() throws Exception {
@@ -75,7 +77,8 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test enable protection only.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testEnableProtectionOnly() throws Exception {
@@ -86,7 +89,8 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test disable protection only.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testDisableProtectionOnly() throws Exception {
@@ -99,7 +103,8 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test enable require reviews only.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testEnableRequireReviewsOnly() throws Exception {
@@ -124,7 +129,8 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test signed commits.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testSignedCommits() throws Exception {
@@ -142,7 +148,8 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test get protection.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetProtection() throws Exception {

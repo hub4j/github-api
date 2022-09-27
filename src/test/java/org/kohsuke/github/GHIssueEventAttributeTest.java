@@ -56,7 +56,8 @@ public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
     /**
      * Test event specific attributes.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testEventSpecificAttributes() throws IOException {

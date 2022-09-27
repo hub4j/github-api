@@ -154,8 +154,10 @@ public class ArchTests {
     /**
      * Not call methods in package unless.
      *
-     * @param packageIdentifier the package identifier
-     * @param unlessPredicates the unless predicates
+     * @param packageIdentifier
+     *            the package identifier
+     * @param unlessPredicates
+     *            the unless predicates
      * @return the arch condition
      */
     public static ArchCondition<JavaClass> notCallMethodsInPackageUnless(final String packageIdentifier,
@@ -176,9 +178,12 @@ public class ArchTests {
     /**
      * Target method is.
      *
-     * @param owner the owner
-     * @param methodName the method name
-     * @param parameterTypes the parameter types
+     * @param owner
+     *            the owner
+     * @param methodName
+     *            the method name
+     * @param parameterTypes
+     *            the parameter types
      * @return the described predicate
      */
     public static DescribedPredicate<JavaCall<?>> targetMethodIs(Class<?> owner,
@@ -194,9 +199,12 @@ public class ArchTests {
     /**
      * Unless.
      *
-     * @param <T> the generic type
-     * @param first the first
-     * @param second the second
+     * @param <T>
+     *            the generic type
+     * @param first
+     *            the first
+     * @param second
+     *            the second
      * @return the described predicate
      */
     public static <T> DescribedPredicate<T> unless(DescribedPredicate<? super T> first,

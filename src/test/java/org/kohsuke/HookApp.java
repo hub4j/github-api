@@ -16,12 +16,14 @@ import java.io.StringReader;
  * @author Kohsuke Kawaguchi
  */
 public class HookApp {
-    
+
     /**
      * The main method.
      *
-     * @param args the arguments
-     * @throws Exception the exception
+     * @param args
+     *            the arguments
+     * @throws Exception
+     *             the exception
      */
     public static void main(String[] args) throws Exception {
         // GitHub.connect().getMyself().getRepository("sandbox").createWebHook(
@@ -34,8 +36,10 @@ public class HookApp {
     /**
      * Do index.
      *
-     * @param req the req
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @param req
+     *            the req
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public void doIndex(StaplerRequest req) throws IOException {
         String str = req.getParameter("payload");

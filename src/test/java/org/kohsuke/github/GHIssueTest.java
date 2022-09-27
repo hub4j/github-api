@@ -31,7 +31,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     /**
      * Clean up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     @After
@@ -49,7 +50,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     /**
      * Creates the issue.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createIssue() throws Exception {
@@ -62,7 +64,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     /**
      * Issue comment.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void issueComment() throws Exception {
@@ -145,7 +148,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     /**
      * Close issue.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void closeIssue() throws Exception {
@@ -160,7 +164,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the labels.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     // Requires push access to the test repo to pass
@@ -181,7 +186,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     /**
      * Adds the labels.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     // Requires push access to the test repo to pass
@@ -215,7 +221,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     /**
      * Adds the labels concurrency issue.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     // Requires push access to the test repo to pass
@@ -240,7 +247,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     /**
      * Removes the labels.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     // Requires push access to the test repo to pass
@@ -279,7 +287,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the assignee.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     // Requires push access to the test repo to pass
@@ -294,8 +303,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the user test.
      *
-     * @return the user test
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getUserTest() throws IOException {
@@ -313,7 +322,8 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
      * Gets the repository.
      *
      * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);

@@ -33,10 +33,10 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
 
     /** The jwt provider 1. */
     protected final AuthorizationProvider jwtProvider1;
-    
+
     /** The jwt provider 2. */
     protected final AuthorizationProvider jwtProvider2;
-    
+
     /** The jwt provider 3. */
     protected final AuthorizationProvider jwtProvider3;
 
@@ -82,9 +82,11 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the app installation with token.
      *
-     * @param jwtToken the jwt token
+     * @param jwtToken
+     *            the jwt token
      * @return the app installation with token
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHAppInstallation getAppInstallationWithToken(String jwtToken) throws IOException {
         GitHub gitHub = getGitHubBuilder().withJwtToken(jwtToken)

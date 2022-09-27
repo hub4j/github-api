@@ -37,7 +37,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
      * Gets the repository.
      *
      * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
@@ -50,7 +51,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test zipball.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testZipball() throws IOException {
@@ -62,7 +64,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test tarball.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testTarball() throws IOException {
@@ -74,7 +77,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test getters.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGetters() throws IOException {
@@ -104,7 +108,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Archive.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void archive() throws Exception {
@@ -125,7 +130,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Checks if is disabled.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void isDisabled() throws Exception {
@@ -137,7 +143,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Checks if is disabled true.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void isDisabledTrue() throws Exception {
@@ -149,8 +156,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the branch URL encoded.
      *
-     * @return the branch URL encoded
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getBranch_URLEncoded() throws Exception {
@@ -162,7 +169,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Creates the signed commit verify error.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void createSignedCommitVerifyError() throws IOException {
@@ -184,7 +192,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Creates the signed commit unknown signature type.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void createSignedCommitUnknownSignatureType() throws IOException {
@@ -206,7 +215,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List stargazers.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listStargazers() throws IOException {
@@ -224,8 +234,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the branch non existent but 200 status.
      *
-     * @return the branch non existent but 200 status
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     // Issue #607
     @Test
@@ -251,7 +261,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Subscription.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void subscription() throws Exception {
@@ -278,7 +289,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test set public.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testSetPublic() throws Exception {
@@ -300,7 +312,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test update repository.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testUpdateRepository() throws Exception {
@@ -353,7 +366,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test get repository with visibility.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGetRepositoryWithVisibility() throws IOException {
@@ -382,7 +396,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List contributors.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listContributors() throws IOException {
@@ -406,8 +421,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the permission.
      *
-     * @return the permission
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getPermission() throws Exception {
@@ -439,7 +454,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Checks for permission.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void hasPermission() throws Exception {
@@ -488,7 +504,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Adds the collaborators.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void addCollaborators() throws Exception {
@@ -509,7 +526,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Adds the collaborators repo perm.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void addCollaboratorsRepoPerm() throws Exception {
@@ -543,7 +561,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List releases.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listReleases() throws IOException {
@@ -554,8 +573,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the release exists.
      *
-     * @return the release exists
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getReleaseExists() throws IOException {
@@ -566,8 +585,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the release does not exist.
      *
-     * @return the release does not exist
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getReleaseDoesNotExist() throws IOException {
@@ -578,8 +597,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the release by tag name exists.
      *
-     * @return the release by tag name exists
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getReleaseByTagNameExists() throws IOException {
@@ -591,8 +610,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the release by tag name does not exist.
      *
-     * @return the release by tag name does not exist
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getReleaseByTagNameDoesNotExist() throws IOException {
@@ -603,7 +622,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List languages.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listLanguages() throws IOException {
@@ -618,7 +638,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List commit comments no comments.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listCommitCommentsNoComments() throws IOException {
@@ -636,7 +657,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Search all public and forked repos.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void searchAllPublicAndForkedRepos() throws IOException {
@@ -654,7 +676,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Search for public forked only repos.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void searchForPublicForkedOnlyRepos() throws IOException {
@@ -749,7 +772,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List commit comments some comments.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listCommitCommentsSomeComments() throws IOException {
@@ -773,7 +797,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List empty contributors.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test // Issue #261
     public void listEmptyContributors() throws IOException {
@@ -785,7 +810,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Search repositories.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void searchRepositories() throws Exception {
@@ -804,7 +830,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Search org for repositories.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void searchOrgForRepositories() throws Exception {
@@ -817,7 +844,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test issue 162.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test // issue #162
     public void testIssue162() throws Exception {
@@ -836,7 +864,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Mark down.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void markDown() throws Exception {
@@ -856,7 +885,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the merge options.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void setMergeOptions() throws IOException {
@@ -889,8 +919,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the delete branch on merge.
      *
-     * @return the delete branch on merge
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getDeleteBranchOnMerge() throws IOException {
@@ -901,7 +931,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the delete branch on merge.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void setDeleteBranchOnMerge() throws IOException {
@@ -923,7 +954,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test set topics.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testSetTopics() throws Exception {
@@ -963,8 +995,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the collaborators.
      *
-     * @return the collaborators
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getCollaborators() throws Exception {
@@ -976,8 +1008,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the post commit hooks.
      *
-     * @return the post commit hooks
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getPostCommitHooks() throws Exception {
@@ -989,8 +1021,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the refs.
      *
-     * @return the refs
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getRefs() throws Exception {
@@ -1004,8 +1036,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the public key.
      *
-     * @return the public key
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getPublicKey() throws Exception {
@@ -1019,8 +1051,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the refs heads.
      *
-     * @return the refs heads
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getRefsHeads() throws Exception {
@@ -1034,8 +1066,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the refs empty tags.
      *
-     * @return the refs empty tags
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getRefsEmptyTags() throws Exception {
@@ -1054,7 +1086,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List refs.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listRefs() throws Exception {
@@ -1103,8 +1136,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the ref.
      *
-     * @return the ref
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getRef() throws Exception {
@@ -1154,7 +1187,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List refs heads.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listRefsHeads() throws Exception {
@@ -1168,7 +1202,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List refs empty tags.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listRefsEmptyTags() throws Exception {
@@ -1185,7 +1220,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List tags empty.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listTagsEmpty() throws Exception {
@@ -1198,7 +1234,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List tags.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listTags() throws Exception {
@@ -1211,7 +1248,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Check watchers count.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void checkWatchersCount() throws Exception {
@@ -1224,7 +1262,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Check stargazers count.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void checkStargazersCount() throws Exception {
@@ -1237,7 +1276,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List collaborators.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listCollaborators() throws Exception {
@@ -1249,7 +1289,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List collaborators filtered.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listCollaboratorsFiltered() throws Exception {
@@ -1263,7 +1304,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * User is collaborator.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void userIsCollaborator() throws Exception {
@@ -1275,8 +1317,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the check runs.
      *
-     * @return the check runs
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getCheckRuns() throws Exception {
@@ -1305,8 +1347,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the last commit status.
      *
-     * @return the last commit status
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getLastCommitStatus() throws Exception {
@@ -1319,7 +1361,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List commits between.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listCommitsBetween() throws Exception {
@@ -1340,7 +1383,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * List commits between paginated.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listCommitsBetweenPaginated() throws Exception {
@@ -1362,8 +1406,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the commits between over 250.
      *
-     * @return the commits between over 250
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getCommitsBetweenOver250() throws Exception {
@@ -1436,8 +1480,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the commits between paged.
      *
-     * @return the commits between paged
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void getCommitsBetweenPaged() throws Exception {
@@ -1459,7 +1503,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Creates the dispatch event without client payload.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createDispatchEventWithoutClientPayload() throws Exception {
@@ -1470,7 +1515,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Creates the dispatch event with client payload.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createDispatchEventWithClientPayload() throws Exception {
@@ -1484,7 +1530,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Creates the secret.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createSecret() throws Exception {

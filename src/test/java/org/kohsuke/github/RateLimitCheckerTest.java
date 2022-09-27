@@ -19,7 +19,7 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
 
     /** The rate limit. */
     GHRateLimit rateLimit = null;
-    
+
     /** The previous limit. */
     GHRateLimit previousLimit = null;
 
@@ -43,7 +43,8 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub rate limit.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGitHubRateLimit() throws Exception {

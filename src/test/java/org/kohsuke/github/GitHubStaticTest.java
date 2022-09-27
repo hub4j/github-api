@@ -33,7 +33,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     /**
      * Test parse URL.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testParseURL() throws Exception {
@@ -51,7 +52,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     /**
      * Test parse instant.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testParseInstant() throws Exception {
@@ -61,7 +63,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     /**
      * Test raw url path invalid.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testRawUrlPathInvalid() throws Exception {
@@ -76,7 +79,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     /**
      * Time round trip.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void timeRoundTrip() throws Exception {
@@ -140,7 +144,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     /**
      * Test from record.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testFromRecord() throws Exception {
@@ -201,7 +206,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub rate limit should replace rate limit.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGitHubRateLimitShouldReplaceRateLimit() throws Exception {
@@ -343,7 +349,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     /**
      * Test mapping reader writer.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testMappingReaderWriter() throws Exception {
@@ -387,7 +394,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub request get api URL.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGitHubRequest_getApiURL() throws Exception {
@@ -424,8 +432,10 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     /**
      * Format date.
      *
-     * @param dt the dt
-     * @param format the format
+     * @param dt
+     *            the dt
+     * @param format
+     *            the format
      * @return the string
      */
     static String formatDate(Date dt, String format) {
@@ -435,9 +445,12 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     /**
      * Format zoned date.
      *
-     * @param dt the dt
-     * @param format the format
-     * @param timeZone the time zone
+     * @param dt
+     *            the dt
+     * @param format
+     *            the format
+     * @param timeZone
+     *            the time zone
      * @return the string
      */
     static String formatZonedDate(Date dt, String format, String timeZone) {

@@ -20,17 +20,18 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     /** The Constant GITHUB_API_TEST. */
     public static final String GITHUB_API_TEST = "github-api-test";
-    
+
     /** The Constant GITHUB_API_TEMPLATE_TEST. */
     public static final String GITHUB_API_TEMPLATE_TEST = "github-api-template-test";
-    
+
     /** The Constant TEAM_NAME_CREATE. */
     public static final String TEAM_NAME_CREATE = "create-team-test";
 
     /**
      * Clean up team.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Before
     @After
@@ -51,7 +52,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create repository.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateRepository() throws IOException {
@@ -70,7 +72,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create repository with auto initialization.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateRepositoryWithAutoInitialization() throws IOException {
@@ -90,7 +93,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create repository with parameter is template.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateRepositoryWithParameterIsTemplate() throws IOException {
@@ -132,7 +136,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create repository with template.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateRepositoryWithTemplate() throws IOException {
@@ -152,7 +157,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test invite user.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testInviteUser() throws IOException {
@@ -178,7 +184,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test list members with filter.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testListMembersWithFilter() throws IOException {
@@ -207,7 +214,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test list members with role.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testListMembersWithRole() throws IOException {
@@ -236,7 +244,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create team with repo access.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateTeamWithRepoAccess() throws IOException {
@@ -254,7 +263,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create team with null perm.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCreateTeamWithNullPerm() throws Exception {
@@ -281,7 +291,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create team with repo perm.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCreateTeamWithRepoPerm() throws Exception {
@@ -309,7 +320,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create team with repo role.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateTeamWithRepoRole() throws IOException {
@@ -338,7 +350,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create team.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateTeam() throws IOException {
@@ -357,7 +370,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create visible team.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateVisibleTeam() throws IOException {
@@ -370,7 +384,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test create all args team.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateAllArgsTeam() throws IOException {
@@ -391,7 +406,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test are organization projects enabled.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testAreOrganizationProjectsEnabled() throws IOException {
@@ -408,7 +424,8 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     /**
      * Test enable organization projects.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testEnableOrganizationProjects() throws IOException {

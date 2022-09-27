@@ -32,7 +32,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Cleanup.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     @After
@@ -52,7 +53,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -62,7 +64,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Test get repository.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetRepository() throws Exception {
@@ -75,7 +78,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Test get file content.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetFileContent() throws Exception {
@@ -89,7 +93,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Test get empty file content.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetEmptyFileContent() throws Exception {
@@ -102,7 +107,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Test get directory content.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetDirectoryContent() throws Exception {
@@ -114,7 +120,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Test get directory content trailing slash.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetDirectoryContentTrailingSlash() throws Exception {
@@ -127,7 +134,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Test CRUD content.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCRUDContent() throws Exception {
@@ -205,11 +213,15 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Check created commits.
      *
-     * @param gitCommit the git commit
-     * @param ghCommit the gh commit
-     * @param expectedRequestCount the expected request count
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
      * @return the int
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     int checkCreatedCommits(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws Exception {
         expectedRequestCount = checkBasicCommitInfo(gitCommit, ghCommit, expectedRequestCount);
@@ -239,9 +251,11 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the GH commit.
      *
-     * @param resp the resp
+     * @param resp
+     *            the resp
      * @return the GH commit
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     GHCommit getGHCommit(GHContentUpdateResponse resp) throws Exception {
         for (Method method : resp.getClass().getMethods()) {
@@ -256,11 +270,15 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Check updated content response commits.
      *
-     * @param gitCommit the git commit
-     * @param ghCommit the gh commit
-     * @param expectedRequestCount the expected request count
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
      * @return the int
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     int checkUpdatedContentResponseCommits(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount)
             throws Exception {
@@ -289,11 +307,15 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Check basic commit info.
      *
-     * @param gitCommit the git commit
-     * @param ghCommit the gh commit
-     * @param expectedRequestCount the expected request count
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
      * @return the int
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     int checkBasicCommitInfo(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
         assertThat(gitCommit, notNullValue());
@@ -316,11 +338,15 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Check commit user info.
      *
-     * @param gitCommit the git commit
-     * @param ghCommit the gh commit
-     * @param expectedRequestCount the expected request count
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
      * @return the int
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     int checkCommitUserInfo(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws Exception {
         assertThat(gitCommit.getAuthor().getName(), equalTo("Liam Newman"));
@@ -352,12 +378,17 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the GH author.
      *
-     * @param commit the commit
+     * @param commit
+     *            the commit
      * @return the GH author
-     * @throws GHException the GH exception
-     * @throws IllegalAccessException the illegal access exception
-     * @throws IllegalArgumentException the illegal argument exception
-     * @throws InvocationTargetException the invocation target exception
+     * @throws GHException
+     *             the GH exception
+     * @throws IllegalAccessException
+     *             the illegal access exception
+     * @throws IllegalArgumentException
+     *             the illegal argument exception
+     * @throws InvocationTargetException
+     *             the invocation target exception
      */
     GHCommit.GHAuthor getGHAuthor(GitCommit commit)
             throws GHException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -373,12 +404,17 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the GH author.
      *
-     * @param commit the commit
+     * @param commit
+     *            the commit
      * @return the GH author
-     * @throws GHException the GH exception
-     * @throws IllegalAccessException the illegal access exception
-     * @throws IllegalArgumentException the illegal argument exception
-     * @throws InvocationTargetException the invocation target exception
+     * @throws GHException
+     *             the GH exception
+     * @throws IllegalAccessException
+     *             the illegal access exception
+     * @throws IllegalArgumentException
+     *             the illegal argument exception
+     * @throws InvocationTargetException
+     *             the invocation target exception
      */
     GHCommit.GHAuthor getGHAuthor(GHCommit.ShortInfo commit)
             throws GHException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -394,11 +430,15 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Check commit tree.
      *
-     * @param gitCommit the git commit
-     * @param ghCommit the gh commit
-     * @param expectedRequestCount the expected request count
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
      * @return the int
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     int checkCommitTree(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
         assertThat(gitCommit.getTreeSHA1(), notNullValue());
@@ -420,11 +460,15 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Check commit parents.
      *
-     * @param gitCommit the git commit
-     * @param ghCommit the gh commit
-     * @param expectedRequestCount the expected request count
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
      * @return the int
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     int checkCommitParents(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
         assertThat(gitCommit.getParentSHA1s().size(), is(greaterThan(0)));
@@ -442,7 +486,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Test MIME small.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testMIMESmall() throws IOException {
@@ -457,7 +502,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Test MIME long.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testMIMELong() throws IOException {
@@ -468,11 +514,12 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         ghContentBuilder.content("1234567890123456789012345678901234567890123456789012345678");
         ghContentBuilder.commit();
     }
-    
+
     /**
      * Test MIME longer.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testMIMELonger() throws IOException {
@@ -490,7 +537,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Test get file content with non ascii path.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetFileContentWithNonAsciiPath() throws Exception {
@@ -505,7 +553,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     /**
      * Test get file content with symlink.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetFileContentWithSymlink() throws Exception {

@@ -22,7 +22,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
     /**
      * User when proxying auth correctly configured.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void user_whenProxying_AuthCorrectlyConfigured() throws Exception {
@@ -49,7 +50,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
     /**
      * User when not proxying stubbed.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void user_whenNotProxying_Stubbed() throws Exception {
@@ -72,7 +74,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
     /**
      * Basic behaviors when not proxying.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Can't run this as WireMock will report failure after the test method completes.")
     @Test
@@ -114,7 +117,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
     /**
      * Basic behaviors when proxying.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void BasicBehaviors_whenProxying() throws Exception {
@@ -149,7 +153,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
     /**
      * When snapshot ensure proxy.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void whenSnapshot_EnsureProxy() throws Exception {
@@ -162,7 +167,8 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
     /**
      * When snapshot ensure record to expected location.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Not implemented yet")
     @Test

@@ -61,7 +61,8 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
     /**
      * Test handler fail.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testHandler_Fail() throws Exception {
@@ -222,7 +223,8 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
     /**
      * Test handler http status fail.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testHandler_HttpStatus_Fail() throws Exception {
@@ -254,7 +256,8 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
     /**
      * Test handler wait.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testHandler_Wait() throws Exception {
@@ -275,7 +278,8 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
     /**
      * Test handler wait stuck.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testHandler_WaitStuck() throws Exception {

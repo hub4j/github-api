@@ -13,11 +13,12 @@ import static org.hamcrest.Matchers.*;
  * @author Kohsuke Kawaguchi
  */
 public class GHGistTest extends AbstractGitHubWireMockTest {
-    
+
     /**
      * Lifecycle test.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void lifecycleTest() throws Exception {
@@ -108,7 +109,8 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
     /**
      * Star test.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void starTest() throws Exception {
@@ -143,7 +145,8 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
     /**
      * Gist file.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void gistFile() throws Exception {

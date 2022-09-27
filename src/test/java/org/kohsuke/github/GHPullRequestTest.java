@@ -26,7 +26,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Clean up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     @After
@@ -44,7 +45,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Creates the pull request.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createPullRequest() throws Exception {
@@ -67,7 +69,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Creates the draft pull request.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createDraftPullRequest() throws Exception {
@@ -95,7 +98,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Pull request comment.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void pullRequestComment() throws Exception {
@@ -177,7 +181,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Close pull request.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void closePullRequest() throws Exception {
@@ -193,7 +198,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Pull request reviews.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void pullRequestReviews() throws Exception {
@@ -224,7 +230,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Pull request review comments.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void pullRequestReviewComments() throws Exception {
@@ -290,7 +297,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Test pull request review requests.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testPullRequestReviewRequests() throws Exception {
@@ -308,7 +316,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Test pull request team review requests.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testPullRequestTeamReviewRequests() throws Exception {
@@ -342,7 +351,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Merge commit SHA.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void mergeCommitSHA() throws Exception {
@@ -380,7 +390,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the base branch.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void setBaseBranch() throws Exception {
@@ -404,7 +415,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the base branch non existing.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void setBaseBranchNonExisting() throws Exception {
@@ -431,7 +443,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Update outdated branches unexpected head.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void updateOutdatedBranchesUnexpectedHead() throws Exception {
@@ -468,7 +481,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Update outdated branches.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void updateOutdatedBranches() throws Exception {
@@ -500,7 +514,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Squash merge.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void squashMerge() throws Exception {
@@ -519,7 +534,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Update content squash merge.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void updateContentSquashMerge() throws Exception {
@@ -547,7 +563,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Query pull requests qualified head.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void queryPullRequestsQualifiedHead() throws Exception {
@@ -571,7 +588,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Query pull requests unqualified head.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void queryPullRequestsUnqualifiedHead() throws Exception {
@@ -595,7 +613,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the labels.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     // Requires push access to the test repo to pass
@@ -616,7 +635,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Adds the labels.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     // Requires push access to the test repo to pass
@@ -650,7 +670,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Adds the labels concurrency issue.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     // Requires push access to the test repo to pass
@@ -676,7 +697,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Removes the labels.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     // Requires push access to the test repo to pass
@@ -715,7 +737,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the assignee.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     // Requires push access to the test repo to pass
@@ -730,8 +753,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the user test.
      *
-     * @return the user test
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getUserTest() throws IOException {
@@ -752,7 +775,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Check non existent reviewer.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void checkNonExistentReviewer() throws IOException {
@@ -769,7 +793,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Check non existent author.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void checkNonExistentAuthor() throws IOException {
@@ -783,7 +808,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     /**
      * Check pull request reviewer.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void checkPullRequestReviewer() throws IOException {
@@ -800,7 +826,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
      * Gets the repository.
      *
      * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);

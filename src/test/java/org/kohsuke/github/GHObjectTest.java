@@ -13,7 +13,8 @@ public class GHObjectTest extends org.kohsuke.github.AbstractGitHubWireMockTest 
     /**
      * Test to string.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void test_toString() throws Exception {

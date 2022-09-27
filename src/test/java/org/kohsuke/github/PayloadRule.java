@@ -33,7 +33,8 @@ public class PayloadRule implements TestRule {
     /**
      * Instantiates a new payload rule.
      *
-     * @param type the type
+     * @param type
+     *            the type
      */
     public PayloadRule(String type) {
         this.type = type;
@@ -42,8 +43,10 @@ public class PayloadRule implements TestRule {
     /**
      * Apply.
      *
-     * @param base the base
-     * @param description the description
+     * @param base
+     *            the base
+     * @param description
+     *            the description
      * @return the statement
      */
     public Statement apply(final Statement base, final Description description) {
@@ -66,7 +69,8 @@ public class PayloadRule implements TestRule {
      * As input stream.
      *
      * @return the input stream
-     * @throws FileNotFoundException the file not found exception
+     * @throws FileNotFoundException
+     *             the file not found exception
      */
     public InputStream asInputStream() throws FileNotFoundException {
         String name = resourceName.startsWith("/")
@@ -83,7 +87,8 @@ public class PayloadRule implements TestRule {
      * As bytes.
      *
      * @return the byte[]
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public byte[] asBytes() throws IOException {
         InputStream input = asInputStream();
@@ -97,9 +102,11 @@ public class PayloadRule implements TestRule {
     /**
      * As string.
      *
-     * @param encoding the encoding
+     * @param encoding
+     *            the encoding
      * @return the string
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public String asString(Charset encoding) throws IOException {
         return new String(asBytes(), encoding.name());
@@ -108,9 +115,11 @@ public class PayloadRule implements TestRule {
     /**
      * As string.
      *
-     * @param encoding the encoding
+     * @param encoding
+     *            the encoding
      * @return the string
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public String asString(String encoding) throws IOException {
         return new String(asBytes(), encoding);
@@ -120,7 +129,8 @@ public class PayloadRule implements TestRule {
      * As string.
      *
      * @return the string
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public String asString() throws IOException {
         return new String(asBytes(), Charset.defaultCharset().name());
@@ -130,7 +140,8 @@ public class PayloadRule implements TestRule {
      * As reader.
      *
      * @return the reader
-     * @throws FileNotFoundException the file not found exception
+     * @throws FileNotFoundException
+     *             the file not found exception
      */
     public Reader asReader() throws FileNotFoundException {
         return new InputStreamReader(asInputStream(), Charset.defaultCharset());
@@ -139,9 +150,11 @@ public class PayloadRule implements TestRule {
     /**
      * As reader.
      *
-     * @param transformer the transformer
+     * @param transformer
+     *            the transformer
      * @return the reader
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public Reader asReader(@Nonnull Function<String, String> transformer) throws IOException {
         String payloadString = asString();
@@ -151,9 +164,11 @@ public class PayloadRule implements TestRule {
     /**
      * As reader.
      *
-     * @param encoding the encoding
+     * @param encoding
+     *            the encoding
      * @return the reader
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public Reader asReader(String encoding) throws IOException {
         return new InputStreamReader(asInputStream(), encoding);
@@ -162,9 +177,11 @@ public class PayloadRule implements TestRule {
     /**
      * As reader.
      *
-     * @param encoding the encoding
+     * @param encoding
+     *            the encoding
      * @return the reader
-     * @throws FileNotFoundException the file not found exception
+     * @throws FileNotFoundException
+     *             the file not found exception
      */
     public Reader asReader(Charset encoding) throws FileNotFoundException {
         return new InputStreamReader(asInputStream(), encoding);

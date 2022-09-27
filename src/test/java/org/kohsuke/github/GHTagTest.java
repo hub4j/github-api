@@ -19,7 +19,8 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
     /**
      * Clean up tags.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     @After
@@ -43,7 +44,8 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
     /**
      * Test create tag.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCreateTag() throws Exception {
@@ -74,7 +76,8 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
      * Gets the repository.
      *
      * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);

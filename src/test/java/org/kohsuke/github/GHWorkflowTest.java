@@ -28,7 +28,8 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     /**
      * Cleanup.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     @After
@@ -47,7 +48,8 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -57,7 +59,8 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     /**
      * Test basic information.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testBasicInformation() throws IOException {
@@ -81,7 +84,8 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     /**
      * Test disable enable.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testDisableEnable() throws IOException {
@@ -103,7 +107,8 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     /**
      * Test dispatch.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testDispatch() throws IOException {
@@ -124,7 +129,8 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     /**
      * Test list workflows.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testListWorkflows() throws IOException {
@@ -147,7 +153,8 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     /**
      * Test list workflow runs.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testListWorkflowRuns() throws IOException {

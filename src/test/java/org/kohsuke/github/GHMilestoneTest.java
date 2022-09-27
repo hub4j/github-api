@@ -21,7 +21,8 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
     /**
      * Clean up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     @After
@@ -42,7 +43,8 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
     /**
      * Test update milestone.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testUpdateMilestone() throws Exception {
@@ -76,7 +78,8 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
     /**
      * Test unset milestone.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testUnsetMilestone() throws IOException {
@@ -98,7 +101,8 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
     /**
      * Test unset milestone from pull request.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testUnsetMilestoneFromPullRequest() throws IOException {
@@ -122,7 +126,8 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
      * Gets the repository.
      *
      * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);

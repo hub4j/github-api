@@ -28,14 +28,15 @@ import static org.junit.Assert.assertThrows;
  * Unit test for simple App.
  */
 public class AppTest extends AbstractGitHubWireMockTest {
-    
+
     /** The Constant GITHUB_API_TEST_REPO. */
     static final String GITHUB_API_TEST_REPO = "github-api-test";
 
     /**
      * Test repo CRUD.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testRepoCRUD() throws Exception {
@@ -85,7 +86,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test repository with auto initialization CRUD.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testRepositoryWithAutoInitializationCRUD() throws Exception {
@@ -113,7 +115,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test credential valid.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCredentialValid() throws IOException {
@@ -134,7 +137,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test credential valid enterprise.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCredentialValidEnterprise() throws IOException {
@@ -160,7 +164,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test issue with no comment.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testIssueWithNoComment() throws IOException {
@@ -174,7 +179,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test issue with comment.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testIssueWithComment() throws IOException {
@@ -238,7 +244,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test create issue.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateIssue() throws IOException {
@@ -270,7 +277,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test create and list deployments.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateAndListDeployments() throws IOException {
@@ -301,7 +309,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test get deployment statuses.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGetDeploymentStatuses() throws IOException {
@@ -339,7 +348,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test get issues.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetIssues() throws Exception {
@@ -354,7 +364,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test query issues.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testQueryIssues() throws IOException {
@@ -434,7 +445,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test list issues.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testListIssues() throws IOException {
@@ -454,7 +466,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test rate limit.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testRateLimit() throws IOException {
@@ -464,7 +477,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test my organizations.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testMyOrganizations() throws IOException {
@@ -476,7 +490,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test my organizations contain my teams.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testMyOrganizationsContainMyTeams() throws IOException {
@@ -490,7 +505,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test my teams should include myself.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testMyTeamsShouldIncludeMyself() throws IOException {
@@ -508,7 +524,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test user public organizations when there are some.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testUserPublicOrganizationsWhenThereAreSome() throws IOException {
@@ -523,7 +540,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test user public organizations when there are none.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testUserPublicOrganizationsWhenThereAreNone() throws IOException {
@@ -546,7 +564,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test fetching team from git hub instance throws exception.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     @SuppressWarnings("deprecation")
@@ -560,7 +579,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test should fetch team from organization.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testShouldFetchTeamFromOrganization() throws Exception {
@@ -584,7 +604,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test fetch pull request.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Needs mocking check")
     @Test
@@ -599,7 +620,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test fetch pull request as list.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Needs mocking check")
     @Test
@@ -615,7 +637,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test get app installations.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetAppInstallations() throws Exception {
@@ -634,7 +657,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test repo permissions.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Needs mocking check")
     @Test
@@ -651,7 +675,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test get myself.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetMyself() throws Exception {
@@ -666,7 +691,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test public keys.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Needs mocking check")
     @Test
@@ -678,7 +704,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test org fork.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testOrgFork() throws Exception {
@@ -689,7 +716,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test get teams for repo.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetTeamsForRepo() throws Exception {
@@ -702,7 +730,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test membership.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testMembership() throws Exception {
@@ -715,7 +744,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test member orgs.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testMemberOrgs() throws Exception {
@@ -726,7 +756,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test org teams.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testOrgTeams() throws Exception {
@@ -742,7 +773,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test org team by name.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testOrgTeamByName() throws Exception {
@@ -754,7 +786,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test org team by slug.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testOrgTeamBySlug() throws Exception {
@@ -766,7 +799,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test commit.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCommit() throws Exception {
@@ -812,7 +846,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test list commits.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testListCommits() throws Exception {
@@ -827,7 +862,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test branches.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Needs mocking check")
     @Test
@@ -839,7 +875,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test commit comment.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCommitComment() throws Exception {
@@ -855,7 +892,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test create commit comment.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCreateCommitComment() throws Exception {
@@ -904,7 +942,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Try hook.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void tryHook() throws Exception {
@@ -976,7 +1015,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test event api.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testEventApi() throws Exception {
@@ -999,7 +1039,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test app.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Ignore("Needs mocking check")
     @Test
@@ -1096,7 +1137,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test org repositories.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testOrgRepositories() throws IOException {
@@ -1111,7 +1153,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test organization.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testOrganization() throws IOException {
@@ -1127,7 +1170,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test commit status.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCommitStatus() throws Exception {
@@ -1149,7 +1193,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test commit short info.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCommitShortInfo() throws Exception {
@@ -1168,7 +1213,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test pull request populate.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Needs mocking check")
     @Test
@@ -1182,7 +1228,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test check membership.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCheckMembership() throws Exception {
@@ -1201,7 +1248,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test ref.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testRef() throws IOException {
@@ -1213,7 +1261,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Directory listing.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void directoryListing() throws IOException {
@@ -1231,7 +1280,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test add deploy key.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Ignore("Needs mocking check")
     @Test
@@ -1256,7 +1306,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test commit status context.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Ignore("Needs mocking check")
     @Test
@@ -1272,7 +1323,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test member pagenation.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Ignore("Needs mocking check")
     @Test
@@ -1288,7 +1340,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test commit search.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCommitSearch() throws IOException {
@@ -1307,7 +1360,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test issue search.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testIssueSearch() throws IOException {
@@ -1329,7 +1383,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test readme.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test // issue #99
     public void testReadme() throws IOException {
@@ -1341,7 +1396,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test trees.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Ignore("Needs mocking check")
     @Test
@@ -1360,7 +1416,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test trees recursive.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testTreesRecursive() throws IOException {
@@ -1388,7 +1445,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test repo label.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testRepoLabel() throws IOException {
@@ -1502,7 +1560,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Cleanup label.
      *
-     * @param name the name
+     * @param name
+     *            the name
      */
     void cleanupLabel(String name) {
         if (mockGitHub.isUseProxy()) {
@@ -1518,7 +1577,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test subscribers.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testSubscribers() throws IOException {
@@ -1539,7 +1599,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Notifications.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void notifications() throws Exception {
@@ -1576,7 +1637,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Check to string.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Needs mocking check")
     @Test
@@ -1592,7 +1654,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Reactions.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void reactions() throws Exception {
@@ -1657,7 +1720,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * List org memberships.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listOrgMemberships() throws Exception {
@@ -1672,7 +1736,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Blob.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void blob() throws Exception {

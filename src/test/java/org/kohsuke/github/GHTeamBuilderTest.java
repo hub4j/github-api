@@ -15,7 +15,8 @@ public class GHTeamBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test create child team.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateChildTeam() throws IOException {

@@ -34,7 +34,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test offline.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testOffline() throws Exception {
@@ -53,7 +54,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub server with http.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGitHubServerWithHttp() throws Exception {
@@ -65,7 +67,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub server with https.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGitHubServerWithHttps() throws Exception {
@@ -77,7 +80,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub server without server.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGitHubServerWithoutServer() throws Exception {
@@ -89,7 +93,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub builder from environment.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGitHubBuilderFromEnvironment() throws IOException {
@@ -138,7 +143,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub builder from custom environment.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGitHubBuilderFromCustomEnvironment() throws IOException {
@@ -180,7 +186,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub builder from credentials with environment.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGitHubBuilderFromCredentialsWithEnvironment() throws IOException {
@@ -229,7 +236,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub builder from credentials with property file.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGitHubBuilderFromCredentialsWithPropertyFile() throws IOException {
@@ -313,7 +321,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test anonymous.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testAnonymous() throws IOException {
@@ -336,7 +345,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test github builder with app installation token.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGithubBuilderWithAppInstallationToken() throws Exception {
@@ -356,7 +366,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub is api url valid.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGitHubIsApiUrlValid() throws IOException {
@@ -389,7 +400,8 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     /**
      * Test git hub O auth user query.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGitHubOAuthUserQuery() throws IOException {

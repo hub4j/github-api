@@ -23,7 +23,8 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -33,7 +34,8 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
     /**
      * Cleanup discussions.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @After
     public void cleanupDiscussions() throws Exception {
@@ -50,7 +52,8 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
     /**
      * Test created discussion.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreatedDiscussion() throws IOException {
@@ -94,7 +97,8 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
     /**
      * Test get and edit discussion.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGetAndEditDiscussion() throws IOException {
@@ -142,7 +146,8 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
     /**
      * Test list discussion.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testListDiscussion() throws IOException {
@@ -157,7 +162,8 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
     /**
      * Test to delete discussion.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testToDeleteDiscussion() throws IOException {

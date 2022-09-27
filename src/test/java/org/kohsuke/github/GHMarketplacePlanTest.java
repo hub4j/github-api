@@ -33,7 +33,8 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
     /**
      * List marketplace plans.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listMarketplacePlans() throws IOException {
@@ -45,7 +46,8 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
     /**
      * List accounts.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listAccounts() throws IOException {
@@ -59,7 +61,8 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
     /**
      * List accounts with direction.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listAccountsWithDirection() throws IOException {
@@ -80,7 +83,8 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
     /**
      * List accounts with sort and direction.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listAccountsWithSortAndDirection() throws IOException {

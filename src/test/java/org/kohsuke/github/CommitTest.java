@@ -18,11 +18,12 @@ import static org.hamcrest.Matchers.*;
  * @author Kohsuke Kawaguchi
  */
 public class CommitTest extends AbstractGitHubWireMockTest {
-    
+
     /**
      * Last status.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test // issue 152
     public void lastStatus() throws IOException {
@@ -33,7 +34,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     /**
      * List files.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test // issue 230
     public void listFiles() throws Exception {
@@ -48,7 +50,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     /**
      * Test query commits.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testQueryCommits() throws Exception {
@@ -134,7 +137,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     /**
      * List pull requests of not included commit.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listPullRequestsOfNotIncludedCommit() throws Exception {
@@ -149,7 +153,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     /**
      * List pull requests.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listPullRequests() throws Exception {
@@ -169,7 +174,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     /**
      * List pull requests of commit with 2 pull requests.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listPullRequestsOfCommitWith2PullRequests() throws Exception {
@@ -190,7 +196,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     /**
      * List branches where head.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listBranchesWhereHead() throws Exception {
@@ -210,7 +217,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     /**
      * List branches where head 2 heads.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listBranchesWhereHead2Heads() throws Exception {
@@ -226,7 +234,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     /**
      * List branches where head of commit with head nowhere.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void listBranchesWhereHeadOfCommitWithHeadNowhere() throws Exception {
@@ -241,7 +250,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     /**
      * Commit signature verification.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test // issue 737
     public void commitSignatureVerification() throws Exception {
@@ -263,7 +273,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     /**
      * Commit date not null.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test // issue 883
     public void commitDateNotNull() throws Exception {

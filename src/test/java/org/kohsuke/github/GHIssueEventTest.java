@@ -19,7 +19,8 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     /**
      * Test events for single issue.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testEventsForSingleIssue() throws Exception {
@@ -51,7 +52,8 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     /**
      * Test issue review requested event.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testIssueReviewRequestedEvent() throws Exception {
@@ -81,7 +83,8 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     /**
      * Test events for issue rename.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testEventsForIssueRename() throws Exception {
@@ -120,7 +123,8 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     /**
      * Test repository events.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testRepositoryEvents() throws Exception {
@@ -140,7 +144,8 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
      * Gets the repository.
      *
      * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);

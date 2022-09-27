@@ -24,7 +24,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     /**
      * Test set description.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testSetDescription() throws IOException {
@@ -54,8 +55,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the members.
      *
-     * @return the members
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getMembers() throws IOException {
@@ -74,7 +75,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     /**
      * List members.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listMembers() throws IOException {
@@ -93,7 +95,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     /**
      * List members admin.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listMembersAdmin() throws IOException {
@@ -112,7 +115,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     /**
      * List members no match.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listMembersNoMatch() throws IOException {
@@ -128,7 +132,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     /**
      * Test set privacy.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testSetPrivacy() throws IOException {
@@ -158,7 +163,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     /**
      * Test fetch child teams.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testFetchChildTeams() throws IOException {
@@ -175,7 +181,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     /**
      * Test fetch empty child teams.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testFetchEmptyChildTeams() throws IOException {
@@ -191,7 +198,8 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     /**
      * Adds the remove member.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void addRemoveMember() throws IOException {

@@ -37,7 +37,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Cleanup.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     @After
@@ -59,7 +60,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -72,7 +74,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test text entry.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     @Ignore("It seems that GitHub no longer supports the 'content' parameter")
@@ -89,7 +92,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test sha entry.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testShaEntry() throws Exception {
@@ -108,7 +112,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test add.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testAdd() throws Exception {

@@ -21,7 +21,8 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -31,7 +32,8 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     /**
      * Test created project.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreatedProject() throws IOException {
@@ -46,7 +48,8 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     /**
      * Test edit project name.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testEditProjectName() throws IOException {
@@ -60,7 +63,8 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     /**
      * Test edit project body.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testEditProjectBody() throws IOException {
@@ -74,7 +78,8 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     /**
      * Test edit project state.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testEditProjectState() throws IOException {
@@ -88,7 +93,8 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     /**
      * Test delete project.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testDeleteProject() throws IOException {
@@ -104,7 +110,8 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     /**
      * After.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @After
     public void after() throws IOException {

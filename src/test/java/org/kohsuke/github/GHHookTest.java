@@ -27,7 +27,8 @@ public class GHHookTest {
     /**
      * Expose responce headers.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Ignore
     @Test

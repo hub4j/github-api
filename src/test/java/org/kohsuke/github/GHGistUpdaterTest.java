@@ -22,7 +22,8 @@ public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the up.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Before
     public void setUp() throws IOException {
@@ -39,7 +40,8 @@ public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
     /**
      * Clean up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @After
     public void cleanUp() throws Exception {
@@ -54,7 +56,8 @@ public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
     /**
      * Test git updater.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGitUpdater() throws Exception {

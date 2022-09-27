@@ -19,7 +19,8 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
     /**
      * Test get deployment by id string payload.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGetDeploymentByIdStringPayload() throws IOException {
@@ -41,7 +42,8 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
     /**
      * Test get deployment by id object payload.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGetDeploymentByIdObjectPayload() throws IOException {
@@ -68,7 +70,8 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
      * Gets the repository.
      *
      * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);

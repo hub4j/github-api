@@ -20,7 +20,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * List users.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listUsers() throws IOException {
@@ -33,8 +34,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the repository.
      *
-     * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getRepository() throws IOException {
@@ -63,8 +64,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the orgs.
      *
-     * @return the orgs
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getOrgs() throws IOException {
@@ -92,7 +93,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * Search users.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void searchUsers() throws Exception {
@@ -106,7 +108,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * Test list all repositories.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testListAllRepositories() throws Exception {
@@ -131,7 +134,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * Search content.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void searchContent() throws Exception {
@@ -251,7 +255,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * Test list my authorizations.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testListMyAuthorizations() throws IOException {
@@ -265,8 +270,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the meta.
      *
-     * @return the meta
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getMeta() throws IOException {
@@ -304,8 +309,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the my marketplace purchases.
      *
-     * @return the my marketplace purchases
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getMyMarketplacePurchases() throws IOException {
@@ -355,7 +360,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * Gzip.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void gzip() throws Exception {
@@ -373,7 +379,8 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     /**
      * Test header field name.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testHeaderFieldName() throws Exception {

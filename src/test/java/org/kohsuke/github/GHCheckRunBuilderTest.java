@@ -43,7 +43,8 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
      * Gets the installation github.
      *
      * @return the installation github
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GitHub getInstallationGithub() throws IOException {
         return getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization()).root();
@@ -52,7 +53,8 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
     /**
      * Creates the check run.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createCheckRun() throws Exception {
@@ -83,7 +85,8 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
     /**
      * Creates the check run many annotations.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createCheckRunManyAnnotations() throws Exception {
@@ -110,7 +113,8 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
     /**
      * Creates the check run no annotations.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createCheckRunNoAnnotations() throws Exception {
@@ -127,7 +131,8 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
     /**
      * Creates the pending check run.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createPendingCheckRun() throws Exception {
@@ -143,7 +148,8 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
     /**
      * Creates the check run err missing conclusion.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void createCheckRunErrMissingConclusion() throws Exception {
@@ -164,7 +170,8 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
     /**
      * Update check run.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void updateCheckRun() throws Exception {

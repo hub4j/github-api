@@ -47,7 +47,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Commit comment.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void commit_comment() throws Exception {
@@ -73,7 +74,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Creates the.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void create() throws Exception {
@@ -91,7 +93,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Delete.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void delete() throws Exception {
@@ -107,7 +110,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Deployment.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void deployment() throws Exception {
@@ -126,7 +130,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Deployment status.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void deployment_status() throws Exception {
@@ -151,7 +156,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Fork.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void fork() throws Exception {
@@ -187,7 +193,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Issue comment.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void issue_comment() throws Exception {
@@ -215,7 +222,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Issue comment edited.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void issue_comment_edited() throws Exception {
@@ -229,7 +237,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Issues.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void issues() throws Exception {
@@ -251,7 +260,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Issue labeled.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void issue_labeled() throws Exception {
@@ -268,7 +278,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Issue unlabeled.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void issue_unlabeled() throws Exception {
@@ -284,7 +295,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Issue title edited.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void issue_title_edited() throws Exception {
@@ -299,7 +311,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Issue body edited.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void issue_body_edited() throws Exception {
@@ -334,7 +347,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Ping.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void ping() throws Exception {
@@ -350,7 +364,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Public.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     @Payload("public")
@@ -365,7 +380,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Pull request.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void pull_request() throws Exception {
@@ -405,7 +421,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Pull request edited base.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void pull_request_edited_base() throws Exception {
@@ -425,7 +442,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Pull request edited title.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void pull_request_edited_title() throws Exception {
@@ -444,7 +462,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Pull request labeled.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void pull_request_labeled() throws Exception {
@@ -489,7 +508,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Pull request review.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void pull_request_review() throws Exception {
@@ -528,7 +548,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Pull request review comment.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void pull_request_review_comment() throws Exception {
@@ -564,7 +585,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Pull request review comment edited.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void pull_request_review_comment_edited() throws Exception {
@@ -579,7 +601,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Push.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void push() throws Exception {
@@ -623,7 +646,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Push to fork.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     @Payload("push.fork")
@@ -698,7 +722,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Release published.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void release_published() throws Exception {
@@ -720,7 +745,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Repository.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void repository() throws Exception {
@@ -736,7 +762,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Status.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void status() throws Exception {
@@ -757,7 +784,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Status 2.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void status2() throws Exception {
@@ -779,7 +807,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Check run event.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     @Payload("check-run")
@@ -852,7 +881,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Check suite event.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     @Payload("check-suite")
@@ -917,7 +947,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Installation repositories event.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     @Payload("installation_repositories")
@@ -943,7 +974,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Installation event.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     @Payload("installation")
@@ -969,7 +1001,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Workflow dispatch.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void workflow_dispatch() throws Exception {
@@ -989,7 +1022,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Workflow run.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void workflow_run() throws Exception {
@@ -1059,7 +1093,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Workflow run pull request.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void workflow_run_pull_request() throws Exception {
@@ -1077,7 +1112,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Workflow run other repository.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void workflow_run_other_repository() throws Exception {
@@ -1095,7 +1131,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Workflow job.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void workflow_job() throws Exception {
@@ -1134,7 +1171,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Label created.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void label_created() throws Exception {
@@ -1155,7 +1193,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Label edited.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void label_edited() throws Exception {
@@ -1179,7 +1218,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Label deleted.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void label_deleted() throws Exception {
@@ -1200,7 +1240,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Discussion created.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void discussion_created() throws Exception {
@@ -1253,7 +1294,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Discussion answered.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void discussion_answered() throws Exception {
@@ -1307,7 +1349,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Discussion labeled.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void discussion_labeled() throws Exception {
@@ -1370,7 +1413,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Starred.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void starred() throws Exception {
@@ -1386,7 +1430,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Projectsv 2 item created.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void projectsv2item_created() throws Exception {
@@ -1422,7 +1467,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Projectsv 2 item edited.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void projectsv2item_edited() throws Exception {
@@ -1444,7 +1490,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Projectsv 2 item archived.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void projectsv2item_archived() throws Exception {
@@ -1465,7 +1512,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Projectsv 2 item restored.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void projectsv2item_restored() throws Exception {
@@ -1486,7 +1534,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     /**
      * Projectsv 2 item reordered.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void projectsv2item_reordered() throws Exception {

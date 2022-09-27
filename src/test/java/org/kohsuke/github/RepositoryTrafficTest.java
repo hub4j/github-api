@@ -46,7 +46,8 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
     /**
      * Test get views.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGetViews() throws IOException {
@@ -78,7 +79,8 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
     /**
      * Test get clones.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGetClones() throws IOException {
@@ -108,7 +110,8 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
     /**
      * Test get traffic stats access failure due to insufficient permissions.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testGetTrafficStatsAccessFailureDueToInsufficientPermissions() throws IOException {

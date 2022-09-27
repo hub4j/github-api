@@ -23,6 +23,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
+// TODO: Auto-generated Javadoc
 /**
  * Test showing the behavior of OkHttpConnector with and without cache.
  * <p>
@@ -45,6 +46,9 @@ import static org.junit.Assume.assumeTrue;
  */
 public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Instantiates a new ok http connector test.
+     */
     public OkHttpConnectorTest() {
         useDefaultGitHub = false;
     }
@@ -70,6 +74,11 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
     private GHRateLimit rateLimitBefore;
     private Cache cache = null;
 
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
     @Override
     protected WireMockConfiguration getWireMockOptions() {
         return super.getWireMockOptions()
@@ -78,6 +87,12 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
                 .extensions(templating.newResponseTransformer());
     }
 
+    /**
+     * Setup repo.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     public void setupRepo() throws Exception {
         if (mockGitHub.isUseProxy()) {
@@ -90,6 +105,12 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Delete cache.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @After
     public void deleteCache() throws IOException {
         if (cache != null) {
@@ -97,6 +118,12 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Default connector.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void DefaultConnector() throws Exception {
 
@@ -111,6 +138,12 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         checkRequestAndLimit(defaultNetworkRequestCount, defaultRateLimitUsed);
     }
 
+    /**
+     * Ok http connector no cache.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void OkHttpConnector_NoCache() throws Exception {
 
@@ -132,6 +165,12 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         assertThat("Cache", cache, is(nullValue()));
     }
 
+    /**
+     * Ok http connector cache max age none.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void OkHttpConnector_Cache_MaxAgeNone() throws Exception {
         // The responses were recorded from github, but the Date headers
@@ -160,6 +199,12 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         assertThat("getHitCount", cache.hitCount(), is(maxAgeNoneHitCount));
     }
 
+    /**
+     * Ok http connector cache max age three.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void OkHttpConnector_Cache_MaxAge_Three() throws Exception {
 
@@ -185,6 +230,12 @@ public class OkHttpConnectorTest extends AbstractGitHubWireMockTest {
         assertThat("getHitCount", cache.hitCount(), is(maxAgeThreeHitCount));
     }
 
+    /**
+     * Ok http connector cache max age default zero.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void OkHttpConnector_Cache_MaxAgeDefault_Zero() throws Exception {
         // The responses were recorded from github, but the Date headers

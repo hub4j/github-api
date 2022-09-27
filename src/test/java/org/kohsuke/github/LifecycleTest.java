@@ -17,11 +17,12 @@ import static org.hamcrest.Matchers.*;
  * The Class LifecycleTest.
  */
 public class LifecycleTest extends AbstractGitHubWireMockTest {
-    
+
     /**
      * Test create repository.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateRepository() throws IOException {

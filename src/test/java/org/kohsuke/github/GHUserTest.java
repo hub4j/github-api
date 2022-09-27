@@ -22,7 +22,8 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     /**
      * Checks if is member of.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void isMemberOf() throws IOException {
@@ -48,7 +49,8 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     /**
      * List follows and followers.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listFollowsAndFollowers() throws IOException {
@@ -69,8 +71,8 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     /**
      * Gets the keys.
      *
-     * @return the keys
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getKeys() throws IOException {
@@ -111,7 +113,8 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     /**
      * List public repositories.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listPublicRepositories() throws IOException {
@@ -132,7 +135,8 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     /**
      * List projects.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listProjects() throws IOException {
@@ -148,7 +152,8 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     /**
      * List public repositories page size 62.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listPublicRepositoriesPageSize62() throws IOException {
@@ -169,7 +174,8 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     /**
      * Creates the and count private repos.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void createAndCountPrivateRepos() throws IOException {
@@ -193,7 +199,8 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     /**
      * Verify bio and hireable.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void verifyBioAndHireable() throws IOException {
@@ -212,7 +219,8 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     /**
      * Verify ldapdn.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void verifyLdapdn() throws IOException {

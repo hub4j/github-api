@@ -19,7 +19,8 @@ public class Github2faTest extends AbstractGitHubWireMockTest {
     /**
      * Test 2 fa token.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void test2faToken() throws IOException {

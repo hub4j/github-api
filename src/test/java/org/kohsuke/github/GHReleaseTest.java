@@ -14,7 +14,8 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
     /**
      * Test create simple release.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCreateSimpleRelease() throws Exception {
@@ -38,7 +39,8 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
     /**
      * Test create simple release without discussion.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCreateSimpleReleaseWithoutDiscussion() throws Exception {
@@ -62,7 +64,8 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
     /**
      * Test create double release fails.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCreateDoubleReleaseFails() throws Exception {
@@ -90,7 +93,8 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
     /**
      * Test create release with unknown category fails.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testCreateReleaseWithUnknownCategoryFails() throws Exception {
@@ -111,7 +115,8 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
     /**
      * Test update release.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testUpdateRelease() throws Exception {
@@ -142,7 +147,8 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
     /**
      * Test delete release.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testDeleteRelease() throws Exception {

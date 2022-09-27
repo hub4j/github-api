@@ -39,7 +39,7 @@ public abstract class AbstractGitHubWireMockTest {
 
     /** The Constant STUBBED_USER_LOGIN. */
     final static String STUBBED_USER_LOGIN = "placeholder-user";
-    
+
     /** The Constant STUBBED_USER_PASSWORD. */
     final static String STUBBED_USER_PASSWORD = "placeholder-password";
 
@@ -58,7 +58,7 @@ public abstract class AbstractGitHubWireMockTest {
 
     /** The base files class path. */
     protected final String baseFilesClassPath = this.getClass().getName().replace('.', '/');
-    
+
     /** The base record path. */
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
 
@@ -136,7 +136,8 @@ public abstract class AbstractGitHubWireMockTest {
     /**
      * Wire mock setup.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void wireMockSetup() throws Exception {
@@ -164,7 +165,8 @@ public abstract class AbstractGitHubWireMockTest {
     /**
      * Require proxy.
      *
-     * @param reason the reason
+     * @param reason
+     *            the reason
      */
     protected void requireProxy(String reason) {
         assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable): " + reason,
@@ -174,7 +176,8 @@ public abstract class AbstractGitHubWireMockTest {
     /**
      * Verify authenticated.
      *
-     * @param instance the instance
+     * @param instance
+     *            the instance
      */
     protected void verifyAuthenticated(GitHub instance) {
         assertThat(
@@ -195,7 +198,8 @@ public abstract class AbstractGitHubWireMockTest {
     /**
      * Gets the user.
      *
-     * @param gitHub the git hub
+     * @param gitHub
+     *            the git hub
      * @return the user
      */
     protected static GHUser getUser(GitHub gitHub) {
@@ -255,7 +259,8 @@ public abstract class AbstractGitHubWireMockTest {
     /**
      * Cleanup temp repositories.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Before
     @After
@@ -270,8 +275,10 @@ public abstract class AbstractGitHubWireMockTest {
     /**
      * Cleanup repository.
      *
-     * @param fullName the full name
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @param fullName
+     *            the full name
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected void cleanupRepository(String fullName) throws IOException {
         if (mockGitHub.isUseProxy()) {
@@ -331,11 +338,12 @@ public abstract class AbstractGitHubWireMockTest {
     public static void fail() {
         Assert.fail();
     }
-    
+
     /**
      * Fail.
      *
-     * @param reason the reason
+     * @param reason
+     *            the reason
      */
     public static void fail(String reason) {
         Assert.fail(reason);
@@ -344,9 +352,12 @@ public abstract class AbstractGitHubWireMockTest {
     /**
      * Assert that.
      *
-     * @param <T> the generic type
-     * @param actual the actual
-     * @param matcher the matcher
+     * @param <T>
+     *            the generic type
+     * @param actual
+     *            the actual
+     * @param matcher
+     *            the matcher
      */
     public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
         MatcherAssert.assertThat("", actual, matcher);
@@ -355,10 +366,14 @@ public abstract class AbstractGitHubWireMockTest {
     /**
      * Assert that.
      *
-     * @param <T> the generic type
-     * @param reason the reason
-     * @param actual the actual
-     * @param matcher the matcher
+     * @param <T>
+     *            the generic type
+     * @param reason
+     *            the reason
+     * @param actual
+     *            the actual
+     * @param matcher
+     *            the matcher
      */
     public static <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {
         MatcherAssert.assertThat(reason, actual, matcher);
@@ -367,8 +382,10 @@ public abstract class AbstractGitHubWireMockTest {
     /**
      * Assert that.
      *
-     * @param reason the reason
-     * @param assertion the assertion
+     * @param reason
+     *            the reason
+     * @param assertion
+     *            the assertion
      */
     public static void assertThat(String reason, boolean assertion) {
         MatcherAssert.assertThat(reason, assertion);
@@ -378,7 +395,7 @@ public abstract class AbstractGitHubWireMockTest {
      * The Class TemplatingHelper.
      */
     protected static class TemplatingHelper {
-        
+
         /** The test start date. */
         public Date testStartDate = new Date();
 

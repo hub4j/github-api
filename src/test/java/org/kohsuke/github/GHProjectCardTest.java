@@ -24,7 +24,8 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -46,7 +47,8 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     /**
      * Test edit card note.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testEditCardNote() throws IOException {
@@ -59,7 +61,8 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     /**
      * Test archive card.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testArchiveCard() throws IOException {
@@ -72,7 +75,8 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     /**
      * Test create card from issue.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateCardFromIssue() throws IOException {
@@ -91,7 +95,8 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     /**
      * Test create card from PR.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testCreateCardFromPR() throws IOException {
@@ -122,7 +127,8 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     /**
      * Test delete card.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testDeleteCard() throws IOException {
@@ -138,7 +144,8 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     /**
      * After.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @After
     public void after() throws IOException {

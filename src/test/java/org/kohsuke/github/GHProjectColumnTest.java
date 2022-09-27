@@ -23,7 +23,8 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
     /**
      * Sets the up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -42,7 +43,8 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
     /**
      * Test edit column name.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testEditColumnName() throws IOException {
@@ -54,7 +56,8 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
     /**
      * Test delete column.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void testDeleteColumn() throws IOException {
@@ -70,7 +73,8 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
     /**
      * After.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @After
     public void after() throws IOException {

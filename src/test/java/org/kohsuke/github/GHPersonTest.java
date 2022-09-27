@@ -14,11 +14,12 @@ import static org.hamcrest.Matchers.notNullValue;
  * @author Martin van Zijl
  */
 public class GHPersonTest extends AbstractGitHubWireMockTest {
-    
+
     /**
      * Test fields for organization.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testFieldsForOrganization() throws Exception {
@@ -31,7 +32,8 @@ public class GHPersonTest extends AbstractGitHubWireMockTest {
     /**
      * Test fields for user.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testFieldsForUser() throws Exception {
@@ -44,7 +46,8 @@ public class GHPersonTest extends AbstractGitHubWireMockTest {
      * Gets the repository.
      *
      * @return the repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);

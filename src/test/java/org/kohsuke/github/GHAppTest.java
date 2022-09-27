@@ -39,8 +39,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     /**
      * Gets the git hub app.
      *
-     * @return the git hub app
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getGitHubApp() throws IOException {
@@ -72,7 +72,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     /**
      * List installations.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void listInstallations() throws IOException {
@@ -87,8 +88,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     /**
      * Gets the installation by id.
      *
-     * @return the installation by id
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getInstallationById() throws IOException {
@@ -100,8 +101,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     /**
      * Gets the installation by organization.
      *
-     * @return the installation by organization
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getInstallationByOrganization() throws IOException {
@@ -113,8 +114,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     /**
      * Gets the installation by repository.
      *
-     * @return the installation by repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getInstallationByRepository() throws IOException {
@@ -126,8 +127,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     /**
      * Gets the installation by user.
      *
-     * @return the installation by user
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void getInstallationByUser() throws IOException {
@@ -139,7 +140,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     /**
      * Delete installation.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void deleteInstallation() throws IOException {
@@ -155,7 +157,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     /**
      * Creates the token.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void createToken() throws IOException {
@@ -205,7 +208,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     /**
      * Creates the token with repositories.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     public void createTokenWithRepositories() throws IOException {

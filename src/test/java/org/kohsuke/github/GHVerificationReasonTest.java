@@ -11,11 +11,12 @@ import static org.hamcrest.Matchers.*;
  * @author Sourabh Sarvotham Parkala
  */
 public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
-    
+
     /**
      * Test expired key.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     // Issue 737
     @Test
@@ -31,7 +32,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test not signing key.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testNotSigningKey() throws Exception {
@@ -46,7 +48,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test gpgverify error.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGpgverifyError() throws Exception {
@@ -61,7 +64,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test gpgverify unavailable.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGpgverifyUnavailable() throws Exception {
@@ -76,7 +80,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test unsigned.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testUnsigned() throws Exception {
@@ -90,7 +95,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test unknown signature type.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testUnknownSignatureType() throws Exception {
@@ -105,7 +111,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test no user.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testNoUser() throws Exception {
@@ -119,7 +126,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test unverified email.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testUnverifiedEmail() throws Exception {
@@ -134,7 +142,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test bad email.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testBadEmail() throws Exception {
@@ -148,7 +157,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test unknown key.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testUnknownKey() throws Exception {
@@ -163,7 +173,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test malformed signature.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testMalformedSignature() throws Exception {
@@ -178,7 +189,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test invalid.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testInvalid() throws Exception {
@@ -192,7 +204,8 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
     /**
      * Test valid.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testValid() throws Exception {

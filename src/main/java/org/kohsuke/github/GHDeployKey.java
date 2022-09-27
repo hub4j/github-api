@@ -4,13 +4,19 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHDeployKey.
  */
 public class GHDeployKey {
 
+    /** The title. */
     protected String url, key, title;
+    
+    /** The verified. */
     protected boolean verified;
+    
+    /** The id. */
     protected long id;
     private GHRepository owner;
 
@@ -83,6 +89,11 @@ public class GHDeployKey {
         return this;
     }
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     public String toString() {
         return new ToStringBuilder(this).append("title", title).append("id", id).append("key", key).toString();
     }

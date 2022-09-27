@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
+// TODO: Auto-generated Javadoc
 /**
  * A workflow run job.
  *
@@ -72,7 +73,7 @@ public class GHWorkflowJob extends GHObject {
     }
 
     /**
-     * When was this job started?
+     * When was this job started?.
      *
      * @return start date
      */
@@ -81,7 +82,7 @@ public class GHWorkflowJob extends GHObject {
     }
 
     /**
-     * When was this job completed?
+     * When was this job completed?.
      *
      * @return completion date
      */
@@ -129,6 +130,11 @@ public class GHWorkflowJob extends GHObject {
         return runAttempt;
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
@@ -212,13 +218,10 @@ public class GHWorkflowJob extends GHObject {
      * <p>
      * The logs are returned as a text file.
      *
-     * @param <T>
-     *            the type of result
-     * @param streamFunction
-     *            The {@link InputStreamFunction} that will process the stream
-     * @throws IOException
-     *             The IO exception.
+     * @param <T>            the type of result
+     * @param streamFunction            The {@link InputStreamFunction} that will process the stream
      * @return the result of reading the stream.
+     * @throws IOException             The IO exception.
      */
     public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
         requireNonNull(streamFunction, "Stream function must not be null");
@@ -236,11 +239,20 @@ public class GHWorkflowJob extends GHObject {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/jobs/" + getId();
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param owner the owner
+     * @return the GH workflow job
+     */
     GHWorkflowJob wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;
     }
 
+    /**
+     * The Class Step.
+     */
     public static class Step {
 
         private String name;
@@ -271,7 +283,7 @@ public class GHWorkflowJob extends GHObject {
         }
 
         /**
-         * When was this step started?
+         * When was this step started?.
          *
          * @return start date
          */
@@ -280,7 +292,7 @@ public class GHWorkflowJob extends GHObject {
         }
 
         /**
-         * When was this step completed?
+         * When was this step completed?.
          *
          * @return completion date
          */

@@ -4,18 +4,32 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Iterable for GHAppInstallation listing.
  */
 class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
+    
+    /** The Constant APP_INSTALLATIONS_URL. */
     public static final String APP_INSTALLATIONS_URL = "/user/installations";
     private final transient GitHub root;
     private GHAppInstallationsPage result;
 
+    /**
+     * Instantiates a new GH app installations iterable.
+     *
+     * @param root the root
+     */
     public GHAppInstallationsIterable(GitHub root) {
         this.root = root;
     }
 
+    /**
+     * Iterator.
+     *
+     * @param pageSize the page size
+     * @return the paged iterator
+     */
     @Nonnull
     @Override
     public PagedIterator<GHAppInstallation> _iterator(int pageSize) {
@@ -25,6 +39,12 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
                 null);
     }
 
+    /**
+     * Adapt.
+     *
+     * @param base the base
+     * @return the iterator
+     */
     protected Iterator<GHAppInstallation[]> adapt(final Iterator<GHAppInstallationsPage> base) {
         return new Iterator<GHAppInstallation[]>() {
             public boolean hasNext() {

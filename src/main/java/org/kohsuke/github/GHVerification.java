@@ -2,16 +2,16 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+// TODO: Auto-generated Javadoc
 /**
  * The commit/tag can be signed by user. This object holds the verification status. Whether the Commit/Tag is signed or
  * not.
  *
+ * @author Sourabh Sarvotham Parkala
  * @see <a href="https://developer.github.com/v3/git/tags/#signature-verification-object">tags signature
  *      verificatiion</a>
  * @see <a href="https://developer.github.com/v3/git/commits/#signature-verification-object">commits signature
  *      verificatiion</a>
- *
- * @author Sourabh Sarvotham Parkala
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
@@ -60,23 +60,49 @@ public class GHVerification {
     /**
      * The possible values for reason in verification object from github.
      *
+     * @author Sourabh Sarvotham Parkala
      * @see <a href="https://developer.github.com/v3/repos/commits/#signature-verification-object">List of possible
      *      reason values</a>
-     * @author Sourabh Sarvotham Parkala
      */
     public enum Reason {
+        
+        /** The expired key. */
         EXPIRED_KEY,
+        
+        /** The not signing key. */
         NOT_SIGNING_KEY,
+        
+        /** The gpgverify error. */
         GPGVERIFY_ERROR,
+        
+        /** The gpgverify unavailable. */
         GPGVERIFY_UNAVAILABLE,
+        
+        /** The unsigned. */
         UNSIGNED,
+        
+        /** The unknown signature type. */
         UNKNOWN_SIGNATURE_TYPE,
+        
+        /** The no user. */
         NO_USER,
+        
+        /** The unverified email. */
         UNVERIFIED_EMAIL,
+        
+        /** The bad email. */
         BAD_EMAIL,
+        
+        /** The unknown key. */
         UNKNOWN_KEY,
+        
+        /** The malformed signature. */
         MALFORMED_SIGNATURE,
+        
+        /** The invalid. */
         INVALID,
+        
+        /** The valid. */
         VALID
     }
 }

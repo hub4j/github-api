@@ -8,6 +8,7 @@ import java.net.URL;
 
 import javax.annotation.CheckForNull;
 
+// TODO: Auto-generated Javadoc
 /**
  * {@link IOException} for http exceptions because {@link HttpURLConnection} throws un-discerned {@link IOException} and
  * it can help to know the http response code to decide how to handle an http exceptions.
@@ -15,10 +16,15 @@ import javax.annotation.CheckForNull;
  * @author <a href="mailto:cleclerc@cloudbees.com">Cyrille Le Clerc</a>
  */
 public class HttpException extends GHIOException {
+    
+    /** The Constant serialVersionUID. */
     static final long serialVersionUID = 1L;
 
+    /** The response code for this exception. */
     private final int responseCode;
+    /** The response message for this exception. */
     private final String responseMessage;
+    /** The message for this exception. */
     private final String url;
 
     /**
@@ -123,7 +129,7 @@ public class HttpException extends GHIOException {
     }
 
     /**
-     * Http response code of the request that cause the exception
+     * Http response code of the request that cause the exception.
      *
      * @return {@code -1} if no code can be discerned.
      */
@@ -132,7 +138,7 @@ public class HttpException extends GHIOException {
     }
 
     /**
-     * Http response message of the request that cause the exception
+     * Http response message of the request that cause the exception.
      *
      * @return {@code null} if no response message can be discerned.
      */
@@ -141,7 +147,7 @@ public class HttpException extends GHIOException {
     }
 
     /**
-     * The http URL that caused the exception
+     * The http URL that caused the exception.
      *
      * @return url url
      */

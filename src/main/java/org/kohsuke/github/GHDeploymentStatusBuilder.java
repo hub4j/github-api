@@ -4,6 +4,7 @@ import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Creates a new deployment status.
  *
@@ -31,6 +32,13 @@ public class GHDeploymentStatusBuilder {
         this(repo, (long) deploymentId, state);
     }
 
+    /**
+     * Instantiates a new GH deployment status builder.
+     *
+     * @param repo the repo
+     * @param deploymentId the deployment id
+     * @param state the state
+     */
     GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
@@ -47,12 +55,9 @@ public class GHDeploymentStatusBuilder {
      * Add an inactive status to all prior non-transient, non-production environment deployments with the same
      * repository and environment name as the created status's deployment.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
-     * @param autoInactive
-     *            Add inactive status flag
-     *
+     * @param autoInactive            Add inactive status flag
      * @return the gh deployment status builder
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview({ Previews.ANT_MAN, Previews.FLASH })
     public GHDeploymentStatusBuilder autoInactive(boolean autoInactive) {
@@ -76,12 +81,9 @@ public class GHDeploymentStatusBuilder {
     /**
      * Name for the target deployment environment, which can be changed when setting a deploy status.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
-     * @param environment
-     *            the environment name
-     *
+     * @param environment            the environment name
      * @return the gh deployment status builder
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.FLASH)
     public GHDeploymentStatusBuilder environment(String environment) {
@@ -90,14 +92,11 @@ public class GHDeploymentStatusBuilder {
     }
 
     /**
-     * The URL for accessing the environment
+     * The URL for accessing the environment.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
-     * @param environmentUrl
-     *            the environment url
-     *
+     * @param environmentUrl            the environment url
      * @return the gh deployment status builder
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder environmentUrl(String environmentUrl) {
@@ -110,12 +109,9 @@ public class GHDeploymentStatusBuilder {
      * <p>
      * This method replaces {@link #targetUrl(String) targetUrl}.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
-     * @param logUrl
-     *            the deployment output url
-     *
+     * @param logUrl            the deployment output url
      * @return the gh deployment status builder
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
@@ -126,12 +122,9 @@ public class GHDeploymentStatusBuilder {
     /**
      * Target url gh deployment status builder.
      *
-     * @deprecated Target url is deprecated in favor of {@link #logUrl(String) logUrl}
-     *
-     * @param targetUrl
-     *            the target url
-     *
+     * @param targetUrl            the target url
      * @return the gh deployment status builder
+     * @deprecated Target url is deprecated in favor of {@link #logUrl(String) logUrl}
      */
     @Deprecated
     public GHDeploymentStatusBuilder targetUrl(String targetUrl) {

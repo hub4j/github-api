@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHIssueBuilder.
  *
@@ -15,6 +16,12 @@ public class GHIssueBuilder {
     private List<String> labels = new ArrayList<String>();
     private List<String> assignees = new ArrayList<String>();
 
+    /**
+     * Instantiates a new GH issue builder.
+     *
+     * @param repo the repo
+     * @param title the title
+     */
     GHIssueBuilder(GHRepository repo, String title) {
         this.repo = repo;
         this.builder = repo.root().createRequest().method("POST");

@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.annotation.CheckForNull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Most (all?) domain objects in GitHub seems to have these 4 properties.
  */
@@ -34,14 +35,16 @@ public abstract class GHObject extends GitHubInteractiveObject {
     private String createdAt;
     private String updatedAt;
 
+    /**
+     * Instantiates a new GH object.
+     */
     GHObject() {
     }
 
     /**
-     * Called by Jackson
+     * Called by Jackson.
      *
-     * @param connectorResponse
-     *            the {@link GitHubConnectorResponse} to get headers from.
+     * @param connectorResponse            the {@link GitHubConnectorResponse} to get headers from.
      */
     @JacksonInject
     protected void setResponseHeaderFields(@CheckForNull GitHubConnectorResponse connectorResponse) {
@@ -69,11 +72,10 @@ public abstract class GHObject extends GitHubInteractiveObject {
     }
 
     /**
-     * When was this resource created?
+     * When was this resource created?.
      *
      * @return date created
-     * @throws IOException
-     *             on error
+     * @throws IOException             on error
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "createdAtStr")
     public Date getCreatedAt() throws IOException {
@@ -106,11 +108,10 @@ public abstract class GHObject extends GitHubInteractiveObject {
     public abstract URL getHtmlUrl() throws IOException;
 
     /**
-     * When was this resource last updated?
+     * When was this resource last updated?.
      *
      * @return updated date
-     * @throws IOException
-     *             on error
+     * @throws IOException             on error
      */
     public Date getUpdatedAt() throws IOException {
         return GitHubClient.parseDate(updatedAt);
@@ -119,9 +120,8 @@ public abstract class GHObject extends GitHubInteractiveObject {
     /**
      * Get Global node_id from Github object.
      *
-     * @see <a href="https://developer.github.com/v4/guides/using-global-node-ids/">Using Global Node IDs</a>
-     *
      * @return Global Node ID.
+     * @see <a href="https://developer.github.com/v4/guides/using-global-node-ids/">Using Global Node IDs</a>
      */
     public String getNodeId() {
         return nodeId;
@@ -154,6 +154,8 @@ public abstract class GHObject extends GitHubInteractiveObject {
     /**
      * String representation to assist debugging and inspection. The output format of this string is not a committed
      * part of the API and is subject to change.
+     *
+     * @return the string
      */
     @Override
     public String toString() {

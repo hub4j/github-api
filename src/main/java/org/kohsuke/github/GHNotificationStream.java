@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Listens to GitHub notification stream.
  *
@@ -29,16 +30,21 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
     private String apiUrl;
     private boolean nonBlocking = false;
 
+    /**
+     * Instantiates a new GH notification stream.
+     *
+     * @param root the root
+     * @param apiUrl the api url
+     */
     GHNotificationStream(GitHub root, String apiUrl) {
         super(root);
         this.apiUrl = apiUrl;
     }
 
     /**
-     * Should the stream include notifications that are already read?
+     * Should the stream include notifications that are already read?.
      *
-     * @param v
-     *            the v
+     * @param v            the v
      * @return the gh notification stream
      */
     public GHNotificationStream read(boolean v) {
@@ -47,10 +53,9 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
     }
 
     /**
-     * Should the stream be restricted to notifications in which the user is directly participating or mentioned?
+     * Should the stream be restricted to notifications in which the user is directly participating or mentioned?.
      *
-     * @param v
-     *            the v
+     * @param v            the v
      * @return the gh notification stream
      */
     public GHNotificationStream participating(boolean v) {
@@ -96,6 +101,8 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
 
     /**
      * Returns an infinite blocking {@link Iterator} that returns {@link GHThread} as notifications arrive.
+     *
+     * @return the iterator
      */
     public Iterator<GHThread> iterator() {
         // capture the configuration setting here

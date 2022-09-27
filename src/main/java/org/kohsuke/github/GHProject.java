@@ -32,6 +32,7 @@ import java.util.Locale;
 
 import static org.kohsuke.github.internal.Previews.INERTIA;
 
+// TODO: Auto-generated Javadoc
 /**
  * A GitHub project.
  *
@@ -39,6 +40,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
  * @see <a href="https://developer.github.com/v3/projects/">Projects</a>
  */
 public class GHProject extends GHObject {
+    
+    /** The owner. */
     protected GHObject owner;
 
     private String owner_url;
@@ -49,6 +52,12 @@ public class GHProject extends GHObject {
     private String state;
     private GHUser creator;
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public URL getHtmlUrl() throws IOException {
         return GitHubClient.parseURL(html_url);
@@ -92,8 +101,8 @@ public class GHProject extends GHObject {
     /**
      * Gets node id.
      *
-     * @deprecated Use {@link GHObject#getNodeId()}
      * @return the node id
+     * @deprecated Use {@link GHObject#getNodeId()}
      */
     @Deprecated
     public String getNode_id() {
@@ -223,7 +232,11 @@ public class GHProject extends GHObject {
      * The enum ProjectState.
      */
     public enum ProjectState {
-        OPEN, CLOSED
+        
+        /** The open. */
+        OPEN, 
+ /** The closed. */
+ CLOSED
     }
 
     /**
@@ -242,7 +255,13 @@ public class GHProject extends GHObject {
      * The enum ProjectStateFilter.
      */
     public static enum ProjectStateFilter {
-        ALL, OPEN, CLOSED
+        
+        /** The all. */
+        ALL, 
+ /** The open. */
+ OPEN, 
+ /** The closed. */
+ CLOSED
     }
 
     /**

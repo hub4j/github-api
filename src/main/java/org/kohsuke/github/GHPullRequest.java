@@ -40,6 +40,7 @@ import javax.annotation.CheckForNull;
 import static org.kohsuke.github.internal.Previews.LYDIAN;
 import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
+// TODO: Auto-generated Javadoc
 /**
  * A pull request.
  *
@@ -61,6 +62,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     private GHUser merged_by;
     private int review_comments, additions, commits;
     private boolean merged, maintainer_can_modify;
+    
+    /** The draft. */
     // making these package private to all for testing
     boolean draft;
     private Boolean mergeable;
@@ -75,11 +78,22 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     private GHUser[] requested_reviewers;
     private GHTeam[] requested_teams;
 
+    /**
+     * Wrap up.
+     *
+     * @param owner the owner
+     * @return the GH pull request
+     */
     GHPullRequest wrapUp(GHRepository owner) {
         this.wrap(owner);
         return this;
     }
 
+    /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
     @Override
     protected String getApiRoute() {
         if (owner == null) {
@@ -165,11 +179,21 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         return GitHubClient.parseDate(merged_at);
     }
 
+    /**
+     * Gets the closed by.
+     *
+     * @return the closed by
+     */
     @Override
     public GHUser getClosedBy() {
         return null;
     }
 
+    /**
+     * Gets the pull request.
+     *
+     * @return the pull request
+     */
     @Override
     public PullRequest getPullRequest() {
         return null;
@@ -265,20 +289,24 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
-     * Is this PR mergeable?
+     * Is this PR mergeable?.
      *
      * @return null if the state has not been determined yet, for example when a PR is newly created. If this method is
      *         called on an instance whose mergeable state is not yet known, API call is made to retrieve the latest
      *         state.
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public Boolean getMergeable() throws IOException {
         refresh(mergeable);
         return mergeable;
     }
 
-    /** for test purposes only */
+    /**
+     *  for test purposes only.
+     *
+     * @return the mergeable no refresh
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Deprecated
     Boolean getMergeableNoRefresh() throws IOException {
         return mergeable;
@@ -368,7 +396,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         refresh();
     }
 
-    /** Repopulates this object. */
+    /**
+     *  Repopulates this object.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void refresh() throws IOException {
         if (isOffline()) {
             return; // cannot populate, will have to live with what we have
@@ -549,13 +581,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
-     * Set the base branch on the pull request
+     * Set the base branch on the pull request.
      *
-     * @param newBaseBranch
-     *            the name of the new base branch
-     * @throws IOException
-     *             the io exception
+     * @param newBaseBranch            the name of the new base branch
      * @return the updated pull request
+     * @throws IOException             the io exception
      */
     public GHPullRequest setBaseBranch(String newBaseBranch) throws IOException {
         return root().createRequest()
@@ -640,7 +670,13 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     /** The enum MergeMethod. */
     public enum MergeMethod {
-        MERGE, SQUASH, REBASE
+        
+        /** The merge. */
+        MERGE, 
+ /** The squash. */
+ SQUASH, 
+ /** The rebase. */
+ REBASE
     }
 
     /**

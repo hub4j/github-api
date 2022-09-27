@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
+// TODO: Auto-generated Javadoc
 /**
  * Pluggable strategy to detect and choose what to do when errors occur during an http request.
  *
@@ -21,7 +22,9 @@ abstract class GitHubConnectorResponseErrorHandler {
     /**
      * Called to detect an error handled by this handler.
      *
+     * @param connectorResponse the connector response
      * @return {@code true} if there is an error and {@link #onError(GitHubConnectorResponse)} should be called
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 
@@ -42,6 +45,7 @@ abstract class GitHubConnectorResponseErrorHandler {
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 
+    /** The status http bad request or greater. */
     static GitHubConnectorResponseErrorHandler STATUS_HTTP_BAD_REQUEST_OR_GREATER = new GitHubConnectorResponseErrorHandler() {
         @Override
         public boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {

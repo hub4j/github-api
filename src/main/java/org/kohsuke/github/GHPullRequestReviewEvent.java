@@ -23,18 +23,34 @@
  */
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * Action to perform on {@link GHPullRequestReview}.
  */
 public enum GHPullRequestReviewEvent {
-    PENDING, APPROVE, REQUEST_CHANGES, COMMENT;
+    
+    /** The pending. */
+    PENDING, 
+ /** The approve. */
+ APPROVE, 
+ /** The request changes. */
+ REQUEST_CHANGES, 
+ /** The comment. */
+ COMMENT;
 
+    /**
+     * Action.
+     *
+     * @return the string
+     */
     String action() {
         return this == PENDING ? null : name();
     }
 
     /**
      * When a {@link GHPullRequestReview} is submitted with this event, it should transition to this state.
+     *
+     * @return the GH pull request review state
      */
     GHPullRequestReviewState toState() {
         switch (this) {

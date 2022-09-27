@@ -53,7 +53,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
-import java.security.AccessControlException;
 import java.security.Permission;
 import java.security.Principal;
 import java.security.cert.Certificate;
@@ -321,7 +320,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
         String value;
         try {
             value = System.getProperty(key);
-        } catch (AccessControlException ex) {
+        } catch (SecurityException | IllegalArgumentException | NullPointerException ex) {
             return defaultValue;
         }
         return value != null ? value : defaultValue;

@@ -8,14 +8,16 @@ import java.util.List;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Base class for various search builders.
  *
- * @param <T>
- *            the type parameter
  * @author Kohsuke Kawaguchi
+ * @param <T>            the type parameter
  */
 public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
+    
+    /** The terms. */
     protected final List<String> terms = new ArrayList<String>();
 
     /**
@@ -23,6 +25,12 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
      */
     private final Class<? extends SearchResult<T>> receiverType;
 
+    /**
+     * Instantiates a new GH search builder.
+     *
+     * @param root the root
+     * @param receiverType the receiver type
+     */
     GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
         super(root);
         this.receiverType = receiverType;
@@ -68,6 +76,8 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
 
     /**
      * Performs the search.
+     *
+     * @return the paged search iterable
      */
     @Override
     public PagedSearchIterable<T> list() {

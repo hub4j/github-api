@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builder pattern for creating a new tree. Based on https://developer.github.com/v3/git/trees/#create-a-tree
  */
@@ -36,6 +37,11 @@ public class GHTreeBuilder {
         }
     }
 
+    /**
+     * Instantiates a new GH tree builder.
+     *
+     * @param repo the repo
+     */
     GHTreeBuilder(GHRepository repo) {
         this.repo = repo;
         req = repo.root().createRequest();

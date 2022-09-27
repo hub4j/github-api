@@ -4,12 +4,19 @@ import javax.annotation.Nonnull;
 
 import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Github App Installation corresponding to the installation token used in a client.
  *
  * @see GitHub#getInstallation() GitHub#getAuthenticatedAppInstallation()
  */
 public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
+    
+    /**
+     * Instantiates a new GH authenticated app installation.
+     *
+     * @param root the root
+     */
     protected GHAuthenticatedAppInstallation(@Nonnull GitHub root) {
         super(root);
     }

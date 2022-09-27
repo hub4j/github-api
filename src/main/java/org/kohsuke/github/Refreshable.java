@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * The interface Refreshable.
  *
@@ -17,12 +18,10 @@ public interface Refreshable {
     void refresh() throws IOException;
 
     /**
-     * Calls refresh if the provided value is null
+     * Calls refresh if the provided value is null.
      *
-     * @param value
-     *            the value
-     * @throws IOException
-     *             the io exception
+     * @param value            the value
+     * @throws IOException             the io exception
      */
     default void refresh(Object value) throws IOException {
         if (value == null) {

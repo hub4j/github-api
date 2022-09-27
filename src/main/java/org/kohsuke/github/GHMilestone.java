@@ -7,17 +7,23 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHMilestone.
  *
  * @author Yusuke Kokubo
  */
 public class GHMilestone extends GHObject {
+    
+    /** The owner. */
     GHRepository owner;
 
+    /** The creator. */
     GHUser creator;
     private String state, due_on, title, description, html_url;
     private int closed_issues, open_issues, number;
+    
+    /** The closed at. */
     protected String closed_at;
 
     /**
@@ -53,11 +59,10 @@ public class GHMilestone extends GHObject {
     }
 
     /**
-     * When was this milestone closed?
+     * When was this milestone closed?.
      *
      * @return the closed at
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public Date getClosedAt() throws IOException {
         return GitHubClient.parseDate(closed_at);
@@ -108,6 +113,11 @@ public class GHMilestone extends GHObject {
         return number;
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }

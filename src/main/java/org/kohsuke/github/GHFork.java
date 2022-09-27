@@ -1,7 +1,8 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
- * The enum for Fork search mode
+ * The enum for Fork search mode.
  */
 public enum GHFork {
 
@@ -27,10 +28,21 @@ public enum GHFork {
     PARENT_ONLY("");
 
     private String filterMode;
+    
+    /**
+     * Instantiates a new GH fork.
+     *
+     * @param mode the mode
+     */
     GHFork(final String mode) {
         this.filterMode = mode;
     }
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
         return filterMode;

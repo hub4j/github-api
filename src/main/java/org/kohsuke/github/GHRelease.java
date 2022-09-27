@@ -14,6 +14,7 @@ import java.util.List;
 
 import static java.lang.String.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Release in a github repository.
  *
@@ -22,6 +23,8 @@ import static java.lang.String.*;
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
 public class GHRelease extends GHObject {
+    
+    /** The owner. */
     GHRepository owner;
 
     private String html_url;
@@ -90,6 +93,11 @@ public class GHRelease extends GHObject {
         return update().draft(draft).update();
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }
@@ -198,11 +206,24 @@ public class GHRelease extends GHObject {
         return tarball_url;
     }
 
+    /**
+     * Wrap.
+     *
+     * @param owner the owner
+     * @return the GH release
+     */
     GHRelease wrap(GHRepository owner) {
         this.owner = owner;
         return this;
     }
 
+    /**
+     * Wrap.
+     *
+     * @param releases the releases
+     * @param owner the owner
+     * @return the GH release[]
+     */
     static GHRelease[] wrap(GHRelease[] releases, GHRepository owner) {
         for (GHRelease release : releases) {
             release.wrap(owner);

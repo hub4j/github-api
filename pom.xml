@@ -218,6 +218,7 @@
             <source>8</source>
             <failOnWarnings>true</failOnWarnings>
             <doclint>all</doclint>
+            <show>protected</show>
           </configuration>
         </plugin>
         <plugin>

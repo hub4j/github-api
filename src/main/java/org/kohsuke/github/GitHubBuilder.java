@@ -243,7 +243,7 @@ public class GitHubBuilder implements Cloneable {
      *
      * @param endpoint
      *            The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
-     *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
+     *            "https://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
      *            historical reasons, this parameter still accepts the bare domain name, but that's considered
      *            deprecated.
      * @return the git hub builder

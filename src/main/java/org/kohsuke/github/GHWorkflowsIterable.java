@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Iterable for workflows listing.
  */
@@ -12,10 +13,23 @@ class GHWorkflowsIterable extends PagedIterable<GHWorkflow> {
 
     private GHWorkflowsPage result;
 
+    /**
+     * Instantiates a new GH workflows iterable.
+     *
+     * @param owner
+     *            the owner
+     */
     public GHWorkflowsIterable(GHRepository owner) {
         this.owner = owner;
     }
 
+    /**
+     * Iterator.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
+     */
     @Nonnull
     @Override
     public PagedIterator<GHWorkflow> _iterator(int pageSize) {
@@ -29,6 +43,13 @@ class GHWorkflowsIterable extends PagedIterable<GHWorkflow> {
                 null);
     }
 
+    /**
+     * Adapt.
+     *
+     * @param base
+     *            the base
+     * @return the iterator
+     */
     protected Iterator<GHWorkflow[]> adapt(final Iterator<GHWorkflowsPage> base) {
         return new Iterator<GHWorkflow[]>() {
             public boolean hasNext() {

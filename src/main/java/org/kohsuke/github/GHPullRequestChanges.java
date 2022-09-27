@@ -2,8 +2,9 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+// TODO: Auto-generated Javadoc
 /**
- * Wrapper to define changed fields on pull_request action="edited"
+ * Wrapper to define changed fields on pull_request action="edited".
  *
  * @see GHEventPayload.PullRequest
  */
@@ -42,6 +43,8 @@ public class GHPullRequestChanges {
     }
 
     /**
+     * The Class GHCommitPointer.
+     *
      * @see org.kohsuke.github.GHCommitPointer
      */
     public static class GHCommitPointer {

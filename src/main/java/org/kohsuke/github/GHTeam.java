@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 
 import static org.kohsuke.github.GitHubRequest.transformEnum;
 
+// TODO: Auto-generated Javadoc
 /**
  * A team in GitHub organization.
  *
@@ -30,18 +31,24 @@ public class GHTeam extends GHObject implements Refreshable {
 
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
+    /**
+     * The Enum Privacy.
+     */
     public enum Privacy {
-        SECRET, // only visible to organization owners and members of this team.
+
+        /** The secret. */
+        SECRET,
+        /** The closed. */
+        // only visible to organization owners and members of this team.
         CLOSED // visible to all members of this organization.
     }
 
     /**
-     * Member's role in a team
+     * Member's role in a team.
      */
     public enum Role {
-        /**
-         * A normal member of the team
-         */
+
+        /** A normal member of the team. */
         MEMBER,
         /**
          * Able to add/remove other team members, promote other team members to team maintainer, and edit the team's
@@ -50,11 +57,25 @@ public class GHTeam extends GHObject implements Refreshable {
         MAINTAINER
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH team
+     */
     GHTeam wrapUp(GHOrganization owner) {
         this.organization = owner;
         return this;
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param root
+     *            the root
+     * @return the GH team
+     */
     GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
         return wrapUp(organization);
     }
@@ -172,11 +193,8 @@ public class GHTeam extends GHObject implements Refreshable {
      * @param discussionNumber
      *            id of the discussion that we want to query for
      * @return the discussion
-     * @throws java.io.FileNotFoundException
-     *             if the discussion does not exist
      * @throws IOException
      *             the io exception
-     *
      * @see <a href= "https://developer.github.com/v3/teams/discussions/#get-a-discussion">documentation</a>
      */
     @Nonnull
@@ -416,16 +434,34 @@ public class GHTeam extends GHObject implements Refreshable {
         return organization;
     }
 
+    /**
+     * Refresh.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Override
     public void refresh() throws IOException {
         root().createRequest().withUrlPath(api("")).fetchInto(this).wrapUp(root());
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }
 
+    /**
+     * Equals.
+     *
+     * @param o
+     *            the o
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -440,6 +476,11 @@ public class GHTeam extends GHObject implements Refreshable {
                 && Objects.equals(description, ghTeam.description) && privacy == ghTeam.privacy;
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
         return Objects.hash(name, getUrl(), permission, slug, description, privacy);

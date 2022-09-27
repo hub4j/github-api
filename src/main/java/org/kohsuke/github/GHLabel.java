@@ -13,6 +13,7 @@ import java.util.Objects;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHLabel.
  *
@@ -42,6 +43,11 @@ public class GHLabel extends GitHubInteractiveObject {
         description = null;
     }
 
+    /**
+     * Gets the api root.
+     *
+     * @return the api root
+     */
     @Nonnull
     GitHub getApiRoot() {
         return Objects.requireNonNull(root());
@@ -86,7 +92,7 @@ public class GHLabel extends GitHubInteractiveObject {
     }
 
     /**
-     * Color code without leading '#', such as 'f29513'
+     * Color code without leading '#', such as 'f29513'.
      *
      * @return the color
      */
@@ -96,7 +102,7 @@ public class GHLabel extends GitHubInteractiveObject {
     }
 
     /**
-     * Purpose of Label
+     * Purpose of Label.
      *
      * @return the description
      */
@@ -142,6 +148,13 @@ public class GHLabel extends GitHubInteractiveObject {
         set().description(newDescription);
     }
 
+    /**
+     * To names.
+     *
+     * @param labels
+     *            the labels
+     * @return the collection
+     */
     static Collection<String> toNames(Collection<GHLabel> labels) {
         List<String> r = new ArrayList<>();
         for (GHLabel l : labels) {
@@ -234,6 +247,13 @@ public class GHLabel extends GitHubInteractiveObject {
         root().createRequest().method("DELETE").setRawUrlPath(getUrl()).send();
     }
 
+    /**
+     * Equals.
+     *
+     * @param o
+     *            the o
+     * @return true, if successful
+     */
     @Override
     public boolean equals(final Object o) {
         if (this == o)
@@ -245,6 +265,11 @@ public class GHLabel extends GitHubInteractiveObject {
                 && Objects.equals(color, ghLabel.color) && Objects.equals(description, ghLabel.description);
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
         return Objects.hash(url, name, color, description);

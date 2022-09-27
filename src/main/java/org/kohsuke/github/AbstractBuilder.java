@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * An abstract data object builder/updater.
  *
@@ -32,13 +33,12 @@ import javax.annotation.Nonnull;
  * If {@link S} is not the same as {@link R}, {@link #with(String, Object)} will batch together multiple changes and let
  * the user call {@link #done()} when they are ready.
  *
+ * @author Liam Newman
  * @param <R>
  *            Final return type built by this builder returned when {@link #done()}} is called.
  * @param <S>
  *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link R}, this builder will commit changes after each call to {@link #with(String, Object)}.
- *
- * @author Liam Newman
  */
 abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
 
@@ -50,26 +50,28 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
     @CheckForNull
     private final R baseInstance;
 
+    /** The requester. */
     @Nonnull
     protected final Requester requester;
 
     // TODO: Not sure how update-in-place behavior should be controlled
     // However, it certainly can be controlled dynamically down to the instance level or inherited for all children of
     // some
+    /** The update in place. */
     // connection.
     protected boolean updateInPlace;
 
     /**
      * Creates a builder.
      *
-     * @param root
-     *            the GitHub instance to connect to.
+     * @param finalReturnType
+     *            the final return type for built by this builder returned when {@link #done()}} is called.
      * @param intermediateReturnType
      *            the intermediate return type of type {@link S} returned by calls to {@link #with(String, Object)}.
      *            Must either be equal to {@code builtReturnType} or this instance must be castable to this class. If
      *            not, the constructor will throw {@link IllegalArgumentException}.
-     * @param finalReturnType
-     *            the final return type for built by this builder returned when {@link #done()}} is called.
+     * @param root
+     *            the GitHub instance to connect to.
      * @param baseInstance
      *            optional instance on which to base this builder.
      */

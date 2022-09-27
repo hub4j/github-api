@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHInvitation.
  *
@@ -43,6 +44,11 @@ public class GHInvitation extends GHObject {
         root().createRequest().method("DELETE").withUrlPath("/user/repository_invitations/" + id).send();
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);

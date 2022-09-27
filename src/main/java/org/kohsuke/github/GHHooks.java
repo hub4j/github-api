@@ -7,11 +7,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+// TODO: Auto-generated Javadoc
 /**
  * Utility class for creating and retrieving webhooks; removes duplication between GHOrganization and GHRepository
- * functionality
+ * functionality.
  */
 class GHHooks {
+
+    /**
+     * The Class Context.
+     */
     static abstract class Context extends GitHubInteractiveObject {
 
         private Context(GitHub root) {
@@ -99,12 +104,34 @@ class GHHooks {
             root().createRequest().method("DELETE").withUrlPath(collection() + "/" + id).send();
         }
 
+        /**
+         * Collection.
+         *
+         * @return the string
+         */
         abstract String collection();
 
+        /**
+         * Collection class.
+         *
+         * @return the class<? extends GH hook[]>
+         */
         abstract Class<? extends GHHook[]> collectionClass();
 
+        /**
+         * Clazz.
+         *
+         * @return the class<? extends GH hook>
+         */
         abstract Class<? extends GHHook> clazz();
 
+        /**
+         * Wrap.
+         *
+         * @param hook
+         *            the hook
+         * @return the GH hook
+         */
         abstract GHHook wrap(GHHook hook);
     }
 
@@ -168,10 +195,26 @@ class GHHooks {
         }
     }
 
+    /**
+     * Repo context.
+     *
+     * @param repository
+     *            the repository
+     * @param owner
+     *            the owner
+     * @return the context
+     */
     static Context repoContext(GHRepository repository, GHUser owner) {
         return new RepoContext(repository, owner);
     }
 
+    /**
+     * Org context.
+     *
+     * @param organization
+     *            the organization
+     * @return the context
+     */
     static Context orgContext(GHOrganization organization) {
         return new OrgContext(organization);
     }

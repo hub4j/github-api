@@ -2,8 +2,9 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+// TODO: Auto-generated Javadoc
 /**
- * Represents a tag in {@link GHRepository}
+ * Represents a tag in {@link GHRepository}.
  *
  * @see GHRepository#listTags() GHRepository#listTags()
  */
@@ -15,6 +16,13 @@ public class GHTag extends GitHubInteractiveObject {
     private String name;
     private GHCommit commit;
 
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH tag
+     */
     GHTag wrap(GHRepository owner) {
         this.owner = owner;
         if (commit != null)

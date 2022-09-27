@@ -4,9 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHIssueQueryBuilder.
+ */
 public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
     private final List<String> labels = new ArrayList<>();
 
+    /**
+     * Instantiates a new GH issue query builder.
+     *
+     * @param root
+     *            the root
+     */
     GHIssueQueryBuilder(GitHub root) {
         super(root);
     }
@@ -101,7 +111,13 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
      * The enum Sort.
      */
     public enum Sort {
-        CREATED, UPDATED, COMMENTS
+
+        /** The created. */
+        CREATED,
+        /** The updated. */
+        UPDATED,
+        /** The comments. */
+        COMMENTS
     }
 
     /**
@@ -111,9 +127,18 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
      */
     public abstract String getApiUrl();
 
+    /**
+     * The Class ForRepository.
+     */
     public static class ForRepository extends GHIssueQueryBuilder {
         private final GHRepository repo;
 
+        /**
+         * Instantiates a new for repository.
+         *
+         * @param repo
+         *            the repo
+         */
         ForRepository(final GHRepository repo) {
             super(repo.root());
             this.repo = repo;
@@ -170,11 +195,21 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
             return this;
         }
 
+        /**
+         * Gets the api url.
+         *
+         * @return the api url
+         */
         @Override
         public String getApiUrl() {
             return repo.getApiTailUrl("issues");
         }
 
+        /**
+         * List.
+         *
+         * @return the paged iterable
+         */
         @Override
         public PagedIterable<GHIssue> list() {
             return req.withUrlPath(getApiUrl()).toIterable(GHIssue[].class, item -> item.wrap(repo));

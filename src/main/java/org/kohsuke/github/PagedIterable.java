@@ -11,13 +11,14 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * {@link Iterable} that returns {@link PagedIterator}. {@link PagedIterable} is thread-safe but {@link PagedIterator}
  * is not. Any one instance of {@link PagedIterator} should only be called from a single thread.
  *
+ * @author Kohsuke Kawaguchi
  * @param <T>
  *            the type of items on each page
- * @author Kohsuke Kawaguchi
  */
 public abstract class PagedIterable<T> implements Iterable<T> {
     /**

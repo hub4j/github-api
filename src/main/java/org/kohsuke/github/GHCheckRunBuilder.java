@@ -37,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * Drafts or updates a check run.
  *
@@ -50,7 +51,10 @@ import java.util.Locale;
 @Preview(Previews.ANTIOPE)
 public final class GHCheckRunBuilder {
 
+    /** The repo. */
     protected final GHRepository repo;
+
+    /** The requester. */
     protected final Requester requester;
     private Output output;
     private List<Action> actions;
@@ -60,6 +64,16 @@ public final class GHCheckRunBuilder {
         this.requester = requester;
     }
 
+    /**
+     * Instantiates a new GH check run builder.
+     *
+     * @param repo
+     *            the repo
+     * @param name
+     *            the name
+     * @param headSHA
+     *            the head SHA
+     */
     GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
         this(repo,
                 repo.root()
@@ -71,6 +85,14 @@ public final class GHCheckRunBuilder {
                         .withUrlPath(repo.getApiTailUrl("check-runs")));
     }
 
+    /**
+     * Instantiates a new GH check run builder.
+     *
+     * @param repo
+     *            the repo
+     * @param checkId
+     *            the check id
+     */
     GHCheckRunBuilder(GHRepository repo, long checkId) {
         this(repo,
                 repo.root()
@@ -80,16 +102,37 @@ public final class GHCheckRunBuilder {
                         .withUrlPath(repo.getApiTailUrl("check-runs/" + checkId)));
     }
 
+    /**
+     * With details URL.
+     *
+     * @param detailsURL
+     *            the details URL
+     * @return the GH check run builder
+     */
     public @NonNull GHCheckRunBuilder withDetailsURL(@CheckForNull String detailsURL) {
         requester.with("details_url", detailsURL);
         return this;
     }
 
+    /**
+     * With external ID.
+     *
+     * @param externalID
+     *            the external ID
+     * @return the GH check run builder
+     */
     public @NonNull GHCheckRunBuilder withExternalID(@CheckForNull String externalID) {
         requester.with("external_id", externalID);
         return this;
     }
 
+    /**
+     * With status.
+     *
+     * @param status
+     *            the status
+     * @return the GH check run builder
+     */
     public @NonNull GHCheckRunBuilder withStatus(@CheckForNull GHCheckRun.Status status) {
         if (status != null) {
             // Do *not* use the overload taking Enum, as that s/_/-/g which would be wrong here.
@@ -98,6 +141,13 @@ public final class GHCheckRunBuilder {
         return this;
     }
 
+    /**
+     * With conclusion.
+     *
+     * @param conclusion
+     *            the conclusion
+     * @return the GH check run builder
+     */
     public @NonNull GHCheckRunBuilder withConclusion(@CheckForNull GHCheckRun.Conclusion conclusion) {
         if (conclusion != null) {
             requester.with("conclusion", conclusion.toString().toLowerCase(Locale.ROOT));
@@ -105,6 +155,13 @@ public final class GHCheckRunBuilder {
         return this;
     }
 
+    /**
+     * With started at.
+     *
+     * @param startedAt
+     *            the started at
+     * @return the GH check run builder
+     */
     public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
         if (startedAt != null) {
             requester.with("started_at", GitHubClient.printDate(startedAt));
@@ -112,6 +169,13 @@ public final class GHCheckRunBuilder {
         return this;
     }
 
+    /**
+     * With completed at.
+     *
+     * @param completedAt
+     *            the completed at
+     * @return the GH check run builder
+     */
     public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
         if (completedAt != null) {
             requester.with("completed_at", GitHubClient.printDate(completedAt));
@@ -119,6 +183,13 @@ public final class GHCheckRunBuilder {
         return this;
     }
 
+    /**
+     * Adds the.
+     *
+     * @param output
+     *            the output
+     * @return the GH check run builder
+     */
     public @NonNull GHCheckRunBuilder add(@NonNull Output output) {
         if (this.output != null) {
             throw new IllegalStateException("cannot add Output twice");
@@ -127,6 +198,13 @@ public final class GHCheckRunBuilder {
         return this;
     }
 
+    /**
+     * Adds the.
+     *
+     * @param action
+     *            the action
+     * @return the GH check run builder
+     */
     public @NonNull GHCheckRunBuilder add(@NonNull Action action) {
         if (actions == null) {
             actions = new LinkedList<>();
@@ -170,6 +248,8 @@ public final class GHCheckRunBuilder {
     }
 
     /**
+     * The Class Output.
+     *
      * @see <a href="https://developer.github.com/v3/checks/runs/#output-object">documentation</a>
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -181,16 +261,38 @@ public final class GHCheckRunBuilder {
         private List<Annotation> annotations;
         private List<Image> images;
 
+        /**
+         * Instantiates a new output.
+         *
+         * @param title
+         *            the title
+         * @param summary
+         *            the summary
+         */
         public Output(@NonNull String title, @NonNull String summary) {
             this.title = title;
             this.summary = summary;
         }
 
+        /**
+         * With text.
+         *
+         * @param text
+         *            the text
+         * @return the output
+         */
         public @NonNull Output withText(@CheckForNull String text) {
             this.text = text;
             return this;
         }
 
+        /**
+         * Adds the.
+         *
+         * @param annotation
+         *            the annotation
+         * @return the output
+         */
         public @NonNull Output add(@NonNull Annotation annotation) {
             if (annotations == null) {
                 annotations = new LinkedList<>();
@@ -199,6 +301,13 @@ public final class GHCheckRunBuilder {
             return this;
         }
 
+        /**
+         * Adds the.
+         *
+         * @param image
+         *            the image
+         * @return the output
+         */
         public @NonNull Output add(@NonNull Image image) {
             if (images == null) {
                 images = new LinkedList<>();
@@ -210,6 +319,8 @@ public final class GHCheckRunBuilder {
     }
 
     /**
+     * The Class Annotation.
+     *
      * @see <a href="https://developer.github.com/v3/checks/runs/#annotations-object">documentation</a>
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -225,6 +336,18 @@ public final class GHCheckRunBuilder {
         private String title;
         private String raw_details;
 
+        /**
+         * Instantiates a new annotation.
+         *
+         * @param path
+         *            the path
+         * @param line
+         *            the line
+         * @param annotationLevel
+         *            the annotation level
+         * @param message
+         *            the message
+         */
         public Annotation(@NonNull String path,
                 int line,
                 @NonNull GHCheckRun.AnnotationLevel annotationLevel,
@@ -232,6 +355,20 @@ public final class GHCheckRunBuilder {
             this(path, line, line, annotationLevel, message);
         }
 
+        /**
+         * Instantiates a new annotation.
+         *
+         * @param path
+         *            the path
+         * @param startLine
+         *            the start line
+         * @param endLine
+         *            the end line
+         * @param annotationLevel
+         *            the annotation level
+         * @param message
+         *            the message
+         */
         public Annotation(@NonNull String path,
                 int startLine,
                 int endLine,
@@ -244,21 +381,49 @@ public final class GHCheckRunBuilder {
             this.message = message;
         }
 
+        /**
+         * With start column.
+         *
+         * @param startColumn
+         *            the start column
+         * @return the annotation
+         */
         public @NonNull Annotation withStartColumn(@CheckForNull Integer startColumn) {
             start_column = startColumn;
             return this;
         }
 
+        /**
+         * With end column.
+         *
+         * @param endColumn
+         *            the end column
+         * @return the annotation
+         */
         public @NonNull Annotation withEndColumn(@CheckForNull Integer endColumn) {
             end_column = endColumn;
             return this;
         }
 
+        /**
+         * With title.
+         *
+         * @param title
+         *            the title
+         * @return the annotation
+         */
         public @NonNull Annotation withTitle(@CheckForNull String title) {
             this.title = title;
             return this;
         }
 
+        /**
+         * With raw details.
+         *
+         * @param rawDetails
+         *            the raw details
+         * @return the annotation
+         */
         public @NonNull Annotation withRawDetails(@CheckForNull String rawDetails) {
             raw_details = rawDetails;
             return this;
@@ -267,6 +432,8 @@ public final class GHCheckRunBuilder {
     }
 
     /**
+     * The Class Image.
+     *
      * @see <a href="https://developer.github.com/v3/checks/runs/#images-object">documentation</a>
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -276,11 +443,26 @@ public final class GHCheckRunBuilder {
         private final String image_url;
         private String caption;
 
+        /**
+         * Instantiates a new image.
+         *
+         * @param alt
+         *            the alt
+         * @param imageURL
+         *            the image URL
+         */
         public Image(@NonNull String alt, @NonNull String imageURL) {
             this.alt = alt;
             image_url = imageURL;
         }
 
+        /**
+         * With caption.
+         *
+         * @param caption
+         *            the caption
+         * @return the image
+         */
         public @NonNull Image withCaption(@CheckForNull String caption) {
             this.caption = caption;
             return this;
@@ -289,6 +471,8 @@ public final class GHCheckRunBuilder {
     }
 
     /**
+     * The Class Action.
+     *
      * @see <a href="https://developer.github.com/v3/checks/runs/#actions-object">documentation</a>
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -298,6 +482,16 @@ public final class GHCheckRunBuilder {
         private final String description;
         private final String identifier;
 
+        /**
+         * Instantiates a new action.
+         *
+         * @param label
+         *            the label
+         * @param description
+         *            the description
+         * @param identifier
+         *            the identifier
+         */
         public Action(@NonNull String label, @NonNull String description, @NonNull String identifier) {
             this.label = label;
             this.description = description;

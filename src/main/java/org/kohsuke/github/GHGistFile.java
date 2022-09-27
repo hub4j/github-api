@@ -1,13 +1,16 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
- * A file inside {@link GHGist}
+ * A file inside {@link GHGist}.
  *
  * @author Kohsuke Kawaguchi
  * @see GHGist#getFile(String) GHGist#getFile(String)
  * @see GHGist#getFiles() GHGist#getFiles()
  */
 public class GHGistFile {
+
+    /** The file name. */
     /* package almost final */ String fileName;
 
     private int size;
@@ -42,7 +45,7 @@ public class GHGistFile {
     }
 
     /**
-     * Content type of this Gist, such as "text/plain"
+     * Content type of this Gist, such as "text/plain".
      *
      * @return the type
      */

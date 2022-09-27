@@ -5,7 +5,9 @@ import java.io.IOException;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHLabelBuilder.
  *
  * @param <S>
  *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
@@ -15,6 +17,7 @@ import javax.annotation.Nonnull;
 class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
 
     /**
+     * Instantiates a new GH label builder.
      *
      * @param intermediateReturnType
      *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
@@ -37,18 +40,45 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
         }
     }
 
+    /**
+     * Name.
+     *
+     * @param value
+     *            the value
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Nonnull
     @BetaApi
     public S name(String value) throws IOException {
         return with("name", value);
     }
 
+    /**
+     * Color.
+     *
+     * @param value
+     *            the value
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Nonnull
     @BetaApi
     public S color(String value) throws IOException {
         return with("color", value);
     }
 
+    /**
+     * Description.
+     *
+     * @param value
+     *            the value
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Nonnull
     @BetaApi
     public S description(String value) throws IOException {

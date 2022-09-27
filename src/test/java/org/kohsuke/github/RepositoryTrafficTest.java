@@ -9,6 +9,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RepositoryTrafficTest.
+ */
 public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
     final private String repositoryName = "github-api";
 
@@ -39,6 +43,12 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
         return gitHub.getOrganization("hub4j").getRepository("github-api");
     }
 
+    /**
+     * Test get views.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGetViews() throws IOException {
         // Would change all the time
@@ -66,6 +76,12 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
         checkResponse(expectedResult, views);
     }
 
+    /**
+     * Test get clones.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGetClones() throws IOException {
         // Would change all the time
@@ -91,6 +107,12 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
         checkResponse(expectedResult, clones);
     }
 
+    /**
+     * Test get traffic stats access failure due to insufficient permissions.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGetTrafficStatsAccessFailureDueToInsufficientPermissions() throws IOException {
         // Snapshot taken without permissions

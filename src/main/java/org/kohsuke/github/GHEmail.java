@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents an email of GitHub.
  *
@@ -36,8 +37,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 public class GHEmail {
 
+    /** The email. */
     protected String email;
+
+    /** The primary. */
     protected boolean primary;
+
+    /** The verified. */
     protected boolean verified;
 
     /**
@@ -67,16 +73,33 @@ public class GHEmail {
         return verified;
     }
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
         return "Email:" + email;
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
         return email.hashCode();
     }
 
+    /**
+     * Equals.
+     *
+     * @param obj
+     *            the obj
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof GHEmail) {

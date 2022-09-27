@@ -4,6 +4,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.kohsuke.github.GHCheckRun.Conclusion;
 import org.kohsuke.github.GHCheckRun.Status;
+import org.kohsuke.github.GHProjectsV2Item.ContentType;
+import org.kohsuke.github.GHProjectsV2ItemChanges.FieldType;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -11,7 +13,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThrows;
 
 public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
@@ -876,7 +889,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         GHPullRequest pullRequest = pullRequests.get(0);
         assertThat(pullRequest.getId(), is(599098265L));
         assertThat(pullRequest.getRepository(), sameInstance(workflowRunPayload.getRepository()));
-
     }
 
     @Test
@@ -890,6 +902,40 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 is("gsmet-bot-playground/quarkus-bot-java-playground"));
         assertThat(workflowRun.getRepository(), sameInstance(workflowRunPayload.getRepository()));
         assertThat(workflowRunPayload.getWorkflow().getRepository(), sameInstance(workflowRunPayload.getRepository()));
+    }
+
+    @Test
+    public void workflow_job() throws Exception {
+        final GHEventPayload.WorkflowJob workflowJobPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.WorkflowJob.class);
+
+        assertThat(workflowJobPayload.getAction(), is("completed"));
+        assertThat(workflowJobPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(workflowJobPayload.getSender().getLogin(), is("gsmet"));
+
+        GHWorkflowJob workflowJob = workflowJobPayload.getWorkflowJob();
+        assertThat(workflowJob.getId(), is(6653410527L));
+        assertThat(workflowJob.getRunId(), is(2408553341L));
+        assertThat(workflowJob.getRunAttempt(), is(1));
+        assertThat(workflowJob.getUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/jobs/6653410527"));
+        assertThat(workflowJob.getHtmlUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/runs/6653410527?check_suite_focus=true"));
+        assertThat(workflowJob.getNodeId(), is("CR_kwDOEq3cwc8AAAABjJL83w"));
+        assertThat(workflowJob.getHeadSha(), is("5dd2dadfbdc2a722c08a8ad42ae4e26e3e731042"));
+        assertThat(workflowJob.getStatus(), is(GHWorkflowRun.Status.COMPLETED));
+        assertThat(workflowJob.getConclusion(), is(GHWorkflowRun.Conclusion.FAILURE));
+        assertThat(workflowJob.getStartedAt().getTime(), is(1653908125000L));
+        assertThat(workflowJob.getCompletedAt().getTime(), is(1653908157000L));
+        assertThat(workflowJob.getName(), is("JVM Tests - JDK JDK16"));
+        assertThat(workflowJob.getSteps(),
+                contains(hasProperty("name", is("Set up job")),
+                        hasProperty("name", is("Run actions/checkout@v2")),
+                        hasProperty("name", is("Build with Maven")),
+                        hasProperty("name", is("Post Run actions/checkout@v2")),
+                        hasProperty("name", is("Complete job"))));
+        assertThat(workflowJob.getCheckRunUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/check-runs/6653410527"));
     }
 
     @Test
@@ -1096,5 +1142,114 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(label.getColor(), is("ededed"));
         assertThat(label.isDefault(), is(false));
         assertThat(label.getDescription(), is(nullValue()));
+    }
+
+    @Test
+    public void starred() throws Exception {
+        final GHEventPayload.Star starPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Star.class);
+
+        assertThat(starPayload.getAction(), is("created"));
+        assertThat(starPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(starPayload.getSender().getLogin(), is("gsmet"));
+        assertThat(starPayload.getStarredAt().getTime(), is(1654017876000L));
+    }
+
+    @Test
+    public void projectsv2item_created() throws Exception {
+        final GHEventPayload.ProjectsV2Item projectsV2ItemPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.ProjectsV2Item.class);
+
+        assertThat(projectsV2ItemPayload.getAction(), is("created"));
+
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getId(), is(8083254L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getNodeId(), is("PVTI_lADOBNft-M4AEjBWzgB7VzY"));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getProjectNodeId(), is("PVT_kwDOBNft-M4AEjBW"));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getContentNodeId(), is("I_kwDOFOkjw85Ozz26"));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getContentType(), is(ContentType.ISSUE));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreator().getLogin(), is("gsmet"));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreator().getNodeId(), is("MDQ6VXNlcjEyNzk3NDk="));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().getTime(), is(1659532028000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().getTime(), is(1659532028000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt(), is(nullValue()));
+
+        assertThat(projectsV2ItemPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+        assertThat(projectsV2ItemPayload.getOrganization().getId(), is(81260024L));
+        assertThat(projectsV2ItemPayload.getOrganization().getNodeId(), is("MDEyOk9yZ2FuaXphdGlvbjgxMjYwMDI0"));
+
+        assertThat(projectsV2ItemPayload.getSender().getLogin(), is("gsmet"));
+        assertThat(projectsV2ItemPayload.getSender().getId(), is(1279749L));
+        assertThat(projectsV2ItemPayload.getSender().getNodeId(), is("MDQ6VXNlcjEyNzk3NDk="));
+
+        assertThat(projectsV2ItemPayload.getInstallation().getId(), is(16779846L));
+        assertThat(projectsV2ItemPayload.getInstallation().getNodeId(),
+                is("MDIzOkludGVncmF0aW9uSW5zdGFsbGF0aW9uMTY3Nzk4NDY="));
+    }
+
+    @Test
+    public void projectsv2item_edited() throws Exception {
+        final GHEventPayload.ProjectsV2Item projectsV2ItemPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.ProjectsV2Item.class);
+
+        assertThat(projectsV2ItemPayload.getAction(), is("edited"));
+
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getId(), is(8083254L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().getTime(), is(1659532028000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().getTime(), is(1659532033000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt(), is(nullValue()));
+
+        assertThat(projectsV2ItemPayload.getChanges().getFieldValue().getFieldNodeId(),
+                is("PVTF_lADOBNft-M4AEjBWzgCnp5Q"));
+        assertThat(projectsV2ItemPayload.getChanges().getFieldValue().getFieldType(), is(FieldType.SINGLE_SELECT));
+    }
+
+    @Test
+    public void projectsv2item_archived() throws Exception {
+        final GHEventPayload.ProjectsV2Item projectsV2ItemPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.ProjectsV2Item.class);
+
+        assertThat(projectsV2ItemPayload.getAction(), is("archived"));
+
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getId(), is(8083794L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().getTime(), is(1659532431000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().getTime(), is(1660086629000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt().getTime(), is(1660086629000L));
+
+        assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getFrom(), is(nullValue()));
+        assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getTo().getTime(), is(1660086629000L));
+    }
+
+    @Test
+    public void projectsv2item_restored() throws Exception {
+        final GHEventPayload.ProjectsV2Item projectsV2ItemPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.ProjectsV2Item.class);
+
+        assertThat(projectsV2ItemPayload.getAction(), is("restored"));
+
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getId(), is(8083254L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().getTime(), is(1659532028000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().getTime(), is(1659532419000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt(), is(nullValue()));
+
+        assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getFrom().getTime(), is(1659532142000L));
+        assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getTo(), is(nullValue()));
+    }
+
+    @Test
+    public void projectsv2item_reordered() throws Exception {
+        final GHEventPayload.ProjectsV2Item projectsV2ItemPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.ProjectsV2Item.class);
+
+        assertThat(projectsV2ItemPayload.getAction(), is("reordered"));
+
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getId(), is(8083794L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().getTime(), is(1659532431000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().getTime(), is(1659532439000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt(), is(nullValue()));
+
+        assertThat(projectsV2ItemPayload.getChanges().getPreviousProjectsV2ItemNodeId().getFrom(),
+                is("PVTI_lADOBNft-M4AEjBWzgB7VzY"));
+        assertThat(projectsV2ItemPayload.getChanges().getPreviousProjectsV2ItemNodeId().getTo(),
+                is("PVTI_lADOBNft-M4AEjBWzgB7VzY"));
     }
 }

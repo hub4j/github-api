@@ -1,0 +1,41 @@
+{
+  "id": "54b46c29-3b21-41ff-8dbe-bc90f4e2834f",
+  "name": "organizations_7544739_team_3451996_memberships_gsmet",
+  "request": {
+    "url": "/organizations/7544739/team/3451996/memberships/gsmet",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/reference/teams#get-team-membership-for-a-user\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 21 Apr 2022 10:56:53 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, write:org",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4972",
+      "X-RateLimit-Reset": "1650541694",
+      "X-RateLimit-Used": "28",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "C194:B3FD:C25197:C63FCC:62613875"
+    }
+  },
+  "uuid": "54b46c29-3b21-41ff-8dbe-bc90f4e2834f",
+  "persistent": true,
+  "insertionIndex": 11
+}

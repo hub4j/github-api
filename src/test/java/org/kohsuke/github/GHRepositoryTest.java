@@ -94,6 +94,20 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void isDisabled() throws Exception {
+        GHRepository r = getRepository();
+
+        assertThat(r.isDisabled(), is(false));
+    }
+
+    @Test
+    public void isDisabledTrue() throws Exception {
+        GHRepository r = getRepository();
+
+        assertThat(r.isDisabled(), is(true));
+    }
+
+    @Test
     public void getBranch_URLEncoded() throws Exception {
         GHRepository repo = getRepository();
         GHBranch branch = repo.getBranch("test/#UrlEncode");
@@ -740,6 +754,15 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void getPublicKey() throws Exception {
+        GHRepository repo = getTempRepository();
+        GHRepositoryPublicKey publicKey = repo.getPublicKey();
+        assertThat(publicKey, notNullValue());
+        assertThat(publicKey.getKey(), equalTo("test-key"));
+        assertThat(publicKey.getKeyId(), equalTo("key-id"));
+    }
+
+    @Test
     public void getRefsHeads() throws Exception {
         GHRepository repo = getTempRepository();
         GHRef[] refs = repo.getRefs("heads");
@@ -921,6 +944,13 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void userIsCollaborator() throws Exception {
+        GHRepository repo = getRepository();
+        GHUser collaborator = repo.listCollaborators().toList().get(0);
+        assertThat(repo.isCollaborator(collaborator), is(true));
+    }
+
+    @Test
     public void getCheckRuns() throws Exception {
         final int expectedCount = 8;
         // Use github-api repository as it has checks set up
@@ -1085,4 +1115,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         repository.dispatch("test", clientPayload);
     }
 
+    @Test
+    public void createSecret() throws Exception {
+        GHRepository repo = getTempRepository();
+        repo.createSecret("secret", "encrypted", "public");
+    }
 }

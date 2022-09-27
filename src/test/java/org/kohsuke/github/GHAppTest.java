@@ -17,29 +17,34 @@ import static org.junit.Assert.assertThrows;
  *
  * @author Paulo Miguel Almeida
  */
-public class GHAppTest extends AbstractGitHubWireMockTest {
+public class GHAppTest extends AbstractGHAppInstallationTest {
 
     protected GitHubBuilder getGitHubBuilder() {
         return super.getGitHubBuilder()
                 // ensure that only JWT will be used against the tests below
                 .withPassword(null, null)
-                .withJwtToken("bogus");
+                // Note that we used to provide a bogus token here and to rely on (apparently) manually crafted/edited
+                // Wiremock recordings, so most of the tests cannot actually be executed against GitHub without
+                // relying on the Wiremock recordings.
+                // Some tests have been updated, though (getGitHubApp in particular).
+                .withAuthorizationProvider(jwtProvider1);
     }
 
     @Test
     public void getGitHubApp() throws IOException {
         GHApp app = gitHub.getApp();
-        assertThat(app.getId(), is((long) 11111));
-        assertThat(app.getOwner().getId(), is((long) 111111111));
-        assertThat(app.getOwner().login, is("bogus"));
-        assertThat(app.getName(), is("Bogus-Development"));
+        assertThat(app.getId(), is((long) 82994));
+        assertThat(app.getOwner().getId(), is((long) 7544739));
+        assertThat(app.getOwner().getLogin(), is("hub4j-test-org"));
+        assertThat(app.getName(), is("GHApi Test app 1"));
+        assertThat(app.getSlug(), is("ghapi-test-app-1"));
         assertThat(app.getDescription(), is(""));
-        assertThat(app.getExternalUrl(), is("https://bogus.domain.com"));
-        assertThat(app.getHtmlUrl().toString(), is("https://github.com/apps/bogus-development"));
-        assertThat(app.getCreatedAt(), is(GitHubClient.parseDate("2019-06-10T04:21:41Z")));
-        assertThat(app.getUpdatedAt(), is(GitHubClient.parseDate("2019-06-10T04:21:41Z")));
-        assertThat(app.getPermissions().size(), is(4));
-        assertThat(app.getEvents().size(), is(2));
+        assertThat(app.getExternalUrl(), is("http://localhost"));
+        assertThat(app.getHtmlUrl().toString(), is("https://github.com/apps/ghapi-test-app-1"));
+        assertThat(app.getCreatedAt(), is(GitHubClient.parseDate("2020-09-30T13:40:56Z")));
+        assertThat(app.getUpdatedAt(), is(GitHubClient.parseDate("2020-09-30T13:40:56Z")));
+        assertThat(app.getPermissions().size(), is(2));
+        assertThat(app.getEvents().size(), is(0));
         assertThat(app.getInstallationsCount(), is((long) 1));
 
         // Deprecated methods
@@ -144,6 +149,27 @@ public class GHAppTest extends AbstractGitHubWireMockTest {
         assertThat(installationToken2.getExpiresAt(), is(GitHubClient.parseDate("2019-12-19T12:27:59Z")));
 
         assertThat(installationToken2.getRepositories(), nullValue());;
+    }
+
+    @Test
+    public void createTokenWithRepositories() throws IOException {
+        GHApp app = gitHub.getApp();
+        GHAppInstallation installation = app.getInstallationByUser("bogus");
+
+        // Create token specifying repositories (not repository_ids!)
+        GHAppInstallationToken installationToken = installation.createToken()
+                .repositories(Collections.singletonList("bogus"))
+                .create();
+
+        assertThat(installationToken.getToken(), is("bogus"));
+        assertThat(installationToken.getPermissions().entrySet(), hasSize(4));
+        assertThat(installationToken.getRepositorySelection(), is(GHRepositorySelection.SELECTED));
+        assertThat(installationToken.getExpiresAt(), is(GitHubClient.parseDate("2022-07-27T21:38:33Z")));
+
+        GHRepository repository = installationToken.getRepositories().get(0);
+        assertThat(installationToken.getRepositories().size(), is(1));
+        assertThat(repository.getId(), is((long) 11111111));
+        assertThat(repository.getName(), is("bogus"));
     }
 
     private void testAppInstallation(GHAppInstallation appInstallation) throws IOException {

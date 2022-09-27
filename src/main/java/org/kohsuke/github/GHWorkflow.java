@@ -87,7 +87,7 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void disable() throws IOException {
-        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "disable").fetchHttpStatusCode();
+        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "disable").send();
     }
 
     /**
@@ -97,7 +97,7 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void enable() throws IOException {
-        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").fetchHttpStatusCode();
+        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").send();
     }
 
     /**
@@ -133,7 +133,7 @@ public class GHWorkflow extends GHObject {
             requester.with("inputs", inputs);
         }
 
-        requester.fetchHttpStatusCode();
+        requester.send();
     }
 
     /**

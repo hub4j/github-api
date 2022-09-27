@@ -479,16 +479,28 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Obtains all the comments associated with this issue.
+     * Obtains all the comments associated with this issue, witout any filter.
      *
      * @return the paged iterable
      * @throws IOException
      *             the io exception
+     * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
+     * @see #queryComments() queryComments to apply filters.
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
         return root().createRequest()
                 .withUrlPath(getIssuesApiRoute() + "/comments")
                 .toIterable(GHIssueComment[].class, item -> item.wrapUp(this));
+    }
+
+    /**
+     * Search comments on this issue by specifying filters through a builder pattern.
+     *
+     * @return the query builder
+     * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
+     */
+    public GHIssueCommentQueryBuilder queryComments() {
+        return new GHIssueCommentQueryBuilder(this);
     }
 
     @Preview(SQUIRREL_GIRL)

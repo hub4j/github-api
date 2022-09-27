@@ -115,7 +115,7 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
 
         List<GHWorkflowRun> workflowRuns = workflow.listRuns().toList();
-        assertThat(workflowRuns.size(), is(2));
+        assertThat(workflowRuns.size(), greaterThan(2));
 
         checkWorkflowRunProperties(workflowRuns.get(0), workflow.getId());
         checkWorkflowRunProperties(workflowRuns.get(1), workflow.getId());

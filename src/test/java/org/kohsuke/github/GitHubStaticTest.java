@@ -22,6 +22,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 
+// TODO: Auto-generated Javadoc
 /**
  * Unit test for {@link GitHub} static helpers.
  *
@@ -29,6 +30,11 @@ import static org.junit.Assert.fail;
  */
 public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Test parse URL.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testParseURL() throws Exception {
         assertThat(GitHubClient.parseURL("https://api.github.com"), equalTo(new URL("https://api.github.com")));
@@ -42,11 +48,21 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test parse instant.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testParseInstant() throws Exception {
         assertThat(GitHubClient.parseInstant(null), nullValue());
     }
 
+    /**
+     * Test raw url path invalid.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testRawUrlPathInvalid() throws Exception {
         try {
@@ -57,6 +73,11 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Time round trip.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void timeRoundTrip() throws Exception {
         final long stableInstantEpochMilli = 1533721222255L;
@@ -116,6 +137,11 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test from record.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testFromRecord() throws Exception {
         final long stableInstantEpochSeconds = 11610674762L;
@@ -172,6 +198,11 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit_core.toString(), containsString("search {remaining=999999, limit=1000000"));
     }
 
+    /**
+     * Test git hub rate limit should replace rate limit.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGitHubRateLimitShouldReplaceRateLimit() throws Exception {
 
@@ -309,6 +340,11 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test mapping reader writer.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testMappingReaderWriter() throws Exception {
 
@@ -348,6 +384,11 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test git hub request get api URL.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGitHubRequest_getApiURL() throws Exception {
         assertThat(GitHubRequest.getApiURL("github.com", "/endpoint").toString(),
@@ -380,10 +421,25 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Format date.
+     *
+     * @param dt the dt
+     * @param format the format
+     * @return the string
+     */
     static String formatDate(Date dt, String format) {
         return formatZonedDate(dt, format, "GMT");
     }
 
+    /**
+     * Format zoned date.
+     *
+     * @param dt the dt
+     * @param format the format
+     * @param timeZone the time zone
+     * @return the string
+     */
     static String formatZonedDate(Date dt, String format, String timeZone) {
         SimpleDateFormat df = new SimpleDateFormat(format);
         df.setTimeZone(TimeZone.getTimeZone(timeZone));

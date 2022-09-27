@@ -15,11 +15,19 @@ import javax.annotation.Nonnull;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class BridgeMethodTest.
+ *
  * @author Kohsuke Kawaguchi
  */
 public class BridgeMethodTest extends Assert {
 
+    /**
+     * Test bridge methods.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testBridgeMethods() throws IOException {
 
@@ -55,10 +63,25 @@ public class BridgeMethodTest extends Assert {
 
     }
 
+    /**
+     * Verify bridge methods.
+     *
+     * @param targetClass the target class
+     * @param methodName the method name
+     * @param returnTypes the return types
+     */
     void verifyBridgeMethods(@Nonnull Class<?> targetClass, @Nonnull String methodName, Class<?>... returnTypes) {
         verifyBridgeMethods(targetClass, methodName, 0, returnTypes);
     }
 
+    /**
+     * Verify bridge methods.
+     *
+     * @param targetClass the target class
+     * @param methodName the method name
+     * @param parameterCount the parameter count
+     * @param returnTypes the return types
+     */
     void verifyBridgeMethods(@Nonnull Class<?> targetClass,
             @Nonnull String methodName,
             int parameterCount,

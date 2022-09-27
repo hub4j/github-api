@@ -15,12 +15,21 @@ import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.notNullValue;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHWorkflowTest.
+ */
 public class GHWorkflowTest extends AbstractGitHubWireMockTest {
 
     private static String REPO_NAME = "hub4j-test-org/GHWorkflowTest";
 
     private GHRepository repo;
 
+    /**
+     * Cleanup.
+     *
+     * @throws Exception the exception
+     */
     @Before
     @After
     public void cleanup() throws Exception {
@@ -35,11 +44,21 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Sets the up.
+     *
+     * @throws Exception the exception
+     */
     @Before
     public void setUp() throws Exception {
         repo = gitHub.getRepository(REPO_NAME);
     }
 
+    /**
+     * Test basic information.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testBasicInformation() throws IOException {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
@@ -59,6 +78,11 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
         assertThat(workflowById.getNodeId(), equalTo(workflow.getNodeId()));
     }
 
+    /**
+     * Test disable enable.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testDisableEnable() throws IOException {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
@@ -76,6 +100,11 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
         assertThat(workflow.getState(), equalTo("active"));
     }
 
+    /**
+     * Test dispatch.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testDispatch() throws IOException {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
@@ -92,6 +121,11 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
                         .withRequestBody(containing("value")));
     }
 
+    /**
+     * Test list workflows.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testListWorkflows() throws IOException {
         List<GHWorkflow> workflows = repo.listWorkflows().toList();
@@ -110,6 +144,11 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
                 equalTo("/hub4j-test-org/GHWorkflowTest/workflows/test-workflow/badge.svg"));
     }
 
+    /**
+     * Test list workflow runs.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testListWorkflowRuns() throws IOException {
         GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");

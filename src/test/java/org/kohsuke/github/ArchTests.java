@@ -40,6 +40,10 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ArchTests.
+ */
 public class ArchTests {
 
     private static final JavaClasses classFiles = new ClassFileImporter()
@@ -64,11 +68,17 @@ public class ArchTests {
         }
     };
 
+    /**
+     * Before class.
+     */
     @BeforeClass
     public static void beforeClass() {
         assertThat(classFiles.size(), greaterThan(0));
     }
 
+    /**
+     * Test require use of assert that.
+     */
     @Test
     public void testRequireUseOfAssertThat() {
 
@@ -84,6 +94,9 @@ public class ArchTests {
         onlyAssertThatRule.check(testClassFiles);
     }
 
+    /**
+     * Test api stability.
+     */
     @Test
     public void testApiStability() {
         assertThat("OkHttpConnector must implement HttpConnector",
@@ -91,6 +104,9 @@ public class ArchTests {
                 Matchers.containsInAnyOrder(HttpConnector.class));
     }
 
+    /**
+     * Test require use of only specific apache commons.
+     */
     @Test
     public void testRequireUseOfOnlySpecificApacheCommons() {
 
@@ -135,6 +151,13 @@ public class ArchTests {
         onlyApprovedApacheCommonsMethods.check(classFiles);
     }
 
+    /**
+     * Not call methods in package unless.
+     *
+     * @param packageIdentifier the package identifier
+     * @param unlessPredicates the unless predicates
+     * @return the arch condition
+     */
     public static ArchCondition<JavaClass> notCallMethodsInPackageUnless(final String packageIdentifier,
             final DescribedPredicate<JavaCall<?>>... unlessPredicates) {
         DescribedPredicate<JavaCall<?>> restrictedPackageCalls = target(
@@ -150,6 +173,14 @@ public class ArchTests {
         return not(callMethodWhere(restrictedPackageCalls));
     }
 
+    /**
+     * Target method is.
+     *
+     * @param owner the owner
+     * @param methodName the method name
+     * @param parameterTypes the parameter types
+     * @return the described predicate
+     */
     public static DescribedPredicate<JavaCall<?>> targetMethodIs(Class<?> owner,
             String methodName,
             Class<?>... parameterTypes) {
@@ -160,6 +191,14 @@ public class ArchTests {
                         Formatters.formatMethodSimple(owner.getSimpleName(), methodName, namesOf(parameterTypes)));
     }
 
+    /**
+     * Unless.
+     *
+     * @param <T> the generic type
+     * @param first the first
+     * @param second the second
+     * @return the described predicate
+     */
     public static <T> DescribedPredicate<T> unless(DescribedPredicate<? super T> first,
             DescribedPredicate<? super T> second) {
         return new UnlessPredicate(first, second);

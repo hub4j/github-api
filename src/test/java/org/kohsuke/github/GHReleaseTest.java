@@ -5,8 +5,17 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHReleaseTest.
+ */
 public class GHReleaseTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Test create simple release.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCreateSimpleRelease() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -26,6 +35,11 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test create simple release without discussion.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCreateSimpleReleaseWithoutDiscussion() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -45,6 +59,11 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test create double release fails.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCreateDoubleReleaseFails() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -68,6 +87,11 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test create release with unknown category fails.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCreateReleaseWithUnknownCategoryFails() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -84,6 +108,11 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         });
     }
 
+    /**
+     * Test update release.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testUpdateRelease() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -110,6 +139,11 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test delete release.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testDeleteRelease() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");

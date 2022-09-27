@@ -25,11 +25,20 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.GHVerification.Reason.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHRepositoryTest.
+ *
  * @author Liam Newman
  */
 public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }
@@ -38,6 +47,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
+    /**
+     * Test zipball.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testZipball() throws IOException {
         getTempRepository().readZip((InputStream inputstream) -> {
@@ -45,6 +59,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }, null);
     }
 
+    /**
+     * Test tarball.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testTarball() throws IOException {
         getTempRepository().readTar((InputStream inputstream) -> {
@@ -52,6 +71,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }, null);
     }
 
+    /**
+     * Test getters.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGetters() throws IOException {
         GHRepository r = getTempRepository();
@@ -77,6 +101,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.getFullName(), equalTo("hub4j-test-org/temp-testGetters"));
     }
 
+    /**
+     * Archive.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void archive() throws Exception {
         // Archive is a one-way action in the API.
@@ -93,6 +122,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(getRepository().isArchived(), is(true));
     }
 
+    /**
+     * Checks if is disabled.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void isDisabled() throws Exception {
         GHRepository r = getRepository();
@@ -100,6 +134,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.isDisabled(), is(false));
     }
 
+    /**
+     * Checks if is disabled true.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void isDisabledTrue() throws Exception {
         GHRepository r = getRepository();
@@ -107,6 +146,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.isDisabled(), is(true));
     }
 
+    /**
+     * Gets the branch URL encoded.
+     *
+     * @return the branch URL encoded
+     * @throws Exception the exception
+     */
     @Test
     public void getBranch_URLEncoded() throws Exception {
         GHRepository repo = getRepository();
@@ -114,6 +159,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(branch.getName(), is("test/#UrlEncode"));
     }
 
+    /**
+     * Creates the signed commit verify error.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void createSignedCommitVerifyError() throws IOException {
         GHRepository repository = getRepository();
@@ -131,6 +181,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(verification.getReason(), equalTo(GPGVERIFY_ERROR));
     }
 
+    /**
+     * Creates the signed commit unknown signature type.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void createSignedCommitUnknownSignatureType() throws IOException {
         GHRepository repository = getRepository();
@@ -148,6 +203,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(verification.getReason(), equalTo(UNKNOWN_SIGNATURE_TYPE));
     }
 
+    /**
+     * List stargazers.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void listStargazers() throws IOException {
         GHRepository repository = getRepository();
@@ -161,6 +221,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(stargazer.getRepository(), sameInstance(repository));
     }
 
+    /**
+     * Gets the branch non existent but 200 status.
+     *
+     * @return the branch non existent but 200 status
+     * @throws Exception the exception
+     */
     // Issue #607
     @Test
     public void getBranchNonExistentBut200Status() throws Exception {
@@ -182,6 +248,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Subscription.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void subscription() throws Exception {
         GHRepository r = getRepository();
@@ -204,6 +275,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.getSubscription(), nullValue());
     }
 
+    /**
+     * Test set public.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testSetPublic() throws Exception {
         kohsuke();
@@ -221,6 +297,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test update repository.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testUpdateRepository() throws Exception {
         String homepage = "https://github-api.kohsuke.org/apidocs/index.html";
@@ -269,6 +350,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(redux.getDescription(), equalTo(updatedDescription));
     }
 
+    /**
+     * Test get repository with visibility.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGetRepositoryWithVisibility() throws IOException {
         snapshotNotAllowed();
@@ -293,6 +379,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 equalTo(Visibility.UNKNOWN));
     }
 
+    /**
+     * List contributors.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void listContributors() throws IOException {
         GHRepository r = gitHub.getOrganization("hub4j").getRepository("github-api");
@@ -312,6 +403,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(kohsuke, is(true));
     }
 
+    /**
+     * Gets the permission.
+     *
+     * @return the permission
+     * @throws Exception the exception
+     */
     @Test
     public void getPermission() throws Exception {
         kohsuke();
@@ -339,6 +436,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Checks for permission.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void hasPermission() throws Exception {
         kohsuke();
@@ -368,6 +470,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(privateRepository.hasPermission("dude", GHPermissionType.NONE), equalTo(true));
     }
 
+    /**
+     * Latest repository exist.
+     */
     @Test
     public void LatestRepositoryExist() {
         try {
@@ -380,6 +485,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Adds the collaborators.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void addCollaborators() throws Exception {
         GHRepository repo = getRepository();
@@ -396,6 +506,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(user.getName(), equalTo(colabUser.getName()));
     }
 
+    /**
+     * Adds the collaborators repo perm.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void addCollaboratorsRepoPerm() throws Exception {
         GHRepository repo = getRepository();
@@ -410,6 +525,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(user.getName(), equalTo(colabUser.getName()));
     }
 
+    /**
+     * Latest repository not exist.
+     */
     @Test
     public void LatestRepositoryNotExist() {
         try {
@@ -422,24 +540,47 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * List releases.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void listReleases() throws IOException {
         PagedIterable<GHRelease> releases = gitHub.getOrganization("github").getRepository("hub").listReleases();
         assertThat(releases, is(not(emptyIterable())));
     }
 
+    /**
+     * Gets the release exists.
+     *
+     * @return the release exists
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void getReleaseExists() throws IOException {
         GHRelease release = gitHub.getOrganization("github").getRepository("hub").getRelease(6839710);
         assertThat(release.getTagName(), equalTo("v2.3.0-pre10"));
     }
 
+    /**
+     * Gets the release does not exist.
+     *
+     * @return the release does not exist
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void getReleaseDoesNotExist() throws IOException {
         GHRelease release = gitHub.getOrganization("github").getRepository("hub").getRelease(Long.MAX_VALUE);
         assertThat(release, nullValue());
     }
 
+    /**
+     * Gets the release by tag name exists.
+     *
+     * @return the release by tag name exists
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void getReleaseByTagNameExists() throws IOException {
         GHRelease release = gitHub.getOrganization("github").getRepository("hub").getReleaseByTagName("v2.3.0-pre10");
@@ -447,12 +588,23 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(release.getTagName(), equalTo("v2.3.0-pre10"));
     }
 
+    /**
+     * Gets the release by tag name does not exist.
+     *
+     * @return the release by tag name does not exist
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void getReleaseByTagNameDoesNotExist() throws IOException {
         GHRelease release = getRepository().getReleaseByTagName("foo-bar-baz");
         assertThat(release, nullValue());
     }
 
+    /**
+     * List languages.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void listLanguages() throws IOException {
         GHRepository r = gitHub.getRepository("hub4j/github-api");
@@ -463,6 +615,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(languages.get("Java"), greaterThan(100000L));
     }
 
+    /**
+     * List commit comments no comments.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void listCommitCommentsNoComments() throws IOException {
         List<GHCommitComment> commitComments = getRepository()
@@ -476,6 +633,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat("Commit has no comments", commitComments.isEmpty());
     }
 
+    /**
+     * Search all public and forked repos.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void searchAllPublicAndForkedRepos() throws IOException {
         PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
@@ -489,6 +651,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(u.stream().filter(item -> item.getName().equals("Complete-Python-3-Bootcamp")).count(), is(1L));
     }
 
+    /**
+     * Search for public forked only repos.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void searchForPublicForkedOnlyRepos() throws IOException {
         PagedSearchIterable<GHRepository> list = gitHub.searchRepositories()
@@ -502,6 +669,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(u.get(1).getName(), is("Complete-Python-3-Bootcamp"));
     }
 
+    /**
+     * Gh repository search builder ignores unknown visibility.
+     */
     @Test
     public void ghRepositorySearchBuilderIgnoresUnknownVisibility() {
         GHRepositorySearchBuilder ghRepositorySearchBuilder;
@@ -521,6 +691,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("is:")).count(), is(1L));
     }
 
+    /**
+     * Gh repository search builder fork default reset forks search terms.
+     */
     @Test
     public void ghRepositorySearchBuilderForkDefaultResetForksSearchTerms() {
         GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
@@ -537,6 +710,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
     }
 
+    /**
+     * Gh repository search builder fork deprecated enum.
+     */
     @Test
     public void ghRepositorySearchBuilderForkDeprecatedEnum() {
         GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
@@ -552,6 +728,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
     }
 
+    /**
+     * Gh repository search builder fork deprecated string.
+     */
     @Test
     public void ghRepositorySearchBuilderForkDeprecatedString() {
         GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
@@ -567,6 +746,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
     }
 
+    /**
+     * List commit comments some comments.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void listCommitCommentsSomeComments() throws IOException {
         List<GHCommitComment> commitComments = getRepository()
@@ -586,6 +770,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 containsInAnyOrder("comment 1", "comment 2"));
     }
 
+    /**
+     * List empty contributors.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test // Issue #261
     public void listEmptyContributors() throws IOException {
         assertThat("This list should be empty, but should return a valid empty iterable.",
@@ -593,6 +782,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 is(emptyIterable()));
     }
 
+    /**
+     * Search repositories.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void searchRepositories() throws Exception {
         PagedSearchIterable<GHRepository> r = gitHub.searchRepositories()
@@ -607,6 +801,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.getTotalCount(), greaterThan(0));
     }
 
+    /**
+     * Search org for repositories.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void searchOrgForRepositories() throws Exception {
         PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().org("hub4j-test-org").list();
@@ -615,6 +814,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.getTotalCount(), greaterThan(0));
     }
 
+    /**
+     * Test issue 162.
+     *
+     * @throws Exception the exception
+     */
     @Test // issue #162
     public void testIssue162() throws Exception {
         GHRepository r = gitHub.getRepository("hub4j/github-api");
@@ -629,6 +833,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Mark down.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void markDown() throws Exception {
         assertThat(IOUtils.toString(gitHub.renderMarkdown("**Test日本語**")).trim(),
@@ -644,6 +853,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(actual, containsString("to fix issue"));
     }
 
+    /**
+     * Sets the merge options.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void setMergeOptions() throws IOException {
         // String repoName = "hub4j-test-org/test-mergeoptions";
@@ -672,12 +886,23 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.isAllowSquashMerge(), is(false));
     }
 
+    /**
+     * Gets the delete branch on merge.
+     *
+     * @return the delete branch on merge
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void getDeleteBranchOnMerge() throws IOException {
         GHRepository r = getRepository();
         assertThat(r.isDeleteBranchOnMerge(), notNullValue());
     }
 
+    /**
+     * Sets the delete branch on merge.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void setDeleteBranchOnMerge() throws IOException {
         GHRepository r = getRepository();
@@ -695,6 +920,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.isDeleteBranchOnMerge(), is(false));
     }
 
+    /**
+     * Test set topics.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testSetTopics() throws Exception {
         GHRepository repo = getRepository(gitHub);
@@ -730,6 +960,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat("Topics can be set to empty", repo.listTopics(), is(empty()));
     }
 
+    /**
+     * Gets the collaborators.
+     *
+     * @return the collaborators
+     * @throws Exception the exception
+     */
     @Test
     public void getCollaborators() throws Exception {
         GHRepository repo = getRepository(gitHub);
@@ -737,6 +973,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(collaborators.size(), greaterThan(0));
     }
 
+    /**
+     * Gets the post commit hooks.
+     *
+     * @return the post commit hooks
+     * @throws Exception the exception
+     */
     @Test
     public void getPostCommitHooks() throws Exception {
         GHRepository repo = getRepository(gitHub);
@@ -744,6 +986,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(postcommitHooks, is(empty()));
     }
 
+    /**
+     * Gets the refs.
+     *
+     * @return the refs
+     * @throws Exception the exception
+     */
     @Test
     public void getRefs() throws Exception {
         GHRepository repo = getTempRepository();
@@ -753,6 +1001,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(refs[0].getRef(), equalTo("refs/heads/main"));
     }
 
+    /**
+     * Gets the public key.
+     *
+     * @return the public key
+     * @throws Exception the exception
+     */
     @Test
     public void getPublicKey() throws Exception {
         GHRepository repo = getTempRepository();
@@ -762,6 +1016,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(publicKey.getKeyId(), equalTo("key-id"));
     }
 
+    /**
+     * Gets the refs heads.
+     *
+     * @return the refs heads
+     * @throws Exception the exception
+     */
     @Test
     public void getRefsHeads() throws Exception {
         GHRepository repo = getTempRepository();
@@ -771,6 +1031,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(refs[0].getRef(), equalTo("refs/heads/main"));
     }
 
+    /**
+     * Gets the refs empty tags.
+     *
+     * @return the refs empty tags
+     * @throws Exception the exception
+     */
     @Test
     public void getRefsEmptyTags() throws Exception {
         GHRepository repo = getTempRepository();
@@ -785,6 +1051,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * List refs.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void listRefs() throws Exception {
         GHRepository repo = getRepository();
@@ -829,6 +1100,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Gets the ref.
+     *
+     * @return the ref
+     * @throws Exception the exception
+     */
     @Test
     public void getRef() throws Exception {
         GHRepository repo = getRepository();
@@ -874,6 +1151,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * List refs heads.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void listRefsHeads() throws Exception {
         GHRepository repo = getTempRepository();
@@ -883,6 +1165,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(refs.get(0).getRef(), equalTo("refs/heads/main"));
     }
 
+    /**
+     * List refs empty tags.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void listRefsEmptyTags() throws Exception {
         try {
@@ -895,6 +1182,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * List tags empty.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void listTagsEmpty() throws Exception {
         GHRepository repo = getTempRepository();
@@ -903,6 +1195,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(refs, is(empty()));
     }
 
+    /**
+     * List tags.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void listTags() throws Exception {
         GHRepository repo = getRepository();
@@ -911,6 +1208,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(refs.size(), greaterThan(90));
     }
 
+    /**
+     * Check watchers count.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void checkWatchersCount() throws Exception {
         snapshotNotAllowed();
@@ -919,6 +1221,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(watchersCount, equalTo(10));
     }
 
+    /**
+     * Check stargazers count.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void checkStargazersCount() throws Exception {
         snapshotNotAllowed();
@@ -927,6 +1234,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(stargazersCount, equalTo(10));
     }
 
+    /**
+     * List collaborators.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void listCollaborators() throws Exception {
         GHRepository repo = getRepository();
@@ -934,6 +1246,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(collaborators.size(), greaterThan(10));
     }
 
+    /**
+     * List collaborators filtered.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void listCollaboratorsFiltered() throws Exception {
         GHRepository repo = getRepository();
@@ -943,6 +1260,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(filteredCollaborators.size(), lessThan(allCollaborators.size()));
     }
 
+    /**
+     * User is collaborator.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void userIsCollaborator() throws Exception {
         GHRepository repo = getRepository();
@@ -950,6 +1272,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(repo.isCollaborator(collaborator), is(true));
     }
 
+    /**
+     * Gets the check runs.
+     *
+     * @return the check runs
+     * @throws Exception the exception
+     */
     @Test
     public void getCheckRuns() throws Exception {
         final int expectedCount = 8;
@@ -974,6 +1302,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Gets the last commit status.
+     *
+     * @return the last commit status
+     * @throws Exception the exception
+     */
     @Test
     public void getLastCommitStatus() throws Exception {
         GHCommitStatus status = getRepository().getLastCommitStatus("8051615eff597f4e49f4f47625e6fc2b49f26bfc");
@@ -982,6 +1316,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(status.getContext(), equalTo("ci/circleci: build"));
     }
 
+    /**
+     * List commits between.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void listCommitsBetween() throws Exception {
         GHRepository repository = getRepository();
@@ -998,6 +1337,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(startingCount + 1));
     }
 
+    /**
+     * List commits between paginated.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void listCommitsBetweenPaginated() throws Exception {
         GHRepository repository = getRepository();
@@ -1015,6 +1359,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(startingCount + 3));
     }
 
+    /**
+     * Gets the commits between over 250.
+     *
+     * @return the commits between over 250
+     * @throws Exception the exception
+     */
     @Test
     public void getCommitsBetweenOver250() throws Exception {
         GHRepository repository = getRepository();
@@ -1083,6 +1433,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 endsWith("/raw/94ff089e60064bfa43e374baeb10846f7ce82f40/.github/PULL_REQUEST_TEMPLATE.md"));
     }
 
+    /**
+     * Gets the commits between paged.
+     *
+     * @return the commits between paged
+     * @throws Exception the exception
+     */
     @Test
     public void getCommitsBetweenPaged() throws Exception {
         GHRepository repository = getRepository();
@@ -1100,12 +1456,22 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(startingCount + 4));
     }
 
+    /**
+     * Creates the dispatch event without client payload.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void createDispatchEventWithoutClientPayload() throws Exception {
         GHRepository repository = getTempRepository();
         repository.dispatch("test", null);
     }
 
+    /**
+     * Creates the dispatch event with client payload.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void createDispatchEventWithClientPayload() throws Exception {
         GHRepository repository = getTempRepository();
@@ -1115,6 +1481,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         repository.dispatch("test", clientPayload);
     }
 
+    /**
+     * Creates the secret.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void createSecret() throws Exception {
         GHRepository repo = getTempRepository();

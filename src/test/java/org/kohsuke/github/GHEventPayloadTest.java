@@ -27,15 +27,28 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThrows;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHEventPayloadTest.
+ */
 public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
+    /** The payload. */
     @Rule
     public final PayloadRule payload = new PayloadRule(".json");
 
+    /**
+     * Instantiates a new GH event payload test.
+     */
     public GHEventPayloadTest() {
         useDefaultGitHub = false;
     }
 
+    /**
+     * Commit comment.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void commit_comment() throws Exception {
         final GHEventPayload.CommitComment event = GitHub.offline()
@@ -57,6 +70,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThrows(RuntimeException.class, () -> event.setSender(null));
     }
 
+    /**
+     * Creates the.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void create() throws Exception {
         final GHEventPayload.Create event = GitHub.offline()
@@ -70,6 +88,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
+    /**
+     * Delete.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void delete() throws Exception {
         final GHEventPayload.Delete event = GitHub.offline()
@@ -81,6 +104,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
+    /**
+     * Deployment.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void deployment() throws Exception {
         final GHEventPayload.Deployment event = GitHub.offline()
@@ -95,6 +123,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getDeployment().getOwner(), sameInstance(event.getRepository()));
     }
 
+    /**
+     * Deployment status.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void deployment_status() throws Exception {
         final GHEventPayload.DeploymentStatus event = GitHub.offline()
@@ -115,6 +148,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThrows(RuntimeException.class, () -> event.setDeploymentStatus(null));
     }
 
+    /**
+     * Fork.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void fork() throws Exception {
         final GHEventPayload.Fork event = GitHub.offline()
@@ -146,6 +184,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     // assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     // }
 
+    /**
+     * Issue comment.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void issue_comment() throws Exception {
         final GHEventPayload.IssueComment event = GitHub.offline()
@@ -169,6 +212,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThrows(RuntimeException.class, () -> event.setIssue(null));
     }
 
+    /**
+     * Issue comment edited.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void issue_comment_edited() throws Exception {
         final GHEventPayload.IssueComment event = GitHub.offline()
@@ -178,6 +226,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getChanges().getBody().getFrom(), is("This is the issue comment BEFORE edit."));
     }
 
+    /**
+     * Issues.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void issues() throws Exception {
         final GHEventPayload.Issue event = GitHub.offline()
@@ -195,6 +248,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getIssue().getRepository(), sameInstance(event.getRepository()));
     }
 
+    /**
+     * Issue labeled.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void issue_labeled() throws Exception {
         final GHEventPayload.Issue event = GitHub.offline()
@@ -207,6 +265,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getLabel().getName(), is("enhancement"));
     }
 
+    /**
+     * Issue unlabeled.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void issue_unlabeled() throws Exception {
         final GHEventPayload.Issue event = GitHub.offline()
@@ -218,6 +281,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getLabel().getName(), is("enhancement"));
     }
 
+    /**
+     * Issue title edited.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void issue_title_edited() throws Exception {
         final GHEventPayload.Issue event = GitHub.offline()
@@ -228,6 +296,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getChanges().getTitle().getFrom(), is("Test GHEventPayload.Issue changes"));
     }
 
+    /**
+     * Issue body edited.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void issue_body_edited() throws Exception {
         final GHEventPayload.Issue event = GitHub.offline()
@@ -258,6 +331,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     // @Test
     // public void page_build() throws Exception {}
 
+    /**
+     * Ping.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void ping() throws Exception {
         final GHEventPayload.Ping event = GitHub.offline()
@@ -269,6 +347,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getOrganization(), nullValue());
     }
 
+    /**
+     * Public.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @Payload("public")
     public void public_() throws Exception {
@@ -279,6 +362,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
+    /**
+     * Pull request.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void pull_request() throws Exception {
         final GHEventPayload.PullRequest event = GitHub.offline()
@@ -314,6 +402,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getRepository(), sameInstance(event.getRepository()));
     }
 
+    /**
+     * Pull request edited base.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void pull_request_edited_base() throws Exception {
         final GHEventPayload.PullRequest event = GitHub.offline()
@@ -329,6 +422,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getChanges().getBody(), nullValue());
     }
 
+    /**
+     * Pull request edited title.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void pull_request_edited_title() throws Exception {
         final GHEventPayload.PullRequest event = GitHub.offline()
@@ -343,6 +441,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getChanges().getBody(), nullValue());
     }
 
+    /**
+     * Pull request labeled.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void pull_request_labeled() throws Exception {
         final GHEventPayload.PullRequest event = GitHub.offline()
@@ -383,6 +486,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getOrganization().getLogin(), is("trilogy-group"));
     }
 
+    /**
+     * Pull request review.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void pull_request_review() throws Exception {
         final GHEventPayload.PullRequestReview event = GitHub.offline()
@@ -417,6 +525,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getReview().getParent(), sameInstance(event.getPullRequest()));
     }
 
+    /**
+     * Pull request review comment.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void pull_request_review_comment() throws Exception {
         final GHEventPayload.PullRequestReviewComment event = GitHub.offline()
@@ -448,6 +561,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getComment().getParent(), sameInstance(event.getPullRequest()));
     }
 
+    /**
+     * Pull request review comment edited.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void pull_request_review_comment_edited() throws Exception {
         final GHEventPayload.PullRequestReviewComment event = GitHub.offline()
@@ -458,6 +576,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getChanges().getBody().getFrom(), is("This is the pull request review comment BEFORE edit."));
     }
 
+    /**
+     * Push.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void push() throws Exception {
         final GHEventPayload.Push event = GitHub.offline()
@@ -497,6 +620,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Push to fork.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @Payload("push.fork")
     public void pushToFork() throws Exception {
@@ -567,6 +695,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Release published.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void release_published() throws Exception {
         final GHEventPayload.Release event = GitHub.offline()
@@ -584,6 +717,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThrows(RuntimeException.class, () -> event.setRelease(null));
     }
 
+    /**
+     * Repository.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void repository() throws Exception {
         final GHEventPayload.Repository event = GitHub.offline()
@@ -595,6 +733,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
+    /**
+     * Status.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void status() throws Exception {
         final GHEventPayload.Status event = GitHub.offline()
@@ -611,6 +754,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThrows(RuntimeException.class, () -> event.setState(GHCommitState.ERROR));
     }
 
+    /**
+     * Status 2.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void status2() throws Exception {
         final GHEventPayload.Status event = GitHub.offline()
@@ -628,6 +776,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     // @Test
     // public void watch() throws Exception {}
 
+    /**
+     * Check run event.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @Payload("check-run")
     public void checkRunEvent() throws Exception {
@@ -696,6 +849,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         return checkRun;
     }
 
+    /**
+     * Check suite event.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @Payload("check-suite")
     public void checkSuiteEvent() throws Exception {
@@ -756,6 +914,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         return checkSuite;
     }
 
+    /**
+     * Installation repositories event.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @Payload("installation_repositories")
     public void InstallationRepositoriesEvent() throws Exception {
@@ -777,6 +940,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("Codertocat"));
     }
 
+    /**
+     * Installation event.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @Payload("installation")
     public void InstallationEvent() throws Exception {
@@ -798,6 +966,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("octocat"));
     }
 
+    /**
+     * Workflow dispatch.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void workflow_dispatch() throws Exception {
         final GHEventPayload.WorkflowDispatch workflowDispatchPayload = GitHub.offline()
@@ -813,6 +986,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(workflowDispatchPayload.getSender().getLogin(), is("gsmet"));
     }
 
+    /**
+     * Workflow run.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void workflow_run() throws Exception {
         final GHEventPayload.WorkflowRun workflowRunPayload = GitHub.offline()
@@ -878,6 +1056,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getRepository(), sameInstance(workflowRunPayload.getRepository()));
     }
 
+    /**
+     * Workflow run pull request.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void workflow_run_pull_request() throws Exception {
         final GHEventPayload.WorkflowRun workflowRunPayload = GitHub.offline()
@@ -891,6 +1074,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(pullRequest.getRepository(), sameInstance(workflowRunPayload.getRepository()));
     }
 
+    /**
+     * Workflow run other repository.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void workflow_run_other_repository() throws Exception {
         final GHEventPayload.WorkflowRun workflowRunPayload = GitHub.offline()
@@ -904,6 +1092,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRunPayload.getWorkflow().getRepository(), sameInstance(workflowRunPayload.getRepository()));
     }
 
+    /**
+     * Workflow job.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void workflow_job() throws Exception {
         final GHEventPayload.WorkflowJob workflowJobPayload = GitHub.offline()
@@ -938,6 +1131,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/check-runs/6653410527"));
     }
 
+    /**
+     * Label created.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void label_created() throws Exception {
         final GHEventPayload.Label labelPayload = GitHub.offline()
@@ -954,6 +1152,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(label.getDescription(), is("description"));
     }
 
+    /**
+     * Label edited.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void label_edited() throws Exception {
         final GHEventPayload.Label labelPayload = GitHub.offline()
@@ -973,6 +1176,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(labelPayload.getChanges().getColor().getFrom(), is("f9d0c4"));
     }
 
+    /**
+     * Label deleted.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void label_deleted() throws Exception {
         GHEventPayload.Label labelPayload = GitHub.offline()
@@ -989,6 +1197,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(label.getDescription(), is("description"));
     }
 
+    /**
+     * Discussion created.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void discussion_created() throws Exception {
         final GHEventPayload.Discussion discussionPayload = GitHub.offline()
@@ -1037,6 +1250,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(discussion.getBody(), is("Body of discussion."));
     }
 
+    /**
+     * Discussion answered.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void discussion_answered() throws Exception {
         final GHEventPayload.Discussion discussionPayload = GitHub.offline()
@@ -1086,6 +1304,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(discussion.getBody(), is("Body of discussion."));
     }
 
+    /**
+     * Discussion labeled.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void discussion_labeled() throws Exception {
         final GHEventPayload.Discussion discussionPayload = GitHub.offline()
@@ -1144,6 +1367,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(label.getDescription(), is(nullValue()));
     }
 
+    /**
+     * Starred.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void starred() throws Exception {
         final GHEventPayload.Star starPayload = GitHub.offline()
@@ -1155,6 +1383,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(starPayload.getStarredAt().getTime(), is(1654017876000L));
     }
 
+    /**
+     * Projectsv 2 item created.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void projectsv2item_created() throws Exception {
         final GHEventPayload.ProjectsV2Item projectsV2ItemPayload = GitHub.offline()
@@ -1186,6 +1419,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 is("MDIzOkludGVncmF0aW9uSW5zdGFsbGF0aW9uMTY3Nzk4NDY="));
     }
 
+    /**
+     * Projectsv 2 item edited.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void projectsv2item_edited() throws Exception {
         final GHEventPayload.ProjectsV2Item projectsV2ItemPayload = GitHub.offline()
@@ -1203,6 +1441,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(projectsV2ItemPayload.getChanges().getFieldValue().getFieldType(), is(FieldType.SINGLE_SELECT));
     }
 
+    /**
+     * Projectsv 2 item archived.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void projectsv2item_archived() throws Exception {
         final GHEventPayload.ProjectsV2Item projectsV2ItemPayload = GitHub.offline()
@@ -1219,6 +1462,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getTo().getTime(), is(1660086629000L));
     }
 
+    /**
+     * Projectsv 2 item restored.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void projectsv2item_restored() throws Exception {
         final GHEventPayload.ProjectsV2Item projectsV2ItemPayload = GitHub.offline()
@@ -1235,6 +1483,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getTo(), is(nullValue()));
     }
 
+    /**
+     * Projectsv 2 item reordered.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void projectsv2item_reordered() throws Exception {
         final GHEventPayload.ProjectsV2Item projectsV2ItemPayload = GitHub.offline()

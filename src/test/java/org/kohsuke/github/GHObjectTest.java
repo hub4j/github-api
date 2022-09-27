@@ -4,8 +4,17 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHObjectTest.
+ */
 public class GHObjectTest extends org.kohsuke.github.AbstractGitHubWireMockTest {
 
+    /**
+     * Test to string.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_toString() throws Exception {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);

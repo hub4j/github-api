@@ -23,12 +23,20 @@ import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
 
+// TODO: Auto-generated Javadoc
 /**
  * Unit test for simple App.
  */
 public class AppTest extends AbstractGitHubWireMockTest {
+    
+    /** The Constant GITHUB_API_TEST_REPO. */
     static final String GITHUB_API_TEST_REPO = "github-api-test";
 
+    /**
+     * Test repo CRUD.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testRepoCRUD() throws Exception {
         String targetName = "github-api-test-rename2";
@@ -74,6 +82,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         r.delete();
     }
 
+    /**
+     * Test repository with auto initialization CRUD.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testRepositoryWithAutoInitializationCRUD() throws Exception {
         String name = "github-api-test-autoinit";
@@ -97,6 +110,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test credential valid.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCredentialValid() throws IOException {
         assertThat(gitHub.isCredentialValid(), is(true));
@@ -113,6 +131,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(gitHub.lastRateLimit().getCore().getLimit(), equalTo(60));
     }
 
+    /**
+     * Test credential valid enterprise.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCredentialValidEnterprise() throws IOException {
         // Simulated GHE: getRateLimit returns 404
@@ -134,6 +157,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(gitHub.lastRateLimit(), sameInstance(GHRateLimit.DEFAULT));
     }
 
+    /**
+     * Test issue with no comment.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testIssueWithNoComment() throws IOException {
         GHRepository repository = gitHub.getRepository("kohsuke/test");
@@ -143,6 +171,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(v, is(empty()));
     }
 
+    /**
+     * Test issue with comment.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testIssueWithComment() throws IOException {
         GHRepository repository = gitHub.getRepository("kohsuke/test");
@@ -202,6 +235,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test create issue.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateIssue() throws IOException {
         GHUser u = getUser();
@@ -229,6 +267,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         o.close();
     }
 
+    /**
+     * Test create and list deployments.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateAndListDeployments() throws IOException {
         GHRepository repository = getTestRepository();
@@ -255,6 +298,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test get deployment statuses.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGetDeploymentStatuses() throws IOException {
         GHRepository repository = getTestRepository();
@@ -288,6 +336,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test get issues.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGetIssues() throws Exception {
         List<GHIssue> closedIssues = gitHub.getOrganization("hub4j")
@@ -298,6 +351,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(closedIssues.get(0));
     }
 
+    /**
+     * Test query issues.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testQueryIssues() throws IOException {
         final GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("testQueryIssues");
@@ -373,6 +431,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         return getTempRepository(GITHUB_API_TEST_REPO);
     }
 
+    /**
+     * Test list issues.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testListIssues() throws IOException {
         Iterable<GHIssue> closedIssues = gitHub.getOrganization("hub4j")
@@ -388,11 +451,21 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(x, greaterThan(150));
     }
 
+    /**
+     * Test rate limit.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testRateLimit() throws IOException {
         assertThat(gitHub.getRateLimit(), notNullValue());
     }
 
+    /**
+     * Test my organizations.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testMyOrganizations() throws IOException {
         Map<String, GHOrganization> org = gitHub.getMyOrganizations();
@@ -400,6 +473,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         // System.out.println(org);
     }
 
+    /**
+     * Test my organizations contain my teams.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testMyOrganizationsContainMyTeams() throws IOException {
         Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
@@ -409,6 +487,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(myOrganizations.keySet().containsAll(teams.keySet()), is(true));
     }
 
+    /**
+     * Test my teams should include myself.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testMyTeamsShouldIncludeMyself() throws IOException {
         Map<String, Set<GHTeam>> teams = gitHub.getMyTeams();
@@ -422,6 +505,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test user public organizations when there are some.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testUserPublicOrganizationsWhenThereAreSome() throws IOException {
         // kohsuke had some public org memberships at the time Wiremock recorded the GitHub API responses
@@ -432,6 +520,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(orgs.size(), greaterThan(0));
     }
 
+    /**
+     * Test user public organizations when there are none.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testUserPublicOrganizationsWhenThereAreNone() throws IOException {
         // bitwiseman had no public org memberships at the time Wiremock recorded the GitHub API responses
@@ -450,6 +543,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         return team.hasMember(gitHub.getMyself());
     }
 
+    /**
+     * Test fetching team from git hub instance throws exception.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @SuppressWarnings("deprecation")
     public void testFetchingTeamFromGitHubInstanceThrowsException() throws Exception {
@@ -459,6 +557,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThrows(UnsupportedOperationException.class, () -> gitHub.getTeam((int) teamByName.getId()));
     }
 
+    /**
+     * Test should fetch team from organization.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testShouldFetchTeamFromOrganization() throws Exception {
         GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
@@ -478,6 +581,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test fetch pull request.
+     *
+     * @throws Exception the exception
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testFetchPullRequest() throws Exception {
@@ -488,6 +596,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         r.getPullRequests(GHIssueState.OPEN);
     }
 
+    /**
+     * Test fetch pull request as list.
+     *
+     * @throws Exception the exception
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testFetchPullRequestAsList() throws Exception {
@@ -499,6 +612,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(prs, is(not(empty())));
     }
 
+    /**
+     * Test get app installations.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGetAppInstallations() throws Exception {
         // To generate test data user-to-server OAuth access token was used
@@ -513,6 +631,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(ghAppInstallation.getAccount().getLogin(), is("t0m4uk1991"));
     }
 
+    /**
+     * Test repo permissions.
+     *
+     * @throws Exception the exception
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testRepoPermissions() throws Exception {
@@ -525,6 +648,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(r.hasAdminAccess(), is(false));
     }
 
+    /**
+     * Test get myself.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGetMyself() throws Exception {
         GHMyself me = gitHub.getMyself();
@@ -535,6 +663,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(ghRepositories, is(not(emptyIterable())));
     }
 
+    /**
+     * Test public keys.
+     *
+     * @throws Exception the exception
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testPublicKeys() throws Exception {
@@ -542,12 +675,22 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(keys, is(not(empty())));
     }
 
+    /**
+     * Test org fork.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testOrgFork() throws Exception {
         cleanupRepository(GITHUB_API_TEST_ORG + "/rubywm");
         gitHub.getRepository("kohsuke/rubywm").forkTo(gitHub.getOrganization(GITHUB_API_TEST_ORG));
     }
 
+    /**
+     * Test get teams for repo.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGetTeamsForRepo() throws Exception {
         kohsuke();
@@ -556,6 +699,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 equalTo(2));
     }
 
+    /**
+     * Test membership.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testMembership() throws Exception {
         Set<String> members = gitHub.getOrganization(GITHUB_API_TEST_ORG)
@@ -564,12 +712,22 @@ public class AppTest extends AbstractGitHubWireMockTest {
         // System.out.println(members.contains("kohsuke"));
     }
 
+    /**
+     * Test member orgs.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testMemberOrgs() throws Exception {
         HashSet<GHOrganization> o = gitHub.getUser("kohsuke").getOrganizations();
         assertThat(o, hasItem(hasProperty("name", equalTo("CloudBees"))));
     }
 
+    /**
+     * Test org teams.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testOrgTeams() throws Exception {
         kohsuke();
@@ -581,6 +739,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(sz, lessThan(100));
     }
 
+    /**
+     * Test org team by name.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testOrgTeamByName() throws Exception {
         kohsuke();
@@ -588,6 +751,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(e, notNullValue());
     }
 
+    /**
+     * Test org team by slug.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testOrgTeamBySlug() throws Exception {
         kohsuke();
@@ -595,6 +763,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(e, notNullValue());
     }
 
+    /**
+     * Test commit.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCommit() throws Exception {
         GHCommit commit = gitHub.getUser("jenkinsci")
@@ -636,6 +809,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(t.getEntry("war").asTree(), notNullValue());
     }
 
+    /**
+     * Test list commits.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testListCommits() throws Exception {
         List<String> sha1 = new ArrayList<String>();
@@ -646,6 +824,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(sha1.size(), equalTo(1));
     }
 
+    /**
+     * Test branches.
+     *
+     * @throws Exception the exception
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testBranches() throws Exception {
@@ -653,6 +836,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         // System.out.println(b);
     }
 
+    /**
+     * Test commit comment.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCommitComment() throws Exception {
         GHRepository r = gitHub.getUser("jenkinsci").getRepository("jenkins");
@@ -664,6 +852,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test create commit comment.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCreateCommitComment() throws Exception {
         GHCommit commit = gitHub.getUser("kohsuke")
@@ -708,6 +901,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Try hook.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void tryHook() throws Exception {
         final GHOrganization o = gitHub.getOrganization(GITHUB_API_TEST_ORG);
@@ -775,6 +973,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test event api.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testEventApi() throws Exception {
         for (GHEventInfo ev : gitHub.getEvents()) {
@@ -793,6 +996,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test app.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testApp() throws IOException {
@@ -885,6 +1093,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         // System.out.println(hooks);
     }
 
+    /**
+     * Test org repositories.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testOrgRepositories() throws IOException {
         kohsuke();
@@ -895,6 +1108,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         // System.out.printf("%d repositories in %dms\n", repos.size(), end - start);
     }
 
+    /**
+     * Test organization.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testOrganization() throws IOException {
         kohsuke();
@@ -906,6 +1124,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         // t.add(labs.getRepository("xyz"));
     }
 
+    /**
+     * Test commit status.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCommitStatus() throws Exception {
         GHRepository r = gitHub.getRepository("hub4j/github-api");
@@ -923,6 +1146,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(state.getCreator().getLogin(), equalTo("kohsuke"));
     }
 
+    /**
+     * Test commit short info.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCommitShortInfo() throws Exception {
         GHRepository r = gitHub.getRepository("hub4j/github-api");
@@ -937,6 +1165,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 equalTo(1271650361L));
     }
 
+    /**
+     * Test pull request populate.
+     *
+     * @throws Exception the exception
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testPullRequestPopulate() throws Exception {
@@ -946,6 +1179,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(u.getName(), notNullValue());
     }
 
+    /**
+     * Test check membership.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCheckMembership() throws Exception {
         kohsuke();
@@ -960,6 +1198,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(j.hasPublicMember(b), is(false));
     }
 
+    /**
+     * Test ref.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testRef() throws IOException {
         GHRef mainRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/main");
@@ -967,6 +1210,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 equalTo(mockGitHub.apiServer().baseUrl() + "/repos/jenkinsci/jenkins/git/refs/heads/main"));
     }
 
+    /**
+     * Directory listing.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void directoryListing() throws IOException {
         List<GHContent> children = gitHub.getRepository("jenkinsci/jenkins").getDirectoryContent("core");
@@ -980,6 +1228,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test add deploy key.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testAddDeployKey() throws IOException {
@@ -1000,6 +1253,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test commit status context.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testCommitStatusContext() throws IOException {
@@ -1011,6 +1269,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test member pagenation.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testMemberPagenation() throws IOException {
@@ -1022,6 +1285,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(all, is(not(empty())));
     }
 
+    /**
+     * Test commit search.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCommitSearch() throws IOException {
         PagedSearchIterable<GHCommit> r = gitHub.searchCommits()
@@ -1036,6 +1304,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(firstCommit.getFiles(), is(not(empty())));
     }
 
+    /**
+     * Test issue search.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testIssueSearch() throws IOException {
         PagedSearchIterable<GHIssue> r = gitHub.searchIssues()
@@ -1053,6 +1326,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test readme.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test // issue #99
     public void testReadme() throws IOException {
         GHContent readme = gitHub.getRepository("hub4j-test-org/test-readme").getReadme();
@@ -1060,6 +1338,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat("This is a markdown readme.\n", equalTo(readme.getContent()));
     }
 
+    /**
+     * Test trees.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Ignore("Needs mocking check")
     @Test
     public void testTrees() throws IOException {
@@ -1074,6 +1357,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(foundReadme, is(true));
     }
 
+    /**
+     * Test trees recursive.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testTreesRecursive() throws IOException {
         GHTree mainTree = gitHub.getRepository("hub4j/github-api").getTreeRecursive("main", 1);
@@ -1097,6 +1385,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(foundThisFile, is(true));
     }
 
+    /**
+     * Test repo label.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testRepoLabel() throws IOException {
         cleanupLabel("test");
@@ -1206,6 +1499,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Cleanup label.
+     *
+     * @param name the name
+     */
     void cleanupLabel(String name) {
         if (mockGitHub.isUseProxy()) {
             try {
@@ -1217,6 +1515,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test subscribers.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testSubscribers() throws IOException {
         boolean bitwiseman = false;
@@ -1233,6 +1536,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(githubApiFound, is(true));
     }
 
+    /**
+     * Notifications.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void notifications() throws Exception {
         boolean found = false;
@@ -1265,6 +1573,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         gitHub.listNotifications().markAsRead();
     }
 
+    /**
+     * Check to string.
+     *
+     * @throws Exception the exception
+     */
     @Ignore("Needs mocking check")
     @Test
     public void checkToString() throws Exception {
@@ -1276,6 +1589,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         // System.out.println(r.getIssue(1));
     }
 
+    /**
+     * Reactions.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void reactions() throws Exception {
         GHIssue i = gitHub.getRepository("hub4j/github-api").getIssue(311);
@@ -1336,6 +1654,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(l.size(), equalTo(1));
     }
 
+    /**
+     * List org memberships.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void listOrgMemberships() throws Exception {
         GHMyself me = gitHub.getMyself();
@@ -1346,6 +1669,11 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Blob.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void blob() throws Exception {
         Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);

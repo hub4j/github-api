@@ -9,13 +9,21 @@ import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHGistUpdaterTest.
+ *
  * @author Martin van Zijl
  */
 public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
 
     private GHGist gist;
 
+    /**
+     * Sets the up.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Before
     public void setUp() throws IOException {
         GHGistBuilder builder = new GHGistBuilder(gitHub);
@@ -28,6 +36,11 @@ public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
                 .create();
     }
 
+    /**
+     * Clean up.
+     *
+     * @throws Exception the exception
+     */
     @After
     public void cleanUp() throws Exception {
         // Cleanup is only needed when proxying
@@ -38,6 +51,11 @@ public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
         gist.delete();
     }
 
+    /**
+     * Test git updater.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGitUpdater() throws Exception {
         GHGistUpdater updater = gist.update();

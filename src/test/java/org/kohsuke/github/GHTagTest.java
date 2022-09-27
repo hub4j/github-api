@@ -8,12 +8,19 @@ import java.io.IOException;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHTagTest.
  *
  * @author Martin van Zijl
  */
 public class GHTagTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Clean up tags.
+     *
+     * @throws Exception the exception
+     */
     @Before
     @After
     public void cleanUpTags() throws Exception {
@@ -33,6 +40,11 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test create tag.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCreateTag() throws Exception {
         GHRepository repo = getRepository();
@@ -58,6 +70,12 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
         assertThat(ref, notNullValue());
     }
 
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }

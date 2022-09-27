@@ -32,16 +32,18 @@ import java.net.URL;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHLicenseTest.
+ *
  * @author Duncan Dickinson
  */
 public class GHLicenseTest extends AbstractGitHubWireMockTest {
 
     /**
-     * Basic test to ensure that the list of licenses from {@link GitHub#listLicenses()} is returned
+     * Basic test to ensure that the list of licenses from {@link GitHub#listLicenses()} is returned.
      *
-     * @throws IOException
-     *             if test fails
+     * @throws IOException             if test fails
      */
     @Test
     public void listLicenses() throws IOException {
@@ -69,10 +71,10 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
 
     /**
      * Checks that the request for an individual license using {@link GitHub#getLicense(String)} returns expected values
-     * (not all properties are checked)
+     * (not all properties are checked).
      *
-     * @throws IOException
-     *             if test fails
+     * @return the license
+     * @throws IOException             if test fails
      */
     @Test
     public void getLicense() throws IOException {
@@ -97,10 +99,9 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
 
     /**
      * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)} and checks that the license is
-     * correct
+     * correct.
      *
-     * @throws IOException
-     *             if test failss
+     * @throws IOException             if test failss
      */
     @Test
     public void checkRepositoryLicense() throws IOException {
@@ -115,10 +116,9 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Accesses the 'atom/atom' repo using {@link GitHub#getRepository(String)} and checks that the license is correct
+     * Accesses the 'atom/atom' repo using {@link GitHub#getRepository(String)} and checks that the license is correct.
      *
-     * @throws IOException
-     *             if test fails
+     * @throws IOException             if test fails
      */
     @Test
     public void checkRepositoryLicenseAtom() throws IOException {
@@ -133,10 +133,9 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)} and checks that the license is correct
+     * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)} and checks that the license is correct.
      *
-     * @throws IOException
-     *             if test fails
+     * @throws IOException             if test fails
      */
     @Test
     public void checkRepositoryLicensePomes() throws IOException {
@@ -152,10 +151,9 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
 
     /**
      * Accesses the 'dedickinson/test-repo' repo using {@link GitHub#getRepository(String)} and checks that *no* license
-     * is returned as the repo doesn't have one
+     * is returned as the repo doesn't have one.
      *
-     * @throws IOException
-     *             if test fails
+     * @throws IOException             if test fails
      */
     @Test
     public void checkRepositoryWithoutLicense() throws IOException {
@@ -166,10 +164,9 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
 
     /**
      * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)} and then calls
-     * {@link GHRepository#getLicense()} and checks that certain properties are correct
+     * {@link GHRepository#getLicense()} and checks that certain properties are correct.
      *
-     * @throws IOException
-     *             if test fails
+     * @throws IOException             if test fails
      */
     @Test
     public void checkRepositoryFullLicense() throws IOException {
@@ -188,10 +185,9 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
 
     /**
      * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)} and then calls
-     * {@link GHRepository#getLicenseContent()} and checks that certain properties are correct
+     * {@link GHRepository#getLicenseContent()} and checks that certain properties are correct.
      *
-     * @throws IOException
-     *             if test fails
+     * @throws IOException             if test fails
      */
     @Test
     public void checkRepositoryLicenseContent() throws IOException {

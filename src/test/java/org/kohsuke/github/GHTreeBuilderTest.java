@@ -11,6 +11,10 @@ import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHTreeBuilderTest.
+ */
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     private static String REPO_NAME = "hub4j-test-org/GHTreeBuilderTest";
 
@@ -30,6 +34,11 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     private GHRef mainRef;
     private GHTreeBuilder treeBuilder;
 
+    /**
+     * Cleanup.
+     *
+     * @throws Exception the exception
+     */
     @Before
     @After
     public void cleanup() throws Exception {
@@ -47,6 +56,11 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Sets the up.
+     *
+     * @throws Exception the exception
+     */
     @Before
     public void setUp() throws Exception {
         repo = gitHub.getRepository(REPO_NAME);
@@ -55,6 +69,11 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         treeBuilder = repo.createTree().baseTree(mainTreeSha);
     }
 
+    /**
+     * Test text entry.
+     *
+     * @throws Exception the exception
+     */
     @Test
     @Ignore("It seems that GitHub no longer supports the 'content' parameter")
     public void testTextEntry() throws Exception {
@@ -67,6 +86,11 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         assertThat(getFileSize(PATH_README), equalTo(CONTENT_README.length()));
     }
 
+    /**
+     * Test sha entry.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testShaEntry() throws Exception {
         String dataSha1 = new GHBlobBuilder(repo).binaryContent(CONTENT_DATA1).create().getSha();
@@ -81,6 +105,11 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         assertThat(getFileSize(PATH_DATA2), equalTo((long) CONTENT_DATA2.length));
     }
 
+    /**
+     * Test add.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testAdd() throws Exception {
         treeBuilder.add(PATH_SCRIPT, CONTENT_SCRIPT, true);

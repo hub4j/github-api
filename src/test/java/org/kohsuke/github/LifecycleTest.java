@@ -12,7 +12,17 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LifecycleTest.
+ */
 public class LifecycleTest extends AbstractGitHubWireMockTest {
+    
+    /**
+     * Test create repository.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateRepository() throws IOException {
         Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);

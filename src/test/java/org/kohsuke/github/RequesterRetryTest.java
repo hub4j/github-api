@@ -37,7 +37,10 @@ import javax.net.ssl.SSLHandshakeException;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class RequesterRetryTest.
+ *
  * @author Victor Martinez
  */
 public class RequesterRetryTest extends AbstractGitHubWireMockTest {
@@ -46,13 +49,26 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
                                                                                 // class
     private static OutputStream logCapturingStream;
     private static StreamHandler customLogHandler;
+    
+    /** The connection. */
     HttpURLConnection connection;
+    
+    /** The base request count. */
     int baseRequestCount;
 
+    /**
+     * Instantiates a new requester retry test.
+     */
     public RequesterRetryTest() {
         useDefaultGitHub = false;
     }
 
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }
@@ -61,6 +77,9 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
+    /**
+     * Attach log capturer.
+     */
     @Before
     public void attachLogCapturer() {
         logCapturingStream = new ByteArrayOutputStream();
@@ -69,11 +88,22 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         Logger.getLogger(OkHttpClient.class.getName()).addHandler(customLogHandler);
     }
 
+    /**
+     * Gets the test captured log.
+     *
+     * @return the test captured log
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String getTestCapturedLog() throws IOException {
         customLogHandler.flush();
         return logCapturingStream.toString();
     }
 
+    /**
+     * Reset test captured log.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void resetTestCapturedLog() throws IOException {
         Logger.getLogger(GitHubClient.class.getName()).removeHandler(customLogHandler);
         Logger.getLogger(OkHttpClient.class.getName()).removeHandler(customLogHandler);
@@ -81,6 +111,11 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         attachLogCapturer();
     }
 
+    /**
+     * Test git hub is api url valid.
+     *
+     * @throws Exception the exception
+     */
     @Ignore("Used okhttp3 and this to verify connection closing. Too flaky for CI system.")
     @Test
     public void testGitHubIsApiUrlValid() throws Exception {
@@ -109,6 +144,11 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         assertThat(capturedLog, not(containsString("leaked")));
     }
 
+    /**
+     * Test socket connection and retry.
+     *
+     * @throws Exception the exception
+     */
     // Issue #539
     @Test
     public void testSocketConnectionAndRetry() throws Exception {
@@ -139,6 +179,11 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 6));
     }
 
+    /**
+     * Test socket connection and retry status code.
+     *
+     * @throws Exception the exception
+     */
     // Issue #539
     @Test
     public void testSocketConnectionAndRetry_StatusCode() throws Exception {
@@ -171,6 +216,11 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 6));
     }
 
+    /**
+     * Test socket connection and retry success.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testSocketConnectionAndRetry_Success() throws Exception {
         // Only implemented for HttpURLConnection connectors
@@ -224,6 +274,11 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 6));
     }
 
+    /**
+     * Test response code failure exceptions.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testResponseCodeFailureExceptions() throws Exception {
         // No retry for these Exceptions
@@ -271,6 +326,11 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test input stream failure exceptions.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testInputStreamFailureExceptions() throws Exception {
         // No retry for these Exceptions
@@ -330,6 +390,11 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 1));
     }
 
+    /**
+     * Test response code connection exceptions.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testResponseCodeConnectionExceptions() throws Exception {
         // Because the test throws at the very start of getResponseCode, there is only one connection for 3 retries
@@ -352,6 +417,11 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         runConnectionExceptionStatusCodeTest(connector, 1);
     }
 
+    /**
+     * Test input stream connection exceptions.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testInputStreamConnectionExceptions() throws Exception {
         // InputStream is where most exceptions get thrown whether connection or simple FNF
@@ -422,8 +492,18 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * The Class ResponseCodeThrowingHttpConnector.
+     *
+     * @param <E> the element type
+     */
     class ResponseCodeThrowingHttpConnector<E extends IOException> extends ImpatientHttpConnector {
 
+        /**
+         * Instantiates a new response code throwing http connector.
+         *
+         * @param thrower the thrower
+         */
         ResponseCodeThrowingHttpConnector(final Thrower<E> thrower) {
             super(new HttpConnector() {
                 final int[] count = { 0 };
@@ -454,8 +534,18 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * The Class InputStreamThrowingHttpConnector.
+     *
+     * @param <E> the element type
+     */
     class InputStreamThrowingHttpConnector<E extends IOException> extends ImpatientHttpConnector {
 
+        /**
+         * Instantiates a new input stream throwing http connector.
+         *
+         * @param thrower the thrower
+         */
         InputStreamThrowingHttpConnector(final Thrower<E> thrower) {
             super(new HttpConnector() {
                 final int[] count = { 0 };
@@ -486,8 +576,19 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * The Interface Thrower.
+     *
+     * @param <E> the element type
+     */
     @FunctionalInterface
     public interface Thrower<E extends Throwable> {
+        
+        /**
+         * Throw error.
+         *
+         * @throws E the e
+         */
         void throwError() throws E;
     }
 
@@ -497,226 +598,522 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
      */
     static class HttpURLConnectionWrapper extends HttpURLConnection {
 
+        /** The http URL connection. */
         protected final HttpURLConnection httpURLConnection;
 
+        /**
+         * Instantiates a new http URL connection wrapper.
+         *
+         * @param url the url
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         HttpURLConnectionWrapper(URL url) throws IOException {
             super(new URL("http://nonexistant"));
             httpURLConnection = (HttpURLConnection) url.openConnection();
         }
 
+        /**
+         * Connect.
+         *
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public void connect() throws IOException {
             httpURLConnection.connect();
         }
 
+        /**
+         * Sets the connect timeout.
+         *
+         * @param timeout the new connect timeout
+         */
         public void setConnectTimeout(int timeout) {
             httpURLConnection.setConnectTimeout(timeout);
         }
 
+        /**
+         * Gets the connect timeout.
+         *
+         * @return the connect timeout
+         */
         public int getConnectTimeout() {
             return httpURLConnection.getConnectTimeout();
         }
 
+        /**
+         * Sets the read timeout.
+         *
+         * @param timeout the new read timeout
+         */
         public void setReadTimeout(int timeout) {
             httpURLConnection.setReadTimeout(timeout);
         }
 
+        /**
+         * Gets the read timeout.
+         *
+         * @return the read timeout
+         */
         public int getReadTimeout() {
             return httpURLConnection.getReadTimeout();
         }
 
+        /**
+         * Gets the url.
+         *
+         * @return the url
+         */
         public URL getURL() {
             return httpURLConnection.getURL();
         }
 
+        /**
+         * Gets the content length.
+         *
+         * @return the content length
+         */
         public int getContentLength() {
             return httpURLConnection.getContentLength();
         }
 
+        /**
+         * Gets the content length long.
+         *
+         * @return the content length long
+         */
         public long getContentLengthLong() {
             return httpURLConnection.getContentLengthLong();
         }
 
+        /**
+         * Gets the content type.
+         *
+         * @return the content type
+         */
         public String getContentType() {
             return httpURLConnection.getContentType();
         }
 
+        /**
+         * Gets the content encoding.
+         *
+         * @return the content encoding
+         */
         public String getContentEncoding() {
             return httpURLConnection.getContentEncoding();
         }
 
+        /**
+         * Gets the expiration.
+         *
+         * @return the expiration
+         */
         public long getExpiration() {
             return httpURLConnection.getExpiration();
         }
 
+        /**
+         * Gets the date.
+         *
+         * @return the date
+         */
         public long getDate() {
             return httpURLConnection.getDate();
         }
 
+        /**
+         * Gets the last modified.
+         *
+         * @return the last modified
+         */
         public long getLastModified() {
             return httpURLConnection.getLastModified();
         }
 
+        /**
+         * Gets the header field.
+         *
+         * @param name the name
+         * @return the header field
+         */
         public String getHeaderField(String name) {
             return httpURLConnection.getHeaderField(name);
         }
 
+        /**
+         * Gets the header fields.
+         *
+         * @return the header fields
+         */
         public Map<String, List<String>> getHeaderFields() {
             return httpURLConnection.getHeaderFields();
         }
 
+        /**
+         * Gets the header field int.
+         *
+         * @param name the name
+         * @param Default the default
+         * @return the header field int
+         */
         public int getHeaderFieldInt(String name, int Default) {
             return httpURLConnection.getHeaderFieldInt(name, Default);
         }
 
+        /**
+         * Gets the header field long.
+         *
+         * @param name the name
+         * @param Default the default
+         * @return the header field long
+         */
         public long getHeaderFieldLong(String name, long Default) {
             return httpURLConnection.getHeaderFieldLong(name, Default);
         }
 
+        /**
+         * Gets the content.
+         *
+         * @return the content
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public Object getContent() throws IOException {
             return httpURLConnection.getContent();
         }
 
+        /**
+         * Gets the content.
+         *
+         * @param classes the classes
+         * @return the content
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         @Override
         public Object getContent(Class[] classes) throws IOException {
             return httpURLConnection.getContent(classes);
         }
 
+        /**
+         * Gets the input stream.
+         *
+         * @return the input stream
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public InputStream getInputStream() throws IOException {
             return httpURLConnection.getInputStream();
         }
 
+        /**
+         * Gets the output stream.
+         *
+         * @return the output stream
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public OutputStream getOutputStream() throws IOException {
             return httpURLConnection.getOutputStream();
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         public String toString() {
             return httpURLConnection.toString();
         }
 
+        /**
+         * Sets the do input.
+         *
+         * @param doinput the new do input
+         */
         public void setDoInput(boolean doinput) {
             httpURLConnection.setDoInput(doinput);
         }
 
+        /**
+         * Gets the do input.
+         *
+         * @return the do input
+         */
         public boolean getDoInput() {
             return httpURLConnection.getDoInput();
         }
 
+        /**
+         * Sets the do output.
+         *
+         * @param dooutput the new do output
+         */
         public void setDoOutput(boolean dooutput) {
             httpURLConnection.setDoOutput(dooutput);
         }
 
+        /**
+         * Gets the do output.
+         *
+         * @return the do output
+         */
         public boolean getDoOutput() {
             return httpURLConnection.getDoOutput();
         }
 
+        /**
+         * Sets the allow user interaction.
+         *
+         * @param allowuserinteraction the new allow user interaction
+         */
         public void setAllowUserInteraction(boolean allowuserinteraction) {
             httpURLConnection.setAllowUserInteraction(allowuserinteraction);
         }
 
+        /**
+         * Gets the allow user interaction.
+         *
+         * @return the allow user interaction
+         */
         public boolean getAllowUserInteraction() {
             return httpURLConnection.getAllowUserInteraction();
         }
 
+        /**
+         * Sets the use caches.
+         *
+         * @param usecaches the new use caches
+         */
         public void setUseCaches(boolean usecaches) {
             httpURLConnection.setUseCaches(usecaches);
         }
 
+        /**
+         * Gets the use caches.
+         *
+         * @return the use caches
+         */
         public boolean getUseCaches() {
             return httpURLConnection.getUseCaches();
         }
 
+        /**
+         * Sets the if modified since.
+         *
+         * @param ifmodifiedsince the new if modified since
+         */
         public void setIfModifiedSince(long ifmodifiedsince) {
             httpURLConnection.setIfModifiedSince(ifmodifiedsince);
         }
 
+        /**
+         * Gets the if modified since.
+         *
+         * @return the if modified since
+         */
         public long getIfModifiedSince() {
             return httpURLConnection.getIfModifiedSince();
         }
 
+        /**
+         * Gets the default use caches.
+         *
+         * @return the default use caches
+         */
         public boolean getDefaultUseCaches() {
             return httpURLConnection.getDefaultUseCaches();
         }
 
+        /**
+         * Sets the default use caches.
+         *
+         * @param defaultusecaches the new default use caches
+         */
         public void setDefaultUseCaches(boolean defaultusecaches) {
             httpURLConnection.setDefaultUseCaches(defaultusecaches);
         }
 
+        /**
+         * Sets the request property.
+         *
+         * @param key the key
+         * @param value the value
+         */
         public void setRequestProperty(String key, String value) {
             httpURLConnection.setRequestProperty(key, value);
         }
 
+        /**
+         * Adds the request property.
+         *
+         * @param key the key
+         * @param value the value
+         */
         public void addRequestProperty(String key, String value) {
             httpURLConnection.addRequestProperty(key, value);
         }
 
+        /**
+         * Gets the request property.
+         *
+         * @param key the key
+         * @return the request property
+         */
         public String getRequestProperty(String key) {
             return httpURLConnection.getRequestProperty(key);
         }
 
+        /**
+         * Gets the request properties.
+         *
+         * @return the request properties
+         */
         public Map<String, List<String>> getRequestProperties() {
             return httpURLConnection.getRequestProperties();
         }
 
+        /**
+         * Gets the header field key.
+         *
+         * @param n the n
+         * @return the header field key
+         */
         public String getHeaderFieldKey(int n) {
             return httpURLConnection.getHeaderFieldKey(n);
         }
 
+        /**
+         * Sets the fixed length streaming mode.
+         *
+         * @param contentLength the new fixed length streaming mode
+         */
         public void setFixedLengthStreamingMode(int contentLength) {
             httpURLConnection.setFixedLengthStreamingMode(contentLength);
         }
 
+        /**
+         * Sets the fixed length streaming mode.
+         *
+         * @param contentLength the new fixed length streaming mode
+         */
         public void setFixedLengthStreamingMode(long contentLength) {
             httpURLConnection.setFixedLengthStreamingMode(contentLength);
         }
 
+        /**
+         * Sets the chunked streaming mode.
+         *
+         * @param chunklen the new chunked streaming mode
+         */
         public void setChunkedStreamingMode(int chunklen) {
             httpURLConnection.setChunkedStreamingMode(chunklen);
         }
 
+        /**
+         * Gets the header field.
+         *
+         * @param n the n
+         * @return the header field
+         */
         public String getHeaderField(int n) {
             return httpURLConnection.getHeaderField(n);
         }
 
+        /**
+         * Sets the instance follow redirects.
+         *
+         * @param followRedirects the new instance follow redirects
+         */
         public void setInstanceFollowRedirects(boolean followRedirects) {
             httpURLConnection.setInstanceFollowRedirects(followRedirects);
         }
 
+        /**
+         * Gets the instance follow redirects.
+         *
+         * @return the instance follow redirects
+         */
         public boolean getInstanceFollowRedirects() {
             return httpURLConnection.getInstanceFollowRedirects();
         }
 
+        /**
+         * Sets the request method.
+         *
+         * @param method the new request method
+         * @throws ProtocolException the protocol exception
+         */
         public void setRequestMethod(String method) throws ProtocolException {
             httpURLConnection.setRequestMethod(method);
         }
 
+        /**
+         * Gets the request method.
+         *
+         * @return the request method
+         */
         public String getRequestMethod() {
             return httpURLConnection.getRequestMethod();
         }
 
+        /**
+         * Gets the response code.
+         *
+         * @return the response code
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public int getResponseCode() throws IOException {
             return httpURLConnection.getResponseCode();
         }
 
+        /**
+         * Gets the response message.
+         *
+         * @return the response message
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public String getResponseMessage() throws IOException {
             return httpURLConnection.getResponseMessage();
         }
 
+        /**
+         * Gets the header field date.
+         *
+         * @param name the name
+         * @param Default the default
+         * @return the header field date
+         */
         public long getHeaderFieldDate(String name, long Default) {
             return httpURLConnection.getHeaderFieldDate(name, Default);
         }
 
+        /**
+         * Disconnect.
+         */
         public void disconnect() {
             httpURLConnection.disconnect();
         }
 
+        /**
+         * Using proxy.
+         *
+         * @return true, if successful
+         */
         public boolean usingProxy() {
             return httpURLConnection.usingProxy();
         }
 
+        /**
+         * Gets the permission.
+         *
+         * @return the permission
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public Permission getPermission() throws IOException {
             return httpURLConnection.getPermission();
         }
 
+        /**
+         * Gets the error stream.
+         *
+         * @return the error stream
+         */
         public InputStream getErrorStream() {
             return httpURLConnection.getErrorStream();
         }

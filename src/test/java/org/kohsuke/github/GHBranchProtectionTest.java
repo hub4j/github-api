@@ -8,6 +8,10 @@ import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHBranchProtectionTest.
+ */
 public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     private static final String BRANCH = "main";
     private static final String BRANCH_REF = "heads/" + BRANCH;
@@ -16,12 +20,22 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
 
     private GHRepository repo;
 
+    /**
+     * Sets the up.
+     *
+     * @throws Exception the exception
+     */
     @Before
     public void setUp() throws Exception {
         repo = getTempRepository();
         branch = repo.getBranch(BRANCH);
     }
 
+    /**
+     * Test enable branch protections.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testEnableBranchProtections() throws Exception {
         // team/user restrictions require an organization repo to test against
@@ -58,12 +72,22 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
         assertThat(enforceAdmins.isEnabled(), is(true));
     }
 
+    /**
+     * Test enable protection only.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testEnableProtectionOnly() throws Exception {
         branch.enableProtection().enable();
         assertThat(repo.getBranch(BRANCH).isProtected(), is(true));
     }
 
+    /**
+     * Test disable protection only.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testDisableProtectionOnly() throws Exception {
         GHBranchProtection protection = branch.enableProtection().enable();
@@ -72,6 +96,11 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
         assertThat(repo.getBranch(BRANCH).isProtected(), is(false));
     }
 
+    /**
+     * Test enable require reviews only.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testEnableRequireReviewsOnly() throws Exception {
         GHBranchProtection protection = branch.enableProtection().requireReviews().enable();
@@ -92,6 +121,11 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
         assertThat(protection.getRequiredReviews().getRequiredReviewers(), equalTo(1));
     }
 
+    /**
+     * Test signed commits.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testSignedCommits() throws Exception {
         GHBranchProtection protection = branch.enableProtection().enable();
@@ -105,6 +139,11 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
         assertThat(protection.getRequiredSignatures(), is(false));
     }
 
+    /**
+     * Test get protection.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGetProtection() throws Exception {
         GHBranchProtection protection = branch.enableProtection().enable();

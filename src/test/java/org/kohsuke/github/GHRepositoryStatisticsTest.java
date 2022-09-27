@@ -8,11 +8,24 @@ import java.util.NoSuchElementException;
 
 import static org.hamcrest.Matchers.equalTo;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHRepositoryStatisticsTest.
+ */
 public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
+    /** The max iterations. */
     public static int MAX_ITERATIONS = 3;
+    
+    /** The sleep interval. */
     public static int SLEEP_INTERVAL = 5000;
 
+    /**
+     * Test contributor stats.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws InterruptedException the interrupted exception
+     */
     @Test
     public void testContributorStats() throws IOException, InterruptedException {
         // get the statistics
@@ -62,6 +75,12 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         assertThat("Did not find author " + authorLogin, developerFound);
     }
 
+    /**
+     * Test commit activity.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws InterruptedException the interrupted exception
+     */
     @Test
     @SuppressWarnings("SleepWhileInLoop")
     public void testCommitActivity() throws IOException, InterruptedException {
@@ -107,6 +126,12 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         assertThat("Could not find week starting 1546128000", foundWeek);
     }
 
+    /**
+     * Test code frequency.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws InterruptedException the interrupted exception
+     */
     @Test
     @SuppressWarnings("SleepWhileInLoop")
     public void testCodeFrequency() throws IOException, InterruptedException {
@@ -144,6 +169,12 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         assertThat("Could not find week starting 1535241600", foundWeek);
     }
 
+    /**
+     * Test participation.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws InterruptedException the interrupted exception
+     */
     @Test
     public void testParticipation() throws IOException, InterruptedException {
         // get the statistics
@@ -174,6 +205,12 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         // The values depend on who is running the test.
     }
 
+    /**
+     * Test punch card.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws InterruptedException the interrupted exception
+     */
     @Test
     @SuppressWarnings("SleepWhileInLoop")
     public void testPunchCard() throws IOException, InterruptedException {
@@ -210,6 +247,12 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         assertThat("Hour 10 for Day 2 not found.", hourFound);
     }
 
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }

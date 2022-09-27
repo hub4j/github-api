@@ -12,12 +12,26 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHOrganizationTest.
+ */
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
+    /** The Constant GITHUB_API_TEST. */
     public static final String GITHUB_API_TEST = "github-api-test";
+    
+    /** The Constant GITHUB_API_TEMPLATE_TEST. */
     public static final String GITHUB_API_TEMPLATE_TEST = "github-api-template-test";
+    
+    /** The Constant TEAM_NAME_CREATE. */
     public static final String TEAM_NAME_CREATE = "create-team-test";
 
+    /**
+     * Clean up team.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Before
     @After
     public void cleanUpTeam() throws IOException {
@@ -34,6 +48,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         getNonRecordingGitHub().getOrganization(GITHUB_API_TEST_ORG).enableOrganizationProjects(true);
     }
 
+    /**
+     * Test create repository.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateRepository() throws IOException {
         cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
@@ -48,6 +67,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(repository, notNullValue());
     }
 
+    /**
+     * Test create repository with auto initialization.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateRepositoryWithAutoInitialization() throws IOException {
         cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
@@ -63,6 +87,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(repository.getReadme(), notNullValue());
     }
 
+    /**
+     * Test create repository with parameter is template.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateRepositoryWithParameterIsTemplate() throws IOException {
         cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEMPLATE_TEST);
@@ -100,6 +129,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test create repository with template.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateRepositoryWithTemplate() throws IOException {
         cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
@@ -115,6 +149,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test invite user.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testInviteUser() throws IOException {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
@@ -136,6 +175,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // assertTrue(org.hasMember(user));
     }
 
+    /**
+     * Test list members with filter.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testListMembersWithFilter() throws IOException {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
@@ -160,6 +204,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                         "timja"));
     }
 
+    /**
+     * Test list members with role.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testListMembersWithRole() throws IOException {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
@@ -184,6 +233,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                         "timja"));
     }
 
+    /**
+     * Test create team with repo access.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateTeamWithRepoAccess() throws IOException {
         String REPO_NAME = "github-api";
@@ -197,6 +251,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(team.getPermission(), equalTo(Permission.PUSH.toString().toLowerCase()));
     }
 
+    /**
+     * Test create team with null perm.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCreateTeamWithNullPerm() throws Exception {
         String REPO_NAME = "github-api";
@@ -219,6 +278,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                 equalTo(Permission.PULL.toString().toLowerCase()));
     }
 
+    /**
+     * Test create team with repo perm.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCreateTeamWithRepoPerm() throws Exception {
         String REPO_NAME = "github-api";
@@ -242,6 +306,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test create team with repo role.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateTeamWithRepoRole() throws IOException {
         String REPO_NAME = "github-api";
@@ -266,6 +335,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // equalTo(role.toString()));
     }
 
+    /**
+     * Test create team.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateTeam() throws IOException {
         String REPO_NAME = "github-api";
@@ -280,6 +354,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(team.getPermission(), equalTo(DEFAULT_PERMISSION));
     }
 
+    /**
+     * Test create visible team.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateVisibleTeam() throws IOException {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
@@ -288,6 +367,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(team.getPrivacy(), equalTo(GHTeam.Privacy.CLOSED));
     }
 
+    /**
+     * Test create all args team.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateAllArgsTeam() throws IOException {
         String REPO_NAME = "github-api";
@@ -304,6 +388,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(team.getPrivacy(), equalTo(GHTeam.Privacy.CLOSED));
     }
 
+    /**
+     * Test are organization projects enabled.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testAreOrganizationProjectsEnabled() throws IOException {
         // Arrange
@@ -316,6 +405,11 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(result, is(true));
     }
 
+    /**
+     * Test enable organization projects.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testEnableOrganizationProjects() throws IOException {
         // Arrange

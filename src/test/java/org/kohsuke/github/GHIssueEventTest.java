@@ -8,11 +8,19 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHIssueEventTest.
+ *
  * @author Martin van Zijl
  */
 public class GHIssueEventTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Test events for single issue.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testEventsForSingleIssue() throws Exception {
         // Create the issue.
@@ -40,6 +48,11 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
         issue.close();
     }
 
+    /**
+     * Test issue review requested event.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testIssueReviewRequestedEvent() throws Exception {
         // Create the PR.
@@ -65,6 +78,11 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
         pullRequest.close();
     }
 
+    /**
+     * Test events for issue rename.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testEventsForIssueRename() throws Exception {
         // Create the issue.
@@ -99,6 +117,11 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
         issue.close();
     }
 
+    /**
+     * Test repository events.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testRepositoryEvents() throws Exception {
         GHRepository repo = getRepository();
@@ -113,6 +136,12 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }

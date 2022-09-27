@@ -18,15 +18,24 @@ import java.util.Properties;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Unit test for {@link GitHub}.
  */
 public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Instantiates a new git hub connection test.
+     */
     public GitHubConnectionTest() {
         useDefaultGitHub = false;
     }
 
+    /**
+     * Test offline.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testOffline() throws Exception {
         GitHub hub = GitHub.offline();
@@ -41,6 +50,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test git hub server with http.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGitHubServerWithHttp() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("http://enterprise.kohsuke.org/api/v3", "bogus", "bogus");
@@ -48,6 +62,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
                 equalTo("http://enterprise.kohsuke.org/api/v3/test"));
     }
 
+    /**
+     * Test git hub server with https.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGitHubServerWithHttps() throws Exception {
         GitHub hub = GitHub.connectToEnterprise("https://enterprise.kohsuke.org/api/v3", "bogus", "bogus");
@@ -55,6 +74,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
                 equalTo("https://enterprise.kohsuke.org/api/v3/test"));
     }
 
+    /**
+     * Test git hub server without server.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGitHubServerWithoutServer() throws Exception {
         GitHub hub = GitHub.connectUsingPassword("kohsuke", "bogus");
@@ -62,6 +86,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
                 equalTo("https://api.github.com/test"));
     }
 
+    /**
+     * Test git hub builder from environment.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGitHubBuilderFromEnvironment() throws IOException {
         // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
@@ -106,6 +135,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test git hub builder from custom environment.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGitHubBuilderFromCustomEnvironment() throws IOException {
         // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
@@ -143,6 +177,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
     }
 
+    /**
+     * Test git hub builder from credentials with environment.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGitHubBuilderFromCredentialsWithEnvironment() throws IOException {
         // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
@@ -187,6 +226,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         assertThat(((UserAuthorizationProvider) builder.authorizationProvider).getLogin(), equalTo("bogus login"));
     }
 
+    /**
+     * Test git hub builder from credentials with property file.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGitHubBuilderFromCredentialsWithPropertyFile() throws IOException {
         // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
@@ -266,6 +310,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         return new File("target").getAbsolutePath();
     }
 
+    /**
+     * Test anonymous.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testAnonymous() throws IOException {
         // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
@@ -284,6 +333,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         assertThat(builder.authorizationProvider, sameInstance(AuthorizationProvider.ANONYMOUS));
     }
 
+    /**
+     * Test github builder with app installation token.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGithubBuilderWithAppInstallationToken() throws Exception {
 
@@ -299,6 +353,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         assertThat(github.getClient().getLogin(), is(emptyString()));
     }
 
+    /**
+     * Test git hub is api url valid.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGitHubIsApiUrlValid() throws IOException {
         // NOTE: We cannot test connectAnonymously on a general basis because it can hang if
@@ -327,6 +386,11 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test git hub O auth user query.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGitHubOAuthUserQuery() throws IOException {
         snapshotNotAllowed();

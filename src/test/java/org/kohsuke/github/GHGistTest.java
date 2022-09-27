@@ -6,10 +6,19 @@ import java.io.FileNotFoundException;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHGistTest.
+ *
  * @author Kohsuke Kawaguchi
  */
 public class GHGistTest extends AbstractGitHubWireMockTest {
+    
+    /**
+     * Lifecycle test.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void lifecycleTest() throws Exception {
         // CRUD operation
@@ -96,6 +105,11 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Star test.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void starTest() throws Exception {
         GHGist gist = gitHub.getGist("9903708");
@@ -126,6 +140,11 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Gist file.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void gistFile() throws Exception {
         GHGist gist = gitHub.getGist("9903708");

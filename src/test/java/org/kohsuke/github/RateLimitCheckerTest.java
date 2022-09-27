@@ -8,6 +8,7 @@ import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Test showing the behavior of the {@link GitHubRateLimitChecker} and {@link RateLimitChecker.LiteralValue}.
  *
@@ -16,18 +17,34 @@ import static org.hamcrest.CoreMatchers.*;
  */
 public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
 
+    /** The rate limit. */
     GHRateLimit rateLimit = null;
+    
+    /** The previous limit. */
     GHRateLimit previousLimit = null;
 
+    /**
+     * Instantiates a new rate limit checker test.
+     */
     public RateLimitCheckerTest() {
         useDefaultGitHub = false;
     }
 
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
     @Override
     protected WireMockConfiguration getWireMockOptions() {
         return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
+    /**
+     * Test git hub rate limit.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGitHubRateLimit() throws Exception {
         // Customized response that templates the date to keep things working
@@ -84,6 +101,9 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit.getCore().getRemaining(), equalTo(4601));
     }
 
+    /**
+     * Update test rate limit.
+     */
     protected void updateTestRateLimit() {
         previousLimit = rateLimit;
         rateLimit = gitHub.lastRateLimit();

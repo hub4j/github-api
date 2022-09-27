@@ -16,11 +16,19 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHHookTest.
+ *
  * @author Kanstantsin Shautsou
  */
 public class GHHookTest {
 
+    /**
+     * Expose responce headers.
+     *
+     * @throws Exception the exception
+     */
     @Ignore
     @Test
     public void exposeResponceHeaders() throws Exception {

@@ -10,18 +10,31 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHDiscussionTest.
+ *
  * @author Charles Moulliard
  */
 public class GHDiscussionTest extends AbstractGitHubWireMockTest {
     private final String TEAM_SLUG = "dummy-team";
     private GHTeam team;
 
+    /**
+     * Sets the up.
+     *
+     * @throws Exception the exception
+     */
     @Before
     public void setUp() throws Exception {
         team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(TEAM_SLUG);
     }
 
+    /**
+     * Cleanup discussions.
+     *
+     * @throws Exception the exception
+     */
     @After
     public void cleanupDiscussions() throws Exception {
         // only need to clean up if we're pointing to the live site
@@ -34,6 +47,11 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test created discussion.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreatedDiscussion() throws IOException {
         GHDiscussion discussion = team.createDiscussion("Some Discussion").body("This is a public discussion").done();
@@ -73,6 +91,11 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test get and edit discussion.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGetAndEditDiscussion() throws IOException {
         GHDiscussion created = team.createDiscussion("Some Discussion").body("This is a test discussion").done();
@@ -116,6 +139,11 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test list discussion.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testListDiscussion() throws IOException {
         team.createDiscussion("Some Discussion A").body("This is a test discussion").done();
@@ -126,6 +154,11 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
         assertThat(all.size(), equalTo(3));
     }
 
+    /**
+     * Test to delete discussion.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Test
     public void testToDeleteDiscussion() throws IOException {
         GHDiscussion discussion = team.createDiscussion("Some Discussion").body("This is a test discussion").done();

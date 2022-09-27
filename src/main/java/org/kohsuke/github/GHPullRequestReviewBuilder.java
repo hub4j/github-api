@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builds up a creation of new {@link GHPullRequestReview}.
  *
@@ -15,6 +16,11 @@ public class GHPullRequestReviewBuilder {
     private final Requester builder;
     private final List<DraftReviewComment> comments = new ArrayList<DraftReviewComment>();
 
+    /**
+     * Instantiates a new GH pull request review builder.
+     *
+     * @param pr the pr
+     */
     GHPullRequestReviewBuilder(GHPullRequest pr) {
         this.pr = pr;
         this.builder = pr.root().createRequest();

@@ -8,7 +8,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GitCommit.
+ *
  * @author Emily Xia-Reinert
  * @see GHContentUpdateResponse#getCommit() GHContentUpdateResponse#getCommit()
  */
@@ -24,14 +27,31 @@ public class GitCommit {
 
     private GHVerification verification;
 
+    /**
+     * The Class Tree.
+     */
     static class Tree {
+        
+        /** The url. */
         String url;
+        
+        /** The sha. */
         String sha;
 
+        /**
+         * Gets the url.
+         *
+         * @return the url
+         */
         public String getUrl() {
             return url;
         }
 
+        /**
+         * Gets the sha.
+         *
+         * @return the sha
+         */
         public String getSha() {
             return sha;
         }
@@ -42,10 +62,18 @@ public class GitCommit {
 
     private List<GHCommit.Parent> parents;
 
+    /**
+     * Instantiates a new git commit.
+     */
     public GitCommit() {
         // empty constructor for Jackson binding
     };
 
+    /**
+     * Instantiates a new git commit.
+     *
+     * @param commit the commit
+     */
     GitCommit(GitCommit commit) {
         // copy constructor used to cast to GitCommit.ShortInfo and from there
         // to GHCommit, for GHContentUpdateResponse bridge method to GHCommit
@@ -179,23 +207,48 @@ public class GitCommit {
         return verification;
     }
 
+    /**
+     * Gets the tree.
+     *
+     * @return the tree
+     */
     Tree getTree() {
         return tree;
     }
 
+    /**
+     * Gets the tree SHA 1.
+     *
+     * @return the tree SHA 1
+     */
     public String getTreeSHA1() {
         return tree.getSha();
     }
 
+    /**
+     * Gets the tree url.
+     *
+     * @return the tree url
+     */
     public String getTreeUrl() {
         return tree.getUrl();
     }
 
+    /**
+     * Gets the parents.
+     *
+     * @return the parents
+     */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
     List<GHCommit.Parent> getParents() {
         return parents;
     }
 
+    /**
+     * Gets the parent SHA 1 s.
+     *
+     * @return the parent SHA 1 s
+     */
     public List<String> getParentSHA1s() {
         if (parents == null || parents.size() == 0)
             return Collections.emptyList();
@@ -212,6 +265,12 @@ public class GitCommit {
         };
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param owner the owner
+     * @return the git commit
+     */
     GitCommit wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;

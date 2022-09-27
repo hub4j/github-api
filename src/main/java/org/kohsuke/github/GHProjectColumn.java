@@ -8,17 +8,26 @@ import java.net.URL;
 
 import static org.kohsuke.github.internal.Previews.INERTIA;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHProjectColumn.
  *
  * @author Gunnar Skjold
  */
 public class GHProjectColumn extends GHObject {
+    
+    /** The project. */
     protected GHProject project;
 
     private String name;
     private String project_url;
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public URL getHtmlUrl() throws IOException {
         return null;

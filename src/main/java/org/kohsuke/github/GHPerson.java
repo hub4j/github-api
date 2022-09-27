@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+// TODO: Auto-generated Javadoc
 /**
  * Common part of {@link GHUser} and {@link GHOrganization}.
  *
@@ -18,15 +19,24 @@ import java.util.TreeMap;
  */
 public abstract class GHPerson extends GHObject {
 
+    /** The avatar url. */
     // core data fields that exist even for "small" user data (such as the user info in pull request)
     protected String login, avatar_url;
 
+    /** The twitter username. */
     // other fields (that only show up in full data)
     protected String location, blog, email, bio, name, company, type, twitter_username;
+    
+    /** The html url. */
     protected String html_url;
+    
+    /** The public gists. */
     protected int followers, following, public_repos, public_gists;
+    
+    /** The hireable. */
     protected boolean site_admin, hireable;
 
+    /** The total private repos. */
     // other fields (that only show up in full data) that require privileged scope
     protected Integer total_private_repos;
 
@@ -159,7 +169,7 @@ public abstract class GHPerson extends GHObject {
     public abstract PagedIterable<GHEventInfo> listEvents() throws IOException;
 
     /**
-     * Gravatar ID of this user, like 0cb9832a01c22c083390f3c5dcb64105
+     * Gravatar ID of this user, like 0cb9832a01c22c083390f3c5dcb64105.
      *
      * @return the gravatar id
      * @deprecated No longer available in the v3 API.
@@ -179,7 +189,7 @@ public abstract class GHPerson extends GHObject {
     }
 
     /**
-     * Gets the login ID of this user, like 'kohsuke'
+     * Gets the login ID of this user, like 'kohsuke'.
      *
      * @return the login
      */
@@ -188,11 +198,10 @@ public abstract class GHPerson extends GHObject {
     }
 
     /**
-     * Gets the human-readable name of the user, like "Kohsuke Kawaguchi"
+     * Gets the human-readable name of the user, like "Kohsuke Kawaguchi".
      *
      * @return the name
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public String getName() throws IOException {
         populate();
@@ -212,11 +221,10 @@ public abstract class GHPerson extends GHObject {
     }
 
     /**
-     * Gets the location of this user, like "Santa Clara, California"
+     * Gets the location of this user, like "Santa Clara, California".
      *
      * @return the location
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public String getLocation() throws IOException {
         populate();
@@ -224,22 +232,33 @@ public abstract class GHPerson extends GHObject {
     }
 
     /**
-     * Gets the Twitter Username of this user, like "GitHub"
+     * Gets the Twitter Username of this user, like "GitHub".
      *
      * @return the Twitter username
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public String getTwitterUsername() throws IOException {
         populate();
         return twitter_username;
     }
 
+    /**
+     * Gets the created at.
+     *
+     * @return the created at
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public Date getCreatedAt() throws IOException {
         populate();
         return super.getCreatedAt();
     }
 
+    /**
+     * Gets the updated at.
+     *
+     * @return the updated at
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public Date getUpdatedAt() throws IOException {
         populate();
         return super.getUpdatedAt();
@@ -257,6 +276,11 @@ public abstract class GHPerson extends GHObject {
         return blog;
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
@@ -335,11 +359,10 @@ public abstract class GHPerson extends GHObject {
     }
 
     /**
-     * Gets the site_admin field
+     * Gets the site_admin field.
      *
      * @return the site_admin field
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public boolean isSiteAdmin() throws IOException {
         populate();

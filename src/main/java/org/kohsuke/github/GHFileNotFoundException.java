@@ -8,12 +8,15 @@ import java.util.Map;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Request/responce contains useful metadata. Custom exception allows store info for next diagnostics.
  *
  * @author Kanstantsin Shautsou
  */
 public class GHFileNotFoundException extends FileNotFoundException {
+    
+    /** The response header fields. */
     protected Map<String, List<String>> responseHeaderFields;
 
     /**
@@ -55,6 +58,12 @@ public class GHFileNotFoundException extends FileNotFoundException {
         return Collections.unmodifiableMap(responseHeaderFields);
     }
 
+    /**
+     * With response header fields.
+     *
+     * @param headerFields the header fields
+     * @return the GH file not found exception
+     */
     GHFileNotFoundException withResponseHeaderFields(@Nonnull Map<String, List<String>> headerFields) {
         this.responseHeaderFields = headerFields;
         return this;

@@ -12,6 +12,7 @@ import java.util.TreeMap;
 
 import static org.kohsuke.github.internal.Previews.INERTIA;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHOrganization.
  *
@@ -159,13 +160,11 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Finds a team that has the given name in its {@link GHTeam#getName()}
+     * Finds a team that has the given name in its {@link GHTeam#getName()}.
      *
-     * @param name
-     *            the name
+     * @param name            the name
      * @return the team by name
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public GHTeam getTeamByName(String name) throws IOException {
         for (GHTeam t : listTeams()) {
@@ -176,13 +175,11 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Finds a team that has the given slug in its {@link GHTeam#getSlug()}
+     * Finds a team that has the given slug in its {@link GHTeam#getSlug()}.
      *
-     * @param slug
-     *            the slug
+     * @param slug            the slug
      * @return the team by slug
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
      */
     public GHTeam getTeamBySlug(String slug) throws IOException {
@@ -193,9 +190,11 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Member's role in an organization
+     * Member's role in an organization.
      */
     public enum Role {
+        
+        /** The admin. */
         ADMIN,
         /** The user is an owner of the organization. */
         MEMBER /** The user is a non-owner member of the organization. */
@@ -376,12 +375,10 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Sets organization projects enabled status boolean
+     * Sets organization projects enabled status boolean.
      *
-     * @param newStatus
-     *            enable status
-     * @throws IOException
-     *             the io exception
+     * @param newStatus            enable status
+     * @throws IOException             the io exception
      */
     public void enableOrganizationProjects(boolean newStatus) throws IOException {
         edit("has_organization_projects", newStatus);
@@ -450,7 +447,17 @@ public class GHOrganization extends GHPerson {
      * @see RepositoryRole
      */
     public enum Permission {
-        ADMIN, MAINTAIN, PUSH, TRIAGE, PULL
+        
+        /** The admin. */
+        ADMIN, 
+ /** The maintain. */
+ MAINTAIN, 
+ /** The push. */
+ PUSH, 
+ /** The triage. */
+ TRIAGE, 
+ /** The pull. */
+ PULL
     }
 
     /**
@@ -463,14 +470,31 @@ public class GHOrganization extends GHPerson {
             this.permission = permission;
         }
 
+        /**
+         * Custom.
+         *
+         * @param permission the permission
+         * @return the repository role
+         */
         public static RepositoryRole custom(String permission) {
             return new RepositoryRole(permission);
         }
 
+        /**
+         * From.
+         *
+         * @param permission the permission
+         * @return the repository role
+         */
         public static RepositoryRole from(Permission permission) {
             return custom(permission.toString().toLowerCase());
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return permission;
@@ -615,6 +639,9 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Lists events performed by a user (this includes private events if the caller is authenticated.
+     *
+     * @return the paged iterable
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return root().createRequest()
@@ -625,9 +652,9 @@ public class GHOrganization extends GHPerson {
     /**
      * Lists up all the repositories using the specified page size.
      *
-     * @param pageSize
-     *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
+     * @param pageSize            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
      *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     * @return the paged iterable
      */
     @Override
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {

@@ -47,6 +47,7 @@ import javax.annotation.Nonnull;
 import static org.kohsuke.github.internal.Previews.INERTIA;
 import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
+// TODO: Auto-generated Javadoc
 /**
  * Root of the GitHub API.
  *
@@ -71,45 +72,40 @@ public class GitHub {
 
     /**
      * Creates a client API root object.
-     *
+     * 
      * <p>
      * Several different combinations of the login/oauthAccessToken/password parameters are allowed to represent
      * different ways of authentication.
-     *
+     * 
      * <dl>
      * <dt>Log in anonymously
      * <dd>Leave all three parameters null and you will be making HTTP requests without any authentication.
-     *
+     * 
      * <dt>Log in with password
      * <dd>Specify the login and password, then leave oauthAccessToken null. This will use the HTTP BASIC auth with the
      * GitHub API.
-     *
+     * 
      * <dt>Log in with OAuth token
      * <dd>Specify oauthAccessToken, and optionally specify the login. Leave password null. This will send OAuth token
      * to the GitHub API. If the login parameter is null, The constructor makes an API call to figure out the user name
      * that owns the token.
-     *
+     * 
      * <dt>Log in with JWT token
      * <dd>Specify jwtToken. Leave password null. This will send JWT token to the GitHub API via the Authorization HTTP
      * header. Please note that only operations in which permissions have been previously configured and accepted during
      * the GitHub App will be executed successfully.
      * </dl>
      *
-     * @param apiUrl
-     *            The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
+     * @param apiUrl            The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
      *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
      *            historical reasons, this parameter still accepts the bare domain name, but that's considered
      *            deprecated. Password is also considered deprecated as it is no longer required for api usage.
-     * @param connector
-     *            a connector
-     * @param rateLimitHandler
-     *            rateLimitHandler
-     * @param abuseLimitHandler
-     *            abuseLimitHandler
-     * @param rateLimitChecker
-     *            rateLimitChecker
-     * @param authorizationProvider
-     *            a authorization provider
+     * @param connector            a connector
+     * @param rateLimitHandler            rateLimitHandler
+     * @param abuseLimitHandler            abuseLimitHandler
+     * @param rateLimitChecker            rateLimitChecker
+     * @param authorizationProvider            a authorization provider
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     GitHub(String apiUrl,
             GitHubConnector connector,
@@ -185,6 +181,9 @@ public class GitHub {
         }
     }
 
+    /**
+     * The Class DependentAuthorizationProvider.
+     */
     public static abstract class DependentAuthorizationProvider implements AuthorizationProvider {
 
         private GitHub baseGitHub;
@@ -217,6 +216,11 @@ public class GitHub {
             this.baseGitHub = github;
         }
 
+        /**
+         * Git hub.
+         *
+         * @return the git hub
+         */
         protected synchronized final GitHub gitHub() {
             if (gitHub == null) {
                 gitHub = new GitHub.AuthorizationRefreshGitHubWrapper(this.baseGitHub, authorizationProvider);
@@ -360,17 +364,14 @@ public class GitHub {
     /**
      * Connect using password git hub.
      *
-     * @param login
-     *            the login
-     * @param password
-     *            the password
+     * @param login            the login
+     * @param password            the password
      * @return the git hub
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #connectUsingOAuth(String)} instead.
+     * @throws IOException             the io exception
      * @see <a href=
      *      "https://developer.github.com/changes/2020-02-14-deprecating-password-auth/#changes-to-make">Deprecating
      *      password authentication and OAuth authorizations API</a>
+     * @deprecated Use {@link #connectUsingOAuth(String)} instead.
      */
     @Deprecated
     public static GitHub connectUsingPassword(String login, String password) throws IOException {
@@ -451,7 +452,7 @@ public class GitHub {
     }
 
     /**
-     * Is this an anonymous connection
+     * Is this an anonymous connection.
      *
      * @return {@code true} if operations that require authentication will fail.
      */
@@ -591,7 +592,7 @@ public class GitHub {
     }
 
     /**
-     * clears all cached data in order for external changes (modifications and del) to be reflected
+     * clears all cached data in order for external changes (modifications and del) to be reflected.
      */
     public void refreshCache() {
         users.clear();
@@ -656,13 +657,11 @@ public class GitHub {
     }
 
     /**
-     * Gets the repository object from 'owner/repo' string that GitHub calls as "repository name"
+     * Gets the repository object from 'owner/repo' string that GitHub calls as "repository name".
      *
-     * @param name
-     *            the name
+     * @param name            the name
      * @return the repository
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      * @see GHRepository#getName() GHRepository#getName()
      */
     public GHRepository getRepository(String name) throws IOException {
@@ -674,14 +673,11 @@ public class GitHub {
     }
 
     /**
-     * Gets the repository object from its ID
+     * Gets the repository object from its ID.
      *
-     * @param id
-     *            the id
+     * @param id            the id
      * @return the repository by id
-     * @throws IOException
-     *             the io exception
-     *
+     * @throws IOException             the io exception
      * @deprecated Do not use this method. It was added due to misunderstanding of the type of parameter. Use
      *             {@link #getRepositoryById(long)} instead
      */
@@ -691,24 +687,21 @@ public class GitHub {
     }
 
     /**
-     * Gets the repository object from its ID
+     * Gets the repository object from its ID.
      *
-     * @param id
-     *            the id
+     * @param id            the id
      * @return the repository by id
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public GHRepository getRepositoryById(long id) throws IOException {
         return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class);
     }
 
     /**
-     * Returns a list of popular open source licenses
+     * Returns a list of popular open source licenses.
      *
      * @return a list of popular open source licenses
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      */
     public PagedIterable<GHLicense> listLicenses() throws IOException {
@@ -727,13 +720,11 @@ public class GitHub {
     }
 
     /**
-     * Returns the full details for a license
+     * Returns the full details for a license.
      *
-     * @param key
-     *            The license key provided from the API
+     * @param key            The license key provided from the API
      * @return The license details
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      * @see GHLicense#getKey() GHLicense#getKey()
      */
     public GHLicense getLicense(String key) throws IOException {
@@ -878,16 +869,13 @@ public class GitHub {
      * <p>
      * This method is no longer supported and throws an UnsupportedOperationException.
      *
-     * @param id
-     *            the id
+     * @param id            the id
      * @return the team
-     * @throws IOException
-     *             the io exception
-     *
-     * @deprecated Use {@link GHOrganization#getTeam(long)}
+     * @throws IOException             the io exception
      * @see <a href="https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
      * @see <a href="https://github.blog/changelog/2022-02-22-sunset-notice-deprecated-teams-api-endpoints/">sunset
      *      notice</a>
+     * @deprecated Use {@link GHOrganization#getTeam(long)}
      */
     @Deprecated
     public GHTeam getTeam(int id) throws IOException {
@@ -1395,11 +1383,21 @@ public class GitHub {
         return GitHubClient.getMappingObjectReader(GitHub.offline());
     }
 
+    /**
+     * Gets the client.
+     *
+     * @return the client
+     */
     @Nonnull
     GitHubClient getClient() {
         return client;
     }
 
+    /**
+     * Creates the request.
+     *
+     * @return the requester
+     */
     @Nonnull
     Requester createRequest() {
         Requester requester = new Requester(client);
@@ -1411,6 +1409,13 @@ public class GitHub {
         return requester;
     }
 
+    /**
+     * Intern.
+     *
+     * @param user the user
+     * @return the GH user
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     GHUser intern(GHUser user) throws IOException {
         if (user != null) {
             // if we already have this user in our map, get it

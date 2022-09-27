@@ -69,6 +69,7 @@ import static org.kohsuke.github.internal.Previews.MERCY;
 import static org.kohsuke.github.internal.Previews.NEBULA;
 import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
+// TODO: Auto-generated Javadoc
 /**
  * A repository on GitHub.
  *
@@ -127,6 +128,15 @@ public class GHRepository extends GHObject {
     private Boolean isTemplate;
     private boolean compareUsePaginatedCommits;
 
+    /**
+     * Read.
+     *
+     * @param root the root
+     * @param owner the owner
+     * @param name the name
+     * @return the GH repository
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     static GHRepository read(GitHub root, String owner, String name) throws IOException {
         return root.createRequest().withUrlPath("/repos/" + owner + '/' + name).fetch(GHRepository.class);
     }
@@ -223,7 +233,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets node id
+     * Gets node id.
      *
      * @return the node id
      */
@@ -306,6 +316,11 @@ public class GHRepository extends GHObject {
         return ssh_url;
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }
@@ -697,7 +712,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Automatically deleting head branches when pull requests are merged
+     * Automatically deleting head branches when pull requests are merged.
      *
      * @return the boolean
      */
@@ -749,8 +764,14 @@ public class GHRepository extends GHObject {
      * Visibility of a repository.
      */
     public enum Visibility {
+        
+        /** The public. */
         PUBLIC,
+        
+        /** The internal. */
         INTERNAL,
+        
+        /** The private. */
         PRIVATE,
 
         /**
@@ -764,10 +785,21 @@ public class GHRepository extends GHObject {
          */
         UNKNOWN;
 
+        /**
+         * From.
+         *
+         * @param value the value
+         * @return the visibility
+         */
         public static Visibility from(String value) {
             return EnumUtils.getNullableEnumOrDefault(Visibility.class, value, Visibility.UNKNOWN);
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return name().toLowerCase(Locale.ROOT);
@@ -910,10 +942,16 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Affiliation of a repository collaborator
+     * Affiliation of a repository collaborator.
      */
     public enum CollaboratorAffiliation {
-        ALL, DIRECT, OUTSIDE
+        
+        /** The all. */
+        ALL, 
+ /** The direct. */
+ DIRECT, 
+ /** The outside. */
+ OUTSIDE
     }
 
     /**
@@ -1489,10 +1527,16 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Sort orders for listing forks
+     * Sort orders for listing forks.
      */
     public enum ForkSort {
-        NEWEST, OLDEST, STARGAZERS
+        
+        /** The newest. */
+        NEWEST, 
+ /** The oldest. */
+ OLDEST, 
+ /** The stargazers. */
+ STARGAZERS
     }
 
     /**
@@ -2080,7 +2124,6 @@ public class GHRepository extends GHObject {
 
     /**
      * Gets the basic license details for the repository.
-     * <p>
      *
      * @return null if there's no license.
      * @throws IOException
@@ -2092,12 +2135,10 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Retrieves the contents of the repository's license file - makes an additional API call
-     * <p>
+     * Retrieves the contents of the repository's license file - makes an additional API call.
      *
      * @return details regarding the license contents, or null if there's no license.
-     * @throws IOException
-     *             as usual but also if you don't use the preview connector
+     * @throws IOException             as usual but also if you don't use the preview connector
      */
     public GHContent getLicenseContent() throws IOException {
         return getLicenseContent_();
@@ -2164,21 +2205,15 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Creates a commit status
+     * Creates a commit status.
      *
-     * @param sha1
-     *            the sha 1
-     * @param state
-     *            the state
-     * @param targetUrl
-     *            Optional parameter that points to the URL that has more details.
-     * @param description
-     *            Optional short description.
-     * @param context
-     *            Optinal commit status context.
+     * @param sha1            the sha 1
+     * @param state            the state
+     * @param targetUrl            Optional parameter that points to the URL that has more details.
+     * @param description            Optional short description.
+     * @param context            Optinal commit status context.
      * @return the gh commit status
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public GHCommitStatus createCommitStatus(String sha1,
             GHCommitState state,
@@ -2912,12 +2947,23 @@ public class GHRepository extends GHObject {
             return contributions;
         }
 
+        /**
+         * Hash code.
+         *
+         * @return the int
+         */
         @Override
         public int hashCode() {
             // We ignore contributions in the calculation
             return super.hashCode();
         }
 
+        /**
+         * Equals.
+         *
+         * @param obj the obj
+         * @return true, if successful
+         */
         @Override
         public boolean equals(Object obj) {
             // We ignore contributions in the calculation
@@ -3047,11 +3093,22 @@ public class GHRepository extends GHObject {
                 .fetch(GHRepositoryCloneTraffic.class);
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
         return ("Repository:" + getOwnerName() + ":" + name).hashCode();
     }
 
+    /**
+     * Equals.
+     *
+     * @param obj the obj
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof GHRepository) {
@@ -3061,6 +3118,12 @@ public class GHRepository extends GHObject {
         return false;
     }
 
+    /**
+     * Gets the api tail url.
+     *
+     * @param tail the tail
+     * @return the api tail url
+     */
     String getApiTailUrl(String tail) {
         if (tail.length() > 0 && !tail.startsWith("/")) {
             tail = '/' + tail;
@@ -3200,11 +3263,10 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets the public key for the given repo
+     * Gets the public key for the given repo.
      *
      * @return the public key
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public GHRepositoryPublicKey getPublicKey() throws IOException {
         return root().createRequest()
@@ -3273,20 +3335,16 @@ public class GHRepository extends GHObject {
                 .withUrlPath(getApiTailUrl("actions/secrets") + "/" + secretName)
                 .send();
     }
+    
     /**
      * Create a tag. See https://developer.github.com/v3/git/tags/#create-a-tag-object
      *
-     * @param tag
-     *            The tag's name.
-     * @param message
-     *            The tag message.
-     * @param object
-     *            The SHA of the git object this is tagging.
-     * @param type
-     *            The type of the object we're tagging: "commit", "tree" or "blob".
+     * @param tag            The tag's name.
+     * @param message            The tag message.
+     * @param object            The SHA of the git object this is tagging.
+     * @param type            The type of the object we're tagging: "commit", "tree" or "blob".
      * @return The newly created tag.
-     * @throws java.io.IOException
-     *             The IO exception.
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public GHTagObject createTag(String tag, String message, String object, String type) throws IOException {
         return root().createRequest()
@@ -3303,15 +3361,11 @@ public class GHRepository extends GHObject {
     /**
      * Streams a zip archive of the repository, optionally at a given <code>ref</code>.
      *
-     * @param <T>
-     *            the type of result
-     * @param streamFunction
-     *            The {@link InputStreamFunction} that will process the stream
-     * @param ref
-     *            if <code>null</code> the repository's default branch, usually <code>main</code>,
-     * @throws IOException
-     *             The IO exception.
+     * @param <T>            the type of result
+     * @param streamFunction            The {@link InputStreamFunction} that will process the stream
+     * @param ref            if <code>null</code> the repository's default branch, usually <code>main</code>,
      * @return the result of reading the stream.
+     * @throws IOException             The IO exception.
      */
     public <T> T readZip(InputStreamFunction<T> streamFunction, String ref) throws IOException {
         return downloadArchive("zip", ref, streamFunction);
@@ -3320,15 +3374,11 @@ public class GHRepository extends GHObject {
     /**
      * Streams a tar archive of the repository, optionally at a given <code>ref</code>.
      *
-     * @param <T>
-     *            the type of result
-     * @param streamFunction
-     *            The {@link InputStreamFunction} that will process the stream
-     * @param ref
-     *            if <code>null</code> the repository's default branch, usually <code>main</code>,
-     * @throws IOException
-     *             The IO exception.
+     * @param <T>            the type of result
+     * @param streamFunction            The {@link InputStreamFunction} that will process the stream
+     * @param ref            if <code>null</code> the repository's default branch, usually <code>main</code>,
      * @return the result of reading the stream.
+     * @throws IOException             The IO exception.
      */
     public <T> T readTar(InputStreamFunction<T> streamFunction, String ref) throws IOException {
         return downloadArchive("tar", ref, streamFunction);
@@ -3338,14 +3388,10 @@ public class GHRepository extends GHObject {
      * Create a repository dispatch event, which can be used to start a workflow/action from outside github, as
      * described on https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event
      *
-     * @param eventType
-     *            the eventType
-     * @param clientPayload
-     *            a custom payload , can be nullable
-     * @param <T>
-     *            type of client payload
-     * @throws IOException
-     *             the io exception
+     * @param <T>            type of client payload
+     * @param eventType            the eventType
+     * @param clientPayload            a custom payload , can be nullable
+     * @throws IOException             the io exception
      */
     public <T> void dispatch(String eventType, @Nullable T clientPayload) throws IOException {
         root().createRequest()
@@ -3371,8 +3417,7 @@ public class GHRepository extends GHObject {
     /**
      * Populate this object.
      *
-     * @throws java.io.IOException
-     *             The IO exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     void populate() throws IOException {
         if (isOffline()) {
@@ -3395,6 +3440,12 @@ public class GHRepository extends GHObject {
      */
     @BetaApi
     public static class Updater extends GHRepositoryBuilder<Updater> {
+        
+        /**
+         * Instantiates a new updater.
+         *
+         * @param repository the repository
+         */
         protected Updater(@Nonnull GHRepository repository) {
             super(Updater.class, repository.root(), null);
             // even when we don't change the name, we need to send it in
@@ -3412,6 +3463,12 @@ public class GHRepository extends GHObject {
      */
     @BetaApi
     public static class Setter extends GHRepositoryBuilder<GHRepository> {
+        
+        /**
+         * Instantiates a new setter.
+         *
+         * @param repository the repository
+         */
         protected Setter(@Nonnull GHRepository repository) {
             super(GHRepository.class, repository.root(), null);
             // even when we don't change the name, we need to send it in

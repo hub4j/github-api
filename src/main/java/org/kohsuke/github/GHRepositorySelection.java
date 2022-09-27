@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * App installation repository selection.
  *
@@ -9,10 +10,16 @@ import java.util.Locale;
  * @see GHAppInstallation
  */
 public enum GHRepositorySelection {
-    SELECTED, ALL;
+    
+    /** The selected. */
+    SELECTED, 
+ /** The all. */
+ ALL;
 
     /**
      * Returns GitHub's internal representation of this event.
+     *
+     * @return the string
      */
     String symbol() {
         return name().toLowerCase(Locale.ENGLISH);

@@ -8,12 +8,15 @@ import java.util.Map;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Request/responce contains useful metadata. Custom exception allows store info for next diagnostics.
  *
  * @author Kanstantsin Shautsou
  */
 public class GHIOException extends IOException {
+    
+    /** The response header fields. */
     protected Map<String, List<String>> responseHeaderFields;
 
     /**
@@ -56,6 +59,12 @@ public class GHIOException extends IOException {
         return Collections.unmodifiableMap(responseHeaderFields);
     }
 
+    /**
+     * With response header fields.
+     *
+     * @param headerFields the header fields
+     * @return the GHIO exception
+     */
     GHIOException withResponseHeaderFields(@Nonnull Map<String, List<String>> headerFields) {
         this.responseHeaderFields = headerFields;
         return this;

@@ -37,6 +37,13 @@ public abstract class GitHubConnectorResponse implements Closeable {
     @Nonnull
     private final Map<String, List<String>> headers;
 
+    /**
+     * GitHubConnectorResponse constructor
+     * 
+     * @param request the request
+     * @param statusCode the status code
+     * @param headers the headers
+     */
     protected GitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
             int statusCode,
             @Nonnull Map<String, List<String>> headers) {
@@ -158,12 +165,22 @@ public abstract class GitHubConnectorResponse implements Closeable {
         }
     }
 
+    /**
+     * A ByteArrayResponse class
+     */
     public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
 
         private boolean inputStreamRead = false;
         private byte[] inputBytes = null;
         private boolean isClosed = false;
 
+        /**
+         * Constructor for ByteArray Response
+         * 
+         * @param request the request
+         * @param statusCode the status code
+         * @param headers the headers
+         */
         protected ByteArrayResponse(@Nonnull GitHubConnectorRequest request,
                 int statusCode,
                 @Nonnull Map<String, List<String>> headers) {

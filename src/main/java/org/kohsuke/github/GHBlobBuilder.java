@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.util.Base64;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builder pattern for creating a new blob. Based on https://developer.github.com/v3/git/blobs/#create-a-blob
  */
@@ -10,6 +11,11 @@ public class GHBlobBuilder {
     private final GHRepository repo;
     private final Requester req;
 
+    /**
+     * Instantiates a new GH blob builder.
+     *
+     * @param repo the repo
+     */
     GHBlobBuilder(GHRepository repo) {
         this.repo = repo;
         req = repo.root().createRequest();

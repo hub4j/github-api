@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * Specifies the rate limit record of an operation.
  *

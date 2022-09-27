@@ -30,6 +30,7 @@ import java.util.*;
 
 import static org.kohsuke.github.internal.Previews.INERTIA;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents an user of GitHub.
  *
@@ -37,6 +38,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
  */
 public class GHUser extends GHPerson {
 
+    /** The ldap dn. */
     protected String ldap_dn;
 
     /**
@@ -71,11 +73,10 @@ public class GHUser extends GHPerson {
     }
 
     /**
-     * Lists the users that this user is following
+     * Lists the users that this user is following.
      *
      * @return the follows
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollows() throws IOException {
@@ -83,7 +84,7 @@ public class GHUser extends GHPerson {
     }
 
     /**
-     * Lists the users that this user is following
+     * Lists the users that this user is following.
      *
      * @return the paged iterable
      */
@@ -189,7 +190,7 @@ public class GHUser extends GHPerson {
     }
 
     /**
-     * Returns true if this user is marked as hireable, false otherwise
+     * Returns true if this user is marked as hireable, false otherwise.
      *
      * @return if the user is marked as hireable
      */
@@ -197,6 +198,11 @@ public class GHUser extends GHPerson {
         return hireable;
     }
 
+    /**
+     * Gets the bio.
+     *
+     * @return the bio
+     */
     public String getBio() {
         return bio;
     }
@@ -224,6 +230,9 @@ public class GHUser extends GHPerson {
 
     /**
      * Lists events performed by a user (this includes private events if the caller is authenticated.
+     *
+     * @return the paged iterable
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return root().createRequest()
@@ -248,24 +257,32 @@ public class GHUser extends GHPerson {
      * Gets LDAP information for user.
      *
      * @return The LDAP information
-     *
+     * @throws IOException             the io exception
      * @see <a
      *      href=https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap>Github
      *      LDAP</a>
-     *
-     * @throws IOException
-     *             the io exception
      */
     public Optional<String> getLdapDn() throws IOException {
         super.populate();
         return Optional.ofNullable(ldap_dn);
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
         return login.hashCode();
     }
 
+    /**
+     * Equals.
+     *
+     * @param obj the obj
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof GHUser) {
@@ -275,6 +292,12 @@ public class GHUser extends GHPerson {
         return false;
     }
 
+    /**
+     * Gets the api tail url.
+     *
+     * @param tail the tail
+     * @return the api tail url
+     */
     String getApiTailUrl(String tail) {
         if (tail.length() > 0 && !tail.startsWith("/"))
             tail = '/' + tail;

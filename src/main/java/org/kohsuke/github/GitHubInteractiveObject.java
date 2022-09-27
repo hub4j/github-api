@@ -7,6 +7,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Objects;
 
+// TODO: Auto-generated Javadoc
 /**
  * Defines a base class that all classes in this library that interact with GitHub inherit from.
  *
@@ -21,10 +22,18 @@ abstract class GitHubInteractiveObject {
     @CheckForNull
     private transient final GitHub root;
 
+    /**
+     * Instantiates a new git hub interactive object.
+     */
     GitHubInteractiveObject() {
         root = null;
     }
 
+    /**
+     * Instantiates a new git hub interactive object.
+     *
+     * @param root the root
+     */
     GitHubInteractiveObject(GitHub root) {
         this.root = root;
     }

@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
+// TODO: Auto-generated Javadoc
 /**
  * Lists up pull requests with some filtering and sorting.
  *
@@ -11,6 +12,11 @@ import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
     private final GHRepository repo;
 
+    /**
+     * Instantiates a new GH pull request query builder.
+     *
+     * @param repo the repo
+     */
     GHPullRequestQueryBuilder(GHRepository repo) {
         super(repo.root());
         this.repo = repo;
@@ -71,7 +77,15 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
      * The enum Sort.
      */
     public enum Sort {
-        CREATED, UPDATED, POPULARITY, LONG_RUNNING
+        
+        /** The created. */
+        CREATED, 
+ /** The updated. */
+ UPDATED, 
+ /** The popularity. */
+ POPULARITY, 
+ /** The long running. */
+ LONG_RUNNING
     }
 
     /**
@@ -86,6 +100,11 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
         return this;
     }
 
+    /**
+     * List.
+     *
+     * @return the paged iterable
+     */
     @Override
     public PagedIterable<GHPullRequest> list() {
         return req.withPreview(SHADOW_CAT)

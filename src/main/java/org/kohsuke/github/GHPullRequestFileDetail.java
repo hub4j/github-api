@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * File detail inside a {@link GHPullRequest}.
  *
@@ -34,25 +35,45 @@ import java.net.URL;
  */
 public class GHPullRequestFileDetail {
 
+    /** The sha. */
     String sha;
+    
+    /** The filename. */
     String filename;
+    
+    /** The status. */
     String status;
+    
+    /** The additions. */
     int additions;
+    
+    /** The deletions. */
     int deletions;
+    
+    /** The changes. */
     int changes;
+    
+    /** The blob url. */
     String blob_url;
+    
+    /** The raw url. */
     String raw_url;
+    
+    /** The contents url. */
     String contents_url;
+    
+    /** The patch. */
     String patch;
+    
+    /** The previous filename. */
     String previous_filename;
 
     /**
      * Gets sha of the file (not commit sha).
      *
+     * @return the sha
      * @see <a href="https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files">List pull requests
      *      files</a>
-     *
-     * @return the sha
      */
     public String getSha() {
         return sha;
@@ -68,7 +89,7 @@ public class GHPullRequestFileDetail {
     }
 
     /**
-     * Gets status (added/modified/deleted)
+     * Gets status (added/modified/deleted).
      *
      * @return the status
      */

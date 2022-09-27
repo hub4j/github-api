@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * Search users.
  *
@@ -7,12 +8,21 @@ package org.kohsuke.github;
  * @see GitHub#searchUsers() GitHub#searchUsers()
  */
 public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
+    
+    /**
+     * Instantiates a new GH user search builder.
+     *
+     * @param root the root
+     */
     GHUserSearchBuilder(GitHub root) {
         super(root, UserSearchResult.class);
     }
 
     /**
      * Search terms.
+     *
+     * @param term the term
+     * @return the GH user search builder
      */
     public GHUserSearchBuilder q(String term) {
         super.q(term);
@@ -124,7 +134,13 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
      * The enum Sort.
      */
     public enum Sort {
-        FOLLOWERS, REPOSITORIES, JOINED
+        
+        /** The followers. */
+        FOLLOWERS, 
+ /** The repositories. */
+ REPOSITORIES, 
+ /** The joined. */
+ JOINED
     }
 
     private static class UserSearchResult extends SearchResult<GHUser> {
@@ -136,6 +152,11 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
         }
     }
 
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
     @Override
     protected String getApiUrl() {
         return "/search/users";

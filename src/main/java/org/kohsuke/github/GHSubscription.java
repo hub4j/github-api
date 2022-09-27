@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents your subscribing to a repository / conversation thread..
  *
@@ -92,6 +93,12 @@ public class GHSubscription extends GitHubInteractiveObject {
         root().createRequest().method("DELETE").withUrlPath(repo.getApiTailUrl("subscription")).send();
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param repo the repo
+     * @return the GH subscription
+     */
     GHSubscription wrapUp(GHRepository repo) {
         this.repo = repo;
         return this;

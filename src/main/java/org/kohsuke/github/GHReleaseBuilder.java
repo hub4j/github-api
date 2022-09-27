@@ -4,8 +4,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
- * Builder pattern for creating a {@link GHRelease}
+ * Builder pattern for creating a {@link GHRelease}.
  *
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
@@ -78,10 +79,9 @@ public class GHReleaseBuilder {
     }
 
     /**
-     * Optional
+     * Optional.
      *
-     * @param prerelease
-     *            {@code true} to identify the release as a prerelease. {@code false} to identify the release as a full
+     * @param prerelease            {@code true} to identify the release as a prerelease. {@code false} to identify the release as a full
      *            release. Default is {@code false}.
      * @return the gh release builder
      */
@@ -91,10 +91,9 @@ public class GHReleaseBuilder {
     }
 
     /**
-     * Optional
+     * Optional.
      *
-     * @param categoryName
-     *            the category of the discussion to be created for the release. Category should already exist
+     * @param categoryName            the category of the discussion to be created for the release. Category should already exist
      * @return the gh release builder
      */
     public GHReleaseBuilder categoryName(String categoryName) {

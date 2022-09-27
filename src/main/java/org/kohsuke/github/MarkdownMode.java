@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * Rendering mode of markdown.
  *
@@ -22,6 +23,11 @@ public enum MarkdownMode {
      */
     GFM;
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     public String toString() {
         return name().toLowerCase(Locale.ENGLISH);
     }

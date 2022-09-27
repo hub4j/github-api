@@ -11,6 +11,7 @@ import java.util.Objects;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * A discussion in GitHub Team.
  *
@@ -26,11 +27,23 @@ public class GHDiscussion extends GHObject {
     @JsonProperty(value = "private")
     private boolean isPrivate;
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public URL getHtmlUrl() throws IOException {
         return GitHubClient.parseURL(htmlUrl);
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param team the team
+     * @return the GH discussion
+     */
     GHDiscussion wrapUp(GHTeam team) {
         this.team = team;
         return this;
@@ -110,6 +123,14 @@ public class GHDiscussion extends GHObject {
         return new GHDiscussion.Creator(team);
     }
 
+    /**
+     * Read.
+     *
+     * @param team the team
+     * @param discussionNumber the discussion number
+     * @return the GH discussion
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     static GHDiscussion read(GHTeam team, long discussionNumber) throws IOException {
         return team.root()
                 .createRequest()
@@ -118,6 +139,13 @@ public class GHDiscussion extends GHObject {
                 .wrapUp(team);
     }
 
+    /**
+     * Read all.
+     *
+     * @param team the team
+     * @return the paged iterable
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     static PagedIterable<GHDiscussion> readAll(GHTeam team) throws IOException {
         return team.root()
                 .createRequest()
@@ -148,10 +176,9 @@ public class GHDiscussion extends GHObject {
     }
 
     /**
-     * Delete the discussion
+     * Delete the discussion.
      *
-     * @throws IOException
-     *             the io exception
+     * @throws IOException             the io exception
      */
     public void delete() throws IOException {
         team.root().createRequest().method("DELETE").setRawUrlPath(getRawUrlPath(team, number)).send();
@@ -212,6 +239,12 @@ public class GHDiscussion extends GHObject {
         }
     }
 
+    /**
+     * Equals.
+     *
+     * @param o the o
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -225,6 +258,11 @@ public class GHDiscussion extends GHObject {
                 && Objects.equals(body, that.body) && Objects.equals(title, that.title);
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
         return Objects.hash(team, number, body, title);

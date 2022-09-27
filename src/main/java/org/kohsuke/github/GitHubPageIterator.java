@@ -8,19 +8,18 @@ import java.util.NoSuchElementException;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * May be used for any item that has pagination information. Iterates over paginated {@link T} objects (not the items
  * inside the page). Also exposes {@link #finalResponse()} to allow getting a full {@link GitHubResponse<T>} after
  * iterating completes.
- *
+ * 
  * Works for array responses, also works for search results which are single instances with an array of items inside.
- *
+ * 
  * This class is not thread-safe. Any one instance should only be called from a single thread.
  *
- * @param <T>
- *            type of each page (not the items in the page).
- *
  * @author Liam Newman
+ * @param <T>            type of each page (not the items in the page).
  */
 class GitHubPageIterator<T> implements Iterator<T> {
 
@@ -64,12 +63,11 @@ class GitHubPageIterator<T> implements Iterator<T> {
     /**
      * Loads paginated resources.
      *
-     * @param client
-     *            the {@link GitHubClient} from which to request responses
-     * @param type
-     *            type of each page (not the items in the page).
-     * @param <T>
-     *            type of each page (not the items in the page).
+     * @param <T>            type of each page (not the items in the page).
+     * @param client            the {@link GitHubClient} from which to request responses
+     * @param type            type of each page (not the items in the page).
+     * @param request the request
+     * @param pageSize the page size
      * @return iterator
      */
     static <T> GitHubPageIterator<T> create(GitHubClient client, Class<T> type, GitHubRequest request, int pageSize) {

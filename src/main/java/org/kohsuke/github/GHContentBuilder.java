@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+// TODO: Auto-generated Javadoc
 /**
  * Used to create/update content.
  *
@@ -18,6 +19,11 @@ public final class GHContentBuilder {
     private final Requester req;
     private String path;
 
+    /**
+     * Instantiates a new GH content builder.
+     *
+     * @param repo the repo
+     */
     GHContentBuilder(GHRepository repo) {
         this.repo = repo;
         this.req = repo.root().createRequest().method("PUT");

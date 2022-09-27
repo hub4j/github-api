@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * A conversation in the notification API.
  *
@@ -24,10 +25,21 @@ public class GHThread extends GHObject {
     private String last_read_at;
     private String url, subscription_url;
 
+    /**
+     * The Class Subject.
+     */
     static class Subject {
+        
+        /** The title. */
         String title;
+        
+        /** The url. */
         String url;
+        
+        /** The latest comment url. */
         String latest_comment_url;
+        
+        /** The type. */
         String type;
     }
 
@@ -44,6 +56,9 @@ public class GHThread extends GHObject {
     }
 
     /**
+     * Gets the html url.
+     *
+     * @return the html url
      * @deprecated This object has no HTML URL.
      */
     @Override

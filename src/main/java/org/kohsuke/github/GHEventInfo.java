@@ -6,6 +6,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.util.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents an event.
  *
@@ -50,6 +51,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
         private String name; // owner/repo
     }
 
+    /** The Constant mapTypeStringToEvent. */
     static final Map<String, GHEvent> mapTypeStringToEvent = createEventMap();
 
     /**
@@ -78,6 +80,12 @@ public class GHEventInfo extends GitHubInteractiveObject {
         return Collections.unmodifiableMap(map);
     }
 
+    /**
+     * Transform type to GH event.
+     *
+     * @param type the type
+     * @return the GH event
+     */
     static GHEvent transformTypeToGHEvent(String type) {
         return mapTypeStringToEvent.getOrDefault(type, GHEvent.UNKNOWN);
     }

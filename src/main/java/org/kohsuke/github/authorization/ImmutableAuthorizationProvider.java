@@ -13,6 +13,11 @@ public class ImmutableAuthorizationProvider implements AuthorizationProvider {
 
     private final String authorization;
 
+    /**
+     * ImmutableAuthorizationProvider constructor
+     * 
+     * @param authorization the authorization string
+     */
     public ImmutableAuthorizationProvider(String authorization) {
         this.authorization = authorization;
     }

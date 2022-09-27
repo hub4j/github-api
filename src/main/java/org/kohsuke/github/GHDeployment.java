@@ -7,8 +7,9 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 
+// TODO: Auto-generated Javadoc
 /**
- * Represents a deployment
+ * Represents a deployment.
  *
  * @see <a href="https://developer.github.com/v3/repos/deployments/">documentation</a>
  * @see GHRepository#listDeployments(String, String, String, String) GHRepository#listDeployments(String, String,
@@ -17,19 +18,49 @@ import java.util.Map;
  */
 public class GHDeployment extends GHObject {
     private GHRepository owner;
+    
+    /** The sha. */
     protected String sha;
+    
+    /** The ref. */
     protected String ref;
+    
+    /** The task. */
     protected String task;
+    
+    /** The payload. */
     protected Object payload;
+    
+    /** The environment. */
     protected String environment;
+    
+    /** The description. */
     protected String description;
+    
+    /** The statuses url. */
     protected String statuses_url;
+    
+    /** The repository url. */
     protected String repository_url;
+    
+    /** The creator. */
     protected GHUser creator;
+    
+    /** The original environment. */
     protected String original_environment;
+    
+    /** The transient environment. */
     protected boolean transient_environment;
+    
+    /** The production environment. */
     protected boolean production_environment;
 
+    /**
+     * Wrap.
+     *
+     * @param owner the owner
+     * @return the GH deployment
+     */
     GHDeployment wrap(GHRepository owner) {
         this.owner = owner;
         return this;
@@ -94,9 +125,8 @@ public class GHDeployment extends GHObject {
     /**
      * The environment defined when the deployment was first created.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @return the original deployment environment
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.FLASH)
     public String getOriginalEnvironment() {
@@ -116,9 +146,8 @@ public class GHDeployment extends GHObject {
      * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
      * future.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @return the environment is transient
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public boolean isTransientEnvironment() {
@@ -128,9 +157,8 @@ public class GHDeployment extends GHObject {
     /**
      * Specifies if the given environment is one that end-users directly interact with.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @return the environment is used by end-users directly
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public boolean isProductionEnvironment() {
@@ -167,6 +195,9 @@ public class GHDeployment extends GHObject {
     }
 
     /**
+     * Gets the html url.
+     *
+     * @return the html url
      * @deprecated This object has no HTML URL.
      */
     @Override
@@ -198,6 +229,11 @@ public class GHDeployment extends GHObject {
                 .toIterable(GHDeploymentStatus[].class, item -> item.lateBind(owner));
     }
 
+    /**
+     * Gets the owner.
+     *
+     * @return the owner
+     */
     // test only
     GHRepository getOwner() {
         return owner;

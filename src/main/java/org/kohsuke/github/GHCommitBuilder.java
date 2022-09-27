@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builder pattern for creating a new commit. Based on https://developer.github.com/v3/git/commits/#create-a-commit
  */
@@ -32,6 +33,11 @@ public class GHCommitBuilder {
         }
     }
 
+    /**
+     * Instantiates a new GH commit builder.
+     *
+     * @param repo the repo
+     */
     GHCommitBuilder(GHRepository repo) {
         this.repo = repo;
         req = repo.root().createRequest().method("POST");

@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * Search code for {@link GHContent}.
  *
@@ -7,6 +8,12 @@ package org.kohsuke.github;
  * @see GitHub#searchContent() GitHub#searchContent()
  */
 public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
+    
+    /**
+     * Instantiates a new GH content search builder.
+     *
+     * @param root the root
+     */
     GHContentSearchBuilder(GitHub root) {
         super(root, ContentSearchResult.class);
     }
@@ -178,7 +185,11 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
      * The enum Sort.
      */
     public enum Sort {
-        BEST_MATCH, INDEXED
+        
+        /** The best match. */
+        BEST_MATCH, 
+ /** The indexed. */
+ INDEXED
     }
 
     private static class ContentSearchResult extends SearchResult<GHContent> {
@@ -190,6 +201,11 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
         }
     }
 
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
     @Override
     protected String getApiUrl() {
         return "/search/code";

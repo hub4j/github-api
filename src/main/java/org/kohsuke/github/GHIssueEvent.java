@@ -4,12 +4,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHIssueEvent.
  *
- * @see <a href="https://developer.github.com/v3/issues/events/">Github documentation for issue events</a>
- *
  * @author Martin van Zijl
+ * @see <a href="https://developer.github.com/v3/issues/events/">Github documentation for issue events</a>
  */
 public class GHIssueEvent extends GitHubInteractiveObject {
     private long id;
@@ -189,11 +189,22 @@ public class GHIssueEvent extends GitHubInteractiveObject {
         return this.requestedReviewer;
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param parent the parent
+     * @return the GH issue event
+     */
     GHIssueEvent wrapUp(GHIssue parent) {
         this.issue = parent;
         return this;
     }
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
         return String.format("Issue %d was %s by %s on %s",

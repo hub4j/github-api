@@ -1,0 +1,50 @@
+{
+  "id": "f8725936-6466-42ec-afee-43e799ac5210",
+  "name": "repos_hub4j-test-org_ghissuetest_issues_3_labels_removelabels_label_name_3",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHIssueTest/issues/3/labels/removeLabels_label_name_3",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "[{\"id\":4563123625,\"node_id\":\"LA_kwDOIC5ExM8AAAABD_u9qQ\",\"url\":\"https://api.github.com/repos/hub4j-test-org/GHIssueTest/labels/removeLabels_label_name_1\",\"name\":\"removeLabels_label_name_1\",\"color\":\"ededed\",\"default\":false,\"description\":null}]",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 22 Sep 2022 09:56:39 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"8a32c2a8982fdbf4a8ec92e7b46a97c30897c771591f8d2965fe27ba53d76aba\"",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-09-29 09:53:54 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4895",
+      "X-RateLimit-Reset": "1663844087",
+      "X-RateLimit-Used": "105",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D22C:5420:9409A63:96440B2:632C3156"
+    }
+  },
+  "uuid": "f8725936-6466-42ec-afee-43e799ac5210",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-GHIssueTest-issues-3-labels-removeLabels_label_name_3",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-repos-hub4j-test-org-GHIssueTest-issues-3-labels-removeLabels_label_name_3-2",
+  "insertionIndex": 9
+}

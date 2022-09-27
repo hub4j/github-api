@@ -72,7 +72,7 @@ public class PagedIterator<T> implements Iterator<T> {
      */
     public boolean hasNext() {
         fetch();
-        return currentPage.length > nextItemIndex;
+        return (currentPage != null && currentPage.length > nextItemIndex);
     }
 
     /**

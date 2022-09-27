@@ -1161,6 +1161,22 @@ public class GitHub {
     }
 
     /**
+     * Returns the GitHub App Installation associated with the authentication credentials used.
+     * <p>
+     * You must use an installation token to access this endpoint; otherwise consider {@link #getApp()} and its various
+     * ways of retrieving installations.
+     *
+     * @return the app
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://docs.github.com/en/rest/apps/installations">GitHub App installations</a>
+     */
+    @Preview(MACHINE_MAN)
+    public GHAuthenticatedAppInstallation getInstallation() throws IOException {
+        return new GHAuthenticatedAppInstallation(this);
+    }
+
+    /**
      * Ensures that the credential is valid.
      *
      * @return the boolean

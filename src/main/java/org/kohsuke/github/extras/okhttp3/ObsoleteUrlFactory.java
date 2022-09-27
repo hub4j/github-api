@@ -320,7 +320,7 @@ public final class ObsoleteUrlFactory implements URLStreamHandlerFactory, Clonea
         String value;
         try {
             value = System.getProperty(key);
-        } catch (SecurityException | IllegalArgumentException | NullPointerException ex) {
+        } catch (SecurityException | IllegalArgumentException ex) {
             return defaultValue;
         }
         return value != null ? value : defaultValue;

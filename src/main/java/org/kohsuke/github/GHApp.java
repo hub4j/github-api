@@ -22,6 +22,7 @@ public class GHApp extends GHObject {
 
     private GHUser owner;
     private String name;
+    private String slug;
     private String description;
     private String externalUrl;
     private Map<String, String> permissions;
@@ -58,6 +59,15 @@ public class GHApp extends GHObject {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets the slug name of the GitHub app.
+     *
+     * @return the slug name of the GitHub app
+     */
+    public String getSlug() {
+        return slug;
     }
 
     /**

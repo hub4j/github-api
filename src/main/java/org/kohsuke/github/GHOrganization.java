@@ -721,4 +721,118 @@ public class GHOrganization extends GHPerson {
     public GHHook createWebHook(URL url) throws IOException {
         return createWebHook(url, null);
     }
+
+    /**
+     * Gets an organization public key, which is needed to encrypt secrets.
+     * "https://docs.github.com/en/rest/actions/secrets#get-an-organization-public-key"
+     *
+     * @return the public key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPublicKey getPublicKey() throws IOException {
+        return GHPublicKeys.orgContext(this).getPublicKey();
+    }
+
+    /**
+     * Gets a single organization secret without revealing its encrypted value.
+     * "https://docs.github.com/rest/actions/secrets#get-an-organization-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @return the secret
+     * @throws IOException
+     *             the io exception
+     */
+    public GHOrgSecret getSecret(String secretName) throws IOException {
+        return root().createRequest()
+                .withUrlPath(String.format("/orgs/%s/actions/secrets/%s", login, secretName))
+                .fetch(GHOrgSecret.class)
+                .wrapUp(this);
+    }
+
+    /**
+     * Creates or updates an organization secret with an encrypted value.
+     * "https://docs.github.com/rest/reference/actions#create-or-update-an-organization-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @param encryptedValue
+     *            The encrypted value for this secret
+     * @param publicKeyId
+     *            The id of the Public Key used to encrypt this secret
+     * @param visibility
+     *            Which type of organization repositories have access to the organization secret. Can be one of: "all",
+     *            "private", "selected"
+     * @param selected_repository_ids
+     *            An array of repository ids that can access the organization secret. You can only provide a list of
+     *            repository ids when the visibility is set to selected.
+     * @throws IOException
+     *             the io exception
+     */
+    public void createSecret(String secretName,
+            String encryptedValue,
+            String publicKeyId,
+            String visibility,
+            long[] selected_repository_ids) throws IOException {
+        if (visibility.equals("selected") && selected_repository_ids == null) {
+            throw new IllegalArgumentException(
+                    "You must provide a list of repository ids when the visibility is set to selected");
+        }
+        root().createRequest()
+                .method("PUT")
+                .with("encrypted_value", encryptedValue)
+                .with("key_id", publicKeyId)
+                .with("visibility", visibility)
+                .with("selected_repository_ids", selected_repository_ids)
+                .withUrlPath(String.format("/orgs/%s/actions/secrets/%s", login, secretName))
+                .send();
+    }
+
+    /**
+     * Creates or updates an organization secret with an encrypted value.
+     * "https://docs.github.com/rest/reference/actions#create-or-update-an-organization-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @param encryptedValue
+     *            The encrypted value for this secret
+     * @param publicKeyId
+     *            The id of the Public Key used to encrypt this secret
+     * @param visibility
+     *            Which type of organization repositories have access to the organization secret. Can be one of: "all",
+     *            "private", "selected"
+     * @throws IOException
+     *             the io exception
+     */
+    public void createSecret(String secretName, String encryptedValue, String publicKeyId, String visibility)
+            throws IOException {
+        if (visibility.equals("selected")) {
+            throw new IllegalArgumentException(
+                    "You must provide a list of repository ids when the visibility is set to selected");
+        }
+        root().createRequest()
+                .method("PUT")
+                .with("encrypted_value", encryptedValue)
+                .with("key_id", publicKeyId)
+                .with("visibility", visibility)
+                .withUrlPath(String.format("/orgs/%s/actions/secrets/%s", login, secretName))
+                .send();
+    }
+
+    /**
+     * Deletes a secret in an organization using the secret name.
+     * "https://docs.github.com/rest/actions/secrets#delete-an-organization-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteSecret(String secretName) throws IOException {
+        root().createRequest()
+                .method("DELETE")
+                .withUrlPath(String.format("/orgs/%s/actions/secrets/%s", login, secretName))
+                .send();
+    }
 }

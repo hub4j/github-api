@@ -1,38 +1,29 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.io.IOException;
-import java.net.URL;
-
 /**
  * A public key for the given repository
  *
  * @author Aditya Bansal
  */
-public class GHRepositoryPublicKey extends GHObject {
-    // Not provided by the API.
-    @JsonIgnore
-    private GHRepository owner;
+class GHRepositoryPublicKey extends GHPublicKey {
+    /**
+     * Repository that the secret belongs to.
+     */
+    transient GHRepository repository;
 
-    private String keyId;
-    private String key;
+    GHRepositoryPublicKey wrap(GHRepository owner) {
+        this.repository = owner;
+        return this;
+    }
 
     @Override
-    public URL getHtmlUrl() throws IOException {
-        return null;
+    GitHub root() {
+        return repository.root();
     }
 
-    public String getKeyId() {
-        return keyId;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    GHRepositoryPublicKey wrapUp(GHRepository owner) {
-        this.owner = owner;
-        return this;
+    @Override
+    String getApiRoute() {
+        return String
+                .format("/repos/%s/%s/actions/secrets/public-key", repository.getOwnerName(), repository.getName());
     }
 }

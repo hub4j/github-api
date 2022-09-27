@@ -1755,6 +1755,61 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Gets a single repository secret without revealing its encrypted value.
+     * "https://docs.github.com/en/rest/actions/secrets#get-a-repository-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @return the secret
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepoSecret getSecret(String secretName) throws IOException {
+        return root().createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/actions/secrets/%s", getOwnerName(), name, secretName))
+                .fetch(GHRepoSecret.class)
+                .wrapUp(this);
+    }
+
+    /**
+     * Creates or updates a repository secret with an encrypted value.
+     * "https://docs.github.com/rest/reference/actions#create-or-update-a-repository-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @param encryptedValue
+     *            The encrypted value for this secret
+     * @param publicKeyId
+     *            The id of the Public Key used to encrypt this secret
+     * @throws IOException
+     *             the io exception
+     */
+    public void createSecret(String secretName, String encryptedValue, String publicKeyId) throws IOException {
+        root().createRequest()
+                .method("PUT")
+                .with("encrypted_value", encryptedValue)
+                .with("key_id", publicKeyId)
+                .withUrlPath(String.format("/repos/%s/%s/actions/secrets/%s", getOwnerName(), name, secretName))
+                .send();
+    }
+
+    /**
+     * Deletes a secret in a repository using the secret name.
+     * "https://docs.github.com/rest/reference/actions#delete-a-repository-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteSecret(String secretName) throws IOException {
+        root().createRequest()
+                .method("DELETE")
+                .withUrlPath(String.format("/repos/%s/%s/actions/secrets/%s", getOwnerName(), name, secretName))
+                .send();
+    }
+
+    /**
      * Sets {@link #getCompare(String, String)} to return a {@link GHCompare} that uses a paginated commit list instead
      * of limiting to 250 results.
      *
@@ -3206,11 +3261,8 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHRepositoryPublicKey getPublicKey() throws IOException {
-        return root().createRequest()
-                .withUrlPath(getApiTailUrl("/actions/secrets/public-key"))
-                .fetch(GHRepositoryPublicKey.class)
-                .wrapUp(this);
+    public GHPublicKey getPublicKey() throws IOException {
+        return GHPublicKeys.repoContext(this, owner).getPublicKey();
     }
 
     // Only used within listTopics().
@@ -3252,27 +3304,6 @@ public class GHRepository extends GHObject {
                 .send();
     }
 
-    /**
-     * Set/Update a repository secret
-     * "https://docs.github.com/rest/reference/actions#create-or-update-a-repository-secret"
-     *
-     * @param secretName
-     *            the name of the secret
-     * @param encryptedValue
-     *            The encrypted value for this secret
-     * @param publicKeyId
-     *            The id of the Public Key used to encrypt this secret
-     * @throws IOException
-     *             the io exception
-     */
-    public void createSecret(String secretName, String encryptedValue, String publicKeyId) throws IOException {
-        root().createRequest()
-                .method("PUT")
-                .with("encrypted_value", encryptedValue)
-                .with("key_id", publicKeyId)
-                .withUrlPath(getApiTailUrl("actions/secrets") + "/" + secretName)
-                .send();
-    }
     /**
      * Create a tag. See https://developer.github.com/v3/git/tags/#create-a-tag-object
      *

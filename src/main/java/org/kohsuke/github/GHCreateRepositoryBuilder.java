@@ -15,9 +15,12 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
     /**
      * Instantiates a new GH create repository builder.
      *
-     * @param name the name
-     * @param root the root
-     * @param apiTail the api tail
+     * @param name
+     *            the name
+     * @param root
+     *            the root
+     * @param apiTail
+     *            the api tail
      */
     public GHCreateRepositoryBuilder(String name, GitHub root, String apiTail) {
         super(GHCreateRepositoryBuilder.class, root, null);
@@ -46,9 +49,11 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
     /**
      * Desired license template to apply.
      *
-     * @param license            template to base the license file on
+     * @param license
+     *            template to base the license file on
      * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder licenseTemplate(String license) throws IOException {
         return with("license_template", license);
@@ -113,8 +118,10 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
     /**
      * Create repository from template repository.
      *
-     * @param templateOwner            template repository owner
-     * @param templateRepo            template repository
+     * @param templateOwner
+     *            template repository owner
+     * @param templateRepo
+     *            template repository
      * @return a builder to continue with building
      * @see <a href="https://developer.github.com/v3/previews/">GitHub API Previews</a>
      */

@@ -40,7 +40,8 @@ public class GHTreeBuilder {
     /**
      * Instantiates a new GH tree builder.
      *
-     * @param repo the repo
+     * @param repo
+     *            the repo
      */
     GHTreeBuilder(GHRepository repo) {
         this.repo = repo;

@@ -11,28 +11,28 @@ import java.util.Locale;
  */
 public class GHDeploymentStatus extends GHObject {
     private GHRepository owner;
-    
+
     /** The creator. */
     protected GHUser creator;
-    
+
     /** The state. */
     protected String state;
-    
+
     /** The description. */
     protected String description;
-    
+
     /** The target url. */
     protected String target_url;
-    
+
     /** The log url. */
     protected String log_url;
-    
+
     /** The deployment url. */
     protected String deployment_url;
-    
+
     /** The repository url. */
     protected String repository_url;
-    
+
     /** The environment url. */
     protected String environment_url;
 

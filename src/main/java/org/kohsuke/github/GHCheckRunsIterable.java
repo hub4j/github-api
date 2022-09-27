@@ -17,8 +17,10 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
     /**
      * Instantiates a new GH check runs iterable.
      *
-     * @param owner the owner
-     * @param request the request
+     * @param owner
+     *            the owner
+     * @param request
+     *            the request
      */
     public GHCheckRunsIterable(GHRepository owner, GitHubRequest request) {
         this.owner = owner;
@@ -28,7 +30,8 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
     /**
      * Iterator.
      *
-     * @param pageSize the page size
+     * @param pageSize
+     *            the page size
      * @return the paged iterator
      */
     @Nonnull
@@ -42,7 +45,8 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
     /**
      * Adapt.
      *
-     * @param base the base
+     * @param base
+     *            the base
      * @return the iterator
      */
     protected Iterator<GHCheckRun[]> adapt(final Iterator<GHCheckRunsPage> base) {

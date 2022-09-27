@@ -26,13 +26,13 @@ public abstract class GHPerson extends GHObject {
     /** The twitter username. */
     // other fields (that only show up in full data)
     protected String location, blog, email, bio, name, company, type, twitter_username;
-    
+
     /** The html url. */
     protected String html_url;
-    
+
     /** The public gists. */
     protected int followers, following, public_repos, public_gists;
-    
+
     /** The hireable. */
     protected boolean site_admin, hireable;
 
@@ -201,7 +201,8 @@ public abstract class GHPerson extends GHObject {
      * Gets the human-readable name of the user, like "Kohsuke Kawaguchi".
      *
      * @return the name
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public String getName() throws IOException {
         populate();
@@ -224,7 +225,8 @@ public abstract class GHPerson extends GHObject {
      * Gets the location of this user, like "Santa Clara, California".
      *
      * @return the location
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public String getLocation() throws IOException {
         populate();
@@ -235,7 +237,8 @@ public abstract class GHPerson extends GHObject {
      * Gets the Twitter Username of this user, like "GitHub".
      *
      * @return the Twitter username
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public String getTwitterUsername() throws IOException {
         populate();
@@ -246,7 +249,8 @@ public abstract class GHPerson extends GHObject {
      * Gets the created at.
      *
      * @return the created at
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public Date getCreatedAt() throws IOException {
         populate();
@@ -257,7 +261,8 @@ public abstract class GHPerson extends GHObject {
      * Gets the updated at.
      *
      * @return the updated at
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public Date getUpdatedAt() throws IOException {
         populate();
@@ -362,7 +367,8 @@ public abstract class GHPerson extends GHObject {
      * Gets the site_admin field.
      *
      * @return the site_admin field
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public boolean isSiteAdmin() throws IOException {
         populate();

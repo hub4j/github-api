@@ -151,7 +151,8 @@ public class GHLabel extends GitHubInteractiveObject {
     /**
      * To names.
      *
-     * @param labels the labels
+     * @param labels
+     *            the labels
      * @return the collection
      */
     static Collection<String> toNames(Collection<GHLabel> labels) {
@@ -249,7 +250,8 @@ public class GHLabel extends GitHubInteractiveObject {
     /**
      * Equals.
      *
-     * @param o the o
+     * @param o
+     *            the o
      * @return true, if successful
      */
     @Override

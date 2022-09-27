@@ -96,7 +96,8 @@ public class GHWorkflowRun extends GHObject {
      * When was this run triggered?.
      *
      * @return run triggered
-     * @throws IOException             on error
+     * @throws IOException
+     *             on error
      */
     public Date getRunStartedAt() throws IOException {
         return GitHubClient.parseDate(runStartedAt);
@@ -106,7 +107,8 @@ public class GHWorkflowRun extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public URL getHtmlUrl() throws IOException {
@@ -331,10 +333,13 @@ public class GHWorkflowRun extends GHObject {
      * <p>
      * Note that the archive is the same as the one downloaded from a workflow run so it contains the logs for all jobs.
      *
-     * @param <T>            the type of result
-     * @param streamFunction            The {@link InputStreamFunction} that will process the stream
+     * @param <T>
+     *            the type of result
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
      * @return the result of reading the stream.
-     * @throws IOException             The IO exception.
+     * @throws IOException
+     *             The IO exception.
      */
     public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
         requireNonNull(streamFunction, "Stream function must not be null");
@@ -383,7 +388,8 @@ public class GHWorkflowRun extends GHObject {
     /**
      * Wrap up.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH workflow run
      */
     GHWorkflowRun wrapUp(GHRepository owner) {
@@ -394,7 +400,8 @@ public class GHWorkflowRun extends GHObject {
     /**
      * Wrap up.
      *
-     * @param root the root
+     * @param root
+     *            the root
      * @return the GH workflow run
      */
     GHWorkflowRun wrapUp(GitHub root) {
@@ -478,20 +485,21 @@ public class GHWorkflowRun extends GHObject {
      * The Enum Status.
      */
     public static enum Status {
-        
+
         /** The queued. */
-        QUEUED, 
- /** The in progress. */
- IN_PROGRESS, 
- /** The completed. */
- COMPLETED, 
- /** The unknown. */
- UNKNOWN;
+        QUEUED,
+        /** The in progress. */
+        IN_PROGRESS,
+        /** The completed. */
+        COMPLETED,
+        /** The unknown. */
+        UNKNOWN;
 
         /**
          * From.
          *
-         * @param value the value
+         * @param value
+         *            the value
          * @return the status
          */
         public static Status from(String value) {
@@ -513,30 +521,31 @@ public class GHWorkflowRun extends GHObject {
      * The Enum Conclusion.
      */
     public static enum Conclusion {
-        
+
         /** The action required. */
-        ACTION_REQUIRED, 
- /** The cancelled. */
- CANCELLED, 
- /** The failure. */
- FAILURE, 
- /** The neutral. */
- NEUTRAL, 
- /** The success. */
- SUCCESS, 
- /** The skipped. */
- SKIPPED, 
- /** The stale. */
- STALE, 
- /** The timed out. */
- TIMED_OUT, 
- /** The unknown. */
- UNKNOWN;
+        ACTION_REQUIRED,
+        /** The cancelled. */
+        CANCELLED,
+        /** The failure. */
+        FAILURE,
+        /** The neutral. */
+        NEUTRAL,
+        /** The success. */
+        SUCCESS,
+        /** The skipped. */
+        SKIPPED,
+        /** The stale. */
+        STALE,
+        /** The timed out. */
+        TIMED_OUT,
+        /** The unknown. */
+        UNKNOWN;
 
         /**
          * From.
          *
-         * @param value the value
+         * @param value
+         *            the value
          * @return the conclusion
          */
         public static Conclusion from(String value) {

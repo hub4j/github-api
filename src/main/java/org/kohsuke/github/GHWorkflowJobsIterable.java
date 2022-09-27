@@ -17,8 +17,10 @@ class GHWorkflowJobsIterable extends PagedIterable<GHWorkflowJob> {
     /**
      * Instantiates a new GH workflow jobs iterable.
      *
-     * @param repo the repo
-     * @param request the request
+     * @param repo
+     *            the repo
+     * @param request
+     *            the request
      */
     public GHWorkflowJobsIterable(GHRepository repo, GitHubRequest request) {
         this.repo = repo;
@@ -28,7 +30,8 @@ class GHWorkflowJobsIterable extends PagedIterable<GHWorkflowJob> {
     /**
      * Iterator.
      *
-     * @param pageSize the page size
+     * @param pageSize
+     *            the page size
      * @return the paged iterator
      */
     @Nonnull
@@ -42,7 +45,8 @@ class GHWorkflowJobsIterable extends PagedIterable<GHWorkflowJob> {
     /**
      * Adapt.
      *
-     * @param base the base
+     * @param base
+     *            the base
      * @return the iterator
      */
     protected Iterator<GHWorkflowJob[]> adapt(final Iterator<GHWorkflowJobsPage> base) {

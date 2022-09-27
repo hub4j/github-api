@@ -9,7 +9,7 @@ import java.net.URL;
 // TODO: Auto-generated Javadoc
 /**
  * Pluggability for customizing HTTP request behaviors or using altogether different library.
- * 
+ *
  * <p>
  * For example, you can implement this to st custom timeouts.
  *

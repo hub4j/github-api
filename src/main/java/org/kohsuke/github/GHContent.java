@@ -174,7 +174,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * Retrieves the actual content stored here.
      *
      * @return the input stream
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     /**
      * Retrieves the actual bytes of the blob.
@@ -387,8 +388,10 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     /**
      * Gets the api route.
      *
-     * @param repository the repository
-     * @param path the path
+     * @param repository
+     *            the repository
+     * @param path
+     *            the path
      * @return the api route
      */
     static String getApiRoute(GHRepository repository, String path) {
@@ -398,7 +401,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH content
      */
     GHContent wrap(GHRepository owner) {
@@ -408,10 +412,11 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
 
     /**
      * Fully populate the data by retrieving missing data.
-     * 
+     *
      * Depending on the original API call where this object is created, it may not contain everything.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public synchronized void refresh() throws IOException {

@@ -8,11 +8,12 @@ package org.kohsuke.github;
  * @see GitHub#searchRepositories() GitHub#searchRepositories()
  */
 public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
-    
+
     /**
      * Instantiates a new GH repository search builder.
      *
-     * @param root the root
+     * @param root
+     *            the root
      */
     GHRepositorySearchBuilder(GitHub root) {
         super(root, RepositorySearchResult.class);
@@ -131,9 +132,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     /**
      * Search by repository visibility.
      *
-     * @param visibility            repository visibility
+     * @param visibility
+     *            repository visibility
      * @return the gh repository search builder
-     * @throws GHException             if {@link GHRepository.Visibility#UNKNOWN} is passed. UNKNOWN is a placeholder for unexpected values
+     * @throws GHException
+     *             if {@link GHRepository.Visibility#UNKNOWN} is passed. UNKNOWN is a placeholder for unexpected values
      *             encountered when reading data.
      * @see <a href=
      *      "https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-repository-visibility">Search
@@ -264,13 +267,13 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      * The enum Sort.
      */
     public enum Sort {
-        
+
         /** The stars. */
-        STARS, 
- /** The forks. */
- FORKS, 
- /** The updated. */
- UPDATED
+        STARS,
+        /** The forks. */
+        FORKS,
+        /** The updated. */
+        UPDATED
     }
 
     /**
@@ -303,11 +306,12 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
         PARENT_ONLY("");
 
         private String filterMode;
-        
+
         /**
          * Instantiates a new fork.
          *
-         * @param mode the mode
+         * @param mode
+         *            the mode
          */
         Fork(final String mode) {
             this.filterMode = mode;

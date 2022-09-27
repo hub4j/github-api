@@ -83,7 +83,8 @@ public class GHEventInfo extends GitHubInteractiveObject {
     /**
      * Transform type to GH event.
      *
-     * @param type the type
+     * @param type
+     *            the type
      * @return the GH event
      */
     static GHEvent transformTypeToGHEvent(String type) {

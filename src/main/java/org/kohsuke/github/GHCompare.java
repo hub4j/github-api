@@ -345,15 +345,15 @@ public class GHCompare {
      * The enum Status.
      */
     public static enum Status {
-        
+
         /** The behind. */
-        behind, 
- /** The ahead. */
- ahead, 
- /** The identical. */
- identical, 
- /** The diverged. */
- diverged
+        behind,
+        /** The ahead. */
+        ahead,
+        /** The identical. */
+        identical,
+        /** The diverged. */
+        diverged
     }
 
     /**
@@ -372,7 +372,8 @@ public class GHCompare {
         /**
          * Iterator.
          *
-         * @param pageSize the page size
+         * @param pageSize
+         *            the page size
          * @return the paged iterator
          */
         @Nonnull
@@ -396,7 +397,8 @@ public class GHCompare {
         /**
          * Adapt.
          *
-         * @param base the base
+         * @param base
+         *            the base
          * @return the iterator
          */
         protected Iterator<Commit[]> adapt(final Iterator<GHCompare> base) {

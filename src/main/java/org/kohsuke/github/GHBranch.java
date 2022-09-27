@@ -34,8 +34,10 @@ public class GHBranch extends GitHubInteractiveObject {
     /**
      * Instantiates a new GH branch.
      *
-     * @param name the name
-     * @throws Exception the exception
+     * @param name
+     *            the name
+     * @throws Exception
+     *             the exception
      */
     @JsonCreator
     GHBranch(@JsonProperty(value = "name", required = true) String name) throws Exception {
@@ -47,7 +49,7 @@ public class GHBranch extends GitHubInteractiveObject {
      * The type Commit.
      */
     public static class Commit {
-        
+
         /** The sha. */
         String sha;
 
@@ -242,7 +244,8 @@ public class GHBranch extends GitHubInteractiveObject {
     /**
      * Wrap.
      *
-     * @param repo the repo
+     * @param repo
+     *            the repo
      * @return the GH branch
      */
     GHBranch wrap(GHRepository repo) {

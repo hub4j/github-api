@@ -16,7 +16,8 @@ class GHWorkflowsIterable extends PagedIterable<GHWorkflow> {
     /**
      * Instantiates a new GH workflows iterable.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      */
     public GHWorkflowsIterable(GHRepository owner) {
         this.owner = owner;
@@ -25,7 +26,8 @@ class GHWorkflowsIterable extends PagedIterable<GHWorkflow> {
     /**
      * Iterator.
      *
-     * @param pageSize the page size
+     * @param pageSize
+     *            the page size
      * @return the paged iterator
      */
     @Nonnull
@@ -44,7 +46,8 @@ class GHWorkflowsIterable extends PagedIterable<GHWorkflow> {
     /**
      * Adapt.
      *
-     * @param base the base
+     * @param base
+     *            the base
      * @return the iterator
      */
     protected Iterator<GHWorkflow[]> adapt(final Iterator<GHWorkflowsPage> base) {

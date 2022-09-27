@@ -9,12 +9,13 @@ import javax.annotation.Nonnull;
 /**
  * {@link PagedIterable} implementation that take a {@link Consumer} that initializes all the items on each page as they
  * are retrieved.
- * 
+ *
  * {@link GitHubPageContentsIterable} is immutable and thread-safe, but the iterator returned from {@link #iterator()}
  * is not. Any one instance of iterator should only be called from a single thread.
  *
  * @author Liam Newman
- * @param <T>            the type of items on each page
+ * @param <T>
+ *            the type of items on each page
  */
 class GitHubPageContentsIterable<T> extends PagedIterable<T> {
 
@@ -26,10 +27,14 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
     /**
      * Instantiates a new git hub page contents iterable.
      *
-     * @param client the client
-     * @param request the request
-     * @param receiverType the receiver type
-     * @param itemInitializer the item initializer
+     * @param client
+     *            the client
+     * @param request
+     *            the request
+     * @param receiverType
+     *            the receiver type
+     * @param itemInitializer
+     *            the item initializer
      */
     GitHubPageContentsIterable(GitHubClient client,
             GitHubRequest request,

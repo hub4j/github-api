@@ -17,7 +17,8 @@ import javax.annotation.Nonnull;
  * is not. Any one instance of {@link PagedIterator} should only be called from a single thread.
  *
  * @author Kohsuke Kawaguchi
- * @param <T>            the type of items on each page
+ * @param <T>
+ *            the type of items on each page
  */
 public abstract class PagedIterable<T> implements Iterable<T> {
     /**

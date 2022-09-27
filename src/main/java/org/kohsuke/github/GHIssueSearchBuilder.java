@@ -8,11 +8,12 @@ package org.kohsuke.github;
  * @see GitHub#searchIssues() GitHub#searchIssues()
  */
 public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
-    
+
     /**
      * Instantiates a new GH issue search builder.
      *
-     * @param root the root
+     * @param root
+     *            the root
      */
     GHIssueSearchBuilder(GitHub root) {
         super(root, IssueSearchResult.class);
@@ -21,7 +22,8 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     /**
      * Search terms.
      *
-     * @param term the term
+     * @param term
+     *            the term
      * @return the GH issue search builder
      */
     public GHIssueSearchBuilder q(String term) {
@@ -106,13 +108,13 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
      * The enum Sort.
      */
     public enum Sort {
-        
+
         /** The comments. */
-        COMMENTS, 
- /** The created. */
- CREATED, 
- /** The updated. */
- UPDATED
+        COMMENTS,
+        /** The created. */
+        CREATED,
+        /** The updated. */
+        UPDATED
     }
 
     private static class IssueSearchResult extends SearchResult<GHIssue> {

@@ -11,7 +11,8 @@ import javax.annotation.Nonnull;
  * {@link PagedIterable} enhanced to report search result specific information.
  *
  * @author Kohsuke Kawaguchi
- * @param <T>            the type parameter
+ * @param <T>
+ *            the type parameter
  */
 @SuppressFBWarnings(
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD",
@@ -32,9 +33,12 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
     /**
      * Instantiates a new paged search iterable.
      *
-     * @param root the root
-     * @param request the request
-     * @param receiverType the receiver type
+     * @param root
+     *            the root
+     * @param request
+     *            the request
+     * @param receiverType
+     *            the receiver type
      */
     PagedSearchIterable(GitHub root, GitHubRequest request, Class<? extends SearchResult<T>> receiverType) {
         this.root = root;
@@ -45,7 +49,8 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
     /**
      * With page size.
      *
-     * @param size the size
+     * @param size
+     *            the size
      * @return the paged search iterable
      */
     @Override
@@ -81,7 +86,8 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
     /**
      * Iterator.
      *
-     * @param pageSize the page size
+     * @param pageSize
+     *            the page size
      * @return the paged iterator
      */
     @Nonnull

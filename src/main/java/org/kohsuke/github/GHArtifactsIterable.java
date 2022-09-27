@@ -17,8 +17,10 @@ class GHArtifactsIterable extends PagedIterable<GHArtifact> {
     /**
      * Instantiates a new GH artifacts iterable.
      *
-     * @param owner the owner
-     * @param requestBuilder the request builder
+     * @param owner
+     *            the owner
+     * @param requestBuilder
+     *            the request builder
      */
     public GHArtifactsIterable(GHRepository owner, GitHubRequest.Builder<?> requestBuilder) {
         this.owner = owner;
@@ -28,7 +30,8 @@ class GHArtifactsIterable extends PagedIterable<GHArtifact> {
     /**
      * Iterator.
      *
-     * @param pageSize the page size
+     * @param pageSize
+     *            the page size
      * @return the paged iterator
      */
     @Nonnull
@@ -42,7 +45,8 @@ class GHArtifactsIterable extends PagedIterable<GHArtifact> {
     /**
      * Adapt.
      *
-     * @param base the base
+     * @param base
+     *            the base
      * @return the iterator
      */
     protected Iterator<GHArtifact[]> adapt(final Iterator<GHArtifactsPage> base) {

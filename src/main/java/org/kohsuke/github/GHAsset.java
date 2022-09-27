@@ -12,7 +12,7 @@ import java.net.URL;
  * @see GHRelease#getAssets() GHRelease#getAssets()
  */
 public class GHAsset extends GHObject {
-    
+
     /** The owner. */
     GHRepository owner;
     private String name;
@@ -154,7 +154,8 @@ public class GHAsset extends GHObject {
     /**
      * Wrap.
      *
-     * @param release the release
+     * @param release
+     *            the release
      * @return the GH asset
      */
     GHAsset wrap(GHRelease release) {

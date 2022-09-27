@@ -14,11 +14,12 @@ import java.io.IOException;
  */
 @Preview(Previews.CLOAK)
 public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
-    
+
     /**
      * Instantiates a new GH commit search builder.
      *
-     * @param root the root
+     * @param root
+     *            the root
      */
     GHCommitSearchBuilder(GitHub root) {
         super(root, CommitSearchResult.class);
@@ -28,7 +29,8 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
     /**
      * Search terms.
      *
-     * @param term the term
+     * @param term
+     *            the term
      * @return the GH commit search builder
      */
     public GHCommitSearchBuilder q(String term) {
@@ -240,11 +242,11 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
      * The enum Sort.
      */
     public enum Sort {
-        
+
         /** The author date. */
-        AUTHOR_DATE, 
- /** The committer date. */
- COMMITTER_DATE
+        AUTHOR_DATE,
+        /** The committer date. */
+        COMMITTER_DATE
     }
 
     private static class CommitSearchResult extends SearchResult<GHCommit> {

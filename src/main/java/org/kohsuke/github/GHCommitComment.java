@@ -24,13 +24,13 @@ public class GHCommitComment extends GHObject implements Reactable {
 
     /** The commit id. */
     String body, html_url, commit_id;
-    
+
     /** The line. */
     Integer line;
-    
+
     /** The path. */
     String path;
-    
+
     /** The user. */
     GHUser user; // not fully populated. beware.
 
@@ -136,9 +136,11 @@ public class GHCommitComment extends GHObject implements Reactable {
     /**
      * Creates the reaction.
      *
-     * @param content the content
+     * @param content
+     *            the content
      * @return the GH reaction
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
@@ -154,8 +156,10 @@ public class GHCommitComment extends GHObject implements Reactable {
     /**
      * Delete reaction.
      *
-     * @param reaction the reaction
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @param reaction
+     *            the reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public void deleteReaction(GHReaction reaction) throws IOException {
         owner.root()
@@ -196,7 +200,8 @@ public class GHCommitComment extends GHObject implements Reactable {
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH commit comment
      */
     GHCommitComment wrap(GHRepository owner) {

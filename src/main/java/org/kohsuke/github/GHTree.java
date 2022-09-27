@@ -15,7 +15,7 @@ import java.util.List;
  * @see GHTreeEntry#asTree() GHTreeEntry#asTree()
  */
 public class GHTree {
-    
+
     /** The repo. */
     /* package almost final */GHRepository repo;
 
@@ -80,7 +80,8 @@ public class GHTree {
     /**
      * Wrap.
      *
-     * @param repo the repo
+     * @param repo
+     *            the repo
      * @return the GH tree
      */
     GHTree wrap(GHRepository repo) {

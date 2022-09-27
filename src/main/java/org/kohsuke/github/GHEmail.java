@@ -39,10 +39,10 @@ public class GHEmail {
 
     /** The email. */
     protected String email;
-    
+
     /** The primary. */
     protected boolean primary;
-    
+
     /** The verified. */
     protected boolean verified;
 
@@ -96,7 +96,8 @@ public class GHEmail {
     /**
      * Equals.
      *
-     * @param obj the obj
+     * @param obj
+     *            the obj
      * @return true, if successful
      */
     @Override

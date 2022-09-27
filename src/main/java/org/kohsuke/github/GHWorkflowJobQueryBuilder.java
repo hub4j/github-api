@@ -12,7 +12,8 @@ public class GHWorkflowJobQueryBuilder extends GHQueryBuilder<GHWorkflowJob> {
     /**
      * Instantiates a new GH workflow job query builder.
      *
-     * @param workflowRun the workflow run
+     * @param workflowRun
+     *            the workflow run
      */
     GHWorkflowJobQueryBuilder(GHWorkflowRun workflowRun) {
         super(workflowRun.getRepository().root());

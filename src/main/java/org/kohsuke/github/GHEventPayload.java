@@ -159,7 +159,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         /**
          * Sets Check Run object.
          *
-         * @param currentCheckRun            the check run object
+         * @param currentCheckRun
+         *            the check run object
          * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
         @Deprecated
@@ -180,7 +181,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         /**
          * Sets the Requested Action object.
          *
-         * @param currentRequestedAction            the current action
+         * @param currentRequestedAction
+         *            the current action
          * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
          */
         @Deprecated

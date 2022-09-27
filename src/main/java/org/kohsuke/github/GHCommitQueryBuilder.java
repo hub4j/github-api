@@ -26,7 +26,8 @@ public class GHCommitQueryBuilder {
     /**
      * Instantiates a new GH commit query builder.
      *
-     * @param repo the repo
+     * @param repo
+     *            the repo
      */
     GHCommitQueryBuilder(GHRepository repo) {
         this.repo = repo;
@@ -84,7 +85,8 @@ public class GHCommitQueryBuilder {
     /**
      * Only commits after this date will be returned.
      *
-     * @param dt            the dt
+     * @param dt
+     *            the dt
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(Date dt) {
@@ -95,7 +97,8 @@ public class GHCommitQueryBuilder {
     /**
      * Only commits after this date will be returned.
      *
-     * @param timestamp            the timestamp
+     * @param timestamp
+     *            the timestamp
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(long timestamp) {
@@ -105,7 +108,8 @@ public class GHCommitQueryBuilder {
     /**
      * Only commits before this date will be returned.
      *
-     * @param dt            the dt
+     * @param dt
+     *            the dt
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(Date dt) {
@@ -116,7 +120,8 @@ public class GHCommitQueryBuilder {
     /**
      * Only commits before this date will be returned.
      *
-     * @param timestamp            the timestamp
+     * @param timestamp
+     *            the timestamp
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(long timestamp) {

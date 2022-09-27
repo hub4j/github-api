@@ -19,7 +19,8 @@ public class GHTag extends GitHubInteractiveObject {
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH tag
      */
     GHTag wrap(GHRepository owner) {

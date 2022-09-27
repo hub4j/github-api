@@ -43,14 +43,15 @@ import javax.annotation.Nonnull;
  * @author Kohsuke Kawaguchi
  */
 class Requester extends GitHubRequest.Builder<Requester> {
-    
+
     /** The client. */
     /* private */ final transient GitHubClient client;
 
     /**
      * Instantiates a new requester.
      *
-     * @param client the client
+     * @param client
+     *            the client
      */
     Requester(GitHubClient client) {
         this.client = client;
@@ -118,10 +119,13 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * Response input stream. There are scenarios where direct stream reading is needed, however it is better to use
      * {@link #fetch(Class)} where possible.
      *
-     * @param <T> the generic type
-     * @param handler the handler
+     * @param <T>
+     *            the generic type
+     * @param handler
+     *            the handler
      * @return the t
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public <T> T fetchStream(@Nonnull InputStreamFunction<T> handler) throws IOException {
         return client.sendRequest(this, (connectorResponse) -> handler.apply(connectorResponse.bodyStream())).body();
@@ -154,9 +158,12 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * or {@link Iterator#hasNext()} are called.
      * </p>
      *
-     * @param <R>            the element type for the pages returned from
-     * @param type            the type of the pages to retrieve.
-     * @param itemInitializer            the consumer to execute on each paged item retrieved.
+     * @param <R>
+     *            the element type for the pages returned from
+     * @param type
+     *            the type of the pages to retrieve.
+     * @param itemInitializer
+     *            the consumer to execute on each paged item retrieved.
      * @return the {@link PagedIterable} for this builder.
      */
     public <R> PagedIterable<R> toIterable(Class<R[]> type, Consumer<R> itemInitializer) {

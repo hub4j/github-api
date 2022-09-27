@@ -21,19 +21,19 @@ public class GHMyself extends GHUser {
      * Type of repositories returned during listing.
      */
     public enum RepositoryListFilter {
-        
+
         /** All public and private repositories that current user has access or collaborates to. */
         ALL,
-        
+
         /** Public and private repositories owned by current user. */
         OWNER,
-        
+
         /** Public repositories that current user has access or collaborates to. */
         PUBLIC,
-        
+
         /** Private repositories that current user has access or collaborates to. */
         PRIVATE,
-        
+
         /** Public and private repositories that current user is a member. */
         MEMBER;
     }
@@ -137,7 +137,7 @@ public class GHMyself extends GHUser {
 
     /**
      * Lists up all repositories this user owns (public and private).
-     * 
+     *
      * Unlike {@link #getAllRepositories()}, this does not wait until all the repositories are returned. Repositories
      * are returned by GitHub API with a 30 items per page.
      *
@@ -151,13 +151,14 @@ public class GHMyself extends GHUser {
     /**
      * List repositories that are accessible to the authenticated user (public and private) using the specified page
      * size.
-     * 
+     *
      * This includes repositories owned by the authenticated user, repositories that belong to other users where the
      * authenticated user is a collaborator, and other organizations' repositories that the authenticated user has
      * access to through an organization membership.
      *
-     * @param pageSize            size for each page of items returned by GitHub. Maximum page size is 100.
-     * 
+     * @param pageSize
+     *            size for each page of items returned by GitHub. Maximum page size is 100.
+     *
      *            Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      * @return the paged iterable
      */
@@ -206,7 +207,8 @@ public class GHMyself extends GHUser {
     /**
      * List your organization memberships.
      *
-     * @param state            Filter by a specific state
+     * @param state
+     *            Filter by a specific state
      * @return the paged iterable
      */
     public PagedIterable<GHMembership> listOrgMemberships(final GHMembership.State state) {

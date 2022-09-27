@@ -20,7 +20,8 @@ class GHWorkflowsPage {
     /**
      * Gets the workflows.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the workflows
      */
     GHWorkflow[] getWorkflows(GHRepository owner) {

@@ -76,7 +76,8 @@ public class GHUser extends GHPerson {
      * Lists the users that this user is following.
      *
      * @return the follows
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getFollows() throws IOException {
@@ -232,7 +233,8 @@ public class GHUser extends GHPerson {
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      *
      * @return the paged iterable
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return root().createRequest()
@@ -257,7 +259,8 @@ public class GHUser extends GHPerson {
      * Gets LDAP information for user.
      *
      * @return The LDAP information
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      * @see <a
      *      href=https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap>Github
      *      LDAP</a>
@@ -280,7 +283,8 @@ public class GHUser extends GHPerson {
     /**
      * Equals.
      *
-     * @param obj the obj
+     * @param obj
+     *            the obj
      * @return true, if successful
      */
     @Override
@@ -295,7 +299,8 @@ public class GHUser extends GHPerson {
     /**
      * Gets the api tail url.
      *
-     * @param tail the tail
+     * @param tail
+     *            the tail
      * @return the api tail url
      */
     String getApiTailUrl(String tail) {

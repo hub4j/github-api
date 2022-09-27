@@ -16,14 +16,15 @@ import javax.annotation.Nonnull;
 public class GHGistUpdater {
     private final GHGist base;
     private final Requester builder;
-    
+
     /** The files. */
     LinkedHashMap<String, Map<String, String>> files;
 
     /**
      * Instantiates a new GH gist updater.
      *
-     * @param base the base
+     * @param base
+     *            the base
      */
     GHGistUpdater(GHGist base) {
         this.base = base;
@@ -51,9 +52,11 @@ public class GHGistUpdater {
     /**
      * Delete file.
      *
-     * @param fileName the file name
+     * @param fileName
+     *            the file name
      * @return the GH gist updater
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public GHGistUpdater deleteFile(@Nonnull String fileName) throws IOException {
         files.put(fileName, null);
@@ -97,11 +100,15 @@ public class GHGistUpdater {
     /**
      * Update file name and content.
      *
-     * @param fileName            the file name
-     * @param newFileName            the new file name
-     * @param content            the content
+     * @param fileName
+     *            the file name
+     * @param newFileName
+     *            the new file name
+     * @param content
+     *            the content
      * @return the gh gist updater
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String newFileName, @Nonnull String content)
             throws IOException {

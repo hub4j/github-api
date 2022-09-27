@@ -188,7 +188,8 @@ public class GHGist extends GHObject {
     /**
      * Gets the api tail url.
      *
-     * @param tail the tail
+     * @param tail
+     *            the tail
      * @return the api tail url
      */
     String getApiTailUrl(String tail) {
@@ -274,7 +275,8 @@ public class GHGist extends GHObject {
     /**
      * Equals.
      *
-     * @param o the o
+     * @param o
+     *            the o
      * @return true, if successful
      */
     @Override

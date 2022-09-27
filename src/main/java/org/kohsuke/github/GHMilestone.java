@@ -14,7 +14,7 @@ import java.util.Locale;
  * @author Yusuke Kokubo
  */
 public class GHMilestone extends GHObject {
-    
+
     /** The owner. */
     GHRepository owner;
 
@@ -22,7 +22,7 @@ public class GHMilestone extends GHObject {
     GHUser creator;
     private String state, due_on, title, description, html_url;
     private int closed_issues, open_issues, number;
-    
+
     /** The closed at. */
     protected String closed_at;
 
@@ -62,7 +62,8 @@ public class GHMilestone extends GHObject {
      * When was this milestone closed?.
      *
      * @return the closed at
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public Date getClosedAt() throws IOException {
         return GitHubClient.parseDate(closed_at);

@@ -192,7 +192,8 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     /**
      * Wrap up.
      *
-     * @param parent the parent
+     * @param parent
+     *            the parent
      * @return the GH issue event
      */
     GHIssueEvent wrapUp(GHIssue parent) {

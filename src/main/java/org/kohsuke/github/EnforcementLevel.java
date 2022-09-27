@@ -10,13 +10,13 @@ import java.util.Locale;
  */
 @Deprecated
 public enum EnforcementLevel {
-    
+
     /** The off. */
-    OFF, 
- /** The non admins. */
- NON_ADMINS, 
- /** The everyone. */
- EVERYONE;
+    OFF,
+    /** The non admins. */
+    NON_ADMINS,
+    /** The everyone. */
+    EVERYONE;
 
     /**
      * To string.

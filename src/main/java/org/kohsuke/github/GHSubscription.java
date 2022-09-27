@@ -96,7 +96,8 @@ public class GHSubscription extends GitHubInteractiveObject {
     /**
      * Wrap up.
      *
-     * @param repo the repo
+     * @param repo
+     *            the repo
      * @return the GH subscription
      */
     GHSubscription wrapUp(GHRepository repo) {

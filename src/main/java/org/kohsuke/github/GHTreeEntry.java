@@ -12,7 +12,7 @@ import java.net.URL;
  * @see GHTree
  */
 public class GHTreeEntry {
-    
+
     /** The tree. */
     /* package almost final */GHTree tree;
 

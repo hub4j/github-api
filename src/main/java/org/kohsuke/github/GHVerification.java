@@ -65,43 +65,43 @@ public class GHVerification {
      *      reason values</a>
      */
     public enum Reason {
-        
+
         /** The expired key. */
         EXPIRED_KEY,
-        
+
         /** The not signing key. */
         NOT_SIGNING_KEY,
-        
+
         /** The gpgverify error. */
         GPGVERIFY_ERROR,
-        
+
         /** The gpgverify unavailable. */
         GPGVERIFY_UNAVAILABLE,
-        
+
         /** The unsigned. */
         UNSIGNED,
-        
+
         /** The unknown signature type. */
         UNKNOWN_SIGNATURE_TYPE,
-        
+
         /** The no user. */
         NO_USER,
-        
+
         /** The unverified email. */
         UNVERIFIED_EMAIL,
-        
+
         /** The bad email. */
         BAD_EMAIL,
-        
+
         /** The unknown key. */
         UNKNOWN_KEY,
-        
+
         /** The malformed signature. */
         MALFORMED_SIGNATURE,
-        
+
         /** The invalid. */
         INVALID,
-        
+
         /** The valid. */
         VALID
     }

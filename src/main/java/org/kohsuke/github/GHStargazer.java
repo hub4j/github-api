@@ -50,7 +50,8 @@ public class GHStargazer {
     /**
      * Wrap up.
      *
-     * @param repository the repository
+     * @param repository
+     *            the repository
      */
     void wrapUp(GHRepository repository) {
         this.repository = repository;

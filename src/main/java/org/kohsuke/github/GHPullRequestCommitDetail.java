@@ -45,7 +45,8 @@ public class GHPullRequestCommitDetail {
     /**
      * Wrap up.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      */
     void wrapUp(GHPullRequest owner) {
         this.owner = owner;
@@ -63,10 +64,10 @@ public class GHPullRequestCommitDetail {
      * The type Tree.
      */
     public static class Tree {
-        
+
         /** The sha. */
         String sha;
-        
+
         /** The url. */
         String url;
 
@@ -93,22 +94,22 @@ public class GHPullRequestCommitDetail {
      * The type Commit.
      */
     public static class Commit {
-        
+
         /** The author. */
         Authorship author;
-        
+
         /** The committer. */
         Authorship committer;
-        
+
         /** The message. */
         String message;
-        
+
         /** The tree. */
         Tree tree;
-        
+
         /** The url. */
         String url;
-        
+
         /** The comment count. */
         int comment_count;
 
@@ -173,13 +174,13 @@ public class GHPullRequestCommitDetail {
      * The type CommitPointer.
      */
     public static class CommitPointer {
-        
+
         /** The sha. */
         String sha;
-        
+
         /** The url. */
         String url;
-        
+
         /** The html url. */
         String html_url;
 
@@ -213,19 +214,19 @@ public class GHPullRequestCommitDetail {
 
     /** The sha. */
     String sha;
-    
+
     /** The commit. */
     Commit commit;
-    
+
     /** The url. */
     String url;
-    
+
     /** The html url. */
     String html_url;
-    
+
     /** The comments url. */
     String comments_url;
-    
+
     /** The parents. */
     CommitPointer[] parents;
 

@@ -67,7 +67,8 @@ public class GitUser {
     /**
      * Instantiates a new git user.
      *
-     * @param user the user
+     * @param user
+     *            the user
      */
     public GitUser(GitUser user) {
         // Copy constructor to convert to GHCommit.GHAuthor

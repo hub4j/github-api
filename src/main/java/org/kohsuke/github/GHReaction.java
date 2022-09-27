@@ -52,7 +52,8 @@ public class GHReaction extends GHObject {
     /**
      * Removes this reaction.
      *
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      * @see <a href="https://github.blog/changelog/2022-02-11-legacy-delete-reactions-rest-api-removed/">Legacy Delete
      *      reactions REST API removed</a>
      * @deprecated this API is no longer supported by GitHub, keeping it as is for old versions of GitHub Enterprise

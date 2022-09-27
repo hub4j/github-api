@@ -9,7 +9,8 @@ import java.util.HashSet;
  * Set of {@link GHPerson} with helper lookup methods.
  *
  * @author Kohsuke Kawaguchi
- * @param <T>            the type parameter
+ * @param <T>
+ *            the type parameter
  */
 public class GHPersonSet<T extends GHPerson> extends HashSet<T> {
     private static final long serialVersionUID = 1L;

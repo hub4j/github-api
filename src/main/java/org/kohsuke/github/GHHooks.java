@@ -13,7 +13,7 @@ import java.util.Map;
  * functionality.
  */
 class GHHooks {
-    
+
     /**
      * The Class Context.
      */
@@ -128,7 +128,8 @@ class GHHooks {
         /**
          * Wrap.
          *
-         * @param hook the hook
+         * @param hook
+         *            the hook
          * @return the GH hook
          */
         abstract GHHook wrap(GHHook hook);
@@ -197,8 +198,10 @@ class GHHooks {
     /**
      * Repo context.
      *
-     * @param repository the repository
-     * @param owner the owner
+     * @param repository
+     *            the repository
+     * @param owner
+     *            the owner
      * @return the context
      */
     static Context repoContext(GHRepository repository, GHUser owner) {
@@ -208,7 +211,8 @@ class GHHooks {
     /**
      * Org context.
      *
-     * @param organization the organization
+     * @param organization
+     *            the organization
      * @return the context
      */
     static Context orgContext(GHOrganization organization) {

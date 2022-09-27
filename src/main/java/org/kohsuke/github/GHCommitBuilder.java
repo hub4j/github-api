@@ -36,7 +36,8 @@ public class GHCommitBuilder {
     /**
      * Instantiates a new GH commit builder.
      *
-     * @param repo the repo
+     * @param repo
+     *            the repo
      */
     GHCommitBuilder(GHRepository repo) {
         this.repo = repo;

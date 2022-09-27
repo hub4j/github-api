@@ -35,11 +35,11 @@ public class GHTeam extends GHObject implements Refreshable {
      * The Enum Privacy.
      */
     public enum Privacy {
-        
+
         /** The secret. */
-        SECRET, 
- /** The closed. */
- // only visible to organization owners and members of this team.
+        SECRET,
+        /** The closed. */
+        // only visible to organization owners and members of this team.
         CLOSED // visible to all members of this organization.
     }
 
@@ -47,7 +47,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * Member's role in a team.
      */
     public enum Role {
-        
+
         /** A normal member of the team. */
         MEMBER,
         /**
@@ -60,7 +60,8 @@ public class GHTeam extends GHObject implements Refreshable {
     /**
      * Wrap up.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH team
      */
     GHTeam wrapUp(GHOrganization owner) {
@@ -71,7 +72,8 @@ public class GHTeam extends GHObject implements Refreshable {
     /**
      * Wrap up.
      *
-     * @param root the root
+     * @param root
+     *            the root
      * @return the GH team
      */
     GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
@@ -188,9 +190,11 @@ public class GHTeam extends GHObject implements Refreshable {
     /**
      * Gets a single discussion by ID.
      *
-     * @param discussionNumber            id of the discussion that we want to query for
+     * @param discussionNumber
+     *            id of the discussion that we want to query for
      * @return the discussion
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      * @see <a href= "https://developer.github.com/v3/teams/discussions/#get-a-discussion">documentation</a>
      */
     @Nonnull
@@ -433,7 +437,8 @@ public class GHTeam extends GHObject implements Refreshable {
     /**
      * Refresh.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public void refresh() throws IOException {
@@ -453,7 +458,8 @@ public class GHTeam extends GHObject implements Refreshable {
     /**
      * Equals.
      *
-     * @param o the o
+     * @param o
+     *            the o
      * @return true, if successful
      */
     @Override

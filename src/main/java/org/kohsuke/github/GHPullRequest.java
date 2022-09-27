@@ -62,7 +62,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     private GHUser merged_by;
     private int review_comments, additions, commits;
     private boolean merged, maintainer_can_modify;
-    
+
     /** The draft. */
     // making these package private to all for testing
     boolean draft;
@@ -81,7 +81,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     /**
      * Wrap up.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH pull request
      */
     GHPullRequest wrapUp(GHRepository owner) {
@@ -294,7 +295,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return null if the state has not been determined yet, for example when a PR is newly created. If this method is
      *         called on an instance whose mergeable state is not yet known, API call is made to retrieve the latest
      *         state.
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public Boolean getMergeable() throws IOException {
         refresh(mergeable);
@@ -302,10 +304,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
-     *  for test purposes only.
+     * for test purposes only.
      *
      * @return the mergeable no refresh
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Deprecated
     Boolean getMergeableNoRefresh() throws IOException {
@@ -397,9 +400,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
-     *  Repopulates this object.
+     * Repopulates this object.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public void refresh() throws IOException {
         if (isOffline()) {
@@ -583,9 +587,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     /**
      * Set the base branch on the pull request.
      *
-     * @param newBaseBranch            the name of the new base branch
+     * @param newBaseBranch
+     *            the name of the new base branch
      * @return the updated pull request
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public GHPullRequest setBaseBranch(String newBaseBranch) throws IOException {
         return root().createRequest()
@@ -670,13 +676,13 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
     /** The enum MergeMethod. */
     public enum MergeMethod {
-        
+
         /** The merge. */
-        MERGE, 
- /** The squash. */
- SQUASH, 
- /** The rebase. */
- REBASE
+        MERGE,
+        /** The squash. */
+        SQUASH,
+        /** The rebase. */
+        REBASE
     }
 
     /**

@@ -32,7 +32,8 @@ abstract class GitHubInteractiveObject {
     /**
      * Instantiates a new git hub interactive object.
      *
-     * @param root the root
+     * @param root
+     *            the root
      */
     GitHubInteractiveObject(GitHub root) {
         this.root = root;

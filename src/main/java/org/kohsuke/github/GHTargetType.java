@@ -12,11 +12,11 @@ import java.util.Locale;
  * @see GHAppInstallation
  */
 public enum GHTargetType {
-    
+
     /** The organization. */
-    ORGANIZATION, 
- /** The user. */
- USER;
+    ORGANIZATION,
+    /** The user. */
+    USER;
 
     /**
      * Returns GitHub's internal representation of this event.

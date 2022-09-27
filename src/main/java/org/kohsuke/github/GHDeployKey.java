@@ -12,10 +12,10 @@ public class GHDeployKey {
 
     /** The title. */
     protected String url, key, title;
-    
+
     /** The verified. */
     protected boolean verified;
-    
+
     /** The id. */
     protected long id;
     private GHRepository owner;

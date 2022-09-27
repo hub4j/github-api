@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
  * Iterable for GHAppInstallation listing.
  */
 class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
-    
+
     /** The Constant APP_INSTALLATIONS_URL. */
     public static final String APP_INSTALLATIONS_URL = "/user/installations";
     private final transient GitHub root;
@@ -18,7 +18,8 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
     /**
      * Instantiates a new GH app installations iterable.
      *
-     * @param root the root
+     * @param root
+     *            the root
      */
     public GHAppInstallationsIterable(GitHub root) {
         this.root = root;
@@ -27,7 +28,8 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
     /**
      * Iterator.
      *
-     * @param pageSize the page size
+     * @param pageSize
+     *            the page size
      * @return the paged iterator
      */
     @Nonnull
@@ -42,7 +44,8 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
     /**
      * Adapt.
      *
-     * @param base the base
+     * @param base
+     *            the base
      * @return the iterator
      */
     protected Iterator<GHAppInstallation[]> adapt(final Iterator<GHAppInstallationsPage> base) {

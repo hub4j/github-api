@@ -65,9 +65,11 @@ public abstract class RateLimitChecker {
     /**
      * Sleep until reset.
      *
-     * @param record the record
+     * @param record
+     *            the record
      * @return true, if successful
-     * @throws InterruptedException the interrupted exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     protected final boolean sleepUntilReset(GHRateLimit.Record record) throws InterruptedException {
         // Sleep until reset
@@ -96,7 +98,8 @@ public abstract class RateLimitChecker {
         /**
          * Instantiates a new literal value.
          *
-         * @param sleepAtOrBelow the sleep at or below
+         * @param sleepAtOrBelow
+         *            the sleep at or below
          */
         public LiteralValue(int sleepAtOrBelow) {
             if (sleepAtOrBelow < 0) {
@@ -108,10 +111,13 @@ public abstract class RateLimitChecker {
         /**
          * Check rate limit.
          *
-         * @param record the record
-         * @param count the count
+         * @param record
+         *            the record
+         * @param count
+         *            the count
          * @return true, if successful
-         * @throws InterruptedException the interrupted exception
+         * @throws InterruptedException
+         *             the interrupted exception
          */
         @Override
         protected boolean checkRateLimit(GHRateLimit.Record record, long count) throws InterruptedException {

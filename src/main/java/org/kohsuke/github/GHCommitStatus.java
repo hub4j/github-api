@@ -14,16 +14,16 @@ import java.net.URL;
  *      GHCommitState, String, String)
  */
 public class GHCommitStatus extends GHObject {
-    
+
     /** The state. */
     String state;
-    
+
     /** The description. */
     String target_url, description;
-    
+
     /** The context. */
     String context;
-    
+
     /** The creator. */
     GHUser creator;
 

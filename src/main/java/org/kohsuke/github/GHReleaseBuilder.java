@@ -81,7 +81,8 @@ public class GHReleaseBuilder {
     /**
      * Optional.
      *
-     * @param prerelease            {@code true} to identify the release as a prerelease. {@code false} to identify the release as a full
+     * @param prerelease
+     *            {@code true} to identify the release as a prerelease. {@code false} to identify the release as a full
      *            release. Default is {@code false}.
      * @return the gh release builder
      */
@@ -93,7 +94,8 @@ public class GHReleaseBuilder {
     /**
      * Optional.
      *
-     * @param categoryName            the category of the discussion to be created for the release. Category should already exist
+     * @param categoryName
+     *            the category of the discussion to be created for the release. Category should already exist
      * @return the gh release builder
      */
     public GHReleaseBuilder categoryName(String categoryName) {

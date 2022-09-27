@@ -218,10 +218,13 @@ public class GHWorkflowJob extends GHObject {
      * <p>
      * The logs are returned as a text file.
      *
-     * @param <T>            the type of result
-     * @param streamFunction            The {@link InputStreamFunction} that will process the stream
+     * @param <T>
+     *            the type of result
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
      * @return the result of reading the stream.
-     * @throws IOException             The IO exception.
+     * @throws IOException
+     *             The IO exception.
      */
     public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
         requireNonNull(streamFunction, "Stream function must not be null");
@@ -242,7 +245,8 @@ public class GHWorkflowJob extends GHObject {
     /**
      * Wrap up.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH workflow job
      */
     GHWorkflowJob wrapUp(GHRepository owner) {

@@ -5,16 +5,16 @@ package org.kohsuke.github;
  * Current state of {@link GHPullRequestReview}.
  */
 public enum GHPullRequestReviewState {
-    
+
     /** The pending. */
     PENDING,
-    
+
     /** The approved. */
     APPROVED,
-    
+
     /** The changes requested. */
     CHANGES_REQUESTED,
-    
+
     /**
      * The request changes.
      *
@@ -22,10 +22,10 @@ public enum GHPullRequestReviewState {
      *             {@link #CHANGES_REQUESTED}. Left here for compatibility.
      */
     REQUEST_CHANGES,
-    
+
     /** The commented. */
     COMMENTED,
-    
+
     /** The dismissed. */
     DISMISSED;
 

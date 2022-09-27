@@ -67,7 +67,7 @@ class GitHubClient {
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    
+
     /** The Constant GITHUB_URL. */
     static final String GITHUB_URL = "https://api.github.com";
 
@@ -84,13 +84,20 @@ class GitHubClient {
     /**
      * Instantiates a new git hub client.
      *
-     * @param apiUrl the api url
-     * @param connector the connector
-     * @param rateLimitHandler the rate limit handler
-     * @param abuseLimitHandler the abuse limit handler
-     * @param rateLimitChecker the rate limit checker
-     * @param authorizationProvider the authorization provider
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @param apiUrl
+     *            the api url
+     * @param connector
+     *            the connector
+     * @param rateLimitHandler
+     *            the rate limit handler
+     * @param abuseLimitHandler
+     *            the abuse limit handler
+     * @param rateLimitChecker
+     *            the rate limit checker
+     * @param authorizationProvider
+     *            the authorization provider
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     GitHubClient(String apiUrl,
             GitHubConnector connector,
@@ -236,7 +243,8 @@ class GitHubClient {
      * Gets the encoded authorization.
      *
      * @return the encoded authorization
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @CheckForNull
     String getEncodedAuthorization() throws IOException {
@@ -246,9 +254,11 @@ class GitHubClient {
     /**
      * Gets the rate limit.
      *
-     * @param rateLimitTarget the rate limit target
+     * @param rateLimitTarget
+     *            the rate limit target
      * @return the rate limit
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Nonnull
     GHRateLimit getRateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
@@ -376,12 +386,16 @@ class GitHubClient {
      * Builds a {@link GitHubRequest}, sends the {@link GitHubRequest} to the server, and uses the {@link BodyHandler}
      * to parse the response info and response body data into an instance of {@link T}.
      *
-     * @param <T>            the type of the parse body data.
-     * @param builder            used to build the request that will be sent to the server.
-     * @param handler            parse the response info and body data into a instance of {@link T}. If null, no parsing occurs and
+     * @param <T>
+     *            the type of the parse body data.
+     * @param builder
+     *            used to build the request that will be sent to the server.
+     * @param handler
+     *            parse the response info and body data into a instance of {@link T}. If null, no parsing occurs and
      *            {@link GitHubResponse#body()} will return null.
      * @return a {@link GitHubResponse} containing the parsed body data as a {@link T}. Parsed instance may be null.
-     * @throws IOException             if an I/O Exception occurs
+     * @throws IOException
+     *             if an I/O Exception occurs
      */
     @Nonnull
     public <T> GitHubResponse<T> sendRequest(@Nonnull GitHubRequest.Builder<?> builder,
@@ -393,12 +407,16 @@ class GitHubClient {
      * Sends the {@link GitHubRequest} to the server, and uses the {@link BodyHandler} to parse the response info and
      * response body data into an instance of {@link T}.
      *
-     * @param <T>            the type of the parse body data.
-     * @param request            the request that will be sent to the server.
-     * @param handler            parse the response info and body data into a instance of {@link T}. If null, no parsing occurs and
+     * @param <T>
+     *            the type of the parse body data.
+     * @param request
+     *            the request that will be sent to the server.
+     * @param handler
+     *            parse the response info and body data into a instance of {@link T}. If null, no parsing occurs and
      *            {@link GitHubResponse#body()} will return null.
      * @return a {@link GitHubResponse} containing the parsed body data as a {@link T}. Parsed instance may be null.
-     * @throws IOException             if an I/O Exception occurs
+     * @throws IOException
+     *             if an I/O Exception occurs
      */
     @Nonnull
     public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull BodyHandler<T> handler)
@@ -703,7 +721,8 @@ class GitHubClient {
     /**
      * Parses the URL.
      *
-     * @param s the s
+     * @param s
+     *            the s
      * @return the url
      */
     static URL parseURL(String s) {
@@ -717,7 +736,8 @@ class GitHubClient {
     /**
      * Parses the date.
      *
-     * @param timestamp the timestamp
+     * @param timestamp
+     *            the timestamp
      * @return the date
      */
     static Date parseDate(String timestamp) {
@@ -730,7 +750,8 @@ class GitHubClient {
     /**
      * Parses the instant.
      *
-     * @param timestamp the timestamp
+     * @param timestamp
+     *            the timestamp
      * @return the instant
      */
     static Instant parseInstant(String timestamp) {
@@ -748,7 +769,8 @@ class GitHubClient {
     /**
      * Prints the date.
      *
-     * @param dt the dt
+     * @param dt
+     *            the dt
      * @return the string
      */
     static String printDate(Date dt) {
@@ -768,7 +790,8 @@ class GitHubClient {
     /**
      * Helper for {@link #getMappingObjectReader(GitHubConnectorResponse)}.
      *
-     * @param root            the root GitHub object for this reader
+     * @param root
+     *            the root GitHub object for this reader
      * @return an {@link ObjectReader} instance that can be further configured.
      */
     @Nonnull
@@ -814,9 +837,12 @@ class GitHubClient {
     /**
      * Unmodifiable map or null.
      *
-     * @param <K> the key type
-     * @param <V> the value type
-     * @param map the map
+     * @param <K>
+     *            the key type
+     * @param <V>
+     *            the value type
+     * @param map
+     *            the map
      * @return the map
      */
     static <K, V> Map<K, V> unmodifiableMapOrNull(Map<? extends K, ? extends V> map) {
@@ -826,8 +852,10 @@ class GitHubClient {
     /**
      * Unmodifiable list or null.
      *
-     * @param <T> the generic type
-     * @param list the list
+     * @param <T>
+     *            the generic type
+     * @param list
+     *            the list
      * @return the list
      */
     static <T> List<T> unmodifiableListOrNull(List<? extends T> list) {
@@ -838,10 +866,10 @@ class GitHubClient {
      * The Class RetryRequestException.
      */
     static class RetryRequestException extends IOException {
-        
+
         /** The connector request. */
         final GitHubConnectorRequest connectorRequest;
-        
+
         /**
          * Instantiates a new retry request exception.
          */
@@ -852,7 +880,8 @@ class GitHubClient {
         /**
          * Instantiates a new retry request exception.
          *
-         * @param connectorRequest the connector request
+         * @param connectorRequest
+         *            the connector request
          */
         RetryRequestException(GitHubConnectorRequest connectorRequest) {
             this.connectorRequest = connectorRequest;

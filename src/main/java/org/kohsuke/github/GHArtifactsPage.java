@@ -20,7 +20,8 @@ class GHArtifactsPage {
     /**
      * Gets the artifacts.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the artifacts
      */
     GHArtifact[] getArtifacts(GHRepository owner) {

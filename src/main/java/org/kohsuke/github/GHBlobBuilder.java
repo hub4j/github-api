@@ -14,7 +14,8 @@ public class GHBlobBuilder {
     /**
      * Instantiates a new GH blob builder.
      *
-     * @param repo the repo
+     * @param repo
+     *            the repo
      */
     GHBlobBuilder(GHRepository repo) {
         this.repo = repo;

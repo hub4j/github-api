@@ -20,7 +20,8 @@ class GHWorkflowRunsPage {
     /**
      * Gets the workflow runs.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the workflow runs
      */
     GHWorkflowRun[] getWorkflowRuns(GHRepository owner) {

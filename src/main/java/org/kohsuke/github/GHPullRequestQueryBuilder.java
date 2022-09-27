@@ -15,7 +15,8 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
     /**
      * Instantiates a new GH pull request query builder.
      *
-     * @param repo the repo
+     * @param repo
+     *            the repo
      */
     GHPullRequestQueryBuilder(GHRepository repo) {
         super(repo.root());
@@ -77,15 +78,15 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
      * The enum Sort.
      */
     public enum Sort {
-        
+
         /** The created. */
-        CREATED, 
- /** The updated. */
- UPDATED, 
- /** The popularity. */
- POPULARITY, 
- /** The long running. */
- LONG_RUNNING
+        CREATED,
+        /** The updated. */
+        UPDATED,
+        /** The popularity. */
+        POPULARITY,
+        /** The long running. */
+        LONG_RUNNING
     }
 
     /**

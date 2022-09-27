@@ -56,10 +56,14 @@ class GitHubRateLimitChecker {
     /**
      * Instantiates a new git hub rate limit checker.
      *
-     * @param core the core
-     * @param search the search
-     * @param graphql the graphql
-     * @param integrationManifest the integration manifest
+     * @param core
+     *            the core
+     * @param search
+     *            the search
+     * @param graphql
+     *            the graphql
+     * @param integrationManifest
+     *            the integration manifest
      */
     GitHubRateLimitChecker(@Nonnull RateLimitChecker core,
             @Nonnull RateLimitChecker search,

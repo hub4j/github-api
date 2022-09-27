@@ -7,9 +7,9 @@ package org.kohsuke.github;
  * @author Kohsuke Kawaguchi
  */
 public enum GHDirection {
-    
+
     /** The asc. */
-    ASC, 
- /** The desc. */
- DESC
+    ASC,
+    /** The desc. */
+    DESC
 }

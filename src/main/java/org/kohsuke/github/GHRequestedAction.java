@@ -19,7 +19,8 @@ public class GHRequestedAction extends GHObject {
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH requested action
      */
     GHRequestedAction wrap(GHRepository owner) {

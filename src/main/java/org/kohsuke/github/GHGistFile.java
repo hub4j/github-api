@@ -9,7 +9,7 @@ package org.kohsuke.github;
  * @see GHGist#getFiles() GHGist#getFiles()
  */
 public class GHGistFile {
-    
+
     /** The file name. */
     /* package almost final */ String fileName;
 

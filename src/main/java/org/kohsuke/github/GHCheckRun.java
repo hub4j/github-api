@@ -47,7 +47,8 @@ public class GHCheckRun extends GHObject {
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH check run
      */
     GHCheckRun wrap(GHRepository owner) {
@@ -59,7 +60,8 @@ public class GHCheckRun extends GHObject {
     /**
      * Wrap.
      *
-     * @param root the root
+     * @param root
+     *            the root
      * @return the GH check run
      */
     GHCheckRun wrap(GitHub root) {
@@ -99,20 +101,21 @@ public class GHCheckRun extends GHObject {
      * The Enum Status.
      */
     public static enum Status {
-        
+
         /** The queued. */
-        QUEUED, 
- /** The in progress. */
- IN_PROGRESS, 
- /** The completed. */
- COMPLETED, 
- /** The unknown. */
- UNKNOWN;
+        QUEUED,
+        /** The in progress. */
+        IN_PROGRESS,
+        /** The completed. */
+        COMPLETED,
+        /** The unknown. */
+        UNKNOWN;
 
         /**
          * From.
          *
-         * @param value the value
+         * @param value
+         *            the value
          * @return the status
          */
         public static Status from(String value) {
@@ -153,30 +156,31 @@ public class GHCheckRun extends GHObject {
      * Parameters - <code>conclusion</code></a>.
      */
     public static enum Conclusion {
-        
+
         /** The action required. */
-        ACTION_REQUIRED, 
- /** The cancelled. */
- CANCELLED, 
- /** The failure. */
- FAILURE, 
- /** The neutral. */
- NEUTRAL, 
- /** The success. */
- SUCCESS, 
- /** The skipped. */
- SKIPPED, 
- /** The stale. */
- STALE, 
- /** The timed out. */
- TIMED_OUT, 
- /** The unknown. */
- UNKNOWN;
+        ACTION_REQUIRED,
+        /** The cancelled. */
+        CANCELLED,
+        /** The failure. */
+        FAILURE,
+        /** The neutral. */
+        NEUTRAL,
+        /** The success. */
+        SUCCESS,
+        /** The skipped. */
+        SKIPPED,
+        /** The stale. */
+        STALE,
+        /** The timed out. */
+        TIMED_OUT,
+        /** The unknown. */
+        UNKNOWN;
 
         /**
          * From.
          *
-         * @param value the value
+         * @param value
+         *            the value
          * @return the conclusion
          */
         public static Conclusion from(String value) {
@@ -379,13 +383,13 @@ public class GHCheckRun extends GHObject {
      * The Enum AnnotationLevel.
      */
     public static enum AnnotationLevel {
-        
+
         /** The notice. */
-        NOTICE, 
- /** The warning. */
- WARNING, 
- /** The failure. */
- FAILURE
+        NOTICE,
+        /** The warning. */
+        WARNING,
+        /** The failure. */
+        FAILURE
     }
 
     /**

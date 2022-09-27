@@ -11,11 +11,12 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
  * @see GitHub#getInstallation() GitHub#getAuthenticatedAppInstallation()
  */
 public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
-    
+
     /**
      * Instantiates a new GH authenticated app installation.
      *
-     * @param root the root
+     * @param root
+     *            the root
      */
     protected GHAuthenticatedAppInstallation(@Nonnull GitHub root) {
         super(root);

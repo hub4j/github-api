@@ -14,7 +14,8 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
     /**
      * Instantiates a new GH issue query builder.
      *
-     * @param root the root
+     * @param root
+     *            the root
      */
     GHIssueQueryBuilder(GitHub root) {
         super(root);
@@ -110,13 +111,13 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
      * The enum Sort.
      */
     public enum Sort {
-        
+
         /** The created. */
-        CREATED, 
- /** The updated. */
- UPDATED, 
- /** The comments. */
- COMMENTS
+        CREATED,
+        /** The updated. */
+        UPDATED,
+        /** The comments. */
+        COMMENTS
     }
 
     /**
@@ -135,7 +136,8 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
         /**
          * Instantiates a new for repository.
          *
-         * @param repo the repo
+         * @param repo
+         *            the repo
          */
         ForRepository(final GHRepository repo) {
             super(repo.root());

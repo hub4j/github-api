@@ -23,7 +23,8 @@ public class GHRepositoryPublicKey extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public URL getHtmlUrl() throws IOException {
@@ -51,7 +52,8 @@ public class GHRepositoryPublicKey extends GHObject {
     /**
      * Wrap up.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH repository public key
      */
     GHRepositoryPublicKey wrapUp(GHRepository owner) {

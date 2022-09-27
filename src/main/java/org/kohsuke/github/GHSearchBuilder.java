@@ -13,10 +13,11 @@ import javax.annotation.Nonnull;
  * Base class for various search builders.
  *
  * @author Kohsuke Kawaguchi
- * @param <T>            the type parameter
+ * @param <T>
+ *            the type parameter
  */
 public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
-    
+
     /** The terms. */
     protected final List<String> terms = new ArrayList<String>();
 
@@ -28,8 +29,10 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     /**
      * Instantiates a new GH search builder.
      *
-     * @param root the root
-     * @param receiverType the receiver type
+     * @param root
+     *            the root
+     * @param receiverType
+     *            the receiver type
      */
     GHSearchBuilder(GitHub root, Class<? extends SearchResult<T>> receiverType) {
         super(root);

@@ -21,11 +21,14 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
     /**
      * Instantiates a new GH discussion builder.
      *
-     * @param intermediateReturnType            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
+     * @param intermediateReturnType
+     *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
      *            {@link S} the same as {@link GHDiscussion}, this builder will commit changes after each call to
      *            {@link #with(String, Object)}.
-     * @param team            the GitHub team. Updates will be sent to the root of this team.
-     * @param baseInstance            instance on which to base this builder. If {@code null} a new instance will be created.
+     * @param team
+     *            the GitHub team. Updates will be sent to the root of this team.
+     * @param baseInstance
+     *            instance on which to base this builder. If {@code null} a new instance will be created.
      */
     protected GHDiscussionBuilder(@Nonnull Class<S> intermediateReturnType,
             @Nonnull GHTeam team,

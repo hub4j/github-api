@@ -53,7 +53,7 @@ public final class GHCheckRunBuilder {
 
     /** The repo. */
     protected final GHRepository repo;
-    
+
     /** The requester. */
     protected final Requester requester;
     private Output output;
@@ -67,9 +67,12 @@ public final class GHCheckRunBuilder {
     /**
      * Instantiates a new GH check run builder.
      *
-     * @param repo the repo
-     * @param name the name
-     * @param headSHA the head SHA
+     * @param repo
+     *            the repo
+     * @param name
+     *            the name
+     * @param headSHA
+     *            the head SHA
      */
     GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
         this(repo,
@@ -85,8 +88,10 @@ public final class GHCheckRunBuilder {
     /**
      * Instantiates a new GH check run builder.
      *
-     * @param repo the repo
-     * @param checkId the check id
+     * @param repo
+     *            the repo
+     * @param checkId
+     *            the check id
      */
     GHCheckRunBuilder(GHRepository repo, long checkId) {
         this(repo,
@@ -100,7 +105,8 @@ public final class GHCheckRunBuilder {
     /**
      * With details URL.
      *
-     * @param detailsURL the details URL
+     * @param detailsURL
+     *            the details URL
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withDetailsURL(@CheckForNull String detailsURL) {
@@ -111,7 +117,8 @@ public final class GHCheckRunBuilder {
     /**
      * With external ID.
      *
-     * @param externalID the external ID
+     * @param externalID
+     *            the external ID
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withExternalID(@CheckForNull String externalID) {
@@ -122,7 +129,8 @@ public final class GHCheckRunBuilder {
     /**
      * With status.
      *
-     * @param status the status
+     * @param status
+     *            the status
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withStatus(@CheckForNull GHCheckRun.Status status) {
@@ -136,7 +144,8 @@ public final class GHCheckRunBuilder {
     /**
      * With conclusion.
      *
-     * @param conclusion the conclusion
+     * @param conclusion
+     *            the conclusion
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withConclusion(@CheckForNull GHCheckRun.Conclusion conclusion) {
@@ -149,7 +158,8 @@ public final class GHCheckRunBuilder {
     /**
      * With started at.
      *
-     * @param startedAt the started at
+     * @param startedAt
+     *            the started at
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
@@ -162,7 +172,8 @@ public final class GHCheckRunBuilder {
     /**
      * With completed at.
      *
-     * @param completedAt the completed at
+     * @param completedAt
+     *            the completed at
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
@@ -175,7 +186,8 @@ public final class GHCheckRunBuilder {
     /**
      * Adds the.
      *
-     * @param output the output
+     * @param output
+     *            the output
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder add(@NonNull Output output) {
@@ -189,7 +201,8 @@ public final class GHCheckRunBuilder {
     /**
      * Adds the.
      *
-     * @param action the action
+     * @param action
+     *            the action
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder add(@NonNull Action action) {
@@ -251,8 +264,10 @@ public final class GHCheckRunBuilder {
         /**
          * Instantiates a new output.
          *
-         * @param title the title
-         * @param summary the summary
+         * @param title
+         *            the title
+         * @param summary
+         *            the summary
          */
         public Output(@NonNull String title, @NonNull String summary) {
             this.title = title;
@@ -262,7 +277,8 @@ public final class GHCheckRunBuilder {
         /**
          * With text.
          *
-         * @param text the text
+         * @param text
+         *            the text
          * @return the output
          */
         public @NonNull Output withText(@CheckForNull String text) {
@@ -273,7 +289,8 @@ public final class GHCheckRunBuilder {
         /**
          * Adds the.
          *
-         * @param annotation the annotation
+         * @param annotation
+         *            the annotation
          * @return the output
          */
         public @NonNull Output add(@NonNull Annotation annotation) {
@@ -287,7 +304,8 @@ public final class GHCheckRunBuilder {
         /**
          * Adds the.
          *
-         * @param image the image
+         * @param image
+         *            the image
          * @return the output
          */
         public @NonNull Output add(@NonNull Image image) {
@@ -321,10 +339,14 @@ public final class GHCheckRunBuilder {
         /**
          * Instantiates a new annotation.
          *
-         * @param path the path
-         * @param line the line
-         * @param annotationLevel the annotation level
-         * @param message the message
+         * @param path
+         *            the path
+         * @param line
+         *            the line
+         * @param annotationLevel
+         *            the annotation level
+         * @param message
+         *            the message
          */
         public Annotation(@NonNull String path,
                 int line,
@@ -336,11 +358,16 @@ public final class GHCheckRunBuilder {
         /**
          * Instantiates a new annotation.
          *
-         * @param path the path
-         * @param startLine the start line
-         * @param endLine the end line
-         * @param annotationLevel the annotation level
-         * @param message the message
+         * @param path
+         *            the path
+         * @param startLine
+         *            the start line
+         * @param endLine
+         *            the end line
+         * @param annotationLevel
+         *            the annotation level
+         * @param message
+         *            the message
          */
         public Annotation(@NonNull String path,
                 int startLine,
@@ -357,7 +384,8 @@ public final class GHCheckRunBuilder {
         /**
          * With start column.
          *
-         * @param startColumn the start column
+         * @param startColumn
+         *            the start column
          * @return the annotation
          */
         public @NonNull Annotation withStartColumn(@CheckForNull Integer startColumn) {
@@ -368,7 +396,8 @@ public final class GHCheckRunBuilder {
         /**
          * With end column.
          *
-         * @param endColumn the end column
+         * @param endColumn
+         *            the end column
          * @return the annotation
          */
         public @NonNull Annotation withEndColumn(@CheckForNull Integer endColumn) {
@@ -379,7 +408,8 @@ public final class GHCheckRunBuilder {
         /**
          * With title.
          *
-         * @param title the title
+         * @param title
+         *            the title
          * @return the annotation
          */
         public @NonNull Annotation withTitle(@CheckForNull String title) {
@@ -390,7 +420,8 @@ public final class GHCheckRunBuilder {
         /**
          * With raw details.
          *
-         * @param rawDetails the raw details
+         * @param rawDetails
+         *            the raw details
          * @return the annotation
          */
         public @NonNull Annotation withRawDetails(@CheckForNull String rawDetails) {
@@ -415,8 +446,10 @@ public final class GHCheckRunBuilder {
         /**
          * Instantiates a new image.
          *
-         * @param alt the alt
-         * @param imageURL the image URL
+         * @param alt
+         *            the alt
+         * @param imageURL
+         *            the image URL
          */
         public Image(@NonNull String alt, @NonNull String imageURL) {
             this.alt = alt;
@@ -426,7 +459,8 @@ public final class GHCheckRunBuilder {
         /**
          * With caption.
          *
-         * @param caption the caption
+         * @param caption
+         *            the caption
          * @return the image
          */
         public @NonNull Image withCaption(@CheckForNull String caption) {
@@ -451,9 +485,12 @@ public final class GHCheckRunBuilder {
         /**
          * Instantiates a new action.
          *
-         * @param label the label
-         * @param description the description
-         * @param identifier the identifier
+         * @param label
+         *            the label
+         * @param description
+         *            the description
+         * @param identifier
+         *            the identifier
          */
         public Action(@NonNull String label, @NonNull String description, @NonNull String identifier) {
             this.label = label;

@@ -126,7 +126,8 @@ public class GHDeploymentBuilder {
      * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
      * future.
      *
-     * @param transientEnvironment            the environment is transient
+     * @param transientEnvironment
+     *            the environment is transient
      * @return the gh deployment builder
      * @deprecated until preview feature has graduated to stable
      */
@@ -139,7 +140,8 @@ public class GHDeploymentBuilder {
     /**
      * Specifies if the given environment is one that end-users directly interact with.
      *
-     * @param productionEnvironment            the environment is used by end-users directly
+     * @param productionEnvironment
+     *            the environment is used by end-users directly
      * @return the gh deployment builder
      * @deprecated until preview feature has graduated to stable
      */

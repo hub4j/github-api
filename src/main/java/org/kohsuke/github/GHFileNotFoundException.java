@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
  * @author Kanstantsin Shautsou
  */
 public class GHFileNotFoundException extends FileNotFoundException {
-    
+
     /** The response header fields. */
     protected Map<String, List<String>> responseHeaderFields;
 
@@ -61,7 +61,8 @@ public class GHFileNotFoundException extends FileNotFoundException {
     /**
      * With response header fields.
      *
-     * @param headerFields the header fields
+     * @param headerFields
+     *            the header fields
      * @return the GH file not found exception
      */
     GHFileNotFoundException withResponseHeaderFields(@Nonnull Map<String, List<String>> headerFields) {

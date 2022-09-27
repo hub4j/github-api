@@ -43,11 +43,15 @@ public class JWTTokenProvider implements AuthorizationProvider {
 
     /**
      * Create a JWTTokenProvider
-     * 
-     * @param applicationId the application id
-     * @param keyFile the key file
-     * @throws GeneralSecurityException when an error occurs
-     * @throws IOException when an error occurs
+     *
+     * @param applicationId
+     *            the application id
+     * @param keyFile
+     *            the key file
+     * @throws GeneralSecurityException
+     *             when an error occurs
+     * @throws IOException
+     *             when an error occurs
      */
     public JWTTokenProvider(String applicationId, File keyFile) throws GeneralSecurityException, IOException {
         this(applicationId, keyFile.toPath());
@@ -55,11 +59,15 @@ public class JWTTokenProvider implements AuthorizationProvider {
 
     /**
      * Create a JWTTokenProvider
-     * 
-     * @param applicationId the application id
-     * @param keyPath the key path
-     * @throws GeneralSecurityException when an error occurs 
-     * @throws IOException when an error occurs
+     *
+     * @param applicationId
+     *            the application id
+     * @param keyPath
+     *            the key path
+     * @throws GeneralSecurityException
+     *             when an error occurs
+     * @throws IOException
+     *             when an error occurs
      */
     public JWTTokenProvider(String applicationId, Path keyPath) throws GeneralSecurityException, IOException {
         this(applicationId, new String(Files.readAllBytes(keyPath), StandardCharsets.UTF_8));
@@ -67,20 +75,25 @@ public class JWTTokenProvider implements AuthorizationProvider {
 
     /**
      * Create a JWTTokenProvider
-     * 
-     * @param applicationId the application id
-     * @param keyString the key string
-     * @throws GeneralSecurityException when an error occurs
-     */    
+     *
+     * @param applicationId
+     *            the application id
+     * @param keyString
+     *            the key string
+     * @throws GeneralSecurityException
+     *             when an error occurs
+     */
     public JWTTokenProvider(String applicationId, String keyString) throws GeneralSecurityException {
         this(applicationId, getPrivateKeyFromString(keyString));
     }
 
     /**
      * Create a JWTTokenProvider
-     * 
-     * @param applicationId the application id
-     * @param privateKey the private key
+     *
+     * @param applicationId
+     *            the application id
+     * @param privateKey
+     *            the private key
      */
     public JWTTokenProvider(String applicationId, PrivateKey privateKey) {
         this.privateKey = privateKey;

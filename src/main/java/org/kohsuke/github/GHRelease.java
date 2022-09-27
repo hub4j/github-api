@@ -23,7 +23,7 @@ import static java.lang.String.*;
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
 public class GHRelease extends GHObject {
-    
+
     /** The owner. */
     GHRepository owner;
 
@@ -209,7 +209,8 @@ public class GHRelease extends GHObject {
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH release
      */
     GHRelease wrap(GHRepository owner) {
@@ -220,8 +221,10 @@ public class GHRelease extends GHObject {
     /**
      * Wrap.
      *
-     * @param releases the releases
-     * @param owner the owner
+     * @param releases
+     *            the releases
+     * @param owner
+     *            the owner
      * @return the GH release[]
      */
     static GHRelease[] wrap(GHRelease[] releases, GHRepository owner) {

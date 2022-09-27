@@ -19,8 +19,10 @@ public class GHIssueBuilder {
     /**
      * Instantiates a new GH issue builder.
      *
-     * @param repo the repo
-     * @param title the title
+     * @param repo
+     *            the repo
+     * @param title
+     *            the title
      */
     GHIssueBuilder(GHRepository repo, String title) {
         this.repo = repo;

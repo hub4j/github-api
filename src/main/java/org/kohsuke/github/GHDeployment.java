@@ -18,47 +18,48 @@ import java.util.Map;
  */
 public class GHDeployment extends GHObject {
     private GHRepository owner;
-    
+
     /** The sha. */
     protected String sha;
-    
+
     /** The ref. */
     protected String ref;
-    
+
     /** The task. */
     protected String task;
-    
+
     /** The payload. */
     protected Object payload;
-    
+
     /** The environment. */
     protected String environment;
-    
+
     /** The description. */
     protected String description;
-    
+
     /** The statuses url. */
     protected String statuses_url;
-    
+
     /** The repository url. */
     protected String repository_url;
-    
+
     /** The creator. */
     protected GHUser creator;
-    
+
     /** The original environment. */
     protected String original_environment;
-    
+
     /** The transient environment. */
     protected boolean transient_environment;
-    
+
     /** The production environment. */
     protected boolean production_environment;
 
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH deployment
      */
     GHDeployment wrap(GHRepository owner) {

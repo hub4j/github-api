@@ -22,9 +22,11 @@ abstract class GitHubConnectorResponseErrorHandler {
     /**
      * Called to detect an error handled by this handler.
      *
-     * @param connectorResponse the connector response
+     * @param connectorResponse
+     *            the connector response
      * @return {@code true} if there is an error and {@link #onError(GitHubConnectorResponse)} should be called
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 

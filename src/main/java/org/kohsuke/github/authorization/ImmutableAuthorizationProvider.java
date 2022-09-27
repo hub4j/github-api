@@ -15,8 +15,9 @@ public class ImmutableAuthorizationProvider implements AuthorizationProvider {
 
     /**
      * ImmutableAuthorizationProvider constructor
-     * 
-     * @param authorization the authorization string
+     *
+     * @param authorization
+     *            the authorization string
      */
     public ImmutableAuthorizationProvider(String authorization) {
         this.authorization = authorization;

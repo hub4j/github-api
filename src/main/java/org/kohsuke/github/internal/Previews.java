@@ -135,6 +135,7 @@ public enum Previews {
 
     /**
      * Gets the mediaType
+     *
      * @return the media type string
      */
     public String mediaType() {

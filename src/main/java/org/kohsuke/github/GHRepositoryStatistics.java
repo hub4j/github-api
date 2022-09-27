@@ -107,7 +107,8 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          * Gets the html url.
          *
          * @return the html url
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         @Override
         public URL getHtmlUrl() throws IOException {
@@ -292,7 +293,8 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          * Gets the html url.
          *
          * @return the html url
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         @Override
         public URL getHtmlUrl() throws IOException {
@@ -403,7 +405,8 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          * Gets the html url.
          *
          * @return the html url
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         @Override
         public URL getHtmlUrl() throws IOException {
@@ -500,7 +503,8 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
     /**
      * Gets the api tail url.
      *
-     * @param tail the tail
+     * @param tail
+     *            the tail
      * @return the api tail url
      */
     String getApiTailUrl(String tail) {

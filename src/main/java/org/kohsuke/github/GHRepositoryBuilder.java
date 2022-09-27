@@ -12,16 +12,20 @@ import static org.kohsuke.github.internal.Previews.NEBULA;
 /**
  * The Class GHRepositoryBuilder.
  *
- * @param <S> the generic type
+ * @param <S>
+ *            the generic type
  */
 abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
 
     /**
      * Instantiates a new GH repository builder.
      *
-     * @param intermediateReturnType the intermediate return type
-     * @param root the root
-     * @param baseInstance the base instance
+     * @param intermediateReturnType
+     *            the intermediate return type
+     * @param root
+     *            the root
+     * @param baseInstance
+     *            the base instance
      */
     protected GHRepositoryBuilder(Class<S> intermediateReturnType, GitHub root, GHRepository baseInstance) {
         super(GHRepository.class, intermediateReturnType, root, baseInstance);
@@ -90,9 +94,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Default repository branch.
      *
-     * @param branch            branch name
+     * @param branch
+     *            branch name
      * @return a builder to continue with building
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public S defaultBranch(String branch) throws IOException {
         return with("default_branch", branch);
@@ -101,9 +107,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Description for repository.
      *
-     * @param description            description of repository
+     * @param description
+     *            description of repository
      * @return a builder to continue with building
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public S description(String description) throws IOException {
         return with("description", description);
@@ -112,9 +120,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Homepage for repository.
      *
-     * @param homepage            homepage of repository
+     * @param homepage
+     *            homepage of repository
      * @return a builder to continue with building
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public S homepage(URL homepage) throws IOException {
         return homepage(homepage.toExternalForm());
@@ -123,9 +133,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Homepage for repository.
      *
-     * @param homepage            homepage of repository
+     * @param homepage
+     *            homepage of repository
      * @return a builder to continue with building
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public S homepage(String homepage) throws IOException {
         return with("homepage", homepage);
@@ -134,9 +146,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Sets the repository to private.
      *
-     * @param enabled            private if true
+     * @param enabled
+     *            private if true
      * @return a builder to continue with building
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public S private_(boolean enabled) throws IOException {
         return with("private", enabled);
@@ -145,9 +159,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Sets the repository visibility.
      *
-     * @param visibility            visibility of repository
+     * @param visibility
+     *            visibility of repository
      * @return a builder to continue with building
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public S visibility(final Visibility visibility) throws IOException {
         requester.withPreview(NEBULA);
@@ -157,9 +173,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Enables issue tracker.
      *
-     * @param enabled            true if enabled
+     * @param enabled
+     *            true if enabled
      * @return a builder to continue with building
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public S issues(boolean enabled) throws IOException {
         return with("has_issues", enabled);
@@ -168,9 +186,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Enables projects.
      *
-     * @param enabled            true if enabled
+     * @param enabled
+     *            true if enabled
      * @return a builder to continue with building
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public S projects(boolean enabled) throws IOException {
         return with("has_projects", enabled);
@@ -179,9 +199,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Enables wiki.
      *
-     * @param enabled            true if enabled
+     * @param enabled
+     *            true if enabled
      * @return a builder to continue with building
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public S wiki(boolean enabled) throws IOException {
         return with("has_wiki", enabled);
@@ -190,9 +212,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Enables downloads.
      *
-     * @param enabled            true if enabled
+     * @param enabled
+     *            true if enabled
      * @return a builder to continue with building
-     * @throws IOException             In case of any networking error or error from the server.
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
     public S downloads(boolean enabled) throws IOException {
         return with("has_downloads", enabled);
@@ -217,7 +241,8 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * Done.
      *
      * @return the GH repository
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public GHRepository done() throws IOException {
@@ -228,7 +253,8 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * Archive.
      *
      * @return the s
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     S archive() throws IOException {
         return with("archived", true);
@@ -237,9 +263,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     /**
      * Name.
      *
-     * @param name the name
+     * @param name
+     *            the name
      * @return the s
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     S name(String name) throws IOException {
         return with("name", name);

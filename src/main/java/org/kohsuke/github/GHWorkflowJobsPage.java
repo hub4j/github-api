@@ -20,7 +20,8 @@ class GHWorkflowJobsPage {
     /**
      * Gets the workflow jobs.
      *
-     * @param repo the repo
+     * @param repo
+     *            the repo
      * @return the workflow jobs
      */
     GHWorkflowJob[] getWorkflowJobs(GHRepository repo) {

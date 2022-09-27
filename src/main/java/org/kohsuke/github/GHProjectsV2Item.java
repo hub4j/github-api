@@ -61,7 +61,8 @@ public class GHProjectsV2Item extends GHObject {
      * Gets the creator.
      *
      * @return the creator
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public GHUser getCreator() throws IOException {
         return root().intern(creator);
@@ -89,14 +90,14 @@ public class GHProjectsV2Item extends GHObject {
      * The Enum ContentType.
      */
     public enum ContentType {
-        
+
         /** The issue. */
-        ISSUE, 
- /** The draftissue. */
- DRAFTISSUE, 
- /** The pullrequest. */
- PULLREQUEST, 
- /** The unknown. */
- UNKNOWN;
+        ISSUE,
+        /** The draftissue. */
+        DRAFTISSUE,
+        /** The pullrequest. */
+        PULLREQUEST,
+        /** The unknown. */
+        UNKNOWN;
     }
 }

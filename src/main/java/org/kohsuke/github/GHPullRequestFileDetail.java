@@ -37,34 +37,34 @@ public class GHPullRequestFileDetail {
 
     /** The sha. */
     String sha;
-    
+
     /** The filename. */
     String filename;
-    
+
     /** The status. */
     String status;
-    
+
     /** The additions. */
     int additions;
-    
+
     /** The deletions. */
     int deletions;
-    
+
     /** The changes. */
     int changes;
-    
+
     /** The blob url. */
     String blob_url;
-    
+
     /** The raw url. */
     String raw_url;
-    
+
     /** The contents url. */
     String contents_url;
-    
+
     /** The patch. */
     String patch;
-    
+
     /** The previous filename. */
     String previous_filename;
 

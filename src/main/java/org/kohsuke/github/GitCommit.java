@@ -31,10 +31,10 @@ public class GitCommit {
      * The Class Tree.
      */
     static class Tree {
-        
+
         /** The url. */
         String url;
-        
+
         /** The sha. */
         String sha;
 
@@ -72,7 +72,8 @@ public class GitCommit {
     /**
      * Instantiates a new git commit.
      *
-     * @param commit the commit
+     * @param commit
+     *            the commit
      */
     GitCommit(GitCommit commit) {
         // copy constructor used to cast to GitCommit.ShortInfo and from there
@@ -268,7 +269,8 @@ public class GitCommit {
     /**
      * Wrap up.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the git commit
      */
     GitCommit wrapUp(GHRepository owner) {

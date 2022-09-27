@@ -60,10 +60,10 @@ public class GHLicense extends GHObject {
 
     /** The required. */
     protected List<String> required = new ArrayList<String>();
-    
+
     /** The permitted. */
     protected List<String> permitted = new ArrayList<String>();
-    
+
     /** The forbidden. */
     protected List<String> forbidden = new ArrayList<String>();
 
@@ -89,7 +89,8 @@ public class GHLicense extends GHObject {
      * Featured licenses are bold in the new repository drop-down.
      *
      * @return True if the license is featured, false otherwise
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public Boolean isFeatured() throws IOException {
         populate();
@@ -100,7 +101,8 @@ public class GHLicense extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public URL getHtmlUrl() throws IOException {
         populate();
@@ -216,7 +218,8 @@ public class GHLicense extends GHObject {
     /**
      * Equals.
      *
-     * @param o the o
+     * @param o
+     *            the o
      * @return true, if successful
      */
     @Override

@@ -19,16 +19,16 @@ import java.util.Map;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public abstract class GHHook extends GHObject {
-    
+
     /** The name. */
     String name;
-    
+
     /** The events. */
     List<String> events;
-    
+
     /** The active. */
     boolean active;
-    
+
     /** The config. */
     Map<String, String> config;
 

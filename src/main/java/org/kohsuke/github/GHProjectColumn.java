@@ -15,7 +15,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
  * @author Gunnar Skjold
  */
 public class GHProjectColumn extends GHObject {
-    
+
     /** The project. */
     protected GHProject project;
 
@@ -26,7 +26,8 @@ public class GHProjectColumn extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public URL getHtmlUrl() throws IOException {

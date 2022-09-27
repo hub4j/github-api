@@ -20,8 +20,10 @@ public interface Refreshable {
     /**
      * Calls refresh if the provided value is null.
      *
-     * @param value            the value
-     * @throws IOException             the io exception
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
      */
     default void refresh(Object value) throws IOException {
         if (value == null) {

@@ -93,10 +93,13 @@ public class GitHubRequest implements GitHubConnectorRequest {
     /**
      * Gets the final GitHub API URL.
      *
-     * @param apiUrl the api url
-     * @param tailApiUrl the tail api url
+     * @param apiUrl
+     *            the api url
+     * @param tailApiUrl
+     *            the tail api url
      * @return the api URL
-     * @throws GHException             wrapping a {@link MalformedURLException} if the GitHub API URL cannot be constructed
+     * @throws GHException
+     *             wrapping a {@link MalformedURLException} if the GitHub API URL cannot be constructed
      */
     @Nonnull
     static URL getApiURL(String apiUrl, String tailApiUrl) {
@@ -120,7 +123,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
     /**
      * Transform Java Enum into Github constants given its conventions.
      *
-     * @param en            Enum to be transformed
+     * @param en
+     *            Enum to be transformed
      * @return a String containing the value of a Github constant
      */
     static String transformEnum(Enum<?> en) {
@@ -486,7 +490,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
         /**
          * With preview.
          *
-         * @param name the name
+         * @param name
+         *            the name
          * @return the b
          */
         public B withPreview(String name) {
@@ -496,7 +501,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
         /**
          * With preview.
          *
-         * @param preview the preview
+         * @param preview
+         *            the preview
          * @return the b
          */
         public B withPreview(Previews preview) {
@@ -614,9 +620,11 @@ public class GitHubRequest implements GitHubConnectorRequest {
         /**
          * With requester.
          *
-         * @param body            the body
+         * @param body
+         *            the body
          * @return the request builder
-         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         public B with(@WillClose InputStream body) throws IOException {
             this.body = IOUtils.toByteArray(body);
@@ -657,8 +665,10 @@ public class GitHubRequest implements GitHubConnectorRequest {
         /**
          * Unlike {@link #with(String, String)}, overrides the existing value.
          *
-         * @param key            the key
-         * @param value            the value
+         * @param key
+         *            the key
+         * @param value
+         *            the value
          * @return the request builder
          */
         public B set(String key, Object value) {
@@ -750,8 +760,10 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * If urlPath starts with a slash, it will be URI encoded as a path. If it starts with anything else, it will be
          * used as is.
          *
-         * @param urlPath the url path
-         * @param urlPathItems            the content type
+         * @param urlPath
+         *            the url path
+         * @param urlPathItems
+         *            the content type
          * @return the request builder
          */
         public B withUrlPath(@Nonnull String urlPath, @Nonnull String... urlPathItems) {
@@ -793,18 +805,20 @@ public class GitHubRequest implements GitHubConnectorRequest {
      * The Class Entry.
      */
     protected static class Entry {
-        
+
         /** The key. */
         final String key;
-        
+
         /** The value. */
         final Object value;
 
         /**
          * Instantiates a new entry.
          *
-         * @param key the key
-         * @param value the value
+         * @param key
+         *            the key
+         * @param value
+         *            the value
          */
         protected Entry(String key, Object value) {
             this.key = key;

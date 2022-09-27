@@ -20,7 +20,8 @@ class GHCheckRunsPage {
     /**
      * Gets the check runs.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the check runs
      */
     GHCheckRun[] getCheckRuns(GHRepository owner) {

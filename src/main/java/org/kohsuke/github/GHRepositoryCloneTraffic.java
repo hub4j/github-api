@@ -21,9 +21,12 @@ public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
     /**
      * Instantiates a new GH repository clone traffic.
      *
-     * @param count the count
-     * @param uniques the uniques
-     * @param clones the clones
+     * @param count
+     *            the count
+     * @param uniques
+     *            the uniques
+     * @param clones
+     *            the clones
      */
     GHRepositoryCloneTraffic(Integer count, Integer uniques, List<DailyInfo> clones) {
         super(count, uniques);
@@ -52,7 +55,7 @@ public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
      * The type DailyInfo.
      */
     public static class DailyInfo extends GHRepositoryTraffic.DailyInfo {
-        
+
         /**
          * Instantiates a new daily info.
          */
@@ -62,9 +65,12 @@ public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
         /**
          * Instantiates a new daily info.
          *
-         * @param timestamp the timestamp
-         * @param count the count
-         * @param uniques the uniques
+         * @param timestamp
+         *            the timestamp
+         * @param count
+         *            the count
+         * @param uniques
+         *            the uniques
          */
         DailyInfo(String timestamp, int count, int uniques) {
             super(timestamp, count, uniques);

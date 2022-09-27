@@ -35,7 +35,8 @@ public class GHBranchProtectionBuilder {
     /**
      * Instantiates a new GH branch protection builder.
      *
-     * @param branch the branch
+     * @param branch
+     *            the branch
      */
     GHBranchProtectionBuilder(GHBranch branch) {
         this.branch = branch;

@@ -60,51 +60,52 @@ public class GHIssue extends GHObject implements Reactable {
     /** The assignee. */
     // API v3
     protected GHUser assignee; // not sure what this field is now that 'assignees' exist
-    
+
     /** The assignees. */
     protected GHUser[] assignees;
-    
+
     /** The state. */
     protected String state;
-    
+
     /** The number. */
     protected int number;
-    
+
     /** The closed at. */
     protected String closed_at;
-    
+
     /** The comments. */
     protected int comments;
-    
+
     /** The body. */
     @SkipFromToString
     protected String body;
-    
+
     /** The labels. */
     protected List<GHLabel> labels;
-    
+
     /** The user. */
     protected GHUser user;
-    
+
     /** The html url. */
     protected String title, html_url;
-    
+
     /** The pull request. */
     protected GHIssue.PullRequest pull_request;
-    
+
     /** The milestone. */
     protected GHMilestone milestone;
-    
+
     /** The closed by. */
     protected GHUser closed_by;
-    
+
     /** The locked. */
     protected boolean locked;
 
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH issue
      */
     GHIssue wrap(GHRepository owner) {
@@ -369,12 +370,14 @@ public class GHIssue extends GHObject implements Reactable {
 
     /**
      * Adds labels to the issue.
-     * 
+     *
      * Labels that are already present on the target are ignored.
      *
-     * @param names            Names of the label
+     * @param names
+     *            Names of the label
      * @return the complete list of labels including the new additions
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     @WithBridgeMethods(void.class)
     public List<GHLabel> addLabels(String... names) throws IOException {
@@ -383,12 +386,14 @@ public class GHIssue extends GHObject implements Reactable {
 
     /**
      * Add labels.
-     * 
+     *
      * Labels that are already present on the target are ignored.
      *
-     * @param labels            the labels
+     * @param labels
+     *            the labels
      * @return the complete list of labels including the new additions
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     @WithBridgeMethods(void.class)
     public List<GHLabel> addLabels(GHLabel... labels) throws IOException {
@@ -397,12 +402,14 @@ public class GHIssue extends GHObject implements Reactable {
 
     /**
      * Add labels.
-     * 
+     *
      * Labels that are already present on the target are ignored.
      *
-     * @param labels            the labels
+     * @param labels
+     *            the labels
      * @return the complete list of labels including the new additions
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     @WithBridgeMethods(void.class)
     public List<GHLabel> addLabels(Collection<GHLabel> labels) throws IOException {
@@ -419,12 +426,14 @@ public class GHIssue extends GHObject implements Reactable {
 
     /**
      * Remove a single label.
-     * 
+     *
      * Attempting to remove a label that is not present throws {@link GHFileNotFoundException}.
      *
-     * @param name            the name
+     * @param name
+     *            the name
      * @return the remaining list of labels
-     * @throws IOException             the io exception, throws {@link GHFileNotFoundException} if label was not present.
+     * @throws IOException
+     *             the io exception, throws {@link GHFileNotFoundException} if label was not present.
      */
     @WithBridgeMethods(void.class)
     public List<GHLabel> removeLabel(String name) throws IOException {
@@ -436,12 +445,14 @@ public class GHIssue extends GHObject implements Reactable {
 
     /**
      * Remove a collection of labels.
-     * 
+     *
      * Attempting to remove labels that are not present on the target are ignored.
      *
-     * @param names            the names
+     * @param names
+     *            the names
      * @return the remaining list of labels
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     @WithBridgeMethods(void.class)
     public List<GHLabel> removeLabels(String... names) throws IOException {
@@ -450,12 +461,14 @@ public class GHIssue extends GHObject implements Reactable {
 
     /**
      * Remove a collection of labels.
-     * 
+     *
      * Attempting to remove labels that are not present on the target are ignored.
      *
-     * @param labels            the labels
+     * @param labels
+     *            the labels
      * @return the remaining list of labels
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      * @see #removeLabels(String...) #removeLabels(String...)
      */
     @WithBridgeMethods(void.class)
@@ -465,12 +478,14 @@ public class GHIssue extends GHObject implements Reactable {
 
     /**
      * Remove a collection of labels.
-     * 
+     *
      * Attempting to remove labels that are not present on the target are ignored.
      *
-     * @param labels            the labels
+     * @param labels
+     *            the labels
      * @return the remaining list of labels
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     @WithBridgeMethods(void.class)
     public List<GHLabel> removeLabels(Collection<GHLabel> labels) throws IOException {
@@ -529,9 +544,11 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * Creates the reaction.
      *
-     * @param content the content
+     * @param content
+     *            the content
      * @return the GH reaction
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
@@ -546,8 +563,10 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * Delete reaction.
      *
-     * @param reaction the reaction
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @param reaction
+     *            the reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public void deleteReaction(GHReaction reaction) throws IOException {
         owner.root()
@@ -807,7 +826,8 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * Gets the logins.
      *
-     * @param users the users
+     * @param users
+     *            the users
      * @return the logins
      */
     protected static List<String> getLogins(Collection<GHUser> users) {

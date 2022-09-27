@@ -44,7 +44,8 @@ public abstract class GHObject extends GitHubInteractiveObject {
     /**
      * Called by Jackson.
      *
-     * @param connectorResponse            the {@link GitHubConnectorResponse} to get headers from.
+     * @param connectorResponse
+     *            the {@link GitHubConnectorResponse} to get headers from.
      */
     @JacksonInject
     protected void setResponseHeaderFields(@CheckForNull GitHubConnectorResponse connectorResponse) {
@@ -75,7 +76,8 @@ public abstract class GHObject extends GitHubInteractiveObject {
      * When was this resource created?.
      *
      * @return date created
-     * @throws IOException             on error
+     * @throws IOException
+     *             on error
      */
     @WithBridgeMethods(value = String.class, adapterMethod = "createdAtStr")
     public Date getCreatedAt() throws IOException {
@@ -111,7 +113,8 @@ public abstract class GHObject extends GitHubInteractiveObject {
      * When was this resource last updated?.
      *
      * @return updated date
-     * @throws IOException             on error
+     * @throws IOException
+     *             on error
      */
     public Date getUpdatedAt() throws IOException {
         return GitHubClient.parseDate(updatedAt);

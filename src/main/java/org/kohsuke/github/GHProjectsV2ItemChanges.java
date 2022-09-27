@@ -134,11 +134,16 @@ public class GHProjectsV2ItemChanges {
     public enum FieldType {
 
         /** The text. */
-        TEXT, /** The number. */
- NUMBER, /** The date. */
- DATE, /** The single select. */
- SINGLE_SELECT, /** The iteration. */
- ITERATION, /** The unknown. */
- UNKNOWN;
+        TEXT,
+        /** The number. */
+        NUMBER,
+        /** The date. */
+        DATE,
+        /** The single select. */
+        SINGLE_SELECT,
+        /** The iteration. */
+        ITERATION,
+        /** The unknown. */
+        UNKNOWN;
     }
 }

@@ -14,19 +14,19 @@ import java.util.Locale;
  * @see GHMyself#listOrgMemberships() GHMyself#listOrgMemberships()
  */
 public class GHMembership extends GitHubInteractiveObject {
-    
+
     /** The url. */
     String url;
-    
+
     /** The state. */
     String state;
-    
+
     /** The role. */
     String role;
-    
+
     /** The user. */
     GHUser user;
-    
+
     /** The organization. */
     GHOrganization organization;
 
@@ -91,7 +91,8 @@ public class GHMembership extends GitHubInteractiveObject {
     /**
      * Wrap.
      *
-     * @param root the root
+     * @param root
+     *            the root
      * @return the GH membership
      */
     GHMembership wrap(GitHub root) {
@@ -118,10 +119,10 @@ public class GHMembership extends GitHubInteractiveObject {
      * Whether a role is currently active or waiting for acceptance (pending).
      */
     public enum State {
-        
+
         /** The active. */
-        ACTIVE, 
- /** The pending. */
- PENDING;
+        ACTIVE,
+        /** The pending. */
+        PENDING;
     }
 }

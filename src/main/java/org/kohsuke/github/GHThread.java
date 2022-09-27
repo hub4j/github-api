@@ -29,16 +29,16 @@ public class GHThread extends GHObject {
      * The Class Subject.
      */
     static class Subject {
-        
+
         /** The title. */
         String title;
-        
+
         /** The url. */
         String url;
-        
+
         /** The latest comment url. */
         String latest_comment_url;
-        
+
         /** The type. */
         String type;
     }

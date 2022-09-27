@@ -20,8 +20,10 @@ public abstract class GHRepositoryTraffic implements TrafficInfo {
     /**
      * Instantiates a new GH repository traffic.
      *
-     * @param count the count
-     * @param uniques the uniques
+     * @param count
+     *            the count
+     * @param uniques
+     *            the uniques
      */
     GHRepositoryTraffic(int count, int uniques) {
         this.count = count;
@@ -97,9 +99,12 @@ public abstract class GHRepositoryTraffic implements TrafficInfo {
         /**
          * Instantiates a new daily info.
          *
-         * @param timestamp the timestamp
-         * @param count the count
-         * @param uniques the uniques
+         * @param timestamp
+         *            the timestamp
+         * @param count
+         *            the count
+         * @param uniques
+         *            the uniques
          */
         DailyInfo(String timestamp, Integer count, Integer uniques) {
             this.timestamp = timestamp;

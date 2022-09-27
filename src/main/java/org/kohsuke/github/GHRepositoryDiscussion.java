@@ -72,7 +72,8 @@ public class GHRepositoryDiscussion extends GHObject {
      * Gets the answer chosen by.
      *
      * @return the answer chosen by
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public GHUser getAnswerChosenBy() throws IOException {
         return root().intern(answerChosenBy);
@@ -109,7 +110,8 @@ public class GHRepositoryDiscussion extends GHObject {
      * Gets the user.
      *
      * @return the user
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public GHUser getUser() throws IOException {
         return root().intern(user);
@@ -296,12 +298,12 @@ public class GHRepositoryDiscussion extends GHObject {
      * The Enum State.
      */
     public enum State {
-        
+
         /** The open. */
-        OPEN, 
- /** The locked. */
- LOCKED, 
- /** The unknown. */
- UNKNOWN;
+        OPEN,
+        /** The locked. */
+        LOCKED,
+        /** The unknown. */
+        UNKNOWN;
     }
 }

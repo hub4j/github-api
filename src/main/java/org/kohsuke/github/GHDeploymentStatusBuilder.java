@@ -35,9 +35,12 @@ public class GHDeploymentStatusBuilder {
     /**
      * Instantiates a new GH deployment status builder.
      *
-     * @param repo the repo
-     * @param deploymentId the deployment id
-     * @param state the state
+     * @param repo
+     *            the repo
+     * @param deploymentId
+     *            the deployment id
+     * @param state
+     *            the state
      */
     GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
@@ -55,7 +58,8 @@ public class GHDeploymentStatusBuilder {
      * Add an inactive status to all prior non-transient, non-production environment deployments with the same
      * repository and environment name as the created status's deployment.
      *
-     * @param autoInactive            Add inactive status flag
+     * @param autoInactive
+     *            Add inactive status flag
      * @return the gh deployment status builder
      * @deprecated until preview feature has graduated to stable
      */
@@ -81,7 +85,8 @@ public class GHDeploymentStatusBuilder {
     /**
      * Name for the target deployment environment, which can be changed when setting a deploy status.
      *
-     * @param environment            the environment name
+     * @param environment
+     *            the environment name
      * @return the gh deployment status builder
      * @deprecated until preview feature has graduated to stable
      */
@@ -94,7 +99,8 @@ public class GHDeploymentStatusBuilder {
     /**
      * The URL for accessing the environment.
      *
-     * @param environmentUrl            the environment url
+     * @param environmentUrl
+     *            the environment url
      * @return the gh deployment status builder
      * @deprecated until preview feature has graduated to stable
      */
@@ -109,7 +115,8 @@ public class GHDeploymentStatusBuilder {
      * <p>
      * This method replaces {@link #targetUrl(String) targetUrl}.
      *
-     * @param logUrl            the deployment output url
+     * @param logUrl
+     *            the deployment output url
      * @return the gh deployment status builder
      * @deprecated until preview feature has graduated to stable
      */
@@ -122,7 +129,8 @@ public class GHDeploymentStatusBuilder {
     /**
      * Target url gh deployment status builder.
      *
-     * @param targetUrl            the target url
+     * @param targetUrl
+     *            the target url
      * @return the gh deployment status builder
      * @deprecated Target url is deprecated in favor of {@link #logUrl(String) logUrl}
      */

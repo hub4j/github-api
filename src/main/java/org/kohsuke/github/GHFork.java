@@ -28,11 +28,12 @@ public enum GHFork {
     PARENT_ONLY("");
 
     private String filterMode;
-    
+
     /**
      * Instantiates a new GH fork.
      *
-     * @param mode the mode
+     * @param mode
+     *            the mode
      */
     GHFork(final String mode) {
         this.filterMode = mode;

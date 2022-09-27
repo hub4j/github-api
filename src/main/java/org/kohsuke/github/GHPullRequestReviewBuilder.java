@@ -19,7 +19,8 @@ public class GHPullRequestReviewBuilder {
     /**
      * Instantiates a new GH pull request review builder.
      *
-     * @param pr the pr
+     * @param pr
+     *            the pr
      */
     GHPullRequestReviewBuilder(GHPullRequest pr) {
         this.pr = pr;

@@ -39,7 +39,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  * @see GHIssue#listComments() GHIssue#listComments()
  */
 public class GHIssueComment extends GHObject implements Reactable {
-    
+
     /** The owner. */
     GHIssue owner;
 
@@ -49,7 +49,8 @@ public class GHIssueComment extends GHObject implements Reactable {
     /**
      * Wrap up.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH issue comment
      */
     GHIssueComment wrapUp(GHIssue owner) {
@@ -147,9 +148,11 @@ public class GHIssueComment extends GHObject implements Reactable {
     /**
      * Creates the reaction.
      *
-     * @param content the content
+     * @param content
+     *            the content
      * @return the GH reaction
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
@@ -165,8 +168,10 @@ public class GHIssueComment extends GHObject implements Reactable {
     /**
      * Delete reaction.
      *
-     * @param reaction the reaction
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @param reaction
+     *            the reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public void deleteReaction(GHReaction reaction) throws IOException {
         owner.root()

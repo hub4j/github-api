@@ -31,11 +31,11 @@ package org.kohsuke.github;
  * @see GHPullRequestQueryBuilder#state(GHIssueState) GHPullRequestQueryBuilder#state(GHIssueState)
  */
 public enum GHIssueState {
-    
+
     /** The open. */
-    OPEN, 
- /** The closed. */
- CLOSED, 
- /** The all. */
- ALL
+    OPEN,
+    /** The closed. */
+    CLOSED,
+    /** The all. */
+    ALL
 }

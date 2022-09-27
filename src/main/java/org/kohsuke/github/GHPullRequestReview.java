@@ -40,7 +40,7 @@ import javax.annotation.CheckForNull;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHPullRequestReview extends GHObject {
-    
+
     /** The owner. */
     GHPullRequest owner;
 
@@ -54,7 +54,8 @@ public class GHPullRequestReview extends GHObject {
     /**
      * Wrap up.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH pull request review
      */
     GHPullRequestReview wrapUp(GHPullRequest owner) {
@@ -137,7 +138,8 @@ public class GHPullRequestReview extends GHObject {
      * When was this resource created?.
      *
      * @return the submitted at
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public Date getSubmittedAt() throws IOException {
         return GitHubClient.parseDate(submitted_at);
@@ -147,7 +149,8 @@ public class GHPullRequestReview extends GHObject {
      * Since this method does not exist, we forward this value.
      *
      * @return the created at
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public Date getCreatedAt() throws IOException {

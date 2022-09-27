@@ -13,7 +13,8 @@ class GHRepoHook extends GHHook {
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH repo hook
      */
     GHRepoHook wrap(GHRepository owner) {

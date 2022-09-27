@@ -7,16 +7,16 @@ import org.kohsuke.github.internal.Previews;
  * Represents the state of deployment.
  */
 public enum GHDeploymentState {
-    
+
     /** The pending. */
     PENDING,
-    
+
     /** The success. */
     SUCCESS,
-    
+
     /** The error. */
     ERROR,
-    
+
     /** The failure. */
     FAILURE,
 

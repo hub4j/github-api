@@ -8,19 +8,19 @@ import javax.annotation.Nonnull;
 // TODO: Auto-generated Javadoc
 /**
  * An abstract data object builder/updater.
- * 
+ *
  * This class can be use to make a Builder that supports both batch and single property changes.
  * <p>
  * Batching looks like this:
  * </p>
- * 
+ *
  * <pre>
  * update().someName(value).otherName(value).done()
  * </pre>
  * <p>
  * Single changes look like this:
  * </p>
- * 
+ *
  * <pre>
  * set().someName(value);
  * set().otherName(value);
@@ -34,8 +34,10 @@ import javax.annotation.Nonnull;
  * the user call {@link #done()} when they are ready.
  *
  * @author Liam Newman
- * @param <R>            Final return type built by this builder returned when {@link #done()}} is called.
- * @param <S>            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
+ * @param <R>
+ *            Final return type built by this builder returned when {@link #done()}} is called.
+ * @param <S>
+ *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link R}, this builder will commit changes after each call to {@link #with(String, Object)}.
  */
 abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
@@ -62,12 +64,16 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
     /**
      * Creates a builder.
      *
-     * @param finalReturnType            the final return type for built by this builder returned when {@link #done()}} is called.
-     * @param intermediateReturnType            the intermediate return type of type {@link S} returned by calls to {@link #with(String, Object)}.
+     * @param finalReturnType
+     *            the final return type for built by this builder returned when {@link #done()}} is called.
+     * @param intermediateReturnType
+     *            the intermediate return type of type {@link S} returned by calls to {@link #with(String, Object)}.
      *            Must either be equal to {@code builtReturnType} or this instance must be castable to this class. If
      *            not, the constructor will throw {@link IllegalArgumentException}.
-     * @param root            the GitHub instance to connect to.
-     * @param baseInstance            optional instance on which to base this builder.
+     * @param root
+     *            the GitHub instance to connect to.
+     * @param baseInstance
+     *            optional instance on which to base this builder.
      */
     protected AbstractBuilder(@Nonnull Class<R> finalReturnType,
             @Nonnull Class<S> intermediateReturnType,

@@ -17,11 +17,12 @@ import javax.annotation.Nonnull;
  * <p>
  * Aside from the normal iterator operation, this method exposes {@link #nextPage()} and {@link #nextPageArray()} that
  * allows the caller to retrieve entire pages.
- * 
+ *
  * This class is not thread-safe. Any one instance should only be called from a single thread.
  *
  * @author Kohsuke Kawaguchi
- * @param <T>            the type parameter
+ * @param <T>
+ *            the type parameter
  */
 public class PagedIterator<T> implements Iterator<T> {
 
@@ -51,8 +52,10 @@ public class PagedIterator<T> implements Iterator<T> {
     /**
      * Instantiates a new paged iterator.
      *
-     * @param base the base
-     * @param itemInitializer the item initializer
+     * @param base
+     *            the base
+     * @param itemInitializer
+     *            the item initializer
      */
     PagedIterator(@Nonnull Iterator<T[]> base, @CheckForNull Consumer<T> itemInitializer) {
         this.base = base;

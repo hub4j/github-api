@@ -8,11 +8,12 @@ package org.kohsuke.github;
  * @see GitHub#searchUsers() GitHub#searchUsers()
  */
 public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
-    
+
     /**
      * Instantiates a new GH user search builder.
      *
-     * @param root the root
+     * @param root
+     *            the root
      */
     GHUserSearchBuilder(GitHub root) {
         super(root, UserSearchResult.class);
@@ -21,7 +22,8 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
     /**
      * Search terms.
      *
-     * @param term the term
+     * @param term
+     *            the term
      * @return the GH user search builder
      */
     public GHUserSearchBuilder q(String term) {
@@ -134,13 +136,13 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
      * The enum Sort.
      */
     public enum Sort {
-        
+
         /** The followers. */
-        FOLLOWERS, 
- /** The repositories. */
- REPOSITORIES, 
- /** The joined. */
- JOINED
+        FOLLOWERS,
+        /** The repositories. */
+        REPOSITORIES,
+        /** The joined. */
+        JOINED
     }
 
     private static class UserSearchResult extends SearchResult<GHUser> {

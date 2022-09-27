@@ -28,15 +28,15 @@ package org.kohsuke.github;
  * Action to perform on {@link GHPullRequestReview}.
  */
 public enum GHPullRequestReviewEvent {
-    
+
     /** The pending. */
-    PENDING, 
- /** The approve. */
- APPROVE, 
- /** The request changes. */
- REQUEST_CHANGES, 
- /** The comment. */
- COMMENT;
+    PENDING,
+    /** The approve. */
+    APPROVE,
+    /** The request changes. */
+    REQUEST_CHANGES,
+    /** The comment. */
+    COMMENT;
 
     /**
      * Action.

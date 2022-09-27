@@ -10,11 +10,11 @@ import java.util.Locale;
  * @see GHAppInstallation
  */
 public enum GHRepositorySelection {
-    
+
     /** The selected. */
-    SELECTED, 
- /** The all. */
- ALL;
+    SELECTED,
+    /** The all. */
+    ALL;
 
     /**
      * Returns GitHub's internal representation of this event.

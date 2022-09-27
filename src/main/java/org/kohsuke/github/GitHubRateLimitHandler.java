@@ -22,9 +22,11 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
     /**
      * Checks if is error.
      *
-     * @param connectorResponse the connector response
+     * @param connectorResponse
+     *            the connector response
      * @return true, if is error
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {

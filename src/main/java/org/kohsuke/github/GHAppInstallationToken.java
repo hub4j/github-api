@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class GHAppInstallationToken extends GitHubInteractiveObject {
     private String token;
-    
+
     /** The expires at. */
     protected String expires_at;
     private Map<String, String> permissions;

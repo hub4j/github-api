@@ -22,7 +22,8 @@ public final class GHContentBuilder {
     /**
      * Instantiates a new GH content builder.
      *
-     * @param repo the repo
+     * @param repo
+     *            the repo
      */
     GHContentBuilder(GHRepository repo) {
         this.repo = repo;

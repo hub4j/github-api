@@ -26,7 +26,8 @@ public class GHIssueCommentQueryBuilder {
     /**
      * Instantiates a new GH issue comment query builder.
      *
-     * @param issue the issue
+     * @param issue
+     *            the issue
      */
     GHIssueCommentQueryBuilder(GHIssue issue) {
         this.issue = issue;

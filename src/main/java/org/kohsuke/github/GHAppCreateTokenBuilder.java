@@ -16,7 +16,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
  * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
 public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
-    
+
     /** The builder. */
     protected final Requester builder;
     private final String apiUrlTail;
@@ -24,8 +24,10 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     /**
      * Instantiates a new GH app create token builder.
      *
-     * @param root the root
-     * @param apiUrlTail the api url tail
+     * @param root
+     *            the root
+     * @param apiUrlTail
+     *            the api url tail
      */
     @BetaApi
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {
@@ -37,9 +39,12 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     /**
      * Instantiates a new GH app create token builder.
      *
-     * @param root the root
-     * @param apiUrlTail the api url tail
-     * @param permissions the permissions
+     * @param root
+     *            the root
+     * @param apiUrlTail
+     *            the api url tail
+     * @param permissions
+     *            the permissions
      */
     @BetaApi
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {

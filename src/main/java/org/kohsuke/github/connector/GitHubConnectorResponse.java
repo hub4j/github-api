@@ -39,10 +39,13 @@ public abstract class GitHubConnectorResponse implements Closeable {
 
     /**
      * GitHubConnectorResponse constructor
-     * 
-     * @param request the request
-     * @param statusCode the status code
-     * @param headers the headers
+     *
+     * @param request
+     *            the request
+     * @param statusCode
+     *            the status code
+     * @param headers
+     *            the headers
      */
     protected GitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
             int statusCode,
@@ -176,10 +179,13 @@ public abstract class GitHubConnectorResponse implements Closeable {
 
         /**
          * Constructor for ByteArray Response
-         * 
-         * @param request the request
-         * @param statusCode the status code
-         * @param headers the headers
+         *
+         * @param request
+         *            the request
+         * @param statusCode
+         *            the status code
+         * @param headers
+         *            the headers
          */
         protected ByteArrayResponse(@Nonnull GitHubConnectorRequest request,
                 int statusCode,

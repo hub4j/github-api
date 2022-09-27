@@ -40,7 +40,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
  * @see <a href="https://developer.github.com/v3/projects/">Projects</a>
  */
 public class GHProject extends GHObject {
-    
+
     /** The owner. */
     protected GHObject owner;
 
@@ -56,7 +56,8 @@ public class GHProject extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public URL getHtmlUrl() throws IOException {
@@ -232,11 +233,11 @@ public class GHProject extends GHObject {
      * The enum ProjectState.
      */
     public enum ProjectState {
-        
+
         /** The open. */
-        OPEN, 
- /** The closed. */
- CLOSED
+        OPEN,
+        /** The closed. */
+        CLOSED
     }
 
     /**
@@ -255,13 +256,13 @@ public class GHProject extends GHObject {
      * The enum ProjectStateFilter.
      */
     public static enum ProjectStateFilter {
-        
+
         /** The all. */
-        ALL, 
- /** The open. */
- OPEN, 
- /** The closed. */
- CLOSED
+        ALL,
+        /** The open. */
+        OPEN,
+        /** The closed. */
+        CLOSED
     }
 
     /**

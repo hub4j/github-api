@@ -40,7 +40,8 @@ public class GHCheckSuite extends GHObject {
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH check suite
      */
     GHCheckSuite wrap(GHRepository owner) {
@@ -52,7 +53,8 @@ public class GHCheckSuite extends GHObject {
     /**
      * Wrap.
      *
-     * @param root the root
+     * @param root
+     *            the root
      * @return the GH check suite
      */
     GHCheckSuite wrap(GitHub root) {

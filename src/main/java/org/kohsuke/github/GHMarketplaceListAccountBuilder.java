@@ -16,8 +16,10 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
     /**
      * Instantiates a new GH marketplace list account builder.
      *
-     * @param root the root
-     * @param planId the plan id
+     * @param root
+     *            the root
+     * @param planId
+     *            the plan id
      */
     GHMarketplaceListAccountBuilder(GitHub root, long planId) {
         super(root);
@@ -55,11 +57,11 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
      * The enum Sort.
      */
     public enum Sort {
-        
+
         /** The created. */
-        CREATED, 
- /** The updated. */
- UPDATED
+        CREATED,
+        /** The updated. */
+        UPDATED
     }
 
     /**

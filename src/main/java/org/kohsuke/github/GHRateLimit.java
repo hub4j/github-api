@@ -126,10 +126,14 @@ public class GHRateLimit {
     /**
      * Instantiates a new GH rate limit.
      *
-     * @param core the core
-     * @param search the search
-     * @param graphql the graphql
-     * @param integrationManifest the integration manifest
+     * @param core
+     *            the core
+     * @param search
+     *            the search
+     * @param graphql
+     *            the graphql
+     * @param integrationManifest
+     *            the integration manifest
      */
     @JsonCreator
     GHRateLimit(@Nonnull @JsonProperty("core") Record core,
@@ -263,7 +267,8 @@ public class GHRateLimit {
     /**
      * Equals.
      *
-     * @param o the o
+     * @param o
+     *            the o
      * @return true, if successful
      */
     @Override
@@ -366,7 +371,7 @@ public class GHRateLimit {
 
         /** The Constant unknownLimit. */
         static final int unknownLimit = 1000000;
-        
+
         /** The Constant unknownRemaining. */
         static final int unknownRemaining = 999999;
 
@@ -653,7 +658,8 @@ public class GHRateLimit {
         /**
          * Equals.
          *
-         * @param o the o
+         * @param o
+         *            the o
          * @return true, if successful
          */
         @Override

@@ -31,7 +31,8 @@ public class GHDiscussion extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public URL getHtmlUrl() throws IOException {
@@ -41,7 +42,8 @@ public class GHDiscussion extends GHObject {
     /**
      * Wrap up.
      *
-     * @param team the team
+     * @param team
+     *            the team
      * @return the GH discussion
      */
     GHDiscussion wrapUp(GHTeam team) {
@@ -126,10 +128,13 @@ public class GHDiscussion extends GHObject {
     /**
      * Read.
      *
-     * @param team the team
-     * @param discussionNumber the discussion number
+     * @param team
+     *            the team
+     * @param discussionNumber
+     *            the discussion number
      * @return the GH discussion
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     static GHDiscussion read(GHTeam team, long discussionNumber) throws IOException {
         return team.root()
@@ -142,9 +147,11 @@ public class GHDiscussion extends GHObject {
     /**
      * Read all.
      *
-     * @param team the team
+     * @param team
+     *            the team
      * @return the paged iterable
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     static PagedIterable<GHDiscussion> readAll(GHTeam team) throws IOException {
         return team.root()
@@ -178,7 +185,8 @@ public class GHDiscussion extends GHObject {
     /**
      * Delete the discussion.
      *
-     * @throws IOException             the io exception
+     * @throws IOException
+     *             the io exception
      */
     public void delete() throws IOException {
         team.root().createRequest().method("DELETE").setRawUrlPath(getRawUrlPath(team, number)).send();
@@ -242,7 +250,8 @@ public class GHDiscussion extends GHObject {
     /**
      * Equals.
      *
-     * @param o the o
+     * @param o
+     *            the o
      * @return true, if successful
      */
     @Override

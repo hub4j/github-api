@@ -7,9 +7,9 @@ package org.kohsuke.github;
  * @author Yusuke Kokubo
  */
 public enum GHMilestoneState {
-    
+
     /** The open. */
-    OPEN, 
- /** The closed. */
- CLOSED
+    OPEN,
+    /** The closed. */
+    CLOSED
 }

@@ -9,14 +9,15 @@ package org.kohsuke.github;
  * @see GHRepository#getLicense()
  */
 class GHContentWithLicense extends GHContent {
-    
+
     /** The license. */
     GHLicense license;
 
     /**
      * Wrap.
      *
-     * @param owner the owner
+     * @param owner
+     *            the owner
      * @return the GH content with license
      */
     @Override

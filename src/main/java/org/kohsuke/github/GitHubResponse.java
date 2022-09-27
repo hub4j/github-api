@@ -27,7 +27,8 @@ import javax.annotation.Nonnull;
  * </p>
  *
  * @author Liam Newman
- * @param <T>            the type of the data parsed from the body of a {@link GitHubConnectorResponse}.
+ * @param <T>
+ *            the type of the data parsed from the body of a {@link GitHubConnectorResponse}.
  */
 class GitHubResponse<T> {
 
@@ -44,8 +45,10 @@ class GitHubResponse<T> {
     /**
      * Instantiates a new git hub response.
      *
-     * @param response the response
-     * @param body the body
+     * @param response
+     *            the response
+     * @param body
+     *            the body
      */
     GitHubResponse(GitHubResponse<T> response, @CheckForNull T body) {
         this.statusCode = response.statusCode();
@@ -56,8 +59,10 @@ class GitHubResponse<T> {
     /**
      * Instantiates a new git hub response.
      *
-     * @param connectorResponse the connector response
-     * @param body the body
+     * @param connectorResponse
+     *            the connector response
+     * @param body
+     *            the body
      */
     GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {
         this.statusCode = connectorResponse.statusCode();
@@ -68,11 +73,15 @@ class GitHubResponse<T> {
     /**
      * Parses a {@link GitHubConnectorResponse} body into a new instance of {@link T}.
      *
-     * @param <T>            the type
-     * @param connectorResponse            response info to parse.
-     * @param type            the type to be constructed.
+     * @param <T>
+     *            the type
+     * @param connectorResponse
+     *            response info to parse.
+     * @param type
+     *            the type to be constructed.
      * @return a new instance of {@link T}.
-     * @throws IOException             if there is an I/O Exception.
+     * @throws IOException
+     *             if there is an I/O Exception.
      */
     @CheckForNull
     static <T> T parseBody(GitHubConnectorResponse connectorResponse, Class<T> type) throws IOException {
@@ -103,11 +112,15 @@ class GitHubResponse<T> {
     /**
      * Parses a {@link GitHubConnectorResponse} body into a new instance of {@link T}.
      *
-     * @param <T>            the type
-     * @param connectorResponse            response info to parse.
-     * @param instance            the object to fill with data parsed from body
+     * @param <T>
+     *            the type
+     * @param connectorResponse
+     *            response info to parse.
+     * @param instance
+     *            the object to fill with data parsed from body
      * @return a new instance of {@link T}.
-     * @throws IOException             if there is an I/O Exception.
+     * @throws IOException
+     *             if there is an I/O Exception.
      */
     @CheckForNull
     static <T> T parseBody(GitHubConnectorResponse connectorResponse, T instance) throws IOException {
@@ -142,7 +155,8 @@ class GitHubResponse<T> {
     /**
      * Gets the body of the response as a {@link String}.
      *
-     * @param connectorResponse            the response to read
+     * @param connectorResponse
+     *            the response to read
      * @return the body of the response as a {@link String}.
      */
     static String getBodyAsStringOrNull(GitHubConnectorResponse connectorResponse) {
@@ -165,7 +179,8 @@ class GitHubResponse<T> {
     /**
      * The headers for this response.
      *
-     * @param field the field
+     * @param field
+     *            the field
      * @return the headers for this response.
      */
     @Nonnull

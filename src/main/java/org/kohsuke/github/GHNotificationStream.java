@@ -33,8 +33,10 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
     /**
      * Instantiates a new GH notification stream.
      *
-     * @param root the root
-     * @param apiUrl the api url
+     * @param root
+     *            the root
+     * @param apiUrl
+     *            the api url
      */
     GHNotificationStream(GitHub root, String apiUrl) {
         super(root);
@@ -44,7 +46,8 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
     /**
      * Should the stream include notifications that are already read?.
      *
-     * @param v            the v
+     * @param v
+     *            the v
      * @return the gh notification stream
      */
     public GHNotificationStream read(boolean v) {
@@ -55,7 +58,8 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
     /**
      * Should the stream be restricted to notifications in which the user is directly participating or mentioned?.
      *
-     * @param v            the v
+     * @param v
+     *            the v
      * @return the gh notification stream
      */
     public GHNotificationStream participating(boolean v) {

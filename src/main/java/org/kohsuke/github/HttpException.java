@@ -16,7 +16,7 @@ import javax.annotation.CheckForNull;
  * @author <a href="mailto:cleclerc@cloudbees.com">Cyrille Le Clerc</a>
  */
 public class HttpException extends GHIOException {
-    
+
     /** The Constant serialVersionUID. */
     static final long serialVersionUID = 1L;
 

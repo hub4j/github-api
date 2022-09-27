@@ -12,13 +12,19 @@ import java.util.Map;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
 
+// TODO: Auto-generated Javadoc
 /**
- * Tests for the GitHub App API methods
+ * Tests for the GitHub App API methods.
  *
  * @author Paulo Miguel Almeida
  */
 public class GHAppTest extends AbstractGHAppInstallationTest {
 
+    /**
+     * Gets the git hub builder.
+     *
+     * @return the git hub builder
+     */
     protected GitHubBuilder getGitHubBuilder() {
         return super.getGitHubBuilder()
                 // ensure that only JWT will be used against the tests below
@@ -30,6 +36,12 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
                 .withAuthorizationProvider(jwtProvider1);
     }
 
+    /**
+     * Gets the git hub app.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getGitHubApp() throws IOException {
         GHApp app = gitHub.getApp();
@@ -57,6 +69,12 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThrows(RuntimeException.class, () -> app.setPermissions(null));
     }
 
+    /**
+     * List installations.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listInstallations() throws IOException {
         GHApp app = gitHub.getApp();
@@ -67,6 +85,12 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         testAppInstallation(appInstallation);
     }
 
+    /**
+     * Gets the installation by id.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getInstallationById() throws IOException {
         GHApp app = gitHub.getApp();
@@ -74,6 +98,12 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         testAppInstallation(installation);
     }
 
+    /**
+     * Gets the installation by organization.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getInstallationByOrganization() throws IOException {
         GHApp app = gitHub.getApp();
@@ -81,6 +111,12 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         testAppInstallation(installation);
     }
 
+    /**
+     * Gets the installation by repository.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getInstallationByRepository() throws IOException {
         GHApp app = gitHub.getApp();
@@ -88,6 +124,12 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         testAppInstallation(installation);
     }
 
+    /**
+     * Gets the installation by user.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getInstallationByUser() throws IOException {
         GHApp app = gitHub.getApp();
@@ -95,6 +137,12 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         testAppInstallation(installation);
     }
 
+    /**
+     * Delete installation.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void deleteInstallation() throws IOException {
         GHApp app = gitHub.getApp();
@@ -106,6 +154,12 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         }
     }
 
+    /**
+     * Creates the token.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void createToken() throws IOException {
         GHApp app = gitHub.getApp();
@@ -151,6 +205,12 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(installationToken2.getRepositories(), nullValue());;
     }
 
+    /**
+     * Creates the token with repositories.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void createTokenWithRepositories() throws IOException {
         GHApp app = gitHub.getApp();

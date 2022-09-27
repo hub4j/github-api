@@ -9,8 +9,17 @@ import java.util.List;
 import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHAuthenticatedAppInstallationTest.
+ */
 public class GHAuthenticatedAppInstallationTest extends AbstractGHAppInstallationTest {
 
+    /**
+     * Gets the git hub builder.
+     *
+     * @return the git hub builder
+     */
     @Override
     protected GitHubBuilder getGitHubBuilder() {
         OrgAppInstallationAuthorizationProvider provider = new OrgAppInstallationAuthorizationProvider("hub4j-test-org",
@@ -18,6 +27,12 @@ public class GHAuthenticatedAppInstallationTest extends AbstractGHAppInstallatio
         return super.getGitHubBuilder().withAuthorizationProvider(provider);
     }
 
+    /**
+     * Test list repositories two repos.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testListRepositoriesTwoRepos() throws IOException {
         GHAuthenticatedAppInstallation appInstallation = gitHub.getInstallation();

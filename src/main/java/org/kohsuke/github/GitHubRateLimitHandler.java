@@ -8,17 +8,26 @@ import java.net.HttpURLConnection;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Pluggable strategy to determine what to do when the API rate limit is reached.
  *
  * @author Kohsuke Kawaguchi
+ * @author Liam Newman
  * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler) GitHubBuilder#withRateLimitHandler(RateLimitHandler)
  * @see GitHubAbuseLimitHandler
- *
- * @author Liam Newman
  */
 public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {
 
+    /**
+     * Checks if is error.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @return true, if is error
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Override
     boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
         return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN

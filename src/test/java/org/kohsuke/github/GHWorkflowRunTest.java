@@ -22,6 +22,10 @@ import java.util.zip.ZipInputStream;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHWorkflowRunTest.
+ */
 public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
     private static final String REPO_NAME = "hub4j-test-org/GHWorkflowRunTest";
@@ -44,11 +48,23 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
     private GHRepository repo;
 
+    /**
+     * Sets the up.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     public void setUp() throws Exception {
         repo = gitHub.getRepository(REPO_NAME);
     }
 
+    /**
+     * Test manual run and basic information.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testManualRunAndBasicInformation() throws IOException {
         GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
@@ -95,6 +111,12 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getHeadSha(), notNullValue());
     }
 
+    /**
+     * Test cancel and rerun.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCancelAndRerun() throws IOException {
         GHWorkflow workflow = repo.getWorkflow(SLOW_WORKFLOW_PATH);
@@ -139,6 +161,12 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         workflowRun.cancel();
     }
 
+    /**
+     * Test delete.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testDelete() throws IOException {
         GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
@@ -171,6 +199,12 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test search on branch.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testSearchOnBranch() throws IOException {
         GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
@@ -198,6 +232,12 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getConclusion(), equalTo(Conclusion.SUCCESS));
     }
 
+    /**
+     * Test logs.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testLogs() throws IOException {
         GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
@@ -235,6 +275,12 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test artifacts.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @SuppressWarnings("resource")
     @Test
     public void testArtifacts() throws IOException {
@@ -316,6 +362,12 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test jobs.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testJobs() throws IOException {
         GHWorkflow workflow = repo.getWorkflow(MULTI_JOBS_WORKFLOW_PATH);
@@ -363,6 +415,12 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(allJobs.size(), greaterThanOrEqualTo(2));
     }
 
+    /**
+     * Test approval.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testApproval() throws IOException {
         List<GHPullRequest> pullRequests = repo.queryPullRequests()

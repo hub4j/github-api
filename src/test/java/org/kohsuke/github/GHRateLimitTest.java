@@ -15,6 +15,7 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
+// TODO: Auto-generated Javadoc
 /**
  * Test showing the behavior of OkHttpGitHubConnector with and without cache.
  * <p>
@@ -37,18 +38,35 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
  */
 public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
+    /** The rate limit. */
     GHRateLimit rateLimit = null;
+
+    /** The previous limit. */
     GHRateLimit previousLimit = null;
 
+    /**
+     * Instantiates a new GH rate limit test.
+     */
     public GHRateLimitTest() {
         useDefaultGitHub = false;
     }
 
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
     @Override
     protected WireMockConfiguration getWireMockOptions() {
         return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
+    /**
+     * Test git hub rate limit.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testGitHubRateLimit() throws Exception {
         // Customized response that templates the date to keep things working
@@ -234,6 +252,12 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit.reset.getTime(), equalTo(rateLimit.getResetEpochSeconds()));
     }
 
+    /**
+     * Test git hub enterprise does not have rate limit.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testGitHubEnterpriseDoesNotHaveRateLimit() throws Exception {
         // Customized response that results in file not found the same as GitHub Enterprise
@@ -414,6 +438,12 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test git hub rate limit with bad data.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testGitHubRateLimitWithBadData() throws Exception {
         snapshotNotAllowed();
@@ -442,12 +472,24 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test git hub rate limit expiration server five minutes ahead.
+     *
+     * @throws Exception
+     *             the exception
+     */
     // These tests should behave the same, showing server time adjustment working
     @Test
     public void testGitHubRateLimitExpirationServerFiveMinutesAhead() throws Exception {
         executeExpirationTest();
     }
 
+    /**
+     * Test git hub rate limit expiration server five minutes behind.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testGitHubRateLimitExpirationServerFiveMinutesBehind() throws Exception {
         executeExpirationTest();

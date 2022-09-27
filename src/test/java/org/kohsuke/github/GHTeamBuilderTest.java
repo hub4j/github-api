@@ -6,8 +6,18 @@ import java.io.IOException;
 
 import static org.hamcrest.Matchers.equalTo;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHTeamBuilderTest.
+ */
 public class GHTeamBuilderTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Test create child team.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateChildTeam() throws IOException {
         String parentTeamSlug = "dummy-team";

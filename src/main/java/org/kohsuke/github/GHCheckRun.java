@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents a check run.
  *
@@ -24,6 +25,7 @@ import java.util.Locale;
         justification = "JSON API")
 public class GHCheckRun extends GHObject {
 
+    /** The owner. */
     @JsonProperty("repository")
     GHRepository owner;
 
@@ -42,12 +44,26 @@ public class GHCheckRun extends GHObject {
     private GHPullRequest[] pullRequests = new GHPullRequest[0];
     private GHCheckSuite checkSuite;
 
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH check run
+     */
     GHCheckRun wrap(GHRepository owner) {
         this.owner = owner;
         wrap(owner.root());
         return this;
     }
 
+    /**
+     * Wrap.
+     *
+     * @param root
+     *            the root
+     * @return the GH check run
+     */
     GHCheckRun wrap(GitHub root) {
         if (owner != null) {
             for (GHPullRequest singlePull : pullRequests) {
@@ -81,13 +97,36 @@ public class GHCheckRun extends GHObject {
         return status;
     }
 
+    /**
+     * The Enum Status.
+     */
     public static enum Status {
-        QUEUED, IN_PROGRESS, COMPLETED, UNKNOWN;
 
+        /** The queued. */
+        QUEUED,
+        /** The in progress. */
+        IN_PROGRESS,
+        /** The completed. */
+        COMPLETED,
+        /** The unknown. */
+        UNKNOWN;
+
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the status
+         */
         public static Status from(String value) {
             return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return name().toLowerCase(Locale.ROOT);
@@ -117,12 +156,42 @@ public class GHCheckRun extends GHObject {
      * Parameters - <code>conclusion</code></a>.
      */
     public static enum Conclusion {
-        ACTION_REQUIRED, CANCELLED, FAILURE, NEUTRAL, SUCCESS, SKIPPED, STALE, TIMED_OUT, UNKNOWN;
 
+        /** The action required. */
+        ACTION_REQUIRED,
+        /** The cancelled. */
+        CANCELLED,
+        /** The failure. */
+        FAILURE,
+        /** The neutral. */
+        NEUTRAL,
+        /** The success. */
+        SUCCESS,
+        /** The skipped. */
+        SKIPPED,
+        /** The stale. */
+        STALE,
+        /** The timed out. */
+        TIMED_OUT,
+        /** The unknown. */
+        UNKNOWN;
+
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the conclusion
+         */
         public static Conclusion from(String value) {
             return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return name().toLowerCase(Locale.ROOT);
@@ -179,8 +248,8 @@ public class GHCheckRun extends GHObject {
     /**
      * Gets the global node id to access most objects in GitHub.
      *
-     * @see <a href="https://developer.github.com/v4/guides/using-global-node-ids/">documentation</a>
      * @return Global node id
+     * @see <a href="https://developer.github.com/v4/guides/using-global-node-ids/">documentation</a>
      */
     public String getNodeId() {
         return nodeId;
@@ -233,7 +302,7 @@ public class GHCheckRun extends GHObject {
     }
 
     /**
-     * Gets the check suite this check run belongs to
+     * Gets the check suite this check run belongs to.
      *
      * @return Check suite
      */
@@ -310,8 +379,17 @@ public class GHCheckRun extends GHObject {
         }
     }
 
+    /**
+     * The Enum AnnotationLevel.
+     */
     public static enum AnnotationLevel {
-        NOTICE, WARNING, FAILURE
+
+        /** The notice. */
+        NOTICE,
+        /** The warning. */
+        WARNING,
+        /** The failure. */
+        FAILURE
     }
 
     /**

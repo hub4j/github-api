@@ -43,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [ 11 ]
+        java: [ 17 ]
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
@@ -53,6 +53,8 @@ jobs:
           distribution: 'adopt'
           cache: 'maven'
       - name: Maven Site
+        env:
+          MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
         run: mvn -B  clean site -D enable-ci --file pom.xml
   test-8:
     name: test (${{ matrix.os }}, Java 8)

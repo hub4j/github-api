@@ -6,6 +6,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.util.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Github App Installation Token.
  *
@@ -14,6 +15,8 @@ import java.util.*;
  */
 public class GHAppInstallationToken extends GitHubInteractiveObject {
     private String token;
+
+    /** The expires at. */
     protected String expires_at;
     private Map<String, String> permissions;
     private List<GHRepository> repositories;

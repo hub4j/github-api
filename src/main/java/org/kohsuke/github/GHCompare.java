@@ -11,6 +11,7 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * The model user for comparing 2 commits in the GitHub API.
  *
@@ -344,7 +345,15 @@ public class GHCompare {
      * The enum Status.
      */
     public static enum Status {
-        behind, ahead, identical, diverged
+
+        /** The behind. */
+        behind,
+        /** The ahead. */
+        ahead,
+        /** The identical. */
+        identical,
+        /** The diverged. */
+        diverged
     }
 
     /**
@@ -354,9 +363,19 @@ public class GHCompare {
 
         private GHCompare result;
 
+        /**
+         * Instantiates a new GH compare commits iterable.
+         */
         public GHCompareCommitsIterable() {
         }
 
+        /**
+         * Iterator.
+         *
+         * @param pageSize
+         *            the page size
+         * @return the paged iterator
+         */
         @Nonnull
         @Override
         public PagedIterator<Commit> _iterator(int pageSize) {
@@ -375,6 +394,13 @@ public class GHCompare {
                     item -> item.wrapUp(owner));
         }
 
+        /**
+         * Adapt.
+         *
+         * @param base
+         *            the base
+         * @return the iterator
+         */
         protected Iterator<Commit[]> adapt(final Iterator<GHCompare> base) {
             return new Iterator<Commit[]>() {
                 public boolean hasNext() {

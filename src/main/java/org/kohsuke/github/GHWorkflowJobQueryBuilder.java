@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * Lists up jobs of a workflow run with some filtering.
  *
@@ -8,6 +9,12 @@ package org.kohsuke.github;
 public class GHWorkflowJobQueryBuilder extends GHQueryBuilder<GHWorkflowJob> {
     private final GHRepository repo;
 
+    /**
+     * Instantiates a new GH workflow job query builder.
+     *
+     * @param workflowRun
+     *            the workflow run
+     */
     GHWorkflowJobQueryBuilder(GHWorkflowRun workflowRun) {
         super(workflowRun.getRepository().root());
         this.repo = workflowRun.getRepository();
@@ -34,6 +41,11 @@ public class GHWorkflowJobQueryBuilder extends GHQueryBuilder<GHWorkflowJob> {
         return this;
     }
 
+    /**
+     * List.
+     *
+     * @return the paged iterable
+     */
     @Override
     public PagedIterable<GHWorkflowJob> list() {
         return new GHWorkflowJobsIterable(repo, req.build());

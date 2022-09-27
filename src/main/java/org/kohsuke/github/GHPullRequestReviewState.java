@@ -1,18 +1,32 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
- * Current state of {@link GHPullRequestReview}
+ * Current state of {@link GHPullRequestReview}.
  */
 public enum GHPullRequestReviewState {
+
+    /** The pending. */
     PENDING,
+
+    /** The approved. */
     APPROVED,
+
+    /** The changes requested. */
     CHANGES_REQUESTED,
+
     /**
+     * The request changes.
+     *
      * @deprecated This was the thing when this API was in preview, but it changed when it became public. Use
      *             {@link #CHANGES_REQUESTED}. Left here for compatibility.
      */
     REQUEST_CHANGES,
+
+    /** The commented. */
     COMMENTED,
+
+    /** The dismissed. */
     DISMISSED;
 
     /**
@@ -26,6 +40,11 @@ public enum GHPullRequestReviewState {
         return e == null ? null : e.action();
     }
 
+    /**
+     * To event.
+     *
+     * @return the GH pull request review event
+     */
     GHPullRequestReviewEvent toEvent() {
         switch (this) {
             case PENDING :

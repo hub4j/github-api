@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Github App.
  *
@@ -168,6 +169,11 @@ public class GHApp extends GHObject {
         throw new RuntimeException("Do not use this method.");
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }

@@ -13,6 +13,7 @@ import java.util.List;
 import static org.kohsuke.github.internal.Previews.ANTIOPE;
 import static org.kohsuke.github.internal.Previews.GROOT;
 
+// TODO: Auto-generated Javadoc
 /**
  * A commit in a repository.
  *
@@ -41,6 +42,8 @@ public class GHCommit {
          * Gets comment count.
          *
          * @return the comment count
+         * @throws GHException
+         *             the GH exception
          */
         public int getCommentCount() throws GHException {
             if (comment_count < 0) {
@@ -56,12 +59,23 @@ public class GHCommit {
             // Empty constructor required for Jackson binding
         };
 
+        /**
+         * Instantiates a new short info.
+         *
+         * @param commit
+         *            the commit
+         */
         ShortInfo(GitCommit commit) {
             // Inherited copy constructor, used for bridge method from {@link GitCommit},
             // which is used in {@link GHContentUpdateResponse}) to {@link GHCommit}.
             super(commit);
         }
 
+        /**
+         * Gets the parent SHA 1 s.
+         *
+         * @return the parent SHA 1 s
+         */
         @Override
         public List<String> getParentSHA1s() {
             List<String> shortInfoParents = super.getParentSHA1s();
@@ -80,10 +94,20 @@ public class GHCommit {
      */
     @Deprecated
     public static class GHAuthor extends GitUser {
+
+        /**
+         * Instantiates a new GH author.
+         */
         public GHAuthor() {
             super();
         }
 
+        /**
+         * Instantiates a new GH author.
+         *
+         * @param user
+         *            the user
+         */
         public GHAuthor(GitUser user) {
             super(user);
         }
@@ -93,6 +117,8 @@ public class GHCommit {
      * The type Stats.
      */
     public static class Stats {
+
+        /** The deletions. */
         int total, additions, deletions;
     }
 
@@ -101,9 +127,17 @@ public class GHCommit {
      */
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "It's being initilized by JSON deserialization")
     public static class File {
+
+        /** The status. */
         String status;
+
+        /** The deletions. */
         int changes, additions, deletions;
+
+        /** The patch. */
         String raw_url, blob_url, sha, patch;
+
+        /** The previous filename. */
         String filename, previous_filename;
 
         /**
@@ -207,25 +241,46 @@ public class GHCommit {
      * The type Parent.
      */
     public static class Parent {
+
+        /** The url. */
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         String url;
+
+        /** The sha. */
         String sha;
     }
 
+    /**
+     * The Class User.
+     */
     static class User {
+
+        /** The gravatar id. */
         // TODO: what if someone who doesn't have an account on GitHub makes a commit?
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         String url, avatar_url, gravatar_id;
+
+        /** The id. */
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         int id;
 
+        /** The login. */
         String login;
     }
 
+    /** The sha. */
     String url, html_url, sha;
+
+    /** The files. */
     List<File> files;
+
+    /** The stats. */
     Stats stats;
+
+    /** The parents. */
     List<Parent> parents;
+
+    /** The committer. */
     User author, committer;
 
     /**
@@ -235,6 +290,12 @@ public class GHCommit {
         // empty constructor needed for Jackson binding
     }
 
+    /**
+     * Instantiates a new GH commit.
+     *
+     * @param shortInfo
+     *            the short info
+     */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "acceptable")
     GHCommit(ShortInfo shortInfo) {
         // Constructs a (relatively sparse) GHCommit from a GitCommit. Used for
@@ -578,6 +639,13 @@ public class GHCommit {
             owner.root().createRequest().withUrlPath(owner.getApiTailUrl("commits/" + sha)).fetchInto(this);
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH commit
+     */
     GHCommit wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;

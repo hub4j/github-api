@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.fail;
 
+// TODO: Auto-generated Javadoc
 /**
  * Test showing the behavior of OkHttpGitHubConnector cache with GitHub 404 responses.
  *
@@ -28,12 +29,21 @@ import static org.junit.Assert.fail;
  */
 public class GitHubCachingTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Instantiates a new git hub caching test.
+     */
     public GitHubCachingTest() {
         useDefaultGitHub = false;
     }
 
+    /** The test ref name. */
     String testRefName = "heads/test/content_ref_cache";
 
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
     @Override
     protected WireMockConfiguration getWireMockOptions() {
         return super.getWireMockOptions()
@@ -42,6 +52,12 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
                 .extensions(templating.newResponseTransformer());
     }
 
+    /**
+     * Setup repo.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     public void setupRepo() throws Exception {
         if (mockGitHub.isUseProxy()) {
@@ -56,6 +72,12 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test cached 404.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testCached404() throws Exception {
         Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);

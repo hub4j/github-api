@@ -15,12 +15,25 @@ import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DefaultGitHubConnectorTest.
+ */
 public class DefaultGitHubConnectorTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Instantiates a new default git hub connector test.
+     */
     public DefaultGitHubConnectorTest() {
         useDefaultGitHub = false;
     }
 
+    /**
+     * Test create.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testCreate() throws Exception {
         GitHubConnector connector;

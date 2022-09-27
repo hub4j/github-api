@@ -26,6 +26,7 @@ package org.kohsuke.github;
 
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * Permission for a user in a repository.
  *

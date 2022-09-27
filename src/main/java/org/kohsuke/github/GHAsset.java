@@ -5,12 +5,15 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Asset in a release.
  *
  * @see GHRelease#getAssets() GHRelease#getAssets()
  */
 public class GHAsset extends GHObject {
+
+    /** The owner. */
     GHRepository owner;
     private String name;
     private String label;
@@ -111,6 +114,9 @@ public class GHAsset extends GHObject {
     }
 
     /**
+     * Gets the html url.
+     *
+     * @return the html url
      * @deprecated This object has no HTML URL.
      */
     @Override
@@ -145,6 +151,13 @@ public class GHAsset extends GHObject {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/releases/assets/" + getId();
     }
 
+    /**
+     * Wrap.
+     *
+     * @param release
+     *            the release
+     * @return the GH asset
+     */
     GHAsset wrap(GHRelease release) {
         this.owner = release.getOwner();
         return this;

@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * A GitHub API Rate Limit Checker called before each request.
  *
@@ -45,10 +46,25 @@ class GitHubRateLimitChecker {
 
     private static final Logger LOGGER = Logger.getLogger(GitHubRateLimitChecker.class.getName());
 
+    /**
+     * Instantiates a new git hub rate limit checker.
+     */
     GitHubRateLimitChecker() {
         this(RateLimitChecker.NONE, RateLimitChecker.NONE, RateLimitChecker.NONE, RateLimitChecker.NONE);
     }
 
+    /**
+     * Instantiates a new git hub rate limit checker.
+     *
+     * @param core
+     *            the core
+     * @param search
+     *            the search
+     * @param graphql
+     *            the graphql
+     * @param integrationManifest
+     *            the integration manifest
+     */
     GitHubRateLimitChecker(@Nonnull RateLimitChecker core,
             @Nonnull RateLimitChecker search,
             @Nonnull RateLimitChecker graphql,

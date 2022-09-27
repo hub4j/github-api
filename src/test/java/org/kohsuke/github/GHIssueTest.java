@@ -19,12 +19,21 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHIssueTest.
+ *
  * @author Kohsuke Kawaguchi
  * @author Yoann Rodiere
  */
 public class GHIssueTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Clean up.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     @After
     public void cleanUp() throws Exception {
@@ -38,6 +47,12 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Creates the issue.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void createIssue() throws Exception {
         String name = "createIssue";
@@ -46,6 +61,12 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         assertThat(issue.getTitle(), equalTo(name));
     }
 
+    /**
+     * Issue comment.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void issueComment() throws Exception {
         String name = "createIssueComment";
@@ -124,6 +145,12 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
     }
 
+    /**
+     * Close issue.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void closeIssue() throws Exception {
         String name = "closeIssue";
@@ -134,6 +161,12 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         assertThat(getRepository().getIssue(issue.getNumber()).getState(), equalTo(GHIssueState.CLOSED));
     }
 
+    /**
+     * Sets the labels.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     // Requires push access to the test repo to pass
     public void setLabels() throws Exception {
@@ -150,6 +183,12 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         assertThat(savedLabel.isDefault(), is(false));
     }
 
+    /**
+     * Adds the labels.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     // Requires push access to the test repo to pass
     public void addLabels() throws Exception {
@@ -179,6 +218,12 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         assertThat(resultingLabels.size(), equalTo(3));
     }
 
+    /**
+     * Adds the labels concurrency issue.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     // Requires push access to the test repo to pass
     public void addLabelsConcurrencyIssue() throws Exception {
@@ -199,6 +244,12 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
                         hasProperty("name", equalTo(addedLabel2))));
     }
 
+    /**
+     * Removes the labels.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     // Requires push access to the test repo to pass
     public void removeLabels() throws Exception {
@@ -233,6 +284,12 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Sets the assignee.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     // Requires push access to the test repo to pass
     public void setAssignee() throws Exception {
@@ -243,6 +300,12 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         assertThat(getRepository().getIssue(issue.getNumber()).getAssignee(), equalTo(user));
     }
 
+    /**
+     * Gets the user test.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getUserTest() throws IOException {
         GHIssue issue = getRepository().createIssue("getUserTest").create();
@@ -255,6 +318,13 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }

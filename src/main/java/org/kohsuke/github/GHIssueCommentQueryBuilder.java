@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builds a query for listing comments on an issue.
  * <p>
@@ -22,6 +23,12 @@ public class GHIssueCommentQueryBuilder {
     private final Requester req;
     private final GHIssue issue;
 
+    /**
+     * Instantiates a new GH issue comment query builder.
+     *
+     * @param issue
+     *            the issue
+     */
     GHIssueCommentQueryBuilder(GHIssue issue) {
         this.issue = issue;
         this.req = issue.root().createRequest().withUrlPath(issue.getIssuesApiRoute() + "/comments");

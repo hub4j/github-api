@@ -4,15 +4,28 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Creates a team.
  *
  * https://developer.github.com/v3/teams/#create-team
  */
 public class GHTeamBuilder extends GitHubInteractiveObject {
+
+    /** The builder. */
     protected final Requester builder;
     private final String orgName;
 
+    /**
+     * Instantiates a new GH team builder.
+     *
+     * @param root
+     *            the root
+     * @param orgName
+     *            the org name
+     * @param name
+     *            the name
+     */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHTeamBuilder(GitHub root, String orgName, String name) {
         super(root);
@@ -58,7 +71,7 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * Description for this team
+     * Description for this team.
      *
      * @param privacy
      *            privacy of team
@@ -70,7 +83,7 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * Parent team id for this team
+     * Parent team id for this team.
      *
      * @param parentTeamId
      *            parentTeamId of team

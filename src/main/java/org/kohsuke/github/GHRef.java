@@ -6,6 +6,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Provides information on a Git ref from GitHub.
  *
@@ -16,7 +17,7 @@ public class GHRef extends GitHubInteractiveObject {
     private GHObject object;
 
     /**
-     * Name of the ref, such as "refs/tags/abc"
+     * Name of the ref, such as "refs/tags/abc".
      *
      * @return the ref
      */
@@ -163,7 +164,7 @@ public class GHRef extends GitHubInteractiveObject {
         private String type, sha, url;
 
         /**
-         * Type of the object, such as "commit"
+         * Type of the object, such as "commit".
          *
          * @return the type
          */

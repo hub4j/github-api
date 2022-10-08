@@ -6,18 +6,29 @@ import org.junit.Test;
 import org.kohsuke.github.GHPullRequest.AutoMerge;
 
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHPullRequestTest.
+ *
  * @author Kohsuke Kawaguchi
  */
 public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Clean up.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     @After
     public void cleanUp() throws Exception {
@@ -31,6 +42,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Creates the pull request.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void createPullRequest() throws Exception {
         String name = "createPullRequest";
@@ -49,6 +66,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(autoMerge.getEnabledBy(), is(notNullValue()));
     }
 
+    /**
+     * Creates the draft pull request.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void createDraftPullRequest() throws Exception {
         String name = "createDraftPullRequest";
@@ -72,13 +95,95 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(p.isDraft(), is(true));
     }
 
+    /**
+     * Pull request comment.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
-    public void createPullRequestComment() throws Exception {
+    public void pullRequestComment() throws Exception {
         String name = "createPullRequestComment";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
-        p.comment("Some comment");
+
+        List<GHIssueComment> comments;
+        comments = p.listComments().toList();
+        assertThat(comments, hasSize(0));
+        comments = p.queryComments().list().toList();
+        assertThat(comments, hasSize(0));
+
+        GHIssueComment firstComment = p.comment("First comment");
+        Date firstCommentCreatedAt = firstComment.getCreatedAt();
+        Date firstCommentCreatedAtPlus1Second = Date
+                .from(firstComment.getCreatedAt().toInstant().plus(1, ChronoUnit.SECONDS));
+
+        comments = p.listComments().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("First comment"))));
+        comments = p.queryComments().list().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("First comment"))));
+
+        // Test "since"
+        comments = p.queryComments().since(firstCommentCreatedAt).list().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("First comment"))));
+        comments = p.queryComments().since(firstCommentCreatedAtPlus1Second).list().toList();
+        assertThat(comments, hasSize(0));
+
+        // "since" is only precise up to the second,
+        // so if we want to differentiate comments, we need to be completely sure they're created
+        // at least 1 second from each other.
+        // Waiting 2 seconds to avoid edge cases.
+        Thread.sleep(2000);
+
+        GHIssueComment secondComment = p.comment("Second comment");
+        Date secondCommentCreatedAt = secondComment.getCreatedAt();
+        Date secondCommentCreatedAtPlus1Second = Date
+                .from(secondComment.getCreatedAt().toInstant().plus(1, ChronoUnit.SECONDS));
+        assertThat(
+                "There's an error in the setup of this test; please fix it."
+                        + " The second comment should be created at least one second after the first one.",
+                firstCommentCreatedAtPlus1Second.getTime() <= secondCommentCreatedAt.getTime());
+
+        comments = p.listComments().toList();
+        assertThat(comments, hasSize(2));
+        assertThat(comments,
+                contains(hasProperty("body", equalTo("First comment")),
+                        hasProperty("body", equalTo("Second comment"))));
+        comments = p.queryComments().list().toList();
+        assertThat(comments, hasSize(2));
+        assertThat(comments,
+                contains(hasProperty("body", equalTo("First comment")),
+                        hasProperty("body", equalTo("Second comment"))));
+
+        // Test "since"
+        comments = p.queryComments().since(firstCommentCreatedAt).list().toList();
+        assertThat(comments, hasSize(2));
+        assertThat(comments,
+                contains(hasProperty("body", equalTo("First comment")),
+                        hasProperty("body", equalTo("Second comment"))));
+        comments = p.queryComments().since(firstCommentCreatedAtPlus1Second).list().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
+        comments = p.queryComments().since(secondCommentCreatedAt).list().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
+        comments = p.queryComments().since(secondCommentCreatedAtPlus1Second).list().toList();
+        assertThat(comments, hasSize(0));
+
+        // Test "since" with timestamp instead of Date
+        comments = p.queryComments().since(secondCommentCreatedAt.getTime()).list().toList();
+        assertThat(comments, hasSize(1));
+        assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
     }
 
+    /**
+     * Close pull request.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void closePullRequest() throws Exception {
         String name = "closePullRequest";
@@ -90,6 +195,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(getRepository().getPullRequest(p.getNumber()).getState(), equalTo(GHIssueState.CLOSED));
     }
 
+    /**
+     * Pull request reviews.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void pullRequestReviews() throws Exception {
         String name = "testPullRequestReviews";
@@ -116,6 +227,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         draftReview.delete();
     }
 
+    /**
+     * Pull request review comments.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void pullRequestReviewComments() throws Exception {
         String name = "pullRequestReviewComments";
@@ -177,6 +294,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test pull request review requests.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testPullRequestReviewRequests() throws Exception {
         String name = "testPullRequestReviewRequests";
@@ -190,6 +313,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(p.getRequestedReviewers(), is(not(empty())));
     }
 
+    /**
+     * Test pull request team review requests.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testPullRequestTeamReviewRequests() throws Exception {
         String name = "testPullRequestTeamReviewRequests";
@@ -219,6 +348,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                 equalTo(2));
     }
 
+    /**
+     * Merge commit SHA.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void mergeCommitSHA() throws Exception {
         String name = "mergeCommitSHA";
@@ -252,6 +387,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         fail();
     }
 
+    /**
+     * Sets the base branch.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void setBaseBranch() throws Exception {
         String prName = "testSetBaseBranch";
@@ -271,6 +412,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                 equalTo(newBaseBranch));
     }
 
+    /**
+     * Sets the base branch non existing.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void setBaseBranchNonExisting() throws Exception {
         String prName = "testSetBaseBranchNonExisting";
@@ -293,6 +440,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         pullRequest.close();
     }
 
+    /**
+     * Update outdated branches unexpected head.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void updateOutdatedBranchesUnexpectedHead() throws Exception {
         String prName = "testUpdateOutdatedBranches";
@@ -325,6 +478,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         outdatedPullRequest.close();
     }
 
+    /**
+     * Update outdated branches.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void updateOutdatedBranches() throws Exception {
         String prName = "testUpdateOutdatedBranches";
@@ -352,6 +511,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         outdatedPullRequest.close();
     }
 
+    /**
+     * Squash merge.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void squashMerge() throws Exception {
         String name = "squashMerge";
@@ -366,6 +531,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
     }
 
+    /**
+     * Update content squash merge.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void updateContentSquashMerge() throws Exception {
         String name = "updateContentSquashMerge";
@@ -389,6 +560,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         p.merge("squash merge", null, GHPullRequest.MergeMethod.SQUASH);
     }
 
+    /**
+     * Query pull requests qualified head.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void queryPullRequestsQualifiedHead() throws Exception {
         GHRepository repo = getRepository();
@@ -408,6 +585,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(prs.get(0).getHead().getRef(), equalTo("test/stable"));
     }
 
+    /**
+     * Query pull requests unqualified head.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void queryPullRequestsUnqualifiedHead() throws Exception {
         GHRepository repo = getRepository();
@@ -427,6 +610,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(prs.get(0).getHead().getRef(), equalTo("test/stable"));
     }
 
+    /**
+     * Sets the labels.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     // Requires push access to the test repo to pass
     public void setLabels() throws Exception {
@@ -443,6 +632,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(savedLabel.isDefault(), is(false));
     }
 
+    /**
+     * Adds the labels.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     // Requires push access to the test repo to pass
     public void addLabels() throws Exception {
@@ -472,6 +667,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(resultingLabels.size(), equalTo(3));
     }
 
+    /**
+     * Adds the labels concurrency issue.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     // Requires push access to the test repo to pass
     public void addLabelsConcurrencyIssue() throws Exception {
@@ -493,6 +694,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                         hasProperty("name", equalTo(addedLabel2))));
     }
 
+    /**
+     * Removes the labels.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     // Requires push access to the test repo to pass
     public void removeLabels() throws Exception {
@@ -527,6 +734,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Sets the assignee.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     // Requires push access to the test repo to pass
     public void setAssignee() throws Exception {
@@ -537,6 +750,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(getRepository().getPullRequest(p.getNumber()).getAssignee(), equalTo(user));
     }
 
+    /**
+     * Gets the user test.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getUserTest() throws IOException {
         GHPullRequest p = getRepository().createPullRequest("getUserTest", "test/stable", "main", "## test");
@@ -553,6 +772,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Check non existent reviewer.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void checkNonExistentReviewer() throws IOException {
         // PR id is based on https://github.com/sahansera/TestRepo/pull/1
@@ -565,6 +790,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(reviewer, is(nullValue()));
     }
 
+    /**
+     * Check non existent author.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void checkNonExistentAuthor() throws IOException {
         // PR id is based on https://github.com/sahansera/TestRepo/pull/2
@@ -574,6 +805,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(pullRequest.getUser().login, is("ghost"));
     }
 
+    /**
+     * Check pull request reviewer.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void checkPullRequestReviewer() throws IOException {
         // PR id is based on https://github.com/sahansera/TestRepo/pull/6
@@ -585,6 +822,13 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(reviewer, notNullValue());
     }
 
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
     }

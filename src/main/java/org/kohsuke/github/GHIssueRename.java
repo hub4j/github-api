@@ -1,12 +1,12 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHIssueRename.
  *
+ * @author Andrii Tomchuk
  * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#renamed">Github
  *      documentation for renamed event</a>
- *
- * @author Andrii Tomchuk
  */
 public class GHIssueRename {
     private String from = "";

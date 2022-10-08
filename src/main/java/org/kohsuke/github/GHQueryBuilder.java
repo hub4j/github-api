@@ -1,15 +1,24 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * Used to specify filters, sort order, etc for listing items in a collection.
  *
+ * @author Kohsuke Kawaguchi
  * @param <T>
  *            the type parameter
- * @author Kohsuke Kawaguchi
  */
 public abstract class GHQueryBuilder<T> extends GitHubInteractiveObject {
+
+    /** The req. */
     protected final Requester req;
 
+    /**
+     * Instantiates a new GH query builder.
+     *
+     * @param root
+     *            the root
+     */
     GHQueryBuilder(GitHub root) {
         super(root);
         this.req = root.createRequest();

@@ -5,8 +5,15 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EnumUtilsTest.
+ */
 public class EnumUtilsTest {
 
+    /**
+     * Test get enum.
+     */
     @Test
     public void testGetEnum() {
         assertThat(EnumUtils.getEnumOrDefault(TestEnum.class, null, TestEnum.UNKNOWN), equalTo(TestEnum.UNKNOWN));

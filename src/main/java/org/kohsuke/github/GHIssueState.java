@@ -24,11 +24,18 @@
 
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * The enum GHIssueState.
  *
  * @see GHPullRequestQueryBuilder#state(GHIssueState) GHPullRequestQueryBuilder#state(GHIssueState)
  */
 public enum GHIssueState {
-    OPEN, CLOSED, ALL
+
+    /** The open. */
+    OPEN,
+    /** The closed. */
+    CLOSED,
+    /** The all. */
+    ALL
 }

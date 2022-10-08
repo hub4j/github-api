@@ -9,7 +9,10 @@ import java.io.IOException;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHProjectCardTest.
+ *
  * @author Gunnar Skjold
  */
 public class GHProjectCardTest extends AbstractGitHubWireMockTest {
@@ -18,6 +21,12 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     private GHProjectColumn column;
     private GHProjectCard card;
 
+    /**
+     * Sets the up.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     public void setUp() throws Exception {
         org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
@@ -26,12 +35,21 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         card = column.createCard("This is a card");
     }
 
+    /**
+     * Test created card.
+     */
     @Test
     public void testCreatedCard() {
         assertThat(card.getNote(), equalTo("This is a card"));
         assertThat(card.isArchived(), is(false));
     }
 
+    /**
+     * Test edit card note.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testEditCardNote() throws IOException {
         card.setNote("New note");
@@ -40,6 +58,12 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         assertThat(card.isArchived(), is(false));
     }
 
+    /**
+     * Test archive card.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testArchiveCard() throws IOException {
         card.setArchived(true);
@@ -48,6 +72,12 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         assertThat(card.isArchived(), is(true));
     }
 
+    /**
+     * Test create card from issue.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateCardFromIssue() throws IOException {
         GHRepository repo = org.createRepository("repo-for-project-card").create();
@@ -62,6 +92,12 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test create card from PR.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreateCardFromPR() throws IOException {
         GHRepository repo = org.createRepository("repo-for-project-card").autoInit(true).create();
@@ -88,6 +124,12 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test delete card.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testDeleteCard() throws IOException {
         card.delete();
@@ -99,6 +141,12 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * After.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @After
     public void after() throws IOException {
         if (mockGitHub.isUseProxy()) {

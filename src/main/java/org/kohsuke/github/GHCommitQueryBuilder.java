@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builds up query for listing commits.
  *
@@ -22,6 +23,12 @@ public class GHCommitQueryBuilder {
     private final Requester req;
     private final GHRepository repo;
 
+    /**
+     * Instantiates a new GH commit query builder.
+     *
+     * @param repo
+     *            the repo
+     */
     GHCommitQueryBuilder(GHRepository repo) {
         this.repo = repo;
         this.req = repo.root().createRequest(); // requester to build up
@@ -76,7 +83,7 @@ public class GHCommitQueryBuilder {
     }
 
     /**
-     * Only commits after this date will be returned
+     * Only commits after this date will be returned.
      *
      * @param dt
      *            the dt
@@ -88,7 +95,7 @@ public class GHCommitQueryBuilder {
     }
 
     /**
-     * Only commits after this date will be returned
+     * Only commits after this date will be returned.
      *
      * @param timestamp
      *            the timestamp
@@ -99,7 +106,7 @@ public class GHCommitQueryBuilder {
     }
 
     /**
-     * Only commits before this date will be returned
+     * Only commits before this date will be returned.
      *
      * @param dt
      *            the dt
@@ -111,7 +118,7 @@ public class GHCommitQueryBuilder {
     }
 
     /**
-     * Only commits before this date will be returned
+     * Only commits before this date will be returned.
      *
      * @param timestamp
      *            the timestamp

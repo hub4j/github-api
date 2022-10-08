@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Projects V2 item in the organization.
  * <p>
@@ -29,31 +30,74 @@ public class GHProjectsV2Item extends GHObject {
     private GHUser creator;
     private String archivedAt;
 
+    /**
+     * Gets the project node id.
+     *
+     * @return the project node id
+     */
     public String getProjectNodeId() {
         return projectNodeId;
     }
 
+    /**
+     * Gets the content node id.
+     *
+     * @return the content node id
+     */
     public String getContentNodeId() {
         return contentNodeId;
     }
 
+    /**
+     * Gets the content type.
+     *
+     * @return the content type
+     */
     public ContentType getContentType() {
         return EnumUtils.getEnumOrDefault(ContentType.class, contentType, ContentType.UNKNOWN);
     }
 
+    /**
+     * Gets the creator.
+     *
+     * @return the creator
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public GHUser getCreator() throws IOException {
         return root().intern(creator);
     }
 
+    /**
+     * Gets the archived at.
+     *
+     * @return the archived at
+     */
     public Date getArchivedAt() {
         return GitHubClient.parseDate(archivedAt);
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     public URL getHtmlUrl() {
         throw new IllegalStateException(getClass().getName() + " does not offer a HTML URL.");
     }
 
+    /**
+     * The Enum ContentType.
+     */
     public enum ContentType {
-        ISSUE, DRAFTISSUE, PULLREQUEST, UNKNOWN;
+
+        /** The issue. */
+        ISSUE,
+        /** The draftissue. */
+        DRAFTISSUE,
+        /** The pullrequest. */
+        PULLREQUEST,
+        /** The unknown. */
+        UNKNOWN;
     }
 }

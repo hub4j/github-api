@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents a membership of a user in an organization.
  *
@@ -13,10 +14,20 @@ import java.util.Locale;
  * @see GHMyself#listOrgMemberships() GHMyself#listOrgMemberships()
  */
 public class GHMembership extends GitHubInteractiveObject {
+
+    /** The url. */
     String url;
+
+    /** The state. */
     String state;
+
+    /** The role. */
     String role;
+
+    /** The user. */
     GHUser user;
+
+    /** The organization. */
     GHOrganization organization;
 
     /**
@@ -77,6 +88,13 @@ public class GHMembership extends GitHubInteractiveObject {
         root().createRequest().method("PATCH").with("state", State.ACTIVE).withUrlPath(url).fetchInto(this);
     }
 
+    /**
+     * Wrap.
+     *
+     * @param root
+     *            the root
+     * @return the GH membership
+     */
     GHMembership wrap(GitHub root) {
         if (user != null)
             user = root.getUser(user);
@@ -98,9 +116,13 @@ public class GHMembership extends GitHubInteractiveObject {
     }
 
     /**
-     * Whether a role is currently active or waiting for acceptance (pending)
+     * Whether a role is currently active or waiting for acceptance (pending).
      */
     public enum State {
-        ACTIVE, PENDING;
+
+        /** The active. */
+        ACTIVE,
+        /** The pending. */
+        PENDING;
     }
 }

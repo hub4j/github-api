@@ -2554,16 +2554,28 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public Map<String, GHBranch> getBranches() throws IOException {
+        return getBranches(0);
+    }
+
+    /**
+     * Gets branches by {@linkplain GHBranch#getName() their names}.
+     *
+     * @return the branches
+     * @throws IOException
+     *             the io exception
+     */
+    public Map<String, GHBranch> getBranches(final int pageSize) throws IOException {
         Map<String, GHBranch> r = new TreeMap<String, GHBranch>();
         for (GHBranch p : root().createRequest()
                 .withUrlPath(getApiTailUrl("branches"))
                 .toIterable(GHBranch[].class, item -> item.wrap(this))
+                .withPageSize(pageSize)
                 .toArray()) {
             r.put(p.getName(), p);
         }
         return r;
     }
-
+        
     /**
      * Gets branch.
      *

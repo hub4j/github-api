@@ -36,6 +36,18 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
     }
 
     /**
+     * State reason gh issue query builder.
+     *
+     * @param stateReason
+     *            the state_reason
+     * @return the gh issue query builder
+     */
+    public GHPullRequestQueryBuilder stateReason(GHIssueStateReason stateReason) {
+        req.with("state_reason", stateReason);
+        return this;
+    }
+
+    /**
      * Head gh pull request query builder.
      *
      * @param head

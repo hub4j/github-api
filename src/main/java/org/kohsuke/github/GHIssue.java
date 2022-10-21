@@ -67,6 +67,9 @@ public class GHIssue extends GHObject implements Reactable {
     /** The state. */
     protected String state;
 
+    /** The state_reason. */
+    protected String state_reason;
+
     /** The number. */
     protected int number;
 
@@ -199,6 +202,15 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public GHIssueStateReason getStateReason() {
+        return Enum.valueOf(GHIssueStateReason.class, state_reason.toUpperCase(Locale.ENGLISH));
+    }
+
+    /**
      * Gets labels.
      *
      * @return the labels
@@ -292,6 +304,17 @@ public class GHIssue extends GHObject implements Reactable {
      */
     public void close() throws IOException {
         edit("state", "closed");
+    }
+
+    /**
+     * Closes this issue.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void closeNotPlanned() throws IOException {
+        edit("state", "closed");
+        edit("stat_reason", "not_planned");
     }
 
     /**

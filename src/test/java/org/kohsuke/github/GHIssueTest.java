@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertNull;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -157,8 +158,28 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         GHIssue issue = getRepository().createIssue(name).body("## test").create();
         assertThat(issue.getTitle(), equalTo(name));
         assertThat(getRepository().getIssue(issue.getNumber()).getState(), equalTo(GHIssueState.OPEN));
+        assertNull(getRepository().getIssue(issue.getNumber()).getStateReason());
         issue.close();
         assertThat(getRepository().getIssue(issue.getNumber()).getState(), equalTo(GHIssueState.CLOSED));
+        assertThat(getRepository().getIssue(issue.getNumber()).getStateReason(), equalTo(GHIssueStateReason.COMPLETED));
+    }
+
+    /**
+     * Close issue as unplanned.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void closeIssueNotPlanned() throws Exception {
+        String name = "closeIssueNotPlanned";
+        GHIssue issue = getRepository().createIssue(name).body("## test").create();
+        assertThat(issue.getTitle(), equalTo(name));
+        assertThat(getRepository().getIssue(issue.getNumber()).getState(), equalTo(GHIssueState.OPEN));
+        assertNull(getRepository().getIssue(issue.getNumber()).getStateReason());
+        issue.closeNotPlanned();
+        assertThat(getRepository().getIssue(issue.getNumber()).getState(), equalTo(GHIssueState.CLOSED));
+        assertThat(getRepository().getIssue(issue.getNumber()).getStateReason(), equalTo(GHIssueStateReason.NOT_PLANNED));
     }
 
     /**

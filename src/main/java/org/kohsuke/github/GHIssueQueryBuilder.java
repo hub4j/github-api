@@ -34,6 +34,18 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
     }
 
     /**
+     * State reason gh issue query builder.
+     *
+     * @param stateReason
+     *            the state_reason
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder stateReason(GHIssueStateReason stateReason) {
+        req.with("state_reason", stateReason);
+        return this;
+    }
+
+    /**
      * Labels gh issue query builder.
      *
      * @param label

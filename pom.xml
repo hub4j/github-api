@@ -34,7 +34,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spotbugs-maven-plugin.version>4.7.1.1</spotbugs-maven-plugin.version>
-    <spotbugs.version>4.7.1</spotbugs.version>
+    <spotbugs.version>4.7.2</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.9.2</okhttp3.version>
@@ -333,7 +333,7 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.25.0</version>
+        <version>2.27.2</version>
         <executions>
           <execution>
             <id>spotless-check</id>
@@ -468,7 +468,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.13.3</version>
+      <version>2.13.4.1</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -567,7 +567,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>4.7.0</version>
+      <version>4.8.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -591,7 +591,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.36</version>
+      <version>2.0.3</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

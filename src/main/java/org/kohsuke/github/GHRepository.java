@@ -2575,7 +2575,7 @@ public class GHRepository extends GHObject {
         }
         return r;
     }
-        
+
     /**
      * Gets branch.
      *

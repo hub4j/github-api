@@ -240,7 +240,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                         "Sage-Pierce",
                         "timja"));
     }
-    
+
     /**
      * Test list outside collaborators with filter.
      *

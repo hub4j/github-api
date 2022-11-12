@@ -283,7 +283,7 @@
           <dependency>
             <groupId>org.apache.bcel</groupId>
             <artifactId>bcel</artifactId>
-            <version>6.5.0</version>
+            <version>6.6.1</version>
           </dependency>
         </dependencies>
       </plugin>

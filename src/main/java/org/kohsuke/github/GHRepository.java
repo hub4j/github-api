@@ -123,7 +123,7 @@ public class GHRepository extends GHObject {
     @SkipFromToString
     private GHRepoPermission permissions;
 
-    private GHRepository source, parent;
+    private GHRepository source, parent, template_repository;
 
     private Boolean isTemplate;
     private boolean compareUsePaginatedCommits;
@@ -2892,6 +2892,27 @@ public class GHRepository extends GHObject {
             return null;
         }
         return parent;
+    }
+
+    /**
+     * Repositories generated from a template have a 'template_repository' attribute that specifies the repository this
+     * repository is generated from. Only available in Detailed representations, not in Summary representations.
+     *
+     * @return {@link GHRepository} that points to the repository where this repository is generated from. Otherwise
+     *         null.
+     * @throws IOException
+     *             the io exception
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getTemplateRepository() throws IOException {
+        if (template_repository == null) {
+            populate();
+        }
+
+        if (template_repository == null) {
+            return null;
+        }
+        return template_repository;
     }
 
     /**

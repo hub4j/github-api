@@ -1538,4 +1538,17 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getTempRepository();
         repo.createSecret("secret", "encrypted", "public");
     }
+
+    /**
+     * Creates the template repository
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void templateRepository() throws Exception {
+        GHRepository repo = getRepository();
+
+        assertThat(repo.getTemplateRepository().getName(), is("github-api-template"));
+    }
 }

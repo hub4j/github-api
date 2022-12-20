@@ -3057,7 +3057,7 @@ public class GHRepository extends GHObject {
         if (head.length() > 0 && !head.endsWith("/")) {
             head = '/' + head;
         }
-        return "/user/" + head + getOwnerName() + "/" + name;
+        return "/user" + head + "/" + getOwnerName() + "/" + name;
     }
 
     /**

@@ -20,8 +20,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.GHVerification.Reason.*;
 
@@ -1112,5 +1114,17 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void createSecret() throws Exception {
         GHRepository repo = getTempRepository();
         repo.createSecret("secret", "encrypted", "public");
+    }
+
+    @Test
+    public void starTest() throws Exception {
+        String owner = "hub4j-test-org";
+        GHRepository repository = getRepository();
+        assertEquals(owner, repository.getOwner().getLogin());
+        assertEquals(0, repository.getStargazersCount());
+        repository.star();
+        assertEquals(1, repository.listStargazers2().toList().size());
+        repository.unstar();
+        assertEquals(0, repository.listStargazers().toList().size());
     }
 }

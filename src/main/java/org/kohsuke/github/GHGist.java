@@ -11,8 +11,9 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
+// TODO: Auto-generated Javadoc
 /**
- * Gist
+ * Gist.
  *
  * @author Kohsuke Kawaguchi
  * @see GHUser#listGists() GHUser#listGists()
@@ -22,6 +23,7 @@ import java.util.Map.Entry;
  */
 public class GHGist extends GHObject {
 
+    /** The owner. */
     final GHUser owner;
 
     private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
@@ -183,6 +185,13 @@ public class GHGist extends GHObject {
         return Collections.unmodifiableMap(files);
     }
 
+    /**
+     * Gets the api tail url.
+     *
+     * @param tail
+     *            the tail
+     * @return the api tail url
+     */
     String getApiTailUrl(String tail) {
         String result = "/gists/" + id;
         if (!StringUtils.isBlank(tail)) {
@@ -263,6 +272,13 @@ public class GHGist extends GHObject {
         return new GHGistUpdater(this);
     }
 
+    /**
+     * Equals.
+     *
+     * @param o
+     *            the o
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -274,6 +290,11 @@ public class GHGist extends GHObject {
 
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
         return id.hashCode();

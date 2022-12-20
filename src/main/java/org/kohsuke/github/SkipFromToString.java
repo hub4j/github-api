@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Ignores this field for {@link GHObject#toString()}
+ * Ignores this field for {@link GHObject#toString()}.
  *
  * @author Kohsuke Kawaguchi
  */

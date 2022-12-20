@@ -9,6 +9,7 @@ import java.net.URL;
 
 import static org.kohsuke.github.internal.Previews.INERTIA;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHProjectCard.
  *
@@ -23,6 +24,13 @@ public class GHProjectCard extends GHObject {
     private String content_url, project_url, column_url;
     private boolean archived;
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public URL getHtmlUrl() throws IOException {
         return null;
     }

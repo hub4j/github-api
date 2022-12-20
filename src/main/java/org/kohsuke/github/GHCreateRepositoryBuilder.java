@@ -4,13 +4,24 @@ import java.io.IOException;
 
 import static org.kohsuke.github.internal.Previews.BAPTISTE;
 
+// TODO: Auto-generated Javadoc
 /**
- * Creates a repository
+ * Creates a repository.
  *
  * @author Kohsuke Kawaguchi
  */
 public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepositoryBuilder> {
 
+    /**
+     * Instantiates a new GH create repository builder.
+     *
+     * @param name
+     *            the name
+     * @param root
+     *            the root
+     * @param apiTail
+     *            the api tail
+     */
     public GHCreateRepositoryBuilder(String name, GitHub root, String apiTail) {
         super(GHCreateRepositoryBuilder.class, root, null);
         requester.method("POST").withUrlPath(apiTail);
@@ -36,7 +47,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
     }
 
     /**
-     * Desired license template to apply
+     * Desired license template to apply.
      *
      * @param license
      *            template to base the license file on
@@ -105,7 +116,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
     }
 
     /**
-     * Create repository from template repository
+     * Create repository from template repository.
      *
      * @param templateOwner
      *            template repository owner

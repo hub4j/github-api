@@ -7,11 +7,15 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class JsonRateLimit.
+ *
  * @author Kohsuke Kawaguchi
  */
 class JsonRateLimit {
 
+    /** The resources. */
     @Nonnull
     final GHRateLimit resources;
 

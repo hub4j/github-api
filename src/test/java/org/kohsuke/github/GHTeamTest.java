@@ -15,8 +15,18 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHTeamTest.
+ */
 public class GHTeamTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Test set description.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testSetDescription() throws IOException {
 
@@ -42,6 +52,12 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         assertThat(team.getDescription(), equalTo(description));
     }
 
+    /**
+     * Gets the members.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getMembers() throws IOException {
         String teamSlug = "dummy-team";
@@ -56,6 +72,12 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
                 admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
     }
 
+    /**
+     * List members.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listMembers() throws IOException {
         String teamSlug = "dummy-team";
@@ -70,6 +92,12 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
                 admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
     }
 
+    /**
+     * List members admin.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listMembersAdmin() throws IOException {
         String teamSlug = "dummy-team";
@@ -84,6 +112,12 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
                 admins.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
     }
 
+    /**
+     * List members no match.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listMembersNoMatch() throws IOException {
         String teamSlug = "dummy-team";
@@ -95,6 +129,12 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         assertThat("No regular members in team", justMembers.isEmpty());
     }
 
+    /**
+     * Test set privacy.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testSetPrivacy() throws IOException {
         // we need to use a team that doesn't have child teams
@@ -120,6 +160,12 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         assertThat(team.getPrivacy(), equalTo(privacy));
     }
 
+    /**
+     * Test fetch child teams.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testFetchChildTeams() throws IOException {
         String teamSlug = "dummy-team";
@@ -132,6 +178,12 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         assertThat(result.toArray(new GHTeam[]{})[0].getName(), equalTo("child-team-for-dummy"));
     }
 
+    /**
+     * Test fetch empty child teams.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testFetchEmptyChildTeams() throws IOException {
         String teamSlug = "simple-team";
@@ -143,6 +195,12 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         assertThat(result, is(empty()));
     }
 
+    /**
+     * Adds the remove member.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void addRemoveMember() throws IOException {
         String teamSlug = "dummy-team";

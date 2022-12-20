@@ -11,30 +11,36 @@ import java.time.Instant;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JWTTokenProviderTest.
+ */
 /*
- * This test will request an application ensuring that the header for the "Authorization" matches a valid JWT token.
- * A JWT token in the Authorization header will always start with "ey" which is always the start of the base64
- * encoding of the JWT Header , so a valid header will look like this:
+ * This test will request an application ensuring that the header for the "Authorization" matches a valid JWT token. A
+ * JWT token in the Authorization header will always start with "ey" which is always the start of the base64 encoding of
+ * the JWT Header , so a valid header will look like this:
  *
- * <pre>
- * Authorization: Bearer ey{rest of the header}.{payload}.{signature}
- * </pre>
+ * <pre> Authorization: Bearer ey{rest of the header}.{payload}.{signature} </pre>
  *
  * Matched by the regular expression:
  *
- * <pre>
- * ^Bearer (?<JWTHeader>ey\S*)\.(?<JWTPayload>\S*)\.(?<JWTSignature>\S*)$
- * </pre>
+ * <pre> ^Bearer (?<JWTHeader>ey\S*)\.(?<JWTPayload>\S*)\.(?<JWTSignature>\S*)$ </pre>
  *
- * Which is present in the wiremock matcher. Note that we need to use a matcher because the JWT token is encoded
- * with a private key and a random nonce, so it will never be the same (under normal conditions). For more
- * information on the format of a JWT token, see: https://jwt.io/introduction/
+ * Which is present in the wiremock matcher. Note that we need to use a matcher because the JWT token is encoded with a
+ * private key and a random nonce, so it will never be the same (under normal conditions). For more information on the
+ * format of a JWT token, see: https://jwt.io/introduction/
  */
 public class JWTTokenProviderTest extends AbstractGHAppInstallationTest {
 
     private static String TEST_APP_ID_2 = "83009";
     private static String PRIVATE_KEY_FILE_APP_2 = "/ghapi-test-app-2.private-key.pem";
 
+    /**
+     * Test caching valid authorization.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCachingValidAuthorization() throws IOException {
         assertThat(jwtProvider1, instanceOf(JWTTokenProvider.class));
@@ -47,6 +53,14 @@ public class JWTTokenProviderTest extends AbstractGHAppInstallationTest {
         assertThat(authorizationRefresh, sameInstance(authorization));
     }
 
+    /**
+     * Test authorization header pattern.
+     *
+     * @throws GeneralSecurityException
+     *             the general security exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testAuthorizationHeaderPattern() throws GeneralSecurityException, IOException {
         // authorization header check is custom
@@ -63,6 +77,14 @@ public class JWTTokenProviderTest extends AbstractGHAppInstallationTest {
         gh.getApp();
     }
 
+    /**
+     * Test issued at skew.
+     *
+     * @throws GeneralSecurityException
+     *             the general security exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testIssuedAtSkew() throws GeneralSecurityException, IOException {
         // TODO: This isn't a great test as it doesn't really check anything in CI

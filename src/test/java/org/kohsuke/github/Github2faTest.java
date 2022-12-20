@@ -8,11 +8,20 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class Github2faTest.
+ *
  * @author Kevin Harrington mad.hephaestus@gmail.com
  */
 public class Github2faTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Test 2 fa token.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void test2faToken() throws IOException {
         assertThat("Test only valid when not proxying", mockGitHub.isUseProxy(), is(false));

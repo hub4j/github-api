@@ -5,18 +5,35 @@ import org.kohsuke.github.internal.Previews;
 import java.net.URL;
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHDeploymentStatus.
  */
 public class GHDeploymentStatus extends GHObject {
     private GHRepository owner;
+
+    /** The creator. */
     protected GHUser creator;
+
+    /** The state. */
     protected String state;
+
+    /** The description. */
     protected String description;
+
+    /** The target url. */
     protected String target_url;
+
+    /** The log url. */
     protected String log_url;
+
+    /** The deployment url. */
     protected String deployment_url;
+
+    /** The repository url. */
     protected String repository_url;
+
+    /** The environment url. */
     protected String environment_url;
 
     /**
@@ -48,9 +65,8 @@ public class GHDeploymentStatus extends GHObject {
     /**
      * Gets target url.
      *
-     * @deprecated Target url is deprecated in favor of {@link #getLogUrl() getLogUrl}
-     *
      * @return the target url
+     * @deprecated Target url is deprecated in favor of {@link #getLogUrl() getLogUrl}
      */
     @Deprecated
     public URL getTargetUrl() {
@@ -62,9 +78,8 @@ public class GHDeploymentStatus extends GHObject {
      * <p>
      * This method replaces {@link #getTargetUrl() getTargetUrl}}.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @return the target url
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public URL getLogUrl() {
@@ -83,9 +98,8 @@ public class GHDeploymentStatus extends GHObject {
     /**
      * Gets deployment environment url.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @return the deployment environment url
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public URL getEnvironmentUrl() {
@@ -111,6 +125,9 @@ public class GHDeploymentStatus extends GHObject {
     }
 
     /**
+     * Gets the html url.
+     *
+     * @return the html url
      * @deprecated This object has no HTML URL.
      */
     @Override
@@ -118,6 +135,11 @@ public class GHDeploymentStatus extends GHObject {
         return null;
     }
 
+    /**
+     * Gets the owner.
+     *
+     * @return the owner
+     */
     // test only
     GHRepository getOwner() {
         return owner;

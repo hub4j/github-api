@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Statistics for a GitHub repository.
  *
@@ -102,6 +103,13 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
         private int total;
         private List<Week> weeks;
 
+        /**
+         * Gets the html url.
+         *
+         * @return the html url
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
+         */
         @Override
         public URL getHtmlUrl() throws IOException {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -156,6 +164,11 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
             return Collections.unmodifiableList(weeks);
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return author.getLogin() + " made " + String.valueOf(total) + " contributions over "
@@ -212,6 +225,11 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
                 return c;
             }
 
+            /**
+             * To string.
+             *
+             * @return the string
+             */
             @Override
             public String toString() {
                 return String.format("Week starting %d - Additions: %d, Deletions: %d, Commits: %d", w, a, d, c);
@@ -271,6 +289,13 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
             return week;
         }
 
+        /**
+         * Gets the html url.
+         *
+         * @return the html url
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
+         */
         @Override
         public URL getHtmlUrl() throws IOException {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -345,6 +370,11 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
             return deletions;
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return "Week starting " + getWeekTimestamp() + " has " + getAdditions() + " additions and "
@@ -371,6 +401,13 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
         private List<Integer> all;
         private List<Integer> owner;
 
+        /**
+         * Gets the html url.
+         *
+         * @return the html url
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
+         */
         @Override
         public URL getHtmlUrl() throws IOException {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -453,11 +490,23 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
             return numberOfCommits;
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         public String toString() {
             return "Day " + getDayOfWeek() + " Hour " + getHourOfDay() + ": " + getNumberOfCommits() + " commits";
         }
     }
 
+    /**
+     * Gets the api tail url.
+     *
+     * @param tail
+     *            the tail
+     * @return the api tail url
+     */
     String getApiTailUrl(String tail) {
         return repo.getApiTailUrl("stats/" + tail);
     }

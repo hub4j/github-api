@@ -3498,8 +3498,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void star() throws IOException {
-        root().createRequest().method("PUT")
-                .withUrlPath(String.format("/user/starred/%s",full_name)).send();
+        root().createRequest().method("PUT").withUrlPath(String.format("/user/starred/%s", full_name)).send();
     }
 
     /**
@@ -3509,8 +3508,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void unstar() throws IOException {
-        root().createRequest().method("DELETE")
-                .withUrlPath(String.format("/user/starred/%s",full_name)).send();
+        root().createRequest().method("DELETE").withUrlPath(String.format("/user/starred/%s", full_name)).send();
     }
 
     /**

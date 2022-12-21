@@ -23,11 +23,20 @@ public class GHCodeScanningAlertTest extends AbstractGitHubWireMockTest {
     private static final String REPO_NAME = "Pixi";
     private GHRepository repo;
 
+    /**
+     * Gets the mock repo
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     public void setUp() throws Exception {
         repo = gitHub.getRepository(GITHUB_API_TEST_ORG + "/" + REPO_NAME);
     }
 
+    /**
+     * Test list code scanning alert payload
+     */
     @Test
     public void testListCodeScanningAlerts() {
         // Arrange
@@ -66,6 +75,12 @@ public class GHCodeScanningAlertTest extends AbstractGitHubWireMockTest {
         assertThat(openAlert.getState(), is(GHCodeScanningAlertState.OPEN));
     }
 
+    /**
+     * Test get code scanning alert payload
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testGetCodeScanningAlert() throws IOException {
         // Arrange

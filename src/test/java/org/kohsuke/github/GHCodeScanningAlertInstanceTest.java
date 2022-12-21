@@ -21,6 +21,12 @@ public class GHCodeScanningAlertInstanceTest extends AbstractGitHubWireMockTest 
     private static final String REPO_NAME = "Pixi";
     private GHCodeScanningAlert alert;
 
+    /**
+     * Gets the first dismissed alert from the mock repo
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     public void setUp() throws Exception {
         GHRepository repo = gitHub.getRepository(GITHUB_API_TEST_ORG + "/" + REPO_NAME);
@@ -35,6 +41,12 @@ public class GHCodeScanningAlertInstanceTest extends AbstractGitHubWireMockTest 
         return dismissedAlerts.get(0);
     }
 
+    /**
+     * Test list alert instances payload
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testListAlertInstances() throws IOException {
         // Arrange

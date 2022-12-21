@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.GHVerification.Reason.*;
 
@@ -1540,15 +1539,21 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         repo.createSecret("secret", "encrypted", "public");
     }
 
+    /**
+     * Test to check star method by verifying stargarzer count.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void starTest() throws Exception {
         String owner = "hub4j-test-org";
         GHRepository repository = getRepository();
-        assertEquals(owner, repository.getOwner().getLogin());
-        assertEquals(0, repository.getStargazersCount());
+        assertThat(repository.getOwner().getLogin(), equalTo(owner));
+        assertThat(repository.getStargazersCount(), is(0));
         repository.star();
-        assertEquals(1, repository.listStargazers2().toList().size());
+        assertThat(repository.listStargazers2().toList().size(), is(1));
         repository.unstar();
-        assertEquals(0, repository.listStargazers().toList().size());
+        assertThat(repository.listStargazers().toList().size(), is(0));
     }
 }

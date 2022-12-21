@@ -6,11 +6,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
 /**
- * Code scanning alert instance for a repository
- *
- * <a href="https://docs.github.com/en/rest/reference/code-scanning"></a>
+ * Code scanning alert instance for a repository <a href="https://docs.github.com/en/rest/reference/code-scanning"></a>
  */
 public class GHCodeScanningAlertInstance {
     private String ref;

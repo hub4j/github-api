@@ -4,6 +4,9 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Iterable for github code scanning instances.
+ */
 public class GHCodeScanningAlertInstancesIterable extends PagedIterable<GHCodeScanningAlertInstance> {
     private final GHCodeScanningAlert owner;
     private final GitHubRequest request;
@@ -23,6 +26,13 @@ public class GHCodeScanningAlertInstancesIterable extends PagedIterable<GHCodeSc
                 null);
     }
 
+    /**
+     * Adapts {@link Iterator}.
+     *
+     * @param base
+     *            the base
+     * @return the iterator
+     */
     protected Iterator<GHCodeScanningAlertInstance[]> adapt(final Iterator<GHCodeScanningAlertInstance[]> base) {
         return new Iterator<GHCodeScanningAlertInstance[]>() {
             public boolean hasNext() {

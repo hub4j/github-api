@@ -782,4 +782,11 @@ public class GHOrganization extends GHPerson {
     public GHHook createWebHook(URL url) throws IOException {
         return createWebHook(url, null);
     }
+
+    public GHPreReceiveHook configurePreReceiveHook(long id,
+            GHPreReceiveHookEnforcement enforcement,
+            boolean downstreamConfigurable) throws IOException {
+        return GHPreReceiveHooks.orgContext(this)
+                .configurePreReceiveHook(new GHOrgPreReceiveHook(id, enforcement, downstreamConfigurable));
+    }
 }

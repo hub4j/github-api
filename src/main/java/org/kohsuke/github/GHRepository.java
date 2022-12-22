@@ -2463,6 +2463,13 @@ public class GHRepository extends GHObject {
         return createWebHook(url, null);
     }
 
+    public GHPreReceiveHook setPreReceiveHookEnforcement(long id, GHPreReceiveHookEnforcement enforcement)
+            throws IOException {
+        GHRepoPreReceiveHook hook = new GHRepoPreReceiveHook();
+        return GHPreReceiveHooks.repoContext(this, owner)
+                .configurePreReceiveHook(new GHRepoPreReceiveHook(id, enforcement));
+    }
+
     /**
      * Returns a set that represents the post-commit hook URLs. The returned set is live, and changes made to them are
      * reflected to GitHub.

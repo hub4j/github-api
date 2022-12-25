@@ -1043,6 +1043,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         private String ref;
         private int size;
         private List<PushCommit> commits;
+        private PushCommit headCommit;
         private Pusher pusher;
         private String compare;
 
@@ -1122,6 +1123,16 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         public List<PushCommit> getCommits() {
             return Collections.unmodifiableList(commits);
+        }
+
+        /**
+         * The head commit of the push.
+         *
+         * @return the commit
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public PushCommit getHeadCommit() {
+            return headCommit;
         }
 
         /**

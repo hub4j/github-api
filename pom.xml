@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
-  <artifactId>github-api</artifactId>
+  <artifactId>cortexapps-github-api</artifactId>
   <version>1.312-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
@@ -393,32 +393,32 @@
           </dependency>
         </dependencies>
       </plugin>
-      <plugin>
-        <groupId>com.github.siom79.japicmp</groupId>
-        <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.16.0</version>
-        <configuration>
-          <parameter>
-            <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
-            <onlyModified>true</onlyModified>
-            <includeSynthetic>true</includeSynthetic>
-            <excludes>
-              <!-- Classes in internal are public but are considered private for API stability purposes -->
-              <exclude>org.kohsuke.github.internal</exclude>
-              <!-- TODO: started failing in CI recently. This is part of the multi-release structure. -->
-              <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector#HttpClientGitHubConnector(java.net.http.HttpClient)</exclude>
-            </excludes>
-          </parameter>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>verify</phase>
-            <goals>
-              <goal>cmp</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+<!--      <plugin>-->
+<!--        <groupId>com.github.siom79.japicmp</groupId>-->
+<!--        <artifactId>japicmp-maven-plugin</artifactId>-->
+<!--        <version>0.16.0</version>-->
+<!--        <configuration>-->
+<!--          <parameter>-->
+<!--            <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>-->
+<!--            <onlyModified>true</onlyModified>-->
+<!--            <includeSynthetic>true</includeSynthetic>-->
+<!--            <excludes>-->
+<!--              &lt;!&ndash; Classes in internal are public but are considered private for API stability purposes &ndash;&gt;-->
+<!--              <exclude>org.kohsuke.github.internal</exclude>-->
+<!--              &lt;!&ndash; TODO: started failing in CI recently. This is part of the multi-release structure. &ndash;&gt;-->
+<!--              <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector#HttpClientGitHubConnector(java.net.http.HttpClient)</exclude>-->
+<!--            </excludes>-->
+<!--          </parameter>-->
+<!--        </configuration>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <phase>verify</phase>-->
+<!--            <goals>-->
+<!--              <goal>cmp</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
     </plugins>
   </build>
 

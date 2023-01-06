@@ -117,7 +117,9 @@ public class GHCodeScanningAlert extends GHObject {
      *
      * @return the severity
      */
-    public String getSeverity() { return rule.severity; }
+    public String getSeverity() {
+        return rule.severity;
+    }
 
     /**
      * Most recent instance of the alert

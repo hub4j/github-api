@@ -1,0 +1,49 @@
+{
+  "id": "8ae703db-4abb-47d0-9165-2be274eb70f2",
+  "name": "repos_cortextests_test-code-scanning",
+  "request": {
+    "url": "/repos/cortextests/test-code-scanning",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_cortextests_test-code-scanning-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 10 Jan 2023 22:29:00 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"13bb6f9168c92af0fe7aed066e4dea6eb67f7dd06180c3f3b0b0fdfe64341154\"",
+      "Last-Modified": "Wed, 04 Jan 2023 20:18:29 GMT",
+      "X-OAuth-Scopes": "project, repo, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2023-01-16 19:25:18 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4983",
+      "X-RateLimit-Reset": "1673392023",
+      "X-RateLimit-Used": "17",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D03B:76CC:30FBA79:63FE7C7:63BDE6AC"
+    }
+  },
+  "uuid": "8ae703db-4abb-47d0-9165-2be274eb70f2",
+  "persistent": true,
+  "insertionIndex": 7
+}

@@ -1,0 +1,101 @@
+[
+  {
+    "number": 2,
+    "created_at": "2023-01-04T20:27:49Z",
+    "updated_at": "2023-01-06T10:47:36Z",
+    "url": "https://api.github.com/repos/cortextests/test-code-scanning/code-scanning/alerts/2",
+    "html_url": "https://github.com/cortextests/test-code-scanning/security/code-scanning/2",
+    "state": "open",
+    "fixed_at": null,
+    "dismissed_by": null,
+    "dismissed_at": null,
+    "dismissed_reason": null,
+    "dismissed_comment": null,
+    "rule": {
+      "id": "js/type-confusion-through-parameter-tampering",
+      "severity": "error",
+      "description": "Type confusion through parameter tampering",
+      "name": "js/type-confusion-through-parameter-tampering",
+      "tags": [
+        "external/cwe/cwe-843",
+        "security"
+      ],
+      "security_severity_level": "critical"
+    },
+    "tool": {
+      "name": "CodeQL",
+      "guid": null,
+      "version": "2.11.5"
+    },
+    "most_recent_instance": {
+      "ref": "refs/heads/main",
+      "analysis_key": ".github/workflows/codeql.yml:analyze",
+      "environment": "{\"language\":\"javascript\"}",
+      "category": "/language:javascript",
+      "state": "open",
+      "commit_sha": "d6ad7298324e50a737504b0dffcb234034d669b1",
+      "message": {
+        "text": "Potential type confusion as this HTTP request parameter may be either an array or a string."
+      },
+      "location": {
+        "path": "sample_file.ts",
+        "start_line": 10,
+        "end_line": 10,
+        "start_column": 25,
+        "end_column": 28
+      },
+      "classifications": []
+    },
+    "instances_url": "https://api.github.com/repos/cortextests/test-code-scanning/code-scanning/alerts/2/instances"
+  },
+  {
+    "number": 1,
+    "created_at": "2023-01-04T20:27:49Z",
+    "updated_at": "2023-01-06T10:47:36Z",
+    "url": "https://api.github.com/repos/cortextests/test-code-scanning/code-scanning/alerts/1",
+    "html_url": "https://github.com/cortextests/test-code-scanning/security/code-scanning/1",
+    "state": "open",
+    "fixed_at": null,
+    "dismissed_by": null,
+    "dismissed_at": null,
+    "dismissed_reason": null,
+    "dismissed_comment": null,
+    "rule": {
+      "id": "js/loop-bound-injection",
+      "severity": "warning",
+      "description": "Loop bound injection",
+      "name": "js/loop-bound-injection",
+      "tags": [
+        "external/cwe/cwe-730",
+        "external/cwe/cwe-834",
+        "security"
+      ],
+      "security_severity_level": "high"
+    },
+    "tool": {
+      "name": "CodeQL",
+      "guid": null,
+      "version": "2.11.5"
+    },
+    "most_recent_instance": {
+      "ref": "refs/heads/main",
+      "analysis_key": ".github/workflows/codeql.yml:analyze",
+      "environment": "{\"language\":\"javascript\"}",
+      "category": "/language:javascript",
+      "state": "open",
+      "commit_sha": "d6ad7298324e50a737504b0dffcb234034d669b1",
+      "message": {
+        "text": "Iteration over a user-controlled object with a potentially unbounded .length property from a user-provided value."
+      },
+      "location": {
+        "path": "sample_file.ts",
+        "start_line": 10,
+        "end_line": 10,
+        "start_column": 25,
+        "end_column": 28
+      },
+      "classifications": []
+    },
+    "instances_url": "https://api.github.com/repos/cortextests/test-code-scanning/code-scanning/alerts/1/instances"
+  }
+]

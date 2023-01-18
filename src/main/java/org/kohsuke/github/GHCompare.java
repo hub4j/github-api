@@ -224,7 +224,7 @@ public class GHCompare {
     }
 
     /**
-     * Compare commits had a child commit element with additional details we want to capture. This extenstion of
+     * Compare commits had a child commit element with additional details we want to capture. This extension of
      * GHCommit provides that.
      */
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },

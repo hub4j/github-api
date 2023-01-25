@@ -84,6 +84,28 @@ public class GHMyself extends GHUser {
     }
 
     /**
+     * Add public SSH key for the user.
+     * <p>
+     * https://docs.github.com/en/rest/users/keys?apiVersion=2022-11-28#create-a-public-ssh-key-for-the-authenticated-user
+     *
+     * @param title
+     *            Title of the SSH key
+     * @param key
+     *            the public key
+     * @return the newly created Github key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHKey addPublicKey(String title, String key) throws IOException {
+        return root().createRequest()
+                .withUrlPath("/user/keys")
+                .method("POST")
+                .with("title", title)
+                .with("key", key)
+                .fetch(GHKey.class);
+    }
+
+    /**
      * Returns the read-only list of all the public verified keys of the current user.
      * <p>
      * Differently from the getPublicKeys() method, the retrieval of the user's verified public keys does not require

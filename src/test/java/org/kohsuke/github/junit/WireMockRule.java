@@ -528,6 +528,16 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
+     * Removes the stub mapping.
+     *
+     * @param id
+     *            the id
+     */
+    public void removeStubMapping(UUID id) {
+        wireMockServer.removeStubMapping(id);
+    }
+
+    /**
      * List all stub mappings.
      *
      * @return the list stub mappings result

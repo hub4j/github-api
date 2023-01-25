@@ -614,18 +614,6 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
-     * Set scenario state
-     *
-     * @param name
-     *            the name
-     * @param state
-     *            the state
-     */
-    public void setScenarioState(String name, String state) {
-        wireMockServer.setScenarioState(name, state);
-    }
-    
-    /**
      * Reset mappings.
      */
     public void resetMappings() {
@@ -721,6 +709,28 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
      */
     public GetScenariosResult getAllScenarios() {
         return wireMockServer.getAllScenarios();
+    }
+
+    /**
+     * Reset a scenario
+     *
+     * @param name
+     *            the name
+     */
+    public void resetScenario(String name) {
+        wireMockServer.resetScenario(name);
+    }
+
+    /**
+     * Set scenario state
+     *
+     * @param name
+     *            the name
+     * @param state
+     *            the state
+     */
+    public void setScenarioState(String name, String state) {
+        wireMockServer.setScenarioState(name, state);
     }
 
     /**

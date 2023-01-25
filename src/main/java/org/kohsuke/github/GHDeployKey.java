@@ -27,6 +27,12 @@ public class GHDeployKey {
     /** Last used date of the deploy key */
     private String last_used;
 
+    /** Name of user that added the deploy key */
+    private String added_by;
+
+    /** Whether the deploykey has readonly permission or full access */
+    private boolean read_only;
+
     /**
      * Gets id.
      *
@@ -91,6 +97,24 @@ public class GHDeployKey {
     }
 
     /**
+     * Gets added_by
+     *
+     * @return the added_by
+     */
+    public String getAdded_by() {
+        return added_by;
+    }
+
+    /**
+     * Is read_only
+     *
+     * @return true if the key can only read. False if the key has write permission as well.
+     */
+    public boolean isRead_only() {
+        return read_only;
+    }
+
+    /**
      * Wrap gh deploy key.
      *
      * @param repo
@@ -125,6 +149,8 @@ public class GHDeployKey {
                 .append("key", key)
                 .append("created_at", created_at)
                 .append("last_used", last_used)
+                .append("added_by", added_by)
+                .append("read_only", read_only)
                 .toString();
     }
 

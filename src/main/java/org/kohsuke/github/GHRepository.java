@@ -1891,7 +1891,7 @@ public class GHRepository extends GHObject {
     /**
      * Retrieves all refs for the github repository.
      *
-     * @return an array of GHRef elements coresponding with the refs in the remote repository.
+     * @return an array of GHRef elements corresponding with the refs in the remote repository.
      * @throws IOException
      *             on failure communicating with GitHub
      */
@@ -1937,7 +1937,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Retrive a ref of the given type for the current GitHub repository.
+     * Retrieve a ref of the given type for the current GitHub repository.
      *
      * @param refName
      *            eg: heads/branch
@@ -1964,7 +1964,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Retrive a tree of the given type for the current GitHub repository.
+     * Retrieve a tree of the given type for the current GitHub repository.
      *
      * @param sha
      *            sha number or branch name ex: "main"
@@ -2222,7 +2222,7 @@ public class GHRepository extends GHObject {
      * @param description
      *            Optional short description.
      * @param context
-     *            Optinal commit status context.
+     *            Optional commit status context.
      * @return the gh commit status
      * @throws IOException
      *             the io exception

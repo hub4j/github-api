@@ -242,6 +242,65 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test list outside collaborators.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListOutsideCollaborators() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        List<GHUser> admins = org.listOutsideCollaborators().toList();
+
+        assertThat(admins, notNullValue());
+        // In case more are added in the future
+        assertThat(admins.size(), greaterThanOrEqualTo(12));
+        assertThat(admins.stream().map(GHUser::getLogin).collect(Collectors.toList()),
+                hasItems("alexanderrtaylor",
+                        "asthinasthi",
+                        "bitwiseman",
+                        "farmdawgnation",
+                        "halkeye",
+                        "jberglund-BSFT",
+                        "kohsuke",
+                        "kohsuke2",
+                        "martinvanzijl",
+                        "PauloMigAlmeida",
+                        "Sage-Pierce",
+                        "timja"));
+    }
+    /**
+     * Test list outside collaborators with filter.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListOutsideCollaboratorsWithFilter() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        List<GHUser> admins = org.listOutsideCollaboratorsWithFilter("all").toList();
+
+        assertThat(admins, notNullValue());
+        // In case more are added in the future
+        assertThat(admins.size(), greaterThanOrEqualTo(12));
+        assertThat(admins.stream().map(GHUser::getLogin).collect(Collectors.toList()),
+                hasItems("alexanderrtaylor",
+                        "asthinasthi",
+                        "bitwiseman",
+                        "farmdawgnation",
+                        "halkeye",
+                        "jberglund-BSFT",
+                        "kohsuke",
+                        "kohsuke2",
+                        "martinvanzijl",
+                        "PauloMigAlmeida",
+                        "Sage-Pierce",
+                        "timja"));
+    }
+
+    /**
      * Test create team with repo access.
      *
      * @throws IOException

@@ -315,6 +315,17 @@ public class GHOrganization extends GHPerson {
         return listMembers("public_members");
     }
 
+    /**
+     * All the outside collaborators of this organization.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listOutsideCollaborators() throws IOException {
+        return listMembers("outside_collaborators");
+    }
+
     private PagedIterable<GHUser> listMembers(String suffix) throws IOException {
         return listMembers(suffix, null, null);
     }
@@ -330,6 +341,19 @@ public class GHOrganization extends GHPerson {
      */
     public PagedIterable<GHUser> listMembersWithFilter(String filter) throws IOException {
         return listMembers("members", filter, null);
+    }
+
+    /**
+     * List outside collaborators with filter paged iterable.
+     *
+     * @param filter
+     *            the filter
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listOutsideCollaboratorsWithFilter(String filter) throws IOException {
+        return listMembers("outside_collaborators", filter, null);
     }
 
     /**
@@ -631,7 +655,7 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Gets all the open pull requests in this organizataion.
+     * Gets all the open pull requests in this organization.
      *
      * @return the pull requests
      * @throws IOException

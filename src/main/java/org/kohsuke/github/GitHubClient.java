@@ -430,6 +430,7 @@ class GitHubClient {
                 logRequest(connectorRequest);
                 rateLimitChecker.checkRateLimit(this, request.rateLimitTarget());
                 connectorResponse = connector.send(connectorRequest);
+                logResponse(connectorResponse);
                 noteRateLimit(request.rateLimitTarget(), connectorResponse);
                 detectKnownErrors(connectorResponse, request, handler != null);
                 return createResponse(connectorResponse, handler);
@@ -520,8 +521,23 @@ class GitHubClient {
 
     private void logRequest(@Nonnull final GitHubConnectorRequest request) {
         LOGGER.log(FINE,
-                () -> "GitHub API request [" + (getLogin() == null ? "anonymous" : getLogin()) + "]: "
-                        + request.method() + " " + request.url().toString());
+                () -> String.format("(%s) GitHub API request [%s]: %s",
+                        Integer.toHexString(request.hashCode()),
+                        (getLogin() == null ? "anonymous" : getLogin()),
+                        (request.method() + " " + request.url().toString())));
+    }
+
+    private void logResponse(@Nonnull final GitHubConnectorResponse response) {
+        LOGGER.log(FINE, () -> {
+            try {
+                return String.format("(%s) GitHub API response [%s]: %s",
+                        Integer.toHexString(response.request().hashCode()),
+                        (getLogin() == null ? "anonymous" : getLogin()),
+                        (response.statusCode() + " " + GitHubResponse.getBodyAsString(response)));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Nonnull

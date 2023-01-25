@@ -29,7 +29,7 @@ public class GHObjectTest extends org.kohsuke.github.AbstractGitHubWireMockTest 
         assertThat(org.toString(), containsString("type=Organization"));
         assertThat(org.toString(), containsString("followers=0"));
         assertThat(org.toString(), containsString("hireable=false"));
-        
+
         // getResponseHeaderFields is deprecated but we should not break it.
         assertThat(org.getResponseHeaderFields(), notNullValue());
         assertThat(org.getResponseHeaderFields().get("Cache-Control").get(0), is("private, max-age=60, s-maxage=60"));

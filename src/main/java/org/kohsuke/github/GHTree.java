@@ -61,7 +61,7 @@ public class GHTree {
     /**
      * Returns true if the number of items in the tree array exceeded the GitHub maximum limit.
      *
-     * @return true true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
+     * @return true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
      */
     public boolean isTruncated() {
         return truncated;

@@ -1,0 +1,39 @@
+{
+  "id": "5f5399dc-ca55-404b-b0b8-26ca577bd1f6",
+  "name": "repos_hub4j-test-org_github-api_subscription",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/subscription",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Sat, 23 Jan 2021 04:48:06 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4875",
+      "X-RateLimit-Reset": "1611379080",
+      "x-ratelimit-used": "125",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": [
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "X-GitHub-Request-Id": "D8B8:0DDD:2899D:30520:600BAA86"
+    }
+  },
+  "uuid": "5f5399dc-ca55-404b-b0b8-26ca577bd1f6",
+  "persistent": true,
+  "insertionIndex": 6
+}

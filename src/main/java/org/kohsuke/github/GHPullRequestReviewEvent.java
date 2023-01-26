@@ -23,28 +23,45 @@
  */
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * Action to perform on {@link GHPullRequestReview}.
  */
 public enum GHPullRequestReviewEvent {
+
+    /** The pending. */
     PENDING,
+    /** The approve. */
     APPROVE,
+    /** The request changes. */
     REQUEST_CHANGES,
+    /** The comment. */
     COMMENT;
 
-    /*package*/ String action() {
-        return this==PENDING ? null : name();
+    /**
+     * Action.
+     *
+     * @return the string
+     */
+    String action() {
+        return this == PENDING ? null : name();
     }
 
     /**
      * When a {@link GHPullRequestReview} is submitted with this event, it should transition to this state.
+     *
+     * @return the GH pull request review state
      */
-    /*package*/ GHPullRequestReviewState toState() {
+    GHPullRequestReviewState toState() {
         switch (this) {
-        case PENDING:           return GHPullRequestReviewState.PENDING;
-        case APPROVE:           return GHPullRequestReviewState.APPROVED;
-        case REQUEST_CHANGES:   return GHPullRequestReviewState.CHANGES_REQUESTED;
-        case COMMENT:           return GHPullRequestReviewState.COMMENTED;
+            case PENDING :
+                return GHPullRequestReviewState.PENDING;
+            case APPROVE :
+                return GHPullRequestReviewState.APPROVED;
+            case REQUEST_CHANGES :
+                return GHPullRequestReviewState.CHANGES_REQUESTED;
+            case COMMENT :
+                return GHPullRequestReviewState.COMMENTED;
         }
         throw new IllegalStateException();
     }

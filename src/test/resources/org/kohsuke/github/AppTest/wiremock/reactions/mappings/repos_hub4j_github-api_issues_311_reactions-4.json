@@ -1,0 +1,53 @@
+{
+  "id": "174d99d0-6e90-4e1c-aab0-e0b8fcfd7d42",
+  "name": "repos_hub4j_github-api_issues_311_reactions",
+  "request": {
+    "url": "/repos/hub4j/github-api/issues/311/reactions",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"content\":\"hooray\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j_github-api_issues_311_reactions-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 08 Apr 2022 17:54:34 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"a02da1e1f58a3192bd8b65fb8dca01b5319460a81bd0b9137055508710ea0479\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4910",
+      "X-RateLimit-Reset": "1649442146",
+      "X-RateLimit-Used": "90",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C57E:020B:2F658:33E75:625076DA"
+    }
+  },
+  "uuid": "174d99d0-6e90-4e1c-aab0-e0b8fcfd7d42",
+  "persistent": true,
+  "insertionIndex": 4
+}

@@ -1,0 +1,46 @@
+{
+  "id": "7311a2f2-a7f7-45a8-bd1b-8eaa4dd986d5",
+  "name": "user",
+  "request": {
+    "url": "/user",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "user-1.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 31 Jul 2020 21:47:31 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4982",
+      "X-RateLimit-Reset": "1596235134",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"fd90864a27d8465275943fa60d303b11\"",
+      "Last-Modified": "Thu, 30 Jul 2020 20:38:23 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F660:5BE7:14CF24:300ED5:5F249173"
+    }
+  },
+  "uuid": "7311a2f2-a7f7-45a8-bd1b-8eaa4dd986d5",
+  "persistent": true,
+  "insertionIndex": 1
+}

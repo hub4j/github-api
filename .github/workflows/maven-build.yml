@@ -1,0 +1,106 @@
+name: CI
+
+on: 
+  push:
+    branches:
+      - main
+      - '!/refs/heads/dependabot/*'
+  pull_request:
+    branches:
+      - '*'
+      - '!/refs/heads/patch*'
+
+# this is required by spotless for JDK 16+
+env:
+  JAVA_11_PLUS_MAVEN_OPTS: "--add-opens jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build-only (Java ${{ matrix.java }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [ 17 ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'zulu'
+          cache: 'maven'
+      - name: Maven Install (skipTests)
+        env:
+          MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
+        run: mvn -B clean install -DskipTests --file pom.xml
+  site:
+    name: site (Java ${{ matrix.java }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [ 17 ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'adopt'
+          cache: 'maven'
+      - name: Maven Site
+        env:
+          MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
+        run: mvn -B  clean site -D enable-ci --file pom.xml
+  test-8:
+    name: test (${{ matrix.os }}, Java 8)
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu ]
+        java: [ 8 ]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: 'zulu'
+        cache: 'maven'
+    # JDK 8
+    - name: Maven Install with Code Coverage
+      run: mvn -B clean install -D enable-ci -Djapicmp.skip --file pom.xml
+    - name: Codecov Report 
+      uses: codecov/codecov-action@v3.1.1
+  test:
+    name: test (${{ matrix.os }}, Java ${{ matrix.java }})
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu, windows ]
+        java: [ 11, 17 ]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: 'zulu'
+        cache: 'maven'
+    # JDK 11+
+    - name: Maven Install without Code Coverage
+      if: matrix.os == 'windows'
+      env:
+        MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
+      run: mvn -B clean install -D japicmp.skip=true --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
+    - name: Maven Install with Code Coverage
+      if: matrix.os != 'windows'
+      env:
+        MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
+      run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"

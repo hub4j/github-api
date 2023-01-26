@@ -11,18 +11,25 @@ import java.util.Map;
 
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.hasValue;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertThat;
 
-
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHHookTest.
+ *
  * @author Kanstantsin Shautsou
  */
 public class GHHookTest {
 
+    /**
+     * Expose responce headers.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Ignore
     @Test
     public void exposeResponceHeaders() throws Exception {
@@ -59,20 +66,15 @@ public class GHHookTest {
 
         try {
             // fails because application isn't approved in organisation and you can find it only after doing real call
-            final GHHook hook = repository.createHook(
-                "my-hook",
-                singletonMap("url", "http://localhost"),
-                singletonList(GHEvent.PUSH),
-                true
-            );
+            final GHHook hook = repository
+                    .createHook("my-hook", singletonMap("url", "http://localhost"), singletonList(GHEvent.PUSH), true);
         } catch (IOException ex) {
             assertThat(ex, instanceOf(GHFileNotFoundException.class));
             final GHFileNotFoundException ghFileNotFoundException = (GHFileNotFoundException) ex;
             final Map<String, List<String>> responseHeaderFields = ghFileNotFoundException.getResponseHeaderFields();
             assertThat(responseHeaderFields, hasKey("X-Accepted-OAuth-Scopes"));
             assertThat(responseHeaderFields.get("X-Accepted-OAuth-Scopes"),
-                hasItem("admin:repo_hook, public_repo, repo, write:repo_hook")
-            );
+                    hasItem("admin:repo_hook, public_repo, repo, write:repo_hook"));
         }
     }
 }

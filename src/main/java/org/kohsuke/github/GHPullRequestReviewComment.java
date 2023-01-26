@@ -23,34 +23,54 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
+
 import javax.annotation.CheckForNull;
 
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
+// TODO: Auto-generated Javadoc
 /**
- * Review comment to the pull request
+ * Review comment to the pull request.
  *
  * @author Julien Henry
- * @see GHPullRequest#listReviewComments()
- * @see GHPullRequest#createReviewComment(String, String, String, int)
+ * @see GHPullRequest#listReviewComments() GHPullRequest#listReviewComments()
+ * @see GHPullRequest#createReviewComment(String, String, String, int) GHPullRequest#createReviewComment(String, String,
+ *      String, int)
  */
 public class GHPullRequestReviewComment extends GHObject implements Reactable {
+
+    /** The owner. */
     GHPullRequest owner;
 
     private String body;
     private GHUser user;
     private String path;
+    private String html_url;
     private int position = -1;
     private int original_position = -1;
     private long in_reply_to_id = -1L;
-
+    private String diff_hunk;
+    private String commit_id;
+    private String original_commit_id;
+    private GHCommentAuthorAssociation author_association;
 
     /**
-     * @deprecated
-     *      You should be using {@link GHPullRequestReviewBuilder#comment(String, String, int)}
+     * Draft gh pull request review comment.
+     *
+     * @param body
+     *            the body
+     * @param path
+     *            the path
+     * @param position
+     *            the position
+     * @return the gh pull request review comment
+     * @deprecated You should be using {@link GHPullRequestReviewBuilder#comment(String, String, int)}
      */
+    @Deprecated
     public static GHPullRequestReviewComment draft(String body, String path, int position) {
         GHPullRequestReviewComment result = new GHPullRequestReviewComment();
         result.body = body;
@@ -59,20 +79,32 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return result;
     }
 
-    /*package*/ GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH pull request review comment
+     */
+    GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
         this.owner = owner;
         return this;
     }
 
     /**
      * Gets the pull request to which this review comment is associated.
+     *
+     * @return the parent
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHPullRequest getParent() {
         return owner;
     }
 
     /**
      * The comment itself.
+     *
+     * @return the body
      */
     public String getBody() {
         return body;
@@ -80,84 +112,210 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     /**
      * Gets the user who posted this comment.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
      */
     public GHUser getUser() throws IOException {
-        return owner.root.getUser(user.getLogin());
+        return owner.root().getUser(user.getLogin());
     }
 
+    /**
+     * Gets path.
+     *
+     * @return the path
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Gets position.
+     *
+     * @return the position
+     */
     @CheckForNull
     public int getPosition() {
         return position;
     }
 
+    /**
+     * Gets original position.
+     *
+     * @return the original position
+     */
     public int getOriginalPosition() {
         return original_position;
     }
 
+    /**
+     * Gets diff hunk.
+     *
+     * @return the diff hunk
+     */
+    public String getDiffHunk() {
+        return diff_hunk;
+    }
+
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
+    public String getCommitId() {
+        return commit_id;
+    }
+
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
+    public String getOriginalCommitId() {
+        return original_commit_id;
+    }
+
+    /**
+     * Gets the author association to the project.
+     *
+     * @return the author association to the project
+     */
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+        return author_association;
+    }
+
+    /**
+     * Gets in reply to id.
+     *
+     * @return the in reply to id
+     */
     @CheckForNull
     public long getInReplyToId() {
         return in_reply_to_id;
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     @Override
     public URL getHtmlUrl() {
-        return null;
+        return GitHubClient.parseURL(html_url);
     }
 
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
     protected String getApiRoute() {
-        return "/repos/"+owner.getRepository().getFullName()+"/pulls/comments/"+id;
+        return getApiRoute(false);
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @param includePullNumber
+     *            if true, includes the owning pull request's number in the route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute(boolean includePullNumber) {
+        return "/repos/" + owner.getRepository().getFullName() + "/pulls"
+                + (includePullNumber ? "/" + owner.getNumber() : "") + "/comments/" + getId();
     }
 
     /**
      * Updates the comment.
+     *
+     * @param body
+     *            the body
+     * @throws IOException
+     *             the io exception
      */
     public void update(String body) throws IOException {
-        new Requester(owner.root).method("PATCH").with("body", body).to(getApiRoute(),this);
+        owner.root().createRequest().method("PATCH").with("body", body).withUrlPath(getApiRoute()).fetchInto(this);
         this.body = body;
     }
 
     /**
      * Deletes this review comment.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void delete() throws IOException {
-        new Requester(owner.root).method("DELETE").to(getApiRoute());
+        owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
      * Create a new comment that replies to this comment.
+     *
+     * @param body
+     *            the body
+     * @return the gh pull request review comment
+     * @throws IOException
+     *             the io exception
      */
     public GHPullRequestReviewComment reply(String body) throws IOException {
-        return new Requester(owner.root).method("POST")
+        return owner.root()
+                .createRequest()
+                .method("POST")
                 .with("body", body)
-                .with("in_reply_to", getId())
-                .to(getApiRoute() + "/comments", GHPullRequestReviewComment.class)
+                .withUrlPath(getApiRoute(true) + "/replies")
+                .fetch(GHPullRequestReviewComment.class)
                 .wrapUp(owner);
     }
 
-    @Preview @Deprecated
+    /**
+     * Creates the reaction.
+     *
+     * @param content
+     *            the content
+     * @return the GH reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
+        return owner.root()
+                .createRequest()
+                .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.root);
+                .withUrlPath(getApiRoute() + "/reactions")
+                .fetch(GHReaction.class);
     }
 
-    @Preview @Deprecated
+    /**
+     * Delete reaction.
+     *
+     * @param reaction
+     *            the reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public void deleteReaction(GHReaction reaction) throws IOException {
+        owner.root()
+                .createRequest()
+                .method("DELETE")
+                .withUrlPath(getApiRoute(), "reactions", String.valueOf(reaction.getId()))
+                .send();
+    }
+
+    /**
+     * List reactions.
+     *
+     * @return the paged iterable
+     */
+    @Preview(SQUIRREL_GIRL)
     public PagedIterable<GHReaction> listReactions() {
-        return new PagedIterable<GHReaction>() {
-            public PagedIterator<GHReaction> _iterator(int pageSize) {
-                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute() + "/reactions", GHReaction[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHReaction[] page) {
-                        for (GHReaction c : page)
-                            c.wrap(owner.root);
-                    }
-                };
-            }
-        };
+        return owner.root()
+                .createRequest()
+                .withPreview(SQUIRREL_GIRL)
+                .withUrlPath(getApiRoute() + "/reactions")
+                .toIterable(GHReaction[].class, item -> owner.root());
     }
 }

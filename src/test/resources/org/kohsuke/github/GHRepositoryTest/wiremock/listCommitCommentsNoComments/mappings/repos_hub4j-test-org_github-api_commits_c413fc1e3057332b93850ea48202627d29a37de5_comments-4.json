@@ -1,0 +1,49 @@
+{
+  "id": "a426003e-bc47-4b68-addb-92d2314be60d",
+  "name": "repos_hub4j-test-org_github-api_commits_c413fc1e3057332b93850ea48202627d29a37de5_comments",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/commits/c413fc1e3057332b93850ea48202627d29a37de5/comments",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "[]",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 28 Jun 2021 22:40:58 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"027a0d42aaa8ceaece78f160baf74c785b82b9f7350faad709cb4e0fb36fbd8f\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4944",
+      "X-RateLimit-Reset": "1624920219",
+      "X-RateLimit-Used": "56",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF8C:3D48:CEF219:DE95E1:60DA4FFA"
+    }
+  },
+  "uuid": "a426003e-bc47-4b68-addb-92d2314be60d",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-github-api-commits-c413fc1e3057332b93850ea48202627d29a37de5-comments",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-repos-hub4j-test-org-github-api-commits-c413fc1e3057332b93850ea48202627d29a37de5-comments-2",
+  "insertionIndex": 4
+}

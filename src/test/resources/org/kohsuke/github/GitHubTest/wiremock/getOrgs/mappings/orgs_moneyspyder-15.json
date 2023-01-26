@@ -1,0 +1,48 @@
+{
+  "id": "859aaf3c-8049-4341-9984-6360921b5bb3",
+  "name": "orgs_moneyspyder",
+  "request": {
+    "url": "/orgs/moneyspyder",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_moneyspyder-15.json",
+    "headers": {
+      "Date": "Mon, 07 Oct 2019 19:26:40 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4919",
+      "X-RateLimit-Reset": "1570478899",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"7186eacccf626d86599d3fb7323139ae\"",
+      "Last-Modified": "Tue, 25 Jun 2019 13:02:14 GMT",
+      "X-OAuth-Scopes": "gist, notifications, read:org, read:public_key, read:repo_hook, repo",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E262:78ED:3390082:3D8FB2A:5D9B9170"
+    }
+  },
+  "uuid": "859aaf3c-8049-4341-9984-6360921b5bb3",
+  "persistent": true,
+  "insertionIndex": 15
+}

@@ -1,0 +1,39 @@
+2021-04-05T15:42:49.0020645Z ##[section]Starting: Request a runner to run this job
+2021-04-05T15:42:49.1987299Z Can't find any online and idle self-hosted runner in current repository that matches the required labels: 'ubuntu-latest'
+2021-04-05T15:42:49.1987397Z Can't find any online and idle self-hosted runner in current repository's account/organization that matches the required labels: 'ubuntu-latest'
+2021-04-05T15:42:49.1987581Z Found online and idle hosted runner in current repository's account/organization that matches the required labels: 'ubuntu-latest'
+2021-04-05T15:42:49.3426885Z ##[section]Finishing: Request a runner to run this job
+2021-04-05T15:42:56.0567059Z Current runner version: '2.277.1'
+2021-04-05T15:42:56.0600935Z ##[group]Operating System
+2021-04-05T15:42:56.0601950Z Ubuntu
+2021-04-05T15:42:56.0602426Z 20.04.2
+2021-04-05T15:42:56.0602805Z LTS
+2021-04-05T15:42:56.0603218Z ##[endgroup]
+2021-04-05T15:42:56.0603764Z ##[group]Virtual Environment
+2021-04-05T15:42:56.0604319Z Environment: ubuntu-20.04
+2021-04-05T15:42:56.0604821Z Version: 20210330.1
+2021-04-05T15:42:56.0605789Z Included Software: https://github.com/actions/virtual-environments/blob/ubuntu20/20210330.1/images/linux/Ubuntu2004-README.md
+2021-04-05T15:42:56.0607029Z Image Release: https://github.com/actions/virtual-environments/releases/tag/ubuntu20%2F20210330.1
+2021-04-05T15:42:56.0607893Z ##[endgroup]
+2021-04-05T15:42:56.0609926Z ##[group]GITHUB_TOKEN Permissions
+2021-04-05T15:42:56.0611248Z Actions: write
+2021-04-05T15:42:56.0611695Z Checks: write
+2021-04-05T15:42:56.0612141Z Contents: write
+2021-04-05T15:42:56.0612676Z Deployments: write
+2021-04-05T15:42:56.0613281Z Issues: write
+2021-04-05T15:42:56.0613770Z Metadata: read
+2021-04-05T15:42:56.0614371Z OrganizationPackages: write
+2021-04-05T15:42:56.0614921Z Packages: write
+2021-04-05T15:42:56.0615409Z PullRequests: write
+2021-04-05T15:42:56.0616025Z RepositoryProjects: write
+2021-04-05T15:42:56.0616595Z SecurityEvents: write
+2021-04-05T15:42:56.0617170Z Statuses: write
+2021-04-05T15:42:56.0618112Z ##[endgroup]
+2021-04-05T15:42:56.0621459Z Prepare workflow directory
+2021-04-05T15:42:56.1404407Z Prepare all required actions
+2021-04-05T15:42:56.2234997Z ##[group]Run echo Hello from job2!
+2021-04-05T15:42:56.2235638Z [36;1mecho Hello from job2![0m
+2021-04-05T15:42:56.2823776Z shell: /usr/bin/bash -e {0}
+2021-04-05T15:42:56.2824500Z ##[endgroup]
+2021-04-05T15:42:57.2686945Z Hello from job2!
+2021-04-05T15:42:57.2720038Z Cleaning up orphan processes

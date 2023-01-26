@@ -1,0 +1,46 @@
+{
+  "id": "59f1a356-9c2f-4483-8451-af21be92e0ec",
+  "name": "organizations_43133889_team_3367218_memberships_gsmet",
+  "request": {
+    "url": "/organizations/43133889/team/3367218/memberships/gsmet",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"state\":\"active\",\"role\":\"member\",\"url\":\"https://api.github.com/organizations/43133889/team/3367218/memberships/gsmet\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 09:08:02 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"51174827a4c5b744e1981d9973225746ec73e75b7dc0c7aa133472d2d6e85751\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, write:org",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4987",
+      "X-RateLimit-Reset": "1646388479",
+      "X-RateLimit-Used": "13",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "B582:9B1E:C96008:D4E889:6221D6F2"
+    }
+  },
+  "uuid": "59f1a356-9c2f-4483-8451-af21be92e0ec",
+  "persistent": true,
+  "insertionIndex": 13
+}

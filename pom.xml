@@ -1,74 +1,327 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.kohsuke</groupId>
-    <artifactId>pom</artifactId>
-    <version>21</version>
-    <relativePath />
-  </parent>
-
+  <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.96-SNAPSHOT</version>
+  <version>1.312-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
 
   <scm>
-    <connection>scm:git:git@github.com/kohsuke/${project.artifactId}.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/kohsuke/${project.artifactId}.git</developerConnection>
-    <url>https://${project.artifactId}.kohsuke.org/</url>
+    <connection>scm:git:git@github.com/hub4j/${project.artifactId}.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/hub4j/${project.artifactId}.git</developerConnection>
+    <url>https://github.com/hub4j/github-api/</url>
     <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <name>Nexus Release Repository</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
     <site>
       <id>github-pages</id>
-      <url>gitsite:git@github.com/kohsuke/${project.artifactId}.git</url>
+      <url>gitsite:git@github.com/hub4j/${project.artifactId}.git</url>
     </site>
   </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>3.1.11</spotbugs-maven-plugin.version>
-    <spotbugs.version>3.1.12</spotbugs.version>
+    <spotbugs-maven-plugin.version>4.7.3.0</spotbugs-maven-plugin.version>
+    <spotbugs.version>4.7.3</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
-    <hamcrest.version>2.1</hamcrest.version>
+    <hamcrest.version>2.2</hamcrest.version>
+    <okhttp3.version>4.9.2</okhttp3.version>
+    <okio.version>2.10.0</okio.version>
+    <!-- Using this as the minimum bar for code coverage.  Adding methods without covering them will fail this. -->
+    <jacoco.coverage.target.bundle.method>0.70</jacoco.coverage.target.bundle.method>
+    <jacoco.coverage.target.class.method>0.50</jacoco.coverage.target.class.method>
+    <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
+    <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
+    <jjwt.suite.version>0.11.5</jjwt.suite.version>
+
+    <jacoco.surefire.argLine />
+    <surefire.argLine />
   </properties>
 
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-gitexe</artifactId>
+        <version>1.13.0</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-manager-plexus</artifactId>
+        <version>1.13.0</version>
+      </extension>
+      <!-- Doing site publishing manually for now -->
+<!--
+      <extension>
+        <groupId>org.kohsuke</groupId>
+        <artifactId>wagon-gitsite</artifactId>
+        <version>0.3.5</version>
+      </extension>
+-->
+    </extensions>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <excludes>
+          <exclude>**/wiremock/**</exclude>
+        </excludes>
+      </testResource>
+    </testResources>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.2</version>
+          <configuration>
+            <!-- SUREFIRE-1226 workaround -->
+            <trimStackTrace>false</trimStackTrace>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.2.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>3.0.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.8</version>
+          <configuration>
+            <!-- no need to get data about external code. It dramatically reduces performance of JaCoCo for nothing -->
+            <excludes>
+              <exclude>/org/kohsuke/github/extras/HttpClient*</exclude>
+              <exclude>/org/kohsuke/github/example/*</exclude>
+              <exclude>/org/kohsuke/github/extras/OkHttpConnector*</exclude>
+              <exclude>/org/kohsuke/github/extras/OkHttp3Connector*</exclude>
+              <exclude>/org/kohsuke/github/extras/okhttp3/ObsoleteUrlFactory*</exclude>
+            </excludes>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>prepare-agent-integration</goal>
+              </goals>
+              <configuration>
+                <propertyName>jacoco.surefire.argLine</propertyName>
+              </configuration>
+            </execution>
+            <!-- attached to Maven test phase -->
+            <execution>
+              <id>report</id>
+              <goals>
+                <goal>report-integration</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>check</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <dataFile>${project.build.directory}/jacoco-it.exec</dataFile>
+                <rules>
+                  <rule>
+                    <element>BUNDLE</element>
+                    <limits>
+                      <limit>
+                        <counter>METHOD</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>${jacoco.coverage.target.bundle.method}</minimum>
+                      </limit>
+                    </limits>
+                  </rule>
+                  <rule>
+                    <!--We end up with chatty logs, but it shows us which particular classes    -->
+                    <!--are lacking in coverage. If this is too much, just remove the           -->
+                    <!--<element>CLASS</element> tag below.                                     -->
+                    <element>CLASS</element>
+                    <limits>
+                      <limit>
+                        <counter>METHOD</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>${jacoco.coverage.target.class.method}</minimum>
+                      </limit>
+                    </limits>
+                    <excludes>
+                      <!-- Java 11 multi-release overlay problems -->
+                      <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector.**</exclude>
+                      <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector</exclude>
+
+                      <!-- Code implemented externally -->
+                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
+                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
+
+                      <!-- Sample only -->
+                      <exclude>org.kohsuke.github.example.*</exclude>
+
+                      <!-- Deprecated -->
+                      <exclude>org.kohsuke.github.extras.OkHttpConnector</exclude>
+                      <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
+                      <exclude>org.kohsuke.github.EnforcementLevel</exclude>
+                      <exclude>org.kohsuke.github.GHPerson.1</exclude>
+                      <exclude>org.kohsuke.github.GHCompare.User</exclude>
+
+                      <!-- TODO: Some coverage, but more needed -->
+                      <exclude>org.kohsuke.github.GHPullRequestReviewBuilder.DraftReviewComment</exclude>
+                      <exclude>org.kohsuke.github.GHIssue.PullRequest</exclude>
+                      <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
+                      <exclude>org.kohsuke.github.GHRepositorySearchBuilder</exclude>
+                      <exclude>org.kohsuke.github.GHUserSearchBuilder</exclude>
+
+                      <!-- TODO: These still need test coverage -->
+                      <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>
+                      <exclude>org.kohsuke.github.GHBranchProtectionBuilder.Restrictions</exclude>
+                      <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
+                      <exclude>org.kohsuke.github.GHCommentAuthorAssociation</exclude>
+                      <exclude>org.kohsuke.github.GHDeployKey</exclude>
+                      <exclude>org.kohsuke.github.GHEmail</exclude>
+                      <exclude>org.kohsuke.github.GHInvitation</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Authorship</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Commit</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.CommitPointer</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Tree</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestFileDetail</exclude>
+                      <exclude>org.kohsuke.github.GHReleaseUpdater</exclude>
+                      <exclude>org.kohsuke.github.GHRequestedAction</exclude>
+                      <exclude>org.kohsuke.github.GHVerifiedKey</exclude>
+                    </excludes>
+                  </rule>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.4.1</version>
+          <configuration>
+            <release>8</release>
+            <failOnWarnings>true</failOnWarnings>
+            <doclint>all</doclint>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.13</version>
+          <extensions>true</extensions>
+          <configuration>
+            <serverId>sonatype-nexus-staging</serverId>
+            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>animal-sniffer-maven-plugin</artifactId>
+          <version>1.22</version>
+          <configuration>
+            <signature>
+              <groupId>org.codehaus.mojo.signature</groupId>
+              <artifactId>java18</artifactId>
+              <version>1.0</version>
+            </signature>
+          </configuration>
+          <executions>
+            <execution>
+              <id>ensure-java-1.8-class-library</id>
+              <phase>test</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.1</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.12.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
         <configuration>
-          <rerunFailingTestsCount>2</rerunFailingTestsCount>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <useReleaseProfile>false</useReleaseProfile>
+          <releaseProfiles>release</releaseProfiles>
+          <goals>deploy</goals>
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>1.15</version>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>3.4.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.bcel</groupId>
+            <artifactId>bcel</artifactId>
+            <version>6.6.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
         <configuration>
-          <signature>
-            <groupId>org.codehaus.mojo.signature</groupId>
-            <artifactId>java15</artifactId>
-            <version>1.0</version>
-          </signature>
+          <source>1.8</source>
+          <target>1.8</target>
+          <annotationProcessorPaths>
+            <annotationProcessorPath>
+              <groupId>org.jenkins-ci</groupId>
+              <artifactId>annotation-indexer</artifactId>
+              <version>1.12</version>
+            </annotationProcessorPath>
+          </annotationProcessorPaths>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
         <executions>
           <execution>
-            <id>ensure-java-1.5-class-library</id>
-            <phase>test</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
+            <id>default-test</id>
+            <configuration>
+              <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+              <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
+            </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>animal-sniffer-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
         <groupId>com.infradna.tool</groupId>
         <artifactId>bridge-method-injector</artifactId>
-        <version>1.18</version>
+        <version>1.23</version>
         <executions>
           <execution>
             <goals>
@@ -76,6 +329,43 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>2.27.2</version>
+        <executions>
+          <execution>
+            <id>spotless-check</id>
+            <!-- runs in verify phase by default -->
+            <goals>
+              <!-- can be disabled using -Dspotless.check.skip=true -->
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <java>
+            <includes>
+              <include>src/main/java/**/*.java</include>
+              <include>src/main/java11/**/*.java</include>
+              <include>src/test/java/**/*.java</include>
+            </includes>
+
+            <eclipse>
+              <file>${basedir}/src/build/eclipse/formatter.xml</file>
+            </eclipse>
+
+            <importOrder>
+              <file>${basedir}/src/build/eclipse/eclipse.importorder</file>
+            </importOrder>
+            <removeUnusedImports />
+
+            <trimTrailingWhitespace />
+            <endWithNewline />
+
+          </java>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
@@ -88,9 +378,9 @@
         <executions>
           <execution>
             <id>run-spotbugs</id>
-            <phase>verify</phase> 
+            <phase>verify</phase>
             <goals>
-              <goal>check</goal> 
+              <goal>check</goal>
             </goals>
           </execution>
         </executions>
@@ -103,13 +393,28 @@
           </dependency>
         </dependencies>
       </plugin>
-      <!-- Do not use gmaven plugin -->
       <plugin>
-        <groupId>org.codehaus.gmaven</groupId>
-        <artifactId>gmaven-plugin</artifactId>
+        <groupId>com.github.siom79.japicmp</groupId>
+        <artifactId>japicmp-maven-plugin</artifactId>
+        <version>0.16.0</version>
+        <configuration>
+          <parameter>
+            <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
+            <onlyModified>true</onlyModified>
+            <includeSynthetic>true</includeSynthetic>
+            <excludes>
+              <!-- Classes in internal are public but are considered private for API stability purposes -->
+              <exclude>org.kohsuke.github.internal</exclude>
+              <!-- TODO: started failing in CI recently. This is part of the multi-release structure. -->
+              <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector#HttpClientGitHubConnector(java.net.http.HttpClient)</exclude>
+            </excludes>
+          </parameter>
+        </configuration>
         <executions>
           <execution>
+            <phase>verify</phase>
             <goals>
+              <goal>cmp</goal>
             </goals>
           </execution>
         </executions>
@@ -121,12 +426,13 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.7</version>
+      <version>3.9</version>
     </dependency>
     <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.7</version>
+      <groupId>com.tngtech.archunit</groupId>
+      <artifactId>archunit</artifactId>
+      <version>0.23.1</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -150,24 +456,51 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>4.2.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.9.9.3</version>
+      <version>2.14.0</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>1.4</version>
+      <version>2.8.0</version>
     </dependency>
     <dependency>
       <groupId>com.infradna.tool</groupId>
       <artifactId>bridge-method-annotation</artifactId>
-      <version>1.17</version>
+      <version>1.23</version>
       <optional>true</optional>
+    </dependency>
+    <!-- for stapler-jetty -->
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.4</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- for stapler-jetty -->
+    <dependency>
+      <groupId>commons-discovery</groupId>
+      <artifactId>commons-discovery</artifactId>
+      <version>0.5</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- for stapler-jetty -->
+    <dependency>
+      <groupId>org.kohsuke.stapler</groupId>
+      <artifactId>stapler</artifactId>
+      <version>1.263</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>
@@ -178,8 +511,46 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>4.9.0.201710071750-r</version>
+      <version>6.4.0.202211300538-r</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-api</artifactId>
+      <version>${jjwt.suite.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>${jjwt.suite.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-jackson</artifactId>
+      <version>${jjwt.suite.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okio</groupId>
+      <artifactId>okio</artifactId>
+      <version>${okio.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>${okhttp3.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <!-- This is the last version of okhttp3 that support UrlConnection -->
+    <!-- The class using this has been deprecated, this dependency can be remove when that class is. -->
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp-urlconnection</artifactId>
+      <version>3.12.3</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.squareup.okhttp</groupId>
@@ -188,33 +559,39 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp-urlconnection</artifactId>
-      <version>3.9.0</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>org.kohsuke</groupId>
       <artifactId>wordnet-random-name</artifactId>
-      <version>1.3</version>
+      <version>1.5</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.10.19</version>
+      <artifactId>mockito-core</artifactId>
+      <version>4.11.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs-annotations</artifactId>
       <version>${spotbugs.version}</version>
-      <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock-jre8-standalone</artifactId>
-      <version>2.24.1</version>
+      <version>2.35.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.10</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.3</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -230,12 +607,296 @@
       <url>https://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
+  <profiles>
+    <!-- only enable slow-or-flaky-test if -Dtest= is not present -->
+    <profile>
+      <id>slow-or-flaky-test</id>
+      <activation>
+        <property>
+          <name>!test</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>okhttp-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttp</argLine>
+                </configuration>
+              </execution>
+              <execution>
+                <id>slow-or-flaky-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <rerunFailingTestsCount>2</rerunFailingTestsCount>
+                  <!-- There are some tests that take longer or are a little
+                    flaky. Run them here. -->
+                  <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>ci-non-windows</id>
+      <activation>
+        <property>
+          <name>enable-ci</name>
+        </property>
+        <os>
+          <family>!windows</family>
+        </os>
+      </activation>
+      <properties>
+        <!-- Only fail code coverage on non-windows machines -->
+        <jacoco.haltOnFailure>true</jacoco.haltOnFailure>
+      </properties>
+    </profile>
+    <profile>
+      <id>ci-all</id>
+      <activation>
+        <property>
+          <name>enable-ci</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <groupId>com.diffplug.spotless</groupId>
+            <artifactId>spotless-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>spotless-check</id>
+                <!-- In CI, run check early in the build -->
+                <phase>process-sources</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+              <execution>
+                <id>enforce-jacoco-exist</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireFilesExist>
+                      <files>
+                        <file>${project.build.directory}/jacoco-it.exec</file>
+                      </files>
+                    </requireFilesExist>
+                  </rules>
+                  <fail>true</fail>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>multirelease</id>
+      <activation>
+	    <jdk>[11,)</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>animal-sniffer-maven-plugin</artifactId>
+            <configuration>
+              <ignores>
+                java.net.http.*
+              </ignores>
+            </configuration>
+          </plugin>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.10.1</version>
+            <executions>
+              <execution>
+                <id>compile-java-11</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>compile</goal>
+                </goals>
+                <configuration>
+                  <release>11</release>
+                  <source>11</source>
+                  <target>11</target>
+                  <compileSourceRoots>
+                    <compileSourceRoot>${project.basedir}/src/main/java11</compileSourceRoot>
+                  </compileSourceRoots>
+                  <multiReleaseOutput>true</multiReleaseOutput>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.3.0</version>
+            <configuration>
+              <archive>
+                <manifestEntries>
+                  <Automatic-Module-Name>org.kohsuke.github.api</Automatic-Module-Name>
+                  <Multi-Release>true</Multi-Release>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>multirelease-test</id>
+      <activation>
+        <jdk>[11,)</jdk>
+        <property>
+          <name>!test</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>java11-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
+                </configuration>
+              </execution>
+              <execution>
+                <id>java11-urlconnection-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=urlconnection</argLine>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
 
+  </profiles>
   <reporting>
     <plugins>
       <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <!-- select non-aggregate reports -->
+              <report>report-integration</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
       </plugin>
     </plugins>
   </reporting>
@@ -255,4 +916,13 @@
       <archive>https://groups.google.com/forum/#!forum/github-api</archive>
     </mailingList>
   </mailingLists>
+
+  <developers>
+    <developer>
+      <name>Kohsuke Kawaguchi</name>
+      <id>kohsuke</id>
+      <email>kk@kohsuke.org</email>
+    </developer>
+  </developers>
+
 </project>

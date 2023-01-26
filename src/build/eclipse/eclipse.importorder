@@ -1,0 +1,6 @@
+#Organize Import Order
+# Import this file in Window -> Preferences -> Java -> Code Style -> Organize Imports -> Import...
+0=
+1=java
+2=javax
+3=\#

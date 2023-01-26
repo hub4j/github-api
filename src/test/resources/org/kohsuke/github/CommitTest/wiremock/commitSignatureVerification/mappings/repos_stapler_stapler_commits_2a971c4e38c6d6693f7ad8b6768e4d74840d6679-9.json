@@ -1,0 +1,48 @@
+{
+  "id": "a01b5cee-d3ea-449b-9b11-5fd3c2a7ed38",
+  "name": "repos_stapler_stapler_commits_2a971c4e38c6d6693f7ad8b6768e4d74840d6679",
+  "request": {
+    "url": "/repos/stapler/stapler/commits/2a971c4e38c6d6693f7ad8b6768e4d74840d6679",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_stapler_stapler_commits_2a971c4e38c6d6693f7ad8b6768e4d74840d6679-9.json",
+    "headers": {
+      "Date": "Thu, 12 Mar 2020 20:18:56 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4970",
+      "X-RateLimit-Reset": "1584045523",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"7b1dfd787be1d37e7597235f96ebcf39\"",
+      "Last-Modified": "Fri, 28 Jun 2019 16:21:18 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, read:packages, repo, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DB8F:22CA3:3479A0D:3E24EB9:5E6A992F"
+    }
+  },
+  "uuid": "a01b5cee-d3ea-449b-9b11-5fd3c2a7ed38",
+  "persistent": true,
+  "insertionIndex": 9
+}

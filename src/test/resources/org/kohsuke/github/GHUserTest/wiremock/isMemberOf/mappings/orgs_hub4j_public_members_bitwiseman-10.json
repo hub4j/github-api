@@ -1,0 +1,39 @@
+{
+  "id": "094f35e6-369d-4287-8e83-16c7217400f4",
+  "name": "orgs_hub4j_public_members_bitwiseman",
+  "request": {
+    "url": "/orgs/hub4j/public_members/bitwiseman",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 13:41:56 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4990",
+      "X-RateLimit-Reset": "1646404914",
+      "X-RateLimit-Used": "10",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "BA78:03D4:32B8AF5:33C35A9:62221724"
+    }
+  },
+  "uuid": "094f35e6-369d-4287-8e83-16c7217400f4",
+  "persistent": true,
+  "insertionIndex": 10
+}

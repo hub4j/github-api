@@ -1,0 +1,43 @@
+{
+  "id": "6045fad3-6145-4683-b92a-50944c7f44ba",
+  "name": "repos_hub4j-test-org_temp-testzipball_zipball",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testZipball/zipball",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 302,
+    "headers": {
+      "Date": "Mon, 04 Jan 2021 09:13:03 GMT",
+      "Content-Type": "text/html;charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "302 Found",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4928",
+      "X-RateLimit-Reset": "1609753350",
+      "X-RateLimit-Used": "72",
+      "Cache-Control": "public, must-revalidate, max-age=0",
+      "Expires": "Mon, 04 Jan 2021 09:13:03 GMT",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": [
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "X-GitHub-Request-Id": "E3B3:1D4C:33F8888:3F433C2:5FF2DC1F",
+      "Location": "https://codeload.github.com/hub4j-test-org/temp-testZipball/legacy.zip/main"
+    }
+  },
+  "uuid": "6045fad3-6145-4683-b92a-50944c7f44ba",
+  "persistent": true,
+  "insertionIndex": 3
+}

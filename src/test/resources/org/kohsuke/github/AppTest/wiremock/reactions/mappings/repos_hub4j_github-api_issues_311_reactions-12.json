@@ -1,0 +1,49 @@
+{
+  "id": "aead86e6-8e90-4e86-ade3-39e03b86cfa0",
+  "name": "repos_hub4j_github-api_issues_311_reactions",
+  "request": {
+    "url": "/repos/hub4j/github-api/issues/311/reactions",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j_github-api_issues_311_reactions-12.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 08 Apr 2022 17:54:36 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"87a51b277fa8bc107445451a451e0f21d15f4f7526ee999e398ef8a4321bd965\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4902",
+      "X-RateLimit-Reset": "1649442146",
+      "X-RateLimit-Used": "98",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C58E:AE8B:1825E:1C6DF:625076DC"
+    }
+  },
+  "uuid": "aead86e6-8e90-4e86-ade3-39e03b86cfa0",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-github-api-issues-311-reactions",
+  "requiredScenarioState": "scenario-1-repos-hub4j-github-api-issues-311-reactions-3",
+  "newScenarioState": "scenario-1-repos-hub4j-github-api-issues-311-reactions-4",
+  "insertionIndex": 12
+}

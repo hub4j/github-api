@@ -1,0 +1,51 @@
+{
+  "id": "8ac20af2-3f87-419a-b5cb-a96f5f2fd3c7",
+  "name": "repos_stapler_stapler_commits_2a971c4e38c6d6693f7ad8b6768e4d74840d6679",
+  "request": {
+    "url": "/repos/stapler/stapler/commits/2a971c4e38c6d6693f7ad8b6768e4d74840d6679",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_stapler_stapler_commits_2a971c4e38c6d6693f7ad8b6768e4d74840d6679-10.json",
+    "headers": {
+      "Date": "Mon, 09 Sep 2019 18:31:02 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4947",
+      "X-RateLimit-Reset": "1568056823",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"210b8038c41dfbe9d59f53360f6c2b2b\"",
+      "Last-Modified": "Fri, 28 Jun 2019 16:21:18 GMT",
+      "X-OAuth-Scopes": "delete_repo, gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D99C:7CF7:A219F:C02CD:5D769A66"
+    }
+  },
+  "uuid": "8ac20af2-3f87-419a-b5cb-a96f5f2fd3c7",
+  "persistent": true,
+  "scenarioName": "scenario-4-repos-stapler-stapler-commits-2a971c4e38c6d6693f7ad8b6768e4d74840d6679",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-4-repos-stapler-stapler-commits-2a971c4e38c6d6693f7ad8b6768e4d74840d6679-2",
+  "insertionIndex": 10
+}

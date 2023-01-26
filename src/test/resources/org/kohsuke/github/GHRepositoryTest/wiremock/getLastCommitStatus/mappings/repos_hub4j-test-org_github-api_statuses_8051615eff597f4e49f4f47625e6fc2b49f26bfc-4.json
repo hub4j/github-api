@@ -1,0 +1,47 @@
+{
+  "id": "a9d176d5-8a1d-452c-932d-1c86182695bc",
+  "name": "repos_hub4j-test-org_github-api_statuses_8051615eff597f4e49f4f47625e6fc2b49f26bfc",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/statuses/8051615eff597f4e49f4f47625e6fc2b49f26bfc",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-8051615eff597f4e49f4f47625e6fc2b49f26bfc-975c9dbb-4cd0-4ee0-baa4-a2f092e437b6.json",
+    "headers": {
+      "Date": "Sat, 14 Mar 2020 15:07:44 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4990",
+      "X-RateLimit-Reset": "1584201810",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"4f2c1efa0a5363e128144e5c3014b948\"",
+      "X-OAuth-Scopes": "repo, user",
+      "X-Accepted-OAuth-Scopes": "repo, repo:status",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "87CC:8D92:6230768:73BAD10:5E6CF340"
+    }
+  },
+  "uuid": "a9d176d5-8a1d-452c-932d-1c86182695bc",
+  "persistent": true,
+  "insertionIndex": 4
+}

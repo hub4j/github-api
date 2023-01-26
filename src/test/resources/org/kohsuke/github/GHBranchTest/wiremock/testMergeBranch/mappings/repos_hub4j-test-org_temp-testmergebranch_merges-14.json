@@ -1,0 +1,46 @@
+{
+  "id": "199be879-575f-463a-a583-510b6ba8abad",
+  "name": "repos_hub4j-test-org_temp-testmergebranch_merges",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch/merges",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"head\":\"471654e98a1bf875f1b465295271d4370a4b25fa\",\"commit_message\":\"merging from 8ed41e215a0207c8be6fd31be8f942fca072fe4c\",\"base\":\"main\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 14 Sep 2021 20:43:15 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4872",
+      "X-RateLimit-Reset": "1631652409",
+      "X-RateLimit-Used": "128",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "D384:57F9:6B740:717D5:61410963"
+    }
+  },
+  "uuid": "199be879-575f-463a-a583-510b6ba8abad",
+  "persistent": true,
+  "insertionIndex": 14
+}

@@ -1,0 +1,48 @@
+{
+  "id": "2624a0c2-3bee-4d14-ad13-b0c96381ad90",
+  "name": "repositories_206888201_collaborators",
+  "request": {
+    "url": "/repositories/206888201/collaborators?page=2",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_206888201_collaborators-5.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 22 Jun 2022 13:18:16 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"d53581f41f93b974f1e2c3f8c7d3f42343561163b0593865121640518d932cad\"",
+      "X-OAuth-Scopes": "admin:org, admin:repo_hook, gist, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-09-20 12:51:45 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4883",
+      "X-RateLimit-Reset": "1655906861",
+      "X-RateLimit-Used": "117",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CDD0:11400:57FAC0:5CF124:62B31698",
+      "Link": "<https://api.github.com/repositories/206888201/collaborators?page=1>; rel=\"prev\", <https://api.github.com/repositories/206888201/collaborators?page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "2624a0c2-3bee-4d14-ad13-b0c96381ad90",
+  "persistent": true,
+  "insertionIndex": 5
+}

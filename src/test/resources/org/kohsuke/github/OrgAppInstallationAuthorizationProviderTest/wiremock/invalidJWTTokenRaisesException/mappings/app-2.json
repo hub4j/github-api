@@ -1,0 +1,35 @@
+{
+  "id": "960b4085-803f-43aa-a291-ccb6fd003adb",
+  "name": "app",
+  "request": {
+    "url": "/app",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.machine-man-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 401,
+    "body": "{\"message\":\"A JSON web token could not be decoded\",\"documentation_url\":\"https://docs.github.com/rest\"}",
+    "headers": {
+      "Date": "Tue, 29 Sep 2020 12:35:35 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "401 Unauthorized",
+      "X-GitHub-Media-Type": "github.v3; param=machine-man-preview; format=json",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "D236:47C4:1909E17E:1DD010FD:5F732A16"
+    }
+  },
+  "uuid": "960b4085-803f-43aa-a291-ccb6fd003adb",
+  "persistent": true,
+  "insertionIndex": 2
+}

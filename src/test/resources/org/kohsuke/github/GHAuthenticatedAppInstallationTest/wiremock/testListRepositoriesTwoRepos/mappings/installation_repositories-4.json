@@ -1,0 +1,44 @@
+{
+  "id": "039aac93-94ba-4b47-840a-492765ce1fdc",
+  "name": "installation_repositories",
+  "request": {
+    "url": "/installation/repositories",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.machine-man-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "installation_repositories-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 21 Sep 2022 15:16:08 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"ccc141b003bb4015c7772d4383f88726efaad307f31448ba35fac1a5ba0aaf23\"",
+      "X-GitHub-Media-Type": "github.v3; param=machine-man-preview; format=json",
+      "X-RateLimit-Limit": "5950",
+      "X-RateLimit-Remaining": "5949",
+      "X-RateLimit-Reset": "1663776968",
+      "X-RateLimit-Used": "1",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D13F:C712:6B899C5:6D0836C:632B2AB8"
+    }
+  },
+  "uuid": "039aac93-94ba-4b47-840a-492765ce1fdc",
+  "persistent": true,
+  "insertionIndex": 4
+}

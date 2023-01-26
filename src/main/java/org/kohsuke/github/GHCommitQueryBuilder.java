@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builds up query for listing commits.
  *
@@ -16,72 +17,112 @@ import java.util.Date;
  * </pre>
  *
  * @author Kohsuke Kawaguchi
- * @see GHRepository#queryCommits()
-*/
+ * @see GHRepository#queryCommits() GHRepository#queryCommits()
+ */
 public class GHCommitQueryBuilder {
     private final Requester req;
     private final GHRepository repo;
 
-    /*package*/ GHCommitQueryBuilder(GHRepository repo) {
+    /**
+     * Instantiates a new GH commit query builder.
+     *
+     * @param repo
+     *            the repo
+     */
+    GHCommitQueryBuilder(GHRepository repo) {
         this.repo = repo;
-        this.req = repo.root.retrieve();    // requester to build up
+        this.req = repo.root().createRequest(); // requester to build up
     }
 
     /**
      * GItHub login or email address by which to filter by commit author.
+     *
+     * @param author
+     *            the author
+     * @return the gh commit query builder
      */
     public GHCommitQueryBuilder author(String author) {
-        req.with("author",author);
+        req.with("author", author);
         return this;
     }
 
     /**
      * Only commits containing this file path will be returned.
+     *
+     * @param path
+     *            the path
+     * @return the gh commit query builder
      */
     public GHCommitQueryBuilder path(String path) {
-        req.with("path",path);
+        req.with("path", path);
         return this;
     }
 
     /**
      * Specifies the SHA1 commit / tag / branch / etc to start listing commits from.
      *
+     * @param ref
+     *            the ref
+     * @return the gh commit query builder
      */
     public GHCommitQueryBuilder from(String ref) {
-        req.with("sha",ref);
-        return this;
-    }
-
-    public GHCommitQueryBuilder pageSize(int pageSize) {
-        req.with("per_page",pageSize);
+        req.with("sha", ref);
         return this;
     }
 
     /**
-     * Only commits after this date will be returned
+     * Page size gh commit query builder.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the gh commit query builder
+     */
+    public GHCommitQueryBuilder pageSize(int pageSize) {
+        req.with("per_page", pageSize);
+        return this;
+    }
+
+    /**
+     * Only commits after this date will be returned.
+     *
+     * @param dt
+     *            the dt
+     * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(Date dt) {
-        req.with("since",GitHub.printDate(dt));
+        req.with("since", GitHubClient.printDate(dt));
         return this;
     }
 
     /**
-     * Only commits after this date will be returned
+     * Only commits after this date will be returned.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(long timestamp) {
         return since(new Date(timestamp));
     }
 
     /**
-     * Only commits before this date will be returned
+     * Only commits before this date will be returned.
+     *
+     * @param dt
+     *            the dt
+     * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(Date dt) {
-        req.with("until",GitHub.printDate(dt));
+        req.with("until", GitHubClient.printDate(dt));
         return this;
     }
 
     /**
-     * Only commits before this date will be returned
+     * Only commits before this date will be returned.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(long timestamp) {
         return until(new Date(timestamp));
@@ -89,17 +130,10 @@ public class GHCommitQueryBuilder {
 
     /**
      * Lists up the commits with the criteria built so far.
+     *
+     * @return the paged iterable
      */
     public PagedIterable<GHCommit> list() {
-        return new PagedIterable<GHCommit>() {
-            public PagedIterator<GHCommit> _iterator(int pageSize) {
-                return new PagedIterator<GHCommit>(req.asIterator(repo.getApiTailUrl("commits"), GHCommit[].class, pageSize)) {
-                    protected void wrapUp(GHCommit[] page) {
-                        for (GHCommit c : page)
-                            c.wrapUp(repo);
-                    }
-                };
-            }
-        };
+        return req.withUrlPath(repo.getApiTailUrl("commits")).toIterable(GHCommit[].class, item -> item.wrapUp(repo));
     }
 }

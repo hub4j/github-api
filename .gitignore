@@ -7,3 +7,7 @@ target
 .project
 .settings/
 .DS_Store
+
+dependency-reduced-pom.xml
+.factorypath
+.vscode/settings.json

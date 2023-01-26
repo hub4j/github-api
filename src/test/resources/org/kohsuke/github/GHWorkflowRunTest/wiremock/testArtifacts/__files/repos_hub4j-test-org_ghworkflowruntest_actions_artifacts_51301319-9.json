@@ -1,0 +1,12 @@
+{
+  "id": 51301319,
+  "node_id": "MDg6QXJ0aWZhY3Q1MTMwMTMxOQ==",
+  "name": "artifact1",
+  "size_in_bytes": 10,
+  "url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/artifacts/51301319",
+  "archive_download_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/artifacts/51301319/zip",
+  "expired": false,
+  "created_at": "2021-04-02T16:54:32Z",
+  "updated_at": "2021-04-02T16:54:32Z",
+  "expires_at": "2021-07-01T16:54:27Z"
+}

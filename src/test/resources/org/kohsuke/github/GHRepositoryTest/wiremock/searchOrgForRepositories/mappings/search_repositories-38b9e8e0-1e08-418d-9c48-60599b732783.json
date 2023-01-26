@@ -1,0 +1,46 @@
+{
+  "id": "38b9e8e0-1e08-418d-9c48-60599b732783",
+  "name": "search_repositories",
+  "request": {
+    "url": "/search/repositories?q=org%3Ahub4j-test-org",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "search_repositories-38b9e8e0-1e08-418d-9c48-60599b732783.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 15 Feb 2022 05:39:25 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-cache",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "X-OAuth-Scopes": "gist, read:discussion, read:org, read:packages, read:user, repo, user:email, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "29",
+      "X-RateLimit-Reset": "1644903625",
+      "X-RateLimit-Used": "1",
+      "X-RateLimit-Resource": "search",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EBD4:EA93:C06301:CF0868:620B3C8D",
+      "Link": "<https://api.github.com/search/repositories?q=org%3Ahub4j-test-org&page=2>; rel=\"next\", <https://api.github.com/search/repositories?q=org%3Ahub4j-test-org&page=2>; rel=\"last\""
+    }
+  },
+  "uuid": "38b9e8e0-1e08-418d-9c48-60599b732783",
+  "persistent": true,
+  "insertionIndex": 2
+}

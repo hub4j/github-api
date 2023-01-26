@@ -1,0 +1,44 @@
+{
+  "request": {
+    "url": "/app/installations/11111111/access_tokens",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"repository_ids\":[111111111],\"permissions\":{\"pull_requests\":\"write\",\"metadata\":\"read\",\"checks\":\"write\",\"contents\":\"read\"}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.machine-man-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "body-githubapp-create-installation-accesstokens.json",
+    "headers": {
+      "Date": "Sat, 10 Aug 2019 04:54:58 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "Cache-Control": "public, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"c47070915d3f78d2c4aea4bd8a2c3351\"",
+      "X-GitHub-Media-Type": "github.machine-man-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EEC8:4357:E0DD17:110A2E7:5D4E4E22"
+    }
+  }
+}

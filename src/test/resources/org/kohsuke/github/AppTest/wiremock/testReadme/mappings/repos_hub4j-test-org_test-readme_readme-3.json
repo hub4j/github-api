@@ -1,0 +1,48 @@
+{
+  "id": "7d02eec3-3ed8-490a-a064-d4b60ce8b6ce",
+  "name": "repos_hub4j-test-org_test-readme_readme",
+  "request": {
+    "url": "/repos/hub4j-test-org/test-readme/readme",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_test-readme_readme-3.json",
+    "headers": {
+      "Date": "Sat, 22 Feb 2020 01:44:37 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4709",
+      "X-RateLimit-Reset": "1582337639",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"63f2cc8c439bf86ca51c18b021729ccf\"",
+      "Last-Modified": "Sun, 15 Feb 2015 14:25:06 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DD5E:9E3D:5B85B0:6D734E:5E508785"
+    }
+  },
+  "uuid": "7d02eec3-3ed8-490a-a064-d4b60ce8b6ce",
+  "persistent": true,
+  "insertionIndex": 3
+}

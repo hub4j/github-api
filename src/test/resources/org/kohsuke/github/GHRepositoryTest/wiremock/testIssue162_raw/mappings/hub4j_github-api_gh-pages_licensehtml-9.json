@@ -1,0 +1,45 @@
+{
+  "id": "833a6540-79e4-4464-88e3-f87a5858230e",
+  "name": "hub4j_github-api_gh-pages_licensehtml",
+  "request": {
+    "url": "/hub4j/github-api/gh-pages/license.html",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "hub4j_github-api_gh-pages_licensehtml-9.txt",
+    "headers": {
+      "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+      "Strict-Transport-Security": "max-age=31536000",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "deny",
+      "X-XSS-Protection": "1; mode=block",
+      "ETag": "\"078dbdbf8e234664d36b831b1cbaa2787c3758af\"",
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "max-age=300",
+      "X-Geo-Block-List": "",
+      "X-GitHub-Request-Id": "4328:3D82:97A63F:B2D6E5:5D9B9BC0",
+      "Accept-Ranges": "bytes",
+      "Date": "Mon, 07 Oct 2019 20:15:23 GMT",
+      "Via": "1.1 varnish",
+      "Connection": "keep-alive",
+      "X-Served-By": "cache-sea1051-SEA",
+      "X-Cache": "HIT",
+      "X-Cache-Hits": "1",
+      "X-Timer": "S1570479323.302039,VS0,VE1",
+      "Vary": "Authorization,Accept-Encoding",
+      "Access-Control-Allow-Origin": "*",
+      "X-Fastly-Request-ID": "a9ffaca104413cda50364ed9bf746dd17e434901",
+      "Expires": "Mon, 07 Oct 2019 20:20:23 GMT",
+      "Source-Age": "283"
+    }
+  },
+  "uuid": "833a6540-79e4-4464-88e3-f87a5858230e",
+  "persistent": true,
+  "insertionIndex": 9
+}

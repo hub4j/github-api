@@ -1,0 +1,41 @@
+{
+  "id": "112e1e32-4afb-43b6-8a57-f4821737ff64",
+  "name": "projects_columns_6706794",
+  "request": {
+    "url": "/projects/columns/6706794",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.inertia-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/projects/columns/#get-a-project-column\"}",
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 17:24:29 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "404 Not Found",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4662",
+      "X-RateLimit-Reset": "1570212957",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.inertia-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FEBE:9576:9378D5:B04918:5D97804D"
+    }
+  },
+  "uuid": "112e1e32-4afb-43b6-8a57-f4821737ff64",
+  "persistent": true,
+  "insertionIndex": 6
+}

@@ -1,173 +1,400 @@
 package org.kohsuke.github;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.Iterables;
+import org.junit.Assert;
 import org.junit.Test;
+import org.kohsuke.github.example.dataobject.ReadOnlyObjects;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import java.io.IOException;
+import java.util.*;
 
+import static org.hamcrest.Matchers.*;
+import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
+
+// TODO: Auto-generated Javadoc
 /**
  * Unit test for {@link GitHub}.
  */
-public class GitHubTest {
-    @Test
-    public void testOffline() throws Exception {
-        GitHub hub = GitHub.offline();
-        assertEquals("https://api.github.invalid/test", hub.getApiURL("/test").toString());
-        assertTrue(hub.isAnonymous());
-        try {
-            hub.getRateLimit();
-            fail("Offline instance should always fail");
-        } catch (IOException e) {
-            assertEquals("Offline", e.getMessage());
-        }
-    }
+public class GitHubTest extends AbstractGitHubWireMockTest {
 
-    @Test
-    public void testGitHubServerWithHttp() throws Exception {
-        GitHub hub = GitHub.connectToEnterprise("http://enterprise.kohsuke.org/api/v3", "bogus","bogus");
-        assertEquals("http://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
-    }
-    @Test
-    public void testGitHubServerWithHttps() throws Exception {
-        GitHub hub = GitHub.connectToEnterprise("https://enterprise.kohsuke.org/api/v3", "bogus","bogus");
-        assertEquals("https://enterprise.kohsuke.org/api/v3/test", hub.getApiURL("/test").toString());
-    }
-    @Test
-    public void testGitHubServerWithoutServer() throws Exception {
-        GitHub hub = GitHub.connectUsingPassword("kohsuke", "bogus");
-        assertEquals("https://api.github.com/test", hub.getApiURL("/test").toString());
-    }
-    @Test
-    public void testGitHubBuilderFromEnvironment() throws IOException {
-        
-        Map<String, String>props = new HashMap<String, String>();
-        
-        props.put("login", "bogus");
-        props.put("oauth", "bogus");
-        props.put("password", "bogus");
-        
-        setupEnvironment(props);
-        
-        GitHubBuilder builder = GitHubBuilder.fromEnvironment();
-        
-        assertEquals("bogus", builder.user);
-        assertEquals("bogus", builder.oauthToken);
-        assertEquals("bogus", builder.password);
-        
-    }
-    
-    /*
-     * Copied from StackOverflow: http://stackoverflow.com/a/7201825/2336755
-     * 
-     * This allows changing the in memory process environment.
-     * 
-     * Its used to wire in values for the github credentials to test that the GitHubBuilder works properly to resolve them.
+    /**
+     * List users.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
-    private void setupEnvironment(Map<String, String> newenv) {
-        try {
-            Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
-            Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
-            theEnvironmentField.setAccessible(true);
-            Map<String, String> env = (Map<String, String>) theEnvironmentField.get(null);
-            env.putAll(newenv);
-            Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
-            theCaseInsensitiveEnvironmentField.setAccessible(true);
-            Map<String, String> cienv = (Map<String, String>) theCaseInsensitiveEnvironmentField.get(null);
-            cienv.putAll(newenv);
-        } catch (NoSuchFieldException e) {
-            try {
-                Class[] classes = Collections.class.getDeclaredClasses();
-                Map<String, String> env = System.getenv();
-                for (Class cl : classes) {
-                    if ("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
-                        Field field = cl.getDeclaredField("m");
-                        field.setAccessible(true);
-                        Object obj = field.get(env);
-                        Map<String, String> map = (Map<String, String>) obj;
-                        map.clear();
-                        map.putAll(newenv);
-                    }
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-    }
-    @Test
-    public void testGitHubBuilderFromCustomEnvironment() throws IOException {
-        Map<String, String> props = new HashMap<String, String>();
-
-        props.put("customLogin", "bogusLogin");
-        props.put("customOauth", "bogusOauth");
-        props.put("customPassword", "bogusPassword");
-        props.put("customEndpoint", "bogusEndpoint");
-
-        setupEnvironment(props);
-
-        GitHubBuilder builder = GitHubBuilder.fromEnvironment("customLogin", "customPassword", "customOauth", "customEndpoint");
-
-        assertEquals("bogusLogin", builder.user);
-        assertEquals("bogusOauth", builder.oauthToken);
-        assertEquals("bogusPassword", builder.password);
-        assertEquals("bogusEndpoint", builder.endpoint);
-    }
-
-    @Test
-    public void testGitHubEnterpriseDoesNotHaveRateLimit() throws IOException {
-        GitHub github = spy(new GitHubBuilder().build());
-        when(github.retrieve()).thenThrow(FileNotFoundException.class);
-
-        GHRateLimit rateLimit = github.getRateLimit();
-        assertThat(rateLimit.getResetDate(), notNullValue());
-    }
-
-    @Test
-    public void testGitHubIsApiUrlValid() throws IOException {
-        GitHub github = GitHub.connectAnonymously();
-        //GitHub github = GitHub.connectToEnterpriseAnonymously("https://github.mycompany.com/api/v3/");
-        try {
-            github.checkApiUrlValidity();
-        } catch (IOException ioe) {
-            assertTrue(ioe.getMessage().contains("private mode enabled"));
-        }
-    }
-
     @Test
     public void listUsers() throws IOException {
-        GitHub hub = GitHub.connect();
-        for (GHUser u : Iterables.limit(hub.listUsers(),10)) {
-            assert u.getName()!=null;
-            System.out.println(u.getName());
+        for (GHUser u : Iterables.limit(gitHub.listUsers(), 10)) {
+            assert u.getName() != null;
+            // System.out.println(u.getName());
         }
     }
 
+    /**
+     * Gets the repository.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void getRepository() throws IOException {
+        GHRepository repo = gitHub.getRepository("hub4j/github-api");
+
+        assertThat(repo.getFullName(), equalTo("hub4j/github-api"));
+
+        GHRepository repo2 = gitHub.getRepositoryById(Long.toString(repo.getId()));
+        assertThat(repo2.getFullName(), equalTo("hub4j/github-api"));
+
+        try {
+            gitHub.getRepository("hub4j_github-api");
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), equalTo("Repository name must be in format owner/repo"));
+        }
+
+        try {
+            gitHub.getRepository("hub4j/github/api");
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), equalTo("Repository name must be in format owner/repo"));
+        }
+    }
+
+    /**
+     * Gets the orgs.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getOrgs() throws IOException {
-        GitHub hub = GitHub.connect();
         int iterations = 10;
         Set<Long> orgIds = new HashSet<Long>();
-        for (GHOrganization org : Iterables.limit(hub.listOrganizations().withPageSize(2), iterations)) {
+        for (GHOrganization org : Iterables.limit(gitHub.listOrganizations().withPageSize(2), iterations)) {
             orgIds.add(org.getId());
-            System.out.println(org.getName());
+            // System.out.println(org.getName());
         }
         assertThat(orgIds.size(), equalTo(iterations));
+
+        GHOrganization org = gitHub.getOrganization("hub4j");
+        GHOrganization org2 = gitHub.getOrganization("hub4j");
+        assertThat(org.getLogin(), equalTo("hub4j"));
+        // caching
+        assertThat(org, sameInstance(org2));
+
+        gitHub.refreshCache();
+        org2 = gitHub.getOrganization("hub4j");
+        assertThat(org2.getLogin(), equalTo("hub4j"));
+        // cache cleared
+        assertThat(org, not(sameInstance(org2)));
+    }
+
+    /**
+     * Search users.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void searchUsers() throws Exception {
+        PagedSearchIterable<GHUser> r = gitHub.searchUsers().q("tom").repos(">42").followers(">1000").list();
+        GHUser u = r.iterator().next();
+        // System.out.println(u.getName());
+        assertThat(u.getId(), notNullValue());
+        assertThat(r.getTotalCount(), greaterThan(0));
+    }
+
+    /**
+     * Test list all repositories.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testListAllRepositories() throws Exception {
+        Iterator<GHRepository> itr = gitHub.listAllPublicRepositories().iterator();
+        for (int i = 0; i < 115; i++) {
+            assertThat(itr.hasNext(), is(true));
+            GHRepository r = itr.next();
+            // System.out.println(r.getFullName());
+            assertThat(r.getUrl(), notNullValue());
+            assertThat(r.getId(), not(0L));
+        }
+
+        // ensure the iterator throws as expected
+        try {
+            itr.remove();
+            fail();
+        } catch (UnsupportedOperationException e) {
+            assertThat(e, notNullValue());
+        }
+    }
+
+    /**
+     * Search content.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void searchContent() throws Exception {
+        PagedSearchIterable<GHContent> r = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                // ignored unless sort is also set
+                .order(GHDirection.DESC)
+                .list();
+        GHContent c = r.iterator().next();
+
+        // System.out.println(c.getName());
+        assertThat(c.getDownloadUrl(), notNullValue());
+        assertThat(c.getOwner(), notNullValue());
+        assertThat(c.getOwner().getFullName(), equalTo("jquery/jquery"));
+        assertThat(r.getTotalCount(), greaterThan(5));
+
+        PagedSearchIterable<GHContent> r2 = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                // resets query sort back to default
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .sort(GHContentSearchBuilder.Sort.BEST_MATCH)
+                // ignored unless sort is also set to non-default
+                .order(GHDirection.ASC)
+                .list();
+
+        GHContent c2 = r2.iterator().next();
+        assertThat(c2.getPath(), equalTo(c.getPath()));
+        assertThat(r2.getTotalCount(), equalTo(r.getTotalCount()));
+
+        PagedSearchIterable<GHContent> r3 = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.ASC)
+                .list();
+
+        GHContent c3 = r3.iterator().next();
+        assertThat(c3.getPath(), not(equalTo(c2.getPath())));
+        assertThat(r3.getTotalCount(), equalTo(r2.getTotalCount()));
+
+        GHContentSearchBuilder searchBuilder = gitHub.searchContent()
+                .q("addClass")
+                .in("file")
+                .language("js")
+                .repo("jquery/jquery")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.DESC);
+
+        PagedSearchIterable<GHContent> r4 = searchBuilder.list();
+
+        GHContent c4 = r4.iterator().next();
+        assertThat(c4.getPath(), not(equalTo(c2.getPath())));
+        assertThat(c4.getPath(), not(equalTo(c3.getPath())));
+        assertThat(r4.getTotalCount(), equalTo(r2.getTotalCount()));
+
+        // Verify qualifier not allowed to be empty
+        IllegalArgumentException e = Assert.assertThrows(IllegalArgumentException.class,
+                () -> searchBuilder.q("", "not valid"));
+        assertThat(e.getMessage(), equalTo("qualifier cannot be null or empty"));
+    }
+
+    /**
+     * Search content with forks.
+     */
+    @Test
+    public void searchContentWithForks() {
+        final PagedSearchIterable<GHContent> results = gitHub.searchContent()
+                .q("addClass")
+                .language("js")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.DESC)
+                .fork(GHFork.PARENT_ONLY)
+                .list();
+
+        final PagedSearchIterable<GHContent> resultsWithForks = gitHub.searchContent()
+                .q("addClass")
+                .language("js")
+                .sort(GHContentSearchBuilder.Sort.INDEXED)
+                .order(GHDirection.DESC)
+                .fork(GHFork.PARENT_AND_FORKS)
+                .list();
+
+        assertThat(results.getTotalCount(), lessThan(resultsWithForks.getTotalCount()));
+
+        // Do not record these.
+        // This will verify that the queries for the deprecated path are identical to the ones above.
+        if (!mockGitHub.isTakeSnapshot()) {
+            final PagedSearchIterable<GHContent> resultsDeprecated = gitHub.searchContent()
+                    .q("addClass")
+                    .language("js")
+                    .sort(GHContentSearchBuilder.Sort.INDEXED)
+                    .order(GHDirection.DESC)
+                    .fork(GHFork.PARENT_ONLY.toString())
+                    .list();
+
+            final PagedSearchIterable<GHContent> resultsWithForksDeprecated = gitHub.searchContent()
+                    .q("addClass")
+                    .language("js")
+                    .sort(GHContentSearchBuilder.Sort.INDEXED)
+                    .order(GHDirection.DESC)
+                    .fork(GHFork.PARENT_AND_FORKS.toString())
+                    .list();
+
+            assertThat(resultsDeprecated.getTotalCount(), equalTo(results.getTotalCount()));
+            assertThat(resultsWithForksDeprecated.getTotalCount(), equalTo(resultsWithForks.getTotalCount()));
+        }
+    }
+
+    /**
+     * Test list my authorizations.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListMyAuthorizations() throws IOException {
+        PagedIterable<GHAuthorization> list = gitHub.listMyAuthorizations();
+
+        for (GHAuthorization auth : list) {
+            assertThat(auth.getAppName(), notNullValue());
+        }
+    }
+
+    /**
+     * Gets the meta.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void getMeta() throws IOException {
+        GHMeta meta = gitHub.getMeta();
+        assertThat(meta.isVerifiablePasswordAuthentication(), is(true));
+        assertThat(meta.getApi().size(), equalTo(19));
+        assertThat(meta.getGit().size(), equalTo(36));
+        assertThat(meta.getHooks().size(), equalTo(4));
+        assertThat(meta.getImporter().size(), equalTo(3));
+        assertThat(meta.getPages().size(), equalTo(6));
+        assertThat(meta.getWeb().size(), equalTo(20));
+        assertThat(meta.getPackages().size(), equalTo(25));
+        assertThat(meta.getActions().size(), equalTo(1739));
+        assertThat(meta.getDependabot().size(), equalTo(3));
+
+        // Also test examples here
+        Class[] examples = new Class[]{ ReadOnlyObjects.GHMetaPublic.class, ReadOnlyObjects.GHMetaPackage.class,
+                ReadOnlyObjects.GHMetaGettersUnmodifiable.class, ReadOnlyObjects.GHMetaGettersFinal.class,
+                ReadOnlyObjects.GHMetaGettersFinalCreator.class, };
+
+        for (Class metaClass : examples) {
+            ReadOnlyObjects.GHMetaExample metaExample = gitHub.createRequest()
+                    .withUrlPath("/meta")
+                    .fetch((Class<ReadOnlyObjects.GHMetaExample>) metaClass);
+            assertThat(metaExample.isVerifiablePasswordAuthentication(), is(true));
+            assertThat(metaExample.getApi().size(), equalTo(19));
+            assertThat(metaExample.getGit().size(), equalTo(36));
+            assertThat(metaExample.getHooks().size(), equalTo(4));
+            assertThat(metaExample.getImporter().size(), equalTo(3));
+            assertThat(metaExample.getPages().size(), equalTo(6));
+            assertThat(metaExample.getWeb().size(), equalTo(20));
+        }
+    }
+
+    /**
+     * Gets the my marketplace purchases.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void getMyMarketplacePurchases() throws IOException {
+        List<GHMarketplaceUserPurchase> userPurchases = gitHub.getMyMarketplacePurchases().toList();
+        assertThat(userPurchases.size(), equalTo(2));
+
+        for (GHMarketplaceUserPurchase userPurchase : userPurchases) {
+            assertThat(userPurchase.isOnFreeTrial(), is(false));
+            assertThat(userPurchase.getFreeTrialEndsOn(), nullValue());
+            assertThat(userPurchase.getBillingCycle(), equalTo("monthly"));
+
+            GHMarketplacePlan plan = userPurchase.getPlan();
+            // GHMarketplacePlan - Non-nullable fields
+            assertThat(plan.getUrl(), notNullValue());
+            assertThat(plan.getAccountsUrl(), notNullValue());
+            assertThat(plan.getName(), notNullValue());
+            assertThat(plan.getDescription(), notNullValue());
+            assertThat(plan.getPriceModel(), notNullValue());
+            assertThat(plan.getState(), notNullValue());
+
+            // GHMarketplacePlan - primitive fields
+            assertThat(plan.getId(), not(0L));
+            assertThat(plan.getNumber(), not(0L));
+            assertThat(plan.getMonthlyPriceInCents(), greaterThanOrEqualTo(0L));
+
+            // GHMarketplacePlan - list
+            assertThat(plan.getBullets().size(), equalTo(2));
+
+            GHMarketplaceAccount account = userPurchase.getAccount();
+            // GHMarketplaceAccount - Non-nullable fields
+            assertThat(account.getLogin(), notNullValue());
+            assertThat(account.getUrl(), notNullValue());
+            assertThat(account.getType(), notNullValue());
+
+            // GHMarketplaceAccount - primitive fields
+            assertThat(account.getId(), not(0L));
+
+            /* logical combination tests */
+            // Rationale: organization_billing_email is only set when account type is ORGANIZATION.
+            if (account.getType() == ORGANIZATION)
+                assertThat(account.getOrganizationBillingEmail(), notNullValue());
+            else
+                assertThat(account.getOrganizationBillingEmail(), nullValue());
+        }
+    }
+
+    /**
+     * Gzip.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void gzip() throws Exception {
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        // getResponseHeaderFields is deprecated but we'll use it for testing.
+        assertThat(org.getResponseHeaderFields(), notNullValue());
+
+        // WireMock should automatically gzip all responses
+        assertThat(org.getResponseHeaderFields().get("Content-Encoding").get(0), is("gzip"));
+        assertThat(org.getResponseHeaderFields().get("Content-eNcoding").get(0), is("gzip"));
+    }
+
+    /**
+     * Test header field name.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testHeaderFieldName() throws Exception {
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        // getResponseHeaderFields is deprecated but we'll use it for testing.
+        assertThat(org.getResponseHeaderFields(), notNullValue());
+
+        assertThat("Header field names must be case-insensitive",
+                org.getResponseHeaderFields().containsKey("CacHe-ContrOl"));
+
+        assertThat("KeySet from header fields should also be case-insensitive",
+                org.getResponseHeaderFields().keySet().contains("CacHe-ControL"));
+        assertThat(org.getResponseHeaderFields().get("cachE-cOntrol").get(0), is("private, max-age=60, s-maxage=60"));
     }
 }

@@ -1,0 +1,55 @@
+{
+  "id": "c829e266-6f50-48a4-94bc-54067c3f7693",
+  "name": "repos_hub4j-test-org_repo-for-project-card_issues",
+  "request": {
+    "url": "/repos/hub4j-test-org/repo-for-project-card/issues",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"assignees\":[],\"title\":\"new-issue\",\"body\":\"With body\",\"labels\":[]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_repo-for-project-card_issues-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 11 Oct 2021 15:43:40 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"f7e4fb89178a13a9b60d313a7e73f6d3b37e51b16860bc436b08b1c20df12a69\"",
+      "X-OAuth-Scopes": "admin:org, delete_repo, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2021-11-10 16:10:38 UTC",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4981",
+      "X-RateLimit-Reset": "1633970441",
+      "X-RateLimit-Used": "19",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EED6:617C:166BC51:40CEB7A:61645BAC",
+      "Location": "https://api.github.com/repos/hub4j-test-org/repo-for-project-card/issues/1"
+    }
+  },
+  "uuid": "c829e266-6f50-48a4-94bc-54067c3f7693",
+  "persistent": true,
+  "insertionIndex": 7
+}

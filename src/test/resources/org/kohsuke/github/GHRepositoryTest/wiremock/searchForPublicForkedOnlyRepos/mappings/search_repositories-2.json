@@ -1,0 +1,45 @@
+{
+  "id": "494306d0-974d-42d2-bad3-12d07b7c9d43",
+  "name": "search_repositories",
+  "request": {
+    "url": "/search/repositories?q=user%3At0m4uk1991+is%3Apublic+fork%3Aonly",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "search_repositories-2.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 24 Jun 2021 06:48:35 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-cache",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "X-OAuth-Scopes": "gist, notifications, repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "28",
+      "X-RateLimit-Reset": "1624517374",
+      "X-RateLimit-Used": "2",
+      "X-RateLimit-Resource": "search",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E39D:2FF7:58A8D82:5A5547C:60D42AC3"
+    }
+  },
+  "uuid": "494306d0-974d-42d2-bad3-12d07b7c9d43",
+  "persistent": true,
+  "insertionIndex": 2
+}

@@ -1,0 +1,51 @@
+{
+  "id": "036019d5-fdf5-4936-b85a-3e2d6c8585f3",
+  "name": "repos_hub4j-test-org_temp-setmergeoptions",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-setMergeOptions",
+    "method": "PATCH",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"temp-setMergeOptions\",\"allow_rebase_merge\":false}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_temp-setmergeoptions-5.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 09 Oct 2019 20:35:27 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4757",
+      "X-RateLimit-Reset": "1570656117",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
+      "ETag": "W/\"9b6a5b60f9f5940540226c138cadaa94\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CCBD:55D1:740DA5:DD388A:5D9E448E"
+    }
+  },
+  "uuid": "036019d5-fdf5-4936-b85a-3e2d6c8585f3",
+  "persistent": true,
+  "insertionIndex": 5
+}

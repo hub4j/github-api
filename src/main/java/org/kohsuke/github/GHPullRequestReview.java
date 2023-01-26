@@ -25,19 +25,23 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Date;
-import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 
+import javax.annotation.CheckForNull;
+
+// TODO: Auto-generated Javadoc
 /**
  * Review to a pull request.
  *
- * @see GHPullRequest#listReviews()
+ * @see GHPullRequest#listReviews() GHPullRequest#listReviews()
  * @see GHPullRequestReviewBuilder
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_FIELD"}, justification = "JSON API")
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHPullRequestReview extends GHObject {
+
+    /** The owner. */
     GHPullRequest owner;
 
     private String body;
@@ -45,21 +49,34 @@ public class GHPullRequestReview extends GHObject {
     private String commit_id;
     private GHPullRequestReviewState state;
     private String submitted_at;
+    private String html_url;
 
-    /*package*/ GHPullRequestReview wrapUp(GHPullRequest owner) {
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH pull request review
+     */
+    GHPullRequestReview wrapUp(GHPullRequest owner) {
         this.owner = owner;
         return this;
     }
 
     /**
      * Gets the pull request to which this review is associated.
+     *
+     * @return the parent
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHPullRequest getParent() {
         return owner;
     }
 
     /**
      * The comment itself.
+     *
+     * @return the body
      */
     public String getBody() {
         return body;
@@ -67,38 +84,73 @@ public class GHPullRequestReview extends GHObject {
 
     /**
      * Gets the user who posted this review.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
      */
     public GHUser getUser() throws IOException {
-        return owner.root.getUser(user.getLogin());
+        if (user != null) {
+            return owner.root().getUser(user.getLogin());
+        }
+        return null;
     }
 
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
     public String getCommitId() {
         return commit_id;
     }
 
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
     @CheckForNull
     public GHPullRequestReviewState getState() {
         return state;
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     @Override
     public URL getHtmlUrl() {
-        return null;
-    }
-
-    protected String getApiRoute() {
-        return owner.getApiRoute()+"/reviews/"+id;
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
-     * When was this resource created?
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+        return owner.getApiRoute() + "/reviews/" + getId();
+    }
+
+    /**
+     * When was this resource created?.
+     *
+     * @return the submitted at
+     * @throws IOException
+     *             the io exception
      */
     public Date getSubmittedAt() throws IOException {
-        return GitHub.parseDate(submitted_at);
+        return GitHubClient.parseDate(submitted_at);
     }
 
     /**
      * Since this method does not exist, we forward this value.
+     *
+     * @return the created at
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public Date getCreatedAt() throws IOException {
@@ -106,60 +158,83 @@ public class GHPullRequestReview extends GHObject {
     }
 
     /**
-     * @deprecated
-     *      Former preview method that changed when it got public. Left here for backward compatibility.
-     *      Use {@link #submit(String, GHPullRequestReviewEvent)}
+     * Submit.
+     *
+     * @param body
+     *            the body
+     * @param state
+     *            the state
+     * @throws IOException
+     *             the io exception
+     * @deprecated Former preview method that changed when it got public. Left here for backward compatibility. Use
+     *             {@link #submit(String, GHPullRequestReviewEvent)}
      */
+    @Deprecated
     public void submit(String body, GHPullRequestReviewState state) throws IOException {
-        submit(body,state.toEvent());
+        submit(body, state.toEvent());
     }
 
     /**
      * Updates the comment.
+     *
+     * @param body
+     *            the body
+     * @param event
+     *            the event
+     * @throws IOException
+     *             the io exception
      */
     public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-        new Requester(owner.root).method("POST")
+        owner.root()
+                .createRequest()
+                .method("POST")
                 .with("body", body)
                 .with("event", event.action())
-                .to(getApiRoute()+"/events",this);
+                .withUrlPath(getApiRoute() + "/events")
+                .fetchInto(this);
         this.body = body;
         this.state = event.toState();
     }
 
     /**
      * Deletes this review.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void delete() throws IOException {
-        new Requester(owner.root).method("DELETE")
-                .to(getApiRoute());
+        owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
      * Dismisses this review.
+     *
+     * @param message
+     *            the message
+     * @throws IOException
+     *             the io exception
      */
     public void dismiss(String message) throws IOException {
-        new Requester(owner.root).method("PUT")
+        owner.root()
+                .createRequest()
+                .method("PUT")
                 .with("message", message)
-                .to(getApiRoute()+"/dismissals");
+                .withUrlPath(getApiRoute() + "/dismissals")
+                .send();
         state = GHPullRequestReviewState.DISMISSED;
     }
 
     /**
      * Obtains all the review comments associated with this pull request review.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
-        return new PagedIterable<GHPullRequestReviewComment>() {
-            public PagedIterator<GHPullRequestReviewComment> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequestReviewComment>(
-                        owner.root.retrieve()
-                                .asIterator(getApiRoute() + "/comments",
-                                GHPullRequestReviewComment[].class, pageSize)) {
-                    protected void wrapUp(GHPullRequestReviewComment[] page) {
-                        for (GHPullRequestReviewComment c : page)
-                            c.wrapUp(owner);
-                    }
-                };
-            }
-        };
+        return owner.root()
+                .createRequest()
+                .withUrlPath(getApiRoute() + "/comments")
+                .toIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(owner));
     }
 }

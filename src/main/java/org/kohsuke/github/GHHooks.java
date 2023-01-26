@@ -7,56 +7,131 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+// TODO: Auto-generated Javadoc
 /**
  * Utility class for creating and retrieving webhooks; removes duplication between GHOrganization and GHRepository
- * functionality
+ * functionality.
  */
 class GHHooks {
-    static abstract class Context {
-        private final GitHub root;
+
+    /**
+     * The Class Context.
+     */
+    static abstract class Context extends GitHubInteractiveObject {
 
         private Context(GitHub root) {
-          this.root = root;
+            super(root);
         }
 
+        /**
+         * Gets hooks.
+         *
+         * @return the hooks
+         * @throws IOException
+         *             the io exception
+         */
         public List<GHHook> getHooks() throws IOException {
-        	
-            GHHook [] hookArray = root.retrieve().to(collection(),collectionClass());  // jdk/eclipse bug requires this to be on separate line
+
+            // jdk/eclipse bug
+            GHHook[] hookArray = root().createRequest().withUrlPath(collection()).fetch(collectionClass());
+            // requires this
+            // to be on separate line
             List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));
             for (GHHook h : list)
-              wrap(h);
+                wrap(h);
             return list;
         }
 
+        /**
+         * Gets hook.
+         *
+         * @param id
+         *            the id
+         * @return the hook
+         * @throws IOException
+         *             the io exception
+         */
         public GHHook getHook(int id) throws IOException {
-            GHHook hook = root.retrieve().to(collection() + "/" + id, clazz());
+            GHHook hook = root().createRequest().withUrlPath(collection() + "/" + id).fetch(clazz());
             return wrap(hook);
         }
 
-        public GHHook createHook(String name, Map<String, String> config, Collection<GHEvent> events, boolean active) throws IOException {
+        /**
+         * Create hook gh hook.
+         *
+         * @param name
+         *            the name
+         * @param config
+         *            the config
+         * @param events
+         *            the events
+         * @param active
+         *            the active
+         * @return the gh hook
+         * @throws IOException
+         *             the io exception
+         */
+        public GHHook createHook(String name, Map<String, String> config, Collection<GHEvent> events, boolean active)
+                throws IOException {
             List<String> ea = null;
-            if (events!=null) {
-              ea = new ArrayList<String>();
-              for (GHEvent e : events)
-                ea.add(e.symbol());
+            if (events != null) {
+                ea = new ArrayList<String>();
+                for (GHEvent e : events)
+                    ea.add(e.symbol());
             }
 
-            GHHook hook = new Requester(root)
-                .with("name", name)
-                .with("active", active)
-                ._with("config", config)
-                ._with("events", ea)
-                .to(collection(), clazz());
+            GHHook hook = root().createRequest()
+                    .method("POST")
+                    .with("name", name)
+                    .with("active", active)
+                    .with("config", config)
+                    .with("events", ea)
+                    .withUrlPath(collection())
+                    .fetch(clazz());
 
             return wrap(hook);
         }
 
+        /**
+         * Deletes hook.
+         *
+         * @param id
+         *            the id
+         * @throws IOException
+         *             the io exception
+         */
+        public void deleteHook(int id) throws IOException {
+            root().createRequest().method("DELETE").withUrlPath(collection() + "/" + id).send();
+        }
+
+        /**
+         * Collection.
+         *
+         * @return the string
+         */
         abstract String collection();
 
+        /**
+         * Collection class.
+         *
+         * @return the class<? extends GH hook[]>
+         */
         abstract Class<? extends GHHook[]> collectionClass();
 
+        /**
+         * Clazz.
+         *
+         * @return the class<? extends GH hook>
+         */
         abstract Class<? extends GHHook> clazz();
 
+        /**
+         * Wrap.
+         *
+         * @param hook
+         *            the hook
+         * @return the GH hook
+         */
         abstract GHHook wrap(GHHook hook);
     }
 
@@ -65,7 +140,7 @@ class GHHooks {
         private final GHUser owner;
 
         private RepoContext(GHRepository repository, GHUser owner) {
-            super(repository.root);
+            super(repository.root());
             this.repository = repository;
             this.owner = owner;
         }
@@ -87,7 +162,7 @@ class GHHooks {
 
         @Override
         GHHook wrap(GHHook hook) {
-            return ((GHRepoHook)hook).wrap(repository);
+            return ((GHRepoHook) hook).wrap(repository);
         }
     }
 
@@ -95,7 +170,7 @@ class GHHooks {
         private final GHOrganization organization;
 
         private OrgContext(GHOrganization organization) {
-            super(organization.root);
+            super(organization.root());
             this.organization = organization;
         }
 
@@ -116,15 +191,31 @@ class GHHooks {
 
         @Override
         GHHook wrap(GHHook hook) {
-            return ((GHOrgHook)hook).wrap(organization);
+            return ((GHOrgHook) hook).wrap(organization);
         }
     }
 
-      static Context repoContext(GHRepository repository, GHUser owner) {
-          return new RepoContext(repository, owner);
-      }
+    /**
+     * Repo context.
+     *
+     * @param repository
+     *            the repository
+     * @param owner
+     *            the owner
+     * @return the context
+     */
+    static Context repoContext(GHRepository repository, GHUser owner) {
+        return new RepoContext(repository, owner);
+    }
 
-      static Context orgContext(GHOrganization organization) {
-          return new OrgContext(organization);
-      }
+    /**
+     * Org context.
+     *
+     * @param organization
+     *            the organization
+     * @return the context
+     */
+    static Context orgContext(GHOrganization organization) {
+        return new OrgContext(organization);
+    }
 }

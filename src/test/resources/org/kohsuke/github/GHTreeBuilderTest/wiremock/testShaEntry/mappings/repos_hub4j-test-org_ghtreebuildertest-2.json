@@ -1,0 +1,48 @@
+{
+  "id": "839490dc-a97a-4697-98bc-45e33eff6d35",
+  "name": "repos_hub4j-test-org_ghtreebuildertest",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHTreeBuilderTest",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_ghtreebuildertest-2.json",
+    "headers": {
+      "Date": "Sat, 23 Jan 2021 20:24:26 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"5fa942d30f6fc015db9d8bf90f5b10a6a0d5b64d5defc075425794aba20254d0\"",
+      "last-modified": "Sat, 23 Jan 2021 20:24:25 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4841",
+      "X-RateLimit-Reset": "1611434953",
+      "x-ratelimit-used": "159",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F07A:0E3D:17E3A:2014F:600C85F8"
+    }
+  },
+  "uuid": "839490dc-a97a-4697-98bc-45e33eff6d35",
+  "persistent": true,
+  "insertionIndex": 2
+}

@@ -1,0 +1,49 @@
+{
+  "id": "82b829dd-2632-4d74-b721-46352ee24e11",
+  "name": "repos_hub4j-test-org_github-api",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api-6.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 13 Mar 2021 01:48:44 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"5b5c2af161f09bfe2b6c58170c7a5733df09789eac630b72b07c03226599bbed\"",
+      "Last-Modified": "Fri, 22 Jan 2021 03:50:37 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4895",
+      "X-RateLimit-Reset": "1615600351",
+      "X-RateLimit-Used": "105",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C5EC:7528:5437DF:59CDE4:604C19FC"
+    }
+  },
+  "uuid": "82b829dd-2632-4d74-b721-46352ee24e11",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-github-api-2",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-3",
+  "insertionIndex": 6
+}

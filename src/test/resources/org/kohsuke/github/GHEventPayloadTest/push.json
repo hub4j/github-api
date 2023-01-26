@@ -25,10 +25,8 @@
         "email": "baxterthehacker@users.noreply.github.com",
         "username": "baxterthehacker"
       },
-      "added": [
-      ],
-      "removed": [
-      ],
+      "added": [],
+      "removed": [],
       "modified": [
         "README.md"
       ]
@@ -51,10 +49,8 @@
       "email": "baxterthehacker@users.noreply.github.com",
       "username": "baxterthehacker"
     },
-    "added": [
-    ],
-    "removed": [
-    ],
+    "added": [],
+    "removed": [],
     "modified": [
       "README.md"
     ]
@@ -129,9 +125,9 @@
     "forks": 0,
     "open_issues": 0,
     "watchers": 0,
-    "default_branch": "master",
+    "default_branch": "main",
     "stargazers": 0,
-    "master_branch": "master"
+    "master_branch": "main"
   },
   "pusher": {
     "name": "baxterthehacker",

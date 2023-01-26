@@ -1,0 +1,44 @@
+{
+  "id": "03ff4bb7-7909-4e5b-9322-f8f3923fa65a",
+  "name": "search_repositories",
+  "request": {
+    "url": "/search/repositories?sort=stars&q=tetris+language%3Aassembly",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "search_repositories-2.json",
+    "headers": {
+      "Date": "Mon, 07 Oct 2019 19:59:49 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "28",
+      "X-RateLimit-Reset": "1570478429",
+      "Cache-Control": "no-cache",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "E531:3C9F:28FF686:30ABFB8:5D9B9934",
+      "Link": "<https://api.github.com/search/repositories?sort=stars&q=tetris+language%3Aassembly&page=2>; rel=\"next\", <https://api.github.com/search/repositories?sort=stars&q=tetris+language%3Aassembly&page=34>; rel=\"last\""
+    }
+  },
+  "uuid": "03ff4bb7-7909-4e5b-9322-f8f3923fa65a",
+  "persistent": true,
+  "insertionIndex": 2
+}

@@ -1,0 +1,7 @@
+ignore:
+  - "**/extras/okhttp3/ObsoleteUrlFactory**"
+  - "**/extras/OkHttpConnector"
+  - "**/extras/OkHttp3Connector"
+  - "**/example/**"
+  - "**/github/EnforcementLevel"
+

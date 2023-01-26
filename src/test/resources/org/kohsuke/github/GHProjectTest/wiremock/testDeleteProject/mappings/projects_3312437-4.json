@@ -1,0 +1,40 @@
+{
+  "id": "f507621b-4b4d-497d-81aa-d83b31b7dd52",
+  "name": "projects_3312437",
+  "request": {
+    "url": "/projects/3312437",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.inertia-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 17:23:30 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4690",
+      "X-RateLimit-Reset": "1570212957",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo, write:org",
+      "X-GitHub-Media-Type": "github.inertia-preview; format=json",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "FEAD:2CE8:1B9B3B2:210E85D:5D978012"
+    }
+  },
+  "uuid": "f507621b-4b4d-497d-81aa-d83b31b7dd52",
+  "persistent": true,
+  "insertionIndex": 4
+}

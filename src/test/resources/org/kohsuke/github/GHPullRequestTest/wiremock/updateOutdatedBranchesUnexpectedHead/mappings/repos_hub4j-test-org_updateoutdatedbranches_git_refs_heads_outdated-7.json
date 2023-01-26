@@ -1,0 +1,52 @@
+{
+  "id": "38c5ccfb-39ea-4724-9775-fc0c0c289503",
+  "name": "repos_hub4j-test-org_updateoutdatedbranches_git_refs_heads_outdated",
+  "request": {
+    "url": "/repos/hub4j-test-org/updateOutdatedBranches/git/refs/heads/outdated",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"force\":true,\"sha\":\"f567328eb81270487864963b7d7446953353f2b5\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_updateoutdatedbranches_git_refs_heads_outdated-7.json",
+    "headers": {
+      "Date": "Thu, 03 Sep 2020 19:05:42 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"906a27b3d6f7291ded0bc7756a9a07c9\"",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4658",
+      "X-RateLimit-Reset": "1599161295",
+      "X-RateLimit-Used": "342",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C86E:BABF:1139952:14CE09D:5F513E86"
+    }
+  },
+  "uuid": "38c5ccfb-39ea-4724-9775-fc0c0c289503",
+  "persistent": true,
+  "insertionIndex": 7
+}

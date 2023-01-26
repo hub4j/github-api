@@ -1,0 +1,47 @@
+{
+  "id": "9ae337f3-ba1f-4756-9775-89be33ef5fd3",
+  "name": "repos_hub4j-test-org_github-api_stats_participation",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/stats/participation",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"all\":[1,0,2,1,9,0,0,1,0,0,0,1,0,0,0,0,1,0,0,2,0,0,0,1,1,0,0,0,1,0,0,4,2,0,0,0,2,0,1,0,0,0,0,0,1,0,14,7,1,0,0,0],\"owner\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}",
+    "headers": {
+      "Date": "Sat, 05 Oct 2019 04:28:01 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4955",
+      "X-RateLimit-Reset": "1570253246",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"c6937df7adc1c9c5e70081a77b5d9684\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F4F7:361D:196A79B:1E5F954:5D981BD1"
+    }
+  },
+  "uuid": "9ae337f3-ba1f-4756-9775-89be33ef5fd3",
+  "persistent": true,
+  "insertionIndex": 4
+}

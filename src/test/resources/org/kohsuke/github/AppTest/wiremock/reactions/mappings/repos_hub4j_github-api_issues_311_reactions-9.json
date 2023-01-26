@@ -1,0 +1,53 @@
+{
+  "id": "10cdf5f8-533b-465c-867e-8b23af484926",
+  "name": "repos_hub4j_github-api_issues_311_reactions",
+  "request": {
+    "url": "/repos/hub4j/github-api/issues/311/reactions",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"content\":\"confused\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j_github-api_issues_311_reactions-9.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 08 Apr 2022 17:54:35 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"6bcb76b192943fc8adc003707e9c3a198ba7e176bdcd00da01b751bd35e5d9d6\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4905",
+      "X-RateLimit-Reset": "1649442146",
+      "X-RateLimit-Used": "95",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C588:93CC:31CA1:364CA:625076DB"
+    }
+  },
+  "uuid": "10cdf5f8-533b-465c-867e-8b23af484926",
+  "persistent": true,
+  "insertionIndex": 9
+}

@@ -1,0 +1,48 @@
+{
+  "id": "a70d05ac-5820-4749-8318-e422f0f6eaf5",
+  "name": "repos_hub4j_github-api_issues",
+  "request": {
+    "url": "/repos/hub4j/github-api/issues?state=closed",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j_github-api_issues-4.json",
+    "headers": {
+      "Date": "Fri, 04 Oct 2019 00:17:12 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4934",
+      "X-RateLimit-Reset": "1570151182",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"855067f1626a8814f2a51a24a505205e\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D5B9:6B2E:188E8DF:1D03BD4:5D968F88",
+      "Link": "<https://api.github.com/repositories/617210/issues?state=closed&page=2>; rel=\"next\", <https://api.github.com/repositories/617210/issues?state=closed&page=16>; rel=\"last\""
+    }
+  },
+  "uuid": "a70d05ac-5820-4749-8318-e422f0f6eaf5",
+  "persistent": true,
+  "insertionIndex": 4
+}

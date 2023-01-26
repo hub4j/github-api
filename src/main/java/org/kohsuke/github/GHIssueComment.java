@@ -23,38 +23,55 @@
  */
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.Previews.*;
+import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
+// TODO: Auto-generated Javadoc
 /**
- * Comment to the issue
+ * Comment to the issue.
  *
  * @author Kohsuke Kawaguchi
- * @see GHIssue#comment(String)
- * @see GHIssue#listComments()
+ * @see GHIssue#comment(String) GHIssue#comment(String)
+ * @see GHIssue#listComments() GHIssue#listComments()
  */
 public class GHIssueComment extends GHObject implements Reactable {
+
+    /** The owner. */
     GHIssue owner;
 
     private String body, gravatar_id, html_url, author_association;
     private GHUser user; // not fully populated. beware.
 
-    /*package*/ GHIssueComment wrapUp(GHIssue owner) {
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH issue comment
+     */
+    GHIssueComment wrapUp(GHIssue owner) {
         this.owner = owner;
         return this;
     }
 
     /**
      * Gets the issue to which this comment is associated.
+     *
+     * @return the parent
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHIssue getParent() {
         return owner;
     }
 
     /**
      * The comment itself.
+     *
+     * @return the body
      */
     public String getBody() {
         return body;
@@ -62,6 +79,8 @@ public class GHIssueComment extends GHObject implements Reactable {
 
     /**
      * Gets the ID of the user who posted this comment.
+     *
+     * @return the user name
      */
     @Deprecated
     public String getUserName() {
@@ -70,59 +89,114 @@ public class GHIssueComment extends GHObject implements Reactable {
 
     /**
      * Gets the user who posted this comment.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
      */
     public GHUser getUser() throws IOException {
-        return owner == null || owner.root.isOffline() ? user : owner.root.getUser(user.getLogin());
-    }
-    
-    @Override
-    public URL getHtmlUrl() {
-        return GitHub.parseURL(html_url);
+        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    @Override
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
+    }
+
+    /**
+     * Gets author association.
+     *
+     * @return the author association
+     */
     public GHCommentAuthorAssociation getAuthorAssociation() {
         return GHCommentAuthorAssociation.valueOf(author_association);
     }
-    
+
     /**
      * Updates the body of the issue comment.
+     *
+     * @param body
+     *            the body
+     * @throws IOException
+     *             the io exception
      */
     public void update(String body) throws IOException {
-        new Requester(owner.root).with("body", body).method("PATCH").to(getApiRoute(), GHIssueComment.class);
+        owner.root()
+                .createRequest()
+                .method("PATCH")
+                .with("body", body)
+                .withUrlPath(getApiRoute())
+                .fetch(GHIssueComment.class);
         this.body = body;
     }
 
     /**
      * Deletes this issue comment.
+     *
+     * @throws IOException
+     *             the io exception
      */
     public void delete() throws IOException {
-        new Requester(owner.root).method("DELETE").to(getApiRoute());
+        owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
-    @Preview @Deprecated
+    /**
+     * Creates the reaction.
+     *
+     * @param content
+     *            the content
+     * @return the GH reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
-        return new Requester(owner.root)
+        return owner.root()
+                .createRequest()
+                .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .to(getApiRoute()+"/reactions", GHReaction.class).wrap(owner.root);
+                .withUrlPath(getApiRoute() + "/reactions")
+                .fetch(GHReaction.class);
     }
 
-    @Preview @Deprecated
+    /**
+     * Delete reaction.
+     *
+     * @param reaction
+     *            the reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public void deleteReaction(GHReaction reaction) throws IOException {
+        owner.root()
+                .createRequest()
+                .method("DELETE")
+                .withUrlPath(getApiRoute(), "reactions", String.valueOf(reaction.getId()))
+                .send();
+    }
+
+    /**
+     * List reactions.
+     *
+     * @return the paged iterable
+     */
+    @Preview(SQUIRREL_GIRL)
     public PagedIterable<GHReaction> listReactions() {
-        return new PagedIterable<GHReaction>() {
-            public PagedIterator<GHReaction> _iterator(int pageSize) {
-                return new PagedIterator<GHReaction>(owner.root.retrieve().withPreview(SQUIRREL_GIRL).asIterator(getApiRoute()+"/reactions", GHReaction[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHReaction[] page) {
-                        for (GHReaction c : page)
-                            c.wrap(owner.root);
-                    }
-                };
-            }
-        };
+        return owner.root()
+                .createRequest()
+                .withPreview(SQUIRREL_GIRL)
+                .withUrlPath(getApiRoute() + "/reactions")
+                .toIterable(GHReaction[].class, item -> owner.root());
     }
 
     private String getApiRoute() {
-        return "/repos/"+owner.getRepository().getOwnerName()+"/"+owner.getRepository().getName()+"/issues/comments/" + id;
+        return "/repos/" + owner.getRepository().getOwnerName() + "/" + owner.getRepository().getName()
+                + "/issues/comments/" + getId();
     }
 }

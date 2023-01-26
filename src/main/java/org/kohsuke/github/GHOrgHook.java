@@ -4,24 +4,45 @@
 
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHOrgHook.
+ */
 class GHOrgHook extends GHHook {
     /**
      * Organization that the hook belongs to.
      */
-    /*package*/ transient GHOrganization organization;
+    transient GHOrganization organization;
 
-    /*package*/ GHOrgHook wrap(GHOrganization owner) {
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH org hook
+     */
+    GHOrgHook wrap(GHOrganization owner) {
         this.organization = owner;
         return this;
     }
 
+    /**
+     * Root.
+     *
+     * @return the git hub
+     */
     @Override
-    GitHub getRoot() {
-        return organization.root;
+    GitHub root() {
+        return organization.root();
     }
 
+    /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
     @Override
     String getApiRoute() {
-        return String.format("/orgs/%s/hooks/%d", organization.getLogin(), id);
+        return String.format("/orgs/%s/hooks/%d", organization.getLogin(), getId());
     }
 }

@@ -18,8 +18,7 @@ import static org.hamcrest.Matchers.is;
  * @author Jonas van Vliet
  */
 public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
-    //TODO: Create repo and keys in the hub4j-test-org
-    public static final String DEPLOY_KEY_TEST_REPO_NAME = "github-api-deploykey-test";
+    public static final String DEPLOY_KEY_TEST_REPO_NAME = "hub4j-test-org/GHDeployKeyTest";
     public static final String ED_25519_READONLY = "DeployKey - ed25519 - readonly";
     public static final String RSA_4096_READWRITE = "Deploykey - rsa4096 - readwrite";
     public static final String KEY_CREATOR_USERNAME = "van-vliet";
@@ -42,7 +41,7 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
         assertThat("The key exists", ed25519Key, isPresent());
         assertThat("The key was created at the specified date",
                 ed25519Key.get().getCreatedAt(),
-                is(Date.from(Instant.parse("2023-01-25T09:47:01.00Z")))); //TODO: Update timestamp once deploykeys are created in the hub4j-test-org
+                is(Date.from(Instant.parse("2023-01-26T14:11:41.00Z"))));
         assertThat("The key is created by " + KEY_CREATOR_USERNAME,
                 ed25519Key.get().getAdded_by(),
                 is(KEY_CREATOR_USERNAME));
@@ -54,7 +53,7 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
         assertThat("The key exists", rsa_4096Key, isPresent());
         assertThat("The key was created at the specified date",
                 rsa_4096Key.get().getCreatedAt(),
-                is(Date.from(Instant.parse("2023-01-25T09:47:17.00Z")))); //TODO: Update timestamp once deploykeys are created in the hub4j-test-org
+                is(Date.from(Instant.parse("2023-01-26T14:12:12.00Z"))));
         assertThat("The key is created by " + KEY_CREATOR_USERNAME,
                 rsa_4096Key.get().getAdded_by(),
                 is(KEY_CREATOR_USERNAME));
@@ -69,10 +68,10 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
      *             Signals that an I/O exception has occurred.
      */
     protected GHRepository getRepository() throws IOException {
-        return getRepository(getNonRecordingGitHub());
+        return getRepository(gitHub);
     }
 
     private GHRepository getRepository(final GitHub gitHub) throws IOException {
-        return gitHub.getMyself().getRepository(DEPLOY_KEY_TEST_REPO_NAME);
+        return gitHub.getRepository(DEPLOY_KEY_TEST_REPO_NAME);
     }
 }

@@ -1,0 +1,24 @@
+[
+  {
+    "id": 76924248,
+    "key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIINaSsehgTpibnTTtH4kKohPhwfzqo0OvfwP4w8qZfPp",
+    "url": "https://api.github.com/repos/hub4j-test-org/GHDeployKeyTest/keys/76924248",
+    "title": "DeployKey - ed25519 - readonly",
+    "verified": true,
+    "created_at": "2023-01-26T14:11:41Z",
+    "read_only": true,
+    "last_used": null,
+    "added_by": "van-vliet"
+  },
+  {
+    "id": 76924278,
+    "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDBO4AyE/CjnMt0YeJ4QFnU87qr4u534Q5FHRZmTUP7Ixi/ks6iMVJAU71GltuP1NIUynOTTA+Y+XNHfCp+/wNCi6B6o63Ouk2Debx7cf3ufFXM7G48iTG3ULK2qfPzm8OkfRP4urg+AmdrQAUuH3Wx3CinqlGt8phJECsRkQqdoYoikOrRtx9iNx0Cz45xD4JyRBOjZix0kZTqQy8LKnpxXA8nIzJJoh9eYTOPT3Pf3X3qeOUpN2QTSH7ya9xvE+lCxEMqP6m/vnA1tm5Vzso53bU/pG/SZwNESpafD9Dkry8AiCg9zfzFnzikwWHhrPRqCjIwYuMdaXbBtQBknPx62nDkpS/b0iFvdIoRmWTNbTng38urH5lFRLE7y13WW1GWYPeiSF3zY6B0B+rdNJm2RNrZtvtbQ0e3ruWVR8ZIVtQysT0/ueGO0g2pmodY0lB2Z6EidOx4F46i8mitUgABwhnlrzfki/nO/K0voIUh48D5M8tJsR7kCj+G0e1zXoTl7OF7/g8br8zYlSDczIZBgjORT+XBOr5My6cbSFYRratR2cy1ZB7XpcolCp89mPY3MTQOTOrNIE4BhoJHS6ws7rIv/ZNQeW+4lktPq0x59Tdcv5vgYAdAiu3qpjTcaVxxkAVE8AxNz237+CRs4+jWCsGHl2BAHCEtM9KVqLR77w==",
+    "url": "https://api.github.com/repos/hub4j-test-org/GHDeployKeyTest/keys/76924278",
+    "title": "Deploykey - rsa4096 - readwrite",
+    "verified": true,
+    "created_at": "2023-01-26T14:12:12Z",
+    "read_only": false,
+    "last_used": null,
+    "added_by": "van-vliet"
+  }
+]

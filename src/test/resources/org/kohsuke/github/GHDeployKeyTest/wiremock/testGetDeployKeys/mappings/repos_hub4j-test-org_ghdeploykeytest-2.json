@@ -1,8 +1,8 @@
 {
-  "id": "91ea0e9f-c8ae-4d71-af07-4f12a2100166",
-  "name": "user_keys",
+  "id": "c17e068d-d92a-4138-8f8b-2de76765e231",
+  "name": "repos_hub4j-test-org_ghdeploykeytest",
   "request": {
-    "url": "/user/keys",
+    "url": "/repos/hub4j-test-org/GHDeployKeyTest",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,25 +12,27 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "user_keys-3.json",
+    "bodyFileName": "repos_hub4j-test-org_ghdeploykeytest-2.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Wed, 25 Jan 2023 13:26:44 GMT",
+      "Date": "Thu, 26 Jan 2023 14:33:46 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"1ec3189fa6ce755c32842e642c83b1f6d9e0fab56797be22a2db9ec34be45315\"",
-      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
-      "X-Accepted-OAuth-Scopes": "admin:public_key, read:public_key, write:public_key",
+      "ETag": "W/\"ccb5e13d45de3c0541c6be0f53bb4bffb08cf1dcb916a2eeb417a2d162181d25\"",
+      "Last-Modified": "Thu, 26 Jan 2023 13:58:23 GMT",
+      "X-OAuth-Scopes": "admin:public_key, admin:ssh_signing_key, delete:packages, repo, user, workflow, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2023-02-02 14:15:42 UTC",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4990",
-      "X-RateLimit-Reset": "1674656069",
-      "X-RateLimit-Used": "10",
+      "X-RateLimit-Remaining": "4936",
+      "X-RateLimit-Reset": "1674743761",
+      "X-RateLimit-Used": "64",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -38,13 +40,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C3EA:3AB5:261DF50:26D6C8F:63D12E14"
+      "X-GitHub-Request-Id": "C001:2FE1:38B1808:39B6D94:63D28F4A"
     }
   },
-  "uuid": "91ea0e9f-c8ae-4d71-af07-4f12a2100166",
+  "uuid": "c17e068d-d92a-4138-8f8b-2de76765e231",
   "persistent": true,
-  "scenarioName": "scenario-1-user-keys",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-user-keys-2",
-  "insertionIndex": 3
+  "insertionIndex": 2
 }

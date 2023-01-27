@@ -1,0 +1,46 @@
+{
+  "id": "d6129252-9f48-4380-babb-cc06baa4234e",
+  "name": "repos_hub4j-test-org_github-api_issues_events",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/events",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_issues_events-3.json",
+    "headers": {
+      "Date": "Fri, 11 Oct 2019 03:33:35 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4980",
+      "X-RateLimit-Reset": "1570768157",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"092fd69b20562cd35fb3c435ea1c0031\"",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C422:6D1D:15D95C:194DAC:5D9FF80E",
+      "Link": "<https://api.github.com/repositories/206888201/issues/events?page=2>; rel=\"next\", <https://api.github.com/repositories/206888201/issues/events?page=14>; rel=\"last\""
+    }
+  },
+  "uuid": "d6129252-9f48-4380-babb-cc06baa4234e",
+  "persistent": true,
+  "insertionIndex": 3
+}

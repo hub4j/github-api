@@ -2,16 +2,16 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+// TODO: Auto-generated Javadoc
 /**
- * Represents an annotated tag in a {@link GHRepository}
+ * Represents an annotated tag in a {@link GHRepository}.
  *
- * @see GHRepository#getTagObject(String)
+ * @see GHRepository#getTagObject(String) GHRepository#getTagObject(String)
  */
-@SuppressFBWarnings(value = {"UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", 
-    "NP_UNWRITTEN_FIELD"}, justification = "JSON API")
-public class GHTagObject {
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+        justification = "JSON API")
+public class GHTagObject extends GitHubInteractiveObject {
     private GHRepository owner;
-    private GitHub root;
 
     private String tag;
     private String sha;
@@ -19,42 +19,90 @@ public class GHTagObject {
     private String message;
     private GitUser tagger;
     private GHRef.GHObject object;
+    private GHVerification verification;
 
-    /*package*/ GHTagObject wrap(GHRepository owner) {
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH tag object
+     */
+    GHTagObject wrap(GHRepository owner) {
         this.owner = owner;
-        this.root = owner.root;
         return this;
     }
 
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
     }
 
-    public GitHub getRoot() {
-        return root;
-    }
-
+    /**
+     * Gets tag.
+     *
+     * @return the tag
+     */
     public String getTag() {
         return tag;
     }
 
+    /**
+     * Gets sha.
+     *
+     * @return the sha
+     */
     public String getSha() {
         return sha;
     }
 
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Gets message.
+     *
+     * @return the message
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * Gets tagger.
+     *
+     * @return the tagger
+     */
     public GitUser getTagger() {
         return tagger;
     }
 
+    /**
+     * Gets object.
+     *
+     * @return the object
+     */
     public GHRef.GHObject getObject() {
         return object;
+    }
+
+    /**
+     * Gets Verification Status.
+     *
+     * @return the Verification status
+     */
+    public GHVerification getVerification() {
+        return verification;
     }
 }

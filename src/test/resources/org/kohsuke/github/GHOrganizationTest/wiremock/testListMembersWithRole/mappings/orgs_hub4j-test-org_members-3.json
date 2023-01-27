@@ -1,0 +1,47 @@
+{
+  "id": "80be661d-6679-43df-9ced-eb3b78827280",
+  "name": "orgs_hub4j-test-org_members",
+  "request": {
+    "url": "/orgs/hub4j-test-org/members?role=admin",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_hub4j-test-org_members-3.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 25 Feb 2020 14:29:12 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4990",
+      "X-RateLimit-Reset": "1582644474",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"631de12e6bc586863218257765331a70\"",
+      "X-OAuth-Scopes": "delete_repo, repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E7D4:4A52:336FBD:797AB0:5E552F38"
+    }
+  },
+  "uuid": "80be661d-6679-43df-9ced-eb3b78827280",
+  "persistent": true,
+  "insertionIndex": 3
+}

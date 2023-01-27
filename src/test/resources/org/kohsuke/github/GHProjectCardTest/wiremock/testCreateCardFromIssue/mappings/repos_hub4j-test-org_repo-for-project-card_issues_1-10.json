@@ -1,0 +1,50 @@
+{
+  "id": "80bb9001-dbad-4447-800e-81bb9aedb41a",
+  "name": "repos_hub4j-test-org_repo-for-project-card_issues_1",
+  "request": {
+    "url": "/repos/hub4j-test-org/repo-for-project-card/issues/1",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_repo-for-project-card_issues_1-10.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 11 Oct 2021 15:43:41 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"f7e4fb89178a13a9b60d313a7e73f6d3b37e51b16860bc436b08b1c20df12a69\"",
+      "Last-Modified": "Mon, 11 Oct 2021 15:43:40 GMT",
+      "X-OAuth-Scopes": "admin:org, delete_repo, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2021-11-10 16:10:38 UTC",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4978",
+      "X-RateLimit-Reset": "1633970441",
+      "X-RateLimit-Used": "22",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EED9:27D6:1EBA312:39A9576:61645BAD"
+    }
+  },
+  "uuid": "80bb9001-dbad-4447-800e-81bb9aedb41a",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-repo-for-project-card-issues-1",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-repo-for-project-card-issues-1-2",
+  "insertionIndex": 10
+}

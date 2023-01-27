@@ -1,0 +1,47 @@
+{
+  "id": "3c8120ed-2ea0-4228-8639-7159cc73d23b",
+  "name": "repos_hub4j-test-org_temp-setmergeoptions",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-setMergeOptions",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_temp-setmergeoptions-10.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 09 Oct 2019 20:35:28 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4752",
+      "X-RateLimit-Reset": "1570656117",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
+      "ETag": "W/\"7eb031a9c26906a5a19e00c92f308fdd\"",
+      "Last-Modified": "Wed, 09 Oct 2019 20:35:26 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CCBD:55D1:740DB2:DD38A4:5D9E448F"
+    }
+  },
+  "uuid": "3c8120ed-2ea0-4228-8639-7159cc73d23b",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-temp-setMergeOptions",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-temp-setMergeOptions-3",
+  "insertionIndex": 10
+}

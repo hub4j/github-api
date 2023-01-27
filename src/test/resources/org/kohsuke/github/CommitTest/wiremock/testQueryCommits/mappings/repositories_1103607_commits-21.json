@@ -1,0 +1,49 @@
+{
+  "id": "0f26f42d-a931-4f7e-b40e-613f8e2421ca",
+  "name": "repositories_1103607_commits",
+  "request": {
+    "url": "/repositories/1103607/commits?path=pom.xml&per_page=100&author=kohsuke%4071c3de6d-444a-0410-be80-ed276b4c234a&page=6",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_1103607_commits-21.json",
+    "headers": {
+      "Date": "Fri, 22 Jan 2021 22:35:33 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"5de77d78dd998cce50b7440f0e1467bcb8b0f649d05ff26d94ebd97da37c972c\"",
+      "last-modified": "Tue, 31 Jul 2007 00:36:52 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4799",
+      "X-RateLimit-Reset": "1611357669",
+      "x-ratelimit-used": "201",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CE75:13FC:5DAFE8:6C1568:600B5334",
+      "Link": "<https://api.github.com/repositories/1103607/commits?path=pom.xml&per_page=100&author=kohsuke%4071c3de6d-444a-0410-be80-ed276b4c234a&page=7>; rel=\"next\", <https://api.github.com/repositories/1103607/commits?path=pom.xml&per_page=100&author=kohsuke%4071c3de6d-444a-0410-be80-ed276b4c234a&page=7>; rel=\"last\", <https://api.github.com/repositories/1103607/commits?path=pom.xml&per_page=100&author=kohsuke%4071c3de6d-444a-0410-be80-ed276b4c234a&page=1>; rel=\"first\", <https://api.github.com/repositories/1103607/commits?path=pom.xml&per_page=100&author=kohsuke%4071c3de6d-444a-0410-be80-ed276b4c234a&page=5>; rel=\"prev\""
+    }
+  },
+  "uuid": "0f26f42d-a931-4f7e-b40e-613f8e2421ca",
+  "persistent": true,
+  "insertionIndex": 21
+}

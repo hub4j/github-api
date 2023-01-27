@@ -26,34 +26,41 @@ package org.kohsuke.github;
 
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * Permission for a user in a repository.
+ *
  * @see <a href="https://developer.github.com/v3/repos/collaborators/#review-a-users-permission-level">API</a>
  */
-/*package*/ class GHPermission {
+class GHPermission {
 
     private String permission;
     private GHUser user;
 
     /**
+     * Gets permission.
+     *
      * @return one of {@code admin}, {@code write}, {@code read}, or {@code none}
      */
     public String getPermission() {
         return permission;
     }
 
+    /**
+     * Gets permission type.
+     *
+     * @return the permission type
+     */
     public GHPermissionType getPermissionType() {
         return Enum.valueOf(GHPermissionType.class, permission.toUpperCase(Locale.ENGLISH));
     }
 
+    /**
+     * Gets user.
+     *
+     * @return the user
+     */
     public GHUser getUser() {
         return user;
     }
-
-    void wrapUp(GitHub root) {
-        if (user != null) {
-            user.root = root;
-        }
-    }
-
 }

@@ -1,0 +1,53 @@
+{
+  "id": "3f418ea2-7ad2-4a8d-a0e0-aa8dba0bc3aa",
+  "name": "repos_hub4j-test-org_test-labels_labels",
+  "request": {
+    "url": "/repos/hub4j-test-org/test-labels/labels",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"color\":\"123458\",\"name\":\"test2\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "body": "{\"id\":1937403007,\"node_id\":\"MDU6TGFiZWwxOTM3NDAzMDA3\",\"url\":\"https://api.github.com/repos/hub4j-test-org/test-labels/labels/test2\",\"name\":\"test2\",\"color\":\"123458\",\"default\":false,\"description\":null}",
+    "headers": {
+      "Date": "Thu, 26 Mar 2020 21:52:23 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4977",
+      "X-RateLimit-Reset": "1585263137",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With, X-GitHub-OpenAPI"
+      ],
+      "ETag": "\"b44c275d6657bfc2df3d5bfe449bff8d\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/repos/hub4j-test-org/test-labels/labels/test2",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E69B:9495:1D220:245C5:5E7D2416"
+    }
+  },
+  "uuid": "3f418ea2-7ad2-4a8d-a0e0-aa8dba0bc3aa",
+  "persistent": true,
+  "insertionIndex": 18
+}

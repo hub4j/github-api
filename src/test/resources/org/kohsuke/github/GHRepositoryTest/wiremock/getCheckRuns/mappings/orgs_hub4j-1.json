@@ -1,0 +1,44 @@
+{
+  "id": "5d8b3f90-4fb5-4321-b979-b06127d19224",
+  "name": "orgs_hub4j",
+  "request": {
+    "url": "/orgs/hub4j",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_hub4j-1.json",
+    "headers": {
+      "Date": "Thu, 19 Mar 2020 16:20:01 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "60",
+      "X-RateLimit-Remaining": "39",
+      "X-RateLimit-Reset": "1584637771",
+      "Cache-Control": "public, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"ecb2a1373168a8fb973e115a07230ce6\"",
+      "Last-Modified": "Wed, 04 Sep 2019 18:12:34 GMT",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BDDE:30E5B:FEA263:12C841D:5E739BB0"
+    }
+  },
+  "uuid": "5d8b3f90-4fb5-4321-b979-b06127d19224",
+  "persistent": true,
+  "insertionIndex": 1
+}

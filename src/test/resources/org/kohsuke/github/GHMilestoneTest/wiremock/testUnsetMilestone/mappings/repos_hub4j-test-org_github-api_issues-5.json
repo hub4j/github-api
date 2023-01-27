@@ -1,0 +1,53 @@
+{
+  "id": "b8afb86b-c8b2-45ec-9ea4-775d470669b3",
+  "name": "repos_hub4j-test-org_github-api_issues",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"assignees\":[],\"title\":\"Issue for testUnsetMilestone\",\"labels\":[]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_github-api_issues-5.json",
+    "headers": {
+      "Date": "Sun, 05 Apr 2020 04:12:50 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4957",
+      "X-RateLimit-Reset": "1586062476",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"69a006d264422a49583ebfb0ffa6a4d2\"",
+      "X-OAuth-Scopes": "admin:org, admin:repo_hook, delete_repo, gist, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/issues/368",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "8F8C:6DE8:376410:3EEA3E:5E895AC1"
+    }
+  },
+  "uuid": "b8afb86b-c8b2-45ec-9ea4-775d470669b3",
+  "persistent": true,
+  "insertionIndex": 5
+}

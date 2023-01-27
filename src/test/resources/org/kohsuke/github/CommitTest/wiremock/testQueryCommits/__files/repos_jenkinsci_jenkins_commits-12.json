@@ -1,0 +1,4102 @@
+[
+  {
+    "sha": "1cccddb22e305397151b2b7b87b4b47d74ca337b",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzoxY2NjZGRiMjJlMzA1Mzk3MTUxYjJiN2I4N2I0YjQ3ZDc0Y2EzMzdi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-30T09:00:09Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-30T09:00:09Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6916 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "65812402efbd6bb67bf69668c68980eba7c59216",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/65812402efbd6bb67bf69668c68980eba7c59216"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/1cccddb22e305397151b2b7b87b4b47d74ca337b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/1cccddb22e305397151b2b7b87b4b47d74ca337b",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/1cccddb22e305397151b2b7b87b4b47d74ca337b",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/1cccddb22e305397151b2b7b87b4b47d74ca337b/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "e4661133e21828ac4befbc7da960d7bb6fb5b795",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e4661133e21828ac4befbc7da960d7bb6fb5b795",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/e4661133e21828ac4befbc7da960d7bb6fb5b795"
+      }
+    ]
+  },
+  {
+    "sha": "e4661133e21828ac4befbc7da960d7bb6fb5b795",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzplNDY2MTEzM2UyMTgyOGFjNGJlZmJjN2RhOTYwZDdiYjZmYjViNzk1",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-30T08:59:15Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-30T08:59:15Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_177\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6914 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "c1211379586386c226d3c2487b8cb10bb854fedb",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/c1211379586386c226d3c2487b8cb10bb854fedb"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/e4661133e21828ac4befbc7da960d7bb6fb5b795",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e4661133e21828ac4befbc7da960d7bb6fb5b795",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/e4661133e21828ac4befbc7da960d7bb6fb5b795",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e4661133e21828ac4befbc7da960d7bb6fb5b795/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "01a47af8b699ca7cb07a240446e8ed5aaca7aceb",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/01a47af8b699ca7cb07a240446e8ed5aaca7aceb",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/01a47af8b699ca7cb07a240446e8ed5aaca7aceb"
+      }
+    ]
+  },
+  {
+    "sha": "413c6a15fbf0a4c07cc176a3538c552b983686ee",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo0MTNjNmExNWZiZjBhNGMwN2NjMTc2YTM1MzhjNTUyYjk4MzY4NmVl",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-25T03:24:04Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-25T03:24:04Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6868 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "20150eb070b516a0bc374cf3c8c665bb39707466",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/20150eb070b516a0bc374cf3c8c665bb39707466"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/413c6a15fbf0a4c07cc176a3538c552b983686ee",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/413c6a15fbf0a4c07cc176a3538c552b983686ee",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/413c6a15fbf0a4c07cc176a3538c552b983686ee",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/413c6a15fbf0a4c07cc176a3538c552b983686ee/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "278bb4ea05861c330ddcf9109ba957a90f496a51",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/278bb4ea05861c330ddcf9109ba957a90f496a51",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/278bb4ea05861c330ddcf9109ba957a90f496a51"
+      }
+    ]
+  },
+  {
+    "sha": "278bb4ea05861c330ddcf9109ba957a90f496a51",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzoyNzhiYjRlYTA1ODYxYzMzMGRkY2Y5MTA5YmE5NTdhOTBmNDk2YTUx",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-25T03:23:28Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-25T03:23:28Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_176\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6866 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "14a75be161ed452cb21d2a072e60e5dc825ed69e",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/14a75be161ed452cb21d2a072e60e5dc825ed69e"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/278bb4ea05861c330ddcf9109ba957a90f496a51",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/278bb4ea05861c330ddcf9109ba957a90f496a51",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/278bb4ea05861c330ddcf9109ba957a90f496a51",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/278bb4ea05861c330ddcf9109ba957a90f496a51/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "a0b0d6bf5b3fe7e269313cb1ce4d9c24bc4e3694",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/a0b0d6bf5b3fe7e269313cb1ce4d9c24bc4e3694",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/a0b0d6bf5b3fe7e269313cb1ce4d9c24bc4e3694"
+      }
+    ]
+  },
+  {
+    "sha": "d0e938726753c0d9516f9c6b5c3e40c2637a9240",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpkMGU5Mzg3MjY3NTNjMGQ5NTE2ZjljNmI1YzNlNDBjMjYzN2E5MjQw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-21T22:45:45Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-21T22:45:45Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6832 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "c98850434e6f2797db28de3f24984d94130fdef7",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/c98850434e6f2797db28de3f24984d94130fdef7"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/d0e938726753c0d9516f9c6b5c3e40c2637a9240",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/d0e938726753c0d9516f9c6b5c3e40c2637a9240",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/d0e938726753c0d9516f9c6b5c3e40c2637a9240",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/d0e938726753c0d9516f9c6b5c3e40c2637a9240/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "b8ba52b39e506b508ade527c8be4327406eab4b9",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/b8ba52b39e506b508ade527c8be4327406eab4b9",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/b8ba52b39e506b508ade527c8be4327406eab4b9"
+      }
+    ]
+  },
+  {
+    "sha": "b8ba52b39e506b508ade527c8be4327406eab4b9",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpiOGJhNTJiMzllNTA2YjUwOGFkZTUyN2M4YmU0MzI3NDA2ZWFiNGI5",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-21T22:44:31Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-21T22:44:31Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_175\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6830 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "e205f91e351925ef99e4f29d0352e156fe121f9e",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/e205f91e351925ef99e4f29d0352e156fe121f9e"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/b8ba52b39e506b508ade527c8be4327406eab4b9",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/b8ba52b39e506b508ade527c8be4327406eab4b9",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/b8ba52b39e506b508ade527c8be4327406eab4b9",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/b8ba52b39e506b508ade527c8be4327406eab4b9/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "9c9d607872fd45dfd2307ac25d9195e4787a42a9",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9c9d607872fd45dfd2307ac25d9195e4787a42a9",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/9c9d607872fd45dfd2307ac25d9195e4787a42a9"
+      }
+    ]
+  },
+  {
+    "sha": "ccc04cf8e8a6202b0c354aa87c4a517cb36d4610",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpjY2MwNGNmOGU4YTYyMDJiMGMzNTRhYTg3YzRhNTE3Y2IzNmQ0NjEw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-19T06:54:30Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-19T06:54:30Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6751 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "efd5c22fba92b48c28e454c911cc383858bd7361",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/efd5c22fba92b48c28e454c911cc383858bd7361"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/ccc04cf8e8a6202b0c354aa87c4a517cb36d4610",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ccc04cf8e8a6202b0c354aa87c4a517cb36d4610",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/ccc04cf8e8a6202b0c354aa87c4a517cb36d4610",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ccc04cf8e8a6202b0c354aa87c4a517cb36d4610/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "85a234d52c6da1fb4578354282dea111c359836e",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/85a234d52c6da1fb4578354282dea111c359836e",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/85a234d52c6da1fb4578354282dea111c359836e"
+      }
+    ]
+  },
+  {
+    "sha": "85a234d52c6da1fb4578354282dea111c359836e",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo4NWEyMzRkNTJjNmRhMWZiNDU3ODM1NDI4MmRlYTExMWMzNTk4MzZl",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-19T06:53:53Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-19T06:53:53Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_174\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6749 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "20dd7a381975cf79513be74233aec7f608157260",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/20dd7a381975cf79513be74233aec7f608157260"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/85a234d52c6da1fb4578354282dea111c359836e",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/85a234d52c6da1fb4578354282dea111c359836e",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/85a234d52c6da1fb4578354282dea111c359836e",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/85a234d52c6da1fb4578354282dea111c359836e/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "c98a380ed41e65fc4010388de85b78d928fcdb7d",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c98a380ed41e65fc4010388de85b78d928fcdb7d",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/c98a380ed41e65fc4010388de85b78d928fcdb7d"
+      }
+    ]
+  },
+  {
+    "sha": "3d12fdf5f3a0ff93d9e6f1f9ce79c85762f20e81",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozZDEyZmRmNWYzYTBmZjkzZDllNmYxZjljZTc5Yzg1NzYyZjIwZTgx",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-17T07:28:06Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-17T07:28:06Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6729 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "36e03c288baf975c26cbf173e8850877a1e07316",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/36e03c288baf975c26cbf173e8850877a1e07316"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/3d12fdf5f3a0ff93d9e6f1f9ce79c85762f20e81",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/3d12fdf5f3a0ff93d9e6f1f9ce79c85762f20e81",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/3d12fdf5f3a0ff93d9e6f1f9ce79c85762f20e81",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/3d12fdf5f3a0ff93d9e6f1f9ce79c85762f20e81/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "61cbfc73b0ad78ba35bae64cce7be03f39092c10",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/61cbfc73b0ad78ba35bae64cce7be03f39092c10",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/61cbfc73b0ad78ba35bae64cce7be03f39092c10"
+      }
+    ]
+  },
+  {
+    "sha": "61cbfc73b0ad78ba35bae64cce7be03f39092c10",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo2MWNiZmM3M2IwYWQ3OGJhMzViYWU2NGNjZTdiZTAzZjM5MDkyYzEw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-17T07:27:03Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-17T07:27:03Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_173\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6727 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "cfada530714024aecc3dc847cfb9593096affa21",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/cfada530714024aecc3dc847cfb9593096affa21"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/61cbfc73b0ad78ba35bae64cce7be03f39092c10",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/61cbfc73b0ad78ba35bae64cce7be03f39092c10",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/61cbfc73b0ad78ba35bae64cce7be03f39092c10",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/61cbfc73b0ad78ba35bae64cce7be03f39092c10/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "c1d7be103233ac52eb3ee3bfd59e5393a758e822",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c1d7be103233ac52eb3ee3bfd59e5393a758e822",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/c1d7be103233ac52eb3ee3bfd59e5393a758e822"
+      }
+    ]
+  },
+  {
+    "sha": "ea1c103146317d2d3e303efa129be884a8f0a20b",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzplYTFjMTAzMTQ2MzE3ZDJkM2UzMDNlZmExMjliZTg4NGE4ZjBhMjBi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-17T01:49:23Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-17T01:49:23Z"
+      },
+      "message": "bumping up the version number since I updated wagon-svn version\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6713 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "5be43f9ec05c186e3bbe5fcc6c5830e630a0a2ff",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/5be43f9ec05c186e3bbe5fcc6c5830e630a0a2ff"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/ea1c103146317d2d3e303efa129be884a8f0a20b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ea1c103146317d2d3e303efa129be884a8f0a20b",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/ea1c103146317d2d3e303efa129be884a8f0a20b",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ea1c103146317d2d3e303efa129be884a8f0a20b/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "eaf95d3719b0f138be1a1a944730a2489a157540",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/eaf95d3719b0f138be1a1a944730a2489a157540",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/eaf95d3719b0f138be1a1a944730a2489a157540"
+      }
+    ]
+  },
+  {
+    "sha": "7da7fd00703728e927cd9e4f0b3bb7ad60b4113e",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo3ZGE3ZmQwMDcwMzcyOGU5MjdjZDllNGYwYjNiYjdhZDYwYjQxMTNl",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-16T06:07:22Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-16T06:07:22Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6684 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "f064b9503a895db9a4a87d5b87bc123a4ceca95d",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/f064b9503a895db9a4a87d5b87bc123a4ceca95d"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/7da7fd00703728e927cd9e4f0b3bb7ad60b4113e",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/7da7fd00703728e927cd9e4f0b3bb7ad60b4113e",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/7da7fd00703728e927cd9e4f0b3bb7ad60b4113e",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/7da7fd00703728e927cd9e4f0b3bb7ad60b4113e/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "0bc8ff832c2c24670aed5ecf82b1f55a150e36b5",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0bc8ff832c2c24670aed5ecf82b1f55a150e36b5",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/0bc8ff832c2c24670aed5ecf82b1f55a150e36b5"
+      }
+    ]
+  },
+  {
+    "sha": "0bc8ff832c2c24670aed5ecf82b1f55a150e36b5",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzowYmM4ZmY4MzJjMmMyNDY3MGFlZDVlY2Y4MmIxZjU1YTE1MGUzNmI1",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-16T06:06:40Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-16T06:06:40Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_172\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6682 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "cf90b4c0cec7194095c361bec042bf450fe3408e",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/cf90b4c0cec7194095c361bec042bf450fe3408e"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/0bc8ff832c2c24670aed5ecf82b1f55a150e36b5",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0bc8ff832c2c24670aed5ecf82b1f55a150e36b5",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/0bc8ff832c2c24670aed5ecf82b1f55a150e36b5",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0bc8ff832c2c24670aed5ecf82b1f55a150e36b5/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "286e32613149c8537560cc194fcce743efec5d10",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/286e32613149c8537560cc194fcce743efec5d10",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/286e32613149c8537560cc194fcce743efec5d10"
+      }
+    ]
+  },
+  {
+    "sha": "65ec1c24f679a6619122539dd9db513a60b58061",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo2NWVjMWMyNGY2NzlhNjYxOTEyMjUzOWRkOWRiNTEzYTYwYjU4MDYx",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-14T05:21:52Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-14T05:21:52Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6650 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "710bc7a6de52de59beeca4e20f2275af956a9457",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/710bc7a6de52de59beeca4e20f2275af956a9457"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/65ec1c24f679a6619122539dd9db513a60b58061",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/65ec1c24f679a6619122539dd9db513a60b58061",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/65ec1c24f679a6619122539dd9db513a60b58061",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/65ec1c24f679a6619122539dd9db513a60b58061/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "359c072e2caf2bfc6de8337bfd6f7a26e0f3a47a",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/359c072e2caf2bfc6de8337bfd6f7a26e0f3a47a",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/359c072e2caf2bfc6de8337bfd6f7a26e0f3a47a"
+      }
+    ]
+  },
+  {
+    "sha": "359c072e2caf2bfc6de8337bfd6f7a26e0f3a47a",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozNTljMDcyZTJjYWYyYmZjNmRlODMzN2JmZDZmN2EyNmUwZjNhNDdh",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-14T05:20:57Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-14T05:20:57Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_171\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6648 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "a7d5f0423cf7662382dbcac2fec9a384060d9603",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/a7d5f0423cf7662382dbcac2fec9a384060d9603"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/359c072e2caf2bfc6de8337bfd6f7a26e0f3a47a",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/359c072e2caf2bfc6de8337bfd6f7a26e0f3a47a",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/359c072e2caf2bfc6de8337bfd6f7a26e0f3a47a",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/359c072e2caf2bfc6de8337bfd6f7a26e0f3a47a/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "0bc16b226166b2ba47420043971e73d547615491",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0bc16b226166b2ba47420043971e73d547615491",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/0bc16b226166b2ba47420043971e73d547615491"
+      }
+    ]
+  },
+  {
+    "sha": "a5259970acaec9813e2a12a91f37dfc7871a5ef5",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzphNTI1OTk3MGFjYWVjOTgxM2UyYTEyYTkxZjM3ZGZjNzg3MWE1ZWY1",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-13T05:04:44Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-13T05:04:44Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6621 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "8d7f15f84d5ed164f90e08ff90735a2eaa3d7068",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/8d7f15f84d5ed164f90e08ff90735a2eaa3d7068"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/a5259970acaec9813e2a12a91f37dfc7871a5ef5",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/a5259970acaec9813e2a12a91f37dfc7871a5ef5",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/a5259970acaec9813e2a12a91f37dfc7871a5ef5",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/a5259970acaec9813e2a12a91f37dfc7871a5ef5/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "c8be303540aafdcfa09750c22eaa5a86cb2d68e7",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c8be303540aafdcfa09750c22eaa5a86cb2d68e7",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/c8be303540aafdcfa09750c22eaa5a86cb2d68e7"
+      }
+    ]
+  },
+  {
+    "sha": "c8be303540aafdcfa09750c22eaa5a86cb2d68e7",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpjOGJlMzAzNTQwYWFmZGNmYTA5NzUwYzIyZWFhNWE4NmNiMmQ2OGU3",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-13T05:04:01Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-13T05:04:01Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_170\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6619 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "0d10d83db828d5127db39e8a0c62a7eb4e1a81a2",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/0d10d83db828d5127db39e8a0c62a7eb4e1a81a2"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/c8be303540aafdcfa09750c22eaa5a86cb2d68e7",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c8be303540aafdcfa09750c22eaa5a86cb2d68e7",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/c8be303540aafdcfa09750c22eaa5a86cb2d68e7",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c8be303540aafdcfa09750c22eaa5a86cb2d68e7/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "4ffcd115e02d11d812fb94699abe3c4f9e78052b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/4ffcd115e02d11d812fb94699abe3c4f9e78052b",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/4ffcd115e02d11d812fb94699abe3c4f9e78052b"
+      }
+    ]
+  },
+  {
+    "sha": "56e584cda5c1b21287e2e20818b6c5b7fd55addc",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo1NmU1ODRjZGE1YzFiMjEyODdlMmUyMDgxOGI2YzViN2ZkNTVhZGRj",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-12T02:50:33Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-12T02:50:33Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6597 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "c8e7bb4b7a4b6e0f25dffdb330530edb068643b3",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/c8e7bb4b7a4b6e0f25dffdb330530edb068643b3"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/56e584cda5c1b21287e2e20818b6c5b7fd55addc",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/56e584cda5c1b21287e2e20818b6c5b7fd55addc",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/56e584cda5c1b21287e2e20818b6c5b7fd55addc",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/56e584cda5c1b21287e2e20818b6c5b7fd55addc/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "143582a609c7ae8a98d616986624c3e00e9fd810",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/143582a609c7ae8a98d616986624c3e00e9fd810",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/143582a609c7ae8a98d616986624c3e00e9fd810"
+      }
+    ]
+  },
+  {
+    "sha": "143582a609c7ae8a98d616986624c3e00e9fd810",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzoxNDM1ODJhNjA5YzdhZThhOThkNjE2OTg2NjI0YzNlMDBlOWZkODEw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-12T02:49:50Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-12T02:49:50Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_169\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6595 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "d619488734061b05fbdf6fc284f77751599cca61",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/d619488734061b05fbdf6fc284f77751599cca61"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/143582a609c7ae8a98d616986624c3e00e9fd810",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/143582a609c7ae8a98d616986624c3e00e9fd810",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/143582a609c7ae8a98d616986624c3e00e9fd810",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/143582a609c7ae8a98d616986624c3e00e9fd810/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "cddeb23d2c50cb40e2145e84fea8689937d9d026",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/cddeb23d2c50cb40e2145e84fea8689937d9d026",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/cddeb23d2c50cb40e2145e84fea8689937d9d026"
+      }
+    ]
+  },
+  {
+    "sha": "3e44b225fbc1472bc5de5f871f4b17b86ef6e8cb",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozZTQ0YjIyNWZiYzE0NzJiYzVkZTVmODcxZjRiMTdiODZlZjZlOGNi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-11T03:03:44Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-11T03:03:44Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6573 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "2d2ab2d8746d0705ac658dc80abaa1f496b3e177",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/2d2ab2d8746d0705ac658dc80abaa1f496b3e177"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/3e44b225fbc1472bc5de5f871f4b17b86ef6e8cb",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/3e44b225fbc1472bc5de5f871f4b17b86ef6e8cb",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/3e44b225fbc1472bc5de5f871f4b17b86ef6e8cb",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/3e44b225fbc1472bc5de5f871f4b17b86ef6e8cb/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "5b227baa0ea05dd9c2b7edad69a61917817402ce",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/5b227baa0ea05dd9c2b7edad69a61917817402ce",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/5b227baa0ea05dd9c2b7edad69a61917817402ce"
+      }
+    ]
+  },
+  {
+    "sha": "91d4d026f107640b3225df9f7aa7f39fb3436326",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo5MWQ0ZDAyNmYxMDc2NDBiMzIyNWRmOWY3YWE3ZjM5ZmIzNDM2MzI2",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-11T03:02:19Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-11T03:02:19Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_168\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6570 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "d544767f639b566d82563280829e9852451e4a65",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/d544767f639b566d82563280829e9852451e4a65"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/91d4d026f107640b3225df9f7aa7f39fb3436326",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/91d4d026f107640b3225df9f7aa7f39fb3436326",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/91d4d026f107640b3225df9f7aa7f39fb3436326",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/91d4d026f107640b3225df9f7aa7f39fb3436326/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "ea26bba8cba52bee4a649b897e0fad48065f4fe7",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ea26bba8cba52bee4a649b897e0fad48065f4fe7",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/ea26bba8cba52bee4a649b897e0fad48065f4fe7"
+      }
+    ]
+  },
+  {
+    "sha": "cf4dabbd89993d406a86464864a8e9daeb75cd48",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpjZjRkYWJiZDg5OTkzZDQwNmE4NjQ2NDg2NGE4ZTlkYWViNzVjZDQ4",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-10T06:20:31Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-10T06:20:31Z"
+      },
+      "message": "I guess all we need here is to have enough information to resolve parent POM\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6554 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "8b83641e70d6ae781ce99135c905fb7076fc8e4b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/8b83641e70d6ae781ce99135c905fb7076fc8e4b"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/cf4dabbd89993d406a86464864a8e9daeb75cd48",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/cf4dabbd89993d406a86464864a8e9daeb75cd48",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/cf4dabbd89993d406a86464864a8e9daeb75cd48",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/cf4dabbd89993d406a86464864a8e9daeb75cd48/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "faaa4d6fd697348b88c89d09ed3764f767635d07",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/faaa4d6fd697348b88c89d09ed3764f767635d07",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/faaa4d6fd697348b88c89d09ed3764f767635d07"
+      }
+    ]
+  },
+  {
+    "sha": "faaa4d6fd697348b88c89d09ed3764f767635d07",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmYWFhNGQ2ZmQ2OTczNDhiODhjODlkMDllZDM3NjRmNzY3NjM1ZDA3",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-10T06:19:07Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-10T06:19:07Z"
+      },
+      "message": "duplicating repository entries so that people who are just checking out the main module can still build it\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6553 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "a219ed3a660cdaf3d1b8bec8b750441498fb1f61",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/a219ed3a660cdaf3d1b8bec8b750441498fb1f61"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/faaa4d6fd697348b88c89d09ed3764f767635d07",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/faaa4d6fd697348b88c89d09ed3764f767635d07",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/faaa4d6fd697348b88c89d09ed3764f767635d07",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/faaa4d6fd697348b88c89d09ed3764f767635d07/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "fe255e8d9295a2e8b2dd39655bf2969a66bd8c1e",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fe255e8d9295a2e8b2dd39655bf2969a66bd8c1e",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/fe255e8d9295a2e8b2dd39655bf2969a66bd8c1e"
+      }
+    ]
+  },
+  {
+    "sha": "fe255e8d9295a2e8b2dd39655bf2969a66bd8c1e",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmZTI1NWU4ZDkyOTVhMmU4YjJkZDM5NjU1YmYyOTY5YTY2YmQ4YzFl",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-10T02:14:57Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-10T02:14:57Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6544 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "de96c5ede123690e1e71b379339982fd01f88735",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/de96c5ede123690e1e71b379339982fd01f88735"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/fe255e8d9295a2e8b2dd39655bf2969a66bd8c1e",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fe255e8d9295a2e8b2dd39655bf2969a66bd8c1e",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/fe255e8d9295a2e8b2dd39655bf2969a66bd8c1e",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fe255e8d9295a2e8b2dd39655bf2969a66bd8c1e/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "c92a2bebe3668a4ee93bf51b3c80cd15cbc4c96d",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c92a2bebe3668a4ee93bf51b3c80cd15cbc4c96d",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/c92a2bebe3668a4ee93bf51b3c80cd15cbc4c96d"
+      }
+    ]
+  },
+  {
+    "sha": "c92a2bebe3668a4ee93bf51b3c80cd15cbc4c96d",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpjOTJhMmJlYmUzNjY4YTRlZTkzYmY1MWIzYzgwY2QxNWNiYzRjOTZk",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-10T02:14:03Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-10T02:14:03Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_167\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6542 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "92acc3be5c38c7f4717d465b067845af0c7b8870",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/92acc3be5c38c7f4717d465b067845af0c7b8870"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/c92a2bebe3668a4ee93bf51b3c80cd15cbc4c96d",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c92a2bebe3668a4ee93bf51b3c80cd15cbc4c96d",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/c92a2bebe3668a4ee93bf51b3c80cd15cbc4c96d",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c92a2bebe3668a4ee93bf51b3c80cd15cbc4c96d/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "1eefe44f534c294e32b792370f0a1bf0a7321365",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/1eefe44f534c294e32b792370f0a1bf0a7321365",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/1eefe44f534c294e32b792370f0a1bf0a7321365"
+      }
+    ]
+  },
+  {
+    "sha": "5fbd09d44f6087b420bf7f213e75dd19d6196d1e",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo1ZmJkMDlkNDRmNjA4N2I0MjBiZjdmMjEzZTc1ZGQxOWQ2MTk2ZDFl",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-05T01:48:00Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-05T01:48:00Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6487 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "b41f9ad138c92e709f6ce8faebb06ff190fa060b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/b41f9ad138c92e709f6ce8faebb06ff190fa060b"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/5fbd09d44f6087b420bf7f213e75dd19d6196d1e",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/5fbd09d44f6087b420bf7f213e75dd19d6196d1e",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/5fbd09d44f6087b420bf7f213e75dd19d6196d1e",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/5fbd09d44f6087b420bf7f213e75dd19d6196d1e/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "caa8add031ce10e0c1d5725e82939b22e7b7b902",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/caa8add031ce10e0c1d5725e82939b22e7b7b902",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/caa8add031ce10e0c1d5725e82939b22e7b7b902"
+      }
+    ]
+  },
+  {
+    "sha": "caa8add031ce10e0c1d5725e82939b22e7b7b902",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpjYWE4YWRkMDMxY2UxMGUwYzFkNTcyNWU4MjkzOWIyMmU3YjdiOTAy",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-05T01:47:24Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-05T01:47:24Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_166\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6485 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "e51014a8b9fd8f1043fa0e4ee91ca7f963467c11",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/e51014a8b9fd8f1043fa0e4ee91ca7f963467c11"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/caa8add031ce10e0c1d5725e82939b22e7b7b902",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/caa8add031ce10e0c1d5725e82939b22e7b7b902",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/caa8add031ce10e0c1d5725e82939b22e7b7b902",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/caa8add031ce10e0c1d5725e82939b22e7b7b902/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "28fad72ad31ae1d67df732bc1e17f60d4869b0ac",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/28fad72ad31ae1d67df732bc1e17f60d4869b0ac",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/28fad72ad31ae1d67df732bc1e17f60d4869b0ac"
+      }
+    ]
+  },
+  {
+    "sha": "d9312af6cf9af1020d63b423b300e0b5245c891f",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpkOTMxMmFmNmNmOWFmMTAyMGQ2M2I0MjNiMzAwZTBiNTI0NWM4OTFm",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-02T18:26:32Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-02T18:26:32Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6457 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "d83f97b8deef279e967359269c248da51f84ddaf",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/d83f97b8deef279e967359269c248da51f84ddaf"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/d9312af6cf9af1020d63b423b300e0b5245c891f",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/d9312af6cf9af1020d63b423b300e0b5245c891f",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/d9312af6cf9af1020d63b423b300e0b5245c891f",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/d9312af6cf9af1020d63b423b300e0b5245c891f/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "ac92b16d440aa8425e2e3720a54600dd1d743907",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ac92b16d440aa8425e2e3720a54600dd1d743907",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/ac92b16d440aa8425e2e3720a54600dd1d743907"
+      }
+    ]
+  },
+  {
+    "sha": "ac92b16d440aa8425e2e3720a54600dd1d743907",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzphYzkyYjE2ZDQ0MGFhODQyNWUyZTM3MjBhNTQ2MDBkZDFkNzQzOTA3",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-02T18:25:51Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2008-01-02T18:25:51Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_165\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6455 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "38f04d3553022eec16a239dd3ca133716c658404",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/38f04d3553022eec16a239dd3ca133716c658404"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/ac92b16d440aa8425e2e3720a54600dd1d743907",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ac92b16d440aa8425e2e3720a54600dd1d743907",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/ac92b16d440aa8425e2e3720a54600dd1d743907",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ac92b16d440aa8425e2e3720a54600dd1d743907/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "934ffdb842a9262f9e9653f61f1e9da98e714a2b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/934ffdb842a9262f9e9653f61f1e9da98e714a2b",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/934ffdb842a9262f9e9653f61f1e9da98e714a2b"
+      }
+    ]
+  },
+  {
+    "sha": "3382630865948cf103bbff48514ffdfa60a87e05",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozMzgyNjMwODY1OTQ4Y2YxMDNiYmZmNDg1MTRmZmRmYTYwYTg3ZTA1",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-29T04:51:15Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-29T04:51:15Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6445 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "8498d0ff826407a1c2127382ace8743b212df4dd",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/8498d0ff826407a1c2127382ace8743b212df4dd"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/3382630865948cf103bbff48514ffdfa60a87e05",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/3382630865948cf103bbff48514ffdfa60a87e05",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/3382630865948cf103bbff48514ffdfa60a87e05",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/3382630865948cf103bbff48514ffdfa60a87e05/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "fc0ed8d45a3a6909236d1ff9f1ceb1c30c1c8a30",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fc0ed8d45a3a6909236d1ff9f1ceb1c30c1c8a30",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/fc0ed8d45a3a6909236d1ff9f1ceb1c30c1c8a30"
+      }
+    ]
+  },
+  {
+    "sha": "fc0ed8d45a3a6909236d1ff9f1ceb1c30c1c8a30",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmYzBlZDhkNDVhM2E2OTA5MjM2ZDFmZjlmMWNlYjFjMzBjMWM4YTMw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-29T04:50:28Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-29T04:50:28Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_164\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6443 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "ba9ef4f2c0fb3dcd08302023c9e0b3607e6f4768",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/ba9ef4f2c0fb3dcd08302023c9e0b3607e6f4768"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/fc0ed8d45a3a6909236d1ff9f1ceb1c30c1c8a30",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fc0ed8d45a3a6909236d1ff9f1ceb1c30c1c8a30",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/fc0ed8d45a3a6909236d1ff9f1ceb1c30c1c8a30",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fc0ed8d45a3a6909236d1ff9f1ceb1c30c1c8a30/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "4291b77fabf74ffb6fdba275a9db045b6263eb97",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/4291b77fabf74ffb6fdba275a9db045b6263eb97",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/4291b77fabf74ffb6fdba275a9db045b6263eb97"
+      }
+    ]
+  },
+  {
+    "sha": "dbf343bdc36d2a3722cad19978ab86e211ff0113",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpkYmYzNDNiZGMzNmQyYTM3MjJjYWQxOTk3OGFiODZlMjExZmYwMTEz",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-22T01:44:57Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-22T01:44:57Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6379 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "0adf2b4b0221d20db377d6e3f1d80f7b6e022d45",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/0adf2b4b0221d20db377d6e3f1d80f7b6e022d45"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/dbf343bdc36d2a3722cad19978ab86e211ff0113",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/dbf343bdc36d2a3722cad19978ab86e211ff0113",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/dbf343bdc36d2a3722cad19978ab86e211ff0113",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/dbf343bdc36d2a3722cad19978ab86e211ff0113/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "9d1110a3baf77ac0f88f6adb847e816ec2d73bb8",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9d1110a3baf77ac0f88f6adb847e816ec2d73bb8",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/9d1110a3baf77ac0f88f6adb847e816ec2d73bb8"
+      }
+    ]
+  },
+  {
+    "sha": "9d1110a3baf77ac0f88f6adb847e816ec2d73bb8",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo5ZDExMTBhM2JhZjc3YWMwZjg4ZjZhZGI4NDdlODE2ZWMyZDczYmI4",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-22T01:44:25Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-22T01:44:25Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_163\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6377 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "ce5f056d7db87b26d24278b38140cb5f7837e552",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/ce5f056d7db87b26d24278b38140cb5f7837e552"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/9d1110a3baf77ac0f88f6adb847e816ec2d73bb8",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9d1110a3baf77ac0f88f6adb847e816ec2d73bb8",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/9d1110a3baf77ac0f88f6adb847e816ec2d73bb8",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9d1110a3baf77ac0f88f6adb847e816ec2d73bb8/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "0d8533c917150fc8487a5cfd96f451cf59e992bf",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0d8533c917150fc8487a5cfd96f451cf59e992bf",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/0d8533c917150fc8487a5cfd96f451cf59e992bf"
+      }
+    ]
+  },
+  {
+    "sha": "07f4481295655a6240382deec9c00d16ea089aae",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzowN2Y0NDgxMjk1NjU1YTYyNDAzODJkZWVjOWMwMGQxNmVhMDg5YWFl",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-22T01:13:29Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-22T01:13:29Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6369 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "50e335536e10986c2d3c692dd132d11ea68f29e3",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/50e335536e10986c2d3c692dd132d11ea68f29e3"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/07f4481295655a6240382deec9c00d16ea089aae",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/07f4481295655a6240382deec9c00d16ea089aae",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/07f4481295655a6240382deec9c00d16ea089aae",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/07f4481295655a6240382deec9c00d16ea089aae/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "803df1362d7d35b1be598b704f18fef1af2d7c7d",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/803df1362d7d35b1be598b704f18fef1af2d7c7d",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/803df1362d7d35b1be598b704f18fef1af2d7c7d"
+      }
+    ]
+  },
+  {
+    "sha": "803df1362d7d35b1be598b704f18fef1af2d7c7d",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo4MDNkZjEzNjJkN2QzNWIxYmU1OThiNzA0ZjE4ZmVmMWFmMmQ3Yzdk",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-22T01:12:44Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-22T01:12:44Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_162\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6367 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "d7976d13b70a9e2d2219832399903f9ef7215f2c",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/d7976d13b70a9e2d2219832399903f9ef7215f2c"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/803df1362d7d35b1be598b704f18fef1af2d7c7d",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/803df1362d7d35b1be598b704f18fef1af2d7c7d",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/803df1362d7d35b1be598b704f18fef1af2d7c7d",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/803df1362d7d35b1be598b704f18fef1af2d7c7d/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "18ec24a18211ba09b5c4c07334936c32887d900b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/18ec24a18211ba09b5c4c07334936c32887d900b",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/18ec24a18211ba09b5c4c07334936c32887d900b"
+      }
+    ]
+  },
+  {
+    "sha": "cd76c1711244c832c5ca862990f804149a9f713d",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpjZDc2YzE3MTEyNDRjODMyYzVjYTg2Mjk5MGY4MDQxNDlhOWY3MTNk",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-21T19:25:15Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-21T19:25:15Z"
+      },
+      "message": "using fix1600 to fix #1107\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6363 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "9fa8789d972a95ee66b1de2b40280804dfa1038d",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/9fa8789d972a95ee66b1de2b40280804dfa1038d"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/cd76c1711244c832c5ca862990f804149a9f713d",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/cd76c1711244c832c5ca862990f804149a9f713d",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/cd76c1711244c832c5ca862990f804149a9f713d",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/cd76c1711244c832c5ca862990f804149a9f713d/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "924330228964d53086cd8001dcbf7701c08f6059",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/924330228964d53086cd8001dcbf7701c08f6059",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/924330228964d53086cd8001dcbf7701c08f6059"
+      }
+    ]
+  },
+  {
+    "sha": "ece0ff4476cfcb3d3789d1c52c8d01d773d73817",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzplY2UwZmY0NDc2Y2ZjYjNkMzc4OWQxYzUyYzhkMDFkNzczZDczODE3",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-16T05:04:42Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-16T05:04:42Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6309 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "fc8ec84540951eb13ad5fae8af5a9e756a289800",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/fc8ec84540951eb13ad5fae8af5a9e756a289800"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/ece0ff4476cfcb3d3789d1c52c8d01d773d73817",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ece0ff4476cfcb3d3789d1c52c8d01d773d73817",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/ece0ff4476cfcb3d3789d1c52c8d01d773d73817",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ece0ff4476cfcb3d3789d1c52c8d01d773d73817/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "fc9dc01386103a668b4db14435a0f5c6628d25eb",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fc9dc01386103a668b4db14435a0f5c6628d25eb",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/fc9dc01386103a668b4db14435a0f5c6628d25eb"
+      }
+    ]
+  },
+  {
+    "sha": "fc9dc01386103a668b4db14435a0f5c6628d25eb",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmYzlkYzAxMzg2MTAzYTY2OGI0ZGIxNDQzNWEwZjVjNjYyOGQyNWVi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-16T05:04:00Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-16T05:04:00Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_161\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6307 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "d8c21b08ed240e3dcce47649a1d4f892e1a1c6d2",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/d8c21b08ed240e3dcce47649a1d4f892e1a1c6d2"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/fc9dc01386103a668b4db14435a0f5c6628d25eb",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fc9dc01386103a668b4db14435a0f5c6628d25eb",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/fc9dc01386103a668b4db14435a0f5c6628d25eb",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fc9dc01386103a668b4db14435a0f5c6628d25eb/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "6c48b986b27463e90d197055e864af3abb1dc331",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/6c48b986b27463e90d197055e864af3abb1dc331",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/6c48b986b27463e90d197055e864af3abb1dc331"
+      }
+    ]
+  },
+  {
+    "sha": "2af52b4e28e02ada6dd51fba57d051ef85c588ad",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzoyYWY1MmI0ZTI4ZTAyYWRhNmRkNTFmYmE1N2QwNTFlZjg1YzU4OGFk",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-02T06:21:01Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-12-02T06:21:01Z"
+      },
+      "message": "somehow RELEASE is failing to resolve on fresh systems, so back to hard-coded version\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6163 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "6bbcc7bf17d77d035123e9cf327d534ab1d7ff9a",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/6bbcc7bf17d77d035123e9cf327d534ab1d7ff9a"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/2af52b4e28e02ada6dd51fba57d051ef85c588ad",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/2af52b4e28e02ada6dd51fba57d051ef85c588ad",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/2af52b4e28e02ada6dd51fba57d051ef85c588ad",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/2af52b4e28e02ada6dd51fba57d051ef85c588ad/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "e61301f004a6e83fd0c4c7ddaf0a7e04baac905c",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e61301f004a6e83fd0c4c7ddaf0a7e04baac905c",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/e61301f004a6e83fd0c4c7ddaf0a7e04baac905c"
+      }
+    ]
+  },
+  {
+    "sha": "4fd6da717ffb0a0f8161ad5665ae1ebdb80c1af8",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo0ZmQ2ZGE3MTdmZmIwYTBmODE2MWFkNTY2NWFlMWViZGI4MGMxYWY4",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-30T19:09:33Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-30T19:09:33Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6148 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "f93970187f29633000668b5880c8fa36c9b20a46",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/f93970187f29633000668b5880c8fa36c9b20a46"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/4fd6da717ffb0a0f8161ad5665ae1ebdb80c1af8",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/4fd6da717ffb0a0f8161ad5665ae1ebdb80c1af8",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/4fd6da717ffb0a0f8161ad5665ae1ebdb80c1af8",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/4fd6da717ffb0a0f8161ad5665ae1ebdb80c1af8/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "db39e0f46cc29477cc7161d27ca48900e9e9f1d9",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/db39e0f46cc29477cc7161d27ca48900e9e9f1d9",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/db39e0f46cc29477cc7161d27ca48900e9e9f1d9"
+      }
+    ]
+  },
+  {
+    "sha": "db39e0f46cc29477cc7161d27ca48900e9e9f1d9",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpkYjM5ZTBmNDZjYzI5NDc3Y2M3MTYxZDI3Y2E0ODkwMGU5ZTlmMWQ5",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-30T19:08:43Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-30T19:08:43Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_160\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6146 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "9732cb8d68d4d36f3272c2cf9630c6e5931cd92b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/9732cb8d68d4d36f3272c2cf9630c6e5931cd92b"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/db39e0f46cc29477cc7161d27ca48900e9e9f1d9",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/db39e0f46cc29477cc7161d27ca48900e9e9f1d9",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/db39e0f46cc29477cc7161d27ca48900e9e9f1d9",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/db39e0f46cc29477cc7161d27ca48900e9e9f1d9/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "e4c248b0cfdd4b2695e336c49dac9f3c75a1a889",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e4c248b0cfdd4b2695e336c49dac9f3c75a1a889",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/e4c248b0cfdd4b2695e336c49dac9f3c75a1a889"
+      }
+    ]
+  },
+  {
+    "sha": "48c797762b42575dcf3c2df1ff7459c74b0e2260",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo0OGM3OTc3NjJiNDI1NzVkY2YzYzJkZjFmZjc0NTljNzRiMGUyMjYw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-29T02:03:40Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-29T02:03:40Z"
+      },
+      "message": "use the latest wagon-svn\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6102 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "0469cffa3d90a552697091a095526a3d708d1cb8",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/0469cffa3d90a552697091a095526a3d708d1cb8"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/48c797762b42575dcf3c2df1ff7459c74b0e2260",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/48c797762b42575dcf3c2df1ff7459c74b0e2260",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/48c797762b42575dcf3c2df1ff7459c74b0e2260",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/48c797762b42575dcf3c2df1ff7459c74b0e2260/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "74b0f4524713bf7a01f3589e4bb479f6428e87e9",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/74b0f4524713bf7a01f3589e4bb479f6428e87e9",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/74b0f4524713bf7a01f3589e4bb479f6428e87e9"
+      }
+    ]
+  },
+  {
+    "sha": "ed7a21e23eb7e70d9033ce316efa57eb7d498dd8",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzplZDdhMjFlMjNlYjdlNzBkOTAzM2NlMzE2ZWZhNTdlYjdkNDk4ZGQ4",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-23T01:13:37Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-23T01:13:37Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6025 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "965c69cb1491827aa6d4971db4d15dddb50959d2",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/965c69cb1491827aa6d4971db4d15dddb50959d2"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/ed7a21e23eb7e70d9033ce316efa57eb7d498dd8",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ed7a21e23eb7e70d9033ce316efa57eb7d498dd8",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/ed7a21e23eb7e70d9033ce316efa57eb7d498dd8",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/ed7a21e23eb7e70d9033ce316efa57eb7d498dd8/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "f368bf4ea87e9a69777e5993e14bedf91a45fd7e",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f368bf4ea87e9a69777e5993e14bedf91a45fd7e",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/f368bf4ea87e9a69777e5993e14bedf91a45fd7e"
+      }
+    ]
+  },
+  {
+    "sha": "f368bf4ea87e9a69777e5993e14bedf91a45fd7e",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmMzY4YmY0ZWE4N2U5YTY5Nzc3ZTU5OTNlMTRiZWRmOTFhNDVmZDdl",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-23T01:13:10Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-23T01:13:10Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@6023 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "17bbd7a24b83cfd9697311ee9c5e976f200c0d14",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/17bbd7a24b83cfd9697311ee9c5e976f200c0d14"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/f368bf4ea87e9a69777e5993e14bedf91a45fd7e",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f368bf4ea87e9a69777e5993e14bedf91a45fd7e",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/f368bf4ea87e9a69777e5993e14bedf91a45fd7e",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f368bf4ea87e9a69777e5993e14bedf91a45fd7e/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "7b14197de580acbcbb208ec09e9bcd2dfd715848",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/7b14197de580acbcbb208ec09e9bcd2dfd715848",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/7b14197de580acbcbb208ec09e9bcd2dfd715848"
+      }
+    ]
+  },
+  {
+    "sha": "0df5775c3d83e2660a62b2e788fb2bddc749d470",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzowZGY1Nzc1YzNkODNlMjY2MGE2MmIyZTc4OGZiMmJkZGM3NDlkNDcw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-21T18:56:33Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-21T18:56:33Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5988 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "daa30d6efe529783483b1f8751f1043ccbd2ff06",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/daa30d6efe529783483b1f8751f1043ccbd2ff06"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/0df5775c3d83e2660a62b2e788fb2bddc749d470",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0df5775c3d83e2660a62b2e788fb2bddc749d470",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/0df5775c3d83e2660a62b2e788fb2bddc749d470",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0df5775c3d83e2660a62b2e788fb2bddc749d470/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "9208f642399b90b8cbded445e5b73f1db884d22f",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9208f642399b90b8cbded445e5b73f1db884d22f",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/9208f642399b90b8cbded445e5b73f1db884d22f"
+      }
+    ]
+  },
+  {
+    "sha": "9208f642399b90b8cbded445e5b73f1db884d22f",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo5MjA4ZjY0MjM5OWI5MGI4Y2JkZWQ0NDVlNWI3M2YxZGI4ODRkMjJm",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-21T18:55:48Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-21T18:55:48Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_158\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5986 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "59c3e02020baffdb14456449b513c6fd5c903382",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/59c3e02020baffdb14456449b513c6fd5c903382"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/9208f642399b90b8cbded445e5b73f1db884d22f",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9208f642399b90b8cbded445e5b73f1db884d22f",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/9208f642399b90b8cbded445e5b73f1db884d22f",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9208f642399b90b8cbded445e5b73f1db884d22f/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "8d8493a9d7be24a7aecc32a084197f05223d9540",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/8d8493a9d7be24a7aecc32a084197f05223d9540",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/8d8493a9d7be24a7aecc32a084197f05223d9540"
+      }
+    ]
+  },
+  {
+    "sha": "350b16e7fbdc4abf78f341ce0a3976e31819e803",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozNTBiMTZlN2ZiZGM0YWJmNzhmMzQxY2UwYTM5NzZlMzE4MTllODAz",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-21T02:04:38Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-21T02:04:38Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5958 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "54f7f6d907186d3f215bd3049c90e9978a986103",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/54f7f6d907186d3f215bd3049c90e9978a986103"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/350b16e7fbdc4abf78f341ce0a3976e31819e803",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/350b16e7fbdc4abf78f341ce0a3976e31819e803",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/350b16e7fbdc4abf78f341ce0a3976e31819e803",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/350b16e7fbdc4abf78f341ce0a3976e31819e803/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "125a24a77fe3cb6a50ed393d8f851453df48e551",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/125a24a77fe3cb6a50ed393d8f851453df48e551",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/125a24a77fe3cb6a50ed393d8f851453df48e551"
+      }
+    ]
+  },
+  {
+    "sha": "125a24a77fe3cb6a50ed393d8f851453df48e551",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzoxMjVhMjRhNzdmZTNjYjZhNTBlZDM5M2Q4Zjg1MTQ1M2RmNDhlNTUx",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-21T02:03:58Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-21T02:03:58Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_157\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5956 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "e36ad71fdc23c960b916c25f84ffacf458b8454e",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/e36ad71fdc23c960b916c25f84ffacf458b8454e"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/125a24a77fe3cb6a50ed393d8f851453df48e551",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/125a24a77fe3cb6a50ed393d8f851453df48e551",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/125a24a77fe3cb6a50ed393d8f851453df48e551",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/125a24a77fe3cb6a50ed393d8f851453df48e551/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "e15266ef07eef0191dd9bc22e5a0caa0644e6c68",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e15266ef07eef0191dd9bc22e5a0caa0644e6c68",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/e15266ef07eef0191dd9bc22e5a0caa0644e6c68"
+      }
+    ]
+  },
+  {
+    "sha": "560eb225cceb314648d7c837cad70b5da3cb74b0",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo1NjBlYjIyNWNjZWIzMTQ2NDhkN2M4MzdjYWQ3MGI1ZGEzY2I3NGIw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-14T02:21:31Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-14T02:21:31Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5896 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "781648eda20043d8d1fbdcaed888aff2d39e2bd2",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/781648eda20043d8d1fbdcaed888aff2d39e2bd2"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/560eb225cceb314648d7c837cad70b5da3cb74b0",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/560eb225cceb314648d7c837cad70b5da3cb74b0",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/560eb225cceb314648d7c837cad70b5da3cb74b0",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/560eb225cceb314648d7c837cad70b5da3cb74b0/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "283bbb61aead128771c1c7b9a2afd89112c794fc",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/283bbb61aead128771c1c7b9a2afd89112c794fc",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/283bbb61aead128771c1c7b9a2afd89112c794fc"
+      }
+    ]
+  },
+  {
+    "sha": "283bbb61aead128771c1c7b9a2afd89112c794fc",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzoyODNiYmI2MWFlYWQxMjg3NzFjMWM3YjlhMmFmZDg5MTEyYzc5NGZj",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-14T02:20:21Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-14T02:20:21Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_156\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5894 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "7f9407ab2b5a3fe8e6bb7844a58486c035b6b68f",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/7f9407ab2b5a3fe8e6bb7844a58486c035b6b68f"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/283bbb61aead128771c1c7b9a2afd89112c794fc",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/283bbb61aead128771c1c7b9a2afd89112c794fc",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/283bbb61aead128771c1c7b9a2afd89112c794fc",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/283bbb61aead128771c1c7b9a2afd89112c794fc/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "52bab8583a7b4bb3f7222ad7d18be2706c68461a",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/52bab8583a7b4bb3f7222ad7d18be2706c68461a",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/52bab8583a7b4bb3f7222ad7d18be2706c68461a"
+      }
+    ]
+  },
+  {
+    "sha": "34dd43e2e0f264357c48286d03f3e5d683abe00b",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozNGRkNDNlMmUwZjI2NDM1N2M0ODI4NmQwM2YzZTVkNjgzYWJlMDBi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-13T17:15:44Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-13T17:15:44Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5879 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "510fc3f7f05d7dbd50c5b3631089448b9e985e38",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/510fc3f7f05d7dbd50c5b3631089448b9e985e38"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/34dd43e2e0f264357c48286d03f3e5d683abe00b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/34dd43e2e0f264357c48286d03f3e5d683abe00b",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/34dd43e2e0f264357c48286d03f3e5d683abe00b",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/34dd43e2e0f264357c48286d03f3e5d683abe00b/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "daee9a7693b655fd3c6869ae5a04ebb57fa9a194",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/daee9a7693b655fd3c6869ae5a04ebb57fa9a194",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/daee9a7693b655fd3c6869ae5a04ebb57fa9a194"
+      }
+    ]
+  },
+  {
+    "sha": "daee9a7693b655fd3c6869ae5a04ebb57fa9a194",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpkYWVlOWE3NjkzYjY1NWZkM2M2ODY5YWU1YTA0ZWJiNTdmYTlhMTk0",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-13T17:14:46Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-13T17:14:46Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_155\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5877 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "42ca8719440c723603d798c383b46d6346b83299",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/42ca8719440c723603d798c383b46d6346b83299"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/daee9a7693b655fd3c6869ae5a04ebb57fa9a194",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/daee9a7693b655fd3c6869ae5a04ebb57fa9a194",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/daee9a7693b655fd3c6869ae5a04ebb57fa9a194",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/daee9a7693b655fd3c6869ae5a04ebb57fa9a194/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "402da21baea77234bc2f5d14b7b8128f9acb5611",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/402da21baea77234bc2f5d14b7b8128f9acb5611",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/402da21baea77234bc2f5d14b7b8128f9acb5611"
+      }
+    ]
+  },
+  {
+    "sha": "30a5a467ce56eae4700a10eda1b1f2de63f777b1",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozMGE1YTQ2N2NlNTZlYWU0NzAwYTEwZWRhMWIxZjJkZTYzZjc3N2Ix",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-13T03:10:57Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-13T03:10:57Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5864 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "b50ce022e7edb584581eba18ef38876fe0207cd5",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/b50ce022e7edb584581eba18ef38876fe0207cd5"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/30a5a467ce56eae4700a10eda1b1f2de63f777b1",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/30a5a467ce56eae4700a10eda1b1f2de63f777b1",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/30a5a467ce56eae4700a10eda1b1f2de63f777b1",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/30a5a467ce56eae4700a10eda1b1f2de63f777b1/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "9c5524b8b1b21a591d0f72886f6ed7a0967f0ecd",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9c5524b8b1b21a591d0f72886f6ed7a0967f0ecd",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/9c5524b8b1b21a591d0f72886f6ed7a0967f0ecd"
+      }
+    ]
+  },
+  {
+    "sha": "9c5524b8b1b21a591d0f72886f6ed7a0967f0ecd",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo5YzU1MjRiOGIxYjIxYTU5MWQwZjcyODg2ZjZlZDdhMDk2N2YwZWNk",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-13T03:09:59Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-13T03:09:59Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_154\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5862 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "f39b185b5b5023e97c12334052d429056192b9b4",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/f39b185b5b5023e97c12334052d429056192b9b4"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/9c5524b8b1b21a591d0f72886f6ed7a0967f0ecd",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9c5524b8b1b21a591d0f72886f6ed7a0967f0ecd",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/9c5524b8b1b21a591d0f72886f6ed7a0967f0ecd",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9c5524b8b1b21a591d0f72886f6ed7a0967f0ecd/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "afad4ce977ff5415b07bc632ca9567e68c39e614",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/afad4ce977ff5415b07bc632ca9567e68c39e614",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/afad4ce977ff5415b07bc632ca9567e68c39e614"
+      }
+    ]
+  },
+  {
+    "sha": "296789561d3a1db2e1f57004d77c91ba4d40603a",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzoyOTY3ODk1NjFkM2ExZGIyZTFmNTcwMDRkNzdjOTFiYTRkNDA2MDNh",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-06T21:13:18Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-06T21:13:18Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5760 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "d258b163109d93bddc36b35bb341140224d8bc30",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/d258b163109d93bddc36b35bb341140224d8bc30"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/296789561d3a1db2e1f57004d77c91ba4d40603a",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/296789561d3a1db2e1f57004d77c91ba4d40603a",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/296789561d3a1db2e1f57004d77c91ba4d40603a",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/296789561d3a1db2e1f57004d77c91ba4d40603a/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "cbb9a849e21a6aeff51a7105b7ff6f12d956feb7",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/cbb9a849e21a6aeff51a7105b7ff6f12d956feb7",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/cbb9a849e21a6aeff51a7105b7ff6f12d956feb7"
+      }
+    ]
+  },
+  {
+    "sha": "cbb9a849e21a6aeff51a7105b7ff6f12d956feb7",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpjYmI5YTg0OWUyMWE2YWVmZjUxYTcxMDViN2ZmNmYxMmQ5NTZmZWI3",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-06T21:12:29Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-06T21:12:29Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_153\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5758 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "ad215bb73cdbe0bfa2ba0767e6cdcae579fce9cc",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/ad215bb73cdbe0bfa2ba0767e6cdcae579fce9cc"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/cbb9a849e21a6aeff51a7105b7ff6f12d956feb7",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/cbb9a849e21a6aeff51a7105b7ff6f12d956feb7",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/cbb9a849e21a6aeff51a7105b7ff6f12d956feb7",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/cbb9a849e21a6aeff51a7105b7ff6f12d956feb7/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "4950981376a596aa3b0977bc47a771e92b455349",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/4950981376a596aa3b0977bc47a771e92b455349",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/4950981376a596aa3b0977bc47a771e92b455349"
+      }
+    ]
+  },
+  {
+    "sha": "4950981376a596aa3b0977bc47a771e92b455349",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo0OTUwOTgxMzc2YTU5NmFhM2IwOTc3YmM0N2E3NzFlOTJiNDU1MzQ5",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-06T21:09:05Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-06T21:09:05Z"
+      },
+      "message": "bumping up to 1.1 so that wagon-svn is picked up\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5757 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "da89ec75251419d6f35a86a363f8074c8c49f3ca",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/da89ec75251419d6f35a86a363f8074c8c49f3ca"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/4950981376a596aa3b0977bc47a771e92b455349",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/4950981376a596aa3b0977bc47a771e92b455349",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/4950981376a596aa3b0977bc47a771e92b455349",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/4950981376a596aa3b0977bc47a771e92b455349/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "e9bd3914d9a821fd7276468cca12ab0a6d1700ef",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e9bd3914d9a821fd7276468cca12ab0a6d1700ef",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/e9bd3914d9a821fd7276468cca12ab0a6d1700ef"
+      }
+    ]
+  },
+  {
+    "sha": "eff5a469020101d02f7a2fa55e01d6cee573d6c9",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzplZmY1YTQ2OTAyMDEwMWQwMmY3YTJmYTU1ZTAxZDZjZWU1NzNkNmM5",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-06T01:39:39Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-06T01:39:39Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5725 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "20d13083165fc583d3514149bfa8882d5bf65a67",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/20d13083165fc583d3514149bfa8882d5bf65a67"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/eff5a469020101d02f7a2fa55e01d6cee573d6c9",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/eff5a469020101d02f7a2fa55e01d6cee573d6c9",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/eff5a469020101d02f7a2fa55e01d6cee573d6c9",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/eff5a469020101d02f7a2fa55e01d6cee573d6c9/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "521c06bb3f86e88cac8ea83de8cdf698d1452b20",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/521c06bb3f86e88cac8ea83de8cdf698d1452b20",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/521c06bb3f86e88cac8ea83de8cdf698d1452b20"
+      }
+    ]
+  },
+  {
+    "sha": "521c06bb3f86e88cac8ea83de8cdf698d1452b20",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo1MjFjMDZiYjNmODZlODhjYWM4ZWE4M2RlOGNkZjY5OGQxNDUyYjIw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-06T01:39:01Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-06T01:39:01Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5724 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "0dcf2db5a007f36a38eabe77512c7abc1eb4d917",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/0dcf2db5a007f36a38eabe77512c7abc1eb4d917"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/521c06bb3f86e88cac8ea83de8cdf698d1452b20",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/521c06bb3f86e88cac8ea83de8cdf698d1452b20",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/521c06bb3f86e88cac8ea83de8cdf698d1452b20",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/521c06bb3f86e88cac8ea83de8cdf698d1452b20/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "1c0293a399f6312e85d3fed8f78336b40ef8ab12",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/1c0293a399f6312e85d3fed8f78336b40ef8ab12",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/1c0293a399f6312e85d3fed8f78336b40ef8ab12"
+      }
+    ]
+  },
+  {
+    "sha": "9483efd77ba63d40ab09f585170c854768d78022",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo5NDgzZWZkNzdiYTYzZDQwYWIwOWY1ODUxNzBjODU0NzY4ZDc4MDIy",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-04T04:22:43Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-04T04:22:43Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5689 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "5acf43e27ffd2ec4e6c7b55aaf5b5ec1716e8274",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/5acf43e27ffd2ec4e6c7b55aaf5b5ec1716e8274"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/9483efd77ba63d40ab09f585170c854768d78022",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9483efd77ba63d40ab09f585170c854768d78022",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/9483efd77ba63d40ab09f585170c854768d78022",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9483efd77ba63d40ab09f585170c854768d78022/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "7056a206d370506e9f6327307d9ddb84a074463b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/7056a206d370506e9f6327307d9ddb84a074463b",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/7056a206d370506e9f6327307d9ddb84a074463b"
+      }
+    ]
+  },
+  {
+    "sha": "7056a206d370506e9f6327307d9ddb84a074463b",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo3MDU2YTIwNmQzNzA1MDZlOWY2MzI3MzA3ZDlkZGI4NGEwNzQ0NjNi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-04T04:22:11Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-11-04T04:22:11Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_151\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5687 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "b444a9a220c35379641929a1b8c1393635735df8",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/b444a9a220c35379641929a1b8c1393635735df8"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/7056a206d370506e9f6327307d9ddb84a074463b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/7056a206d370506e9f6327307d9ddb84a074463b",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/7056a206d370506e9f6327307d9ddb84a074463b",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/7056a206d370506e9f6327307d9ddb84a074463b/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "a2027b4f0e1ff87ce6bdc5563e4b5c7a93c6bcd7",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/a2027b4f0e1ff87ce6bdc5563e4b5c7a93c6bcd7",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/a2027b4f0e1ff87ce6bdc5563e4b5c7a93c6bcd7"
+      }
+    ]
+  },
+  {
+    "sha": "549121569e7c6b568e3db54eb41f3d36521dee2b",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo1NDkxMjE1NjllN2M2YjU2OGUzZGI1NGViNDFmM2QzNjUyMWRlZTJi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-31T00:50:57Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-31T00:50:57Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5621 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "7ba7c5825882451887a7aada3ab47d7cd9646613",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/7ba7c5825882451887a7aada3ab47d7cd9646613"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/549121569e7c6b568e3db54eb41f3d36521dee2b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/549121569e7c6b568e3db54eb41f3d36521dee2b",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/549121569e7c6b568e3db54eb41f3d36521dee2b",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/549121569e7c6b568e3db54eb41f3d36521dee2b/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "33f905c84f9bc6943cf4f0af6737843fbd1dfde7",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/33f905c84f9bc6943cf4f0af6737843fbd1dfde7",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/33f905c84f9bc6943cf4f0af6737843fbd1dfde7"
+      }
+    ]
+  },
+  {
+    "sha": "33f905c84f9bc6943cf4f0af6737843fbd1dfde7",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozM2Y5MDVjODRmOWJjNjk0M2NmNGYwYWY2NzM3ODQzZmJkMWRmZGU3",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-31T00:50:01Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-31T00:50:01Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_150\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5619 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "9ad8baa9b2b752ffa043f00d2c653a8b8469a014",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/9ad8baa9b2b752ffa043f00d2c653a8b8469a014"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/33f905c84f9bc6943cf4f0af6737843fbd1dfde7",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/33f905c84f9bc6943cf4f0af6737843fbd1dfde7",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/33f905c84f9bc6943cf4f0af6737843fbd1dfde7",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/33f905c84f9bc6943cf4f0af6737843fbd1dfde7/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "52166088a7fd4d13808587a86e2ba64c2ac18943",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/52166088a7fd4d13808587a86e2ba64c2ac18943",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/52166088a7fd4d13808587a86e2ba64c2ac18943"
+      }
+    ]
+  },
+  {
+    "sha": "185e2a240627d8843a7b3a6e0875269ce8f553b4",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzoxODVlMmEyNDA2MjdkODg0M2E3YjNhNmUwODc1MjY5Y2U4ZjU1M2I0",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-24T05:20:42Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-24T05:20:42Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5423 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "a3dbe78fc1437a20239c0fe8f722cb1f11df2bb0",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/a3dbe78fc1437a20239c0fe8f722cb1f11df2bb0"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/185e2a240627d8843a7b3a6e0875269ce8f553b4",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/185e2a240627d8843a7b3a6e0875269ce8f553b4",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/185e2a240627d8843a7b3a6e0875269ce8f553b4",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/185e2a240627d8843a7b3a6e0875269ce8f553b4/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "42a1e9df3658377cdcaaf8d567ee639b98e8a63a",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/42a1e9df3658377cdcaaf8d567ee639b98e8a63a",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/42a1e9df3658377cdcaaf8d567ee639b98e8a63a"
+      }
+    ]
+  },
+  {
+    "sha": "42a1e9df3658377cdcaaf8d567ee639b98e8a63a",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo0MmExZTlkZjM2NTgzNzdjZGNhYWY4ZDU2N2VlNjM5Yjk4ZThhNjNh",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-24T05:19:41Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-24T05:19:41Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_149\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5421 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "b8aa66e30df1b82c6ed06a0c962b826cc403c997",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/b8aa66e30df1b82c6ed06a0c962b826cc403c997"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/42a1e9df3658377cdcaaf8d567ee639b98e8a63a",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/42a1e9df3658377cdcaaf8d567ee639b98e8a63a",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/42a1e9df3658377cdcaaf8d567ee639b98e8a63a",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/42a1e9df3658377cdcaaf8d567ee639b98e8a63a/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "e1bf25d25f003b33bba684345f600e7372619180",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/e1bf25d25f003b33bba684345f600e7372619180",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/e1bf25d25f003b33bba684345f600e7372619180"
+      }
+    ]
+  },
+  {
+    "sha": "f05008839c5533638a7e5d3bb3af899ecdc31e7b",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmMDUwMDg4MzljNTUzMzYzOGE3ZTVkM2JiM2FmODk5ZWNkYzMxZTdi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-22T22:40:14Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-22T22:40:14Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5405 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "559e667bddd396238c8c865f95918c85029f8268",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/559e667bddd396238c8c865f95918c85029f8268"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/f05008839c5533638a7e5d3bb3af899ecdc31e7b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f05008839c5533638a7e5d3bb3af899ecdc31e7b",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/f05008839c5533638a7e5d3bb3af899ecdc31e7b",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f05008839c5533638a7e5d3bb3af899ecdc31e7b/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "761a433d00afd8e74ee58175873acb65b7c0d5d2",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/761a433d00afd8e74ee58175873acb65b7c0d5d2",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/761a433d00afd8e74ee58175873acb65b7c0d5d2"
+      }
+    ]
+  },
+  {
+    "sha": "761a433d00afd8e74ee58175873acb65b7c0d5d2",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo3NjFhNDMzZDAwYWZkOGU3NGVlNTgxNzU4NzNhY2I2NWI3YzBkNWQy",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-22T22:39:34Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-22T22:39:34Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_148\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5403 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "12a96a9efa23565d4b92e27c4e0150e629c0baa3",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/12a96a9efa23565d4b92e27c4e0150e629c0baa3"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/761a433d00afd8e74ee58175873acb65b7c0d5d2",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/761a433d00afd8e74ee58175873acb65b7c0d5d2",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/761a433d00afd8e74ee58175873acb65b7c0d5d2",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/761a433d00afd8e74ee58175873acb65b7c0d5d2/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "f9af6c95ffe6791e72d686bb7401cf2d14a8c300",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f9af6c95ffe6791e72d686bb7401cf2d14a8c300",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/f9af6c95ffe6791e72d686bb7401cf2d14a8c300"
+      }
+    ]
+  },
+  {
+    "sha": "13deb34582154eef518c0877c46e9b157206ccad",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzoxM2RlYjM0NTgyMTU0ZWVmNTE4YzA4NzdjNDZlOWIxNTcyMDZjY2Fk",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-20T01:17:32Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-20T01:17:32Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5358 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "a1a399efeb655319ce8e7258c01f054c4fb58435",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/a1a399efeb655319ce8e7258c01f054c4fb58435"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/13deb34582154eef518c0877c46e9b157206ccad",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/13deb34582154eef518c0877c46e9b157206ccad",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/13deb34582154eef518c0877c46e9b157206ccad",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/13deb34582154eef518c0877c46e9b157206ccad/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "b90d3924a158b51a54495359f5d633c5b0b9fc90",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/b90d3924a158b51a54495359f5d633c5b0b9fc90",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/b90d3924a158b51a54495359f5d633c5b0b9fc90"
+      }
+    ]
+  },
+  {
+    "sha": "b90d3924a158b51a54495359f5d633c5b0b9fc90",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpiOTBkMzkyNGExNThiNTFhNTQ0OTUzNTlmNWQ2MzNjNWIwYjlmYzkw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-20T01:16:53Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-20T01:16:53Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_147\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5356 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "ec08a5e75d42adbfc5e9ed0c1a713cfbb023c55c",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/ec08a5e75d42adbfc5e9ed0c1a713cfbb023c55c"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/b90d3924a158b51a54495359f5d633c5b0b9fc90",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/b90d3924a158b51a54495359f5d633c5b0b9fc90",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/b90d3924a158b51a54495359f5d633c5b0b9fc90",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/b90d3924a158b51a54495359f5d633c5b0b9fc90/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "425f91b1d9032e8fc1b81e535eb2a73caedc2ad1",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/425f91b1d9032e8fc1b81e535eb2a73caedc2ad1",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/425f91b1d9032e8fc1b81e535eb2a73caedc2ad1"
+      }
+    ]
+  },
+  {
+    "sha": "85263b563231bbe17b7021ca2d23bc80b64beadd",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo4NTI2M2I1NjMyMzFiYmUxN2I3MDIxY2EyZDIzYmM4MGI2NGJlYWRk",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-10T05:37:50Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-10T05:37:50Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5223 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "4280b2a59eaa556b87d215af7485fba18b97dd3f",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/4280b2a59eaa556b87d215af7485fba18b97dd3f"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/85263b563231bbe17b7021ca2d23bc80b64beadd",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/85263b563231bbe17b7021ca2d23bc80b64beadd",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/85263b563231bbe17b7021ca2d23bc80b64beadd",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/85263b563231bbe17b7021ca2d23bc80b64beadd/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "f78c4578b59bd9a5da0cb50e8795ea705f7bdba1",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f78c4578b59bd9a5da0cb50e8795ea705f7bdba1",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/f78c4578b59bd9a5da0cb50e8795ea705f7bdba1"
+      }
+    ]
+  },
+  {
+    "sha": "f78c4578b59bd9a5da0cb50e8795ea705f7bdba1",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmNzhjNDU3OGI1OWJkOWE1ZGEwY2I1MGU4Nzk1ZWE3MDVmN2JkYmEx",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-10T05:36:52Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-10T05:36:52Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_146\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5221 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "f11073e0fed960e2c89fe16d7eb4fbda0c4ef02c",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/f11073e0fed960e2c89fe16d7eb4fbda0c4ef02c"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/f78c4578b59bd9a5da0cb50e8795ea705f7bdba1",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f78c4578b59bd9a5da0cb50e8795ea705f7bdba1",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/f78c4578b59bd9a5da0cb50e8795ea705f7bdba1",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f78c4578b59bd9a5da0cb50e8795ea705f7bdba1/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "9b2c47dcbc59b77e0da21373c7e3931676a42d31",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9b2c47dcbc59b77e0da21373c7e3931676a42d31",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/9b2c47dcbc59b77e0da21373c7e3931676a42d31"
+      }
+    ]
+  },
+  {
+    "sha": "f322371d04e7ce1c11c271874be76802b3804d9d",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmMzIyMzcxZDA0ZTdjZTFjMTFjMjcxODc0YmU3NjgwMmIzODA0ZDlk",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-06T03:23:03Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-06T03:23:03Z"
+      },
+      "message": "enforcer at top-level breaks builds. It apparently tries to resolve dependencies too eagerly\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5128 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "e40c336c388b318b8f5a6c8b505f39e8b72dc70b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/e40c336c388b318b8f5a6c8b505f39e8b72dc70b"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/f322371d04e7ce1c11c271874be76802b3804d9d",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f322371d04e7ce1c11c271874be76802b3804d9d",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/f322371d04e7ce1c11c271874be76802b3804d9d",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f322371d04e7ce1c11c271874be76802b3804d9d/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "795b6732c5239ac69d4e125573ebcd87f05dc38d",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/795b6732c5239ac69d4e125573ebcd87f05dc38d",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/795b6732c5239ac69d4e125573ebcd87f05dc38d"
+      }
+    ]
+  },
+  {
+    "sha": "7b52190026678fe91557ad94d8b8f3b93d79d986",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo3YjUyMTkwMDI2Njc4ZmU5MTU1N2FkOTRkOGI4ZjNiOTNkNzlkOTg2",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-05T01:00:30Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-05T01:00:30Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5108 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "525b9ce391a5a5f7bec7328ea4836e469e111035",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/525b9ce391a5a5f7bec7328ea4836e469e111035"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/7b52190026678fe91557ad94d8b8f3b93d79d986",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/7b52190026678fe91557ad94d8b8f3b93d79d986",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/7b52190026678fe91557ad94d8b8f3b93d79d986",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/7b52190026678fe91557ad94d8b8f3b93d79d986/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "0104a5c0949d9c7a081857da59d3b2cb3febf915",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0104a5c0949d9c7a081857da59d3b2cb3febf915",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/0104a5c0949d9c7a081857da59d3b2cb3febf915"
+      }
+    ]
+  },
+  {
+    "sha": "0104a5c0949d9c7a081857da59d3b2cb3febf915",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzowMTA0YTVjMDk0OWQ5YzdhMDgxODU3ZGE1OWQzYjJjYjNmZWJmOTE1",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-05T00:59:51Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-10-05T00:59:51Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_145\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@5106 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "0c2b947aca0935995dff95cb8fbe79f733eab326",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/0c2b947aca0935995dff95cb8fbe79f733eab326"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/0104a5c0949d9c7a081857da59d3b2cb3febf915",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0104a5c0949d9c7a081857da59d3b2cb3febf915",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/0104a5c0949d9c7a081857da59d3b2cb3febf915",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0104a5c0949d9c7a081857da59d3b2cb3febf915/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "96a5a2f16fd039ccc3e8fbb09580ce9d287a4b6d",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/96a5a2f16fd039ccc3e8fbb09580ce9d287a4b6d",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/96a5a2f16fd039ccc3e8fbb09580ce9d287a4b6d"
+      }
+    ]
+  },
+  {
+    "sha": "b510f0f0f3df8aa6673e2d3c3e8b16a258004b2f",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpiNTEwZjBmMGYzZGY4YWE2NjczZTJkM2MzZThiMTZhMjU4MDA0YjJm",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-28T01:50:04Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-28T01:50:04Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4959 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "9e916476abea803e1c6afff9582ef0bd83e4992f",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/9e916476abea803e1c6afff9582ef0bd83e4992f"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/b510f0f0f3df8aa6673e2d3c3e8b16a258004b2f",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/b510f0f0f3df8aa6673e2d3c3e8b16a258004b2f",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/b510f0f0f3df8aa6673e2d3c3e8b16a258004b2f",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/b510f0f0f3df8aa6673e2d3c3e8b16a258004b2f/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "9302f3e9ccba91a6e5e60a2e73e635b7817ada98",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9302f3e9ccba91a6e5e60a2e73e635b7817ada98",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/9302f3e9ccba91a6e5e60a2e73e635b7817ada98"
+      }
+    ]
+  },
+  {
+    "sha": "9302f3e9ccba91a6e5e60a2e73e635b7817ada98",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo5MzAyZjNlOWNjYmE5MWE2ZTVlNjBhMmU3M2U2MzViNzgxN2FkYTk4",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-28T01:49:20Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-28T01:49:20Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_144\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4957 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "5a8ebfa5cd642dd4a0cc6e763a146f8fc338e5e4",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/5a8ebfa5cd642dd4a0cc6e763a146f8fc338e5e4"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/9302f3e9ccba91a6e5e60a2e73e635b7817ada98",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9302f3e9ccba91a6e5e60a2e73e635b7817ada98",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/9302f3e9ccba91a6e5e60a2e73e635b7817ada98",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9302f3e9ccba91a6e5e60a2e73e635b7817ada98/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "592f9b05db4a24c88cc66d04ce22b2c0b69652da",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/592f9b05db4a24c88cc66d04ce22b2c0b69652da",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/592f9b05db4a24c88cc66d04ce22b2c0b69652da"
+      }
+    ]
+  },
+  {
+    "sha": "8124d1e6b12b9d2baf4e8726a753c1ed1db42a58",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo4MTI0ZDFlNmIxMmI5ZDJiYWY0ZTg3MjZhNzUzYzFlZDFkYjQyYTU4",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-27T01:18:02Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-27T01:18:02Z"
+      },
+      "message": "forgot this property\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4932 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "5c787c9ab023edd36bd3442b8797393e1229df65",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/5c787c9ab023edd36bd3442b8797393e1229df65"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/8124d1e6b12b9d2baf4e8726a753c1ed1db42a58",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/8124d1e6b12b9d2baf4e8726a753c1ed1db42a58",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/8124d1e6b12b9d2baf4e8726a753c1ed1db42a58",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/8124d1e6b12b9d2baf4e8726a753c1ed1db42a58/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "fe1cbbdd855e0e7df20e696cbff6ecf2cd9b994c",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fe1cbbdd855e0e7df20e696cbff6ecf2cd9b994c",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/fe1cbbdd855e0e7df20e696cbff6ecf2cd9b994c"
+      }
+    ]
+  },
+  {
+    "sha": "0813aaf9eb64e0a05d0c0c9f51ed18bd77f5db4e",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzowODEzYWFmOWViNjRlMGEwNWQwYzBjOWY1MWVkMThiZDc3ZjVkYjRl",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-24T23:50:01Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-24T23:50:01Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4919 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "ae0c2cd83e9fa70917a564fcc7757af7a8f1e70e",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/ae0c2cd83e9fa70917a564fcc7757af7a8f1e70e"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/0813aaf9eb64e0a05d0c0c9f51ed18bd77f5db4e",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0813aaf9eb64e0a05d0c0c9f51ed18bd77f5db4e",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/0813aaf9eb64e0a05d0c0c9f51ed18bd77f5db4e",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/0813aaf9eb64e0a05d0c0c9f51ed18bd77f5db4e/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "8cb0f318f6fffef1eab5f46893813d13c503457c",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/8cb0f318f6fffef1eab5f46893813d13c503457c",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/8cb0f318f6fffef1eab5f46893813d13c503457c"
+      }
+    ]
+  },
+  {
+    "sha": "8cb0f318f6fffef1eab5f46893813d13c503457c",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo4Y2IwZjMxOGY2ZmZmZWYxZWFiNWY0Njg5MzgxM2QxM2M1MDM0NTdj",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-24T23:49:22Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-24T23:49:22Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_143\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4917 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "5ebecc63427ca5cd096b566918effb72639bc946",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/5ebecc63427ca5cd096b566918effb72639bc946"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/8cb0f318f6fffef1eab5f46893813d13c503457c",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/8cb0f318f6fffef1eab5f46893813d13c503457c",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/8cb0f318f6fffef1eab5f46893813d13c503457c",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/8cb0f318f6fffef1eab5f46893813d13c503457c/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "bf67e9a86c9b0fcf14a5ea3fc6ff70b813219091",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/bf67e9a86c9b0fcf14a5ea3fc6ff70b813219091",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/bf67e9a86c9b0fcf14a5ea3fc6ff70b813219091"
+      }
+    ]
+  },
+  {
+    "sha": "1008b520abaebd5dda4f74f4128a09932585f7e0",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzoxMDA4YjUyMGFiYWViZDVkZGE0Zjc0ZjQxMjhhMDk5MzI1ODVmN2Uw",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-22T17:15:07Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-22T17:15:07Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4899 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "e827e6b12b4101e1c433877a67de1d73602c6301",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/e827e6b12b4101e1c433877a67de1d73602c6301"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/1008b520abaebd5dda4f74f4128a09932585f7e0",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/1008b520abaebd5dda4f74f4128a09932585f7e0",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/1008b520abaebd5dda4f74f4128a09932585f7e0",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/1008b520abaebd5dda4f74f4128a09932585f7e0/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "9ed3d599f1d2a7ccdd838aed5ee90c8ac762f90b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9ed3d599f1d2a7ccdd838aed5ee90c8ac762f90b",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/9ed3d599f1d2a7ccdd838aed5ee90c8ac762f90b"
+      }
+    ]
+  },
+  {
+    "sha": "9ed3d599f1d2a7ccdd838aed5ee90c8ac762f90b",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo5ZWQzZDU5OWYxZDJhN2NjZGQ4MzhhZWQ1ZWU5MGM4YWM3NjJmOTBi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-22T17:14:28Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-22T17:14:28Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_142\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4897 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "02ee8457ba9c40cd81c73590344c47adb34296a4",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/02ee8457ba9c40cd81c73590344c47adb34296a4"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/9ed3d599f1d2a7ccdd838aed5ee90c8ac762f90b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9ed3d599f1d2a7ccdd838aed5ee90c8ac762f90b",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/9ed3d599f1d2a7ccdd838aed5ee90c8ac762f90b",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9ed3d599f1d2a7ccdd838aed5ee90c8ac762f90b/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "69180869bd06119a46fbc9441ce4998cbce9fa0c",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/69180869bd06119a46fbc9441ce4998cbce9fa0c",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/69180869bd06119a46fbc9441ce4998cbce9fa0c"
+      }
+    ]
+  },
+  {
+    "sha": "cb0e27c6aa97f46b033fac948bf497b6b326aa44",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpjYjBlMjdjNmFhOTdmNDZiMDMzZmFjOTQ4YmY0OTdiNmIzMjZhYTQ0",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-22T04:50:16Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-22T04:50:16Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4889 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "b11d66e10144fd6b290af09329cc8c8f943357ca",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/b11d66e10144fd6b290af09329cc8c8f943357ca"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/cb0e27c6aa97f46b033fac948bf497b6b326aa44",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/cb0e27c6aa97f46b033fac948bf497b6b326aa44",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/cb0e27c6aa97f46b033fac948bf497b6b326aa44",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/cb0e27c6aa97f46b033fac948bf497b6b326aa44/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "305d6f660a7338aa0e6b74b24cd97b096da0ca7f",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/305d6f660a7338aa0e6b74b24cd97b096da0ca7f",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/305d6f660a7338aa0e6b74b24cd97b096da0ca7f"
+      }
+    ]
+  },
+  {
+    "sha": "305d6f660a7338aa0e6b74b24cd97b096da0ca7f",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozMDVkNmY2NjBhNzMzOGFhMGU2Yjc0YjI0Y2Q5N2IwOTZkYTBjYTdm",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-22T04:49:37Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-22T04:49:37Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_141\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4887 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "96a47fb1e0e854d6f8af19da1d57b762eb7f18a0",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/96a47fb1e0e854d6f8af19da1d57b762eb7f18a0"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/305d6f660a7338aa0e6b74b24cd97b096da0ca7f",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/305d6f660a7338aa0e6b74b24cd97b096da0ca7f",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/305d6f660a7338aa0e6b74b24cd97b096da0ca7f",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/305d6f660a7338aa0e6b74b24cd97b096da0ca7f/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "2485196b537c5fa577adb11a868ff4c142723569",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/2485196b537c5fa577adb11a868ff4c142723569",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/2485196b537c5fa577adb11a868ff4c142723569"
+      }
+    ]
+  },
+  {
+    "sha": "90fce4ffe84b764172e6f2f85d6124b544c2c297",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo5MGZjZTRmZmU4NGI3NjQxNzJlNmYyZjg1ZDYxMjRiNTQ0YzJjMjk3",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-20T04:16:57Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-20T04:16:57Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4827 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "7004fc443cdd2e78d5f46785f473f8c5bb5fe963",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/7004fc443cdd2e78d5f46785f473f8c5bb5fe963"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/90fce4ffe84b764172e6f2f85d6124b544c2c297",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/90fce4ffe84b764172e6f2f85d6124b544c2c297",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/90fce4ffe84b764172e6f2f85d6124b544c2c297",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/90fce4ffe84b764172e6f2f85d6124b544c2c297/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "bf9d205b99d72e3a3628b9cee0da2ef45535284b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/bf9d205b99d72e3a3628b9cee0da2ef45535284b",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/bf9d205b99d72e3a3628b9cee0da2ef45535284b"
+      }
+    ]
+  },
+  {
+    "sha": "bf9d205b99d72e3a3628b9cee0da2ef45535284b",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpiZjlkMjA1Yjk5ZDcyZTNhMzYyOGI5Y2VlMGRhMmVmNDU1MzUyODRi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-20T04:16:08Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-20T04:16:08Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_140\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4825 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "fe24fc07d4ae2f1313db469eca6ced7af7094f3e",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/fe24fc07d4ae2f1313db469eca6ced7af7094f3e"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/bf9d205b99d72e3a3628b9cee0da2ef45535284b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/bf9d205b99d72e3a3628b9cee0da2ef45535284b",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/bf9d205b99d72e3a3628b9cee0da2ef45535284b",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/bf9d205b99d72e3a3628b9cee0da2ef45535284b/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "976b1bb314785802e1fd936e53384faf9c6bcf34",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/976b1bb314785802e1fd936e53384faf9c6bcf34",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/976b1bb314785802e1fd936e53384faf9c6bcf34"
+      }
+    ]
+  },
+  {
+    "sha": "561372ec818aed76815e1088a61eb39f890f2c93",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo1NjEzNzJlYzgxOGFlZDc2ODE1ZTEwODhhNjFlYjM5Zjg5MGYyYzkz",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-17T00:58:14Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-17T00:58:14Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4788 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "cbf290c14ca0bd34ba489c9206f89535fcefa812",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/cbf290c14ca0bd34ba489c9206f89535fcefa812"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/561372ec818aed76815e1088a61eb39f890f2c93",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/561372ec818aed76815e1088a61eb39f890f2c93",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/561372ec818aed76815e1088a61eb39f890f2c93",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/561372ec818aed76815e1088a61eb39f890f2c93/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "c2b2b880a383f90f06ce7c4723fb4f9ffa1b1153",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c2b2b880a383f90f06ce7c4723fb4f9ffa1b1153",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/c2b2b880a383f90f06ce7c4723fb4f9ffa1b1153"
+      }
+    ]
+  },
+  {
+    "sha": "c2b2b880a383f90f06ce7c4723fb4f9ffa1b1153",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpjMmIyYjg4MGEzODNmOTBmMDZjZTdjNDcyM2ZiNGY5ZmZhMWIxMTUz",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-17T00:57:23Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-17T00:57:23Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_139\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4786 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "282c512106fcd082371d9135e8894e3b9cfa6145",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/282c512106fcd082371d9135e8894e3b9cfa6145"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/c2b2b880a383f90f06ce7c4723fb4f9ffa1b1153",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c2b2b880a383f90f06ce7c4723fb4f9ffa1b1153",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/c2b2b880a383f90f06ce7c4723fb4f9ffa1b1153",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/c2b2b880a383f90f06ce7c4723fb4f9ffa1b1153/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "a4e0b31ad25504ba50be5f37912389bc3352d260",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/a4e0b31ad25504ba50be5f37912389bc3352d260",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/a4e0b31ad25504ba50be5f37912389bc3352d260"
+      }
+    ]
+  },
+  {
+    "sha": "fc89bce1907651e5704684023dd9d10ea153b87c",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmYzg5YmNlMTkwNzY1MWU1NzA0Njg0MDIzZGQ5ZDEwZWExNTNiODdj",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-15T00:58:23Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-15T00:58:23Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4757 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "ef032493bdd5131aa9f26895aa096571d27473b0",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/ef032493bdd5131aa9f26895aa096571d27473b0"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/fc89bce1907651e5704684023dd9d10ea153b87c",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fc89bce1907651e5704684023dd9d10ea153b87c",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/fc89bce1907651e5704684023dd9d10ea153b87c",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fc89bce1907651e5704684023dd9d10ea153b87c/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "042454c0223c86c43656f18728c25ec58be1380b",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/042454c0223c86c43656f18728c25ec58be1380b",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/042454c0223c86c43656f18728c25ec58be1380b"
+      }
+    ]
+  },
+  {
+    "sha": "042454c0223c86c43656f18728c25ec58be1380b",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzowNDI0NTRjMDIyM2M4NmM0MzY1NmYxODcyOGMyNWVjNThiZTEzODBi",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-15T00:57:40Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-15T00:57:40Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_138\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4755 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "bc0c916565a0ca837590a9f27a76c4e549ca531f",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/bc0c916565a0ca837590a9f27a76c4e549ca531f"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/042454c0223c86c43656f18728c25ec58be1380b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/042454c0223c86c43656f18728c25ec58be1380b",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/042454c0223c86c43656f18728c25ec58be1380b",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/042454c0223c86c43656f18728c25ec58be1380b/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "d4235c54efdf327538179aa9a8a40f10ea2535f4",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/d4235c54efdf327538179aa9a8a40f10ea2535f4",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/d4235c54efdf327538179aa9a8a40f10ea2535f4"
+      }
+    ]
+  },
+  {
+    "sha": "3710d23074559bdd0278eb73be657fe728f12095",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozNzEwZDIzMDc0NTU5YmRkMDI3OGViNzNiZTY1N2ZlNzI4ZjEyMDk1",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-13T05:13:31Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-13T05:13:31Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4720 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "ab9173affa81f7ed3d27bba0c0c3df91b320a177",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/ab9173affa81f7ed3d27bba0c0c3df91b320a177"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/3710d23074559bdd0278eb73be657fe728f12095",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/3710d23074559bdd0278eb73be657fe728f12095",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/3710d23074559bdd0278eb73be657fe728f12095",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/3710d23074559bdd0278eb73be657fe728f12095/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "9f8cb70197e4c1d458c863580a8d891d385357a9",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9f8cb70197e4c1d458c863580a8d891d385357a9",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/9f8cb70197e4c1d458c863580a8d891d385357a9"
+      }
+    ]
+  },
+  {
+    "sha": "9f8cb70197e4c1d458c863580a8d891d385357a9",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo5ZjhjYjcwMTk3ZTRjMWQ0NThjODYzNTgwYThkODkxZDM4NTM1N2E5",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-13T05:12:48Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-13T05:12:48Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_137\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4718 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "3334e454d816308be82a3639c01b56241d5a2412",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/3334e454d816308be82a3639c01b56241d5a2412"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/9f8cb70197e4c1d458c863580a8d891d385357a9",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9f8cb70197e4c1d458c863580a8d891d385357a9",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/9f8cb70197e4c1d458c863580a8d891d385357a9",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9f8cb70197e4c1d458c863580a8d891d385357a9/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "4ba8af4b0fb01ce3dbd0d9496937d5918a1008bb",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/4ba8af4b0fb01ce3dbd0d9496937d5918a1008bb",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/4ba8af4b0fb01ce3dbd0d9496937d5918a1008bb"
+      }
+    ]
+  },
+  {
+    "sha": "a317eaacc9aa347b3110442c0d48d68a0e111c1f",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzphMzE3ZWFhY2M5YWEzNDdiMzExMDQ0MmMwZDQ4ZDY4YTBlMTExYzFm",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-05T00:13:30Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-05T00:13:30Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4637 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "21b0ec53f6bd3e6a99a78459c8791ee63667be2d",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/21b0ec53f6bd3e6a99a78459c8791ee63667be2d"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/a317eaacc9aa347b3110442c0d48d68a0e111c1f",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/a317eaacc9aa347b3110442c0d48d68a0e111c1f",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/a317eaacc9aa347b3110442c0d48d68a0e111c1f",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/a317eaacc9aa347b3110442c0d48d68a0e111c1f/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "9231b7b21e19fd2a1f97d6ad46df77856f6e8404",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9231b7b21e19fd2a1f97d6ad46df77856f6e8404",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/9231b7b21e19fd2a1f97d6ad46df77856f6e8404"
+      }
+    ]
+  },
+  {
+    "sha": "9231b7b21e19fd2a1f97d6ad46df77856f6e8404",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo5MjMxYjdiMjFlMTlmZDJhMWY5N2Q2YWQ0NmRmNzc4NTZmNmU4NDA0",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-05T00:12:55Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-05T00:12:55Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_136\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4635 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "52d08e8f9e2cc1b945e8b5f8b61000e0e501a907",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/52d08e8f9e2cc1b945e8b5f8b61000e0e501a907"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/9231b7b21e19fd2a1f97d6ad46df77856f6e8404",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9231b7b21e19fd2a1f97d6ad46df77856f6e8404",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/9231b7b21e19fd2a1f97d6ad46df77856f6e8404",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9231b7b21e19fd2a1f97d6ad46df77856f6e8404/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "bacb72743a2c571b0786e92f98f96fcfe3903df8",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/bacb72743a2c571b0786e92f98f96fcfe3903df8",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/bacb72743a2c571b0786e92f98f96fcfe3903df8"
+      }
+    ]
+  },
+  {
+    "sha": "305a931ee8bc1b4f3f878b24c0357f0af104e809",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozMDVhOTMxZWU4YmMxYjRmM2Y4NzhiMjRjMDM1N2YwYWYxMDRlODA5",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-03T06:25:16Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-03T06:25:16Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4609 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "431a863ff2f512ba8bf1a0df4e3f74b3e2d96f70",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/431a863ff2f512ba8bf1a0df4e3f74b3e2d96f70"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/305a931ee8bc1b4f3f878b24c0357f0af104e809",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/305a931ee8bc1b4f3f878b24c0357f0af104e809",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/305a931ee8bc1b4f3f878b24c0357f0af104e809",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/305a931ee8bc1b4f3f878b24c0357f0af104e809/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "fbce7b044a8a64d968d8facf8c00ea24bb5ba06a",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fbce7b044a8a64d968d8facf8c00ea24bb5ba06a",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/fbce7b044a8a64d968d8facf8c00ea24bb5ba06a"
+      }
+    ]
+  },
+  {
+    "sha": "fbce7b044a8a64d968d8facf8c00ea24bb5ba06a",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmYmNlN2IwNDRhOGE2NGQ5NjhkOGZhY2Y4YzAwZWEyNGJiNWJhMDZh",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-03T06:24:12Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-03T06:24:12Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_135\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4607 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "c318b97abfdd323cac247a03964aff88b3659c17",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/c318b97abfdd323cac247a03964aff88b3659c17"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/fbce7b044a8a64d968d8facf8c00ea24bb5ba06a",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fbce7b044a8a64d968d8facf8c00ea24bb5ba06a",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/fbce7b044a8a64d968d8facf8c00ea24bb5ba06a",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/fbce7b044a8a64d968d8facf8c00ea24bb5ba06a/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "95270c3372331da0d8a36b1bb6379100c01ace12",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/95270c3372331da0d8a36b1bb6379100c01ace12",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/95270c3372331da0d8a36b1bb6379100c01ace12"
+      }
+    ]
+  },
+  {
+    "sha": "4e9d404aaff480db23b26117bf4f99f8b57ba24d",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo0ZTlkNDA0YWFmZjQ4MGRiMjNiMjYxMTdiZjRmOTlmOGI1N2JhMjRk",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-01T16:03:58Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-01T16:03:58Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4574 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "5b526ef31c45ecf1730e4aea9f24ca84b12ca135",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/5b526ef31c45ecf1730e4aea9f24ca84b12ca135"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/4e9d404aaff480db23b26117bf4f99f8b57ba24d",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/4e9d404aaff480db23b26117bf4f99f8b57ba24d",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/4e9d404aaff480db23b26117bf4f99f8b57ba24d",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/4e9d404aaff480db23b26117bf4f99f8b57ba24d/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "31e12609647ddba99444cf41167dffd3debe8952",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/31e12609647ddba99444cf41167dffd3debe8952",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/31e12609647ddba99444cf41167dffd3debe8952"
+      }
+    ]
+  },
+  {
+    "sha": "31e12609647ddba99444cf41167dffd3debe8952",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzozMWUxMjYwOTY0N2RkYmE5OTQ0NGNmNDExNjdkZmZkM2RlYmU4OTUy",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-01T16:03:13Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-09-01T16:03:13Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_134\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4572 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "0cb5c07ae3e463276b3657fc978df2c3d6c8f31c",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/0cb5c07ae3e463276b3657fc978df2c3d6c8f31c"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/31e12609647ddba99444cf41167dffd3debe8952",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/31e12609647ddba99444cf41167dffd3debe8952",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/31e12609647ddba99444cf41167dffd3debe8952",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/31e12609647ddba99444cf41167dffd3debe8952/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "9bc74925cdf003de3f5aeee70333b37923b5ab68",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/9bc74925cdf003de3f5aeee70333b37923b5ab68",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/9bc74925cdf003de3f5aeee70333b37923b5ab68"
+      }
+    ]
+  },
+  {
+    "sha": "f8b24579198d72b654a7338c3955710ba271c438",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzpmOGIyNDU3OTE5OGQ3MmI2NTRhNzMzOGMzOTU1NzEwYmEyNzFjNDM4",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-08-29T04:11:38Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-08-29T04:11:38Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4515 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "039bf543458fdb233f12efd4eab15335389a7ee5",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/039bf543458fdb233f12efd4eab15335389a7ee5"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/f8b24579198d72b654a7338c3955710ba271c438",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f8b24579198d72b654a7338c3955710ba271c438",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/f8b24579198d72b654a7338c3955710ba271c438",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/f8b24579198d72b654a7338c3955710ba271c438/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "5dbf81810362c668a8a894836115fac2c21f1563",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/5dbf81810362c668a8a894836115fac2c21f1563",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/5dbf81810362c668a8a894836115fac2c21f1563"
+      }
+    ]
+  },
+  {
+    "sha": "5dbf81810362c668a8a894836115fac2c21f1563",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo1ZGJmODE4MTAzNjJjNjY4YThhODk0ODM2MTE1ZmFjMmMyMWYxNTYz",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-08-29T04:10:55Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-08-29T04:10:55Z"
+      },
+      "message": "[maven-release-plugin] prepare release hudson-1_133\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4513 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "8cb3ea345d873a17493c194afcd7564b22c8b146",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/8cb3ea345d873a17493c194afcd7564b22c8b146"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/5dbf81810362c668a8a894836115fac2c21f1563",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/5dbf81810362c668a8a894836115fac2c21f1563",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/5dbf81810362c668a8a894836115fac2c21f1563",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/5dbf81810362c668a8a894836115fac2c21f1563/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "7bf8aa5533293cf6cdd48728bb1139488d37f31f",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/7bf8aa5533293cf6cdd48728bb1139488d37f31f",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/7bf8aa5533293cf6cdd48728bb1139488d37f31f"
+      }
+    ]
+  },
+  {
+    "sha": "8f4b1835270044f0afe84cfff4e6617a1a04c6c7",
+    "node_id": "MDY6Q29tbWl0MTEwMzYwNzo4ZjRiMTgzNTI3MDA0NGYwYWZlODRjZmZmNGU2NjE3YTFhMDRjNmM3",
+    "commit": {
+      "author": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-08-23T01:14:34Z"
+      },
+      "committer": {
+        "name": "kohsuke",
+        "email": "kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a",
+        "date": "2007-08-23T01:14:34Z"
+      },
+      "message": "[maven-release-plugin] prepare for next development iteration\n\n\ngit-svn-id: https://hudson.dev.java.net/svn/hudson/trunk/hudson/main@4398 71c3de6d-444a-0410-be80-ed276b4c234a",
+      "tree": {
+        "sha": "7d51c34f8d4516f20b00f408f5222c49b682c8dc",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/7d51c34f8d4516f20b00f408f5222c49b682c8dc"
+      },
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/8f4b1835270044f0afe84cfff4e6617a1a04c6c7",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/8f4b1835270044f0afe84cfff4e6617a1a04c6c7",
+    "html_url": "https://github.com/jenkinsci/jenkins/commit/8f4b1835270044f0afe84cfff4e6617a1a04c6c7",
+    "comments_url": "https://api.github.com/repos/jenkinsci/jenkins/commits/8f4b1835270044f0afe84cfff4e6617a1a04c6c7/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "7cf80d1e313923b07d63b023f1901a7222282c30",
+        "url": "https://api.github.com/repos/jenkinsci/jenkins/commits/7cf80d1e313923b07d63b023f1901a7222282c30",
+        "html_url": "https://github.com/jenkinsci/jenkins/commit/7cf80d1e313923b07d63b023f1901a7222282c30"
+      }
+    ]
+  }
+]

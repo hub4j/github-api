@@ -1,0 +1,50 @@
+{
+  "id": "6b9cab4c-c28f-4c6d-90c9-99fc3edfc028",
+  "name": "repos_hub4j-test-org_ghcontentintegrationtest_contents_testdirectory-50_test-file-tocreate-1txt",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/contents/test+directory%20%2350/test%20file-to+create-%231.txt",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_ghcontentintegrationtest_contents_testdirectory-50_test-file-tocreate-1txt-10.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 28 Jun 2021 20:37:50 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"8db9c31d79dfb9d0411c7af11b7ec7fabc72c5b1\"",
+      "Last-Modified": "Mon, 28 Jun 2021 20:37:49 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4757",
+      "X-RateLimit-Reset": "1624914877",
+      "X-RateLimit-Used": "243",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF4F:9C37:CAD99:E4426:60DA331E"
+    }
+  },
+  "uuid": "6b9cab4c-c28f-4c6d-90c9-99fc3edfc028",
+  "persistent": true,
+  "scenarioName": "scenario-3-repos-hub4j-test-org-GHContentIntegrationTest-contents-test+directory #50-test file-to+create-#1.txt",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-3-repos-hub4j-test-org-GHContentIntegrationTest-contents-test+directory #50-test file-to+create-#1.txt-2",
+  "insertionIndex": 10
+}

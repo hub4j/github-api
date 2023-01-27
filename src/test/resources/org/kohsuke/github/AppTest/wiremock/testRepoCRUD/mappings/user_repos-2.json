@@ -1,0 +1,55 @@
+{
+  "id": "fc0e1a16-42f0-4842-aa57-f5e3695b9a78",
+  "name": "user_repos",
+  "request": {
+    "url": "/user/repos",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"private\":false,\"name\":\"github-api-test-rename\",\"description\":\"a test repository\",\"homepage\":\"http://github-api.kohsuke.org/\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "user_repos-2.json",
+    "headers": {
+      "Date": "Tue, 29 Dec 2020 02:01:48 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"e6bdb2b74b53f0236b78b25394c030306faebf64d5761aeab5014bccc1eed948\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "public_repo, repo",
+      "Location": "https://api.github.com/repos/bitwiseman/github-api-test-rename",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4981",
+      "X-RateLimit-Reset": "1609210718",
+      "X-RateLimit-Used": "19",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D20D:05F9:1179BCD:154F636:5FEA8E09"
+    }
+  },
+  "uuid": "fc0e1a16-42f0-4842-aa57-f5e3695b9a78",
+  "persistent": true,
+  "insertionIndex": 2
+}

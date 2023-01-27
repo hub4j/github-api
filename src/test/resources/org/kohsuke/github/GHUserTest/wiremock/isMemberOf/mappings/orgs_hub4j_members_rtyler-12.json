@@ -1,0 +1,38 @@
+{
+  "id": "0bda5021-7ed4-4d13-9154-5c186eb81a5d",
+  "name": "orgs_hub4j_members_rtyler",
+  "request": {
+    "url": "/orgs/hub4j/members/rtyler",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 302,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 13:41:56 GMT",
+      "Content-Type": "text/html;charset=utf-8",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4988",
+      "X-RateLimit-Reset": "1646404914",
+      "X-RateLimit-Used": "12",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "BA7C:B363:4D24892:4E610EC:62221724",
+      "Location": "https://api.github.com/organizations/54909825/public_members/rtyler"
+    }
+  },
+  "uuid": "0bda5021-7ed4-4d13-9154-5c186eb81a5d",
+  "persistent": true,
+  "insertionIndex": 12
+}

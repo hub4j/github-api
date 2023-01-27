@@ -1,0 +1,53 @@
+{
+  "id": "5c954603-0b68-4aa4-ae85-68da32a54633",
+  "name": "repos_hub4j-test-org_github-api_issues_428",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/428",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"state\":\"closed\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api_issues_428-8.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Jun 2021 17:30:20 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"0ee6b1428cd142490f980c4d763aae4fe6975eb3c1b55781bfa4de3c0ed041e7\"",
+      "X-OAuth-Scopes": "admin:org, repo, user",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4959",
+      "X-RateLimit-Reset": "1622831137",
+      "X-RateLimit-Used": "41",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "356A:135F2:F26AFC:F70BEA:60BA632C"
+    }
+  },
+  "uuid": "5c954603-0b68-4aa4-ae85-68da32a54633",
+  "persistent": true,
+  "insertionIndex": 8
+}

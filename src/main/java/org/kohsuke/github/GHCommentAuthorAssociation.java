@@ -1,7 +1,8 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
- * How is an user associated with a repository?
+ * How is an user associated with a repository?.
  *
  * @author Kohsuke Kawaguchi
  */

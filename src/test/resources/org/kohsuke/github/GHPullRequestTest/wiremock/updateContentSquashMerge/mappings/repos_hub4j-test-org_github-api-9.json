@@ -1,0 +1,51 @@
+{
+  "id": "ea77125d-4094-4cd9-bfbe-da1696813034",
+  "name": "repos_hub4j-test-org_github-api",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_github-api-9.json",
+    "headers": {
+      "Date": "Sun, 08 Sep 2019 07:24:21 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4936",
+      "X-RateLimit-Reset": "1567929276",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"476689c50d919384d02a3d812284c8cd\"",
+      "Last-Modified": "Sun, 08 Sep 2019 07:21:20 GMT",
+      "X-OAuth-Scopes": "gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF7E:15CC:AA760B:C68B74:5D74ACA4"
+    }
+  },
+  "uuid": "ea77125d-4094-4cd9-bfbe-da1696813034",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-github-api-4",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-5",
+  "insertionIndex": 9
+}

@@ -1,0 +1,91 @@
+{
+  "sha": "b4c27fd7cdefc7ed36397e1082e38c53ba2a4477",
+  "node_id": "MDY6Q29tbWl0MjA2ODg4MjAxOmI0YzI3ZmQ3Y2RlZmM3ZWQzNjM5N2UxMDgyZTM4YzUzYmEyYTQ0Nzc=",
+  "commit": {
+    "author": {
+      "name": "Tadas Giniotis",
+      "email": "61763026+tginiotis-at-work@users.noreply.github.com",
+      "date": "2020-09-30T22:23:53Z"
+    },
+    "committer": {
+      "name": "Tadas Giniotis",
+      "email": "61763026+tginiotis-at-work@users.noreply.github.com",
+      "date": "2020-09-30T22:23:53Z"
+    },
+    "message": "test signing",
+    "tree": {
+      "sha": "496d6428b9cf92981dc9495211e6e1120fb6f2ba",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/trees/496d6428b9cf92981dc9495211e6e1120fb6f2ba"
+    },
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/b4c27fd7cdefc7ed36397e1082e38c53ba2a4477",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "gpgverify_error",
+      "signature": "-----BEGIN PGP SIGNATURE-----\ninvalid\n-----END PGP SIGNATURE-----",
+      "payload": "tree 496d6428b9cf92981dc9495211e6e1120fb6f2ba\nauthor Tadas Giniotis <61763026+tginiotis-at-work@users.noreply.github.com> 1601504633 +0300\ncommitter Tadas Giniotis <61763026+tginiotis-at-work@users.noreply.github.com> 1601504633 +0300\n\ntest signing"
+    }
+  },
+  "url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/b4c27fd7cdefc7ed36397e1082e38c53ba2a4477",
+  "html_url": "https://github.com/hub4j-test-org/github-api/commit/b4c27fd7cdefc7ed36397e1082e38c53ba2a4477",
+  "comments_url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/b4c27fd7cdefc7ed36397e1082e38c53ba2a4477/comments",
+  "author": {
+    "login": "tginiotis-at-work",
+    "id": 61763026,
+    "node_id": "MDQ6VXNlcjYxNzYzMDI2",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/61763026?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/tginiotis-at-work",
+    "html_url": "https://github.com/tginiotis-at-work",
+    "followers_url": "https://api.github.com/users/tginiotis-at-work/followers",
+    "following_url": "https://api.github.com/users/tginiotis-at-work/following{/other_user}",
+    "gists_url": "https://api.github.com/users/tginiotis-at-work/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/tginiotis-at-work/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/tginiotis-at-work/subscriptions",
+    "organizations_url": "https://api.github.com/users/tginiotis-at-work/orgs",
+    "repos_url": "https://api.github.com/users/tginiotis-at-work/repos",
+    "events_url": "https://api.github.com/users/tginiotis-at-work/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/tginiotis-at-work/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "tginiotis-at-work",
+    "id": 61763026,
+    "node_id": "MDQ6VXNlcjYxNzYzMDI2",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/61763026?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/tginiotis-at-work",
+    "html_url": "https://github.com/tginiotis-at-work",
+    "followers_url": "https://api.github.com/users/tginiotis-at-work/followers",
+    "following_url": "https://api.github.com/users/tginiotis-at-work/following{/other_user}",
+    "gists_url": "https://api.github.com/users/tginiotis-at-work/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/tginiotis-at-work/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/tginiotis-at-work/subscriptions",
+    "organizations_url": "https://api.github.com/users/tginiotis-at-work/orgs",
+    "repos_url": "https://api.github.com/users/tginiotis-at-work/repos",
+    "events_url": "https://api.github.com/users/tginiotis-at-work/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/tginiotis-at-work/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [],
+  "stats": {
+    "total": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  "files": [
+    {
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "filename": "a",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0,
+      "changes": 0,
+      "blob_url": "https://github.com/hub4j-test-org/github-api/blob/b4c27fd7cdefc7ed36397e1082e38c53ba2a4477/a",
+      "raw_url": "https://github.com/hub4j-test-org/github-api/raw/b4c27fd7cdefc7ed36397e1082e38c53ba2a4477/a",
+      "contents_url": "https://api.github.com/repos/hub4j-test-org/github-api/contents/a?ref=b4c27fd7cdefc7ed36397e1082e38c53ba2a4477"
+    }
+  ]
+}

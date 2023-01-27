@@ -1,40 +1,78 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents a membership of a user in an organization.
  *
  * @author Kohsuke Kawaguchi
- * @see GHMyself#listOrgMemberships()
+ * @see GHMyself#listOrgMemberships() GHMyself#listOrgMemberships()
  */
-public class GHMembership /* extends GHObject --- but it doesn't have id, created_at, etc. */ {
-    GitHub root;
+public class GHMembership extends GitHubInteractiveObject {
 
+    /** The url. */
     String url;
+
+    /** The state. */
     String state;
+
+    /** The role. */
     String role;
+
+    /** The user. */
     GHUser user;
+
+    /** The organization. */
     GHOrganization organization;
 
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
     public URL getUrl() {
-        return GitHub.parseURL(url);
+        return GitHubClient.parseURL(url);
     }
 
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
     public State getState() {
         return Enum.valueOf(State.class, state.toUpperCase(Locale.ENGLISH));
     }
 
+    /**
+     * Gets role.
+     *
+     * @return the role
+     */
     public Role getRole() {
         return Enum.valueOf(Role.class, role.toUpperCase(Locale.ENGLISH));
     }
 
+    /**
+     * Gets user.
+     *
+     * @return the user
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getUser() {
         return user;
     }
 
+    /**
+     * Gets organization.
+     *
+     * @return the organization
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHOrganization getOrganization() {
         return organization;
     }
@@ -42,22 +80,25 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
     /**
      * Accepts a pending invitation to an organization.
      *
-     * @see GHMyself#getMembership(GHOrganization)
+     * @throws IOException
+     *             the io exception
+     * @see GHMyself#getMembership(GHOrganization) GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-        root.retrieve().method("PATCH").with("state",State.ACTIVE).to(url,this);
+        root().createRequest().method("PATCH").with("state", State.ACTIVE).withUrlPath(url).fetchInto(this);
     }
 
-    /*package*/ GHMembership wrap(GitHub root) {
-        this.root = root;
-        if (user!=null)     user = root.getUser(user.wrapUp(root));
-        if (organization!=null) organization.wrapUp(root);
+    /**
+     * Wrap.
+     *
+     * @param root
+     *            the root
+     * @return the GH membership
+     */
+    GHMembership wrap(GitHub root) {
+        if (user != null)
+            user = root.getUser(user);
         return this;
-    }
-
-    /*package*/ static void wrap(GHMembership[] page, GitHub root) {
-        for (GHMembership m : page)
-            m.wrap(root);
     }
 
     /**
@@ -75,10 +116,13 @@ public class GHMembership /* extends GHObject --- but it doesn't have id, create
     }
 
     /**
-     * Whether a role is currently active or waiting for acceptance (pending)
+     * Whether a role is currently active or waiting for acceptance (pending).
      */
     public enum State {
+
+        /** The active. */
         ACTIVE,
+        /** The pending. */
         PENDING;
     }
 }

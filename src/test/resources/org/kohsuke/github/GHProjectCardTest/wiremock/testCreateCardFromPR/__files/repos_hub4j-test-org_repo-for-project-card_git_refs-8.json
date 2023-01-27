@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/branch1",
+  "node_id": "REF_kwDOGQKnDrJyZWZzL2hlYWRzL2JyYW5jaDE",
+  "url": "https://api.github.com/repos/hub4j-test-org/repo-for-project-card/git/refs/heads/branch1",
+  "object": {
+    "sha": "ba33f8eab9078a17c1395889e45822f13435cf22",
+    "type": "commit",
+    "url": "https://api.github.com/repos/hub4j-test-org/repo-for-project-card/git/commits/ba33f8eab9078a17c1395889e45822f13435cf22"
+  }
+}

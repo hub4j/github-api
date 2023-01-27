@@ -1,0 +1,53 @@
+{
+  "id": "a6a18e14-ce7c-45f7-9164-86da4bf75ef4",
+  "name": "repos_hub4j-test-org_github-api_pulls",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.shadow-cat-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"head\":\"test/stable\",\"draft\":false,\"maintainer_can_modify\":true,\"title\":\"testSetBaseBranchNonExisting\",\"body\":\"## test\",\"base\":\"main\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_github-api_pulls-3.json",
+    "headers": {
+      "Date": "Thu, 03 Sep 2020 19:05:11 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"e5dae09961ee55c19f9643ad7b5ae02b\"",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/381",
+      "X-GitHub-Media-Type": "github.v3; param=shadow-cat-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4695",
+      "X-RateLimit-Reset": "1599161295",
+      "X-RateLimit-Used": "305",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C84A:2C9E:13F9DD37:18306399:5F513E66"
+    }
+  },
+  "uuid": "a6a18e14-ce7c-45f7-9164-86da4bf75ef4",
+  "persistent": true,
+  "insertionIndex": 3
+}

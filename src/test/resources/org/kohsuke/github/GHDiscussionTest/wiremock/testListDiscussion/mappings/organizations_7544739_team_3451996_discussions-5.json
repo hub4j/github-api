@@ -1,0 +1,54 @@
+{
+  "id": "8122b2d7-fb10-4a80-9c90-603a0331c40c",
+  "name": "organizations_7544739_team_3451996_discussions",
+  "request": {
+    "url": "/organizations/7544739/team/3451996/discussions",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"title\":\"Some Discussion B\",\"body\":\"This is a test discussion\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "organizations_7544739_team_3451996_discussions-5.json",
+    "headers": {
+      "Date": "Fri, 05 Jun 2020 23:08:35 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4725",
+      "X-RateLimit-Reset": "1591398936",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"4acb1681262e9f89b5516ad5d804aee4\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "write:discussion",
+      "Location": "https://api.github.com/organizations/7544739/team/3451996/discussions/62",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CFFB:979C:1DBF96:23C482:5EDAD072"
+    }
+  },
+  "uuid": "8122b2d7-fb10-4a80-9c90-603a0331c40c",
+  "persistent": true,
+  "insertionIndex": 5
+}

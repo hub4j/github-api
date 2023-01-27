@@ -1,0 +1,5 @@
+**/extras/**
+**/GHRateLimitTest
+**/RequesterRetryTest
+**/RateLimitCheckerTest
+**/RateLimitHandlerTest

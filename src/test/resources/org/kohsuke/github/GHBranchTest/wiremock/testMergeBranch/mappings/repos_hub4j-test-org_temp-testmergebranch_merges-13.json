@@ -1,0 +1,54 @@
+{
+  "id": "8728388c-f0a4-48bc-8d7f-5b530268dfeb",
+  "name": "repos_hub4j-test-org_temp-testmergebranch_merges",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testMergeBranch/merges",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"head\":\"8ed41e215a0207c8be6fd31be8f942fca072fe4c\",\"commit_message\":\"merging from 8ed41e215a0207c8be6fd31be8f942fca072fe4c\",\"base\":\"main\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_temp-testmergebranch_merges-13.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 14 Sep 2021 20:43:15 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"da2842c69fd8aa8e178e295d616a04d11ae8c293b4096a4b4ac525a681cdbbb4\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4873",
+      "X-RateLimit-Reset": "1631652409",
+      "X-RateLimit-Used": "127",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D382:4C0E:1A952A0:1C238FC:61410962",
+      "Location": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/commits/471654e98a1bf875f1b465295271d4370a4b25fa"
+    }
+  },
+  "uuid": "8728388c-f0a4-48bc-8d7f-5b530268dfeb",
+  "persistent": true,
+  "insertionIndex": 13
+}

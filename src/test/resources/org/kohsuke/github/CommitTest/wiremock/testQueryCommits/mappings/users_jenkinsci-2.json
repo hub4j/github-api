@@ -1,0 +1,48 @@
+{
+  "id": "0ea5f6b1-d2f1-42bc-ab1e-d8aa4ac1c478",
+  "name": "users_jenkinsci",
+  "request": {
+    "url": "/users/jenkinsci",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "users_jenkinsci-2.json",
+    "headers": {
+      "Date": "Fri, 22 Jan 2021 22:35:23 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"1944fcc0832ab0d805557d1b0253653cc075ba421414177a18ef7daabcb25526\"",
+      "last-modified": "Thu, 18 Jun 2020 10:24:17 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4818",
+      "X-RateLimit-Reset": "1611357669",
+      "x-ratelimit-used": "182",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CE75:13FC:5DAD57:6C1254:600B532A"
+    }
+  },
+  "uuid": "0ea5f6b1-d2f1-42bc-ab1e-d8aa4ac1c478",
+  "persistent": true,
+  "insertionIndex": 2
+}

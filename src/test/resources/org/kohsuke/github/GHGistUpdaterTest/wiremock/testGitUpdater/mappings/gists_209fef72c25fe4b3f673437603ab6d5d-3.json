@@ -1,0 +1,38 @@
+{
+  "id": "94cd5114-cc74-4003-ba1f-6bedcb561d20",
+  "name": "gists_209fef72c25fe4b3f673437603ab6d5d",
+  "request": {
+    "url": "/gists/209fef72c25fe4b3f673437603ab6d5d",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Date": "Wed, 09 Oct 2019 18:06:40 GMT",
+      "Server": "GitHub.com",
+      "Status": "204 No Content",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4984",
+      "X-RateLimit-Reset": "1570647617",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "AF56:13F4:12346B2:150F02F:5D9E21B0"
+    }
+  },
+  "uuid": "94cd5114-cc74-4003-ba1f-6bedcb561d20",
+  "persistent": true,
+  "insertionIndex": 3
+}

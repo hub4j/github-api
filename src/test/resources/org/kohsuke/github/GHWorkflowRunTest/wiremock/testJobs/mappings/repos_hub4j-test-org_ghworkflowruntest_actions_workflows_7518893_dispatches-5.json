@@ -1,0 +1,45 @@
+{
+  "id": "99ac1046-2ff7-4984-844f-ea2498783487",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_workflows_7518893_dispatches",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/workflows/7518893/dispatches",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"ref\":\"main\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 05 Apr 2021 15:42:47 GMT",
+      "X-OAuth-Scopes": "repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4960",
+      "X-RateLimit-Reset": "1617640843",
+      "X-RateLimit-Used": "40",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "9F98:10C34:780A52F:79F1844:606B2FF7"
+    }
+  },
+  "uuid": "99ac1046-2ff7-4984-844f-ea2498783487",
+  "persistent": true,
+  "insertionIndex": 5
+}

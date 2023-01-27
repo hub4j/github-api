@@ -1,138 +1,144 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.net.URL;
 
+import static org.kohsuke.github.internal.Previews.BAPTISTE;
+
+// TODO: Auto-generated Javadoc
 /**
- * Creates a repository
+ * Creates a repository.
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHCreateRepositoryBuilder {
-    private final GitHub root;
-    protected final Requester builder;
-    private final String apiUrlTail;
-
-    /*package*/ GHCreateRepositoryBuilder(GitHub root, String apiUrlTail, String name) {
-        this.root = root;
-        this.apiUrlTail = apiUrlTail;
-        this.builder = new Requester(root);
-        this.builder.with("name",name);
-    }
-
-    public GHCreateRepositoryBuilder description(String description) {
-        this.builder.with("description",description);
-        return this;
-    }
-
-    public GHCreateRepositoryBuilder homepage(URL homepage) {
-        return homepage(homepage.toExternalForm());
-    }
-
-    public GHCreateRepositoryBuilder homepage(String homepage) {
-        this.builder.with("homepage",homepage);
-        return this;
-    }
+public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepositoryBuilder> {
 
     /**
-     * Creates a private repository
+     * Instantiates a new GH create repository builder.
+     *
+     * @param name
+     *            the name
+     * @param root
+     *            the root
+     * @param apiTail
+     *            the api tail
      */
-    public GHCreateRepositoryBuilder private_(boolean b) {
-        this.builder.with("private",b);
-        return this;
-    }
+    public GHCreateRepositoryBuilder(String name, GitHub root, String apiTail) {
+        super(GHCreateRepositoryBuilder.class, root, null);
+        requester.method("POST").withUrlPath(apiTail);
 
-    /**
-     * Enables issue tracker
-     */
-    public GHCreateRepositoryBuilder issues(boolean b) {
-        this.builder.with("has_issues",b);
-        return this;
-    }
-
-    /**
-     * Enables wiki
-     */
-    public GHCreateRepositoryBuilder wiki(boolean b) {
-        this.builder.with("has_wiki",b);
-        return this;
-    }
-
-    /**
-     * Enables downloads
-     */
-    public GHCreateRepositoryBuilder downloads(boolean b) {
-        this.builder.with("has_downloads",b);
-        return this;
-    }
-
-    /**
-     * If true, create an initial commit with empty README.
-     */
-    public GHCreateRepositoryBuilder autoInit(boolean b) {
-        this.builder.with("auto_init",b);
-        return this;
-    }
-
-    /**
-     * Allow or disallow squash-merging pull requests.
-     */
-    public GHCreateRepositoryBuilder allowSquashMerge(boolean b) {
-        this.builder.with("allow_squash_merge",b);
-        return this;
-    }
-
-    /**
-     * Allow or disallow merging pull requests with a merge commit.
-     */
-    public GHCreateRepositoryBuilder allowMergeCommit(boolean b) {
-        this.builder.with("allow_merge_commit",b);
-        return this;
-    }
-
-    /**
-     * Allow or disallow rebase-merging pull requests.
-     */
-    public GHCreateRepositoryBuilder allowRebaseMerge(boolean b) {
-        this.builder.with("allow_rebase_merge",b);
-        return this;
+        try {
+            name(name);
+        } catch (IOException e) {
+            // not going to happen here
+        }
     }
 
     /**
      * Creates a default .gitignore
      *
-     * See https://developer.github.com/v3/repos/#create
+     * @param language
+     *            template to base the ignore file on
+     * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
-    public GHCreateRepositoryBuilder gitignoreTemplate(String language) {
-        this.builder.with("gitignore_template",language);
-        return this;
+    public GHCreateRepositoryBuilder gitignoreTemplate(String language) throws IOException {
+        return with("gitignore_template", language);
     }
 
     /**
-     * Desired license template to apply
+     * Desired license template to apply.
      *
-     * See https://developer.github.com/v3/repos/#create
+     * @param license
+     *            template to base the license file on
+     * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      */
-    public GHCreateRepositoryBuilder licenseTemplate(String license) {
-        this.builder.with("license_template",license);
+    public GHCreateRepositoryBuilder licenseTemplate(String license) throws IOException {
+        return with("license_template", license);
+    }
+
+    /**
+     * If true, create an initial commit with empty README.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public GHCreateRepositoryBuilder autoInit(boolean enabled) throws IOException {
+        return with("auto_init", enabled);
+    }
+
+    /**
+     * The team that gets granted access to this repository. Only valid for creating a repository in an organization.
+     *
+     * @param team
+     *            team to grant access to
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public GHCreateRepositoryBuilder team(GHTeam team) throws IOException {
+        if (team != null)
+            return with("team_id", team.getId());
         return this;
     }
 
     /**
-     * The team that gets granted access to this repository. Only valid for creating a repository in
-     * an organization.
+     * Specifies whether the repository is a template.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     * @deprecated Use {@link #isTemplate(boolean)} method instead
      */
-    public GHCreateRepositoryBuilder team(GHTeam team) {
-        if (team!=null)
-            this.builder.with("team_id",team.getId());
+    @Deprecated
+    public GHCreateRepositoryBuilder templateRepository(boolean enabled) throws IOException {
+        return isTemplate(enabled);
+    }
+
+    /**
+     * Specifies the ownership of the repository.
+     *
+     * @param owner
+     *            organization or personage
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public GHCreateRepositoryBuilder owner(String owner) throws IOException {
+        return with("owner", owner);
+    }
+
+    /**
+     * Create repository from template repository.
+     *
+     * @param templateOwner
+     *            template repository owner
+     * @param templateRepo
+     *            template repository
+     * @return a builder to continue with building
+     * @see <a href="https://developer.github.com/v3/previews/">GitHub API Previews</a>
+     */
+    @Preview(BAPTISTE)
+    public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
+        requester.withPreview(BAPTISTE).withUrlPath("/repos/" + templateOwner + "/" + templateRepo + "/generate");
         return this;
     }
 
     /**
      * Creates a repository with all the parameters.
+     *
+     * @return the gh repository
+     * @throws IOException
+     *             if repository cannot be created
      */
     public GHRepository create() throws IOException {
-        return builder.method("POST").to(apiUrlTail, GHRepository.class).wrap(root);
+        return done();
     }
-
 }

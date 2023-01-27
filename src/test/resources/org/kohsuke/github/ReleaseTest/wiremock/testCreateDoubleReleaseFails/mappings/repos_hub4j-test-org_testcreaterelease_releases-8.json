@@ -1,0 +1,50 @@
+{
+  "id": "4b8a8c3b-2019-41e8-9cd2-68a60cfafd1e",
+  "name": "repos_hub4j-test-org_testcreaterelease_releases",
+  "request": {
+    "url": "/repos/hub4j-test-org/testCreateRelease/releases",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"tag_name\":\"6cc26e0a-830e-4fff-8db2-3e222f76c43b\",\"name\":\"release-6cc26e0a-830e-4fff-8db2-3e222f76c43b\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 422,
+    "body": "{\"message\":\"Validation Failed\",\"errors\":[{\"resource\":\"Release\",\"code\":\"already_exists\",\"field\":\"tag_name\"}],\"documentation_url\":\"https://docs.github.com/rest/reference/repos#create-a-release\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 10 Jun 2021 16:03:12 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4990",
+      "X-RateLimit-Reset": "1623344540",
+      "X-RateLimit-Used": "10",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "C3BA:110C4:411B61B:424896A:60C237C0"
+    }
+  },
+  "uuid": "4b8a8c3b-2019-41e8-9cd2-68a60cfafd1e",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-testCreateRelease-releases",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-testCreateRelease-releases-2",
+  "insertionIndex": 8
+}

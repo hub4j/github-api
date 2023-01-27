@@ -1,0 +1,41 @@
+{
+  "id": "6469d0e8-bc20-48e6-bd3c-30b677aa7cd1",
+  "name": "repos_hub4j-test-org_github-api_subscription",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/subscription",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/reference/activity#get-a-repository-subscription\"}",
+    "headers": {
+      "Date": "Sat, 23 Jan 2021 04:48:06 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "404 Not Found",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "notifications, repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4877",
+      "X-RateLimit-Reset": "1611379080",
+      "x-ratelimit-used": "123",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "D8B8:0DDD:28999:30519:600BAA85"
+    }
+  },
+  "uuid": "6469d0e8-bc20-48e6-bd3c-30b677aa7cd1",
+  "persistent": true,
+  "insertionIndex": 4
+}

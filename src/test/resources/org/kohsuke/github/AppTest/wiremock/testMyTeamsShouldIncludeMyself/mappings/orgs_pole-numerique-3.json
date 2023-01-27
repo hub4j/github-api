@@ -1,0 +1,47 @@
+{
+  "id": "9535a2fb-d0ae-4446-9110-b9a4e6125c24",
+  "name": "orgs_pole-numerique",
+  "request": {
+    "url": "/orgs/pole-numerique",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "orgs_pole-numerique-3.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 09:08:00 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"94f1df8290806efd0133c341229d7dbcd4615fd109e45d887d9dfb44087bc77c\"",
+      "Last-Modified": "Sun, 26 Jun 2016 05:58:54 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4997",
+      "X-RateLimit-Reset": "1646388479",
+      "X-RateLimit-Used": "3",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "B56C:4A7F:2C44C07:2D37B2E:6221D6F0"
+    }
+  },
+  "uuid": "9535a2fb-d0ae-4446-9110-b9a4e6125c24",
+  "persistent": true,
+  "insertionIndex": 3
+}

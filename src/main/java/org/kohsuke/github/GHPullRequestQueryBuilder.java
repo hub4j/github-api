@@ -1,58 +1,115 @@
 package org.kohsuke.github;
 
+import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
+
+// TODO: Auto-generated Javadoc
 /**
  * Lists up pull requests with some filtering and sorting.
  *
  * @author Kohsuke Kawaguchi
- * @see GHRepository#queryPullRequests()
+ * @see GHRepository#queryPullRequests() GHRepository#queryPullRequests()
  */
 public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
     private final GHRepository repo;
 
-    /*package*/ GHPullRequestQueryBuilder(GHRepository repo) {
-        super(repo.root);
+    /**
+     * Instantiates a new GH pull request query builder.
+     *
+     * @param repo
+     *            the repo
+     */
+    GHPullRequestQueryBuilder(GHRepository repo) {
+        super(repo.root());
         this.repo = repo;
     }
 
+    /**
+     * State gh pull request query builder.
+     *
+     * @param state
+     *            the state
+     * @return the gh pull request query builder
+     */
     public GHPullRequestQueryBuilder state(GHIssueState state) {
-        req.with("state",state);
+        req.with("state", state);
         return this;
     }
 
+    /**
+     * Head gh pull request query builder.
+     *
+     * @param head
+     *            the head
+     * @return the gh pull request query builder
+     */
     public GHPullRequestQueryBuilder head(String head) {
-        req.with("head",head);
+        if (head != null && !head.contains(":")) {
+            head = repo.getOwnerName() + ":" + head;
+        }
+        req.with("head", head);
         return this;
     }
 
+    /**
+     * Base gh pull request query builder.
+     *
+     * @param base
+     *            the base
+     * @return the gh pull request query builder
+     */
     public GHPullRequestQueryBuilder base(String base) {
-        req.with("base",base);
+        req.with("base", base);
         return this;
     }
 
+    /**
+     * Sort gh pull request query builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh pull request query builder
+     */
     public GHPullRequestQueryBuilder sort(Sort sort) {
-        req.with("sort",sort);
+        req.with("sort", sort);
         return this;
     }
 
-    public enum Sort { CREATED, UPDATED, POPULARITY, LONG_RUNNING }
+    /**
+     * The enum Sort.
+     */
+    public enum Sort {
 
+        /** The created. */
+        CREATED,
+        /** The updated. */
+        UPDATED,
+        /** The popularity. */
+        POPULARITY,
+        /** The long running. */
+        LONG_RUNNING
+    }
+
+    /**
+     * Direction gh pull request query builder.
+     *
+     * @param d
+     *            the d
+     * @return the gh pull request query builder
+     */
     public GHPullRequestQueryBuilder direction(GHDirection d) {
-        req.with("direction",d);
+        req.with("direction", d);
         return this;
     }
 
+    /**
+     * List.
+     *
+     * @return the paged iterable
+     */
     @Override
     public PagedIterable<GHPullRequest> list() {
-        return new PagedIterable<GHPullRequest>() {
-            public PagedIterator<GHPullRequest> _iterator(int pageSize) {
-                return new PagedIterator<GHPullRequest>(req.asIterator(repo.getApiTailUrl("pulls"), GHPullRequest[].class, pageSize)) {
-                    @Override
-                    protected void wrapUp(GHPullRequest[] page) {
-                        for (GHPullRequest pr : page)
-                            pr.wrapUp(repo);
-                    }
-                };
-            }
-        };
+        return req.withPreview(SHADOW_CAT)
+                .withUrlPath(repo.getApiTailUrl("pulls"))
+                .toIterable(GHPullRequest[].class, item -> item.wrapUp(repo));
     }
 }

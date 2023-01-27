@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "comment": ""
+  },
+  "id": "9ad3064d-ae78-4fc6-a6bc-20386f446f5e",
+  "name": "rate_limit",
+  "request": {
+    "url": "/rate_limit",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"resources\": {\"core\": {\"limit\": 5000,\"remaining\": 4600,\"reset\": {{testStartDate offset='10 seconds' format='unix'}} },\"search\": {\"limit\": 30,\"remaining\": 30,\"reset\": {{testStartDate offset='1 hours' format='unix'}} },\"graphql\": {\"limit\": 5000,\"remaining\": 5000,\"reset\": {{testStartDate offset='1 hours' format='unix'}} },\"integration_manifest\": {\"limit\": 5000,\"remaining\": 5000,\"reset\": {{testStartDate offset='1 hours' format='unix'}} } },\"rate\": {\"limit\": 5000,\"remaining\": 0,\"reset\": 1570478899}}",
+    "headers": {
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4600",
+      "X-RateLimit-Reset": "{{testStartDate offset='10 seconds' format='unix'}}",
+      "Cache-Control": "no-cache",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "F8AD:9836:A3F7EB:C516B7:5E4DF170"
+    }
+  },
+  "uuid": "9ad3064d-ae78-4fc6-a6bc-20386f446f5e",
+  "persistent": true,
+  "scenarioName": "scenario-1-rate_limit",
+  "requiredScenarioState": "scenario-1-rate_limit-2",
+  "newScenarioState": "scenario-1-rate_limit-3",
+  "insertionIndex": 5
+}

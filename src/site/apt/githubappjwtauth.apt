@@ -1,0 +1,135 @@
+GitHub App Authentication via JWT token
+
+  In order to authenticate to GitHub as a GitHub App, you must use the JWT token authentication mechanism. This can be
+  easily achieved with this library by obtaining a <<<GitHub>>> instance like this:
+
++-----+
+GitHub github = new GitHubBuilder().withJwtToken("my_jwt_token").build();
++-----+
+
+  Authenticating as a GitHub App lets you do a couple of things:
+
+  * You can retrieve high-level management information about your GitHub App.
+
+  * You can request access tokens for an installation of the app.
+
+  []
+
+Where do I get the JWT token from?
+
+  To generate the JWT token required to authenticate as a GitHub app you have to:
+
+  * Sign the JWT token using the private key you configured on your GitHub app as described {{{https://developer.github.com/apps/building-github-apps/authenticating-with-github-apps/#generating-a-private-key}here}}
+
+  * Encode it using the <<<RS256>>> algorithm.
+
+  []
+
+  GitHub checks that the request is authenticated by verifying the token with the app's stored public key.
+
+Converting the private key into a Java friendly format
+
+  <<Note:>> GitHub let's you download the GitHub App private key in the <<<PEM>>> format which isn't natively supported
+    by the JVM unless you leverage a third-party library such as {{{https://www.bouncycastle.org/}BouncyCastle}}. In this
+    guide we will convert it to <<<DER>>> using the <<<openssl>>> utility.
+
++-----+
+openssl pkcs8 -topk8 -inform PEM -outform DER -in ~/github-api-app.private-key.pem -out ~/github-api-app.private-key.der -nocrypt
++-----+
+
+How can I generate the JWT token?
+
+  Once you have the private key converted to the <<<DER>>> format, you will need 2 more things before you are able to
+  generate JWT tokens:
+
+  <<GitHub App Id:>>
+
+  You can obtain the GitHub App Id from your app settings webpage as shown below:
+
+[images/Github_App_Id.png] Github_App_Id
+
+  <<JWT library:>>
+
+  In order to generate the JWT, you will have to likely use a JWT library.
+  In this guide we will use {{{https://github.com/jwtk/jjwt}jjwt}} to that matter.
+
+  Having said that, add on your <<<pom.xml>>> the following dependencies:
+
++-----+
+<dependency>
+  <groupId>io.jsonwebtoken</groupId>
+  <artifactId>jjwt-api</artifactId>
+  <version>0.10.5</version>
+</dependency>
+<dependency>
+  <groupId>io.jsonwebtoken</groupId>
+  <artifactId>jjwt-impl</artifactId>
+  <version>0.10.5</version>
+  <scope>runtime</scope>
+</dependency>
+<dependency>
+  <groupId>io.jsonwebtoken</groupId>
+  <artifactId>jjwt-jackson</artifactId>
+  <version>0.10.5</version>
+  <scope>runtime</scope>
+</dependency>
++-----+
+
+
+  Now we have everything we need so let's generate the JWT token:
+
++-----+
+static PrivateKey get(String filename) throws Exception {
+  byte[] keyBytes = Files.toByteArray(new File(filename));
+
+  PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+  KeyFactory kf = KeyFactory.getInstance("RSA");
+  return kf.generatePrivate(spec);
+}
+
+static String createJWT(String githubAppId, long ttlMillis) throws Exception {
+  //The JWT signature algorithm we will be using to sign the token
+  SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.RS256;
+
+  long nowMillis = System.currentTimeMillis();
+  Date now = new Date(nowMillis);
+
+  //We will sign our JWT with our private key
+  Key signingKey = get("github-api-app.private-key.der");
+
+  //Let's set the JWT Claims
+  JwtBuilder builder = Jwts.builder()
+          .setIssuedAt(now)
+          .setIssuer(githubAppId)
+          .signWith(signingKey, signatureAlgorithm);
+
+  //if it has been specified, let's add the expiration
+  if (ttlMillis > 0) {
+    long expMillis = nowMillis + ttlMillis;
+    Date exp = new Date(expMillis);
+    builder.setExpiration(exp);
+  }
+
+  //Builds the JWT and serializes it to a compact, URL-safe string
+  return builder.compact();
+}
+
+public static void main(String[] args) throws Exception {
+  String jwtToken = createJWT("44435", 600000); //sdk-github-api-app-test
+  GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
+}
++-----+
+
+How do I get a specific app installation?
+
++-----+
+String jwtToken = createJWT("44435", 600000); //sdk-github-api-app-test
+GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
+GHAppInstallation appInstallation = gitHubApp.getApp().getInstallationById(111111); // Installation Id
++-----+
+
+What next?
+
+  * Authenticating as an installation via the {{{/githubappappinsttokenauth.html}App Installation Token}}
+
+  []

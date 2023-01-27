@@ -4,7 +4,7 @@
   "name": "baxterthehacker/public-repo",
   "target_url": null,
   "context": "default",
-  "description": null,
+  "description": "status description",
   "state": "success",
   "commit": {
     "sha": "9049f1265b7d61be4a8904a9a27120d2064dab3b",
@@ -68,12 +68,11 @@
       "type": "User",
       "site_admin": false
     },
-    "parents": [
-    ]
+    "parents": []
   },
   "branches": [
     {
-      "name": "master",
+      "name": "main",
       "commit": {
         "sha": "9049f1265b7d61be4a8904a9a27120d2064dab3b",
         "url": "https://api.github.com/repos/baxterthehacker/public-repo/commits/9049f1265b7d61be4a8904a9a27120d2064dab3b"
@@ -181,7 +180,7 @@
     "forks": 0,
     "open_issues": 2,
     "watchers": 0,
-    "default_branch": "master"
+    "default_branch": "main"
   },
   "sender": {
     "login": "baxterthehacker",

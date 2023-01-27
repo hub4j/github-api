@@ -1,0 +1,46 @@
+{
+  "id": "94dd8eff-b6f3-4003-89c9-c97721354a77",
+  "name": "repositories_206888201_issues_events",
+  "request": {
+    "url": "/repositories/206888201/issues/events?page=11",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repositories_206888201_issues_events-13.json",
+    "headers": {
+      "Date": "Fri, 11 Oct 2019 03:33:41 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4970",
+      "X-RateLimit-Reset": "1570768157",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"98a3f5cf7a07880aba4cf561323dccda\"",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C422:6D1D:15DA74:194EF4:5D9FF814",
+      "Link": "<https://api.github.com/repositories/206888201/issues/events?page=10>; rel=\"prev\", <https://api.github.com/repositories/206888201/issues/events?page=12>; rel=\"next\", <https://api.github.com/repositories/206888201/issues/events?page=14>; rel=\"last\", <https://api.github.com/repositories/206888201/issues/events?page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "94dd8eff-b6f3-4003-89c9-c97721354a77",
+  "persistent": true,
+  "insertionIndex": 13
+}

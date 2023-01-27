@@ -1,0 +1,46 @@
+{
+  "id": "3069f0eb-aba0-4cc2-9bad-8aaa4e27e676",
+  "name": "repos_hub4j-test-org_temp-testcreaterepository_releases_21786739_assets",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testCreateRepository/releases/21786739/assets?name=LICENSE.txt",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalTo": " Copyright (c) 2011- Kohsuke Kawaguchi and other contributors\n\n Permission is hereby granted, free of charge, to any person\n obtaining a copy of this software and associated documentation\n files (the \"Software\"), to deal in the Software without\n restriction, including without limitation the rights to use,\n copy, modify, merge, publish, distribute, sublicense, and/or sell\n copies of the Software, and to permit persons to whom the\n Software is furnished to do so, subject to the following\n conditions:\n\n The above copyright notice and this permission notice shall be\n included in all copies or substantial portions of the Software.\n\n THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\n EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES\n OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\n NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT\n HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\n WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\n FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR\n OTHER DEALINGS IN THE SOFTWARE.\n",
+        "caseInsensitive": false
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_temp-testcreaterepository_releases_21786739_assets-1.json",
+    "headers": {
+      "Date": "Wed, 27 Nov 2019 01:45:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-cache",
+      "Content-Security-Policy": "default-src 'none'",
+      "Etag": "W/\"037b49f1c38e9e0af7ed5a2978c5989d\"",
+      "Last-Modified": "Wed, 27 Nov 2019 01:45:30 GMT",
+      "Strict-Transport-Security": "max-age=31557600",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "X-Accepted-Oauth-Scopes": "repo",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "deny",
+      "X-Github-Media-Type": "unknown, github.v3",
+      "X-Oauth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Xss-Protection": "1; mode=block",
+      "X-GitHub-Request-Id": "D72F:3D33:27CEE:309FD:5DDDD53A"
+    }
+  },
+  "uuid": "3069f0eb-aba0-4cc2-9bad-8aaa4e27e676",
+  "persistent": true,
+  "insertionIndex": 1
+}

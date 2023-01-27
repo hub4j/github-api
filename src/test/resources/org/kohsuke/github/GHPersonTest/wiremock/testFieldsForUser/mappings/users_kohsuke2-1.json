@@ -1,0 +1,46 @@
+{
+  "id": "be47bccc-9404-4fe4-be81-ae86857a3c99",
+  "name": "users_kohsuke2",
+  "request": {
+    "url": "/users/kohsuke2",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "users_kohsuke2-1.json",
+    "headers": {
+      "Date": "Fri, 13 Dec 2019 18:23:31 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4992",
+      "X-RateLimit-Reset": "1576264896",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"d7eece591c3ac8f84be4eede2c45cddf\"",
+      "Last-Modified": "Thu, 16 May 2019 20:59:50 GMT",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "A5F3:771A:2C88B78:32D2E33:5DF3D723"
+    }
+  },
+  "uuid": "be47bccc-9404-4fe4-be81-ae86857a3c99",
+  "persistent": true,
+  "insertionIndex": 1
+}

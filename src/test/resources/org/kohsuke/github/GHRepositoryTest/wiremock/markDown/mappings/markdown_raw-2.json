@@ -1,0 +1,46 @@
+{
+  "id": "44dcd281-d384-45fb-9081-a72ef275f560",
+  "name": "markdown_raw",
+  "request": {
+    "url": "/markdown/raw",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalTo": "**Test日本語**",
+        "caseInsensitive": false
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "<p><strong>Test日本語</strong></p>\n",
+    "headers": {
+      "Date": "Mon, 07 Oct 2019 20:15:46 GMT",
+      "Content-Type": "text/html;charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4843",
+      "X-RateLimit-Reset": "1570482632",
+      "X-CommonMarker-Version": "0.20.0",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding",
+      "X-GitHub-Request-Id": "E94B:957A:38A6635:42F3F8A:5D9B9CF1"
+    }
+  },
+  "uuid": "44dcd281-d384-45fb-9081-a72ef275f560",
+  "persistent": true,
+  "insertionIndex": 2
+}

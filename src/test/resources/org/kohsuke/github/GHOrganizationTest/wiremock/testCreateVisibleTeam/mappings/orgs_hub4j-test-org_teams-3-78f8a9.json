@@ -1,0 +1,55 @@
+{
+  "id": "78f8a9a6-6d92-4273-8b0b-e54cf83397c8",
+  "name": "orgs_hub4j-test-org_teams",
+  "request": {
+    "url": "/orgs/hub4j-test-org/teams",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"create-team-test\",\"privacy\":\"closed\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "orgs_hub4j-test-org_teams-78f8a9a6-6d92-4273-8b0b-e54cf83397c8.json",
+    "headers": {
+      "Date": "Sat, 25 Jan 2020 19:41:36 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4940",
+      "X-RateLimit-Reset": "1579982959",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"ce0c63d2705890f614967cf87a262b09\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, read:packages, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "admin:org, repo",
+      "Location": "https://api.github.com/organizations/49127317/team/3618000",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D770:3B0BC:482A7B6:5605410:5E2C99EF"
+    }
+  },
+  "uuid": "78f8a9a6-6d92-4273-8b0b-e54cf83397c8",
+  "persistent": true,
+  "insertionIndex": 3
+}

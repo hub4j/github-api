@@ -1,0 +1,47 @@
+{
+  "id": "b5d7803b-fec0-4b30-ae7e-9c7ab28322fe",
+  "name": "repos_jenkinsci_jenkins_git_blobs_187cdf651cbf44196886f87327dc3968443174fb",
+  "request": {
+    "url": "/repos/jenkinsci/jenkins/git/blobs/187cdf651cbf44196886f87327dc3968443174fb",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3.raw"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "  executor rendering.\n    we'd like to sort executors so that WideJobProperty can merge its rendering with parents.\n",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 08 Nov 2021 03:25:43 GMT",
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "private, max-age=86400, s-maxage=86400",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"efeaf90639b4abc969c1085d3045f1ea9861d64478dac5a64777d9f325e6ba4c\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-01-19 07:08:40 UTC",
+      "X-GitHub-Media-Type": "github.v3; param=raw",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4983",
+      "X-RateLimit-Reset": "1636345515",
+      "X-RateLimit-Used": "17",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D630:0DBE:2244D7F:23EC7AA:618898B7"
+    }
+  },
+  "uuid": "b5d7803b-fec0-4b30-ae7e-9c7ab28322fe",
+  "persistent": true,
+  "insertionIndex": 7
+}

@@ -1,0 +1,50 @@
+{
+  "id": "9f6ba360-e234-460e-a17c-5545f015d09f",
+  "name": "repos_hub4j-test-org_ghcontentintegrationtest_git_trees_11219d0bcbf2752c237394f97f7e54fbfbfed870",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/11219d0bcbf2752c237394f97f7e54fbfbfed870",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_ghcontentintegrationtest_git_trees_11219d0bcbf2752c237394f97f7e54fbfbfed870-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 28 Jun 2021 20:37:50 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"8171edfbe89a9e9516cfc74e22894677fbc231f2f97b46ae3711b382c551c91b\"",
+      "Last-Modified": "Mon, 28 Jun 2021 20:37:08 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4760",
+      "X-RateLimit-Reset": "1624914877",
+      "X-RateLimit-Used": "240",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF90:7AC9:96E021:AAD748:60DA331E"
+    }
+  },
+  "uuid": "9f6ba360-e234-460e-a17c-5545f015d09f",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-GHContentIntegrationTest-git-trees-11219d0bcbf2752c237394f97f7e54fbfbfed870",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-repos-hub4j-test-org-GHContentIntegrationTest-git-trees-11219d0bcbf2752c237394f97f7e54fbfbfed870-2",
+  "insertionIndex": 7
+}

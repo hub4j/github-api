@@ -1,0 +1,54 @@
+{
+  "id": "1cdf46b2-2554-4f7c-b46f-334654200c77",
+  "name": "repos_hub4j-test-org_testcreaterelease_releases",
+  "request": {
+    "url": "/repos/hub4j-test-org/testCreateRelease/releases",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"tag_name\":\"f9c2647a-6a65-47c5-9c46-4c0a3650ecb1\",\"prerelease\":false,\"name\":\"release-f9c2647a-6a65-47c5-9c46-4c0a3650ecb1\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_testcreaterelease_releases-3.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 10 Jun 2021 15:53:21 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"d04db25e3fb8db25df58ed0b5209b2697f2039213b0172674074fe6b83b6c9b1\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4916",
+      "X-RateLimit-Reset": "1623340890",
+      "X-RateLimit-Used": "84",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C2FD:A4AA:13BB58A:1491E71:60C23570",
+      "Location": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/releases/44425482"
+    }
+  },
+  "uuid": "1cdf46b2-2554-4f7c-b46f-334654200c77",
+  "persistent": true,
+  "insertionIndex": 3
+}

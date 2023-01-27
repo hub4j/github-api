@@ -1,8 +1,8 @@
 {
-  "id": "50b9bd75-d57e-4579-bbe9-036ec859922e",
-  "name": "user_keys_76873461",
+  "id": "2f7174e7-49d8-450e-8070-e82e1016dac5",
+  "name": "user_keys_76959766",
   "request": {
-    "url": "/user/keys/76873461",
+    "url": "/user/keys/76959766",
     "method": "DELETE",
     "headers": {
       "Accept": {
@@ -14,15 +14,16 @@
     "status": 204,
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Wed, 25 Jan 2023 13:26:44 GMT",
-      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
+      "Date": "Fri, 27 Jan 2023 08:26:09 GMT",
+      "X-OAuth-Scopes": "admin:public_key, admin:ssh_signing_key, delete:packages, repo, user, workflow, write:packages",
       "X-Accepted-OAuth-Scopes": "admin:public_key",
+      "github-authentication-token-expiration": "2023-02-02 14:15:42 UTC",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4989",
-      "X-RateLimit-Reset": "1674656069",
-      "X-RateLimit-Used": "11",
+      "X-RateLimit-Remaining": "4878",
+      "X-RateLimit-Reset": "1674808169",
+      "X-RateLimit-Used": "122",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -31,10 +32,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Vary": "Accept-Encoding, Accept, X-Requested-With",
-      "X-GitHub-Request-Id": "C3EB:387F:4832191:495ADF7:63D12E14"
+      "X-GitHub-Request-Id": "E774:B4C4:1EBE82D:1F58B9C:63D38AA1"
     }
   },
-  "uuid": "50b9bd75-d57e-4579-bbe9-036ec859922e",
+  "uuid": "2f7174e7-49d8-450e-8070-e82e1016dac5",
   "persistent": true,
-  "insertionIndex": 4
+  "insertionIndex": 3
 }

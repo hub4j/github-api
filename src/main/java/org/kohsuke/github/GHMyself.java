@@ -70,9 +70,9 @@ public class GHMyself extends GHUser {
     }
 
     /**
-     * Returns the read-only list of all the pulic keys of the current user.
+     * Returns the read-only list of all the public keys of the current user.
      * <p>
-     * NOTE: When using OAuth authenticaiton, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
+     * NOTE: When using OAuth authentication, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
      * will get a 404 NOT FOUND.
      *
      * @return Always non-null.

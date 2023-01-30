@@ -528,6 +528,16 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
+     * Removes the stub mapping.
+     *
+     * @param id
+     *            the id
+     */
+    public void removeStubMapping(UUID id) {
+        wireMockServer.removeStubMapping(id);
+    }
+
+    /**
      * List all stub mappings.
      *
      * @return the list stub mappings result
@@ -709,6 +719,28 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
      */
     public GetScenariosResult getAllScenarios() {
         return wireMockServer.getAllScenarios();
+    }
+
+    /**
+     * Reset a scenario
+     *
+     * @param name
+     *            the name
+     */
+    public void resetScenario(String name) {
+        wireMockServer.resetScenario(name);
+    }
+
+    /**
+     * Set scenario state
+     *
+     * @param name
+     *            the name
+     * @param state
+     *            the state
+     */
+    public void setScenarioState(String name, String state) {
+        wireMockServer.setScenarioState(name, state);
     }
 
     /**

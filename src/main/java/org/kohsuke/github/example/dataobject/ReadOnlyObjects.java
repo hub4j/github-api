@@ -94,7 +94,7 @@ public final class ReadOnlyObjects {
      * <ul>
      * <li>Easy to create</li>
      * <li>Not much code</li>
-     * <li>Mininal annotations</li>
+     * <li>Minimal annotations</li>
      * </ul>
      * Con:
      * <ul>
@@ -373,7 +373,7 @@ public final class ReadOnlyObjects {
      * <ul>
      * <li>Very Easy to create</li>
      * <li>Minimal code</li>
-     * <li>Mininal annotations</li>
+     * <li>Minimal annotations</li>
      * <li>Fields effectively final and lists unmodifiable</li>
      * </ul>
      * Con:

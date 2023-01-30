@@ -122,7 +122,7 @@ public class JWTTokenProvider implements AuthorizationProvider {
      * <p>
      * Made internal for testing
      *
-     * @return false if the the token has been refreshed within the required window, otherwise true
+     * @return false if the token has been refreshed within the required window, otherwise true
      */
     boolean isNotValid() {
         return Instant.now().isAfter(validUntil);

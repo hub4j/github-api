@@ -655,7 +655,7 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Gets all the open pull requests in this organizataion.
+     * Gets all the open pull requests in this organization.
      *
      * @return the pull requests
      * @throws IOException

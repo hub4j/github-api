@@ -517,7 +517,7 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Obtains all the comments associated with this issue, witout any filter.
+     * Obtains all the comments associated with this issue, without any filter.
      *
      * @return the paged iterable
      * @throws IOException

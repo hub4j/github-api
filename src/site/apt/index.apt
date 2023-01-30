@@ -142,7 +142,7 @@ Pluggable HTTP client
   through <<<HttpConnector>>>. In particular, this means you can use {{{https://square.github.io/okhttp/}OkHttp}},
   so we can make use of it's HTTP response cache.
   Making a conditional request against the GitHub API and receiving a 304 response
-  {{{https://developer.github.com/v3/#conditional-requests}does not count against the rate limit}}.
+  {{{https://docs.github.com/en/rest/overview/resources-in-the-rest-api#conditional-requests}does not count against the rate limit}}.
 
   The following code shows an example of how to set up persistent cache on the disk:
 

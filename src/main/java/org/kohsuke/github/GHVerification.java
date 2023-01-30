@@ -9,9 +9,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @author Sourabh Sarvotham Parkala
  * @see <a href="https://developer.github.com/v3/git/tags/#signature-verification-object">tags signature
- *      verificatiion</a>
+ *      verification</a>
  * @see <a href="https://developer.github.com/v3/git/commits/#signature-verification-object">commits signature
- *      verificatiion</a>
+ *      verification</a>
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
@@ -32,7 +32,7 @@ public class GHVerification {
     /**
      * Gets reason for verification value.
      *
-     * @return return reason of type {@link Reason}, such as "valid" or "unsigned". The possible values can be found in
+     * @return reason of type {@link Reason}, such as "valid" or "unsigned". The possible values can be found in
      *         {@link Reason}}
      */
     public Reason getReason() {

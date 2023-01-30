@@ -228,7 +228,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
     }
 
     /**
-     * The content type to to be sent by this request.
+     * The content type to be sent by this request.
      *
      * @return the content type.
      */
@@ -262,7 +262,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
     /**
      * Whether arguments for this request should be included in the URL or in the body of the request.
      *
-     * @return true if the arguements should be sent in the body of the request.
+     * @return true if the arguments should be sent in the body of the request.
      */
     @Override
     public boolean hasBody() {

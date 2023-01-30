@@ -13,8 +13,9 @@ import java.io.ByteArrayOutputStream;
  * @author Jonas van Vliet
  */
 public class GHPublicKeyTest extends AbstractGitHubWireMockTest {
-    public static final String TMP_KEY_NAME = "Temporary user key";
-    public static final String WIREMOCK_SSH_PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDepW2/BSVFM2AfuGGsvi+vjQzC0EBD3R+/7PNEvP0/nvTWxiC/tthfvvCJR6TKrsprCir5tiJFm73gX+K18W0RKYpkyg8H6d1eZu3q/JOiGvoDPeN8Oe9hOGeeexw1WOiz7ESPHzZYXI981evzHAzxxn8zibr2EryopVNsXyoenw==";
+
+    private static final String TMP_KEY_NAME = "Temporary user key";
+    private static final String WIREMOCK_SSH_PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDepW2/BSVFM2AfuGGsvi+vjQzC0EBD3R+/7PNEvP0/nvTWxiC/tthfvvCJR6TKrsprCir5tiJFm73gX+K18W0RKYpkyg8H6d1eZu3q/JOiGvoDPeN8Oe9hOGeeexw1WOiz7ESPHzZYXI981evzHAzxxn8zibr2EryopVNsXyoenw==";
 
     /**
      * Test adding a public key to the user

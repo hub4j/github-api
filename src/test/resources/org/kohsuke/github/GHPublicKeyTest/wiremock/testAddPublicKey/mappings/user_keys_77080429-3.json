@@ -1,8 +1,8 @@
 {
-  "id": "2f7174e7-49d8-450e-8070-e82e1016dac5",
-  "name": "user_keys_76959766",
+  "id": "d91a5200-ed4b-4145-be9f-fece79f6f92d",
+  "name": "user_keys_77080429",
   "request": {
-    "url": "/user/keys/76959766",
+    "url": "/user/keys/77080429",
     "method": "DELETE",
     "headers": {
       "Accept": {
@@ -14,16 +14,16 @@
     "status": 204,
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Fri, 27 Jan 2023 08:26:09 GMT",
-      "X-OAuth-Scopes": "admin:public_key, admin:ssh_signing_key, delete:packages, repo, user, workflow, write:packages",
+      "Date": "Mon, 30 Jan 2023 09:31:56 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
       "X-Accepted-OAuth-Scopes": "admin:public_key",
-      "github-authentication-token-expiration": "2023-02-02 14:15:42 UTC",
+      "github-authentication-token-expiration": "2023-03-01 08:23:08 UTC",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4878",
-      "X-RateLimit-Reset": "1674808169",
-      "X-RateLimit-Used": "122",
+      "X-RateLimit-Remaining": "4996",
+      "X-RateLimit-Reset": "1675074715",
+      "X-RateLimit-Used": "4",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -32,10 +32,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Vary": "Accept-Encoding, Accept, X-Requested-With",
-      "X-GitHub-Request-Id": "E774:B4C4:1EBE82D:1F58B9C:63D38AA1"
+      "X-GitHub-Request-Id": "CAB9:B29F:A4B977:A7B346:63D78E8C"
     }
   },
-  "uuid": "2f7174e7-49d8-450e-8070-e82e1016dac5",
+  "uuid": "d91a5200-ed4b-4145-be9f-fece79f6f92d",
   "persistent": true,
   "insertionIndex": 3
 }

@@ -1,11 +1,6 @@
 package org.kohsuke.github;
 
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.KeyPair;
 import org.junit.Test;
-
-import java.io.ByteArrayOutputStream;
 
 /**
  * The Class GHPublicKeyTest.
@@ -28,34 +23,11 @@ public class GHPublicKeyTest extends AbstractGitHubWireMockTest {
         GHKey newPublicKey = null;
         try {
             GHMyself me = gitHub.getMyself();
-
-            // This test adds a public key to the users profile. Since such a key grants access to everything the user
-            // can access, the private key must be a secret that only the current user can access.
-            //
-            // The following if-statement ensures that the test does not add keys when using wiremocks, but creates
-            // a unique key when run without wiremocks.
-            //
-            if (this.mockGitHub.isUseProxy()) {
-                newPublicKey = me.addPublicKey(TMP_KEY_NAME, WIREMOCK_SSH_PUBLIC_KEY);
-            } else {
-                newPublicKey = me.addPublicKey(TMP_KEY_NAME, createPublicKey());
-            }
+            newPublicKey = me.addPublicKey(TMP_KEY_NAME, WIREMOCK_SSH_PUBLIC_KEY);
         } finally {
             if (newPublicKey != null) {
                 newPublicKey.delete();
             }
-        }
-    }
-
-    private String createPublicKey() {
-        JSch jsch = new JSch();
-        try {
-            KeyPair keyPair = KeyPair.genKeyPair(jsch, KeyPair.RSA);
-            ByteArrayOutputStream publicKey = new ByteArrayOutputStream();
-            keyPair.writePublicKey(publicKey, "Temporary key for testing");
-            return new String(publicKey.toByteArray());
-        } catch (JSchException e) {
-            throw new IllegalStateException("Could not generate SSH key", e);
         }
     }
 }

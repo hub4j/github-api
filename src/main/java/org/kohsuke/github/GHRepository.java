@@ -2939,9 +2939,10 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * List contributors paged iterable.
+     * List errors in the {@code CODEOWNERS} file. Note that GitHub skips lines with incorrect syntax; these are
+     * reported in the web interface, but not in the API call which this library uses.
      *
-     * @return the paged iterable
+     * @return the list of errors
      * @throws IOException
      *             the io exception
      */

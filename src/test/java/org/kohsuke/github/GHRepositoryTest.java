@@ -1344,6 +1344,23 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    @Test
+    public void getCheckRunsWithParams() throws Exception {
+        final int expectedCount = 1;
+        // Use github-api repository as it has checks set up
+        PagedIterable<GHCheckRun> checkRuns = gitHub.getOrganization("hub4j")
+                .getRepository("github-api")
+                .getCheckRuns("54d60fbb53b4efa19f3081417bfb6a1de30c55e4", Map.of("check_name", "build-only (Java 17)"));
+
+        // Check if the checkruns are all succeeded and if we got all of them
+        int checkRunsCount = 0;
+        for (GHCheckRun checkRun : checkRuns) {
+            assertThat(checkRun.getConclusion(), equalTo(Conclusion.SUCCESS));
+            checkRunsCount++;
+        }
+        assertThat(checkRunsCount, equalTo(expectedCount));
+    }
+
     /**
      * Gets the last commit status.
      *

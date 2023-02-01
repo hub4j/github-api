@@ -1,5 +1,12 @@
 package org.kohsuke.github;
 
+/**
+ * Represents an error in a {@code CODEOWNERS} file. See <a href=
+ * "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners">the
+ * relevant documentation</a>.
+ *
+ * @author Michael Grant
+ */
 public class GHCodeownersError {
     private int line, column;
 

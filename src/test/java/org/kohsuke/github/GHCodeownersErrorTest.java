@@ -7,6 +7,11 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 
+/**
+ * Test class for listing errors in CODEOWNERS files.
+ *
+ * @author Michael Grant
+ */
 public class GHCodeownersErrorTest extends AbstractGitHubWireMockTest {
 
     /**

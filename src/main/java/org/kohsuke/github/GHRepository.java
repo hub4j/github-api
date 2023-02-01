@@ -2210,6 +2210,16 @@ public class GHRepository extends GHObject {
         return new GHCheckRunsIterable(this, request);
     }
 
+    @Preview(ANTIOPE)
+    public PagedIterable<GHCheckRun> getCheckRuns(String ref, Map<String, Object> params) throws IOException {
+        GitHubRequest request = root().createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
+                .with(params)
+                .withPreview(ANTIOPE)
+                .build();
+        return new GHCheckRunsIterable(this, request);
+    }
+
     /**
      * Creates a commit status.
      *

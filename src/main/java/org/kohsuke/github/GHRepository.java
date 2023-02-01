@@ -2933,6 +2933,24 @@ public class GHRepository extends GHObject {
         }
     }
 
+    // Only used within listCodeownersErrors().
+    private static class GHCodeownersErrors {
+        public List<GHCodeownersError> errors;
+    }
+
+    /**
+     * List contributors paged iterable.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHCodeownersError> listCodeownersErrors() throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("codeowners/errors"))
+                .fetch(GHCodeownersErrors.class).errors;
+    }
+
     /**
      * List contributors paged iterable.
      *

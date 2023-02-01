@@ -2213,10 +2213,13 @@ public class GHRepository extends GHObject {
     /**
      * Gets check runs for given ref which validate provided parameters
      *
-     * @param ref the Git reference
-     * @param params a map of parameters to filter check runs
+     * @param ref
+     *            the Git reference
+     * @param params
+     *            a map of parameters to filter check runs
      * @return check runs for the given ref
-     * @throws IOException the io exception
+     * @throws IOException
+     *             the io exception
      * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */

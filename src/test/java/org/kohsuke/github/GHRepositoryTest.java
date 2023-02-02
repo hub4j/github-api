@@ -1344,6 +1344,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Filter out the checks from a reference
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void getCheckRunsWithParams() throws Exception {
         final int expectedCount = 1;

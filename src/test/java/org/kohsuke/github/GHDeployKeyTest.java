@@ -48,6 +48,7 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
                 ed25519Key.get().getLastUsedAt(),
                 is(Date.from(Instant.parse("2023-02-08T10:02:11.00Z"))));
         assertThat("The key only has read access", ed25519Key.get().isRead_only(), is(true));
+        assertThat("Object has a toString()", ed25519Key.get().toString(), is(notNullValue()));
 
         Optional<GHDeployKey> rsa_4096Key = deployKeys.stream()
                 .filter(key -> key.getTitle().equals(RSA_4096_READWRITE))

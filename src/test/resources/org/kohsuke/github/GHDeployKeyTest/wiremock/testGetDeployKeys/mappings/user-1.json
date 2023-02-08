@@ -1,5 +1,5 @@
 {
-  "id": "cefc24ac-589e-4de4-a5c4-ed51e3814e97",
+  "id": "ffe193ff-1772-4bdb-a87d-f09d73a55e9c",
   "name": "user",
   "request": {
     "url": "/user",
@@ -15,35 +15,37 @@
     "bodyFileName": "user-1.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Thu, 26 Jan 2023 14:33:45 GMT",
+      "Date": "Wed, 08 Feb 2023 10:16:06 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"30a2446b53568c889b9e8ddf9cd8cb55b443b4ecd79b7a0eb814ac2a2679d0a0\"",
+      "ETag": "W/\"d886bab2c0d06ed3ad08a6e1296c04c22f9a975d735ded6a05ba24cf69cee315\"",
       "Last-Modified": "Fri, 04 Nov 2022 06:44:42 GMT",
-      "X-OAuth-Scopes": "admin:public_key, admin:ssh_signing_key, delete:packages, repo, user, workflow, write:packages",
+      "X-OAuth-Scopes": "read:user, repo",
       "X-Accepted-OAuth-Scopes": "",
-      "github-authentication-token-expiration": "2023-02-02 14:15:42 UTC",
+      "github-authentication-token-expiration": "2023-02-15 10:03:43 UTC",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4938",
-      "X-RateLimit-Reset": "1674743761",
-      "X-RateLimit-Used": "62",
+      "X-RateLimit-Remaining": "4985",
+      "X-RateLimit-Reset": "1675854466",
+      "X-RateLimit-Used": "15",
       "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "FFFF:127ED:3A9DAE7:3BA4E9E:63D28F49"
+      "X-GitHub-Request-Id": "E1B6:4092:490FCD:4A4F75:63E37665"
     }
   },
-  "uuid": "cefc24ac-589e-4de4-a5c4-ed51e3814e97",
+  "uuid": "ffe193ff-1772-4bdb-a87d-f09d73a55e9c",
   "persistent": true,
   "insertionIndex": 1
 }

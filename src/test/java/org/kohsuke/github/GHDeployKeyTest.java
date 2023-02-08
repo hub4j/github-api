@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.npathai.hamcrestopt.OptionalMatchers.isPresent;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 /**
  * The Class GHDeployKeyTest.
@@ -41,10 +40,13 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
         assertThat("The key exists", ed25519Key, isPresent());
         assertThat("The key was created at the specified date",
                 ed25519Key.get().getCreatedAt(),
-                is(Date.from(Instant.parse("2023-01-26T14:11:41.00Z"))));
+                is(Date.from(Instant.parse("2023-02-08T10:00:15.00Z"))));
         assertThat("The key is created by " + KEY_CREATOR_USERNAME,
                 ed25519Key.get().getAdded_by(),
                 is(KEY_CREATOR_USERNAME));
+        assertThat("The key has a last_used value",
+                ed25519Key.get().getLastUsedAt(),
+                is(Date.from(Instant.parse("2023-02-08T10:02:11.00Z"))));
         assertThat("The key only has read access", ed25519Key.get().isRead_only(), is(true));
 
         Optional<GHDeployKey> rsa_4096Key = deployKeys.stream()
@@ -57,6 +59,7 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
         assertThat("The key is created by " + KEY_CREATOR_USERNAME,
                 rsa_4096Key.get().getAdded_by(),
                 is(KEY_CREATOR_USERNAME));
+        assertThat("The key has never been used", rsa_4096Key.get().getLastUsedAt(), is(nullValue()));
         assertThat("The key only has read/write access", rsa_4096Key.get().isRead_only(), is(false));
     }
 

@@ -128,6 +128,7 @@ public class ArchTests {
                         targetMethodIs(ToStringBuilder.class, "append", String.class, Object.class),
                         targetMethodIs(ToStringBuilder.class, "append", String.class, long.class),
                         targetMethodIs(ToStringBuilder.class, "append", String.class, int.class),
+                        targetMethodIs(ToStringBuilder.class, "append", String.class, boolean.class),
                         targetMethodIs(ToStringBuilder.class, "isEmpty"),
                         targetMethodIs(ToStringBuilder.class, "equals"),
                         targetMethodIs(ToStringBuilder.class, "capitalize"),

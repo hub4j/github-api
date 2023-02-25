@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 
 // TODO: Auto-generated Javadoc
 /**
- * Request/responce contains useful metadata. Custom exception allows store info for next diagnostics.
+ * Request/response contains useful metadata. Custom exception allows store info for next diagnostics.
  *
  * @author Kanstantsin Shautsou
  */

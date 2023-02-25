@@ -83,7 +83,7 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
         }
 
         // HttpUrlConnection is nuts. This call opens the connection and gets a response.
-        // Putting this on it's own line for ease of debugging if needed.
+        // Putting this on its own line for ease of debugging if needed.
         int statusCode = connection.getResponseCode();
         Map<String, List<String>> headers = connection.getHeaderFields();
 

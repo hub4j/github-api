@@ -339,9 +339,9 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return reactions;
     }
 
-   /**
-    * The side of the diff to which the comment applies
-    */
+    /**
+     * The side of the diff to which the comment applies
+     */
     public static enum Side {
         RIGHT, LEFT, UNKNOWN;
 

@@ -2956,6 +2956,25 @@ public class GHRepository extends GHObject {
         }
     }
 
+    // Only used within listCodeownersErrors().
+    private static class GHCodeownersErrors {
+        public List<GHCodeownersError> errors;
+    }
+
+    /**
+     * List errors in the {@code CODEOWNERS} file. Note that GitHub skips lines with incorrect syntax; these are
+     * reported in the web interface, but not in the API call which this library uses.
+     *
+     * @return the list of errors
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHCodeownersError> listCodeownersErrors() throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("codeowners/errors"))
+                .fetch(GHCodeownersErrors.class).errors;
+    }
+
     /**
      * List contributors paged iterable.
      *

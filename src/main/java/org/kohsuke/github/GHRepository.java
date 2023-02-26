@@ -3515,6 +3515,26 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Star a repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void star() throws IOException {
+        root().createRequest().method("PUT").withUrlPath(String.format("/user/starred/%s", full_name)).send();
+    }
+
+    /**
+     * Unstar a repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void unstar() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(String.format("/user/starred/%s", full_name)).send();
+    }
+
+    /**
      * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
      *
      * Consumer must call {@link #done()} to commit changes.

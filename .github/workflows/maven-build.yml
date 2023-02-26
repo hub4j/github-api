@@ -31,7 +31,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'zulu'
+          distribution: 'temurin'
           cache: 'maven'
       - name: Maven Install (skipTests)
         env:
@@ -50,7 +50,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'adopt'
+          distribution: 'temurin'
           cache: 'maven'
       - name: Maven Site
         env:
@@ -70,7 +70,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: ${{ matrix.java }}
-        distribution: 'zulu'
+        distribution: 'temurin'
         cache: 'maven'
     # JDK 8
     - name: Maven Install with Code Coverage
@@ -91,7 +91,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: ${{ matrix.java }}
-        distribution: 'zulu'
+        distribution: 'temurin'
         cache: 'maven'
     # JDK 11+
     - name: Maven Install without Code Coverage

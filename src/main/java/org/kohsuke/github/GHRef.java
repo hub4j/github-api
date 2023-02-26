@@ -85,7 +85,7 @@ public class GHRef extends GitHubInteractiveObject {
     }
 
     /**
-     * Retrive a ref of the given type for the current GitHub repository.
+     * Retrieve a ref of the given type for the current GitHub repository.
      *
      * @param repository
      *            the repository to read from

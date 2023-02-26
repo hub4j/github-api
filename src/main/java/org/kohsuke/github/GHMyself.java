@@ -70,9 +70,9 @@ public class GHMyself extends GHUser {
     }
 
     /**
-     * Returns the read-only list of all the pulic keys of the current user.
+     * Returns the read-only list of all the public keys of the current user.
      * <p>
-     * NOTE: When using OAuth authenticaiton, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
+     * NOTE: When using OAuth authentication, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
      * will get a 404 NOT FOUND.
      *
      * @return Always non-null.
@@ -81,6 +81,28 @@ public class GHMyself extends GHUser {
      */
     public List<GHKey> getPublicKeys() throws IOException {
         return root().createRequest().withUrlPath("/user/keys").toIterable(GHKey[].class, null).toList();
+    }
+
+    /**
+     * Add public SSH key for the user.
+     * <p>
+     * https://docs.github.com/en/rest/users/keys?apiVersion=2022-11-28#create-a-public-ssh-key-for-the-authenticated-user
+     *
+     * @param title
+     *            Title of the SSH key
+     * @param key
+     *            the public key
+     * @return the newly created Github key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHKey addPublicKey(String title, String key) throws IOException {
+        return root().createRequest()
+                .withUrlPath("/user/keys")
+                .method("POST")
+                .with("title", title)
+                .with("key", key)
+                .fetch(GHKey.class);
     }
 
     /**

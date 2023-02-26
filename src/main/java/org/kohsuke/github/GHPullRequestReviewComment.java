@@ -343,8 +343,21 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * The side of the diff to which the comment applies
      */
     public static enum Side {
-        RIGHT, LEFT, UNKNOWN;
+        
+        /** Right side */
+        RIGHT,
+        /** Left side */
+        LEFT,
+        /** Unknown side */
+        UNKNOWN;
 
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the status
+         */
         public static Side from(String value) {
             return EnumUtils.getEnumOrDefault(Side.class, value, Side.UNKNOWN);
         }

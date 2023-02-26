@@ -33,8 +33,9 @@ import javax.annotation.CheckForNull;
 
 import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
+// TODO: Auto-generated Javadoc
 /**
- * Review comment to the pull request
+ * Review comment to the pull request.
  *
  * @author Julien Henry
  * @see GHPullRequest#listReviewComments() GHPullRequest#listReviewComments()
@@ -42,6 +43,8 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  *      String, int)
  */
 public class GHPullRequestReviewComment extends GHObject implements Reactable {
+
+    /** The owner. */
     GHPullRequest owner;
 
     private Long pull_request_review_id = -1L;
@@ -88,6 +91,13 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return result;
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH pull request review comment
+     */
     GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
         this.owner = owner;
         return this;
@@ -197,6 +207,11 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
         return in_reply_to_id;
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
@@ -375,6 +390,15 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
                 .wrapUp(owner);
     }
 
+    /**
+     * Creates the reaction.
+     *
+     * @param content
+     *            the content
+     * @return the GH reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return owner.root()
@@ -386,6 +410,14 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
                 .fetch(GHReaction.class);
     }
 
+    /**
+     * Delete reaction.
+     *
+     * @param reaction
+     *            the reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public void deleteReaction(GHReaction reaction) throws IOException {
         owner.root()
                 .createRequest()
@@ -394,6 +426,11 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
                 .send();
     }
 
+    /**
+     * List reactions.
+     *
+     * @return the paged iterable
+     */
     @Preview(SQUIRREL_GIRL)
     public PagedIterable<GHReaction> listReactions() {
         return owner.root()

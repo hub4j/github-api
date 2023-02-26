@@ -4,12 +4,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
+// TODO: Auto-generated Javadoc
 /**
  * Set of {@link GHPerson} with helper lookup methods.
  *
+ * @author Kohsuke Kawaguchi
  * @param <T>
  *            the type parameter
- * @author Kohsuke Kawaguchi
  */
 public class GHPersonSet<T extends GHPerson> extends HashSet<T> {
     private static final long serialVersionUID = 1L;

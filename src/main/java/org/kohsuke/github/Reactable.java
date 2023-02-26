@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Those {@link GHObject}s that can have {@linkplain GHReaction reactions}.
  *

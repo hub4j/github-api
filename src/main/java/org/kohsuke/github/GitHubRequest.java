@@ -25,6 +25,7 @@ import javax.annotation.WillClose;
 
 import static java.util.Arrays.asList;
 
+// TODO: Auto-generated Javadoc
 /**
  * Class {@link GitHubRequest} represents an immutable instance used by the client to determine what information to
  * retrieve from a GitHub server. Use the {@link Builder} to construct a {@link GitHubRequest}.
@@ -92,6 +93,11 @@ public class GitHubRequest implements GitHubConnectorRequest {
     /**
      * Gets the final GitHub API URL.
      *
+     * @param apiUrl
+     *            the api url
+     * @param tailApiUrl
+     *            the tail api url
+     * @return the api URL
      * @throws GHException
      *             wrapping a {@link MalformedURLException} if the GitHub API URL cannot be constructed
      */
@@ -115,7 +121,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
     }
 
     /**
-     * Transform Java Enum into Github constants given its conventions
+     * Transform Java Enum into Github constants given its conventions.
      *
      * @param en
      *            Enum to be transformed
@@ -201,7 +207,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
     }
 
     /**
-     * The base GitHub API URL for this request represented as a {@link String}
+     * The base GitHub API URL for this request represented as a {@link String}.
      *
      * @return the url string
      */
@@ -222,7 +228,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
     }
 
     /**
-     * The content type to to be sent by this request.
+     * The content type to be sent by this request.
      *
      * @return the content type.
      */
@@ -256,7 +262,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
     /**
      * Whether arguments for this request should be included in the URL or in the body of the request.
      *
-     * @return true if the arguements should be sent in the body of the request.
+     * @return true if the arguments should be sent in the body of the request.
      */
     @Override
     public boolean hasBody() {
@@ -481,10 +487,24 @@ public class GitHubRequest implements GitHubConnectorRequest {
             return (B) this;
         }
 
+        /**
+         * With preview.
+         *
+         * @param name
+         *            the name
+         * @return the b
+         */
         public B withPreview(String name) {
             return withHeader("Accept", name);
         }
 
+        /**
+         * With preview.
+         *
+         * @param preview
+         *            the preview
+         * @return the b
+         */
         public B withPreview(Previews preview) {
             return withPreview(preview.mediaType());
         }
@@ -603,6 +623,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @param body
          *            the body
          * @return the request builder
+         * @throws IOException
+         *             Signals that an I/O exception has occurred.
          */
         public B with(@WillClose InputStream body) throws IOException {
             this.body = IOUtils.toByteArray(body);
@@ -641,7 +663,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
         }
 
         /**
-         * Unlike {@link #with(String, String)}, overrides the existing value
+         * Unlike {@link #with(String, String)}, overrides the existing value.
          *
          * @param key
          *            the key
@@ -738,6 +760,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * If urlPath starts with a slash, it will be URI encoded as a path. If it starts with anything else, it will be
          * used as is.
          *
+         * @param urlPath
+         *            the url path
          * @param urlPathItems
          *            the content type
          * @return the request builder
@@ -777,10 +801,25 @@ public class GitHubRequest implements GitHubConnectorRequest {
         }
     }
 
+    /**
+     * The Class Entry.
+     */
     protected static class Entry {
+
+        /** The key. */
         final String key;
+
+        /** The value. */
         final Object value;
 
+        /**
+         * Instantiates a new entry.
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         */
         protected Entry(String key, Object value) {
             this.key = key;
             this.value = value;

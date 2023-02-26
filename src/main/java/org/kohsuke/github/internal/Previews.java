@@ -133,6 +133,11 @@ public enum Previews {
         this.mediaType = mediaType;
     }
 
+    /**
+     * Gets the mediaType
+     *
+     * @return the media type string
+     */
     public String mediaType() {
         return mediaType;
     }

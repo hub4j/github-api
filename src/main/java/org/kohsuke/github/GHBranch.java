@@ -12,6 +12,7 @@ import java.util.Objects;
 
 import javax.annotation.CheckForNull;
 
+// TODO: Auto-generated Javadoc
 /**
  * A branch in a repository.
  *
@@ -30,6 +31,14 @@ public class GHBranch extends GitHubInteractiveObject {
     private boolean protection;
     private String protection_url;
 
+    /**
+     * Instantiates a new GH branch.
+     *
+     * @param name
+     *            the name
+     * @throws Exception
+     *             the exception
+     */
     @JsonCreator
     GHBranch(@JsonProperty(value = "name", required = true) String name) throws Exception {
         Objects.requireNonNull(name);
@@ -40,8 +49,11 @@ public class GHBranch extends GitHubInteractiveObject {
      * The type Commit.
      */
     public static class Commit {
+
+        /** The sha. */
         String sha;
 
+        /** The url. */
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         String url;
     }
@@ -209,16 +221,33 @@ public class GHBranch extends GitHubInteractiveObject {
         return result;
     }
 
+    /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
     String getApiRoute() {
         return owner.getApiTailUrl("/branches/" + name);
     }
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
         final String url = owner != null ? owner.getUrl().toString() : "unknown";
         return "Branch:" + name + " in " + url;
     }
 
+    /**
+     * Wrap.
+     *
+     * @param repo
+     *            the repo
+     * @return the GH branch
+     */
     GHBranch wrap(GHRepository repo) {
         this.owner = repo;
         return this;

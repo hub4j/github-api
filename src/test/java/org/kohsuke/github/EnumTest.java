@@ -5,6 +5,7 @@ import org.kohsuke.github.GHPullRequest.MergeMethod;
 
 import static org.hamcrest.CoreMatchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Unit test for {@link GitHub} static helpers.
  *
@@ -12,6 +13,9 @@ import static org.hamcrest.CoreMatchers.*;
  */
 public class EnumTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Touch enums.
+     */
     @Test
     public void touchEnums() {
         assertThat(GHCheckRun.AnnotationLevel.values().length, equalTo(3));

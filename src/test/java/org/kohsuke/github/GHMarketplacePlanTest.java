@@ -10,13 +10,19 @@ import static org.kohsuke.github.GHDirection.DESC;
 import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
 import static org.kohsuke.github.GHMarketplaceListAccountBuilder.Sort.UPDATED;
 
+// TODO: Auto-generated Javadoc
 /**
- * Tests for the GitHub MarketPlace Plan API methods
+ * Tests for the GitHub MarketPlace Plan API methods.
  *
  * @author Paulo Miguel Almeida
  */
 public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Gets the git hub builder.
+     *
+     * @return the git hub builder
+     */
     protected GitHubBuilder getGitHubBuilder() {
         return super.getGitHubBuilder()
                 // ensure that only JWT will be used against the tests below
@@ -24,6 +30,12 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
                 .withJwtToken("bogus");
     }
 
+    /**
+     * List marketplace plans.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listMarketplacePlans() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
@@ -31,6 +43,12 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
         plans.forEach(this::testMarketplacePlan);
     }
 
+    /**
+     * List accounts.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listAccounts() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
@@ -40,6 +58,12 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
         marketplaceUsers.forEach(this::testMarketplaceAccount);
     }
 
+    /**
+     * List accounts with direction.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listAccountsWithDirection() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
@@ -56,6 +80,12 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * List accounts with sort and direction.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listAccountsWithSortAndDirection() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();

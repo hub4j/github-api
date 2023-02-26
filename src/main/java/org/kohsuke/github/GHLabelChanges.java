@@ -2,8 +2,9 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+// TODO: Auto-generated Javadoc
 /**
- * Wrapper to define changed fields on label action="edited"
+ * Wrapper to define changed fields on label action="edited".
  *
  * @see GHEventPayload.Label
  */

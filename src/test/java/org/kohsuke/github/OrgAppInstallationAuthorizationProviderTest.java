@@ -9,12 +9,25 @@ import java.io.IOException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class OrgAppInstallationAuthorizationProviderTest.
+ */
 public class OrgAppInstallationAuthorizationProviderTest extends AbstractGHAppInstallationTest {
 
+    /**
+     * Instantiates a new org app installation authorization provider test.
+     */
     public OrgAppInstallationAuthorizationProviderTest() {
         useDefaultGitHub = false;
     }
 
+    /**
+     * Invalid JWT token raises exception.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test(expected = HttpException.class)
     public void invalidJWTTokenRaisesException() throws IOException {
         OrgAppInstallationAuthorizationProvider provider = new OrgAppInstallationAuthorizationProvider(
@@ -27,6 +40,12 @@ public class OrgAppInstallationAuthorizationProviderTest extends AbstractGHAppIn
         provider.getEncodedAuthorization();
     }
 
+    /**
+     * Valid JWT token allows oauth token request.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void validJWTTokenAllowsOauthTokenRequest() throws IOException {
         OrgAppInstallationAuthorizationProvider provider = new OrgAppInstallationAuthorizationProvider("hub4j-test-org",

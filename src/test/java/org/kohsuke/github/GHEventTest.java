@@ -5,6 +5,10 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHEventTest.
+ */
 public class GHEventTest {
 
     /**
@@ -23,6 +27,9 @@ public class GHEventTest {
         return GHEvent.UNKNOWN;
     }
 
+    /**
+     * Regression test.
+     */
     @Test
     public void regressionTest() {
         assertThat(GHEventInfo.transformTypeToGHEvent("NewlyAddedOrBogusEvent"), is(GHEvent.UNKNOWN));

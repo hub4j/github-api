@@ -1,0 +1,55 @@
+{
+  "id": "252d7786-18ad-40e2-9030-bc7f535a77ef",
+  "name": "repos_hub4j-test-org_ghissuetest_issues_15_comments",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHIssueTest/issues/15/comments",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"body\":\"First comment\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_ghissuetest_issues_15_comments-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 22 Sep 2022 10:48:19 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"fe4b553e97fb6e05bd7963a7f1ad3c4774bbc210350b90697167c78cfc35e1c6\"",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-09-29 09:53:54 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4663",
+      "X-RateLimit-Reset": "1663844087",
+      "X-RateLimit-Used": "337",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DC91:9FDD:4F1C506:505FE5A:632C3D72",
+      "Location": "https://api.github.com/repos/hub4j-test-org/GHIssueTest/issues/comments/1254853505"
+    }
+  },
+  "uuid": "252d7786-18ad-40e2-9030-bc7f535a77ef",
+  "persistent": true,
+  "insertionIndex": 7
+}

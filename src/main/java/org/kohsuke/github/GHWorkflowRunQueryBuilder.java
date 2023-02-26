@@ -1,7 +1,9 @@
 package org.kohsuke.github;
 
+import org.kohsuke.github.GHWorkflowRun.Conclusion;
 import org.kohsuke.github.GHWorkflowRun.Status;
 
+// TODO: Auto-generated Javadoc
 /**
  * Lists up workflow runs with some filtering and sorting.
  *
@@ -11,6 +13,12 @@ import org.kohsuke.github.GHWorkflowRun.Status;
 public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
     private final GHRepository repo;
 
+    /**
+     * Instantiates a new GH workflow run query builder.
+     *
+     * @param repo
+     *            the repo
+     */
     GHWorkflowRunQueryBuilder(GHRepository repo) {
         super(repo.root());
         this.repo = repo;
@@ -88,6 +96,25 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
         return this;
     }
 
+    /**
+     * Conclusion workflow run query builder.
+     * <p>
+     * The GitHub API is also using the status field to search by conclusion.
+     *
+     * @param conclusion
+     *            the conclusion
+     * @return the gh workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder conclusion(Conclusion conclusion) {
+        req.with("status", conclusion.toString());
+        return this;
+    }
+
+    /**
+     * List.
+     *
+     * @return the paged iterable
+     */
     @Override
     public PagedIterable<GHWorkflowRun> list() {
         return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl("actions/runs")));

@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Iterator over a paginated data source. Iterates of the content items of each page, automatically requesting new pages
  * as needed.
@@ -19,12 +20,13 @@ import javax.annotation.Nonnull;
  *
  * This class is not thread-safe. Any one instance should only be called from a single thread.
  *
+ * @author Kohsuke Kawaguchi
  * @param <T>
  *            the type parameter
- * @author Kohsuke Kawaguchi
  */
 public class PagedIterator<T> implements Iterator<T> {
 
+    /** The base. */
     @Nonnull
     protected final Iterator<T[]> base;
 
@@ -47,6 +49,14 @@ public class PagedIterator<T> implements Iterator<T> {
      */
     private int nextItemIndex;
 
+    /**
+     * Instantiates a new paged iterator.
+     *
+     * @param base
+     *            the base
+     * @param itemInitializer
+     *            the item initializer
+     */
     PagedIterator(@Nonnull Iterator<T[]> base, @CheckForNull Consumer<T> itemInitializer) {
         this.base = base;
         this.itemInitializer = itemInitializer;
@@ -72,7 +82,7 @@ public class PagedIterator<T> implements Iterator<T> {
      */
     public boolean hasNext() {
         fetch();
-        return currentPage.length > nextItemIndex;
+        return (currentPage != null && currentPage.length > nextItemIndex);
     }
 
     /**

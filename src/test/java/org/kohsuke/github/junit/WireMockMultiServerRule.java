@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO: Auto-generated Javadoc
 /**
  * The standard WireMockRule eagerly initializes a WireMockServer. This version supports multiple servers in one rule
  * and takes a lazy approach to intitialization allowing us to isolate files snapshots for each method.
@@ -26,33 +27,76 @@ import java.util.Map;
  */
 public class WireMockMultiServerRule implements MethodRule, TestRule {
 
+    /** The servers. */
     protected final Map<String, WireMockServer> servers = new HashMap<>();
     private boolean failOnUnmatchedRequests;
     private final Options options;
 
+    /**
+     * Gets the method name.
+     *
+     * @return the method name
+     */
     public String getMethodName() {
         return methodName;
     }
 
     private String methodName = null;
 
+    /**
+     * Instantiates a new wire mock multi server rule.
+     *
+     * @param options
+     *            the options
+     */
     public WireMockMultiServerRule(Options options) {
         this(options, true);
     }
 
+    /**
+     * Instantiates a new wire mock multi server rule.
+     *
+     * @param options
+     *            the options
+     * @param failOnUnmatchedRequests
+     *            the fail on unmatched requests
+     */
     public WireMockMultiServerRule(Options options, boolean failOnUnmatchedRequests) {
         this.options = options;
         this.failOnUnmatchedRequests = failOnUnmatchedRequests;
     }
 
+    /**
+     * Instantiates a new wire mock multi server rule.
+     */
     public WireMockMultiServerRule() {
         this(WireMockRuleConfiguration.wireMockConfig());
     }
 
+    /**
+     * Apply.
+     *
+     * @param base
+     *            the base
+     * @param description
+     *            the description
+     * @return the statement
+     */
     public Statement apply(Statement base, Description description) {
         return this.apply(base, description.getMethodName());
     }
 
+    /**
+     * Apply.
+     *
+     * @param base
+     *            the base
+     * @param method
+     *            the method
+     * @param target
+     *            the target
+     * @return the statement
+     */
     public Statement apply(final Statement base, FrameworkMethod method, Object target) {
         return this.apply(base, method.getName());
     }
@@ -79,9 +123,20 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
         };
     }
 
+    /**
+     * Initialize servers.
+     */
     protected void initializeServers() {
     }
 
+    /**
+     * Initialize server.
+     *
+     * @param serverId
+     *            the server id
+     * @param extensions
+     *            the extensions
+     */
     protected final void initializeServer(String serverId, Extension... extensions) {
         String directoryName = methodName;
         if (!serverId.equals("default")) {
@@ -104,9 +159,15 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
         }
     }
 
+    /**
+     * Before.
+     */
     protected void before() {
     }
 
+    /**
+     * After.
+     */
     protected void after() {
     }
 

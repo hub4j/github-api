@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * Provides information for Git Trees https://developer.github.com/v3/git/trees/
  *
@@ -14,6 +15,8 @@ import java.util.List;
  * @see GHTreeEntry#asTree() GHTreeEntry#asTree()
  */
 public class GHTree {
+
+    /** The repo. */
     /* package almost final */GHRepository repo;
 
     private boolean truncated;
@@ -21,7 +24,7 @@ public class GHTree {
     private GHTreeEntry[] tree;
 
     /**
-     * The SHA for this trees
+     * The SHA for this trees.
      *
      * @return the sha
      */
@@ -30,7 +33,7 @@ public class GHTree {
     }
 
     /**
-     * Return an array of entries of the trees
+     * Return an array of entries of the trees.
      *
      * @return the tree
      */
@@ -58,7 +61,7 @@ public class GHTree {
     /**
      * Returns true if the number of items in the tree array exceeded the GitHub maximum limit.
      *
-     * @return true true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
+     * @return true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
      */
     public boolean isTruncated() {
         return truncated;
@@ -74,6 +77,13 @@ public class GHTree {
         return GitHubClient.parseURL(url);
     }
 
+    /**
+     * Wrap.
+     *
+     * @param repo
+     *            the repo
+     * @return the GH tree
+     */
     GHTree wrap(GHRepository repo) {
         this.repo = repo;
         for (GHTreeEntry e : tree) {

@@ -2977,6 +2977,25 @@ public class GHRepository extends GHObject {
         }
     }
 
+    // Only used within listCodeownersErrors().
+    private static class GHCodeownersErrors {
+        public List<GHCodeownersError> errors;
+    }
+
+    /**
+     * List errors in the {@code CODEOWNERS} file. Note that GitHub skips lines with incorrect syntax; these are
+     * reported in the web interface, but not in the API call which this library uses.
+     *
+     * @return the list of errors
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHCodeownersError> listCodeownersErrors() throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("codeowners/errors"))
+                .fetch(GHCodeownersErrors.class).errors;
+    }
+
     /**
      * List contributors paged iterable.
      *
@@ -3533,6 +3552,26 @@ public class GHRepository extends GHObject {
 
             requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
         }
+    }
+
+    /**
+     * Star a repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void star() throws IOException {
+        root().createRequest().method("PUT").withUrlPath(String.format("/user/starred/%s", full_name)).send();
+    }
+
+    /**
+     * Unstar a repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void unstar() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(String.format("/user/starred/%s", full_name)).send();
     }
 
     /**

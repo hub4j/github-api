@@ -2211,6 +2211,29 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Gets check runs for given ref which validate provided parameters
+     *
+     * @param ref
+     *            the Git reference
+     * @param params
+     *            a map of parameters to filter check runs
+     * @return check runs for the given ref
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
+     *      for a specific ref</a>
+     */
+    @Preview(ANTIOPE)
+    public PagedIterable<GHCheckRun> getCheckRuns(String ref, Map<String, Object> params) throws IOException {
+        GitHubRequest request = root().createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
+                .with(params)
+                .withPreview(ANTIOPE)
+                .build();
+        return new GHCheckRunsIterable(this, request);
+    }
+
+    /**
      * Creates a commit status.
      *
      * @param sha1

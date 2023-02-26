@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.IOException;
+import java.util.Date;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -19,6 +20,18 @@ public class GHDeployKey {
     /** The id. */
     protected long id;
     private GHRepository owner;
+
+    /** Creation date of the deploy key */
+    private String created_at;
+
+    /** Last used date of the deploy key */
+    private String last_used;
+
+    /** Name of user that added the deploy key */
+    private String added_by;
+
+    /** Whether the deploykey has readonly permission or full access */
+    private boolean read_only;
 
     /**
      * Gets id.
@@ -66,6 +79,42 @@ public class GHDeployKey {
     }
 
     /**
+     * Gets created_at.
+     *
+     * @return the created_at
+     */
+    public Date getCreatedAt() {
+        return GitHubClient.parseDate(created_at);
+    }
+
+    /**
+     * Gets last_used.
+     *
+     * @return the last_used
+     */
+    public Date getLastUsedAt() {
+        return GitHubClient.parseDate(last_used);
+    }
+
+    /**
+     * Gets added_by
+     *
+     * @return the added_by
+     */
+    public String getAdded_by() {
+        return added_by;
+    }
+
+    /**
+     * Is read_only
+     *
+     * @return true if the key can only read. False if the key has write permission as well.
+     */
+    public boolean isRead_only() {
+        return read_only;
+    }
+
+    /**
      * Wrap gh deploy key.
      *
      * @param repo
@@ -95,7 +144,14 @@ public class GHDeployKey {
      * @return the string
      */
     public String toString() {
-        return new ToStringBuilder(this).append("title", title).append("id", id).append("key", key).toString();
+        return new ToStringBuilder(this).append("title", title)
+                .append("id", id)
+                .append("key", key)
+                .append("created_at", created_at)
+                .append("last_used", last_used)
+                .append("added_by", added_by)
+                .append("read_only", read_only)
+                .toString();
     }
 
     /**

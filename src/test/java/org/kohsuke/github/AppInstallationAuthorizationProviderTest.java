@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.authorization.AppInstallationAuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.authorization.OrgAppInstallationAuthorizationProvider;
 
@@ -11,14 +12,14 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class OrgAppInstallationAuthorizationProviderTest.
+ * The Class AppInstallationAuthorizationProviderTest.
  */
-public class OrgAppInstallationAuthorizationProviderTest extends AbstractGHAppInstallationTest {
+public class AppInstallationAuthorizationProviderTest extends AbstractGHAppInstallationTest {
 
     /**
      * Instantiates a new org app installation authorization provider test.
      */
-    public OrgAppInstallationAuthorizationProviderTest() {
+    public AppInstallationAuthorizationProviderTest() {
         useDefaultGitHub = false;
     }
 
@@ -48,7 +49,8 @@ public class OrgAppInstallationAuthorizationProviderTest extends AbstractGHAppIn
      */
     @Test
     public void validJWTTokenAllowsOauthTokenRequest() throws IOException {
-        OrgAppInstallationAuthorizationProvider provider = new OrgAppInstallationAuthorizationProvider("hub4j-test-org",
+        AppInstallationAuthorizationProvider provider = new AppInstallationAuthorizationProvider(
+                app -> app.getInstallationByOrganization("hub4j-test-org"),
                 ImmutableAuthorizationProvider.fromJwtToken("bogus-valid-token"));
         gitHub = getGitHubBuilder().withAuthorizationProvider(provider)
                 .withEndpoint(mockGitHub.apiServer().baseUrl())

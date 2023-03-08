@@ -1303,6 +1303,26 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    @Test
+    public void testAddDeployKeyAsReadOnly() throws IOException {
+        GHRepository myRepository = getTestRepository();
+        final GHDeployKey newDeployKey = myRepository.addDeployKey("test",
+                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIATWwMLytklB44O66isWRKOB3Qd7Ysc7q7EyWTmT0bG9 test@example.com",
+                true);
+        try {
+            assertThat(newDeployKey.getId(), notNullValue());
+
+            GHDeployKey k = Iterables.find(myRepository.getDeployKeys(), new Predicate<GHDeployKey>() {
+                public boolean apply(GHDeployKey deployKey) {
+                    return newDeployKey.getId() == deployKey.getId() && deployKey.isRead_only();
+                }
+            });
+            assertThat(k, notNullValue());
+        } finally {
+            newDeployKey.delete();
+        }
+    }
+
     /**
      * Test commit status context.
      *

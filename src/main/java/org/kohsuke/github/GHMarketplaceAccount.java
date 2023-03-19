@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.io.IOException;
 import java.net.URL;
 
 // TODO: Auto-generated Javadoc
@@ -78,21 +79,18 @@ public class GHMarketplaceAccount extends GitHubInteractiveObject {
      * also see the upcoming pending change.
      *
      * <p>
-     * You use the returned builder to set various properties, then call
-     * {@link GHMarketplacePlanForAccountBuilder#createRequest()} to finally fetch the plan related this this account.
-     *
-     * <p>
      * GitHub Apps must use a JWT to access this endpoint.
      * <p>
      * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
      *
      * @return a GHMarketplaceListAccountBuilder instance
+     * @throws IOException 
      * @see <a href=
-     *      "https://developer.github.com/v3/apps/marketplace/#list-all-github-accounts-user-or-organization-on-a-specific-plan">List
-     *      all GitHub accounts (user or organization) on a specific plan</a>
+     *      "https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account">Get
+     *      a subscription plan for an account</a>
      */
-    public GHMarketplacePlanForAccountBuilder getPlan() {
-        return new GHMarketplacePlanForAccountBuilder(root(), this.id);
+    public GHMarketplaceAccountPlan getPlan() throws IOException {
+        return new GHMarketplacePlanForAccountBuilder(root(), this.id).createRequest();
     }
 
 }

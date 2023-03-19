@@ -84,7 +84,7 @@ public class GHMarketplaceAccount extends GitHubInteractiveObject {
      * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
      *
      * @return a GHMarketplaceListAccountBuilder instance
-     * @throws IOException 
+     * @throws IOException
      * @see <a href=
      *      "https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account">Get
      *      a subscription plan for an account</a>

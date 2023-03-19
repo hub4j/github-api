@@ -53,7 +53,7 @@
         "monthly_price_in_cents": 1099,
         "yearly_price_in_cents": 11870,
         "has_free_trial": false,
-        "price_model": "per-unit",
+        "price_model": "PER_UNIT",
         "state": "published",
         "unit_name": "seat",
         "bullets": [
@@ -80,7 +80,7 @@
         "monthly_price_in_cents": 1099,
         "yearly_price_in_cents": 11870,
         "has_free_trial": false,
-        "price_model": "per-unit",
+        "price_model": "PER_UNIT",
         "state": "published",
         "unit_name": "seat",
         "bullets": [

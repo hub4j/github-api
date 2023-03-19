@@ -600,6 +600,12 @@
       <version>2.0.3</version>
       <scope>test</scope>
     </dependency>
+	<dependency>
+		<groupId>com.nimbusds</groupId>
+		<artifactId>nimbus-jose-jwt</artifactId>
+		<version>9.5</version>
+        <scope>test</scope>
+	</dependency>
   </dependencies>
   <repositories>
     <repository>

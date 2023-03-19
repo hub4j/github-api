@@ -1,0 +1,36 @@
+{
+  "url": "https://api.github.com/orgs/solven-eu",
+  "type": "Organization",
+  "id": 34552197,
+  "login": "solven-eu",
+  "marketplace_pending_change": null,
+  "marketplace_purchase": {
+    "billing_cycle": "monthly",
+    "unit_count": 1,
+    "on_free_trial": false,
+    "free_trial_ends_on": null,
+    "is_installed": true,
+    "updated_at": "2023-03-02T06:05:31Z",
+    "next_billing_date": "2023-03-28T00:00:00Z",
+    "plan": {
+      "url": "https://api.github.com/marketplace_listing/plans/8366",
+      "accounts_url": "https://api.github.com/marketplace_listing/plans/8366/accounts",
+      "id": 8366,
+      "number": 8,
+      "name": "Organization Private Repositories",
+      "description": "Enable CleanThat for any of your organization repositories",
+      "monthly_price_in_cents": 5000,
+      "yearly_price_in_cents": 50000,
+      "price_model": "FLAT_RATE",
+      "has_free_trial": false,
+      "unit_name": null,
+      "state": "published",
+      "bullets": [
+        "Branches are automatically cleaned",
+        "Main branchrs are cleaned through PullRequests",
+        "Java, Kotlin, Json, Yaml, Markdown, etc"
+      ]
+    }
+  },
+  "organization_billing_email": "accounting@m-itrust.com"
+}

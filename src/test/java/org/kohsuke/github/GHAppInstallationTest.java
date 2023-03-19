@@ -44,4 +44,17 @@ public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
                 appInstallation.listRepositories().toList().isEmpty());
     }
 
+    /**
+     * Test list repositories no permissions.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetMarketplaceAccount() throws IOException {
+        GHAppInstallation appInstallation = getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization());
+
+        GHMarketplacePlanTest.testMarketplaceAccount(appInstallation.getMarketplaceAccount());
+    }
+
 }

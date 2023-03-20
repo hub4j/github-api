@@ -2850,14 +2850,31 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHDeployKey addDeployKey(String title, String key) throws IOException {
+        return addDeployKey(title, key, false);
+    }
+
+    /**
+     * Add deploy key gh deploy key.
+     *
+     * @param title
+     *            the title
+     * @param key
+     *            the key
+     * @param readOnly
+     *            read-only ability of the key
+     * @return the gh deploy key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeployKey addDeployKey(String title, String key, boolean readOnly) throws IOException {
         return root().createRequest()
                 .method("POST")
                 .with("title", title)
                 .with("key", key)
+                .with("read_only", readOnly)
                 .withUrlPath(getApiTailUrl("keys"))
                 .fetch(GHDeployKey.class)
                 .lateBind(this);
-
     }
 
     /**

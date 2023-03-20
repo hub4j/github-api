@@ -1303,6 +1303,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test add deploy key read-only.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testAddDeployKeyAsReadOnly() throws IOException {
         GHRepository myRepository = getTestRepository();

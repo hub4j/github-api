@@ -1,11 +1,10 @@
 package org.kohsuke.github;
 
+import com.google.common.collect.ImmutableSet;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.extras.authorization.JWTTokenProvider;
-
-import com.google.common.collect.ImmutableSet;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +20,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 // TODO: Auto-generated Javadoc
 /**

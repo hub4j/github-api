@@ -5,6 +5,8 @@ import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.extras.authorization.JWTTokenProvider;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -115,7 +117,7 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
         GHApp app = gitHub.getApp();
 
         GHAppInstallation appInstallation;
-        if (Set.of(TEST_APP_ID_1, TEST_APP_ID_2, TEST_APP_ID_3).contains(Long.toString(app.getId()))) {
+        if (ImmutableSet.of(TEST_APP_ID_1, TEST_APP_ID_2, TEST_APP_ID_3).contains(Long.toString(app.getId()))) {
             List<GHAppInstallation> installations = app.listInstallations().toList();
             appInstallation = installations.stream()
                     .filter(it -> it.getAccount().login.equals("hub4j-test-org"))

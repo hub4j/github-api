@@ -1,8 +1,5 @@
 package org.kohsuke.github;
 
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.crypto.impl.RSAKeyUtils;
-import com.nimbusds.jose.jwk.RSAKey;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
@@ -12,11 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
@@ -31,7 +28,7 @@ import java.util.Set;
 public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
 
     private static String ENV_GITHUB_APP_ID = "GITHUB_APP_ID";
-    private static String ENV_GITHUB_APP_TOKEN = "GITHUB_APP_TOKEN";
+    private static String ENV_GITHUB_APP_JWK_PATH = "GITHUB_APP_JWK_PATH";
     private static String ENV_GITHUB_APP_ORG = "GITHUB_APP_ORG";
     private static String ENV_GITHUB_APP_REPO = "GITHUB_APP_REPO";
 
@@ -56,19 +53,12 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
      */
     protected AbstractGHAppInstallationTest() {
         String appId = System.getenv(ENV_GITHUB_APP_ID);
-        String appToken = System.getenv(ENV_GITHUB_APP_TOKEN);
+        String appJwkPath = System.getenv(ENV_GITHUB_APP_JWK_PATH);
         try {
-            if (appId != null && appToken != null) {
-                RSAKey rsaJWK;
-                try {
-                    rsaJWK = RSAKey.parse(appToken);
-                } catch (IllegalStateException | ParseException e) {
-                    throw new IllegalStateException("Issue parsing privateKey", e);
-                }
-
-                jwtProvider1 = new JWTTokenProvider(appId, RSAKeyUtils.toRSAPrivateKey(rsaJWK));
-                jwtProvider2 = new JWTTokenProvider(appId, RSAKeyUtils.toRSAPrivateKey(rsaJWK));
-                jwtProvider3 = new JWTTokenProvider(appId, RSAKeyUtils.toRSAPrivateKey(rsaJWK));
+            if (appId != null && appJwkPath != null) {
+                jwtProvider1 = new JWTTokenProvider(appId, Paths.get(appJwkPath));
+                jwtProvider2 = jwtProvider1;
+                jwtProvider3 = jwtProvider1;
             } else {
                 jwtProvider1 = new JWTTokenProvider(TEST_APP_ID_1,
                         new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_1).getFile()));
@@ -79,7 +69,7 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
                                 new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_3).getFile()).toPath()),
                                 StandardCharsets.UTF_8));
             }
-        } catch (GeneralSecurityException | IOException | JOSEException e) {
+        } catch (GeneralSecurityException | IOException e) {
             throw new RuntimeException("These should never fail", e);
         }
     }

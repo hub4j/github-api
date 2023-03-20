@@ -85,6 +85,7 @@ public class GHMarketplaceAccount extends GitHubInteractiveObject {
      *
      * @return a GHMarketplaceListAccountBuilder instance
      * @throws IOException
+     *             in case of {@link IOException}
      * @see <a href=
      *      "https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account">Get
      *      a subscription plan for an account</a>

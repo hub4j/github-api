@@ -167,7 +167,7 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
         if (marketplacePurchase.getPlan().getPriceModel() == GHMarketplacePriceModel.PER_UNIT)
             assertThat(marketplacePurchase.getUnitCount(), notNullValue());
         else
-            assertThat(marketplacePurchase.getUnitCount(), Matchers.either(nullValue()).or(is(1L)));
+            assertThat(marketplacePurchase.getUnitCount(), Matchers.anyOf(nullValue(), is(1L)));
 
     }
 

@@ -374,6 +374,7 @@ public class GHAppInstallation extends GHObject {
      *
      * @return a GHMarketplaceAccountPlan instance
      * @throws IOException
+     *             it may throw an {@link IOException}
      * @see <a href=
      *      "https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account">Get
      *      a subscription plan for an account</a>

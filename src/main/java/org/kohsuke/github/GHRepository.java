@@ -39,21 +39,7 @@ import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.net.URL;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.WeakHashMap;
+import java.util.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -3592,5 +3578,26 @@ public class GHRepository extends GHObject {
 
             requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
         }
+    }
+
+    /**
+     * Get the API endpoint tail for the specified Git resource type.
+     *
+     * @param resourceType
+     *            the type of Git resource (commits, blobs, comments, or trees)
+     * @return the API endpoint tail for the specified resource type, or null if the resource type is invalid
+     */
+    public String getApiTail(String resourceType){
+        switch (resourceType) {
+            case "commits":
+                return String.format("/repos/%s/%s/git/commits", getOwnerName(), getName());
+            case "blobs":
+                return String.format("/repos/%s/%s/git/blobs", getOwnerName(), getName());
+            case "comments":
+                return String.format("/repos/%s/%s/comments/%s", getOwnerName(), getName(), getId());
+            case "trees":
+                return String.format("/repos/%s/%s/git/trees", getOwnerName(), getName());
+        }
+        return null;
     }
 }

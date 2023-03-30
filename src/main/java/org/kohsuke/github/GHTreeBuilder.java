@@ -162,10 +162,6 @@ public class GHTreeBuilder {
         return add(path, content.getBytes(StandardCharsets.UTF_8), executable);
     }
 
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/git/trees", repo.getOwnerName(), repo.getName());
-    }
-
     /**
      * Creates a tree based on the parameters specified thus far.
      *
@@ -175,6 +171,6 @@ public class GHTreeBuilder {
      */
     public GHTree create() throws IOException {
         req.with("tree", treeEntries);
-        return req.method("POST").withUrlPath(getApiTail()).fetch(GHTree.class).wrap(repo);
+        return req.method("POST").withUrlPath(repo.getApiTail("trees")).fetch(GHTree.class).wrap(repo);
     }
 }

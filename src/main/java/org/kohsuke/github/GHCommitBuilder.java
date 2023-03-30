@@ -125,10 +125,6 @@ public class GHCommitBuilder {
         return this;
     }
 
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/git/commits", repo.getOwnerName(), repo.getName());
-    }
-
     /**
      * Creates a blob based on the parameters specified thus far.
      *
@@ -138,6 +134,6 @@ public class GHCommitBuilder {
      */
     public GHCommit create() throws IOException {
         req.with("parents", parents);
-        return req.method("POST").withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);
+        return req.method("POST").withUrlPath(repo.getApiTail("commits")).fetch(GHCommit.class).wrapUp(repo);
     }
 }

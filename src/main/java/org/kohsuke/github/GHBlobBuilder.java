@@ -49,10 +49,6 @@ public class GHBlobBuilder {
         return this;
     }
 
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/git/blobs", repo.getOwnerName(), repo.getName());
-    }
-
     /**
      * Creates a blob based on the parameters specified thus far.
      *
@@ -61,6 +57,6 @@ public class GHBlobBuilder {
      *             if the blob cannot be created.
      */
     public GHBlob create() throws IOException {
-        return req.method("POST").withUrlPath(getApiTail()).fetch(GHBlob.class);
+        return req.method("POST").withUrlPath(repo.getApiTail("blobs")).fetch(GHBlob.class);
     }
 }

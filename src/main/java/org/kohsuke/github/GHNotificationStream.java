@@ -46,24 +46,24 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
     /**
      * Should the stream include notifications that are already read?.
      *
-     * @param v
-     *            the v
-     * @return the gh notification stream
+     * @param includeReadNotifications
+     *            true if read notifications should be included in the stream, false otherwise
+     * @return the GH notification stream
      */
-    public GHNotificationStream read(boolean v) {
-        all = v;
+    public GHNotificationStream read(boolean includeReadNotifications) {
+        all = includeReadNotifications;
         return this;
     }
 
     /**
      * Should the stream be restricted to notifications in which the user is directly participating or mentioned?.
      *
-     * @param v
-     *            the v
-     * @return the gh notification stream
+     * @param restrictedToParticipatingNotifications
+     *            true if the stream should be restricted to participating notifications, false otherwise
+     * @return the GH notification stream
      */
-    public GHNotificationStream participating(boolean v) {
-        participating = v;
+    public GHNotificationStream participating(boolean restrictedToParticipatingNotifications) {
+        participating = restrictedToParticipatingNotifications;
         return this;
     }
 
@@ -143,9 +143,11 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
 
             private GHThread next;
 
+            private static final int MAX_POLLING_WAIT_TIME = 60;
+
             public GHThread next() {
                 if (next == null) {
-                    next = fetch();
+                    next = fetchLatestGitHubThread();
                     if (next == null)
                         throw new NoSuchElementException();
                 }
@@ -157,64 +159,80 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
 
             public boolean hasNext() {
                 if (next == null)
-                    next = fetch();
+                    next = fetchLatestGitHubThread();
                 return next != null;
             }
 
-            GHThread fetch() {
+            GHThread fetchLatestGitHubThread() {
                 try {
                     while (true) {// loop until we get new threads to return
 
                         // if we have fetched un-returned threads, use them first
-                        while (idx >= 0) {
-                            GHThread n = threads[idx--];
-                            long nt = n.getUpdatedAt().getTime();
-                            if (nt >= lastUpdated) {
-                                lastUpdated = nt;
-                                return n;
-                            }
+                        GHThread lastUnReturnedThread = getLatestUnReturnedThread();
+                        if (lastUnReturnedThread != null) {
+                            return lastUnReturnedThread;
                         }
 
                         if (nonBlocking && nextCheckTime >= 0)
                             return null; // nothing more to report, and we aren't blocking
 
                         // observe the polling interval before making the call
-                        while (true) {
-                            long now = System.currentTimeMillis();
-                            if (nextCheckTime < now)
-                                break;
-                            long waitTime = Math.min(Math.max(nextCheckTime - now, 1000), 60 * 1000);
-                            Thread.sleep(waitTime);
-                        }
+                        waitUntilNextPollingTime();
 
-                        req.setHeader("If-Modified-Since", lastModified);
-
-                        Requester requester = req.withUrlPath(apiUrl);
-                        GitHubResponse<GHThread[]> response = ((GitHubPageContentsIterable<GHThread>) requester
-                                .toIterable(GHThread[].class, null)).toResponse();
-                        threads = response.body();
-
-                        if (threads == null) {
-                            threads = EMPTY_ARRAY; // if unmodified, we get empty array
-                        } else {
-                            // we get a new batch, but we want to ignore the ones that we've seen
-                            lastUpdated++;
-                        }
-                        idx = threads.length - 1;
-
-                        nextCheckTime = calcNextCheckTime(response);
-                        lastModified = response.header("Last-Modified");
+                        updateThreadsAndMetadataFromGitHub();
                     }
                 } catch (IOException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
 
+            private GHThread getLatestUnReturnedThread() throws IOException {
+                while (idx >= 0) {
+                    GHThread n = threads[idx--];
+                    long nt = n.getUpdatedAt().getTime();
+                    if (nt >= lastUpdated) {
+                        lastUpdated = nt;
+                        return n;
+                    }
+                }
+                return null;
+            }
+
+            private void waitUntilNextPollingTime() throws InterruptedException {
+                while (true) {
+                    long now = System.currentTimeMillis();
+                    if (nextCheckTime < now)
+                        break;
+                    long waitTime = Math.min(Math.max(nextCheckTime - now, 1000), MAX_POLLING_WAIT_TIME * 1000);
+                    Thread.sleep(waitTime);
+                }
+            }
+
+            private void updateThreadsAndMetadataFromGitHub() throws IOException {
+                req.setHeader("If-Modified-Since", lastModified);
+
+                Requester requester = req.withUrlPath(apiUrl);
+                GitHubResponse<GHThread[]> response = ((GitHubPageContentsIterable<GHThread>) requester
+                        .toIterable(GHThread[].class, null)).toResponse();
+                threads = response.body();
+
+                if (threads == null) {
+                    threads = EMPTY_ARRAY; // if unmodified, we get empty array
+                } else {
+                    // we get a new batch, but we want to ignore the ones that we've seen
+                    lastUpdated++;
+                }
+                idx = threads.length - 1;
+
+                nextCheckTime = calcNextCheckTime(response);
+                lastModified = response.header("Last-Modified");
+            }
+
             private long calcNextCheckTime(GitHubResponse<GHThread[]> response) {
-                String v = response.header("X-Poll-Interval");
-                if (v == null)
-                    v = "60";
-                long seconds = Integer.parseInt(v);
+                String pollIntervalHeaderValue = response.header("X-Poll-Interval");
+                if (pollIntervalHeaderValue == null)
+                    pollIntervalHeaderValue = "60";
+                long seconds = Integer.parseInt(pollIntervalHeaderValue);
                 return System.currentTimeMillis() + seconds * 1000;
             }
         };

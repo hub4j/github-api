@@ -128,7 +128,7 @@ public class GHCommitComment extends GHObject implements Reactable {
                 .createRequest()
                 .method("PATCH")
                 .with("body", body)
-                .withUrlPath(getApiTail())
+                .withUrlPath(owner.getApiTail("comments"))
                 .fetch(GHCommitComment.class);
         this.body = body;
     }
@@ -149,7 +149,7 @@ public class GHCommitComment extends GHObject implements Reactable {
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .withUrlPath(getApiTail() + "/reactions")
+                .withUrlPath(owner.getApiTail("comments") + "/reactions")
                 .fetch(GHReaction.class);
     }
 
@@ -165,7 +165,7 @@ public class GHCommitComment extends GHObject implements Reactable {
         owner.root()
                 .createRequest()
                 .method("DELETE")
-                .withUrlPath(getApiTail(), "reactions", String.valueOf(reaction.getId()))
+                .withUrlPath(owner.getApiTail("comments"), "reactions", String.valueOf(reaction.getId()))
                 .send();
     }
 
@@ -179,7 +179,7 @@ public class GHCommitComment extends GHObject implements Reactable {
         return owner.root()
                 .createRequest()
                 .withPreview(SQUIRREL_GIRL)
-                .withUrlPath(getApiTail() + "/reactions")
+                .withUrlPath(owner.getApiTail("comments") + "/reactions")
                 .toIterable(GHReaction[].class, item -> owner.root());
     }
 
@@ -190,11 +190,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void delete() throws IOException {
-        owner.root().createRequest().method("DELETE").withUrlPath(getApiTail()).send();
-    }
-
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/comments/%s", owner.getOwnerName(), owner.getName(), getId());
+        owner.root().createRequest().method("DELETE").withUrlPath(owner.getApiTail("comments")).send();
     }
 
     /**

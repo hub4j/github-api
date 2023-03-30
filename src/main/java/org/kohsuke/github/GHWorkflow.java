@@ -95,7 +95,7 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void disable() throws IOException {
-        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "disable").send();
+        root().createRequest().method("PUT").withUrlPath(getApiRoute(owner), "disable").send();
     }
 
     /**
@@ -105,7 +105,7 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void enable() throws IOException {
-        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").send();
+        root().createRequest().method("PUT").withUrlPath(getApiRoute(owner), "enable").send();
     }
 
     /**
@@ -134,7 +134,7 @@ public class GHWorkflow extends GHObject {
     public void dispatch(String ref, Map<String, Object> inputs) throws IOException {
         Requester requester = root().createRequest()
                 .method("POST")
-                .withUrlPath(getApiRoute(), "dispatches")
+                .withUrlPath(getApiRoute(owner), "dispatches")
                 .with("ref", ref);
 
         if (!inputs.isEmpty()) {
@@ -150,16 +150,11 @@ public class GHWorkflow extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHWorkflowRun> listRuns() {
-        return new GHWorkflowRunsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), "runs"));
+        return new GHWorkflowRunsIterable(owner, root().createRequest().withUrlPath(getApiRoute(owner), "runs"));
     }
 
-    private String getApiRoute() {
-        if (owner == null) {
-            // Workflow runs returned from search to do not have an owner. Attempt to use url.
-            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
-
-        }
+    @Override
+    protected String getApiRouteImpl() {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/workflows/" + getId();
     }
 

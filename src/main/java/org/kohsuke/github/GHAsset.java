@@ -1,9 +1,11 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -134,7 +136,7 @@ public class GHAsset extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute(owner)).send();
     }
 
     /**
@@ -144,10 +146,11 @@ public class GHAsset extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute(owner)).send();
     }
 
-    private String getApiRoute() {
+    @Override
+    protected String getApiRouteImpl() {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/releases/assets/" + getId();
     }
 

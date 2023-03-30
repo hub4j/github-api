@@ -284,7 +284,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void cancel() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").send();
+        root().createRequest().method("POST").withUrlPath(getApiRoute(owner), "cancel").send();
     }
 
     /**
@@ -294,7 +294,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute(owner)).send();
     }
 
     /**
@@ -304,7 +304,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void rerun() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").send();
+        root().createRequest().method("POST").withUrlPath(getApiRoute(owner), "rerun").send();
     }
 
     /**
@@ -314,7 +314,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void approve() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "approve").send();
+        root().createRequest().method("POST").withUrlPath(getApiRoute(owner), "approve").send();
     }
 
     /**
@@ -323,7 +323,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHArtifact> listArtifacts() {
-        return new GHArtifactsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), "artifacts"));
+        return new GHArtifactsIterable(owner, root().createRequest().withUrlPath(getApiRoute(owner), "artifacts"));
     }
 
     /**
@@ -344,7 +344,7 @@ public class GHWorkflowRun extends GHObject {
     public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
         requireNonNull(streamFunction, "Stream function must not be null");
 
-        return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
+        return root().createRequest().method("GET").withUrlPath(getApiRoute(owner), "logs").fetchStream(streamFunction);
     }
 
     /**
@@ -354,7 +354,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void deleteLogs() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute(owner), "logs").send();
     }
 
     /**
@@ -375,13 +375,8 @@ public class GHWorkflowRun extends GHObject {
         return new GHWorkflowJobQueryBuilder(this).all().list();
     }
 
-    private String getApiRoute() {
-        if (owner == null) {
-            // Workflow runs returned from search to do not have an owner. Attempt to use url.
-            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
-
-        }
+    @Override
+    protected String getApiRouteImpl() {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/runs/" + getId();
     }
 

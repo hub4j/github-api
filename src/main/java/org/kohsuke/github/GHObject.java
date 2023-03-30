@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
@@ -13,6 +14,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.CheckForNull;
 
@@ -190,4 +192,16 @@ public abstract class GHObject extends GitHubInteractiveObject {
             super.append(buffer, fieldName, value, fullDetail);
         }
     };
+
+    public String getApiRoute(GHRepository owner) {
+        if (owner == null) {
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
+        }
+        return getApiRouteImpl();
+    }
+
+    protected String getApiRouteImpl() {
+        throw new UnsupportedOperationException("This operation is not supported.");
+    }
 }

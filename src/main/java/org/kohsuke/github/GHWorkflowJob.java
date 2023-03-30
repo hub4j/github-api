@@ -229,16 +229,11 @@ public class GHWorkflowJob extends GHObject {
     public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
         requireNonNull(streamFunction, "Stream function must not be null");
 
-        return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
+        return root().createRequest().method("GET").withUrlPath(getApiRoute(owner), "logs").fetchStream(streamFunction);
     }
 
-    private String getApiRoute() {
-        if (owner == null) {
-            // Workflow runs returned from search to do not have an owner. Attempt to use url.
-            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
-
-        }
+    @Override
+    protected String getApiRouteImpl() {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/jobs/" + getId();
     }
 

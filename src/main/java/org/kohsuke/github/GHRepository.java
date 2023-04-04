@@ -3012,7 +3012,7 @@ public class GHRepository extends GHObject {
         @Override
         public int hashCode() {
             // We ignore contributions in the calculation
-            return super.hashCode();
+            return login.hashCode();
         }
 
         /**

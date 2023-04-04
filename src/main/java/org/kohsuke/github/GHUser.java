@@ -271,16 +271,6 @@ public class GHUser extends GHPerson {
     }
 
     /**
-     * Hash code.
-     *
-     * @return the int
-     */
-    @Override
-    public int hashCode() {
-        return login.hashCode();
-    }
-
-    /**
      * Equals.
      *
      * @param obj

@@ -2560,6 +2560,8 @@ public class GHRepository extends GHObject {
     /**
      * Gets branches by {@linkplain GHBranch#getName() their names}.
      *
+     * @param pageSize
+     *            the size of the page to be fetched
      * @return the branches
      * @throws IOException
      *             the io exception

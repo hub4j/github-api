@@ -411,4 +411,21 @@ public class WireMockRuleConfiguration implements Options {
         return parent.getDisableStrictHttpHeaders();
     }
 
+    /**
+     * Gets the data truncation settings.
+     *
+     * @return the data truncation settings
+     */
+    public DataTruncationSettings getDataTruncationSettings() {
+        return parent.getDataTruncationSettings();
+    }
+
+    /**
+     * Gets the network address rules.
+     *
+     * @return the network address rules
+     */
+    public NetworkAddressRules getProxyTargetRules() {
+        return parent.getProxyTargetRules();
+    }
 }

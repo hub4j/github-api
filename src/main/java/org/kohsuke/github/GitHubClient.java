@@ -638,9 +638,7 @@ class GitHubClient {
         // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
         // their 404 responses, this will result in at worst two requests being made for each 404
         // responses. However, only the second request will count against rate limit.
-        if (connectorResponse.statusCode() == 404 && Objects.equals(connectorResponse.request().method(), "GET")
-                && connectorResponse.header("ETag") != null
-                && !Objects.equals(connectorResponse.request().header("Cache-Control"), "no-cache")) {
+        if (isCacheableResourceNotFound(connectorResponse)) {
             LOGGER.log(FINE,
                     "Encountered GitHub invalid cached 404 from " + connectorResponse.request().url()
                             + ". Retrying with \"Cache-Control\"=\"no-cache\"...");
@@ -650,6 +648,12 @@ class GitHubClient {
             throw new RetryRequestException(
                     prepareConnectorRequest(request.toBuilder().setHeader("Cache-Control", "no-cache").build()));
         }
+    }
+
+    private boolean isCacheableResourceNotFound(GitHubConnectorResponse connectorResponse){
+        return connectorResponse.statusCode() == 404 && Objects.equals(connectorResponse.request().method(), "GET")
+                && connectorResponse.header("ETag") != null
+                && !Objects.equals(connectorResponse.request().header("Cache-Control"), "no-cache");
     }
 
     private void noteRateLimit(@Nonnull RateLimitTarget rateLimitTarget,

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>cortexapps-github-api</artifactId>
-  <version>1.313</version>
+  <version>1.314</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -16,18 +16,18 @@
 
   <distributionManagement>
     <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        <id>github</id>
+        <name>GitHub Packages</name>
+        <url>https://maven.pkg.github.com/cortexapps/github-api</url>
     </snapshotRepository>
     <repository>
-      <id>sonatype-nexus-staging</id>
-      <name>Nexus Release Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        <id>github</id>
+        <name>GitHub Packages</name>
+        <url>https://maven.pkg.github.com/cortexapps/github-api</url>
     </repository>
     <site>
-      <id>github-pages</id>
-      <url>gitsite:git@github.com/hub4j/${project.artifactId}.git</url>
+        <id>github-pages</id>
+        <url>gitsite:git@github.com/hub4j/${project.artifactId}.git</url>
     </site>
   </distributionManagement>
 

@@ -47,6 +47,7 @@ import javax.annotation.Nonnull;
 import static org.kohsuke.github.internal.Previews.INERTIA;
 import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
+// TODO: Auto-generated Javadoc
 /**
  * Root of the GitHub API.
  *
@@ -110,6 +111,8 @@ public class GitHub {
      *            rateLimitChecker
      * @param authorizationProvider
      *            a authorization provider
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     GitHub(String apiUrl,
             GitHubConnector connector,
@@ -185,6 +188,9 @@ public class GitHub {
         }
     }
 
+    /**
+     * The Class DependentAuthorizationProvider.
+     */
     public static abstract class DependentAuthorizationProvider implements AuthorizationProvider {
 
         private GitHub baseGitHub;
@@ -217,6 +223,11 @@ public class GitHub {
             this.baseGitHub = github;
         }
 
+        /**
+         * Git hub.
+         *
+         * @return the git hub
+         */
         protected synchronized final GitHub gitHub() {
             if (gitHub == null) {
                 gitHub = new GitHub.AuthorizationRefreshGitHubWrapper(this.baseGitHub, authorizationProvider);
@@ -367,10 +378,10 @@ public class GitHub {
      * @return the git hub
      * @throws IOException
      *             the io exception
-     * @deprecated Use {@link #connectUsingOAuth(String)} instead.
      * @see <a href=
      *      "https://developer.github.com/changes/2020-02-14-deprecating-password-auth/#changes-to-make">Deprecating
      *      password authentication and OAuth authorizations API</a>
+     * @deprecated Use {@link #connectUsingOAuth(String)} instead.
      */
     @Deprecated
     public static GitHub connectUsingPassword(String login, String password) throws IOException {
@@ -451,7 +462,7 @@ public class GitHub {
     }
 
     /**
-     * Is this an anonymous connection
+     * Is this an anonymous connection.
      *
      * @return {@code true} if operations that require authentication will fail.
      */
@@ -591,7 +602,7 @@ public class GitHub {
     }
 
     /**
-     * clears all cached data in order for external changes (modifications and del) to be reflected
+     * clears all cached data in order for external changes (modifications and del) to be reflected.
      */
     public void refreshCache() {
         users.clear();
@@ -656,7 +667,7 @@ public class GitHub {
     }
 
     /**
-     * Gets the repository object from 'owner/repo' string that GitHub calls as "repository name"
+     * Gets the repository object from 'owner/repo' string that GitHub calls as "repository name".
      *
      * @param name
      *            the name
@@ -674,14 +685,13 @@ public class GitHub {
     }
 
     /**
-     * Gets the repository object from its ID
+     * Gets the repository object from its ID.
      *
      * @param id
      *            the id
      * @return the repository by id
      * @throws IOException
      *             the io exception
-     *
      * @deprecated Do not use this method. It was added due to misunderstanding of the type of parameter. Use
      *             {@link #getRepositoryById(long)} instead
      */
@@ -691,7 +701,7 @@ public class GitHub {
     }
 
     /**
-     * Gets the repository object from its ID
+     * Gets the repository object from its ID.
      *
      * @param id
      *            the id
@@ -704,7 +714,7 @@ public class GitHub {
     }
 
     /**
-     * Returns a list of popular open source licenses
+     * Returns a list of popular open source licenses.
      *
      * @return a list of popular open source licenses
      * @throws IOException
@@ -727,7 +737,7 @@ public class GitHub {
     }
 
     /**
-     * Returns the full details for a license
+     * Returns the full details for a license.
      *
      * @param key
      *            The license key provided from the API
@@ -883,11 +893,10 @@ public class GitHub {
      * @return the team
      * @throws IOException
      *             the io exception
-     *
-     * @deprecated Use {@link GHOrganization#getTeam(long)}
      * @see <a href="https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
      * @see <a href="https://github.blog/changelog/2022-02-22-sunset-notice-deprecated-teams-api-endpoints/">sunset
      *      notice</a>
+     * @deprecated Use {@link GHOrganization#getTeam(long)}
      */
     @Deprecated
     public GHTeam getTeam(int id) throws IOException {
@@ -1161,6 +1170,22 @@ public class GitHub {
     }
 
     /**
+     * Returns the GitHub App Installation associated with the authentication credentials used.
+     * <p>
+     * You must use an installation token to access this endpoint; otherwise consider {@link #getApp()} and its various
+     * ways of retrieving installations.
+     *
+     * @return the app
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://docs.github.com/en/rest/apps/installations">GitHub App installations</a>
+     */
+    @Preview(MACHINE_MAN)
+    public GHAuthenticatedAppInstallation getInstallation() throws IOException {
+        return new GHAuthenticatedAppInstallation(this);
+    }
+
+    /**
      * Ensures that the credential is valid.
      *
      * @return the boolean
@@ -1379,11 +1404,21 @@ public class GitHub {
         return GitHubClient.getMappingObjectReader(GitHub.offline());
     }
 
+    /**
+     * Gets the client.
+     *
+     * @return the client
+     */
     @Nonnull
     GitHubClient getClient() {
         return client;
     }
 
+    /**
+     * Creates the request.
+     *
+     * @return the requester
+     */
     @Nonnull
     Requester createRequest() {
         Requester requester = new Requester(client);
@@ -1395,17 +1430,24 @@ public class GitHub {
         return requester;
     }
 
+    /**
+     * Intern.
+     *
+     * @param user
+     *            the user
+     * @return the GH user
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     GHUser intern(GHUser user) throws IOException {
-        if (user == null)
-            return user;
-
-        // if we already have this user in our map, use it
-        GHUser u = users.get(user.getLogin());
-        if (u != null)
-            return u;
-
-        // if not, remember this new user
-        users.putIfAbsent(user.getLogin(), user);
+        if (user != null) {
+            // if we already have this user in our map, get it
+            // if not, remember this new user
+            GHUser existingUser = users.putIfAbsent(user.getLogin(), user);
+            if (existingUser != null) {
+                user = existingUser;
+            }
+        }
         return user;
     }
 

@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.common.Gzip.unGzipToString;
 
+// TODO: Auto-generated Javadoc
 /**
  * The standard WireMockRule eagerly initializes a WireMockServer. This version suptakes a laze approach allowing us to
  * automatically isolate snapshots for each method.
@@ -43,56 +44,122 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     private final static boolean useProxy = takeSnapshot
             || System.getProperty("test.github.useProxy", "false") != "false";
 
+    /**
+     * Customize record spec.
+     *
+     * @param customizeRecordSpec
+     *            the customize record spec
+     */
     public void customizeRecordSpec(Consumer<RecordSpecBuilder> customizeRecordSpec) {
         this.customizeRecordSpec = customizeRecordSpec;
     }
 
     private Consumer<RecordSpecBuilder> customizeRecordSpec = null;
 
+    /**
+     * Instantiates a new git hub wire mock rule.
+     */
     public GitHubWireMockRule() {
         this(WireMockConfiguration.options());
     }
 
+    /**
+     * Instantiates a new git hub wire mock rule.
+     *
+     * @param options
+     *            the options
+     */
     public GitHubWireMockRule(WireMockConfiguration options) {
         this(options, true);
     }
 
+    /**
+     * Instantiates a new git hub wire mock rule.
+     *
+     * @param options
+     *            the options
+     * @param failOnUnmatchedRequests
+     *            the fail on unmatched requests
+     */
     public GitHubWireMockRule(WireMockConfiguration options, boolean failOnUnmatchedRequests) {
         super(options, failOnUnmatchedRequests);
     }
 
+    /**
+     * Api server.
+     *
+     * @return the wire mock server
+     */
     public WireMockServer apiServer() {
         return servers.get("default");
     }
 
+    /**
+     * Raw server.
+     *
+     * @return the wire mock server
+     */
     public WireMockServer rawServer() {
         return servers.get("raw");
     }
 
+    /**
+     * Uploads server.
+     *
+     * @return the wire mock server
+     */
     public WireMockServer uploadsServer() {
         return servers.get("uploads");
     }
 
+    /**
+     * Codeload server.
+     *
+     * @return the wire mock server
+     */
     public WireMockServer codeloadServer() {
         return servers.get("codeload");
     }
 
+    /**
+     * Actions user content server.
+     *
+     * @return the wire mock server
+     */
     public WireMockServer actionsUserContentServer() {
         return servers.get("actions-user-content");
     }
 
+    /**
+     * Checks if is use proxy.
+     *
+     * @return true, if is use proxy
+     */
     public boolean isUseProxy() {
         return GitHubWireMockRule.useProxy;
     }
 
+    /**
+     * Checks if is take snapshot.
+     *
+     * @return true, if is take snapshot
+     */
     public boolean isTakeSnapshot() {
         return GitHubWireMockRule.takeSnapshot;
     }
 
+    /**
+     * Checks if is test with org.
+     *
+     * @return true, if is test with org
+     */
     public boolean isTestWithOrg() {
         return GitHubWireMockRule.testWithOrg;
     }
 
+    /**
+     * Initialize servers.
+     */
     @Override
     protected void initializeServers() {
         super.initializeServers();
@@ -116,6 +183,9 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         }
     }
 
+    /**
+     * Before.
+     */
     @Override
     protected void before() {
         super.before();
@@ -144,6 +214,9 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
     }
 
+    /**
+     * After.
+     */
     @Override
     protected void after() {
         super.after();
@@ -191,10 +264,22 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         }
     }
 
+    /**
+     * Gets the request count.
+     *
+     * @return the request count
+     */
     public int getRequestCount() {
         return getRequestCount(apiServer());
     }
 
+    /**
+     * Gets the request count.
+     *
+     * @param server
+     *            the server
+     * @return the request count
+     */
     public static int getRequestCount(WireMockServer server) {
         return server.countRequestsMatching(RequestPatternBuilder.allRequests().build()).getCount();
     }
@@ -314,6 +399,13 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         return targetPath;
     }
 
+    /**
+     * Map to mock git hub.
+     *
+     * @param body
+     *            the body
+     * @return the string
+     */
     @Nonnull
     public String mapToMockGitHub(String body) {
         body = body.replace("https://api.github.com", this.apiServer().baseUrl());

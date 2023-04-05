@@ -1,0 +1,57 @@
+{
+  "id": "29f74017-4392-4702-88db-a3d1170c0ead",
+  "name": "repos_hub4j-test-org_ghissuetest_issues_5_labels",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHIssueTest/issues/5/labels",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"labels\":[\"addLabels_label_name_1\"]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": "[{\"id\":4563124459,\"node_id\":\"LA_kwDOIC5ExM8AAAABD_vA6w\",\"url\":\"https://api.github.com/repos/hub4j-test-org/GHIssueTest/labels/addLabels_label_name_1\",\"name\":\"addLabels_label_name_1\",\"color\":\"ededed\",\"default\":false,\"description\":null}]",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 22 Sep 2022 09:56:49 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"8dd45248ecbe504cead8f206c42aa9b45703454d518860db6d930e804ec2cec3\"",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-09-29 09:53:54 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4870",
+      "X-RateLimit-Reset": "1663844087",
+      "X-RateLimit-Used": "130",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EC2C:A95E:64D4707:6667696:632C3161"
+    }
+  },
+  "uuid": "29f74017-4392-4702-88db-a3d1170c0ead",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHIssueTest-issues-5-labels",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-GHIssueTest-issues-5-labels-2",
+  "insertionIndex": 5
+}

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Provides information for Git Trees https://developer.github.com/v3/git/trees/
  *
@@ -11,6 +12,8 @@ import java.net.URL;
  * @see GHTree
  */
 public class GHTreeEntry {
+
+    /** The tree. */
     /* package almost final */GHTree tree;
 
     private String path, mode, type, sha, url;
@@ -26,7 +29,7 @@ public class GHTreeEntry {
     }
 
     /**
-     * Get mode such as 100644
+     * Get mode such as 100644.
      *
      * @return the mode
      */
@@ -35,7 +38,7 @@ public class GHTreeEntry {
     }
 
     /**
-     * Gets the size of the file, such as 132
+     * Gets the size of the file, such as 132.
      *
      * @return The size of the path or 0 if it is a directory
      */

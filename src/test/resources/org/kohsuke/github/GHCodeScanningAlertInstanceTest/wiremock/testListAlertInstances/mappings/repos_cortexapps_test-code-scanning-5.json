@@ -1,0 +1,43 @@
+{
+  "id": "f8d53994-6df9-45a7-a2ea-93ba064c8ea5",
+  "name": "repos_cortexapps_test-code-scanning",
+  "request": {
+    "url": "/repos/cortexapps/test-code-scanning",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/reference/repos#get-a-repository\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 10 Jan 2023 22:30:33 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "project, repo, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2023-01-16 19:25:18 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4980",
+      "X-RateLimit-Reset": "1673392023",
+      "X-RateLimit-Used": "20",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "D04A:3E8D:2E4A981:5EABDD8:63BDE709"
+    }
+  },
+  "uuid": "f8d53994-6df9-45a7-a2ea-93ba064c8ea5",
+  "persistent": true,
+  "insertionIndex": 5
+}

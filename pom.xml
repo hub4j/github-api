@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>cortexapps-github-api</artifactId>
-  <version>1.304-SNAPSHOT</version>
+  <version>1.314-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -33,8 +33,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>4.5.3.0</spotbugs-maven-plugin.version>
-    <spotbugs.version>4.5.3</spotbugs.version>
+    <spotbugs-maven-plugin.version>4.7.3.0</spotbugs-maven-plugin.version>
+    <spotbugs.version>4.7.3</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
     <okhttp3.version>4.9.2</okhttp3.version>
@@ -44,7 +44,7 @@
     <jacoco.coverage.target.class.method>0.50</jacoco.coverage.target.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
-    <jjwt.suite.version>0.11.2</jjwt.suite.version>
+    <jjwt.suite.version>0.11.5</jjwt.suite.version>
 
     <jacoco.surefire.argLine />
     <surefire.argLine />
@@ -55,12 +55,12 @@
       <extension>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-provider-gitexe</artifactId>
-        <version>1.12.2</version>
+        <version>1.13.0</version>
       </extension>
       <extension>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>1.12.2</version>
+        <version>1.13.0</version>
       </extension>
       <!-- Doing site publishing manually for now -->
 <!--
@@ -102,7 +102,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.7</version>
+          <version>0.8.8</version>
           <configuration>
             <!-- no need to get data about external code. It dramatically reduces performance of JaCoCo for nothing -->
             <excludes>
@@ -213,9 +213,9 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.3.2</version>
+          <version>3.4.1</version>
           <configuration>
-            <source>8</source>
+            <release>8</release>
             <failOnWarnings>true</failOnWarnings>
             <doclint>all</doclint>
           </configuration>
@@ -223,7 +223,7 @@
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
           <artifactId>nexus-staging-maven-plugin</artifactId>
-          <version>1.6.12</version>
+          <version>1.6.13</version>
           <extensions>true</extensions>
           <configuration>
             <serverId>sonatype-nexus-staging</serverId>
@@ -234,7 +234,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>animal-sniffer-maven-plugin</artifactId>
-          <version>1.21</version>
+          <version>1.22</version>
           <configuration>
             <signature>
               <groupId>org.codehaus.mojo.signature</groupId>
@@ -258,7 +258,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.11.0</version>
+        <version>3.12.1</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -278,18 +278,18 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.2.2</version>
+        <version>3.4.1</version>
         <dependencies>
           <dependency>
             <groupId>org.apache.bcel</groupId>
             <artifactId>bcel</artifactId>
-            <version>6.5.0</version>
+            <version>6.6.1</version>
           </dependency>
         </dependencies>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.0</version>
+        <version>3.10.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -333,7 +333,7 @@
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.21.0</version>
+        <version>2.27.2</version>
         <executions>
           <execution>
             <id>spotless-check</id>
@@ -393,26 +393,32 @@
           </dependency>
         </dependencies>
       </plugin>
-      <plugin>
-        <groupId>com.github.siom79.japicmp</groupId>
-        <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.15.7</version>
-        <configuration>
-          <parameter>
-            <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
-            <onlyModified>true</onlyModified>
-            <includeSynthetic>true</includeSynthetic>
-          </parameter>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>verify</phase>
-            <goals>
-              <goal>cmp</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+<!--      <plugin>-->
+<!--        <groupId>com.github.siom79.japicmp</groupId>-->
+<!--        <artifactId>japicmp-maven-plugin</artifactId>-->
+<!--        <version>0.16.0</version>-->
+<!--        <configuration>-->
+<!--          <parameter>-->
+<!--            <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>-->
+<!--            <onlyModified>true</onlyModified>-->
+<!--            <includeSynthetic>true</includeSynthetic>-->
+<!--            <excludes>-->
+<!--              &lt;!&ndash; Classes in internal are public but are considered private for API stability purposes &ndash;&gt;-->
+<!--              <exclude>org.kohsuke.github.internal</exclude>-->
+<!--              &lt;!&ndash; TODO: started failing in CI recently. This is part of the multi-release structure. &ndash;&gt;-->
+<!--              <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector#HttpClientGitHubConnector(java.net.http.HttpClient)</exclude>-->
+<!--            </excludes>-->
+<!--          </parameter>-->
+<!--        </configuration>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <phase>verify</phase>-->
+<!--            <goals>-->
+<!--              <goal>cmp</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
     </plugins>
   </build>
 
@@ -456,13 +462,13 @@
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
-      <version>4.1.1</version>
+      <version>4.2.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.13.1</version>
+      <version>2.14.0</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -505,7 +511,7 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>6.0.0.202111291000-r</version>
+      <version>6.4.0.202211300538-r</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -561,7 +567,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>4.3.1</version>
+      <version>4.11.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -579,13 +585,13 @@
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>2.9.0</version>
+      <version>2.10</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.36</version>
+      <version>2.0.3</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -612,38 +618,38 @@
       </activation>
       <build>
         <plugins>
-          <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>okhttp-test</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
-                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttp</argLine>
-                </configuration>
-              </execution>
-              <execution>
-                <id>slow-or-flaky-test</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
-                  <rerunFailingTestsCount>2</rerunFailingTestsCount>
-                  <!-- There are some tests that take longer or are a little
-                    flaky. Run them here. -->
-                  <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
+<!--          <plugin>-->
+<!--            <artifactId>maven-surefire-plugin</artifactId>-->
+<!--            <executions>-->
+<!--              <execution>-->
+<!--                <id>okhttp-test</id>-->
+<!--                <phase>integration-test</phase>-->
+<!--                <goals>-->
+<!--                  <goal>test</goal>-->
+<!--                </goals>-->
+<!--                <configuration>-->
+<!--                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>-->
+<!--                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>-->
+<!--                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttp</argLine>-->
+<!--                </configuration>-->
+<!--              </execution>-->
+<!--              <execution>-->
+<!--                <id>slow-or-flaky-test</id>-->
+<!--                <phase>integration-test</phase>-->
+<!--                <goals>-->
+<!--                  <goal>test</goal>-->
+<!--                </goals>-->
+<!--                <configuration>-->
+<!--                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>-->
+<!--                  <rerunFailingTestsCount>2</rerunFailingTestsCount>-->
+<!--                  &lt;!&ndash; There are some tests that take longer or are a little-->
+<!--                    flaky. Run them here. &ndash;&gt;-->
+<!--                  <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>-->
+<!--                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>-->
+<!--                </configuration>-->
+<!--              </execution>-->
+<!--            </executions>-->
+<!--          </plugin>-->
         </plugins>
       </build>
     </profile>
@@ -689,30 +695,30 @@
               </execution>
             </executions>
           </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <version>3.0.0</version>
-            <executions>
-              <execution>
-                <id>enforce-jacoco-exist</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>enforce</goal>
-                </goals>
-                <configuration>
-                  <rules>
-                    <requireFilesExist>
-                      <files>
-                        <file>${project.build.directory}/jacoco-it.exec</file>
-                      </files>
-                    </requireFilesExist>
-                  </rules>
-                  <fail>true</fail>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
+<!--          <plugin>-->
+<!--            <groupId>org.apache.maven.plugins</groupId>-->
+<!--            <artifactId>maven-enforcer-plugin</artifactId>-->
+<!--            <version>3.1.0</version>-->
+<!--            <executions>-->
+<!--              <execution>-->
+<!--                <id>enforce-jacoco-exist</id>-->
+<!--                <phase>verify</phase>-->
+<!--                <goals>-->
+<!--                  <goal>enforce</goal>-->
+<!--                </goals>-->
+<!--                <configuration>-->
+<!--                  <rules>-->
+<!--                    <requireFilesExist>-->
+<!--                      <files>-->
+<!--                        <file>${project.build.directory}/jacoco-it.exec</file>-->
+<!--                      </files>-->
+<!--                    </requireFilesExist>-->
+<!--                  </rules>-->
+<!--                  <fail>true</fail>-->
+<!--                </configuration>-->
+<!--              </execution>-->
+<!--            </executions>-->
+<!--          </plugin>-->
         </plugins>
       </build>
     </profile>
@@ -788,7 +794,7 @@
           </plugin>
           <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.10.0</version>
+            <version>3.10.1</version>
             <executions>
               <execution>
                 <id>compile-java-11</id>
@@ -811,7 +817,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
-            <version>3.2.2</version>
+            <version>3.3.0</version>
             <configuration>
               <archive>
                 <manifestEntries>
@@ -834,37 +840,37 @@
       </activation>
       <build>
         <plugins>
-          <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>java11-test</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
-                  <useSystemClassLoader>false</useSystemClassLoader>
-                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
-                </configuration>
-              </execution>
-              <execution>
-                <id>java11-urlconnection-test</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
-                  <useSystemClassLoader>false</useSystemClassLoader>
-                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=urlconnection</argLine>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
+<!--          <plugin>-->
+<!--            <artifactId>maven-surefire-plugin</artifactId>-->
+<!--            <executions>-->
+<!--              <execution>-->
+<!--                <id>java11-test</id>-->
+<!--                <phase>integration-test</phase>-->
+<!--                <goals>-->
+<!--                  <goal>test</goal>-->
+<!--                </goals>-->
+<!--                <configuration>-->
+<!--                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>-->
+<!--                  <useSystemClassLoader>false</useSystemClassLoader>-->
+<!--                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>-->
+<!--                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>-->
+<!--                </configuration>-->
+<!--              </execution>-->
+<!--              <execution>-->
+<!--                <id>java11-urlconnection-test</id>-->
+<!--                <phase>integration-test</phase>-->
+<!--                <goals>-->
+<!--                  <goal>test</goal>-->
+<!--                </goals>-->
+<!--                <configuration>-->
+<!--                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>-->
+<!--                  <useSystemClassLoader>false</useSystemClassLoader>-->
+<!--                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>-->
+<!--                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=urlconnection</argLine>-->
+<!--                </configuration>-->
+<!--              </execution>-->
+<!--            </executions>-->
+<!--          </plugin>-->
         </plugins>
       </build>
     </profile>

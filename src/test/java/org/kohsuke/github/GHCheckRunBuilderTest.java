@@ -32,13 +32,30 @@ import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHCheckRunBuilderTest.
+ */
 @SuppressWarnings("deprecation") // preview
 public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
 
+    /**
+     * Gets the installation github.
+     *
+     * @return the installation github
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     protected GitHub getInstallationGithub() throws IOException {
         return getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization()).root();
     }
 
+    /**
+     * Creates the check run.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void createCheckRun() throws Exception {
         GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")
@@ -65,6 +82,12 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         assertThat(checkRun.getOutput().getText(), equalTo("Hello Text!"));
     }
 
+    /**
+     * Creates the check run many annotations.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void createCheckRunManyAnnotations() throws Exception {
         GHCheckRunBuilder.Output output = new GHCheckRunBuilder.Output("Big Run", "Lots of stuff here »")
@@ -87,6 +110,12 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         assertThat(checkRun.getId(), equalTo(1424883599L));
     }
 
+    /**
+     * Creates the check run no annotations.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void createCheckRunNoAnnotations() throws Exception {
         GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")
@@ -99,6 +128,12 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         assertThat(checkRun.getId(), equalTo(1424883957L));
     }
 
+    /**
+     * Creates the pending check run.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void createPendingCheckRun() throws Exception {
         GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")
@@ -110,6 +145,12 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         assertThat(checkRun.getId(), equalTo(1424883451L));
     }
 
+    /**
+     * Creates the check run err missing conclusion.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void createCheckRunErrMissingConclusion() throws Exception {
         try {
@@ -126,6 +167,12 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         }
     }
 
+    /**
+     * Update check run.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void updateCheckRun() throws Exception {
         GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")

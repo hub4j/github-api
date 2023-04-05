@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Github App.
  *
@@ -22,6 +23,7 @@ public class GHApp extends GHObject {
 
     private GHUser owner;
     private String name;
+    private String slug;
     private String description;
     private String externalUrl;
     private Map<String, String> permissions;
@@ -58,6 +60,15 @@ public class GHApp extends GHObject {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets the slug name of the GitHub app.
+     *
+     * @return the slug name of the GitHub app
+     */
+    public String getSlug() {
+        return slug;
     }
 
     /**
@@ -158,6 +169,11 @@ public class GHApp extends GHObject {
         throw new RuntimeException("Do not use this method.");
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }

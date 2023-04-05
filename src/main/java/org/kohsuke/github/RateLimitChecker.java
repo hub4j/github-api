@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
  * A GitHub API Rate Limit Checker called before each request
  *
@@ -23,6 +24,7 @@ public abstract class RateLimitChecker {
 
     private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());
 
+    /** The Constant NONE. */
     public static final RateLimitChecker NONE = new RateLimitChecker() {
     };
 
@@ -60,6 +62,15 @@ public abstract class RateLimitChecker {
         return false;
     }
 
+    /**
+     * Sleep until reset.
+     *
+     * @param record
+     *            the record
+     * @return true, if successful
+     * @throws InterruptedException
+     *             the interrupted exception
+     */
     protected final boolean sleepUntilReset(GHRateLimit.Record record) throws InterruptedException {
         // Sleep until reset
         long sleepMilliseconds = record.getResetDate().getTime() - System.currentTimeMillis();
@@ -84,6 +95,12 @@ public abstract class RateLimitChecker {
     public static class LiteralValue extends RateLimitChecker {
         private final int sleepAtOrBelow;
 
+        /**
+         * Instantiates a new literal value.
+         *
+         * @param sleepAtOrBelow
+         *            the sleep at or below
+         */
         public LiteralValue(int sleepAtOrBelow) {
             if (sleepAtOrBelow < 0) {
                 throw new IllegalArgumentException("sleepAtOrBelow must >= 0");
@@ -91,6 +108,17 @@ public abstract class RateLimitChecker {
             this.sleepAtOrBelow = sleepAtOrBelow;
         }
 
+        /**
+         * Check rate limit.
+         *
+         * @param record
+         *            the record
+         * @param count
+         *            the count
+         * @return true, if successful
+         * @throws InterruptedException
+         *             the interrupted exception
+         */
         @Override
         protected boolean checkRateLimit(GHRateLimit.Record record, long count) throws InterruptedException {
             if (record.getRemaining() <= sleepAtOrBelow) {

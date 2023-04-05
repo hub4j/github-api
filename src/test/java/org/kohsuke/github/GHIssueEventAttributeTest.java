@@ -15,6 +15,10 @@ import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHIssueEventAttributeTest.
+ */
 public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
 
     private enum Type implements Predicate<GHIssueEvent>, Consumer<GHIssueEvent> {
@@ -49,6 +53,12 @@ public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
                 .collect(toList());
     }
 
+    /**
+     * Test event specific attributes.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testEventSpecificAttributes() throws IOException {
         for (Type type : Type.values()) {

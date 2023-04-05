@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
+// TODO: Auto-generated Javadoc
 /**
  * A workflow run.
  *
@@ -31,6 +32,9 @@ public class GHWorkflowRun extends GHObject {
     private String name;
     private long runNumber;
     private long workflowId;
+
+    private long runAttempt;
+    private String runStartedAt;
 
     private String htmlUrl;
     private String jobsUrl;
@@ -79,6 +83,33 @@ public class GHWorkflowRun extends GHObject {
         return workflowId;
     }
 
+    /**
+     * The run attempt.
+     *
+     * @return the run attempt
+     */
+    public long getRunAttempt() {
+        return runAttempt;
+    }
+
+    /**
+     * When was this run triggered?.
+     *
+     * @return run triggered
+     * @throws IOException
+     *             on error
+     */
+    public Date getRunStartedAt() throws IOException {
+        return GitHubClient.parseDate(runStartedAt);
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Override
     public URL getHtmlUrl() throws IOException {
         return GitHubClient.parseURL(htmlUrl);
@@ -253,7 +284,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void cancel() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").fetchHttpStatusCode();
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").send();
     }
 
     /**
@@ -263,7 +294,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).fetchHttpStatusCode();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -273,7 +304,17 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void rerun() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").fetchHttpStatusCode();
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").send();
+    }
+
+    /**
+     * Approve the workflow run.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void approve() throws IOException {
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "approve").send();
     }
 
     /**
@@ -296,9 +337,9 @@ public class GHWorkflowRun extends GHObject {
      *            the type of result
      * @param streamFunction
      *            The {@link InputStreamFunction} that will process the stream
+     * @return the result of reading the stream.
      * @throws IOException
      *             The IO exception.
-     * @return the result of reading the stream.
      */
     public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
         requireNonNull(streamFunction, "Stream function must not be null");
@@ -313,7 +354,7 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void deleteLogs() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").fetchHttpStatusCode();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").send();
     }
 
     /**
@@ -344,11 +385,25 @@ public class GHWorkflowRun extends GHObject {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/runs/" + getId();
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH workflow run
+     */
     GHWorkflowRun wrapUp(GHRepository owner) {
         this.owner = owner;
         return wrapUp(owner.root());
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param root
+     *            the root
+     * @return the GH workflow run
+     */
     GHWorkflowRun wrapUp(GitHub root) {
         if (owner != null) {
             if (pullRequests != null) {
@@ -360,6 +415,9 @@ public class GHWorkflowRun extends GHObject {
         return this;
     }
 
+    /**
+     * The Class HeadCommit.
+     */
     public static class HeadCommit {
         private String id;
         private String treeId;
@@ -369,7 +427,7 @@ public class GHWorkflowRun extends GHObject {
         private GitUser committer;
 
         /**
-         * Gets id of the commit
+         * Gets id of the commit.
          *
          * @return id of the commit
          */
@@ -423,26 +481,82 @@ public class GHWorkflowRun extends GHObject {
         }
     }
 
+    /**
+     * The Enum Status.
+     */
     public static enum Status {
-        QUEUED, IN_PROGRESS, COMPLETED, UNKNOWN;
 
+        /** The queued. */
+        QUEUED,
+        /** The in progress. */
+        IN_PROGRESS,
+        /** The completed. */
+        COMPLETED,
+        /** The unknown. */
+        UNKNOWN;
+
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the status
+         */
         public static Status from(String value) {
             return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return name().toLowerCase(Locale.ROOT);
         }
     }
 
+    /**
+     * The Enum Conclusion.
+     */
     public static enum Conclusion {
-        ACTION_REQUIRED, CANCELLED, FAILURE, NEUTRAL, SUCCESS, SKIPPED, STALE, TIMED_OUT, UNKNOWN;
 
+        /** The action required. */
+        ACTION_REQUIRED,
+        /** The cancelled. */
+        CANCELLED,
+        /** The failure. */
+        FAILURE,
+        /** The neutral. */
+        NEUTRAL,
+        /** The success. */
+        SUCCESS,
+        /** The skipped. */
+        SKIPPED,
+        /** The stale. */
+        STALE,
+        /** The timed out. */
+        TIMED_OUT,
+        /** The unknown. */
+        UNKNOWN;
+
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the conclusion
+         */
         public static Conclusion from(String value) {
             return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return name().toLowerCase(Locale.ROOT);

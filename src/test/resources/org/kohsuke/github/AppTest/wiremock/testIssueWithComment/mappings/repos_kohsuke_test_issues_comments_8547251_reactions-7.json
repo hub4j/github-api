@@ -1,35 +1,42 @@
 {
-  "id": "24e3f69b-df35-46f4-a20e-cd9f359c89af",
+  "id": "78f2e418-780d-44e5-a422-1ebafc2d006c",
   "name": "repos_kohsuke_test_issues_comments_8547251_reactions",
   "request": {
     "url": "/repos/kohsuke/test/issues/comments/8547251/reactions",
-    "method": "GET",
+    "method": "POST",
     "headers": {
       "Accept": {
         "equalTo": "application/vnd.github.squirrel-girl-preview+json"
       }
-    }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"content\":\"confused\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
   },
   "response": {
-    "status": 200,
+    "status": 201,
     "bodyFileName": "repos_kohsuke_test_issues_comments_8547251_reactions-7.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Sat, 11 Sep 2021 07:03:05 GMT",
+      "Date": "Fri, 08 Apr 2022 17:53:03 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"361404fe525aa0c8bfcfdba6d71d0ae779b39db1971f01ddf9cd916887f85b00\"",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "ETag": "\"d3886dff7615a4c562cdcdb39bf2aa0a0436ee61fea8a2350fa56f50966c904a\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "X-GitHub-Media-Type": "github.squirrel-girl-preview; format=json",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4929",
-      "X-RateLimit-Reset": "1631346154",
-      "X-RateLimit-Used": "71",
+      "X-RateLimit-Remaining": "4919",
+      "X-RateLimit-Reset": "1649442146",
+      "X-RateLimit-Used": "81",
       "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
@@ -37,13 +44,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D36E:60B8:79A830:7F41C7:613C54A9"
+      "X-GitHub-Request-Id": "BEB8:10500:83CAB:88B80:6250767F"
     }
   },
-  "uuid": "24e3f69b-df35-46f4-a20e-cd9f359c89af",
+  "uuid": "78f2e418-780d-44e5-a422-1ebafc2d006c",
   "persistent": true,
-  "scenarioName": "scenario-2-repos-kohsuke-test-issues-comments-8547251-reactions",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-2-repos-kohsuke-test-issues-comments-8547251-reactions-2",
   "insertionIndex": 7
 }

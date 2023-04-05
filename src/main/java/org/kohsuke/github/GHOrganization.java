@@ -12,6 +12,7 @@ import java.util.TreeMap;
 
 import static org.kohsuke.github.internal.Previews.INERTIA;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHOrganization.
  *
@@ -86,7 +87,6 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Starts a builder that creates a new repository.
-     *
      * <p>
      * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()} to
      * finally create a repository.
@@ -135,7 +135,6 @@ public class GHOrganization extends GHPerson {
      * @return the team
      * @throws IOException
      *             the io exception
-     *
      * @deprecated Use {@link GHOrganization#getTeam(long)}
      */
     @Deprecated
@@ -151,7 +150,6 @@ public class GHOrganization extends GHPerson {
      * @return the team
      * @throws IOException
      *             the io exception
-     *
      * @see <a href= "https://developer.github.com/v3/teams/#get-team-by-name">documentation</a>
      */
     public GHTeam getTeam(long teamId) throws IOException {
@@ -162,7 +160,7 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Finds a team that has the given name in its {@link GHTeam#getName()}
+     * Finds a team that has the given name in its {@link GHTeam#getName()}.
      *
      * @param name
      *            the name
@@ -179,7 +177,7 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Finds a team that has the given slug in its {@link GHTeam#getSlug()}
+     * Finds a team that has the given slug in its {@link GHTeam#getSlug()}.
      *
      * @param slug
      *            the slug
@@ -196,9 +194,11 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Member's role in an organization
+     * Member's role in an organization.
      */
     public enum Role {
+
+        /** The admin. */
         ADMIN,
         /** The user is an owner of the organization. */
         MEMBER /** The user is a non-owner member of the organization. */
@@ -315,6 +315,17 @@ public class GHOrganization extends GHPerson {
         return listMembers("public_members");
     }
 
+    /**
+     * All the outside collaborators of this organization.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listOutsideCollaborators() throws IOException {
+        return listMembers("outside_collaborators");
+    }
+
     private PagedIterable<GHUser> listMembers(String suffix) throws IOException {
         return listMembers(suffix, null, null);
     }
@@ -330,6 +341,19 @@ public class GHOrganization extends GHPerson {
      */
     public PagedIterable<GHUser> listMembersWithFilter(String filter) throws IOException {
         return listMembers("members", filter, null);
+    }
+
+    /**
+     * List outside collaborators with filter paged iterable.
+     *
+     * @param filter
+     *            the filter
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHUser> listOutsideCollaboratorsWithFilter(String filter) throws IOException {
+        return listMembers("outside_collaborators", filter, null);
     }
 
     /**
@@ -379,7 +403,7 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Sets organization projects enabled status boolean
+     * Sets organization projects enabled status boolean.
      *
      * @param newStatus
      *            enable status
@@ -449,9 +473,64 @@ public class GHOrganization extends GHPerson {
 
     /**
      * The enum Permission.
+     *
+     * @see RepositoryRole
      */
     public enum Permission {
-        ADMIN, MAINTAIN, PUSH, TRIAGE, PULL
+
+        /** The admin. */
+        ADMIN,
+        /** The maintain. */
+        MAINTAIN,
+        /** The push. */
+        PUSH,
+        /** The triage. */
+        TRIAGE,
+        /** The pull. */
+        PULL
+    }
+
+    /**
+     * Repository permissions (roles) for teams and collaborators.
+     */
+    public static class RepositoryRole {
+        private final String permission;
+
+        private RepositoryRole(String permission) {
+            this.permission = permission;
+        }
+
+        /**
+         * Custom.
+         *
+         * @param permission
+         *            the permission
+         * @return the repository role
+         */
+        public static RepositoryRole custom(String permission) {
+            return new RepositoryRole(permission);
+        }
+
+        /**
+         * From.
+         *
+         * @param permission
+         *            the permission
+         * @return the repository role
+         */
+        public static RepositoryRole from(Permission permission) {
+            return custom(permission.toString().toLowerCase());
+        }
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+            return permission;
+        }
     }
 
     /**
@@ -542,7 +621,6 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Starts a builder that creates a new team.
-     *
      * <p>
      * You use the returned builder to set various properties, then call {@link GHTeamBuilder#create()} to finally
      * create a team.
@@ -593,6 +671,10 @@ public class GHOrganization extends GHPerson {
 
     /**
      * Lists events performed by a user (this includes private events if the caller is authenticated.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public PagedIterable<GHEventInfo> listEvents() throws IOException {
         return root().createRequest()
@@ -604,9 +686,9 @@ public class GHOrganization extends GHPerson {
      * Lists up all the repositories using the specified page size.
      *
      * @param pageSize
-     *            size for each page of items returned by GitHub. Maximum page size is 100.
-     *
-     *            Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
+     *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     * @return the paged iterable
      */
     @Override
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {

@@ -14,6 +14,9 @@ on:
 env:
   JAVA_11_PLUS_MAVEN_OPTS: "--add-opens jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: build-only (Java ${{ matrix.java }})
@@ -23,9 +26,9 @@ jobs:
       matrix:
         java: [ 17 ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
           distribution: 'zulu'
@@ -40,16 +43,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [ 11 ]
+        java: [ 17 ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
           distribution: 'adopt'
           cache: 'maven'
       - name: Maven Site
+        env:
+          MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
         run: mvn -B  clean site -D enable-ci --file pom.xml
   test-8:
     name: test (${{ matrix.os }}, Java 8)
@@ -60,9 +65,9 @@ jobs:
         os: [ ubuntu ]
         java: [ 8 ]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: ${{ matrix.java }}
         distribution: 'zulu'
@@ -71,7 +76,7 @@ jobs:
     - name: Maven Install with Code Coverage
       run: mvn -B clean install -D enable-ci -Djapicmp.skip --file pom.xml
     - name: Codecov Report 
-      uses: codecov/codecov-action@v2.1.0
+      uses: codecov/codecov-action@v3.1.1
   test:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
     runs-on: ${{ matrix.os }}-latest
@@ -79,11 +84,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu, windows ]
-        java: [ 11.0.3, 11, 17 ]
+        java: [ 11, 17 ]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: ${{ matrix.java }}
         distribution: 'zulu'

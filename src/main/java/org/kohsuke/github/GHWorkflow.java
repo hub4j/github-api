@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
+// TODO: Auto-generated Javadoc
 /**
  * A workflow.
  *
@@ -56,6 +57,13 @@ public class GHWorkflow extends GHObject {
         return state;
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Override
     public URL getHtmlUrl() throws IOException {
         return GitHubClient.parseURL(htmlUrl);
@@ -87,7 +95,7 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void disable() throws IOException {
-        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "disable").fetchHttpStatusCode();
+        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "disable").send();
     }
 
     /**
@@ -97,7 +105,7 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void enable() throws IOException {
-        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").fetchHttpStatusCode();
+        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").send();
     }
 
     /**
@@ -133,7 +141,7 @@ public class GHWorkflow extends GHObject {
             requester.with("inputs", inputs);
         }
 
-        requester.fetchHttpStatusCode();
+        requester.send();
     }
 
     /**
@@ -155,6 +163,13 @@ public class GHWorkflow extends GHObject {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/workflows/" + getId();
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH workflow
+     */
     GHWorkflow wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;

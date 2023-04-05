@@ -24,20 +24,29 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class AbstractGitHubWireMockTest.
+ *
  * @author Liam Newman
  */
 public abstract class AbstractGitHubWireMockTest {
 
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
+    /** The Constant GITHUB_API_TEST_ORG. */
     final static String GITHUB_API_TEST_ORG = "hub4j-test-org";
 
+    /** The Constant STUBBED_USER_LOGIN. */
     final static String STUBBED_USER_LOGIN = "placeholder-user";
+
+    /** The Constant STUBBED_USER_PASSWORD. */
     final static String STUBBED_USER_PASSWORD = "placeholder-password";
 
+    /** The use default git hub. */
     protected boolean useDefaultGitHub = true;
 
+    /** The temp git hub repositories. */
     protected final Set<String> tempGitHubRepositories = new HashSet<>();
 
     /**
@@ -47,18 +56,31 @@ public abstract class AbstractGitHubWireMockTest {
 
     private GitHub nonRecordingGitHub;
 
+    /** The base files class path. */
     protected final String baseFilesClassPath = this.getClass().getName().replace('.', '/');
+
+    /** The base record path. */
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
 
+    /** The mock git hub. */
     @Rule
     public final GitHubWireMockRule mockGitHub;
 
+    /** The templating. */
     protected final TemplatingHelper templating = new TemplatingHelper();
 
+    /**
+     * Instantiates a new abstract git hub wire mock test.
+     */
     public AbstractGitHubWireMockTest() {
         mockGitHub = new GitHubWireMockRule(this.getWireMockOptions());
     }
 
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
     protected WireMockConfiguration getWireMockOptions() {
         return WireMockConfiguration.options().dynamicPort().usingFilesUnderDirectory(baseRecordPath);
     }
@@ -93,6 +115,11 @@ public abstract class AbstractGitHubWireMockTest {
         return builder.withRateLimitHandler(RateLimitHandler.FAIL);
     }
 
+    /**
+     * Gets the git hub builder.
+     *
+     * @return the git hub builder
+     */
     protected GitHubBuilder getGitHubBuilder() {
         GitHubBuilder builder = githubBuilder.clone();
 
@@ -106,6 +133,12 @@ public abstract class AbstractGitHubWireMockTest {
         return builder;
     }
 
+    /**
+     * Wire mock setup.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     public void wireMockSetup() throws Exception {
         GitHubBuilder builder = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl());
@@ -121,16 +154,31 @@ public abstract class AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Snapshot not allowed.
+     */
     protected void snapshotNotAllowed() {
         assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.",
                 mockGitHub.isTakeSnapshot());
     }
 
+    /**
+     * Require proxy.
+     *
+     * @param reason
+     *            the reason
+     */
     protected void requireProxy(String reason) {
         assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable): " + reason,
                 mockGitHub.isUseProxy());
     }
 
+    /**
+     * Verify authenticated.
+     *
+     * @param instance
+     *            the instance
+     */
     protected void verifyAuthenticated(GitHub instance) {
         assertThat(
                 "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_LOGIN and GITHUB_PASSWORD environment variables",
@@ -138,10 +186,22 @@ public abstract class AbstractGitHubWireMockTest {
                 Matchers.is(false));
     }
 
+    /**
+     * Gets the user.
+     *
+     * @return the user
+     */
     protected GHUser getUser() {
         return getUser(gitHub);
     }
 
+    /**
+     * Gets the user.
+     *
+     * @param gitHub
+     *            the git hub
+     * @return the user
+     */
     protected static GHUser getUser(GitHub gitHub) {
         try {
             return gitHub.getMyself();
@@ -196,6 +256,12 @@ public abstract class AbstractGitHubWireMockTest {
         return gitHub.getRepository(fullName);
     }
 
+    /**
+     * Cleanup temp repositories.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Before
     @After
     public void cleanupTempRepositories() throws IOException {
@@ -206,6 +272,14 @@ public abstract class AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Cleanup repository.
+     *
+     * @param fullName
+     *            the full name
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     protected void cleanupRepository(String fullName) throws IOException {
         if (mockGitHub.isUseProxy()) {
             tempGitHubRepositories.add(fullName);
@@ -232,6 +306,9 @@ public abstract class AbstractGitHubWireMockTest {
         return nonRecordingGitHub;
     }
 
+    /**
+     * Kohsuke.
+     */
     protected void kohsuke() {
         // No-op for now
         // Generally this means the test is doing something that requires additional access rights
@@ -255,28 +332,78 @@ public abstract class AbstractGitHubWireMockTest {
         return mockGitHub.isTestWithOrg() ? GITHUB_API_TEST_ORG : gitHub.getMyself().getLogin();
     }
 
+    /**
+     * Fail.
+     */
     public static void fail() {
         Assert.fail();
     }
+
+    /**
+     * Fail.
+     *
+     * @param reason
+     *            the reason
+     */
     public static void fail(String reason) {
         Assert.fail(reason);
     }
 
+    /**
+     * Assert that.
+     *
+     * @param <T>
+     *            the generic type
+     * @param actual
+     *            the actual
+     * @param matcher
+     *            the matcher
+     */
     public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
         MatcherAssert.assertThat("", actual, matcher);
     }
 
+    /**
+     * Assert that.
+     *
+     * @param <T>
+     *            the generic type
+     * @param reason
+     *            the reason
+     * @param actual
+     *            the actual
+     * @param matcher
+     *            the matcher
+     */
     public static <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {
         MatcherAssert.assertThat(reason, actual, matcher);
     }
 
+    /**
+     * Assert that.
+     *
+     * @param reason
+     *            the reason
+     * @param assertion
+     *            the assertion
+     */
     public static void assertThat(String reason, boolean assertion) {
         MatcherAssert.assertThat(reason, assertion);
     }
 
+    /**
+     * The Class TemplatingHelper.
+     */
     protected static class TemplatingHelper {
+
+        /** The test start date. */
         public Date testStartDate = new Date();
 
+        /**
+         * New response transformer.
+         *
+         * @return the response template transformer
+         */
         public ResponseTemplateTransformer newResponseTransformer() {
             testStartDate = new Date();
             return ResponseTemplateTransformer.builder()

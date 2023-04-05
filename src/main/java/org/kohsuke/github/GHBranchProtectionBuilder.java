@@ -14,6 +14,7 @@ import java.util.Set;
 
 import static org.kohsuke.github.internal.Previews.LUKE_CAGE;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builder to configure the branch protection settings.
  *
@@ -31,6 +32,12 @@ public class GHBranchProtectionBuilder {
     private Restrictions restrictions;
     private StatusChecks statusChecks;
 
+    /**
+     * Instantiates a new GH branch protection builder.
+     *
+     * @param branch
+     *            the branch
+     */
     GHBranchProtectionBuilder(GHBranch branch) {
         this.branch = branch;
     }

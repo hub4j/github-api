@@ -1,5 +1,5 @@
 {
-  "id": "d9de8255-dcbc-409d-b311-b7824a3ddeb6",
+  "id": "d15a81b4-dbd1-4c75-8abb-998c644d0ff2",
   "name": "repos_hub4j_github-api_issues_311_reactions",
   "request": {
     "url": "/repos/hub4j/github-api/issues/311/reactions",
@@ -13,7 +13,7 @@
       {
         "equalToJson": "{\"content\":\"+1\"}",
         "ignoreArrayOrder": true,
-        "ignoreExtraElements": true
+        "ignoreExtraElements": false
       }
     ]
   },
@@ -21,34 +21,33 @@
     "status": 201,
     "bodyFileName": "repos_hub4j_github-api_issues_311_reactions-8.json",
     "headers": {
-      "Date": "Sun, 23 Feb 2020 03:15:55 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "201 Created",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4885",
-      "X-RateLimit-Reset": "1582428788",
+      "Date": "Fri, 08 Apr 2022 17:54:35 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"6830982bf9c6904a3f72d80ecc83fbaa\"",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "ETag": "\"e466e9581a3f51886974183d8c4b81e04a58168cafb785a1373085b556b04ee8\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
-      "X-GitHub-Media-Type": "github.squirrel-girl-preview; format=json",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
-      "Access-Control-Allow-Origin": "*",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4906",
+      "X-RateLimit-Reset": "1649442146",
+      "X-RateLimit-Used": "94",
+      "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C701:8993:A68E43:C0D6DC:5E51EE6B"
+      "X-GitHub-Request-Id": "C586:020C:80DA7:85EAB:625076DB"
     }
   },
-  "uuid": "d9de8255-dcbc-409d-b311-b7824a3ddeb6",
+  "uuid": "d15a81b4-dbd1-4c75-8abb-998c644d0ff2",
   "persistent": true,
   "insertionIndex": 8
 }

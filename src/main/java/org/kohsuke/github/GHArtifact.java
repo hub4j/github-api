@@ -12,6 +12,7 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
+// TODO: Auto-generated Javadoc
 /**
  * An artifact from a workflow run.
  *
@@ -85,6 +86,11 @@ public class GHArtifact extends GHObject {
     }
 
     /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      * @deprecated This object has no HTML URL.
      */
     @Override
@@ -99,7 +105,7 @@ public class GHArtifact extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).fetchHttpStatusCode();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -109,9 +115,9 @@ public class GHArtifact extends GHObject {
      *            the type of result
      * @param streamFunction
      *            The {@link InputStreamFunction} that will process the stream
+     * @return the result of reading the stream.
      * @throws IOException
      *             The IO exception.
-     * @return the result of reading the stream.
      */
     public <T> T download(InputStreamFunction<T> streamFunction) throws IOException {
         requireNonNull(streamFunction, "Stream function must not be null");
@@ -128,6 +134,13 @@ public class GHArtifact extends GHObject {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/artifacts/" + getId();
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH artifact
+     */
     GHArtifact wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;

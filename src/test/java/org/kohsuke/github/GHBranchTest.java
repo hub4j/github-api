@@ -4,12 +4,22 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHBranchTest.
+ */
 public class GHBranchTest extends AbstractGitHubWireMockTest {
     private static final String BRANCH_1 = "testBranch1";
     private static final String BRANCH_2 = "testBranch2";
 
     private GHRepository repository;
 
+    /**
+     * Test merge branch.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testMergeBranch() throws Exception {
         repository = getTempRepository();

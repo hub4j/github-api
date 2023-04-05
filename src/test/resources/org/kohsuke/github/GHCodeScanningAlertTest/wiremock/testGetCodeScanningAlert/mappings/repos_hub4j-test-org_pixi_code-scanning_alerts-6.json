@@ -1,0 +1,43 @@
+{
+  "id": "a4c157e9-b884-4d7a-b4a7-04b5d167a493",
+  "name": "repos_hub4j-test-org_pixi_code-scanning_alerts",
+  "request": {
+    "url": "/repos/hub4j-test-org/Pixi/code-scanning/alerts?state=dismissed&per_page=1",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 403,
+    "body": "{\"message\":\"You are not authorized to read code scanning alerts.\",\"documentation_url\":\"https://docs.github.com/rest/reference/code-scanning#list-code-scanning-alerts-for-a-repository\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 10 Jan 2023 22:27:32 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "project, repo, write:packages",
+      "X-Accepted-OAuth-Scopes": "admin:repo_hook, delete_repo, read:repo_hook, repo, repo:invite, repo:status, repo_deployment, security_events, write:repo_hook",
+      "github-authentication-token-expiration": "2023-01-16 19:25:18 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4988",
+      "X-RateLimit-Reset": "1673392023",
+      "X-RateLimit-Used": "12",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "D021:5263:2E452EE:5EA00C4:63BDE654"
+    }
+  },
+  "uuid": "a4c157e9-b884-4d7a-b4a7-04b5d167a493",
+  "persistent": true,
+  "insertionIndex": 6
+}

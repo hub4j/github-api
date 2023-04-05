@@ -9,17 +9,32 @@ import java.io.IOException;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class GHProjectTest.
+ *
  * @author Gunnar Skjold
  */
 public class GHProjectTest extends AbstractGitHubWireMockTest {
     private GHProject project;
 
+    /**
+     * Sets the up.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     public void setUp() throws Exception {
         project = gitHub.getOrganization(GITHUB_API_TEST_ORG).createProject("test-project", "This is a test project");
     }
 
+    /**
+     * Test created project.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testCreatedProject() throws IOException {
         assertThat(project, notNullValue());
@@ -30,6 +45,12 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
         assertThat(project.getUrl().toString(), containsString("/projects/"));
     }
 
+    /**
+     * Test edit project name.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testEditProjectName() throws IOException {
         project.setName("new-name");
@@ -39,6 +60,12 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
         assertThat(project.getState(), equalTo(GHProject.ProjectState.OPEN));
     }
 
+    /**
+     * Test edit project body.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testEditProjectBody() throws IOException {
         project.setBody("New body");
@@ -48,6 +75,12 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
         assertThat(project.getState(), equalTo(GHProject.ProjectState.OPEN));
     }
 
+    /**
+     * Test edit project state.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testEditProjectState() throws IOException {
         project.setState(GHProject.ProjectState.CLOSED);
@@ -57,6 +90,12 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
         assertThat(project.getState(), equalTo(GHProject.ProjectState.CLOSED));
     }
 
+    /**
+     * Test delete project.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testDeleteProject() throws IOException {
         project.delete();
@@ -68,6 +107,12 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * After.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @After
     public void after() throws IOException {
         if (mockGitHub.isUseProxy()) {

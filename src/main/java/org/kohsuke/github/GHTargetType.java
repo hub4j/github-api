@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * App installation target type.
  *
@@ -11,10 +12,16 @@ import java.util.Locale;
  * @see GHAppInstallation
  */
 public enum GHTargetType {
-    ORGANIZATION, USER;
+
+    /** The organization. */
+    ORGANIZATION,
+    /** The user. */
+    USER;
 
     /**
      * Returns GitHub's internal representation of this event.
+     *
+     * @return the string
      */
     String symbol() {
         return StringUtils.capitalize(name().toLowerCase(Locale.ENGLISH));

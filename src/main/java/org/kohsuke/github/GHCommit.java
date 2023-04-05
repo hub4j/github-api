@@ -464,6 +464,9 @@ public class GHCommit {
      *             the io exception
      */
     public GHUser getAuthor() throws IOException {
+        if (author != null) {
+            return resolveUser(author);
+        }
         populate();
         return resolveUser(author);
     }

@@ -1170,6 +1170,38 @@ public class GitHub {
     }
 
     /**
+     * Returns the GitHub App identified by the given slug
+     *
+     * @param slug
+     *            the slug of the application
+     * @return the app
+     * @throws IOException
+     *             the IO exception
+     * @see <a href="https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#get-an-app">Get an app</a>
+     */
+    public GHApp getApp(@Nonnull String slug) throws IOException {
+        return createRequest().withUrlPath("/apps/" + slug).fetch(GHApp.class);
+    }
+
+    /**
+     * Creates a GitHub App from a manifest.
+     *
+     * @param code
+     *            temporary code returned during the manifest flow
+     * @return the app
+     * @throws IOException
+     *             the IO exception
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest">Get an
+     *      app</a>
+     */
+    public GHAppFromManifest createAppFromManifest(String code) throws IOException {
+        return createRequest().method("POST")
+                .withUrlPath("/app-manifests/" + code + "/conversions")
+                .fetch(GHAppFromManifest.class);
+    }
+
+    /**
      * Returns the GitHub App Installation associated with the authentication credentials used.
      * <p>
      * You must use an installation token to access this endpoint; otherwise consider {@link #getApp()} and its various

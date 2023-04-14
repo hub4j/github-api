@@ -55,9 +55,9 @@ public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
         GHAppInstallation appInstallation = getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization());
 
         GHMarketplaceAccountPlan marketplaceAccount = appInstallation.getMarketplaceAccount();
-		GHMarketplacePlanTest.testMarketplaceAccount(marketplaceAccount);
-		
-		GHMarketplaceAccountPlan plan = marketplaceAccount.getPlan();
+        GHMarketplacePlanTest.testMarketplaceAccount(marketplaceAccount);
+
+        GHMarketplaceAccountPlan plan = marketplaceAccount.getPlan();
         assertThat(plan.getType(), equalTo(GHMarketplaceAccountType.ORGANIZATION));
     }
 

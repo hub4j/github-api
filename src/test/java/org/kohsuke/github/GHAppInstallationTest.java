@@ -54,7 +54,11 @@ public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
     public void testGetMarketplaceAccount() throws IOException {
         GHAppInstallation appInstallation = getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization());
 
-        GHMarketplacePlanTest.testMarketplaceAccount(appInstallation.getMarketplaceAccount());
+        GHMarketplaceAccountPlan marketplaceAccount = appInstallation.getMarketplaceAccount();
+		GHMarketplacePlanTest.testMarketplaceAccount(marketplaceAccount);
+		
+		GHMarketplaceAccountPlan plan = marketplaceAccount.getPlan();
+        assertThat(plan.getType(), equalTo(GHMarketplaceAccountType.ORGANIZATION));
     }
 
 }

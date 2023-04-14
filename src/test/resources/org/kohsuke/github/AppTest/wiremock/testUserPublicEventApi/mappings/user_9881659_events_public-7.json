@@ -1,0 +1,53 @@
+{
+  "id": "f5565be2-f059-4d73-9a31-94e1e87369ca",
+  "name": "user_9881659_events_public",
+  "request": {
+    "url": "/user/9881659/events/public?page=6",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "user_9881659_events_public-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 14 Apr 2023 10:30:34 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"b3a8273b75efef955e1e9fdb9fc373b9d22c6dda0b6664a8ff3afb9fdf01321a\"",
+      "Last-Modified": "Fri, 03 Mar 2023 13:33:40 GMT",
+      "X-Poll-Interval": "60",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2023-05-14 08:53:01 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4762",
+      "X-RateLimit-Reset": "1681471155",
+      "X-RateLimit-Used": "238",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C5C2:0A09:DCBA21:1C66EAF:64392B49",
+      "Link": "<https://api.github.com/user/9881659/events/public?page=5>; rel=\"prev\", <https://api.github.com/user/9881659/events/public?page=7>; rel=\"next\", <https://api.github.com/user/9881659/events/public?page=8>; rel=\"last\", <https://api.github.com/user/9881659/events/public?page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "f5565be2-f059-4d73-9a31-94e1e87369ca",
+  "persistent": true,
+  "insertionIndex": 7
+}

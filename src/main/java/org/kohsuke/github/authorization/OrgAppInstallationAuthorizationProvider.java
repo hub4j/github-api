@@ -18,7 +18,7 @@ public class OrgAppInstallationAuthorizationProvider extends AppInstallationAuth
      *            A authorization provider that returns a JWT token that can be used to refresh the App Installation
      *            token from GitHub.
      *
-     * @deprecated Replaced by {@link #AppInstallationAuthorizationProvider}
+     * @deprecated Replaced by {@link AppInstallationAuthorizationProvider}
      */
     @BetaApi
     @Deprecated

@@ -66,6 +66,15 @@ public class AppInstallationAuthorizationProvider extends GitHub.DependentAuthor
      */
     @FunctionalInterface
     public interface AppInstallationProvider {
+        /**
+         * Provides a GHAppInstallation for the given GHApp
+         *
+         * @param app
+         *            The GHApp to use
+         * @return The GHAppInstallation
+         * @throws IOException
+         *             on error
+         */
         GHAppInstallation getAppInstallation(GHApp app) throws IOException;
     }
 }

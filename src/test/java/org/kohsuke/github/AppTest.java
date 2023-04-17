@@ -1036,6 +1036,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test user public event api.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testUserPublicEventApi() throws Exception {
         for (GHEventInfo ev : gitHub.getUserPublicEvents("PierreBtz")) {

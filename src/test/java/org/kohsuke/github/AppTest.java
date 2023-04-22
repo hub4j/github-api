@@ -1037,6 +1037,30 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test user public event api.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testUserPublicEventApi() throws Exception {
+        for (GHEventInfo ev : gitHub.getUserPublicEvents("PierreBtz")) {
+            if (ev.getType() == GHEvent.PULL_REQUEST) {
+                if (ev.getId() == 27449881624L) {
+                    assertThat(ev.getActorLogin(), equalTo("PierreBtz"));
+                    assertThat(ev.getOrganization().getLogin(), equalTo("hub4j"));
+                    assertThat(ev.getRepository().getFullName(), equalTo("hub4j/github-api"));
+                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseDate("2023-03-02T16:37:49Z")));
+                    assertThat(ev.getType(), equalTo(GHEvent.PULL_REQUEST));
+                }
+
+                GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
+                assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
+            }
+        }
+    }
+
+    /**
      * Test app.
      *
      * @throws IOException
@@ -1283,18 +1307,43 @@ public class AppTest extends AbstractGitHubWireMockTest {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Ignore("Needs mocking check")
     @Test
     public void testAddDeployKey() throws IOException {
         GHRepository myRepository = getTestRepository();
         final GHDeployKey newDeployKey = myRepository.addDeployKey("test",
-                "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUt0RAycC5cS42JKh6SecfFZBR1RrF+2hYMctz4mk74/arBE+wFb7fnSHGzdGKX2h5CFOWODifRCJVhB7hlVxodxe+QkQQYAEL/x1WVCJnGgTGQGOrhOMj95V3UE5pQKhsKD608C+u5tSofcWXLToP1/wZ7U4/AHjqYi08OLsWToHCax55TZkvdt2jo0hbIoYU+XI9Q8Uv4ONDN1oabiOdgeKi8+crvHAuvNleiBhWVBzFh8KdfzaH5uNdw7ihhFjEd1vzqACsjCINCjdMfzl6jD9ExuWuE92nZJnucls2cEoNC6k2aPmrZDg9hA32FXVpyseY+bDUWFU6LO2LG6PB kohsuke@atlas");
+                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIATWwMLytklB44O66isWRKOB3Qd7Ysc7q7EyWTmT0bG9 test@example.com");
         try {
             assertThat(newDeployKey.getId(), notNullValue());
 
             GHDeployKey k = Iterables.find(myRepository.getDeployKeys(), new Predicate<GHDeployKey>() {
                 public boolean apply(GHDeployKey deployKey) {
-                    return newDeployKey.getId() == deployKey.getId();
+                    return newDeployKey.getId() == deployKey.getId() && !deployKey.isRead_only();
+                }
+            });
+            assertThat(k, notNullValue());
+        } finally {
+            newDeployKey.delete();
+        }
+    }
+
+    /**
+     * Test add deploy key read-only.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testAddDeployKeyAsReadOnly() throws IOException {
+        GHRepository myRepository = getTestRepository();
+        final GHDeployKey newDeployKey = myRepository.addDeployKey("test",
+                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIATWwMLytklB44O66isWRKOB3Qd7Ysc7q7EyWTmT0bG9 test@example.com",
+                true);
+        try {
+            assertThat(newDeployKey.getId(), notNullValue());
+
+            GHDeployKey k = Iterables.find(myRepository.getDeployKeys(), new Predicate<GHDeployKey>() {
+                public boolean apply(GHDeployKey deployKey) {
+                    return newDeployKey.getId() == deployKey.getId() && deployKey.isRead_only();
                 }
             });
             assertThat(k, notNullValue());

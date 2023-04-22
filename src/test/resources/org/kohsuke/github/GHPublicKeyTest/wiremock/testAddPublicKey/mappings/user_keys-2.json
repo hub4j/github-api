@@ -1,0 +1,56 @@
+{
+  "id": "2a67008e-cf5e-4b4c-894a-878f6c718a05",
+  "name": "user_keys",
+  "request": {
+    "url": "/user/keys",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"title\":\"Temporary user key\",\"key\":\"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDepW2/BSVFM2AfuGGsvi+vjQzC0EBD3R+/7PNEvP0/nvTWxiC/tthfvvCJR6TKrsprCir5tiJFm73gX+K18W0RKYpkyg8H6d1eZu3q/JOiGvoDPeN8Oe9hOGeeexw1WOiz7ESPHzZYXI981evzHAzxxn8zibr2EryopVNsXyoenw==\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "user_keys-2.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 30 Jan 2023 09:31:56 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"6510ce8437cc68cf299fe8f5209abc961b86e6b4d35dfa4ae626ce43b32b2580\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "admin:public_key, write:public_key",
+      "github-authentication-token-expiration": "2023-03-01 08:23:08 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4997",
+      "X-RateLimit-Reset": "1675074715",
+      "X-RateLimit-Used": "3",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CAB8:5F74:B9E56B:BCE687:63D78E8B",
+      "Location": "https://api.github.com/user/keys/77080429"
+    }
+  },
+  "uuid": "2a67008e-cf5e-4b4c-894a-878f6c718a05",
+  "persistent": true,
+  "insertionIndex": 2
+}

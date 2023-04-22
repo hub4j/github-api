@@ -3,6 +3,8 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.io.IOException;
+
 // TODO: Auto-generated Javadoc
 /**
  * SSH public key.
@@ -73,5 +75,15 @@ public class GHKey extends GitHubInteractiveObject {
      */
     public String toString() {
         return new ToStringBuilder(this).append("title", title).append("id", id).append("key", key).toString();
+    }
+
+    /**
+     * Delete the GHKey
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(String.format("/user/keys/%d", id)).send();
     }
 }

@@ -1,0 +1,55 @@
+{
+  "id": "37ca8b73-12d2-49a3-8313-f0d431df04cb",
+  "name": "repos_hub4j-test-org_github-api_pulls_456_comments_902875759_replies",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/456/comments/902875759/replies",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"body\":\"This is a reply.\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_github-api_pulls_456_comments_902875759_replies-24.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 21 Jun 2022 17:18:31 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"50c45442ba1c3250fe571c1279aa8974e99f137be5f8c4b25bc2bff97a31e30d\"",
+      "X-OAuth-Scopes": "admin:gpg_key, notifications, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-07-17 15:27:30 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4972",
+      "X-RateLimit-Reset": "1655835493",
+      "X-RateLimit-Used": "28",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "AF8C:5CC2:53C762:557D24:62B1FD66",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/comments/902875952"
+    }
+  },
+  "uuid": "37ca8b73-12d2-49a3-8313-f0d431df04cb",
+  "persistent": true,
+  "insertionIndex": 24
+}

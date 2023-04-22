@@ -1,0 +1,16 @@
+{
+  "id": "4c1e8c73-a989-4625-8582-5fa6a2f88f4d",
+  "name": "repos_hub4j-test-org_github-api-starred",
+  "request": {
+    "url": "/user/starred/hub4j-test-org/github-api",
+    "method": "PUT",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204
+  }
+}

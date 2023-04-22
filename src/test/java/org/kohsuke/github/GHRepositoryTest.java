@@ -1563,4 +1563,22 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getTempRepository();
         repo.createSecret("secret", "encrypted", "public");
     }
+
+    /**
+     * Test to check star method by verifying stargarzer count.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void starTest() throws Exception {
+        String owner = "hub4j-test-org";
+        GHRepository repository = getRepository();
+        assertThat(repository.getOwner().getLogin(), equalTo(owner));
+        assertThat(repository.getStargazersCount(), is(0));
+        repository.star();
+        assertThat(repository.listStargazers2().toList().size(), is(1));
+        repository.unstar();
+        assertThat(repository.listStargazers().toList().size(), is(0));
+    }
 }

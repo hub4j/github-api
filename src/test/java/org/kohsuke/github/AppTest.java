@@ -1037,6 +1037,30 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test user public event api.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testUserPublicEventApi() throws Exception {
+        for (GHEventInfo ev : gitHub.getUserPublicEvents("PierreBtz")) {
+            if (ev.getType() == GHEvent.PULL_REQUEST) {
+                if (ev.getId() == 27449881624L) {
+                    assertThat(ev.getActorLogin(), equalTo("PierreBtz"));
+                    assertThat(ev.getOrganization().getLogin(), equalTo("hub4j"));
+                    assertThat(ev.getRepository().getFullName(), equalTo("hub4j/github-api"));
+                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseDate("2023-03-02T16:37:49Z")));
+                    assertThat(ev.getType(), equalTo(GHEvent.PULL_REQUEST));
+                }
+
+                GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
+                assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
+            }
+        }
+    }
+
+    /**
      * Test app.
      *
      * @throws IOException

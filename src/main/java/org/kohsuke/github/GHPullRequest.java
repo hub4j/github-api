@@ -242,9 +242,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
-     * Gets commits.
+     * Gets the number of commits.
      *
-     * @return the commits
+     * @return the number of commits
      * @throws IOException
      *             the io exception
      */

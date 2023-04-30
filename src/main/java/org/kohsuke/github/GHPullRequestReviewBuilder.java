@@ -73,14 +73,13 @@ public class GHPullRequestReviewBuilder {
 
     /**
      * Comment gh pull request review builder.
-     *
+     *          
      * @param body
-     *            The relative path to the file that necessitates a review comment.
-     * @param path
-     *            The position in the diff where you want to add a review comment. Note this value is not the same as
-     *            the line number in the file. For help finding the position value, read the note below.
-     * @param position
      *            Text of the review comment.
+     * @param path
+     *            The relative path to the file that necessitates a review comment.
+     * @param position
+     *            The line of the blob in the pull request diff that the comment applies to. 
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder comment(String body, String path, int position) {
@@ -106,12 +105,12 @@ public class GHPullRequestReviewBuilder {
     private static class DraftReviewComment {
         private String body;
         private String path;
-        private int position;
+        private int line;
 
-        DraftReviewComment(String body, String path, int position) {
+        DraftReviewComment(String body, String path, int line) {
             this.body = body;
             this.path = path;
-            this.position = position;
+            this.line = line;
         }
 
         /**
@@ -133,12 +132,12 @@ public class GHPullRequestReviewBuilder {
         }
 
         /**
-         * Gets position.
+         * Gets line.
          *
-         * @return the position
+         * @return the line
          */
-        public int getPosition() {
-            return position;
+        public int getLine() {
+            return line;
         }
     }
 }

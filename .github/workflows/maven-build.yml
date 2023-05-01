@@ -36,7 +36,7 @@ jobs:
       - name: Maven Install (skipTests)
         env:
           MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-        run: mvn -B clean install -DskipTests --file pom.xml
+        run: mvn -B clean install -DskipTests -Djapicmp.skip --file pom.xml
   site:
     name: site (Java ${{ matrix.java }})
     runs-on: ubuntu-latest

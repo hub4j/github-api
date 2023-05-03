@@ -74,7 +74,7 @@ jobs:
         cache: 'maven'
     # JDK 8
     - name: Maven Install with Code Coverage
-      run: mvn -B clean install -D enable-ci -Djapicmp.skip --file pom.xml
+      run: mvn -B clean install -D enable-ci -Djapicmp.skip --file pom.xml -Dsurefire.useFile=false -DdisableXmlReport=true
     - name: Codecov Report 
       uses: codecov/codecov-action@v3.1.1
   test:

@@ -142,7 +142,7 @@ public class GHPullRequestReviewBuilder {
         private Integer start_line;
         private String side;
 
-        DraftReviewComment(String body, String path, Integer position) {
+        DraftReviewComment(String body, String path, int position) {
             this.body = body;
             this.path = path;
             this.position = position;

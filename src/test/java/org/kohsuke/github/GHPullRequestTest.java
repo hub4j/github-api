@@ -208,6 +208,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHPullRequestReview draftReview = p.createReview()
                 .body("Some draft review")
                 .comment("Some niggle", "README.md", 1)
+                .comment("other niggle", "README.md", 1, null, null)
                 .create();
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
@@ -220,10 +221,16 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(review.getCommitId(), notNullValue());
         draftReview.submit("Some review comment", GHPullRequestReviewEvent.COMMENT);
         List<GHPullRequestReviewComment> comments = review.listReviewComments().toList();
-        assertThat(comments.size(), equalTo(1));
+        assertThat(comments.size(), equalTo(2));
         GHPullRequestReviewComment comment = comments.get(0);
         assertThat(comment.getBody(), equalTo("Some niggle"));
-        draftReview = p.createReview().body("Some new review").comment("Some niggle", "README.md", 1).create();
+        comment = comments.get(1);
+        assertThat(comment.getBody(), equalTo("other niggle"));
+        draftReview = p.createReview()
+                .body("Some draft review")
+                .comment("Some niggle", "README.md", 1)
+                .comment("other niggle", "README.md", 1, null, null)
+                .create();
         draftReview.delete();
     }
 

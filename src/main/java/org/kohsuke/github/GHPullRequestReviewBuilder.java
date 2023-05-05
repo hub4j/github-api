@@ -84,8 +84,8 @@ public class GHPullRequestReviewBuilder {
      * @param path
      *            The relative path to the file that necessitates a review comment.
      * @param position
-     *            The position in the diff where you want to add a review comment. Note this value is not the same as
-     *            the line number in the file.
+     *            Line number down from the first "@@" hunk in header. Position continues to increase through lines of
+     *            whitespace and additional hunks.
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder comment(String body, String path, int position) {
@@ -151,11 +151,7 @@ public class GHPullRequestReviewBuilder {
             this.side = null;
         }
 
-        DraftReviewComment(String body,
-                String path,
-                Integer line,
-                @Nullable Integer start_line,
-                @Nullable String side) {
+        DraftReviewComment(String body, String path, int line, @Nullable Integer start_line, @Nullable String side) {
             this.body = body;
             this.path = path;
             this.position = null;

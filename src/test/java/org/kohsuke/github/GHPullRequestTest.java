@@ -207,7 +207,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
         GHPullRequestReview draftReview = p.createReview()
                 .body("Some draft review")
-                .comment("Some niggle", "README.md", 1)
+                .comment("Some niggle", "README.md", 2)
                 .comment("other niggle", "README.md", 1, null, null)
                 .create();
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));

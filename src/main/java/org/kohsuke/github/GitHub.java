@@ -916,6 +916,23 @@ public class GitHub {
     }
 
     /**
+     * List public events for a user
+     * <a href="https://docs.github.com/en/rest/activity/events?apiVersion=2022-11-28#list-public-events-for-a-user">see
+     * API documentation</a>
+     *
+     * @param login
+     *            the login (user) to look public events for
+     * @return the events
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHEventInfo> getUserPublicEvents(String login) throws IOException {
+        return createRequest().withUrlPath("/users/" + login + "/events/public")
+                .toIterable(GHEventInfo[].class, null)
+                .toList();
+    }
+
+    /**
      * Gets a single gist by ID.
      *
      * @param id

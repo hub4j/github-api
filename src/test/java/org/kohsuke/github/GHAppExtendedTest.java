@@ -23,7 +23,7 @@ public class GHAppExtendedTest extends AbstractGitHubWireMockTest {
      *             An IOException has occurred.
      */
     @Test
-    public void testGetAppBySlugTest() throws IOException {
+    public void getAppBySlugTest() throws IOException {
         GHApp app = gitHub.getApp(APP_SLUG);
 
         assertThat(app.getId(), is((long) 330762));
@@ -33,5 +33,7 @@ public class GHAppExtendedTest extends AbstractGitHubWireMockTest {
         assertThat(app.getHtmlUrl().toString(), equalTo("https://github.com/apps/ghapi-test-app-4"));
         assertThat(app.getDescription(), equalTo("An app to test the GitHub getApp(slug) method."));
     }
+
+
 
 }

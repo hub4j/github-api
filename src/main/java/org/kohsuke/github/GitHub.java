@@ -1212,7 +1212,7 @@ public class GitHub {
      *      "https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest">Get an
      *      app</a>
      */
-    public GHAppFromManifest createAppFromManifest(String code) throws IOException {
+    public GHAppFromManifest createAppFromManifest(@Nonnull String code) throws IOException {
         return createRequest().method("POST")
                 .withUrlPath("/app-manifests/" + code + "/conversions")
                 .fetch(GHAppFromManifest.class);

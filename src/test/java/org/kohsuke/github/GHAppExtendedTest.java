@@ -35,12 +35,13 @@ public class GHAppExtendedTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Tests the create from App Manifest Flow.
+     * Tests App creation via the App Manifest Flow.
      *
      * The used code defined below was only valid for a short time, meaning that you can not replay the test against the
      * GitHub API. Use the stored wire snapshot for executing those tests.
      *
      * @throws IOException
+     *             An IOException has occurred.
      */
     @Test
     public void createAppByManifestFlowTest() throws IOException {

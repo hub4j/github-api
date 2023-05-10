@@ -3,6 +3,7 @@ package org.kohsuke.github.extras.authorization;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.jackson.io.JacksonSerializer;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.File;
@@ -181,7 +182,7 @@ public class JWTTokenProvider implements AuthorizationProvider {
         validUntil = expiration.minus(Duration.ofMinutes(2));
 
         // Builds the JWT and serializes it to a compact, URL-safe string
-        return builder.compact();
+        return builder.serializeToJsonWith(new JacksonSerializer<>()).compact();
     }
 
     Instant getIssuedAt(Instant now) {

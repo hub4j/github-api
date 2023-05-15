@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.GHVerification.Reason.*;
 
@@ -1587,6 +1586,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void testRepoActionVariable() throws Exception {
         GHRepository repository = getRepository();
         GHRepositoryVariable variable = repository.getRepoVariable("myvar");
-        assertEquals("this is my var value", variable.getValue());
+        assertThat(variable.getValue(), is("this is my var value"));
     }
 }

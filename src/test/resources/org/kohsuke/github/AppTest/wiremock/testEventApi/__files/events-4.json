@@ -2084,7 +2084,7 @@
         "created_at": "2019-10-21T21:54:50Z",
         "updated_at": "2019-10-21T21:54:50Z",
         "author_association": "MEMBER",
-        "body": "el documento solo se publica cuando el proveedor amyvar, si el proveedor rechaza no pasa nada con el documento.\r\n\r\nel flujo se crea cuando el contratista sube archivos y el flujo se cancela cuando el contratista elimina los archivos"
+        "body": "el documento solo se publica cuando el proveedor aprueba, si el proveedor rechaza no pasa nada con el documento.\r\n\r\nel flujo se crea cuando el contratista sube archivos y el flujo se cancela cuando el contratista elimina los archivos"
       }
     },
     "public": true,

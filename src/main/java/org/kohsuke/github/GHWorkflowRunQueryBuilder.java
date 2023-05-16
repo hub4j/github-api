@@ -111,6 +111,16 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
     }
 
     /**
+     * @param created
+     *            specifies a date-time range to return workflow runs within
+     * @return the gh workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder created(String created) {
+        req.with("created", created);
+        return this;
+    }
+
+    /**
      * List.
      *
      * @return the paged iterable

@@ -1582,6 +1582,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(repository.listStargazers().toList().size(), is(0));
     }
 
+    /**
+     * Test to check getRepoVariable method.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testRepoActionVariable() throws Exception {
         GHRepository repository = getRepository();

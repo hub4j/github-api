@@ -30,6 +30,7 @@ public class GHWorkflowRun extends GHObject {
     private GHRepository owner;
 
     private String name;
+    private String displayTitle;
     private long runNumber;
     private long workflowId;
 
@@ -63,6 +64,15 @@ public class GHWorkflowRun extends GHObject {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * The display title of the workflow run.
+     *
+     * @return the displayTitle
+     */
+    public String getDisplayTitle() {
+        return displayTitle;
     }
 
     /**

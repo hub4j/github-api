@@ -2730,6 +2730,21 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Gets a variable by name
+     *
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @return the variable
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepositoryVariable getRepoVariable(String name) throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("actions/variables"), name)
+                .fetch(GHRepositoryVariable.class);
+    }
+
+    /**
      * Creates a new content, or update an existing content.
      *
      * @return the gh content builder

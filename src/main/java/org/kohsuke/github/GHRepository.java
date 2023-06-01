@@ -2738,13 +2738,13 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHRepositoryVariable createRepoVariable(final GHRepositoryVariable name) throws IOException {
-        return root().createRequest()
+    public void createRepoVariable(final GHRepositoryVariable name) throws IOException {
+        root().createRequest()
                 .withUrlPath(getApiTailUrl("actions/variables"))
                 .method("POST")
                 .with("name", name.getName())
                 .with("value", name.getValue())
-                .fetch(GHRepositoryVariable.class);
+                .send();
     }
 
     /**
@@ -2773,15 +2773,14 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHRepositoryVariable updateRepoVariable(final String name, final GHRepositoryVariable variableToUpdate)
-            throws IOException {
+    public void updateRepoVariable(final String name, final GHRepositoryVariable variableToUpdate) throws IOException {
 
-        return root().createRequest()
+        root().createRequest()
                 .withUrlPath(getApiTailUrl("actions/variables"), name)
                 .method("PATCH")
                 .with("name", variableToUpdate.getName())
                 .with("value", variableToUpdate.getValue())
-                .fetch(GHRepositoryVariable.class);
+                .send();
     }
 
     /**

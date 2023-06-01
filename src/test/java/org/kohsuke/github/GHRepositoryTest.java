@@ -1594,4 +1594,34 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepositoryVariable variable = repository.getRepoVariable("myvar");
         assertThat(variable.getValue(), is("this is my var value"));
     }
+
+    /**
+     * Test create repo action variable.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testCreateRepoActionVariable() throws IOException {
+        GHRepository repository = getRepository();
+        GHRepositoryVariable newVariable = new GHRepositoryVariable();
+        newVariable.setName("mynewvariable");
+        newVariable.setValue("mynewvalue");
+        repository.createRepoVariable(newVariable);
+    }
+
+    /**
+     * Test create repo action variable.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testUpdateRepoActionVariable() throws IOException {
+        GHRepository repository = getRepository();
+        GHRepositoryVariable updateVariable = new GHRepositoryVariable();
+        updateVariable.setName("mynewvariable");
+        updateVariable.setValue("mynewupdatevalue");
+        repository.updateRepoVariable("mynewvariable", updateVariable);
+    }
 }

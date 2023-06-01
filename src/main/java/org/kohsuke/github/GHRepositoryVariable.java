@@ -6,6 +6,7 @@ package org.kohsuke.github;
  * @author garridobarrera
  */
 public class GHRepositoryVariable {
+
     private String name;
     private String value;
     private String createdAt;
@@ -21,11 +22,31 @@ public class GHRepositoryVariable {
     }
 
     /**
+     * Sets name.
+     *
+     * @param name
+     *            the name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * Gets value.
      *
      * @return the value
      */
     public String getValue() {
         return value;
+    }
+
+    /**
+     * Sets value.
+     *
+     * @param value
+     *            the value
+     */
+    public void setValue(String value) {
+        this.value = value;
     }
 }

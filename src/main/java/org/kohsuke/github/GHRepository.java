@@ -2734,7 +2734,6 @@ public class GHRepository extends GHObject {
      *
      * @param name
      *            the name
-     * @return the gh repository variable
      * @throws IOException
      *             the io exception
      */
@@ -2769,7 +2768,6 @@ public class GHRepository extends GHObject {
      *            the name
      * @param variableToUpdate
      *            the variable to update
-     * @return the gh repository variable
      * @throws IOException
      *             the io exception
      */

@@ -4,13 +4,14 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Github Marketplace purchase pending change.
  *
  * @author Paulo Miguel Almeida
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
-<span class="fc" id="L13">public class GHMarketplacePendingChange extends GitHubInteractiveObject {</span>
+<span class="fc" id="L14">public class GHMarketplacePendingChange extends GitHubInteractiveObject {</span>
     private long id;
     @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
     private Long unitCount;
@@ -25,7 +26,7 @@ import java.util.Date;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L28">        return id;</span>
+<span class="fc" id="L29">        return id;</span>
     }
 
     /**
@@ -34,7 +35,7 @@ import java.util.Date;
      * @return the unit count
      */
     public Long getUnitCount() {
-<span class="fc" id="L37">        return unitCount;</span>
+<span class="fc" id="L38">        return unitCount;</span>
     }
 
     /**
@@ -43,7 +44,7 @@ import java.util.Date;
      * @return the plan
      */
     public GHMarketplacePlan getPlan() {
-<span class="fc" id="L46">        return plan;</span>
+<span class="fc" id="L47">        return plan;</span>
     }
 
     /**
@@ -52,8 +53,8 @@ import java.util.Date;
      * @return the effective date
      */
     public Date getEffectiveDate() {
-<span class="fc" id="L55">        return GitHubClient.parseDate(effectiveDate);</span>
+<span class="fc" id="L56">        return GitHubClient.parseDate(effectiveDate);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

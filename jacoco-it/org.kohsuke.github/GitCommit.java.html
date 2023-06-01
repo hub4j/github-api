@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitCommit.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GitCommit.java</span></div><h1>GitCommit.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.util.AbstractList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GitCommit.
+ *
+ * @author Emily Xia-Reinert
+ * @see GHContentUpdateResponse#getCommit() GHContentUpdateResponse#getCommit()
+ */
+
+@SuppressFBWarnings(value = { &quot;NP_UNWRITTEN_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
+public class GitCommit {
+    private GHRepository owner;
+    private String sha, node_id, url, html_url;
+    private GitUser author;
+    private GitUser committer;
+
+    private String message;
+
+    private GHVerification verification;
+
+    /**
+     * The Class Tree.
+     */
+<span class="fc" id="L33">    static class Tree {</span>
+
+        /** The url. */
+        String url;
+
+        /** The sha. */
+        String sha;
+
+        /**
+         * Gets the url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="fc" id="L47">            return url;</span>
+        }
+
+        /**
+         * Gets the sha.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+<span class="fc" id="L56">            return sha;</span>
+        }
+
+    }
+
+    private Tree tree;
+
+    private List&lt;GHCommit.Parent&gt; parents;
+
+    /**
+     * Instantiates a new git commit.
+     */
+<span class="fc" id="L68">    public GitCommit() {</span>
+        // empty constructor for Jackson binding
+<span class="fc" id="L70">    };</span>
+
+    /**
+     * Instantiates a new git commit.
+     *
+     * @param commit
+     *            the commit
+     */
+<span class="fc" id="L78">    GitCommit(GitCommit commit) {</span>
+        // copy constructor used to cast to GitCommit.ShortInfo and from there
+        // to GHCommit, for GHContentUpdateResponse bridge method to GHCommit
+<span class="fc" id="L81">        this.owner = commit.getOwner();</span>
+<span class="fc" id="L82">        this.sha = commit.getSha();</span>
+<span class="fc" id="L83">        this.node_id = commit.getNodeId();</span>
+<span class="fc" id="L84">        this.url = commit.getUrl();</span>
+<span class="fc" id="L85">        this.html_url = commit.getHtmlUrl();</span>
+<span class="fc" id="L86">        this.author = commit.getAuthor();</span>
+<span class="fc" id="L87">        this.committer = commit.getCommitter();</span>
+<span class="fc" id="L88">        this.message = commit.getMessage();</span>
+<span class="fc" id="L89">        this.verification = commit.getVerification();</span>
+<span class="fc" id="L90">        this.tree = commit.getTree();</span>
+<span class="fc" id="L91">        this.parents = commit.getParents();</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Gets owner.
+     *
+     * @return the repository that contains the commit.
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getOwner() {
+<span class="fc" id="L101">        return owner;</span>
+    }
+
+    /**
+     * Gets SHA1.
+     *
+     * @return The SHA1 of this commit
+     */
+    public String getSHA1() {
+<span class="fc" id="L110">        return sha;</span>
+    }
+
+    /**
+     * Gets SHA.
+     *
+     * @return The SHA of this commit
+     */
+    public String getSha() {
+<span class="fc" id="L119">        return sha;</span>
+    }
+
+    /**
+     * Gets node id.
+     *
+     * @return The node id of this commit
+     */
+    public String getNodeId() {
+<span class="fc" id="L128">        return node_id;</span>
+    }
+
+    /**
+     * Gets URL.
+     *
+     * @return The URL of this commit
+     */
+    public String getUrl() {
+<span class="fc" id="L137">        return url;</span>
+    }
+
+    /**
+     * Gets HTML URL.
+     *
+     * @return The HTML URL of this commit
+     */
+    public String getHtmlUrl() {
+<span class="fc" id="L146">        return html_url;</span>
+    }
+
+    /**
+     * Gets author.
+     *
+     * @return the author
+     */
+    @WithBridgeMethods(value = GHCommit.GHAuthor.class, adapterMethod = &quot;gitUserToGHAuthor&quot;)
+    public GitUser getAuthor() {
+<span class="fc" id="L156">        return author;</span>
+    }
+
+    @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;,
+            justification = &quot;bridge method of getAuthor &amp; getCommitter&quot;)
+    private Object gitUserToGHAuthor(GitUser author, Class targetType) {
+<span class="fc" id="L162">        return new GHCommit.GHAuthor(author);</span>
+    }
+
+    /**
+     * Gets authored date.
+     *
+     * @return the authored date
+     */
+    public Date getAuthoredDate() {
+<span class="fc" id="L171">        return author.getDate();</span>
+    }
+
+    /**
+     * Gets committer.
+     *
+     * @return the committer
+     */
+    @WithBridgeMethods(value = GHCommit.GHAuthor.class, adapterMethod = &quot;gitUserToGHAuthor&quot;)
+    public GitUser getCommitter() {
+<span class="fc" id="L181">        return committer;</span>
+    }
+
+    /**
+     * Gets commit date.
+     *
+     * @return the commit date
+     */
+    public Date getCommitDate() {
+<span class="fc" id="L190">        return committer.getDate();</span>
+    }
+
+    /**
+     * Gets message.
+     *
+     * @return Commit message.
+     */
+    public String getMessage() {
+<span class="fc" id="L199">        return message;</span>
+    }
+
+    /**
+     * Gets Verification Status.
+     *
+     * @return the Verification status
+     */
+    public GHVerification getVerification() {
+<span class="fc" id="L208">        return verification;</span>
+    }
+
+    /**
+     * Gets the tree.
+     *
+     * @return the tree
+     */
+    Tree getTree() {
+<span class="fc" id="L217">        return tree;</span>
+    }
+
+    /**
+     * Gets the tree SHA 1.
+     *
+     * @return the tree SHA 1
+     */
+    public String getTreeSHA1() {
+<span class="fc" id="L226">        return tree.getSha();</span>
+    }
+
+    /**
+     * Gets the tree url.
+     *
+     * @return the tree url
+     */
+    public String getTreeUrl() {
+<span class="fc" id="L235">        return tree.getUrl();</span>
+    }
+
+    /**
+     * Gets the parents.
+     *
+     * @return the parents
+     */
+    @SuppressFBWarnings(value = &quot;EI_EXPOSE_REP&quot;, justification = &quot;acceptable&quot;)
+    List&lt;GHCommit.Parent&gt; getParents() {
+<span class="fc" id="L245">        return parents;</span>
+    }
+
+    /**
+     * Gets the parent SHA 1 s.
+     *
+     * @return the parent SHA 1 s
+     */
+    public List&lt;String&gt; getParentSHA1s() {
+<span class="pc bpc" id="L254" title="2 of 4 branches missed.">        if (parents == null || parents.size() == 0)</span>
+<span class="nc" id="L255">            return Collections.emptyList();</span>
+<span class="fc" id="L256">        return new AbstractList&lt;String&gt;() {</span>
+            @Override
+            public String get(int index) {
+<span class="fc" id="L259">                return parents.get(index).sha;</span>
+            }
+
+            @Override
+            public int size() {
+<span class="fc" id="L264">                return parents.size();</span>
+            }
+        };
+    }
+
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the git commit
+     */
+    GitCommit wrapUp(GHRepository owner) {
+<span class="fc" id="L277">        this.owner = owner;</span>
+<span class="fc" id="L278">        return this;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -8,19 +8,22 @@ import java.util.Map;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
- * Request/responce contains useful metadata. Custom exception allows store info for next diagnostics.
+ * Request/response contains useful metadata. Custom exception allows store info for next diagnostics.
  *
  * @author Kanstantsin Shautsou
  */
 public class GHIOException extends IOException {
+
+    /** The response header fields. */
     protected Map&lt;String, List&lt;String&gt;&gt; responseHeaderFields;
 
     /**
      * Instantiates a new Ghio exception.
      */
-<span class="fc" id="L22">    public GHIOException() {</span>
-<span class="fc" id="L23">    }</span>
+<span class="fc" id="L25">    public GHIOException() {</span>
+<span class="fc" id="L26">    }</span>
 
     /**
      * Instantiates a new Ghio exception.
@@ -29,8 +32,8 @@ public class GHIOException extends IOException {
      *            the message
      */
     public GHIOException(String message) {
-<span class="fc" id="L32">        super(message);</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L35">        super(message);</span>
+<span class="fc" id="L36">    }</span>
 
     /**
      * Constructs a {@code GHIOException} with the specified detail message and cause.
@@ -43,8 +46,8 @@ public class GHIOException extends IOException {
      *            permitted, and indicates that the cause is nonexistent or unknown.)
      */
     public GHIOException(String message, Throwable cause) {
-<span class="fc" id="L46">        super(message, cause);</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L49">        super(message, cause);</span>
+<span class="fc" id="L50">    }</span>
 
     /**
      * Gets response header fields.
@@ -53,12 +56,19 @@ public class GHIOException extends IOException {
      */
     @CheckForNull
     public Map&lt;String, List&lt;String&gt;&gt; getResponseHeaderFields() {
-<span class="nc" id="L56">        return Collections.unmodifiableMap(responseHeaderFields);</span>
+<span class="nc" id="L59">        return Collections.unmodifiableMap(responseHeaderFields);</span>
     }
 
+    /**
+     * With response header fields.
+     *
+     * @param headerFields
+     *            the header fields
+     * @return the GHIO exception
+     */
     GHIOException withResponseHeaderFields(@Nonnull Map&lt;String, List&lt;String&gt;&gt; headerFields) {
-<span class="fc" id="L60">        this.responseHeaderFields = headerFields;</span>
-<span class="fc" id="L61">        return this;</span>
+<span class="fc" id="L70">        this.responseHeaderFields = headerFields;</span>
+<span class="fc" id="L71">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

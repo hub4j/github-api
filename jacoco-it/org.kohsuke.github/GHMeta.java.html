@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * Class that wraps the list of GitHub's IP addresses.
  *
@@ -13,7 +14,7 @@ import java.util.List;
  * @see GitHub#getMeta() GitHub#getMeta()
  * @see &lt;a href=&quot;https://developer.github.com/v3/meta/#meta&quot;&gt;Get Meta&lt;/a&gt;
  */
-<span class="fc" id="L16">public class GHMeta {</span>
+<span class="fc" id="L17">public class GHMeta {</span>
 
     @JsonProperty(&quot;verifiable_password_authentication&quot;)
     private boolean verifiablePasswordAuthentication;
@@ -22,7 +23,7 @@ import java.util.List;
     private List&lt;String&gt; web;
     private List&lt;String&gt; api;
     private List&lt;String&gt; pages;
-<span class="fc" id="L25">    private List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L26">    private List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
     private List&lt;String&gt; packages;
     private List&lt;String&gt; actions;
     private List&lt;String&gt; dependabot;
@@ -33,7 +34,7 @@ import java.util.List;
      * @return the boolean
      */
     public boolean isVerifiablePasswordAuthentication() {
-<span class="fc" id="L36">        return verifiablePasswordAuthentication;</span>
+<span class="fc" id="L37">        return verifiablePasswordAuthentication;</span>
     }
 
     /**
@@ -42,7 +43,7 @@ import java.util.List;
      * @return the hooks
      */
     public List&lt;String&gt; getHooks() {
-<span class="fc" id="L45">        return Collections.unmodifiableList(hooks);</span>
+<span class="fc" id="L46">        return Collections.unmodifiableList(hooks);</span>
     }
 
     /**
@@ -51,7 +52,7 @@ import java.util.List;
      * @return the git
      */
     public List&lt;String&gt; getGit() {
-<span class="fc" id="L54">        return Collections.unmodifiableList(git);</span>
+<span class="fc" id="L55">        return Collections.unmodifiableList(git);</span>
     }
 
     /**
@@ -60,7 +61,7 @@ import java.util.List;
      * @return the web
      */
     public List&lt;String&gt; getWeb() {
-<span class="fc" id="L63">        return Collections.unmodifiableList(web);</span>
+<span class="fc" id="L64">        return Collections.unmodifiableList(web);</span>
     }
 
     /**
@@ -69,7 +70,7 @@ import java.util.List;
      * @return the api
      */
     public List&lt;String&gt; getApi() {
-<span class="fc" id="L72">        return Collections.unmodifiableList(api);</span>
+<span class="fc" id="L73">        return Collections.unmodifiableList(api);</span>
     }
 
     /**
@@ -78,7 +79,7 @@ import java.util.List;
      * @return the pages
      */
     public List&lt;String&gt; getPages() {
-<span class="fc" id="L81">        return Collections.unmodifiableList(pages);</span>
+<span class="fc" id="L82">        return Collections.unmodifiableList(pages);</span>
     }
 
     /**
@@ -87,7 +88,7 @@ import java.util.List;
      * @return the importer
      */
     public List&lt;String&gt; getImporter() {
-<span class="fc" id="L90">        return Collections.unmodifiableList(importer);</span>
+<span class="fc" id="L91">        return Collections.unmodifiableList(importer);</span>
     }
 
     /**
@@ -96,7 +97,7 @@ import java.util.List;
      * @return the package
      */
     public List&lt;String&gt; getPackages() {
-<span class="fc" id="L99">        return Collections.unmodifiableList(packages);</span>
+<span class="fc" id="L100">        return Collections.unmodifiableList(packages);</span>
     }
 
     /**
@@ -105,7 +106,7 @@ import java.util.List;
      * @return the actions
      */
     public List&lt;String&gt; getActions() {
-<span class="fc" id="L108">        return Collections.unmodifiableList(actions);</span>
+<span class="fc" id="L109">        return Collections.unmodifiableList(actions);</span>
     }
 
     /**
@@ -114,7 +115,7 @@ import java.util.List;
      * @return the dependabot
      */
     public List&lt;String&gt; getDependabot() {
-<span class="fc" id="L117">        return Collections.unmodifiableList(dependabot);</span>
+<span class="fc" id="L118">        return Collections.unmodifiableList(dependabot);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

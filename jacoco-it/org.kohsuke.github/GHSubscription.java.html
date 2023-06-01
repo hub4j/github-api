@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents your subscribing to a repository / conversation thread..
  *
@@ -12,7 +13,7 @@ import java.util.Date;
  * @see GHRepository#getSubscription() GHRepository#getSubscription()
  * @see GHThread#getSubscription() GHThread#getSubscription()
  */
-<span class="fc" id="L15">public class GHSubscription extends GitHubInteractiveObject {</span>
+<span class="fc" id="L16">public class GHSubscription extends GitHubInteractiveObject {</span>
     private String created_at, url, repository_url, reason;
     private boolean subscribed, ignored;
 
@@ -24,7 +25,7 @@ import java.util.Date;
      * @return the created at
      */
     public Date getCreatedAt() {
-<span class="fc" id="L27">        return GitHubClient.parseDate(created_at);</span>
+<span class="fc" id="L28">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -33,7 +34,7 @@ import java.util.Date;
      * @return the url
      */
     public String getUrl() {
-<span class="fc" id="L36">        return url;</span>
+<span class="fc" id="L37">        return url;</span>
     }
 
     /**
@@ -42,7 +43,7 @@ import java.util.Date;
      * @return the repository url
      */
     public String getRepositoryUrl() {
-<span class="fc" id="L45">        return repository_url;</span>
+<span class="fc" id="L46">        return repository_url;</span>
     }
 
     /**
@@ -51,7 +52,7 @@ import java.util.Date;
      * @return the reason
      */
     public String getReason() {
-<span class="fc" id="L54">        return reason;</span>
+<span class="fc" id="L55">        return reason;</span>
     }
 
     /**
@@ -60,7 +61,7 @@ import java.util.Date;
      * @return the boolean
      */
     public boolean isSubscribed() {
-<span class="fc" id="L63">        return subscribed;</span>
+<span class="fc" id="L64">        return subscribed;</span>
     }
 
     /**
@@ -69,7 +70,7 @@ import java.util.Date;
      * @return the boolean
      */
     public boolean isIgnored() {
-<span class="fc" id="L72">        return ignored;</span>
+<span class="fc" id="L73">        return ignored;</span>
     }
 
     /**
@@ -79,7 +80,7 @@ import java.util.Date;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L82">        return repo;</span>
+<span class="fc" id="L83">        return repo;</span>
     }
 
     /**
@@ -89,12 +90,19 @@ import java.util.Date;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L92">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(repo.getApiTailUrl(&quot;subscription&quot;)).send();</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L93">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(repo.getApiTailUrl(&quot;subscription&quot;)).send();</span>
+<span class="fc" id="L94">    }</span>
 
+    /**
+     * Wrap up.
+     *
+     * @param repo
+     *            the repo
+     * @return the GH subscription
+     */
     GHSubscription wrapUp(GHRepository repo) {
-<span class="fc" id="L96">        this.repo = repo;</span>
-<span class="fc" id="L97">        return this;</span>
+<span class="fc" id="L104">        this.repo = repo;</span>
+<span class="fc" id="L105">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

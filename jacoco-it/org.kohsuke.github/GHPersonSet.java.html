@@ -4,12 +4,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
+// TODO: Auto-generated Javadoc
 /**
  * Set of {@link GHPerson} with helper lookup methods.
  *
+ * @author Kohsuke Kawaguchi
  * @param &lt;T&gt;
  *            the type parameter
- * @author Kohsuke Kawaguchi
  */
 public class GHPersonSet&lt;T extends GHPerson&gt; extends HashSet&lt;T&gt; {
     private static final long serialVersionUID = 1L;
@@ -17,8 +18,8 @@ public class GHPersonSet&lt;T extends GHPerson&gt; extends HashSet&lt;T&gt; {
     /**
      * Instantiates a new Gh person set.
      */
-<span class="fc" id="L20">    public GHPersonSet() {</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L21">    public GHPersonSet() {</span>
+<span class="fc" id="L22">    }</span>
 
     /**
      * Instantiates a new Gh person set.
@@ -27,8 +28,8 @@ public class GHPersonSet&lt;T extends GHPerson&gt; extends HashSet&lt;T&gt; {
      *            the c
      */
     public GHPersonSet(Collection&lt;? extends T&gt; c) {
-<span class="fc" id="L30">        super(c);</span>
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L31">        super(c);</span>
+<span class="fc" id="L32">    }</span>
 
     /**
      * Instantiates a new Gh person set.
@@ -37,8 +38,8 @@ public class GHPersonSet&lt;T extends GHPerson&gt; extends HashSet&lt;T&gt; {
      *            the c
      */
     public GHPersonSet(T... c) {
-<span class="nc" id="L40">        super(Arrays.asList(c));</span>
-<span class="nc" id="L41">    }</span>
+<span class="nc" id="L41">        super(Arrays.asList(c));</span>
+<span class="nc" id="L42">    }</span>
 
     /**
      * Instantiates a new Gh person set.
@@ -49,8 +50,8 @@ public class GHPersonSet&lt;T extends GHPerson&gt; extends HashSet&lt;T&gt; {
      *            the load factor
      */
     public GHPersonSet(int initialCapacity, float loadFactor) {
-<span class="nc" id="L52">        super(initialCapacity, loadFactor);</span>
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L53">        super(initialCapacity, loadFactor);</span>
+<span class="nc" id="L54">    }</span>
 
     /**
      * Instantiates a new Gh person set.
@@ -59,8 +60,8 @@ public class GHPersonSet&lt;T extends GHPerson&gt; extends HashSet&lt;T&gt; {
      *            the initial capacity
      */
     public GHPersonSet(int initialCapacity) {
-<span class="nc" id="L62">        super(initialCapacity);</span>
-<span class="nc" id="L63">    }</span>
+<span class="nc" id="L63">        super(initialCapacity);</span>
+<span class="nc" id="L64">    }</span>
 
     /**
      * Finds the item by its login.
@@ -70,10 +71,10 @@ public class GHPersonSet&lt;T extends GHPerson&gt; extends HashSet&lt;T&gt; {
      * @return the t
      */
     public T byLogin(String login) {
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        for (T t : this)</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            if (t.getLogin().equals(login))</span>
-<span class="fc" id="L75">                return t;</span>
-<span class="nc" id="L76">        return null;</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        for (T t : this)</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            if (t.getLogin().equals(login))</span>
+<span class="fc" id="L76">                return t;</span>
+<span class="nc" id="L77">        return null;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

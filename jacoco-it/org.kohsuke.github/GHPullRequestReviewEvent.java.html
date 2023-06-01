@@ -23,31 +23,47 @@
  */
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * Action to perform on {@link GHPullRequestReview}.
  */
-<span class="fc" id="L29">public enum GHPullRequestReviewEvent {</span>
-<span class="fc" id="L30">    PENDING, APPROVE, REQUEST_CHANGES, COMMENT;</span>
+<span class="fc" id="L30">public enum GHPullRequestReviewEvent {</span>
 
+    /** The pending. */
+<span class="fc" id="L33">    PENDING,</span>
+    /** The approve. */
+<span class="fc" id="L35">    APPROVE,</span>
+    /** The request changes. */
+<span class="fc" id="L37">    REQUEST_CHANGES,</span>
+    /** The comment. */
+<span class="fc" id="L39">    COMMENT;</span>
+
+    /**
+     * Action.
+     *
+     * @return the string
+     */
     String action() {
-<span class="fc bfc" id="L33" title="All 2 branches covered.">        return this == PENDING ? null : name();</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        return this == PENDING ? null : name();</span>
     }
 
     /**
      * When a {@link GHPullRequestReview} is submitted with this event, it should transition to this state.
+     *
+     * @return the GH pull request review state
      */
     GHPullRequestReviewState toState() {
-<span class="pc bpc" id="L40" title="3 of 5 branches missed.">        switch (this) {</span>
+<span class="pc bpc" id="L56" title="3 of 5 branches missed.">        switch (this) {</span>
             case PENDING :
-<span class="fc" id="L42">                return GHPullRequestReviewState.PENDING;</span>
+<span class="fc" id="L58">                return GHPullRequestReviewState.PENDING;</span>
             case APPROVE :
-<span class="nc" id="L44">                return GHPullRequestReviewState.APPROVED;</span>
+<span class="nc" id="L60">                return GHPullRequestReviewState.APPROVED;</span>
             case REQUEST_CHANGES :
-<span class="nc" id="L46">                return GHPullRequestReviewState.CHANGES_REQUESTED;</span>
+<span class="nc" id="L62">                return GHPullRequestReviewState.CHANGES_REQUESTED;</span>
             case COMMENT :
-<span class="fc" id="L48">                return GHPullRequestReviewState.COMMENTED;</span>
+<span class="fc" id="L64">                return GHPullRequestReviewState.COMMENTED;</span>
         }
-<span class="nc" id="L50">        throw new IllegalStateException();</span>
+<span class="nc" id="L66">        throw new IllegalStateException();</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

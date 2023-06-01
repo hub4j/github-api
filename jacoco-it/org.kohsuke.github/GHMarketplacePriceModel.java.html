@@ -2,21 +2,34 @@
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+// TODO: Auto-generated Javadoc
 /**
  * GitHub Marketplace plan pricing model.
  *
  * @author Paulo Miguel Almeida
  * @see GHMarketplacePlan
  */
-<span class="fc" id="L11">public enum GHMarketplacePriceModel {</span>
-<span class="fc" id="L12">    FREE(&quot;free&quot;), PER_UNIT(&quot;per-unit&quot;), FLAT_RATE(&quot;flat-rate&quot;);</span>
+<span class="fc" id="L12">public enum GHMarketplacePriceModel {</span>
+
+    /** The free. */
+<span class="fc" id="L15">    FREE(&quot;FREE&quot;),</span>
+    /** The per unit. */
+<span class="fc" id="L17">    PER_UNIT(&quot;PER_UNIT&quot;),</span>
+    /** The flat rate. */
+<span class="fc" id="L19">    FLAT_RATE(&quot;FLAT_RATE&quot;);</span>
 
     @JsonValue
     private final String internalName;
 
-<span class="fc" id="L17">    GHMarketplacePriceModel(String internalName) {</span>
-<span class="fc" id="L18">        this.internalName = internalName;</span>
-<span class="fc" id="L19">    }</span>
+    /**
+     * Instantiates a new GH marketplace price model.
+     *
+     * @param internalName
+     *            the internal name
+     */
+<span class="fc" id="L30">    GHMarketplacePriceModel(String internalName) {</span>
+<span class="fc" id="L31">        this.internalName = internalName;</span>
+<span class="fc" id="L32">    }</span>
 
     /**
      * Returns GitHub's internal representation of this event.
@@ -24,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
      * @return a string containing GitHub's internal representation of this event.
      */
     public String symbol() {
-<span class="nc" id="L27">        return internalName;</span>
+<span class="nc" id="L40">        return internalName;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

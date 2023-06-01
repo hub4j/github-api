@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHPullRequestReviewCommentReactions.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHPullRequestReviewCommentReactions.java</span></div><h1>GHPullRequestReviewCommentReactions.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.net.URL;
+
+/**
+ * Reactions for a Pull Request Review comment.
+ *
+ * @author Vasilis Gakias
+ * @see &lt;a href=&quot;https://docs.github.com/en/rest/pulls/comments#get-a-review-comment-for-a-pull-request&quot;&gt;API
+ *      documentation in the response schema&lt;/a&gt;
+ * @see GHPullRequestReviewComment
+ */
+<span class="fc" id="L15">public class GHPullRequestReviewCommentReactions {</span>
+
+    private String url;
+
+<span class="fc" id="L19">    private int total_count = -1;</span>
+<span class="fc" id="L20">    @JsonProperty(&quot;+1&quot;)</span>
+    private int plus_one = -1;
+<span class="fc" id="L22">    @JsonProperty(&quot;-1&quot;)</span>
+    private int minus_one = -1;
+<span class="fc" id="L24">    private int laugh = -1;</span>
+<span class="fc" id="L25">    private int confused = -1;</span>
+<span class="fc" id="L26">    private int heart = -1;</span>
+<span class="fc" id="L27">    private int hooray = -1;</span>
+<span class="fc" id="L28">    private int eyes = -1;</span>
+<span class="fc" id="L29">    private int rocket = -1;</span>
+
+    /**
+     * Gets the URL of the comment's reactions
+     *
+     * @return the URL of the comment's reactions
+     */
+    public URL getUrl() {
+<span class="fc" id="L37">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * Gets the total count of reactions
+     *
+     * @return the number of total reactions
+     */
+    public int getTotalCount() {
+<span class="fc" id="L46">        return total_count;</span>
+    }
+
+    /**
+     * Gets the number of +1 reactions
+     *
+     * @return the number of +1 reactions
+     */
+    public int getPlusOne() {
+<span class="fc" id="L55">        return plus_one;</span>
+    }
+
+    /**
+     * Gets the number of -1 reactions
+     *
+     * @return the number of -1 reactions
+     */
+    public int getMinusOne() {
+<span class="fc" id="L64">        return minus_one;</span>
+    }
+
+    /**
+     * Gets the number of laugh reactions
+     *
+     * @return the number of laugh reactions
+     */
+    public int getLaugh() {
+<span class="fc" id="L73">        return laugh;</span>
+    }
+
+    /**
+     * Gets the number of confused reactions
+     *
+     * @return the number of confused reactions
+     */
+    public int getConfused() {
+<span class="fc" id="L82">        return confused;</span>
+    }
+
+    /**
+     * Gets the number of heart reactions
+     *
+     * @return the number of heart reactions
+     */
+    public int getHeart() {
+<span class="fc" id="L91">        return heart;</span>
+    }
+
+    /**
+     * Gets the number of hooray reactions
+     *
+     * @return the number of hooray reactions
+     */
+    public int getHooray() {
+<span class="fc" id="L100">        return hooray;</span>
+    }
+
+    /**
+     * Gets the number of eyes reactions
+     *
+     * @return the number of eyes reactions
+     */
+    public int getEyes() {
+<span class="fc" id="L109">        return eyes;</span>
+    }
+
+    /**
+     * Gets the number of rocket reactions
+     *
+     * @return the number of rocket reactions
+     */
+    public int getRocket() {
+<span class="fc" id="L118">        return rocket;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

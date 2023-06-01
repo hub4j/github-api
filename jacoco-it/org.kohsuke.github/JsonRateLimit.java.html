@@ -7,18 +7,22 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class JsonRateLimit.
+ *
  * @author Kohsuke Kawaguchi
  */
 class JsonRateLimit {
 
+    /** The resources. */
     @Nonnull
     final GHRateLimit resources;
 
     @JsonCreator
-<span class="fc" id="L19">    private JsonRateLimit(@Nonnull @JsonProperty(value = &quot;resources&quot;, required = true) GHRateLimit resources) {</span>
-<span class="fc" id="L20">        Objects.requireNonNull(resources);</span>
-<span class="fc" id="L21">        this.resources = resources;</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L23">    private JsonRateLimit(@Nonnull @JsonProperty(value = &quot;resources&quot;, required = true) GHRateLimit resources) {</span>
+<span class="fc" id="L24">        Objects.requireNonNull(resources);</span>
+<span class="fc" id="L25">        this.resources = resources;</span>
+<span class="fc" id="L26">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

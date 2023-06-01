@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AppInstallationAuthorizationProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.authorization</a> &gt; <span class="el_source">AppInstallationAuthorizationProvider.java</span></div><h1>AppInstallationAuthorizationProvider.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.authorization;
+
+import org.kohsuke.github.BetaApi;
+import org.kohsuke.github.GHApp;
+import org.kohsuke.github.GHAppInstallation;
+import org.kohsuke.github.GHAppInstallationToken;
+import org.kohsuke.github.GitHub;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
+
+/**
+ * An AuthorizationProvider that performs automatic token refresh for an organization's AppInstallation.
+ */
+public class AppInstallationAuthorizationProvider extends GitHub.DependentAuthorizationProvider {
+
+    private final AppInstallationProvider appInstallationProvider;
+
+    private String authorization;
+
+<span class="fc" id="L25">    @Nonnull</span>
+    private Instant validUntil = Instant.MIN;
+
+    /**
+     * Provides an AuthorizationProvider that performs automatic token refresh, based on an previously authenticated
+     * github client.
+     *
+     * @param appInstallationProvider
+     *            An AppInstallationProvider that the authorization provider will use to retrieve the App.
+     * @param authorizationProvider
+     *            A authorization provider that returns a JWT token that can be used to refresh the App Installation
+     *            token from GitHub.
+     */
+    @BetaApi
+    public AppInstallationAuthorizationProvider(AppInstallationProvider appInstallationProvider,
+            AuthorizationProvider authorizationProvider) {
+<span class="fc" id="L41">        super(authorizationProvider);</span>
+<span class="fc" id="L42">        this.appInstallationProvider = appInstallationProvider;</span>
+<span class="fc" id="L43">    }</span>
+
+    @Override
+    public String getEncodedAuthorization() throws IOException {
+<span class="fc" id="L47">        synchronized (this) {</span>
+<span class="pc bpc" id="L48" title="3 of 4 branches missed.">            if (authorization == null || Instant.now().isAfter(this.validUntil)) {</span>
+<span class="fc" id="L49">                String token = refreshToken();</span>
+<span class="fc" id="L50">                authorization = String.format(&quot;token %s&quot;, token);</span>
+            }
+<span class="fc" id="L52">            return authorization;</span>
+        }
+    }
+
+    private String refreshToken() throws IOException {
+<span class="fc" id="L57">        GitHub gitHub = this.gitHub();</span>
+<span class="fc" id="L58">        GHAppInstallation installationByOrganization = appInstallationProvider.getAppInstallation(gitHub.getApp());</span>
+<span class="fc" id="L59">        GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();</span>
+<span class="fc" id="L60">        this.validUntil = ghAppInstallationToken.getExpiresAt().toInstant().minus(Duration.ofMinutes(5));</span>
+<span class="fc" id="L61">        return Objects.requireNonNull(ghAppInstallationToken.getToken());</span>
+    }
+
+    /**
+     * Provides an interface that returns an app to be used by an AppInstallationAuthorizationProvider
+     */
+    @FunctionalInterface
+    public interface AppInstallationProvider {
+        /**
+         * Provides a GHAppInstallation for the given GHApp
+         *
+         * @param app
+         *            The GHApp to use
+         * @return The GHAppInstallation
+         * @throws IOException
+         *             on error
+         */
+        GHAppInstallation getAppInstallation(GHApp app) throws IOException;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

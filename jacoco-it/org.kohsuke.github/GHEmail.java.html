@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents an email of GitHub.
  *
@@ -34,10 +35,15 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
                 &quot;NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="nc" id="L37">public class GHEmail {</span>
+<span class="nc" id="L38">public class GHEmail {</span>
 
+    /** The email. */
     protected String email;
+
+    /** The primary. */
     protected boolean primary;
+
+    /** The verified. */
     protected boolean verified;
 
     /**
@@ -46,7 +52,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the email
      */
     public String getEmail() {
-<span class="nc" id="L49">        return email;</span>
+<span class="nc" id="L55">        return email;</span>
     }
 
     /**
@@ -55,7 +61,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the boolean
      */
     public boolean isPrimary() {
-<span class="nc" id="L58">        return primary;</span>
+<span class="nc" id="L64">        return primary;</span>
     }
 
     /**
@@ -64,26 +70,43 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the boolean
      */
     public boolean isVerified() {
-<span class="nc" id="L67">        return verified;</span>
+<span class="nc" id="L73">        return verified;</span>
     }
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
-<span class="nc" id="L72">        return &quot;Email:&quot; + email;</span>
+<span class="nc" id="L83">        return &quot;Email:&quot; + email;</span>
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
-<span class="nc" id="L77">        return email.hashCode();</span>
+<span class="nc" id="L93">        return email.hashCode();</span>
     }
 
+    /**
+     * Equals.
+     *
+     * @param obj
+     *            the obj
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object obj) {
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (obj instanceof GHEmail) {</span>
-<span class="nc" id="L83">            GHEmail that = (GHEmail) obj;</span>
-<span class="nc" id="L84">            return this.email.equals(that.email);</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (obj instanceof GHEmail) {</span>
+<span class="nc" id="L106">            GHEmail that = (GHEmail) obj;</span>
+<span class="nc" id="L107">            return this.email.equals(that.email);</span>
         }
-<span class="nc" id="L86">        return false;</span>
+<span class="nc" id="L109">        return false;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

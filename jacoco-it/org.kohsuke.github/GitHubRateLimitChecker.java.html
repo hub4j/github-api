@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * A GitHub API Rate Limit Checker called before each request.
  *
@@ -43,21 +44,36 @@ class GitHubRateLimitChecker {
     @Nonnull
     private final RateLimitChecker integrationManifest;
 
-<span class="fc" id="L46">    private static final Logger LOGGER = Logger.getLogger(GitHubRateLimitChecker.class.getName());</span>
+<span class="fc" id="L47">    private static final Logger LOGGER = Logger.getLogger(GitHubRateLimitChecker.class.getName());</span>
 
+    /**
+     * Instantiates a new git hub rate limit checker.
+     */
     GitHubRateLimitChecker() {
-<span class="fc" id="L49">        this(RateLimitChecker.NONE, RateLimitChecker.NONE, RateLimitChecker.NONE, RateLimitChecker.NONE);</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L53">        this(RateLimitChecker.NONE, RateLimitChecker.NONE, RateLimitChecker.NONE, RateLimitChecker.NONE);</span>
+<span class="fc" id="L54">    }</span>
 
+    /**
+     * Instantiates a new git hub rate limit checker.
+     *
+     * @param core
+     *            the core
+     * @param search
+     *            the search
+     * @param graphql
+     *            the graphql
+     * @param integrationManifest
+     *            the integration manifest
+     */
     GitHubRateLimitChecker(@Nonnull RateLimitChecker core,
             @Nonnull RateLimitChecker search,
             @Nonnull RateLimitChecker graphql,
-<span class="fc" id="L55">            @Nonnull RateLimitChecker integrationManifest) {</span>
-<span class="fc" id="L56">        this.core = Objects.requireNonNull(core);</span>
-<span class="fc" id="L57">        this.search = Objects.requireNonNull(search);</span>
-<span class="fc" id="L58">        this.graphql = Objects.requireNonNull(graphql);</span>
-<span class="fc" id="L59">        this.integrationManifest = Objects.requireNonNull(integrationManifest);</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L71">            @Nonnull RateLimitChecker integrationManifest) {</span>
+<span class="fc" id="L72">        this.core = Objects.requireNonNull(core);</span>
+<span class="fc" id="L73">        this.search = Objects.requireNonNull(search);</span>
+<span class="fc" id="L74">        this.graphql = Objects.requireNonNull(graphql);</span>
+<span class="fc" id="L75">        this.integrationManifest = Objects.requireNonNull(integrationManifest);</span>
+<span class="fc" id="L76">    }</span>
 
     /**
      * Constructs a new {@link GitHubRateLimitChecker} with a new checker for a particular target.
@@ -72,10 +88,10 @@ class GitHubRateLimitChecker {
      * @return a new {@link GitHubRateLimitChecker}
      */
     GitHubRateLimitChecker with(@Nonnull RateLimitChecker checker, @Nonnull RateLimitTarget rateLimitTarget) {
-<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        return new GitHubRateLimitChecker(rateLimitTarget == RateLimitTarget.CORE ? checker : core,</span>
-<span class="pc bpc" id="L76" title="1 of 2 branches missed.">                rateLimitTarget == RateLimitTarget.SEARCH ? checker : search,</span>
-<span class="pc bpc" id="L77" title="1 of 2 branches missed.">                rateLimitTarget == RateLimitTarget.GRAPHQL ? checker : graphql,</span>
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">                rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST ? checker : integrationManifest);</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        return new GitHubRateLimitChecker(rateLimitTarget == RateLimitTarget.CORE ? checker : core,</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">                rateLimitTarget == RateLimitTarget.SEARCH ? checker : search,</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">                rateLimitTarget == RateLimitTarget.GRAPHQL ? checker : graphql,</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">                rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST ? checker : integrationManifest);</span>
     }
 
     /**
@@ -115,33 +131,33 @@ class GitHubRateLimitChecker {
      *             if there is an I/O error
      */
     void checkRateLimit(GitHubClient client, @Nonnull RateLimitTarget rateLimitTarget) throws IOException {
-<span class="fc" id="L118">        RateLimitChecker guard = selectChecker(rateLimitTarget);</span>
-<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (guard == RateLimitChecker.NONE) {</span>
-<span class="fc" id="L120">            return;</span>
+<span class="fc" id="L134">        RateLimitChecker guard = selectChecker(rateLimitTarget);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        if (guard == RateLimitChecker.NONE) {</span>
+<span class="fc" id="L136">            return;</span>
         }
 
         // For the first rate limit, accept the current limit if a valid one is already present.
-<span class="fc" id="L124">        GHRateLimit rateLimit = client.rateLimit(rateLimitTarget);</span>
-<span class="fc" id="L125">        GHRateLimit.Record rateLimitRecord = rateLimit.getRecord(rateLimitTarget);</span>
-<span class="fc" id="L126">        long waitCount = 0;</span>
+<span class="fc" id="L140">        GHRateLimit rateLimit = client.rateLimit(rateLimitTarget);</span>
+<span class="fc" id="L141">        GHRateLimit.Record rateLimitRecord = rateLimit.getRecord(rateLimitTarget);</span>
+<span class="fc" id="L142">        long waitCount = 0;</span>
         try {
-<span class="fc bfc" id="L128" title="All 2 branches covered.">            while (guard.checkRateLimit(rateLimitRecord, waitCount)) {</span>
-<span class="fc" id="L129">                waitCount++;</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">            while (guard.checkRateLimit(rateLimitRecord, waitCount)) {</span>
+<span class="fc" id="L145">                waitCount++;</span>
 
                 // When rate limit is exceeded, sleep for one additional second beyond when the
                 // called {@link RateLimitChecker} sleeps.
                 // Reset time is only accurate to the second, so adding a one second buffer for safety is a good idea.
                 // This also keeps polling clients from querying too often.
-<span class="fc" id="L135">                Thread.sleep(1000);</span>
+<span class="fc" id="L151">                Thread.sleep(1000);</span>
 
                 // After the first wait, always request a new rate limit from the server.
-<span class="fc" id="L138">                rateLimit = client.getRateLimit(rateLimitTarget);</span>
-<span class="fc" id="L139">                rateLimitRecord = rateLimit.getRecord(rateLimitTarget);</span>
+<span class="fc" id="L154">                rateLimit = client.getRateLimit(rateLimitTarget);</span>
+<span class="fc" id="L155">                rateLimitRecord = rateLimit.getRecord(rateLimitTarget);</span>
             }
-<span class="nc" id="L141">        } catch (InterruptedException e) {</span>
-<span class="nc" id="L142">            throw (IOException) new InterruptedIOException(e.getMessage()).initCause(e);</span>
-<span class="fc" id="L143">        }</span>
-<span class="fc" id="L144">    }</span>
+<span class="nc" id="L157">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L158">            throw (IOException) new InterruptedIOException(e.getMessage()).initCause(e);</span>
+<span class="fc" id="L159">        }</span>
+<span class="fc" id="L160">    }</span>
 
     /**
      * Gets the appropriate {@link RateLimitChecker} for a particular target.
@@ -154,19 +170,19 @@ class GitHubRateLimitChecker {
      */
     @Nonnull
     private RateLimitChecker selectChecker(@Nonnull RateLimitTarget rateLimitTarget) {
-<span class="fc bfc" id="L157" title="All 2 branches covered.">        if (rateLimitTarget == RateLimitTarget.NONE) {</span>
-<span class="fc" id="L158">            return RateLimitChecker.NONE;</span>
-<span class="fc bfc" id="L159" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.CORE) {</span>
-<span class="fc" id="L160">            return core;</span>
-<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
-<span class="fc" id="L162">            return search;</span>
-<span class="nc bnc" id="L163" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
-<span class="nc" id="L164">            return graphql;</span>
-<span class="nc bnc" id="L165" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
-<span class="nc" id="L166">            return integrationManifest;</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (rateLimitTarget == RateLimitTarget.NONE) {</span>
+<span class="fc" id="L174">            return RateLimitChecker.NONE;</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.CORE) {</span>
+<span class="fc" id="L176">            return core;</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
+<span class="fc" id="L178">            return search;</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
+<span class="nc" id="L180">            return graphql;</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
+<span class="nc" id="L182">            return integrationManifest;</span>
         } else {
-<span class="nc" id="L168">            throw new IllegalArgumentException(&quot;Unknown rate limit target: &quot; + rateLimitTarget.toString());</span>
+<span class="nc" id="L184">            throw new IllegalArgumentException(&quot;Unknown rate limit target: &quot; + rateLimitTarget.toString());</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

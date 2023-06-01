@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.annotation.CheckForNull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents a user in Git who authors/commits a commit.
  * &lt;p&gt;
@@ -16,7 +17,7 @@ import javax.annotation.CheckForNull;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="fc" id="L19">public class GitUser {</span>
+public class GitUser {
     private String name, email, date, username;
 
     /**
@@ -25,7 +26,7 @@ import javax.annotation.CheckForNull;
      * @return Human readable name of the user, such as &quot;Kohsuke Kawaguchi&quot;
      */
     public String getName() {
-<span class="fc" id="L28">        return name;</span>
+<span class="fc" id="L29">        return name;</span>
     }
 
     /**
@@ -34,7 +35,7 @@ import javax.annotation.CheckForNull;
      * @return E-mail address, such as &quot;foo@example.com&quot;
      */
     public String getEmail() {
-<span class="fc" id="L37">        return email;</span>
+<span class="fc" id="L38">        return email;</span>
     }
 
     /**
@@ -44,7 +45,7 @@ import javax.annotation.CheckForNull;
      */
     @CheckForNull
     public String getUsername() {
-<span class="fc" id="L47">        return username;</span>
+<span class="fc" id="L48">        return username;</span>
     }
 
     /**
@@ -53,7 +54,28 @@ import javax.annotation.CheckForNull;
      * @return Commit Date.
      */
     public Date getDate() {
-<span class="fc" id="L56">        return GitHubClient.parseDate(date);</span>
+<span class="fc" id="L57">        return GitHubClient.parseDate(date);</span>
     }
+
+    /**
+     * Instantiates a new git user.
+     */
+<span class="fc" id="L63">    public GitUser() {</span>
+        // Empty constructor for Jackson binding
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Instantiates a new git user.
+     *
+     * @param user
+     *            the user
+     */
+<span class="fc" id="L73">    public GitUser(GitUser user) {</span>
+        // Copy constructor to convert to GHCommit.GHAuthor
+<span class="fc" id="L75">        name = user.getName();</span>
+<span class="fc" id="L76">        email = user.getEmail();</span>
+<span class="fc" id="L77">        date = user.getDate().toString();</span>
+<span class="fc" id="L78">        username = user.getUsername();</span>
+<span class="fc" id="L79">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

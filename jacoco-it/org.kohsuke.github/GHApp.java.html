@@ -12,16 +12,18 @@ import java.util.stream.Collectors;
 
 import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Github App.
  *
  * @author Paulo Miguel Almeida
  * @see GitHub#getApp() GitHub#getApp()
  */
-<span class="fc" id="L21">public class GHApp extends GHObject {</span>
+<span class="fc" id="L22">public class GHApp extends GHObject {</span>
 
     private GHUser owner;
     private String name;
+    private String slug;
     private String description;
     private String externalUrl;
     private Map&lt;String, String&gt; permissions;
@@ -36,7 +38,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getOwner() {
-<span class="fc" id="L39">        return owner;</span>
+<span class="fc" id="L41">        return owner;</span>
     }
 
     /**
@@ -48,7 +50,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setOwner(GHUser owner) {
-<span class="fc" id="L51">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L53">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -57,7 +59,16 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L60">        return name;</span>
+<span class="fc" id="L62">        return name;</span>
+    }
+
+    /**
+     * Gets the slug name of the GitHub app.
+     *
+     * @return the slug name of the GitHub app
+     */
+    public String getSlug() {
+<span class="fc" id="L71">        return slug;</span>
     }
 
     /**
@@ -69,7 +80,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setName(String name) {
-<span class="fc" id="L72">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L83">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -78,7 +89,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L81">        return description;</span>
+<span class="fc" id="L92">        return description;</span>
     }
 
     /**
@@ -90,7 +101,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setDescription(String description) {
-<span class="fc" id="L93">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L104">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -99,7 +110,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the external url
      */
     public String getExternalUrl() {
-<span class="fc" id="L102">        return externalUrl;</span>
+<span class="fc" id="L113">        return externalUrl;</span>
     }
 
     /**
@@ -111,7 +122,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setExternalUrl(String externalUrl) {
-<span class="fc" id="L114">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L125">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -120,9 +131,9 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the events
      */
     public List&lt;GHEvent&gt; getEvents() {
-<span class="fc" id="L123">        return events.stream()</span>
-<span class="fc" id="L124">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
-<span class="fc" id="L125">                .collect(Collectors.toList());</span>
+<span class="fc" id="L134">        return events.stream()</span>
+<span class="pc" id="L135">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
+<span class="fc" id="L136">                .collect(Collectors.toList());</span>
     }
 
     /**
@@ -134,7 +145,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setEvents(List&lt;GHEvent&gt; events) {
-<span class="fc" id="L137">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L148">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -143,7 +154,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the installations count
      */
     public long getInstallationsCount() {
-<span class="fc" id="L146">        return installationsCount;</span>
+<span class="fc" id="L157">        return installationsCount;</span>
     }
 
     /**
@@ -155,11 +166,16 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setInstallationsCount(long installationsCount) {
-<span class="fc" id="L158">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L169">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     public URL getHtmlUrl() {
-<span class="fc" id="L162">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L178">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -168,7 +184,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the permissions
      */
     public Map&lt;String, String&gt; getPermissions() {
-<span class="fc" id="L171">        return Collections.unmodifiableMap(permissions);</span>
+<span class="fc" id="L187">        return Collections.unmodifiableMap(permissions);</span>
     }
 
     /**
@@ -180,7 +196,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setPermissions(Map&lt;String, String&gt; permissions) {
-<span class="fc" id="L183">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L199">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -193,10 +209,10 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Preview(MACHINE_MAN)
     public PagedIterable&lt;GHAppInstallation&gt; listInstallations() {
-<span class="fc" id="L196">        return root().createRequest()</span>
-<span class="fc" id="L197">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L198">                .withUrlPath(&quot;/app/installations&quot;)</span>
-<span class="fc" id="L199">                .toIterable(GHAppInstallation[].class, null);</span>
+<span class="fc" id="L212">        return root().createRequest()</span>
+<span class="fc" id="L213">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L214">                .withUrlPath(&quot;/app/installations&quot;)</span>
+<span class="fc" id="L215">                .toIterable(GHAppInstallation[].class, null);</span>
     }
 
     /**
@@ -213,10 +229,10 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Preview(MACHINE_MAN)
     public GHAppInstallation getInstallationById(long id) throws IOException {
-<span class="fc" id="L216">        return root().createRequest()</span>
-<span class="fc" id="L217">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L218">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, id))</span>
-<span class="fc" id="L219">                .fetch(GHAppInstallation.class);</span>
+<span class="fc" id="L232">        return root().createRequest()</span>
+<span class="fc" id="L233">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L234">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, id))</span>
+<span class="fc" id="L235">                .fetch(GHAppInstallation.class);</span>
     }
 
     /**
@@ -234,10 +250,10 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Preview(MACHINE_MAN)
     public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
-<span class="fc" id="L237">        return root().createRequest()</span>
-<span class="fc" id="L238">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L239">                .withUrlPath(String.format(&quot;/orgs/%s/installation&quot;, name))</span>
-<span class="fc" id="L240">                .fetch(GHAppInstallation.class);</span>
+<span class="fc" id="L253">        return root().createRequest()</span>
+<span class="fc" id="L254">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L255">                .withUrlPath(String.format(&quot;/orgs/%s/installation&quot;, name))</span>
+<span class="fc" id="L256">                .fetch(GHAppInstallation.class);</span>
     }
 
     /**
@@ -257,10 +273,10 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Preview(MACHINE_MAN)
     public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
-<span class="fc" id="L260">        return root().createRequest()</span>
-<span class="fc" id="L261">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L262">                .withUrlPath(String.format(&quot;/repos/%s/%s/installation&quot;, ownerName, repositoryName))</span>
-<span class="fc" id="L263">                .fetch(GHAppInstallation.class);</span>
+<span class="fc" id="L276">        return root().createRequest()</span>
+<span class="fc" id="L277">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L278">                .withUrlPath(String.format(&quot;/repos/%s/%s/installation&quot;, ownerName, repositoryName))</span>
+<span class="fc" id="L279">                .fetch(GHAppInstallation.class);</span>
     }
 
     /**
@@ -277,11 +293,11 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Preview(MACHINE_MAN)
     public GHAppInstallation getInstallationByUser(String name) throws IOException {
-<span class="fc" id="L280">        return root().createRequest()</span>
-<span class="fc" id="L281">                .withPreview(MACHINE_MAN)</span>
-<span class="fc" id="L282">                .withUrlPath(String.format(&quot;/users/%s/installation&quot;, name))</span>
-<span class="fc" id="L283">                .fetch(GHAppInstallation.class);</span>
+<span class="fc" id="L296">        return root().createRequest()</span>
+<span class="fc" id="L297">                .withPreview(MACHINE_MAN)</span>
+<span class="fc" id="L298">                .withUrlPath(String.format(&quot;/users/%s/installation&quot;, name))</span>
+<span class="fc" id="L299">                .fetch(GHAppInstallation.class);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

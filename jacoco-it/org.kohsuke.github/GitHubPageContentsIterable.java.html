@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * {@link PagedIterable} implementation that take a {@link Consumer} that initializes all the items on each page as they
  * are retrieved.
@@ -12,10 +13,9 @@ import javax.annotation.Nonnull;
  * {@link GitHubPageContentsIterable} is immutable and thread-safe, but the iterator returned from {@link #iterator()}
  * is not. Any one instance of iterator should only be called from a single thread.
  *
+ * @author Liam Newman
  * @param &lt;T&gt;
  *            the type of items on each page
- *
- * @author Liam Newman
  */
 class GitHubPageContentsIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
 
@@ -24,15 +24,27 @@ class GitHubPageContentsIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
     private final Class&lt;T[]&gt; receiverType;
     private final Consumer&lt;T&gt; itemInitializer;
 
+    /**
+     * Instantiates a new git hub page contents iterable.
+     *
+     * @param client
+     *            the client
+     * @param request
+     *            the request
+     * @param receiverType
+     *            the receiver type
+     * @param itemInitializer
+     *            the item initializer
+     */
     GitHubPageContentsIterable(GitHubClient client,
             GitHubRequest request,
             Class&lt;T[]&gt; receiverType,
-<span class="fc" id="L30">            Consumer&lt;T&gt; itemInitializer) {</span>
-<span class="fc" id="L31">        this.client = client;</span>
-<span class="fc" id="L32">        this.request = request;</span>
-<span class="fc" id="L33">        this.receiverType = receiverType;</span>
-<span class="fc" id="L34">        this.itemInitializer = itemInitializer;</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L42">            Consumer&lt;T&gt; itemInitializer) {</span>
+<span class="fc" id="L43">        this.client = client;</span>
+<span class="fc" id="L44">        this.request = request;</span>
+<span class="fc" id="L45">        this.receiverType = receiverType;</span>
+<span class="fc" id="L46">        this.itemInitializer = itemInitializer;</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * {@inheritDoc}
@@ -40,8 +52,8 @@ class GitHubPageContentsIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
     @Override
     @Nonnull
     public PagedIterator&lt;T&gt; _iterator(int pageSize) {
-<span class="fc" id="L43">        final GitHubPageIterator&lt;T[]&gt; iterator = GitHubPageIterator.create(client, receiverType, request, pageSize);</span>
-<span class="fc" id="L44">        return new GitHubPageContentsIterator(iterator, itemInitializer);</span>
+<span class="fc" id="L55">        final GitHubPageIterator&lt;T[]&gt; iterator = GitHubPageIterator.create(client, receiverType, request, pageSize);</span>
+<span class="fc" id="L56">        return new GitHubPageContentsIterator(iterator, itemInitializer);</span>
     }
 
     /**
@@ -54,10 +66,10 @@ class GitHubPageContentsIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
      */
     @Nonnull
     GitHubResponse&lt;T[]&gt; toResponse() throws IOException {
-<span class="fc" id="L57">        GitHubPageContentsIterator iterator = (GitHubPageContentsIterator) iterator();</span>
-<span class="fc" id="L58">        T[] items = toArray(iterator);</span>
-<span class="fc" id="L59">        GitHubResponse&lt;T[]&gt; lastResponse = iterator.lastResponse();</span>
-<span class="fc" id="L60">        return new GitHubResponse&lt;&gt;(lastResponse, items);</span>
+<span class="fc" id="L69">        GitHubPageContentsIterator iterator = (GitHubPageContentsIterator) iterator();</span>
+<span class="fc" id="L70">        T[] items = toArray(iterator);</span>
+<span class="fc" id="L71">        GitHubResponse&lt;T[]&gt; lastResponse = iterator.lastResponse();</span>
+<span class="fc" id="L72">        return new GitHubResponse&lt;&gt;(lastResponse, items);</span>
     }
 
     /**
@@ -65,9 +77,9 @@ class GitHubPageContentsIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
      */
     private class GitHubPageContentsIterator extends PagedIterator&lt;T&gt; {
 
-<span class="fc" id="L68">        public GitHubPageContentsIterator(GitHubPageIterator&lt;T[]&gt; iterator, Consumer&lt;T&gt; itemInitializer) {</span>
-<span class="fc" id="L69">            super(iterator, itemInitializer);</span>
-<span class="fc" id="L70">        }</span>
+<span class="fc" id="L80">        public GitHubPageContentsIterator(GitHubPageIterator&lt;T[]&gt; iterator, Consumer&lt;T&gt; itemInitializer) {</span>
+<span class="fc" id="L81">            super(iterator, itemInitializer);</span>
+<span class="fc" id="L82">        }</span>
 
         /**
          * Gets the {@link GitHubResponse} for the last page received.
@@ -75,8 +87,8 @@ class GitHubPageContentsIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
          * @return the {@link GitHubResponse} for the last page received.
          */
         private GitHubResponse&lt;T[]&gt; lastResponse() {
-<span class="fc" id="L78">            return ((GitHubPageIterator&lt;T[]&gt;) base).finalResponse();</span>
+<span class="fc" id="L90">            return ((GitHubPageIterator&lt;T[]&gt;) base).finalResponse();</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Provides information for Git Trees https://developer.github.com/v3/git/trees/
  *
  * @author Daniel Teixeira - https://github.com/ddtxra
  * @see GHTree
  */
-<span class="fc" id="L13">public class GHTreeEntry {</span>
+<span class="fc" id="L14">public class GHTreeEntry {</span>
+
+    /** The tree. */
     /* package almost final */GHTree tree;
 
     private String path, mode, type, sha, url;
@@ -22,25 +25,25 @@ import java.net.URL;
      * @return the path
      */
     public String getPath() {
-<span class="fc" id="L25">        return path;</span>
+<span class="fc" id="L28">        return path;</span>
     }
 
     /**
-     * Get mode such as 100644
+     * Get mode such as 100644.
      *
      * @return the mode
      */
     public String getMode() {
-<span class="fc" id="L34">        return mode;</span>
+<span class="fc" id="L37">        return mode;</span>
     }
 
     /**
-     * Gets the size of the file, such as 132
+     * Gets the size of the file, such as 132.
      *
      * @return The size of the path or 0 if it is a directory
      */
     public long getSize() {
-<span class="fc" id="L43">        return size;</span>
+<span class="fc" id="L46">        return size;</span>
     }
 
     /**
@@ -49,7 +52,7 @@ import java.net.URL;
      * @return The type
      */
     public String getType() {
-<span class="nc" id="L52">        return type;</span>
+<span class="nc" id="L55">        return type;</span>
     }
 
     /**
@@ -58,7 +61,7 @@ import java.net.URL;
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L61">        return sha;</span>
+<span class="fc" id="L64">        return sha;</span>
     }
 
     /**
@@ -68,7 +71,7 @@ import java.net.URL;
      * @return the url
      */
     public URL getUrl() {
-<span class="fc" id="L71">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L74">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -79,10 +82,10 @@ import java.net.URL;
      *             the io exception
      */
     public GHBlob asBlob() throws IOException {
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
-<span class="fc" id="L83">            return tree.repo.getBlob(sha);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
+<span class="fc" id="L86">            return tree.repo.getBlob(sha);</span>
         else
-<span class="nc" id="L85">            return null;</span>
+<span class="nc" id="L88">            return null;</span>
     }
 
     /**
@@ -93,10 +96,10 @@ import java.net.URL;
      *             the io exception
      */
     public InputStream readAsBlob() throws IOException {
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
-<span class="fc" id="L97">            return tree.repo.readBlob(sha);</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
+<span class="fc" id="L100">            return tree.repo.readBlob(sha);</span>
         else
-<span class="nc" id="L99">            return null;</span>
+<span class="nc" id="L102">            return null;</span>
     }
 
     /**
@@ -107,10 +110,10 @@ import java.net.URL;
      *             the io exception
      */
     public GHTree asTree() throws IOException {
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (type.equals(&quot;tree&quot;))</span>
-<span class="fc" id="L111">            return tree.repo.getTree(sha);</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (type.equals(&quot;tree&quot;))</span>
+<span class="fc" id="L114">            return tree.repo.getTree(sha);</span>
         else
-<span class="nc" id="L113">            return null;</span>
+<span class="nc" id="L116">            return null;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

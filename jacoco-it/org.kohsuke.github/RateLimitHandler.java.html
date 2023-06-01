@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Pluggable strategy to determine what to do when the API rate limit is reached.
  *
@@ -18,7 +19,7 @@ import javax.annotation.Nonnull;
  * @deprecated Switch to {@link GitHubRateLimitHandler} or even better provide {@link RateLimitChecker}s.
  */
 @Deprecated
-<span class="fc" id="L21">public abstract class RateLimitHandler extends GitHubRateLimitHandler {</span>
+<span class="fc" id="L22">public abstract class RateLimitHandler extends GitHubRateLimitHandler {</span>
 
     /**
      * Called when the library encounters HTTP error indicating that the API rate limit has been exceeded.
@@ -36,12 +37,12 @@ import javax.annotation.Nonnull;
      * @see &lt;a href=&quot;https://developer.github.com/v3/#rate-limiting&quot;&gt;API documentation from GitHub&lt;/a&gt;
      */
     public void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc" id="L39">        GHIOException e = new HttpException(&quot;API rate limit reached&quot;,</span>
-<span class="fc" id="L40">                connectorResponse.statusCode(),</span>
-<span class="fc" id="L41">                connectorResponse.header(&quot;Status&quot;),</span>
-<span class="fc" id="L42">                connectorResponse.request().url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());</span>
-<span class="fc" id="L43">        onError(e, connectorResponse.toHttpURLConnection());</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L40">        GHIOException e = new HttpException(&quot;API rate limit reached&quot;,</span>
+<span class="fc" id="L41">                connectorResponse.statusCode(),</span>
+<span class="fc" id="L42">                connectorResponse.header(&quot;Status&quot;),</span>
+<span class="fc" id="L43">                connectorResponse.request().url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());</span>
+<span class="fc" id="L44">        onError(e, connectorResponse.toHttpURLConnection());</span>
+<span class="fc" id="L45">    }</span>
 
     /**
      * Called when the library encounters HTTP error indicating that the API rate limit is reached.
@@ -67,22 +68,22 @@ import javax.annotation.Nonnull;
      * Block until the API rate limit is reset. Useful for long-running batch processing.
      */
     @Deprecated
-<span class="fc" id="L70">    public static final RateLimitHandler WAIT = new RateLimitHandler() {</span>
+<span class="fc" id="L71">    public static final RateLimitHandler WAIT = new RateLimitHandler() {</span>
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
             try {
-<span class="fc" id="L74">                Thread.sleep(parseWaitTime(uc));</span>
-<span class="nc" id="L75">            } catch (InterruptedException x) {</span>
-<span class="nc" id="L76">                throw (InterruptedIOException) new InterruptedIOException().initCause(e);</span>
-<span class="fc" id="L77">            }</span>
-<span class="fc" id="L78">        }</span>
+<span class="fc" id="L75">                Thread.sleep(parseWaitTime(uc));</span>
+<span class="nc" id="L76">            } catch (InterruptedException x) {</span>
+<span class="nc" id="L77">                throw (InterruptedIOException) new InterruptedIOException().initCause(e);</span>
+<span class="fc" id="L78">            }</span>
+<span class="fc" id="L79">        }</span>
 
         private long parseWaitTime(HttpURLConnection uc) {
-<span class="fc" id="L81">            String v = uc.getHeaderField(&quot;X-RateLimit-Reset&quot;);</span>
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">            if (v == null)</span>
-<span class="nc" id="L83">                return 10000; // can't tell</span>
+<span class="fc" id="L82">            String v = uc.getHeaderField(&quot;X-RateLimit-Reset&quot;);</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">            if (v == null)</span>
+<span class="nc" id="L84">                return 10000; // can't tell</span>
 
-<span class="fc" id="L85">            return Math.max(10000, Long.parseLong(v) * 1000 - System.currentTimeMillis());</span>
+<span class="fc" id="L86">            return Math.max(10000, Long.parseLong(v) * 1000 - System.currentTimeMillis());</span>
         }
     };
 
@@ -90,11 +91,11 @@ import javax.annotation.Nonnull;
      * Fail immediately.
      */
     @Deprecated
-<span class="fc" id="L93">    public static final RateLimitHandler FAIL = new RateLimitHandler() {</span>
+<span class="fc" id="L94">    public static final RateLimitHandler FAIL = new RateLimitHandler() {</span>
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
-<span class="fc" id="L96">            throw e;</span>
+<span class="fc" id="L97">            throw e;</span>
         }
     };
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

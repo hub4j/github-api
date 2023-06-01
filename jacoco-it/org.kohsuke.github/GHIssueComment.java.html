@@ -30,22 +30,32 @@ import java.net.URL;
 
 import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
+// TODO: Auto-generated Javadoc
 /**
- * Comment to the issue
+ * Comment to the issue.
  *
  * @author Kohsuke Kawaguchi
  * @see GHIssue#comment(String) GHIssue#comment(String)
  * @see GHIssue#listComments() GHIssue#listComments()
  */
-<span class="fc" id="L40">public class GHIssueComment extends GHObject implements Reactable {</span>
+<span class="fc" id="L41">public class GHIssueComment extends GHObject implements Reactable {</span>
+
+    /** The owner. */
     GHIssue owner;
 
     private String body, gravatar_id, html_url, author_association;
     private GHUser user; // not fully populated. beware.
 
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH issue comment
+     */
     GHIssueComment wrapUp(GHIssue owner) {
-<span class="fc" id="L47">        this.owner = owner;</span>
-<span class="fc" id="L48">        return this;</span>
+<span class="fc" id="L57">        this.owner = owner;</span>
+<span class="fc" id="L58">        return this;</span>
     }
 
     /**
@@ -55,7 +65,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHIssue getParent() {
-<span class="fc" id="L58">        return owner;</span>
+<span class="fc" id="L68">        return owner;</span>
     }
 
     /**
@@ -64,7 +74,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L67">        return body;</span>
+<span class="fc" id="L77">        return body;</span>
     }
 
     /**
@@ -74,7 +84,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @Deprecated
     public String getUserName() {
-<span class="nc" id="L77">        return user.getLogin();</span>
+<span class="nc" id="L87">        return user.getLogin();</span>
     }
 
     /**
@@ -85,12 +95,17 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-<span class="pc bpc" id="L88" title="1 of 4 branches missed.">        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());</span>
+<span class="pc bpc" id="L98" title="1 of 4 branches missed.">        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());</span>
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     @Override
     public URL getHtmlUrl() {
-<span class="fc" id="L93">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L108">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -99,7 +114,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the author association
      */
     public GHCommentAuthorAssociation getAuthorAssociation() {
-<span class="nc" id="L102">        return GHCommentAuthorAssociation.valueOf(author_association);</span>
+<span class="nc" id="L117">        return GHCommentAuthorAssociation.valueOf(author_association);</span>
     }
 
     /**
@@ -111,14 +126,14 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void update(String body) throws IOException {
-<span class="nc" id="L114">        owner.root()</span>
-<span class="nc" id="L115">                .createRequest()</span>
-<span class="nc" id="L116">                .method(&quot;PATCH&quot;)</span>
-<span class="nc" id="L117">                .with(&quot;body&quot;, body)</span>
-<span class="nc" id="L118">                .withUrlPath(getApiRoute())</span>
-<span class="nc" id="L119">                .fetch(GHIssueComment.class);</span>
-<span class="nc" id="L120">        this.body = body;</span>
-<span class="nc" id="L121">    }</span>
+<span class="nc" id="L129">        owner.root()</span>
+<span class="nc" id="L130">                .createRequest()</span>
+<span class="nc" id="L131">                .method(&quot;PATCH&quot;)</span>
+<span class="nc" id="L132">                .with(&quot;body&quot;, body)</span>
+<span class="nc" id="L133">                .withUrlPath(getApiRoute())</span>
+<span class="nc" id="L134">                .fetch(GHIssueComment.class);</span>
+<span class="nc" id="L135">        this.body = body;</span>
+<span class="nc" id="L136">    }</span>
 
     /**
      * Deletes this issue comment.
@@ -127,32 +142,62 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="nc" id="L130">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="nc" id="L131">    }</span>
+<span class="nc" id="L145">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="nc" id="L146">    }</span>
 
+    /**
+     * Creates the reaction.
+     *
+     * @param content
+     *            the content
+     * @return the GH reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="fc" id="L135">        return owner.root()</span>
-<span class="fc" id="L136">                .createRequest()</span>
-<span class="fc" id="L137">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L138">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L139">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="fc" id="L140">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L141">                .fetch(GHReaction.class);</span>
+<span class="fc" id="L159">        return owner.root()</span>
+<span class="fc" id="L160">                .createRequest()</span>
+<span class="fc" id="L161">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L162">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L163">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="fc" id="L164">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L165">                .fetch(GHReaction.class);</span>
     }
 
+    /**
+     * Delete reaction.
+     *
+     * @param reaction
+     *            the reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public void deleteReaction(GHReaction reaction) throws IOException {
+<span class="fc" id="L177">        owner.root()</span>
+<span class="fc" id="L178">                .createRequest()</span>
+<span class="fc" id="L179">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L180">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
+<span class="fc" id="L181">                .send();</span>
+<span class="fc" id="L182">    }</span>
+
+    /**
+     * List reactions.
+     *
+     * @return the paged iterable
+     */
     @Preview(SQUIRREL_GIRL)
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L146">        return owner.root()</span>
-<span class="fc" id="L147">                .createRequest()</span>
-<span class="fc" id="L148">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L149">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L150">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
+<span class="fc" id="L191">        return owner.root()</span>
+<span class="fc" id="L192">                .createRequest()</span>
+<span class="fc" id="L193">                .withPreview(SQUIRREL_GIRL)</span>
+<span class="fc" id="L194">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L195">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
     }
 
     private String getApiRoute() {
-<span class="fc" id="L154">        return &quot;/repos/&quot; + owner.getRepository().getOwnerName() + &quot;/&quot; + owner.getRepository().getName()</span>
-<span class="fc" id="L155">                + &quot;/issues/comments/&quot; + getId();</span>
+<span class="fc" id="L199">        return &quot;/repos/&quot; + owner.getRepository().getOwnerName() + &quot;/&quot; + owner.getRepository().getName()</span>
+<span class="fc" id="L200">                + &quot;/issues/comments/&quot; + getId();</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

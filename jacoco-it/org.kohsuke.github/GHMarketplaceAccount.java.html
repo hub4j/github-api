@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMarketplaceAccount.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMarketplaceAccount.java</span></div><h1>GHMarketplaceAccount.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import java.io.IOException;
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Base class for Github Marketplace Account.
  *
@@ -9,7 +11,7 @@ import java.net.URL;
  * @see GitHub#getMyMarketplacePurchases()
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
-<span class="fc" id="L12">public class GHMarketplaceAccount extends GitHubInteractiveObject {</span>
+<span class="fc" id="L14">public class GHMarketplaceAccount extends GitHubInteractiveObject {</span>
     private String url;
     private long id;
     private String login;
@@ -23,7 +25,7 @@ import java.net.URL;
      * @return the url
      */
     public URL getUrl() {
-<span class="fc" id="L26">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L28">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -32,7 +34,7 @@ import java.net.URL;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L35">        return id;</span>
+<span class="fc" id="L37">        return id;</span>
     }
 
     /**
@@ -41,7 +43,7 @@ import java.net.URL;
      * @return the login
      */
     public String getLogin() {
-<span class="fc" id="L44">        return login;</span>
+<span class="fc" id="L46">        return login;</span>
     }
 
     /**
@@ -50,7 +52,7 @@ import java.net.URL;
      * @return the email
      */
     public String getEmail() {
-<span class="nc" id="L53">        return email;</span>
+<span class="nc" id="L55">        return email;</span>
     }
 
     /**
@@ -59,7 +61,7 @@ import java.net.URL;
      * @return the organization billing email
      */
     public String getOrganizationBillingEmail() {
-<span class="fc" id="L62">        return organizationBillingEmail;</span>
+<span class="fc" id="L64">        return organizationBillingEmail;</span>
     }
 
     /**
@@ -68,8 +70,29 @@ import java.net.URL;
      * @return the type
      */
     public GHMarketplaceAccountType getType() {
-<span class="fc" id="L71">        return type;</span>
+<span class="fc" id="L73">        return type;</span>
+    }
+
+    /**
+     * Shows whether the user or organization account actively subscribes to a plan listed by the authenticated GitHub
+     * App. When someone submits a plan change that won't be processed until the end of their billing cycle, you will
+     * also see the upcoming pending change.
+     *
+     * &lt;p&gt;
+     * GitHub Apps must use a JWT to access this endpoint.
+     * &lt;p&gt;
+     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
+     *
+     * @return a GHMarketplaceListAccountBuilder instance
+     * @throws IOException
+     *             in case of {@link IOException}
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account&quot;&gt;Get
+     *      a subscription plan for an account&lt;/a&gt;
+     */
+    public GHMarketplaceAccountPlan getPlan() throws IOException {
+<span class="fc" id="L94">        return new GHMarketplacePlanForAccountBuilder(root(), this.id).createRequest();</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

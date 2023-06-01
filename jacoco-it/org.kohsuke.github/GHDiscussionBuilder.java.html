@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Base class for creating or updating a discussion.
  *
@@ -18,6 +19,7 @@ class GHDiscussionBuilder&lt;S&gt; extends AbstractBuilder&lt;GHDiscussion, S&gt
     private final GHTeam team;
 
     /**
+     * Instantiates a new GH discussion builder.
      *
      * @param intermediateReturnType
      *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
@@ -31,15 +33,15 @@ class GHDiscussionBuilder&lt;S&gt; extends AbstractBuilder&lt;GHDiscussion, S&gt
     protected GHDiscussionBuilder(@Nonnull Class&lt;S&gt; intermediateReturnType,
             @Nonnull GHTeam team,
             @CheckForNull GHDiscussion baseInstance) {
-<span class="fc" id="L34">        super(GHDiscussion.class, intermediateReturnType, team.root(), baseInstance);</span>
+<span class="fc" id="L36">        super(GHDiscussion.class, intermediateReturnType, team.root(), baseInstance);</span>
 
-<span class="fc" id="L36">        this.team = team;</span>
+<span class="fc" id="L38">        this.team = team;</span>
 
-<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (baseInstance != null) {</span>
-<span class="fc" id="L39">            requester.with(&quot;title&quot;, baseInstance.getTitle());</span>
-<span class="fc" id="L40">            requester.with(&quot;body&quot;, baseInstance.getBody());</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (baseInstance != null) {</span>
+<span class="fc" id="L41">            requester.with(&quot;title&quot;, baseInstance.getTitle());</span>
+<span class="fc" id="L42">            requester.with(&quot;body&quot;, baseInstance.getBody());</span>
         }
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L44">    }</span>
 
     /**
      * Title for this discussion.
@@ -52,7 +54,7 @@ class GHDiscussionBuilder&lt;S&gt; extends AbstractBuilder&lt;GHDiscussion, S&gt
      */
     @Nonnull
     public S title(String value) throws IOException {
-<span class="fc" id="L55">        return with(&quot;title&quot;, value);</span>
+<span class="fc" id="L57">        return with(&quot;title&quot;, value);</span>
     }
 
     /**
@@ -66,7 +68,7 @@ class GHDiscussionBuilder&lt;S&gt; extends AbstractBuilder&lt;GHDiscussion, S&gt
      */
     @Nonnull
     public S body(String value) throws IOException {
-<span class="fc" id="L69">        return with(&quot;body&quot;, value);</span>
+<span class="fc" id="L71">        return with(&quot;body&quot;, value);</span>
     }
 
     /**
@@ -75,7 +77,7 @@ class GHDiscussionBuilder&lt;S&gt; extends AbstractBuilder&lt;GHDiscussion, S&gt
     @Nonnull
     @Override
     public GHDiscussion done() throws IOException {
-<span class="fc" id="L78">        return super.done().wrapUp(team);</span>
+<span class="fc" id="L80">        return super.done().wrapUp(team);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -4,41 +4,64 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Iterable for GHAppInstallation listing.
  */
 class GHAppInstallationsIterable extends PagedIterable&lt;GHAppInstallation&gt; {
+
+    /** The Constant APP_INSTALLATIONS_URL. */
     public static final String APP_INSTALLATIONS_URL = &quot;/user/installations&quot;;
     private final transient GitHub root;
     private GHAppInstallationsPage result;
 
-<span class="fc" id="L15">    public GHAppInstallationsIterable(GitHub root) {</span>
-<span class="fc" id="L16">        this.root = root;</span>
-<span class="fc" id="L17">    }</span>
+    /**
+     * Instantiates a new GH app installations iterable.
+     *
+     * @param root
+     *            the root
+     */
+<span class="fc" id="L24">    public GHAppInstallationsIterable(GitHub root) {</span>
+<span class="fc" id="L25">        this.root = root;</span>
+<span class="fc" id="L26">    }</span>
 
+    /**
+     * Iterator.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
+     */
     @Nonnull
     @Override
     public PagedIterator&lt;GHAppInstallation&gt; _iterator(int pageSize) {
-<span class="fc" id="L22">        final GitHubRequest request = root.createRequest().withUrlPath(APP_INSTALLATIONS_URL).build();</span>
-<span class="fc" id="L23">        return new PagedIterator&lt;&gt;(</span>
-<span class="fc" id="L24">                adapt(GitHubPageIterator.create(root.getClient(), GHAppInstallationsPage.class, request, pageSize)),</span>
+<span class="fc" id="L38">        final GitHubRequest request = root.createRequest().withUrlPath(APP_INSTALLATIONS_URL).build();</span>
+<span class="fc" id="L39">        return new PagedIterator&lt;&gt;(</span>
+<span class="fc" id="L40">                adapt(GitHubPageIterator.create(root.getClient(), GHAppInstallationsPage.class, request, pageSize)),</span>
                 null);
     }
 
+    /**
+     * Adapt.
+     *
+     * @param base
+     *            the base
+     * @return the iterator
+     */
     protected Iterator&lt;GHAppInstallation[]&gt; adapt(final Iterator&lt;GHAppInstallationsPage&gt; base) {
-<span class="fc" id="L29">        return new Iterator&lt;GHAppInstallation[]&gt;() {</span>
+<span class="fc" id="L52">        return new Iterator&lt;GHAppInstallation[]&gt;() {</span>
             public boolean hasNext() {
-<span class="fc" id="L31">                return base.hasNext();</span>
+<span class="fc" id="L54">                return base.hasNext();</span>
             }
 
             public GHAppInstallation[] next() {
-<span class="fc" id="L35">                GHAppInstallationsPage v = base.next();</span>
-<span class="fc bfc" id="L36" title="All 2 branches covered.">                if (result == null) {</span>
-<span class="fc" id="L37">                    result = v;</span>
+<span class="fc" id="L58">                GHAppInstallationsPage v = base.next();</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                if (result == null) {</span>
+<span class="fc" id="L60">                    result = v;</span>
                 }
-<span class="fc" id="L39">                return v.getInstallations();</span>
+<span class="fc" id="L62">                return v.getInstallations();</span>
             }
         };
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

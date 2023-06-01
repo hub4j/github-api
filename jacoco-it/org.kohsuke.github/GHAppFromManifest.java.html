@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHAppFromManifest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHAppFromManifest.java</span></div><h1>GHAppFromManifest.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+/**
+ * A GitHub App with the additional attributes returned during its creation.
+ *
+ * @author Daniel Baur
+ * @see GitHub#createAppFromManifest(String)
+ */
+<span class="fc" id="L9">public class GHAppFromManifest extends GHApp {</span>
+
+    private String clientId;
+    private String clientSecret;
+    private String webhookSecret;
+    private String pem;
+
+    /**
+     * Gets the client id
+     *
+     * @return the client id
+     */
+    public String getClientId() {
+<span class="fc" id="L22">        return clientId;</span>
+    }
+
+    /**
+     * Gets the client secret
+     *
+     * @return the client secret
+     */
+    public String getClientSecret() {
+<span class="fc" id="L31">        return clientSecret;</span>
+    }
+
+    /**
+     * Gets the webhook secret
+     *
+     * @return the webhook secret
+     */
+    public String getWebhookSecret() {
+<span class="fc" id="L40">        return webhookSecret;</span>
+    }
+
+    /**
+     * Gets the pem
+     *
+     * @return the pem
+     */
+    public String getPem() {
+<span class="fc" id="L49">        return pem;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

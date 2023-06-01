@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builds up a creation of new {@link GHPullRequestReview}.
  *
@@ -13,12 +14,18 @@ import java.util.List;
 public class GHPullRequestReviewBuilder {
     private final GHPullRequest pr;
     private final Requester builder;
-<span class="fc" id="L16">    private final List&lt;DraftReviewComment&gt; comments = new ArrayList&lt;DraftReviewComment&gt;();</span>
+<span class="fc" id="L17">    private final List&lt;DraftReviewComment&gt; comments = new ArrayList&lt;DraftReviewComment&gt;();</span>
 
-<span class="fc" id="L18">    GHPullRequestReviewBuilder(GHPullRequest pr) {</span>
-<span class="fc" id="L19">        this.pr = pr;</span>
-<span class="fc" id="L20">        this.builder = pr.root().createRequest();</span>
-<span class="fc" id="L21">    }</span>
+    /**
+     * Instantiates a new GH pull request review builder.
+     *
+     * @param pr
+     *            the pr
+     */
+<span class="fc" id="L25">    GHPullRequestReviewBuilder(GHPullRequest pr) {</span>
+<span class="fc" id="L26">        this.pr = pr;</span>
+<span class="fc" id="L27">        this.builder = pr.root().createRequest();</span>
+<span class="fc" id="L28">    }</span>
 
     // public GHPullRequestReview createReview(@Nullable String commitId, String body, GHPullRequestReviewEvent event,
     // List&lt;GHPullRequestReviewComment&gt; comments) throws IOException
@@ -33,8 +40,8 @@ public class GHPullRequestReviewBuilder {
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder commitId(String commitId) {
-<span class="nc" id="L36">        builder.with(&quot;commit_id&quot;, commitId);</span>
-<span class="nc" id="L37">        return this;</span>
+<span class="nc" id="L43">        builder.with(&quot;commit_id&quot;, commitId);</span>
+<span class="nc" id="L44">        return this;</span>
     }
 
     /**
@@ -45,8 +52,8 @@ public class GHPullRequestReviewBuilder {
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder body(String body) {
-<span class="fc" id="L48">        builder.with(&quot;body&quot;, body);</span>
-<span class="fc" id="L49">        return this;</span>
+<span class="fc" id="L55">        builder.with(&quot;body&quot;, body);</span>
+<span class="fc" id="L56">        return this;</span>
     }
 
     /**
@@ -60,8 +67,8 @@ public class GHPullRequestReviewBuilder {
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder event(GHPullRequestReviewEvent event) {
-<span class="nc" id="L63">        builder.with(&quot;event&quot;, event.action());</span>
-<span class="nc" id="L64">        return this;</span>
+<span class="nc" id="L70">        builder.with(&quot;event&quot;, event.action());</span>
+<span class="nc" id="L71">        return this;</span>
     }
 
     /**
@@ -77,8 +84,8 @@ public class GHPullRequestReviewBuilder {
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder comment(String body, String path, int position) {
-<span class="fc" id="L80">        comments.add(new DraftReviewComment(body, path, position));</span>
-<span class="fc" id="L81">        return this;</span>
+<span class="fc" id="L87">        comments.add(new DraftReviewComment(body, path, position));</span>
+<span class="fc" id="L88">        return this;</span>
     }
 
     /**
@@ -89,11 +96,11 @@ public class GHPullRequestReviewBuilder {
      *             the io exception
      */
     public GHPullRequestReview create() throws IOException {
-<span class="fc" id="L92">        return builder.method(&quot;POST&quot;)</span>
-<span class="fc" id="L93">                .with(&quot;comments&quot;, comments)</span>
-<span class="fc" id="L94">                .withUrlPath(pr.getApiRoute() + &quot;/reviews&quot;)</span>
-<span class="fc" id="L95">                .fetch(GHPullRequestReview.class)</span>
-<span class="fc" id="L96">                .wrapUp(pr);</span>
+<span class="fc" id="L99">        return builder.method(&quot;POST&quot;)</span>
+<span class="fc" id="L100">                .with(&quot;comments&quot;, comments)</span>
+<span class="fc" id="L101">                .withUrlPath(pr.getApiRoute() + &quot;/reviews&quot;)</span>
+<span class="fc" id="L102">                .fetch(GHPullRequestReview.class)</span>
+<span class="fc" id="L103">                .wrapUp(pr);</span>
     }
 
     private static class DraftReviewComment {
@@ -101,11 +108,11 @@ public class GHPullRequestReviewBuilder {
         private String path;
         private int position;
 
-<span class="fc" id="L104">        DraftReviewComment(String body, String path, int position) {</span>
-<span class="fc" id="L105">            this.body = body;</span>
-<span class="fc" id="L106">            this.path = path;</span>
-<span class="fc" id="L107">            this.position = position;</span>
-<span class="fc" id="L108">        }</span>
+<span class="fc" id="L111">        DraftReviewComment(String body, String path, int position) {</span>
+<span class="fc" id="L112">            this.body = body;</span>
+<span class="fc" id="L113">            this.path = path;</span>
+<span class="fc" id="L114">            this.position = position;</span>
+<span class="fc" id="L115">        }</span>
 
         /**
          * Gets body.
@@ -113,7 +120,7 @@ public class GHPullRequestReviewBuilder {
          * @return the body
          */
         public String getBody() {
-<span class="nc" id="L116">            return body;</span>
+<span class="nc" id="L123">            return body;</span>
         }
 
         /**
@@ -122,7 +129,7 @@ public class GHPullRequestReviewBuilder {
          * @return the path
          */
         public String getPath() {
-<span class="nc" id="L125">            return path;</span>
+<span class="nc" id="L132">            return path;</span>
         }
 
         /**
@@ -131,8 +138,8 @@ public class GHPullRequestReviewBuilder {
          * @return the position
          */
         public int getPosition() {
-<span class="nc" id="L134">            return position;</span>
+<span class="nc" id="L141">            return position;</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

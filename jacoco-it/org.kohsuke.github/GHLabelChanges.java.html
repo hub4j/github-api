@@ -2,13 +2,14 @@
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+// TODO: Auto-generated Javadoc
 /**
- * Wrapper to define changed fields on label action=&quot;edited&quot;
+ * Wrapper to define changed fields on label action=&quot;edited&quot;.
  *
  * @see GHEventPayload.Label
  */
 @SuppressFBWarnings(&quot;UWF_UNWRITTEN_FIELD&quot;)
-<span class="fc" id="L11">public class GHLabelChanges {</span>
+<span class="fc" id="L12">public class GHLabelChanges {</span>
 
     private GHFrom name;
     private GHFrom color;
@@ -19,7 +20,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return old label name (or null if not changed)
      */
     public GHFrom getName() {
-<span class="fc" id="L22">        return name;</span>
+<span class="fc" id="L23">        return name;</span>
     }
 
     /**
@@ -28,13 +29,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return old label color (or null if not changed)
      */
     public GHFrom getColor() {
-<span class="fc" id="L31">        return color;</span>
+<span class="fc" id="L32">        return color;</span>
     }
 
     /**
      * Wrapper for changed values.
      */
-<span class="fc" id="L37">    public static class GHFrom {</span>
+<span class="fc" id="L38">    public static class GHFrom {</span>
         private String from;
 
         /**
@@ -43,8 +44,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
          * @return previous value
          */
         public String getFrom() {
-<span class="fc" id="L46">            return from;</span>
+<span class="fc" id="L47">            return from;</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -270,7 +270,7 @@ export GITHUB_OAUTH=4d98173f7c075527cb64878561d1fe70</pre></div>
 <div class="source">
 <pre>GitHub github = GitHubBuilder.fromEnvironment().build();</pre></div></section></section><section>
 <h2><a name="Pluggable_HTTP_client"></a>Pluggable HTTP client</h2>
-<p>This library comes with a pluggable connector to use different HTTP client implementations through <code>HttpConnector</code>. In particular, this means you can use <a class="externalLink" href="https://square.github.io/okhttp/">OkHttp</a>, so we can make use of it's HTTP response cache. Making a conditional request against the GitHub API and receiving a 304 response <a class="externalLink" href="https://developer.github.com/v3/#conditional-requests">does not count against the rate limit</a>.</p>
+<p>This library comes with a pluggable connector to use different HTTP client implementations through <code>HttpConnector</code>. In particular, this means you can use <a class="externalLink" href="https://square.github.io/okhttp/">OkHttp</a>, so we can make use of its HTTP response cache. Making a conditional request against the GitHub API and receiving a 304 response <a class="externalLink" href="https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#conditional-requests">does not count against the rate limit</a>.</p>
 <p>The following code shows an example of how to set up persistent cache on the disk:</p>
 <div class="source">
 <pre>Cache cache = new Cache(cacheDirectory, 10 * 1024 * 1024); // 10MB cache
@@ -281,7 +281,7 @@ GitHub gitHub = GitHubBuilder.fromEnvironment()
     </div>
     <div id="footer">
       <div class="xright">&#169;  
-          2022
+          2023
     
           <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
@@ -289,8 +289,8 @@ GitHub gitHub = GitHubBuilder.fromEnvironment()
 
   
   
-  &nbsp;| Last Published: 2022-03-01
-  &nbsp;| Version: 1.302
+  &nbsp;| Last Published: 2023-05-31
+  &nbsp;| Version: 1.315
 </div>
       <div class="clear">
         <hr/>

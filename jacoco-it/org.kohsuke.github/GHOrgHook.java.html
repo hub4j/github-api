@@ -4,25 +4,46 @@
 
 package org.kohsuke.github;
 
-<span class="fc" id="L7">class GHOrgHook extends GHHook {</span>
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHOrgHook.
+ */
+<span class="fc" id="L11">class GHOrgHook extends GHHook {</span>
     /**
      * Organization that the hook belongs to.
      */
     transient GHOrganization organization;
 
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH org hook
+     */
     GHOrgHook wrap(GHOrganization owner) {
-<span class="fc" id="L14">        this.organization = owner;</span>
-<span class="fc" id="L15">        return this;</span>
+<span class="fc" id="L25">        this.organization = owner;</span>
+<span class="fc" id="L26">        return this;</span>
     }
 
+    /**
+     * Root.
+     *
+     * @return the git hub
+     */
     @Override
     GitHub root() {
-<span class="fc" id="L20">        return organization.root();</span>
+<span class="fc" id="L36">        return organization.root();</span>
     }
 
+    /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
     @Override
     String getApiRoute() {
-<span class="fc" id="L25">        return String.format(&quot;/orgs/%s/hooks/%d&quot;, organization.getLogin(), getId());</span>
+<span class="fc" id="L46">        return String.format(&quot;/orgs/%s/hooks/%d&quot;, organization.getLogin(), getId());</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

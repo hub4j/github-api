@@ -3,16 +3,35 @@
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.IOException;
+import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHDeployKey.
  */
-<span class="nc" id="L10">public class GHDeployKey {</span>
+<span class="fc" id="L12">public class GHDeployKey {</span>
 
+    /** The title. */
     protected String url, key, title;
+
+    /** The verified. */
     protected boolean verified;
+
+    /** The id. */
     protected long id;
     private GHRepository owner;
+
+    /** Creation date of the deploy key */
+    private String created_at;
+
+    /** Last used date of the deploy key */
+    private String last_used;
+
+    /** Name of user that added the deploy key */
+    private String added_by;
+
+    /** Whether the deploykey has readonly permission or full access */
+    private boolean read_only;
 
     /**
      * Gets id.
@@ -20,7 +39,7 @@ import java.io.IOException;
      * @return the id
      */
     public long getId() {
-<span class="nc" id="L23">        return id;</span>
+<span class="fc" id="L42">        return id;</span>
     }
 
     /**
@@ -29,7 +48,7 @@ import java.io.IOException;
      * @return the key
      */
     public String getKey() {
-<span class="nc" id="L32">        return key;</span>
+<span class="nc" id="L51">        return key;</span>
     }
 
     /**
@@ -38,7 +57,7 @@ import java.io.IOException;
      * @return the title
      */
     public String getTitle() {
-<span class="nc" id="L41">        return title;</span>
+<span class="fc" id="L60">        return title;</span>
     }
 
     /**
@@ -47,7 +66,7 @@ import java.io.IOException;
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L50">        return url;</span>
+<span class="nc" id="L69">        return url;</span>
     }
 
     /**
@@ -56,7 +75,43 @@ import java.io.IOException;
      * @return the boolean
      */
     public boolean isVerified() {
-<span class="nc" id="L59">        return verified;</span>
+<span class="nc" id="L78">        return verified;</span>
+    }
+
+    /**
+     * Gets created_at.
+     *
+     * @return the created_at
+     */
+    public Date getCreatedAt() {
+<span class="fc" id="L87">        return GitHubClient.parseDate(created_at);</span>
+    }
+
+    /**
+     * Gets last_used.
+     *
+     * @return the last_used
+     */
+    public Date getLastUsedAt() {
+<span class="fc" id="L96">        return GitHubClient.parseDate(last_used);</span>
+    }
+
+    /**
+     * Gets added_by
+     *
+     * @return the added_by
+     */
+    public String getAdded_by() {
+<span class="fc" id="L105">        return added_by;</span>
+    }
+
+    /**
+     * Is read_only
+     *
+     * @return true if the key can only read. False if the key has write permission as well.
+     */
+    public boolean isRead_only() {
+<span class="fc" id="L114">        return read_only;</span>
     }
 
     /**
@@ -68,7 +123,7 @@ import java.io.IOException;
      */
     @Deprecated
     public GHDeployKey wrap(GHRepository repo) {
-<span class="nc" id="L71">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="nc" id="L126">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -79,12 +134,24 @@ import java.io.IOException;
      * @return the gh deploy key
      */
     GHDeployKey lateBind(GHRepository repo) {
-<span class="nc" id="L82">        this.owner = repo;</span>
-<span class="nc" id="L83">        return this;</span>
+<span class="fc" id="L137">        this.owner = repo;</span>
+<span class="fc" id="L138">        return this;</span>
     }
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     public String toString() {
-<span class="nc" id="L87">        return new ToStringBuilder(this).append(&quot;title&quot;, title).append(&quot;id&quot;, id).append(&quot;key&quot;, key).toString();</span>
+<span class="fc" id="L147">        return new ToStringBuilder(this).append(&quot;title&quot;, title)</span>
+<span class="fc" id="L148">                .append(&quot;id&quot;, id)</span>
+<span class="fc" id="L149">                .append(&quot;key&quot;, key)</span>
+<span class="fc" id="L150">                .append(&quot;created_at&quot;, created_at)</span>
+<span class="fc" id="L151">                .append(&quot;last_used&quot;, last_used)</span>
+<span class="fc" id="L152">                .append(&quot;added_by&quot;, added_by)</span>
+<span class="fc" id="L153">                .append(&quot;read_only&quot;, read_only)</span>
+<span class="fc" id="L154">                .toString();</span>
     }
 
     /**
@@ -94,11 +161,11 @@ import java.io.IOException;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="nc" id="L97">        owner.root()</span>
-<span class="nc" id="L98">                .createRequest()</span>
-<span class="nc" id="L99">                .method(&quot;DELETE&quot;)</span>
-<span class="nc" id="L100">                .withUrlPath(String.format(&quot;/repos/%s/%s/keys/%d&quot;, owner.getOwnerName(), owner.getName(), id))</span>
-<span class="nc" id="L101">                .send();</span>
-<span class="nc" id="L102">    }</span>
+<span class="fc" id="L164">        owner.root()</span>
+<span class="fc" id="L165">                .createRequest()</span>
+<span class="fc" id="L166">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L167">                .withUrlPath(String.format(&quot;/repos/%s/%s/keys/%d&quot;, owner.getOwnerName(), owner.getName(), id))</span>
+<span class="fc" id="L168">                .send();</span>
+<span class="fc" id="L169">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMarketplacePlanForAccountBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMarketplacePlanForAccountBuilder.java</span></div><h1>GHMarketplacePlanForAccountBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+
+// TODO: Auto-generated Javadoc
+/**
+ * Returns the plan associated with current account.
+ *
+ * @author Benoit Lacelle
+ * @see GHMarketplacePlan#listAccounts()
+ * @see GitHub#listMarketplacePlans()
+ */
+public class GHMarketplacePlanForAccountBuilder extends GitHubInteractiveObject {
+    private final Requester builder;
+    private final long accountId;
+
+    /**
+     * Instantiates a new GH marketplace list account builder.
+     *
+     * @param root
+     *            the root
+     * @param accountId
+     *            the account id
+     */
+    GHMarketplacePlanForAccountBuilder(GitHub root, long accountId) {
+<span class="fc" id="L26">        super(root);</span>
+<span class="fc" id="L27">        this.builder = root.createRequest();</span>
+<span class="fc" id="L28">        this.accountId = accountId;</span>
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * Fetch the plan associated with the account specified on construction.
+     * &lt;p&gt;
+     * GitHub Apps must use a JWT to access this endpoint.
+     *
+     * @return a GHMarketplaceAccountPlan
+     * @throws IOException
+     *             on error
+     */
+    public GHMarketplaceAccountPlan createRequest() throws IOException {
+<span class="fc" id="L41">        return builder.withUrlPath(String.format(&quot;/marketplace_listing/accounts/%d&quot;, this.accountId))</span>
+<span class="fc" id="L42">                .fetch(GHMarketplaceAccountPlan.class);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

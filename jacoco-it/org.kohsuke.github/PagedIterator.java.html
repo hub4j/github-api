@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Iterator over a paginated data source. Iterates of the content items of each page, automatically requesting new pages
  * as needed.
@@ -19,12 +20,13 @@ import javax.annotation.Nonnull;
  *
  * This class is not thread-safe. Any one instance should only be called from a single thread.
  *
+ * @author Kohsuke Kawaguchi
  * @param &lt;T&gt;
  *            the type parameter
- * @author Kohsuke Kawaguchi
  */
 public class PagedIterator&lt;T&gt; implements Iterator&lt;T&gt; {
 
+    /** The base. */
     @Nonnull
     protected final Iterator&lt;T[]&gt; base;
 
@@ -47,10 +49,18 @@ public class PagedIterator&lt;T&gt; implements Iterator&lt;T&gt; {
      */
     private int nextItemIndex;
 
-<span class="fc" id="L50">    PagedIterator(@Nonnull Iterator&lt;T[]&gt; base, @CheckForNull Consumer&lt;T&gt; itemInitializer) {</span>
-<span class="fc" id="L51">        this.base = base;</span>
-<span class="fc" id="L52">        this.itemInitializer = itemInitializer;</span>
-<span class="fc" id="L53">    }</span>
+    /**
+     * Instantiates a new paged iterator.
+     *
+     * @param base
+     *            the base
+     * @param itemInitializer
+     *            the item initializer
+     */
+<span class="fc" id="L60">    PagedIterator(@Nonnull Iterator&lt;T[]&gt; base, @CheckForNull Consumer&lt;T&gt; itemInitializer) {</span>
+<span class="fc" id="L61">        this.base = base;</span>
+<span class="fc" id="L62">        this.itemInitializer = itemInitializer;</span>
+<span class="fc" id="L63">    }</span>
 
     /**
      * This poorly named method, initializes items with local data after they are fetched. It is up to the implementer
@@ -60,28 +70,28 @@ public class PagedIterator&lt;T&gt; implements Iterator&lt;T&gt; {
      *            the page of items to be initialized
      */
     protected void wrapUp(T[] page) {
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (itemInitializer != null) {</span>
-<span class="fc bfc" id="L64" title="All 2 branches covered.">            for (T item : page) {</span>
-<span class="fc" id="L65">                itemInitializer.accept(item);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (itemInitializer != null) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            for (T item : page) {</span>
+<span class="fc" id="L75">                itemInitializer.accept(item);</span>
             }
         }
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L78">    }</span>
 
     /**
      * {@inheritDoc}
      */
     public boolean hasNext() {
-<span class="fc" id="L74">        fetch();</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        return currentPage.length &gt; nextItemIndex;</span>
+<span class="fc" id="L84">        fetch();</span>
+<span class="pc bpc" id="L85" title="1 of 4 branches missed.">        return (currentPage != null &amp;&amp; currentPage.length &gt; nextItemIndex);</span>
     }
 
     /**
      * {@inheritDoc}
      */
     public T next() {
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (!hasNext())</span>
-<span class="nc" id="L83">            throw new NoSuchElementException();</span>
-<span class="fc" id="L84">        return currentPage[nextItemIndex++];</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        if (!hasNext())</span>
+<span class="nc" id="L93">            throw new NoSuchElementException();</span>
+<span class="fc" id="L94">        return currentPage[nextItemIndex++];</span>
     }
 
     /**
@@ -103,14 +113,14 @@ public class PagedIterator&lt;T&gt; implements Iterator&lt;T&gt; {
      * &lt;/p&gt;
      */
     private void fetch() {
-<span class="fc bfc" id="L106" title="All 6 branches covered.">        if ((currentPage == null || currentPage.length &lt;= nextItemIndex) &amp;&amp; base.hasNext()) {</span>
+<span class="fc bfc" id="L116" title="All 6 branches covered.">        if ((currentPage == null || currentPage.length &lt;= nextItemIndex) &amp;&amp; base.hasNext()) {</span>
             // On first call, always get next page (may be empty array)
-<span class="fc" id="L108">            T[] result = Objects.requireNonNull(base.next());</span>
-<span class="fc" id="L109">            wrapUp(result);</span>
-<span class="fc" id="L110">            currentPage = result;</span>
-<span class="fc" id="L111">            nextItemIndex = 0;</span>
+<span class="fc" id="L118">            T[] result = Objects.requireNonNull(base.next());</span>
+<span class="fc" id="L119">            wrapUp(result);</span>
+<span class="fc" id="L120">            currentPage = result;</span>
+<span class="fc" id="L121">            nextItemIndex = 0;</span>
         }
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L123">    }</span>
 
     /**
      * Gets the next page worth of data.
@@ -118,7 +128,7 @@ public class PagedIterator&lt;T&gt; implements Iterator&lt;T&gt; {
      * @return the list
      */
     public List&lt;T&gt; nextPage() {
-<span class="fc" id="L121">        return Arrays.asList(nextPageArray());</span>
+<span class="fc" id="L131">        return Arrays.asList(nextPageArray());</span>
     }
 
     /**
@@ -130,20 +140,20 @@ public class PagedIterator&lt;T&gt; implements Iterator&lt;T&gt; {
     T[] nextPageArray() {
         // if we have not fetched any pages yet, always fetch.
         // If we have fetched at least one page, check hasNext()
-<span class="fc bfc" id="L133" title="All 2 branches covered.">        if (currentPage == null) {</span>
-<span class="fc" id="L134">            fetch();</span>
-<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        } else if (!hasNext()) {</span>
-<span class="nc" id="L136">            throw new NoSuchElementException();</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (currentPage == null) {</span>
+<span class="fc" id="L144">            fetch();</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">        } else if (!hasNext()) {</span>
+<span class="nc" id="L146">            throw new NoSuchElementException();</span>
         }
 
         // Current should never be null after fetch
-<span class="fc" id="L140">        Objects.requireNonNull(currentPage);</span>
-<span class="fc" id="L141">        T[] r = currentPage;</span>
-<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (nextItemIndex != 0) {</span>
-<span class="nc" id="L143">            r = Arrays.copyOfRange(r, nextItemIndex, r.length);</span>
+<span class="fc" id="L150">        Objects.requireNonNull(currentPage);</span>
+<span class="fc" id="L151">        T[] r = currentPage;</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        if (nextItemIndex != 0) {</span>
+<span class="nc" id="L153">            r = Arrays.copyOfRange(r, nextItemIndex, r.length);</span>
         }
-<span class="fc" id="L145">        nextItemIndex = currentPage.length;</span>
-<span class="fc" id="L146">        return r;</span>
+<span class="fc" id="L155">        nextItemIndex = currentPage.length;</span>
+<span class="fc" id="L156">        return r;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

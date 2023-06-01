@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCodeownersError.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCodeownersError.java</span></div><h1>GHCodeownersError.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+/**
+ * Represents an error in a {@code CODEOWNERS} file. See &lt;a href=
+ * &quot;https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners&quot;&gt;the
+ * relevant documentation&lt;/a&gt;.
+ *
+ * @author Michael Grant
+ */
+<span class="fc" id="L10">public class GHCodeownersError {</span>
+    private int line, column;
+
+    private String kind, source, suggestion, message, path;
+
+    /**
+     * Gets line.
+     *
+     * @return the line
+     */
+    public int getLine() {
+<span class="fc" id="L21">        return line;</span>
+    }
+
+    /**
+     * Gets column.
+     *
+     * @return the column
+     */
+    public int getColumn() {
+<span class="fc" id="L30">        return column;</span>
+    }
+
+    /**
+     * Gets kind.
+     *
+     * @return the kind
+     */
+    public String getKind() {
+<span class="fc" id="L39">        return kind;</span>
+    }
+
+    /**
+     * Gets source.
+     *
+     * @return the source
+     */
+    public String getSource() {
+<span class="fc" id="L48">        return source;</span>
+    }
+
+    /**
+     * Gets suggestion.
+     *
+     * @return the suggestion
+     */
+    public String getSuggestion() {
+<span class="fc" id="L57">        return suggestion;</span>
+    }
+
+    /**
+     * Gets message.
+     *
+     * @return the message
+     */
+    public String getMessage() {
+<span class="fc" id="L66">        return message;</span>
+    }
+
+    /**
+     * Gets path.
+     *
+     * @return the path
+     */
+    public String getPath() {
+<span class="fc" id="L75">        return path;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

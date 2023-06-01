@@ -7,6 +7,7 @@ import java.net.URL;
 
 import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Reaction to issue, comment, PR, and so on.
  *
@@ -14,7 +15,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  * @see Reactable
  */
 @Preview(SQUIRREL_GIRL)
-<span class="fc" id="L17">public class GHReaction extends GHObject {</span>
+<span class="fc" id="L18">public class GHReaction extends GHObject {</span>
 
     private GHUser user;
     private ReactionContent content;
@@ -25,7 +26,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the content
      */
     public ReactionContent getContent() {
-<span class="fc" id="L28">        return content;</span>
+<span class="fc" id="L29">        return content;</span>
     }
 
     /**
@@ -35,15 +36,17 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getUser() {
-<span class="fc" id="L38">        return user;</span>
+<span class="fc" id="L39">        return user;</span>
     }
 
     /**
      * Reaction has no HTML URL. Don't call this method.
+     *
+     * @return the html url
      */
     @Deprecated
     public URL getHtmlUrl() {
-<span class="nc" id="L46">        return null;</span>
+<span class="nc" id="L49">        return null;</span>
     }
 
     /**
@@ -51,9 +54,14 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *
      * @throws IOException
      *             the io exception
+     * @see &lt;a href=&quot;https://github.blog/changelog/2022-02-11-legacy-delete-reactions-rest-api-removed/&quot;&gt;Legacy Delete
+     *      reactions REST API removed&lt;/a&gt;
+     * @deprecated this API is no longer supported by GitHub, keeping it as is for old versions of GitHub Enterprise
      */
+    @Deprecated
     public void delete() throws IOException {
-<span class="fc" id="L56">        root().createRequest().method(&quot;DELETE&quot;).withPreview(SQUIRREL_GIRL).withUrlPath(&quot;/reactions/&quot; + getId()).send();</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L63">        throw new UnsupportedOperationException(</span>
+                &quot;This method is not supported anymore. Please use Reactable#deleteReaction(GHReaction).&quot;);
+    }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

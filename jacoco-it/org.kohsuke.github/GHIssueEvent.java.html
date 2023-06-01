@@ -4,12 +4,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHIssueEvent.
  *
- * @see &lt;a href=&quot;https://developer.github.com/v3/issues/events/&quot;&gt;Github documentation for issue events&lt;/a&gt;
- *
  * @author Martin van Zijl
+ * @see &lt;a href=&quot;https://developer.github.com/v3/issues/events/&quot;&gt;Github documentation for issue events&lt;/a&gt;
  */
 <span class="fc" id="L14">public class GHIssueEvent extends GitHubInteractiveObject {</span>
     private long id;
@@ -189,18 +189,30 @@ import java.util.Date;
 <span class="fc" id="L189">        return this.requestedReviewer;</span>
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param parent
+     *            the parent
+     * @return the GH issue event
+     */
     GHIssueEvent wrapUp(GHIssue parent) {
-<span class="fc" id="L193">        this.issue = parent;</span>
-<span class="fc" id="L194">        return this;</span>
+<span class="fc" id="L200">        this.issue = parent;</span>
+<span class="fc" id="L201">        return this;</span>
     }
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
-<span class="nc" id="L199">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
-<span class="nc" id="L200">                getIssue().getNumber(),</span>
-<span class="nc" id="L201">                getEvent(),</span>
-<span class="nc" id="L202">                getActor().getLogin(),</span>
-<span class="nc" id="L203">                getCreatedAt().toString());</span>
+<span class="nc" id="L211">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
+<span class="nc" id="L212">                getIssue().getNumber(),</span>
+<span class="nc" id="L213">                getEvent(),</span>
+<span class="nc" id="L214">                getActor().getLogin(),</span>
+<span class="nc" id="L215">                getCreatedAt().toString());</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHIssueCommentQueryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHIssueCommentQueryBuilder.java</span></div><h1>GHIssueCommentQueryBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.util.Date;
+
+// TODO: Auto-generated Javadoc
+/**
+ * Builds a query for listing comments on an issue.
+ * &lt;p&gt;
+ * Call various methods that set the filter criteria, then the {@link #list()} method to actually retrieve the comments.
+ *
+ * &lt;pre&gt;
+ * GHIssue issue = ...;
+ * for (GHIssueComment comment : issue.queryComments().since(x).list()) {
+ *     ...
+ * }
+ * &lt;/pre&gt;
+ *
+ * @author Yoann Rodiere
+ * @see GHIssue#queryComments() GHIssue#queryComments()
+ * @see &lt;a href=&quot;https://docs.github.com/en/rest/issues/comments#list-issue-comments&quot;&gt;List issue comments&lt;/a&gt;
+ */
+public class GHIssueCommentQueryBuilder {
+    private final Requester req;
+    private final GHIssue issue;
+
+    /**
+     * Instantiates a new GH issue comment query builder.
+     *
+     * @param issue
+     *            the issue
+     */
+<span class="fc" id="L32">    GHIssueCommentQueryBuilder(GHIssue issue) {</span>
+<span class="fc" id="L33">        this.issue = issue;</span>
+<span class="fc" id="L34">        this.req = issue.root().createRequest().withUrlPath(issue.getIssuesApiRoute() + &quot;/comments&quot;);</span>
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Only comments created/updated after this date will be returned.
+     *
+     * @param date
+     *            the date
+     * @return the query builder
+     */
+    public GHIssueCommentQueryBuilder since(Date date) {
+<span class="fc" id="L45">        req.with(&quot;since&quot;, GitHubClient.printDate(date));</span>
+<span class="fc" id="L46">        return this;</span>
+    }
+
+    /**
+     * Only comments created/updated after this timestamp will be returned.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the query builder
+     */
+    public GHIssueCommentQueryBuilder since(long timestamp) {
+<span class="fc" id="L57">        return since(new Date(timestamp));</span>
+    }
+
+    /**
+     * Lists up the comments with the criteria added so far.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHIssueComment&gt; list() {
+<span class="fc" id="L66">        return req.toIterable(GHIssueComment[].class, item -&gt; item.wrapUp(issue));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -4,22 +4,35 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Creates a team.
  *
  * https://developer.github.com/v3/teams/#create-team
  */
 public class GHTeamBuilder extends GitHubInteractiveObject {
+
+    /** The builder. */
     protected final Requester builder;
     private final String orgName;
 
+    /**
+     * Instantiates a new GH team builder.
+     *
+     * @param root
+     *            the root
+     * @param orgName
+     *            the org name
+     * @param name
+     *            the name
+     */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
     public GHTeamBuilder(GitHub root, String orgName, String name) {
-<span class="fc" id="L18">        super(root);</span>
-<span class="fc" id="L19">        this.orgName = orgName;</span>
-<span class="fc" id="L20">        this.builder = root.createRequest();</span>
-<span class="fc" id="L21">        this.builder.with(&quot;name&quot;, name);</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L31">        super(root);</span>
+<span class="fc" id="L32">        this.orgName = orgName;</span>
+<span class="fc" id="L33">        this.builder = root.createRequest();</span>
+<span class="fc" id="L34">        this.builder.with(&quot;name&quot;, name);</span>
+<span class="fc" id="L35">    }</span>
 
     /**
      * Description for this team.
@@ -29,8 +42,8 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
      * @return a builder to continue with building
      */
     public GHTeamBuilder description(String description) {
-<span class="fc" id="L32">        this.builder.with(&quot;description&quot;, description);</span>
-<span class="fc" id="L33">        return this;</span>
+<span class="fc" id="L45">        this.builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L46">        return this;</span>
     }
 
     /**
@@ -41,8 +54,8 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
      * @return a builder to continue with building
      */
     public GHTeamBuilder maintainers(String... maintainers) {
-<span class="fc" id="L44">        this.builder.with(&quot;maintainers&quot;, maintainers);</span>
-<span class="fc" id="L45">        return this;</span>
+<span class="fc" id="L57">        this.builder.with(&quot;maintainers&quot;, maintainers);</span>
+<span class="fc" id="L58">        return this;</span>
     }
 
     /**
@@ -53,32 +66,32 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
      * @return a builder to continue with building
      */
     public GHTeamBuilder repositories(String... repoNames) {
-<span class="fc" id="L56">        this.builder.with(&quot;repo_names&quot;, repoNames);</span>
-<span class="fc" id="L57">        return this;</span>
+<span class="fc" id="L69">        this.builder.with(&quot;repo_names&quot;, repoNames);</span>
+<span class="fc" id="L70">        return this;</span>
     }
 
     /**
-     * Description for this team
+     * Description for this team.
      *
      * @param privacy
      *            privacy of team
      * @return a builder to continue with building
      */
     public GHTeamBuilder privacy(GHTeam.Privacy privacy) {
-<span class="fc" id="L68">        this.builder.with(&quot;privacy&quot;, privacy);</span>
-<span class="fc" id="L69">        return this;</span>
+<span class="fc" id="L81">        this.builder.with(&quot;privacy&quot;, privacy);</span>
+<span class="fc" id="L82">        return this;</span>
     }
 
     /**
-     * Parent team id for this team
+     * Parent team id for this team.
      *
      * @param parentTeamId
      *            parentTeamId of team
      * @return a builder to continue with building
      */
     public GHTeamBuilder parentTeamId(long parentTeamId) {
-<span class="fc" id="L80">        this.builder.with(&quot;parent_team_id&quot;, parentTeamId);</span>
-<span class="fc" id="L81">        return this;</span>
+<span class="fc" id="L93">        this.builder.with(&quot;parent_team_id&quot;, parentTeamId);</span>
+<span class="fc" id="L94">        return this;</span>
     }
 
     /**
@@ -89,7 +102,7 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
      *             if team cannot be created
      */
     public GHTeam create() throws IOException {
-<span class="fc" id="L92">        return builder.method(&quot;POST&quot;).withUrlPath(&quot;/orgs/&quot; + orgName + &quot;/teams&quot;).fetch(GHTeam.class).wrapUp(root());</span>
+<span class="fc" id="L105">        return builder.method(&quot;POST&quot;).withUrlPath(&quot;/orgs/&quot; + orgName + &quot;/teams&quot;).fetch(GHTeam.class).wrapUp(root());</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

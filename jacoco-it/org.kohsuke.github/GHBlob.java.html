@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Base64;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHBlob.
  *
@@ -14,7 +15,7 @@ import java.util.Base64;
  * @see GHRepository#getBlob(String) GHRepository#getBlob(String)
  * @see &lt;a href=&quot;https://developer.github.com/v3/git/blobs/#get-a-blob&quot;&gt;Get a blob&lt;/a&gt;
  */
-<span class="fc" id="L17">public class GHBlob {</span>
+<span class="fc" id="L18">public class GHBlob {</span>
     private String content, encoding, url, sha;
     private long size;
 
@@ -24,7 +25,7 @@ import java.util.Base64;
      * @return API URL of this blob.
      */
     public URL getUrl() {
-<span class="fc" id="L27">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L28">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -33,7 +34,7 @@ import java.util.Base64;
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L36">        return sha;</span>
+<span class="fc" id="L37">        return sha;</span>
     }
 
     /**
@@ -42,7 +43,7 @@ import java.util.Base64;
      * @return Number of bytes in this blob.
      */
     public long getSize() {
-<span class="fc" id="L45">        return size;</span>
+<span class="fc" id="L46">        return size;</span>
     }
 
     /**
@@ -51,7 +52,7 @@ import java.util.Base64;
      * @return the encoding
      */
     public String getEncoding() {
-<span class="nc" id="L54">        return encoding;</span>
+<span class="nc" id="L55">        return encoding;</span>
     }
 
     /**
@@ -60,7 +61,7 @@ import java.util.Base64;
      * @return Encoded content. You probably want {@link #read()}
      */
     public String getContent() {
-<span class="nc" id="L63">        return content;</span>
+<span class="nc" id="L64">        return content;</span>
     }
 
     /**
@@ -69,16 +70,16 @@ import java.util.Base64;
      * @return the actual bytes of the blob.
      */
     public InputStream read() {
-<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
             try {
-<span class="fc" id="L74">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
-<span class="fc" id="L75">                return new ByteArrayInputStream(decoder.decode(content));</span>
-<span class="nc" id="L76">            } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L77">                throw new AssertionError(e); // US-ASCII is mandatory</span>
+<span class="fc" id="L75">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
+<span class="fc" id="L76">                return new ByteArrayInputStream(decoder.decode(content));</span>
+<span class="nc" id="L77">            } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L78">                throw new AssertionError(e); // US-ASCII is mandatory</span>
             }
         }
 
-<span class="nc" id="L81">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
+<span class="nc" id="L82">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

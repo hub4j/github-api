@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Pluggable strategy to determine what to do when the API abuse limit is hit.
  *
@@ -19,7 +20,7 @@ import javax.annotation.Nonnull;
  * @deprecated Switch to {@link GitHubAbuseLimitHandler}.
  */
 @Deprecated
-<span class="fc" id="L22">public abstract class AbuseLimitHandler extends GitHubAbuseLimitHandler {</span>
+<span class="fc" id="L23">public abstract class AbuseLimitHandler extends GitHubAbuseLimitHandler {</span>
 
     /**
      * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
@@ -40,12 +41,12 @@ import javax.annotation.Nonnull;
      *
      */
     public void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc" id="L43">        GHIOException e = new HttpException(&quot;Abuse limit reached&quot;,</span>
-<span class="fc" id="L44">                connectorResponse.statusCode(),</span>
-<span class="fc" id="L45">                connectorResponse.header(&quot;Status&quot;),</span>
-<span class="fc" id="L46">                connectorResponse.request().url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());</span>
-<span class="fc" id="L47">        onError(e, connectorResponse.toHttpURLConnection());</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L44">        GHIOException e = new HttpException(&quot;Abuse limit reached&quot;,</span>
+<span class="fc" id="L45">                connectorResponse.statusCode(),</span>
+<span class="fc" id="L46">                connectorResponse.header(&quot;Status&quot;),</span>
+<span class="fc" id="L47">                connectorResponse.request().url().toString()).withResponseHeaderFields(connectorResponse.allHeaders());</span>
+<span class="fc" id="L48">        onError(e, connectorResponse.toHttpURLConnection());</span>
+<span class="fc" id="L49">    }</span>
 
     /**
      * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
@@ -75,22 +76,22 @@ import javax.annotation.Nonnull;
      * Wait until the API abuse &quot;wait time&quot; is passed.
      */
     @Deprecated
-<span class="fc" id="L78">    public static final AbuseLimitHandler WAIT = new AbuseLimitHandler() {</span>
+<span class="fc" id="L79">    public static final AbuseLimitHandler WAIT = new AbuseLimitHandler() {</span>
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
             try {
-<span class="fc" id="L82">                Thread.sleep(parseWaitTime(uc));</span>
-<span class="nc" id="L83">            } catch (InterruptedException ex) {</span>
-<span class="nc" id="L84">                throw (InterruptedIOException) new InterruptedIOException().initCause(e);</span>
-<span class="fc" id="L85">            }</span>
-<span class="fc" id="L86">        }</span>
+<span class="fc" id="L83">                Thread.sleep(parseWaitTime(uc));</span>
+<span class="nc" id="L84">            } catch (InterruptedException ex) {</span>
+<span class="nc" id="L85">                throw (InterruptedIOException) new InterruptedIOException().initCause(e);</span>
+<span class="fc" id="L86">            }</span>
+<span class="fc" id="L87">        }</span>
 
         private long parseWaitTime(HttpURLConnection uc) {
-<span class="fc" id="L89">            String v = uc.getHeaderField(&quot;Retry-After&quot;);</span>
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (v == null)</span>
-<span class="nc" id="L91">                return 60 * 1000; // can't tell, return 1 min</span>
+<span class="fc" id="L90">            String v = uc.getHeaderField(&quot;Retry-After&quot;);</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">            if (v == null)</span>
+<span class="nc" id="L92">                return 60 * 1000; // can't tell, return 1 min</span>
 
-<span class="fc" id="L93">            return Math.max(1000, Long.parseLong(v) * 1000);</span>
+<span class="fc" id="L94">            return Math.max(1000, Long.parseLong(v) * 1000);</span>
         }
     };
 
@@ -98,11 +99,11 @@ import javax.annotation.Nonnull;
      * Fail immediately.
      */
     @Deprecated
-<span class="fc" id="L101">    public static final AbuseLimitHandler FAIL = new AbuseLimitHandler() {</span>
+<span class="fc" id="L102">    public static final AbuseLimitHandler FAIL = new AbuseLimitHandler() {</span>
         @Override
         public void onError(IOException e, HttpURLConnection uc) throws IOException {
-<span class="fc" id="L104">            throw e;</span>
+<span class="fc" id="L105">            throw e;</span>
         }
     };
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHWorkflowRunQueryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHWorkflowRunQueryBuilder.java</span></div><h1>GHWorkflowRunQueryBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import org.kohsuke.github.GHWorkflowRun.Conclusion;
 import org.kohsuke.github.GHWorkflowRun.Status;
 
+// TODO: Auto-generated Javadoc
 /**
  * Lists up workflow runs with some filtering and sorting.
  *
@@ -11,10 +13,16 @@ import org.kohsuke.github.GHWorkflowRun.Status;
 public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&gt; {
     private final GHRepository repo;
 
+    /**
+     * Instantiates a new GH workflow run query builder.
+     *
+     * @param repo
+     *            the repo
+     */
     GHWorkflowRunQueryBuilder(GHRepository repo) {
-<span class="fc" id="L15">        super(repo.root());</span>
-<span class="fc" id="L16">        this.repo = repo;</span>
-<span class="fc" id="L17">    }</span>
+<span class="fc" id="L23">        super(repo.root());</span>
+<span class="fc" id="L24">        this.repo = repo;</span>
+<span class="fc" id="L25">    }</span>
 
     /**
      * Actor workflow run query builder.
@@ -24,8 +32,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder actor(String actor) {
-<span class="nc" id="L27">        req.with(&quot;actor&quot;, actor);</span>
-<span class="nc" id="L28">        return this;</span>
+<span class="nc" id="L35">        req.with(&quot;actor&quot;, actor);</span>
+<span class="nc" id="L36">        return this;</span>
     }
 
     /**
@@ -36,8 +44,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder actor(GHUser actor) {
-<span class="nc" id="L39">        req.with(&quot;actor&quot;, actor.getLogin());</span>
-<span class="nc" id="L40">        return this;</span>
+<span class="nc" id="L47">        req.with(&quot;actor&quot;, actor.getLogin());</span>
+<span class="nc" id="L48">        return this;</span>
     }
 
     /**
@@ -48,8 +56,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder branch(String branch) {
-<span class="fc" id="L51">        req.with(&quot;branch&quot;, branch);</span>
-<span class="fc" id="L52">        return this;</span>
+<span class="fc" id="L59">        req.with(&quot;branch&quot;, branch);</span>
+<span class="fc" id="L60">        return this;</span>
     }
 
     /**
@@ -60,8 +68,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder event(GHEvent event) {
-<span class="fc" id="L63">        req.with(&quot;event&quot;, event.symbol());</span>
-<span class="fc" id="L64">        return this;</span>
+<span class="fc" id="L71">        req.with(&quot;event&quot;, event.symbol());</span>
+<span class="fc" id="L72">        return this;</span>
     }
 
     /**
@@ -72,8 +80,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder event(String event) {
-<span class="nc" id="L75">        req.with(&quot;event&quot;, event);</span>
-<span class="nc" id="L76">        return this;</span>
+<span class="nc" id="L83">        req.with(&quot;event&quot;, event);</span>
+<span class="nc" id="L84">        return this;</span>
     }
 
     /**
@@ -84,13 +92,32 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder status(Status status) {
-<span class="fc" id="L87">        req.with(&quot;status&quot;, status.toString());</span>
-<span class="fc" id="L88">        return this;</span>
+<span class="fc" id="L95">        req.with(&quot;status&quot;, status.toString());</span>
+<span class="fc" id="L96">        return this;</span>
     }
 
+    /**
+     * Conclusion workflow run query builder.
+     * &lt;p&gt;
+     * The GitHub API is also using the status field to search by conclusion.
+     *
+     * @param conclusion
+     *            the conclusion
+     * @return the gh workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder conclusion(Conclusion conclusion) {
+<span class="fc" id="L109">        req.with(&quot;status&quot;, conclusion.toString());</span>
+<span class="fc" id="L110">        return this;</span>
+    }
+
+    /**
+     * List.
+     *
+     * @return the paged iterable
+     */
     @Override
     public PagedIterable&lt;GHWorkflowRun&gt; list() {
-<span class="fc" id="L93">        return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl(&quot;actions/runs&quot;)));</span>
+<span class="fc" id="L120">        return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl(&quot;actions/runs&quot;)));</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

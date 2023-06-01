@@ -7,6 +7,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Objects;
 
+// TODO: Auto-generated Javadoc
 /**
  * Defines a base class that all classes in this library that interact with GitHub inherit from.
  *
@@ -21,13 +22,22 @@ abstract class GitHubInteractiveObject {
     @CheckForNull
     private transient final GitHub root;
 
-<span class="fc" id="L24">    GitHubInteractiveObject() {</span>
-<span class="fc" id="L25">        root = null;</span>
-<span class="fc" id="L26">    }</span>
-
-<span class="fc" id="L28">    GitHubInteractiveObject(GitHub root) {</span>
-<span class="fc" id="L29">        this.root = root;</span>
+    /**
+     * Instantiates a new git hub interactive object.
+     */
+<span class="fc" id="L28">    GitHubInteractiveObject() {</span>
+<span class="fc" id="L29">        root = null;</span>
 <span class="fc" id="L30">    }</span>
+
+    /**
+     * Instantiates a new git hub interactive object.
+     *
+     * @param root
+     *            the root
+     */
+<span class="fc" id="L38">    GitHubInteractiveObject(GitHub root) {</span>
+<span class="fc" id="L39">        this.root = root;</span>
+<span class="fc" id="L40">    }</span>
 
     /**
      * Get the root {@link GitHub} instance for this object.
@@ -39,7 +49,7 @@ abstract class GitHubInteractiveObject {
     @Deprecated
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GitHub getRoot() {
-<span class="fc" id="L42">        return root();</span>
+<span class="fc" id="L52">        return root();</span>
     }
 
     /**
@@ -49,7 +59,7 @@ abstract class GitHubInteractiveObject {
      */
     @NonNull
     GitHub root() {
-<span class="fc" id="L52">        return Objects.requireNonNull(root,</span>
+<span class="fc" id="L62">        return Objects.requireNonNull(root,</span>
                 &quot;The root GitHub reference for this instance is null. Probably caused by deserializing this class without using a GitHub instance. If you must do this, use the MappingObjectReader from GitHub.getMappingObjectReader().&quot;);
     }
 
@@ -59,7 +69,7 @@ abstract class GitHubInteractiveObject {
      * @return true if GitHub instance is null or offline.
      */
     boolean isOffline() {
-<span class="fc bfc" id="L62" title="All 4 branches covered.">        return root == null || root.isOffline();</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">        return root == null || root.isOffline();</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

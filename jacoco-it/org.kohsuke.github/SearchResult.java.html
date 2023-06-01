@@ -2,21 +2,31 @@
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+// TODO: Auto-generated Javadoc
 /**
- * Represents the result of a search
+ * Represents the result of a search.
  *
  * @author Kohsuke Kawaguchi
+ * @param &lt;T&gt;
+ *            the generic type
  */
-<span class="fc" id="L10">abstract class SearchResult&lt;T&gt; {</span>
+<span class="fc" id="L13">abstract class SearchResult&lt;T&gt; {</span>
+
+    /** The total count. */
     @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
     int total_count;
 
+    /** The incomplete results. */
     @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
     boolean incomplete_results;
 
     /**
      * Wraps up the retrieved object and return them. Only called once.
+     *
+     * @param root
+     *            the root
+     * @return the items
      */
     abstract T[] getItems(GitHub root);
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

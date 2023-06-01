@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHTeam.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHTeam.java</span></div><h1>GHTeam.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
 
+import static org.kohsuke.github.GitHubRequest.transformEnum;
+
+// TODO: Auto-generated Javadoc
 /**
  * A team in GitHub organization.
  *
  * @author Kohsuke Kawaguchi
  */
-<span class="fc" id="L19">public class GHTeam extends GHObject implements Refreshable {</span>
+<span class="fc" id="L24">public class GHTeam extends GHObject implements Refreshable {</span>
     private String html_url;
     private String name;
     private String permission;
@@ -26,33 +31,53 @@ import javax.annotation.Nonnull;
 
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
-<span class="fc" id="L29">    public enum Privacy {</span>
-<span class="fc" id="L30">        SECRET, // only visible to organization owners and members of this team.</span>
-<span class="fc" id="L31">        CLOSED // visible to all members of this organization.</span>
+    /**
+     * The Enum Privacy.
+     */
+<span class="fc" id="L37">    public enum Privacy {</span>
+
+        /** The secret. */
+<span class="fc" id="L40">        SECRET,</span>
+        /** The closed. */
+        // only visible to organization owners and members of this team.
+<span class="fc" id="L43">        CLOSED // visible to all members of this organization.</span>
     }
 
     /**
-     * Member's role in a team
+     * Member's role in a team.
      */
-<span class="fc" id="L37">    public enum Role {</span>
-        /**
-         * A normal member of the team
-         */
-<span class="fc" id="L41">        MEMBER,</span>
+<span class="fc" id="L49">    public enum Role {</span>
+
+        /** A normal member of the team. */
+<span class="fc" id="L52">        MEMBER,</span>
         /**
          * Able to add/remove other team members, promote other team members to team maintainer, and edit the team's
          * name and description.
          */
-<span class="fc" id="L46">        MAINTAINER</span>
+<span class="fc" id="L57">        MAINTAINER</span>
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH team
+     */
     GHTeam wrapUp(GHOrganization owner) {
-<span class="fc" id="L50">        this.organization = owner;</span>
-<span class="fc" id="L51">        return this;</span>
+<span class="fc" id="L68">        this.organization = owner;</span>
+<span class="fc" id="L69">        return this;</span>
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param root
+     *            the root
+     * @return the GH team
+     */
     GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
-<span class="fc" id="L55">        return wrapUp(organization);</span>
+<span class="fc" id="L80">        return wrapUp(organization);</span>
     }
 
     /**
@@ -61,7 +86,7 @@ import javax.annotation.Nonnull;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L64">        return name;</span>
+<span class="fc" id="L89">        return name;</span>
     }
 
     /**
@@ -70,7 +95,7 @@ import javax.annotation.Nonnull;
      * @return the permission
      */
     public String getPermission() {
-<span class="fc" id="L73">        return permission;</span>
+<span class="fc" id="L98">        return permission;</span>
     }
 
     /**
@@ -79,7 +104,7 @@ import javax.annotation.Nonnull;
      * @return the slug
      */
     public String getSlug() {
-<span class="fc" id="L82">        return slug;</span>
+<span class="fc" id="L107">        return slug;</span>
     }
 
     /**
@@ -88,7 +113,7 @@ import javax.annotation.Nonnull;
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L91">        return description;</span>
+<span class="fc" id="L116">        return description;</span>
     }
 
     /**
@@ -97,7 +122,7 @@ import javax.annotation.Nonnull;
      * @return the privacy state.
      */
     public Privacy getPrivacy() {
-<span class="fc" id="L100">        return privacy;</span>
+<span class="fc" id="L125">        return privacy;</span>
     }
 
     /**
@@ -109,8 +134,8 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void setDescription(String description) throws IOException {
-<span class="fc" id="L112">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;description&quot;, description).withUrlPath(api(&quot;&quot;)).send();</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L137">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;description&quot;, description).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="fc" id="L138">    }</span>
 
     /**
      * Updates the team's privacy setting.
@@ -121,8 +146,8 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void setPrivacy(Privacy privacy) throws IOException {
-<span class="fc" id="L124">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;privacy&quot;, privacy).withUrlPath(api(&quot;&quot;)).send();</span>
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L149">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;privacy&quot;, privacy).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="fc" id="L150">    }</span>
 
     /**
      * Retrieves the discussions.
@@ -133,7 +158,7 @@ import javax.annotation.Nonnull;
      */
     @Nonnull
     public PagedIterable&lt;GHDiscussion&gt; listDiscussions() throws IOException {
-<span class="fc" id="L136">        return GHDiscussion.readAll(this);</span>
+<span class="fc" id="L161">        return GHDiscussion.readAll(this);</span>
     }
 
     /**
@@ -146,7 +171,20 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listMembers(String role) throws IOException {
-<span class="fc" id="L149">        return root().createRequest().withUrlPath(api(&quot;/members&quot;)).with(&quot;role&quot;, role).toIterable(GHUser[].class, null);</span>
+<span class="fc" id="L174">        return root().createRequest().withUrlPath(api(&quot;/members&quot;)).with(&quot;role&quot;, role).toIterable(GHUser[].class, null);</span>
+    }
+
+    /**
+     * List members with specified role paged iterable.
+     *
+     * @param role
+     *            the role
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHUser&gt; listMembers(Role role) throws IOException {
+<span class="fc" id="L187">        return listMembers(transformEnum(role));</span>
     }
 
     /**
@@ -155,16 +193,13 @@ import javax.annotation.Nonnull;
      * @param discussionNumber
      *            id of the discussion that we want to query for
      * @return the discussion
-     * @throws java.io.FileNotFoundException
-     *             if the discussion does not exist
      * @throws IOException
      *             the io exception
-     *
      * @see &lt;a href= &quot;https://developer.github.com/v3/teams/discussions/#get-a-discussion&quot;&gt;documentation&lt;/a&gt;
      */
     @Nonnull
     public GHDiscussion getDiscussion(long discussionNumber) throws IOException {
-<span class="fc" id="L167">        return GHDiscussion.read(this, discussionNumber);</span>
+<span class="fc" id="L202">        return GHDiscussion.read(this, discussionNumber);</span>
     }
 
     /**
@@ -175,7 +210,7 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listMembers() throws IOException {
-<span class="fc" id="L178">        return listMembers(&quot;all&quot;);</span>
+<span class="fc" id="L213">        return listMembers(&quot;all&quot;);</span>
     }
 
     /**
@@ -186,9 +221,9 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public PagedIterable&lt;GHTeam&gt; listChildTeams() throws IOException {
-<span class="fc" id="L189">        return root().createRequest()</span>
-<span class="fc" id="L190">                .withUrlPath(api(&quot;/teams&quot;))</span>
-<span class="fc" id="L191">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this.organization));</span>
+<span class="fc" id="L224">        return root().createRequest()</span>
+<span class="fc" id="L225">                .withUrlPath(api(&quot;/teams&quot;))</span>
+<span class="fc" id="L226">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this.organization));</span>
     }
 
     /**
@@ -199,7 +234,7 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public Set&lt;GHUser&gt; getMembers() throws IOException {
-<span class="fc" id="L202">        return listMembers().toSet();</span>
+<span class="fc" id="L237">        return listMembers().toSet();</span>
     }
 
     /**
@@ -211,10 +246,10 @@ import javax.annotation.Nonnull;
      */
     public boolean hasMember(GHUser user) {
         try {
-<span class="fc" id="L214">            root().createRequest().withUrlPath(&quot;/teams/&quot; + getId() + &quot;/members/&quot; + user.getLogin()).send();</span>
-<span class="fc" id="L215">            return true;</span>
-<span class="fc" id="L216">        } catch (IOException ignore) {</span>
-<span class="fc" id="L217">            return false;</span>
+<span class="fc" id="L249">            root().createRequest().withUrlPath(api(&quot;/memberships/&quot; + user.getLogin())).send();</span>
+<span class="fc" id="L250">            return true;</span>
+<span class="fc" id="L251">        } catch (@SuppressWarnings(&quot;unused&quot;) IOException ignore) {</span>
+<span class="fc" id="L252">            return false;</span>
         }
     }
 
@@ -226,11 +261,11 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public Map&lt;String, GHRepository&gt; getRepositories() throws IOException {
-<span class="fc" id="L229">        Map&lt;String, GHRepository&gt; m = new TreeMap&lt;String, GHRepository&gt;();</span>
-<span class="fc bfc" id="L230" title="All 2 branches covered.">        for (GHRepository r : listRepositories()) {</span>
-<span class="fc" id="L231">            m.put(r.getName(), r);</span>
-<span class="fc" id="L232">        }</span>
-<span class="fc" id="L233">        return m;</span>
+<span class="fc" id="L264">        Map&lt;String, GHRepository&gt; m = new TreeMap&lt;&gt;();</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        for (GHRepository r : listRepositories()) {</span>
+<span class="fc" id="L266">            m.put(r.getName(), r);</span>
+<span class="fc" id="L267">        }</span>
+<span class="fc" id="L268">        return m;</span>
     }
 
     /**
@@ -239,7 +274,7 @@ import javax.annotation.Nonnull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories() {
-<span class="fc" id="L242">        return root().createRequest().withUrlPath(api(&quot;/repos&quot;)).toIterable(GHRepository[].class, null);</span>
+<span class="fc" id="L277">        return root().createRequest().withUrlPath(api(&quot;/repos&quot;)).toIterable(GHRepository[].class, null);</span>
     }
 
     /**
@@ -254,8 +289,8 @@ import javax.annotation.Nonnull;
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-<span class="nc" id="L257">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
-<span class="nc" id="L258">    }</span>
+<span class="nc" id="L292">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
+<span class="nc" id="L293">    }</span>
 
     /**
      * Adds a member to the team
@@ -270,12 +305,12 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void add(GHUser user, Role role) throws IOException {
-<span class="nc" id="L273">        root().createRequest()</span>
-<span class="nc" id="L274">                .method(&quot;PUT&quot;)</span>
-<span class="nc" id="L275">                .with(&quot;role&quot;, role)</span>
-<span class="nc" id="L276">                .withUrlPath(api(&quot;/memberships/&quot; + user.getLogin()))</span>
-<span class="nc" id="L277">                .send();</span>
-<span class="nc" id="L278">    }</span>
+<span class="fc" id="L308">        root().createRequest()</span>
+<span class="fc" id="L309">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L310">                .with(&quot;role&quot;, role)</span>
+<span class="fc" id="L311">                .withUrlPath(api(&quot;/memberships/&quot; + user.getLogin()))</span>
+<span class="fc" id="L312">                .send();</span>
+<span class="fc" id="L313">    }</span>
 
     /**
      * Removes a member to the team.
@@ -286,8 +321,8 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void remove(GHUser u) throws IOException {
-<span class="nc" id="L289">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/members/&quot; + u.getLogin())).send();</span>
-<span class="nc" id="L290">    }</span>
+<span class="fc" id="L324">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
+<span class="fc" id="L325">    }</span>
 
     /**
      * Add.
@@ -298,8 +333,24 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void add(GHRepository r) throws IOException {
-<span class="nc" id="L301">        add(r, null);</span>
-<span class="nc" id="L302">    }</span>
+<span class="fc" id="L336">        add(r, (GHOrganization.RepositoryRole) null);</span>
+<span class="fc" id="L337">    }</span>
+
+    /**
+     * * Add.
+     *
+     * @param r
+     *            the r
+     * @param permission
+     *            the permission
+     * @throws IOException
+     *             the io exception
+     * @deprecated use {@link GHTeam#add(GHRepository, org.kohsuke.github.GHOrganization.RepositoryRole)}
+     */
+    @Deprecated
+    public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
+<span class="fc" id="L352">        add(r, GHOrganization.RepositoryRole.from(permission));</span>
+<span class="fc" id="L353">    }</span>
 
     /**
      * Add.
@@ -311,13 +362,14 @@ import javax.annotation.Nonnull;
      * @throws IOException
      *             the io exception
      */
-    public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-<span class="nc" id="L315">        root().createRequest()</span>
-<span class="nc" id="L316">                .method(&quot;PUT&quot;)</span>
-<span class="nc" id="L317">                .with(&quot;permission&quot;, permission)</span>
-<span class="nc" id="L318">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
-<span class="nc" id="L319">                .send();</span>
-<span class="nc" id="L320">    }</span>
+    public void add(GHRepository r, GHOrganization.RepositoryRole permission) throws IOException {
+<span class="fc" id="L366">        root().createRequest()</span>
+<span class="fc" id="L367">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L368">                .with(&quot;permission&quot;,</span>
+<span class="fc" id="L369">                        Optional.ofNullable(permission).map(GHOrganization.RepositoryRole::toString).orElse(null))</span>
+<span class="fc" id="L370">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
+<span class="fc" id="L371">                .send();</span>
+<span class="fc" id="L372">    }</span>
 
     /**
      * Remove.
@@ -328,11 +380,11 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void remove(GHRepository r) throws IOException {
-<span class="nc" id="L331">        root().createRequest()</span>
-<span class="nc" id="L332">                .method(&quot;DELETE&quot;)</span>
-<span class="nc" id="L333">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
-<span class="nc" id="L334">                .send();</span>
-<span class="nc" id="L335">    }</span>
+<span class="nc" id="L383">        root().createRequest()</span>
+<span class="nc" id="L384">                .method(&quot;DELETE&quot;)</span>
+<span class="nc" id="L385">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
+<span class="nc" id="L386">                .send();</span>
+<span class="nc" id="L387">    }</span>
 
     /**
      * Deletes this team.
@@ -341,11 +393,17 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="nc" id="L344">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;&quot;)).send();</span>
-<span class="nc" id="L345">    }</span>
+<span class="nc" id="L396">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="nc" id="L397">    }</span>
 
     private String api(String tail) {
-<span class="fc" id="L348">        return &quot;/teams/&quot; + getId() + tail;</span>
+<span class="fc bfc" id="L400" title="All 2 branches covered.">        if (organization == null) {</span>
+            // Teams returned from pull requests to do not have an organization. Attempt to use url.
+<span class="fc" id="L402">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="fc" id="L403">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;) + tail;</span>
+        }
+
+<span class="fc" id="L406">        return &quot;/organizations/&quot; + organization.getId() + &quot;/team/&quot; + getId() + tail;</span>
     }
 
     /**
@@ -360,7 +418,7 @@ import javax.annotation.Nonnull;
      *             the io exception
      */
     public GHDiscussion.Creator createDiscussion(String title) throws IOException {
-<span class="fc" id="L363">        return GHDiscussion.create(this).title(title);</span>
+<span class="fc" id="L421">        return GHDiscussion.create(this).title(title);</span>
     }
 
     /**
@@ -372,37 +430,60 @@ import javax.annotation.Nonnull;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHOrganization getOrganization() throws IOException {
-<span class="fc" id="L375">        refresh(organization);</span>
-<span class="fc" id="L376">        return organization;</span>
+<span class="fc" id="L433">        refresh(organization);</span>
+<span class="fc" id="L434">        return organization;</span>
     }
 
+    /**
+     * Refresh.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Override
     public void refresh() throws IOException {
-<span class="fc" id="L381">        root().createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root());</span>
-<span class="fc" id="L382">    }</span>
+<span class="fc" id="L445">        root().createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root());</span>
+<span class="fc" id="L446">    }</span>
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     @Override
     public URL getHtmlUrl() {
-<span class="fc" id="L386">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L455">        return GitHubClient.parseURL(html_url);</span>
     }
 
+    /**
+     * Equals.
+     *
+     * @param o
+     *            the o
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object o) {
-<span class="fc bfc" id="L391" title="All 2 branches covered.">        if (this == o) {</span>
-<span class="fc" id="L392">            return true;</span>
+<span class="fc bfc" id="L467" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L468">            return true;</span>
         }
-<span class="pc bpc" id="L394" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
-<span class="nc" id="L395">            return false;</span>
+<span class="pc bpc" id="L470" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L471">            return false;</span>
         }
-<span class="fc" id="L397">        GHTeam ghTeam = (GHTeam) o;</span>
-<span class="pc bpc" id="L398" title="2 of 4 branches missed.">        return Objects.equals(name, ghTeam.name) &amp;&amp; Objects.equals(getUrl(), ghTeam.getUrl())</span>
-<span class="pc bpc" id="L399" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(permission, ghTeam.permission) &amp;&amp; Objects.equals(slug, ghTeam.slug)</span>
-<span class="pc bpc" id="L400" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(description, ghTeam.description) &amp;&amp; privacy == ghTeam.privacy;</span>
+<span class="fc" id="L473">        GHTeam ghTeam = (GHTeam) o;</span>
+<span class="pc bpc" id="L474" title="2 of 4 branches missed.">        return Objects.equals(name, ghTeam.name) &amp;&amp; Objects.equals(getUrl(), ghTeam.getUrl())</span>
+<span class="pc bpc" id="L475" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(permission, ghTeam.permission) &amp;&amp; Objects.equals(slug, ghTeam.slug)</span>
+<span class="pc bpc" id="L476" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(description, ghTeam.description) &amp;&amp; privacy == ghTeam.privacy;</span>
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
-<span class="fc" id="L405">        return Objects.hash(name, getUrl(), permission, slug, description, privacy);</span>
+<span class="fc" id="L486">        return Objects.hash(name, getUrl(), permission, slug, description, privacy);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -2,20 +2,27 @@
 
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * App installation repository selection.
  *
  * @author Paulo Miguel Almeida
  * @see GHAppInstallation
  */
-<span class="fc" id="L11">public enum GHRepositorySelection {</span>
-<span class="fc" id="L12">    SELECTED, ALL;</span>
+<span class="fc" id="L12">public enum GHRepositorySelection {</span>
+
+    /** The selected. */
+<span class="fc" id="L15">    SELECTED,</span>
+    /** The all. */
+<span class="fc" id="L17">    ALL;</span>
 
     /**
      * Returns GitHub's internal representation of this event.
+     *
+     * @return the string
      */
     String symbol() {
-<span class="nc" id="L18">        return name().toLowerCase(Locale.ENGLISH);</span>
+<span class="nc" id="L25">        return name().toLowerCase(Locale.ENGLISH);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

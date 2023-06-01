@@ -3,6 +3,7 @@
 import java.util.Date;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHRepositoryTraffic.
  */
@@ -10,20 +11,41 @@ public abstract class GHRepositoryTraffic implements TrafficInfo {
     private int count;
     private int uniques;
 
-<span class="fc" id="L13">    GHRepositoryTraffic() {</span>
-<span class="fc" id="L14">    }</span>
+    /**
+     * Instantiates a new GH repository traffic.
+     */
+<span class="fc" id="L17">    GHRepositoryTraffic() {</span>
+<span class="fc" id="L18">    }</span>
 
-<span class="fc" id="L16">    GHRepositoryTraffic(int count, int uniques) {</span>
-<span class="fc" id="L17">        this.count = count;</span>
-<span class="fc" id="L18">        this.uniques = uniques;</span>
-<span class="fc" id="L19">    }</span>
+    /**
+     * Instantiates a new GH repository traffic.
+     *
+     * @param count
+     *            the count
+     * @param uniques
+     *            the uniques
+     */
+<span class="fc" id="L28">    GHRepositoryTraffic(int count, int uniques) {</span>
+<span class="fc" id="L29">        this.count = count;</span>
+<span class="fc" id="L30">        this.uniques = uniques;</span>
+<span class="fc" id="L31">    }</span>
 
+    /**
+     * Gets the count.
+     *
+     * @return the count
+     */
     public int getCount() {
-<span class="fc" id="L22">        return count;</span>
+<span class="fc" id="L39">        return count;</span>
     }
 
+    /**
+     * Gets the uniques.
+     *
+     * @return the uniques
+     */
     public int getUniques() {
-<span class="fc" id="L26">        return uniques;</span>
+<span class="fc" id="L48">        return uniques;</span>
     }
 
     /**
@@ -47,25 +69,48 @@ public abstract class GHRepositoryTraffic implements TrafficInfo {
          * @return the timestamp
          */
         public Date getTimestamp() {
-<span class="fc" id="L50">            return GitHubClient.parseDate(timestamp);</span>
+<span class="fc" id="L72">            return GitHubClient.parseDate(timestamp);</span>
         }
 
+        /**
+         * Gets the count.
+         *
+         * @return the count
+         */
         public int getCount() {
-<span class="fc" id="L54">            return count;</span>
+<span class="fc" id="L81">            return count;</span>
         }
 
+        /**
+         * Gets the uniques.
+         *
+         * @return the uniques
+         */
         public int getUniques() {
-<span class="fc" id="L58">            return uniques;</span>
+<span class="fc" id="L90">            return uniques;</span>
         }
 
-<span class="fc" id="L61">        DailyInfo() {</span>
-<span class="fc" id="L62">        }</span>
+        /**
+         * Instantiates a new daily info.
+         */
+<span class="fc" id="L96">        DailyInfo() {</span>
+<span class="fc" id="L97">        }</span>
 
-<span class="fc" id="L64">        DailyInfo(String timestamp, Integer count, Integer uniques) {</span>
-<span class="fc" id="L65">            this.timestamp = timestamp;</span>
-<span class="fc" id="L66">            this.count = count;</span>
-<span class="fc" id="L67">            this.uniques = uniques;</span>
-<span class="fc" id="L68">        }</span>
+        /**
+         * Instantiates a new daily info.
+         *
+         * @param timestamp
+         *            the timestamp
+         * @param count
+         *            the count
+         * @param uniques
+         *            the uniques
+         */
+<span class="fc" id="L109">        DailyInfo(String timestamp, Integer count, Integer uniques) {</span>
+<span class="fc" id="L110">            this.timestamp = timestamp;</span>
+<span class="fc" id="L111">            this.count = count;</span>
+<span class="fc" id="L112">            this.uniques = uniques;</span>
+<span class="fc" id="L113">        }</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -8,19 +8,22 @@ import java.util.Map;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
- * Request/responce contains useful metadata. Custom exception allows store info for next diagnostics.
+ * Request/response contains useful metadata. Custom exception allows store info for next diagnostics.
  *
  * @author Kanstantsin Shautsou
  */
 public class GHFileNotFoundException extends FileNotFoundException {
+
+    /** The response header fields. */
     protected Map&lt;String, List&lt;String&gt;&gt; responseHeaderFields;
 
     /**
      * Instantiates a new Gh file not found exception.
      */
-<span class="nc" id="L22">    public GHFileNotFoundException() {</span>
-<span class="nc" id="L23">    }</span>
+<span class="nc" id="L25">    public GHFileNotFoundException() {</span>
+<span class="nc" id="L26">    }</span>
 
     /**
      * Instantiates a new Gh file not found exception.
@@ -29,8 +32,8 @@ public class GHFileNotFoundException extends FileNotFoundException {
      *            the message
      */
     public GHFileNotFoundException(String message) {
-<span class="fc" id="L32">        super(message);</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L35">        super(message);</span>
+<span class="fc" id="L36">    }</span>
 
     /**
      * Instantiates a new Gh file not found exception.
@@ -41,9 +44,9 @@ public class GHFileNotFoundException extends FileNotFoundException {
      *            the cause
      */
     public GHFileNotFoundException(String message, Throwable cause) {
-<span class="fc" id="L44">        super(message);</span>
-<span class="fc" id="L45">        this.initCause(cause);</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L47">        super(message);</span>
+<span class="fc" id="L48">        this.initCause(cause);</span>
+<span class="fc" id="L49">    }</span>
 
     /**
      * Gets response header fields.
@@ -52,12 +55,19 @@ public class GHFileNotFoundException extends FileNotFoundException {
      */
     @CheckForNull
     public Map&lt;String, List&lt;String&gt;&gt; getResponseHeaderFields() {
-<span class="nc" id="L55">        return Collections.unmodifiableMap(responseHeaderFields);</span>
+<span class="nc" id="L58">        return Collections.unmodifiableMap(responseHeaderFields);</span>
     }
 
+    /**
+     * With response header fields.
+     *
+     * @param headerFields
+     *            the header fields
+     * @return the GH file not found exception
+     */
     GHFileNotFoundException withResponseHeaderFields(@Nonnull Map&lt;String, List&lt;String&gt;&gt; headerFields) {
-<span class="fc" id="L59">        this.responseHeaderFields = headerFields;</span>
-<span class="fc" id="L60">        return this;</span>
+<span class="fc" id="L69">        this.responseHeaderFields = headerFields;</span>
+<span class="fc" id="L70">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

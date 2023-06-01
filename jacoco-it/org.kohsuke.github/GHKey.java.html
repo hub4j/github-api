@@ -3,15 +3,24 @@
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.io.IOException;
+
+// TODO: Auto-generated Javadoc
 /**
  * SSH public key.
  *
  * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, justification = &quot;JSON API&quot;)
-<span class="fc" id="L12">public class GHKey extends GitHubInteractiveObject {</span>
+<span class="fc" id="L15">public class GHKey extends GitHubInteractiveObject {</span>
+
+    /** The title. */
     protected String url, key, title;
+
+    /** The verified. */
     protected boolean verified;
+
+    /** The id. */
     protected int id;
 
     /**
@@ -20,7 +29,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the id
      */
     public int getId() {
-<span class="fc" id="L23">        return id;</span>
+<span class="fc" id="L32">        return id;</span>
     }
 
     /**
@@ -29,7 +38,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the key
      */
     public String getKey() {
-<span class="fc" id="L32">        return key;</span>
+<span class="fc" id="L41">        return key;</span>
     }
 
     /**
@@ -38,7 +47,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the title
      */
     public String getTitle() {
-<span class="fc" id="L41">        return title;</span>
+<span class="fc" id="L50">        return title;</span>
     }
 
     /**
@@ -47,7 +56,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the url
      */
     public String getUrl() {
-<span class="fc" id="L50">        return url;</span>
+<span class="fc" id="L59">        return url;</span>
     }
 
     /**
@@ -56,11 +65,26 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
      * @return the boolean
      */
     public boolean isVerified() {
-<span class="fc" id="L59">        return verified;</span>
+<span class="fc" id="L68">        return verified;</span>
     }
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     public String toString() {
-<span class="fc" id="L63">        return new ToStringBuilder(this).append(&quot;title&quot;, title).append(&quot;id&quot;, id).append(&quot;key&quot;, key).toString();</span>
+<span class="fc" id="L77">        return new ToStringBuilder(this).append(&quot;title&quot;, title).append(&quot;id&quot;, id).append(&quot;key&quot;, key).toString();</span>
     }
+
+    /**
+     * Delete the GHKey
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L87">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(String.format(&quot;/user/keys/%d&quot;, id)).send();</span>
+<span class="fc" id="L88">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

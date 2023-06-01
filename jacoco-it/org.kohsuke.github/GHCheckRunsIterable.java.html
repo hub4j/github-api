@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Iterable for check-runs listing.
  */
@@ -13,33 +14,55 @@ class GHCheckRunsIterable extends PagedIterable&lt;GHCheckRun&gt; {
 
     private GHCheckRunsPage result;
 
-<span class="fc" id="L16">    public GHCheckRunsIterable(GHRepository owner, GitHubRequest request) {</span>
-<span class="fc" id="L17">        this.owner = owner;</span>
-<span class="fc" id="L18">        this.request = request;</span>
-<span class="fc" id="L19">    }</span>
+    /**
+     * Instantiates a new GH check runs iterable.
+     *
+     * @param owner
+     *            the owner
+     * @param request
+     *            the request
+     */
+<span class="fc" id="L25">    public GHCheckRunsIterable(GHRepository owner, GitHubRequest request) {</span>
+<span class="fc" id="L26">        this.owner = owner;</span>
+<span class="fc" id="L27">        this.request = request;</span>
+<span class="fc" id="L28">    }</span>
 
+    /**
+     * Iterator.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
+     */
     @Nonnull
     @Override
     public PagedIterator&lt;GHCheckRun&gt; _iterator(int pageSize) {
-<span class="fc" id="L24">        return new PagedIterator&lt;&gt;(</span>
-<span class="fc" id="L25">                adapt(GitHubPageIterator.create(owner.root().getClient(), GHCheckRunsPage.class, request, pageSize)),</span>
+<span class="fc" id="L40">        return new PagedIterator&lt;&gt;(</span>
+<span class="fc" id="L41">                adapt(GitHubPageIterator.create(owner.root().getClient(), GHCheckRunsPage.class, request, pageSize)),</span>
                 null);
     }
 
+    /**
+     * Adapt.
+     *
+     * @param base
+     *            the base
+     * @return the iterator
+     */
     protected Iterator&lt;GHCheckRun[]&gt; adapt(final Iterator&lt;GHCheckRunsPage&gt; base) {
-<span class="fc" id="L30">        return new Iterator&lt;GHCheckRun[]&gt;() {</span>
+<span class="fc" id="L53">        return new Iterator&lt;GHCheckRun[]&gt;() {</span>
             public boolean hasNext() {
-<span class="fc" id="L32">                return base.hasNext();</span>
+<span class="fc" id="L55">                return base.hasNext();</span>
             }
 
             public GHCheckRun[] next() {
-<span class="fc" id="L36">                GHCheckRunsPage v = base.next();</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">                if (result == null) {</span>
-<span class="fc" id="L38">                    result = v;</span>
+<span class="fc" id="L59">                GHCheckRunsPage v = base.next();</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">                if (result == null) {</span>
+<span class="fc" id="L61">                    result = v;</span>
                 }
-<span class="fc" id="L40">                return v.getCheckRuns(owner);</span>
+<span class="fc" id="L63">                return v.getCheckRuns(owner);</span>
             }
         };
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

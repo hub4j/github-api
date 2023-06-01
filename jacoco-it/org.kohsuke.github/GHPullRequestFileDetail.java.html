@@ -25,6 +25,7 @@ package org.kohsuke.github;
 
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * File detail inside a {@link GHPullRequest}.
  *
@@ -32,30 +33,50 @@ import java.net.URL;
  * @see GHPullRequest#listFiles() GHPullRequest#listFiles()
  * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files&quot;&gt;List pull requests files&lt;/a&gt;
  */
-<span class="nc" id="L35">public class GHPullRequestFileDetail {</span>
+<span class="nc" id="L36">public class GHPullRequestFileDetail {</span>
 
+    /** The sha. */
     String sha;
+
+    /** The filename. */
     String filename;
+
+    /** The status. */
     String status;
+
+    /** The additions. */
     int additions;
+
+    /** The deletions. */
     int deletions;
+
+    /** The changes. */
     int changes;
+
+    /** The blob url. */
     String blob_url;
+
+    /** The raw url. */
     String raw_url;
+
+    /** The contents url. */
     String contents_url;
+
+    /** The patch. */
     String patch;
+
+    /** The previous filename. */
     String previous_filename;
 
     /**
      * Gets sha of the file (not commit sha).
      *
+     * @return the sha
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files&quot;&gt;List pull requests
      *      files&lt;/a&gt;
-     *
-     * @return the sha
      */
     public String getSha() {
-<span class="nc" id="L58">        return sha;</span>
+<span class="nc" id="L79">        return sha;</span>
     }
 
     /**
@@ -64,16 +85,16 @@ import java.net.URL;
      * @return the filename
      */
     public String getFilename() {
-<span class="nc" id="L67">        return filename;</span>
+<span class="nc" id="L88">        return filename;</span>
     }
 
     /**
-     * Gets status (added/modified/deleted)
+     * Gets status (added/modified/deleted).
      *
      * @return the status
      */
     public String getStatus() {
-<span class="nc" id="L76">        return status;</span>
+<span class="nc" id="L97">        return status;</span>
     }
 
     /**
@@ -82,7 +103,7 @@ import java.net.URL;
      * @return the additions
      */
     public int getAdditions() {
-<span class="nc" id="L85">        return additions;</span>
+<span class="nc" id="L106">        return additions;</span>
     }
 
     /**
@@ -91,7 +112,7 @@ import java.net.URL;
      * @return the deletions
      */
     public int getDeletions() {
-<span class="nc" id="L94">        return deletions;</span>
+<span class="nc" id="L115">        return deletions;</span>
     }
 
     /**
@@ -100,7 +121,7 @@ import java.net.URL;
      * @return the changes
      */
     public int getChanges() {
-<span class="nc" id="L103">        return changes;</span>
+<span class="nc" id="L124">        return changes;</span>
     }
 
     /**
@@ -109,7 +130,7 @@ import java.net.URL;
      * @return the blob url
      */
     public URL getBlobUrl() {
-<span class="nc" id="L112">        return GitHubClient.parseURL(blob_url);</span>
+<span class="nc" id="L133">        return GitHubClient.parseURL(blob_url);</span>
     }
 
     /**
@@ -118,7 +139,7 @@ import java.net.URL;
      * @return the raw url
      */
     public URL getRawUrl() {
-<span class="nc" id="L121">        return GitHubClient.parseURL(raw_url);</span>
+<span class="nc" id="L142">        return GitHubClient.parseURL(raw_url);</span>
     }
 
     /**
@@ -127,7 +148,7 @@ import java.net.URL;
      * @return the contents url
      */
     public URL getContentsUrl() {
-<span class="nc" id="L130">        return GitHubClient.parseURL(contents_url);</span>
+<span class="nc" id="L151">        return GitHubClient.parseURL(contents_url);</span>
     }
 
     /**
@@ -136,7 +157,7 @@ import java.net.URL;
      * @return the patch
      */
     public String getPatch() {
-<span class="nc" id="L139">        return patch;</span>
+<span class="nc" id="L160">        return patch;</span>
     }
 
     /**
@@ -145,7 +166,7 @@ import java.net.URL;
      * @return the previous filename
      */
     public String getPreviousFilename() {
-<span class="nc" id="L148">        return previous_filename;</span>
+<span class="nc" id="L169">        return previous_filename;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

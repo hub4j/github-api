@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Modifies {@link GHRelease}.
  *
@@ -12,10 +13,16 @@ public class GHReleaseUpdater {
     private final GHRelease base;
     private final Requester builder;
 
-<span class="fc" id="L15">    GHReleaseUpdater(GHRelease base) {</span>
-<span class="fc" id="L16">        this.base = base;</span>
-<span class="fc" id="L17">        this.builder = base.root().createRequest();</span>
-<span class="fc" id="L18">    }</span>
+    /**
+     * Instantiates a new GH release updater.
+     *
+     * @param base
+     *            the base
+     */
+<span class="fc" id="L22">    GHReleaseUpdater(GHRelease base) {</span>
+<span class="fc" id="L23">        this.base = base;</span>
+<span class="fc" id="L24">        this.builder = base.root().createRequest();</span>
+<span class="fc" id="L25">    }</span>
 
     /**
      * Tag gh release updater.
@@ -25,8 +32,8 @@ public class GHReleaseUpdater {
      * @return the gh release updater
      */
     public GHReleaseUpdater tag(String tag) {
-<span class="nc" id="L28">        builder.with(&quot;tag_name&quot;, tag);</span>
-<span class="nc" id="L29">        return this;</span>
+<span class="nc" id="L35">        builder.with(&quot;tag_name&quot;, tag);</span>
+<span class="nc" id="L36">        return this;</span>
     }
 
     /**
@@ -37,8 +44,8 @@ public class GHReleaseUpdater {
      * @return the gh release updater
      */
     public GHReleaseUpdater body(String body) {
-<span class="nc" id="L40">        builder.with(&quot;body&quot;, body);</span>
-<span class="nc" id="L41">        return this;</span>
+<span class="nc" id="L47">        builder.with(&quot;body&quot;, body);</span>
+<span class="nc" id="L48">        return this;</span>
     }
 
     /**
@@ -49,8 +56,8 @@ public class GHReleaseUpdater {
      * @return the gh release updater
      */
     public GHReleaseUpdater commitish(String commitish) {
-<span class="nc" id="L52">        builder.with(&quot;target_commitish&quot;, commitish);</span>
-<span class="nc" id="L53">        return this;</span>
+<span class="nc" id="L59">        builder.with(&quot;target_commitish&quot;, commitish);</span>
+<span class="nc" id="L60">        return this;</span>
     }
 
     /**
@@ -62,8 +69,8 @@ public class GHReleaseUpdater {
      * @return the gh release updater
      */
     public GHReleaseUpdater draft(boolean draft) {
-<span class="nc" id="L65">        builder.with(&quot;draft&quot;, draft);</span>
-<span class="nc" id="L66">        return this;</span>
+<span class="nc" id="L72">        builder.with(&quot;draft&quot;, draft);</span>
+<span class="nc" id="L73">        return this;</span>
     }
 
     /**
@@ -74,12 +81,12 @@ public class GHReleaseUpdater {
      * @return the gh release updater
      */
     public GHReleaseUpdater name(String name) {
-<span class="nc" id="L77">        builder.with(&quot;name&quot;, name);</span>
-<span class="nc" id="L78">        return this;</span>
+<span class="nc" id="L84">        builder.with(&quot;name&quot;, name);</span>
+<span class="nc" id="L85">        return this;</span>
     }
 
     /**
-     * Optional
+     * Optional.
      *
      * @param prerelease
      *            {@code true} to identify the release as a prerelease. {@code false} to identify the release as a full
@@ -87,20 +94,20 @@ public class GHReleaseUpdater {
      * @return the gh release updater
      */
     public GHReleaseUpdater prerelease(boolean prerelease) {
-<span class="fc" id="L90">        builder.with(&quot;prerelease&quot;, prerelease);</span>
-<span class="fc" id="L91">        return this;</span>
+<span class="fc" id="L97">        builder.with(&quot;prerelease&quot;, prerelease);</span>
+<span class="fc" id="L98">        return this;</span>
     }
 
     /**
-     * Optional
+     * Optional.
      *
      * @param categoryName
      *            the category of the discussion to be created for the release. Category should already exist
      * @return the gh release builder
      */
     public GHReleaseUpdater categoryName(String categoryName) {
-<span class="fc" id="L102">        builder.with(&quot;discussion_category_name&quot;, categoryName);</span>
-<span class="fc" id="L103">        return this;</span>
+<span class="fc" id="L109">        builder.with(&quot;discussion_category_name&quot;, categoryName);</span>
+<span class="fc" id="L110">        return this;</span>
     }
 
     /**
@@ -111,11 +118,11 @@ public class GHReleaseUpdater {
      *             the io exception
      */
     public GHRelease update() throws IOException {
-<span class="fc" id="L114">        return builder.method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L115">                .withUrlPath(base.owner.getApiTailUrl(&quot;releases/&quot; + base.getId()))</span>
-<span class="fc" id="L116">                .fetch(GHRelease.class)</span>
-<span class="fc" id="L117">                .wrap(base.owner);</span>
+<span class="fc" id="L121">        return builder.method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L122">                .withUrlPath(base.owner.getApiTailUrl(&quot;releases/&quot; + base.getId()))</span>
+<span class="fc" id="L123">                .fetch(GHRelease.class)</span>
+<span class="fc" id="L124">                .wrap(base.owner);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

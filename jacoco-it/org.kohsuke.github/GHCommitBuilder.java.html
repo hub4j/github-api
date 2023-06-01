@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builder pattern for creating a new commit. Based on https://developer.github.com/v3/git/commits/#create-a-commit
  */
@@ -15,27 +16,33 @@ public class GHCommitBuilder {
     private final GHRepository repo;
     private final Requester req;
 
-<span class="fc" id="L18">    private final List&lt;String&gt; parents = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L19">    private final List&lt;String&gt; parents = new ArrayList&lt;String&gt;();</span>
 
     private static final class UserInfo {
         private final String name;
         private final String email;
         private final String date;
 
-<span class="fc" id="L25">        private UserInfo(String name, String email, Date date) {</span>
-<span class="fc" id="L26">            this.name = name;</span>
-<span class="fc" id="L27">            this.email = email;</span>
-<span class="fc" id="L28">            TimeZone tz = TimeZone.getTimeZone(&quot;UTC&quot;);</span>
-<span class="fc" id="L29">            DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ss'Z'&quot;);</span>
-<span class="fc" id="L30">            df.setTimeZone(tz);</span>
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">            this.date = df.format((date != null) ? date : new Date());</span>
-<span class="fc" id="L32">        }</span>
+<span class="fc" id="L26">        private UserInfo(String name, String email, Date date) {</span>
+<span class="fc" id="L27">            this.name = name;</span>
+<span class="fc" id="L28">            this.email = email;</span>
+<span class="fc" id="L29">            TimeZone tz = TimeZone.getTimeZone(&quot;UTC&quot;);</span>
+<span class="fc" id="L30">            DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ss'Z'&quot;);</span>
+<span class="fc" id="L31">            df.setTimeZone(tz);</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">            this.date = df.format((date != null) ? date : new Date());</span>
+<span class="fc" id="L33">        }</span>
     }
 
-<span class="fc" id="L35">    GHCommitBuilder(GHRepository repo) {</span>
-<span class="fc" id="L36">        this.repo = repo;</span>
-<span class="fc" id="L37">        req = repo.root().createRequest().method(&quot;POST&quot;);</span>
-<span class="fc" id="L38">    }</span>
+    /**
+     * Instantiates a new GH commit builder.
+     *
+     * @param repo
+     *            the repo
+     */
+<span class="fc" id="L42">    GHCommitBuilder(GHRepository repo) {</span>
+<span class="fc" id="L43">        this.repo = repo;</span>
+<span class="fc" id="L44">        req = repo.root().createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L45">    }</span>
 
     /**
      * Message gh commit builder.
@@ -45,8 +52,8 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder message(String message) {
-<span class="fc" id="L48">        req.with(&quot;message&quot;, message);</span>
-<span class="fc" id="L49">        return this;</span>
+<span class="fc" id="L55">        req.with(&quot;message&quot;, message);</span>
+<span class="fc" id="L56">        return this;</span>
     }
 
     /**
@@ -57,8 +64,8 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder tree(String tree) {
-<span class="fc" id="L60">        req.with(&quot;tree&quot;, tree);</span>
-<span class="fc" id="L61">        return this;</span>
+<span class="fc" id="L67">        req.with(&quot;tree&quot;, tree);</span>
+<span class="fc" id="L68">        return this;</span>
     }
 
     /**
@@ -69,8 +76,8 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder parent(String parent) {
-<span class="fc" id="L72">        parents.add(parent);</span>
-<span class="fc" id="L73">        return this;</span>
+<span class="fc" id="L79">        parents.add(parent);</span>
+<span class="fc" id="L80">        return this;</span>
     }
 
     /**
@@ -85,8 +92,8 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder author(String name, String email, Date date) {
-<span class="fc" id="L88">        req.with(&quot;author&quot;, new UserInfo(name, email, date));</span>
-<span class="fc" id="L89">        return this;</span>
+<span class="fc" id="L95">        req.with(&quot;author&quot;, new UserInfo(name, email, date));</span>
+<span class="fc" id="L96">        return this;</span>
     }
 
     /**
@@ -98,8 +105,8 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder withSignature(String signature) {
-<span class="fc" id="L101">        req.with(&quot;signature&quot;, signature);</span>
-<span class="fc" id="L102">        return this;</span>
+<span class="fc" id="L108">        req.with(&quot;signature&quot;, signature);</span>
+<span class="fc" id="L109">        return this;</span>
     }
 
     /**
@@ -114,12 +121,12 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder committer(String name, String email, Date date) {
-<span class="fc" id="L117">        req.with(&quot;committer&quot;, new UserInfo(name, email, date));</span>
-<span class="fc" id="L118">        return this;</span>
+<span class="fc" id="L124">        req.with(&quot;committer&quot;, new UserInfo(name, email, date));</span>
+<span class="fc" id="L125">        return this;</span>
     }
 
     private String getApiTail() {
-<span class="fc" id="L122">        return String.format(&quot;/repos/%s/%s/git/commits&quot;, repo.getOwnerName(), repo.getName());</span>
+<span class="fc" id="L129">        return String.format(&quot;/repos/%s/%s/git/commits&quot;, repo.getOwnerName(), repo.getName());</span>
     }
 
     /**
@@ -130,8 +137,8 @@ public class GHCommitBuilder {
      *             the io exception
      */
     public GHCommit create() throws IOException {
-<span class="fc" id="L133">        req.with(&quot;parents&quot;, parents);</span>
-<span class="fc" id="L134">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);</span>
+<span class="fc" id="L140">        req.with(&quot;parents&quot;, parents);</span>
+<span class="fc" id="L141">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

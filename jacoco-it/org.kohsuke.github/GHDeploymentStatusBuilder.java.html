@@ -4,6 +4,7 @@ import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Creates a new deployment status.
  *
@@ -28,36 +29,44 @@ public class GHDeploymentStatusBuilder {
      */
     @Deprecated
     public GHDeploymentStatusBuilder(GHRepository repo, int deploymentId, GHDeploymentState state) {
-<span class="nc" id="L31">        this(repo, (long) deploymentId, state);</span>
-<span class="nc" id="L32">    }</span>
+<span class="nc" id="L32">        this(repo, (long) deploymentId, state);</span>
+<span class="nc" id="L33">    }</span>
 
-<span class="fc" id="L34">    GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {</span>
-<span class="fc" id="L35">        this.repo = repo;</span>
-<span class="fc" id="L36">        this.deploymentId = deploymentId;</span>
-<span class="fc" id="L37">        this.builder = repo.root()</span>
-<span class="fc" id="L38">                .createRequest()</span>
-<span class="fc" id="L39">                .withPreview(Previews.ANT_MAN)</span>
-<span class="fc" id="L40">                .withPreview(Previews.FLASH)</span>
-<span class="fc" id="L41">                .method(&quot;POST&quot;);</span>
+    /**
+     * Instantiates a new GH deployment status builder.
+     *
+     * @param repo
+     *            the repo
+     * @param deploymentId
+     *            the deployment id
+     * @param state
+     *            the state
+     */
+<span class="fc" id="L45">    GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {</span>
+<span class="fc" id="L46">        this.repo = repo;</span>
+<span class="fc" id="L47">        this.deploymentId = deploymentId;</span>
+<span class="fc" id="L48">        this.builder = repo.root()</span>
+<span class="fc" id="L49">                .createRequest()</span>
+<span class="fc" id="L50">                .withPreview(Previews.ANT_MAN)</span>
+<span class="fc" id="L51">                .withPreview(Previews.FLASH)</span>
+<span class="fc" id="L52">                .method(&quot;POST&quot;);</span>
 
-<span class="fc" id="L43">        this.builder.with(&quot;state&quot;, state);</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L54">        this.builder.with(&quot;state&quot;, state);</span>
+<span class="fc" id="L55">    }</span>
 
     /**
      * Add an inactive status to all prior non-transient, non-production environment deployments with the same
      * repository and environment name as the created status's deployment.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @param autoInactive
      *            Add inactive status flag
-     *
      * @return the gh deployment status builder
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview({ Previews.ANT_MAN, Previews.FLASH })
     public GHDeploymentStatusBuilder autoInactive(boolean autoInactive) {
-<span class="nc" id="L59">        this.builder.with(&quot;auto_inactive&quot;, autoInactive);</span>
-<span class="nc" id="L60">        return this;</span>
+<span class="nc" id="L68">        this.builder.with(&quot;auto_inactive&quot;, autoInactive);</span>
+<span class="nc" id="L69">        return this;</span>
     }
 
     /**
@@ -69,40 +78,36 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder description(String description) {
-<span class="fc" id="L72">        this.builder.with(&quot;description&quot;, description);</span>
-<span class="fc" id="L73">        return this;</span>
+<span class="fc" id="L81">        this.builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L82">        return this;</span>
     }
 
     /**
      * Name for the target deployment environment, which can be changed when setting a deploy status.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @param environment
      *            the environment name
-     *
      * @return the gh deployment status builder
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.FLASH)
     public GHDeploymentStatusBuilder environment(String environment) {
-<span class="fc" id="L88">        this.builder.with(&quot;environment&quot;, environment);</span>
-<span class="fc" id="L89">        return this;</span>
+<span class="fc" id="L95">        this.builder.with(&quot;environment&quot;, environment);</span>
+<span class="fc" id="L96">        return this;</span>
     }
 
     /**
-     * The URL for accessing the environment
-     *
-     * @deprecated until preview feature has graduated to stable
+     * The URL for accessing the environment.
      *
      * @param environmentUrl
      *            the environment url
-     *
      * @return the gh deployment status builder
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder environmentUrl(String environmentUrl) {
-<span class="fc" id="L104">        this.builder.with(&quot;environment_url&quot;, environmentUrl);</span>
-<span class="fc" id="L105">        return this;</span>
+<span class="fc" id="L109">        this.builder.with(&quot;environment_url&quot;, environmentUrl);</span>
+<span class="fc" id="L110">        return this;</span>
     }
 
     /**
@@ -110,33 +115,29 @@ public class GHDeploymentStatusBuilder {
      * &lt;p&gt;
      * This method replaces {@link #targetUrl(String) targetUrl}.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @param logUrl
      *            the deployment output url
-     *
      * @return the gh deployment status builder
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
-<span class="fc" id="L122">        this.builder.with(&quot;log_url&quot;, logUrl);</span>
-<span class="fc" id="L123">        return this;</span>
+<span class="fc" id="L125">        this.builder.with(&quot;log_url&quot;, logUrl);</span>
+<span class="fc" id="L126">        return this;</span>
     }
 
     /**
      * Target url gh deployment status builder.
      *
-     * @deprecated Target url is deprecated in favor of {@link #logUrl(String) logUrl}
-     *
      * @param targetUrl
      *            the target url
-     *
      * @return the gh deployment status builder
+     * @deprecated Target url is deprecated in favor of {@link #logUrl(String) logUrl}
      */
     @Deprecated
     public GHDeploymentStatusBuilder targetUrl(String targetUrl) {
-<span class="fc" id="L138">        this.builder.with(&quot;target_url&quot;, targetUrl);</span>
-<span class="fc" id="L139">        return this;</span>
+<span class="fc" id="L139">        this.builder.with(&quot;target_url&quot;, targetUrl);</span>
+<span class="fc" id="L140">        return this;</span>
     }
 
     /**
@@ -148,9 +149,9 @@ public class GHDeploymentStatusBuilder {
      *             the io exception
      */
     public GHDeploymentStatus create() throws IOException {
-<span class="fc" id="L151">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments/&quot; + deploymentId + &quot;/statuses&quot;))</span>
-<span class="fc" id="L152">                .fetch(GHDeploymentStatus.class)</span>
-<span class="fc" id="L153">                .lateBind(repo);</span>
+<span class="fc" id="L152">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments/&quot; + deploymentId + &quot;/statuses&quot;))</span>
+<span class="fc" id="L153">                .fetch(GHDeploymentStatus.class)</span>
+<span class="fc" id="L154">                .lateBind(repo);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

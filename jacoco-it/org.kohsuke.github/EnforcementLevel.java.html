@@ -2,17 +2,29 @@
 
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * This was added during preview API period but it has changed since then.
  *
  * @author Kohsuke Kawaguchi
  */
-<span class="nc" id="L10">@Deprecated</span>
+<span class="nc" id="L11">@Deprecated</span>
 public enum EnforcementLevel {
-<span class="nc" id="L12">    OFF, NON_ADMINS, EVERYONE;</span>
 
+    /** The off. */
+<span class="nc" id="L15">    OFF,</span>
+    /** The non admins. */
+<span class="nc" id="L17">    NON_ADMINS,</span>
+    /** The everyone. */
+<span class="nc" id="L19">    EVERYONE;</span>
+
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     public String toString() {
-<span class="nc" id="L15">        return name().toLowerCase(Locale.ENGLISH);</span>
+<span class="nc" id="L27">        return name().toLowerCase(Locale.ENGLISH);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

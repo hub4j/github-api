@@ -2,31 +2,40 @@
 
 import org.kohsuke.github.internal.Previews;
 
+// TODO: Auto-generated Javadoc
 /**
- * Represents the state of deployment
+ * Represents the state of deployment.
  */
-<span class="fc" id="L8">public enum GHDeploymentState {</span>
-<span class="fc" id="L9">    PENDING,</span>
-<span class="fc" id="L10">    SUCCESS,</span>
-<span class="fc" id="L11">    ERROR,</span>
-<span class="fc" id="L12">    FAILURE,</span>
+<span class="fc" id="L9">public enum GHDeploymentState {</span>
+
+    /** The pending. */
+<span class="fc" id="L12">    PENDING,</span>
+
+    /** The success. */
+<span class="fc" id="L15">    SUCCESS,</span>
+
+    /** The error. */
+<span class="fc" id="L18">    ERROR,</span>
+
+    /** The failure. */
+<span class="fc" id="L21">    FAILURE,</span>
 
     /**
      * The state of the deployment currently reflects it's in progress.
      */
-<span class="fc" id="L17">    @Preview(Previews.FLASH)</span>
+<span class="fc" id="L26">    @Preview(Previews.FLASH)</span>
     IN_PROGRESS,
 
     /**
      * The state of the deployment currently reflects it's queued up for processing.
      */
-<span class="fc" id="L23">    @Preview(Previews.FLASH)</span>
+<span class="fc" id="L32">    @Preview(Previews.FLASH)</span>
     QUEUED,
 
     /**
      * The state of the deployment currently reflects it's no longer active.
      */
-<span class="fc" id="L29">    @Preview(Previews.ANT_MAN)</span>
+<span class="fc" id="L38">    @Preview(Previews.ANT_MAN)</span>
     INACTIVE
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

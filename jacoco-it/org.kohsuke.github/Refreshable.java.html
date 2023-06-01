@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * The interface Refreshable.
  *
@@ -17,7 +18,7 @@ public interface Refreshable {
     void refresh() throws IOException;
 
     /**
-     * Calls refresh if the provided value is null
+     * Calls refresh if the provided value is null.
      *
      * @param value
      *            the value
@@ -25,9 +26,9 @@ public interface Refreshable {
      *             the io exception
      */
     default void refresh(Object value) throws IOException {
-<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L29">            this.refresh();</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L30">            this.refresh();</span>
         }
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L32">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

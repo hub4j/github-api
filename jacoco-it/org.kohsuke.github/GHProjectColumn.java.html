@@ -8,20 +8,30 @@ import java.net.URL;
 
 import static org.kohsuke.github.internal.Previews.INERTIA;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHProjectColumn.
  *
  * @author Gunnar Skjold
  */
-<span class="fc" id="L16">public class GHProjectColumn extends GHObject {</span>
+<span class="fc" id="L17">public class GHProjectColumn extends GHObject {</span>
+
+    /** The project. */
     protected GHProject project;
 
     private String name;
     private String project_url;
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Override
     public URL getHtmlUrl() throws IOException {
-<span class="nc" id="L24">        return null;</span>
+<span class="nc" id="L34">        return null;</span>
     }
 
     /**
@@ -33,7 +43,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Deprecated
     public GHProjectColumn wrap(GitHub root) {
-<span class="nc" id="L36">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="nc" id="L46">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -44,7 +54,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the gh project column
      */
     GHProjectColumn lateBind(GitHub root) {
-<span class="fc" id="L47">        return this;</span>
+<span class="fc" id="L57">        return this;</span>
     }
 
     /**
@@ -56,7 +66,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Deprecated
     public GHProjectColumn wrap(GHProject project) {
-<span class="nc" id="L59">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="nc" id="L69">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -67,8 +77,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the gh project column
      */
     GHProjectColumn lateBind(GHProject project) {
-<span class="fc" id="L70">        this.project = project;</span>
-<span class="fc" id="L71">        return lateBind(project.root());</span>
+<span class="fc" id="L80">        this.project = project;</span>
+<span class="fc" id="L81">        return lateBind(project.root());</span>
     }
 
     /**
@@ -80,13 +90,13 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHProject getProject() throws IOException {
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (project == null) {</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (project == null) {</span>
             try {
-<span class="nc" id="L85">                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);</span>
-<span class="nc" id="L86">            } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L87">            }</span>
+<span class="nc" id="L95">                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);</span>
+<span class="nc" id="L96">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L97">            }</span>
         }
-<span class="nc" id="L89">        return project;</span>
+<span class="nc" id="L99">        return project;</span>
     }
 
     /**
@@ -95,7 +105,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L98">        return name;</span>
+<span class="fc" id="L108">        return name;</span>
     }
 
     /**
@@ -104,7 +114,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the project url
      */
     public URL getProjectUrl() {
-<span class="nc" id="L107">        return GitHubClient.parseURL(project_url);</span>
+<span class="nc" id="L117">        return GitHubClient.parseURL(project_url);</span>
     }
 
     /**
@@ -116,12 +126,12 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void setName(String name) throws IOException {
-<span class="fc" id="L119">        edit(&quot;name&quot;, name);</span>
-<span class="fc" id="L120">    }</span>
+<span class="fc" id="L129">        edit(&quot;name&quot;, name);</span>
+<span class="fc" id="L130">    }</span>
 
     private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L123">        root().createRequest().method(&quot;PATCH&quot;).withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L124">    }</span>
+<span class="fc" id="L133">        root().createRequest().method(&quot;PATCH&quot;).withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L134">    }</span>
 
     /**
      * Gets api route.
@@ -129,7 +139,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L132">        return String.format(&quot;/projects/columns/%d&quot;, getId());</span>
+<span class="fc" id="L142">        return String.format(&quot;/projects/columns/%d&quot;, getId());</span>
     }
 
     /**
@@ -139,8 +149,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L142">        root().createRequest().withPreview(INERTIA).method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L143">    }</span>
+<span class="fc" id="L152">        root().createRequest().withPreview(INERTIA).method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L153">    }</span>
 
     /**
      * List cards paged iterable.
@@ -150,11 +160,11 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHProjectCard&gt; listCards() throws IOException {
-<span class="nc" id="L153">        final GHProjectColumn column = this;</span>
-<span class="nc" id="L154">        return root().createRequest()</span>
-<span class="nc" id="L155">                .withPreview(INERTIA)</span>
-<span class="nc" id="L156">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="nc" id="L157">                .toIterable(GHProjectCard[].class, item -&gt; item.lateBind(column));</span>
+<span class="nc" id="L163">        final GHProjectColumn column = this;</span>
+<span class="nc" id="L164">        return root().createRequest()</span>
+<span class="nc" id="L165">                .withPreview(INERTIA)</span>
+<span class="nc" id="L166">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="nc" id="L167">                .toIterable(GHProjectCard[].class, item -&gt; item.lateBind(column));</span>
     }
 
     /**
@@ -167,13 +177,13 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHProjectCard createCard(String note) throws IOException {
-<span class="fc" id="L170">        return root().createRequest()</span>
-<span class="fc" id="L171">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L172">                .withPreview(INERTIA)</span>
-<span class="fc" id="L173">                .with(&quot;note&quot;, note)</span>
-<span class="fc" id="L174">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="fc" id="L175">                .fetch(GHProjectCard.class)</span>
-<span class="fc" id="L176">                .lateBind(this);</span>
+<span class="fc" id="L180">        return root().createRequest()</span>
+<span class="fc" id="L181">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L182">                .withPreview(INERTIA)</span>
+<span class="fc" id="L183">                .with(&quot;note&quot;, note)</span>
+<span class="fc" id="L184">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="fc" id="L185">                .fetch(GHProjectCard.class)</span>
+<span class="fc" id="L186">                .lateBind(this);</span>
     }
 
     /**
@@ -186,15 +196,15 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHProjectCard createCard(GHIssue issue) throws IOException {
-<span class="fc bfc" id="L189" title="All 2 branches covered.">        String contentType = issue instanceof GHPullRequest ? &quot;PullRequest&quot; : &quot;Issue&quot;;</span>
-<span class="fc" id="L190">        return root().createRequest()</span>
-<span class="fc" id="L191">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L192">                .withPreview(INERTIA)</span>
-<span class="fc" id="L193">                .with(&quot;content_type&quot;, contentType)</span>
-<span class="fc" id="L194">                .with(&quot;content_id&quot;, issue.getId())</span>
-<span class="fc" id="L195">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="fc" id="L196">                .fetch(GHProjectCard.class)</span>
-<span class="fc" id="L197">                .lateBind(this);</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        String contentType = issue instanceof GHPullRequest ? &quot;PullRequest&quot; : &quot;Issue&quot;;</span>
+<span class="fc" id="L200">        return root().createRequest()</span>
+<span class="fc" id="L201">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L202">                .withPreview(INERTIA)</span>
+<span class="fc" id="L203">                .with(&quot;content_type&quot;, contentType)</span>
+<span class="fc" id="L204">                .with(&quot;content_id&quot;, issue.getId())</span>
+<span class="fc" id="L205">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="fc" id="L206">                .fetch(GHProjectCard.class)</span>
+<span class="fc" id="L207">                .lateBind(this);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

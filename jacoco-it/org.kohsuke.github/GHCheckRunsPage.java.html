@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCheckRunsPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCheckRunsPage.java</span></div><h1>GHCheckRunsPage.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents the one page of check-runs result when listing check-runs.
  */
-<span class="fc" id="L6">class GHCheckRunsPage {</span>
+<span class="fc" id="L7">class GHCheckRunsPage {</span>
     private int total_count;
     private GHCheckRun[] check_runs;
 
+    /**
+     * Gets the total count.
+     *
+     * @return the total count
+     */
     public int getTotalCount() {
-<span class="nc" id="L11">        return total_count;</span>
+<span class="nc" id="L17">        return total_count;</span>
     }
 
+    /**
+     * Gets the check runs.
+     *
+     * @param owner
+     *            the owner
+     * @return the check runs
+     */
     GHCheckRun[] getCheckRuns(GHRepository owner) {
-<span class="fc bfc" id="L15" title="All 2 branches covered.">        for (GHCheckRun check_run : check_runs) {</span>
-<span class="fc" id="L16">            check_run.wrap(owner);</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        for (GHCheckRun check_run : check_runs) {</span>
+<span class="fc" id="L29">            check_run.wrap(owner);</span>
         }
-<span class="fc" id="L18">        return check_runs;</span>
+<span class="fc" id="L31">        return check_runs;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

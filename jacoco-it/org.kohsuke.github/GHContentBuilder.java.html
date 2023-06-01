@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+// TODO: Auto-generated Javadoc
 /**
  * Used to create/update content.
  *
@@ -18,10 +19,16 @@ public final class GHContentBuilder {
     private final Requester req;
     private String path;
 
-<span class="fc" id="L21">    GHContentBuilder(GHRepository repo) {</span>
-<span class="fc" id="L22">        this.repo = repo;</span>
-<span class="fc" id="L23">        this.req = repo.root().createRequest().method(&quot;PUT&quot;);</span>
-<span class="fc" id="L24">    }</span>
+    /**
+     * Instantiates a new GH content builder.
+     *
+     * @param repo
+     *            the repo
+     */
+<span class="fc" id="L28">    GHContentBuilder(GHRepository repo) {</span>
+<span class="fc" id="L29">        this.repo = repo;</span>
+<span class="fc" id="L30">        this.req = repo.root().createRequest().method(&quot;PUT&quot;);</span>
+<span class="fc" id="L31">    }</span>
 
     /**
      * Path gh content builder.
@@ -31,9 +38,9 @@ public final class GHContentBuilder {
      * @return the gh content builder
      */
     public GHContentBuilder path(String path) {
-<span class="fc" id="L34">        this.path = path;</span>
-<span class="fc" id="L35">        req.with(&quot;path&quot;, path);</span>
-<span class="fc" id="L36">        return this;</span>
+<span class="fc" id="L41">        this.path = path;</span>
+<span class="fc" id="L42">        req.with(&quot;path&quot;, path);</span>
+<span class="fc" id="L43">        return this;</span>
     }
 
     /**
@@ -44,8 +51,8 @@ public final class GHContentBuilder {
      * @return the gh content builder
      */
     public GHContentBuilder branch(String branch) {
-<span class="fc" id="L47">        req.with(&quot;branch&quot;, branch);</span>
-<span class="fc" id="L48">        return this;</span>
+<span class="fc" id="L54">        req.with(&quot;branch&quot;, branch);</span>
+<span class="fc" id="L55">        return this;</span>
     }
 
     /**
@@ -56,8 +63,8 @@ public final class GHContentBuilder {
      * @return the gh content builder
      */
     public GHContentBuilder sha(String sha) {
-<span class="fc" id="L59">        req.with(&quot;sha&quot;, sha);</span>
-<span class="fc" id="L60">        return this;</span>
+<span class="fc" id="L66">        req.with(&quot;sha&quot;, sha);</span>
+<span class="fc" id="L67">        return this;</span>
     }
 
     /**
@@ -68,8 +75,8 @@ public final class GHContentBuilder {
      * @return the gh content builder
      */
     public GHContentBuilder content(byte[] content) {
-<span class="fc" id="L71">        req.with(&quot;content&quot;, Base64.getEncoder().encodeToString(content));</span>
-<span class="fc" id="L72">        return this;</span>
+<span class="fc" id="L78">        req.with(&quot;content&quot;, Base64.getEncoder().encodeToString(content));</span>
+<span class="fc" id="L79">        return this;</span>
     }
 
     /**
@@ -80,7 +87,7 @@ public final class GHContentBuilder {
      * @return the gh content builder
      */
     public GHContentBuilder content(String content) {
-<span class="fc" id="L83">        return content(content.getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L90">        return content(content.getBytes(StandardCharsets.UTF_8));</span>
     }
 
     /**
@@ -91,8 +98,8 @@ public final class GHContentBuilder {
      * @return the gh content builder
      */
     public GHContentBuilder message(String commitMessage) {
-<span class="fc" id="L94">        req.with(&quot;message&quot;, commitMessage);</span>
-<span class="fc" id="L95">        return this;</span>
+<span class="fc" id="L101">        req.with(&quot;message&quot;, commitMessage);</span>
+<span class="fc" id="L102">        return this;</span>
     }
 
     /**
@@ -103,13 +110,13 @@ public final class GHContentBuilder {
      *             the io exception
      */
     public GHContentUpdateResponse commit() throws IOException {
-<span class="fc" id="L106">        GHContentUpdateResponse response = req.withUrlPath(GHContent.getApiRoute(repo, path))</span>
-<span class="fc" id="L107">                .fetch(GHContentUpdateResponse.class);</span>
+<span class="fc" id="L113">        GHContentUpdateResponse response = req.withUrlPath(GHContent.getApiRoute(repo, path))</span>
+<span class="fc" id="L114">                .fetch(GHContentUpdateResponse.class);</span>
 
-<span class="fc" id="L109">        response.getContent().wrap(repo);</span>
-<span class="fc" id="L110">        response.getCommit().wrapUp(repo);</span>
+<span class="fc" id="L116">        response.getContent().wrap(repo);</span>
+<span class="fc" id="L117">        response.getCommit().wrapUp(repo);</span>
 
-<span class="fc" id="L112">        return response;</span>
+<span class="fc" id="L119">        return response;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

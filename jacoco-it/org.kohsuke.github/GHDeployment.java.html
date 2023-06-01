@@ -7,32 +7,64 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 
+// TODO: Auto-generated Javadoc
 /**
- * Represents a deployment
+ * Represents a deployment.
  *
  * @see &lt;a href=&quot;https://developer.github.com/v3/repos/deployments/&quot;&gt;documentation&lt;/a&gt;
  * @see GHRepository#listDeployments(String, String, String, String) GHRepository#listDeployments(String, String,
  *      String, String)
  * @see GHRepository#getDeployment(long) GHRepository#getDeployment(long)
  */
-<span class="fc" id="L18">public class GHDeployment extends GHObject {</span>
+<span class="fc" id="L19">public class GHDeployment extends GHObject {</span>
     private GHRepository owner;
+
+    /** The sha. */
     protected String sha;
+
+    /** The ref. */
     protected String ref;
+
+    /** The task. */
     protected String task;
+
+    /** The payload. */
     protected Object payload;
+
+    /** The environment. */
     protected String environment;
+
+    /** The description. */
     protected String description;
+
+    /** The statuses url. */
     protected String statuses_url;
+
+    /** The repository url. */
     protected String repository_url;
+
+    /** The creator. */
     protected GHUser creator;
+
+    /** The original environment. */
     protected String original_environment;
+
+    /** The transient environment. */
     protected boolean transient_environment;
+
+    /** The production environment. */
     protected boolean production_environment;
 
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH deployment
+     */
     GHDeployment wrap(GHRepository owner) {
-<span class="fc" id="L34">        this.owner = owner;</span>
-<span class="fc" id="L35">        return this;</span>
+<span class="fc" id="L66">        this.owner = owner;</span>
+<span class="fc" id="L67">        return this;</span>
     }
 
     /**
@@ -41,7 +73,7 @@ import java.util.Map;
      * @return the statuses url
      */
     public URL getStatusesUrl() {
-<span class="nc" id="L44">        return GitHubClient.parseURL(statuses_url);</span>
+<span class="nc" id="L76">        return GitHubClient.parseURL(statuses_url);</span>
     }
 
     /**
@@ -50,7 +82,7 @@ import java.util.Map;
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-<span class="nc" id="L53">        return GitHubClient.parseURL(repository_url);</span>
+<span class="nc" id="L85">        return GitHubClient.parseURL(repository_url);</span>
     }
 
     /**
@@ -59,7 +91,7 @@ import java.util.Map;
      * @return the task
      */
     public String getTask() {
-<span class="fc" id="L62">        return task;</span>
+<span class="fc" id="L94">        return task;</span>
     }
 
     /**
@@ -69,7 +101,7 @@ import java.util.Map;
      * @return the payload
      */
     public String getPayload() {
-<span class="fc" id="L72">        return (String) payload;</span>
+<span class="fc" id="L104">        return (String) payload;</span>
     }
 
     /**
@@ -79,7 +111,7 @@ import java.util.Map;
      * @return the payload
      */
     public Map&lt;String, Object&gt; getPayloadMap() {
-<span class="fc" id="L82">        return Collections.unmodifiableMap((Map&lt;String, Object&gt;) payload);</span>
+<span class="fc" id="L114">        return Collections.unmodifiableMap((Map&lt;String, Object&gt;) payload);</span>
     }
 
     /**
@@ -88,19 +120,18 @@ import java.util.Map;
      * @return the payload
      */
     public Object getPayloadObject() {
-<span class="fc" id="L91">        return payload;</span>
+<span class="fc" id="L123">        return payload;</span>
     }
 
     /**
      * The environment defined when the deployment was first created.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @return the original deployment environment
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.FLASH)
     public String getOriginalEnvironment() {
-<span class="fc" id="L103">        return original_environment;</span>
+<span class="fc" id="L134">        return original_environment;</span>
     }
 
     /**
@@ -109,32 +140,30 @@ import java.util.Map;
      * @return the environment
      */
     public String getEnvironment() {
-<span class="fc" id="L112">        return environment;</span>
+<span class="fc" id="L143">        return environment;</span>
     }
 
     /**
      * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
      * future.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @return the environment is transient
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public boolean isTransientEnvironment() {
-<span class="fc" id="L125">        return transient_environment;</span>
+<span class="fc" id="L155">        return transient_environment;</span>
     }
 
     /**
      * Specifies if the given environment is one that end-users directly interact with.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @return the environment is used by end-users directly
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public boolean isProductionEnvironment() {
-<span class="fc" id="L137">        return production_environment;</span>
+<span class="fc" id="L166">        return production_environment;</span>
     }
 
     /**
@@ -145,7 +174,7 @@ import java.util.Map;
      *             the io exception
      */
     public GHUser getCreator() throws IOException {
-<span class="fc" id="L148">        return root().intern(creator);</span>
+<span class="fc" id="L177">        return root().intern(creator);</span>
     }
 
     /**
@@ -154,7 +183,7 @@ import java.util.Map;
      * @return the ref
      */
     public String getRef() {
-<span class="fc" id="L157">        return ref;</span>
+<span class="fc" id="L186">        return ref;</span>
     }
 
     /**
@@ -163,15 +192,18 @@ import java.util.Map;
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L166">        return sha;</span>
+<span class="fc" id="L195">        return sha;</span>
     }
 
     /**
+     * Gets the html url.
+     *
+     * @return the html url
      * @deprecated This object has no HTML URL.
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L174">        return null;</span>
+<span class="nc" id="L206">        return null;</span>
     }
 
     /**
@@ -182,7 +214,7 @@ import java.util.Map;
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
-<span class="fc" id="L185">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
+<span class="fc" id="L217">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
     }
 
     /**
@@ -191,16 +223,21 @@ import java.util.Map;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHDeploymentStatus&gt; listStatuses() {
-<span class="fc" id="L194">        return root().createRequest()</span>
-<span class="fc" id="L195">                .withUrlPath(statuses_url)</span>
-<span class="fc" id="L196">                .withPreview(Previews.ANT_MAN)</span>
-<span class="fc" id="L197">                .withPreview(Previews.FLASH)</span>
-<span class="fc" id="L198">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.lateBind(owner));</span>
+<span class="fc" id="L226">        return root().createRequest()</span>
+<span class="fc" id="L227">                .withUrlPath(statuses_url)</span>
+<span class="fc" id="L228">                .withPreview(Previews.ANT_MAN)</span>
+<span class="fc" id="L229">                .withPreview(Previews.FLASH)</span>
+<span class="fc" id="L230">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.lateBind(owner));</span>
     }
 
+    /**
+     * Gets the owner.
+     *
+     * @return the owner
+     */
     // test only
     GHRepository getOwner() {
-<span class="fc" id="L203">        return owner;</span>
+<span class="fc" id="L240">        return owner;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

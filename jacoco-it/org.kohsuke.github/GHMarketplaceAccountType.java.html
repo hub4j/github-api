@@ -4,20 +4,27 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * GitHub Marketplace Account type.
  *
  * @author Paulo Miguel Almeida
  * @see GHMarketplaceAccount
  */
-<span class="fc" id="L13">public enum GHMarketplaceAccountType {</span>
-<span class="fc" id="L14">    ORGANIZATION, USER;</span>
+<span class="fc" id="L14">public enum GHMarketplaceAccountType {</span>
+
+    /** The organization. */
+<span class="fc" id="L17">    ORGANIZATION,</span>
+    /** The user. */
+<span class="fc" id="L19">    USER;</span>
 
     /**
      * Returns GitHub's internal representation of this event.
+     *
+     * @return the string
      */
     String symbol() {
-<span class="nc" id="L20">        return StringUtils.capitalize(name().toLowerCase(Locale.ENGLISH));</span>
+<span class="nc" id="L27">        return StringUtils.capitalize(name().toLowerCase(Locale.ENGLISH));</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -3,6 +3,7 @@
 import java.util.Collections;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * Repository clone statistics.
  *
@@ -11,13 +12,26 @@ import java.util.List;
 public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
     private List&lt;DailyInfo&gt; clones;
 
-<span class="fc" id="L14">    GHRepositoryCloneTraffic() {</span>
-<span class="fc" id="L15">    }</span>
+    /**
+     * Instantiates a new GH repository clone traffic.
+     */
+<span class="fc" id="L18">    GHRepositoryCloneTraffic() {</span>
+<span class="fc" id="L19">    }</span>
 
+    /**
+     * Instantiates a new GH repository clone traffic.
+     *
+     * @param count
+     *            the count
+     * @param uniques
+     *            the uniques
+     * @param clones
+     *            the clones
+     */
     GHRepositoryCloneTraffic(Integer count, Integer uniques, List&lt;DailyInfo&gt; clones) {
-<span class="fc" id="L18">        super(count, uniques);</span>
-<span class="fc" id="L19">        this.clones = clones;</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L32">        super(count, uniques);</span>
+<span class="fc" id="L33">        this.clones = clones;</span>
+<span class="fc" id="L34">    }</span>
 
     /**
      * Gets clones.
@@ -25,23 +39,42 @@ public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
      * @return the clones
      */
     public List&lt;DailyInfo&gt; getClones() {
-<span class="fc" id="L28">        return Collections.unmodifiableList(clones);</span>
+<span class="fc" id="L42">        return Collections.unmodifiableList(clones);</span>
     }
 
+    /**
+     * Gets the daily info.
+     *
+     * @return the daily info
+     */
     public List&lt;DailyInfo&gt; getDailyInfo() {
-<span class="fc" id="L32">        return getClones();</span>
+<span class="fc" id="L51">        return getClones();</span>
     }
 
     /**
      * The type DailyInfo.
      */
     public static class DailyInfo extends GHRepositoryTraffic.DailyInfo {
-<span class="fc" id="L39">        DailyInfo() {</span>
-<span class="fc" id="L40">        }</span>
 
+        /**
+         * Instantiates a new daily info.
+         */
+<span class="fc" id="L62">        DailyInfo() {</span>
+<span class="fc" id="L63">        }</span>
+
+        /**
+         * Instantiates a new daily info.
+         *
+         * @param timestamp
+         *            the timestamp
+         * @param count
+         *            the count
+         * @param uniques
+         *            the uniques
+         */
         DailyInfo(String timestamp, int count, int uniques) {
-<span class="fc" id="L43">            super(timestamp, count, uniques);</span>
-<span class="fc" id="L44">        }</span>
+<span class="fc" id="L76">            super(timestamp, count, uniques);</span>
+<span class="fc" id="L77">        }</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

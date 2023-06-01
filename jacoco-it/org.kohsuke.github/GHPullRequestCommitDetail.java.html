@@ -28,6 +28,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Commit detail inside a {@link GHPullRequest}.
  *
@@ -38,26 +39,36 @@ import java.net.URL;
         value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
                 &quot;URF_UNREAD_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="nc" id="L41">public class GHPullRequestCommitDetail {</span>
+<span class="nc" id="L42">public class GHPullRequestCommitDetail {</span>
     private GHPullRequest owner;
 
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     */
     void wrapUp(GHPullRequest owner) {
-<span class="nc" id="L45">        this.owner = owner;</span>
-<span class="nc" id="L46">    }</span>
+<span class="nc" id="L52">        this.owner = owner;</span>
+<span class="nc" id="L53">    }</span>
 
     /**
      * The type Authorship.
      *
      * @deprecated Use {@link GitUser}
      */
-<span class="nc" id="L53">    public static class Authorship extends GitUser {</span>
+<span class="nc" id="L60">    public static class Authorship extends GitUser {</span>
     }
 
     /**
      * The type Tree.
      */
-<span class="nc" id="L59">    public static class Tree {</span>
+<span class="nc" id="L66">    public static class Tree {</span>
+
+        /** The sha. */
         String sha;
+
+        /** The url. */
         String url;
 
         /**
@@ -66,7 +77,7 @@ import java.net.URL;
          * @return the sha
          */
         public String getSha() {
-<span class="nc" id="L69">            return sha;</span>
+<span class="nc" id="L80">            return sha;</span>
         }
 
         /**
@@ -75,19 +86,31 @@ import java.net.URL;
          * @return the url
          */
         public URL getUrl() {
-<span class="nc" id="L78">            return GitHubClient.parseURL(url);</span>
+<span class="nc" id="L89">            return GitHubClient.parseURL(url);</span>
         }
     }
 
     /**
      * The type Commit.
      */
-<span class="nc" id="L85">    public static class Commit {</span>
+<span class="nc" id="L96">    public static class Commit {</span>
+
+        /** The author. */
         Authorship author;
+
+        /** The committer. */
         Authorship committer;
+
+        /** The message. */
         String message;
+
+        /** The tree. */
         Tree tree;
+
+        /** The url. */
         String url;
+
+        /** The comment count. */
         int comment_count;
 
         /**
@@ -97,7 +120,7 @@ import java.net.URL;
          */
         @WithBridgeMethods(value = Authorship.class, castRequired = true)
         public GitUser getAuthor() {
-<span class="nc" id="L100">            return author;</span>
+<span class="nc" id="L123">            return author;</span>
         }
 
         /**
@@ -107,7 +130,7 @@ import java.net.URL;
          */
         @WithBridgeMethods(value = Authorship.class, castRequired = true)
         public GitUser getCommitter() {
-<span class="nc" id="L110">            return committer;</span>
+<span class="nc" id="L133">            return committer;</span>
         }
 
         /**
@@ -116,7 +139,7 @@ import java.net.URL;
          * @return the message
          */
         public String getMessage() {
-<span class="nc" id="L119">            return message;</span>
+<span class="nc" id="L142">            return message;</span>
         }
 
         /**
@@ -125,7 +148,7 @@ import java.net.URL;
          * @return the url
          */
         public URL getUrl() {
-<span class="nc" id="L128">            return GitHubClient.parseURL(url);</span>
+<span class="nc" id="L151">            return GitHubClient.parseURL(url);</span>
         }
 
         /**
@@ -134,7 +157,7 @@ import java.net.URL;
          * @return the comment count
          */
         public int getComment_count() {
-<span class="nc" id="L137">            return comment_count;</span>
+<span class="nc" id="L160">            return comment_count;</span>
         }
 
         /**
@@ -143,16 +166,22 @@ import java.net.URL;
          * @return the tree
          */
         public Tree getTree() {
-<span class="nc" id="L146">            return tree;</span>
+<span class="nc" id="L169">            return tree;</span>
         }
     }
 
     /**
      * The type CommitPointer.
      */
-<span class="nc" id="L153">    public static class CommitPointer {</span>
+<span class="nc" id="L176">    public static class CommitPointer {</span>
+
+        /** The sha. */
         String sha;
+
+        /** The url. */
         String url;
+
+        /** The html url. */
         String html_url;
 
         /**
@@ -161,7 +190,7 @@ import java.net.URL;
          * @return the url
          */
         public URL getUrl() {
-<span class="nc" id="L164">            return GitHubClient.parseURL(url);</span>
+<span class="nc" id="L193">            return GitHubClient.parseURL(url);</span>
         }
 
         /**
@@ -170,7 +199,7 @@ import java.net.URL;
          * @return the html url
          */
         public URL getHtml_url() {
-<span class="nc" id="L173">            return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L202">            return GitHubClient.parseURL(html_url);</span>
         }
 
         /**
@@ -179,15 +208,26 @@ import java.net.URL;
          * @return the sha
          */
         public String getSha() {
-<span class="nc" id="L182">            return sha;</span>
+<span class="nc" id="L211">            return sha;</span>
         }
     }
 
+    /** The sha. */
     String sha;
+
+    /** The commit. */
     Commit commit;
+
+    /** The url. */
     String url;
+
+    /** The html url. */
     String html_url;
+
+    /** The comments url. */
     String comments_url;
+
+    /** The parents. */
     CommitPointer[] parents;
 
     /**
@@ -196,7 +236,7 @@ import java.net.URL;
      * @return the sha
      */
     public String getSha() {
-<span class="nc" id="L199">        return sha;</span>
+<span class="nc" id="L239">        return sha;</span>
     }
 
     /**
@@ -205,7 +245,7 @@ import java.net.URL;
      * @return the commit
      */
     public Commit getCommit() {
-<span class="nc" id="L208">        return commit;</span>
+<span class="nc" id="L248">        return commit;</span>
     }
 
     /**
@@ -214,7 +254,7 @@ import java.net.URL;
      * @return the api url
      */
     public URL getApiUrl() {
-<span class="nc" id="L217">        return GitHubClient.parseURL(url);</span>
+<span class="nc" id="L257">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -223,7 +263,7 @@ import java.net.URL;
      * @return the url
      */
     public URL getUrl() {
-<span class="nc" id="L226">        return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L266">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -232,7 +272,7 @@ import java.net.URL;
      * @return the comments url
      */
     public URL getCommentsUrl() {
-<span class="nc" id="L235">        return GitHubClient.parseURL(comments_url);</span>
+<span class="nc" id="L275">        return GitHubClient.parseURL(comments_url);</span>
     }
 
     /**
@@ -241,9 +281,9 @@ import java.net.URL;
      * @return the commit pointer [ ]
      */
     public CommitPointer[] getParents() {
-<span class="nc" id="L244">        CommitPointer[] newValue = new CommitPointer[parents.length];</span>
-<span class="nc" id="L245">        System.arraycopy(parents, 0, newValue, 0, parents.length);</span>
-<span class="nc" id="L246">        return newValue;</span>
+<span class="nc" id="L284">        CommitPointer[] newValue = new CommitPointer[parents.length];</span>
+<span class="nc" id="L285">        System.arraycopy(parents, 0, newValue, 0, parents.length);</span>
+<span class="nc" id="L286">        return newValue;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

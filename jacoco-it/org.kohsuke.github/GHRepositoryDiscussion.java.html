@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * A discussion in the repository.
  * &lt;p&gt;
@@ -19,7 +20,7 @@ import java.util.Date;
  * @see &lt;a href=&quot;https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussion&quot;&gt;The GraphQL
  *      API for Discussions&lt;/a&gt;
  */
-<span class="fc" id="L22">public class GHRepositoryDiscussion extends GHObject {</span>
+<span class="fc" id="L23">public class GHRepositoryDiscussion extends GHObject {</span>
 
     private Category category;
 
@@ -40,64 +41,143 @@ import java.util.Date;
     private String body;
     private String timelineUrl;
 
+    /**
+     * Gets the category.
+     *
+     * @return the category
+     */
     public Category getCategory() {
-<span class="fc" id="L44">        return category;</span>
+<span class="fc" id="L50">        return category;</span>
     }
 
+    /**
+     * Gets the answer html url.
+     *
+     * @return the answer html url
+     */
     public URL getAnswerHtmlUrl() {
-<span class="fc" id="L48">        return GitHubClient.parseURL(answerHtmlUrl);</span>
+<span class="fc" id="L59">        return GitHubClient.parseURL(answerHtmlUrl);</span>
     }
 
+    /**
+     * Gets the answer chosen at.
+     *
+     * @return the answer chosen at
+     */
     public Date getAnswerChosenAt() {
-<span class="fc" id="L52">        return GitHubClient.parseDate(answerChosenAt);</span>
+<span class="fc" id="L68">        return GitHubClient.parseDate(answerChosenAt);</span>
     }
 
+    /**
+     * Gets the answer chosen by.
+     *
+     * @return the answer chosen by
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public GHUser getAnswerChosenBy() throws IOException {
-<span class="fc" id="L56">        return root().intern(answerChosenBy);</span>
+<span class="fc" id="L79">        return root().intern(answerChosenBy);</span>
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     public URL getHtmlUrl() {
-<span class="fc" id="L60">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L88">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
+    /**
+     * Gets the number.
+     *
+     * @return the number
+     */
     public int getNumber() {
-<span class="fc" id="L64">        return number;</span>
+<span class="fc" id="L97">        return number;</span>
     }
 
+    /**
+     * Gets the title.
+     *
+     * @return the title
+     */
     public String getTitle() {
-<span class="fc" id="L68">        return title;</span>
+<span class="fc" id="L106">        return title;</span>
     }
 
+    /**
+     * Gets the user.
+     *
+     * @return the user
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public GHUser getUser() throws IOException {
-<span class="fc" id="L72">        return root().intern(user);</span>
+<span class="fc" id="L117">        return root().intern(user);</span>
     }
 
+    /**
+     * Gets the state.
+     *
+     * @return the state
+     */
     public State getState() {
-<span class="fc" id="L76">        return EnumUtils.getEnumOrDefault(State.class, state, State.UNKNOWN);</span>
+<span class="fc" id="L126">        return EnumUtils.getEnumOrDefault(State.class, state, State.UNKNOWN);</span>
     }
 
+    /**
+     * Checks if is locked.
+     *
+     * @return true, if is locked
+     */
     public boolean isLocked() {
-<span class="fc" id="L80">        return locked;</span>
+<span class="fc" id="L135">        return locked;</span>
     }
 
+    /**
+     * Gets the comments.
+     *
+     * @return the comments
+     */
     public int getComments() {
-<span class="fc" id="L84">        return comments;</span>
+<span class="fc" id="L144">        return comments;</span>
     }
 
+    /**
+     * Gets the author association.
+     *
+     * @return the author association
+     */
     public GHCommentAuthorAssociation getAuthorAssociation() {
-<span class="fc" id="L88">        return authorAssociation;</span>
+<span class="fc" id="L153">        return authorAssociation;</span>
     }
 
+    /**
+     * Gets the active lock reason.
+     *
+     * @return the active lock reason
+     */
     public String getActiveLockReason() {
-<span class="fc" id="L92">        return activeLockReason;</span>
+<span class="fc" id="L162">        return activeLockReason;</span>
     }
 
+    /**
+     * Gets the body.
+     *
+     * @return the body
+     */
     public String getBody() {
-<span class="fc" id="L96">        return body;</span>
+<span class="fc" id="L171">        return body;</span>
     }
 
+    /**
+     * Gets the timeline url.
+     *
+     * @return the timeline url
+     */
     public String getTimelineUrl() {
-<span class="nc" id="L100">        return timelineUrl;</span>
+<span class="nc" id="L180">        return timelineUrl;</span>
     }
 
     /**
@@ -110,7 +190,7 @@ import java.util.Date;
      *      &quot;https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussioncategory&quot;&gt;The
      *      GraphQL API for Discussions&lt;/a&gt;
      */
-<span class="fc" id="L113">    public static class Category {</span>
+<span class="fc" id="L193">    public static class Category {</span>
 
         private long id;
         private String nodeId;
@@ -123,49 +203,108 @@ import java.util.Date;
         private String slug;
         private boolean isAnswerable;
 
+        /**
+         * Gets the id.
+         *
+         * @return the id
+         */
         public long getId() {
-<span class="fc" id="L127">            return id;</span>
+<span class="fc" id="L212">            return id;</span>
         }
 
+        /**
+         * Gets the node id.
+         *
+         * @return the node id
+         */
         public String getNodeId() {
-<span class="fc" id="L131">            return nodeId;</span>
+<span class="fc" id="L221">            return nodeId;</span>
         }
 
+        /**
+         * Gets the repository id.
+         *
+         * @return the repository id
+         */
         public long getRepositoryId() {
-<span class="nc" id="L135">            return repositoryId;</span>
+<span class="nc" id="L230">            return repositoryId;</span>
         }
 
+        /**
+         * Gets the emoji.
+         *
+         * @return the emoji
+         */
         public String getEmoji() {
-<span class="fc" id="L139">            return emoji;</span>
+<span class="fc" id="L239">            return emoji;</span>
         }
 
+        /**
+         * Gets the name.
+         *
+         * @return the name
+         */
         public String getName() {
-<span class="fc" id="L143">            return name;</span>
+<span class="fc" id="L248">            return name;</span>
         }
 
+        /**
+         * Gets the description.
+         *
+         * @return the description
+         */
         public String getDescription() {
-<span class="fc" id="L147">            return description;</span>
+<span class="fc" id="L257">            return description;</span>
         }
 
+        /**
+         * Gets the created at.
+         *
+         * @return the created at
+         */
         public Date getCreatedAt() {
-<span class="fc" id="L151">            return GitHubClient.parseDate(createdAt);</span>
+<span class="fc" id="L266">            return GitHubClient.parseDate(createdAt);</span>
         }
 
+        /**
+         * Gets the updated at.
+         *
+         * @return the updated at
+         */
         public Date getUpdatedAt() {
-<span class="fc" id="L155">            return GitHubClient.parseDate(updatedAt);</span>
+<span class="fc" id="L275">            return GitHubClient.parseDate(updatedAt);</span>
         }
 
+        /**
+         * Gets the slug.
+         *
+         * @return the slug
+         */
         public String getSlug() {
-<span class="fc" id="L159">            return slug;</span>
+<span class="fc" id="L284">            return slug;</span>
         }
 
+        /**
+         * Checks if is answerable.
+         *
+         * @return true, if is answerable
+         */
         public boolean isAnswerable() {
-<span class="fc" id="L163">            return isAnswerable;</span>
+<span class="fc" id="L293">            return isAnswerable;</span>
         }
     }
 
-<span class="fc" id="L167">    public enum State {</span>
-<span class="fc" id="L168">        OPEN, LOCKED, UNKNOWN;</span>
+    /**
+     * The Enum State.
+     */
+<span class="fc" id="L300">    public enum State {</span>
+
+        /** The open. */
+<span class="fc" id="L303">        OPEN,</span>
+        /** The locked. */
+<span class="fc" id="L305">        LOCKED,</span>
+        /** The unknown. */
+<span class="fc" id="L307">        UNKNOWN;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

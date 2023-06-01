@@ -11,17 +11,22 @@ import javax.annotation.Nonnull;
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
+// TODO: Auto-generated Javadoc
 /**
  * Pluggable strategy to detect and choose what to do when errors occur during an http request.
  *
  * @author Liam Newman
  */
-<span class="fc" id="L19">abstract class GitHubConnectorResponseErrorHandler {</span>
+<span class="fc" id="L20">abstract class GitHubConnectorResponseErrorHandler {</span>
 
     /**
      * Called to detect an error handled by this handler.
      *
+     * @param connectorResponse
+     *            the connector response
      * @return {@code true} if there is an error and {@link #onError(GitHubConnectorResponse)} should be called
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 
@@ -42,20 +47,21 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 
-<span class="fc" id="L45">    static GitHubConnectorResponseErrorHandler STATUS_HTTP_BAD_REQUEST_OR_GREATER = new GitHubConnectorResponseErrorHandler() {</span>
+    /** The status http bad request or greater. */
+<span class="fc" id="L51">    static GitHubConnectorResponseErrorHandler STATUS_HTTP_BAD_REQUEST_OR_GREATER = new GitHubConnectorResponseErrorHandler() {</span>
         @Override
         public boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L48" title="All 2 branches covered.">            return connectorResponse.statusCode() &gt;= HTTP_BAD_REQUEST;</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            return connectorResponse.statusCode() &gt;= HTTP_BAD_REQUEST;</span>
         }
 
         @Override
         public void onError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (connectorResponse.statusCode() == HTTP_NOT_FOUND) {</span>
-<span class="fc" id="L54">                throw new FileNotFoundException(connectorResponse.request().url().toString());</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (connectorResponse.statusCode() == HTTP_NOT_FOUND) {</span>
+<span class="fc" id="L60">                throw new FileNotFoundException(connectorResponse.request().url().toString());</span>
             } else {
-<span class="fc" id="L56">                throw new HttpException(connectorResponse);</span>
+<span class="fc" id="L62">                throw new HttpException(connectorResponse);</span>
             }
         }
     };
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

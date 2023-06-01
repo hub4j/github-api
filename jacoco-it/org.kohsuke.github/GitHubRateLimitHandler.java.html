@@ -8,21 +8,30 @@ import java.net.HttpURLConnection;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Pluggable strategy to determine what to do when the API rate limit is reached.
  *
  * @author Kohsuke Kawaguchi
+ * @author Liam Newman
  * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler) GitHubBuilder#withRateLimitHandler(RateLimitHandler)
  * @see GitHubAbuseLimitHandler
- *
- * @author Liam Newman
  */
 <span class="fc" id="L20">public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {</span>
 
+    /**
+     * Checks if is error.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @return true, if is error
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Override
     boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L24" title="All 2 branches covered.">        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN</span>
-<span class="fc bfc" id="L25" title="All 2 branches covered.">                &amp;&amp; &quot;0&quot;.equals(connectorResponse.header(&quot;X-RateLimit-Remaining&quot;));</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">                &amp;&amp; &quot;0&quot;.equals(connectorResponse.header(&quot;X-RateLimit-Remaining&quot;));</span>
     }
 
     /**
@@ -42,4 +51,4 @@ import javax.annotation.Nonnull;
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

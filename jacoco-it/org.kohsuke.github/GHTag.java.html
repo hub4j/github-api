@@ -2,24 +2,32 @@
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+// TODO: Auto-generated Javadoc
 /**
- * Represents a tag in {@link GHRepository}
+ * Represents a tag in {@link GHRepository}.
  *
  * @see GHRepository#listTags() GHRepository#listTags()
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="fc" id="L12">public class GHTag extends GitHubInteractiveObject {</span>
+<span class="fc" id="L13">public class GHTag extends GitHubInteractiveObject {</span>
     private GHRepository owner;
 
     private String name;
     private GHCommit commit;
 
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH tag
+     */
     GHTag wrap(GHRepository owner) {
-<span class="fc" id="L19">        this.owner = owner;</span>
-<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if (commit != null)</span>
-<span class="fc" id="L21">            commit.wrapUp(owner);</span>
-<span class="fc" id="L22">        return this;</span>
+<span class="fc" id="L27">        this.owner = owner;</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (commit != null)</span>
+<span class="fc" id="L29">            commit.wrapUp(owner);</span>
+<span class="fc" id="L30">        return this;</span>
     }
 
     /**
@@ -29,7 +37,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="nc" id="L32">        return owner;</span>
+<span class="nc" id="L40">        return owner;</span>
     }
 
     /**
@@ -38,7 +46,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the name
      */
     public String getName() {
-<span class="nc" id="L41">        return name;</span>
+<span class="nc" id="L49">        return name;</span>
     }
 
     /**
@@ -48,7 +56,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHCommit getCommit() {
-<span class="fc" id="L51">        return commit;</span>
+<span class="fc" id="L59">        return commit;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

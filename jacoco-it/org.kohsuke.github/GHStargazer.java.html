@@ -4,26 +4,27 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
  * A stargazer at a repository on GitHub.
  *
  * @author noctarius
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
-<span class="fc" id="L13">public class GHStargazer {</span>
+<span class="fc" id="L14">public class GHStargazer {</span>
 
     private GHRepository repository;
     private String starred_at;
     private GHUser user;
 
     /**
-     * Gets the repository that is stargazed
+     * Gets the repository that is stargazed.
      *
      * @return the starred repository
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L26">        return repository;</span>
+<span class="fc" id="L27">        return repository;</span>
     }
 
     /**
@@ -33,21 +34,27 @@ import java.util.Date;
      * @return the date the stargazer was added
      */
     public Date getStarredAt() {
-<span class="fc" id="L36">        return GitHubClient.parseDate(starred_at);</span>
+<span class="fc" id="L37">        return GitHubClient.parseDate(starred_at);</span>
     }
 
     /**
-     * Gets the user that starred the repository
+     * Gets the user that starred the repository.
      *
      * @return the stargazer user
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getUser() {
-<span class="fc" id="L46">        return user;</span>
+<span class="fc" id="L47">        return user;</span>
     }
 
+    /**
+     * Wrap up.
+     *
+     * @param repository
+     *            the repository
+     */
     void wrapUp(GHRepository repository) {
-<span class="fc" id="L50">        this.repository = repository;</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L57">        this.repository = repository;</span>
+<span class="fc" id="L58">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

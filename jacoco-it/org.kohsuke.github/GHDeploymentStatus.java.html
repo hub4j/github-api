@@ -5,18 +5,35 @@ import org.kohsuke.github.internal.Previews;
 import java.net.URL;
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * The type GHDeploymentStatus.
  */
-<span class="fc" id="L11">public class GHDeploymentStatus extends GHObject {</span>
+<span class="fc" id="L12">public class GHDeploymentStatus extends GHObject {</span>
     private GHRepository owner;
+
+    /** The creator. */
     protected GHUser creator;
+
+    /** The state. */
     protected String state;
+
+    /** The description. */
     protected String description;
+
+    /** The target url. */
     protected String target_url;
+
+    /** The log url. */
     protected String log_url;
+
+    /** The deployment url. */
     protected String deployment_url;
+
+    /** The repository url. */
     protected String repository_url;
+
+    /** The environment url. */
     protected String environment_url;
 
     /**
@@ -29,7 +46,7 @@ import java.util.Locale;
      */
     @Deprecated
     public GHDeploymentStatus wrap(GHRepository owner) {
-<span class="nc" id="L32">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="nc" id="L49">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -41,20 +58,19 @@ import java.util.Locale;
      * @return the gh deployment status
      */
     GHDeploymentStatus lateBind(GHRepository owner) {
-<span class="fc" id="L44">        this.owner = owner;</span>
-<span class="fc" id="L45">        return this;</span>
+<span class="fc" id="L61">        this.owner = owner;</span>
+<span class="fc" id="L62">        return this;</span>
     }
 
     /**
      * Gets target url.
      *
-     * @deprecated Target url is deprecated in favor of {@link #getLogUrl() getLogUrl}
-     *
      * @return the target url
+     * @deprecated Target url is deprecated in favor of {@link #getLogUrl() getLogUrl}
      */
     @Deprecated
     public URL getTargetUrl() {
-<span class="fc" id="L57">        return GitHubClient.parseURL(target_url);</span>
+<span class="fc" id="L73">        return GitHubClient.parseURL(target_url);</span>
     }
 
     /**
@@ -62,13 +78,12 @@ import java.util.Locale;
      * &lt;p&gt;
      * This method replaces {@link #getTargetUrl() getTargetUrl}}.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @return the target url
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public URL getLogUrl() {
-<span class="fc" id="L71">        return GitHubClient.parseURL(log_url);</span>
+<span class="fc" id="L86">        return GitHubClient.parseURL(log_url);</span>
     }
 
     /**
@@ -77,19 +92,18 @@ import java.util.Locale;
      * @return the deployment url
      */
     public URL getDeploymentUrl() {
-<span class="fc" id="L80">        return GitHubClient.parseURL(deployment_url);</span>
+<span class="fc" id="L95">        return GitHubClient.parseURL(deployment_url);</span>
     }
 
     /**
      * Gets deployment environment url.
      *
-     * @deprecated until preview feature has graduated to stable
-     *
      * @return the deployment environment url
+     * @deprecated until preview feature has graduated to stable
      */
     @Preview(Previews.ANT_MAN)
     public URL getEnvironmentUrl() {
-<span class="nc" id="L92">        return GitHubClient.parseURL(environment_url);</span>
+<span class="nc" id="L106">        return GitHubClient.parseURL(environment_url);</span>
     }
 
     /**
@@ -98,7 +112,7 @@ import java.util.Locale;
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-<span class="fc" id="L101">        return GitHubClient.parseURL(repository_url);</span>
+<span class="fc" id="L115">        return GitHubClient.parseURL(repository_url);</span>
     }
 
     /**
@@ -107,20 +121,28 @@ import java.util.Locale;
      * @return the state
      */
     public GHDeploymentState getState() {
-<span class="fc" id="L110">        return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L124">        return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
+     * Gets the html url.
+     *
+     * @return the html url
      * @deprecated This object has no HTML URL.
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L118">        return null;</span>
+<span class="nc" id="L135">        return null;</span>
     }
 
+    /**
+     * Gets the owner.
+     *
+     * @return the owner
+     */
     // test only
     GHRepository getOwner() {
-<span class="fc" id="L123">        return owner;</span>
+<span class="fc" id="L145">        return owner;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

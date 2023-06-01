@@ -6,13 +6,14 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.util.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents an event.
  *
  * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, justification = &quot;JSON API&quot;)
-<span class="fc" id="L15">public class GHEventInfo extends GitHubInteractiveObject {</span>
+<span class="fc" id="L16">public class GHEventInfo extends GitHubInteractiveObject {</span>
     // we don't want to expose Jackson dependency to the user. This needs databinding
     private ObjectNode payload;
 
@@ -42,7 +43,7 @@ import java.util.*;
             value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;,
                     &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;JSON API&quot;)
-<span class="fc" id="L45">    public static class GHEventRepository {</span>
+<span class="fc" id="L46">    public static class GHEventRepository {</span>
         @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
         private long id;
         @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
@@ -50,7 +51,8 @@ import java.util.*;
         private String name; // owner/repo
     }
 
-<span class="fc" id="L53">    static final Map&lt;String, GHEvent&gt; mapTypeStringToEvent = createEventMap();</span>
+    /** The Constant mapTypeStringToEvent. */
+<span class="fc" id="L55">    static final Map&lt;String, GHEvent&gt; mapTypeStringToEvent = createEventMap();</span>
 
     /**
      * Map for GitHub Event API Event Type to GHEvent.
@@ -59,27 +61,34 @@ import java.util.*;
      *      types&lt;/a&gt;
      */
     private static Map&lt;String, GHEvent&gt; createEventMap() {
-<span class="fc" id="L62">        HashMap&lt;String, GHEvent&gt; map = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L63">        map.put(&quot;CommitCommentEvent&quot;, GHEvent.COMMIT_COMMENT);</span>
-<span class="fc" id="L64">        map.put(&quot;CreateEvent&quot;, GHEvent.CREATE);</span>
-<span class="fc" id="L65">        map.put(&quot;DeleteEvent&quot;, GHEvent.DELETE);</span>
-<span class="fc" id="L66">        map.put(&quot;ForkEvent&quot;, GHEvent.FORK);</span>
-<span class="fc" id="L67">        map.put(&quot;GollumEvent&quot;, GHEvent.GOLLUM);</span>
-<span class="fc" id="L68">        map.put(&quot;IssueCommentEvent&quot;, GHEvent.ISSUE_COMMENT);</span>
-<span class="fc" id="L69">        map.put(&quot;IssuesEvent&quot;, GHEvent.ISSUES);</span>
-<span class="fc" id="L70">        map.put(&quot;MemberEvent&quot;, GHEvent.MEMBER);</span>
-<span class="fc" id="L71">        map.put(&quot;PublicEvent&quot;, GHEvent.PUBLIC);</span>
-<span class="fc" id="L72">        map.put(&quot;PullRequestEvent&quot;, GHEvent.PULL_REQUEST);</span>
-<span class="fc" id="L73">        map.put(&quot;PullRequestReviewEvent&quot;, GHEvent.PULL_REQUEST_REVIEW);</span>
-<span class="fc" id="L74">        map.put(&quot;PullRequestReviewCommentEvent&quot;, GHEvent.PULL_REQUEST_REVIEW_COMMENT);</span>
-<span class="fc" id="L75">        map.put(&quot;PushEvent&quot;, GHEvent.PUSH);</span>
-<span class="fc" id="L76">        map.put(&quot;ReleaseEvent&quot;, GHEvent.RELEASE);</span>
-<span class="fc" id="L77">        map.put(&quot;WatchEvent&quot;, GHEvent.WATCH);</span>
-<span class="fc" id="L78">        return Collections.unmodifiableMap(map);</span>
+<span class="fc" id="L64">        HashMap&lt;String, GHEvent&gt; map = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L65">        map.put(&quot;CommitCommentEvent&quot;, GHEvent.COMMIT_COMMENT);</span>
+<span class="fc" id="L66">        map.put(&quot;CreateEvent&quot;, GHEvent.CREATE);</span>
+<span class="fc" id="L67">        map.put(&quot;DeleteEvent&quot;, GHEvent.DELETE);</span>
+<span class="fc" id="L68">        map.put(&quot;ForkEvent&quot;, GHEvent.FORK);</span>
+<span class="fc" id="L69">        map.put(&quot;GollumEvent&quot;, GHEvent.GOLLUM);</span>
+<span class="fc" id="L70">        map.put(&quot;IssueCommentEvent&quot;, GHEvent.ISSUE_COMMENT);</span>
+<span class="fc" id="L71">        map.put(&quot;IssuesEvent&quot;, GHEvent.ISSUES);</span>
+<span class="fc" id="L72">        map.put(&quot;MemberEvent&quot;, GHEvent.MEMBER);</span>
+<span class="fc" id="L73">        map.put(&quot;PublicEvent&quot;, GHEvent.PUBLIC);</span>
+<span class="fc" id="L74">        map.put(&quot;PullRequestEvent&quot;, GHEvent.PULL_REQUEST);</span>
+<span class="fc" id="L75">        map.put(&quot;PullRequestReviewEvent&quot;, GHEvent.PULL_REQUEST_REVIEW);</span>
+<span class="fc" id="L76">        map.put(&quot;PullRequestReviewCommentEvent&quot;, GHEvent.PULL_REQUEST_REVIEW_COMMENT);</span>
+<span class="fc" id="L77">        map.put(&quot;PushEvent&quot;, GHEvent.PUSH);</span>
+<span class="fc" id="L78">        map.put(&quot;ReleaseEvent&quot;, GHEvent.RELEASE);</span>
+<span class="fc" id="L79">        map.put(&quot;WatchEvent&quot;, GHEvent.WATCH);</span>
+<span class="fc" id="L80">        return Collections.unmodifiableMap(map);</span>
     }
 
+    /**
+     * Transform type to GH event.
+     *
+     * @param type
+     *            the type
+     * @return the GH event
+     */
     static GHEvent transformTypeToGHEvent(String type) {
-<span class="fc" id="L82">        return mapTypeStringToEvent.getOrDefault(type, GHEvent.UNKNOWN);</span>
+<span class="fc" id="L91">        return mapTypeStringToEvent.getOrDefault(type, GHEvent.UNKNOWN);</span>
     }
 
     /**
@@ -88,7 +97,7 @@ import java.util.*;
      * @return the type
      */
     public GHEvent getType() {
-<span class="fc" id="L91">        return transformTypeToGHEvent(type);</span>
+<span class="fc" id="L100">        return transformTypeToGHEvent(type);</span>
     }
 
     /**
@@ -97,7 +106,7 @@ import java.util.*;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L100">        return id;</span>
+<span class="fc" id="L109">        return id;</span>
     }
 
     /**
@@ -106,7 +115,7 @@ import java.util.*;
      * @return the created at
      */
     public Date getCreatedAt() {
-<span class="fc" id="L109">        return GitHubClient.parseDate(created_at);</span>
+<span class="fc" id="L118">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -119,7 +128,7 @@ import java.util.*;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHRepository getRepository() throws IOException {
-<span class="fc" id="L122">        return root().getRepository(repo.name);</span>
+<span class="fc" id="L131">        return root().getRepository(repo.name);</span>
     }
 
     /**
@@ -132,7 +141,7 @@ import java.util.*;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHUser getActor() throws IOException {
-<span class="nc" id="L135">        return root().getUser(actor.getLogin());</span>
+<span class="nc" id="L144">        return root().getUser(actor.getLogin());</span>
     }
 
     /**
@@ -143,7 +152,7 @@ import java.util.*;
      *             on error
      */
     public String getActorLogin() throws IOException {
-<span class="fc" id="L146">        return actor.getLogin();</span>
+<span class="fc" id="L155">        return actor.getLogin();</span>
     }
 
     /**
@@ -156,7 +165,7 @@ import java.util.*;
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHOrganization getOrganization() throws IOException {
-<span class="pc bpc" id="L159" title="3 of 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root().getOrganization(org.getLogin());</span>
+<span class="pc bpc" id="L168" title="1 of 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root().getOrganization(org.getLogin());</span>
     }
 
     /**
@@ -172,9 +181,9 @@ import java.util.*;
      *             if payload cannot be parsed
      */
     public &lt;T extends GHEventPayload&gt; T getPayload(Class&lt;T&gt; type) throws IOException {
-<span class="fc" id="L175">        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);</span>
-<span class="fc" id="L176">        v.lateBind();</span>
-<span class="fc" id="L177">        return v;</span>
+<span class="fc" id="L184">        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);</span>
+<span class="fc" id="L185">        v.lateBind();</span>
+<span class="fc" id="L186">        return v;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

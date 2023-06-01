@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Iterable for workflows listing.
  */
@@ -12,37 +13,57 @@ class GHWorkflowsIterable extends PagedIterable&lt;GHWorkflow&gt; {
 
     private GHWorkflowsPage result;
 
-<span class="fc" id="L15">    public GHWorkflowsIterable(GHRepository owner) {</span>
-<span class="fc" id="L16">        this.owner = owner;</span>
-<span class="fc" id="L17">    }</span>
+    /**
+     * Instantiates a new GH workflows iterable.
+     *
+     * @param owner
+     *            the owner
+     */
+<span class="fc" id="L22">    public GHWorkflowsIterable(GHRepository owner) {</span>
+<span class="fc" id="L23">        this.owner = owner;</span>
+<span class="fc" id="L24">    }</span>
 
+    /**
+     * Iterator.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
+     */
     @Nonnull
     @Override
     public PagedIterator&lt;GHWorkflow&gt; _iterator(int pageSize) {
-<span class="fc" id="L22">        GitHubRequest request = owner.root()</span>
-<span class="fc" id="L23">                .createRequest()</span>
-<span class="fc" id="L24">                .withUrlPath(owner.getApiTailUrl(&quot;actions/workflows&quot;))</span>
-<span class="fc" id="L25">                .build();</span>
+<span class="fc" id="L36">        GitHubRequest request = owner.root()</span>
+<span class="fc" id="L37">                .createRequest()</span>
+<span class="fc" id="L38">                .withUrlPath(owner.getApiTailUrl(&quot;actions/workflows&quot;))</span>
+<span class="fc" id="L39">                .build();</span>
 
-<span class="fc" id="L27">        return new PagedIterator&lt;&gt;(</span>
-<span class="fc" id="L28">                adapt(GitHubPageIterator.create(owner.root().getClient(), GHWorkflowsPage.class, request, pageSize)),</span>
+<span class="fc" id="L41">        return new PagedIterator&lt;&gt;(</span>
+<span class="fc" id="L42">                adapt(GitHubPageIterator.create(owner.root().getClient(), GHWorkflowsPage.class, request, pageSize)),</span>
                 null);
     }
 
+    /**
+     * Adapt.
+     *
+     * @param base
+     *            the base
+     * @return the iterator
+     */
     protected Iterator&lt;GHWorkflow[]&gt; adapt(final Iterator&lt;GHWorkflowsPage&gt; base) {
-<span class="fc" id="L33">        return new Iterator&lt;GHWorkflow[]&gt;() {</span>
+<span class="fc" id="L54">        return new Iterator&lt;GHWorkflow[]&gt;() {</span>
             public boolean hasNext() {
-<span class="fc" id="L35">                return base.hasNext();</span>
+<span class="fc" id="L56">                return base.hasNext();</span>
             }
 
             public GHWorkflow[] next() {
-<span class="fc" id="L39">                GHWorkflowsPage v = base.next();</span>
-<span class="pc bpc" id="L40" title="1 of 2 branches missed.">                if (result == null) {</span>
-<span class="fc" id="L41">                    result = v;</span>
+<span class="fc" id="L60">                GHWorkflowsPage v = base.next();</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">                if (result == null) {</span>
+<span class="fc" id="L62">                    result = v;</span>
                 }
-<span class="fc" id="L43">                return v.getWorkflows(owner);</span>
+<span class="fc" id="L64">                return v.getWorkflows(owner);</span>
             }
         };
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -3,6 +3,7 @@
 import java.io.IOException;
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents a status of a commit.
  *
@@ -12,10 +13,18 @@ import java.net.URL;
  * @see GHRepository#createCommitStatus(String, GHCommitState, String, String) GHRepository#createCommitStatus(String,
  *      GHCommitState, String, String)
  */
-<span class="fc" id="L15">public class GHCommitStatus extends GHObject {</span>
+<span class="fc" id="L16">public class GHCommitStatus extends GHObject {</span>
+
+    /** The state. */
     String state;
+
+    /** The description. */
     String target_url, description;
+
+    /** The context. */
     String context;
+
+    /** The creator. */
     GHUser creator;
 
     /**
@@ -24,11 +33,11 @@ import java.net.URL;
      * @return the state
      */
     public GHCommitState getState() {
-<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        for (GHCommitState s : GHCommitState.values()) {</span>
-<span class="fc bfc" id="L28" title="All 2 branches covered.">            if (s.name().equalsIgnoreCase(state))</span>
-<span class="fc" id="L29">                return s;</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        for (GHCommitState s : GHCommitState.values()) {</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">            if (s.name().equalsIgnoreCase(state))</span>
+<span class="fc" id="L38">                return s;</span>
         }
-<span class="nc" id="L31">        throw new IllegalStateException(&quot;Unexpected state: &quot; + state);</span>
+<span class="nc" id="L40">        throw new IllegalStateException(&quot;Unexpected state: &quot; + state);</span>
     }
 
     /**
@@ -39,7 +48,7 @@ import java.net.URL;
      * @return the target url
      */
     public String getTargetUrl() {
-<span class="fc" id="L42">        return target_url;</span>
+<span class="fc" id="L51">        return target_url;</span>
     }
 
     /**
@@ -48,7 +57,7 @@ import java.net.URL;
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L51">        return description;</span>
+<span class="fc" id="L60">        return description;</span>
     }
 
     /**
@@ -59,7 +68,7 @@ import java.net.URL;
      *             the io exception
      */
     public GHUser getCreator() throws IOException {
-<span class="fc" id="L62">        return root().intern(creator);</span>
+<span class="fc" id="L71">        return root().intern(creator);</span>
     }
 
     /**
@@ -68,15 +77,18 @@ import java.net.URL;
      * @return the context
      */
     public String getContext() {
-<span class="fc" id="L71">        return context;</span>
+<span class="fc" id="L80">        return context;</span>
     }
 
     /**
+     * Gets the html url.
+     *
+     * @return the html url
      * @deprecated This object has no HTML URL.
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L79">        return null;</span>
+<span class="nc" id="L91">        return null;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * May be used for any item that has pagination information. Iterates over paginated {@link T} objects (not the items
  * inside the page). Also exposes {@link #finalResponse()} to allow getting a full {@link GitHubResponse&lt;T&gt;} after
@@ -17,12 +18,11 @@ import javax.annotation.Nonnull;
  *
  * This class is not thread-safe. Any one instance should only be called from a single thread.
  *
+ * @author Liam Newman
  * @param &lt;T&gt;
  *            type of each page (not the items in the page).
- *
- * @author Liam Newman
  */
-<span class="pc bpc" id="L25" title="1 of 2 branches missed.">class GitHubPageIterator&lt;T&gt; implements Iterator&lt;T&gt; {</span>
+<span class="fc" id="L25">class GitHubPageIterator&lt;T&gt; implements Iterator&lt;T&gt; {</span>
 
     private final GitHubClient client;
     private final Class&lt;T&gt; type;
@@ -64,30 +64,34 @@ import javax.annotation.Nonnull;
     /**
      * Loads paginated resources.
      *
+     * @param &lt;T&gt;
+     *            type of each page (not the items in the page).
      * @param client
      *            the {@link GitHubClient} from which to request responses
      * @param type
      *            type of each page (not the items in the page).
-     * @param &lt;T&gt;
-     *            type of each page (not the items in the page).
+     * @param request
+     *            the request
+     * @param pageSize
+     *            the page size
      * @return iterator
      */
     static &lt;T&gt; GitHubPageIterator&lt;T&gt; create(GitHubClient client, Class&lt;T&gt; type, GitHubRequest request, int pageSize) {
 
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (pageSize &gt; 0) {</span>
-<span class="fc" id="L78">            GitHubRequest.Builder&lt;?&gt; builder = request.toBuilder().with(&quot;per_page&quot;, pageSize);</span>
-<span class="fc" id="L79">            request = builder.build();</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (pageSize &gt; 0) {</span>
+<span class="fc" id="L82">            GitHubRequest.Builder&lt;?&gt; builder = request.toBuilder().with(&quot;per_page&quot;, pageSize);</span>
+<span class="fc" id="L83">            request = builder.build();</span>
         }
 
-<span class="fc" id="L82">        return new GitHubPageIterator&lt;&gt;(client, type, request);</span>
+<span class="fc" id="L86">        return new GitHubPageIterator&lt;&gt;(client, type, request);</span>
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean hasNext() {
-<span class="fc" id="L89">        fetch();</span>
-<span class="fc bfc" id="L90" title="All 2 branches covered.">        return next != null;</span>
+<span class="fc" id="L93">        fetch();</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        return next != null;</span>
     }
 
     /**
@@ -97,13 +101,13 @@ import javax.annotation.Nonnull;
      */
     @Nonnull
     public T next() {
-<span class="fc" id="L100">        fetch();</span>
-<span class="fc" id="L101">        T result = next;</span>
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (result == null)</span>
-<span class="nc" id="L103">            throw new NoSuchElementException();</span>
+<span class="fc" id="L104">        fetch();</span>
+<span class="fc" id="L105">        T result = next;</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        if (result == null)</span>
+<span class="nc" id="L107">            throw new NoSuchElementException();</span>
         // If this is the last page, keep the response
-<span class="fc" id="L105">        next = null;</span>
-<span class="fc" id="L106">        return result;</span>
+<span class="fc" id="L109">        next = null;</span>
+<span class="fc" id="L110">        return result;</span>
     }
 
     /**
@@ -112,10 +116,10 @@ import javax.annotation.Nonnull;
      * @return the final response of the iterator.
      */
     public GitHubResponse&lt;T&gt; finalResponse() {
-<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (hasNext()) {</span>
-<span class="nc" id="L116">            throw new GHException(&quot;Final response is not available until after iterator is done.&quot;);</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (hasNext()) {</span>
+<span class="nc" id="L120">            throw new GHException(&quot;Final response is not available until after iterator is done.&quot;);</span>
         }
-<span class="fc" id="L118">        return finalResponse;</span>
+<span class="fc" id="L122">        return finalResponse;</span>
     }
 
     /**
@@ -132,48 +136,48 @@ import javax.annotation.Nonnull;
      * &lt;/p&gt;
      */
     private void fetch() {
-<span class="fc bfc" id="L135" title="All 2 branches covered.">        if (next != null)</span>
-<span class="fc" id="L136">            return; // already fetched</span>
-<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (nextRequest == null)</span>
-<span class="fc" id="L138">            return; // no more data to fetch</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if (next != null)</span>
+<span class="fc" id="L140">            return; // already fetched</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (nextRequest == null)</span>
+<span class="fc" id="L142">            return; // no more data to fetch</span>
 
-<span class="fc" id="L140">        URL url = nextRequest.url();</span>
+<span class="fc" id="L144">        URL url = nextRequest.url();</span>
         try {
-<span class="fc" id="L142">            GitHubResponse&lt;T&gt; nextResponse = client.sendRequest(nextRequest,</span>
-<span class="fc" id="L143">                    (connectorResponse) -&gt; GitHubResponse.parseBody(connectorResponse, type));</span>
-<span class="pc bpc" id="L144" title="2 of 4 branches missed.">            assert nextResponse.body() != null;</span>
-<span class="fc" id="L145">            next = nextResponse.body();</span>
-<span class="fc" id="L146">            nextRequest = findNextURL(nextRequest, nextResponse);</span>
-<span class="fc bfc" id="L147" title="All 2 branches covered.">            if (nextRequest == null) {</span>
-<span class="fc" id="L148">                finalResponse = nextResponse;</span>
+<span class="fc" id="L146">            GitHubResponse&lt;T&gt; nextResponse = client.sendRequest(nextRequest,</span>
+<span class="fc" id="L147">                    (connectorResponse) -&gt; GitHubResponse.parseBody(connectorResponse, type));</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">            assert nextResponse.body() != null;</span>
+<span class="fc" id="L149">            next = nextResponse.body();</span>
+<span class="fc" id="L150">            nextRequest = findNextURL(nextRequest, nextResponse);</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">            if (nextRequest == null) {</span>
+<span class="fc" id="L152">                finalResponse = nextResponse;</span>
             }
-<span class="fc" id="L150">        } catch (IOException e) {</span>
+<span class="fc" id="L154">        } catch (IOException e) {</span>
             // Iterators do not throw IOExceptions, so we wrap any IOException
             // in a runtime GHException to bubble out if needed.
-<span class="fc" id="L153">            throw new GHException(&quot;Failed to retrieve &quot; + url, e);</span>
-<span class="fc" id="L154">        }</span>
-<span class="fc" id="L155">    }</span>
+<span class="fc" id="L157">            throw new GHException(&quot;Failed to retrieve &quot; + url, e);</span>
+<span class="fc" id="L158">        }</span>
+<span class="fc" id="L159">    }</span>
 
     /**
      * Locate the next page from the pagination &quot;Link&quot; tag.
      */
     private GitHubRequest findNextURL(GitHubRequest nextRequest, GitHubResponse&lt;T&gt; nextResponse)
             throws MalformedURLException {
-<span class="fc" id="L162">        GitHubRequest result = null;</span>
-<span class="fc" id="L163">        String link = nextResponse.header(&quot;Link&quot;);</span>
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (link != null) {</span>
-<span class="fc bfc" id="L165" title="All 2 branches covered.">            for (String token : link.split(&quot;, &quot;)) {</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">                if (token.endsWith(&quot;rel=\&quot;next\&quot;&quot;)) {</span>
+<span class="fc" id="L166">        GitHubRequest result = null;</span>
+<span class="fc" id="L167">        String link = nextResponse.header(&quot;Link&quot;);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (link != null) {</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">            for (String token : link.split(&quot;, &quot;)) {</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">                if (token.endsWith(&quot;rel=\&quot;next\&quot;&quot;)) {</span>
                     // found the next page. This should look something like
                     // &lt;https://api.github.com/repos?page=3&amp;per_page=100&gt;; rel=&quot;next&quot;
-<span class="fc" id="L169">                    int idx = token.indexOf('&gt;');</span>
-<span class="fc" id="L170">                    result = nextRequest.toBuilder().setRawUrlPath(token.substring(1, idx)).build();</span>
-<span class="fc" id="L171">                    break;</span>
+<span class="fc" id="L173">                    int idx = token.indexOf('&gt;');</span>
+<span class="fc" id="L174">                    result = nextRequest.toBuilder().setRawUrlPath(token.substring(1, idx)).build();</span>
+<span class="fc" id="L175">                    break;</span>
                 }
             }
         }
-<span class="fc" id="L175">        return result;</span>
+<span class="fc" id="L179">        return result;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

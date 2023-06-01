@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Content of a repository.
  *
@@ -15,7 +16,7 @@ import java.util.Base64;
  * @see GHRepository#getFileContent(String) GHRepository#getFileContent(String)
  */
 @SuppressWarnings({ &quot;UnusedDeclaration&quot; })
-<span class="fc" id="L18">public class GHContent extends GitHubInteractiveObject implements Refreshable {</span>
+<span class="fc" id="L19">public class GHContent extends GitHubInteractiveObject implements Refreshable {</span>
     /*
      * In normal use of this class, repository field is set via wrap(), but in the code search API, there's a nested
      * 'repository' field that gets populated from JSON.
@@ -42,7 +43,7 @@ import java.util.Base64;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L45">        return repository;</span>
+<span class="fc" id="L46">        return repository;</span>
     }
 
     /**
@@ -51,7 +52,7 @@ import java.util.Base64;
      * @return the type
      */
     public String getType() {
-<span class="fc" id="L54">        return type;</span>
+<span class="fc" id="L55">        return type;</span>
     }
 
     /**
@@ -60,7 +61,7 @@ import java.util.Base64;
      * @return the encoding
      */
     public String getEncoding() {
-<span class="fc" id="L63">        return encoding;</span>
+<span class="fc" id="L64">        return encoding;</span>
     }
 
     /**
@@ -69,7 +70,7 @@ import java.util.Base64;
      * @return the size
      */
     public long getSize() {
-<span class="fc" id="L72">        return size;</span>
+<span class="fc" id="L73">        return size;</span>
     }
 
     /**
@@ -78,7 +79,7 @@ import java.util.Base64;
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L81">        return sha;</span>
+<span class="fc" id="L82">        return sha;</span>
     }
 
     /**
@@ -87,7 +88,7 @@ import java.util.Base64;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L90">        return name;</span>
+<span class="fc" id="L91">        return name;</span>
     }
 
     /**
@@ -96,7 +97,7 @@ import java.util.Base64;
      * @return the path
      */
     public String getPath() {
-<span class="fc" id="L99">        return path;</span>
+<span class="fc" id="L100">        return path;</span>
     }
 
     /**
@@ -105,7 +106,7 @@ import java.util.Base64;
      * @return the target
      */
     public String getTarget() {
-<span class="fc" id="L108">        return target;</span>
+<span class="fc" id="L109">        return target;</span>
     }
 
     /**
@@ -122,7 +123,7 @@ import java.util.Base64;
      */
     @SuppressFBWarnings(&quot;DM_DEFAULT_ENCODING&quot;)
     public String getContent() throws IOException {
-<span class="fc" id="L125">        return new String(Base64.getMimeDecoder().decode(getEncodedContent()));</span>
+<span class="fc" id="L126">        return new String(Base64.getMimeDecoder().decode(getEncodedContent()));</span>
     }
 
     /**
@@ -138,8 +139,8 @@ import java.util.Base64;
      * @deprecated Use {@link #read()}
      */
     public String getEncodedContent() throws IOException {
-<span class="fc" id="L141">        refresh(content);</span>
-<span class="fc" id="L142">        return content;</span>
+<span class="fc" id="L142">        refresh(content);</span>
+<span class="fc" id="L143">        return content;</span>
     }
 
     /**
@@ -148,7 +149,7 @@ import java.util.Base64;
      * @return the url
      */
     public String getUrl() {
-<span class="fc" id="L151">        return url;</span>
+<span class="fc" id="L152">        return url;</span>
     }
 
     /**
@@ -157,7 +158,7 @@ import java.util.Base64;
      * @return the git url
      */
     public String getGitUrl() {
-<span class="nc" id="L160">        return git_url;</span>
+<span class="nc" id="L161">        return git_url;</span>
     }
 
     /**
@@ -166,11 +167,15 @@ import java.util.Base64;
      * @return the html url
      */
     public String getHtmlUrl() {
-<span class="nc" id="L169">        return html_url;</span>
+<span class="nc" id="L170">        return html_url;</span>
     }
 
     /**
      * Retrieves the actual content stored here.
+     *
+     * @return the input stream
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     /**
      * Retrieves the actual bytes of the blob.
@@ -180,17 +185,17 @@ import java.util.Base64;
      *             the io exception
      */
     public InputStream read() throws IOException {
-<span class="fc" id="L183">        refresh(content);</span>
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
+<span class="fc" id="L188">        refresh(content);</span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
             try {
-<span class="fc" id="L186">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
-<span class="fc" id="L187">                return new ByteArrayInputStream(decoder.decode(content.getBytes(StandardCharsets.US_ASCII)));</span>
-<span class="nc" id="L188">            } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L189">                throw new AssertionError(e); // US-ASCII is mandatory</span>
+<span class="fc" id="L191">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
+<span class="fc" id="L192">                return new ByteArrayInputStream(decoder.decode(content.getBytes(StandardCharsets.US_ASCII)));</span>
+<span class="nc" id="L193">            } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L194">                throw new AssertionError(e); // US-ASCII is mandatory</span>
             }
         }
 
-<span class="nc" id="L193">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
+<span class="nc" id="L198">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
     }
 
     /**
@@ -201,8 +206,8 @@ import java.util.Base64;
      *             the io exception
      */
     public String getDownloadUrl() throws IOException {
-<span class="fc" id="L204">        refresh(download_url);</span>
-<span class="fc" id="L205">        return download_url;</span>
+<span class="fc" id="L209">        refresh(download_url);</span>
+<span class="fc" id="L210">        return download_url;</span>
     }
 
     /**
@@ -211,7 +216,7 @@ import java.util.Base64;
      * @return the boolean
      */
     public boolean isFile() {
-<span class="fc" id="L214">        return &quot;file&quot;.equals(type);</span>
+<span class="fc" id="L219">        return &quot;file&quot;.equals(type);</span>
     }
 
     /**
@@ -220,7 +225,7 @@ import java.util.Base64;
      * @return the boolean
      */
     public boolean isDirectory() {
-<span class="fc" id="L223">        return &quot;dir&quot;.equals(type);</span>
+<span class="fc" id="L228">        return &quot;dir&quot;.equals(type);</span>
     }
 
     /**
@@ -232,8 +237,8 @@ import java.util.Base64;
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-<span class="nc" id="L235">        root().createRequest().withUrlPath(url).fetchInto(this);</span>
-<span class="nc" id="L236">    }</span>
+<span class="nc" id="L240">        root().createRequest().withUrlPath(url).fetchInto(this);</span>
+<span class="nc" id="L241">    }</span>
 
     /**
      * List immediate children of this directory.
@@ -243,10 +248,10 @@ import java.util.Base64;
      *             the io exception
      */
     public PagedIterable&lt;GHContent&gt; listDirectoryContent() throws IOException {
-<span class="pc bpc" id="L246" title="1 of 2 branches missed.">        if (!isDirectory())</span>
-<span class="nc" id="L247">            throw new IllegalStateException(path + &quot; is not a directory&quot;);</span>
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">        if (!isDirectory())</span>
+<span class="nc" id="L252">            throw new IllegalStateException(path + &quot; is not a directory&quot;);</span>
 
-<span class="fc" id="L249">        return root().createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -&gt; item.wrap(repository));</span>
+<span class="fc" id="L254">        return root().createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -&gt; item.wrap(repository));</span>
     }
 
     /**
@@ -262,7 +267,7 @@ import java.util.Base64;
      */
     @SuppressFBWarnings(&quot;DM_DEFAULT_ENCODING&quot;)
     public GHContentUpdateResponse update(String newContent, String commitMessage) throws IOException {
-<span class="fc" id="L265">        return update(newContent.getBytes(), commitMessage, null);</span>
+<span class="fc" id="L270">        return update(newContent.getBytes(), commitMessage, null);</span>
     }
 
     /**
@@ -280,7 +285,7 @@ import java.util.Base64;
      */
     @SuppressFBWarnings(&quot;DM_DEFAULT_ENCODING&quot;)
     public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
-<span class="nc" id="L283">        return update(newContent.getBytes(), commitMessage, branch);</span>
+<span class="nc" id="L288">        return update(newContent.getBytes(), commitMessage, branch);</span>
     }
 
     /**
@@ -295,7 +300,7 @@ import java.util.Base64;
      *             the io exception
      */
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage) throws IOException {
-<span class="nc" id="L298">        return update(newContentBytes, commitMessage, null);</span>
+<span class="nc" id="L303">        return update(newContentBytes, commitMessage, null);</span>
     }
 
     /**
@@ -313,28 +318,28 @@ import java.util.Base64;
      */
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch)
             throws IOException {
-<span class="fc" id="L316">        String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);</span>
+<span class="fc" id="L321">        String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);</span>
 
-<span class="fc" id="L318">        Requester requester = root().createRequest()</span>
-<span class="fc" id="L319">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L320">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L321">                .with(&quot;message&quot;, commitMessage)</span>
-<span class="fc" id="L322">                .with(&quot;sha&quot;, sha)</span>
-<span class="fc" id="L323">                .with(&quot;content&quot;, encodedContent)</span>
-<span class="fc" id="L324">                .method(&quot;PUT&quot;);</span>
+<span class="fc" id="L323">        Requester requester = root().createRequest()</span>
+<span class="fc" id="L324">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L325">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L326">                .with(&quot;message&quot;, commitMessage)</span>
+<span class="fc" id="L327">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L328">                .with(&quot;content&quot;, encodedContent)</span>
+<span class="fc" id="L329">                .method(&quot;PUT&quot;);</span>
 
-<span class="pc bpc" id="L326" title="1 of 2 branches missed.">        if (branch != null) {</span>
-<span class="nc" id="L327">            requester.with(&quot;branch&quot;, branch);</span>
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">        if (branch != null) {</span>
+<span class="nc" id="L332">            requester.with(&quot;branch&quot;, branch);</span>
         }
 
-<span class="fc" id="L330">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
-<span class="fc" id="L331">                .fetch(GHContentUpdateResponse.class);</span>
+<span class="fc" id="L335">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
+<span class="fc" id="L336">                .fetch(GHContentUpdateResponse.class);</span>
 
-<span class="fc" id="L333">        response.getContent().wrap(repository);</span>
-<span class="fc" id="L334">        response.getCommit().wrapUp(repository);</span>
+<span class="fc" id="L338">        response.getContent().wrap(repository);</span>
+<span class="fc" id="L339">        response.getCommit().wrapUp(repository);</span>
 
-<span class="fc" id="L336">        this.content = encodedContent;</span>
-<span class="fc" id="L337">        return response;</span>
+<span class="fc" id="L341">        this.content = encodedContent;</span>
+<span class="fc" id="L342">        return response;</span>
     }
 
     /**
@@ -347,7 +352,7 @@ import java.util.Base64;
      *             the io exception
      */
     public GHContentUpdateResponse delete(String message) throws IOException {
-<span class="fc" id="L350">        return delete(message, null);</span>
+<span class="fc" id="L355">        return delete(message, null);</span>
     }
 
     /**
@@ -362,41 +367,60 @@ import java.util.Base64;
      *             the io exception
      */
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-<span class="fc" id="L365">        Requester requester = root().createRequest()</span>
-<span class="fc" id="L366">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L367">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L368">                .with(&quot;message&quot;, commitMessage)</span>
-<span class="fc" id="L369">                .with(&quot;sha&quot;, sha)</span>
-<span class="fc" id="L370">                .method(&quot;DELETE&quot;);</span>
+<span class="fc" id="L370">        Requester requester = root().createRequest()</span>
+<span class="fc" id="L371">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L372">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L373">                .with(&quot;message&quot;, commitMessage)</span>
+<span class="fc" id="L374">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L375">                .method(&quot;DELETE&quot;);</span>
 
-<span class="pc bpc" id="L372" title="1 of 2 branches missed.">        if (branch != null) {</span>
-<span class="nc" id="L373">            requester.with(&quot;branch&quot;, branch);</span>
+<span class="pc bpc" id="L377" title="1 of 2 branches missed.">        if (branch != null) {</span>
+<span class="nc" id="L378">            requester.with(&quot;branch&quot;, branch);</span>
         }
 
-<span class="fc" id="L376">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
-<span class="fc" id="L377">                .fetch(GHContentUpdateResponse.class);</span>
+<span class="fc" id="L381">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
+<span class="fc" id="L382">                .fetch(GHContentUpdateResponse.class);</span>
 
-<span class="fc" id="L379">        response.getCommit().wrapUp(repository);</span>
-<span class="fc" id="L380">        return response;</span>
+<span class="fc" id="L384">        response.getCommit().wrapUp(repository);</span>
+<span class="fc" id="L385">        return response;</span>
     }
 
+    /**
+     * Gets the api route.
+     *
+     * @param repository
+     *            the repository
+     * @param path
+     *            the path
+     * @return the api route
+     */
     static String getApiRoute(GHRepository repository, String path) {
-<span class="fc" id="L384">        return repository.getApiTailUrl(&quot;contents/&quot; + path);</span>
+<span class="fc" id="L398">        return repository.getApiTailUrl(&quot;contents/&quot; + path);</span>
     }
 
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH content
+     */
     GHContent wrap(GHRepository owner) {
-<span class="fc" id="L388">        this.repository = owner;</span>
-<span class="fc" id="L389">        return this;</span>
+<span class="fc" id="L409">        this.repository = owner;</span>
+<span class="fc" id="L410">        return this;</span>
     }
 
     /**
      * Fully populate the data by retrieving missing data.
      *
      * Depending on the original API call where this object is created, it may not contain everything.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public synchronized void refresh() throws IOException {
-<span class="fc" id="L399">        root().createRequest().setRawUrlPath(url).fetchInto(this);</span>
-<span class="fc" id="L400">    }</span>
+<span class="fc" id="L423">        root().createRequest().setRawUrlPath(url).fetchInto(this);</span>
+<span class="fc" id="L424">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

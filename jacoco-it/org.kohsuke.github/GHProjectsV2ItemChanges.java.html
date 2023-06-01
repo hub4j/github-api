@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHProjectsV2ItemChanges.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHProjectsV2ItemChanges.java</span></div><h1>GHProjectsV2ItemChanges.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.EnumUtils;
+
+import java.util.Date;
+
+// TODO: Auto-generated Javadoc
+/**
+ * An object to track changes in projects_v2_item payloads.
+ * &lt;p&gt;
+ * Note that this is best effort only as nothing is documented in the GitHub documentation.
+ */
+@SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
+<span class="fc" id="L15">public class GHProjectsV2ItemChanges {</span>
+
+    private FieldValue fieldValue;
+
+    private FromToDate archivedAt;
+
+    private FromTo previousProjectsV2ItemNodeId;
+
+    /**
+     * Gets the field value.
+     *
+     * @return the field value
+     */
+    public FieldValue getFieldValue() {
+<span class="fc" id="L29">        return fieldValue;</span>
+    }
+
+    /**
+     * Gets the archived at.
+     *
+     * @return the archived at
+     */
+    public FromToDate getArchivedAt() {
+<span class="fc" id="L38">        return archivedAt;</span>
+    }
+
+    /**
+     * Gets the previous projects V 2 item node id.
+     *
+     * @return the previous projects V 2 item node id
+     */
+    public FromTo getPreviousProjectsV2ItemNodeId() {
+<span class="fc" id="L47">        return previousProjectsV2ItemNodeId;</span>
+    }
+
+    /**
+     * The Class FieldValue.
+     */
+<span class="fc" id="L53">    public static class FieldValue {</span>
+
+        private String fieldNodeId;
+        private String fieldType;
+
+        /**
+         * Gets the field node id.
+         *
+         * @return the field node id
+         */
+        public String getFieldNodeId() {
+<span class="fc" id="L64">            return fieldNodeId;</span>
+        }
+
+        /**
+         * Gets the field type.
+         *
+         * @return the field type
+         */
+        public FieldType getFieldType() {
+<span class="fc" id="L73">            return EnumUtils.getEnumOrDefault(FieldType.class, fieldType, FieldType.UNKNOWN);</span>
+        }
+    }
+
+    /**
+     * The Class FromTo.
+     */
+<span class="fc" id="L80">    public static class FromTo {</span>
+
+        private String from;
+        private String to;
+
+        /**
+         * Gets the from.
+         *
+         * @return the from
+         */
+        public String getFrom() {
+<span class="fc" id="L91">            return from;</span>
+        }
+
+        /**
+         * Gets the to.
+         *
+         * @return the to
+         */
+        public String getTo() {
+<span class="fc" id="L100">            return to;</span>
+        }
+    }
+
+    /**
+     * The Class FromToDate.
+     */
+<span class="fc" id="L107">    public static class FromToDate {</span>
+
+        private String from;
+        private String to;
+
+        /**
+         * Gets the from.
+         *
+         * @return the from
+         */
+        public Date getFrom() {
+<span class="fc" id="L118">            return GitHubClient.parseDate(from);</span>
+        }
+
+        /**
+         * Gets the to.
+         *
+         * @return the to
+         */
+        public Date getTo() {
+<span class="fc" id="L127">            return GitHubClient.parseDate(to);</span>
+        }
+    }
+
+    /**
+     * The Enum FieldType.
+     */
+<span class="fc" id="L134">    public enum FieldType {</span>
+
+        /** The text. */
+<span class="fc" id="L137">        TEXT,</span>
+        /** The number. */
+<span class="fc" id="L139">        NUMBER,</span>
+        /** The date. */
+<span class="fc" id="L141">        DATE,</span>
+        /** The single select. */
+<span class="fc" id="L143">        SINGLE_SELECT,</span>
+        /** The iteration. */
+<span class="fc" id="L145">        ITERATION,</span>
+        /** The unknown. */
+<span class="fc" id="L147">        UNKNOWN;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

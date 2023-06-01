@@ -2732,19 +2732,21 @@ public class GHRepository extends GHObject {
     /**
      * Create repo variable
      *
-     * @param name the name
+     * @param name
+     *            the name
      * @return the gh repository variable
-     * @throws IOException the io exception
+     * @throws IOException
+     *             the io exception
      */
     public GHRepositoryVariable createRepoVariable(final GHRepositoryVariable name) throws IOException {
         return root().createRequest()
-            .withUrlPath(getApiTailUrl("actions/variables"))
-            .method("POST")
-            .with("name", name.getName())
-            .with("value", name.getValue())
-            .fetch(GHRepositoryVariable.class);
+                .withUrlPath(getApiTailUrl("actions/variables"))
+                .method("POST")
+                .with("name", name.getName())
+                .with("value", name.getValue())
+                .fetch(GHRepositoryVariable.class);
     }
-    
+
     /**
      * Gets a variable by name
      *
@@ -2763,21 +2765,23 @@ public class GHRepository extends GHObject {
     /**
      * Update repository variable
      *
-     * @param name the name
-     * @param variableToUpdate the variable to update
+     * @param name
+     *            the name
+     * @param variableToUpdate
+     *            the variable to update
      * @return the gh repository variable
-     * @throws IOException the io exception
+     * @throws IOException
+     *             the io exception
      */
-    public GHRepositoryVariable updateRepoVariable(final String name,
-        final GHRepositoryVariable variableToUpdate)
-        throws IOException {
+    public GHRepositoryVariable updateRepoVariable(final String name, final GHRepositoryVariable variableToUpdate)
+            throws IOException {
 
         return root().createRequest()
-            .withUrlPath(getApiTailUrl("actions/variables"), name)
-            .method("PATCH")
-            .with("name", variableToUpdate.getName())
-            .with("value", variableToUpdate.getValue())
-            .fetch(GHRepositoryVariable.class);
+                .withUrlPath(getApiTailUrl("actions/variables"), name)
+                .method("PATCH")
+                .with("name", variableToUpdate.getName())
+                .with("value", variableToUpdate.getValue())
+                .fetch(GHRepositoryVariable.class);
     }
 
     /**

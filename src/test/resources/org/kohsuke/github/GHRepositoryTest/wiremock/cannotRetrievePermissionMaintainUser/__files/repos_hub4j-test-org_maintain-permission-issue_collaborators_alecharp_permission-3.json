@@ -1,0 +1,32 @@
+{
+  "permission": "maintain",
+  "user": {
+    "login": "alecharp",
+    "id": 985955,
+    "node_id": "MDQ6VXNlcjk4NTk1NQ==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/985955?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/alecharp",
+    "html_url": "https://github.com/alecharp",
+    "followers_url": "https://api.github.com/users/alecharp/followers",
+    "following_url": "https://api.github.com/users/alecharp/following{/other_user}",
+    "gists_url": "https://api.github.com/users/alecharp/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/alecharp/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/alecharp/subscriptions",
+    "organizations_url": "https://api.github.com/users/alecharp/orgs",
+    "repos_url": "https://api.github.com/users/alecharp/repos",
+    "events_url": "https://api.github.com/users/alecharp/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/alecharp/received_events",
+    "type": "User",
+    "site_admin": false,
+    "permissions": {
+      "admin": false,
+      "maintain": true,
+      "push": true,
+      "triage": true,
+      "pull": true
+    },
+    "role_name": "maintain"
+  },
+  "role_name": "maintain"
+}

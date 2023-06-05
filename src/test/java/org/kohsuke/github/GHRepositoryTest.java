@@ -46,7 +46,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("app-sevseven");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
     /**

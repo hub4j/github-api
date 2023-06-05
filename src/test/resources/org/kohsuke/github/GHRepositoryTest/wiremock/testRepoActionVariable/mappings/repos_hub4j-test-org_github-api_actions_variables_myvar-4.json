@@ -1,8 +1,8 @@
 {
   "id": "624eb199-1d0c-4b4c-b5c6-9cc8a918b15e",
-  "name": "repos_hub4j-test-org_app-sevseven_actions_variables_myvar",
+  "name": "repos_hub4j-test-org_github-api_actions_variables_myvar",
   "request": {
-    "url": "/repos/hub4j-test-org/app-sevseven/actions/variables/myvar",
+    "url": "/repos/hub4j-test-org/github-api/actions/variables/myvar",
     "method": "GET",
     "headers": {
       "Accept": {

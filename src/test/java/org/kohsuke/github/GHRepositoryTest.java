@@ -1594,4 +1594,15 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepositoryVariable variable = repository.getRepoVariable("myvar");
         assertThat(variable.getValue(), is("this is my var value"));
     }
+
+    /**
+     * Red test demoing the issue with a user having the maintain permission on a repository
+     * @throws IOException the exception
+     */
+    @Test
+    public void cannotRetrievePermissionMaintainUser() throws IOException {
+        GHRepository r = gitHub.getRepository("hub4j-test-org/maintain-permission-issue");
+        GHPermissionType permission = r.getPermission("alecharp");
+        // we should be able to assert on permission but the test crashes
+    }
 }

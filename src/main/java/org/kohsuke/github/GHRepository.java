@@ -2773,26 +2773,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Update repository variable
-     *
-     * @param name
-     *            the name
-     * @param variableToUpdate
-     *            the variable to update
-     * @throws IOException
-     *             the io exception
-     */
-    public void updateRepoVariable(final String name, final GHRepositoryVariable variableToUpdate) throws IOException {
-
-        root().createRequest()
-                .withUrlPath(getApiTailUrl("actions/variables"), name)
-                .method("PATCH")
-                .with("name", variableToUpdate.getName())
-                .with("value", variableToUpdate.getValue())
-                .send();
-    }
-
-    /**
      * Creates a new content, or update an existing content.
      *
      * @return the gh content builder

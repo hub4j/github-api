@@ -8,15 +8,21 @@ import javax.annotation.Nonnull;
 /**
  * The type Gh repository variable builder.
  *
- * @param <S> the type parameter
+ * @param <S>
+ *            the type parameter
  */
 public class GHRepositoryVariableBuilder<S> extends AbstractBuilder<GHRepositoryVariable, S> {
     /**
      * Instantiates a new GH Repository Variable builder.
      *
-     * @param intermediateReturnType Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If            {@link S} the same as {@link GHRepositoryVariable}, this builder will commit changes after each call            to {@link #with(String, Object)}.
-     * @param root                   the GitHub instance to which updates will be sent
-     * @param baseInstance           instance on which to base this builder. If {@code null} a new instance will be created.
+     * @param intermediateReturnType
+     *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
+     *            {@link S} the same as {@link GHRepositoryVariable}, this builder will commit changes after each call
+     *            to {@link #with(String, Object)}.
+     * @param root
+     *            the GitHub instance to which updates will be sent
+     * @param baseInstance
+     *            instance on which to base this builder. If {@code null} a new instance will be created.
      */
     protected GHRepositoryVariableBuilder(@Nonnull Class<S> intermediateReturnType,
             @Nonnull GitHub root,
@@ -31,9 +37,11 @@ public class GHRepositoryVariableBuilder<S> extends AbstractBuilder<GHRepository
     /**
      * Name.
      *
-     * @param value the value
+     * @param value
+     *            the value
      * @return the s
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Nonnull
     @BetaApi
@@ -44,9 +52,11 @@ public class GHRepositoryVariableBuilder<S> extends AbstractBuilder<GHRepository
     /**
      * Name.
      *
-     * @param value the value
+     * @param value
+     *            the value
      * @return the s
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Nonnull
     @BetaApi

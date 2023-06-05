@@ -1606,7 +1606,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void testCreateRepoActionVariable() throws IOException {
         GHRepository repository = getRepository();
         repository.createVariable("MYNEWVARIABLE", "mynewvalue");
-        GHRepositoryVariable variable=repository.getVariable("mynewvariable");
+        GHRepositoryVariable variable = repository.getVariable("mynewvariable");
         assertThat(variable.getName(), is("MYNEWVARIABLE"));
         assertThat(variable.getValue(), is("mynewvalue"));
     }
@@ -1622,7 +1622,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repository = getRepository();
         GHRepositoryVariable variable = repository.getVariable("MYNEWVARIABLE");
         variable.set().value("myupdatevalue");
-        variable=repository.getVariable("MYNEWVARIABLE");
+        variable = repository.getVariable("MYNEWVARIABLE");
         assertThat(variable.getValue(), is("myupdatevalue"));
     }
 
@@ -1637,7 +1637,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repository = getRepository();
         GHRepositoryVariable variable = repository.getVariable("mynewvariable");
         variable.delete();
-        Assert.assertThrows(GHFileNotFoundException.class,()->repository.getVariable("mynewvariable"));
+        Assert.assertThrows(GHFileNotFoundException.class, () -> repository.getVariable("mynewvariable"));
     }
 
 }

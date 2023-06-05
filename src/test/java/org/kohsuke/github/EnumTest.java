@@ -55,7 +55,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHOrganization.Role.values().length, equalTo(2));
         assertThat(GHOrganization.Permission.values().length, equalTo(5));
 
-        assertThat(GHPermissionType.values().length, equalTo(6));
+        assertThat(GHPermissionType.values().length, equalTo(7));
 
         assertThat(GHProject.ProjectState.values().length, equalTo(2));
         assertThat(GHProject.ProjectStateFilter.values().length, equalTo(3));

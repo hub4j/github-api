@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.kohsuke.github.GHCheckRun.Conclusion;
 import org.kohsuke.github.GHOrganization.RepositoryRole;
@@ -45,7 +46,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+        return gitHub.getOrganization("hub4j-test-org").getRepository("app-sevseven");
     }
 
     /**
@@ -1604,14 +1605,14 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void testCreateRepoActionVariable() throws IOException {
         GHRepository repository = getRepository();
-        GHRepositoryVariable newVariable = new GHRepositoryVariable();
-        newVariable.setName("mynewvariable");
-        newVariable.setValue("mynewvalue");
-        repository.createRepoVariable(newVariable);
+        repository.createVariable("MYNEWVARIABLE", "mynewvalue");
+        GHRepositoryVariable variable=repository.getVariable("mynewvariable");
+        assertThat(variable.getName(), is("MYNEWVARIABLE"));
+        assertThat(variable.getValue(), is("mynewvalue"));
     }
 
     /**
-     * Test create repo action variable.
+     * Test update repo action variable.
      *
      * @throws IOException
      *             the exception
@@ -1619,9 +1620,24 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void testUpdateRepoActionVariable() throws IOException {
         GHRepository repository = getRepository();
-        GHRepositoryVariable updateVariable = new GHRepositoryVariable();
-        updateVariable.setName("mynewvariable");
-        updateVariable.setValue("mynewupdatevalue");
-        repository.updateRepoVariable("mynewvariable", updateVariable);
+        GHRepositoryVariable variable = repository.getVariable("MYNEWVARIABLE");
+        variable.set().value("myupdatevalue");
+        variable=repository.getVariable("MYNEWVARIABLE");
+        assertThat(variable.getValue(), is("myupdatevalue"));
     }
+
+    /**
+     * Test delete repo action variable.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testDeleteRepoActionVariable() throws IOException {
+        GHRepository repository = getRepository();
+        GHRepositoryVariable variable = repository.getVariable("mynewvariable");
+        variable.delete();
+        Assert.assertThrows(GHFileNotFoundException.class,()->repository.getVariable("mynewvariable"));
+    }
+
 }

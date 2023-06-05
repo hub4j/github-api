@@ -1,8 +1,8 @@
 {
-  "id": "7e03568a-5a3f-45da-bd11-32da4cf63a67",
-  "name": "repos_hub4j-test-org_github-api_actions_variables_myvar",
+  "id": "5253ccea-04a8-46a2-81fd-f4b53a3c4239",
+  "name": "repos_hub4j-test-org_app-sevseven",
   "request": {
-    "url": "/repos/hub4j-test-org/github-api/actions/variables/myvar",
+    "url": "/repos/hub4j-test-org/app-sevseven",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,25 +12,26 @@
   },
   "response": {
     "status": 200,
-    "body": "{\"name\":\"myvar\",\"value\":\"this is my var value\",\"created_at\":\"2023-05-15T09:56:04Z\",\"updated_at\":\"2023-05-15T09:56:04Z\"}",
+    "bodyFileName": "repos_hub4j-test-org_app-sevseven-3.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Mon, 15 May 2023 11:28:34 GMT",
+      "Date": "Mon, 05 Jun 2023 14:42:02 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"1312302596e84f4a797e200d0161d574f7461ac91f9d6cc37157804ad0405e9b\"",
+      "ETag": "W/\"ad2ec095079899332f528baec4441d362d0e6e5594b29ff93423e00ce1f5350b\"",
+      "Last-Modified": "Mon, 05 Jun 2023 09:18:21 GMT",
       "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
-      "X-Accepted-OAuth-Scopes": "",
+      "X-Accepted-OAuth-Scopes": "repo",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4802",
-      "X-RateLimit-Reset": "1684151924",
-      "X-RateLimit-Used": "198",
+      "X-RateLimit-Remaining": "4901",
+      "X-RateLimit-Reset": "1685976900",
+      "X-RateLimit-Used": "99",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -40,10 +41,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "F3AA:B316:162B75E0:1665F7DF:64621762"
+      "X-GitHub-Request-Id": "CC9A:EA30:E5C3C98:E85AF0B:647DF439"
     }
   },
-  "uuid": "7e03568a-5a3f-45da-bd11-32da4cf63a67",
+  "uuid": "5253ccea-04a8-46a2-81fd-f4b53a3c4239",
   "persistent": true,
-  "insertionIndex": 4
+  "insertionIndex": 3
 }

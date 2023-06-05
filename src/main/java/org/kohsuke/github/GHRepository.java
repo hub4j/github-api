@@ -2730,20 +2730,17 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Create repo variable
+     * Create gh variable.
      *
      * @param name
      *            the name
+     * @param value
+     *            the value
      * @throws IOException
      *             the io exception
      */
-    public void createRepoVariable(final GHRepositoryVariable name) throws IOException {
-        root().createRequest()
-                .withUrlPath(getApiTailUrl("actions/variables"))
-                .method("POST")
-                .with("name", name.getName())
-                .with("value", name.getValue())
-                .send();
+    public void createVariable(String name, String value) throws IOException {
+        GHRepositoryVariable.create(this).name(name).value(value).done();
     }
 
     /**
@@ -2755,10 +2752,24 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @Deprecated
     public GHRepositoryVariable getRepoVariable(String name) throws IOException {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("actions/variables"), name)
                 .fetch(GHRepositoryVariable.class);
+    }
+
+    /**
+     * Gets variable.
+     *
+     * @param name
+     *            the name
+     * @return the variable
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepositoryVariable getVariable(String name) throws IOException {
+        return GHRepositoryVariable.read(this, name);
     }
 
     /**

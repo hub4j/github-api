@@ -151,20 +151,6 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
     }
 
     /**
-     * Begins a batch update
-     * <p>
-     * Consumer must call {@link GHRepositoryVariable.Updater#done()} to commit changes.
-     *
-     * @return a {@link GHRepositoryVariable.Updater}
-     * @throws IOException
-     *             the io exception
-     */
-    @BetaApi
-    public GHRepositoryVariable.Updater update() throws IOException {
-        return new GHRepositoryVariable.Updater(this);
-    }
-
-    /**
      * A {@link GHRepositoryVariableBuilder} that creates a new {@link GHRepositoryVariable}
      * <p>
      * Consumer must call {@link #done()} to create the new instance.
@@ -177,16 +163,4 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
         }
     }
 
-    /**
-     * A {@link GHRepositoryVariableBuilder} that allows multiple properties to be updated per request.
-     * <p>
-     * Consumer must call {@link #done()} to commit changes.
-     */
-    @BetaApi
-    public static class Updater extends GHRepositoryVariableBuilder<Updater> {
-        private Updater(@Nonnull GHRepositoryVariable base) {
-            super(GHRepositoryVariable.Updater.class, base.getApiRoot(), base);
-            requester.method("PATCH").withUrlPath(base.getUrl());
-        }
-    }
 }

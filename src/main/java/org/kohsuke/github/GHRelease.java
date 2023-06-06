@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.File;
@@ -157,8 +158,13 @@ public class GHRelease extends GHObject {
      *
      * @return the published at
      */
+    @Nullable
     public Date getPublished_at() {
-        return new Date(published_at.getTime());
+        if (published_at != null) {
+            return new Date(published_at.getTime());
+        } else {
+            return null;
+        }
     }
 
     /**

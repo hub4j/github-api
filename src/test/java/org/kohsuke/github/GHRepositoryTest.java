@@ -1639,7 +1639,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         variable.delete();
         Assert.assertThrows(GHFileNotFoundException.class, () -> repository.getVariable("mynewvariable"));
     }
-    
+
     /**
      * Test demoing the issue with a user having the maintain permission on a repository.
      *

@@ -1639,5 +1639,18 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         variable.delete();
         Assert.assertThrows(GHFileNotFoundException.class, () -> repository.getVariable("mynewvariable"));
     }
+    
+    /**
+     * Test demoing the issue with a user having the maintain permission on a repository.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void cannotRetrievePermissionMaintainUser() throws IOException {
+        GHRepository r = gitHub.getRepository("hub4j-test-org/maintain-permission-issue");
+        GHPermissionType permission = r.getPermission("alecharp");
+        assertThat(permission.toString(), is("MAINTAIN"));
+    }
 
 }

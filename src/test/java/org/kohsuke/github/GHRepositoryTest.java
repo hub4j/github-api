@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.kohsuke.github.GHCheckRun.Conclusion;
 import org.kohsuke.github.GHOrganization.RepositoryRole;
@@ -1596,6 +1597,50 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test create repo action variable.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testCreateRepoActionVariable() throws IOException {
+        GHRepository repository = getRepository();
+        repository.createVariable("MYNEWVARIABLE", "mynewvalue");
+        GHRepositoryVariable variable = repository.getVariable("mynewvariable");
+        assertThat(variable.getName(), is("MYNEWVARIABLE"));
+        assertThat(variable.getValue(), is("mynewvalue"));
+    }
+
+    /**
+     * Test update repo action variable.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testUpdateRepoActionVariable() throws IOException {
+        GHRepository repository = getRepository();
+        GHRepositoryVariable variable = repository.getVariable("MYNEWVARIABLE");
+        variable.set().value("myupdatevalue");
+        variable = repository.getVariable("MYNEWVARIABLE");
+        assertThat(variable.getValue(), is("myupdatevalue"));
+    }
+
+    /**
+     * Test delete repo action variable.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testDeleteRepoActionVariable() throws IOException {
+        GHRepository repository = getRepository();
+        GHRepositoryVariable variable = repository.getVariable("mynewvariable");
+        variable.delete();
+        Assert.assertThrows(GHFileNotFoundException.class, () -> repository.getVariable("mynewvariable"));
+    }
+    
+    /**
      * Test demoing the issue with a user having the maintain permission on a repository.
      *
      * @throws IOException
@@ -1607,4 +1652,5 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHPermissionType permission = r.getPermission("alecharp");
         assertThat(permission.toString(), is("MAINTAIN"));
     }
+
 }

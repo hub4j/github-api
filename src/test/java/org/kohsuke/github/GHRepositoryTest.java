@@ -1643,6 +1643,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test demoing the issue with a user having the maintain permission on a repository.
      *
+     * Test checking the permission fallback mechanism in case the Github API changes. The test was recorded at a time a
+     * new permission was added by mistake. If a re-recording it is needed, you'll like have to manually edit the
+     * generated mocks to get a non existing permission See
+     * https://github.com/hub4j/github-api/issues/1671#issuecomment-1577515662 for the details.
+     *
      * @throws IOException
      *             the exception
      */
@@ -1650,7 +1655,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     public void cannotRetrievePermissionMaintainUser() throws IOException {
         GHRepository r = gitHub.getRepository("hub4j-test-org/maintain-permission-issue");
         GHPermissionType permission = r.getPermission("alecharp");
-        assertThat(permission.toString(), is("MAINTAIN"));
+        assertThat(permission.toString(), is("UNKNOWN"));
     }
 
 }

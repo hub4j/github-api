@@ -10,12 +10,8 @@ public enum GHPermissionType {
 
     /** The admin. */
     ADMIN(30),
-    /** The maintain. */
-    MAINTAIN(25),
     /** The write. */
     WRITE(20),
-    /** The triage. */
-    TRIAGE(15),
     /** The read. */
     READ(10),
     /** The none. */

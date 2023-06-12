@@ -253,24 +253,59 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             assertThat(comment.getOriginalCommitId(), equalTo("07374fe73aff1c2024a8d4114b32406c7a8e89b7"));
             assertThat(comment.getAuthorAssociation(), equalTo(GHCommentAuthorAssociation.MEMBER));
             assertThat(comment.getUser(), notNullValue());
+            assertThat(comment.getStartLine(), equalTo(-1));
+            assertThat(comment.getOriginalStartLine(), equalTo(-1));
+            assertThat(comment.getStartSide(), equalTo(GHPullRequestReviewComment.Side.UNKNOWN));
+            assertThat(comment.getLine(), equalTo(1));
+            assertThat(comment.getOriginalLine(), equalTo(1));
+            assertThat(comment.getSide(), equalTo(GHPullRequestReviewComment.Side.LEFT));
+            assertThat(comment.getPullRequestUrl(), notNullValue());
+            assertThat(comment.getPullRequestUrl().toString(), containsString("hub4j-test-org/github-api/pulls/"));
+            assertThat(comment.getBodyHtml(), nullValue());
+            assertThat(comment.getBodyText(), nullValue());
             // Assert htmlUrl is not null
             assertThat(comment.getHtmlUrl(), notNullValue());
             assertThat(comment.getHtmlUrl().toString(),
                     containsString("hub4j-test-org/github-api/pull/" + p.getNumber()));
 
+            comment.createReaction(ReactionContent.EYES);
+            GHReaction toBeRemoved = comment.createReaction(ReactionContent.CONFUSED);
+            comment.createReaction(ReactionContent.ROCKET);
+            comment.createReaction(ReactionContent.HOORAY);
+            comment.createReaction(ReactionContent.HEART);
+            comment.createReaction(ReactionContent.MINUS_ONE);
+            comment.createReaction(ReactionContent.PLUS_ONE);
+            comment.createReaction(ReactionContent.LAUGH);
+            GHPullRequestReviewCommentReactions commentReactions = p.listReviewComments()
+                    .toList()
+                    .get(0)
+                    .getReactions();
+            assertThat(commentReactions.getUrl().toString(), equalTo(comment.getUrl().toString().concat("/reactions")));
+            assertThat(commentReactions.getTotalCount(), equalTo(8));
+            assertThat(commentReactions.getPlusOne(), equalTo(1));
+            assertThat(commentReactions.getMinusOne(), equalTo(1));
+            assertThat(commentReactions.getLaugh(), equalTo(1));
+            assertThat(commentReactions.getHooray(), equalTo(1));
+            assertThat(commentReactions.getConfused(), equalTo(1));
+            assertThat(commentReactions.getHeart(), equalTo(1));
+            assertThat(commentReactions.getRocket(), equalTo(1));
+            assertThat(commentReactions.getEyes(), equalTo(1));
+
+            comment.deleteReaction(toBeRemoved);
+
             List<GHReaction> reactions = comment.listReactions().toList();
-            assertThat(reactions, is(empty()));
+            assertThat(reactions.size(), equalTo(7));
 
             GHReaction reaction = comment.createReaction(ReactionContent.CONFUSED);
             assertThat(reaction.getContent(), equalTo(ReactionContent.CONFUSED));
 
             reactions = comment.listReactions().toList();
-            assertThat(reactions.size(), equalTo(1));
+            assertThat(reactions.size(), equalTo(8));
 
             comment.deleteReaction(reaction);
 
             reactions = comment.listReactions().toList();
-            assertThat(reactions.size(), equalTo(0));
+            assertThat(reactions.size(), equalTo(7));
 
             GHPullRequestReviewComment reply = comment.reply("This is a reply.");
             assertThat(reply.getInReplyToId(), equalTo(comment.getId()));

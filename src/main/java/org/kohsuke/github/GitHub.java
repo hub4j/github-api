@@ -916,6 +916,23 @@ public class GitHub {
     }
 
     /**
+     * List public events for a user
+     * <a href="https://docs.github.com/en/rest/activity/events?apiVersion=2022-11-28#list-public-events-for-a-user">see
+     * API documentation</a>
+     *
+     * @param login
+     *            the login (user) to look public events for
+     * @return the events
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHEventInfo> getUserPublicEvents(String login) throws IOException {
+        return createRequest().withUrlPath("/users/" + login + "/events/public")
+                .toIterable(GHEventInfo[].class, null)
+                .toList();
+    }
+
+    /**
      * Gets a single gist by ID.
      *
      * @param id
@@ -1167,6 +1184,38 @@ public class GitHub {
     @Preview(MACHINE_MAN)
     public GHApp getApp() throws IOException {
         return createRequest().withPreview(MACHINE_MAN).withUrlPath("/app").fetch(GHApp.class);
+    }
+
+    /**
+     * Returns the GitHub App identified by the given slug
+     *
+     * @param slug
+     *            the slug of the application
+     * @return the app
+     * @throws IOException
+     *             the IO exception
+     * @see <a href="https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#get-an-app">Get an app</a>
+     */
+    public GHApp getApp(@Nonnull String slug) throws IOException {
+        return createRequest().withUrlPath("/apps/" + slug).fetch(GHApp.class);
+    }
+
+    /**
+     * Creates a GitHub App from a manifest.
+     *
+     * @param code
+     *            temporary code returned during the manifest flow
+     * @return the app
+     * @throws IOException
+     *             the IO exception
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest">Get an
+     *      app</a>
+     */
+    public GHAppFromManifest createAppFromManifest(@Nonnull String code) throws IOException {
+        return createRequest().method("POST")
+                .withUrlPath("/app-manifests/" + code + "/conversions")
+                .fetch(GHAppFromManifest.class);
     }
 
     /**

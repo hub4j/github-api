@@ -2730,6 +2730,47 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Create a repository variable.
+     *
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void createVariable(String name, String value) throws IOException {
+        GHRepositoryVariable.create(this).name(name).value(value).done();
+    }
+
+    /**
+     * Gets a variable by name
+     *
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @return the variable
+     * @throws IOException
+     *             the io exception
+     */
+    @Deprecated
+    public GHRepositoryVariable getRepoVariable(String name) throws IOException {
+        return getVariable(name);
+    }
+
+    /**
+     * Gets a repository variable.
+     *
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @return the variable
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepositoryVariable getVariable(String name) throws IOException {
+        return GHRepositoryVariable.read(this, name);
+    }
+
+    /**
      * Creates a new content, or update an existing content.
      *
      * @return the gh content builder
@@ -2850,14 +2891,31 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHDeployKey addDeployKey(String title, String key) throws IOException {
+        return addDeployKey(title, key, false);
+    }
+
+    /**
+     * Add deploy key gh deploy key.
+     *
+     * @param title
+     *            the title
+     * @param key
+     *            the key
+     * @param readOnly
+     *            read-only ability of the key
+     * @return the gh deploy key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeployKey addDeployKey(String title, String key, boolean readOnly) throws IOException {
         return root().createRequest()
                 .method("POST")
                 .with("title", title)
                 .with("key", key)
+                .with("read_only", readOnly)
                 .withUrlPath(getApiTailUrl("keys"))
                 .fetch(GHDeployKey.class)
                 .lateBind(this);
-
     }
 
     /**

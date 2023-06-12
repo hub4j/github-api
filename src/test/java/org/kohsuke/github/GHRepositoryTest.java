@@ -1657,5 +1657,4 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHPermissionType permission = r.getPermission("alecharp");
         assertThat(permission.toString(), is("UNKNOWN"));
     }
-
 }

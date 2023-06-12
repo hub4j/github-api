@@ -2754,7 +2754,7 @@ public class GHRepository extends GHObject {
      */
     @Deprecated
     public GHRepositoryVariable getRepoVariable(String name) throws IOException {
-        return getVariable(String name)
+        return getVariable(String name);
     }
 
     /**

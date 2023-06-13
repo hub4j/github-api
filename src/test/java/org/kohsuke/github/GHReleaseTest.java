@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.GHReleaseBuilder.MakeLatest;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
@@ -161,5 +162,40 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         release.delete();
         assertThat(repo.getRelease(release.getId()), nullValue());
 
+    }
+
+    /**
+     * Test making a release the latest
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testMakeLatestRelease() throws Exception {
+        GHRepository repo = getTempRepository();
+
+        GHRelease release1 = repo.createRelease("tag1").create();
+        GHRelease release2 = null;
+
+        try {
+            // Newly created release should also be the latest.
+            GHRelease latestRelease = repo.getLatestRelease();
+            assertThat(release1.getNodeId(), is(latestRelease.getNodeId()));
+
+            // Create a second release, explicitly set it not to be latest, confirm it isn't
+            release2 = repo.createRelease("tag2").makeLatest(MakeLatest.FALSE).create();
+            latestRelease = repo.getLatestRelease();
+            assertThat(release1.getNodeId(), is(latestRelease.getNodeId()));
+
+            // Update the second release to be latest, confirm it is.
+            release2.update().makeLatest(MakeLatest.TRUE).update();
+            latestRelease = repo.getLatestRelease();
+            assertThat(release2.getNodeId(), is(latestRelease.getNodeId()));
+        } finally {
+            release1.delete();
+            if (release2 != null) {
+                release2.delete();
+            }
+        }
     }
 }

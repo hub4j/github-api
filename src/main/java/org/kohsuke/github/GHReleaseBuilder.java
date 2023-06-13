@@ -104,6 +104,9 @@ public class GHReleaseBuilder {
         return this;
     }
 
+    /**
+     * Values for whether this release should be the latest.
+     */
     public static enum MakeLatest {
 
         /** Make this the latest release */

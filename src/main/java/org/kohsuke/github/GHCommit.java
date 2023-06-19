@@ -23,7 +23,14 @@ import static org.kohsuke.github.internal.Previews.GROOT;
  */
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHCommit {
-    private GHRepository owner;
+	
+	/** 
+	 * Number of files returned in the commit response. If there are more files than this, the response
+	 * will include pagination link headers for the remaining files.
+	 */
+    private static final int GH_FILE_LIMIT_PER_COMMIT_PAGE = 300;
+
+	private GHRepository owner;
 
     private ShortInfo commit;
 
@@ -269,7 +276,7 @@ public class GHCommit {
     }
 
     /** The sha. */
-    String url, html_url, sha;
+    String url, html_url, sha, message;
 
     /** The files. */
     List<File> files;
@@ -308,6 +315,7 @@ public class GHCommit {
         sha = commit.getSha();
         url = commit.getUrl();
         parents = commit.getParents();
+        message = commit.getMessage();
     }
 
     /**
@@ -414,10 +422,36 @@ public class GHCommit {
      * @return Can be empty but never null.
      * @throws IOException
      *             on error
+     * @deprecated Use {@link #listFiles()} instead.
      */
+    @Deprecated
     public List<File> getFiles() throws IOException {
+        return listFiles();
+    }
+
+    /**
+     * List of files changed/added/removed in this commit.
+     * Uses a paginated list if the files returned by GitHub exceed 300 in quantity.
+     * @see https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
+     *
+     * @return the List of files
+     * @throws IOException
+     */
+    public List<File> listFiles() throws IOException {
+
         populate();
-        return files != null ? Collections.unmodifiableList(files) : Collections.<File>emptyList();
+        
+        if (files != null && files.size() < GH_FILE_LIMIT_PER_COMMIT_PAGE) {
+            return Collections.unmodifiableList(files);
+        }
+
+        PagedIterable<File> filesIterable = new GHCommitIterable(owner, sha);
+        if (files == null) {
+            files = new ArrayList<>();
+        }
+        files.clear();
+        files.addAll(filesIterable.toList());
+        return Collections.unmodifiableList(files);
     }
 
     /**

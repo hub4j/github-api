@@ -22,7 +22,7 @@ public class GHTreeBuilder {
     // Issue #636: Create Tree no longer accepts null value in sha field
     @JsonInclude(Include.NON_NULL)
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    private static final class TreeEntry {
+    private static class TreeEntry {
 
         private final String path;
         private final String mode;
@@ -34,6 +34,15 @@ public class GHTreeBuilder {
             this.path = path;
             this.mode = mode;
             this.type = type;
+        }
+    }
+
+    private static class DeleteTreeEntry extends TreeEntry {
+        @JsonInclude
+        private String sha;
+
+        private DeleteTreeEntry(String path, String mode, String type) {
+            super(path, mode, type);
         }
     }
 
@@ -145,6 +154,21 @@ public class GHTreeBuilder {
         } catch (IOException e) {
             throw new GHException("Cannot create binary content of '" + path + "'", e);
         }
+    }
+
+    /**
+     * Removes an entry with the given path from base tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @param executable
+     *            true, if the file should be executable
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder delete(String path, boolean executable) {
+        TreeEntry entry = new DeleteTreeEntry(path, executable ? "100755" : "100644", "blob");
+        treeEntries.add(entry);
+        return this;
     }
 
     /**

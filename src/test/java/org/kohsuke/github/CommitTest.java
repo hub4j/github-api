@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.google.common.collect.Iterables;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -32,19 +33,69 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * List files.
+     * Test get files.
      *
      * @throws Exception
      *             the exception
      */
     @Test // issue 230
-    public void listFiles() throws Exception {
+    public void getFiles() throws Exception {
         GHRepository repo = gitHub.getRepository("stapler/stapler");
         PagedIterable<GHCommit> commits = repo.queryCommits().path("pom.xml").list();
         for (GHCommit commit : Iterables.limit(commits, 10)) {
             GHCommit expected = repo.getCommit(commit.getSHA1());
             assertThat(commit.getFiles().size(), equalTo(expected.getFiles().size()));
         }
+    }
+
+    /**
+     * Test list files.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test // issue 1667
+    @Ignore
+    public void listFilesWhereCommitHasSmallChange() throws Exception {
+        // GHRepository repo = getTempRepository("github-api");
+        GHRepository repo = gitHub.getRepository(GITHUB_API_TEST_ORG + "/github-api");
+        GHCommit commit = repo.getCommit("b113ff35accb41dfc0b0366c44eb46c82b3ddfd5");
+
+        assertThat(commit.listFiles().size(), equalTo(36));
+    }
+
+    /**
+     * Test list files.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test // issue 1667
+    @Ignore
+    public void listFilesWhereCommitHasLargeChange() throws Exception {
+        // GHRepository repo = getTempRepository("github-api");
+        GHRepository repo = gitHub.getRepository("frink182/github-api-test");
+        GHCommit commit = repo.getCommit("376cb23ae1657b3696870fa7f01f123e6fa8f032");
+
+        assertThat(commit.listFiles().size(), equalTo(691));
+    }
+
+    /**
+     * Tests the commit message.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    @Ignore
+    public void getMessage() throws Exception {
+        // GHRepository repo = getTempRepository("github-api");
+        GHRepository repo = gitHub.getRepository("stapler/stapler");
+        GHCommit commit = repo.getCommit("56a94d9727f2e495cab9c64d6450ab925444567e");
+
+        assertThat(commit.getCommitShortInfo().getMessage(), notNullValue());
+        assertThat(commit.getCommitShortInfo().getMessage(),
+                equalTo("Remove dependency on Prototype or jQuery (#452)"));
     }
 
     /**

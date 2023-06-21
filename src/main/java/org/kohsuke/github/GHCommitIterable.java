@@ -9,14 +9,11 @@ import javax.annotation.Nonnull;
  *
  * @author Stephen Horgan
  */
-public class GHCommitIterable extends PagedIterable<GHCommit.File> {
+class GHCommitIterable extends PagedIterable<GHCommit.File> {
 
-    private final transient GHRepository owner;
-
+    private final GHRepository owner;
+    private final String sha;
     private GHCommitFilesPage result;
-
-    /** The sha. */
-    String sha;
 
     /**
      * Instantiates a new GH commit iterable.

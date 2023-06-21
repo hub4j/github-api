@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import org.kohsuke.github.GHCommit.File;
 
 /**
- * Represents the array of files returned by github in a commit.
+ * Represents the array of files in a commit returned by github.
  *
  * @author Stephen Horgan
  */

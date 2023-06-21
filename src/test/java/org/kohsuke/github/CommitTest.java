@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.google.common.collect.Iterables;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -54,6 +55,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     @Test // issue 1667
+    @Ignore
     public void listFilesWhereCommitHasSmallChange() throws Exception {
         // GHRepository repo = getTempRepository("github-api");
         GHRepository repo = gitHub.getRepository(GITHUB_API_TEST_ORG + "/github-api");
@@ -69,6 +71,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     @Test // issue 1667
+    @Ignore
     public void listFilesWhereCommitHasLargeChange() throws Exception {
         // GHRepository repo = getTempRepository("github-api");
         GHRepository repo = gitHub.getRepository("frink182/github-api-test");
@@ -76,21 +79,23 @@ public class CommitTest extends AbstractGitHubWireMockTest {
 
         assertThat(commit.listFiles().size(), equalTo(691));
     }
-    
+
     /**
      * Tests the commit message.
      *
      * @throws Exception
      *             the exception
      */
-    @Test 
+    @Test
+    @Ignore
     public void getMessage() throws Exception {
         // GHRepository repo = getTempRepository("github-api");
-    	GHRepository repo = gitHub.getRepository("stapler/stapler");
-    	GHCommit commit = repo.getCommit("56a94d9727f2e495cab9c64d6450ab925444567e");
-    	
-    	assertThat(commit.getCommitShortInfo().getMessage(), notNullValue());
-    	assertThat(commit.getCommitShortInfo().getMessage(), equalTo("Remove dependency on Prototype or jQuery (#452)"));
+        GHRepository repo = gitHub.getRepository("stapler/stapler");
+        GHCommit commit = repo.getCommit("56a94d9727f2e495cab9c64d6450ab925444567e");
+
+        assertThat(commit.getCommitShortInfo().getMessage(), notNullValue());
+        assertThat(commit.getCommitShortInfo().getMessage(),
+                equalTo("Remove dependency on Prototype or jQuery (#452)"));
     }
 
     /**

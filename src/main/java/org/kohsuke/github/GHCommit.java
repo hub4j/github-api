@@ -23,14 +23,14 @@ import static org.kohsuke.github.internal.Previews.GROOT;
  */
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHCommit {
-	
-	/** 
-	 * Number of files returned in the commit response. If there are more files than this, the response
-	 * will include pagination link headers for the remaining files.
-	 */
+
+    /**
+     * Number of files returned in the commit response. If there are more files than this, the response will include
+     * pagination link headers for the remaining files.
+     */
     private static final int GH_FILE_LIMIT_PER_COMMIT_PAGE = 300;
 
-	private GHRepository owner;
+    private GHRepository owner;
 
     private ShortInfo commit;
 
@@ -430,8 +430,9 @@ public class GHCommit {
     }
 
     /**
-     * List of files changed/added/removed in this commit.
-     * Uses a paginated list if the files returned by GitHub exceed 300 in quantity.
+     * List of files changed/added/removed in this commit. Uses a paginated list if the files returned by GitHub exceed
+     * 300 in quantity.
+     *
      * @see https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
      *
      * @return the List of files
@@ -440,7 +441,7 @@ public class GHCommit {
     public List<File> listFiles() throws IOException {
 
         populate();
-        
+
         if (files != null && files.size() < GH_FILE_LIMIT_PER_COMMIT_PAGE) {
             return Collections.unmodifiableList(files);
         }

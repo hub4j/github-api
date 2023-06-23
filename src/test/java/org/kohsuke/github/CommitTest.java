@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.google.common.collect.Iterables;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -55,13 +54,11 @@ public class CommitTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     @Test // issue 1667
-    @Ignore
     public void listFilesWhereCommitHasSmallChange() throws Exception {
-        // GHRepository repo = getTempRepository("github-api");
-        GHRepository repo = gitHub.getRepository(GITHUB_API_TEST_ORG + "/github-api");
-        GHCommit commit = repo.getCommit("b113ff35accb41dfc0b0366c44eb46c82b3ddfd5");
+        GHRepository repo = getRepository();
+        GHCommit commit = repo.getCommit("dabf0e89fe7107d6e294a924561533ecf80f2384");
 
-        assertThat(commit.listFiles().size(), equalTo(36));
+        assertThat(commit.listFiles().size(), equalTo(28));
     }
 
     /**
@@ -71,11 +68,9 @@ public class CommitTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     @Test // issue 1667
-    @Ignore
     public void listFilesWhereCommitHasLargeChange() throws Exception {
-        // GHRepository repo = getTempRepository("github-api");
-        GHRepository repo = gitHub.getRepository("frink182/github-api-test");
-        GHCommit commit = repo.getCommit("376cb23ae1657b3696870fa7f01f123e6fa8f032");
+        GHRepository repo = getRepository();
+        GHCommit commit = repo.getCommit("b83812aa76bb7c3c43da96fbf8aec1e45db87624");
 
         assertThat(commit.listFiles().size(), equalTo(691));
     }
@@ -87,15 +82,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     @Test
-    @Ignore
     public void getMessage() throws Exception {
-        // GHRepository repo = getTempRepository("github-api");
-        GHRepository repo = gitHub.getRepository("stapler/stapler");
-        GHCommit commit = repo.getCommit("56a94d9727f2e495cab9c64d6450ab925444567e");
+        GHRepository repo = getRepository();
+        GHCommit commit = repo.getCommit("dabf0e89fe7107d6e294a924561533ecf80f2384");
 
         assertThat(commit.getCommitShortInfo().getMessage(), notNullValue());
-        assertThat(commit.getCommitShortInfo().getMessage(),
-                equalTo("Remove dependency on Prototype or jQuery (#452)"));
+        assertThat(commit.getCommitShortInfo().getMessage(), equalTo("A commit with a few files"));
     }
 
     /**
@@ -322,21 +314,36 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Commit date not null.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test // issue 883
-    public void commitDateNotNull() throws Exception {
-        GHRepository repo = gitHub.getRepository("hub4j/github-api");
-        GHCommit commit = repo.getCommit("865a49d2e86c24c5777985f0f103e975c4b765b9");
+	 * Commit date not null.
+	 *
+	 * @throws Exception
+	 *             the exception
+	 */
+	@Test // issue 883
+	public void commitDateNotNull() throws Exception {
+	    GHRepository repo = gitHub.getRepository("hub4j/github-api");
+	    GHCommit commit = repo.getCommit("865a49d2e86c24c5777985f0f103e975c4b765b9");
+	
+	    assertThat(commit.getCommitShortInfo().getAuthoredDate().toInstant().getEpochSecond(), equalTo(1609207093L));
+	    assertThat(commit.getCommitShortInfo().getAuthoredDate(),
+	            equalTo(commit.getCommitShortInfo().getAuthor().getDate()));
+	    assertThat(commit.getCommitShortInfo().getCommitDate().toInstant().getEpochSecond(), equalTo(1609207652L));
+	    assertThat(commit.getCommitShortInfo().getCommitDate(),
+	            equalTo(commit.getCommitShortInfo().getCommitter().getDate()));
+	}
 
-        assertThat(commit.getCommitShortInfo().getAuthoredDate().toInstant().getEpochSecond(), equalTo(1609207093L));
-        assertThat(commit.getCommitShortInfo().getAuthoredDate(),
-                equalTo(commit.getCommitShortInfo().getAuthor().getDate()));
-        assertThat(commit.getCommitShortInfo().getCommitDate().toInstant().getEpochSecond(), equalTo(1609207652L));
-        assertThat(commit.getCommitShortInfo().getCommitDate(),
-                equalTo(commit.getCommitShortInfo().getCommitter().getDate()));
-    }
+	/**
+	 * Gets the repository.
+	 *
+	 * @return the repository
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	protected GHRepository getRepository() throws IOException {
+	    return getRepository(gitHub);
+	}
+
+	private GHRepository getRepository(GitHub gitHub) throws IOException {
+	    return gitHub.getOrganization("hub4j-test-org").getRepository("CommitTest");
+	}
 }

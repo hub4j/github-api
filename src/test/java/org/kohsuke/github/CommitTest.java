@@ -48,12 +48,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test list files.
+     * Test list files where there are less than 300 files in a commit.
      *
      * @throws Exception
      *             the exception
      */
-    @Test // issue 1667
+    @Test // issue 1669
     public void listFilesWhereCommitHasSmallChange() throws Exception {
         GHRepository repo = getRepository();
         GHCommit commit = repo.getCommit("dabf0e89fe7107d6e294a924561533ecf80f2384");
@@ -62,12 +62,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test list files.
+     * Test list files where there are more than 300 files in a commit.
      *
      * @throws Exception
      *             the exception
      */
-    @Test // issue 1667
+    @Test // issue 1669
     public void listFilesWhereCommitHasLargeChange() throws Exception {
         GHRepository repo = getRepository();
         GHCommit commit = repo.getCommit("b83812aa76bb7c3c43da96fbf8aec1e45db87624");

@@ -314,36 +314,36 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-	 * Commit date not null.
-	 *
-	 * @throws Exception
-	 *             the exception
-	 */
-	@Test // issue 883
-	public void commitDateNotNull() throws Exception {
-	    GHRepository repo = gitHub.getRepository("hub4j/github-api");
-	    GHCommit commit = repo.getCommit("865a49d2e86c24c5777985f0f103e975c4b765b9");
-	
-	    assertThat(commit.getCommitShortInfo().getAuthoredDate().toInstant().getEpochSecond(), equalTo(1609207093L));
-	    assertThat(commit.getCommitShortInfo().getAuthoredDate(),
-	            equalTo(commit.getCommitShortInfo().getAuthor().getDate()));
-	    assertThat(commit.getCommitShortInfo().getCommitDate().toInstant().getEpochSecond(), equalTo(1609207652L));
-	    assertThat(commit.getCommitShortInfo().getCommitDate(),
-	            equalTo(commit.getCommitShortInfo().getCommitter().getDate()));
-	}
+     * Commit date not null.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test // issue 883
+    public void commitDateNotNull() throws Exception {
+        GHRepository repo = gitHub.getRepository("hub4j/github-api");
+        GHCommit commit = repo.getCommit("865a49d2e86c24c5777985f0f103e975c4b765b9");
 
-	/**
-	 * Gets the repository.
-	 *
-	 * @return the repository
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	protected GHRepository getRepository() throws IOException {
-	    return getRepository(gitHub);
-	}
+        assertThat(commit.getCommitShortInfo().getAuthoredDate().toInstant().getEpochSecond(), equalTo(1609207093L));
+        assertThat(commit.getCommitShortInfo().getAuthoredDate(),
+                equalTo(commit.getCommitShortInfo().getAuthor().getDate()));
+        assertThat(commit.getCommitShortInfo().getCommitDate().toInstant().getEpochSecond(), equalTo(1609207652L));
+        assertThat(commit.getCommitShortInfo().getCommitDate(),
+                equalTo(commit.getCommitShortInfo().getCommitter().getDate()));
+    }
 
-	private GHRepository getRepository(GitHub gitHub) throws IOException {
-	    return gitHub.getOrganization("hub4j-test-org").getRepository("CommitTest");
-	}
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("CommitTest");
+    }
 }

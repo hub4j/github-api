@@ -433,10 +433,11 @@ public class GHCommit {
      * List of files changed/added/removed in this commit. Uses a paginated list if the files returned by GitHub exceed
      * 300 in quantity.
      *
-     * @see https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
-     *
      * @return the List of files
+     * @see <a href="https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit">Get a
+     *      commit</a>
      * @throws IOException
+     *             on error
      */
     public List<File> listFiles() throws IOException {
 

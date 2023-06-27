@@ -422,9 +422,9 @@ class GitHubClient {
     public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull BodyHandler<T> handler)
             throws IOException {
         int retries = CONNECTION_ERROR_RETRIES;
-        GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);
 
         do {
+            GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);
             GitHubConnectorResponse connectorResponse = null;
             try {
                 logRequest(connectorRequest);

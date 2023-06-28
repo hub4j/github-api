@@ -157,21 +157,6 @@ public class GHTreeBuilder {
     }
 
     /**
-     * Removes an entry with the given path from base tree.
-     *
-     * @param path
-     *            the file path in the tree
-     * @param executable
-     *            true, if the file should be executable
-     * @return this GHTreeBuilder
-     */
-    public GHTreeBuilder delete(String path, boolean executable) {
-        TreeEntry entry = new DeleteTreeEntry(path, executable ? "100755" : "100644", "blob");
-        treeEntries.add(entry);
-        return this;
-    }
-
-    /**
      * Adds a new entry with the given text content to the tree.
      *
      * @param path
@@ -184,6 +169,21 @@ public class GHTreeBuilder {
      */
     public GHTreeBuilder add(String path, String content, boolean executable) {
         return add(path, content.getBytes(StandardCharsets.UTF_8), executable);
+    }
+
+    /**
+     * Removes an entry with the given path from base tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @param executable
+     *            true, if the file should be executable
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder delete(String path, boolean executable) {
+        TreeEntry entry = new DeleteTreeEntry(path, executable ? "100755" : "100644", "blob");
+        treeEntries.add(entry);
+        return this;
     }
 
     private String getApiTail() {

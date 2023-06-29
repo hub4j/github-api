@@ -134,6 +134,12 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * Test delete.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testDelete() throws Exception {
         // add test tree

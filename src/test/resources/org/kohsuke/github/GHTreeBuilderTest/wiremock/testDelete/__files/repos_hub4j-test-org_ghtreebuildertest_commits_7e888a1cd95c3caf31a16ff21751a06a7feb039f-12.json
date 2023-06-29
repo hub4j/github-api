@@ -1,0 +1,72 @@
+{
+  "sha": "7e888a1cd95c3caf31a16ff21751a06a7feb039f",
+  "node_id": "MDY6Q29tbWl0NjU0OTAwMTA3OjdlODg4YTFjZDk1YzNjYWYzMWExNmZmMjE3NTFhMDZhN2ZlYjAzOWY=",
+  "commit": {
+    "author": {
+      "name": "author",
+      "email": "author@author.com",
+      "date": "2021-01-23T20:20:25Z"
+    },
+    "committer": {
+      "name": "committer",
+      "email": "committer@committer.com",
+      "date": "2021-01-23T20:20:25Z"
+    },
+    "message": "Add files",
+    "tree": {
+      "sha": "0efbfcf79def8e437d825e0116def4be6be56026",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/trees/0efbfcf79def8e437d825e0116def4be6be56026"
+    },
+    "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/commits/7e888a1cd95c3caf31a16ff21751a06a7feb039f",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  },
+  "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/commits/7e888a1cd95c3caf31a16ff21751a06a7feb039f",
+  "html_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/commit/7e888a1cd95c3caf31a16ff21751a06a7feb039f",
+  "comments_url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/commits/7e888a1cd95c3caf31a16ff21751a06a7feb039f/comments",
+  "author": null,
+  "committer": null,
+  "parents": [
+    {
+      "sha": "172349212fb19ffa4f33dcced3263c6963dc750a",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/commits/172349212fb19ffa4f33dcced3263c6963dc750a",
+      "html_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/commit/172349212fb19ffa4f33dcced3263c6963dc750a"
+    }
+  ],
+  "stats": {
+    "total": 2,
+    "additions": 2,
+    "deletions": 0
+  },
+  "files": [
+    {
+      "sha": "aed2973e4b8a7ff1b30ff5c4751e5a2b38989e74",
+      "filename": "data/val1.dat",
+      "status": "added",
+      "additions": 1,
+      "deletions": 0,
+      "changes": 1,
+      "blob_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/blob/7e888a1cd95c3caf31a16ff21751a06a7feb039f/data%2Fval1.dat",
+      "raw_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/raw/7e888a1cd95c3caf31a16ff21751a06a7feb039f/data%2Fval1.dat",
+      "contents_url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/contents/data%2Fval1.dat?ref=7e888a1cd95c3caf31a16ff21751a06a7feb039f",
+      "patch": "@@ -0,0 +1 @@\n+\u0001\u0002\u0003\n\\ No newline at end of file"
+    },
+    {
+      "sha": "fbbc875b17d1e17da06b4ee8fda46e2596c41f3c",
+      "filename": "doc/readme.txt",
+      "status": "added",
+      "additions": 1,
+      "deletions": 0,
+      "changes": 1,
+      "blob_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/blob/7e888a1cd95c3caf31a16ff21751a06a7feb039f/doc%2Freadme.txt",
+      "raw_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/raw/7e888a1cd95c3caf31a16ff21751a06a7feb039f/doc%2Freadme.txt",
+      "contents_url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/contents/doc%2Freadme.txt?ref=7e888a1cd95c3caf31a16ff21751a06a7feb039f",
+      "patch": "@@ -0,0 +1 @@\n+Thanks for using our application!"
+    }
+  ]
+}

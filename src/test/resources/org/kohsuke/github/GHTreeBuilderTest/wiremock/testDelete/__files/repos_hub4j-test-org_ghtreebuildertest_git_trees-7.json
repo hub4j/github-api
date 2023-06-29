@@ -1,0 +1,29 @@
+{
+  "sha": "0efbfcf79def8e437d825e0116def4be6be56026",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/trees/0efbfcf79def8e437d825e0116def4be6be56026",
+  "tree": [
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "958337fe1f522a58e5e7098cc61a2917db1c9643",
+      "size": 19,
+      "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/blobs/958337fe1f522a58e5e7098cc61a2917db1c9643"
+    },
+    {
+      "path": "data",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3ad1a259f440f9995a93ecfd9de5b6ad23d88455",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/trees/3ad1a259f440f9995a93ecfd9de5b6ad23d88455"
+    },
+    {
+      "path": "doc",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "30bda54e864ecafd021698ddf75bb9378dd755e5",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/trees/30bda54e864ecafd021698ddf75bb9378dd755e5"
+    }
+  ],
+  "truncated": false
+}

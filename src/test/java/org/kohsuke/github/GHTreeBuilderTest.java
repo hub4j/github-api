@@ -151,7 +151,7 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         // remove a file from tree
         mainRef = repo.getRef("heads/main");
         treeBuilder = repo.createTree().baseTree(commit.getTree().getSha());
-        treeBuilder.delete(PATH_DATA1, false);
+        treeBuilder.delete(PATH_DATA1);
 
         GHCommit deleteCommit = updateTree();
 

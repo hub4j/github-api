@@ -38,8 +38,12 @@ public class GHTreeBuilder {
     }
 
     private static class DeleteTreeEntry extends TreeEntry {
+        /**
+        According to reference doc https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28#create-a-tree:
+        if sha value is null then the file will be deleted. That's why in this DTO sha is always {@literal null} and is included to json.
+         */
         @JsonInclude
-        private String sha;
+        private final String sha = null;
 
         private DeleteTreeEntry(String path, String mode, String type) {
             super(path, mode, type);
@@ -176,12 +180,10 @@ public class GHTreeBuilder {
      *
      * @param path
      *            the file path in the tree
-     * @param executable
-     *            true, if the file should be executable
      * @return this GHTreeBuilder
      */
-    public GHTreeBuilder delete(String path, boolean executable) {
-        TreeEntry entry = new DeleteTreeEntry(path, executable ? "100755" : "100644", "blob");
+    public GHTreeBuilder delete(String path) {
+        TreeEntry entry = new DeleteTreeEntry(path, "100644", "blob");
         treeEntries.add(entry);
         return this;
     }

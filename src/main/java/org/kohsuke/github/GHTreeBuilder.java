@@ -45,8 +45,10 @@ public class GHTreeBuilder {
         @JsonInclude
         private final String sha = null;
 
-        private DeleteTreeEntry(String path, String mode, String type) {
-            super(path, mode, type);
+        private DeleteTreeEntry(String path) {
+            // The `mode` and `type` parameters are required by the API, but their values are ignored during delete.
+            // Supply reasonable placeholders.
+            super(path, "100644", "blob");
         }
     }
 

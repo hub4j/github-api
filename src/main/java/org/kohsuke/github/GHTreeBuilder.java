@@ -183,7 +183,7 @@ public class GHTreeBuilder {
      * @return this GHTreeBuilder
      */
     public GHTreeBuilder delete(String path) {
-        TreeEntry entry = new DeleteTreeEntry(path, "100644", "blob");
+        TreeEntry entry = new DeleteTreeEntry(path);
         treeEntries.add(entry);
         return this;
     }

@@ -39,8 +39,9 @@ public class GHTreeBuilder {
 
     private static class DeleteTreeEntry extends TreeEntry {
         /**
-        According to reference doc https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28#create-a-tree:
-        if sha value is null then the file will be deleted. That's why in this DTO sha is always {@literal null} and is included to json.
+         * According to reference doc https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28#create-a-tree: if
+         * sha value is null then the file will be deleted. That's why in this DTO sha is always {@literal null} and is
+         * included to json.
          */
         @JsonInclude
         private final String sha = null;

@@ -6,6 +6,7 @@
     "node_id": "MDExOldvcmtmbG93UnVuNjgwNjA0NzQ1",
     "head_branch": "main",
     "head_sha": "dbea8d8b6ed2cf764dfd84a215f3f9040b3d4423",
+    "display_title": "its-display-title",
     "run_number": 6,
     "event": "workflow_dispatch",
     "status": "completed",

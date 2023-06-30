@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.kohsuke.github.GHCheckRun.Conclusion;
 import org.kohsuke.github.GHOrganization.RepositoryRole;
@@ -1580,5 +1581,80 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(repository.listStargazers2().toList().size(), is(1));
         repository.unstar();
         assertThat(repository.listStargazers().toList().size(), is(0));
+    }
+
+    /**
+     * Test to check getRepoVariable method.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testRepoActionVariable() throws Exception {
+        GHRepository repository = getRepository();
+        GHRepositoryVariable variable = repository.getRepoVariable("myvar");
+        assertThat(variable.getValue(), is("this is my var value"));
+    }
+
+    /**
+     * Test create repo action variable.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testCreateRepoActionVariable() throws IOException {
+        GHRepository repository = getRepository();
+        repository.createVariable("MYNEWVARIABLE", "mynewvalue");
+        GHRepositoryVariable variable = repository.getVariable("mynewvariable");
+        assertThat(variable.getName(), is("MYNEWVARIABLE"));
+        assertThat(variable.getValue(), is("mynewvalue"));
+    }
+
+    /**
+     * Test update repo action variable.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testUpdateRepoActionVariable() throws IOException {
+        GHRepository repository = getRepository();
+        GHRepositoryVariable variable = repository.getVariable("MYNEWVARIABLE");
+        variable.set().value("myupdatevalue");
+        variable = repository.getVariable("MYNEWVARIABLE");
+        assertThat(variable.getValue(), is("myupdatevalue"));
+    }
+
+    /**
+     * Test delete repo action variable.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testDeleteRepoActionVariable() throws IOException {
+        GHRepository repository = getRepository();
+        GHRepositoryVariable variable = repository.getVariable("mynewvariable");
+        variable.delete();
+        Assert.assertThrows(GHFileNotFoundException.class, () -> repository.getVariable("mynewvariable"));
+    }
+
+    /**
+     * Test demoing the issue with a user having the maintain permission on a repository.
+     *
+     * Test checking the permission fallback mechanism in case the Github API changes. The test was recorded at a time a
+     * new permission was added by mistake. If a re-recording it is needed, you'll like have to manually edit the
+     * generated mocks to get a non existing permission See
+     * https://github.com/hub4j/github-api/issues/1671#issuecomment-1577515662 for the details.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void cannotRetrievePermissionMaintainUser() throws IOException {
+        GHRepository r = gitHub.getRepository("hub4j-test-org/maintain-permission-issue");
+        GHPermissionType permission = r.getPermission("alecharp");
+        assertThat(permission.toString(), is("UNKNOWN"));
     }
 }

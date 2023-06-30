@@ -1062,6 +1062,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getId(), is(680604745L));
         assertThat(workflowRun.getName(), is("CI"));
         assertThat(workflowRun.getHeadBranch(), is("main"));
+        assertThat(workflowRun.getDisplayTitle(), is("its-display-title"));
         assertThat(workflowRun.getHeadSha(), is("dbea8d8b6ed2cf764dfd84a215f3f9040b3d4423"));
         assertThat(workflowRun.getRunNumber(), is(6L));
         assertThat(workflowRun.getEvent(), is(GHEvent.WORKFLOW_DISPATCH));

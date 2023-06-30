@@ -23,7 +23,7 @@ class GHCommitFileIterable extends PagedIterable<GHCommit.File> {
 
     private final GHRepository owner;
     private final String sha;
-    private GHCommitFilesPage result;
+    private final File[] files;
 
     /**
      * Instantiates a new GH commit iterable.
@@ -38,7 +38,7 @@ class GHCommitFileIterable extends PagedIterable<GHCommit.File> {
     public GHCommitFileIterable(GHRepository owner, String sha, List<File> files) {
         this.owner = owner;
         this.sha = sha;
-        this.result = new GHCommitFilesPage(files != null ? files.toArray(new File[0]) : new File[0]);
+        this.files = files != null ? files.toArray(new File[0]) : null;
     }
 
     /**
@@ -54,9 +54,9 @@ class GHCommitFileIterable extends PagedIterable<GHCommit.File> {
 
         Iterator<GHCommit.File[]> pageIterator;
 
-        if (result.getFiles().length < GH_FILE_LIMIT_PER_COMMIT_PAGE) {
+        if (files != null && files.length < GH_FILE_LIMIT_PER_COMMIT_PAGE) {
             // create a page iterator that only provides one page
-            pageIterator = Collections.singleton(result.getFiles()).iterator();
+            pageIterator = Collections.singleton(files).iterator();
         } else {
             // page size is controlled by the server for this iterator, do not allow it to be set by the caller
             pageSize = 0;
@@ -89,9 +89,6 @@ class GHCommitFileIterable extends PagedIterable<GHCommit.File> {
 
             public GHCommit.File[] next() {
                 GHCommitFilesPage v = base.next();
-                if (result == null) {
-                    result = v;
-                }
                 return v.getFiles();
             }
         };

@@ -58,7 +58,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         GHCommit commit = repo.getCommit("dabf0e89fe7107d6e294a924561533ecf80f2384");
 
-        assertThat(commit.listFiles().size(), equalTo(28));
+        assertThat(commit.listFiles().toList().size(), equalTo(28));
     }
 
     /**
@@ -72,7 +72,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         GHCommit commit = repo.getCommit("b83812aa76bb7c3c43da96fbf8aec1e45db87624");
 
-        assertThat(commit.listFiles().size(), equalTo(691));
+        assertThat(commit.listFiles().toList().size(), equalTo(691));
     }
 
     /**

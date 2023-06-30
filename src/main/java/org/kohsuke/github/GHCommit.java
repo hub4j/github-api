@@ -24,12 +24,6 @@ import static org.kohsuke.github.internal.Previews.GROOT;
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHCommit {
 
-    /**
-     * Number of files returned in the commit response. If there are more files than this, the response will include
-     * pagination link headers for the remaining files.
-     */
-    private static final int GH_FILE_LIMIT_PER_COMMIT_PAGE = 300;
-
     private GHRepository owner;
 
     private ShortInfo commit;
@@ -426,7 +420,7 @@ public class GHCommit {
      */
     @Deprecated
     public List<File> getFiles() throws IOException {
-        return listFiles();
+        return listFiles().toList();
     }
 
     /**
@@ -439,21 +433,11 @@ public class GHCommit {
      * @throws IOException
      *             on error
      */
-    public List<File> listFiles() throws IOException {
+    public PagedIterable<File> listFiles() throws IOException {
 
         populate();
 
-        if (files != null && files.size() < GH_FILE_LIMIT_PER_COMMIT_PAGE) {
-            return Collections.unmodifiableList(files);
-        }
-
-        PagedIterable<File> filesIterable = new GHCommitIterable(owner, sha);
-        if (files == null) {
-            files = new ArrayList<>();
-        }
-        files.clear();
-        files.addAll(filesIterable.toList());
-        return Collections.unmodifiableList(files);
+        return new GHCommitFileIterable(owner, sha, files);
     }
 
     /**

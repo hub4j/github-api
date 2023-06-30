@@ -10,6 +10,13 @@ import org.kohsuke.github.GHCommit.File;
 class GHCommitFilesPage {
     private File[] files;
 
+    public GHCommitFilesPage() {
+    }
+
+    public GHCommitFilesPage(File[] files) {
+        this.files = files;
+    }
+
     /**
      * Gets the files.
      *

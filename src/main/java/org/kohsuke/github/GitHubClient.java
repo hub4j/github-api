@@ -422,9 +422,8 @@ class GitHubClient {
     public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull BodyHandler<T> handler)
             throws IOException {
         int retries = CONNECTION_ERROR_RETRIES;
-
+        GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);
         do {
-            GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);
             GitHubConnectorResponse connectorResponse = null;
             try {
                 logRequest(connectorRequest);
@@ -461,6 +460,7 @@ class GitHubClient {
             boolean detectStatusCodeError) throws IOException {
         detectOTPRequired(connectorResponse);
         detectInvalidCached404Response(connectorResponse, request);
+        detectExpiredToken(connectorResponse, request);
         detectRedirect(connectorResponse);
         if (rateLimitHandler.isError(connectorResponse)) {
             rateLimitHandler.onError(connectorResponse);
@@ -471,6 +471,22 @@ class GitHubClient {
         } else if (detectStatusCodeError
                 && GitHubConnectorResponseErrorHandler.STATUS_HTTP_BAD_REQUEST_OR_GREATER.isError(connectorResponse)) {
             GitHubConnectorResponseErrorHandler.STATUS_HTTP_BAD_REQUEST_OR_GREATER.onError(connectorResponse);
+        }
+    }
+
+    private void detectExpiredToken(GitHubConnectorResponse connectorResponse, GitHubRequest request)
+            throws IOException {
+        if (connectorResponse.statusCode() != HTTP_UNAUTHORIZED) {
+            return;
+        }
+        String originalAuthorization = connectorResponse.request().header("Authorization");
+        if (Objects.isNull(originalAuthorization) || originalAuthorization.isEmpty()) {
+            return;
+        }
+        GitHubConnectorRequest updatedRequest = prepareConnectorRequest(request);
+        String updatedAuthorization = updatedRequest.header("Authorization");
+        if (!originalAuthorization.equals(updatedAuthorization)) {
+            throw new RetryRequestException(updatedRequest);
         }
     }
 

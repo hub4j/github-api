@@ -505,7 +505,7 @@
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>
       <artifactId>stapler</artifactId>
-      <version>1.263</version>
+      <version>1802.v9e2750160d01</version>
       <scope>test</scope>
     </dependency>
     <dependency>

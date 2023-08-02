@@ -186,6 +186,10 @@ public class GHCompare {
     /**
      * Gets an array of files.
      *
+     * By default, the file array is limited to 300 results. To retrieve the full list of files, iterate over each
+     * commit returned by {@link GHCompare#listCommits} and use {@link GHCommit#listFiles} to get the files for each
+     * commit.
+     *
      * @return A copy of the array being stored in the class.
      */
     public GHCommit.File[] getFiles() {

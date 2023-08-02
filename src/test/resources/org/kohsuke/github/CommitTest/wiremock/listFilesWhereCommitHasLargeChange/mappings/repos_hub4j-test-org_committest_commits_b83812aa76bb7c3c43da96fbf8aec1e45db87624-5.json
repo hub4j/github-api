@@ -1,0 +1,52 @@
+{
+  "id": "dcdfb589-d188-4e4e-9e87-f1b7369d91bb",
+  "name": "repos_hub4j-test-org_committest_commits_b83812aa76bb7c3c43da96fbf8aec1e45db87624",
+  "request": {
+    "url": "/repos/hub4j-test-org/CommitTest/commits/b83812aa76bb7c3c43da96fbf8aec1e45db87624",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_committest_commits_b83812aa76bb7c3c43da96fbf8aec1e45db87624-5.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 23 Jun 2023 13:45:37 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"fe0ab35c4e5ff35a7bff89af2960c965c4b03095cf76762061fa74cbb6ae5c6a\"",
+      "Last-Modified": "Fri, 23 Jun 2023 09:50:57 GMT",
+      "github-authentication-token-expiration": "2023-07-19 10:23:39 +0100",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4716",
+      "X-RateLimit-Reset": "1687528241",
+      "X-RateLimit-Used": "284",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "5E09:F1BC:7FD03C:80D89C:6495A201",
+      "Link": "<https://api.github.com/repositories/657543062/commits/b83812aa76bb7c3c43da96fbf8aec1e45db87624?page=2>; rel=\"next\", <https://api.github.com/repositories/657543062/commits/b83812aa76bb7c3c43da96fbf8aec1e45db87624?page=3>; rel=\"last\""
+    }
+  },
+  "uuid": "dcdfb589-d188-4e4e-9e87-f1b7369d91bb",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-CommitTest-commits-b83812aa76bb7c3c43da96fbf8aec1e45db87624",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-CommitTest-commits-b83812aa76bb7c3c43da96fbf8aec1e45db87624-2",
+  "insertionIndex": 5
+}

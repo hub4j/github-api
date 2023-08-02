@@ -111,6 +111,18 @@ public class GHReleaseUpdater {
     }
 
     /**
+     * Optional.
+     *
+     * @param latest
+     *            Whether to make this the latest release. Default is {@code TRUE}
+     * @return the gh release builder
+     */
+    public GHReleaseUpdater makeLatest(GHReleaseBuilder.MakeLatest latest) {
+        builder.with("make_latest", latest);
+        return this;
+    }
+
+    /**
      * Update gh release.
      *
      * @return the gh release

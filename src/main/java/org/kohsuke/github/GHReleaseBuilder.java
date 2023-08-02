@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.util.Locale;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -100,6 +101,41 @@ public class GHReleaseBuilder {
      */
     public GHReleaseBuilder categoryName(String categoryName) {
         builder.with("discussion_category_name", categoryName);
+        return this;
+    }
+
+    /**
+     * Values for whether this release should be the latest.
+     */
+    public static enum MakeLatest {
+
+        /** Make this the latest release */
+        TRUE,
+        /** Do not make this the latest release */
+        FALSE,
+        /** Latest release is determined by date and higher semantic version */
+        LEGACY;
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+    }
+
+    /**
+     * Optional.
+     *
+     * @param latest
+     *            Whether to make this the latest release. Default is {@code TRUE}
+     * @return the gh release builder
+     */
+    public GHReleaseBuilder makeLatest(MakeLatest latest) {
+        builder.with("make_latest", latest);
         return this;
     }
 

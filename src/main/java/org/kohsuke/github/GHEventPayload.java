@@ -286,6 +286,11 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
                         "Expected installation payload, but got something else. Maybe we've got another type of event?");
             }
             super.lateBind();
+
+            if ("deleted".equalsIgnoreCase(getAction())) {
+                repositories.clear(); // can't populate repo list on a deleted installation
+            }
+
             if (repositories != null && !repositories.isEmpty()) {
                 try {
                     for (GHRepository singleRepo : repositories) {

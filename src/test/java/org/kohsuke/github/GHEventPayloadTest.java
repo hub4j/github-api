@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -1000,12 +1001,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getInstallation().getId(), is(2L));
         assertThat(event.getInstallation().getAccount().getLogin(), is("octocat"));
 
-        assertThat(event.getRepositories().get(0).getId(), is(1296269L));
-        assertThat(event.getRepositories().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxMjk2MjY5"));
-        assertThat(event.getRepositories().get(0).getName(), is("Hello-World"));
-        assertThat(event.getRepositories().get(0).getFullName(), is("octocat/Hello-World"));
-        assertThat(event.getRepositories().get(0).isPrivate(), is(false));
-        assertThat(event.getRepositories().get(0).getOwner().getLogin(), is("octocat"));
+        assertTrue(event.getRepositories().isEmpty());
 
         assertThat(event.getSender().getLogin(), is("octocat"));
     }

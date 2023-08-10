@@ -311,6 +311,29 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Tests the creation of repositories with alternating visibilities.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testSetVisibility() throws Exception {
+        kohsuke();
+        GHUser myself = gitHub.getMyself();
+        String repoName = "test-repo-visibility";
+
+        for (Visibility visibility : Visibility.values()) {
+            GHRepository repository = gitHub.createRepository(repoName).visibility(visibility).create();
+            try {
+                assertThat(repository.getVisibility(), is(visibility));
+                assertThat(myself.getRepository(repoName).getVisibility(), is(visibility));
+            } finally {
+                repository.delete();
+            }
+        }
+    }
+
+    /**
      * Test update repository.
      *
      * @throws Exception

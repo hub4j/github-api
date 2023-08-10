@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -318,15 +319,16 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testSetVisibility() throws Exception {
-        kohsuke();
-        GHUser myself = gitHub.getMyself();
         String repoName = "test-repo-visibility";
 
-        for (Visibility visibility : Visibility.values()) {
-            GHRepository repository = gitHub.createRepository(repoName).visibility(visibility).create();
+        GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        // can not test for internal, as test org is not assigned to an enterprise
+        for (Visibility visibility : Sets.newHashSet(Visibility.PUBLIC, Visibility.PRIVATE)) {
+            GHRepository repository = organization.createRepository(repoName).visibility(visibility).create();
             try {
                 assertThat(repository.getVisibility(), is(visibility));
-                assertThat(myself.getRepository(repoName).getVisibility(), is(visibility));
+                assertThat(organization.getRepository(repoName).getVisibility(), is(visibility));
             } finally {
                 repository.delete();
             }

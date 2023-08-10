@@ -1,6 +1,6 @@
 {
-  "id": 676869680,
-  "node_id": "R_kgDOKFg2MA",
+  "id": 676879845,
+  "node_id": "R_kgDOKFhd5Q",
   "name": "test-repo-visibility-public",
   "full_name": "hub4j-test-org/test-repo-visibility-public",
   "private": false,
@@ -64,9 +64,9 @@
   "labels_url": "https://api.github.com/repos/hub4j-test-org/test-repo-visibility-public/labels{/name}",
   "releases_url": "https://api.github.com/repos/hub4j-test-org/test-repo-visibility-public/releases{/id}",
   "deployments_url": "https://api.github.com/repos/hub4j-test-org/test-repo-visibility-public/deployments",
-  "created_at": "2023-08-10T07:45:44Z",
-  "updated_at": "2023-08-10T07:45:45Z",
-  "pushed_at": "2023-08-10T07:45:45Z",
+  "created_at": "2023-08-10T08:16:45Z",
+  "updated_at": "2023-08-10T08:16:46Z",
+  "pushed_at": "2023-08-10T08:16:46Z",
   "git_url": "git://github.com/hub4j-test-org/test-repo-visibility-public.git",
   "ssh_url": "git@github.com:hub4j-test-org/test-repo-visibility-public.git",
   "clone_url": "https://github.com/hub4j-test-org/test-repo-visibility-public.git",
@@ -104,6 +104,7 @@
     "triage": true,
     "pull": true
   },
+  "temp_clone_token": "",
   "allow_squash_merge": true,
   "allow_merge_commit": true,
   "allow_rebase_merge": true,
@@ -135,6 +136,17 @@
     "type": "Organization",
     "site_admin": false
   },
+  "security_and_analysis": {
+    "secret_scanning": {
+      "status": "disabled"
+    },
+    "secret_scanning_push_protection": {
+      "status": "disabled"
+    },
+    "dependabot_security_updates": {
+      "status": "disabled"
+    }
+  },
   "network_count": 0,
-  "subscribers_count": 3
+  "subscribers_count": 7
 }

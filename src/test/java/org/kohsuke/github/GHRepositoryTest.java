@@ -319,12 +319,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testSetVisibility() throws Exception {
-        String repoName = "test-repo-visibility";
-
         GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 
         // can not test for internal, as test org is not assigned to an enterprise
         for (Visibility visibility : Sets.newHashSet(Visibility.PUBLIC, Visibility.PRIVATE)) {
+            String repoName = String.format("test-repo-visibility-%s", visibility.toString());
             GHRepository repository = organization.createRepository(repoName).visibility(visibility).create();
             try {
                 assertThat(repository.getVisibility(), is(visibility));

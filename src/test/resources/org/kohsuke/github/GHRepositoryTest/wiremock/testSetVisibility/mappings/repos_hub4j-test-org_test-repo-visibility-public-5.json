@@ -1,8 +1,8 @@
 {
-  "id": "55176ff0-c55c-4020-8bb4-cc6ad6ce9a15",
-  "name": "repos_hub4j-test-org_test-repo-visibility",
+  "id": "2fd53ed1-984b-4fc0-9791-60116c744823",
+  "name": "repos_hub4j-test-org_test-repo-visibility-public",
   "request": {
-    "url": "/repos/hub4j-test-org/test-repo-visibility",
+    "url": "/repos/hub4j-test-org/test-repo-visibility-public",
     "method": "DELETE",
     "headers": {
       "Accept": {
@@ -14,16 +14,16 @@
     "status": 204,
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Thu, 10 Aug 2023 07:18:56 GMT",
+      "Date": "Thu, 10 Aug 2023 07:45:46 GMT",
       "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
       "X-Accepted-OAuth-Scopes": "delete_repo",
       "github-authentication-token-expiration": "2023-09-09 06:40:49 UTC",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4930",
-      "X-RateLimit-Reset": "1691653436",
-      "X-RateLimit-Used": "70",
+      "X-RateLimit-Remaining": "4984",
+      "X-RateLimit-Reset": "1691657047",
+      "X-RateLimit-Used": "16",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -34,13 +34,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Vary": "Accept-Encoding, Accept, X-Requested-With",
-      "X-GitHub-Request-Id": "C272:1B9A:A1DF4E9:A368E72:64D48F5F"
+      "X-GitHub-Request-Id": "4C6D:E0BE:39AF5F5:3A4072B:64D495AA"
     }
   },
-  "uuid": "55176ff0-c55c-4020-8bb4-cc6ad6ce9a15",
+  "uuid": "2fd53ed1-984b-4fc0-9791-60116c744823",
   "persistent": true,
-  "scenarioName": "scenario-2-repos-hub4j-test-org-test-repo-visibility",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-2-repos-hub4j-test-org-test-repo-visibility-2",
   "insertionIndex": 5
 }

@@ -104,6 +104,7 @@
     "triage": true,
     "pull": true
   },
+  "temp_clone_token": "",
   "allow_squash_merge": true,
   "allow_merge_commit": true,
   "allow_rebase_merge": true,
@@ -135,6 +136,17 @@
     "type": "Organization",
     "site_admin": false
   },
+  "security_and_analysis": {
+    "secret_scanning": {
+      "status": "disabled"
+    },
+    "secret_scanning_push_protection": {
+      "status": "disabled"
+    },
+    "dependabot_security_updates": {
+      "status": "disabled"
+    }
+  },
   "network_count": 0,
-  "subscribers_count": 3
+  "subscribers_count": 14
 }

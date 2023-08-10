@@ -1,5 +1,5 @@
 {
-  "id": "e5597307-486b-4d27-8cf2-39ebbf502cee",
+  "id": "188bae51-0c10-4be0-b3c6-eb6b45414866",
   "name": "orgs_hub4j-test-org_repos",
   "request": {
     "url": "/orgs/hub4j-test-org/repos",
@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"visibility\":\"public\",\"name\":\"test-repo-visibility\"}",
+        "equalToJson": "{\"visibility\":\"public\",\"name\":\"test-repo-visibility-public\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }
@@ -22,23 +22,23 @@
     "bodyFileName": "orgs_hub4j-test-org_repos-3.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Thu, 10 Aug 2023 07:18:55 GMT",
+      "Date": "Thu, 10 Aug 2023 07:45:45 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"4ea5f7ebb6870742d7ef1111f061ebf5aa8c3d166dea426dd056327874e5e668\"",
+      "ETag": "\"19a77460c5594380eda8af4882b0a71fc41409f1fa4ff9850497b878ab13460a\"",
       "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
       "X-Accepted-OAuth-Scopes": "public_repo, repo",
       "github-authentication-token-expiration": "2023-09-09 06:40:49 UTC",
       "X-GitHub-Media-Type": "github.v3; param=nebula-preview; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4932",
-      "X-RateLimit-Reset": "1691653436",
-      "X-RateLimit-Used": "68",
+      "X-RateLimit-Remaining": "4986",
+      "X-RateLimit-Reset": "1691657047",
+      "X-RateLimit-Used": "14",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -48,11 +48,11 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "A971:0F26:BB81279:BD37464:64D48F5E",
-      "Location": "https://api.github.com/repos/hub4j-test-org/test-repo-visibility"
+      "X-GitHub-Request-Id": "9CDF:B69B:5A92D31:5B7A0B2:64D495A8",
+      "Location": "https://api.github.com/repos/hub4j-test-org/test-repo-visibility-public"
     }
   },
-  "uuid": "e5597307-486b-4d27-8cf2-39ebbf502cee",
+  "uuid": "188bae51-0c10-4be0-b3c6-eb6b45414866",
   "persistent": true,
   "insertionIndex": 3
 }

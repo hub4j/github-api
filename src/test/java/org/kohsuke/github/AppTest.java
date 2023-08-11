@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -1427,6 +1429,46 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 assertThat(comment, notNullValue());
             }
         }
+    }
+
+    @Test
+    public void testPullRequestSearch() throws Exception {
+        GHRepository repository = getTestRepository();
+        String mainHead = repository.getRef("heads/main").getObject().getSha();
+        GHRef devBranch = repository.createRef("refs/heads/kgromov-test", mainHead);
+        repository.createContent()
+                .content("Empty content")
+                .message("test search")
+                .path(devBranch.getRef())
+                .branch(devBranch.getRef())
+                .commit();
+        LocalDate createdDate = LocalDate.now();
+        GHPullRequest newPR = repository
+                .createPullRequest("New PR", devBranch.getRef(), "refs/heads/main", "Hello, merged PR");
+        Thread.sleep(1000);
+        List<GHPullRequest> pullRequests = gitHub.searchPullRequests()
+                .createdByMe()
+                .isOpen()
+                .created(createdDate, LocalDate.now())
+                .list()
+                .toList();
+        assertThat(pullRequests.size(), greaterThan(0));
+        for (GHPullRequest pullRequest : pullRequests) {
+            assertThat(pullRequest.getTitle(), is("New PR"));
+            assertThat(pullRequest.getUser().getLogin(), is(repository.getOwner().getLogin()));
+            assertThat(pullRequest.getState(), is(GHIssueState.OPEN));
+            LocalDate createdAt = pullRequest.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            assertThat(createdAt, greaterThanOrEqualTo(createdDate));
+        }
+
+        LocalDate newPrCreatedAt = newPR.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int totalCount = gitHub.searchPullRequests()
+                .createdByMe()
+                .isOpen()
+                .createdAfter(newPrCreatedAt, false)
+                .list()
+                .getTotalCount();
+        assertThat(totalCount, is(0));
     }
 
     /**

@@ -1679,6 +1679,17 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Retrieves pull requests according to search terms.
+     *
+     * @param search
+     *            {@link GHPullRequestSearchBuilder}
+     * @return pull requests as the paged iterable
+     */
+    public PagedSearchIterable<GHPullRequest> searchPullRequests(GHPullRequestSearchBuilder search) {
+        return GHPullRequestSearchBuilder.from(search).repo(this).list();
+    }
+
+    /**
      * Creates a new pull request.
      *
      * @param title

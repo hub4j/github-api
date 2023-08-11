@@ -13,18 +13,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThrows;
-import static org.kohsuke.github.GHVerification.Reason.*;
+import static org.kohsuke.github.GHVerification.Reason.GPGVERIFY_ERROR;
+import static org.kohsuke.github.GHVerification.Reason.UNKNOWN_SIGNATURE_TYPE;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -1656,5 +1654,45 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository r = gitHub.getRepository("hub4j-test-org/maintain-permission-issue");
         GHPermissionType permission = r.getPermission("alecharp");
         assertThat(permission.toString(), is("UNKNOWN"));
+    }
+
+    @Test
+    public void testSearchPullRequests() throws Exception {
+        GHRepository repository = getTempRepository();
+        String mainHead = repository.getRef("heads/main").getObject().getSha();
+        GHRef devBranch = repository.createRef("refs/heads/dev", mainHead);
+        repository.createContent()
+                .content("Empty content")
+                .message("test search")
+                .path(devBranch.getRef())
+                .branch(devBranch.getRef())
+                .commit();
+
+        GHPullRequest ghPullRequest = repository
+                .createPullRequest("Temp PR", devBranch.getRef(), "refs/heads/main", "Hello, merged PR");
+        ghPullRequest.merge("Merged test PR");
+        Thread.sleep(1000);
+        LocalDate from = LocalDate.parse("2023-08-01");
+        LocalDate to = LocalDate.now();
+        GHPullRequestSearchBuilder searchBuilder = gitHub.searchPullRequests()
+                .createdByMe()
+                .isMerged()
+                .merged(from, to)
+                .sort(GHPullRequestSearchBuilder.Sort.CREATED);
+        PagedSearchIterable<GHPullRequest> pullRequests = repository.searchPullRequests(searchBuilder);
+        assertThat(pullRequests.getTotalCount(), greaterThan(0));
+        for (GHPullRequest pullRequest : pullRequests) {
+            assertThat(pullRequest.getTitle(), is("Temp PR"));
+            assertThat(pullRequest.getRepository(), is(repository));
+            assertThat(pullRequest.getUser().getLogin(), is(repository.getOwner().getLogin()));
+            assertThat(pullRequest.getState(), is(GHIssueState.CLOSED));
+            LocalDate closedAt = pullRequest.getClosedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            assertThat(closedAt, greaterThanOrEqualTo(from));
+            assertThat(closedAt, lessThanOrEqualTo(to));
+        }
+
+        searchBuilder = gitHub.searchPullRequests().createdByMe().isOpen().createdAfter(from, true);
+        pullRequests = repository.searchPullRequests(searchBuilder);
+        assertThat(pullRequests.getTotalCount(), is(0));
     }
 }

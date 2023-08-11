@@ -1,0 +1,48 @@
+{
+  "id": "7761add1-0f5f-4425-bed9-abfcf7cebeb0",
+  "name": "search_issues",
+  "request": {
+    "url": "/search/issues?q=author%3A%40me+is%3Aopen+created%3A%3E%3D2023-08-01+repo%3Akgromov%2Ftemp-testSearchPullRequests+is%3Apr",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"total_count\":0,\"incomplete_results\":false,\"items\":[]}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Aug 2023 20:36:59 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-cache",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "27",
+      "X-RateLimit-Reset": "1691786277",
+      "X-RateLimit-Used": "3",
+      "X-RateLimit-Resource": "search",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C74D:F81C:1AC8164:1B087A3:64D69BEB"
+    }
+  },
+  "uuid": "7761add1-0f5f-4425-bed9-abfcf7cebeb0",
+  "persistent": true,
+  "insertionIndex": 11
+}

@@ -1,0 +1,57 @@
+{
+  "id": "ebe0248c-9c5d-40db-978d-359f3aac9fdd",
+  "name": "repos_kgromov_temp-testsearchpullrequests_pulls",
+  "request": {
+    "url": "/repos/kgromov/temp-testSearchPullRequests/pulls",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.shadow-cat-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"head\":\"refs/heads/dev\",\"draft\":false,\"maintainer_can_modify\":true,\"title\":\"Temp PR\",\"body\":\"Hello, merged PR\",\"base\":\"refs/heads/main\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_kgromov_temp-testsearchpullrequests_pulls-ebe0248c-9c5d-40db-978d-359f3aac9fdd.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Aug 2023 20:36:54 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"058a77c131808038a66ed032fd75e826fa43046d81c6e7715eefd82bc4661555\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; param=shadow-cat-preview; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4928",
+      "X-RateLimit-Reset": "1691788130",
+      "X-RateLimit-Used": "72",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C748:12B3E:2B01A15:2B62CB4:64D69BE5",
+      "Location": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/pulls/1"
+    }
+  },
+  "uuid": "ebe0248c-9c5d-40db-978d-359f3aac9fdd",
+  "persistent": true,
+  "insertionIndex": 6
+}

@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -307,6 +308,57 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(myself.getRepository(repoName).isPrivate(), is(false));
         } finally {
             repo.delete();
+        }
+    }
+
+    /**
+     * Tests the creation of repositories with alternating visibilities for orgs.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testCreateVisibilityForOrganization() throws Exception {
+        GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        // can not test for internal, as test org is not assigned to an enterprise
+        for (Visibility visibility : Sets.newHashSet(Visibility.PUBLIC, Visibility.PRIVATE)) {
+            String repoName = String.format("test-repo-visibility-%s", visibility.toString());
+            GHRepository repository = organization.createRepository(repoName).visibility(visibility).create();
+            try {
+                assertThat(repository.getVisibility(), is(visibility));
+                assertThat(organization.getRepository(repoName).getVisibility(), is(visibility));
+            } finally {
+                repository.delete();
+            }
+        }
+    }
+
+    /**
+     * Tests the creation of repositories with alternating visibilities for users.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testCreateVisibilityForUser() throws Exception {
+
+        GHUser myself = gitHub.getMyself();
+
+        // can not test for internal, as test org is not assigned to an enterprise
+        for (Visibility visibility : Sets.newHashSet(Visibility.PUBLIC, Visibility.PRIVATE)) {
+            String repoName = String.format("test-repo-visibility-%s", visibility.toString());
+            boolean isPrivate = visibility.equals(Visibility.PRIVATE);
+            GHRepository repository = gitHub.createRepository(repoName)
+                    .private_(isPrivate)
+                    .visibility(visibility)
+                    .create();
+            try {
+                assertThat(repository.getVisibility(), is(visibility));
+                assertThat(myself.getRepository(repoName).getVisibility(), is(visibility));
+            } finally {
+                repository.delete();
+            }
         }
     }
 

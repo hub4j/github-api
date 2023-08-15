@@ -17,7 +17,7 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
     /**
      * Instantiates a new test.
      */
-    public AuthorizationTokenRefreshTest() throws IOException {
+    public AuthorizationTokenRefreshTest() {
         useDefaultGitHub = false;
     }
 

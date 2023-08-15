@@ -25,7 +25,8 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
         gitHub = getGitHubBuilder().withAuthorizationProvider(new RefreshingAuthorizationProvider())
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(RateLimitHandler.WAIT).build();
+                .withRateLimitHandler(RateLimitHandler.WAIT)
+                .build();
         final GHUser kohsuke = gitHub.getUser("kohsuke");
         assertThat("Usernames match", "kohsuke".equals(kohsuke.getLogin()));
     }
@@ -34,7 +35,8 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
     public void testRetriedRequestDoesNotGetNewAuthorizationTokenWhenOldOneIsStillValid() throws IOException {
         gitHub = getGitHubBuilder().withAuthorizationProvider(() -> "original token")
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(RateLimitHandler.WAIT).build();
+                .withRateLimitHandler(RateLimitHandler.WAIT)
+                .build();
         final GHUser kohsuke = gitHub.getUser("kohsuke");
         assertThat("Usernames match", "kohsuke".equals(kohsuke.getLogin()));
     }

@@ -33,6 +33,9 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
 
     /**
      * Retried request should get new token when the old one expires.
+     *
+     * @throws IOException
+     *             the exception
      */
     @Test
     public void testRetriedRequestGetsNewAuthorizationTokenWhenOldOneExpires() throws IOException {
@@ -47,6 +50,9 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
 
     /**
      * Retried request should not get new token when the old one is still valid.
+     *
+     * @throws IOException
+     *             the exception
      */
     @Test
     public void testRetriedRequestDoesNotGetNewAuthorizationTokenWhenOldOneIsStillValid() throws IOException {

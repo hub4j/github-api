@@ -9,17 +9,31 @@ import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.IOException;
 
+/**
+ * Test authorization token refresh.
+ */
 public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Instantiates a new test.
+     */
     public AuthorizationTokenRefreshTest() throws IOException {
         useDefaultGitHub = false;
     }
 
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
     @Override
     protected WireMockConfiguration getWireMockOptions() {
         return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
+    /**
+     * Retried request should get new token when the old one expires.
+     */
     @Test
     public void testRetriedRequestGetsNewAuthorizationTokenWhenOldOneExpires() throws IOException {
         snapshotNotAllowed();
@@ -31,6 +45,9 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
         assertThat("Usernames match", "kohsuke".equals(kohsuke.getLogin()));
     }
 
+    /**
+     * Retried request should not get new token when the old one is still valid.
+     */
     @Test
     public void testRetriedRequestDoesNotGetNewAuthorizationTokenWhenOldOneIsStillValid() throws IOException {
         gitHub = getGitHubBuilder().withAuthorizationProvider(() -> "original token")

@@ -1,0 +1,51 @@
+{
+  "id": "540eae50-8e68-4a09-bc7e-44a345ca05ac",
+  "name": "repos_hub4j-test-org_test-repo-visibility-private",
+  "request": {
+    "url": "/repos/hub4j-test-org/test-repo-visibility-private",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "repos_hub4j-test-org_test-repo-visibility-private-7.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 10 Aug 2023 08:16:49 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"9e0ca2fa3644d8f9ad2c77c331c32fb2b6142a08142217835d2dc50818ed9763\"",
+      "Last-Modified": "Thu, 10 Aug 2023 08:16:48 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2023-09-09 06:40:49 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4961",
+      "X-RateLimit-Reset": "1691657047",
+      "X-RateLimit-Used": "39",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "6FC8:0628:C18DB8F:C34AA1D:64D49CF1"
+    }
+  },
+  "uuid": "540eae50-8e68-4a09-bc7e-44a345ca05ac",
+  "persistent": true,
+  "insertionIndex": 7
+}

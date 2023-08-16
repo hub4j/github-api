@@ -25,12 +25,12 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
-import static com.tngtech.archunit.core.domain.JavaClass.namesOf;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameContaining;
 import static com.tngtech.archunit.core.domain.properties.HasOwner.Predicates.With.owner;
@@ -61,7 +61,7 @@ public class ArchTests {
             "preview has no required media types defined") {
 
         @Override
-        public boolean apply(JavaAnnotation<?> javaAnnotation) {
+        public boolean test(JavaAnnotation<?> javaAnnotation) {
             boolean isPreview = javaAnnotation.getRawType().isEquivalentTo(Preview.class);
             Object[] values = (Object[]) javaAnnotation.getProperties().get("value");
             return isPreview && values != null && values.length < 1;
@@ -194,7 +194,11 @@ public class ArchTests {
                 .and(JavaCall.Predicates.target(name(methodName)))
                 .and(JavaCall.Predicates.target(rawParameterTypes(parameterTypes)))
                 .as("method is %s",
-                        Formatters.formatMethodSimple(owner.getSimpleName(), methodName, namesOf(parameterTypes)));
+                        Formatters.formatMethodSimple(owner.getSimpleName(),
+                                methodName,
+                                Arrays.stream(parameterTypes)
+                                        .map(item -> item.getName())
+                                        .collect(Collectors.toList())));
     }
 
     /**
@@ -224,8 +228,8 @@ public class ArchTests {
         }
 
         @Override
-        public boolean apply(T input) {
-            return current.apply(input) && !other.apply(input);
+        public boolean test(T input) {
+            return current.test(input) && !other.test(input);
         }
     }
 }

@@ -489,6 +489,13 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
         return this;
     }
 
+    /**
+     * reviewed by user
+     *
+     * @param user
+     *            the user
+     * @return the gh pull request search builder
+     */
     public GHPullRequestSearchBuilder reviewedBy(GHUser user) {
         return this.reviewedBy(user.getLogin());
     }
@@ -579,6 +586,9 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
         return "/search/issues";
     }
 
+    /**
+     * The sort order values.
+     */
     public enum Sort {
 
         /** The comments. */

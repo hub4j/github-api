@@ -16,7 +16,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Instantiates a new GH search builder.
      *
-     * @param root  the root
+     * @param root
+     *            the root
      */
     GHPullRequestSearchBuilder(GitHub root) {
         super(root, PullRequestSearchResult.class);
@@ -25,7 +26,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Mentions gh pull request search builder.
      *
-     * @param u the gh user
+     * @param u
+     *            the gh user
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder mentions(GHUser u) {
@@ -35,7 +37,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Mentions gh pull request search builder.
      *
-     * @param login the login
+     * @param login
+     *            the login
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder mentions(String login) {
@@ -82,7 +85,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Repository gh pull request search builder.
      *
-     * @param repository the repository
+     * @param repository
+     *            the repository
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder repo(GHRepository repository) {
@@ -93,7 +97,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Author gh pull request search builder.
      *
-     * @param user the user as pr author
+     * @param user
+     *            the user as pr author
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder author(GHUser user) {
@@ -103,7 +108,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Username as author gh pull request search builder.
      *
-     * @param username the username as pr author
+     * @param username
+     *            the username as pr author
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder author(String username) {
@@ -124,7 +130,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Head gh pull request search builder.
      *
-     * @param branch the head branch
+     * @param branch
+     *            the head branch
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder head(GHBranch branch) {
@@ -134,7 +141,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Head gh pull request search builder.
      *
-     * @param branch the head branch
+     * @param branch
+     *            the head branch
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder head(String branch) {
@@ -145,7 +153,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Base gh pull request search builder.
      *
-     * @param branch the base branch
+     * @param branch
+     *            the base branch
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder base(GHBranch branch) {
@@ -155,7 +164,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Base gh pull request search builder.
      *
-     * @param branch the base branch
+     * @param branch
+     *            the base branch
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder base(String branch) {
@@ -166,7 +176,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Created gh pull request search builder.
      *
-     * @param created the createdAt
+     * @param created
+     *            the createdAt
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder created(LocalDate created) {
@@ -177,8 +188,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * CreatedBefore gh pull request search builder.
      *
-     * @param created the createdAt
-     * @param inclusive whether to include date
+     * @param created
+     *            the createdAt
+     * @param inclusive
+     *            whether to include date
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder createdBefore(LocalDate created, boolean inclusive) {
@@ -190,8 +203,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * CreatedAfter gh pull request search builder.
      *
-     * @param created the createdAt
-     * @param inclusive whether to include date
+     * @param created
+     *            the createdAt
+     * @param inclusive
+     *            whether to include date
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder createdAfter(LocalDate created, boolean inclusive) {
@@ -203,8 +218,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Created gh pull request search builder.
      *
-     * @param from the createdAt starting from
-     * @param to the createdAt ending to
+     * @param from
+     *            the createdAt starting from
+     * @param to
+     *            the createdAt ending to
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder created(LocalDate from, LocalDate to) {
@@ -216,7 +233,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Merged gh pull request search builder.
      *
-     * @param merged the merged
+     * @param merged
+     *            the merged
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder merged(LocalDate merged) {
@@ -227,8 +245,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * MergedBefore gh pull request search builder.
      *
-     * @param merged the merged
-     * @param inclusive whether to include date
+     * @param merged
+     *            the merged
+     * @param inclusive
+     *            whether to include date
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder mergedBefore(LocalDate merged, boolean inclusive) {
@@ -240,8 +260,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * MergedAfter gh pull request search builder.
      *
-     * @param merged the merged
-     * @param inclusive whether to include date
+     * @param merged
+     *            the merged
+     * @param inclusive
+     *            whether to include date
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder mergedAfter(LocalDate merged, boolean inclusive) {
@@ -253,8 +275,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Merged gh pull request search builder.
      *
-     * @param from the merged starting from
-     * @param to the merged ending to
+     * @param from
+     *            the merged starting from
+     * @param to
+     *            the merged ending to
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder merged(LocalDate from, LocalDate to) {
@@ -266,7 +290,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Closed gh pull request search builder.
      *
-     * @param closed the closed
+     * @param closed
+     *            the closed
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder closed(LocalDate closed) {
@@ -277,8 +302,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * ClosedBefore gh pull request search builder.
      *
-     * @param closed the closed
-     * @param inclusive whether to include date
+     * @param closed
+     *            the closed
+     * @param inclusive
+     *            whether to include date
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder closedBefore(LocalDate closed, boolean inclusive) {
@@ -290,8 +317,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * ClosedAfter gh pull request search builder.
      *
-     * @param closed the closed
-     * @param inclusive whether to include date
+     * @param closed
+     *            the closed
+     * @param inclusive
+     *            whether to include date
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder closedAfter(LocalDate closed, boolean inclusive) {
@@ -303,8 +332,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Closed gh pull request search builder.
      *
-     * @param from the closed starting from
-     * @param to the closed ending to
+     * @param from
+     *            the closed starting from
+     * @param to
+     *            the closed ending to
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder closed(LocalDate from, LocalDate to) {
@@ -316,7 +347,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Updated gh pull request search builder.
      *
-     * @param updated the updated
+     * @param updated
+     *            the updated
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder updated(LocalDate updated) {
@@ -324,12 +356,13 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
         return this;
     }
 
-
     /**
      * UpdatedBefore gh pull request search builder.
      *
-     * @param updated the updated
-     * @param inclusive whether to include date
+     * @param updated
+     *            the updated
+     * @param inclusive
+     *            whether to include date
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder updatedBefore(LocalDate updated, boolean inclusive) {
@@ -341,8 +374,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * UpdatedAfter gh pull request search builder.
      *
-     * @param updated the updated
-     * @param inclusive whether to include date
+     * @param updated
+     *            the updated
+     * @param inclusive
+     *            whether to include date
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder updatedAfter(LocalDate updated, boolean inclusive) {
@@ -354,8 +389,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Updated gh pull request search builder.
      *
-     * @param from the updated starting from
-     * @param to the updated ending to
+     * @param from
+     *            the updated starting from
+     * @param to
+     *            the updated ending to
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder updated(LocalDate from, LocalDate to) {
@@ -367,7 +404,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Label gh pull request search builder.
      *
-     * @param label the label
+     * @param label
+     *            the label
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder label(String label) {
@@ -378,7 +416,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Labels gh pull request search builder.
      *
-     * @param labels the labels
+     * @param labels
+     *            the labels
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder inLabels(Iterable<String> labels) {
@@ -389,7 +428,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Title like search term
      *
-     * @param title the title to be matched
+     * @param title
+     *            the title to be matched
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder titleLike(String title) {
@@ -400,7 +440,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Commit gh pull request search builder.
      *
-     * @param sha the commit SHA
+     * @param sha
+     *            the commit SHA
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder commit(String sha) {
@@ -455,7 +496,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * reviewed by username
      *
-     * @param username the username
+     * @param username
+     *            the username
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder reviewedBy(String username) {
@@ -466,7 +508,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * requested for user
      *
-     * @param user the user
+     * @param user
+     *            the user
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder requestedFor(GHUser user) {
@@ -476,7 +519,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * requested for user
      *
-     * @param username the username
+     * @param username
+     *            the username
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder requestedFor(String username) {
@@ -497,7 +541,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Order gh pull request search builder.
      *
-     * @param direction the direction
+     * @param direction
+     *            the direction
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder order(GHDirection direction) {
@@ -508,7 +553,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**
      * Sort gh pull request search builder.
      *
-     * @param sort the sort
+     * @param sort
+     *            the sort
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder sort(GHPullRequestSearchBuilder.Sort sort) {

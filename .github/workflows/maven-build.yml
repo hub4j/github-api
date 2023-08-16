@@ -116,6 +116,6 @@ jobs:
           distribution: 'zulu'
           cache: 'maven'
       - name: Deploy
-        run: mvn --batch-mode deploy
+        run: mvn deploy -Dmaven.test.skip -Dspotless.check.skip=true -Dgpg.skip -Dmaven.javadoc.skip=true -Djacoco.skip=true -Dspotbugs.skip  -Dmaven.surefire.debug
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

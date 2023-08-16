@@ -94,7 +94,6 @@ public abstract class GHObject extends GitHubInteractiveObject {
      *
      * @return API URL of this object.
      */
-    @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
     public URL getUrl() {
         return GitHubClient.parseURL(url);
     }

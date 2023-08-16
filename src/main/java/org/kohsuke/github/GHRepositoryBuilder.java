@@ -167,7 +167,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      */
     public S visibility(final Visibility visibility) throws IOException {
         requester.withPreview(NEBULA);
-        return with("visibility", visibility);
+        return with("visibility", visibility.toString());
     }
 
     /**

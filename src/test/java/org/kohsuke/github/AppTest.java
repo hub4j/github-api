@@ -1431,6 +1431,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test searching for pull requests.
+     *
+     * @throws IOException
+     *             the exception
+     */
     @Test
     public void testPullRequestSearch() throws Exception {
         GHRepository repository = getTestRepository();

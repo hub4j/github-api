@@ -1708,6 +1708,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(permission.toString(), is("UNKNOWN"));
     }
 
+    /**
+     * Test searching for pull requests.
+     *
+     * @throws IOException
+     *             the exception
+     */
     @Test
     public void testSearchPullRequests() throws Exception {
         GHRepository repository = getTempRepository();

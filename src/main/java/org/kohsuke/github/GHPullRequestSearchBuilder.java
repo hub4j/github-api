@@ -10,7 +10,7 @@ import static org.kohsuke.github.GHPullRequestSearchBuilder.ReviewStatus.*;
  *
  * @author Konstantin Gromov
  * @see <a href="https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests">Search
- *      issues & PRs</a>
+ *      issues and PRs</a>
  */
 public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     /**

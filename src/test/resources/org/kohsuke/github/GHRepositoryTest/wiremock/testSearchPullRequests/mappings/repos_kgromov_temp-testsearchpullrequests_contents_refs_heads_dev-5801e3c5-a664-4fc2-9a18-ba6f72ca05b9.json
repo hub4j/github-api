@@ -1,38 +1,43 @@
 {
-  "id": "ddbdf200-b1b1-4e5e-9274-03b5fd72e104",
-  "name": "repos_kgromov_temp-testsearchpullrequests_git_refs_heads_main",
+  "id": "5801e3c5-a664-4fc2-9a18-ba6f72ca05b9",
+  "name": "repos_kgromov_temp-testsearchpullrequests_contents_refs_heads_dev",
   "request": {
-    "url": "/repos/kgromov/temp-testSearchPullRequests/git/refs/heads/main",
-    "method": "GET",
+    "url": "/repos/kgromov/temp-testSearchPullRequests/contents/refs/heads/dev",
+    "method": "PUT",
     "headers": {
       "Accept": {
         "equalTo": "application/vnd.github.v3+json"
       }
-    }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"path\":\"refs/heads/dev\",\"message\":\"test search\",\"branch\":\"refs/heads/dev\",\"content\":\"RW1wdHkgY29udGVudA==\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "repos_kgromov_temp-testsearchpullrequests_git_refs_heads_main-ddbdf200-b1b1-4e5e-9274-03b5fd72e104.json",
+    "status": 201,
+    "bodyFileName": "repos_kgromov_temp-testsearchpullrequests_contents_refs_heads_dev-5801e3c5-a664-4fc2-9a18-ba6f72ca05b9.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Fri, 11 Aug 2023 20:36:52 GMT",
+      "Date": "Tue, 22 Aug 2023 21:27:54 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"9e181f49c0d601a5ecd0d42788180afe3b7a8728d5a5271921d96e8eb3e5a594\"",
-      "Last-Modified": "Fri, 11 Aug 2023 20:36:48 GMT",
-      "X-Poll-Interval": "300",
+      "ETag": "\"b1e3f88d5b8226763a4205f07d41b2b27dc2796e7c5e318f52f1d773b0ba430f\"",
       "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
-      "X-Accepted-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4931",
-      "X-RateLimit-Reset": "1691788130",
-      "X-RateLimit-Used": "69",
+      "X-RateLimit-Remaining": "4937",
+      "X-RateLimit-Reset": "1692741646",
+      "X-RateLimit-Used": "63",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -42,10 +47,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C745:E1BB:FF2AEEF:1015C118:64D69BE4"
+      "X-GitHub-Request-Id": "E1A3:13837:17B465F:17E8483:64E52859"
     }
   },
-  "uuid": "ddbdf200-b1b1-4e5e-9274-03b5fd72e104",
+  "uuid": "5801e3c5-a664-4fc2-9a18-ba6f72ca05b9",
   "persistent": true,
-  "insertionIndex": 3
+  "insertionIndex": 5
 }

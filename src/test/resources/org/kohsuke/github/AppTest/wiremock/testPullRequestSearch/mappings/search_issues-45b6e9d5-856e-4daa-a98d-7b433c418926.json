@@ -1,44 +1,36 @@
 {
-  "id": "3e0cb468-abb9-4f76-8525-b64526e539e4",
-  "name": "repos_kgromov_temp-testsearchpullrequests_pulls_1_merge",
+  "id": "45b6e9d5-856e-4daa-a98d-7b433c418926",
+  "name": "search_issues",
   "request": {
-    "url": "/repos/kgromov/temp-testSearchPullRequests/pulls/1/merge",
-    "method": "PUT",
+    "url": "/search/issues?q=author%3A%40me+is%3Aopen+label%3Atest+is%3Apr",
+    "method": "GET",
     "headers": {
       "Accept": {
         "equalTo": "application/vnd.github.v3+json"
       }
-    },
-    "bodyPatterns": [
-      {
-        "equalToJson": "{\"commit_message\":\"Merged test PR\"}",
-        "ignoreArrayOrder": true,
-        "ignoreExtraElements": false
-      }
-    ]
+    }
   },
   "response": {
     "status": 200,
-    "body": "{\"sha\":\"8a94734d6838441a8217b96fd39c3447e1e0d33f\",\"merged\":true,\"message\":\"Pull Request successfully merged\"}",
+    "bodyFileName": "search_issues-45b6e9d5-856e-4daa-a98d-7b433c418926.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Fri, 11 Aug 2023 20:36:56 GMT",
+      "Date": "Tue, 22 Aug 2023 21:37:12 GMT",
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Cache-Control": "no-cache",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"9a902be961129ef0626f677b3a8d7ddd17deb44c2a088c86dcd1b69ab556636d\"",
       "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4927",
-      "X-RateLimit-Reset": "1691788130",
-      "X-RateLimit-Used": "73",
-      "X-RateLimit-Resource": "core",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "27",
+      "X-RateLimit-Reset": "1692740251",
+      "X-RateLimit-Used": "3",
+      "X-RateLimit-Resource": "search",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
@@ -47,10 +39,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C749:F85B:13134015:133EE8CA:64D69BE7"
+      "X-GitHub-Request-Id": "E24F:226F:144BB31:14809A0:64E52A88"
     }
   },
-  "uuid": "3e0cb468-abb9-4f76-8525-b64526e539e4",
+  "uuid": "45b6e9d5-856e-4daa-a98d-7b433c418926",
   "persistent": true,
-  "insertionIndex": 7
+  "insertionIndex": 8
 }

@@ -1,0 +1,85 @@
+{
+  "total_count": 1,
+  "incomplete_results": false,
+  "items": [
+    {
+      "url": "https://api.github.com/repos/kgromov/github-api-test/issues/1",
+      "repository_url": "https://api.github.com/repos/kgromov/github-api-test",
+      "labels_url": "https://api.github.com/repos/kgromov/github-api-test/issues/1/labels{/name}",
+      "comments_url": "https://api.github.com/repos/kgromov/github-api-test/issues/1/comments",
+      "events_url": "https://api.github.com/repos/kgromov/github-api-test/issues/1/events",
+      "html_url": "https://github.com/kgromov/github-api-test/pull/1",
+      "id": 1862242135,
+      "node_id": "PR_kwDOKKP-V85Yimer",
+      "number": 1,
+      "title": "New PR",
+      "user": {
+        "login": "kgromov",
+        "id": 9352794,
+        "node_id": "MDQ6VXNlcjkzNTI3OTQ=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/9352794?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/kgromov",
+        "html_url": "https://github.com/kgromov",
+        "followers_url": "https://api.github.com/users/kgromov/followers",
+        "following_url": "https://api.github.com/users/kgromov/following{/other_user}",
+        "gists_url": "https://api.github.com/users/kgromov/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/kgromov/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/kgromov/subscriptions",
+        "organizations_url": "https://api.github.com/users/kgromov/orgs",
+        "repos_url": "https://api.github.com/users/kgromov/repos",
+        "events_url": "https://api.github.com/users/kgromov/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/kgromov/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 5874970723,
+          "node_id": "LA_kwDOKKP-V88AAAABXizwYw",
+          "url": "https://api.github.com/repos/kgromov/github-api-test/labels/test",
+          "name": "test",
+          "color": "ededed",
+          "default": false,
+          "description": null
+        }
+      ],
+      "state": "open",
+      "locked": false,
+      "assignee": null,
+      "assignees": [],
+      "milestone": null,
+      "comments": 0,
+      "created_at": "2023-08-22T21:37:09Z",
+      "updated_at": "2023-08-22T21:37:10Z",
+      "closed_at": null,
+      "author_association": "OWNER",
+      "active_lock_reason": null,
+      "draft": false,
+      "pull_request": {
+        "url": "https://api.github.com/repos/kgromov/github-api-test/pulls/1",
+        "html_url": "https://github.com/kgromov/github-api-test/pull/1",
+        "diff_url": "https://github.com/kgromov/github-api-test/pull/1.diff",
+        "patch_url": "https://github.com/kgromov/github-api-test/pull/1.patch",
+        "merged_at": null
+      },
+      "body": "Hello, merged PR",
+      "reactions": {
+        "url": "https://api.github.com/repos/kgromov/github-api-test/issues/1/reactions",
+        "total_count": 0,
+        "+1": 0,
+        "-1": 0,
+        "laugh": 0,
+        "hooray": 0,
+        "confused": 0,
+        "heart": 0,
+        "rocket": 0,
+        "eyes": 0
+      },
+      "timeline_url": "https://api.github.com/repos/kgromov/github-api-test/issues/1/timeline",
+      "performed_via_github_app": null,
+      "state_reason": null,
+      "score": 1
+    }
+  ]
+}

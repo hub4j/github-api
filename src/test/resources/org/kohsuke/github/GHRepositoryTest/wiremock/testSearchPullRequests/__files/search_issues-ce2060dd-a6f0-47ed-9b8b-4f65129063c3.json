@@ -9,8 +9,8 @@
       "comments_url": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/issues/1/comments",
       "events_url": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/issues/1/events",
       "html_url": "https://github.com/kgromov/temp-testSearchPullRequests/pull/1",
-      "id": 1847398784,
-      "node_id": "PR_kwDOKGJaoc5XweEI",
+      "id": 1862232999,
+      "node_id": "PR_kwDOKKP1js5Yikff",
       "number": 1,
       "title": "Temp PR",
       "user": {
@@ -40,9 +40,9 @@
       "assignees": [],
       "milestone": null,
       "comments": 0,
-      "created_at": "2023-08-11T20:36:54Z",
-      "updated_at": "2023-08-11T20:36:55Z",
-      "closed_at": "2023-08-11T20:36:55Z",
+      "created_at": "2023-08-22T21:27:55Z",
+      "updated_at": "2023-08-22T21:27:56Z",
+      "closed_at": "2023-08-22T21:27:56Z",
       "author_association": "OWNER",
       "active_lock_reason": null,
       "draft": false,
@@ -51,7 +51,7 @@
         "html_url": "https://github.com/kgromov/temp-testSearchPullRequests/pull/1",
         "diff_url": "https://github.com/kgromov/temp-testSearchPullRequests/pull/1.diff",
         "patch_url": "https://github.com/kgromov/temp-testSearchPullRequests/pull/1.patch",
-        "merged_at": "2023-08-11T20:36:55Z"
+        "merged_at": "2023-08-22T21:27:56Z"
       },
       "body": "Hello, merged PR",
       "reactions": {

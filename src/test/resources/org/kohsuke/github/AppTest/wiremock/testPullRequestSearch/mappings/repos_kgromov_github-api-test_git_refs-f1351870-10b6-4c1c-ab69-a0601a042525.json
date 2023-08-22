@@ -1,0 +1,57 @@
+{
+  "id": "f1351870-10b6-4c1c-ab69-a0601a042525",
+  "name": "repos_kgromov_github-api-test_git_refs",
+  "request": {
+    "url": "/repos/kgromov/github-api-test/git/refs",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"ref\":\"refs/heads/kgromov-test\",\"sha\":\"4fb597b337d5425f72db2f1927d204a071be686f\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_kgromov_github-api-test_git_refs-f1351870-10b6-4c1c-ab69-a0601a042525.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 22 Aug 2023 21:37:08 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"b89aa6c2c35e69748f4a667c5750f9a1c41e4463e21490215a11285861173afc\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4915",
+      "X-RateLimit-Reset": "1692741646",
+      "X-RateLimit-Used": "85",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E24B:FD76:D65A8:D93EF:64E52A84",
+      "Location": "https://api.github.com/repos/kgromov/github-api-test/git/refs/heads/kgromov-test"
+    }
+  },
+  "uuid": "f1351870-10b6-4c1c-ab69-a0601a042525",
+  "persistent": true,
+  "insertionIndex": 4
+}

@@ -1451,11 +1451,12 @@ public class AppTest extends AbstractGitHubWireMockTest {
         LocalDate createdDate = LocalDate.now();
         GHPullRequest newPR = repository
                 .createPullRequest("New PR", devBranch.getRef(), "refs/heads/main", "Hello, merged PR");
+        newPR.setLabels("test");
         Thread.sleep(1000);
         List<GHPullRequest> pullRequests = gitHub.searchPullRequests()
                 .createdByMe()
                 .isOpen()
-                .created(createdDate, LocalDate.now())
+                .label("test")
                 .list()
                 .toList();
         assertThat(pullRequests.size(), greaterThan(0));

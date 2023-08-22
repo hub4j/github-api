@@ -1,0 +1,56 @@
+{
+  "id": "dab37504-ac22-4006-9d54-edb9370da7f9",
+  "name": "repos_kgromov_github-api-test_contents_refs_heads_kgromov-test",
+  "request": {
+    "url": "/repos/kgromov/github-api-test/contents/refs/heads/kgromov-test",
+    "method": "PUT",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"path\":\"refs/heads/kgromov-test\",\"message\":\"test search\",\"branch\":\"refs/heads/kgromov-test\",\"content\":\"RW1wdHkgY29udGVudA==\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_kgromov_github-api-test_contents_refs_heads_kgromov-test-dab37504-ac22-4006-9d54-edb9370da7f9.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 22 Aug 2023 21:37:09 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"ff5df07e22d3ba6d8ffa95221b5b46a35e01c5c0b3d187af3cfac8fbc669b98c\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4914",
+      "X-RateLimit-Reset": "1692741646",
+      "X-RateLimit-Used": "86",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E24C:8D1A:162CCDC:1661C0B:64E52A84"
+    }
+  },
+  "uuid": "dab37504-ac22-4006-9d54-edb9370da7f9",
+  "persistent": true,
+  "insertionIndex": 5
+}

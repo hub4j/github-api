@@ -1,8 +1,8 @@
 {
-  "id": "4f33b8a3-4e9f-4bf8-8c10-1b00da5a6807",
-  "name": "search_issues",
+  "id": "fe00cd16-9679-412b-9f40-5bddfef7d036",
+  "name": "user",
   "request": {
-    "url": "/search/issues?q=author%3A%40me+is%3Amerged+merged%3A2023-08-01..2023-08-11+repo%3Akgromov%2Ftemp-testSearchPullRequests+is%3Apr",
+    "url": "/user",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,25 +12,27 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "search_issues-4f33b8a3-4e9f-4bf8-8c10-1b00da5a6807.json",
+    "bodyFileName": "user-fe00cd16-9679-412b-9f40-5bddfef7d036.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Fri, 11 Aug 2023 20:36:57 GMT",
+      "Date": "Tue, 22 Aug 2023 21:27:47 GMT",
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-cache",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
+      "ETag": "W/\"6ca483824c0beb8bcb118bf3795f39894416285cbd30bc5803b2826d133971ce\"",
+      "Last-Modified": "Fri, 28 Jul 2023 20:37:46 GMT",
       "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
-      "X-RateLimit-Limit": "30",
-      "X-RateLimit-Remaining": "29",
-      "X-RateLimit-Reset": "1691786277",
-      "X-RateLimit-Used": "1",
-      "X-RateLimit-Resource": "search",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4943",
+      "X-RateLimit-Reset": "1692741646",
+      "X-RateLimit-Used": "57",
+      "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
@@ -39,13 +41,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "C74A:6CA9:BF38488:C0ED99F:64D69BE9"
+      "X-GitHub-Request-Id": "E19E:6C4D:1590763:15C44F8:64E52853"
     }
   },
-  "uuid": "4f33b8a3-4e9f-4bf8-8c10-1b00da5a6807",
+  "uuid": "fe00cd16-9679-412b-9f40-5bddfef7d036",
   "persistent": true,
-  "scenarioName": "scenario-2-search-issues",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-2-search-issues-2",
-  "insertionIndex": 8
+  "insertionIndex": 1
 }

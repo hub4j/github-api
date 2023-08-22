@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/kgromov-test",
+  "node_id": "REF_kwDOKKP-V7dyZWZzL2hlYWRzL2tncm9tb3YtdGVzdA",
+  "url": "https://api.github.com/repos/kgromov/github-api-test/git/refs/heads/kgromov-test",
+  "object": {
+    "sha": "4fb597b337d5425f72db2f1927d204a071be686f",
+    "type": "commit",
+    "url": "https://api.github.com/repos/kgromov/github-api-test/git/commits/4fb597b337d5425f72db2f1927d204a071be686f"
+  }
+}

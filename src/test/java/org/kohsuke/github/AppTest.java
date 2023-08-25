@@ -1448,7 +1448,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .path(devBranch.getRef())
                 .branch(devBranch.getRef())
                 .commit();
-        LocalDate createdDate = LocalDate.parse("2023-08-23");
+        LocalDate createdDate = LocalDate.parse("2023-08-22");
         GHPullRequest newPR = repository
                 .createPullRequest("New PR", devBranch.getRef(), "refs/heads/main", "Hello, merged PR");
         newPR.setLabels("test");

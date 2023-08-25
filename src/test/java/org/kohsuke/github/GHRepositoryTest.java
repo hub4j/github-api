@@ -1716,7 +1716,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testSearchPullRequests() throws Exception {
-        GHRepository repository = getTempRepository();
+        GHRepository repository = gitHub.getRepository("kgromov/temp-testSearchPullRequests");
         String mainHead = repository.getRef("heads/main").getObject().getSha();
         GHRef devBranch = repository.createRef("refs/heads/dev", mainHead);
         repository.createContent()
@@ -1731,7 +1731,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         ghPullRequest.merge("Merged test PR");
         Thread.sleep(1000);
         LocalDate from = LocalDate.parse("2023-08-01");
-        LocalDate to = LocalDate.now();
+        LocalDate to = LocalDate.parse("2023-08-23");
         GHPullRequestSearchBuilder searchBuilder = gitHub.searchPullRequests()
                 .createdByMe()
                 .isMerged()

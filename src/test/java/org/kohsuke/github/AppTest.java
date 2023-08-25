@@ -1439,7 +1439,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testPullRequestSearch() throws Exception {
-        GHRepository repository = getTestRepository();
+        GHRepository repository = gitHub.getRepository("kgromov/github-api-test");
         String mainHead = repository.getRef("heads/main").getObject().getSha();
         GHRef devBranch = repository.createRef("refs/heads/kgromov-test", mainHead);
         repository.createContent()
@@ -1448,7 +1448,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .path(devBranch.getRef())
                 .branch(devBranch.getRef())
                 .commit();
-        LocalDate createdDate = LocalDate.now();
+        LocalDate createdDate = LocalDate.parse("2023-08-23");
         GHPullRequest newPR = repository
                 .createPullRequest("New PR", devBranch.getRef(), "refs/heads/main", "Hello, merged PR");
         newPR.setLabels("test");

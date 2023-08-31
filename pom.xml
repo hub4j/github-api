@@ -185,6 +185,7 @@
                       <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
                       <exclude>org.kohsuke.github.GHRepositorySearchBuilder</exclude>
                       <exclude>org.kohsuke.github.GHUserSearchBuilder</exclude>
+                      <exclude>org.kohsuke.github.GHPullRequestSearchBuilder</exclude>
 
                       <!-- TODO: These still need test coverage -->
                       <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>

@@ -304,12 +304,14 @@
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
+        </configuration>
         <executions>
           <execution>
             <id>default-test</id>
             <configuration>
               <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-              <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
             </configuration>
           </execution>
         </executions>
@@ -651,7 +653,6 @@
                   <!-- There are some tests that take longer or are a little
                     flaky. Run them here. -->
                   <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
                 </configuration>
               </execution>
             </executions>

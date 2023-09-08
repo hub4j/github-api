@@ -241,6 +241,9 @@
               <artifactId>java18</artifactId>
               <version>1.0</version>
             </signature>
+            <ignores>
+              java.net.http.*
+            </ignores>
           </configuration>
           <executions>
             <execution>
@@ -301,18 +304,51 @@
             </annotationProcessorPath>
           </annotationProcessorPaths>
         </configuration>
+        <executions>
+          <execution>
+            <id>compile-java-11</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <release>11</release>
+              <source>11</source>
+              <target>11</target>
+              <compileSourceRoots>
+                <compileSourceRoot>${project.basedir}/src/main/java11</compileSourceRoot>
+              </compileSourceRoots>
+              <multiReleaseOutput>true</multiReleaseOutput>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
+        </configuration>
         <executions>
           <execution>
             <id>default-test</id>
             <configuration>
               <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-              <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>org.kohsuke.github.api</Automatic-Module-Name>
+              <Multi-Release>true</Multi-Release>
+            </manifestEntries>
+          </archive>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -616,7 +652,7 @@
   <profiles>
     <!-- only enable slow-or-flaky-test if -Dtest= is not present -->
     <profile>
-      <id>slow-or-flaky-test</id>
+      <id>test-slow-multireleasejar-flaky</id>
       <activation>
         <property>
           <name>!test</name>
@@ -640,6 +676,32 @@
                 </configuration>
               </execution>
               <execution>
+                <id>java11-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
+                </configuration>
+              </execution>
+              <execution>
+                <id>java11-urlconnection-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=urlconnection</argLine>
+                </configuration>
+              </execution>
+              <execution>
                 <id>slow-or-flaky-test</id>
                 <phase>integration-test</phase>
                 <goals>
@@ -651,7 +713,6 @@
                   <!-- There are some tests that take longer or are a little
                     flaky. Run them here. -->
                   <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine}</argLine>
                 </configuration>
               </execution>
             </executions>
@@ -782,105 +843,6 @@
         </plugins>
       </build>
     </profile>
-    <profile>
-      <id>multirelease</id>
-      <activation>
-	    <jdk>[11,)</jdk>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>animal-sniffer-maven-plugin</artifactId>
-            <configuration>
-              <ignores>
-                java.net.http.*
-              </ignores>
-            </configuration>
-          </plugin>
-          <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.10.1</version>
-            <executions>
-              <execution>
-                <id>compile-java-11</id>
-                <phase>compile</phase>
-                <goals>
-                  <goal>compile</goal>
-                </goals>
-                <configuration>
-                  <release>11</release>
-                  <source>11</source>
-                  <target>11</target>
-                  <compileSourceRoots>
-                    <compileSourceRoot>${project.basedir}/src/main/java11</compileSourceRoot>
-                  </compileSourceRoots>
-                  <multiReleaseOutput>true</multiReleaseOutput>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.3.0</version>
-            <configuration>
-              <archive>
-                <manifestEntries>
-                  <Automatic-Module-Name>org.kohsuke.github.api</Automatic-Module-Name>
-                  <Multi-Release>true</Multi-Release>
-                </manifestEntries>
-              </archive>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>multirelease-test</id>
-      <activation>
-        <jdk>[11,)</jdk>
-        <property>
-          <name>!test</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>java11-test</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
-                  <useSystemClassLoader>false</useSystemClassLoader>
-                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
-                </configuration>
-              </execution>
-              <execution>
-                <id>java11-urlconnection-test</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
-                  <useSystemClassLoader>false</useSystemClassLoader>
-                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=urlconnection</argLine>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
   </profiles>
   <reporting>
     <plugins>

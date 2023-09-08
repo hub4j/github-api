@@ -520,7 +520,7 @@
     <dependency>
       <groupId>com.infradna.tool</groupId>
       <artifactId>bridge-method-annotation</artifactId>
-      <version>1.23</version>
+      <version>1.28</version>
       <optional>true</optional>
     </dependency>
     <!-- for stapler-jetty -->

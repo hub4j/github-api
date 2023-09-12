@@ -1,0 +1,51 @@
+{
+  "id": "f805cc74-e0b6-494d-9f8e-7388d40689e1",
+  "name": "search_issues",
+  "request": {
+    "url": "/search/issues?q=repo%3Akgromov%2Ftemp-testSearchPullRequests+Temp+in%3Atitle+repo%3Akgromov%2Ftemp-testSearchPullRequests+is%3Apr",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "search_issues-f805cc74-e0b6-494d-9f8e-7388d40689e1.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 12 Sep 2023 22:06:56 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-cache",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "11",
+      "X-RateLimit-Reset": "1694556468",
+      "X-RateLimit-Used": "19",
+      "X-RateLimit-Resource": "search",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CF92:537D:9E64651:9FDADF1:6500E100"
+    }
+  },
+  "uuid": "f805cc74-e0b6-494d-9f8e-7388d40689e1",
+  "persistent": true,
+  "scenarioName": "scenario-9-search-issues",
+  "requiredScenarioState": "scenario-9-search-issues-2",
+  "newScenarioState": "scenario-9-search-issues-3",
+  "insertionIndex": 34
+}

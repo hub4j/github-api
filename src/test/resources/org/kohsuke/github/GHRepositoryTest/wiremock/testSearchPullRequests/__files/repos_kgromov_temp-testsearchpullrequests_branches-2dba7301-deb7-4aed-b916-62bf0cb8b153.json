@@ -1,0 +1,53 @@
+[
+  {
+    "name": "branchToMerge",
+    "commit": {
+      "sha": "e70ac92dc8a342daed5784b3bd54c1185813b982",
+      "url": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/commits/e70ac92dc8a342daed5784b3bd54c1185813b982"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/branches/branchToMerge/protection"
+  },
+  {
+    "name": "draft",
+    "commit": {
+      "sha": "6fd9e8a226f0f48a6ac203adc8f13abca5afe875",
+      "url": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/commits/6fd9e8a226f0f48a6ac203adc8f13abca5afe875"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/branches/draft/protection"
+  },
+  {
+    "name": "main",
+    "commit": {
+      "sha": "ce18a7029a8faa65ccced3c22eff7235fdc14887",
+      "url": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/commits/ce18a7029a8faa65ccced3c22eff7235fdc14887"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/branches/main/protection"
+  }
+]

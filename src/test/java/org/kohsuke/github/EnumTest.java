@@ -87,13 +87,6 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHUserSearchBuilder.Sort.values().length, equalTo(3));
 
         assertThat(GHIssueQueryBuilder.Sort.values().length, equalTo(3));
-
-        assertThat(GHPullRequestSearchBuilder.Sort.values().length, equalTo(4));
-        assertThat(GHPullRequestSearchBuilder.ReviewStatus.values().length, equalTo(4));
-        assertThat(GHPullRequestSearchBuilder.ReviewStatus.ABSENT.getStatus(), equalTo("none"));
-        assertThat(GHPullRequestSearchBuilder.ReviewStatus.REQUIRED.getStatus(), equalTo("required"));
-        assertThat(GHPullRequestSearchBuilder.ReviewStatus.APPROVED.getStatus(), equalTo("approved"));
-        assertThat(GHPullRequestSearchBuilder.ReviewStatus.REJECTED.getStatus(), equalTo("changes_requested"));
     }
 
 }

@@ -3,8 +3,6 @@ package org.kohsuke.github;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static org.kohsuke.github.GHPullRequestSearchBuilder.ReviewStatus.*;
-
 /**
  * Search for pull requests by main search terms in order to narrow down search results.
  *
@@ -24,6 +22,52 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     }
 
     /**
+     * Repository gh pull request search builder.
+     *
+     * @param repository
+     *            the repository
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder repo(GHRepository repository) {
+        q("repo", repository.getFullName());
+        return this;
+    }
+
+    /**
+     * Author gh pull request search builder.
+     *
+     * @param user
+     *            the user as pr author
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder author(GHUser user) {
+        q("author", user.getLogin());
+        return this;
+    }
+
+    /**
+     * CreatedByMe gh pull request search builder.
+     *
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder createdByMe() {
+        q("author:@me");
+        return this;
+    }
+
+    /**
+     * Assigned to gh pull request user.
+     *
+     * @param u
+     *            the gh user
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder assigned(GHUser u) {
+        q("assignee", u.getLogin());
+        return this;
+    }
+
+    /**
      * Mentions gh pull request search builder.
      *
      * @param u
@@ -31,18 +75,7 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder mentions(GHUser u) {
-        return mentions(u.getLogin());
-    }
-
-    /**
-     * Mentions gh pull request search builder.
-     *
-     * @param login
-     *            the login
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder mentions(String login) {
-        q("mentions", login);
+        q("mentions", u.getLogin());
         return this;
     }
 
@@ -83,51 +116,6 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     }
 
     /**
-     * Repository gh pull request search builder.
-     *
-     * @param repository
-     *            the repository
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder repo(GHRepository repository) {
-        q("repo", repository.getFullName());
-        return this;
-    }
-
-    /**
-     * Author gh pull request search builder.
-     *
-     * @param user
-     *            the user as pr author
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder author(GHUser user) {
-        return this.author(user.getLogin());
-    }
-
-    /**
-     * Username as author gh pull request search builder.
-     *
-     * @param username
-     *            the username as pr author
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder author(String username) {
-        q("author", username);
-        return this;
-    }
-
-    /**
-     * CreatedByMe gh pull request search builder.
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder createdByMe() {
-        q("author:@me");
-        return this;
-    }
-
-    /**
      * Head gh pull request search builder.
      *
      * @param branch
@@ -135,18 +123,7 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder head(GHBranch branch) {
-        return this.head(branch.getName());
-    }
-
-    /**
-     * Head gh pull request search builder.
-     *
-     * @param branch
-     *            the head branch
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder head(String branch) {
-        q("head", branch);
+        q("head", branch.getName());
         return this;
     }
 
@@ -158,18 +135,19 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder base(GHBranch branch) {
-        return this.base(branch.getName());
+        q("base", branch.getName());
+        return this;
     }
 
     /**
-     * Base gh pull request search builder.
+     * Commit gh pull request search builder.
      *
-     * @param branch
-     *            the base branch
+     * @param sha
+     *            the commit SHA
      * @return the gh pull request search builder
      */
-    public GHPullRequestSearchBuilder base(String branch) {
-        q("base", branch);
+    public GHPullRequestSearchBuilder commit(String sha) {
+        q("SHA", sha);
         return this;
     }
 
@@ -438,114 +416,6 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     }
 
     /**
-     * Commit gh pull request search builder.
-     *
-     * @param sha
-     *            the commit SHA
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder commit(String sha) {
-        q("SHA", sha);
-        return this;
-    }
-
-    /**
-     * none review
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder notReviewed() {
-        q("review", ABSENT.getStatus());
-        return this;
-    }
-
-    /**
-     * required review
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder reviewRequired() {
-        q("review", REQUIRED.getStatus());
-        return this;
-    }
-
-    /**
-     * approved review
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder reviewApproved() {
-        q("review", APPROVED.getStatus());
-        return this;
-    }
-
-    /**
-     * rejected review
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder reviewRejected() {
-        q("review", REJECTED.getStatus());
-        return this;
-    }
-
-    /**
-     * reviewed by user
-     *
-     * @param user
-     *            the user
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder reviewedBy(GHUser user) {
-        return this.reviewedBy(user.getLogin());
-    }
-
-    /**
-     * reviewed by username
-     *
-     * @param username
-     *            the username
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder reviewedBy(String username) {
-        q("reviewed-by", username);
-        return this;
-    }
-
-    /**
-     * requested for user
-     *
-     * @param user
-     *            the user
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder requestedFor(GHUser user) {
-        return this.requestedFor(user.getLogin());
-    }
-
-    /**
-     * requested for user
-     *
-     * @param username
-     *            the username
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder requestedFor(String username) {
-        q("review-requested", username);
-        return this;
-    }
-
-    /**
-     * requested for me
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder requestedForMe() {
-        q("user-review-requested:@me");
-        return this;
-    }
-
-    /**
      * Order gh pull request search builder.
      *
      * @param direction
@@ -599,19 +469,6 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
         UPDATED,
         /** The relevance. */
         RELEVANCE
-
-    }
-    enum ReviewStatus {
-        ABSENT("none"), REQUIRED("required"), APPROVED("approved"), REJECTED("changes_requested");
-
-        private final String status;
-
-        ReviewStatus(String status) {
-            this.status = status;
-        }
-        public String getStatus() {
-            return status;
-        }
 
     }
 

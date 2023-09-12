@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -1717,40 +1716,128 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void testSearchPullRequests() throws Exception {
         GHRepository repository = gitHub.getRepository("kgromov/temp-testSearchPullRequests");
+        // prepare branches
         String mainHead = repository.getRef("heads/main").getObject().getSha();
-        GHRef devBranch = repository.createRef("refs/heads/dev", mainHead);
+        GHRef draftBranch = repository.createRef("refs/heads/draft", mainHead);
         repository.createContent()
+                .content("Draft content")
+                .message("test search")
+                .path(draftBranch.getRef())
+                .branch(draftBranch.getRef())
+                .commit();
+        GHRef branchToMerge = repository.createRef("refs/heads/branchToMerge", mainHead);
+        GHContentUpdateResponse commit = repository.createContent()
                 .content("Empty content")
                 .message("test search")
-                .path(devBranch.getRef())
-                .branch(devBranch.getRef())
+                .path(branchToMerge.getRef())
+                .branch(branchToMerge.getRef())
                 .commit();
-
-        GHPullRequest ghPullRequest = repository
-                .createPullRequest("Temp PR", devBranch.getRef(), "refs/heads/main", "Hello, merged PR");
-        ghPullRequest.merge("Merged test PR");
+        // prepare pull requests
+        GHPullRequest draftPR = repository.createPullRequest("Temp draft PR",
+                draftBranch.getRef(),
+                "refs/heads/main",
+                "Hello, draft PR",
+                true,
+                true);
+        draftPR.setLabels("test");
+        GHPullRequest mergedPR = repository
+                .createPullRequest("Temp merged PR", branchToMerge.getRef(), "refs/heads/main", "Hello, merged PR");
+        mergedPR.setLabels("test");
+        GHMyself myself = gitHub.getMyself();
+        mergedPR.assignTo(myself);
+        mergedPR.comment("@" + myself.getLogin() + " approved");
+        mergedPR.merge("Merged test PR");
         Thread.sleep(1000);
-        LocalDate from = LocalDate.parse("2023-08-01");
-        LocalDate to = LocalDate.parse("2023-08-23");
-        GHPullRequestSearchBuilder searchBuilder = gitHub.searchPullRequests()
-                .createdByMe()
-                .isMerged()
-                .merged(from, to)
-                .sort(GHPullRequestSearchBuilder.Sort.CREATED);
-        PagedSearchIterable<GHPullRequest> pullRequests = repository.searchPullRequests(searchBuilder);
-        assertThat(pullRequests.getTotalCount(), greaterThan(0));
-        for (GHPullRequest pullRequest : pullRequests) {
-            assertThat(pullRequest.getTitle(), is("Temp PR"));
-            assertThat(pullRequest.getRepository(), is(repository));
-            assertThat(pullRequest.getUser().getLogin(), is(repository.getOwner().getLogin()));
-            assertThat(pullRequest.getState(), is(GHIssueState.CLOSED));
-            LocalDate closedAt = pullRequest.getClosedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            assertThat(closedAt, greaterThanOrEqualTo(from));
-            assertThat(closedAt, lessThanOrEqualTo(to));
-        }
 
-        searchBuilder = gitHub.searchPullRequests().createdByMe().isOpen().createdAfter(from, true);
-        pullRequests = repository.searchPullRequests(searchBuilder);
-        assertThat(pullRequests.getTotalCount(), is(0));
+        // search by states
+        GHPullRequestSearchBuilder search = gitHub.searchPullRequests().repo(repository).isOpen().isDraft();
+        PagedSearchIterable<GHPullRequest> searchResult = repository.searchPullRequests(search);
+        this.verifySingleResult(searchResult, draftPR);
+
+        search = gitHub.searchPullRequests().repo(repository).isClosed().isMerged();
+        searchResult = repository.searchPullRequests(search);
+        this.verifySingleResult(searchResult, mergedPR);
+
+        // search by dates
+        LocalDate from = LocalDate.parse("2023-09-01");
+        LocalDate to = LocalDate.parse("2023-09-12");
+        LocalDate afterRange = LocalDate.parse("2023-09-14");
+
+        search = gitHub.searchPullRequests()
+                .repo(repository)
+                .created(from, to)
+                .updated(from, to)
+                .sort(GHPullRequestSearchBuilder.Sort.UPDATED);
+        searchResult = repository.searchPullRequests(search);
+        this.verifyPluralResult(searchResult, mergedPR, draftPR);
+
+        search = gitHub.searchPullRequests().repo(repository).merged(from, to).closed(from, to);
+        searchResult = repository.searchPullRequests(search);
+        this.verifySingleResult(searchResult, mergedPR);
+
+        search = gitHub.searchPullRequests().repo(repository).created(to).updated(to).closed(to).merged(to);
+        searchResult = repository.searchPullRequests(search);
+        this.verifySingleResult(searchResult, mergedPR);
+
+        search = gitHub.searchPullRequests()
+                .repo(repository)
+                .createdAfter(from, false)
+                .updatedAfter(from, false)
+                .mergedAfter(from, true)
+                .closedAfter(from, true);
+        searchResult = repository.searchPullRequests(search);
+        this.verifySingleResult(searchResult, mergedPR);
+
+        search = gitHub.searchPullRequests()
+                .repo(repository)
+                .createdBefore(afterRange, false)
+                .updatedBefore(afterRange, false)
+                .closedBefore(afterRange, true)
+                .mergedBefore(afterRange, false);
+        searchResult = repository.searchPullRequests(search);
+        this.verifySingleResult(searchResult, mergedPR);
+
+        // search by version control
+        Map<String, GHBranch> branches = repository.getBranches();
+        search = gitHub.searchPullRequests()
+                .base(branches.get("main"))
+                .head(branches.get("branchToMerge"))
+                .commit(commit.getCommit().getSha());
+        searchResult = repository.searchPullRequests(search);
+        this.verifySingleResult(searchResult, mergedPR);
+
+        // search by remaining filters
+        search = gitHub.searchPullRequests()
+                .repo(repository)
+                .titleLike("Temp")
+                .sort(GHPullRequestSearchBuilder.Sort.CREATED);
+        searchResult = repository.searchPullRequests(search);
+        this.verifyPluralResult(searchResult, draftPR, mergedPR);
+
+        search = gitHub.searchPullRequests().repo(repository).inLabels(Set.of("test")).order(GHDirection.DESC);
+        searchResult = repository.searchPullRequests(search);
+        this.verifyPluralResult(searchResult, mergedPR, draftPR);
+
+        search = gitHub.searchPullRequests().repo(repository).assigned(myself).mentions(myself);
+        searchResult = repository.searchPullRequests(search);
+        this.verifySingleResult(searchResult, mergedPR);
+    }
+
+    private void verifyEmptyResult(PagedSearchIterable<GHPullRequest> searchResult) {
+        assertThat(searchResult.getTotalCount(), is(0));
+    }
+
+    private void verifySingleResult(PagedSearchIterable<GHPullRequest> searchResult, GHPullRequest expectedPR)
+            throws IOException {
+        assertThat(searchResult.getTotalCount(), is(1));
+        assertThat(searchResult.toList().get(0).getNumber(), is(expectedPR.getNumber()));
+    }
+
+    private void verifyPluralResult(PagedSearchIterable<GHPullRequest> searchResult,
+            GHPullRequest expectedPR1,
+            GHPullRequest expectedPR2) throws IOException {
+        assertThat(searchResult.getTotalCount(), is(2));
+        assertThat(searchResult.toList().get(0).getNumber(), is(expectedPR1.getNumber()));
+        assertThat(searchResult.toList().get(1).getNumber(), is(expectedPR2.getNumber()));
     }
 }

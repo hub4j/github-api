@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/main",
+  "node_id": "REF_kwDOKSyX8K9yZWZzL2hlYWRzL21haW4",
+  "url": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/git/refs/heads/main",
+  "object": {
+    "sha": "33d4c1629baf1fc0c127839c7d605547daece11e",
+    "type": "commit",
+    "url": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/git/commits/33d4c1629baf1fc0c127839c7d605547daece11e"
+  }
+}

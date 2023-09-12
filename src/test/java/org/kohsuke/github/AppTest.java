@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -1439,40 +1437,34 @@ public class AppTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testPullRequestSearch() throws Exception {
-        GHRepository repository = gitHub.getRepository("kgromov/github-api-test");
+        GHRepository repository = gitHub.getRepository("kgromov/temp-testPullRequestSearch");
         String mainHead = repository.getRef("heads/main").getObject().getSha();
-        GHRef devBranch = repository.createRef("refs/heads/kgromov-test", mainHead);
+        GHRef headBranch = repository.createRef("refs/heads/kgromov-test", mainHead);
         repository.createContent()
                 .content("Empty content")
                 .message("test search")
-                .path(devBranch.getRef())
-                .branch(devBranch.getRef())
+                .path(headBranch.getRef())
+                .branch(headBranch.getRef())
                 .commit();
-        LocalDate createdDate = LocalDate.parse("2023-08-22");
         GHPullRequest newPR = repository
-                .createPullRequest("New PR", devBranch.getRef(), "refs/heads/main", "Hello, merged PR");
+                .createPullRequest("New PR", headBranch.getRef(), "refs/heads/main", "Hello, merged PR");
         newPR.setLabels("test");
         Thread.sleep(1000);
+
         List<GHPullRequest> pullRequests = gitHub.searchPullRequests()
+                .repo(repository)
                 .createdByMe()
                 .isOpen()
                 .label("test")
                 .list()
                 .toList();
-        assertThat(pullRequests.size(), greaterThan(0));
-        for (GHPullRequest pullRequest : pullRequests) {
-            assertThat(pullRequest.getTitle(), is("New PR"));
-            assertThat(pullRequest.getUser().getLogin(), is(repository.getOwner().getLogin()));
-            assertThat(pullRequest.getState(), is(GHIssueState.OPEN));
-            LocalDate createdAt = pullRequest.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            assertThat(createdAt, greaterThanOrEqualTo(createdDate));
-        }
+        assertThat(pullRequests.size(), is(1));
+        assertThat(pullRequests.get(0).getNumber(), is(newPR.getNumber()));
 
-        LocalDate newPrCreatedAt = newPR.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int totalCount = gitHub.searchPullRequests()
-                .createdByMe()
-                .isOpen()
-                .createdAfter(newPrCreatedAt, false)
+                .repo(repository)
+                .author(repository.getOwner())
+                .isMerged()
                 .list()
                 .getTotalCount();
         assertThat(totalCount, is(0));

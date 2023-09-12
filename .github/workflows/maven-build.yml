@@ -19,64 +19,44 @@ permissions:
 
 jobs:
   build:
-    name: build-only (Java ${{ matrix.java }})
+    name: build-only (Java 17)
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
-      matrix:
-        java: [ 17 ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ matrix.java }}
-          distribution: 'temurin'
-          cache: 'maven'
-      - name: Maven Install (skipTests)
-        env:
-          MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-        run: mvn -B clean install -DskipTests --file pom.xml
-  site:
-    name: site (Java ${{ matrix.java }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        java: [ 17 ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ matrix.java }}
-          distribution: 'temurin'
-          cache: 'maven'
-      - name: Maven Site
-        env:
-          MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-        run: mvn -B  clean site -D enable-ci --file pom.xml
-  test-8:
-    name: test (${{ matrix.os }}, Java 8)
-    runs-on: ${{ matrix.os }}-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu ]
-        java: [ 8 ]
+      fail-fast: true
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        java-version: ${{ matrix.java }}
+        java-version: 17
         distribution: 'temurin'
         cache: 'maven'
-    # JDK 8
-    - name: Maven Install with Code Coverage
-      run: mvn -B clean install -D enable-ci -Djapicmp.skip --file pom.xml
-    - name: Codecov Report 
-      uses: codecov/codecov-action@v3.1.4
+    - name: Maven Install (skipTests)
+      env:
+        MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
+      run: mvn -B clean install -DskipTests --file pom.xml
+    - uses: actions/upload-artifact@v3
+      with:
+        name: maven-target-directory
+        path: target/
+        retention-days: 3
+  site:
+    name: site (Java 17)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: 'temurin'
+        cache: 'maven'
+    - name: Maven Site
+      env:
+        MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
+      run: mvn -B clean site -D enable-ci --file pom.xml
   test:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
     runs-on: ${{ matrix.os }}-latest
@@ -104,3 +84,25 @@ jobs:
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
+    - name: Codecov Report 
+      if: matrix.os == 'ubuntu' && matrix.java == '17'
+      uses: codecov/codecov-action@v3.1.4
+
+  test-java-8:
+    name: test Java 8 (no-build)
+    needs: build
+    runs-on: ubuntu-latest
+    steps: 
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: maven-target-directory
+        path: target
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: 8
+        distribution: 'temurin'
+        cache: 'maven'   
+    - name: Maven Test (no build) Java 8
+      run: mvn -B surefire:test -DfailIfNoTests -Dsurefire.excludesFile=src/test/resources/slow-or-flaky-tests.txt

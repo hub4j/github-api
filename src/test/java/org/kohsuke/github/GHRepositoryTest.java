@@ -1814,7 +1814,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         searchResult = repository.searchPullRequests(search);
         this.verifyPluralResult(searchResult, draftPR, mergedPR);
 
-        search = gitHub.searchPullRequests().repo(repository).inLabels(Set.of("test")).order(GHDirection.DESC);
+        search = gitHub.searchPullRequests().repo(repository).inLabels(Arrays.asList("test")).order(GHDirection.DESC);
         searchResult = repository.searchPullRequests(search);
         this.verifyPluralResult(searchResult, mergedPR, draftPR);
 

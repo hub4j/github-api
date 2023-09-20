@@ -66,43 +66,58 @@ public class GHVerification {
      */
     public enum Reason {
 
-        /** The expired key. */
+        /** Signing key expired. */
         EXPIRED_KEY,
 
-        /** The not signing key. */
+        /** The usage flags for the key that signed this don't allow signing. */
         NOT_SIGNING_KEY,
 
-        /** The gpgverify error. */
+        /** The GPG verification service misbehaved. */
         GPGVERIFY_ERROR,
 
-        /** The gpgverify unavailable. */
+        /** The GPG verification service is unavailable at the moment. */
         GPGVERIFY_UNAVAILABLE,
 
-        /** The unsigned. */
+        /** Unsigned. */
         UNSIGNED,
 
-        /** The unknown signature type. */
+        /** Unknown signature type. */
         UNKNOWN_SIGNATURE_TYPE,
 
-        /** The no user. */
+        /** Email used for signing not known to GitHub. */
         NO_USER,
 
-        /** The unverified email. */
+        /** Email used for signing unverified on GitHub. */
         UNVERIFIED_EMAIL,
 
-        /** The bad email. */
+        /** Invalid email used for signing. */
         BAD_EMAIL,
 
-        /** The unknown key. */
+        /** Key used for signing not known to GitHub. */
         UNKNOWN_KEY,
 
-        /** The malformed signature. */
+        /** Malformed signature. */
         MALFORMED_SIGNATURE,
 
-        /** The invalid. */
+        /** Invalid signature. */
         INVALID,
 
-        /** The valid. */
-        VALID
+        /** Valid signature and verified by GitHub. */
+        VALID,
+
+        /** The signing certificate or its chain could not be verified. */
+        BAD_CERT,
+
+        /** Malformed signature. (Returned by graphQL) */
+        MALFORMED_SIG,
+
+        /** Valid signature, though certificate revocation check failed. */
+        OCSP_ERROR,
+
+        /** Valid signature, pending certificate revocation checking. */
+        OCSP_PENDING,
+
+        /** One or more certificates in chain has been revoked. */
+        OCSP_REVOKED
     }
 }

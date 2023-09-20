@@ -61,8 +61,8 @@ public class GHVerification {
      * The possible values for reason in verification object from github.
      *
      * @author Sourabh Sarvotham Parkala
-     * @see <a href="https://developer.github.com/v3/repos/commits/#signature-verification-object">List of possible
-     *      reason values</a>
+     * @see <a href="https://docs.github.com/en/graphql/reference/enums#gitsignaturestate">List of possible
+     *      reason values. Note graphQL documentation has currently the most updated values.</a>
      */
     public enum Reason {
 

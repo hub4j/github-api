@@ -1,8 +1,13 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -75,16 +80,41 @@ public class GHPullRequestReviewBuilder {
      * Comment gh pull request review builder.
      *
      * @param body
-     *            The relative path to the file that necessitates a review comment.
-     * @param path
-     *            The position in the diff where you want to add a review comment. Note this value is not the same as
-     *            the line number in the file. For help finding the position value, read the note below.
-     * @param position
      *            Text of the review comment.
+     * @param path
+     *            The relative path to the file that necessitates a review comment.
+     * @param position
+     *            Line number down from the first "@@" hunk in header. Position continues to increase through lines of
+     *            whitespace and additional hunks.
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder comment(String body, String path, int position) {
         comments.add(new DraftReviewComment(body, path, position));
+        return this;
+    }
+
+    /**
+     * Comment gh pull request review builder.
+     *
+     * @param body
+     *            Text of the review comment.
+     * @param path
+     *            The relative path to the file that necessitates a review comment.
+     * @param line
+     *            The line of the blob in the pull request diff that the comment applies to. For a multi-line comment,
+     *            the last line of the range that your comment applies to.
+     * @param start_line
+     *            The start_line is the first line in the pull request diff that your multi-line comment applies to.
+     * @param side
+     *            The side of the diff that the comment appears on in split diff view. Can be LEFT or RIGHT.
+     * @return the gh pull request review builder
+     */
+    public GHPullRequestReviewBuilder comment(String body,
+            String path,
+            int line,
+            @Nullable Integer start_line,
+            @Nullable String side) {
+        comments.add(new DraftReviewComment(body, path, line, start_line, side));
         return this;
     }
 
@@ -103,15 +133,31 @@ public class GHPullRequestReviewBuilder {
                 .wrapUp(pr);
     }
 
+    @JsonInclude(Include.NON_NULL)
     private static class DraftReviewComment {
         private String body;
         private String path;
-        private int position;
+        private Integer position;
+        private Integer line;
+        private Integer start_line;
+        private String side;
 
         DraftReviewComment(String body, String path, int position) {
             this.body = body;
             this.path = path;
             this.position = position;
+            this.line = null;
+            this.start_line = null;
+            this.side = null;
+        }
+
+        DraftReviewComment(String body, String path, int line, @Nullable Integer start_line, @Nullable String side) {
+            this.body = body;
+            this.path = path;
+            this.position = null;
+            this.line = line;
+            this.start_line = start_line;
+            this.side = side;
         }
 
         /**
@@ -137,8 +183,36 @@ public class GHPullRequestReviewBuilder {
          *
          * @return the position
          */
-        public int getPosition() {
+        public Integer getPosition() {
             return position;
         }
+
+        /**
+         * Gets line.
+         *
+         * @return the line
+         */
+        public Integer getLine() {
+            return line;
+        }
+
+        /**
+         * Gets start line.
+         *
+         * @return the start line
+         */
+        public Integer getStart_line() {
+            return start_line;
+        }
+
+        /**
+         * Gets side.
+         *
+         * @return the side
+         */
+        public String getSide() {
+            return side;
+        }
+
     }
 }

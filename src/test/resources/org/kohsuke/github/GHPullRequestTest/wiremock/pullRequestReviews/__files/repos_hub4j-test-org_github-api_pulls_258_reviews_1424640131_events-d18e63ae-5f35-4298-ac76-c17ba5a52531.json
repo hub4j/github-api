@@ -1,0 +1,39 @@
+{
+  "id": 1424640131,
+  "node_id": "PRR_kwDODFTdCc5U6kiD",
+  "user": {
+    "login": "AlkahtaniHisham",
+    "id": 121261704,
+    "node_id": "U_kgDOBzpOiA",
+    "avatar_url": "https://avatars.githubusercontent.com/u/121261704?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/AlkahtaniHisham",
+    "html_url": "https://github.com/AlkahtaniHisham",
+    "followers_url": "https://api.github.com/users/AlkahtaniHisham/followers",
+    "following_url": "https://api.github.com/users/AlkahtaniHisham/following{/other_user}",
+    "gists_url": "https://api.github.com/users/AlkahtaniHisham/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/AlkahtaniHisham/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/AlkahtaniHisham/subscriptions",
+    "organizations_url": "https://api.github.com/users/AlkahtaniHisham/orgs",
+    "repos_url": "https://api.github.com/users/AlkahtaniHisham/repos",
+    "events_url": "https://api.github.com/users/AlkahtaniHisham/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/AlkahtaniHisham/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "body": "Some review comment",
+  "state": "COMMENTED",
+  "html_url": "https://github.com/hub4j-test-org/github-api/pull/258#pullrequestreview-1424640131",
+  "pull_request_url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/258",
+  "author_association": "MEMBER",
+  "_links": {
+    "html": {
+      "href": "https://github.com/hub4j-test-org/github-api/pull/258#pullrequestreview-1424640131"
+    },
+    "pull_request": {
+      "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/258"
+    }
+  },
+  "submitted_at": "2023-05-12T14:34:32Z",
+  "commit_id": "2d29c787b46ce61b98a1c13e05e21ebc21f49dbf"
+}

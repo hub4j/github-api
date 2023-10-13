@@ -128,8 +128,8 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
         };
     }
 
-    protected NavigableIterator<T[]> adapt(final NavigableIterator<? extends SearchResult<T>> base) {
-        return new NavigableIterator<T[]>() {
+    protected NavigablePageIterator<T[]> adapt(final NavigablePageIterator<? extends SearchResult<T>> base) {
+        return new NavigablePageIterator<T[]>() {
             @Override
             public boolean hasPrevious() {
                 return base.hasNext();
@@ -168,6 +168,16 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
             @Override
             public T[] next() {
                 return base.next().getItems(root);
+            }
+
+            @Override
+            public T[] jumpToPage(int page) {
+                return base.jumpToPage(page).getItems(root);
+            }
+
+            @Override
+            public void refresh() {
+                base.refresh();
             }
         };
     }

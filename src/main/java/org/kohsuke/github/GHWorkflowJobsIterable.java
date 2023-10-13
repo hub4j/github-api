@@ -74,8 +74,8 @@ class GHWorkflowJobsIterable extends PagedIterable<GHWorkflowJob> {
         };
     }
 
-    protected NavigableIterator<GHWorkflowJob[]> adapt(final NavigableIterator<GHWorkflowJobsPage> base) {
-        return new NavigableIterator<GHWorkflowJob[]>() {
+    protected NavigablePageIterator<GHWorkflowJob[]> adapt(final NavigablePageIterator<GHWorkflowJobsPage> base) {
+        return new NavigablePageIterator<GHWorkflowJob[]>() {
             @Override
             public boolean hasPrevious() {
                 return base.hasPrevious();
@@ -114,6 +114,16 @@ class GHWorkflowJobsIterable extends PagedIterable<GHWorkflowJob> {
             @Override
             public GHWorkflowJob[] next() {
                 return base.next().getWorkflowJobs(repo);
+            }
+
+            @Override
+            public GHWorkflowJob[] jumpToPage(int page) {
+                return base.jumpToPage(page).getWorkflowJobs(repo);
+            }
+
+            @Override
+            public void refresh() {
+                base.refresh();
             }
         };
     }

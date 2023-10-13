@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
@@ -447,8 +446,8 @@ public class GHCompare {
             };
         }
 
-        protected NavigableIterator<Commit[]> adapt(final NavigableIterator<GHCompare> base) {
-            return new NavigableIterator<Commit[]>() {
+        protected NavigablePageIterator<Commit[]> adapt(final NavigablePageIterator<GHCompare> base) {
+            return new NavigablePageIterator<Commit[]>() {
                 @Override
                 public boolean hasPrevious() {
                     return base.hasPrevious();
@@ -487,6 +486,16 @@ public class GHCompare {
                 @Override
                 public Commit[] next() {
                     return base.next().commits;
+                }
+
+                @Override
+                public Commit[] jumpToPage(int page) {
+                    return base.jumpToPage(page).commits;
+                }
+
+                @Override
+                public void refresh() {
+                    base.refresh();
                 }
             };
         }

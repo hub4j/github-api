@@ -74,8 +74,8 @@ class GHArtifactsIterable extends PagedIterable<GHArtifact> {
         };
     }
 
-    protected NavigableIterator<GHArtifact[]> adapt(final NavigableIterator<GHArtifactsPage> base) {
-        return new NavigableIterator<GHArtifact[]>() {
+    protected NavigablePageIterator<GHArtifact[]> adapt(final NavigablePageIterator<GHArtifactsPage> base) {
+        return new NavigablePageIterator<GHArtifact[]>() {
             @Override
             public boolean hasPrevious() {
                 return base.hasPrevious();
@@ -114,6 +114,16 @@ class GHArtifactsIterable extends PagedIterable<GHArtifact> {
             @Override
             public GHArtifact[] next() {
                 return base.next().getArtifacts(owner);
+            }
+
+            @Override
+            public GHArtifact[] jumpToPage(int page) {
+                return base.jumpToPage(page).getArtifacts(owner);
+            }
+
+            @Override
+            public void refresh() {
+                base.refresh();
             }
         };
     }

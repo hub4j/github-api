@@ -8,28 +8,59 @@ import java.util.function.Consumer;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
-public class Paginator<T> {
+/**
+ * Iterator over a paginated data source. Iterates over the content items of each page, automatically requesting new
+ * pages as needed.
+ * <p>
+ * Equivalent to {@link PagedIterator} but with support for bidirectional movement and jumping to first, last or any
+ * specific page. This class is not thread-safe. Any one instance should only be called from a single thread.
+ *
+ * @author Anuj Hydrabadi
+ * @param <T>
+ *            the type parameter
+ */
+public class Paginator<T> implements NavigableIterator<T> {
     /**
      * The base.
      */
     @Nonnull
-    protected final NavigableIterator<T[]> base;
+    protected final NavigablePageIterator<T[]> base;
 
     @CheckForNull
     private final Consumer<T> itemInitializer;
 
+    /**
+     * Current batch of items. This field, long with {@link #nextItemIndex} maintains the state of the class. If
+     * {@link #nextItemIndex} moves out of bounds of this array, the next/previous batch of data is fetched and replaced
+     * here.
+     */
     private T[] currentPage;
-    private T[] nextPage;
-    private T[] previousPage;
 
+    /**
+     * The index of the next item to be fetched from the {@link #currentPage}.
+     */
     private int nextItemIndex;
 
-    Paginator(@Nonnull NavigableIterator<T[]> base, @CheckForNull Consumer<T> itemInitializer) {
+    /**
+     * Instantiates a new paginator.
+     *
+     * @param base
+     *            the base
+     * @param itemInitializer
+     *            the item initializer
+     */
+    Paginator(@Nonnull NavigablePageIterator<T[]> base, @CheckForNull Consumer<T> itemInitializer) {
         this.base = base;
         this.itemInitializer = itemInitializer;
     }
 
+    /**
+     * This method initializes items with local data after they are fetched. It is up to the implementer to decide what
+     * local data to apply.
+     *
+     * @param page
+     *            the page of items to be initialized
+     */
     protected void wrapUp(T[] page) {
         if (itemInitializer != null) {
             for (T item : page) {
@@ -38,121 +69,144 @@ public class Paginator<T> {
         }
     }
 
-    public boolean hasPrevious() {
-        return (currentPage != null && nextItemIndex > 0) || previousPage != null || base.hasPrevious();
-    }
-
-    public T previous() {
-        if (!hasPrevious())
-            throw new NoSuchElementException();
-        if (currentPage != null && nextItemIndex > 0)
-            return currentPage[--nextItemIndex];
-        if (previousPage == null) {
-            fetchPrevious();
-        }
-        if (previousPage == null) {
-            throw new NoSuchElementException();
-        }
-        nextItemIndex = previousPage.length - 1;
-        nextPage = currentPage;
-        currentPage = previousPage;
-        previousPage = null;
-        return currentPage[nextItemIndex];
-    }
-
-    public T first() {
-        nextItemIndex = 0;
-        nextPage = null;
-        currentPage = base.first();
-        previousPage = null;
-        return currentPage[nextItemIndex++];
-    }
-
-    T[] firstPageArray() {
-        nextPage = null;
-        previousPage = null;
-        currentPage = base.first();
-        nextItemIndex = currentPage.length;
-        return currentPage;
-    }
-
-    public List<T> firstPageList() {
-        return Arrays.asList(firstPageArray());
-    }
-
-    public T last() {
-        nextPage = null;
-        currentPage = base.last();
-        nextItemIndex = currentPage.length - 1;
-        previousPage = null;
-        return currentPage[nextItemIndex++];
-    }
-
-    T[] lastPageArray() {
-        nextPage = null;
-        previousPage = null;
-        currentPage = base.last();
-        nextItemIndex = currentPage.length;
-        return currentPage;
-    }
-
-    public List<T> lastPageList() {
-        return Arrays.asList(lastPageArray());
-    }
-
+    /**
+     * @return true if there is any data on the next index.
+     */
+    @Override
     public boolean hasNext() {
-        return (currentPage != null && nextItemIndex < currentPage.length) || nextPage != null || base.hasNext();
+        return (currentPage != null && nextItemIndex < currentPage.length) || base.hasNext();
     }
 
+    /**
+     * Increments the pointer and returns the next item.
+     *
+     * @return the item on the next index if present
+     * @throws NoSuchElementException
+     *             if not present
+     */
+    @Override
     public T next() {
         if (!hasNext())
             throw new NoSuchElementException();
         if (currentPage != null && nextItemIndex < currentPage.length)
             return currentPage[nextItemIndex++];
-        if (nextPage == null) {
-            fetchNext();
-        }
-        if (nextPage == null) {
+        fetchNext();
+        if (currentPage == null) {
             throw new NoSuchElementException();
         }
         nextItemIndex = 0;
-        previousPage = currentPage;
-        currentPage = nextPage;
-        nextPage = null;
         return currentPage[nextItemIndex++];
     }
 
+    /**
+     * @return true if there is any data on the previous index.
+     */
+    @Override
+    public boolean hasPrevious() {
+        return (currentPage != null && nextItemIndex > 0) || base.hasPrevious();
+    }
+
+    /**
+     * Decrements the pointer and returns the previous item.
+     *
+     * @return the item on the previous index if present
+     * @throws NoSuchElementException
+     *             if not present
+     */
+    @Override
+    public T previous() {
+        if (!hasPrevious())
+            throw new NoSuchElementException();
+        if (currentPage != null && nextItemIndex > 0)
+            return currentPage[--nextItemIndex];
+        fetchPrevious();
+        if (currentPage == null) {
+            throw new NoSuchElementException();
+        }
+        nextItemIndex = currentPage.length - 1;
+        return currentPage[nextItemIndex];
+    }
+
+    /**
+     * Returns the first item and sets the pointer after that item.
+     *
+     * @return the first item.
+     */
+    @Override
+    public T first() {
+        nextItemIndex = 0;
+        currentPage = base.first();
+        return currentPage[nextItemIndex++];
+    }
+
+    /**
+     * Gets the entire first page of data. Sets the pointer to the end of the first page.
+     *
+     * @return the list
+     */
+    T[] firstPageArray() {
+        currentPage = base.first();
+        nextItemIndex = currentPage.length;
+        return currentPage;
+    }
+
+    /**
+     * Gets the entire first page of data. Sets the pointer to the end of the first page.
+     *
+     * @return the list
+     */
+    public List<T> firstPageList() {
+        return Arrays.asList(firstPageArray());
+    }
+
+    /**
+     * Returns the last item and sets the pointer after that item.
+     *
+     * @return the last item.
+     */
+    @Override
+    public T last() {
+        currentPage = base.last();
+        nextItemIndex = currentPage.length - 1;
+        return currentPage[nextItemIndex++];
+    }
+
+    /**
+     * Gets the entire last page of data. Sets the pointer to the end of the last page.
+     *
+     * @return the list
+     */
+    T[] lastPageArray() {
+        currentPage = base.last();
+        nextItemIndex = currentPage.length;
+        return currentPage;
+    }
+
+    /**
+     * Gets the entire last page of data. Sets the pointer to the end of the last page.
+     *
+     * @return the list
+     */
+    public List<T> lastPageList() {
+        return Arrays.asList(lastPageArray());
+    }
+
+    /**
+     * @return total number of pages
+     */
     public int totalPages() {
         return base.totalCount();
     }
+
+    /**
+     * @return the current page number
+     */
     public int currentPage() {
         return base.currentPage();
     }
 
-    private void fetchNext() {
-        if (nextPage != null) {
-            return;
-        }
-        if (base.hasNext()) {
-            T[] result = Objects.requireNonNull(base.next());
-            wrapUp(result);
-            nextPage = result;
-        }
-    }
-
-    private void fetchPrevious() {
-        if (previousPage != null) {
-            return;
-        }
-        if (base.hasPrevious()) {
-            T[] result = Objects.requireNonNull(base.previous());
-            wrapUp(result);
-            previousPage = result;
-        }
-    }
-
     /**
-     * Gets the next page worth of data.
+     * Gets the next page worth of data. Sets the pointer to the end of that page.
      *
      * @return the list
      */
@@ -161,14 +215,12 @@ public class Paginator<T> {
     }
 
     /**
-     * Gets the next page worth of data.
+     * Gets the next page worth of data. Sets the pointer to the end of that page.
      *
      * @return the list
      */
     @Nonnull
     T[] nextPageArray() {
-        // if we have not fetched any pages yet, always fetch.
-        // If we have fetched at least one page, check hasNext()
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
@@ -185,7 +237,7 @@ public class Paginator<T> {
     }
 
     /**
-     * Gets the next page worth of data.
+     * Gets the previous page worth of data. Sets the pointer to the start of that page.
      *
      * @return the list
      */
@@ -194,14 +246,12 @@ public class Paginator<T> {
     }
 
     /**
-     * Gets the previous page worth of data.
+     * Gets the previous page worth of data. Sets the pointer to the start of that page.
      *
      * @return the list
      */
     @Nonnull
     T[] previousPageArray() {
-        // if we have not fetched any pages yet, always fetch.
-        // If we have fetched at least one page, check hasNext()
         if (!hasPrevious()) {
             throw new NoSuchElementException();
         }
@@ -214,5 +264,53 @@ public class Paginator<T> {
         }
         nextItemIndex = 0;
         return r;
+    }
+
+    /**
+     * Clears out the cached data and updates it with the underlying data source. The position of the pointer stays the
+     * same, though the data it is pointing to may have changed.
+     */
+    public void refresh() {
+        base.refresh();
+        currentPage = null;
+    }
+
+    /**
+     * Jump to a particular page.
+     *
+     * @param page
+     *            the page to jump to.
+     * @return the paginator object to support fluent method chaining.
+     * @throws NoSuchElementException
+     *             if the page does not exist.
+     */
+    public Paginator<T> jumpToPage(int page) {
+        currentPage = base.jumpToPage(page);
+        nextItemIndex = 0;
+        return this;
+    }
+
+    /**
+     * Called at the start of the {@link #next()} method if we have reached the end of {@link #currentPage}. Updates the
+     * current page with the next page data. Does not update the pointer.
+     */
+    private void fetchNext() {
+        if (base.hasNext()) {
+            T[] result = Objects.requireNonNull(base.next());
+            wrapUp(result);
+            currentPage = result;
+        }
+    }
+
+    /**
+     * Called at the start of the {@link #previous()} method if we are at the start of {@link #currentPage}. Updates the
+     * current page with the previous page data. Does not update the pointer.
+     */
+    private void fetchPrevious() {
+        if (base.hasPrevious()) {
+            T[] result = Objects.requireNonNull(base.previous());
+            wrapUp(result);
+            currentPage = result;
+        }
     }
 }

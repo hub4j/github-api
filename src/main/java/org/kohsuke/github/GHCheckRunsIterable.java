@@ -74,8 +74,8 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
         };
     }
 
-    protected NavigableIterator<GHCheckRun[]> adapt(final NavigableIterator<GHCheckRunsPage> base) {
-        return new NavigableIterator<GHCheckRun[]>() {
+    protected NavigablePageIterator<GHCheckRun[]> adapt(final NavigablePageIterator<GHCheckRunsPage> base) {
+        return new NavigablePageIterator<GHCheckRun[]>() {
             @Override
             public boolean hasPrevious() {
                 return base.hasPrevious();
@@ -114,6 +114,16 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
             @Override
             public GHCheckRun[] next() {
                 return base.next().getCheckRuns(owner);
+            }
+
+            @Override
+            public GHCheckRun[] jumpToPage(int page) {
+                return base.jumpToPage(page).getCheckRuns(owner);
+            }
+
+            @Override
+            public void refresh() {
+                base.refresh();
             }
         };
     }

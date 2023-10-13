@@ -75,8 +75,9 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
         };
     }
 
-    protected NavigableIterator<GHAppInstallation[]> adapt(final NavigableIterator<GHAppInstallationsPage> base) {
-        return new NavigableIterator<GHAppInstallation[]>() {
+    protected NavigablePageIterator<GHAppInstallation[]> adapt(
+            final NavigablePageIterator<GHAppInstallationsPage> base) {
+        return new NavigablePageIterator<GHAppInstallation[]>() {
             @Override
             public boolean hasPrevious() {
                 return base.hasPrevious();
@@ -105,6 +106,16 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
             @Override
             public int currentPage() {
                 return base.currentPage();
+            }
+
+            @Override
+            public GHAppInstallation[] jumpToPage(int page) {
+                return base.jumpToPage(page).getInstallations();
+            }
+
+            @Override
+            public void refresh() {
+                base.refresh();
             }
 
             public boolean hasNext() {

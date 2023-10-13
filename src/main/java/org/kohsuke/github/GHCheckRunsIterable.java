@@ -27,6 +27,15 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
         this.request = request;
     }
 
+    @Nonnull
+    @Override
+    public Paginator<GHCheckRun> _paginator(int pageSize, int startPage) {
+        return new Paginator<>(
+                adapt(GitHubPaginator
+                        .create(owner.root().getClient(), GHCheckRunsPage.class, request, pageSize, startPage)),
+                null);
+    }
+
     /**
      * Iterator.
      *
@@ -61,6 +70,50 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
                     result = v;
                 }
                 return v.getCheckRuns(owner);
+            }
+        };
+    }
+
+    protected NavigableIterator<GHCheckRun[]> adapt(final NavigableIterator<GHCheckRunsPage> base) {
+        return new NavigableIterator<GHCheckRun[]>() {
+            @Override
+            public boolean hasPrevious() {
+                return base.hasPrevious();
+            }
+
+            @Override
+            public GHCheckRun[] previous() {
+                return base.previous().getCheckRuns(owner);
+            }
+
+            @Override
+            public GHCheckRun[] first() {
+                return base.first().getCheckRuns(owner);
+            }
+
+            @Override
+            public GHCheckRun[] last() {
+                return base.last().getCheckRuns(owner);
+            }
+
+            @Override
+            public int totalCount() {
+                return base.totalCount();
+            }
+
+            @Override
+            public int currentPage() {
+                return base.currentPage();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return base.hasNext();
+            }
+
+            @Override
+            public GHCheckRun[] next() {
+                return base.next().getCheckRuns(owner);
             }
         };
     }

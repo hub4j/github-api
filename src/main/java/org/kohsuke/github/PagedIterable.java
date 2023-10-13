@@ -26,6 +26,8 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      */
     private int pageSize = 0;
 
+    private int startPage = 0;
+
     /**
      * Sets the pagination size.
      *
@@ -41,6 +43,11 @@ public abstract class PagedIterable<T> implements Iterable<T> {
         return this;
     }
 
+    public PagedIterable<T> withStartPage(int startPage) {
+        this.startPage = startPage;
+        return this;
+    }
+
     /**
      * Returns an iterator over elements of type {@code T}.
      *
@@ -50,6 +57,26 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     public final PagedIterator<T> iterator() {
         return _iterator(pageSize);
     }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Nonnull
+    public final Paginator<T> paginator() {
+        return _paginator(pageSize, startPage);
+    }
+
+    /**
+     * Iterator over page items.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
+     */
+    @Nonnull
+    public abstract Paginator<T> _paginator(int pageSize, int startPage);
 
     /**
      * Iterator over page items.

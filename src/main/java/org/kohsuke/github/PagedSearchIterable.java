@@ -58,6 +58,14 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
         return (PagedSearchIterable<T>) super.withPageSize(size);
     }
 
+    @Nonnull
+    @Override
+    public Paginator<T> _paginator(int pageSize, int startPage) {
+        return new Paginator<>(
+                adapt(GitHubPaginator.create(root.getClient(), receiverType, request, pageSize, startPage)),
+                null);
+    }
+
     /**
      * Returns the total number of hit, including the results that's not yet fetched.
      *
@@ -116,6 +124,50 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
                 if (result == null)
                     result = v;
                 return v.getItems(root);
+            }
+        };
+    }
+
+    protected NavigableIterator<T[]> adapt(final NavigableIterator<? extends SearchResult<T>> base) {
+        return new NavigableIterator<T[]>() {
+            @Override
+            public boolean hasPrevious() {
+                return base.hasNext();
+            }
+
+            @Override
+            public T[] previous() {
+                return base.previous().getItems(root);
+            }
+
+            @Override
+            public T[] first() {
+                return base.first().getItems(root);
+            }
+
+            @Override
+            public T[] last() {
+                return base.last().getItems(root);
+            }
+
+            @Override
+            public int totalCount() {
+                return base.totalCount();
+            }
+
+            @Override
+            public int currentPage() {
+                return base.currentPage();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return base.hasNext();
+            }
+
+            @Override
+            public T[] next() {
+                return base.next().getItems(root);
             }
         };
     }

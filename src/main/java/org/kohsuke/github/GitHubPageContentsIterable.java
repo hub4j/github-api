@@ -46,6 +46,13 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
         this.itemInitializer = itemInitializer;
     }
 
+    @Nonnull
+    @Override
+    public Paginator<T> _paginator(int pageSize, int startPage) {
+        return new Paginator<>(GitHubPaginator.create(client, receiverType, request, pageSize, startPage),
+                itemInitializer);
+    }
+
     /**
      * {@inheritDoc}
      */

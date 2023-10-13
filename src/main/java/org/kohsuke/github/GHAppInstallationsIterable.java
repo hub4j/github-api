@@ -25,6 +25,17 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
         this.root = root;
     }
 
+    @Nonnull
+    @Override
+    public Paginator<GHAppInstallation> _paginator(int pageSize, int startPage) {
+        final GitHubRequest request = root.createRequest().withUrlPath(APP_INSTALLATIONS_URL).build();
+
+        return new Paginator<>(
+                adapt(GitHubPaginator
+                        .create(root.getClient(), GHAppInstallationsPage.class, request, pageSize, startPage)),
+                null);
+    }
+
     /**
      * Iterator.
      *
@@ -60,6 +71,48 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
                     result = v;
                 }
                 return v.getInstallations();
+            }
+        };
+    }
+
+    protected NavigableIterator<GHAppInstallation[]> adapt(final NavigableIterator<GHAppInstallationsPage> base) {
+        return new NavigableIterator<GHAppInstallation[]>() {
+            @Override
+            public boolean hasPrevious() {
+                return base.hasPrevious();
+            }
+
+            @Override
+            public GHAppInstallation[] previous() {
+                return base.previous().getInstallations();
+            }
+
+            @Override
+            public GHAppInstallation[] first() {
+                return base.first().getInstallations();
+            }
+
+            @Override
+            public GHAppInstallation[] last() {
+                return base.last().getInstallations();
+            }
+
+            @Override
+            public int totalCount() {
+                return base.totalCount();
+            }
+
+            @Override
+            public int currentPage() {
+                return base.currentPage();
+            }
+
+            public boolean hasNext() {
+                return base.hasNext();
+            }
+
+            public GHAppInstallation[] next() {
+                return base.next().getInstallations();
             }
         };
     }

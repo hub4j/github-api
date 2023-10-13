@@ -27,6 +27,15 @@ class GHWorkflowJobsIterable extends PagedIterable<GHWorkflowJob> {
         this.request = request;
     }
 
+    @Nonnull
+    @Override
+    public Paginator<GHWorkflowJob> _paginator(int pageSize, int startPage) {
+        return new Paginator<>(
+                adapt(GitHubPaginator
+                        .create(repo.root().getClient(), GHWorkflowJobsPage.class, request, pageSize, startPage)),
+                null);
+    }
+
     /**
      * Iterator.
      *
@@ -61,6 +70,50 @@ class GHWorkflowJobsIterable extends PagedIterable<GHWorkflowJob> {
                     result = v;
                 }
                 return v.getWorkflowJobs(repo);
+            }
+        };
+    }
+
+    protected NavigableIterator<GHWorkflowJob[]> adapt(final NavigableIterator<GHWorkflowJobsPage> base) {
+        return new NavigableIterator<GHWorkflowJob[]>() {
+            @Override
+            public boolean hasPrevious() {
+                return base.hasPrevious();
+            }
+
+            @Override
+            public GHWorkflowJob[] previous() {
+                return base.previous().getWorkflowJobs(repo);
+            }
+
+            @Override
+            public GHWorkflowJob[] first() {
+                return base.first().getWorkflowJobs(repo);
+            }
+
+            @Override
+            public GHWorkflowJob[] last() {
+                return base.last().getWorkflowJobs(repo);
+            }
+
+            @Override
+            public int totalCount() {
+                return base.totalCount();
+            }
+
+            @Override
+            public int currentPage() {
+                return base.currentPage();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return base.hasNext();
+            }
+
+            @Override
+            public GHWorkflowJob[] next() {
+                return base.next().getWorkflowJobs(repo);
             }
         };
     }

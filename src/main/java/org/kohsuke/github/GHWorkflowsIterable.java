@@ -23,6 +23,19 @@ class GHWorkflowsIterable extends PagedIterable<GHWorkflow> {
         this.owner = owner;
     }
 
+    @Nonnull
+    @Override
+    public Paginator<GHWorkflow> _paginator(int pageSize, int startPage) {
+        GitHubRequest request = owner.root()
+                .createRequest()
+                .withUrlPath(owner.getApiTailUrl("actions/workflows"))
+                .build();
+        return new Paginator<>(
+                adapt(GitHubPaginator
+                        .create(owner.root().getClient(), GHWorkflowsPage.class, request, pageSize, startPage)),
+                null);
+    }
+
     /**
      * Iterator.
      *
@@ -62,6 +75,50 @@ class GHWorkflowsIterable extends PagedIterable<GHWorkflow> {
                     result = v;
                 }
                 return v.getWorkflows(owner);
+            }
+        };
+    }
+
+    protected NavigableIterator<GHWorkflow[]> adapt(final NavigableIterator<GHWorkflowsPage> base) {
+        return new NavigableIterator<GHWorkflow[]>() {
+            @Override
+            public boolean hasPrevious() {
+                return base.hasPrevious();
+            }
+
+            @Override
+            public GHWorkflow[] previous() {
+                return base.previous().getWorkflows(owner);
+            }
+
+            @Override
+            public GHWorkflow[] first() {
+                return base.first().getWorkflows(owner);
+            }
+
+            @Override
+            public GHWorkflow[] last() {
+                return base.last().getWorkflows(owner);
+            }
+
+            @Override
+            public int totalCount() {
+                return base.totalCount();
+            }
+
+            @Override
+            public int currentPage() {
+                return base.currentPage();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return base.hasNext();
+            }
+
+            @Override
+            public GHWorkflow[] next() {
+                return base.next().getWorkflows(owner);
             }
         };
     }

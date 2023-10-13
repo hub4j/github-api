@@ -26,7 +26,8 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      */
     private int pageSize = 0;
 
-    private int startPage = 0;
+    /** Start page. 1 by default. */
+    private int startPage = 1;
 
     /**
      * Sets the pagination size.
@@ -43,6 +44,13 @@ public abstract class PagedIterable<T> implements Iterable<T> {
         return this;
     }
 
+    /**
+     * Sets the page size. 1 by default.
+     *
+     * @param startPage
+     *            start page to set
+     * @return the paged iterable
+     */
     public PagedIterable<T> withStartPage(int startPage) {
         this.startPage = startPage;
         return this;

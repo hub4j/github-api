@@ -78,7 +78,7 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
         }
 
         if (startPage > 0) {
-            GitHubRequest.Builder<?> builder = request.toBuilder().with("page", startPage);
+            GitHubRequest.Builder<?> builder = request.toBuilder().set("page", startPage);
             request = builder.build();
         }
 
@@ -104,7 +104,7 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
             throw new NoSuchElementException();
         }
 
-        currentRequest = currentRequest.toBuilder().with("page", String.valueOf(++currentPage)).build();
+        currentRequest = currentRequest.toBuilder().set("page", String.valueOf(++currentPage)).build();
         return makeRequest();
     }
 
@@ -126,7 +126,7 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
         if (!hasPrevious) {
             throw new NoSuchElementException();
         }
-        currentRequest = currentRequest.toBuilder().with("page", String.valueOf(--currentPage)).build();
+        currentRequest = currentRequest.toBuilder().set("page", String.valueOf(--currentPage)).build();
         return makeRequest();
     }
 
@@ -137,7 +137,7 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
             makeRequest();
         }
         currentPage = 1;
-        currentRequest = currentRequest.toBuilder().with("page", String.valueOf(currentPage)).build();
+        currentRequest = currentRequest.toBuilder().set("page", String.valueOf(currentPage)).build();
         return makeRequest();
     }
 
@@ -148,7 +148,7 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
             makeRequest();
         }
         currentPage = finalPage;
-        currentRequest = currentRequest.toBuilder().with("page", String.valueOf(currentPage)).build();
+        currentRequest = currentRequest.toBuilder().set("page", String.valueOf(currentPage)).build();
         return makeRequest();
     }
 
@@ -174,7 +174,7 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
             throw new NoSuchElementException();
         }
         currentPage = page;
-        currentRequest = currentRequest.toBuilder().with("page", String.valueOf(currentPage)).build();
+        currentRequest = currentRequest.toBuilder().set("page", String.valueOf(currentPage)).build();
         return makeRequest();
     }
 

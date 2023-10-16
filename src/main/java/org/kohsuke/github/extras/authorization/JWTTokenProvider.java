@@ -2,7 +2,6 @@ package org.kohsuke.github.extras.authorization;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.jackson.io.JacksonSerializer;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 
@@ -173,16 +172,16 @@ public class JWTTokenProvider implements AuthorizationProvider {
 
         // Let's set the JWT Claims
         JwtBuilder builder = Jwts.builder()
-                .setIssuedAt(Date.from(issuedAt))
-                .setExpiration(Date.from(expiration))
-                .setIssuer(this.applicationId)
-                .signWith(privateKey, SignatureAlgorithm.RS256);
+                .issuedAt(Date.from(issuedAt))
+                .expiration(Date.from(expiration))
+                .issuer(this.applicationId)
+                .signWith(privateKey, Jwts.SIG.RS256);
 
         // Token will refresh 2 minutes before it expires
         validUntil = expiration.minus(Duration.ofMinutes(2));
 
         // Builds the JWT and serializes it to a compact, URL-safe string
-        return builder.serializeToJsonWith(new JacksonSerializer<>()).compact();
+        return builder.json(new JacksonSerializer<>()).compact();
     }
 
     Instant getIssuedAt(Instant now) {

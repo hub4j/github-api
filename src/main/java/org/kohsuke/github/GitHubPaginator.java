@@ -36,6 +36,7 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
     private boolean hasNext;
     /** Whether at least one API call is made. Starts as false when object is created, once set to true, stays true. */
     private boolean firstCallMade;
+    private T next;
     private GitHubPaginator(GitHubClient client, Class<T> type, GitHubRequest request, int startPage) {
         if (!"GET".equals(request.method())) {
             throw new IllegalStateException("Request method \"GET\" is required for page iterator.");
@@ -88,77 +89,71 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
     /** {@inheritDoc} */
     @Override
     public boolean hasNext() {
-        if (!firstCallMade) {
-            makeRequest();
-        }
+        initialise();
         return hasNext;
     }
 
     /** {@inheritDoc} */
     @Override
     public T next() {
-        if (!firstCallMade) {
-            makeRequest();
-        }
+        initialise();
         if (!hasNext) {
             throw new NoSuchElementException();
         }
+        if (next != null)
+            return next;
 
         currentRequest = currentRequest.toBuilder().set("page", String.valueOf(++currentPage)).build();
-        return makeRequest();
+        return makeRequest(false);
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean hasPrevious() {
-        if (!firstCallMade) {
-            makeRequest();
-        }
+        initialise();
         return hasPrevious;
     }
 
     /** {@inheritDoc} */
     @Override
     public T previous() {
-        if (!firstCallMade) {
-            makeRequest();
-        }
+        initialise();
         if (!hasPrevious) {
             throw new NoSuchElementException();
         }
         currentRequest = currentRequest.toBuilder().set("page", String.valueOf(--currentPage)).build();
-        return makeRequest();
+        return makeRequest(false);
     }
 
     /** {@inheritDoc} */
     @Override
     public T first() {
-        if (!firstCallMade) {
-            makeRequest();
-        }
+        initialise();
         currentPage = 1;
         currentRequest = currentRequest.toBuilder().set("page", String.valueOf(currentPage)).build();
-        return makeRequest();
+        return makeRequest(false);
     }
 
     /** {@inheritDoc} */
     @Override
     public T last() {
-        if (!firstCallMade) {
-            makeRequest();
-        }
+        initialise();
         currentPage = finalPage;
         currentRequest = currentRequest.toBuilder().set("page", String.valueOf(currentPage)).build();
-        return makeRequest();
+        return makeRequest(false);
     }
 
     /** {@inheritDoc} */
     @Override
     public int totalCount() {
-        if (!firstCallMade) {
-            makeRequest();
-        }
+        initialise();
         return finalPage;
+    }
+
+    private void initialise() {
+        if (!firstCallMade) {
+            makeRequest(true);
+        }
     }
 
     /** {@inheritDoc} */
@@ -170,18 +165,22 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
     /** {@inheritDoc} */
     @Override
     public T jumpToPage(int page) {
+        initialise();
         if (page < 1 || page > finalPage) {
             throw new NoSuchElementException();
         }
         currentPage = page;
         currentRequest = currentRequest.toBuilder().set("page", String.valueOf(currentPage)).build();
-        return makeRequest();
+        return makeRequest(false);
     }
 
     /** {@inheritDoc} */
     @Override
     public void refresh() {
-        makeRequest();
+        if (!firstCallMade) {
+            throw new GHException("Cannot refresh before the first call has been made!");
+        }
+        makeRequest(false);
     }
 
     /**
@@ -189,14 +188,14 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
      *
      * @return the response
      */
-    private T makeRequest() {
+    private T makeRequest(boolean firstCall) {
         URL url = currentRequest.url();
         try {
             GitHubResponse<T> response = client.sendRequest(currentRequest,
                     (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, type));
             assert response.body() != null;
 
-            updateState(currentRequest, response);
+            updateState(currentRequest, response, firstCall);
             firstCallMade = true;
             return response.body();
         } catch (IOException e) {
@@ -215,7 +214,7 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
      * @param currentResponse
      *            the response just received.
      */
-    private void updateState(GitHubRequest currentRequest, GitHubResponse<T> currentResponse) {
+    private void updateState(GitHubRequest currentRequest, GitHubResponse<T> currentResponse, boolean firstCall) {
         hasPrevious = false;
         hasNext = false;
         finalPage = getPageFromUrl(currentRequest.url());
@@ -243,6 +242,12 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
                     }
                 }
             }
+        }
+        if (firstCall) {
+            hasNext = true;
+            next = currentResponse.body();
+        } else {
+            next = null;
         }
 
     }

@@ -3,6 +3,8 @@ package org.kohsuke.github;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +16,7 @@ import static org.hamcrest.Matchers.notNullValue;
 public class GHWorkflowRunPaginationTest extends AbstractGitHubWireMockTest {
     private static final String REPO_NAME = "hub4j/github-api";
     private static final String SINGLE_RUN_REPO_NAME = "hub4j-test-org/GHWorkflowRunTest";
+    private static final String NO_RUNS_REPO_NAME = "hub4j-test-org/GHWorkflowTest";
     private GHRepository repo;
 
     @Before
@@ -36,7 +39,7 @@ public class GHWorkflowRunPaginationTest extends AbstractGitHubWireMockTest {
         assertThat(paginator.currentPage(), equalTo(6));
 
         // last
-        assertThat(paginator.last().getRunNumber(), equalTo(3084L));
+        assertThat(paginator.last().getRunNumber(), equalTo(3089L));
         assertThat(paginator.hasNext(), equalTo(false));
         assertThat(paginator.hasPrevious(), equalTo(true));
 
@@ -105,6 +108,112 @@ public class GHWorkflowRunPaginationTest extends AbstractGitHubWireMockTest {
     }
 
     @Test
+    public void testPageWithSizeEqualTo1() throws Exception {
+        Paginator<GHWorkflowRun> paginator1 = repo.getWorkflow("maven-build.yml")
+                .listRuns()
+                .withPageSize(1)
+                .paginator();
+        Paginator<GHWorkflowRun> paginator2 = repo.getWorkflow("maven-build.yml")
+                .listRuns()
+                .withPageSize(1)
+                .paginator();
+
+        List<GHWorkflowRun> page = paginator1.nextPage();
+        assertThat(page.size(), equalTo(1));
+        assertThat(page.get(0).getRunNumber(), equalTo(paginator2.next().getRunNumber()));
+        assertThat(page.get(0).getRunNumber(), equalTo(paginator1.previous().getRunNumber()));
+        assertThat(page.get(0).getRunNumber(), equalTo(paginator2.previousPage().get(0).getRunNumber()));
+        assertThat(page.get(0).getRunNumber(), equalTo(paginator1.firstPageList().get(0).getRunNumber()));
+        assertThat(page.get(0).getRunNumber(), equalTo(paginator1.first().getRunNumber()));
+
+        page = paginator1.lastPageList();
+        assertThat(page.size(), equalTo(1));
+        assertThat(page.get(0).getRunNumber(), equalTo(paginator2.last().getRunNumber()));
+
+        // jump to page
+        assertThat(paginator1.jumpToPage(4).currentPage(), equalTo(4));
+        assertThat(paginator1.jumpToPage(8).currentPage(), equalTo(8));
+        assertThat(paginator1.jumpToPage(6).currentPage(), equalTo(6));
+
+        // next and previous over multiple pages
+        long[] ascending = new long[14];
+        long[] descending = new long[14];
+        for (int i = 0; i < 14; i++) {
+            ascending[i] = paginator1.next().getRunNumber();
+        }
+        for (int i = 13; i >= 0; i--) {
+            descending[i] = paginator1.previous().getRunNumber();
+        }
+        assertThat(ascending, equalTo(descending));
+
+        // first page list vs jump to page 1
+        assertThat(getRunNumbers(paginator1.firstPageList()),
+                equalTo(getRunNumbers(paginator1.jumpToPage(1).nextPage())));
+
+        // last page list vs jump to page number totalPages
+        assertThat(getRunNumbers(paginator1.lastPageList()),
+                equalTo(getRunNumbers(paginator1.jumpToPage(paginator1.totalPages()).nextPage())));
+    }
+
+    @Test
+    public void testNext() throws Exception {
+        assertThat(3584L, equalTo(getNewPaginator().next().getRunNumber()));
+    }
+
+    @Test
+    public void testPrevious() throws Exception {
+        assertThat(3585L, equalTo(getNewPaginator().previous().getRunNumber()));
+    }
+
+    @Test
+    public void testFirst() throws Exception {
+        assertThat(3589L, equalTo(getNewPaginator().first().getRunNumber()));
+    }
+
+    @Test
+    public void testLast() throws Exception {
+        assertThat(3089L, equalTo(getNewPaginator().last().getRunNumber()));
+    }
+
+    @Test
+    public void testHasNext() throws Exception {
+        assertThat(true, equalTo(getNewPaginator().hasNext()));
+    }
+
+    @Test
+    public void testHasPrevious() throws Exception {
+        assertThat(true, equalTo(getNewPaginator().hasPrevious()));
+    }
+
+    @Test
+    public void testNextPage() throws Exception {
+        assertThat(Arrays.asList(3584L, 3583L, 3582L, 3581L, 3580L),
+                equalTo(getRunNumbers(getNewPaginator().lastPageList())));
+    }
+
+    @Test
+    public void testPreviousPage() throws Exception {
+        assertThat(Arrays.asList(3589L, 3588L, 3587L, 3586L, 3585L),
+                equalTo(getRunNumbers(getNewPaginator().lastPageList())));
+    }
+
+    @Test
+    public void testFirstPage() throws Exception {
+        assertThat(Arrays.asList(3589L, 3588L, 3587L, 3586L, 3585L),
+                equalTo(getRunNumbers(getNewPaginator().lastPageList())));
+    }
+
+    @Test
+    public void testLastPage() throws Exception {
+        assertThat(Arrays.asList(3091L, 3090L, 3089L), equalTo(getRunNumbers(getNewPaginator().lastPageList())));
+    }
+
+    @Test
+    public void testJumpToPage() throws Exception {
+        assertThat(3579L, equalTo(getNewPaginator().jumpToPage(3).next().getRunNumber()));
+    }
+
+    @Test
     public void testRepoWithSingleRun() throws Exception {
         Paginator<GHWorkflowRun> paginator = gitHub.getRepository(SINGLE_RUN_REPO_NAME)
                 .queryWorkflowRuns()
@@ -154,7 +263,20 @@ public class GHWorkflowRunPaginationTest extends AbstractGitHubWireMockTest {
         assertThat(paginator.hasNext(), equalTo(false));
     }
 
+    @Test
+    public void testRepoWithNoRuns() throws Exception {
+        Paginator<GHWorkflowRun> paginator = gitHub.getRepository(NO_RUNS_REPO_NAME)
+                .queryWorkflowRuns()
+                .list()
+                .paginator();
+        paginator.next();
+    }
+
     private static List<Long> getRunNumbers(List<GHWorkflowRun> runs) {
         return runs.stream().map(GHWorkflowRun::getRunNumber).collect(Collectors.toList());
+    }
+
+    private Paginator<GHWorkflowRun> getNewPaginator() throws IOException {
+        return repo.getWorkflow("maven-build.yml").listRuns().withPageSize(5).withStartPage(2).paginator();
     }
 }

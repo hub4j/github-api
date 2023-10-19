@@ -91,7 +91,7 @@ public class Paginator<T> implements NavigableIterator<T> {
         if (currentPage != null && nextItemIndex < currentPage.length)
             return currentPage[nextItemIndex++];
         fetchNext();
-        if (currentPage == null) {
+        if (currentPage == null || currentPage.length == 0) {
             throw new NoSuchElementException();
         }
         nextItemIndex = 0;
@@ -120,7 +120,7 @@ public class Paginator<T> implements NavigableIterator<T> {
         if (currentPage != null && nextItemIndex > 0)
             return currentPage[--nextItemIndex];
         fetchPrevious();
-        if (currentPage == null) {
+        if (currentPage == null || currentPage.length == 0) {
             throw new NoSuchElementException();
         }
         nextItemIndex = currentPage.length - 1;
@@ -135,7 +135,9 @@ public class Paginator<T> implements NavigableIterator<T> {
     @Override
     public T first() {
         nextItemIndex = 0;
-        currentPage = base.first();
+        T[] result = base.first();
+        wrapUp(result);
+        currentPage = result;
         return currentPage[nextItemIndex++];
     }
 
@@ -145,7 +147,9 @@ public class Paginator<T> implements NavigableIterator<T> {
      * @return the list
      */
     T[] firstPageArray() {
-        currentPage = base.first();
+        T[] result = base.first();
+        wrapUp(result);
+        currentPage = result;
         nextItemIndex = currentPage.length;
         return currentPage;
     }
@@ -166,7 +170,9 @@ public class Paginator<T> implements NavigableIterator<T> {
      */
     @Override
     public T last() {
-        currentPage = base.last();
+        T[] result = base.last();
+        wrapUp(result);
+        currentPage = result;
         nextItemIndex = currentPage.length - 1;
         return currentPage[nextItemIndex++];
     }
@@ -177,7 +183,9 @@ public class Paginator<T> implements NavigableIterator<T> {
      * @return the list
      */
     T[] lastPageArray() {
-        currentPage = base.last();
+        T[] result = base.last();
+        wrapUp(result);
+        currentPage = result;
         nextItemIndex = currentPage.length;
         return currentPage;
     }

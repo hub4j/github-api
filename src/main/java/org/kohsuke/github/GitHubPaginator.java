@@ -180,6 +180,9 @@ public class GitHubPaginator<T> implements NavigablePageIterator<T> {
         if (!firstCallMade) {
             throw new GHException("Cannot refresh before the first call has been made!");
         }
+        if (client.isOffline()) {
+            return; // cannot populate, will have to live with what we have
+        }
         makeRequest(false);
     }
 

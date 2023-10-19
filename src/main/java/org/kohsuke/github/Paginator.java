@@ -74,7 +74,12 @@ public class Paginator<T> implements NavigableIterator<T> {
      */
     @Override
     public boolean hasNext() {
-        return (currentPage != null && nextItemIndex < currentPage.length) || base.hasNext();
+        if (currentPage != null) {
+            return nextItemIndex < currentPage.length || base.hasNext();
+        } else {
+            fetchNext();
+            return currentPage.length != 0;
+        }
     }
 
     /**
@@ -138,6 +143,9 @@ public class Paginator<T> implements NavigableIterator<T> {
         T[] result = base.first();
         wrapUp(result);
         currentPage = result;
+        if (currentPage.length == 0) {
+            throw new NoSuchElementException();
+        }
         return currentPage[nextItemIndex++];
     }
 
@@ -174,6 +182,9 @@ public class Paginator<T> implements NavigableIterator<T> {
         wrapUp(result);
         currentPage = result;
         nextItemIndex = currentPage.length - 1;
+        if (currentPage.length == 0) {
+            throw new NoSuchElementException();
+        }
         return currentPage[nextItemIndex++];
     }
 
@@ -203,6 +214,9 @@ public class Paginator<T> implements NavigableIterator<T> {
      * @return total number of pages
      */
     public int totalPages() {
+        if (!hasPrevious() && !hasNext()) {
+            return 0;
+        }
         return base.totalCount();
     }
 

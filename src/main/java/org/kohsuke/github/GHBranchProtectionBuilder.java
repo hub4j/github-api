@@ -77,8 +77,8 @@ public class GHBranchProtectionBuilder {
     }
 
     /**
-     * Allows deletion of the protected branch by anyone with write access to the repository.
-     * Set to true to allow deletion of the protected branch. Default: false.
+     * Allows deletion of the protected branch by anyone with write access to the repository. Set to true to allow
+     * deletion of the protected branch. Default: false.
      *
      * @param v
      *            the v
@@ -99,8 +99,8 @@ public class GHBranchProtectionBuilder {
     }
 
     /**
-     * Permits force pushes to the protected branch by anyone with write access to the repository.
-     * Set to true to allow force pushes. Set to false to block force pushes. Default: false.
+     * Permits force pushes to the protected branch by anyone with write access to the repository. Set to true to allow
+     * force pushes. Set to false to block force pushes. Default: false.
      *
      * @param v
      *            the v
@@ -121,8 +121,8 @@ public class GHBranchProtectionBuilder {
     }
 
     /**
-     * Whether users can pull changes from upstream when the branch is locked. Set to true to allow fork syncing.
-     * Set to true to enable. Default: false.
+     * Whether users can pull changes from upstream when the branch is locked. Set to true to allow fork syncing. Set to
+     * true to enable. Default: false.
      *
      * @param v
      *            the v
@@ -225,8 +225,8 @@ public class GHBranchProtectionBuilder {
     }
 
     /**
-     * Whether to set the branch as read-only. If this is true, users will not be able to push to the branch.
-     * Set to true to enable. Default: false.
+     * Whether to set the branch as read-only. If this is true, users will not be able to push to the branch. Set to
+     * true to enable. Default: false.
      *
      * @param v
      *            the v
@@ -313,8 +313,8 @@ public class GHBranchProtectionBuilder {
     }
 
     /**
-     * Require all conversations on code to be resolved before a pull request can be merged into a branch that
-     * matches this rule.
+     * Require all conversations on code to be resolved before a pull request can be merged into a branch that matches
+     * this rule.
      *
      * @return the gh branch protection builder
      */
@@ -323,9 +323,8 @@ public class GHBranchProtectionBuilder {
     }
 
     /**
-     * Require all conversations on code to be resolved before a pull request can be merged into a branch that
-     * matches this rule.
-     * Set to true to enable. Default: false.
+     * Require all conversations on code to be resolved before a pull request can be merged into a branch that matches
+     * this rule. Set to true to enable. Default: false.
      *
      * @param v
      *            the v
@@ -348,8 +347,7 @@ public class GHBranchProtectionBuilder {
     /**
      * Enforces a linear commit Git history, which prevents anyone from pushing merge commits to a branch. Set to true
      * to enforce a linear commit history. Set to false to disable a linear commit Git history. Your repository must
-     * allow squash merging or rebase merging before you can enable a linear commit history.
-     * Default: false.
+     * allow squash merging or rebase merging before you can enable a linear commit history. Default: false.
      *
      * @param v
      *            the v

@@ -33,8 +33,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+// TODO: Auto-generated Javadoc
 /**
- * The GitHub Preview API's license information
+ * The GitHub Preview API's license information.
  *
  * @author Duncan Dickinson
  * @see GitHub#getLicense(String) GitHub#getLicense(String)
@@ -46,16 +47,24 @@ import java.util.Objects;
         justification = "JSON API")
 public class GHLicense extends GHObject {
 
+    /** The name. */
     // these fields are always present, even in the short form
     protected String key, name;
 
+    /** The featured. */
     // the rest is only after populated
     protected Boolean featured;
 
+    /** The body. */
     protected String html_url, description, category, implementation, body;
 
+    /** The required. */
     protected List<String> required = new ArrayList<String>();
+
+    /** The permitted. */
     protected List<String> permitted = new ArrayList<String>();
+
+    /** The forbidden. */
     protected List<String> forbidden = new ArrayList<String>();
 
     /**
@@ -77,7 +86,7 @@ public class GHLicense extends GHObject {
     }
 
     /**
-     * Featured licenses are bold in the new repository drop-down
+     * Featured licenses are bold in the new repository drop-down.
      *
      * @return True if the license is featured, false otherwise
      * @throws IOException
@@ -88,6 +97,13 @@ public class GHLicense extends GHObject {
         return featured;
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public URL getHtmlUrl() throws IOException {
         populate();
         return GitHubClient.parseURL(html_url);
@@ -199,6 +215,13 @@ public class GHLicense extends GHObject {
         }
     }
 
+    /**
+     * Equals.
+     *
+     * @param o
+     *            the o
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -210,6 +233,11 @@ public class GHLicense extends GHObject {
         return Objects.equals(getUrl(), that.getUrl());
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
         return Objects.hashCode(getUrl());

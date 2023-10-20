@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Modifies {@link GHRelease}.
  *
@@ -12,6 +13,12 @@ public class GHReleaseUpdater {
     private final GHRelease base;
     private final Requester builder;
 
+    /**
+     * Instantiates a new GH release updater.
+     *
+     * @param base
+     *            the base
+     */
     GHReleaseUpdater(GHRelease base) {
         this.base = base;
         this.builder = base.root().createRequest();
@@ -79,7 +86,7 @@ public class GHReleaseUpdater {
     }
 
     /**
-     * Optional
+     * Optional.
      *
      * @param prerelease
      *            {@code true} to identify the release as a prerelease. {@code false} to identify the release as a full
@@ -92,7 +99,7 @@ public class GHReleaseUpdater {
     }
 
     /**
-     * Optional
+     * Optional.
      *
      * @param categoryName
      *            the category of the discussion to be created for the release. Category should already exist
@@ -100,6 +107,18 @@ public class GHReleaseUpdater {
      */
     public GHReleaseUpdater categoryName(String categoryName) {
         builder.with("discussion_category_name", categoryName);
+        return this;
+    }
+
+    /**
+     * Optional.
+     *
+     * @param latest
+     *            Whether to make this the latest release. Default is {@code TRUE}
+     * @return the gh release builder
+     */
+    public GHReleaseUpdater makeLatest(GHReleaseBuilder.MakeLatest latest) {
+        builder.with("make_latest", latest);
         return this;
     }
 

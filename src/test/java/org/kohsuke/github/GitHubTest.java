@@ -11,11 +11,18 @@ import java.util.*;
 import static org.hamcrest.Matchers.*;
 import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
 
+// TODO: Auto-generated Javadoc
 /**
  * Unit test for {@link GitHub}.
  */
 public class GitHubTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * List users.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listUsers() throws IOException {
         for (GHUser u : Iterables.limit(gitHub.listUsers(), 10)) {
@@ -24,6 +31,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Gets the repository.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getRepository() throws IOException {
         GHRepository repo = gitHub.getRepository("hub4j/github-api");
@@ -35,11 +48,25 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
 
         try {
             gitHub.getRepository("hub4j_github-api");
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), equalTo("Repository name must be in format owner/repo"));
+        }
+
+        try {
+            gitHub.getRepository("hub4j/github/api");
+            fail();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), equalTo("Repository name must be in format owner/repo"));
         }
     }
 
+    /**
+     * Gets the orgs.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getOrgs() throws IOException {
         int iterations = 10;
@@ -63,6 +90,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertThat(org, not(sameInstance(org2)));
     }
 
+    /**
+     * Search users.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void searchUsers() throws Exception {
         PagedSearchIterable<GHUser> r = gitHub.searchUsers().q("tom").repos(">42").followers(">1000").list();
@@ -72,6 +105,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertThat(r.getTotalCount(), greaterThan(0));
     }
 
+    /**
+     * Test list all repositories.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testListAllRepositories() throws Exception {
         Iterator<GHRepository> itr = gitHub.listAllPublicRepositories().iterator();
@@ -92,6 +131,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Search content.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void searchContent() throws Exception {
         PagedSearchIterable<GHContent> r = gitHub.searchContent()
@@ -160,6 +205,9 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertThat(e.getMessage(), equalTo("qualifier cannot be null or empty"));
     }
 
+    /**
+     * Search content with forks.
+     */
     @Test
     public void searchContentWithForks() {
         final PagedSearchIterable<GHContent> results = gitHub.searchContent()
@@ -204,6 +252,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test list my authorizations.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void testListMyAuthorizations() throws IOException {
         PagedIterable<GHAuthorization> list = gitHub.listMyAuthorizations();
@@ -213,6 +267,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Gets the meta.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getMeta() throws IOException {
         GHMeta meta = gitHub.getMeta();
@@ -246,6 +306,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Gets the my marketplace purchases.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getMyMarketplacePurchases() throws IOException {
         List<GHMarketplaceUserPurchase> userPurchases = gitHub.getMyMarketplacePurchases().toList();
@@ -291,6 +357,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Gzip.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void gzip() throws Exception {
 
@@ -304,6 +376,12 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         assertThat(org.getResponseHeaderFields().get("Content-eNcoding").get(0), is("gzip"));
     }
 
+    /**
+     * Test header field name.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testHeaderFieldName() throws Exception {
 

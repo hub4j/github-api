@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
  * GitHub Marketplace Account type.
  *
@@ -11,10 +12,16 @@ import java.util.Locale;
  * @see GHMarketplaceAccount
  */
 public enum GHMarketplaceAccountType {
-    ORGANIZATION, USER;
+
+    /** The organization. */
+    ORGANIZATION,
+    /** The user. */
+    USER;
 
     /**
      * Returns GitHub's internal representation of this event.
+     *
+     * @return the string
      */
     String symbol() {
         return StringUtils.capitalize(name().toLowerCase(Locale.ENGLISH));

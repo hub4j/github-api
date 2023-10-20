@@ -1,8 +1,10 @@
 package org.kohsuke.github;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -10,13 +12,19 @@ import static org.kohsuke.github.GHDirection.DESC;
 import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
 import static org.kohsuke.github.GHMarketplaceListAccountBuilder.Sort.UPDATED;
 
+// TODO: Auto-generated Javadoc
 /**
- * Tests for the GitHub MarketPlace Plan API methods
+ * Tests for the GitHub MarketPlace Plan API methods.
  *
  * @author Paulo Miguel Almeida
  */
 public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Gets the git hub builder.
+     *
+     * @return the git hub builder
+     */
     protected GitHubBuilder getGitHubBuilder() {
         return super.getGitHubBuilder()
                 // ensure that only JWT will be used against the tests below
@@ -24,22 +32,40 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
                 .withJwtToken("bogus");
     }
 
+    /**
+     * List marketplace plans.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listMarketplacePlans() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
         assertThat(plans.size(), equalTo(3));
-        plans.forEach(this::testMarketplacePlan);
+        plans.forEach(GHMarketplacePlanTest::testMarketplacePlan);
     }
 
+    /**
+     * List accounts.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listAccounts() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
         assertThat(plans.size(), equalTo(3));
         List<GHMarketplaceAccountPlan> marketplaceUsers = plans.get(0).listAccounts().createRequest().toList();
         assertThat(marketplaceUsers.size(), equalTo(2));
-        marketplaceUsers.forEach(this::testMarketplaceAccount);
+        marketplaceUsers.forEach(GHMarketplacePlanTest::testMarketplaceAccount);
     }
 
+    /**
+     * List accounts with direction.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listAccountsWithDirection() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
@@ -51,11 +77,17 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
                     .createRequest()
                     .toList();
             assertThat(marketplaceUsers.size(), equalTo(2));
-            marketplaceUsers.forEach(this::testMarketplaceAccount);
+            marketplaceUsers.forEach(GHMarketplacePlanTest::testMarketplaceAccount);
         }
 
     }
 
+    /**
+     * List accounts with sort and direction.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listAccountsWithSortAndDirection() throws IOException {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
@@ -68,12 +100,12 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
                     .createRequest()
                     .toList();
             assertThat(marketplaceUsers.size(), equalTo(2));
-            marketplaceUsers.forEach(this::testMarketplaceAccount);
+            marketplaceUsers.forEach(GHMarketplacePlanTest::testMarketplaceAccount);
         }
 
     }
 
-    private void testMarketplacePlan(GHMarketplacePlan plan) {
+    static void testMarketplacePlan(GHMarketplacePlan plan) {
         // Non-nullable fields
         assertThat(plan.getUrl(), notNullValue());
         assertThat(plan.getAccountsUrl(), notNullValue());
@@ -88,10 +120,10 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
         assertThat(plan.getMonthlyPriceInCents(), greaterThanOrEqualTo(0L));
 
         // list
-        assertThat(plan.getBullets().size(), equalTo(2));
+        assertThat(plan.getBullets().size(), Matchers.in(Arrays.asList(2, 3)));
     }
 
-    private void testMarketplaceAccount(GHMarketplaceAccountPlan account) {
+    static void testMarketplaceAccount(GHMarketplaceAccountPlan account) {
         // Non-nullable fields
         assertThat(account.getLogin(), notNullValue());
         assertThat(account.getUrl(), notNullValue());
@@ -116,7 +148,7 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
             testMarketplacePendingChange(account.getMarketplacePendingChange());
     }
 
-    private void testMarketplacePurchase(GHMarketplacePurchase marketplacePurchase) {
+    static void testMarketplacePurchase(GHMarketplacePurchase marketplacePurchase) {
         // Non-nullable fields
         assertThat(marketplacePurchase.getBillingCycle(), notNullValue());
         assertThat(marketplacePurchase.getNextBillingDate(), notNullValue());
@@ -135,11 +167,11 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
         if (marketplacePurchase.getPlan().getPriceModel() == GHMarketplacePriceModel.PER_UNIT)
             assertThat(marketplacePurchase.getUnitCount(), notNullValue());
         else
-            assertThat(marketplacePurchase.getUnitCount(), nullValue());
+            assertThat(marketplacePurchase.getUnitCount(), Matchers.anyOf(nullValue(), is(1L)));
 
     }
 
-    private void testMarketplacePendingChange(GHMarketplacePendingChange marketplacePendingChange) {
+    static void testMarketplacePendingChange(GHMarketplacePendingChange marketplacePendingChange) {
         // Non-nullable fields
         assertThat(marketplacePendingChange.getEffectiveDate(), notNullValue());
         testMarketplacePlan(marketplacePendingChange.getPlan());

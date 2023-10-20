@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Content of a repository.
  *
@@ -171,6 +172,10 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
 
     /**
      * Retrieves the actual content stored here.
+     *
+     * @return the input stream
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     /**
      * Retrieves the actual bytes of the blob.
@@ -316,12 +321,11 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
         String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);
 
         Requester requester = root().createRequest()
-                .method("POST")
+                .method("PUT")
                 .with("path", path)
                 .with("message", commitMessage)
                 .with("sha", sha)
-                .with("content", encodedContent)
-                .method("PUT");
+                .with("content", encodedContent);
 
         if (branch != null) {
             requester.with("branch", branch);
@@ -363,11 +367,10 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
         Requester requester = root().createRequest()
-                .method("POST")
+                .method("DELETE")
                 .with("path", path)
                 .with("message", commitMessage)
-                .with("sha", sha)
-                .method("DELETE");
+                .with("sha", sha);
 
         if (branch != null) {
             requester.with("branch", branch);
@@ -380,10 +383,26 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
         return response;
     }
 
+    /**
+     * Gets the api route.
+     *
+     * @param repository
+     *            the repository
+     * @param path
+     *            the path
+     * @return the api route
+     */
     static String getApiRoute(GHRepository repository, String path) {
         return repository.getApiTailUrl("contents/" + path);
     }
 
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH content
+     */
     GHContent wrap(GHRepository owner) {
         this.repository = owner;
         return this;
@@ -393,6 +412,9 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * Fully populate the data by retrieving missing data.
      *
      * Depending on the original API call where this object is created, it may not contain everything.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Override
     public synchronized void refresh() throws IOException {

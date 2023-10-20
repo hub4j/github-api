@@ -25,12 +25,12 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
-import static com.tngtech.archunit.core.domain.JavaClass.namesOf;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameContaining;
 import static com.tngtech.archunit.core.domain.properties.HasOwner.Predicates.With.owner;
@@ -40,6 +40,10 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ArchTests.
+ */
 public class ArchTests {
 
     private static final JavaClasses classFiles = new ClassFileImporter()
@@ -57,18 +61,24 @@ public class ArchTests {
             "preview has no required media types defined") {
 
         @Override
-        public boolean apply(JavaAnnotation<?> javaAnnotation) {
+        public boolean test(JavaAnnotation<?> javaAnnotation) {
             boolean isPreview = javaAnnotation.getRawType().isEquivalentTo(Preview.class);
             Object[] values = (Object[]) javaAnnotation.getProperties().get("value");
             return isPreview && values != null && values.length < 1;
         }
     };
 
+    /**
+     * Before class.
+     */
     @BeforeClass
     public static void beforeClass() {
         assertThat(classFiles.size(), greaterThan(0));
     }
 
+    /**
+     * Test require use of assert that.
+     */
     @Test
     public void testRequireUseOfAssertThat() {
 
@@ -84,6 +94,9 @@ public class ArchTests {
         onlyAssertThatRule.check(testClassFiles);
     }
 
+    /**
+     * Test api stability.
+     */
     @Test
     public void testApiStability() {
         assertThat("OkHttpConnector must implement HttpConnector",
@@ -91,6 +104,9 @@ public class ArchTests {
                 Matchers.containsInAnyOrder(HttpConnector.class));
     }
 
+    /**
+     * Test require use of only specific apache commons.
+     */
     @Test
     public void testRequireUseOfOnlySpecificApacheCommons() {
 
@@ -112,6 +128,7 @@ public class ArchTests {
                         targetMethodIs(ToStringBuilder.class, "append", String.class, Object.class),
                         targetMethodIs(ToStringBuilder.class, "append", String.class, long.class),
                         targetMethodIs(ToStringBuilder.class, "append", String.class, int.class),
+                        targetMethodIs(ToStringBuilder.class, "append", String.class, boolean.class),
                         targetMethodIs(ToStringBuilder.class, "isEmpty"),
                         targetMethodIs(ToStringBuilder.class, "equals"),
                         targetMethodIs(ToStringBuilder.class, "capitalize"),
@@ -135,6 +152,15 @@ public class ArchTests {
         onlyApprovedApacheCommonsMethods.check(classFiles);
     }
 
+    /**
+     * Not call methods in package unless.
+     *
+     * @param packageIdentifier
+     *            the package identifier
+     * @param unlessPredicates
+     *            the unless predicates
+     * @return the arch condition
+     */
     public static ArchCondition<JavaClass> notCallMethodsInPackageUnless(final String packageIdentifier,
             final DescribedPredicate<JavaCall<?>>... unlessPredicates) {
         DescribedPredicate<JavaCall<?>> restrictedPackageCalls = target(
@@ -150,6 +176,17 @@ public class ArchTests {
         return not(callMethodWhere(restrictedPackageCalls));
     }
 
+    /**
+     * Target method is.
+     *
+     * @param owner
+     *            the owner
+     * @param methodName
+     *            the method name
+     * @param parameterTypes
+     *            the parameter types
+     * @return the described predicate
+     */
     public static DescribedPredicate<JavaCall<?>> targetMethodIs(Class<?> owner,
             String methodName,
             Class<?>... parameterTypes) {
@@ -157,9 +194,24 @@ public class ArchTests {
                 .and(JavaCall.Predicates.target(name(methodName)))
                 .and(JavaCall.Predicates.target(rawParameterTypes(parameterTypes)))
                 .as("method is %s",
-                        Formatters.formatMethodSimple(owner.getSimpleName(), methodName, namesOf(parameterTypes)));
+                        Formatters.formatMethodSimple(owner.getSimpleName(),
+                                methodName,
+                                Arrays.stream(parameterTypes)
+                                        .map(item -> item.getName())
+                                        .collect(Collectors.toList())));
     }
 
+    /**
+     * Unless.
+     *
+     * @param <T>
+     *            the generic type
+     * @param first
+     *            the first
+     * @param second
+     *            the second
+     * @return the described predicate
+     */
     public static <T> DescribedPredicate<T> unless(DescribedPredicate<? super T> first,
             DescribedPredicate<? super T> second) {
         return new UnlessPredicate(first, second);
@@ -176,8 +228,8 @@ public class ArchTests {
         }
 
         @Override
-        public boolean apply(T input) {
-            return current.apply(input) && !other.apply(input);
+        public boolean test(T input) {
+            return current.test(input) && !other.test(input);
         }
     }
 }

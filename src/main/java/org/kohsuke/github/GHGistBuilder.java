@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Builder pattern for creating a new Gist.
  *

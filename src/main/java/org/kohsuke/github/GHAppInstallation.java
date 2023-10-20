@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import static org.kohsuke.github.internal.Previews.GAMBIT;
 import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Github App Installation.
  *
@@ -45,6 +46,11 @@ public class GHAppInstallation extends GHObject {
     private GHRepositorySelection repositorySelection;
     private String htmlUrl;
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }
@@ -117,7 +123,15 @@ public class GHAppInstallation extends GHObject {
      * List repositories that this app installation can access.
      *
      * @return the paged iterable
+     * @deprecated This method cannot work on a {@link GHAppInstallation} retrieved from
+     *             {@link GHApp#listInstallations()} (for example), except when resorting to unsupported hacks involving
+     *             {@link GHAppInstallation#setRoot(GitHub)} to switch from an application client to an installation
+     *             client. This method will be removed. You should instead use an installation client (with an
+     *             installation token, not a JWT), retrieve a {@link GHAuthenticatedAppInstallation} from
+     *             {@link GitHub#getInstallation()}, then call
+     *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
      */
+    @Deprecated
     @Preview(MACHINE_MAN)
     public PagedSearchIterable<GHRepository> listRepositories() {
         GitHubRequest request;
@@ -346,5 +360,26 @@ public class GHAppInstallation extends GHObject {
     @BetaApi
     public GHAppCreateTokenBuilder createToken() {
         return new GHAppCreateTokenBuilder(root(), String.format("/app/installations/%d/access_tokens", getId()));
+    }
+
+    /**
+     * Shows whether the user or organization account actively subscribes to a plan listed by the authenticated GitHub
+     * App. When someone submits a plan change that won't be processed until the end of their billing cycle, you will
+     * also see the upcoming pending change.
+     *
+     * <p>
+     * GitHub Apps must use a JWT to access this endpoint.
+     * <p>
+     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
+     *
+     * @return a GHMarketplaceAccountPlan instance
+     * @throws IOException
+     *             it may throw an {@link IOException}
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account">Get
+     *      a subscription plan for an account</a>
+     */
+    public GHMarketplaceAccountPlan getMarketplaceAccount() throws IOException {
+        return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();
     }
 }

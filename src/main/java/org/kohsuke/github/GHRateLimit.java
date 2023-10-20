@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 
 import static java.util.logging.Level.FINEST;
 
+// TODO: Auto-generated Javadoc
 /**
  * Rate limit.
  *
@@ -122,6 +123,18 @@ public class GHRateLimit {
         }
     }
 
+    /**
+     * Instantiates a new GH rate limit.
+     *
+     * @param core
+     *            the core
+     * @param search
+     *            the search
+     * @param graphql
+     *            the graphql
+     * @param integrationManifest
+     *            the integration manifest
+     */
     @JsonCreator
     GHRateLimit(@Nonnull @JsonProperty("core") Record core,
             @Nonnull @JsonProperty("search") Record search,
@@ -240,12 +253,24 @@ public class GHRateLimit {
         return integrationManifest;
     }
 
+    /**
+     * To string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
         return "GHRateLimit {" + "core " + getCore().toString() + ", search " + getSearch().toString() + ", graphql "
                 + getGraphQL().toString() + ", integrationManifest " + getIntegrationManifest().toString() + "}";
     }
 
+    /**
+     * Equals.
+     *
+     * @param o
+     *            the o
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -260,6 +285,11 @@ public class GHRateLimit {
                 && getIntegrationManifest().equals(rateLimit.getIntegrationManifest());
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getCore(), getSearch(), getGraphQL(), getIntegrationManifest());
@@ -317,7 +347,7 @@ public class GHRateLimit {
     }
 
     /**
-     * A limit record used as a placeholder when the the actual limit is not known.
+     * A limit record used as a placeholder when the actual limit is not known.
      *
      * @since 1.100
      */
@@ -339,7 +369,10 @@ public class GHRateLimit {
          */
         static long unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
 
+        /** The Constant unknownLimit. */
         static final int unknownLimit = 1000000;
+
+        /** The Constant unknownRemaining. */
         static final int unknownRemaining = 999999;
 
         // The default UnknownLimitRecord is an expired record.
@@ -358,6 +391,11 @@ public class GHRateLimit {
             super(unknownLimit, unknownRemaining, resetEpochSeconds);
         }
 
+        /**
+         * Current.
+         *
+         * @return the record
+         */
         static Record current() {
             Record result = current.get();
             if (result.isExpired()) {
@@ -379,8 +417,8 @@ public class GHRateLimit {
     /**
      * A rate limit record.
      *
-     * @since 1.100
      * @author Liam Newman
+     * @since 1.100
      */
     public static class Record {
         /**
@@ -490,7 +528,7 @@ public class GHRateLimit {
             } else if (!(other instanceof UnknownLimitRecord)) {
                 // If the above is not the case that means other has a later reset
                 // or the same resent and fewer requests remaining.
-                // If the other record is not an unknown record, the the other is more recent
+                // If the other record is not an unknown record, the other is more recent
                 return other;
             } else if (this.isExpired() && !other.isExpired()) {
                 // The other is an unknown record.
@@ -606,12 +644,24 @@ public class GHRateLimit {
             return new Date(resetDate.getTime());
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return "{" + "remaining=" + getRemaining() + ", limit=" + getLimit() + ", resetDate=" + getResetDate()
                     + '}';
         }
 
+        /**
+         * Equals.
+         *
+         * @param o
+         *            the o
+         * @return true, if successful
+         */
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -626,6 +676,11 @@ public class GHRateLimit {
                     && getResetDate().equals(record.getResetDate());
         }
 
+        /**
+         * Hash code.
+         *
+         * @return the int
+         */
         @Override
         public int hashCode() {
             return Objects.hash(getRemaining(), getLimit(), getResetEpochSeconds(), getResetDate());

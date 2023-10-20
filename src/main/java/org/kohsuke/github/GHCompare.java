@@ -11,6 +11,7 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 
+// TODO: Auto-generated Javadoc
 /**
  * The model user for comparing 2 commits in the GitHub API.
  *
@@ -185,6 +186,10 @@ public class GHCompare {
     /**
      * Gets an array of files.
      *
+     * By default, the file array is limited to 300 results. To retrieve the full list of files, iterate over each
+     * commit returned by {@link GHCompare#listCommits} and use {@link GHCommit#listFiles} to get the files for each
+     * commit.
+     *
      * @return A copy of the array being stored in the class.
      */
     public GHCommit.File[] getFiles() {
@@ -223,8 +228,8 @@ public class GHCompare {
     }
 
     /**
-     * Compare commits had a child commit element with additional details we want to capture. This extenstion of
-     * GHCommit provides that.
+     * Compare commits had a child commit element with additional details we want to capture. This extension of GHCommit
+     * provides that.
      */
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },
             justification = "JSON API")
@@ -344,7 +349,15 @@ public class GHCompare {
      * The enum Status.
      */
     public static enum Status {
-        behind, ahead, identical, diverged
+
+        /** The behind. */
+        behind,
+        /** The ahead. */
+        ahead,
+        /** The identical. */
+        identical,
+        /** The diverged. */
+        diverged
     }
 
     /**
@@ -354,9 +367,19 @@ public class GHCompare {
 
         private GHCompare result;
 
+        /**
+         * Instantiates a new GH compare commits iterable.
+         */
         public GHCompareCommitsIterable() {
         }
 
+        /**
+         * Iterator.
+         *
+         * @param pageSize
+         *            the page size
+         * @return the paged iterator
+         */
         @Nonnull
         @Override
         public PagedIterator<Commit> _iterator(int pageSize) {
@@ -375,6 +398,13 @@ public class GHCompare {
                     item -> item.wrapUp(owner));
         }
 
+        /**
+         * Adapt.
+         *
+         * @param base
+         *            the base
+         * @return the iterator
+         */
         protected Iterator<Commit[]> adapt(final Iterator<GHCompare> base) {
             return new Iterator<Commit[]>() {
                 public boolean hasNext() {

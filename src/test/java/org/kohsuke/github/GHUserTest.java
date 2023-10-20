@@ -6,14 +6,25 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHUserTest.
+ */
 public class GHUserTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Checks if is member of.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void isMemberOf() throws IOException {
         GHUser u = gitHub.getUser("bitwiseman");
@@ -35,6 +46,12 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         assertThat(u.isPublicMemberOf(org), is(false));
     }
 
+    /**
+     * List follows and followers.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listFollowsAndFollowers() throws IOException {
         GHUser u = gitHub.getUser("rtyler");
@@ -51,6 +68,12 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         return users;
     }
 
+    /**
+     * Gets the keys.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void getKeys() throws IOException {
         GHUser u = gitHub.getUser("rtyler");
@@ -87,6 +110,12 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
                 equalTo("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3JhH2FZBDmHLjXTcBoV6tdcYKmsQ7sgu8k1RsUhwxGsXm65+Cuas6GcMVoA1DncKfJGQkulHDFiTxIROIBmedh9/otHWBlZ4HqYZ4MQ1A8W5quULkXwX/kF+UdRBUxFvjigibEbuHB+LARVxRRzFlPnTSE9rAfAv8OOEsb3lNUGT/IGhN8w1vwe8GclB90tgqN1RBDgrVqwLFwn5AfrW9kUIa2f2oT4RjYu1OrhKhVIIzfHADo85aD+s8wEhqwI96BCJG3qTWrypoHwBUoj1O6Ak5CGc1iKz9o8XyTMjudRt2ddCjfOtxsuwSlTbVtQXJGIpgKviX1sgh4pPvGh7BVAFP+mdAK4F+mEugDnuj47GO/K5KGGDRCL56kh9+h28l4q/+fZvp7DhtmSN2EzrVAdQFskF8yY/6Xit/aAvjeKm03DcjbylSXbG26EJefaLHlwYFq2mUFRMak25wuuCZS71GF3RC3Sl/bMoxBKRYkyfYtGafeaYTFNGn8Dbd+hfVUCz31ebI8cvmlQR5b5AbCre3T7HTVgw8FKbAxWRf1Fio56PnqHsj+sT1KVj255Zo1F8iD9GrgERSVAlkh5bY/CKszQ8ZSd01c9Qp2a47/gR7XAAbxhzGHP+cSOlrqDlJ24fbPtcpVsM0llqKUcxpmoOBFNboRmE1QqnSmAf9ww=="));
     }
 
+    /**
+     * List public repositories.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listPublicRepositories() throws IOException {
         GHUser user = gitHub.getUser("kohsuke");
@@ -103,6 +132,12 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         assertThat(i, equalTo(115));
     }
 
+    /**
+     * List projects.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listProjects() throws IOException {
         GHUser user = gitHub.getUser("t0m4uk1991");
@@ -114,6 +149,12 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         assertThat(projects.get(2).getName(), is("Project 3"));
     }
 
+    /**
+     * List public repositories page size 62.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void listPublicRepositoriesPageSize62() throws IOException {
         GHUser user = gitHub.getUser("kohsuke");
@@ -130,6 +171,12 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         assertThat(i, equalTo(115));
     }
 
+    /**
+     * Creates the and count private repos.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void createAndCountPrivateRepos() throws IOException {
         String login = gitHub.getMyself().getLogin();
@@ -149,6 +196,12 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Verify bio and hireable.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     public void verifyBioAndHireable() throws IOException {
         GHUser u = gitHub.getUser("Chew");
@@ -161,5 +214,17 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         assertThat(u.getFollowingCount(), equalTo(3));
         assertThat(u.getPublicGistCount(), equalTo(4));
         assertThat(u.getPublicRepoCount(), equalTo(96));
+    }
+
+    /**
+     * Verify ldapdn.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void verifyLdapdn() throws IOException {
+        GHUser u = gitHub.getUser("kartikpatodi");
+        assertThat(u.getLdapDn().orElse(""), not(emptyString()));
     }
 }

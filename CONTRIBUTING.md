@@ -1,5 +1,15 @@
 # Contributing
 
+## Make sure it's spotless
+
+Run `mvn spotless:apply` to fix any formatting, etc issues.
+
+## Make sure you pass CI
+
+If the following does not succeed, you will not pass the pull request checks.
+
+`mvn -D enable-ci clean install site` 
+
 ## Using WireMock and Snapshots
 
 This project has started converting to using WireMock to stub out http responses instead of use live data.
@@ -72,7 +82,7 @@ When modifying existing tests, you can change the stubbed WireMock data files by
 #### Manual editing of data (minor changes only)
 
 If you know what data will change, it is sometimes simplest to make any required changes to the data files manually.
-This can be easier if the changes are minor or when you development environment is not setup to to take updated snapshots.
+This can be easier if the changes are minor or when you development environment is not setup to take updated snapshots.
 
 #### Generating a new snapshot
 

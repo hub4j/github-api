@@ -3,6 +3,7 @@ package org.kohsuke.github.extras.authorization;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.jackson.io.JacksonSerializer;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.File;
@@ -41,23 +42,66 @@ public class JWTTokenProvider implements AuthorizationProvider {
      */
     private final String applicationId;
 
+    /**
+     * Create a JWTTokenProvider
+     *
+     * @param applicationId
+     *            the application id
+     * @param keyFile
+     *            the key file
+     * @throws GeneralSecurityException
+     *             when an error occurs
+     * @throws IOException
+     *             when an error occurs
+     */
     public JWTTokenProvider(String applicationId, File keyFile) throws GeneralSecurityException, IOException {
         this(applicationId, keyFile.toPath());
     }
 
+    /**
+     * Create a JWTTokenProvider
+     *
+     * @param applicationId
+     *            the application id
+     * @param keyPath
+     *            the key path
+     * @throws GeneralSecurityException
+     *             when an error occurs
+     * @throws IOException
+     *             when an error occurs
+     */
     public JWTTokenProvider(String applicationId, Path keyPath) throws GeneralSecurityException, IOException {
         this(applicationId, new String(Files.readAllBytes(keyPath), StandardCharsets.UTF_8));
     }
 
+    /**
+     * Create a JWTTokenProvider
+     *
+     * @param applicationId
+     *            the application id
+     * @param keyString
+     *            the key string
+     * @throws GeneralSecurityException
+     *             when an error occurs
+     */
     public JWTTokenProvider(String applicationId, String keyString) throws GeneralSecurityException {
         this(applicationId, getPrivateKeyFromString(keyString));
     }
 
+    /**
+     * Create a JWTTokenProvider
+     *
+     * @param applicationId
+     *            the application id
+     * @param privateKey
+     *            the private key
+     */
     public JWTTokenProvider(String applicationId, PrivateKey privateKey) {
         this.privateKey = privateKey;
         this.applicationId = applicationId;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getEncodedAuthorization() throws IOException {
         synchronized (this) {
@@ -79,7 +123,7 @@ public class JWTTokenProvider implements AuthorizationProvider {
      * <p>
      * Made internal for testing
      *
-     * @return false if the the token has been refreshed within the required window, otherwise true
+     * @return false if the token has been refreshed within the required window, otherwise true
      */
     boolean isNotValid() {
         return Instant.now().isAfter(validUntil);
@@ -138,7 +182,7 @@ public class JWTTokenProvider implements AuthorizationProvider {
         validUntil = expiration.minus(Duration.ofMinutes(2));
 
         // Builds the JWT and serializes it to a compact, URL-safe string
-        return builder.compact();
+        return builder.serializeToJsonWith(new JacksonSerializer<>()).compact();
     }
 
     Instant getIssuedAt(Instant now) {

@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
  * Search repositories.
  *
@@ -7,6 +8,13 @@ package org.kohsuke.github;
  * @see GitHub#searchRepositories() GitHub#searchRepositories()
  */
 public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
+
+    /**
+     * Instantiates a new GH repository search builder.
+     *
+     * @param root
+     *            the root
+     */
     GHRepositorySearchBuilder(GitHub root) {
         super(root, RepositorySearchResult.class);
     }
@@ -122,11 +130,10 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * Search by repository visibility
+     * Search by repository visibility.
      *
      * @param visibility
      *            repository visibility
-     *
      * @return the gh repository search builder
      * @throws GHException
      *             if {@link GHRepository.Visibility#UNKNOWN} is passed. UNKNOWN is a placeholder for unexpected values
@@ -222,6 +229,17 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
+     * Org gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder org(String v) {
+        return q("org:" + v);
+    }
+
+    /**
      * Order gh repository search builder.
      *
      * @param v
@@ -249,7 +267,13 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      * The enum Sort.
      */
     public enum Sort {
-        STARS, FORKS, UPDATED
+
+        /** The stars. */
+        STARS,
+        /** The forks. */
+        FORKS,
+        /** The updated. */
+        UPDATED
     }
 
     /**
@@ -282,10 +306,22 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
         PARENT_ONLY("");
 
         private String filterMode;
+
+        /**
+         * Instantiates a new fork.
+         *
+         * @param mode
+         *            the mode
+         */
         Fork(final String mode) {
             this.filterMode = mode;
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return filterMode;
@@ -303,6 +339,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
         }
     }
 
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
     @Override
     protected String getApiUrl() {
         return "/search/repositories";

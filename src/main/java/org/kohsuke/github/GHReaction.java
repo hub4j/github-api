@@ -7,6 +7,7 @@ import java.net.URL;
 
 import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Reaction to issue, comment, PR, and so on.
  *
@@ -40,6 +41,8 @@ public class GHReaction extends GHObject {
 
     /**
      * Reaction has no HTML URL. Don't call this method.
+     *
+     * @return the html url
      */
     @Deprecated
     public URL getHtmlUrl() {
@@ -51,8 +54,13 @@ public class GHReaction extends GHObject {
      *
      * @throws IOException
      *             the io exception
+     * @see <a href="https://github.blog/changelog/2022-02-11-legacy-delete-reactions-rest-api-removed/">Legacy Delete
+     *      reactions REST API removed</a>
+     * @deprecated this API is no longer supported by GitHub, keeping it as is for old versions of GitHub Enterprise
      */
+    @Deprecated
     public void delete() throws IOException {
-        root().createRequest().method("DELETE").withPreview(SQUIRREL_GIRL).withUrlPath("/reactions/" + getId()).send();
+        throw new UnsupportedOperationException(
+                "This method is not supported anymore. Please use Reactable#deleteReaction(GHReaction).");
     }
 }

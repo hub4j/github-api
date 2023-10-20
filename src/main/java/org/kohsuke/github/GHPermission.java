@@ -24,8 +24,9 @@
 
 package org.kohsuke.github;
 
-import java.util.Locale;
+import org.kohsuke.github.internal.EnumUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Permission for a user in a repository.
  *
@@ -51,7 +52,7 @@ class GHPermission {
      * @return the permission type
      */
     public GHPermissionType getPermissionType() {
-        return Enum.valueOf(GHPermissionType.class, permission.toUpperCase(Locale.ENGLISH));
+        return EnumUtils.getEnumOrDefault(GHPermissionType.class, permission, GHPermissionType.UNKNOWN);
     }
 
     /**

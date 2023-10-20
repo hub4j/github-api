@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+// TODO: Auto-generated Javadoc
 /**
  * GitHub Marketplace plan pricing model.
  *
@@ -9,11 +10,23 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @see GHMarketplacePlan
  */
 public enum GHMarketplacePriceModel {
-    FREE("free"), PER_UNIT("per-unit"), FLAT_RATE("flat-rate");
+
+    /** The free. */
+    FREE("FREE"),
+    /** The per unit. */
+    PER_UNIT("PER_UNIT"),
+    /** The flat rate. */
+    FLAT_RATE("FLAT_RATE");
 
     @JsonValue
     private final String internalName;
 
+    /**
+     * Instantiates a new GH marketplace price model.
+     *
+     * @param internalName
+     *            the internal name
+     */
     GHMarketplacePriceModel(String internalName) {
         this.internalName = internalName;
     }

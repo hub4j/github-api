@@ -24,7 +24,7 @@
       "monthly_price_in_cents": 1099,
       "yearly_price_in_cents": 11870,
       "has_free_trial": false,
-      "price_model": "flat-rate",
+      "price_model": "FLAT_RATE",
       "state": "published",
       "unit_name": null,
       "bullets": [
@@ -56,7 +56,7 @@
       "description": "A free CI solution",
       "monthly_price_in_cents": 0,
       "yearly_price_in_cents": 0,
-      "price_model": "free",
+      "price_model": "FREE",
       "has_free_trial": false,
       "state": "published",
       "unit_name": null,

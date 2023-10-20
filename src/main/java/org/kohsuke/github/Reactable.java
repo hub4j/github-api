@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Those {@link GHObject}s that can have {@linkplain GHReaction reactions}.
  *
@@ -30,4 +31,14 @@ public interface Reactable {
      */
     @Preview(SQUIRREL_GIRL)
     GHReaction createReaction(ReactionContent content) throws IOException;
+
+    /**
+     * Delete a reaction from this object.
+     *
+     * @param reaction
+     *            the reaction to delete
+     * @throws IOException
+     *             the io exception
+     */
+    void deleteReaction(GHReaction reaction) throws IOException;
 }

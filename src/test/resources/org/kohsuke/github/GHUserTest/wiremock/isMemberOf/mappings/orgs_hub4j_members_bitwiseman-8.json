@@ -1,0 +1,38 @@
+{
+  "id": "250f3756-db0e-4cec-99de-0500d80430f0",
+  "name": "orgs_hub4j_members_bitwiseman",
+  "request": {
+    "url": "/orgs/hub4j/members/bitwiseman",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 302,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 13:41:55 GMT",
+      "Content-Type": "text/html;charset=utf-8",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4992",
+      "X-RateLimit-Reset": "1646404914",
+      "X-RateLimit-Used": "8",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "BA74:361E:4763743:489312C:62221723",
+      "Location": "https://api.github.com/organizations/54909825/public_members/bitwiseman"
+    }
+  },
+  "uuid": "250f3756-db0e-4cec-99de-0500d80430f0",
+  "persistent": true,
+  "insertionIndex": 8
+}

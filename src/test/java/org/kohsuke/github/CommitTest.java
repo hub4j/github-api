@@ -11,18 +11,34 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class CommitTest.
+ *
  * @author Kohsuke Kawaguchi
  */
 public class CommitTest extends AbstractGitHubWireMockTest {
+
+    /**
+     * Last status.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test // issue 152
     public void lastStatus() throws IOException {
         GHTag t = gitHub.getRepository("stapler/stapler").listTags().iterator().next();
         assertThat(t.getCommit().getLastStatus(), notNullValue());
     }
 
+    /**
+     * Test get files.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test // issue 230
-    public void listFiles() throws Exception {
+    public void getFiles() throws Exception {
         GHRepository repo = gitHub.getRepository("stapler/stapler");
         PagedIterable<GHCommit> commits = repo.queryCommits().path("pom.xml").list();
         for (GHCommit commit : Iterables.limit(commits, 10)) {
@@ -31,6 +47,55 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test list files where there are less than 300 files in a commit.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test // issue 1669
+    public void listFilesWhereCommitHasSmallChange() throws Exception {
+        GHRepository repo = getRepository();
+        GHCommit commit = repo.getCommit("dabf0e89fe7107d6e294a924561533ecf80f2384");
+
+        assertThat(commit.listFiles().toList().size(), equalTo(28));
+    }
+
+    /**
+     * Test list files where there are more than 300 files in a commit.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test // issue 1669
+    public void listFilesWhereCommitHasLargeChange() throws Exception {
+        GHRepository repo = getRepository();
+        GHCommit commit = repo.getCommit("b83812aa76bb7c3c43da96fbf8aec1e45db87624");
+
+        assertThat(commit.listFiles().toList().size(), equalTo(691));
+    }
+
+    /**
+     * Tests the commit message.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void getMessage() throws Exception {
+        GHRepository repo = getRepository();
+        GHCommit commit = repo.getCommit("dabf0e89fe7107d6e294a924561533ecf80f2384");
+
+        assertThat(commit.getCommitShortInfo().getMessage(), notNullValue());
+        assertThat(commit.getCommitShortInfo().getMessage(), equalTo("A commit with a few files"));
+    }
+
+    /**
+     * Test query commits.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testQueryCommits() throws Exception {
         List<String> sha1 = new ArrayList<String>();
@@ -112,6 +177,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
 
     }
 
+    /**
+     * List pull requests of not included commit.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void listPullRequestsOfNotIncludedCommit() throws Exception {
         GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
@@ -122,6 +193,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
                 commit.listPullRequests().toList().isEmpty());
     }
 
+    /**
+     * List pull requests.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void listPullRequests() throws Exception {
         GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
@@ -137,6 +214,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
                 listedPrs.stream().findFirst().filter(it -> it.getNumber() == prNumber).isPresent());
     }
 
+    /**
+     * List pull requests of commit with 2 pull requests.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void listPullRequestsOfCommitWith2PullRequests() throws Exception {
         GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
@@ -153,6 +236,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
                         Arrays.stream(expectedPrs).anyMatch(prNumber -> prNumber.equals(pr.getNumber()))));
     }
 
+    /**
+     * List branches where head.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void listBranchesWhereHead() throws Exception {
         GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
@@ -168,6 +257,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
                         .isPresent());
     }
 
+    /**
+     * List branches where head 2 heads.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void listBranchesWhereHead2Heads() throws Exception {
         GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
@@ -179,6 +274,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
                 equalTo(2));
     }
 
+    /**
+     * List branches where head of commit with head nowhere.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void listBranchesWhereHeadOfCommitWithHeadNowhere() throws Exception {
         GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
@@ -189,6 +290,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
                 commit.listBranchesWhereHead().toList().isEmpty());
     }
 
+    /**
+     * Commit signature verification.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test // issue 737
     public void commitSignatureVerification() throws Exception {
         GHRepository repo = gitHub.getRepository("stapler/stapler");
@@ -206,6 +313,12 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Commit date not null.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test // issue 883
     public void commitDateNotNull() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j/github-api");
@@ -217,5 +330,20 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         assertThat(commit.getCommitShortInfo().getCommitDate().toInstant().getEpochSecond(), equalTo(1609207652L));
         assertThat(commit.getCommitShortInfo().getCommitDate(),
                 equalTo(commit.getCommitShortInfo().getCommitter().getDate()));
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("CommitTest");
     }
 }

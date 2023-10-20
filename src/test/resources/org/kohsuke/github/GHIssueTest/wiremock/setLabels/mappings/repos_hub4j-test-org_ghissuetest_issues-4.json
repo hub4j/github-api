@@ -1,0 +1,55 @@
+{
+  "id": "32ec32e7-ea49-4884-85a8-a49b54acb79b",
+  "name": "repos_hub4j-test-org_ghissuetest_issues",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHIssueTest/issues",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"assignees\":[],\"title\":\"setLabels\",\"body\":\"## test\",\"labels\":[]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_hub4j-test-org_ghissuetest_issues-4.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 22 Sep 2022 09:56:55 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"ca00254956115395ccd4712bde6db8d6ac1c64ef0c0da75ed79377759b3d9e43\"",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-09-29 09:53:54 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4857",
+      "X-RateLimit-Reset": "1663844087",
+      "X-RateLimit-Used": "143",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D99B:5420:940D7D9:9647F1B:632C3166",
+      "Location": "https://api.github.com/repos/hub4j-test-org/GHIssueTest/issues/6"
+    }
+  },
+  "uuid": "32ec32e7-ea49-4884-85a8-a49b54acb79b",
+  "persistent": true,
+  "insertionIndex": 4
+}

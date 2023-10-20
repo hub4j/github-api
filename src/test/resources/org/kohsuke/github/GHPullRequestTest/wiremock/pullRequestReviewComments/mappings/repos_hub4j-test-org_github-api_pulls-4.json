@@ -1,5 +1,5 @@
 {
-  "id": "040ee3b9-0b4b-4bad-81da-797e6947ad3c",
+  "id": "b24c0aff-401f-4e35-add3-2d27e799860c",
   "name": "repos_hub4j-test-org_github-api_pulls",
   "request": {
     "url": "/repos/hub4j-test-org/github-api/pulls",
@@ -21,35 +21,35 @@
     "status": 201,
     "bodyFileName": "repos_hub4j-test-org_github-api_pulls-4.json",
     "headers": {
-      "Date": "Fri, 22 Jan 2021 23:38:17 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "201 Created",
+      "Date": "Tue, 21 Jun 2022 17:18:17 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "\"32fc4ebf798f68ee600cbfe11cce66adc1ee61d8c5565db0a402ad1c79fabb57\"",
-      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "ETag": "\"801196cbb450ae48f1d688f815e6830d4e6a687017f5373765f170cd3af6b501\"",
+      "X-OAuth-Scopes": "admin:gpg_key, notifications, repo, user, workflow",
       "X-Accepted-OAuth-Scopes": "",
-      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/395",
+      "github-authentication-token-expiration": "2022-07-17 15:27:30 UTC",
       "X-GitHub-Media-Type": "github.v3; param=shadow-cat-preview; format=json",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4813",
-      "X-RateLimit-Reset": "1611361294",
-      "x-ratelimit-used": "187",
+      "X-RateLimit-Remaining": "4992",
+      "X-RateLimit-Reset": "1655835493",
+      "X-RateLimit-Used": "8",
+      "X-RateLimit-Resource": "core",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "D013:3B95:10581E:1263C2:600B61E8"
+      "X-GitHub-Request-Id": "AF64:9DB3:1B392:2BAFF:62B1FD58",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/456"
     }
   },
-  "uuid": "040ee3b9-0b4b-4bad-81da-797e6947ad3c",
+  "uuid": "b24c0aff-401f-4e35-add3-2d27e799860c",
   "persistent": true,
   "insertionIndex": 4
 }

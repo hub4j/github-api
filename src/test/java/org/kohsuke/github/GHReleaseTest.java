@@ -1,12 +1,23 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.GHReleaseBuilder.MakeLatest;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHReleaseTest.
+ */
 public class GHReleaseTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Test create simple release.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testCreateSimpleRelease() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -26,6 +37,12 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test create simple release without discussion.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testCreateSimpleReleaseWithoutDiscussion() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -45,6 +62,12 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test create double release fails.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testCreateDoubleReleaseFails() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -68,6 +91,12 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test create release with unknown category fails.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testCreateReleaseWithUnknownCategoryFails() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -84,6 +113,12 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         });
     }
 
+    /**
+     * Test update release.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testUpdateRelease() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -110,6 +145,12 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Test delete release.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testDeleteRelease() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
@@ -121,5 +162,40 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
         release.delete();
         assertThat(repo.getRelease(release.getId()), nullValue());
 
+    }
+
+    /**
+     * Test making a release the latest
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testMakeLatestRelease() throws Exception {
+        GHRepository repo = getTempRepository();
+
+        GHRelease release1 = repo.createRelease("tag1").create();
+        GHRelease release2 = null;
+
+        try {
+            // Newly created release should also be the latest.
+            GHRelease latestRelease = repo.getLatestRelease();
+            assertThat(release1.getNodeId(), is(latestRelease.getNodeId()));
+
+            // Create a second release, explicitly set it not to be latest, confirm it isn't
+            release2 = repo.createRelease("tag2").makeLatest(MakeLatest.FALSE).create();
+            latestRelease = repo.getLatestRelease();
+            assertThat(release1.getNodeId(), is(latestRelease.getNodeId()));
+
+            // Update the second release to be latest, confirm it is.
+            release2.update().makeLatest(MakeLatest.TRUE).update();
+            latestRelease = repo.getLatestRelease();
+            assertThat(release2.getNodeId(), is(latestRelease.getNodeId()));
+        } finally {
+            release1.delete();
+            if (release2 != null) {
+                release2.delete();
+            }
+        }
     }
 }

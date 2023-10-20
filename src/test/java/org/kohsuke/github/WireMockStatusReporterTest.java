@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
+// TODO: Auto-generated Javadoc
 /**
  * Tests in this class are meant to show the behavior of {@link AbstractGitHubWireMockTest} with proxying on or off.
  *
@@ -18,6 +19,12 @@ import static org.junit.Assume.assumeTrue;
  */
 public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * User when proxying auth correctly configured.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void user_whenProxying_AuthCorrectlyConfigured() throws Exception {
         snapshotNotAllowed();
@@ -40,6 +47,12 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         System.out.println();
     }
 
+    /**
+     * User when not proxying stubbed.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void user_whenNotProxying_Stubbed() throws Exception {
         snapshotNotAllowed();
@@ -58,6 +71,12 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         // System.out.println("GitHub proxying and user auth correctly configured for user login: " + user.getLogin());
     }
 
+    /**
+     * Basic behaviors when not proxying.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Ignore("Can't run this as WireMock will report failure after the test method completes.")
     @Test
     public void BasicBehaviors_whenNotProxying() throws Exception {
@@ -95,6 +114,12 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assertThat(e.getMessage(), containsString("Request was not matched"));
     }
 
+    /**
+     * Basic behaviors when proxying.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void BasicBehaviors_whenProxying() throws Exception {
         snapshotNotAllowed();
@@ -122,9 +147,15 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assertThat(e, Matchers.<Exception>instanceOf(GHFileNotFoundException.class));
         assertThat(e.getMessage(),
                 containsString(
-                        "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/reference/repos#get-a-repository\"}"));
+                        "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/repos/repos#get-a-repository\"}"));
     }
 
+    /**
+     * When snapshot ensure proxy.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void whenSnapshot_EnsureProxy() throws Exception {
         assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)",
@@ -133,6 +164,12 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
         assertThat("When taking a snapshot, proxy should automatically be enabled", mockGitHub.isUseProxy());
     }
 
+    /**
+     * When snapshot ensure record to expected location.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Ignore("Not implemented yet")
     @Test
     public void whenSnapshot_EnsureRecordToExpectedLocation() throws Exception {

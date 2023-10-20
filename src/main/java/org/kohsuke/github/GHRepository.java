@@ -24,7 +24,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -70,6 +69,7 @@ import static org.kohsuke.github.internal.Previews.MERCY;
 import static org.kohsuke.github.internal.Previews.NEBULA;
 import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
+// TODO: Auto-generated Javadoc
 /**
  * A repository on GitHub.
  *
@@ -95,13 +95,15 @@ public class GHRepository extends GHObject {
 
     private GHUser owner; // not fully populated. beware.
 
-    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, has_projects;
+    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, disabled, has_projects;
 
     private boolean allow_squash_merge;
 
     private boolean allow_merge_commit;
 
     private boolean allow_rebase_merge;
+
+    private boolean allow_forking;
 
     private boolean delete_branch_on_merge;
 
@@ -114,11 +116,11 @@ public class GHRepository extends GHObject {
 
     private String pushed_at;
 
-    private Map<Integer, GHMilestone> milestones = new WeakHashMap<Integer, GHMilestone>();
+    private Map<Integer, GHMilestone> milestones = Collections.synchronizedMap(new WeakHashMap<>());
 
     private String default_branch, language;
 
-    private Map<String, GHCommit> commits = new WeakHashMap<String, GHCommit>();
+    private Map<String, GHCommit> commits = Collections.synchronizedMap(new WeakHashMap<>());
 
     @SkipFromToString
     private GHRepoPermission permissions;
@@ -128,6 +130,19 @@ public class GHRepository extends GHObject {
     private Boolean isTemplate;
     private boolean compareUsePaginatedCommits;
 
+    /**
+     * Read.
+     *
+     * @param root
+     *            the root
+     * @param owner
+     *            the owner
+     * @param name
+     *            the name
+     * @return the GH repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     static GHRepository read(GitHub root, String owner, String name) throws IOException {
         return root.createRequest().withUrlPath("/repos/" + owner + '/' + name).fetch(GHRepository.class);
     }
@@ -224,7 +239,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets node id
+     * Gets node id.
      *
      * @return the node id
      */
@@ -307,6 +322,11 @@ public class GHRepository extends GHObject {
         return ssh_url;
     }
 
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }
@@ -662,6 +682,15 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Is disabled boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /**
      * Is allow squash merge boolean.
      *
      * @return the boolean
@@ -689,7 +718,16 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Automatically deleting head branches when pull requests are merged
+     * Is allow private forks
+     *
+     * @return the boolean
+     */
+    public boolean isAllowForking() {
+        return allow_forking;
+    }
+
+    /**
+     * Automatically deleting head branches when pull requests are merged.
      *
      * @return the boolean
      */
@@ -741,8 +779,14 @@ public class GHRepository extends GHObject {
      * Visibility of a repository.
      */
     public enum Visibility {
+
+        /** The public. */
         PUBLIC,
+
+        /** The internal. */
         INTERNAL,
+
+        /** The private. */
         PRIVATE,
 
         /**
@@ -756,10 +800,22 @@ public class GHRepository extends GHObject {
          */
         UNKNOWN;
 
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the visibility
+         */
         public static Visibility from(String value) {
             return EnumUtils.getNullableEnumOrDefault(Visibility.class, value, Visibility.UNKNOWN);
         }
 
+        /**
+         * To string.
+         *
+         * @return the string
+         */
         @Override
         public String toString() {
             return name().toLowerCase(Locale.ROOT);
@@ -902,10 +958,16 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Affiliation of a repository collaborator
+     * Affiliation of a repository collaborator.
      */
     public enum CollaboratorAffiliation {
-        ALL, DIRECT, OUTSIDE
+
+        /** The all. */
+        ALL,
+        /** The direct. */
+        DIRECT,
+        /** The outside. */
+        OUTSIDE
     }
 
     /**
@@ -1015,6 +1077,21 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Checks if the given user is a collaborator for this repository.
+     *
+     * @param user
+     *            a {@link GHUser}
+     * @return true if the user is a collaborator for this repository
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isCollaborator(GHUser user) throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("collaborators/" + user.getLogin()))
+                .fetchHttpStatusCode() == 204;
+    }
+
+    /**
      * Obtain permission for a given user in this repository.
      *
      * @param user
@@ -1044,6 +1121,36 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Check if a user has at least the given permission in this repository.
+     *
+     * @param user
+     *            a {@link GHUser#getLogin}
+     * @param permission
+     *            the permission to check
+     * @return true if the user has at least this permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean hasPermission(String user, GHPermissionType permission) throws IOException {
+        return getPermission(user).implies(permission);
+    }
+
+    /**
+     * Check if a user has at least the given permission in this repository.
+     *
+     * @param user
+     *            the user
+     * @param permission
+     *            the permission to check
+     * @return true if the user has at least this permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean hasPermission(GHUser user, GHPermissionType permission) throws IOException {
+        return hasPermission(user.getLogin(), permission);
+    }
+
+    /**
      * If this repository belongs to an organization, return a set of teams.
      *
      * @return the teams
@@ -1061,14 +1168,31 @@ public class GHRepository extends GHObject {
     /**
      * Add collaborators.
      *
-     * @param users
-     *            the users
      * @param permission
      *            the permission level
+     * @param users
+     *            the users
+     * @throws IOException
+     *             the io exception
+     * @deprecated #addCollaborators(GHOrganization.RolePermission, GHUser)
+     */
+    @Deprecated
+    public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
+        addCollaborators(asList(users), permission);
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param permission
+     *            the permission level
+     * @param users
+     *            the users
+     *
      * @throws IOException
      *             the io exception
      */
-    public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
+    public void addCollaborators(GHOrganization.RepositoryRole permission, GHUser... users) throws IOException {
         addCollaborators(asList(users), permission);
     }
 
@@ -1105,8 +1229,25 @@ public class GHRepository extends GHObject {
      *            the permission level
      * @throws IOException
      *             the io exception
+     * @deprecated #addCollaborators(Collection, GHOrganization.RolePermission)
      */
+    @Deprecated
     public void addCollaborators(Collection<GHUser> users, GHOrganization.Permission permission) throws IOException {
+        modifyCollaborators(users, "PUT", GHOrganization.RepositoryRole.from(permission));
+    }
+
+    /**
+     * Add collaborators.
+     *
+     * @param users
+     *            the users
+     * @param permission
+     *            the permission level
+     * @throws IOException
+     *             the io exception
+     */
+    public void addCollaborators(Collection<GHUser> users, GHOrganization.RepositoryRole permission)
+            throws IOException {
         modifyCollaborators(users, "PUT", permission);
     }
 
@@ -1136,14 +1277,14 @@ public class GHRepository extends GHObject {
 
     private void modifyCollaborators(@NonNull Collection<GHUser> users,
             @NonNull String method,
-            @CheckForNull GHOrganization.Permission permission) throws IOException {
+            @CheckForNull GHOrganization.RepositoryRole permission) throws IOException {
         Requester requester = root().createRequest().method(method);
         if (permission != null) {
-            requester = requester.with("permission", permission).inBody();
+            requester = requester.with("permission", permission.toString()).inBody();
         }
 
         // Make sure that the users collection doesn't have any duplicates
-        for (GHUser user : new LinkedHashSet<GHUser>(users)) {
+        for (GHUser user : new LinkedHashSet<>(users)) {
             requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
         }
     }
@@ -1157,7 +1298,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setEmailServiceHook(String address) throws IOException {
-        Map<String, String> config = new HashMap<String, String>();
+        Map<String, String> config = new HashMap<>();
         config.put("address", address);
         root().createRequest()
                 .method("POST")
@@ -1332,6 +1473,18 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Allow private fork.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void allowForking(boolean value) throws IOException {
+        set().allowForking(value);
+    }
+
+    /**
      * After pull requests are merged, you can have head branches deleted automatically.
      *
      * @param value
@@ -1402,10 +1555,16 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Sort orders for listing forks
+     * Sort orders for listing forks.
      */
     public enum ForkSort {
-        NEWEST, OLDEST, STARGAZERS
+
+        /** The newest. */
+        NEWEST,
+        /** The oldest. */
+        OLDEST,
+        /** The stargazers. */
+        STARGAZERS
     }
 
     /**
@@ -1755,7 +1914,7 @@ public class GHRepository extends GHObject {
     /**
      * Retrieves all refs for the github repository.
      *
-     * @return an array of GHRef elements coresponding with the refs in the remote repository.
+     * @return an array of GHRef elements corresponding with the refs in the remote repository.
      * @throws IOException
      *             on failure communicating with GitHub
      */
@@ -1801,7 +1960,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Retrive a ref of the given type for the current GitHub repository.
+     * Retrieve a ref of the given type for the current GitHub repository.
      *
      * @param refName
      *            eg: heads/branch
@@ -1828,7 +1987,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Retrive a tree of the given type for the current GitHub repository.
+     * Retrieve a tree of the given type for the current GitHub repository.
      *
      * @param sha
      *            sha number or branch name ex: "main"
@@ -1993,7 +2152,6 @@ public class GHRepository extends GHObject {
 
     /**
      * Gets the basic license details for the repository.
-     * <p>
      *
      * @return null if there's no license.
      * @throws IOException
@@ -2005,8 +2163,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Retrieves the contents of the repository's license file - makes an additional API call
-     * <p>
+     * Retrieves the contents of the repository's license file - makes an additional API call.
      *
      * @return details regarding the license contents, or null if there's no license.
      * @throws IOException
@@ -2077,7 +2234,30 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Creates a commit status
+     * Gets check runs for given ref which validate provided parameters
+     *
+     * @param ref
+     *            the Git reference
+     * @param params
+     *            a map of parameters to filter check runs
+     * @return check runs for the given ref
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
+     *      for a specific ref</a>
+     */
+    @Preview(ANTIOPE)
+    public PagedIterable<GHCheckRun> getCheckRuns(String ref, Map<String, Object> params) throws IOException {
+        GitHubRequest request = root().createRequest()
+                .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
+                .with(params)
+                .withPreview(ANTIOPE)
+                .build();
+        return new GHCheckRunsIterable(this, request);
+    }
+
+    /**
+     * Creates a commit status.
      *
      * @param sha1
      *            the sha 1
@@ -2088,7 +2268,7 @@ public class GHRepository extends GHObject {
      * @param description
      *            Optional short description.
      * @param context
-     *            Optinal commit status context.
+     *            Optional commit status context.
      * @return the gh commit status
      * @throws IOException
      *             the io exception
@@ -2573,6 +2753,47 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Create a repository variable.
+     *
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void createVariable(String name, String value) throws IOException {
+        GHRepositoryVariable.create(this).name(name).value(value).done();
+    }
+
+    /**
+     * Gets a variable by name
+     *
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @return the variable
+     * @throws IOException
+     *             the io exception
+     */
+    @Deprecated
+    public GHRepositoryVariable getRepoVariable(String name) throws IOException {
+        return getVariable(name);
+    }
+
+    /**
+     * Gets a repository variable.
+     *
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @return the variable
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepositoryVariable getVariable(String name) throws IOException {
+        return GHRepositoryVariable.read(this, name);
+    }
+
+    /**
      * Creates a new content, or update an existing content.
      *
      * @return the gh content builder
@@ -2693,14 +2914,31 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHDeployKey addDeployKey(String title, String key) throws IOException {
+        return addDeployKey(title, key, false);
+    }
+
+    /**
+     * Add deploy key gh deploy key.
+     *
+     * @param title
+     *            the title
+     * @param key
+     *            the key
+     * @param readOnly
+     *            read-only ability of the key
+     * @return the gh deploy key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeployKey addDeployKey(String title, String key, boolean readOnly) throws IOException {
         return root().createRequest()
                 .method("POST")
                 .with("title", title)
                 .with("key", key)
+                .with("read_only", readOnly)
                 .withUrlPath(getApiTailUrl("keys"))
                 .fetch(GHDeployKey.class)
                 .lateBind(this);
-
     }
 
     /**
@@ -2799,6 +3037,25 @@ public class GHRepository extends GHObject {
         }
     }
 
+    // Only used within listCodeownersErrors().
+    private static class GHCodeownersErrors {
+        public List<GHCodeownersError> errors;
+    }
+
+    /**
+     * List errors in the {@code CODEOWNERS} file. Note that GitHub skips lines with incorrect syntax; these are
+     * reported in the web interface, but not in the API call which this library uses.
+     *
+     * @return the list of errors
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHCodeownersError> listCodeownersErrors() throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("codeowners/errors"))
+                .fetch(GHCodeownersErrors.class).errors;
+    }
+
     /**
      * List contributors paged iterable.
      *
@@ -2825,12 +3082,24 @@ public class GHRepository extends GHObject {
             return contributions;
         }
 
+        /**
+         * Hash code.
+         *
+         * @return the int
+         */
         @Override
         public int hashCode() {
             // We ignore contributions in the calculation
             return super.hashCode();
         }
 
+        /**
+         * Equals.
+         *
+         * @param obj
+         *            the obj
+         * @return true, if successful
+         */
         @Override
         public boolean equals(Object obj) {
             // We ignore contributions in the calculation
@@ -2960,11 +3229,23 @@ public class GHRepository extends GHObject {
                 .fetch(GHRepositoryCloneTraffic.class);
     }
 
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
     @Override
     public int hashCode() {
         return ("Repository:" + getOwnerName() + ":" + name).hashCode();
     }
 
+    /**
+     * Equals.
+     *
+     * @param obj
+     *            the obj
+     * @return true, if successful
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof GHRepository) {
@@ -2974,11 +3255,18 @@ public class GHRepository extends GHObject {
         return false;
     }
 
+    /**
+     * Gets the api tail url.
+     *
+     * @param tail
+     *            the tail
+     * @return the api tail url
+     */
     String getApiTailUrl(String tail) {
         if (tail.length() > 0 && !tail.startsWith("/")) {
             tail = '/' + tail;
         }
-        return "/repos/" + getOwnerName() + "/" + name + tail;
+        return "/repos/" + full_name + tail;
     }
 
     /**
@@ -3112,6 +3400,20 @@ public class GHRepository extends GHObject {
                 .wrapUp(this);
     }
 
+    /**
+     * Gets the public key for the given repo.
+     *
+     * @return the public key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepositoryPublicKey getPublicKey() throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("/actions/secrets/public-key"))
+                .fetch(GHRepositoryPublicKey.class)
+                .wrapUp(this);
+    }
+
     // Only used within listTopics().
     private static class Topics {
         public List<String> names;
@@ -3152,6 +3454,28 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Set/Update a repository secret
+     * "https://docs.github.com/rest/reference/actions#create-or-update-a-repository-secret"
+     *
+     * @param secretName
+     *            the name of the secret
+     * @param encryptedValue
+     *            The encrypted value for this secret
+     * @param publicKeyId
+     *            The id of the Public Key used to encrypt this secret
+     * @throws IOException
+     *             the io exception
+     */
+    public void createSecret(String secretName, String encryptedValue, String publicKeyId) throws IOException {
+        root().createRequest()
+                .method("PUT")
+                .with("encrypted_value", encryptedValue)
+                .with("key_id", publicKeyId)
+                .withUrlPath(getApiTailUrl("actions/secrets") + "/" + secretName)
+                .send();
+    }
+
+    /**
      * Create a tag. See https://developer.github.com/v3/git/tags/#create-a-tag-object
      *
      * @param tag
@@ -3163,8 +3487,8 @@ public class GHRepository extends GHObject {
      * @param type
      *            The type of the object we're tagging: "commit", "tree" or "blob".
      * @return The newly created tag.
-     * @throws java.io.IOException
-     *             The IO exception.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public GHTagObject createTag(String tag, String message, String object, String type) throws IOException {
         return root().createRequest()
@@ -3187,9 +3511,9 @@ public class GHRepository extends GHObject {
      *            The {@link InputStreamFunction} that will process the stream
      * @param ref
      *            if <code>null</code> the repository's default branch, usually <code>main</code>,
+     * @return the result of reading the stream.
      * @throws IOException
      *             The IO exception.
-     * @return the result of reading the stream.
      */
     public <T> T readZip(InputStreamFunction<T> streamFunction, String ref) throws IOException {
         return downloadArchive("zip", ref, streamFunction);
@@ -3204,9 +3528,9 @@ public class GHRepository extends GHObject {
      *            The {@link InputStreamFunction} that will process the stream
      * @param ref
      *            if <code>null</code> the repository's default branch, usually <code>main</code>,
+     * @return the result of reading the stream.
      * @throws IOException
      *             The IO exception.
-     * @return the result of reading the stream.
      */
     public <T> T readTar(InputStreamFunction<T> streamFunction, String ref) throws IOException {
         return downloadArchive("tar", ref, streamFunction);
@@ -3216,12 +3540,12 @@ public class GHRepository extends GHObject {
      * Create a repository dispatch event, which can be used to start a workflow/action from outside github, as
      * described on https://docs.github.com/en/rest/reference/repos#create-a-repository-dispatch-event
      *
+     * @param <T>
+     *            type of client payload
      * @param eventType
      *            the eventType
      * @param clientPayload
      *            a custom payload , can be nullable
-     * @param <T>
-     *            type of client payload
      * @throws IOException
      *             the io exception
      */
@@ -3249,37 +3573,21 @@ public class GHRepository extends GHObject {
     /**
      * Populate this object.
      *
-     * @throws java.io.IOException
-     *             The IO exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     void populate() throws IOException {
         if (isOffline()) {
             return; // can't populate if the root is offline
         }
 
-        final URL url = requireNonNull(getUrl(), "Missing instance URL!");
+        // We don't use the URL provided in the JSON because it is not reliable:
+        // 1. There is bug in Push event payloads that returns the wrong url.
+        // For Push event repository records, they take the form "https://github.com/{fullName}".
+        // All other occurrences of "url" take the form "https://api.github.com/...".
+        // 2. For Installation event payloads, the URL is not provided at all.
 
-        try {
-            // IMPORTANT: the url for repository records does not reliably point to the API url.
-            // There is bug in Push event payloads that returns the wrong url.
-            // All other occurrences of "url" take the form "https://api.github.com/...".
-            // For Push event repository records, they take the form "https://github.com/{fullName}".
-            root().createRequest()
-                    .withPreview(BAPTISTE)
-                    .withPreview(NEBULA)
-                    .setRawUrlPath(url.toString())
-                    .fetchInto(this);
-        } catch (HttpException e) {
-            if (e.getCause() instanceof JsonParseException) {
-                root().createRequest()
-                        .withPreview(BAPTISTE)
-                        .withPreview(NEBULA)
-                        .withUrlPath("/repos/" + full_name)
-                        .fetchInto(this);
-            } else {
-                throw e;
-            }
-        }
+        root().createRequest().withPreview(BAPTISTE).withPreview(NEBULA).withUrlPath(getApiTailUrl("")).fetchInto(this);
     }
 
     /**
@@ -3289,6 +3597,13 @@ public class GHRepository extends GHObject {
      */
     @BetaApi
     public static class Updater extends GHRepositoryBuilder<Updater> {
+
+        /**
+         * Instantiates a new updater.
+         *
+         * @param repository
+         *            the repository
+         */
         protected Updater(@Nonnull GHRepository repository) {
             super(Updater.class, repository.root(), null);
             // even when we don't change the name, we need to send it in
@@ -3300,12 +3615,39 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Star a repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void star() throws IOException {
+        root().createRequest().method("PUT").withUrlPath(String.format("/user/starred/%s", full_name)).send();
+    }
+
+    /**
+     * Unstar a repository.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void unstar() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(String.format("/user/starred/%s", full_name)).send();
+    }
+
+    /**
      * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
      *
      * Consumer must call {@link #done()} to commit changes.
      */
     @BetaApi
     public static class Setter extends GHRepositoryBuilder<GHRepository> {
+
+        /**
+         * Instantiates a new setter.
+         *
+         * @param repository
+         *            the repository
+         */
         protected Setter(@Nonnull GHRepository repository) {
             super(GHRepository.class, repository.root(), null);
             // even when we don't change the name, we need to send it in

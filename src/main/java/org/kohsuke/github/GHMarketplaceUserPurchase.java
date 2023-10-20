@@ -4,8 +4,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
 /**
- * Github Marketplace User Purchase
+ * Github Marketplace User Purchase.
  *
  * @author Paulo Miguel Almeida
  * @see GitHub#getMyMarketplacePurchases()

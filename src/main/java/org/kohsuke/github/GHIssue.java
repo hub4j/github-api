@@ -41,6 +41,7 @@ import java.util.Objects;
 
 import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents an issue on GitHub.
  *
@@ -53,25 +54,60 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 public class GHIssue extends GHObject implements Reactable {
     private static final String ASSIGNEES = "assignees";
 
+    /** The owner. */
     GHRepository owner;
 
+    /** The assignee. */
     // API v3
     protected GHUser assignee; // not sure what this field is now that 'assignees' exist
+
+    /** The assignees. */
     protected GHUser[] assignees;
+
+    /** The state. */
     protected String state;
+
+    /** The number. */
     protected int number;
+
+    /** The closed at. */
     protected String closed_at;
+
+    /** The comments. */
     protected int comments;
+
+    /** The body. */
     @SkipFromToString
     protected String body;
+
+    /** The labels. */
     protected List<GHLabel> labels;
+
+    /** The user. */
     protected GHUser user;
+
+    /** The html url. */
     protected String title, html_url;
+
+    /** The pull request. */
     protected GHIssue.PullRequest pull_request;
+
+    /** The milestone. */
     protected GHMilestone milestone;
+
+    /** The closed by. */
     protected GHUser closed_by;
+
+    /** The locked. */
     protected boolean locked;
 
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH issue
+     */
     GHIssue wrap(GHRepository owner) {
         this.owner = owner;
         if (milestone != null)
@@ -128,6 +164,8 @@ public class GHIssue extends GHObject implements Reactable {
 
     /**
      * The HTML page of this issue, like https://github.com/jenkinsci/jenkins/issues/100
+     *
+     * @return the html url
      */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
@@ -335,9 +373,9 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Labels that are already present on the target are ignored.
      *
-     * @return the complete list of labels including the new additions
      * @param names
      *            Names of the label
+     * @return the complete list of labels including the new additions
      * @throws IOException
      *             the io exception
      */
@@ -351,9 +389,9 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Labels that are already present on the target are ignored.
      *
-     * @return the complete list of labels including the new additions
      * @param labels
      *            the labels
+     * @return the complete list of labels including the new additions
      * @throws IOException
      *             the io exception
      */
@@ -367,9 +405,9 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Labels that are already present on the target are ignored.
      *
-     * @return the complete list of labels including the new additions
      * @param labels
      *            the labels
+     * @return the complete list of labels including the new additions
      * @throws IOException
      *             the io exception
      */
@@ -391,9 +429,9 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Attempting to remove a label that is not present throws {@link GHFileNotFoundException}.
      *
-     * @return the remaining list of labels
      * @param name
      *            the name
+     * @return the remaining list of labels
      * @throws IOException
      *             the io exception, throws {@link GHFileNotFoundException} if label was not present.
      */
@@ -410,9 +448,9 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Attempting to remove labels that are not present on the target are ignored.
      *
-     * @return the remaining list of labels
      * @param names
      *            the names
+     * @return the remaining list of labels
      * @throws IOException
      *             the io exception
      */
@@ -426,9 +464,9 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Attempting to remove labels that are not present on the target are ignored.
      *
-     * @return the remaining list of labels
      * @param labels
      *            the labels
+     * @return the remaining list of labels
      * @throws IOException
      *             the io exception
      * @see #removeLabels(String...) #removeLabels(String...)
@@ -443,9 +481,9 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * Attempting to remove labels that are not present on the target are ignored.
      *
-     * @return the remaining list of labels
      * @param labels
      *            the labels
+     * @return the remaining list of labels
      * @throws IOException
      *             the io exception
      */
@@ -479,11 +517,13 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Obtains all the comments associated with this issue.
+     * Obtains all the comments associated with this issue, without any filter.
      *
      * @return the paged iterable
      * @throws IOException
      *             the io exception
+     * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
+     * @see #queryComments() queryComments to apply filters.
      */
     public PagedIterable<GHIssueComment> listComments() throws IOException {
         return root().createRequest()
@@ -491,6 +531,25 @@ public class GHIssue extends GHObject implements Reactable {
                 .toIterable(GHIssueComment[].class, item -> item.wrapUp(this));
     }
 
+    /**
+     * Search comments on this issue by specifying filters through a builder pattern.
+     *
+     * @return the query builder
+     * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
+     */
+    public GHIssueCommentQueryBuilder queryComments() {
+        return new GHIssueCommentQueryBuilder(this);
+    }
+
+    /**
+     * Creates the reaction.
+     *
+     * @param content
+     *            the content
+     * @return the GH reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return root().createRequest()
@@ -501,6 +560,27 @@ public class GHIssue extends GHObject implements Reactable {
                 .fetch(GHReaction.class);
     }
 
+    /**
+     * Delete reaction.
+     *
+     * @param reaction
+     *            the reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public void deleteReaction(GHReaction reaction) throws IOException {
+        owner.root()
+                .createRequest()
+                .method("DELETE")
+                .withUrlPath(getApiRoute(), "reactions", String.valueOf(reaction.getId()))
+                .send();
+    }
+
+    /**
+     * List reactions.
+     *
+     * @return the paged iterable
+     */
     @Preview(SQUIRREL_GIRL)
     public PagedIterable<GHReaction> listReactions() {
         return root().createRequest()
@@ -743,6 +823,13 @@ public class GHIssue extends GHObject implements Reactable {
         }
     }
 
+    /**
+     * Gets the logins.
+     *
+     * @param users
+     *            the users
+     * @return the logins
+     */
     protected static List<String> getLogins(Collection<GHUser> users) {
         List<String> names = new ArrayList<String>(users.size());
         for (GHUser a : users) {

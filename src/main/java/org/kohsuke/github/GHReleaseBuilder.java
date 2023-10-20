@@ -3,9 +3,11 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.util.Locale;
 
+// TODO: Auto-generated Javadoc
 /**
- * Builder pattern for creating a {@link GHRelease}
+ * Builder pattern for creating a {@link GHRelease}.
  *
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
@@ -78,7 +80,7 @@ public class GHReleaseBuilder {
     }
 
     /**
-     * Optional
+     * Optional.
      *
      * @param prerelease
      *            {@code true} to identify the release as a prerelease. {@code false} to identify the release as a full
@@ -91,7 +93,7 @@ public class GHReleaseBuilder {
     }
 
     /**
-     * Optional
+     * Optional.
      *
      * @param categoryName
      *            the category of the discussion to be created for the release. Category should already exist
@@ -99,6 +101,41 @@ public class GHReleaseBuilder {
      */
     public GHReleaseBuilder categoryName(String categoryName) {
         builder.with("discussion_category_name", categoryName);
+        return this;
+    }
+
+    /**
+     * Values for whether this release should be the latest.
+     */
+    public static enum MakeLatest {
+
+        /** Make this the latest release */
+        TRUE,
+        /** Do not make this the latest release */
+        FALSE,
+        /** Latest release is determined by date and higher semantic version */
+        LEGACY;
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+    }
+
+    /**
+     * Optional.
+     *
+     * @param latest
+     *            Whether to make this the latest release. Default is {@code TRUE}
+     * @return the gh release builder
+     */
+    public GHReleaseBuilder makeLatest(MakeLatest latest) {
+        builder.with("make_latest", latest);
         return this;
     }
 

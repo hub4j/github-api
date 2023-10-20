@@ -7,17 +7,28 @@ import java.util.Map;
 
 import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
+// TODO: Auto-generated Javadoc
 /**
- * Creates a access token for a GitHub App Installation
+ * Creates a access token for a GitHub App Installation.
  *
  * @author Paulo Miguel Almeida
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
 public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
+
+    /** The builder. */
     protected final Requester builder;
     private final String apiUrlTail;
 
+    /**
+     * Instantiates a new GH app create token builder.
+     *
+     * @param root
+     *            the root
+     * @param apiUrlTail
+     *            the api url tail
+     */
     @BetaApi
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail) {
         super(root);
@@ -25,6 +36,16 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
         this.builder = root.createRequest();
     }
 
+    /**
+     * Instantiates a new GH app create token builder.
+     *
+     * @param root
+     *            the root
+     * @param apiUrlTail
+     *            the api url tail
+     * @param permissions
+     *            the permissions
+     */
     @BetaApi
     GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
         this(root, apiUrlTail);
@@ -43,6 +64,20 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     @BetaApi
     public GHAppCreateTokenBuilder repositoryIds(List<Long> repositoryIds) {
         this.builder.with("repository_ids", repositoryIds);
+        return this;
+    }
+
+    /**
+     * By default the installation token has access to all repositories that the installation can access. To restrict
+     * the access to specific repositories, you can provide repository names when creating the token.
+     *
+     * @param repositories
+     *            Array containing the repository names
+     * @return a GHAppCreateTokenBuilder
+     */
+    @BetaApi
+    public GHAppCreateTokenBuilder repositories(List<String> repositories) {
+        this.builder.with("repositories", repositories);
         return this;
     }
 

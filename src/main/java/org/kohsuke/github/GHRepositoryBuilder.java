@@ -8,8 +8,25 @@ import java.net.URL;
 import static org.kohsuke.github.internal.Previews.BAPTISTE;
 import static org.kohsuke.github.internal.Previews.NEBULA;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHRepositoryBuilder.
+ *
+ * @param <S>
+ *            the generic type
+ */
 abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
 
+    /**
+     * Instantiates a new GH repository builder.
+     *
+     * @param intermediateReturnType
+     *            the intermediate return type
+     * @param root
+     *            the root
+     * @param baseInstance
+     *            the base instance
+     */
     protected GHRepositoryBuilder(Class<S> intermediateReturnType, GitHub root, GHRepository baseInstance) {
         super(GHRepository.class, intermediateReturnType, root, baseInstance);
     }
@@ -60,6 +77,19 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
+     * Allow or disallow private forks
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S allowForking(boolean enabled) throws IOException {
+        return with("allow_forking", enabled);
+    }
+
+    /**
      * After pull requests are merged, you can have head branches deleted automatically.
      *
      * @param enabled
@@ -75,13 +105,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Default repository branch
+     * Default repository branch.
      *
      * @param branch
      *            branch name
-     *
      * @return a builder to continue with building
-     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
@@ -90,13 +118,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Description for repository
+     * Description for repository.
      *
      * @param description
      *            description of repository
-     *
      * @return a builder to continue with building
-     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
@@ -105,13 +131,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Homepage for repository
+     * Homepage for repository.
      *
      * @param homepage
      *            homepage of repository
-     *
      * @return a builder to continue with building
-     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
@@ -120,13 +144,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Homepage for repository
+     * Homepage for repository.
      *
      * @param homepage
      *            homepage of repository
-     *
      * @return a builder to continue with building
-     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
@@ -135,13 +157,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Sets the repository to private
+     * Sets the repository to private.
      *
      * @param enabled
      *            private if true
-     *
      * @return a builder to continue with building
-     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
@@ -150,7 +170,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Sets the repository visibility
+     * Sets the repository visibility.
      *
      * @param visibility
      *            visibility of repository
@@ -160,17 +180,15 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      */
     public S visibility(final Visibility visibility) throws IOException {
         requester.withPreview(NEBULA);
-        return with("visibility", visibility);
+        return with("visibility", visibility.toString());
     }
 
     /**
-     * Enables issue tracker
+     * Enables issue tracker.
      *
      * @param enabled
      *            true if enabled
-     *
      * @return a builder to continue with building
-     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
@@ -179,13 +197,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Enables projects
+     * Enables projects.
      *
      * @param enabled
      *            true if enabled
-     *
      * @return a builder to continue with building
-     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
@@ -194,7 +210,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Enables wiki
+     * Enables wiki.
      *
      * @param enabled
      *            true if enabled
@@ -207,13 +223,11 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Enables downloads
+     * Enables downloads.
      *
      * @param enabled
      *            true if enabled
-     *
      * @return a builder to continue with building
-     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
@@ -236,15 +250,38 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
         return with("is_template", enabled);
     }
 
+    /**
+     * Done.
+     *
+     * @return the GH repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Override
     public GHRepository done() throws IOException {
         return super.done();
     }
 
+    /**
+     * Archive.
+     *
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     S archive() throws IOException {
         return with("archived", true);
     }
 
+    /**
+     * Name.
+     *
+     * @param name
+     *            the name
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     S name(String name) throws IOException {
         return with("name", name);
     }

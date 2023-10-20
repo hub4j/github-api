@@ -1,11 +1,20 @@
 package org.kohsuke.github;
 
+// TODO: Auto-generated Javadoc
 /**
- * Represents the state of commit
+ * Represents the state of commit.
  *
  * @author Kohsuke Kawaguchi
  * @see GHCommitStatus
  */
 public enum GHCommitState {
-    PENDING, SUCCESS, ERROR, FAILURE
+
+    /** The pending. */
+    PENDING,
+    /** The success. */
+    SUCCESS,
+    /** The error. */
+    ERROR,
+    /** The failure. */
+    FAILURE
 }

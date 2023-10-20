@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.annotation.CheckForNull;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents a user in Git who authors/commits a commit.
  * <p>
@@ -54,5 +55,26 @@ public class GitUser {
      */
     public Date getDate() {
         return GitHubClient.parseDate(date);
+    }
+
+    /**
+     * Instantiates a new git user.
+     */
+    public GitUser() {
+        // Empty constructor for Jackson binding
+    }
+
+    /**
+     * Instantiates a new git user.
+     *
+     * @param user
+     *            the user
+     */
+    public GitUser(GitUser user) {
+        // Copy constructor to convert to GHCommit.GHAuthor
+        name = user.getName();
+        email = user.getEmail();
+        date = user.getDate().toString();
+        username = user.getUsername();
     }
 }

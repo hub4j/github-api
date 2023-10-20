@@ -11,6 +11,10 @@ import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GHTreeBuilderTest.
+ */
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     private static String REPO_NAME = "hub4j-test-org/GHTreeBuilderTest";
 
@@ -30,6 +34,12 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
     private GHRef mainRef;
     private GHTreeBuilder treeBuilder;
 
+    /**
+     * Cleanup.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     @After
     public void cleanup() throws Exception {
@@ -47,6 +57,12 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    /**
+     * Sets the up.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Before
     public void setUp() throws Exception {
         repo = gitHub.getRepository(REPO_NAME);
@@ -55,6 +71,12 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         treeBuilder = repo.createTree().baseTree(mainTreeSha);
     }
 
+    /**
+     * Test text entry.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     @Ignore("It seems that GitHub no longer supports the 'content' parameter")
     public void testTextEntry() throws Exception {
@@ -67,6 +89,12 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         assertThat(getFileSize(PATH_README), equalTo(CONTENT_README.length()));
     }
 
+    /**
+     * Test sha entry.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testShaEntry() throws Exception {
         String dataSha1 = new GHBlobBuilder(repo).binaryContent(CONTENT_DATA1).create().getSha();
@@ -81,6 +109,12 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         assertThat(getFileSize(PATH_DATA2), equalTo((long) CONTENT_DATA2.length));
     }
 
+    /**
+     * Test add.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testAdd() throws Exception {
         treeBuilder.add(PATH_SCRIPT, CONTENT_SCRIPT, true);
@@ -98,6 +132,46 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         assertThat(commit.getCommitShortInfo().getAuthor().getEmail(), equalTo("author@author.com"));
         assertThat(commit.getCommitShortInfo().getCommitter().getEmail(), equalTo("committer@committer.com"));
 
+    }
+
+    /**
+     * Test delete.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testDelete() throws Exception {
+        // add test tree
+        treeBuilder.add(PATH_README, CONTENT_README, false);
+        treeBuilder.add(PATH_DATA1, CONTENT_DATA1, false);
+
+        GHCommit commit = updateTree();
+
+        assertThat(getFileSize(PATH_README), equalTo((long) CONTENT_README.length()));
+        assertThat(getFileSize(PATH_DATA1), equalTo((long) CONTENT_DATA1.length));
+
+        assertThat(commit.getCommitShortInfo().getAuthor().getEmail(), equalTo("author@author.com"));
+        assertThat(commit.getCommitShortInfo().getCommitter().getEmail(), equalTo("committer@committer.com"));
+
+        // remove a file from tree
+        mainRef = repo.getRef("heads/main");
+        treeBuilder = repo.createTree().baseTree(commit.getTree().getSha());
+        treeBuilder.delete(PATH_DATA1);
+
+        GHCommit deleteCommit = updateTree();
+
+        assertThat(getFileSize(PATH_README), equalTo((long) CONTENT_README.length()));
+
+        assertThat(deleteCommit.getCommitShortInfo().getAuthor().getEmail(), equalTo("author@author.com"));
+        assertThat(deleteCommit.getCommitShortInfo().getCommitter().getEmail(), equalTo("committer@committer.com"));
+
+        try {
+            getFileSize(PATH_DATA1);
+            fail("File " + PATH_DATA1 + " should not exist");
+        } catch (IOException e) {
+            assertThat(e.getMessage(), stringContainsInOrder(PATH_DATA1, "Not Found"));
+        }
     }
 
     private GHCommit updateTree() throws IOException {

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+// TODO: Auto-generated Javadoc
 /**
  * Represents the account that's logging into GitHub.
  *
@@ -20,25 +21,20 @@ public class GHMyself extends GHUser {
      * Type of repositories returned during listing.
      */
     public enum RepositoryListFilter {
-        /**
-         * All public and private repositories that current user has access or collaborates to
-         */
+
+        /** All public and private repositories that current user has access or collaborates to. */
         ALL,
-        /**
-         * Public and private repositories owned by current user
-         */
+
+        /** Public and private repositories owned by current user. */
         OWNER,
-        /**
-         * Public repositories that current user has access or collaborates to
-         */
+
+        /** Public repositories that current user has access or collaborates to. */
         PUBLIC,
-        /**
-         * Private repositories that current user has access or collaborates to
-         */
+
+        /** Private repositories that current user has access or collaborates to. */
         PRIVATE,
-        /**
-         * Public and private repositories that current user is a member
-         */
+
+        /** Public and private repositories that current user is a member. */
         MEMBER;
     }
 
@@ -74,9 +70,9 @@ public class GHMyself extends GHUser {
     }
 
     /**
-     * Returns the read-only list of all the pulic keys of the current user.
+     * Returns the read-only list of all the public keys of the current user.
      * <p>
-     * NOTE: When using OAuth authenticaiton, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
+     * NOTE: When using OAuth authentication, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
      * will get a 404 NOT FOUND.
      *
      * @return Always non-null.
@@ -85,6 +81,28 @@ public class GHMyself extends GHUser {
      */
     public List<GHKey> getPublicKeys() throws IOException {
         return root().createRequest().withUrlPath("/user/keys").toIterable(GHKey[].class, null).toList();
+    }
+
+    /**
+     * Add public SSH key for the user.
+     * <p>
+     * https://docs.github.com/en/rest/users/keys?apiVersion=2022-11-28#create-a-public-ssh-key-for-the-authenticated-user
+     *
+     * @param title
+     *            Title of the SSH key
+     * @param key
+     *            the public key
+     * @return the newly created Github key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHKey addPublicKey(String title, String key) throws IOException {
+        return root().createRequest()
+                .withUrlPath("/user/keys")
+                .method("POST")
+                .with("title", title)
+                .with("key", key)
+                .fetch(GHKey.class);
     }
 
     /**
@@ -144,6 +162,8 @@ public class GHMyself extends GHUser {
      *
      * Unlike {@link #getAllRepositories()}, this does not wait until all the repositories are returned. Repositories
      * are returned by GitHub API with a 30 items per page.
+     *
+     * @return the paged iterable
      */
     @Override
     public PagedIterable<GHRepository> listRepositories() {
@@ -162,6 +182,7 @@ public class GHMyself extends GHUser {
      *            size for each page of items returned by GitHub. Maximum page size is 100.
      *
      *            Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return listRepositories(pageSize, RepositoryListFilter.ALL);
@@ -197,7 +218,7 @@ public class GHMyself extends GHUser {
     }
 
     /**
-     * List your organization memberships
+     * List your organization memberships.
      *
      * @return the paged iterable
      */
@@ -206,7 +227,7 @@ public class GHMyself extends GHUser {
     }
 
     /**
-     * List your organization memberships
+     * List your organization memberships.
      *
      * @param state
      *            Filter by a specific state

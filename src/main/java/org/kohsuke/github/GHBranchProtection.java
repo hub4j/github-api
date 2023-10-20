@@ -23,7 +23,28 @@ public class GHBranchProtection extends GitHubInteractiveObject {
     private static final String REQUIRE_SIGNATURES_URI = "/required_signatures";
 
     @JsonProperty
+    private AllowDeletions allowDeletions;
+
+    @JsonProperty
+    private AllowForcePushes allowForcePushes;
+
+    @JsonProperty
+    private AllowForkSyncing allowForkSyncing;
+
+    @JsonProperty
+    private BlockCreations blockCreations;
+
+    @JsonProperty
     private EnforceAdmins enforceAdmins;
+
+    @JsonProperty
+    private LockBranch lockBranch;
+
+    @JsonProperty
+    private RequiredConversationResolution requiredConversationResolution;
+
+    @JsonProperty
+    private RequiredLinearHistory requiredLinearHistory;
 
     @JsonProperty("required_pull_request_reviews")
     private RequiredReviews requiredReviews;
@@ -121,6 +142,74 @@ public class GHBranchProtection extends GitHubInteractiveObject {
     }
 
     /**
+     * The type AllowDeletions.
+     */
+    public static class AllowDeletions {
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+            return enabled;
+        }
+    }
+
+    /**
+     * The type AllowForcePushes.
+     */
+    public static class AllowForcePushes {
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+            return enabled;
+        }
+    }
+
+    /**
+     * The type AllowForkSyncing.
+     */
+    public static class AllowForkSyncing {
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+            return enabled;
+        }
+    }
+
+    /**
+     * The type BlockCreations.
+     */
+    public static class BlockCreations {
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+            return enabled;
+        }
+    }
+
+    /**
      * The type EnforceAdmins.
      */
     public static class EnforceAdmins {
@@ -150,15 +239,71 @@ public class GHBranchProtection extends GitHubInteractiveObject {
     }
 
     /**
+     * The type LockBranch.
+     */
+    public static class LockBranch {
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+            return enabled;
+        }
+    }
+
+    /**
+     * The type RequiredConversationResolution.
+     */
+    public static class RequiredConversationResolution {
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+            return enabled;
+        }
+    }
+
+    /**
+     * The type RequiredLinearHistory.
+     */
+    public static class RequiredLinearHistory {
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+            return enabled;
+        }
+    }
+
+    /**
      * The type RequiredReviews.
      */
     public static class RequiredReviews {
         @JsonProperty("dismissal_restrictions")
         private Restrictions dismissalRestriction;
 
+        @JsonProperty
         private boolean dismissStaleReviews;
 
+        @JsonProperty
         private boolean requireCodeOwnerReviews;
+
+        @JsonProperty
+        private boolean requireLastPushApproval;
 
         @JsonProperty("required_approving_review_count")
         private int requiredReviewers;
@@ -200,6 +345,15 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          */
         public boolean isRequireCodeOwnerReviews() {
             return requireCodeOwnerReviews;
+        }
+
+        /**
+         * Is require last push approval boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isRequireLastPushApproval() {
+            return requireLastPushApproval;
         }
 
         /**

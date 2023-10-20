@@ -102,6 +102,9 @@ public enum GHEvent {
     /** The merge queue entry. */
     MERGE_QUEUE_ENTRY,
 
+    /** The merge group entry. */
+    MERGE_GROUP,
+
     /** The meta. */
     META,
 

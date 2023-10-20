@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"name\":\"temp-testUpdateRepository\",\"has_projects\":false,\"allow_squash_merge\":false,\"private\":true,\"has_downloads\":false,\"has_wiki\":false,\"description\":\"A test repository for update testing via the github-api project\",\"delete_branch_on_merge\":true,\"allow_rebase_merge\":false,\"has_issues\":false,\"homepage\":\"https://github-api.kohsuke.org/apidocs/index.html\"}",
+        "equalToJson": "{\"name\":\"temp-testUpdateRepository\",\"has_projects\":false,\"allow_squash_merge\":false,\"allow_forking\":true,\"private\":true,\"has_downloads\":false,\"has_wiki\":false,\"description\":\"A test repository for update testing via the github-api project\",\"delete_branch_on_merge\":true,\"allow_rebase_merge\":false,\"has_issues\":false,\"homepage\":\"https://github-api.kohsuke.org/apidocs/index.html\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

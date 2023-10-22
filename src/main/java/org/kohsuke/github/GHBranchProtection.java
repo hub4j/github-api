@@ -81,12 +81,66 @@ public class GHBranchProtection extends GitHubInteractiveObject {
     }
 
     /**
+     * Gets allow deletions.
+     *
+     * @return the enforce admins
+     */
+    public AllowDeletions getAllowDeletions() {
+        return allowDeletions;
+    }
+
+    /**
+     * Gets allow force pushes.
+     *
+     * @return the enforce admins
+     */
+    public AllowForcePushes getAllowForcePushes() {
+        return allowForcePushes;
+    }
+
+    /**
+     * Gets block creations.
+     *
+     * @return the enforce admins
+     */
+    public BlockCreations getBlockCreations() {
+        return blockCreations;
+    }
+
+    /**
      * Gets enforce admins.
      *
      * @return the enforce admins
      */
     public EnforceAdmins getEnforceAdmins() {
         return enforceAdmins;
+    }
+
+    /**
+     * Gets lock branch.
+     *
+     * @return the enforce admins
+     */
+    public LockBranch getLockBranch() {
+        return lockBranch;
+    }
+
+    /**
+     * Gets required conversation resolution.
+     *
+     * @return the enforce admins
+     */
+    public RequiredConversationResolution getRequiredConversationResolution() {
+        return requiredConversationResolution;
+    }
+
+    /**
+     * Gets required linear history.
+     *
+     * @return the enforce admins
+     */
+    public RequiredLinearHistory getRequiredLinearHistory() {
+        return requiredLinearHistory;
     }
 
     /**

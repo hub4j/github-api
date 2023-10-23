@@ -99,6 +99,15 @@ public class GHBranchProtection extends GitHubInteractiveObject {
     }
 
     /**
+     * Gets allow fork syncing.
+     *
+     * @return the enforce admins
+     */
+    public AllowForkSyncing getAllowForkSyncing() {
+        return allowForkSyncing;
+    }
+
+    /**
      * Gets block creations.
      *
      * @return the enforce admins

@@ -44,7 +44,7 @@
     <jacoco.coverage.target.class.method>0.50</jacoco.coverage.target.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
-    <jjwt.suite.version>0.11.5</jjwt.suite.version>
+    <jjwt.suite.version>0.12.3</jjwt.suite.version>
 
     <jacoco.surefire.argLine />
     <surefire.argLine />

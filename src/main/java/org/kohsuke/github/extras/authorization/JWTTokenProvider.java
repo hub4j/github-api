@@ -1,10 +1,5 @@
 package org.kohsuke.github.extras.authorization;
 
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.jackson.io.JacksonSerializer;
-import org.kohsuke.github.authorization.AuthorizationProvider;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,9 +13,10 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
-import java.util.Date;
 
 import javax.annotation.Nonnull;
+
+import org.kohsuke.github.authorization.AuthorizationProvider;
 
 /**
  * A authorization provider that gives valid JWT tokens. These tokens are then used to create a time-based token to
@@ -170,18 +166,10 @@ public class JWTTokenProvider implements AuthorizationProvider {
         // Setting the issued at to a time in the past to allow for clock skew
         Instant issuedAt = getIssuedAt(now);
 
-        // Let's set the JWT Claims
-        JwtBuilder builder = Jwts.builder()
-                .issuedAt(Date.from(issuedAt))
-                .expiration(Date.from(expiration))
-                .issuer(this.applicationId)
-                .signWith(privateKey, Jwts.SIG.RS256);
-
         // Token will refresh 2 minutes before it expires
         validUntil = expiration.minus(Duration.ofMinutes(2));
 
-        // Builds the JWT and serializes it to a compact, URL-safe string
-        return builder.json(new JacksonSerializer<>()).compact();
+        return JwtBuilderUtil.buildJwt(issuedAt, expiration, applicationId, privateKey);
     }
 
     Instant getIssuedAt(Instant now) {

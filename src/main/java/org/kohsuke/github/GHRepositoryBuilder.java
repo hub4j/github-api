@@ -77,6 +77,19 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
+     * Allow or disallow private forks
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S allowForking(boolean enabled) throws IOException {
+        return with("allow_forking", enabled);
+    }
+
+    /**
      * After pull requests are merged, you can have head branches deleted automatically.
      *
      * @param enabled

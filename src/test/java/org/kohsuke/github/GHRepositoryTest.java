@@ -98,6 +98,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.isAllowMergeCommit(), is(true));
         assertThat(r.isAllowRebaseMerge(), is(true));
         assertThat(r.isAllowSquashMerge(), is(true));
+        assertThat(r.isAllowForking(), is(false));
 
         String httpTransport = "https://github.com/hub4j-test-org/temp-testGetters.git";
         assertThat(r.getHttpTransportUrl(), equalTo(httpTransport));
@@ -380,6 +381,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository updated = builder.allowRebaseMerge(false)
                 .allowSquashMerge(false)
                 .deleteBranchOnMerge(true)
+                .allowForking(true)
                 .description(description)
                 .downloads(false)
                 .downloads(false)
@@ -394,6 +396,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(updated.isAllowRebaseMerge(), is(false));
         assertThat(updated.isAllowSquashMerge(), is(false));
         assertThat(updated.isDeleteBranchOnMerge(), is(true));
+        assertThat(updated.isAllowForking(), is(true));
         assertThat(updated.isPrivate(), is(true));
         assertThat(updated.hasDownloads(), is(false));
         assertThat(updated.hasIssues(), is(false));

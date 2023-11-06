@@ -47,6 +47,7 @@
     <jjwt.suite.version>0.11.5</jjwt.suite.version>
 
     <jacoco.surefire.argLine />
+    <mockito.version>5.5.0</mockito.version>
     <surefire.argLine />
   </properties>
 
@@ -573,7 +574,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.5.0</version>
+      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -614,6 +615,16 @@
     </pluginRepository>
   </pluginRepositories>
   <profiles>
+    <profile>
+      <id>mockito-jdk8</id>
+      <activation>
+	<jdk>(,11)</jdk>
+      </activation>
+      <properties>
+        <!-- Mockito 5.x and above do not support Java 8 or lower -->
+        <mockito.version>4.11.0</mockito.version>
+      </properties>
+    </profile>
     <!-- only enable slow-or-flaky-test if -Dtest= is not present -->
     <profile>
       <id>slow-or-flaky-test</id>

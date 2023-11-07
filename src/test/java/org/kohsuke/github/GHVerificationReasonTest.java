@@ -217,4 +217,88 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
         assertThat(commit.getCommitShortInfo().getVerification().getPayload(), notNullValue());
         assertThat(commit.getCommitShortInfo().getVerification().getSignature(), notNullValue());
     }
+
+    /**
+     * Test bad cert.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testBadCert() throws Exception {
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
+        GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f01");
+        assertThat(commit.getCommitShortInfo().getAuthor().getName(), equalTo("Sourabh Parkala"));
+        assertThat(commit.getCommitShortInfo().getVerification().getSignature(), notNullValue());
+        assertThat(commit.getCommitShortInfo().getVerification().isVerified(), is(false));
+        assertThat(commit.getCommitShortInfo().getVerification().getReason(), equalTo(GHVerification.Reason.BAD_CERT));
+    }
+
+    /**
+     * Test malformed sig.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testMalformedSig() throws Exception {
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
+        GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f01");
+        assertThat(commit.getCommitShortInfo().getAuthor().getName(), equalTo("Sourabh Parkala"));
+        assertThat(commit.getCommitShortInfo().getVerification().getSignature(), notNullValue());
+        assertThat(commit.getCommitShortInfo().getVerification().isVerified(), is(false));
+        assertThat(commit.getCommitShortInfo().getVerification().getReason(),
+                equalTo(GHVerification.Reason.MALFORMED_SIG));
+    }
+
+    /**
+     * Test OSCP error.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testOcspError() throws Exception {
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
+        GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f01");
+        assertThat(commit.getCommitShortInfo().getAuthor().getName(), equalTo("Sourabh Parkala"));
+        assertThat(commit.getCommitShortInfo().getVerification().getSignature(), notNullValue());
+        assertThat(commit.getCommitShortInfo().getVerification().isVerified(), is(false));
+        assertThat(commit.getCommitShortInfo().getVerification().getReason(),
+                equalTo(GHVerification.Reason.OCSP_ERROR));
+    }
+
+    /**
+     * Test OSCP pending.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testOscpPending() throws Exception {
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
+        GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f01");
+        assertThat(commit.getCommitShortInfo().getAuthor().getName(), equalTo("Sourabh Parkala"));
+        assertThat(commit.getCommitShortInfo().getVerification().getSignature(), notNullValue());
+        assertThat(commit.getCommitShortInfo().getVerification().isVerified(), is(false));
+        assertThat(commit.getCommitShortInfo().getVerification().getReason(),
+                equalTo(GHVerification.Reason.OCSP_PENDING));
+    }
+
+    /**
+     * Test OCSP revoked.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testOscpRevoked() throws Exception {
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
+        GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f01");
+        assertThat(commit.getCommitShortInfo().getAuthor().getName(), equalTo("Sourabh Parkala"));
+        assertThat(commit.getCommitShortInfo().getVerification().getSignature(), notNullValue());
+        assertThat(commit.getCommitShortInfo().getVerification().isVerified(), is(false));
+        assertThat(commit.getCommitShortInfo().getVerification().getReason(),
+                equalTo(GHVerification.Reason.OCSP_REVOKED));
+    }
 }

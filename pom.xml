@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.317-SNAPSHOT</version>
+  <version>1.318-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -60,7 +60,7 @@
       <extension>
         <groupId>org.apache.maven.scm</groupId>
         <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>1.13.0</version>
+        <version>2.0.1</version>
       </extension>
       <!-- Doing site publishing manually for now -->
 <!--
@@ -357,7 +357,7 @@
       <plugin>
         <groupId>com.infradna.tool</groupId>
         <artifactId>bridge-method-injector</artifactId>
-        <version>1.23</version>
+        <version>1.29</version>
         <executions>
           <execution>
             <goals>
@@ -520,7 +520,7 @@
     <dependency>
       <groupId>com.infradna.tool</groupId>
       <artifactId>bridge-method-annotation</artifactId>
-      <version>1.23</version>
+      <version>1.29</version>
       <optional>true</optional>
     </dependency>
     <!-- for stapler-jetty -->
@@ -553,7 +553,7 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>6.4.0.202211300538-r</version>
+      <version>6.7.0.202309050840-r</version>
       <scope>test</scope>
     </dependency>
     <dependency>

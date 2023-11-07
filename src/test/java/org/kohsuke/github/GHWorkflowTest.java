@@ -167,6 +167,25 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
         checkWorkflowRunProperties(workflowRuns.get(1), workflow.getId());
     }
 
+    /**
+     * Test list workflow runs.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListWorkflowRunsStartupFailure() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
+
+        List<GHWorkflowRun> workflowRuns = workflow.listRuns().toList();
+
+        var filtered = workflowRuns.stream()
+                .filter(run -> run.getConclusion() == GHWorkflowRun.Conclusion.STARTUP_FAILURE)
+                .toArray();
+
+        assertThat(filtered.length, equalTo(0));
+    }
+
     private static void checkWorkflowRunProperties(GHWorkflowRun workflowRun, long workflowId) throws IOException {
         assertThat(workflowRun.getWorkflowId(), equalTo(workflowId));
         assertThat(workflowRun.getId(), notNullValue());

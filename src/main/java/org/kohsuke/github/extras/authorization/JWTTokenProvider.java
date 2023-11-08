@@ -1,5 +1,7 @@
 package org.kohsuke.github.extras.authorization;
 
+import org.kohsuke.github.authorization.AuthorizationProvider;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -15,8 +17,6 @@ import java.time.Instant;
 import java.util.Base64;
 
 import javax.annotation.Nonnull;
-
-import org.kohsuke.github.authorization.AuthorizationProvider;
 
 /**
  * A authorization provider that gives valid JWT tokens. These tokens are then used to create a time-based token to

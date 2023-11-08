@@ -1,8 +1,6 @@
 **/extras/**
-**/AbuseLimitHandlerTest
 **/GHRateLimitTest
 **/GHPullRequestTest
-**/GitHubStaticTest
 **/RequesterRetryTest
 **/RateLimitCheckerTest
 **/RateLimitHandlerTest

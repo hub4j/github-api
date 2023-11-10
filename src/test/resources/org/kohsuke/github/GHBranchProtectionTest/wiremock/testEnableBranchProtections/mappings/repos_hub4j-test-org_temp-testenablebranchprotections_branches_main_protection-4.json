@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"required_pull_request_reviews\":{\"required_approving_review_count\":2,\"require_code_owner_reviews\":true,\"dismiss_stale_reviews\":true},\"required_status_checks\":{\"contexts\":[\"test-status-check\"],\"strict\":true},\"restrictions\":null,\"enforce_admins\":true}",
+        "equalToJson": "{\"required_pull_request_reviews\":{\"required_approving_review_count\":2,\"require_code_owner_reviews\":true,\"dismiss_stale_reviews\":true,\"require_last_push_approval\":true},\"required_status_checks\":{\"contexts\":[\"test-status-check\"],\"strict\":true},\"restrictions\":null,\"allow_deletions\":true,\"allow_force_pushes\":true,\"allow_fork_syncing\":true,\"block_creations\":true,\"enforce_admins\":true,\"lock_branch\":true,\"required_conversation_resolution\":true,\"required_linear_history\":true}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

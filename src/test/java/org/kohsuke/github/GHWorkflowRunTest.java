@@ -456,6 +456,28 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getConclusion(), is(Conclusion.SUCCESS));
     }
 
+    /**
+     * Test start up failure conclusion.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+
+    @Test
+    public void testStartupFailureConclusion() throws IOException {
+        snapshotNotAllowed();
+
+        GHWorkflow ghWorkflow = repo.getWorkflow("startup-failure-workflow.yml");
+
+        List<GHWorkflowRun> ghWorkflowRunList = ghWorkflow.listRuns().toList();
+
+        List<GHWorkflowRun> list = ghWorkflowRunList.stream().filter(
+            ghWorkflowRun -> ghWorkflowRun.getConclusion().equals(Conclusion.STARTUP_FAILURE)
+        ).collect(Collectors.toList());
+
+        assertThat(list.get(0).getConclusion(), is(Conclusion.STARTUP_FAILURE));
+    }
+
     private void await(String alias, Function<GHRepository, Boolean> condition) throws IOException {
         if (!mockGitHub.isUseProxy()) {
             return;

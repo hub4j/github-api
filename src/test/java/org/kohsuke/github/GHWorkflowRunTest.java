@@ -471,9 +471,9 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
         List<GHWorkflowRun> ghWorkflowRunList = ghWorkflow.listRuns().toList();
 
-        List<GHWorkflowRun> list = ghWorkflowRunList.stream().filter(
-            ghWorkflowRun -> ghWorkflowRun.getConclusion().equals(Conclusion.STARTUP_FAILURE)
-        ).collect(Collectors.toList());
+        List<GHWorkflowRun> list = ghWorkflowRunList.stream()
+                .filter(ghWorkflowRun -> ghWorkflowRun.getConclusion().equals(Conclusion.STARTUP_FAILURE))
+                .collect(Collectors.toList());
 
         assertThat(list.get(0).getConclusion(), is(Conclusion.STARTUP_FAILURE));
     }

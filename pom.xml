@@ -44,7 +44,7 @@
     <jacoco.coverage.target.class.method>0.50</jacoco.coverage.target.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
-    <jjwt.suite.version>0.11.5</jjwt.suite.version>
+    <jjwt.suite.version>0.12.3</jjwt.suite.version>
 
     <jacoco.surefire.argLine />
     <surefire.argLine />
@@ -83,7 +83,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.2</version>
+          <version>3.2.2</version>
           <configuration>
             <!-- SUREFIRE-1226 workaround -->
             <trimStackTrace>false</trimStackTrace>
@@ -458,6 +458,18 @@
     </plugins>
   </build>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>2.15.3</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>   
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -510,7 +522,6 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.15.2</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -652,7 +663,7 @@
   <profiles>
     <!-- only enable slow-or-flaky-test if -Dtest= is not present -->
     <profile>
-      <id>test-slow-multireleasejar-flaky</id>
+      <id>test-jwt-slow-multireleasejar-flaky</id>
       <activation>
         <property>
           <name>!test</name>
@@ -713,6 +724,40 @@
                   <!-- There are some tests that take longer or are a little
                     flaky. Run them here. -->
                   <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
+                </configuration>
+              </execution>
+              <execution>
+                <!-- Verify that JWT suite 0.11.x still works -->
+                <id>jwt0.11.x-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttp</argLine>
+                  <classpathDependencyExcludes>
+                    <classpathDependencyExclude>io.jsonwebtoken:*</classpathDependencyExclude>
+                  </classpathDependencyExcludes>
+                  <additionalClasspathDependencies>
+                    <additionalClasspathDependency>
+                      <groupId>io.jsonwebtoken</groupId>
+                      <artifactId>jjwt-api</artifactId>
+                      <version>0.11.5</version>
+                    </additionalClasspathDependency>
+                    <additionalClasspathDependency>
+                      <groupId>io.jsonwebtoken</groupId>
+                      <artifactId>jjwt-impl</artifactId>
+                      <version>0.11.5</version>
+                    </additionalClasspathDependency>
+                    <additionalClasspathDependency>
+                      <groupId>io.jsonwebtoken</groupId>
+                      <artifactId>jjwt-jackson</artifactId>
+                      <version>0.11.5</version>
+                    </additionalClasspathDependency>
+                  </additionalClasspathDependencies>
                 </configuration>
               </execution>
             </executions>

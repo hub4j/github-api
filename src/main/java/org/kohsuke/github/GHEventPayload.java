@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -9,6 +10,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -265,16 +267,68 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App Installation</a>
      */
     public static class Installation extends GHEventPayload {
+
+        private boolean reposLoaded = false;
         private List<GHRepository> repositories;
+        private List<Repository> rawRepositories;
 
         /**
          * Gets repositories.
+         * For the "deleted" action please rather call {@link #getRawRepositories()}
          *
          * @return the repositories
          */
         public List<GHRepository> getRepositories() {
+            if ("deleted".equalsIgnoreCase(getAction())) {
+                throw new IllegalStateException("Can't call #getRepositories() on Installation event " +
+                        "with 'deleted' action. Please rather call #getRawRepositories()");
+            }
+
+            if (reposLoaded) {
+                return Collections.unmodifiableList(repositories);
+            }
+
+            if (repositories == null || repositories.isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            try {
+                for (GHRepository singleRepo : repositories) {
+                    // populate each repository
+                    // the repository information provided here is so limited
+                    // as to be unusable without populating, so we do it eagerly
+                    singleRepo.populate();
+                }
+            } catch (IOException e) {
+                throw new GHException("Failed to refresh repositories", e);
+            } finally {
+                reposLoaded = true;
+            }
+
             return Collections.unmodifiableList(repositories);
-        };
+        }
+
+        ;
+
+        /**
+         * Returns a list of raw, unpopulated repositories.
+         * Useful when calling from within Installation event with action "deleted".
+         * You can't fetch the info for repositories of an already deleted installation.
+         *
+         * @return List<Repository>
+         */
+        public List<Repository> getRawRepositories() {
+            return Collections.unmodifiableList(rawRepositories);
+        }
+
+        @JsonSetter
+        public void setRepositories(List<GHRepository> repositories) {
+            this.repositories = repositories;
+            this.rawRepositories = repositories
+                    .stream()
+                    .map(r -> new Repository(r.getId(), r.getFullName(), r.getName(), r.getNodeId(), r.isPrivate()))
+                    .collect(Collectors.toList());
+        }
 
         /**
          * Late bind.
@@ -286,22 +340,47 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
                         "Expected installation payload, but got something else. Maybe we've got another type of event?");
             }
             super.lateBind();
+        }
 
-            if ("deleted".equalsIgnoreCase(getAction())) {
-                repositories.clear(); // can't populate repo list on a deleted installation
+        /**
+         * A special minimal implementation of a {@link GHRepository} which contains
+         * only fields from "Properties of repositories" from
+         * <a href="https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#installation">here</a>
+         */
+        public static class Repository {
+            private final long id;
+            private final String fullName;
+            private final String name;
+            private final String nodeId;
+            @JsonProperty(value = "private")
+            private boolean isPrivate;
+
+            public Repository(long id, String fullName, String name, String nodeId, boolean isPrivate) {
+                this.id = id;
+                this.fullName = fullName;
+                this.name = name;
+                this.nodeId = nodeId;
+                this.isPrivate = isPrivate;
             }
 
-            if (repositories != null && !repositories.isEmpty()) {
-                try {
-                    for (GHRepository singleRepo : repositories) {
-                        // populate each repository
-                        // the repository information provided here is so limited
-                        // as to be unusable without populating, so we do it eagerly
-                        singleRepo.populate();
-                    }
-                } catch (IOException e) {
-                    throw new GHException("Failed to refresh repositories", e);
-                }
+            public long getId() {
+                return id;
+            }
+
+            public String getFullName() {
+                return fullName;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public String getNodeId() {
+                return nodeId;
+            }
+
+            public boolean isPrivate() {
+                return isPrivate;
             }
         }
     }

@@ -25,8 +25,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -984,6 +983,25 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("Codertocat"));
     }
 
+    @Test
+    @Payload("installation_created")
+    public void InstallationCreatedEvent() throws Exception {
+        final GHEventPayload.Installation event = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .build()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Installation.class);
+
+        assertThat(event.getAction(), is("created"));
+        assertThat(event.getInstallation().getId(), is(43898337L));
+        assertThat(event.getInstallation().getAccount().getLogin(), is("CronFire"));
+
+        assertFalse(event.getRepositories().isEmpty());
+        assertEquals(event.getRepositories().get(0).getId(), 1296269);
+        assertFalse(event.getRawRepositories().isEmpty());
+        assertEquals(event.getRawRepositories().get(0).getId(), 1296269);
+
+        assertThat(event.getSender().getLogin(), is("Haarolean"));
+    }
+
     /**
      * Installation event.
      *
@@ -991,8 +1009,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     @Test
-    @Payload("installation")
-    public void InstallationEvent() throws Exception {
+    @Payload("installation_deleted")
+    public void InstallationDeletedEvent() throws Exception {
         final GHEventPayload.Installation event = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Installation.class);
@@ -1001,7 +1019,9 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getInstallation().getId(), is(2L));
         assertThat(event.getInstallation().getAccount().getLogin(), is("octocat"));
 
-        assertTrue(event.getRepositories().isEmpty());
+        assertThrows(IllegalStateException.class, () -> event.getRepositories().isEmpty());
+        assertFalse(event.getRawRepositories().isEmpty());
+        assertEquals(event.getRawRepositories().get(0).getId(), 1296269);
 
         assertThat(event.getSender().getLogin(), is("octocat"));
     }

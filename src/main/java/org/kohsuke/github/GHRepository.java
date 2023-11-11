@@ -103,6 +103,8 @@ public class GHRepository extends GHObject {
 
     private boolean allow_rebase_merge;
 
+    private boolean allow_forking;
+
     private boolean delete_branch_on_merge;
 
     @JsonProperty("private")
@@ -713,6 +715,15 @@ public class GHRepository extends GHObject {
      */
     public boolean isAllowRebaseMerge() {
         return allow_rebase_merge;
+    }
+
+    /**
+     * Is allow private forks
+     *
+     * @return the boolean
+     */
+    public boolean isAllowForking() {
+        return allow_forking;
     }
 
     /**
@@ -1459,6 +1470,18 @@ public class GHRepository extends GHObject {
      */
     public void allowRebaseMerge(boolean value) throws IOException {
         set().allowRebaseMerge(value);
+    }
+
+    /**
+     * Allow private fork.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void allowForking(boolean value) throws IOException {
+        set().allowForking(value);
     }
 
     /**

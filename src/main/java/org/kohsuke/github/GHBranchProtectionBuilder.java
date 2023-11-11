@@ -27,7 +27,7 @@ import static org.kohsuke.github.internal.Previews.LUKE_CAGE;
 public class GHBranchProtectionBuilder {
     private final GHBranch branch;
 
-    private boolean enforceAdmins;
+    private Map<String, Object> fields = new HashMap<String, Object>();
     private Map<String, Object> prReviews;
     private Restrictions restrictions;
     private StatusChecks statusChecks;
@@ -40,6 +40,7 @@ public class GHBranchProtectionBuilder {
      */
     GHBranchProtectionBuilder(GHBranch branch) {
         this.branch = branch;
+        includeAdmins(false);
     }
 
     /**
@@ -63,6 +64,95 @@ public class GHBranchProtectionBuilder {
      */
     public GHBranchProtectionBuilder addRequiredChecks(String... checks) {
         addRequiredChecks(Arrays.asList(checks));
+        return this;
+    }
+
+    /**
+     * Allow deletion of the protected branch.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder allowDeletions() {
+        return allowDeletions(true);
+    }
+
+    /**
+     * Allows deletion of the protected branch by anyone with write access to the repository. Set to true to allow
+     * deletion of the protected branch. Default: false.
+     *
+     * @param v
+     *            the v
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder allowDeletions(boolean v) {
+        fields.put("allow_deletions", v);
+        return this;
+    }
+
+    /**
+     * Permits force pushes.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder allowForcePushes() {
+        return allowForcePushes(true);
+    }
+
+    /**
+     * Permits force pushes to the protected branch by anyone with write access to the repository. Set to true to allow
+     * force pushes. Set to false to block force pushes. Default: false.
+     *
+     * @param v
+     *            the v
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder allowForcePushes(boolean v) {
+        fields.put("allow_force_pushes", v);
+        return this;
+    }
+
+    /**
+     * Allow fork syncing.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder allowForkSyncing() {
+        return allowForkSyncing(true);
+    }
+
+    /**
+     * Whether users can pull changes from upstream when the branch is locked. Set to true to allow fork syncing. Set to
+     * true to enable. Default: false.
+     *
+     * @param v
+     *            the v
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder allowForkSyncing(boolean v) {
+        fields.put("allow_fork_syncing", v);
+        return this;
+    }
+
+    /**
+     * Restrict new branch creation.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder blockCreations() {
+        return blockCreations(true);
+    }
+
+    /**
+     * If set to true, the restrictions branch protection settings which limits who can push will also block pushes
+     * which create new branches, unless the push is initiated by a user, team, or app which has the ability to push.
+     * Set to true to restrict new branch creation. Default: false.
+     *
+     * @param v
+     *            the v
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder blockCreations(boolean v) {
+        fields.put("block_creations", v);
         return this;
     }
 
@@ -96,10 +186,10 @@ public class GHBranchProtectionBuilder {
      */
     public GHBranchProtection enable() throws IOException {
         return requester().method("PUT")
+                .with(fields)
                 .withNullable("required_status_checks", statusChecks)
                 .withNullable("required_pull_request_reviews", prReviews)
                 .withNullable("restrictions", restrictions)
-                .withNullable("enforce_admins", enforceAdmins)
                 .withUrlPath(branch.getProtectionUrl().toString())
                 .fetch(GHBranchProtection.class);
     }
@@ -121,7 +211,29 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder includeAdmins(boolean v) {
-        enforceAdmins = v;
+        fields.put("enforce_admins", v);
+        return this;
+    }
+
+    /**
+     * Set the branch as read-only.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder lockBranch() {
+        return lockBranch(true);
+    }
+
+    /**
+     * Whether to set the branch as read-only. If this is true, users will not be able to push to the branch. Set to
+     * true to enable. Default: false.
+     *
+     * @param v
+     *            the v
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder lockBranch(boolean v) {
+        fields.put("lock_branch", v);
         return this;
     }
 
@@ -176,6 +288,73 @@ public class GHBranchProtectionBuilder {
      */
     public GHBranchProtectionBuilder requireCodeOwnReviews(boolean v) {
         getPrReviews().put("require_code_owner_reviews", v);
+        return this;
+    }
+
+    /**
+     * Enable the most recent push must be approved by someone other than the person who pushed it.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder requireLastPushApproval() {
+        return requireLastPushApproval(true);
+    }
+
+    /**
+     * Whether the most recent push must be approved by someone other than the person who pushed it. Default: false.
+     *
+     * @param v
+     *            the v
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder requireLastPushApproval(boolean v) {
+        getPrReviews().put("require_last_push_approval", v);
+        return this;
+    }
+
+    /**
+     * Require all conversations on code to be resolved before a pull request can be merged into a branch that matches
+     * this rule.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder requiredConversationResolution() {
+        return requiredConversationResolution(true);
+    }
+
+    /**
+     * Require all conversations on code to be resolved before a pull request can be merged into a branch that matches
+     * this rule. Set to true to enable. Default: false.
+     *
+     * @param v
+     *            the v
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder requiredConversationResolution(boolean v) {
+        fields.put("required_conversation_resolution", v);
+        return this;
+    }
+
+    /**
+     * Enforce a linear commit Git history.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder requiredLinearHistory() {
+        return requiredLinearHistory(true);
+    }
+
+    /**
+     * Enforces a linear commit Git history, which prevents anyone from pushing merge commits to a branch. Set to true
+     * to enforce a linear commit history. Set to false to disable a linear commit Git history. Your repository must
+     * allow squash merging or rebase merging before you can enable a linear commit history. Default: false.
+     *
+     * @param v
+     *            the v
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder requiredLinearHistory(boolean v) {
+        fields.put("required_linear_history", v);
         return this;
     }
 

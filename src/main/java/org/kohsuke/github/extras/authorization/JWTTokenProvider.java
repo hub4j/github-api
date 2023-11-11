@@ -1,9 +1,5 @@
 package org.kohsuke.github.extras.authorization;
 
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.jackson.io.JacksonSerializer;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.File;
@@ -19,7 +15,6 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
-import java.util.Date;
 
 import javax.annotation.Nonnull;
 
@@ -171,18 +166,10 @@ public class JWTTokenProvider implements AuthorizationProvider {
         // Setting the issued at to a time in the past to allow for clock skew
         Instant issuedAt = getIssuedAt(now);
 
-        // Let's set the JWT Claims
-        JwtBuilder builder = Jwts.builder()
-                .setIssuedAt(Date.from(issuedAt))
-                .setExpiration(Date.from(expiration))
-                .setIssuer(this.applicationId)
-                .signWith(privateKey, SignatureAlgorithm.RS256);
-
         // Token will refresh 2 minutes before it expires
         validUntil = expiration.minus(Duration.ofMinutes(2));
 
-        // Builds the JWT and serializes it to a compact, URL-safe string
-        return builder.serializeToJsonWith(new JacksonSerializer<>()).compact();
+        return JwtBuilderUtil.buildJwt(issuedAt, expiration, applicationId, privateKey);
     }
 
     Instant getIssuedAt(Instant now) {

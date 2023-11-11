@@ -548,6 +548,8 @@ public class GHWorkflowRun extends GHObject {
         STALE,
         /** The timed out. */
         TIMED_OUT,
+        /** Start up fail */
+        STARTUP_FAILURE,
         /** The unknown. */
         UNKNOWN;
 

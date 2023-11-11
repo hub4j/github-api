@@ -2,8 +2,8 @@ package org.kohsuke.github;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
 
     /** The terms. */
-    protected final List<String> terms = new ArrayList<String>();
+    protected final Set<String> terms = new LinkedHashSet<>();
 
     /**
      * Data transfer object that receives the result of search.

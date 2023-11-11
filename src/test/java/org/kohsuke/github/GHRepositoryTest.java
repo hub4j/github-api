@@ -1753,76 +1753,73 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         Thread.sleep(1000);
 
         // search by states
-        GHPullRequestSearchBuilder search = gitHub.searchPullRequests().repo(repository).isOpen().isDraft();
-        PagedSearchIterable<GHPullRequest> searchResult = repository.searchPullRequests(search);
+        GHPullRequestSearchBuilder search = repository.searchPullRequests().isOpen().isDraft();
+        PagedSearchIterable<GHPullRequest> searchResult = search.list();
         this.verifySingleResult(searchResult, draftPR);
 
-        search = gitHub.searchPullRequests().repo(repository).isClosed().isMerged();
-        searchResult = repository.searchPullRequests(search);
+        search = repository.searchPullRequests().isClosed().isMerged();
+        searchResult = search.list();
         this.verifySingleResult(searchResult, mergedPR);
 
         // search by dates
-        LocalDate from = LocalDate.parse("2023-09-01");
-        LocalDate to = LocalDate.parse("2023-09-12");
-        LocalDate afterRange = LocalDate.parse("2023-09-14");
+        LocalDate from = LocalDate.parse("2023-11-01");
+        LocalDate to = LocalDate.parse("2023-11-11");
+        LocalDate afterRange = LocalDate.parse("2023-11-12");
 
-        search = gitHub.searchPullRequests()
-                .repo(repository)
+        search = repository.searchPullRequests()
                 .created(from, to)
                 .updated(from, to)
                 .sort(GHPullRequestSearchBuilder.Sort.UPDATED);
-        searchResult = repository.searchPullRequests(search);
+        searchResult = search.list();
         this.verifyPluralResult(searchResult, mergedPR, draftPR);
 
-        search = gitHub.searchPullRequests().repo(repository).merged(from, to).closed(from, to);
-        searchResult = repository.searchPullRequests(search);
+        search = repository.searchPullRequests().merged(from, to).closed(from, to);
+        searchResult = search.list();
         this.verifySingleResult(searchResult, mergedPR);
 
-        search = gitHub.searchPullRequests().repo(repository).created(to).updated(to).closed(to).merged(to);
-        searchResult = repository.searchPullRequests(search);
+        search = repository.searchPullRequests().created(to).updated(to).closed(to).merged(to);
+        searchResult = search.list();
         this.verifySingleResult(searchResult, mergedPR);
 
-        search = gitHub.searchPullRequests()
-                .repo(repository)
+        search = repository.searchPullRequests()
                 .createdAfter(from, false)
                 .updatedAfter(from, false)
                 .mergedAfter(from, true)
                 .closedAfter(from, true);
-        searchResult = repository.searchPullRequests(search);
+        searchResult = search.list();
         this.verifySingleResult(searchResult, mergedPR);
 
-        search = gitHub.searchPullRequests()
-                .repo(repository)
+        search = repository.searchPullRequests()
                 .createdBefore(afterRange, false)
                 .updatedBefore(afterRange, false)
                 .closedBefore(afterRange, true)
                 .mergedBefore(afterRange, false);
-        searchResult = repository.searchPullRequests(search);
+        searchResult = search.list();
         this.verifySingleResult(searchResult, mergedPR);
 
         // search by version control
         Map<String, GHBranch> branches = repository.getBranches();
-        search = gitHub.searchPullRequests()
+        search = repository.searchPullRequests()
                 .base(branches.get("main"))
                 .head(branches.get("branchToMerge"))
                 .commit(commit.getCommit().getSha());
-        searchResult = repository.searchPullRequests(search);
+        searchResult = search.list();
         this.verifySingleResult(searchResult, mergedPR);
 
         // search by remaining filters
-        search = gitHub.searchPullRequests()
-                .repo(repository)
+        search = repository.searchPullRequests()
                 .titleLike("Temp")
-                .sort(GHPullRequestSearchBuilder.Sort.CREATED);
-        searchResult = repository.searchPullRequests(search);
+                .sort(GHPullRequestSearchBuilder.Sort.CREATED)
+                .order(GHDirection.ASC);
+        searchResult = search.list();
         this.verifyPluralResult(searchResult, draftPR, mergedPR);
 
-        search = gitHub.searchPullRequests().repo(repository).inLabels(Arrays.asList("test")).order(GHDirection.DESC);
-        searchResult = repository.searchPullRequests(search);
+        search = repository.searchPullRequests().inLabels(Arrays.asList("test")).order(GHDirection.DESC);
+        searchResult = search.list();
         this.verifyPluralResult(searchResult, mergedPR, draftPR);
 
-        search = gitHub.searchPullRequests().repo(repository).assigned(myself).mentions(myself);
-        searchResult = repository.searchPullRequests(search);
+        search = repository.searchPullRequests().assigned(myself).mentions(myself);
+        searchResult = search.list();
         this.verifySingleResult(searchResult, mergedPR);
     }
 

@@ -22,6 +22,17 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     }
 
     /**
+     * Instantiates a new GH search builder from repository.
+     *
+     * @param repository
+     *            the gh repository
+     */
+    GHPullRequestSearchBuilder(GHRepository repository) {
+        super(repository.root(), PullRequestSearchResult.class);
+        this.repo(repository);
+    }
+
+    /**
      * Repository gh pull request search builder.
      *
      * @param repository
@@ -470,12 +481,6 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
         /** The relevance. */
         RELEVANCE
 
-    }
-
-    static GHPullRequestSearchBuilder from(GHPullRequestSearchBuilder searchBuilder) {
-        GHPullRequestSearchBuilder builder = new GHPullRequestSearchBuilder(searchBuilder.root());
-        searchBuilder.terms.forEach(builder::q);
-        return builder;
     }
 
     private static class PullRequestSearchResult extends SearchResult<GHPullRequest> {

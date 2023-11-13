@@ -1707,7 +1707,7 @@ public class GHRepository extends GHObject {
      * @return gh pull request search builder for current repository
      */
     public GHPullRequestSearchBuilder searchPullRequests() {
-        return new GHPullRequestSearchBuilder(this);
+        return new GHPullRequestSearchBuilder(this.root()).repo(this);
     }
 
     /**

@@ -273,15 +273,14 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         private List<Repository> rawRepositories;
 
         /**
-         * Gets repositories.
-         * For the "deleted" action please rather call {@link #getRawRepositories()}
+         * Gets repositories. For the "deleted" action please rather call {@link #getRawRepositories()}
          *
          * @return the repositories
          */
         public List<GHRepository> getRepositories() {
             if ("deleted".equalsIgnoreCase(getAction())) {
-                throw new IllegalStateException("Can't call #getRepositories() on Installation event " +
-                        "with 'deleted' action. Please rather call #getRawRepositories()");
+                throw new IllegalStateException("Can't call #getRepositories() on Installation event "
+                        + "with 'deleted' action. Please rather call #getRawRepositories()");
             }
 
             if (reposLoaded) {
@@ -311,9 +310,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         ;
 
         /**
-         * Returns a list of raw, unpopulated repositories.
-         * Useful when calling from within Installation event with action "deleted".
-         * You can't fetch the info for repositories of an already deleted installation.
+         * Returns a list of raw, unpopulated repositories. Useful when calling from within Installation event with
+         * action "deleted". You can't fetch the info for repositories of an already deleted installation.
          *
          * @return List<Repository>
          */
@@ -324,8 +322,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @JsonSetter
         public void setRepositories(List<GHRepository> repositories) {
             this.repositories = repositories;
-            this.rawRepositories = repositories
-                    .stream()
+            this.rawRepositories = repositories.stream()
                     .map(r -> new Repository(r.getId(), r.getFullName(), r.getName(), r.getNodeId(), r.isPrivate()))
                     .collect(Collectors.toList());
         }
@@ -343,9 +340,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * A special minimal implementation of a {@link GHRepository} which contains
-         * only fields from "Properties of repositories" from
-         * <a href="https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#installation">here</a>
+         * A special minimal implementation of a {@link GHRepository} which contains only fields from "Properties of
+         * repositories" from <a href=
+         * "https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#installation">here</a>
          */
         public static class Repository {
             private final long id;

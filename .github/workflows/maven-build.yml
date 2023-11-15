@@ -38,7 +38,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: maven-target-directory
-        path: target/
+        path: github-api/target/
         retention-days: 3
   site:
     name: site (Java 17)
@@ -97,7 +97,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: maven-target-directory
-        path: target
+        path: github-api/target
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
@@ -105,4 +105,4 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'   
     - name: Maven Test (no build) Java 8
-      run: mvn -B surefire:test -DfailIfNoTests -Dsurefire.excludesFile=src/test/resources/slow-or-flaky-tests.txt
+      run: cd github-api && mvn -B surefire:test -DfailIfNoTests -Dsurefire.excludesFile=src/test/resources/slow-or-flaky-tests.txt

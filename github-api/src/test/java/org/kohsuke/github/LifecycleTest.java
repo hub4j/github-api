@@ -64,7 +64,7 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
     }
 
     private GHAsset uploadAsset(GHRelease release) throws IOException {
-        GHAsset asset = release.uploadAsset(new File("LICENSE.txt"), "application/text");
+        GHAsset asset = release.uploadAsset(new File("../LICENSE.txt"), "application/text");
         assertThat(asset, notNullValue());
         List<GHAsset> cachedAssets = release.assets();
         assertThat(cachedAssets, is(empty()));

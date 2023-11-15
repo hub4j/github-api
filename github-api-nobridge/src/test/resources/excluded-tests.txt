@@ -1,0 +1,15 @@
+**/extras/**
+**/AppInstallationAuthorizationProviderTest
+**/BridgeMethodTest
+**/GitHubConnectionTest
+**/GHAppInstallationTest
+**/GHAuthenticatedAppInstallationTest
+**/GHAppTest
+**/GHCheckRunBuilderTest
+**/GHContentIntegrationTest
+**/GHEventPayloadTest
+**/GHPullRequestTest
+**/GHRateLimitTest
+**/RequesterRetryTest
+**/RateLimitCheckerTest
+**/RateLimitHandlerTest

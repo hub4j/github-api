@@ -17,7 +17,6 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -222,10 +221,9 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     @Override
     protected void after() {
         super.after();
-        // TEMP
-        // if (!isTakeSnapshot()) {
-        //     return;
-        // }
+        if (!isTakeSnapshot()) {
+            return;
+        }
 
         recordSnapshot(this.apiServer(), "https://api.github.com", false);
 
@@ -366,9 +364,6 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                         // Can be Array or Map
                         Object parsedObject = g.fromJson(fileText, Object.class);
                         String outputFileText = g.toJson(parsedObject);
-                        if (fileText.endsWith("\n")) {
-                            outputFileText += "\n";
-                        }
                         Files.write(targetFilePath, outputFileText.getBytes());
                     }
                 } catch (Exception e) {
@@ -416,23 +411,13 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         // Replace GUID strings in file paths with abbreviated GUID to limit file path length for windows
         fileName = fileName.replaceAll("(_[a-f0-9]{8})[a-f0-9]{32}([_.])", "$1$2");
 
-       // TEMP
-       // Move all index numbers to the front of the file name for clarity
-       fileName =  fileName.replaceAll("^(.+?)-([0-9]+)\\.", "$2-$1.");
-       // Short early segments of the file name
-       // which tend to be "repos_hub4j-test-org_{repository}".
-       fileName = fileName.replaceAll("^([0-9]+-[a-zA-Z])[^_]+_([a-zA-Z])[^_]+_([a-zA-Z])[^_]+_", "$1_$2_$3_");
-       fileName = fileName.replaceAll("^([0-9]+-[a-zA-Z])[^_]+_([a-zA-Z])[^_]+_", "$1_$2_");
-
         // If the file name is still longer than 60 characters, truncate it
         fileName = fileName.replaceAll("^([^.]{60})[^.]+\\.", "$1.");
 
         String renamedFilePathString = Paths.get(filePath.getParent().toString(), fileName).toString();
         if (renamedFilePathString != filePath.toString()) {
             targetPath = new File(renamedFilePathString).toPath();
-            // Files.move(filePath, targetPath);
-            // TEMP
-            Files.move(filePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(filePath, targetPath);
         }
         return targetPath;
     }

@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -220,9 +222,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     @Override
     protected void after() {
         super.after();
-        if (!isTakeSnapshot()) {
-            return;
-        }
+        // TEMP
+        // if (!isTakeSnapshot()) {
+        //     return;
+        // }
 
         recordSnapshot(this.apiServer(), "https://api.github.com", false);
 
@@ -318,6 +321,7 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                 }
             });
 
+            int longestFileName = 0;
             // Update all
             Files.walk(path).forEach(filePath -> {
                 try {
@@ -326,10 +330,10 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                         return;
                     }
 
-                    Path renamedFilePath = renameFile(filePath, idToIndex);
-                    Path targetFilePath = renamedFilePath == null ? filePath : renamedFilePath;
-
                     if (filePath.toString().endsWith(".json")) {
+                        Path renamedFilePath = renameFile(filePath, idToIndex);
+                        Path targetFilePath = renamedFilePath == null ? filePath : renamedFilePath;
+
                         String fileText = new String(Files.readAllBytes(targetFilePath));
                         // while recording responses we replaced all github calls localhost
                         // now we reverse that for storage.
@@ -361,8 +365,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
                         // Can be Array or Map
                         Object parsedObject = g.fromJson(fileText, Object.class);
-                        fileText = g.toJson(parsedObject);
-                        Files.write(targetFilePath, fileText.getBytes());
+                        String outputFileText = g.toJson(parsedObject);
+                        if (fileText.endsWith("\n")) {
+                            outputFileText += "\n";
+                        }
+                        Files.write(targetFilePath, outputFileText.getBytes());
                     }
                 } catch (Exception e) {
                     throw new RuntimeException("Files could not be written: " + filePath.toString(), e);
@@ -381,10 +388,9 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         }
     }
 
-    private Map.Entry<String, String> getId(Path filePath, Map<String, String> idToIndex) throws IOException {
-        String filePathString = filePath.toString();
+    private Map.Entry<String, String> getId(String fileName, Map<String, String> idToIndex) throws IOException {
         for (Map.Entry<String, String> item : idToIndex.entrySet()) {
-            if (filePathString.contains(item.getKey())) {
+            if (fileName.contains(item.getKey())) {
                 return item;
             }
         }
@@ -393,19 +399,40 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
     private Path renameFile(Path filePath, Map<String, String> idToIndex) throws IOException {
         Path targetPath = null;
-        String renamedFilePathString = filePath.toString();
+        String fileName = filePath.getFileName().toString();
 
-        Map.Entry<String, String> idToIndexEntry = getId(filePath, idToIndex);
+        // Short early segments of the file name
+        // which tend to be "repos_hub4j-test-org_{repository}".
+        fileName = fileName.replaceAll("^([a-zA-Z])[^_]+_([a-zA-Z])[^_]+_([a-zA-Z])[^_]+_", "$1_$2_$3_");
+        fileName = fileName.replaceAll("^([a-zA-Z])[^_]+_([a-zA-Z])[^_]+_", "$1_$2_");
+
+        Map.Entry<String, String> idToIndexEntry = getId(fileName, idToIndex);
         if (idToIndexEntry != null) {
-            renamedFilePathString = renamedFilePathString.replace(idToIndexEntry.getKey(), idToIndexEntry.getValue());
+            fileName = fileName.replace("-" + idToIndexEntry.getKey(), "");
+            // put index number on the front for clarity
+            fileName = idToIndexEntry.getValue() + "-" + fileName;
         }
 
         // Replace GUID strings in file paths with abbreviated GUID to limit file path length for windows
-        renamedFilePathString = renamedFilePathString.replaceAll("(_[a-f0-9]{8})[a-f0-9]{32}([-_])", "$1$2");
+        fileName = fileName.replaceAll("(_[a-f0-9]{8})[a-f0-9]{32}([_.])", "$1$2");
 
+       // TEMP
+       // Move all index numbers to the front of the file name for clarity
+       fileName =  fileName.replaceAll("^(.+?)-([0-9]+)\\.", "$2-$1.");
+       // Short early segments of the file name
+       // which tend to be "repos_hub4j-test-org_{repository}".
+       fileName = fileName.replaceAll("^([0-9]+-[a-zA-Z])[^_]+_([a-zA-Z])[^_]+_([a-zA-Z])[^_]+_", "$1_$2_$3_");
+       fileName = fileName.replaceAll("^([0-9]+-[a-zA-Z])[^_]+_([a-zA-Z])[^_]+_", "$1_$2_");
+
+        // If the file name is still longer than 60 characters, truncate it
+        fileName = fileName.replaceAll("^([^.]{60})[^.]+\\.", "$1.");
+
+        String renamedFilePathString = Paths.get(filePath.getParent().toString(), fileName).toString();
         if (renamedFilePathString != filePath.toString()) {
             targetPath = new File(renamedFilePathString).toPath();
-            Files.move(filePath, targetPath);
+            // Files.move(filePath, targetPath);
+            // TEMP
+            Files.move(filePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
         }
         return targetPath;
     }

@@ -1338,6 +1338,15 @@ public class GitHub {
     }
 
     /**
+     * Search for pull requests.
+     *
+     * @return gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder searchPullRequests() {
+        return new GHPullRequestSearchBuilder(this);
+    }
+
+    /**
      * Search users.
      *
      * @return the gh user search builder

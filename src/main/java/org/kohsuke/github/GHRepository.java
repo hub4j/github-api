@@ -1702,6 +1702,15 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Retrieves pull requests according to search terms.
+     *
+     * @return gh pull request search builder for current repository
+     */
+    public GHPullRequestSearchBuilder searchPullRequests() {
+        return new GHPullRequestSearchBuilder(this.root()).repo(this);
+    }
+
+    /**
      * Creates a new pull request.
      *
      * @param title

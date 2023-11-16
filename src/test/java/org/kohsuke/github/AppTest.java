@@ -1430,6 +1430,47 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test searching for pull requests.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testPullRequestSearch() throws Exception {
+        GHRepository repository = gitHub.getRepository("kgromov/temp-testPullRequestSearch");
+        String mainHead = repository.getRef("heads/main").getObject().getSha();
+        GHRef headBranch = repository.createRef("refs/heads/kgromov-test", mainHead);
+        repository.createContent()
+                .content("Empty content")
+                .message("test search")
+                .path(headBranch.getRef())
+                .branch(headBranch.getRef())
+                .commit();
+        GHPullRequest newPR = repository
+                .createPullRequest("New PR", headBranch.getRef(), "refs/heads/main", "Hello, merged PR");
+        newPR.setLabels("test");
+        Thread.sleep(1000);
+
+        List<GHPullRequest> pullRequests = gitHub.searchPullRequests()
+                .repo(repository)
+                .createdByMe()
+                .isOpen()
+                .label("test")
+                .list()
+                .toList();
+        assertThat(pullRequests.size(), is(1));
+        assertThat(pullRequests.get(0).getNumber(), is(newPR.getNumber()));
+
+        int totalCount = gitHub.searchPullRequests()
+                .repo(repository)
+                .author(repository.getOwner())
+                .isMerged()
+                .list()
+                .getTotalCount();
+        assertThat(totalCount, is(0));
+    }
+
+    /**
      * Test readme.
      *
      * @throws IOException

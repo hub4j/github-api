@@ -1277,9 +1277,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testRef() throws IOException {
-        GHRef mainRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/main");
+        GHRef mainRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/master");
         assertThat(mainRef.getUrl().toString(),
-                equalTo(mockGitHub.apiServer().baseUrl() + "/repos/jenkinsci/jenkins/git/refs/heads/main"));
+                equalTo(mockGitHub.apiServer().baseUrl() + "/repos/jenkinsci/jenkins/git/refs/heads/master"));
     }
 
     /**

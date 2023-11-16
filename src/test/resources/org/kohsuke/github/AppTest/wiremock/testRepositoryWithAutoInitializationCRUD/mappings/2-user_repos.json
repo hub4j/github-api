@@ -1,0 +1,53 @@
+{
+  "id": "2196bd71-ace2-47fa-a6e5-2a0c51701125",
+  "name": "user_repos",
+  "request": {
+    "url": "/user/repos",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"auto_init\":true,\"name\":\"github-api-test-autoinit\",\"description\":\"a test repository for auto init\",\"homepage\":\"http://github-api.kohsuke.org/\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "2-user_repos.json",
+    "headers": {
+      "Date": "Tue, 31 Mar 2020 21:48:43 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4982",
+      "X-RateLimit-Reset": "1585694557",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"36f3cd4e77e0a4b8e0a9b137872a973e\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "public_repo, repo",
+      "Location": "https://api.github.com/repos/bitwiseman/github-api-test-autoinit",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E49F:9AFE:17D6D:1CF02:5E83BAB9"
+    }
+  },
+  "uuid": "2196bd71-ace2-47fa-a6e5-2a0c51701125",
+  "persistent": true,
+  "insertionIndex": 2
+}

@@ -1,0 +1,50 @@
+{
+  "id": "a7972e0c-a2e0-4e50-bd1a-374cfad5576c",
+  "name": "repos_stapler_stapler_commits_6a243869aa3c3f80579102d00848a0083953d654",
+  "request": {
+    "url": "/repos/stapler/stapler/commits/6a243869aa3c3f80579102d00848a0083953d654",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "7-r_s_s_commits_6a243869.json",
+    "headers": {
+      "Date": "Mon, 09 Sep 2019 18:31:01 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4950",
+      "X-RateLimit-Reset": "1568056823",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"94ef432d31efc82dd4627bbd7fdac3ea\"",
+      "Last-Modified": "Mon, 19 Aug 2019 18:38:42 GMT",
+      "X-OAuth-Scopes": "delete_repo, gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D99C:7CF7:A2139:C0242:5D769A65"
+    }
+  },
+  "uuid": "a7972e0c-a2e0-4e50-bd1a-374cfad5576c",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-stapler-stapler-commits-6a243869aa3c3f80579102d00848a0083953d654",
+  "requiredScenarioState": "scenario-2-repos-stapler-stapler-commits-6a243869aa3c3f80579102d00848a0083953d654-2",
+  "insertionIndex": 7
+}

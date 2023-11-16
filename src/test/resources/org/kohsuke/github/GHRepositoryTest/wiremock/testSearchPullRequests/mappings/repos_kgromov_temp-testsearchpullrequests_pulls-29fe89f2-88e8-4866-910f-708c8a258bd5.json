@@ -1,0 +1,57 @@
+{
+  "id": "29fe89f2-88e8-4866-910f-708c8a258bd5",
+  "name": "repos_kgromov_temp-testsearchpullrequests_pulls",
+  "request": {
+    "url": "/repos/kgromov/temp-testSearchPullRequests/pulls",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.shadow-cat-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"head\":\"refs/heads/branchToMerge\",\"draft\":false,\"maintainer_can_modify\":true,\"title\":\"Temp merged PR\",\"body\":\"Hello, merged PR\",\"base\":\"refs/heads/main\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "repos_kgromov_temp-testsearchpullrequests_pulls-29fe89f2-88e8-4866-910f-708c8a258bd5.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 11 Nov 2023 00:45:22 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"08b6f140aad08c5f3f6549776acc144eec8152ed3a388609f4bf4e73a54c0578\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; param=shadow-cat-preview; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4752",
+      "X-RateLimit-Reset": "1699664715",
+      "X-RateLimit-Used": "248",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF9C:C346:20B0F74B:21144682:654ECEA1",
+      "Location": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/pulls/2"
+    }
+  },
+  "uuid": "29fe89f2-88e8-4866-910f-708c8a258bd5",
+  "persistent": true,
+  "insertionIndex": 10
+}

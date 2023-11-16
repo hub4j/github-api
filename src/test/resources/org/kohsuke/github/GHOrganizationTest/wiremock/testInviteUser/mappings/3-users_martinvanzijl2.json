@@ -1,0 +1,46 @@
+{
+  "id": "26b89bbe-835e-4bf6-b60a-bc32177b3fdb",
+  "name": "users_martinvanzijl2",
+  "request": {
+    "url": "/users/martinvanzijl2",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-users_martinvanzijl2.json",
+    "headers": {
+      "Date": "Mon, 07 Oct 2019 02:32:53 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4973",
+      "X-RateLimit-Reset": "1570418960",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"6dca753bbfc1fe8923a2f99bb429a781\"",
+      "Last-Modified": "Mon, 07 Oct 2019 02:24:44 GMT",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BBDE:0E84:C4BDCE:E266A9:5D9AA3D5"
+    }
+  },
+  "uuid": "26b89bbe-835e-4bf6-b60a-bc32177b3fdb",
+  "persistent": true,
+  "insertionIndex": 3
+}

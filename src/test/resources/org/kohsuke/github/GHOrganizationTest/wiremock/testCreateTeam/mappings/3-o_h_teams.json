@@ -1,0 +1,54 @@
+{
+  "id": "5acf975b-dfae-4ffc-b154-914bed3a631a",
+  "name": "orgs_hub4j-test-org_teams",
+  "request": {
+    "url": "/orgs/hub4j-test-org/teams",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"create-team-test\",\"repo_names\":[\"hub4j-test-org/github-api\"]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "3-o_h_teams.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 10:45:14 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"a3bf889dcc670b78bb9cdc3d19b2c949a4c95b208a4d6cbc2bfa4342fdc08a0b\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, repo",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4964",
+      "X-RateLimit-Reset": "1646393817",
+      "X-RateLimit-Used": "36",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BA26:4A7D:EEF872:FAF405:6221EDB9",
+      "Location": "https://api.github.com/organizations/7544739/team/5756591"
+    }
+  },
+  "uuid": "5acf975b-dfae-4ffc-b154-914bed3a631a",
+  "persistent": true,
+  "insertionIndex": 3
+}

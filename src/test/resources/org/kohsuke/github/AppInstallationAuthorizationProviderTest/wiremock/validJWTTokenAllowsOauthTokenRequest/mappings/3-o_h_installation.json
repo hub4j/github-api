@@ -1,0 +1,41 @@
+{
+  "id": "9ffe1e34-1d0e-495a-abdc-86fdf1d15334",
+  "name": "orgs_hub4j-test-org_installation",
+  "request": {
+    "url": "/orgs/hub4j-test-org/installation",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.machine-man-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-o_h_installation.json",
+    "headers": {
+      "Date": "Tue, 29 Sep 2020 12:35:36 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "public, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"5fa17d9ba74cf1c58441056ab43311b39f39e78976e8524ad3962278c5224955\"",
+      "X-GitHub-Media-Type": "github.v3; param=machine-man-preview; format=json",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D11A:F68D:17924BFB:1C12335A:5F732A18"
+    }
+  },
+  "uuid": "9ffe1e34-1d0e-495a-abdc-86fdf1d15334",
+  "persistent": true,
+  "insertionIndex": 3
+}

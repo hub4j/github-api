@@ -1,0 +1,42 @@
+{
+  "id": "1baf6207-f25f-4064-af9b-8eb1cb1fe125",
+  "name": "repos_hub4j-test-org_ghcontentintegrationtest_contents_ghcontent-ro_a-symlink-to-a-dir",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-symlink-to-a-dir",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "4-r_h_g_contents_ghcontent-ro_a-symlink-to-a-dir.json",
+    "headers": {
+      "server": "GitHub.com",
+      "date": "Thu, 02 Jul 2020 16:17:32 GMT",
+      "content-type": "application/json; charset=utf-8",
+      "status": "200 OK",
+      "cache-control": "public, max-age=60, s-maxage=60",
+      "vary": "Accept, Accept-Encoding, Accept, X-Requested-With",
+      "etag": "W/\"fba4aa592c12413933e5583d5ac0bdfd3ed4eb73\"",
+      "last-modified": "Thu, 02 Jul 2020 15:49:45 GMT",
+      "x-github-media-type": "unknown, github.v3",
+      "strict-transport-security": "max-age=31536000; includeSubdomains; preload",
+      "x-frame-options": "deny",
+      "x-content-type-options": "nosniff",
+      "x-xss-protection": "1; mode=block",
+      "referrer-policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "content-security-policy": "default-src 'none'",
+      "X-Ratelimit-Limit": "60",
+      "X-Ratelimit-Remaining": "45",
+      "X-Ratelimit-Reset": "1593708014",
+      "Accept-Ranges": "bytes",
+      "X-GitHub-Request-Id": "EF84:24F2:A8B9A5:1A6F235:5EFE089B"
+    }
+  },
+  "uuid": "1baf6207-f25f-4064-af9b-8eb1cb1fe125",
+  "persistent": true,
+  "insertionIndex": 4
+}

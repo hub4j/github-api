@@ -1,0 +1,53 @@
+{
+  "id": "fde9aa5a-83fc-41d8-b556-16335859de73",
+  "name": "gists",
+  "request": {
+    "url": "/gists",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"public\":true,\"description\":\"Test for the API\",\"files\":{\"unmodified.txt\":{\"content\":\"Should be unmodified\"},\"rename-me.py\":{\"content\":\"print 'hello'\"},\"update-me.txt\":{\"content\":\"To be updated\"}}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ],
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "1-gists.json",
+    "headers": {
+      "Date": "Wed, 09 Oct 2019 18:06:38 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4986",
+      "X-RateLimit-Reset": "1570647617",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"f60e43f46988893f64e50f632c072e41\"",
+      "Location": "https://api.github.com/gists/209fef72c25fe4b3f673437603ab6d5d",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "AF56:13F4:1234663:150EFE0:5D9E21AD"
+    }
+  },
+  "uuid": "fde9aa5a-83fc-41d8-b556-16335859de73",
+  "persistent": true,
+  "insertionIndex": 1
+}

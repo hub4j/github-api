@@ -320,7 +320,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         }
 
         @JsonSetter
-        public void setRepositories(List<GHRepository> repositories) {
+        private void setRepositories(List<GHRepository> repositories) {
             this.repositories = repositories;
             this.rawRepositories = repositories.stream()
                     .map(r -> new Repository(r.getId(), r.getFullName(), r.getName(), r.getNodeId(), r.isPrivate()))

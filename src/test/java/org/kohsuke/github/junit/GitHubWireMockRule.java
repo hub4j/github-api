@@ -319,7 +319,6 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                 }
             });
 
-            int longestFileName = 0;
             // Update all
             Files.walk(path).forEach(filePath -> {
                 try {

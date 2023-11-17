@@ -1,0 +1,57 @@
+{
+  "id": "a6b99918-8bcc-4802-b4f7-664a6696ac4d",
+  "name": "repos_kgromov_temp-testsearchpullrequests_git_refs",
+  "request": {
+    "url": "/repos/kgromov/temp-testSearchPullRequests/git/refs",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"ref\":\"refs/heads/branchToMerge\",\"sha\":\"34b361864cacfbd165af1b06a659113099da1f38\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "6-r_k_t_git_refs.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 11 Nov 2023 00:45:19 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"997a0d8ddf2be53434e491613dc575ce918047eaeeda2ffcde5553af28c51d77\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4756",
+      "X-RateLimit-Reset": "1699664715",
+      "X-RateLimit-Used": "244",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF97:A2C4:1FF181FE:20561D88:654ECE9E",
+      "Location": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/git/refs/heads/branchToMerge"
+    }
+  },
+  "uuid": "a6b99918-8bcc-4802-b4f7-664a6696ac4d",
+  "persistent": true,
+  "insertionIndex": 6
+}

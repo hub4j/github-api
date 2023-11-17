@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -321,16 +322,16 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             // Update all
             Files.walk(path).forEach(filePath -> {
                 try {
-                    Map.Entry<String, String> entry = getId(filePath, idToIndex);
-                    if (entry != null) {
-                        filePath = renameFileToIndex(filePath, entry);
-                    }
                     // For raw server, only fix up mapping files
                     if (isRawServer && !filePath.toString().contains("mappings")) {
                         return;
                     }
+
                     if (filePath.toString().endsWith(".json")) {
-                        String fileText = new String(Files.readAllBytes(filePath));
+                        Path renamedFilePath = renameFile(filePath, idToIndex);
+                        Path targetFilePath = renamedFilePath == null ? filePath : renamedFilePath;
+
+                        String fileText = new String(Files.readAllBytes(targetFilePath));
                         // while recording responses we replaced all github calls localhost
                         // now we reverse that for storage.
                         fileText = fileText.replace(this.apiServer().baseUrl(), "https://api.github.com");
@@ -354,14 +355,15 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                         }
 
                         // point bodyFile in the mapping to the renamed body file
-                        if (entry != null && filePath.toString().contains("mappings")) {
-                            fileText = fileText.replace("-" + entry.getKey(), "-" + entry.getValue());
+                        if (renamedFilePath != null && filePath.toString().contains("mappings")) {
+                            fileText = fileText.replace(filePath.getFileName().toString(),
+                                    renamedFilePath.getFileName().toString());
                         }
 
                         // Can be Array or Map
                         Object parsedObject = g.fromJson(fileText, Object.class);
-                        fileText = g.toJson(parsedObject);
-                        Files.write(filePath, fileText.getBytes());
+                        String outputFileText = g.toJson(parsedObject);
+                        Files.write(targetFilePath, outputFileText.getBytes());
                     }
                 } catch (Exception e) {
                     throw new RuntimeException("Files could not be written: " + filePath.toString(), e);
@@ -380,22 +382,42 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         }
     }
 
-    private Map.Entry<String, String> getId(Path filePath, Map<String, String> idToIndex) throws IOException {
-        Path targetPath = filePath;
-        String filePathString = filePath.toString();
+    private Map.Entry<String, String> getId(String fileName, Map<String, String> idToIndex) throws IOException {
         for (Map.Entry<String, String> item : idToIndex.entrySet()) {
-            if (filePathString.contains(item.getKey())) {
+            if (fileName.contains(item.getKey())) {
                 return item;
             }
         }
         return null;
     }
 
-    private Path renameFileToIndex(Path filePath, Map.Entry<String, String> idToIndex) throws IOException {
-        String filePathString = filePath.toString();
-        Path targetPath = new File(filePathString.replace(idToIndex.getKey(), idToIndex.getValue())).toPath();
-        Files.move(filePath, targetPath);
+    private Path renameFile(Path filePath, Map<String, String> idToIndex) throws IOException {
+        Path targetPath = null;
+        String fileName = filePath.getFileName().toString();
 
+        // Short early segments of the file name
+        // which tend to be "repos_hub4j-test-org_{repository}".
+        fileName = fileName.replaceAll("^([a-zA-Z])[^_]+_([a-zA-Z])[^_]+_([a-zA-Z])[^_]+_", "$1_$2_$3_");
+        fileName = fileName.replaceAll("^([a-zA-Z])[^_]+_([a-zA-Z])[^_]+_", "$1_$2_");
+
+        Map.Entry<String, String> idToIndexEntry = getId(fileName, idToIndex);
+        if (idToIndexEntry != null) {
+            fileName = fileName.replace("-" + idToIndexEntry.getKey(), "");
+            // put index number on the front for clarity
+            fileName = idToIndexEntry.getValue() + "-" + fileName;
+        }
+
+        // Replace GUID strings in file paths with abbreviated GUID to limit file path length for windows
+        fileName = fileName.replaceAll("(_[a-f0-9]{8})[a-f0-9]{32}([_.])", "$1$2");
+
+        // If the file name is still longer than 60 characters, truncate it
+        fileName = fileName.replaceAll("^([^.]{60})[^.]+\\.", "$1.");
+
+        String renamedFilePathString = Paths.get(filePath.getParent().toString(), fileName).toString();
+        if (renamedFilePathString != filePath.toString()) {
+            targetPath = new File(renamedFilePathString).toPath();
+            Files.move(filePath, targetPath);
+        }
         return targetPath;
     }
 
@@ -503,5 +525,4 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             return "github-api-url-rewrite";
         }
     }
-
 }

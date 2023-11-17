@@ -1,0 +1,51 @@
+{
+  "id": "8575adef-4087-4fbd-bf48-b3e0c2cd1807",
+  "name": "repos_jenkinsci_jenkins",
+  "request": {
+    "url": "/repos/jenkinsci/jenkins",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "5-r_j_jenkins.json",
+    "headers": {
+      "Date": "Fri, 22 Jan 2021 22:35:24 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"59d32348e13ad4adb6b72b4900b4ab2c4f123f23fc7025dc04b3d3dd3f273228\"",
+      "last-modified": "Fri, 22 Jan 2021 18:57:30 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4815",
+      "X-RateLimit-Reset": "1611357669",
+      "x-ratelimit-used": "185",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CE75:13FC:5DAD87:6C12A3:600B532C"
+    }
+  },
+  "uuid": "8575adef-4087-4fbd-bf48-b3e0c2cd1807",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-jenkinsci-jenkins",
+  "requiredScenarioState": "scenario-1-repos-jenkinsci-jenkins-2",
+  "newScenarioState": "scenario-1-repos-jenkinsci-jenkins-3",
+  "insertionIndex": 5
+}

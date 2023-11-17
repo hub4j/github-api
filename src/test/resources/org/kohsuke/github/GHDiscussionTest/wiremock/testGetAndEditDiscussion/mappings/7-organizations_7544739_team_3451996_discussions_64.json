@@ -1,0 +1,53 @@
+{
+  "id": "429533ef-462c-4582-a484-dadcc6c6200c",
+  "name": "organizations_7544739_team_3451996_discussions_64",
+  "request": {
+    "url": "/organizations/7544739/team/3451996/discussions/64",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"title\":\"Title changed\",\"body\":\"This is a test discussion changed\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "7-organizations_7544739_team_3451996_discussions_64.json",
+    "headers": {
+      "Date": "Mon, 08 Jun 2020 18:43:32 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4954",
+      "X-RateLimit-Reset": "1591642579",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"b6481a9983d068bb81f4e85ad321ddd7\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "write:discussion",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E996:682F:301CCD:39F063:5EDE86D3"
+    }
+  },
+  "uuid": "429533ef-462c-4582-a484-dadcc6c6200c",
+  "persistent": true,
+  "insertionIndex": 7
+}

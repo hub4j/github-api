@@ -1,0 +1,48 @@
+{
+  "id": "c4ee8bf9-1fc1-4535-ac30-f4133283e22f",
+  "name": "repos_jenkinsci_jenkins_comments",
+  "request": {
+    "url": "/repos/jenkinsci/jenkins/comments",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "4-r_j_j_comments.json",
+    "headers": {
+      "Date": "Sat, 26 Oct 2019 01:27:48 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4390",
+      "X-RateLimit-Reset": "1572055286",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"06f06aa168061deee509547275821e75\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CABC:98FD:5600A0:651EC2:5DB3A113",
+      "Link": "<https://api.github.com/repositories/1103607/comments?page=2>; rel=\"next\", <https://api.github.com/repositories/1103607/comments?page=52>; rel=\"last\""
+    }
+  },
+  "uuid": "c4ee8bf9-1fc1-4535-ac30-f4133283e22f",
+  "persistent": true,
+  "insertionIndex": 4
+}

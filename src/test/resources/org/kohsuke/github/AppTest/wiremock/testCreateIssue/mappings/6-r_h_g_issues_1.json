@@ -1,0 +1,50 @@
+{
+  "id": "7ffbc7a8-e47c-43e3-a4ff-305ea3e751ae",
+  "name": "repos_hub4j-test-org_github-api-test_issues_1",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api-test/issues/1",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "6-r_h_g_issues_1.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 11 Sep 2021 07:32:39 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"ca6c125743a3a39b0e480f99c1c44b2d2ba367fc79be17437f17f146f6e6484c\"",
+      "Last-Modified": "Sat, 11 Sep 2021 07:32:39 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4890",
+      "X-RateLimit-Reset": "1631346154",
+      "X-RateLimit-Used": "110",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D396:32F2:1E3D61:2292D6:613C5B97"
+    }
+  },
+  "uuid": "7ffbc7a8-e47c-43e3-a4ff-305ea3e751ae",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-test-issues-1",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-test-issues-1-2",
+  "insertionIndex": 6
+}

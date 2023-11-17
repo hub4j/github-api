@@ -1,0 +1,48 @@
+{
+  "id": "d68a564a-7eca-47ca-af21-1bb492309cfc",
+  "name": "organizations_107424_repos",
+  "request": {
+    "url": "/organizations/107424/repos?per_page=100&page=3",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "5-organizations_107424_repos.json",
+    "headers": {
+      "Date": "Sat, 26 Oct 2019 01:27:55 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4375",
+      "X-RateLimit-Reset": "1572055286",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"7c59fb09be8ece8abce35d9c643d8bad\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CAC4:1CC6:AE662B:CCC3BF:5DB3A119",
+      "Link": "<https://api.github.com/organizations/107424/repos?per_page=100&page=2>; rel=\"prev\", <https://api.github.com/organizations/107424/repos?per_page=100&page=4>; rel=\"next\", <https://api.github.com/organizations/107424/repos?per_page=100&page=23>; rel=\"last\", <https://api.github.com/organizations/107424/repos?per_page=100&page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "d68a564a-7eca-47ca-af21-1bb492309cfc",
+  "persistent": true,
+  "insertionIndex": 5
+}

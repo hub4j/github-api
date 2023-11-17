@@ -1,0 +1,55 @@
+{
+  "id": "3ffa4da9-2cec-422d-aa3e-11c1ab5c59db",
+  "name": "orgs_hub4j-test-org_teams",
+  "request": {
+    "url": "/orgs/hub4j-test-org/teams",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"create-team-test\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "4-o_h_teams.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 06 Apr 2022 13:29:41 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"c55b8f7b2a21e5ce24b0a46f885f959dd9d7ffa88197ceabe76128307779cb4a\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "admin:org, repo",
+      "github-authentication-token-expiration": "2022-05-06 06:00:00 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4966",
+      "X-RateLimit-Reset": "1649254722",
+      "X-RateLimit-Used": "34",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C148:4D1B:D01588:22CF75B:624D95C5",
+      "Location": "https://api.github.com/organizations/7544739/team/5898310"
+    }
+  },
+  "uuid": "3ffa4da9-2cec-422d-aa3e-11c1ab5c59db",
+  "persistent": true,
+  "insertionIndex": 4
+}

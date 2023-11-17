@@ -1,0 +1,54 @@
+{
+  "id": "1ef45b59-338b-4770-aac1-c85ee63b4fb7",
+  "name": "repos_hub4j-test-org_temp-testupdaterepository",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testUpdateRepository",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"temp-testUpdateRepository\",\"allow_merge_commit\":false,\"private\":false,\"allow_rebase_merge\":true}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "4-r_h_temp-testupdaterepository.json",
+    "headers": {
+      "Date": "Tue, 29 Dec 2020 00:55:32 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"22a92d14baf1cb39402015378e5d6ac8b3ce3d174163e8c9a0e932a0d3da8c0b\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4981",
+      "X-RateLimit-Reset": "1609206867",
+      "X-RateLimit-Used": "19",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FD00:1C7F:1FC6EF8:26FAB20:5FEA7E83"
+    }
+  },
+  "uuid": "1ef45b59-338b-4770-aac1-c85ee63b4fb7",
+  "persistent": true,
+  "insertionIndex": 4
+}

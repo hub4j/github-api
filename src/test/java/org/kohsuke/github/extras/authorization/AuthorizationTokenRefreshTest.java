@@ -38,7 +38,7 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     @Test
-    public void testRetriedRequestGetsNewAuthorizationTokenWhenOldOneExpires() throws IOException {
+    public void testNewWhenOldOneExpires() throws IOException {
         snapshotNotAllowed();
         gitHub = getGitHubBuilder().withAuthorizationProvider(new RefreshingAuthorizationProvider())
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
@@ -55,7 +55,7 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     @Test
-    public void testRetriedRequestDoesNotGetNewAuthorizationTokenWhenOldOneIsStillValid() throws IOException {
+    public void testNotNewWhenOldOneIsStillValid() throws IOException {
         gitHub = getGitHubBuilder().withAuthorizationProvider(() -> "original token")
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withRateLimitHandler(RateLimitHandler.WAIT)

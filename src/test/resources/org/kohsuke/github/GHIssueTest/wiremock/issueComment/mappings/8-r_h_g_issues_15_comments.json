@@ -1,0 +1,50 @@
+{
+  "id": "b117074b-f0c5-494e-8766-46a3c30c7ebf",
+  "name": "repos_hub4j-test-org_ghissuetest_issues_15_comments",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHIssueTest/issues/15/comments",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "8-r_h_g_issues_15_comments.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 22 Sep 2022 10:48:19 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"70474a4be7e01cf80867162c029b2d9a23fac3d13af6e6b36d888862fc14b55c\"",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-09-29 09:53:54 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4662",
+      "X-RateLimit-Reset": "1663844087",
+      "X-RateLimit-Used": "338",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DCFE:9FDD:4F1C77E:50600F4:632C3D73"
+    }
+  },
+  "uuid": "b117074b-f0c5-494e-8766-46a3c30c7ebf",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHIssueTest-issues-15-comments",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-GHIssueTest-issues-15-comments-3",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-GHIssueTest-issues-15-comments-4",
+  "insertionIndex": 8
+}

@@ -1,0 +1,53 @@
+{
+  "id": "e67d9457-6a15-48c0-9129-e4756a1f0270",
+  "name": "repos_hub4j-test-org_github-api_git_commits",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/git/commits",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"signature\":\"unknown\",\"tree\":\"496d6428b9cf92981dc9495211e6e1120fb6f2ba\",\"message\":\"test signing\",\"parents\":[]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "4-r_h_g_git_commits.json",
+    "headers": {
+      "Date": "Wed, 30 Sep 2020 22:23:51 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"a1619b0b838e3c06d760033e46addc8465219d564e8fe93bc13f03bc3bfd739d\"",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/4c84ff0c2e63c338a783d151d34884443269c2b7",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4938",
+      "X-RateLimit-Reset": "1601504639",
+      "X-RateLimit-Used": "62",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "EDA2:11A07:1BDDC7EE:212F8F3C:5F750577"
+    }
+  },
+  "uuid": "e67d9457-6a15-48c0-9129-e4756a1f0270",
+  "persistent": true,
+  "insertionIndex": 4
+}

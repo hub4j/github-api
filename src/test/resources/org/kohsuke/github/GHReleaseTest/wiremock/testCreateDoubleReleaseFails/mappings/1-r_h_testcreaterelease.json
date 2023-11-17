@@ -1,0 +1,47 @@
+{
+  "id": "0db03aa5-b253-4c7b-a88c-be8b9027d0fb",
+  "name": "repos_hub4j-test-org_testcreaterelease",
+  "request": {
+    "url": "/repos/hub4j-test-org/testCreateRelease",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "1-r_h_testcreaterelease.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Jun 2021 07:04:59 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"de954bc365c835a2cea1cff19b80e4ab637089a5abadc8e6a22e6af5d00a28b7\"",
+      "Last-Modified": "Thu, 10 Jun 2021 01:31:14 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4994",
+      "X-RateLimit-Reset": "1623398211",
+      "X-RateLimit-Used": "6",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E687:A57F:1F1412C:1FB700E:60C30B1B"
+    }
+  },
+  "uuid": "0db03aa5-b253-4c7b-a88c-be8b9027d0fb",
+  "persistent": true,
+  "insertionIndex": 1
+}

@@ -1,0 +1,54 @@
+{
+  "id": "1f4a886b-7a65-4975-9cc7-01f5601158f8",
+  "name": "repos_hub4j-test-org_temp-testupdaterepository",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testUpdateRepository",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"temp-testUpdateRepository\",\"description\":\"updated using set()\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "5-r_h_temp-testupdaterepository.json",
+    "headers": {
+      "Date": "Tue, 29 Dec 2020 00:55:32 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"43a9b1515cd78e7b2d830a545963df7530cec6aa5cb81f987fb5d01b25d1f5ec\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4980",
+      "X-RateLimit-Reset": "1609206867",
+      "X-RateLimit-Used": "20",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FD00:1C7F:1FC6F08:26FAB39:5FEA7E84"
+    }
+  },
+  "uuid": "1f4a886b-7a65-4975-9cc7-01f5601158f8",
+  "persistent": true,
+  "insertionIndex": 5
+}

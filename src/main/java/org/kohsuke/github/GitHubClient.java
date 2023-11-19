@@ -16,6 +16,7 @@ import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
@@ -45,11 +46,22 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 class GitHubClient {
 
     /** The Constant CONNECTION_ERROR_RETRIES. */
-    static final int CONNECTION_ERROR_RETRIES = 2;
-    /**
-     * If timeout issues let's retry after milliseconds.
-     */
-    static final int retryTimeoutMillis = 100;
+    private static final int DEFAULT_CONNECTION_ERROR_RETRIES = 2;
+
+    /** The Constant DEFAULT_MINIMUM_RETRY_TIMEOUT_MILLIS. */
+    private static final int DEFAULT_MINIMUM_RETRY_MILLIS = 100;
+
+    /** The Constant DEFAULT_MAXIMUM_RETRY_TIMEOUT_MILLIS. */
+    private static final int DEFAULT_MAXIMUM_RETRY_MILLIS = DEFAULT_MINIMUM_RETRY_MILLIS;
+
+    // WARNING: These are unsupported environment variables. The GitHubClient class is internal and may change at any
+    // time.
+    private static final int retryCount = Math.max(DEFAULT_CONNECTION_ERROR_RETRIES,
+            Integer.getInteger(GitHubClient.class.getName() + ".retryLimit", DEFAULT_CONNECTION_ERROR_RETRIES));
+    private static final int minRetryInterval = Math.max(DEFAULT_MINIMUM_RETRY_MILLIS,
+            Integer.getInteger(GitHubClient.class.getName() + ".minRetryInterval", DEFAULT_MINIMUM_RETRY_MILLIS));
+    private static final int maxRetryInterval = Math.max(DEFAULT_MAXIMUM_RETRY_MILLIS,
+            Integer.getInteger(GitHubClient.class.getName() + ".minRetryInterval", DEFAULT_MINIMUM_RETRY_MILLIS));
 
     // Cache of myself object.
     private final String apiUrl;
@@ -63,6 +75,9 @@ class GitHubClient {
 
     @Nonnull
     private final AtomicReference<GHRateLimit> rateLimit = new AtomicReference<>(GHRateLimit.DEFAULT);
+
+    @Nonnull
+    private final GitHubSanityCachedValue<GHRateLimit> sanityCachedRateLimit = new GitHubSanityCachedValue<>();
 
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
@@ -264,15 +279,19 @@ class GitHubClient {
     GHRateLimit getRateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
         GHRateLimit result;
         try {
-            GitHubRequest request = GitHubRequest.newBuilder()
+            final GitHubRequest request = GitHubRequest.newBuilder()
                     .rateLimit(RateLimitTarget.NONE)
                     .withApiUrl(getApiUrl())
                     .withUrlPath("/rate_limit")
                     .build();
-            result = this
-                    .sendRequest(request,
-                            (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, JsonRateLimit.class))
-                    .body().resources;
+            // Even when explicitly asking for rate limit, restrict to sane query frequency
+            // return cached value if available
+            result = this.sanityCachedRateLimit
+                    .get(() -> this
+                            .sendRequest(request,
+                                    (connectorResponse) -> GitHubResponse.parseBody(connectorResponse,
+                                            JsonRateLimit.class))
+                            .body().resources);
         } catch (FileNotFoundException e) {
             // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
             LOGGER.log(FINE, "/rate_limit returned 404 Not Found.");
@@ -421,7 +440,7 @@ class GitHubClient {
     @Nonnull
     public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull BodyHandler<T> handler)
             throws IOException {
-        int retries = CONNECTION_ERROR_RETRIES;
+        int retries = retryCount;
         GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);
         do {
             GitHubConnectorResponse connectorResponse = null;
@@ -632,11 +651,15 @@ class GitHubClient {
 
     private static void logRetryConnectionError(IOException e, URL url, int retries) throws IOException {
         // There are a range of connection errors where we want to wait a moment and just automatically retry
+        long sleepTime = minRetryInterval;
+        if (maxRetryInterval > minRetryInterval) {
+            sleepTime = ThreadLocalRandom.current().nextLong(minRetryInterval, maxRetryInterval);
+        }
         LOGGER.log(INFO,
-                e.getMessage() + " while connecting to " + url + ". Sleeping " + GitHubClient.retryTimeoutMillis
+                e.getMessage() + " while connecting to " + url + ". Sleeping " + sleepTime
                         + " milliseconds before retrying... ; will try " + retries + " more time(s)");
         try {
-            Thread.sleep(GitHubClient.retryTimeoutMillis);
+            Thread.sleep(sleepTime);
         } catch (InterruptedException ie) {
             throw (IOException) new InterruptedIOException().initCause(e);
         }

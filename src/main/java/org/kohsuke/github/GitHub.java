@@ -70,6 +70,9 @@ public class GitHub {
     private final ConcurrentMap<String, GHUser> users;
     private final ConcurrentMap<String, GHOrganization> orgs;
 
+    @Nonnull
+    private final GitHubSanityCachedValue<GHMeta> sanityCachedMeta = new GitHubSanityCachedValue<>();
+
     /**
      * Creates a client API root object.
      *
@@ -1253,7 +1256,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
      */
     public GHMeta getMeta() throws IOException {
-        return createRequest().withUrlPath("/meta").fetch(GHMeta.class);
+        return this.sanityCachedMeta.get(() -> createRequest().withUrlPath("/meta").fetch(GHMeta.class));
     }
 
     /**

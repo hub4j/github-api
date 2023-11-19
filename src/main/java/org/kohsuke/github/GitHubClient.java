@@ -61,7 +61,7 @@ class GitHubClient {
     private static final int minRetryInterval = Math.max(DEFAULT_MINIMUM_RETRY_MILLIS,
             Integer.getInteger(GitHubClient.class.getName() + ".minRetryInterval", DEFAULT_MINIMUM_RETRY_MILLIS));
     private static final int maxRetryInterval = Math.max(DEFAULT_MAXIMUM_RETRY_MILLIS,
-            Integer.getInteger(GitHubClient.class.getName() + ".minRetryInterval", DEFAULT_MINIMUM_RETRY_MILLIS));
+            Integer.getInteger(GitHubClient.class.getName() + ".maxRetryInterval", DEFAULT_MAXIMUM_RETRY_MILLIS));
 
     // Cache of myself object.
     private final String apiUrl;

@@ -200,7 +200,7 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Tests creation of the release with `generate_release_notes parameter on`.
+     * Tests creation of the release with `generate_release_notes` parameter on.
      *
      * @throws Exception
      *             if any failure has happened.

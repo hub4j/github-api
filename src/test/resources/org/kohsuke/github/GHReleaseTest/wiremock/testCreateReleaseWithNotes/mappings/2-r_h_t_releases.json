@@ -11,7 +11,7 @@
     },
     "bodyPatterns" : [
       {
-        "matchesJsonPath" : "$.[?(@.generate_release_notes  == true)]"
+        "matchesJsonPath" : "$.[?(@.generate_release_notes == true)]"
       }
     ]
   },

@@ -54,15 +54,6 @@ class GitHubClient {
     /** The Constant DEFAULT_MAXIMUM_RETRY_TIMEOUT_MILLIS. */
     private static final int DEFAULT_MAXIMUM_RETRY_MILLIS = DEFAULT_MINIMUM_RETRY_MILLIS;
 
-    // WARNING: These are unsupported environment variables. The GitHubClient class is internal and may change at any
-    // time.
-    private static final int retryCount = Math.max(DEFAULT_CONNECTION_ERROR_RETRIES,
-            Integer.getInteger(GitHubClient.class.getName() + ".retryLimit", DEFAULT_CONNECTION_ERROR_RETRIES));
-    private static final int minRetryInterval = Math.max(DEFAULT_MINIMUM_RETRY_MILLIS,
-            Integer.getInteger(GitHubClient.class.getName() + ".minRetryInterval", DEFAULT_MINIMUM_RETRY_MILLIS));
-    private static final int maxRetryInterval = Math.max(DEFAULT_MAXIMUM_RETRY_MILLIS,
-            Integer.getInteger(GitHubClient.class.getName() + ".maxRetryInterval", DEFAULT_MAXIMUM_RETRY_MILLIS));
-
     // Cache of myself object.
     private final String apiUrl;
 
@@ -440,6 +431,11 @@ class GitHubClient {
     @Nonnull
     public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull BodyHandler<T> handler)
             throws IOException {
+        // WARNING: This is an unsupported environment variable.
+        // The GitHubClient class is internal and may change at any time.
+        int retryCount = Math.max(DEFAULT_CONNECTION_ERROR_RETRIES,
+                Integer.getInteger(GitHubClient.class.getName() + ".retryCount", DEFAULT_CONNECTION_ERROR_RETRIES));
+
         int retries = retryCount;
         GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);
         do {
@@ -650,6 +646,13 @@ class GitHubClient {
     }
 
     private static void logRetryConnectionError(IOException e, URL url, int retries) throws IOException {
+        // WARNING: These are unsupported environment variables.
+        // The GitHubClient class is internal and may change at any time.
+        int minRetryInterval = Math.max(DEFAULT_MINIMUM_RETRY_MILLIS,
+                Integer.getInteger(GitHubClient.class.getName() + ".minRetryInterval", DEFAULT_MINIMUM_RETRY_MILLIS));
+        int maxRetryInterval = Math.max(DEFAULT_MAXIMUM_RETRY_MILLIS,
+                Integer.getInteger(GitHubClient.class.getName() + ".maxRetryInterval", DEFAULT_MAXIMUM_RETRY_MILLIS));
+
         // There are a range of connection errors where we want to wait a moment and just automatically retry
         long sleepTime = minRetryInterval;
         if (maxRetryInterval > minRetryInterval) {

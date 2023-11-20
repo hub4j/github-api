@@ -201,16 +201,16 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
 
     /**
      * Tests creation of the release with `generate_release_notes parameter on`.
-     * @throws Exception if any failure has happened.
+     *
+     * @throws Exception
+     *             if any failure has happened.
      */
     @Test
     public void testCreateReleaseWithNotes() throws Exception {
         GHRepository repo = gitHub.getRepository("hub4j-test-org/testCreateRelease");
 
         String tagName = mockGitHub.getMethodName();
-        GHRelease release = new GHReleaseBuilder(repo, tagName)
-            .generateReleaseNotes(true)
-            .create();
+        GHRelease release = new GHReleaseBuilder(repo, tagName).generateReleaseNotes(true).create();
         try {
             GHRelease releaseCheck = repo.getRelease(release.getId());
 

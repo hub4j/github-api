@@ -54,6 +54,8 @@ class GitHubClient {
     /** The Constant DEFAULT_MAXIMUM_RETRY_TIMEOUT_MILLIS. */
     private static final int DEFAULT_MAXIMUM_RETRY_MILLIS = DEFAULT_MINIMUM_RETRY_MILLIS;
 
+    private static final ThreadLocal<String> sendRequestTraceId = new ThreadLocal<>();
+
     // Cache of myself object.
     private final String apiUrl;
 
@@ -69,6 +71,9 @@ class GitHubClient {
 
     @Nonnull
     private final GitHubSanityCachedValue<GHRateLimit> sanityCachedRateLimit = new GitHubSanityCachedValue<>();
+
+    @Nonnull
+    private GitHubSanityCachedValue<Boolean> sanityCachedIsCredentialValid = new GitHubSanityCachedValue<>();
 
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
 
@@ -160,17 +165,22 @@ class GitHubClient {
      * @return the boolean
      */
     public boolean isCredentialValid() {
-        try {
-            // If 404, ratelimit returns a default value.
-            // This works as credential test because invalid credentials returns 401, not 404
-            getRateLimit();
-            return true;
-        } catch (IOException e) {
-            LOGGER.log(FINE,
-                    "Exception validating credentials on " + getApiUrl() + " with login '" + getLogin() + "' " + e,
-                    e);
-            return false;
-        }
+        return sanityCachedIsCredentialValid.get(() -> {
+            try {
+                // If 404, ratelimit returns a default value.
+                // This works as credential test because invalid credentials returns 401, not 404
+                getRateLimit();
+                return Boolean.TRUE;
+            } catch (IOException e) {
+                LOGGER.log(FINE,
+                        e,
+                        () -> String.format("(%s) Exception validating credentials on %s with login '%s'",
+                                sendRequestTraceId.get(),
+                                getApiUrl(),
+                                getLogin()));
+                return Boolean.FALSE;
+            }
+        });
     }
 
     /**
@@ -194,7 +204,7 @@ class GitHubClient {
         }
 
         LOGGER.warning(
-                "HttpConnector and getConnector() are deprecated. " + "Please file an issue describing your use case.");
+                "HttpConnector and getConnector() are deprecated. Please file an issue describing your use case.");
         return (HttpConnector) connector;
     }
 
@@ -268,31 +278,35 @@ class GitHubClient {
      */
     @Nonnull
     GHRateLimit getRateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
-        GHRateLimit result;
-        try {
-            final GitHubRequest request = GitHubRequest.newBuilder()
-                    .rateLimit(RateLimitTarget.NONE)
-                    .withApiUrl(getApiUrl())
-                    .withUrlPath("/rate_limit")
-                    .build();
-            // Even when explicitly asking for rate limit, restrict to sane query frequency
-            // return cached value if available
-            result = this.sanityCachedRateLimit
-                    .get(() -> this
-                            .sendRequest(request,
-                                    (connectorResponse) -> GitHubResponse.parseBody(connectorResponse,
-                                            JsonRateLimit.class))
-                            .body().resources);
-        } catch (FileNotFoundException e) {
-            // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
-            LOGGER.log(FINE, "/rate_limit returned 404 Not Found.");
+        // Even when explicitly asking for rate limit, restrict to sane query frequency
+        // return cached value if available
+        GHRateLimit output = sanityCachedRateLimit.get(
+                (currentValue) -> currentValue != null && currentValue.getRecord(rateLimitTarget).isExpired(),
+                () -> {
+                    GHRateLimit result;
+                    try {
+                        final GitHubRequest request = GitHubRequest.newBuilder()
+                                .rateLimit(RateLimitTarget.NONE)
+                                .withApiUrl(getApiUrl())
+                                .withUrlPath("/rate_limit")
+                                .build();
+                        result = this
+                                .sendRequest(request,
+                                        (connectorResponse) -> GitHubResponse.parseBody(connectorResponse,
+                                                JsonRateLimit.class))
+                                .body().resources;
+                    } catch (FileNotFoundException e) {
+                        // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
+                        LOGGER.log(FINE, "(%s) /rate_limit returned 404 Not Found.", sendRequestTraceId.get());
 
-            // However some newer versions of GHE include rate limit header information
-            // If the header info is missing and the endpoint returns 404, fill the rate limit
-            // with unknown
-            result = GHRateLimit.fromRecord(GHRateLimit.UnknownLimitRecord.current(), rateLimitTarget);
-        }
-        return updateRateLimit(result);
+                        // However some newer versions of GHE include rate limit header information
+                        // If the header info is missing and the endpoint returns 404, fill the rate limit
+                        // with unknown
+                        result = GHRateLimit.fromRecord(GHRateLimit.UnknownLimitRecord.current(), rateLimitTarget);
+                    }
+                    return result;
+                });
+        return updateRateLimit(output);
     }
 
     /**
@@ -437,6 +451,7 @@ class GitHubClient {
                 Integer.getInteger(GitHubClient.class.getName() + ".retryCount", DEFAULT_CONNECTION_ERROR_RETRIES));
 
         int retries = retryCount;
+        sendRequestTraceId.set(Integer.toHexString(request.hashCode()));
         GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);
         do {
             GitHubConnectorResponse connectorResponse = null;
@@ -553,7 +568,7 @@ class GitHubClient {
     private void logRequest(@Nonnull final GitHubConnectorRequest request) {
         LOGGER.log(FINE,
                 () -> String.format("(%s) GitHub API request [%s]: %s",
-                        Integer.toHexString(request.hashCode()),
+                        sendRequestTraceId.get(),
                         (getLogin() == null ? "anonymous" : getLogin()),
                         (request.method() + " " + request.url().toString())));
     }
@@ -562,7 +577,7 @@ class GitHubClient {
         LOGGER.log(FINE, () -> {
             try {
                 return String.format("(%s) GitHub API response [%s]: %s",
-                        Integer.toHexString(response.request().hashCode()),
+                        sendRequestTraceId.get(),
                         (getLogin() == null ? "anonymous" : getLogin()),
                         (response.statusCode() + " " + GitHubResponse.getBodyAsString(response)));
             } catch (IOException e) {
@@ -596,8 +611,9 @@ class GitHubClient {
             // workflow run cancellation - See https://docs.github.com/en/rest/reference/actions#cancel-a-workflow-run
 
             LOGGER.log(FINE,
-                    "Received HTTP_ACCEPTED(202) from " + connectorResponse.request().url().toString()
-                            + " . Please try again in 5 seconds.");
+                    () -> String.format("(%s) Received HTTP_ACCEPTED(202) from %s. Please try again in 5 seconds.",
+                            sendRequestTraceId.get(),
+                            connectorResponse.request().url().toString()));
             return true;
         } else {
             return false;
@@ -646,6 +662,8 @@ class GitHubClient {
     }
 
     private static void logRetryConnectionError(IOException e, URL url, int retries) throws IOException {
+        // There are a range of connection errors where we want to wait a moment and just automatically retry
+
         // WARNING: These are unsupported environment variables.
         // The GitHubClient class is internal and may change at any time.
         int minRetryInterval = Math.max(DEFAULT_MINIMUM_RETRY_MILLIS,
@@ -653,14 +671,18 @@ class GitHubClient {
         int maxRetryInterval = Math.max(DEFAULT_MAXIMUM_RETRY_MILLIS,
                 Integer.getInteger(GitHubClient.class.getName() + ".maxRetryInterval", DEFAULT_MAXIMUM_RETRY_MILLIS));
 
-        // There are a range of connection errors where we want to wait a moment and just automatically retry
-        long sleepTime = minRetryInterval;
-        if (maxRetryInterval > minRetryInterval) {
-            sleepTime = ThreadLocalRandom.current().nextLong(minRetryInterval, maxRetryInterval);
-        }
+        long sleepTime = maxRetryInterval <= minRetryInterval
+                ? minRetryInterval
+                : ThreadLocalRandom.current().nextLong(minRetryInterval, maxRetryInterval);
+
         LOGGER.log(INFO,
-                e.getMessage() + " while connecting to " + url + ". Sleeping " + sleepTime
-                        + " milliseconds before retrying... ; will try " + retries + " more time(s)");
+                () -> String.format(
+                        "(%s) Error %s  while connecting to %s . Sleeping %d milliseconds before retrying... ; will try %d more time(s)",
+                        sendRequestTraceId.get(),
+                        e.getMessage(),
+                        url,
+                        sleepTime,
+                        retries));
         try {
             Thread.sleep(sleepTime);
         } catch (InterruptedException ie) {
@@ -684,8 +706,10 @@ class GitHubClient {
                 && connectorResponse.header("ETag") != null
                 && !Objects.equals(connectorResponse.request().header("Cache-Control"), "no-cache")) {
             LOGGER.log(FINE,
-                    "Encountered GitHub invalid cached 404 from " + connectorResponse.request().url()
-                            + ". Retrying with \"Cache-Control\"=\"no-cache\"...");
+                    () -> String.format(
+                            "(%s) Encountered GitHub invalid cached 404 from %s. Retrying with \"Cache-Control\"=\"no-cache\"...",
+                            sendRequestTraceId.get(),
+                            connectorResponse.request().url()));
             // Setting "Cache-Control" to "no-cache" stops the cache from supplying
             // "If-Modified-Since" or "If-None-Match" values.
             // This makes GitHub give us current data (not incorrectly cached data)
@@ -703,7 +727,9 @@ class GitHubClient {
             GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, connectorResponse);
             updateRateLimit(GHRateLimit.fromRecord(observed, rateLimitTarget));
         } catch (NumberFormatException e) {
-            LOGGER.log(FINEST, "Missing or malformed X-RateLimit header: ", e);
+            LOGGER.log(FINEST,
+                    e,
+                    () -> String.format("(%s) Missing or malformed X-RateLimit header: ", sendRequestTraceId.get()));
         }
     }
 

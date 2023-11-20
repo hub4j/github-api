@@ -1,0 +1,52 @@
+{
+  "id": "2e081774-790c-4d7b-9f4b-71bad948a411",
+  "name": "repos_hub4j-test-org_testcreaterelease_releases",
+  "request": {
+    "url": "/repos/hub4j-test-org/testCreateRelease/releases",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns" : [
+      {
+        "matchesJsonPath" : "$.[?(@.generate_release_notes  == true)]"
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "2-r_h_t_releases.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Jun 2021 06:56:52 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"c0ff7f2f2ceb987472055c911610b16469c63e1928f209d5f58045a6e1cf861c\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4998",
+      "X-RateLimit-Reset": "1623398211",
+      "X-RateLimit-Used": "2",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E630:CE80:ED7A93:F2C7E4:60C30933",
+      "Location": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/releases/44460162"
+    }
+  },
+  "uuid": "2e081774-790c-4d7b-9f4b-71bad948a411",
+  "persistent": true,
+  "insertionIndex": 2
+}

@@ -462,6 +462,7 @@ class GitHubClient {
                 logResponse(connectorResponse);
                 noteRateLimit(request.rateLimitTarget(), connectorResponse);
                 detectKnownErrors(connectorResponse, request, handler != null);
+                logResponseBody(connectorResponse);
                 return createResponse(connectorResponse, handler);
             } catch (RetryRequestException e) {
                 // retry requested by requested by error handler (rate limit handler for example)
@@ -471,7 +472,7 @@ class GitHubClient {
             } catch (SocketException | SocketTimeoutException | SSLHandshakeException e) {
                 // These transient errors thrown by HttpURLConnection
                 if (retries > 0) {
-                    logRetryConnectionError(e, request.url(), retries);
+                    logRetryConnectionError(e, connectorRequest.url(), retries);
                     continue;
                 }
                 throw interpretApiError(e, connectorRequest, connectorResponse);
@@ -567,22 +568,31 @@ class GitHubClient {
 
     private void logRequest(@Nonnull final GitHubConnectorRequest request) {
         LOGGER.log(FINE,
-                () -> String.format("(%s) GitHub API request [%s]: %s",
+                () -> String.format("(%s) GitHub API request: %s %s",
                         sendRequestTraceId.get(),
-                        (getLogin() == null ? "anonymous" : getLogin()),
-                        (request.method() + " " + request.url().toString())));
+                        request.method(),
+                        request.url().toString()));
     }
 
     private void logResponse(@Nonnull final GitHubConnectorResponse response) {
-        LOGGER.log(FINE, () -> {
+        LOGGER.log(FINER, () -> {
+            return String.format("(%s) GitHub API response: %s",
+                    sendRequestTraceId.get(),
+                    response.request().url().toString(),
+                    response.statusCode());
+        });
+    }
+
+    private void logResponseBody(@Nonnull final GitHubConnectorResponse response) {
+        LOGGER.log(FINEST, () -> {
+            String body;
             try {
-                return String.format("(%s) GitHub API response [%s]: %s",
-                        sendRequestTraceId.get(),
-                        (getLogin() == null ? "anonymous" : getLogin()),
-                        (response.statusCode() + " " + GitHubResponse.getBodyAsString(response)));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                body = GitHubResponse.getBodyAsString(response);
+            } catch (Throwable e) {
+                body = "Error reading response body";
             }
+            return String.format("(%s) GitHub API response body: %s", sendRequestTraceId.get(), body);
+
         });
     }
 
@@ -677,10 +687,11 @@ class GitHubClient {
 
         LOGGER.log(INFO,
                 () -> String.format(
-                        "(%s) Error %s  while connecting to %s . Sleeping %d milliseconds before retrying... ; will try %d more time(s)",
+                        "(%s) %s while connecting to %s: '%s'. Sleeping %d milliseconds before retrying (%d retries remaining)",
                         sendRequestTraceId.get(),
+                        url.toString(),
+                        e.getClass().toString(),
                         e.getMessage(),
-                        url,
                         sleepTime,
                         retries));
         try {
@@ -727,9 +738,10 @@ class GitHubClient {
             GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, connectorResponse);
             updateRateLimit(GHRateLimit.fromRecord(observed, rateLimitTarget));
         } catch (NumberFormatException e) {
-            LOGGER.log(FINEST,
-                    e,
-                    () -> String.format("(%s) Missing or malformed X-RateLimit header: ", sendRequestTraceId.get()));
+            LOGGER.log(FINER,
+                    () -> String.format("(%s) Missing or malformed X-RateLimit header: %s",
+                            sendRequestTraceId.get(),
+                            e.getMessage()));
         }
     }
 

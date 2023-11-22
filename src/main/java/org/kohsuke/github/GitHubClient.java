@@ -281,7 +281,7 @@ class GitHubClient {
         // Even when explicitly asking for rate limit, restrict to sane query frequency
         // return cached value if available
         GHRateLimit output = sanityCachedRateLimit.get(
-                (currentValue) -> currentValue != null && currentValue.getRecord(rateLimitTarget).isExpired(),
+                (currentValue) -> currentValue == null || currentValue.getRecord(rateLimitTarget).isExpired(),
                 () -> {
                     GHRateLimit result;
                     try {

@@ -733,6 +733,22 @@
                 </configuration>
               </execution>
               <execution>
+                <id>slow-or-flaky-test-tracing</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <rerunFailingTestsCount>2</rerunFailingTestsCount>
+                  <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
+                  <!-- Run some test passes with trace logging turned on -->
+                  <systemPropertyVariables>
+                    <java.util.logging.config.file>src/test/resources/test-trace-logging.properties</java.util.logging.config.file>
+                  </systemPropertyVariables>
+                </configuration>
+              </execution>
+              <execution>
                 <!-- Verify that JWT suite 0.11.x still works -->
                 <id>jwt0.11.x-test</id>
                 <phase>integration-test</phase>

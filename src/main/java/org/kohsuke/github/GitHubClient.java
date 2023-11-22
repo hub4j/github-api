@@ -689,8 +689,8 @@ class GitHubClient {
                 () -> String.format(
                         "(%s) %s while connecting to %s: '%s'. Sleeping %d milliseconds before retrying (%d retries remaining)",
                         sendRequestTraceId.get(),
-                        url.toString(),
                         e.getClass().toString(),
+                        url.toString(),
                         e.getMessage(),
                         sleepTime,
                         retries));

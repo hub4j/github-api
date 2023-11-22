@@ -697,6 +697,10 @@
                   <useSystemClassLoader>false</useSystemClassLoader>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
                   <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
+                  <!-- Run some test passes with trace logging turned on -->
+                  <systemPropertyVariables>
+                    <java.util.logging.config.file>src/test/resources/test-trace-logging.properties</java.util.logging.config.file>
+                  </systemPropertyVariables>
                 </configuration>
               </execution>
               <execution>
@@ -710,6 +714,10 @@
                   <useSystemClassLoader>false</useSystemClassLoader>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
                   <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=urlconnection</argLine>
+                  <!-- Run some test passes with trace logging turned on -->
+                  <systemPropertyVariables>
+                    <java.util.logging.config.file>src/test/resources/test-trace-logging.properties</java.util.logging.config.file>
+                  </systemPropertyVariables>
                 </configuration>
               </execution>
               <execution>
@@ -721,9 +729,23 @@
                 <configuration>
                   <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
                   <rerunFailingTestsCount>2</rerunFailingTestsCount>
-                  <!-- There are some tests that take longer or are a little
-                    flaky. Run them here. -->
                   <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
+                </configuration>
+              </execution>
+              <execution>
+                <id>slow-or-flaky-test-tracing</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <rerunFailingTestsCount>2</rerunFailingTestsCount>
+                  <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
+                  <!-- Run some test passes with trace logging turned on -->
+                  <systemPropertyVariables>
+                    <java.util.logging.config.file>src/test/resources/test-trace-logging.properties</java.util.logging.config.file>
+                  </systemPropertyVariables>
                 </configuration>
               </execution>
               <execution>

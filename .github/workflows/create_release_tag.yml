@@ -4,6 +4,7 @@ on: workflow_dispatch
 
 permissions:
   contents: write
+  pull-requests: write
   
 jobs:
   create_release_tag:
@@ -25,13 +26,23 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Prepare release: github-api-${{ steps.release.outputs.version }}" 
+          commit_message: "Prepare release (${{ github.actor }}): github-api-${{ steps.release.outputs.version }}" 
           tagging_message: 'github-api-${{ steps.release.outputs.version }}'
-      
+          branch: staging/main
+          
       - name: Increment Snapshot Version
         run: |
           mvn versions:set versions:commit -DnextSnapshot 
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Prepare for next development iteration" 
+          commit_message: "Prepare for next development iteration"
+          branch: staging/main
+          
+      - name: pull-request to main
+        uses: repo-sync/pull-request@v2
+        with:
+          pr_title: "Prepare release (${{ github.actor }}): github-api-${{ steps.release.outputs.version }}"
+          source_branch: "staging/main"
+          destination_branch: "main"
+          github_token: ${{ secrets.GITHUB_TOKEN }}

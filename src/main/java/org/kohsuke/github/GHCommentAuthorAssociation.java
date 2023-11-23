@@ -34,5 +34,9 @@ public enum GHCommentAuthorAssociation {
     /**
      * Author is the owner of the repository.
      */
-    OWNER
+    OWNER,
+    /**
+     * Author is a placeholder for an unclaimed user.
+     */
+    MANNEQUIN
 }

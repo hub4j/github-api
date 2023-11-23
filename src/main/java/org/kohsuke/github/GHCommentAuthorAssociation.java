@@ -24,6 +24,9 @@ public enum GHCommentAuthorAssociation {
      */
     FIRST_TIME_CONTRIBUTOR,
     /**
+     * Author is a placeholder for an unclaimed user.
+     */
+    MANNEQUIN,    /**
      * Author is a member of the organization that owns the repository.
      */
     MEMBER,
@@ -34,9 +37,5 @@ public enum GHCommentAuthorAssociation {
     /**
      * Author is the owner of the repository.
      */
-    OWNER,
-    /**
-     * Author is a placeholder for an unclaimed user.
-     */
-    MANNEQUIN
+    OWNER
 }

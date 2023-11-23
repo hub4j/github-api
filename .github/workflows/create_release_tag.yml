@@ -18,18 +18,17 @@ jobs:
           cache: 'maven'
 
       - name: Set Release Version
-        id: create_release
+        id: release
         run: |
-          mvn versions:set versions:commit -DremoveSnapshot 
-          echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
+          mvn -B versions:set versions:commit -DremoveSnapshot 
+          echo "version=$(mvn -B help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Prepare release: github-api-${{ steps.new_release.outputs.version }}" 
-          tagging_message: 'github-api-${{ steps.new_release.outputs.version }}'
+          commit_message: "Prepare release: github-api-${{ steps.release.outputs.version }}" 
+          tagging_message: 'github-api-${{ steps.release.outputs.version }}'
       
       - name: Increment Snapshot Version
-        id: next_snapshot
         run: |
           mvn versions:set versions:commit -DnextSnapshot 
 

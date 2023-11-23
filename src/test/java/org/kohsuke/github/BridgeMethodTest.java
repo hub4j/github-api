@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class BridgeMethodTest extends Assert {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
+    @Ignore("Bridge methods disabled in this branch")
     @Test
     public void testBridgeMethods() throws IOException {
 

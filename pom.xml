@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
-  <artifactId>github-api</artifactId>
+  <artifactId>github-api-unbridged</artifactId>
   <version>1.318</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
@@ -365,18 +365,6 @@
         <artifactId>animal-sniffer-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>com.infradna.tool</groupId>
-        <artifactId>bridge-method-injector</artifactId>
-        <version>1.29</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>process</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
         <version>2.27.2</version>
@@ -444,6 +432,8 @@
         <artifactId>japicmp-maven-plugin</artifactId>
         <version>0.17.2</version>
         <configuration>
+          <!-- Disabled until 1.318 unbridged is published -->
+          <skip>true</skip>
           <parameter>
             <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
             <onlyModified>true</onlyModified>

@@ -26,7 +26,8 @@ public enum GHCommentAuthorAssociation {
     /**
      * Author is a placeholder for an unclaimed user.
      */
-    MANNEQUIN,    /**
+    MANNEQUIN,
+    /**
      * Author is a member of the organization that owns the repository.
      */
     MEMBER,

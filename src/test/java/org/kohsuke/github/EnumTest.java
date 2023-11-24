@@ -22,7 +22,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHCheckRun.Conclusion.values().length, equalTo(9));
         assertThat(GHCheckRun.Status.values().length, equalTo(4));
 
-        assertThat(GHCommentAuthorAssociation.values().length, equalTo(7));
+        assertThat(GHCommentAuthorAssociation.values().length, equalTo(8));
 
         assertThat(GHCommitState.values().length, equalTo(4));
 

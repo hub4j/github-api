@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JWTTokenProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github.extras.authorization</a> &gt; <span class="el_source">JWTTokenProvider.java</span></div><h1>JWTTokenProvider.java</h1><pre class="source lang-java linenums">package org.kohsuke.github.extras.authorization;
 
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.jackson.io.JacksonSerializer;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.File;
@@ -19,7 +15,6 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
-import java.util.Date;
 
 import javax.annotation.Nonnull;
 
@@ -32,7 +27,7 @@ public class JWTTokenProvider implements AuthorizationProvider {
 
     private final PrivateKey privateKey;
 
-<span class="fc" id="L35">    @Nonnull</span>
+<span class="fc" id="L30">    @Nonnull</span>
     private Instant validUntil = Instant.MIN;
 
     private String authorization;
@@ -55,8 +50,8 @@ public class JWTTokenProvider implements AuthorizationProvider {
      *             when an error occurs
      */
     public JWTTokenProvider(String applicationId, File keyFile) throws GeneralSecurityException, IOException {
-<span class="fc" id="L58">        this(applicationId, keyFile.toPath());</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L53">        this(applicationId, keyFile.toPath());</span>
+<span class="fc" id="L54">    }</span>
 
     /**
      * Create a JWTTokenProvider
@@ -71,8 +66,8 @@ public class JWTTokenProvider implements AuthorizationProvider {
      *             when an error occurs
      */
     public JWTTokenProvider(String applicationId, Path keyPath) throws GeneralSecurityException, IOException {
-<span class="fc" id="L74">        this(applicationId, new String(Files.readAllBytes(keyPath), StandardCharsets.UTF_8));</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L69">        this(applicationId, new String(Files.readAllBytes(keyPath), StandardCharsets.UTF_8));</span>
+<span class="fc" id="L70">    }</span>
 
     /**
      * Create a JWTTokenProvider
@@ -85,8 +80,8 @@ public class JWTTokenProvider implements AuthorizationProvider {
      *             when an error occurs
      */
     public JWTTokenProvider(String applicationId, String keyString) throws GeneralSecurityException {
-<span class="fc" id="L88">        this(applicationId, getPrivateKeyFromString(keyString));</span>
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L83">        this(applicationId, getPrivateKeyFromString(keyString));</span>
+<span class="fc" id="L84">    }</span>
 
     /**
      * Create a JWTTokenProvider
@@ -96,20 +91,20 @@ public class JWTTokenProvider implements AuthorizationProvider {
      * @param privateKey
      *            the private key
      */
-<span class="fc" id="L99">    public JWTTokenProvider(String applicationId, PrivateKey privateKey) {</span>
-<span class="fc" id="L100">        this.privateKey = privateKey;</span>
-<span class="fc" id="L101">        this.applicationId = applicationId;</span>
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L94">    public JWTTokenProvider(String applicationId, PrivateKey privateKey) {</span>
+<span class="fc" id="L95">        this.privateKey = privateKey;</span>
+<span class="fc" id="L96">        this.applicationId = applicationId;</span>
+<span class="fc" id="L97">    }</span>
 
     /** {@inheritDoc} */
     @Override
     public String getEncodedAuthorization() throws IOException {
-<span class="fc" id="L107">        synchronized (this) {</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">            if (isNotValid()) {</span>
-<span class="fc" id="L109">                String token = refreshJWT();</span>
-<span class="fc" id="L110">                authorization = String.format(&quot;Bearer %s&quot;, token);;</span>
+<span class="fc" id="L102">        synchronized (this) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">            if (isNotValid()) {</span>
+<span class="fc" id="L104">                String token = refreshJWT();</span>
+<span class="fc" id="L105">                authorization = String.format(&quot;Bearer %s&quot;, token);;</span>
             }
-<span class="fc" id="L112">            return authorization;</span>
+<span class="fc" id="L107">            return authorization;</span>
         }
     }
 
@@ -126,7 +121,7 @@ public class JWTTokenProvider implements AuthorizationProvider {
      * @return false if the token has been refreshed within the required window, otherwise true
      */
     boolean isNotValid() {
-<span class="fc" id="L129">        return Instant.now().isAfter(validUntil);</span>
+<span class="fc" id="L124">        return Instant.now().isAfter(validUntil);</span>
     }
 
     /**
@@ -139,54 +134,46 @@ public class JWTTokenProvider implements AuthorizationProvider {
      *             if we couldn't parse the string
      */
     private static PrivateKey getPrivateKeyFromString(final String key) throws GeneralSecurityException {
-<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (key.contains(&quot; RSA &quot;)) {</span>
-<span class="nc" id="L143">            throw new InvalidKeySpecException(</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (key.contains(&quot; RSA &quot;)) {</span>
+<span class="nc" id="L138">            throw new InvalidKeySpecException(</span>
                     &quot;Private key must be a PKCS#8 formatted string, to convert it from PKCS#1 use: &quot;
                             + &quot;openssl pkcs8 -topk8 -inform PEM -outform PEM -in current-key.pem -out new-key.pem -nocrypt&quot;);
         }
 
         // Remove all comments and whitespace from PEM
         // such as &quot;-----BEGIN PRIVATE KEY-----&quot; and newlines
-<span class="fc" id="L150">        String privateKeyContent = key.replaceAll(&quot;(?m)^--.*&quot;, &quot;&quot;).replaceAll(&quot;\\s&quot;, &quot;&quot;);</span>
+<span class="fc" id="L145">        String privateKeyContent = key.replaceAll(&quot;(?m)^--.*&quot;, &quot;&quot;).replaceAll(&quot;\\s&quot;, &quot;&quot;);</span>
 
-<span class="fc" id="L152">        KeyFactory kf = KeyFactory.getInstance(&quot;RSA&quot;);</span>
+<span class="fc" id="L147">        KeyFactory kf = KeyFactory.getInstance(&quot;RSA&quot;);</span>
 
         try {
-<span class="fc" id="L155">            byte[] decode = Base64.getDecoder().decode(privateKeyContent);</span>
-<span class="fc" id="L156">            PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(decode);</span>
+<span class="fc" id="L150">            byte[] decode = Base64.getDecoder().decode(privateKeyContent);</span>
+<span class="fc" id="L151">            PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(decode);</span>
 
-<span class="fc" id="L158">            return kf.generatePrivate(keySpecPKCS8);</span>
-<span class="nc" id="L159">        } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L160">            throw new InvalidKeySpecException(&quot;Failed to decode private key: &quot; + e.getMessage(), e);</span>
+<span class="fc" id="L153">            return kf.generatePrivate(keySpecPKCS8);</span>
+<span class="nc" id="L154">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L155">            throw new InvalidKeySpecException(&quot;Failed to decode private key: &quot; + e.getMessage(), e);</span>
         }
     }
 
     private String refreshJWT() {
-<span class="fc" id="L165">        Instant now = Instant.now();</span>
+<span class="fc" id="L160">        Instant now = Instant.now();</span>
 
         // Max token expiration is 10 minutes for GitHub
         // We use a smaller window since we likely will not need more than a few seconds
-<span class="fc" id="L169">        Instant expiration = now.plus(Duration.ofMinutes(8));</span>
+<span class="fc" id="L164">        Instant expiration = now.plus(Duration.ofMinutes(8));</span>
 
         // Setting the issued at to a time in the past to allow for clock skew
-<span class="fc" id="L172">        Instant issuedAt = getIssuedAt(now);</span>
-
-        // Let's set the JWT Claims
-<span class="fc" id="L175">        JwtBuilder builder = Jwts.builder()</span>
-<span class="fc" id="L176">                .setIssuedAt(Date.from(issuedAt))</span>
-<span class="fc" id="L177">                .setExpiration(Date.from(expiration))</span>
-<span class="fc" id="L178">                .setIssuer(this.applicationId)</span>
-<span class="fc" id="L179">                .signWith(privateKey, SignatureAlgorithm.RS256);</span>
+<span class="fc" id="L167">        Instant issuedAt = getIssuedAt(now);</span>
 
         // Token will refresh 2 minutes before it expires
-<span class="fc" id="L182">        validUntil = expiration.minus(Duration.ofMinutes(2));</span>
+<span class="fc" id="L170">        validUntil = expiration.minus(Duration.ofMinutes(2));</span>
 
-        // Builds the JWT and serializes it to a compact, URL-safe string
-<span class="fc" id="L185">        return builder.serializeToJsonWith(new JacksonSerializer&lt;&gt;()).compact();</span>
+<span class="fc" id="L172">        return JwtBuilderUtil.buildJwt(issuedAt, expiration, applicationId, privateKey);</span>
     }
 
     Instant getIssuedAt(Instant now) {
-<span class="fc" id="L189">        return now.minus(Duration.ofMinutes(2));</span>
+<span class="fc" id="L176">        return now.minus(Duration.ofMinutes(2));</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

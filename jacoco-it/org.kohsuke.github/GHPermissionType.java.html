@@ -15,7 +15,9 @@
     /** The read. */
 <span class="fc" id="L16">    READ(10),</span>
     /** The none. */
-<span class="fc" id="L18">    NONE(0);</span>
+<span class="fc" id="L18">    NONE(0),</span>
+    /** The unknown permission type returned when an unrecognized permission type is returned. */
+<span class="fc" id="L20">    UNKNOWN(-5);</span>
 
     private final int level;
 
@@ -25,9 +27,9 @@
      * @param level
      *            the level
      */
-<span class="fc" id="L28">    GHPermissionType(int level) {</span>
-<span class="fc" id="L29">        this.level = level;</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L30">    GHPermissionType(int level) {</span>
+<span class="fc" id="L31">        this.level = level;</span>
+<span class="fc" id="L32">    }</span>
 
     /**
      * Implies.
@@ -38,11 +40,11 @@
      */
     boolean implies(GHPermissionType other) {
         // NONE is a special case
-<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (other == NONE) {</span>
-<span class="fc bfc" id="L42" title="All 2 branches covered.">            return this == NONE;</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (other == NONE) {</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">            return this == NONE;</span>
         }
 
-<span class="fc bfc" id="L45" title="All 2 branches covered.">        return this.level &gt;= other.level;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        return this.level &gt;= other.level;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

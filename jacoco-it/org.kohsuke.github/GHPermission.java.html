@@ -24,7 +24,7 @@
 
 package org.kohsuke.github;
 
-import java.util.Locale;
+import org.kohsuke.github.internal.EnumUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -52,7 +52,7 @@ import java.util.Locale;
      * @return the permission type
      */
     public GHPermissionType getPermissionType() {
-<span class="fc" id="L55">        return Enum.valueOf(GHPermissionType.class, permission.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L55">        return EnumUtils.getEnumOrDefault(GHPermissionType.class, permission, GHPermissionType.UNKNOWN);</span>
     }
 
     /**
@@ -64,4 +64,4 @@ import java.util.Locale;
 <span class="nc" id="L64">        return user;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

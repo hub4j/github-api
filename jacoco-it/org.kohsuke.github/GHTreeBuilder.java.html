@@ -22,7 +22,7 @@ public class GHTreeBuilder {
     // Issue #636: Create Tree no longer accepts null value in sha field
     @JsonInclude(Include.NON_NULL)
     @SuppressFBWarnings(&quot;URF_UNREAD_FIELD&quot;)
-    private static final class TreeEntry {
+    private static class TreeEntry {
 
         private final String path;
         private final String mode;
@@ -37,16 +37,32 @@ public class GHTreeBuilder {
 <span class="fc" id="L37">        }</span>
     }
 
+    private static class DeleteTreeEntry extends TreeEntry {
+        /**
+         * According to reference doc https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28#create-a-tree: if
+         * sha value is null then the file will be deleted. That's why in this DTO sha is always {@literal null} and is
+         * included to json.
+         */
+<span class="fc" id="L46">        @JsonInclude</span>
+        private final String sha = null;
+
+        private DeleteTreeEntry(String path) {
+            // The `mode` and `type` parameters are required by the API, but their values are ignored during delete.
+            // Supply reasonable placeholders.
+<span class="fc" id="L52">            super(path, &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L53">        }</span>
+    }
+
     /**
      * Instantiates a new GH tree builder.
      *
      * @param repo
      *            the repo
      */
-<span class="fc" id="L46">    GHTreeBuilder(GHRepository repo) {</span>
-<span class="fc" id="L47">        this.repo = repo;</span>
-<span class="fc" id="L48">        req = repo.root().createRequest();</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L62">    GHTreeBuilder(GHRepository repo) {</span>
+<span class="fc" id="L63">        this.repo = repo;</span>
+<span class="fc" id="L64">        req = repo.root().createRequest();</span>
+<span class="fc" id="L65">    }</span>
 
     /**
      * Base tree gh tree builder.
@@ -56,8 +72,8 @@ public class GHTreeBuilder {
      * @return the gh tree builder
      */
     public GHTreeBuilder baseTree(String baseTree) {
-<span class="fc" id="L59">        req.with(&quot;base_tree&quot;, baseTree);</span>
-<span class="fc" id="L60">        return this;</span>
+<span class="fc" id="L75">        req.with(&quot;base_tree&quot;, baseTree);</span>
+<span class="fc" id="L76">        return this;</span>
     }
 
     /**
@@ -78,11 +94,11 @@ public class GHTreeBuilder {
      */
     @Deprecated
     public GHTreeBuilder entry(String path, String mode, String type, String sha, String content) {
-<span class="nc" id="L81">        TreeEntry entry = new TreeEntry(path, mode, type);</span>
-<span class="nc" id="L82">        entry.sha = sha;</span>
-<span class="nc" id="L83">        entry.content = content;</span>
-<span class="nc" id="L84">        treeEntries.add(entry);</span>
-<span class="nc" id="L85">        return this;</span>
+<span class="nc" id="L97">        TreeEntry entry = new TreeEntry(path, mode, type);</span>
+<span class="nc" id="L98">        entry.sha = sha;</span>
+<span class="nc" id="L99">        entry.content = content;</span>
+<span class="nc" id="L100">        treeEntries.add(entry);</span>
+<span class="nc" id="L101">        return this;</span>
     }
 
     /**
@@ -100,10 +116,10 @@ public class GHTreeBuilder {
      */
     @Deprecated
     public GHTreeBuilder shaEntry(String path, String sha, boolean executable) {
-<span class="fc bfc" id="L103" title="All 2 branches covered.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
-<span class="fc" id="L104">        entry.sha = sha;</span>
-<span class="fc" id="L105">        treeEntries.add(entry);</span>
-<span class="fc" id="L106">        return this;</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L120">        entry.sha = sha;</span>
+<span class="fc" id="L121">        treeEntries.add(entry);</span>
+<span class="fc" id="L122">        return this;</span>
     }
 
     /**
@@ -121,10 +137,10 @@ public class GHTreeBuilder {
      */
     @Deprecated
     public GHTreeBuilder textEntry(String path, String content, boolean executable) {
-<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
-<span class="fc" id="L125">        entry.content = content;</span>
-<span class="fc" id="L126">        treeEntries.add(entry);</span>
-<span class="fc" id="L127">        return this;</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L141">        entry.content = content;</span>
+<span class="fc" id="L142">        treeEntries.add(entry);</span>
+<span class="fc" id="L143">        return this;</span>
     }
 
     /**
@@ -140,10 +156,10 @@ public class GHTreeBuilder {
      */
     public GHTreeBuilder add(String path, byte[] content, boolean executable) {
         try {
-<span class="fc" id="L143">            String dataSha = repo.createBlob().binaryContent(content).create().getSha();</span>
-<span class="fc" id="L144">            return shaEntry(path, dataSha, executable);</span>
-<span class="nc" id="L145">        } catch (IOException e) {</span>
-<span class="nc" id="L146">            throw new GHException(&quot;Cannot create binary content of '&quot; + path + &quot;'&quot;, e);</span>
+<span class="fc" id="L159">            String dataSha = repo.createBlob().binaryContent(content).create().getSha();</span>
+<span class="fc" id="L160">            return shaEntry(path, dataSha, executable);</span>
+<span class="nc" id="L161">        } catch (IOException e) {</span>
+<span class="nc" id="L162">            throw new GHException(&quot;Cannot create binary content of '&quot; + path + &quot;'&quot;, e);</span>
         }
     }
 
@@ -159,11 +175,24 @@ public class GHTreeBuilder {
      * @return this GHTreeBuilder
      */
     public GHTreeBuilder add(String path, String content, boolean executable) {
-<span class="fc" id="L162">        return add(path, content.getBytes(StandardCharsets.UTF_8), executable);</span>
+<span class="fc" id="L178">        return add(path, content.getBytes(StandardCharsets.UTF_8), executable);</span>
+    }
+
+    /**
+     * Removes an entry with the given path from base tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder delete(String path) {
+<span class="fc" id="L189">        TreeEntry entry = new DeleteTreeEntry(path);</span>
+<span class="fc" id="L190">        treeEntries.add(entry);</span>
+<span class="fc" id="L191">        return this;</span>
     }
 
     private String getApiTail() {
-<span class="fc" id="L166">        return String.format(&quot;/repos/%s/%s/git/trees&quot;, repo.getOwnerName(), repo.getName());</span>
+<span class="fc" id="L195">        return String.format(&quot;/repos/%s/%s/git/trees&quot;, repo.getOwnerName(), repo.getName());</span>
     }
 
     /**
@@ -174,8 +203,8 @@ public class GHTreeBuilder {
      *             the io exception
      */
     public GHTree create() throws IOException {
-<span class="fc" id="L177">        req.with(&quot;tree&quot;, treeEntries);</span>
-<span class="fc" id="L178">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHTree.class).wrap(repo);</span>
+<span class="fc" id="L206">        req.with(&quot;tree&quot;, treeEntries);</span>
+<span class="fc" id="L207">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHTree.class).wrap(repo);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

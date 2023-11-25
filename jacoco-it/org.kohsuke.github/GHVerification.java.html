@@ -61,49 +61,64 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * The possible values for reason in verification object from github.
      *
      * @author Sourabh Sarvotham Parkala
-     * @see &lt;a href=&quot;https://developer.github.com/v3/repos/commits/#signature-verification-object&quot;&gt;List of possible
-     *      reason values&lt;/a&gt;
+     * @see &lt;a href=&quot;https://docs.github.com/en/graphql/reference/enums#gitsignaturestate&quot;&gt;List of possible reason
+     *      values. Note graphQL documentation has currently the most updated values.&lt;/a&gt;
      */
 <span class="fc" id="L67">    public enum Reason {</span>
 
-        /** The expired key. */
+        /** Signing key expired. */
 <span class="fc" id="L70">        EXPIRED_KEY,</span>
 
-        /** The not signing key. */
+        /** The usage flags for the key that signed this don't allow signing. */
 <span class="fc" id="L73">        NOT_SIGNING_KEY,</span>
 
-        /** The gpgverify error. */
+        /** The GPG verification service misbehaved. */
 <span class="fc" id="L76">        GPGVERIFY_ERROR,</span>
 
-        /** The gpgverify unavailable. */
+        /** The GPG verification service is unavailable at the moment. */
 <span class="fc" id="L79">        GPGVERIFY_UNAVAILABLE,</span>
 
-        /** The unsigned. */
+        /** Unsigned. */
 <span class="fc" id="L82">        UNSIGNED,</span>
 
-        /** The unknown signature type. */
+        /** Unknown signature type. */
 <span class="fc" id="L85">        UNKNOWN_SIGNATURE_TYPE,</span>
 
-        /** The no user. */
+        /** Email used for signing not known to GitHub. */
 <span class="fc" id="L88">        NO_USER,</span>
 
-        /** The unverified email. */
+        /** Email used for signing unverified on GitHub. */
 <span class="fc" id="L91">        UNVERIFIED_EMAIL,</span>
 
-        /** The bad email. */
+        /** Invalid email used for signing. */
 <span class="fc" id="L94">        BAD_EMAIL,</span>
 
-        /** The unknown key. */
+        /** Key used for signing not known to GitHub. */
 <span class="fc" id="L97">        UNKNOWN_KEY,</span>
 
-        /** The malformed signature. */
+        /** Malformed signature. */
 <span class="fc" id="L100">        MALFORMED_SIGNATURE,</span>
 
-        /** The invalid. */
+        /** Invalid signature. */
 <span class="fc" id="L103">        INVALID,</span>
 
-        /** The valid. */
-<span class="fc" id="L106">        VALID</span>
+        /** Valid signature and verified by GitHub. */
+<span class="fc" id="L106">        VALID,</span>
+
+        /** The signing certificate or its chain could not be verified. */
+<span class="fc" id="L109">        BAD_CERT,</span>
+
+        /** Malformed signature. (Returned by graphQL) */
+<span class="fc" id="L112">        MALFORMED_SIG,</span>
+
+        /** Valid signature, though certificate revocation check failed. */
+<span class="fc" id="L115">        OCSP_ERROR,</span>
+
+        /** Valid signature, pending certificate revocation checking. */
+<span class="fc" id="L118">        OCSP_PENDING,</span>
+
+        /** One or more certificates in chain has been revoked. */
+<span class="fc" id="L121">        OCSP_REVOKED</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

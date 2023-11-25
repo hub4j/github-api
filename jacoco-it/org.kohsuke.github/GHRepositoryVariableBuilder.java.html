@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepositoryVariableBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRepositoryVariableBuilder.java</span></div><h1>GHRepositoryVariableBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
+/**
+ * The type Gh repository variable builder.
+ *
+ * @param &lt;S&gt;
+ *            the type parameter
+ */
+public class GHRepositoryVariableBuilder&lt;S&gt; extends AbstractBuilder&lt;GHRepositoryVariable, S&gt; {
+    /**
+     * Instantiates a new GH Repository Variable builder.
+     *
+     * @param intermediateReturnType
+     *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
+     *            {@link S} the same as {@link GHRepositoryVariable}, this builder will commit changes after each call
+     *            to {@link #with(String, Object)}.
+     * @param root
+     *            the GitHub instance to which updates will be sent
+     * @param baseInstance
+     *            instance on which to base this builder. If {@code null} a new instance will be created.
+     */
+    protected GHRepositoryVariableBuilder(@Nonnull Class&lt;S&gt; intermediateReturnType,
+            @Nonnull GitHub root,
+            @CheckForNull GHRepositoryVariable baseInstance) {
+<span class="fc" id="L30">        super(GHRepositoryVariable.class, intermediateReturnType, root, baseInstance);</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (baseInstance != null) {</span>
+<span class="fc" id="L32">            requester.with(&quot;name&quot;, baseInstance.getName());</span>
+<span class="fc" id="L33">            requester.with(&quot;value&quot;, baseInstance.getValue());</span>
+        }
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Name.
+     *
+     * @param value
+     *            the value
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Nonnull
+    @BetaApi
+    public S name(String value) throws IOException {
+<span class="fc" id="L49">        return with(&quot;name&quot;, value);</span>
+    }
+
+    /**
+     * Name.
+     *
+     * @param value
+     *            the value
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Nonnull
+    @BetaApi
+    public S value(String value) throws IOException {
+<span class="fc" id="L64">        return with(&quot;value&quot;, value);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

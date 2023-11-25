@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCommitFileIterable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCommitFileIterable.java</span></div><h1>GHCommitFileIterable.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import org.kohsuke.github.GHCommit.File;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+/**
+ * Iterable for commit listing.
+ *
+ * @author Stephen Horgan
+ */
+class GHCommitFileIterable extends PagedIterable&lt;GHCommit.File&gt; {
+
+    /**
+     * Number of files returned in the commit response. If there are more files than this, the response will include
+     * pagination link headers for the remaining files.
+     */
+    private static final int GH_FILE_LIMIT_PER_COMMIT_PAGE = 300;
+
+    private final GHRepository owner;
+    private final String sha;
+    private final File[] files;
+
+    /**
+     * Instantiates a new GH commit iterable.
+     *
+     * @param owner
+     *            the owner
+     * @param sha
+     *            the SHA of the commit
+     * @param files
+     *            the list of files initially populated
+     */
+<span class="fc" id="L38">    public GHCommitFileIterable(GHRepository owner, String sha, List&lt;File&gt; files) {</span>
+<span class="fc" id="L39">        this.owner = owner;</span>
+<span class="fc" id="L40">        this.sha = sha;</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        this.files = files != null ? files.toArray(new File[0]) : null;</span>
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Iterator.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
+     */
+    @Nonnull
+    @Override
+    public PagedIterator&lt;GHCommit.File&gt; _iterator(int pageSize) {
+
+        Iterator&lt;GHCommit.File[]&gt; pageIterator;
+
+<span class="pc bpc" id="L57" title="1 of 4 branches missed.">        if (files != null &amp;&amp; files.length &lt; GH_FILE_LIMIT_PER_COMMIT_PAGE) {</span>
+            // create a page iterator that only provides one page
+<span class="fc" id="L59">            pageIterator = Collections.singleton(files).iterator();</span>
+        } else {
+            // page size is controlled by the server for this iterator, do not allow it to be set by the caller
+<span class="fc" id="L62">            pageSize = 0;</span>
+
+<span class="fc" id="L64">            GitHubRequest request = owner.root()</span>
+<span class="fc" id="L65">                    .createRequest()</span>
+<span class="fc" id="L66">                    .withUrlPath(owner.getApiTailUrl(&quot;commits/&quot; + sha))</span>
+<span class="fc" id="L67">                    .build();</span>
+
+<span class="fc" id="L69">            pageIterator = adapt(</span>
+<span class="fc" id="L70">                    GitHubPageIterator.create(owner.root().getClient(), GHCommitFilesPage.class, request, pageSize));</span>
+        }
+
+<span class="fc" id="L73">        return new PagedIterator&lt;&gt;(pageIterator, null);</span>
+    }
+
+    /**
+     * Adapt.
+     *
+     * @param base
+     *            the base commit page
+     * @return the iterator
+     */
+    protected Iterator&lt;GHCommit.File[]&gt; adapt(final Iterator&lt;GHCommitFilesPage&gt; base) {
+<span class="fc" id="L84">        return new Iterator&lt;GHCommit.File[]&gt;() {</span>
+
+            public boolean hasNext() {
+<span class="fc" id="L87">                return base.hasNext();</span>
+            }
+
+            public GHCommit.File[] next() {
+<span class="fc" id="L91">                GHCommitFilesPage v = base.next();</span>
+<span class="fc" id="L92">                return v.getFiles();</span>
+            }
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

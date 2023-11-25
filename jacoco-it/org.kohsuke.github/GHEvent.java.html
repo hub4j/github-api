@@ -102,109 +102,112 @@ import java.util.Locale;
     /** The merge queue entry. */
 <span class="fc" id="L103">    MERGE_QUEUE_ENTRY,</span>
 
+    /** The merge group entry. */
+<span class="fc" id="L106">    MERGE_GROUP,</span>
+
     /** The meta. */
-<span class="fc" id="L106">    META,</span>
+<span class="fc" id="L109">    META,</span>
 
     /** The milestone. */
-<span class="fc" id="L109">    MILESTONE,</span>
+<span class="fc" id="L112">    MILESTONE,</span>
 
     /** The organization. */
-<span class="fc" id="L112">    ORGANIZATION,</span>
+<span class="fc" id="L115">    ORGANIZATION,</span>
 
     /** The org block. */
-<span class="fc" id="L115">    ORG_BLOCK,</span>
+<span class="fc" id="L118">    ORG_BLOCK,</span>
 
     /** The package. */
-<span class="fc" id="L118">    PACKAGE,</span>
+<span class="fc" id="L121">    PACKAGE,</span>
 
     /** The page build. */
-<span class="fc" id="L121">    PAGE_BUILD,</span>
+<span class="fc" id="L124">    PAGE_BUILD,</span>
 
     /** The project card. */
-<span class="fc" id="L124">    PROJECT_CARD,</span>
+<span class="fc" id="L127">    PROJECT_CARD,</span>
 
     /** The project column. */
-<span class="fc" id="L127">    PROJECT_COLUMN,</span>
+<span class="fc" id="L130">    PROJECT_COLUMN,</span>
 
     /** The project. */
-<span class="fc" id="L130">    PROJECT,</span>
+<span class="fc" id="L133">    PROJECT,</span>
 
     /** The ping. */
-<span class="fc" id="L133">    PING,</span>
+<span class="fc" id="L136">    PING,</span>
 
     /** The public. */
-<span class="fc" id="L136">    PUBLIC,</span>
+<span class="fc" id="L139">    PUBLIC,</span>
 
     /** The pull request. */
-<span class="fc" id="L139">    PULL_REQUEST,</span>
+<span class="fc" id="L142">    PULL_REQUEST,</span>
 
     /** The pull request review. */
-<span class="fc" id="L142">    PULL_REQUEST_REVIEW,</span>
+<span class="fc" id="L145">    PULL_REQUEST_REVIEW,</span>
 
     /** The pull request review comment. */
-<span class="fc" id="L145">    PULL_REQUEST_REVIEW_COMMENT,</span>
+<span class="fc" id="L148">    PULL_REQUEST_REVIEW_COMMENT,</span>
 
     /** The pull request review thread. */
-<span class="fc" id="L148">    PULL_REQUEST_REVIEW_THREAD,</span>
+<span class="fc" id="L151">    PULL_REQUEST_REVIEW_THREAD,</span>
 
     /** The push. */
-<span class="fc" id="L151">    PUSH,</span>
+<span class="fc" id="L154">    PUSH,</span>
 
     /** The registry package. */
-<span class="fc" id="L154">    REGISTRY_PACKAGE,</span>
+<span class="fc" id="L157">    REGISTRY_PACKAGE,</span>
 
     /** The release. */
-<span class="fc" id="L157">    RELEASE,</span>
+<span class="fc" id="L160">    RELEASE,</span>
 
     /** The repository dispatch. */
-<span class="fc" id="L160">    REPOSITORY_DISPATCH,</span>
+<span class="fc" id="L163">    REPOSITORY_DISPATCH,</span>
     /** The repository. */
     // only valid for org hooks
-<span class="fc" id="L163">    REPOSITORY,</span>
+<span class="fc" id="L166">    REPOSITORY,</span>
 
     /** The repository import. */
-<span class="fc" id="L166">    REPOSITORY_IMPORT,</span>
+<span class="fc" id="L169">    REPOSITORY_IMPORT,</span>
 
     /** The repository vulnerability alert. */
-<span class="fc" id="L169">    REPOSITORY_VULNERABILITY_ALERT,</span>
+<span class="fc" id="L172">    REPOSITORY_VULNERABILITY_ALERT,</span>
 
     /** The schedule. */
-<span class="fc" id="L172">    SCHEDULE,</span>
+<span class="fc" id="L175">    SCHEDULE,</span>
 
     /** The security advisory. */
-<span class="fc" id="L175">    SECURITY_ADVISORY,</span>
+<span class="fc" id="L178">    SECURITY_ADVISORY,</span>
 
     /** The star. */
-<span class="fc" id="L178">    STAR,</span>
+<span class="fc" id="L181">    STAR,</span>
 
     /** The status. */
-<span class="fc" id="L181">    STATUS,</span>
+<span class="fc" id="L184">    STATUS,</span>
 
     /** The team. */
-<span class="fc" id="L184">    TEAM,</span>
+<span class="fc" id="L187">    TEAM,</span>
 
     /** The team add. */
-<span class="fc" id="L187">    TEAM_ADD,</span>
+<span class="fc" id="L190">    TEAM_ADD,</span>
 
     /** The watch. */
-<span class="fc" id="L190">    WATCH,</span>
+<span class="fc" id="L193">    WATCH,</span>
 
     /** The workflow job. */
-<span class="fc" id="L193">    WORKFLOW_JOB,</span>
+<span class="fc" id="L196">    WORKFLOW_JOB,</span>
 
     /** The workflow dispatch. */
-<span class="fc" id="L196">    WORKFLOW_DISPATCH,</span>
+<span class="fc" id="L199">    WORKFLOW_DISPATCH,</span>
 
     /** The workflow run. */
-<span class="fc" id="L199">    WORKFLOW_RUN,</span>
+<span class="fc" id="L202">    WORKFLOW_RUN,</span>
 
     /**
      * Special event type that means we haven't found an enum value corresponding to the event.
      */
-<span class="fc" id="L204">    UNKNOWN,</span>
+<span class="fc" id="L207">    UNKNOWN,</span>
 
     /** Special event type that means &quot;every possible event&quot;. */
-<span class="fc" id="L207">    ALL;</span>
+<span class="fc" id="L210">    ALL;</span>
 
     /**
      * Returns GitHub's internal representation of this event.
@@ -212,9 +215,9 @@ import java.util.Locale;
      * @return the string
      */
     String symbol() {
-<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (this == ALL)</span>
-<span class="fc" id="L216">            return &quot;*&quot;;</span>
-<span class="fc" id="L217">        return name().toLowerCase(Locale.ENGLISH);</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">        if (this == ALL)</span>
+<span class="fc" id="L219">            return &quot;*&quot;;</span>
+<span class="fc" id="L220">        return name().toLowerCase(Locale.ENGLISH);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

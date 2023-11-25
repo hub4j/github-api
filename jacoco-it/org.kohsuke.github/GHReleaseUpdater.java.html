@@ -111,6 +111,18 @@ public class GHReleaseUpdater {
     }
 
     /**
+     * Optional.
+     *
+     * @param latest
+     *            Whether to make this the latest release. Default is {@code TRUE}
+     * @return the gh release builder
+     */
+    public GHReleaseUpdater makeLatest(GHReleaseBuilder.MakeLatest latest) {
+<span class="fc" id="L121">        builder.with(&quot;make_latest&quot;, latest);</span>
+<span class="fc" id="L122">        return this;</span>
+    }
+
+    /**
      * Update gh release.
      *
      * @return the gh release
@@ -118,11 +130,11 @@ public class GHReleaseUpdater {
      *             the io exception
      */
     public GHRelease update() throws IOException {
-<span class="fc" id="L121">        return builder.method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L122">                .withUrlPath(base.owner.getApiTailUrl(&quot;releases/&quot; + base.getId()))</span>
-<span class="fc" id="L123">                .fetch(GHRelease.class)</span>
-<span class="fc" id="L124">                .wrap(base.owner);</span>
+<span class="fc" id="L133">        return builder.method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L134">                .withUrlPath(base.owner.getApiTailUrl(&quot;releases/&quot; + base.getId()))</span>
+<span class="fc" id="L135">                .fetch(GHRelease.class)</span>
+<span class="fc" id="L136">                .wrap(base.owner);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

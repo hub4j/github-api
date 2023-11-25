@@ -71,14 +71,14 @@ public class GitHubBuilder implements Cloneable {
 
 <span class="fc" id="L72">        builder = fromEnvironment();</span>
 
-<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)</span>
-<span class="fc" id="L75">            return builder;</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)</span>
+<span class="nc" id="L75">            return builder;</span>
 
         try {
-<span class="fc" id="L78">            builder = fromPropertyFile();</span>
+<span class="nc" id="L78">            builder = fromPropertyFile();</span>
 
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">            if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)</span>
-<span class="fc" id="L81">                return builder;</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)</span>
+<span class="nc" id="L81">                return builder;</span>
 <span class="fc" id="L82">        } catch (FileNotFoundException e) {</span>
             // fall through
 <span class="fc" id="L84">            cause = e;</span>
@@ -110,10 +110,10 @@ public class GitHubBuilder implements Cloneable {
     }
 
     private static void loadIfSet(String envName, Properties p, String propName) {
-<span class="fc" id="L113">        String v = System.getenv(envName);</span>
-<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (v != null)</span>
-<span class="fc" id="L115">            p.put(propName, v);</span>
-<span class="fc" id="L116">    }</span>
+<span class="nc" id="L113">        String v = System.getenv(envName);</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (v != null)</span>
+<span class="nc" id="L115">            p.put(propName, v);</span>
+<span class="nc" id="L116">    }</span>
 
     /**
      * From environment git hub builder.
@@ -137,12 +137,12 @@ public class GitHubBuilder implements Cloneable {
             String passwordVariableName,
             String oauthVariableName,
             String endpointVariableName) throws IOException {
-<span class="fc" id="L140">        Properties env = new Properties();</span>
-<span class="fc" id="L141">        loadIfSet(loginVariableName, env, &quot;login&quot;);</span>
-<span class="fc" id="L142">        loadIfSet(passwordVariableName, env, &quot;password&quot;);</span>
-<span class="fc" id="L143">        loadIfSet(oauthVariableName, env, &quot;oauth&quot;);</span>
-<span class="fc" id="L144">        loadIfSet(endpointVariableName, env, &quot;endpoint&quot;);</span>
-<span class="fc" id="L145">        return fromProperties(env);</span>
+<span class="nc" id="L140">        Properties env = new Properties();</span>
+<span class="nc" id="L141">        loadIfSet(loginVariableName, env, &quot;login&quot;);</span>
+<span class="nc" id="L142">        loadIfSet(passwordVariableName, env, &quot;password&quot;);</span>
+<span class="nc" id="L143">        loadIfSet(oauthVariableName, env, &quot;oauth&quot;);</span>
+<span class="nc" id="L144">        loadIfSet(endpointVariableName, env, &quot;endpoint&quot;);</span>
+<span class="nc" id="L145">        return fromProperties(env);</span>
     }
 
     /**
@@ -174,8 +174,8 @@ public class GitHubBuilder implements Cloneable {
 <span class="fc" id="L174">        Properties props = new Properties();</span>
 <span class="fc bfc" id="L175" title="All 2 branches covered.">        for (Entry&lt;String, String&gt; e : System.getenv().entrySet()) {</span>
 <span class="fc" id="L176">            String name = e.getKey().toLowerCase(Locale.ENGLISH);</span>
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">            if (name.startsWith(&quot;github_&quot;))</span>
-<span class="nc" id="L178">                name = name.substring(7);</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">            if (name.startsWith(&quot;github_&quot;))</span>
+<span class="fc" id="L178">                name = name.substring(7);</span>
 <span class="fc" id="L179">            props.put(name, e.getValue());</span>
 <span class="fc" id="L180">        }</span>
 <span class="fc" id="L181">        return fromProperties(props);</span>
@@ -189,9 +189,9 @@ public class GitHubBuilder implements Cloneable {
      *             the io exception
      */
     public static GitHubBuilder fromPropertyFile() throws IOException {
-<span class="fc bfc" id="L192" title="All 2 branches covered.">        File homeDir = HOME_DIRECTORY != null ? HOME_DIRECTORY : new File(System.getProperty(&quot;user.home&quot;));</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        File homeDir = HOME_DIRECTORY != null ? HOME_DIRECTORY : new File(System.getProperty(&quot;user.home&quot;));</span>
 <span class="fc" id="L193">        File propertyFile = new File(homeDir, &quot;.github&quot;);</span>
-<span class="fc" id="L194">        return fromPropertyFile(propertyFile.getPath());</span>
+<span class="nc" id="L194">        return fromPropertyFile(propertyFile.getPath());</span>
     }
 
     /**
@@ -207,13 +207,13 @@ public class GitHubBuilder implements Cloneable {
 <span class="fc" id="L207">        Properties props = new Properties();</span>
 <span class="fc" id="L208">        FileInputStream in = null;</span>
         try {
-<span class="fc" id="L210">            in = new FileInputStream(propertyFileName);</span>
-<span class="fc" id="L211">            props.load(in);</span>
+<span class="nc" id="L210">            in = new FileInputStream(propertyFileName);</span>
+<span class="nc" id="L211">            props.load(in);</span>
         } finally {
 <span class="fc" id="L213">            IOUtils.closeQuietly(in);</span>
         }
 
-<span class="fc" id="L216">        return fromProperties(props);</span>
+<span class="nc" id="L216">        return fromProperties(props);</span>
     }
 
     /**
@@ -230,14 +230,14 @@ public class GitHubBuilder implements Cloneable {
 <span class="fc" id="L230">        String login = props.getProperty(&quot;login&quot;);</span>
 <span class="fc" id="L231">        String password = props.getProperty(&quot;password&quot;);</span>
 
-<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (oauth != null) {</span>
-<span class="fc" id="L234">            self.withOAuthToken(oauth, login);</span>
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">        if (oauth != null) {</span>
+<span class="nc" id="L234">            self.withOAuthToken(oauth, login);</span>
         }
-<span class="fc bfc" id="L236" title="All 2 branches covered.">        if (jwt != null) {</span>
-<span class="fc" id="L237">            self.withJwtToken(jwt);</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (jwt != null) {</span>
+<span class="nc" id="L237">            self.withJwtToken(jwt);</span>
         }
-<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (password != null) {</span>
-<span class="fc" id="L240">            self.withPassword(login, password);</span>
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">        if (password != null) {</span>
+<span class="nc" id="L240">            self.withPassword(login, password);</span>
         }
 <span class="fc" id="L242">        self.withEndpoint(props.getProperty(&quot;endpoint&quot;, GitHubClient.GITHUB_URL));</span>
 <span class="fc" id="L243">        return self;</span>
@@ -528,4 +528,4 @@ public class GitHubBuilder implements Cloneable {
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

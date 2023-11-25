@@ -3,6 +3,7 @@
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.util.Locale;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -23,11 +24,11 @@ public class GHReleaseBuilder {
      *            the tag
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Acceptable risk&quot;)
-<span class="fc" id="L26">    public GHReleaseBuilder(GHRepository ghRepository, String tag) {</span>
-<span class="fc" id="L27">        this.repo = ghRepository;</span>
-<span class="fc" id="L28">        this.builder = repo.root().createRequest().method(&quot;POST&quot;);</span>
-<span class="fc" id="L29">        builder.with(&quot;tag_name&quot;, tag);</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L27">    public GHReleaseBuilder(GHRepository ghRepository, String tag) {</span>
+<span class="fc" id="L28">        this.repo = ghRepository;</span>
+<span class="fc" id="L29">        this.builder = repo.root().createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L30">        builder.with(&quot;tag_name&quot;, tag);</span>
+<span class="fc" id="L31">    }</span>
 
     /**
      * Body gh release builder.
@@ -37,8 +38,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder body(String body) {
-<span class="fc" id="L40">        builder.with(&quot;body&quot;, body);</span>
-<span class="fc" id="L41">        return this;</span>
+<span class="fc" id="L41">        builder.with(&quot;body&quot;, body);</span>
+<span class="fc" id="L42">        return this;</span>
     }
 
     /**
@@ -49,8 +50,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder commitish(String commitish) {
-<span class="nc" id="L52">        builder.with(&quot;target_commitish&quot;, commitish);</span>
-<span class="nc" id="L53">        return this;</span>
+<span class="nc" id="L53">        builder.with(&quot;target_commitish&quot;, commitish);</span>
+<span class="nc" id="L54">        return this;</span>
     }
 
     /**
@@ -62,8 +63,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder draft(boolean draft) {
-<span class="nc" id="L65">        builder.with(&quot;draft&quot;, draft);</span>
-<span class="nc" id="L66">        return this;</span>
+<span class="nc" id="L66">        builder.with(&quot;draft&quot;, draft);</span>
+<span class="nc" id="L67">        return this;</span>
     }
 
     /**
@@ -74,8 +75,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder name(String name) {
-<span class="fc" id="L77">        builder.with(&quot;name&quot;, name);</span>
-<span class="fc" id="L78">        return this;</span>
+<span class="fc" id="L78">        builder.with(&quot;name&quot;, name);</span>
+<span class="fc" id="L79">        return this;</span>
     }
 
     /**
@@ -87,8 +88,8 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder prerelease(boolean prerelease) {
-<span class="fc" id="L90">        builder.with(&quot;prerelease&quot;, prerelease);</span>
-<span class="fc" id="L91">        return this;</span>
+<span class="fc" id="L91">        builder.with(&quot;prerelease&quot;, prerelease);</span>
+<span class="fc" id="L92">        return this;</span>
     }
 
     /**
@@ -99,8 +100,56 @@ public class GHReleaseBuilder {
      * @return the gh release builder
      */
     public GHReleaseBuilder categoryName(String categoryName) {
-<span class="fc" id="L102">        builder.with(&quot;discussion_category_name&quot;, categoryName);</span>
-<span class="fc" id="L103">        return this;</span>
+<span class="fc" id="L103">        builder.with(&quot;discussion_category_name&quot;, categoryName);</span>
+<span class="fc" id="L104">        return this;</span>
+    }
+
+    /**
+     * Optional.
+     *
+     * @param generateReleaseNotes
+     *            {@code true} to instruct GitHub to generate release name and notes automatically. {@code false} to
+     *            suppress automatic generation. Default is {@code false}.
+     * @return the gh release builder
+     */
+    public GHReleaseBuilder generateReleaseNotes(boolean generateReleaseNotes) {
+<span class="fc" id="L116">        builder.with(&quot;generate_release_notes&quot;, generateReleaseNotes);</span>
+<span class="fc" id="L117">        return this;</span>
+    }
+
+    /**
+     * Values for whether this release should be the latest.
+     */
+<span class="fc" id="L123">    public static enum MakeLatest {</span>
+
+        /** Make this the latest release */
+<span class="fc" id="L126">        TRUE,</span>
+        /** Do not make this the latest release */
+<span class="fc" id="L128">        FALSE,</span>
+        /** Latest release is determined by date and higher semantic version */
+<span class="fc" id="L130">        LEGACY;</span>
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+<span class="fc" id="L139">            return name().toLowerCase(Locale.ROOT);</span>
+        }
+    }
+
+    /**
+     * Optional.
+     *
+     * @param latest
+     *            Whether to make this the latest release. Default is {@code TRUE}
+     * @return the gh release builder
+     */
+    public GHReleaseBuilder makeLatest(MakeLatest latest) {
+<span class="fc" id="L151">        builder.with(&quot;make_latest&quot;, latest);</span>
+<span class="fc" id="L152">        return this;</span>
     }
 
     /**
@@ -111,7 +160,7 @@ public class GHReleaseBuilder {
      *             the io exception
      */
     public GHRelease create() throws IOException {
-<span class="fc" id="L114">        return builder.withUrlPath(repo.getApiTailUrl(&quot;releases&quot;)).fetch(GHRelease.class).wrap(repo);</span>
+<span class="fc" id="L163">        return builder.withUrlPath(repo.getApiTailUrl(&quot;releases&quot;)).fetch(GHRelease.class).wrap(repo);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

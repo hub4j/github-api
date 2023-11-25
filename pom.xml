@@ -681,7 +681,7 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <classesDirectory>${project.basedir}/target/${project.artifactId}-${project.version}.jar</classesDirectory>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
                   <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttp</argLine>
                 </configuration>
@@ -693,7 +693,7 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <classesDirectory>${project.basedir}/target/${project.artifactId}-${project.version}.jar</classesDirectory>
                   <useSystemClassLoader>false</useSystemClassLoader>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
                   <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
@@ -710,7 +710,7 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <classesDirectory>${project.basedir}/target/${project.artifactId}-${project.version}.jar</classesDirectory>
                   <useSystemClassLoader>false</useSystemClassLoader>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
                   <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=urlconnection</argLine>
@@ -727,7 +727,7 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <classesDirectory>${project.basedir}/target/${project.artifactId}-${project.version}.jar</classesDirectory>
                   <rerunFailingTestsCount>2</rerunFailingTestsCount>
                   <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
                 </configuration>
@@ -739,7 +739,7 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <classesDirectory>${project.basedir}/target/${project.artifactId}-${project.version}.jar</classesDirectory>
                   <rerunFailingTestsCount>2</rerunFailingTestsCount>
                   <includesFile>src/test/resources/slow-or-flaky-tests.txt</includesFile>
                   <!-- Run some test passes with trace logging turned on -->
@@ -756,7 +756,7 @@
                   <goal>test</goal>
                 </goals>
                 <configuration>
-                  <classesDirectory>${project.basedir}/target/github-api-${project.version}.jar</classesDirectory>
+                  <classesDirectory>${project.basedir}/target/${project.artifactId}-${project.version}.jar</classesDirectory>
                   <useSystemClassLoader>false</useSystemClassLoader>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
                   <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=okhttp</argLine>

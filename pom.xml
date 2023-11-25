@@ -189,6 +189,9 @@
                       <exclude>org.kohsuke.github.GHPerson.1</exclude>
                       <exclude>org.kohsuke.github.GHCompare.User</exclude>
 
+                      <!-- Unbridged test changes -->
+                      <exclude>org.kohsuke.github.GHCommit.GHAuthor</exclude>
+
                       <!-- TODO: Some coverage, but more needed -->
                       <exclude>org.kohsuke.github.GHPullRequestReviewBuilder.DraftReviewComment</exclude>
                       <exclude>org.kohsuke.github.GHIssue.PullRequest</exclude>

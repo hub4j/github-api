@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThrows;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -28,7 +27,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     protected GitHubBuilder getGitHubBuilder() {
         return super.getGitHubBuilder()
                 // ensure that only JWT will be used against the tests below
-                .withPassword(null, null)
+                .withOAuthToken(null, null)
                 // Note that we used to provide a bogus token here and to rely on (apparently) manually crafted/edited
                 // Wiremock recordings, so most of the tests cannot actually be executed against GitHub without
                 // relying on the Wiremock recordings.
@@ -58,15 +57,6 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(app.getPermissions().size(), is(2));
         assertThat(app.getEvents().size(), is(0));
         assertThat(app.getInstallationsCount(), is((long) 1));
-
-        // Deprecated methods
-        assertThrows(RuntimeException.class, () -> app.setDescription(""));
-        assertThrows(RuntimeException.class, () -> app.setEvents(null));
-        assertThrows(RuntimeException.class, () -> app.setExternalUrl(""));
-        assertThrows(RuntimeException.class, () -> app.setInstallationsCount(1));
-        assertThrows(RuntimeException.class, () -> app.setName(""));
-        assertThrows(RuntimeException.class, () -> app.setOwner(null));
-        assertThrows(RuntimeException.class, () -> app.setPermissions(null));
     }
 
     /**
@@ -182,13 +172,6 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(installationToken.getRepositorySelection(), is(GHRepositorySelection.SELECTED));
         assertThat(installationToken.getExpiresAt(), is(GitHubClient.parseDate("2019-08-10T05:54:58Z")));
 
-        // Deprecated methods
-        assertThrows(RuntimeException.class, () -> installationToken.setPermissions(null));
-        assertThrows(RuntimeException.class, () -> installationToken.setRoot(null));
-        assertThrows(RuntimeException.class, () -> installationToken.setRepositorySelection(null));
-        assertThrows(RuntimeException.class, () -> installationToken.setRepositories(null));
-        assertThrows(RuntimeException.class, () -> installationToken.setPermissions(null));
-
         GHRepository repository = installationToken.getRepositories().get(0);
         assertThat(installationToken.getRepositories().size(), is(1));
         assertThat(repository.getId(), is((long) 111111111));
@@ -245,19 +228,6 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(appInstallation.getAppId(), is((long) 11111));
         assertThat(appInstallation.getTargetId(), is((long) 111111111));
         assertThat(appInstallation.getTargetType(), is(GHTargetType.ORGANIZATION));
-
-        // Deprecated methods
-        assertThrows(RuntimeException.class, () -> appInstallation.setAccessTokenUrl(""));
-        assertThrows(RuntimeException.class, () -> appInstallation.setAccount(null));
-        assertThrows(RuntimeException.class, () -> appInstallation.setAppId(0));
-        assertThrows(RuntimeException.class, () -> appInstallation.setEvents(null));
-        assertThrows(RuntimeException.class, () -> appInstallation.setPermissions(null));
-        assertThrows(RuntimeException.class, () -> appInstallation.setRepositorySelection(null));
-        assertThrows(RuntimeException.class, () -> appInstallation.setRepositoriesUrl(null));
-        assertThrows(RuntimeException.class, () -> appInstallation.setRoot(null));
-        assertThrows(RuntimeException.class, () -> appInstallation.setSingleFileName(""));
-        assertThrows(RuntimeException.class, () -> appInstallation.setTargetId(0));
-        assertThrows(RuntimeException.class, () -> appInstallation.setTargetType(null));
 
         Map<String, GHPermissionType> permissionsMap = new HashMap<String, GHPermissionType>();
         permissionsMap.put("checks", GHPermissionType.WRITE);

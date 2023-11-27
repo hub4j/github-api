@@ -42,18 +42,6 @@ public class GHApp extends GHObject {
     }
 
     /**
-     * Sets owner.
-     *
-     * @param owner
-     *            the owner
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setOwner(GHUser owner) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets name.
      *
      * @return the name
@@ -72,18 +60,6 @@ public class GHApp extends GHObject {
     }
 
     /**
-     * Sets name.
-     *
-     * @param name
-     *            the name
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setName(String name) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets description.
      *
      * @return the description
@@ -93,36 +69,12 @@ public class GHApp extends GHObject {
     }
 
     /**
-     * Sets description.
-     *
-     * @param description
-     *            the description
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setDescription(String description) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets external url.
      *
      * @return the external url
      */
     public String getExternalUrl() {
         return externalUrl;
-    }
-
-    /**
-     * Sets external url.
-     *
-     * @param externalUrl
-     *            the external url
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setExternalUrl(String externalUrl) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -137,36 +89,12 @@ public class GHApp extends GHObject {
     }
 
     /**
-     * Sets events.
-     *
-     * @param events
-     *            the events
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setEvents(List<GHEvent> events) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets installations count.
      *
      * @return the installations count
      */
     public long getInstallationsCount() {
         return installationsCount;
-    }
-
-    /**
-     * Sets installations count.
-     *
-     * @param installationsCount
-     *            the installations count
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setInstallationsCount(long installationsCount) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -185,18 +113,6 @@ public class GHApp extends GHObject {
      */
     public Map<String, String> getPermissions() {
         return Collections.unmodifiableMap(permissions);
-    }
-
-    /**
-     * Sets permissions.
-     *
-     * @param permissions
-     *            the permissions
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setPermissions(Map<String, String> permissions) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

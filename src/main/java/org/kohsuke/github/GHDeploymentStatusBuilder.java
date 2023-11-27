@@ -16,23 +16,6 @@ public class GHDeploymentStatusBuilder {
     private long deploymentId;
 
     /**
-     * Instantiates a new Gh deployment status builder.
-     *
-     * @param repo
-     *            the repo
-     * @param deploymentId
-     *            the deployment id
-     * @param state
-     *            the state
-     *
-     * @deprecated Use {@link GHDeployment#createStatus(GHDeploymentState)}
-     */
-    @Deprecated
-    public GHDeploymentStatusBuilder(GHRepository repo, int deploymentId, GHDeploymentState state) {
-        this(repo, (long) deploymentId, state);
-    }
-
-    /**
      * Instantiates a new GH deployment status builder.
      *
      * @param repo
@@ -123,20 +106,6 @@ public class GHDeploymentStatusBuilder {
     @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
         this.builder.with("log_url", logUrl);
-        return this;
-    }
-
-    /**
-     * Target url gh deployment status builder.
-     *
-     * @param targetUrl
-     *            the target url
-     * @return the gh deployment status builder
-     * @deprecated Target url is deprecated in favor of {@link #logUrl(String) logUrl}
-     */
-    @Deprecated
-    public GHDeploymentStatusBuilder targetUrl(String targetUrl) {
-        this.builder.with("target_url", targetUrl);
         return this;
     }
 

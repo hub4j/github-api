@@ -25,7 +25,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThrows;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -62,13 +61,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
 
         assertThat(event.getComment().getOwner(), sameInstance(event.getRepository()));
-
-        assertThrows(RuntimeException.class, () -> event.setComment(null));
-
-        // EventPayload checks
-        assertThrows(RuntimeException.class, () -> event.setOrganization(null));
-        assertThrows(RuntimeException.class, () -> event.setRepository(null));
-        assertThrows(RuntimeException.class, () -> event.setSender(null));
     }
 
     /**
@@ -138,7 +130,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         final GHEventPayload.DeploymentStatus event = GitHub.offline()
                 .parseEventPayload(payload.asReader(), GHEventPayload.DeploymentStatus.class);
         assertThat(event.getDeploymentStatus().getState(), is(GHDeploymentState.SUCCESS));
-        assertThat(event.getDeploymentStatus().getTargetUrl(), nullValue());
+        assertThat(event.getDeploymentStatus().getLogUrl(), nullValue());
         assertThat(event.getDeployment().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getDeployment().getEnvironment(), is("production"));
         assertThat(event.getDeployment().getCreator().getLogin(), is("baxterthehacker"));
@@ -148,9 +140,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
         assertThat(event.getDeployment().getOwner(), sameInstance(event.getRepository()));
         assertThat(event.getDeploymentStatus().getOwner(), sameInstance(event.getRepository()));
-
-        assertThrows(RuntimeException.class, () -> event.setDeployment(null));
-        assertThrows(RuntimeException.class, () -> event.setDeploymentStatus(null));
     }
 
     /**
@@ -168,8 +157,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterandthehackers"));
-
-        assertThrows(RuntimeException.class, () -> event.setForkee(null));
     }
 
     // TODO uncomment when we have GHPage implemented
@@ -214,9 +201,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
         assertThat(event.getIssue().getRepository(), sameInstance(event.getRepository()));
         assertThat(event.getComment().getParent(), sameInstance(event.getIssue()));
-
-        assertThrows(RuntimeException.class, () -> event.setComment(null));
-        assertThrows(RuntimeException.class, () -> event.setIssue(null));
     }
 
     /**
@@ -648,11 +632,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
         assertThat(event.getCompare(),
                 is("https://github.com/baxterthehacker/public-repo/compare/9049f1265b7d...0d1a26e67d8f"));
-
-        assertThrows(RuntimeException.class, () -> event.setPusher(null));
-        assertThrows(RuntimeException.class, () -> event.getPusher().setEmail(null));
-        assertThrows(RuntimeException.class, () -> event.getPusher().setName(null));
-
     }
 
     /**
@@ -750,8 +729,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRelease().getName(), is("4.2"));
         assertThat(event.getRelease().getTagName(), is("rest-api-framework-4.2"));
         assertThat(event.getRelease().getBody(), is("REST-269 - unique test executions (#86) Sergey Chernov"));
-
-        assertThrows(RuntimeException.class, () -> event.setRelease(null));
     }
 
     /**
@@ -788,9 +765,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getTargetUrl(), nullValue());
         assertThat(event.getCommit().getOwner(), sameInstance(event.getRepository()));
-
-        assertThrows(RuntimeException.class, () -> event.setCommit(null));
-        assertThrows(RuntimeException.class, () -> event.setState(GHCommitState.ERROR));
     }
 
     /**
@@ -851,8 +825,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
         assertThat(event.getAction(), is("created"));
         assertThat(event.getRequestedAction(), nullValue());
-        assertThrows(RuntimeException.class, () -> event.setCheckRun(null));
-        assertThrows(RuntimeException.class, () -> event.setRequestedAction(null));
 
         // Checks the deserialization of check_run
         final GHCheckRun checkRun = event.getCheckRun();

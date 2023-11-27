@@ -220,17 +220,6 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Gets api url.
-     *
-     * @return API URL of this object.
-     * @deprecated use {@link #getUrl()}
-     */
-    @Deprecated
-    public URL getApiURL() {
-        return getUrl();
-    }
-
-    /**
      * Lock.
      *
      * @throws IOException

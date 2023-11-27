@@ -337,22 +337,6 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
-     * * Add.
-     *
-     * @param r
-     *            the r
-     * @param permission
-     *            the permission
-     * @throws IOException
-     *             the io exception
-     * @deprecated use {@link GHTeam#add(GHRepository, org.kohsuke.github.GHOrganization.RepositoryRole)}
-     */
-    @Deprecated
-    public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-        add(r, GHOrganization.RepositoryRole.from(permission));
-    }
-
-    /**
      * Add.
      *
      * @param r

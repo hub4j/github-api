@@ -71,6 +71,20 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
     }
 
     /**
+     * The permission that new repositories will be added to the team with when none is specified.
+     *
+     * @param permission
+     *            permssion to be applied
+     * @return a builder to continue with building
+     * @deprecated https://docs.github.com/en/free-pro-team@latest/rest/teams/teams?apiVersion=2022-11-28#create-a-team
+     */
+    @Deprecated
+    public GHTeamBuilder permission(GHOrganization.Permission permission) {
+        this.builder.with("permission", permission);
+        return this;
+    }
+
+    /**
      * Description for this team.
      *
      * @param privacy

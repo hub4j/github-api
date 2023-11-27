@@ -79,21 +79,6 @@ public class GHRelease extends GHObject {
     }
 
     /**
-     * Sets draft.
-     *
-     * @param draft
-     *            the draft
-     * @return the draft
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #update()}
-     */
-    @Deprecated
-    public GHRelease setDraft(boolean draft) throws IOException {
-        return update().draft(draft).update();
-    }
-
-    /**
      * Gets the html url.
      *
      * @return the html url
@@ -129,18 +114,6 @@ public class GHRelease extends GHObject {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getOwner() {
         return owner;
-    }
-
-    /**
-     * Sets owner.
-     *
-     * @param owner
-     *            the owner
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setOwner(GHRepository owner) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

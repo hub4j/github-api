@@ -9,7 +9,6 @@ import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.kohsuke.github.extras.HttpClientGitHubConnector;
-import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
 
 import java.io.IOException;
 
@@ -58,16 +57,6 @@ public class DefaultGitHubConnectorTest extends AbstractGitHubWireMockTest {
             assertThat(adapter.httpConnector, equalTo(HttpConnector.DEFAULT));
         }
 
-        connector = DefaultGitHubConnector.create("urlconnection");
-        assertThat(connector, instanceOf(GitHubConnectorHttpConnectorAdapter.class));
-        adapter = (GitHubConnectorHttpConnectorAdapter) connector;
-        assertThat(adapter.httpConnector, equalTo(HttpConnector.DEFAULT));
-
-        connector = DefaultGitHubConnector.create("okhttpconnector");
-        assertThat(connector, instanceOf(GitHubConnectorHttpConnectorAdapter.class));
-        adapter = (GitHubConnectorHttpConnectorAdapter) connector;
-        assertThat(adapter.httpConnector, instanceOf(OkHttpConnector.class));
-
         connector = DefaultGitHubConnector.create("okhttp");
 
         Assert.assertThrows(IllegalStateException.class, () -> DefaultGitHubConnector.create(""));
@@ -83,9 +72,5 @@ public class DefaultGitHubConnectorTest extends AbstractGitHubWireMockTest {
                 throw new IOException();
             }
         }).build();
-        Assert.assertThrows(UnsupportedOperationException.class, () -> gitHub.getConnector());
-        gitHub.setConnector((HttpConnector) GitHubConnector.OFFLINE);
-        // Doesn't throw when HttpConnect is implemented
-        gitHub.getConnector();
     }
 }

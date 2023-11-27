@@ -169,17 +169,6 @@ public abstract class GHPerson extends GHObject {
     public abstract PagedIterable<GHEventInfo> listEvents() throws IOException;
 
     /**
-     * Gravatar ID of this user, like 0cb9832a01c22c083390f3c5dcb64105.
-     *
-     * @return the gravatar id
-     * @deprecated No longer available in the v3 API.
-     */
-    @Deprecated
-    public String getGravatarId() {
-        return "";
-    }
-
-    /**
      * Returns a string of the avatar image URL.
      *
      * @return the avatar url

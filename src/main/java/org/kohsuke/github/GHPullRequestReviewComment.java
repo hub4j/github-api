@@ -71,27 +71,6 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     private GHCommentAuthorAssociation author_association;
 
     /**
-     * Draft gh pull request review comment.
-     *
-     * @param body
-     *            the body
-     * @param path
-     *            the path
-     * @param position
-     *            the position
-     * @return the gh pull request review comment
-     * @deprecated You should be using {@link GHPullRequestReviewBuilder#comment(String, String, int)}
-     */
-    @Deprecated
-    public static GHPullRequestReviewComment draft(String body, String path, int position) {
-        GHPullRequestReviewComment result = new GHPullRequestReviewComment();
-        result.body = body;
-        result.path = path;
-        result.position = position;
-        return result;
-    }
-
-    /**
      * Wrap up.
      *
      * @param owner

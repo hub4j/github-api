@@ -23,36 +23,12 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
     private GHRepositorySelection repositorySelection;
 
     /**
-     * Sets root.
-     *
-     * @param root
-     *            the root
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRoot(GitHub root) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets permissions.
      *
      * @return the permissions
      */
     public Map<String, String> getPermissions() {
         return Collections.unmodifiableMap(permissions);
-    }
-
-    /**
-     * Sets permissions.
-     *
-     * @param permissions
-     *            the permissions
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setPermissions(Map<String, String> permissions) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -65,18 +41,6 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
     }
 
     /**
-     * Sets token.
-     *
-     * @param token
-     *            the token
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setToken(String token) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets repositories.
      *
      * @return the repositories
@@ -86,36 +50,12 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
     }
 
     /**
-     * Sets repositories.
-     *
-     * @param repositories
-     *            the repositories
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRepositories(List<GHRepository> repositories) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets repository selection.
      *
      * @return the repository selection
      */
     public GHRepositorySelection getRepositorySelection() {
         return repositorySelection;
-    }
-
-    /**
-     * Sets repository selection.
-     *
-     * @param repositorySelection
-     *            the repository selection
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

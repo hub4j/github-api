@@ -314,7 +314,10 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         GHRepository repo = org.getRepository(REPO_NAME);
 
         // Create team with access to repository. Check access was granted.
-        GHTeam team = org.createTeam(TEAM_NAME_CREATE, GHOrganization.Permission.PUSH, repo);
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE)
+                .repositories(repo.getFullName())
+                .permission(Permission.PUSH)
+                .create();
         assertThat(team.getRepositories().containsKey(REPO_NAME), is(true));
         assertThat(team.getPermission(), equalTo(Permission.PUSH.toString().toLowerCase()));
     }
@@ -363,7 +366,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // Create team with access to repository. Check access was granted.
         GHTeam team = org.createTeam(TEAM_NAME_CREATE).create();
 
-        team.add(repo, GHOrganization.Permission.PUSH);
+        team.add(repo, GHOrganization.RepositoryRole.from(Permission.PUSH));
 
         assertThat(
                 repo.getTeams()
@@ -421,7 +424,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         GHRepository repo = org.getRepository(REPO_NAME);
 
         // Create team with no permission field. Verify that default permission is pull
-        GHTeam team = org.createTeam(TEAM_NAME_CREATE, repo);
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE).repositories(repo.getFullName()).create();
         assertThat(team.getRepositories().containsKey(REPO_NAME), is(true));
         assertThat(team.getPermission(), equalTo(DEFAULT_PERMISSION));
     }

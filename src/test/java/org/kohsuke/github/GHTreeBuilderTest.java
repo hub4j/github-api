@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -69,44 +68,6 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         mainRef = repo.getRef("heads/main");
         String mainTreeSha = repo.getTreeRecursive("main", 1).getSha();
         treeBuilder = repo.createTree().baseTree(mainTreeSha);
-    }
-
-    /**
-     * Test text entry.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    @Ignore("It seems that GitHub no longer supports the 'content' parameter")
-    public void testTextEntry() throws Exception {
-        treeBuilder.textEntry(PATH_SCRIPT, CONTENT_SCRIPT, true);
-        treeBuilder.textEntry(PATH_README, CONTENT_README, false);
-
-        updateTree();
-
-        assertThat(getFileSize(PATH_SCRIPT), equalTo(CONTENT_SCRIPT.length()));
-        assertThat(getFileSize(PATH_README), equalTo(CONTENT_README.length()));
-    }
-
-    /**
-     * Test sha entry.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testShaEntry() throws Exception {
-        String dataSha1 = new GHBlobBuilder(repo).binaryContent(CONTENT_DATA1).create().getSha();
-        treeBuilder.shaEntry(PATH_DATA1, dataSha1, false);
-
-        String dataSha2 = new GHBlobBuilder(repo).binaryContent(CONTENT_DATA2).create().getSha();
-        treeBuilder.shaEntry(PATH_DATA2, dataSha2, false);
-
-        updateTree();
-
-        assertThat(getFileSize(PATH_DATA1), equalTo((long) CONTENT_DATA1.length));
-        assertThat(getFileSize(PATH_DATA2), equalTo((long) CONTENT_DATA2.length));
     }
 
     /**

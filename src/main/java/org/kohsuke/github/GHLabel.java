@@ -121,34 +121,6 @@ public class GHLabel extends GitHubInteractiveObject {
     }
 
     /**
-     * Sets color.
-     *
-     * @param newColor
-     *            6-letter hex color code, like "f29513"
-     * @throws IOException
-     *             the io exception
-     * @deprecated use {@link #set()} or {@link #update()} instead
-     */
-    @Deprecated
-    public void setColor(String newColor) throws IOException {
-        set().color(newColor);
-    }
-
-    /**
-     * Sets description.
-     *
-     * @param newDescription
-     *            Description of label
-     * @throws IOException
-     *             the io exception
-     * @deprecated use {@link #set()} or {@link #update()} instead
-     */
-    @Deprecated
-    public void setDescription(String newDescription) throws IOException {
-        set().description(newDescription);
-    }
-
-    /**
      * To names.
      *
      * @param labels

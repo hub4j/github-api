@@ -41,32 +41,8 @@ public class GHProjectColumn extends GHObject {
      *            the root
      * @return the gh project column
      */
-    @Deprecated
-    public GHProjectColumn wrap(GitHub root) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
-     * Wrap gh project column.
-     *
-     * @param root
-     *            the root
-     * @return the gh project column
-     */
     GHProjectColumn lateBind(GitHub root) {
         return this;
-    }
-
-    /**
-     * Wrap gh project column.
-     *
-     * @param project
-     *            the project
-     * @return the gh project column
-     */
-    @Deprecated
-    public GHProjectColumn wrap(GHProject project) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

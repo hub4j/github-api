@@ -77,31 +77,6 @@ public class GHTreeBuilder {
     }
 
     /**
-     * Adds a new entry to the tree. Exactly one of the parameters {@code sha} and {@code content} must be non-null.
-     *
-     * @param path
-     *            the path
-     * @param mode
-     *            the mode
-     * @param type
-     *            the type
-     * @param sha
-     *            the sha
-     * @param content
-     *            the content
-     * @return the gh tree builder
-     * @deprecated use {@link #add(String, String, boolean)} or {@link #add(String, byte[], boolean)} instead.
-     */
-    @Deprecated
-    public GHTreeBuilder entry(String path, String mode, String type, String sha, String content) {
-        TreeEntry entry = new TreeEntry(path, mode, type);
-        entry.sha = sha;
-        entry.content = content;
-        treeEntries.add(entry);
-        return this;
-    }
-
-    /**
      * Specialized version of {@link #entry(String, String, String, String, String)} for adding an existing blob
      * referred by its SHA.
      *

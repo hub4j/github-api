@@ -205,18 +205,6 @@ public class GHCompare {
      *            the owner
      * @return the gh compare
      */
-    @Deprecated
-    public GHCompare wrap(GHRepository owner) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
-     * Wrap gh compare.
-     *
-     * @param owner
-     *            the owner
-     * @return the gh compare
-     */
     GHCompare lateBind(GHRepository owner) {
         this.owner = owner;
         for (Commit commit : commits) {

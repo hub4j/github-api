@@ -42,32 +42,8 @@ public class GHProjectCard extends GHObject {
      *            the root
      * @return the gh project card
      */
-    @Deprecated
-    public GHProjectCard wrap(GitHub root) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
-     * Wrap gh project card.
-     *
-     * @param root
-     *            the root
-     * @return the gh project card
-     */
     GHProjectCard lateBind(GitHub root) {
         return this;
-    }
-
-    /**
-     * Wrap gh project card.
-     *
-     * @param column
-     *            the column
-     * @return the gh project card
-     */
-    @Deprecated
-    public GHProjectCard wrap(GHProjectColumn column) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

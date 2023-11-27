@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 
 import javax.annotation.Nonnull;
@@ -52,4 +53,40 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      *
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+
+    /**
+     * Wait until the API abuse "wait time" is passed.
+     */
+    public static final GitHubAbuseLimitHandler WAIT = new GitHubAbuseLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            try {
+                Thread.sleep(parseWaitTime(connectorResponse));
+            } catch (InterruptedException ex) {
+                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);
+            }
+        }
+
+        private long parseWaitTime(GitHubConnectorResponse connectorResponse) {
+            String v = connectorResponse.header("Retry-After");
+            if (v == null)
+                return 60 * 1000; // can't tell, return 1 min
+
+            return Math.max(1000, Long.parseLong(v) * 1000);
+        }
+    };
+
+    /**
+     * Fail immediately.
+     */
+    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            throw new HttpException("Abuse limit reached",
+                    connectorResponse.statusCode(),
+                    connectorResponse.header("Status"),
+                    connectorResponse.request().url().toString())
+                            .withResponseHeaderFields(connectorResponse.allHeaders());
+        }
+    };
 }

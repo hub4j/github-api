@@ -559,7 +559,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHRef mainRef = getRepository().getRef("heads/main");
         GHRef branchRef = getRepository().createRef("refs/heads/" + branchName, mainRef.getObject().getSha());
 
-        getRepository().createContent(name, name, name, branchName);
+        getRepository().createContent().content(name).path(name).message(name).branch(branchName).commit();
         Thread.sleep(1000);
         GHPullRequest p = getRepository().createPullRequest(name, branchName, "main", "## test squash");
         Thread.sleep(1000);
@@ -580,7 +580,13 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHRef mainRef = getRepository().getRef("heads/main");
         GHRef branchRef = getRepository().createRef("refs/heads/" + branchName, mainRef.getObject().getSha());
 
-        GHContentUpdateResponse response = getRepository().createContent(name, name, name, branchName);
+        GHContentUpdateResponse response = getRepository().createContent()
+                .content(name)
+                .path(name)
+                .branch(branchName)
+                .message(name)
+                .commit();
+
         Thread.sleep(1000);
 
         getRepository().createContent()
@@ -799,7 +805,9 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         prSingle.getMergeable();
         assertThat(prSingle.getUser().root(), notNullValue());
 
-        PagedIterable<GHPullRequest> ghPullRequests = getRepository().listPullRequests(GHIssueState.OPEN);
+        PagedIterable<GHPullRequest> ghPullRequests = getRepository().queryPullRequests()
+                .state(GHIssueState.OPEN)
+                .list();
         for (GHPullRequest pr : ghPullRequests) {
             assertThat(pr.getUser().root(), notNullValue());
             pr.getMergeable();

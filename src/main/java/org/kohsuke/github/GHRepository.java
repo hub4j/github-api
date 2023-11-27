@@ -159,21 +159,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets deployment statuses.
-     *
-     * @param id
-     *            the id
-     * @return the deployment statuses
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@code getDeployment(id).listStatuses()}
-     */
-    @Deprecated
-    public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final int id) throws IOException {
-        return getDeployment(id).listStatuses();
-    }
-
-    /**
      * List deployments paged iterable.
      *
      * @param sha
@@ -214,24 +199,6 @@ public class GHRepository extends GHObject {
                 .withPreview(FLASH)
                 .fetch(GHDeployment.class)
                 .wrap(this);
-    }
-
-    /**
-     * Gets deploy status.
-     *
-     * @param deploymentId
-     *            the deployment id
-     * @param ghDeploymentState
-     *            the gh deployment state
-     * @return the deploy status
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@code getDeployment(deploymentId).createStatus(ghDeploymentState)}
-     */
-    @Deprecated
-    public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState)
-            throws IOException {
-        return getDeployment(deploymentId).createStatus(ghDeploymentState);
     }
 
     private static class GHRepoPermission {
@@ -280,17 +247,6 @@ public class GHRepository extends GHObject {
      * @return the http transport url
      */
     public String getHttpTransportUrl() {
-        return clone_url;
-    }
-
-    /**
-     * Git http transport url string.
-     *
-     * @return the string
-     * @deprecated Typo of {@link #getHttpTransportUrl()}
-     */
-    @Deprecated
-    public String gitHttpTransportUrl() {
         return clone_url;
     }
 
@@ -451,19 +407,6 @@ public class GHRepository extends GHObject {
                 .state(state)
                 .list()
                 .toList();
-    }
-
-    /**
-     * Lists up all the issues in this repository.
-     *
-     * @param state
-     *            the state
-     * @return the paged iterable
-     * @deprecated Use {@link #queryIssues()}
-     */
-    @Deprecated
-    public PagedIterable<GHIssue> listIssues(final GHIssueState state) {
-        return queryIssues().state(state).list();
     }
 
     /**
@@ -740,18 +683,6 @@ public class GHRepository extends GHObject {
      * and so on.
      *
      * @return the forks
-     * @deprecated use {@link #getForksCount()} instead
-     */
-    @Deprecated
-    public int getForks() {
-        return getForksCount();
-    }
-
-    /**
-     * Returns the number of all forks of this repository. This not only counts direct forks, but also forks of forks,
-     * and so on.
-     *
-     * @return the forks
      */
     public int getForksCount() {
         return forks_count;
@@ -880,17 +811,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets watchers.
-     *
-     * @return the watchers
-     * @deprecated use {@link #getWatchersCount()} instead
-     */
-    @Deprecated
-    public int getWatchers() {
-        return getWatchersCount();
-    }
-
-    /**
      * Gets the count of watchers.
      *
      * @return the watchers
@@ -932,19 +852,6 @@ public class GHRepository extends GHObject {
      * @return This field is null until the user explicitly configures the default branch.
      */
     public String getDefaultBranch() {
-        return default_branch;
-    }
-
-    /**
-     * Gets default branch.
-     *
-     * Name is an artifact of when "master" was the most common default.
-     *
-     * @return the default branch
-     * @deprecated Renamed to {@link #getDefaultBranch()}
-     */
-    @Deprecated
-    public String getMasterBranch() {
         return default_branch;
     }
 
@@ -1172,22 +1079,6 @@ public class GHRepository extends GHObject {
      *            the permission level
      * @param users
      *            the users
-     * @throws IOException
-     *             the io exception
-     * @deprecated #addCollaborators(GHOrganization.RolePermission, GHUser)
-     */
-    @Deprecated
-    public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
-        addCollaborators(asList(users), permission);
-    }
-
-    /**
-     * Add collaborators.
-     *
-     * @param permission
-     *            the permission level
-     * @param users
-     *            the users
      *
      * @throws IOException
      *             the io exception
@@ -1218,22 +1109,6 @@ public class GHRepository extends GHObject {
      */
     public void addCollaborators(Collection<GHUser> users) throws IOException {
         modifyCollaborators(users, "PUT", null);
-    }
-
-    /**
-     * Add collaborators.
-     *
-     * @param users
-     *            the users
-     * @param permission
-     *            the permission level
-     * @throws IOException
-     *             the io exception
-     * @deprecated #addCollaborators(Collection, GHOrganization.RolePermission)
-     */
-    @Deprecated
-    public void addCollaborators(Collection<GHUser> users, GHOrganization.Permission permission) throws IOException {
-        modifyCollaborators(users, "PUT", GHOrganization.RepositoryRole.from(permission));
     }
 
     /**
@@ -1677,19 +1552,6 @@ public class GHRepository extends GHObject {
      */
     public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
         return queryPullRequests().state(state).list().toList();
-    }
-
-    /**
-     * Retrieves all the pull requests of a particular state.
-     *
-     * @param state
-     *            the state
-     * @return the paged iterable
-     * @deprecated Use {@link #queryPullRequests()}
-     */
-    @Deprecated
-    public PagedIterable<GHPullRequest> listPullRequests(GHIssueState state) {
-        return queryPullRequests().state(state).list();
     }
 
     /**
@@ -2776,20 +2638,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets a variable by name
-     *
-     * @param name
-     *            the variable name (e.g. test-variable)
-     * @return the variable
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public GHRepositoryVariable getRepoVariable(String name) throws IOException {
-        return getVariable(name);
-    }
-
-    /**
      * Gets a repository variable.
      *
      * @param name
@@ -2809,85 +2657,6 @@ public class GHRepository extends GHObject {
      */
     public GHContentBuilder createContent() {
         return new GHContentBuilder(this);
-    }
-
-    /**
-     * Use {@link #createContent()}.
-     *
-     * @param content
-     *            the content
-     * @param commitMessage
-     *            the commit message
-     * @param path
-     *            the path
-     * @return the gh content update response
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
-        return createContent().content(content).message(commitMessage).path(path).commit();
-    }
-
-    /**
-     * Use {@link #createContent()}.
-     *
-     * @param content
-     *            the content
-     * @param commitMessage
-     *            the commit message
-     * @param path
-     *            the path
-     * @param branch
-     *            the branch
-     * @return the gh content update response
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch)
-            throws IOException {
-        return createContent().content(content).message(commitMessage).path(path).branch(branch).commit();
-    }
-
-    /**
-     * Use {@link #createContent()}.
-     *
-     * @param contentBytes
-     *            the content bytes
-     * @param commitMessage
-     *            the commit message
-     * @param path
-     *            the path
-     * @return the gh content update response
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path)
-            throws IOException {
-        return createContent().content(contentBytes).message(commitMessage).path(path).commit();
-    }
-
-    /**
-     * Use {@link #createContent()}.
-     *
-     * @param contentBytes
-     *            the content bytes
-     * @param commitMessage
-     *            the commit message
-     * @param path
-     *            the path
-     * @param branch
-     *            the branch
-     * @return the gh content update response
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch)
-            throws IOException {
-        return createContent().content(contentBytes).message(commitMessage).path(path).branch(branch).commit();
     }
 
     /**

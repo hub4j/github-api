@@ -121,6 +121,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      * @deprecated Use {@link #read()}
      */
+    @Deprecated
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public String getContent() throws IOException {
         return new String(Base64.getMimeDecoder().decode(getEncodedContent()));

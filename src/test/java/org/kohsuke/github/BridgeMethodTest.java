@@ -1,16 +1,12 @@
 package org.kohsuke.github;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +26,6 @@ public class BridgeMethodTest extends Assert {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Ignore("Bridge methods disabled in this branch")
     @Test
     public void testBridgeMethods() throws IOException {
 
@@ -41,29 +36,7 @@ public class BridgeMethodTest extends Assert {
         // verifyBridgeMethods(new GHCommit(), "getAuthor", GHCommit.GHAuthor.class, GitUser.class);
         // verifyBridgeMethods(new GHCommit(), "getCommitter", GHCommit.GHAuthor.class, GitUser.class);
 
-        verifyBridgeMethods(GHIssue.class, "getCreatedAt", Date.class, String.class);
-        verifyBridgeMethods(GHIssue.class, "getId", int.class, long.class, String.class);
-        verifyBridgeMethods(GHIssue.class, "getUrl", String.class, URL.class);
-        verifyBridgeMethods(GHIssue.class, "comment", 1, void.class, GHIssueComment.class);
-
-        verifyBridgeMethods(GHOrganization.class, "getHtmlUrl", String.class, URL.class);
-        verifyBridgeMethods(GHOrganization.class, "getId", int.class, long.class, String.class);
-        verifyBridgeMethods(GHOrganization.class, "getUrl", String.class, URL.class);
-
-        verifyBridgeMethods(GHRepository.class, "getCollaborators", GHPersonSet.class, Set.class);
-        verifyBridgeMethods(GHRepository.class, "getHtmlUrl", String.class, URL.class);
-        verifyBridgeMethods(GHRepository.class, "getId", int.class, long.class, String.class);
-        verifyBridgeMethods(GHRepository.class, "getUrl", String.class, URL.class);
-
-        verifyBridgeMethods(GHUser.class, "getFollows", GHPersonSet.class, Set.class);
-        verifyBridgeMethods(GHUser.class, "getFollowers", GHPersonSet.class, Set.class);
-        verifyBridgeMethods(GHUser.class, "getOrganizations", GHPersonSet.class, Set.class);
-        verifyBridgeMethods(GHUser.class, "getId", int.class, long.class, String.class);
-
-        verifyBridgeMethods(GHTeam.class, "getId", int.class, long.class, String.class);
-
-        // verifyBridgeMethods(GitHub.class, "getMyself", GHMyself.class, GHUser.class);
-
+        // verifyBridgeMethods(GHIssue.class, "getCreatedAt", Date.class, String.class);
     }
 
     /**

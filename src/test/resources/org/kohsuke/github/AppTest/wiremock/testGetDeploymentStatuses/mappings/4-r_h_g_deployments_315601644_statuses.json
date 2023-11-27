@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"environment\":\"new-ci-env\",\"environment_url\":\"http://www.github.com/envurl\",\"target_url\":\"http://www.github.com\",\"log_url\":\"http://www.github.com/logurl\",\"description\":\"success\",\"state\":\"queued\"}",
+        "equalToJson": "{\"environment\":\"new-ci-env\",\"environment_url\":\"http://www.github.com/envurl\",\"log_url\":\"http://www.github.com/logurl\",\"description\":\"success\",\"state\":\"queued\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

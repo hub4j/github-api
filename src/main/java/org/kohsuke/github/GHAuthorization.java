@@ -137,18 +137,6 @@ public class GHAuthorization extends GHObject {
     }
 
     /**
-     * Gets api url.
-     *
-     * @return the api url
-     * @deprecated use {@link #getUrl()}
-     */
-    @Deprecated
-    @SuppressFBWarnings(value = "NM_CONFUSING", justification = "It's a part of the library API, cannot be changed")
-    public URL getApiURL() {
-        return getUrl();
-    }
-
-    /**
      * Gets the html url.
      *
      * @return the html url

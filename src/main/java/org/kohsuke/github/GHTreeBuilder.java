@@ -77,8 +77,7 @@ public class GHTreeBuilder {
     }
 
     /**
-     * Specialized version of {@link #entry(String, String, String, String, String)} for adding an existing blob
-     * referred by its SHA.
+     * Specialized version of entry() for adding an existing blob referred by its SHA.
      *
      * @param path
      *            the path
@@ -98,8 +97,7 @@ public class GHTreeBuilder {
     }
 
     /**
-     * Specialized version of {@link #entry(String, String, String, String, String)} for adding a text file with the
-     * specified {@code content}.
+     * Specialized version of entry() for adding an existing blob specified {@code content}.
      *
      * @param path
      *            the path

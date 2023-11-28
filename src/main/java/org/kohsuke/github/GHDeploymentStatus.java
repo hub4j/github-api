@@ -51,8 +51,6 @@ public class GHDeploymentStatus extends GHObject {
 
     /**
      * Gets target url.
-     * <p>
-     * This method replaces {@link #getTargetUrl() getTargetUrl}}.
      *
      * @return the target url
      * @deprecated until preview feature has graduated to stable

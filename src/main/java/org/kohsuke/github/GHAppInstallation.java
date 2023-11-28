@@ -89,10 +89,9 @@ public class GHAppInstallation extends GHObject {
      * @return the paged iterable
      * @deprecated This method cannot work on a {@link GHAppInstallation} retrieved from
      *             {@link GHApp#listInstallations()} (for example), except when resorting to unsupported hacks involving
-     *             {@link GHAppInstallation#setRoot(GitHub)} to switch from an application client to an installation
-     *             client. This method will be removed. You should instead use an installation client (with an
-     *             installation token, not a JWT), retrieve a {@link GHAuthenticatedAppInstallation} from
-     *             {@link GitHub#getInstallation()}, then call
+     *             setRoot(GitHub) to switch from an application client to an installation client. This method will be
+     *             removed. You should instead use an installation client (with an installation token, not a JWT),
+     *             retrieve a {@link GHAuthenticatedAppInstallation} from {@link GitHub#getInstallation()}, then call
      *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
      */
     @Deprecated

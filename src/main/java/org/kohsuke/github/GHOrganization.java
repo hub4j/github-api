@@ -481,7 +481,7 @@ public class GHOrganization extends GHPerson {
     public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
         List<GHRepository> r = new ArrayList<GHRepository>();
         for (GHRepository repository : listRepositories(100)) {
-            List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
+            List<GHPullRequest> pullRequests = repository.queryPullRequests().state(GHIssueState.OPEN).list().toList();
             if (pullRequests.size() > 0) {
                 r.add(repository);
             }
@@ -499,7 +499,7 @@ public class GHOrganization extends GHPerson {
     public List<GHPullRequest> getPullRequests() throws IOException {
         List<GHPullRequest> all = new ArrayList<GHPullRequest>();
         for (GHRepository r : getRepositoriesWithOpenPullRequests()) {
-            all.addAll(r.getPullRequests(GHIssueState.OPEN));
+            all.addAll(r.queryPullRequests().state(GHIssueState.OPEN).list().toList());
         }
         return all;
     }

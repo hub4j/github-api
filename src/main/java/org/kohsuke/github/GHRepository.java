@@ -1541,20 +1541,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Retrieves all the pull requests of a particular state.
-     *
-     * @param state
-     *            the state
-     * @return the pull requests
-     * @throws IOException
-     *             the io exception
-     * @see #listPullRequests(GHIssueState) #listPullRequests(GHIssueState)
-     */
-    public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
-        return queryPullRequests().state(state).list().toList();
-    }
-
-    /**
      * Retrieves pull requests.
      *
      * @return the gh pull request query builder

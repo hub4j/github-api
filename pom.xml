@@ -174,8 +174,10 @@
 
                       <!-- V2.x changes -->
                       <exclude>org.kohsuke.github.connector.GitHubConnectorResponseHttpUrlConnectionAdapter</exclude>
-                      <exclude>oorg.kohsuke.github.GHPerson.*</exclude>
                       <exclude>org.kohsuke.github.GHRepositorySearchBuilder.Fork</exclude>
+
+                      <!-- Deprecated -->
+                      <exclude>org.kohsuke.github.GHPerson.1</exclude>
 
                       <!-- Sample only -->
                       <exclude>org.kohsuke.github.example.*</exclude>

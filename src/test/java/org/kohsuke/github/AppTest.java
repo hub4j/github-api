@@ -591,7 +591,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         GHRepository r = gitHub.getOrganization("jenkinsci").getRepository("jenkins");
         assertThat(r.getDefaultBranch(), equalTo("main"));
         r.getPullRequest(1);
-        r.getPullRequests(GHIssueState.OPEN);
+        r.queryPullRequests().state(GHIssueState.OPEN).list().toList();
     }
 
     /**

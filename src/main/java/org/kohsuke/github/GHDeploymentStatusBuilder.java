@@ -95,8 +95,6 @@ public class GHDeploymentStatusBuilder {
 
     /**
      * The full URL of the deployment's output.
-     * <p>
-     * This method replaces {@link #targetUrl(String) targetUrl}.
      *
      * @param logUrl
      *            the deployment output url

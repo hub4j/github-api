@@ -846,10 +846,6 @@ public class GitHub {
      * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()} to
      * finally create a repository.
      *
-     * <p>
-     * To create a repository in an organization, see
-     * {@link GHOrganization#createRepository(String, String, String, GHTeam, boolean)}
-     *
      * @param name
      *            the name
      * @return the gh create repository builder

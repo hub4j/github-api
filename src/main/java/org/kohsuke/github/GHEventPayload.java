@@ -56,18 +56,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
-     * Sets sender.
-     *
-     * @param sender
-     *            the sender
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setSender(GHUser sender) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets repository.
      *
      * @return the repository
@@ -78,18 +66,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
-     * Sets repository.
-     *
-     * @param repository
-     *            the repository
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRepository(GHRepository repository) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets organization.
      *
      * @return the organization
@@ -97,18 +73,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHOrganization getOrganization() {
         return organization;
-    }
-
-    /**
-     * Sets organization.
-     *
-     * @param organization
-     *            the organization
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setOrganization(GHOrganization organization) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -157,18 +121,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * Sets Check Run object.
-         *
-         * @param currentCheckRun
-         *            the check run object
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setCheckRun(GHCheckRun currentCheckRun) {
-            throw new RuntimeException("Do not use this method.");
-        }
-
-        /**
          * Gets Check Run object.
          *
          * @return the current checkRun object
@@ -176,18 +128,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHCheckRun getCheckRun() {
             return checkRun;
-        }
-
-        /**
-         * Sets the Requested Action object.
-         *
-         * @param currentRequestedAction
-         *            the current action
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setRequestedAction(GHRequestedAction currentRequestedAction) {
-            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -613,18 +553,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * Sets issue.
-         *
-         * @param issue
-         *            the issue
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setIssue(GHIssue issue) {
-            throw new RuntimeException("Do not use this method.");
-        }
-
-        /**
          * Gets the added or removed label for labeled/unlabeled events.
          *
          * @return label the added or removed label
@@ -690,18 +618,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * Sets comment.
-         *
-         * @param comment
-         *            the comment
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setComment(GHIssueComment comment) {
-            throw new RuntimeException("Do not use this method.");
-        }
-
-        /**
          * Gets issue.
          *
          * @return the issue
@@ -709,18 +625,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHIssue getIssue() {
             return issue;
-        }
-
-        /**
-         * Sets issue.
-         *
-         * @param issue
-         *            the issue
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setIssue(GHIssue issue) {
-            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -756,18 +660,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHCommitComment getComment() {
             return comment;
-        }
-
-        /**
-         * Sets comment.
-         *
-         * @param comment
-         *            the comment
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setComment(GHCommitComment comment) {
-            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -886,18 +778,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * Sets deployment.
-         *
-         * @param deployment
-         *            the deployment
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setDeployment(GHDeployment deployment) {
-            throw new RuntimeException("Do not use this method.");
-        }
-
-        /**
          * Late bind.
          */
         @Override
@@ -933,18 +813,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * Sets deployment status.
-         *
-         * @param deploymentStatus
-         *            the deployment status
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setDeploymentStatus(GHDeploymentStatus deploymentStatus) {
-            throw new RuntimeException("Do not use this method.");
-        }
-
-        /**
          * Gets deployment.
          *
          * @return the deployment
@@ -952,18 +820,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHDeployment getDeployment() {
             return deployment;
-        }
-
-        /**
-         * Sets deployment.
-         *
-         * @param deployment
-         *            the deployment
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setDeployment(GHDeployment deployment) {
-            throw new RuntimeException("Do not use this method.");
         }
 
         /**
@@ -998,18 +854,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHRepository getForkee() {
             return forkee;
-        }
-
-        /**
-         * Sets forkee.
-         *
-         * @param forkee
-         *            the forkee
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setForkee(GHRepository forkee) {
-            throw new RuntimeException("Do not use this method.");
         }
     }
 
@@ -1146,18 +990,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * Sets pusher.
-         *
-         * @param pusher
-         *            the pusher
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setPusher(Pusher pusher) {
-            throw new RuntimeException("Do not use this method.");
-        }
-
-        /**
          * Gets compare.
          *
          * @return compare
@@ -1182,36 +1014,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             }
 
             /**
-             * Sets name.
-             *
-             * @param name
-             *            the name
-             * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-             */
-            @Deprecated
-            public void setName(String name) {
-                throw new RuntimeException("Do not use this method.");
-            }
-
-            /**
              * Gets email.
              *
              * @return the email
              */
             public String getEmail() {
                 return email;
-            }
-
-            /**
-             * Sets email.
-             *
-             * @param email
-             *            the email
-             * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-             */
-            @Deprecated
-            public void setEmail(String email) {
-                throw new RuntimeException("Do not use this method.");
             }
         }
 
@@ -1343,18 +1151,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         public GHRelease getRelease() {
             return release;
         }
-
-        /**
-         * Sets release.
-         *
-         * @param release
-         *            the release
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setRelease(GHRelease release) {
-            throw new RuntimeException("Do not use this method.");
-        }
     }
 
     /**
@@ -1419,18 +1215,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * Sets the status stage.
-         *
-         * @param state
-         *            status state
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setState(GHCommitState state) {
-            throw new RuntimeException("Do not use this method.");
-        }
-
-        /**
          * Gets the commit associated with the status event.
          *
          * @return commit
@@ -1438,18 +1222,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHCommit getCommit() {
             return commit;
-        }
-
-        /**
-         * Sets the commit associated with the status event.
-         *
-         * @param commit
-         *            commit
-         * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-         */
-        @Deprecated
-        public void setCommit(GHCommit commit) {
-            throw new RuntimeException("Do not use this method.");
         }
 
         /**

@@ -35,8 +35,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.CheckForNull;
-
 import static org.kohsuke.github.internal.Previews.LYDIAN;
 import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
@@ -148,18 +146,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public GHCommitPointer getHead() {
         return head;
-    }
-
-    /**
-     * Gets issue updated at.
-     *
-     * @return the issue updated at
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public Date getIssueUpdatedAt() throws IOException {
-        return super.getUpdatedAt();
     }
 
     /**
@@ -463,52 +449,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         return root().createRequest()
                 .withUrlPath(String.format("%s/commits", getApiRoute()))
                 .toIterable(GHPullRequestCommitDetail[].class, item -> item.wrapUp(this));
-    }
-
-    /**
-     * Create review gh pull request review.
-     *
-     * @param body
-     *            the body
-     * @param event
-     *            the event
-     * @param comments
-     *            the comments
-     * @return the gh pull request review
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #createReview()}
-     */
-    @Deprecated
-    public GHPullRequestReview createReview(String body,
-            @CheckForNull GHPullRequestReviewState event,
-            GHPullRequestReviewComment... comments) throws IOException {
-        return createReview(body, event, Arrays.asList(comments));
-    }
-
-    /**
-     * Create review gh pull request review.
-     *
-     * @param body
-     *            the body
-     * @param event
-     *            the event
-     * @param comments
-     *            the comments
-     * @return the gh pull request review
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #createReview()}
-     */
-    @Deprecated
-    public GHPullRequestReview createReview(String body,
-            @CheckForNull GHPullRequestReviewState event,
-            List<GHPullRequestReviewComment> comments) throws IOException {
-        GHPullRequestReviewBuilder b = createReview().body(body);
-        for (GHPullRequestReviewComment c : comments) {
-            b.comment(c.getBody(), c.getPath(), c.getPosition());
-        }
-        return b.create();
     }
 
     /**

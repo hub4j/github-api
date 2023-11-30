@@ -99,7 +99,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         String httpTransport = "https://github.com/hub4j-test-org/temp-testGetters.git";
         assertThat(r.getHttpTransportUrl(), equalTo(httpTransport));
-        assertThat(r.gitHttpTransportUrl(), equalTo(httpTransport));
 
         assertThat(r.getName(), equalTo("temp-testGetters"));
         assertThat(r.getFullName(), equalTo("hub4j-test-org/temp-testGetters"));
@@ -568,7 +567,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         users.add(user);
         users.add(gitHub.getUser("jimmysombrero2"));
-        repo.addCollaborators(users, GHOrganization.Permission.PUSH);
+        repo.addCollaborators(users, RepositoryRole.from(GHOrganization.Permission.PUSH));
 
         GHPersonSet<GHUser> collabs = repo.getCollaborators();
         GHUser colabUser = collabs.byLogin("jimmysombrero");
@@ -783,42 +782,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
 
         ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHFork.PARENT_ONLY);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
-    }
-
-    /**
-     * Gh repository search builder fork deprecated enum.
-     */
-    @Test
-    public void ghRepositorySearchBuilderForkDeprecatedEnum() {
-        GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_AND_FORKS);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.FORKS_ONLY);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:only")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_ONLY);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
-    }
-
-    /**
-     * Gh repository search builder fork deprecated string.
-     */
-    @Test
-    public void ghRepositorySearchBuilderForkDeprecatedString() {
-        GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(GHFork.PARENT_AND_FORKS.toString());
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(GHFork.FORKS_ONLY.toString());
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:only")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(null);
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
     }
 
@@ -1633,19 +1596,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(repository.listStargazers2().toList().size(), is(1));
         repository.unstar();
         assertThat(repository.listStargazers().toList().size(), is(0));
-    }
-
-    /**
-     * Test to check getRepoVariable method.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testRepoActionVariable() throws Exception {
-        GHRepository repository = getRepository();
-        GHRepositoryVariable variable = repository.getRepoVariable("myvar");
-        assertThat(variable.getValue(), is("this is my var value"));
     }
 
     /**

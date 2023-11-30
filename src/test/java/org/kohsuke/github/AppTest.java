@@ -21,7 +21,6 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThrows;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -222,10 +221,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
                             ReactionContent.HOORAY,
                             ReactionContent.ROCKET));
 
-            // test retired delete reaction API throws UnsupportedOperationException
-            final GHReaction reactionToDelete = reaction;
-            assertThrows(UnsupportedOperationException.class, () -> reactionToDelete.delete());
-
             // test new delete reaction API
             v.get(1).deleteReaction(reaction);
             reaction = null;
@@ -322,7 +317,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         try {
             GHDeploymentStatus ghDeploymentStatus = deployment.createStatus(GHDeploymentState.QUEUED)
                     .description("success")
-                    .targetUrl("http://www.github.com")
                     .logUrl("http://www.github.com/logurl")
                     .environmentUrl("http://www.github.com/envurl")
                     .environment("new-ci-env")
@@ -334,9 +328,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(actualStatus.getId(), equalTo(ghDeploymentStatus.getId()));
             assertThat(actualStatus.getState(), equalTo(ghDeploymentStatus.getState()));
             assertThat(actualStatus.getLogUrl(), equalTo(ghDeploymentStatus.getLogUrl()));
-            // Target url was deprecated and replaced with log url. The gh api will
-            // prefer the log url value and return it in place of target url.
-            assertThat(actualStatus.getLogUrl(), equalTo(ghDeploymentStatus.getTargetUrl()));
             assertThat(ghDeploymentStatus.getDeploymentUrl(), equalTo(deployment.getUrl()));
             assertThat(ghDeploymentStatus.getRepositoryUrl(), equalTo(repository.getUrl()));
         } finally {
@@ -452,7 +443,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testListIssues() throws IOException {
         Iterable<GHIssue> closedIssues = gitHub.getOrganization("hub4j")
                 .getRepository("github-api")
-                .listIssues(GHIssueState.CLOSED);
+                .queryIssues()
+                .state(GHIssueState.CLOSED)
+                .list();
 
         int x = 0;
         for (GHIssue issue : closedIssues) {
@@ -562,21 +555,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test fetching team from git hub instance throws exception.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    @SuppressWarnings("deprecation")
-    public void testFetchingTeamFromGitHubInstanceThrowsException() throws Exception {
-        GHOrganization organization = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHTeam teamByName = organization.getTeams().get("Core Developers");
-
-        assertThrows(UnsupportedOperationException.class, () -> gitHub.getTeam((int) teamByName.getId()));
-    }
-
-    /**
      * Test should fetch team from organization.
      *
      * @throws Exception
@@ -611,10 +589,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testFetchPullRequest() throws Exception {
         GHRepository r = gitHub.getOrganization("jenkinsci").getRepository("jenkins");
-        assertThat(r.getMasterBranch(), equalTo("main"));
         assertThat(r.getDefaultBranch(), equalTo("main"));
         r.getPullRequest(1);
-        r.getPullRequests(GHIssueState.OPEN);
+        r.queryPullRequests().state(GHIssueState.OPEN).list().toList();
     }
 
     /**
@@ -627,8 +604,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void testFetchPullRequestAsList() throws Exception {
         GHRepository r = gitHub.getRepository("hub4j/github-api");
-        assertThat(r.getMasterBranch(), equalTo("main"));
-        PagedIterable<GHPullRequest> i = r.listPullRequests(GHIssueState.CLOSED);
+        assertThat(r.getDefaultBranch(), equalTo("main"));
+        PagedIterable<GHPullRequest> i = r.queryPullRequests().state(GHIssueState.CLOSED).list();
         List<GHPullRequest> prs = i.toList();
         assertThat(prs, notNullValue());
         assertThat(prs, is(not(empty())));
@@ -808,7 +785,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .getRepository("jenkins")
                 .getCommit("08c1c9970af4d609ae754fbe803e06186e3206f7");
         assertThat(commit.getParents().size(), equalTo(1));
-        assertThat(commit.getFiles().size(), equalTo(1));
+        assertThat(commit.listFiles().toList().size(), equalTo(1));
         assertThat(commit.getHtmlUrl().toString(),
                 equalTo("https://github.com/jenkinsci/jenkins/commit/08c1c9970af4d609ae754fbe803e06186e3206f7"));
         assertThat(commit.getLinesAdded(), equalTo(40));
@@ -822,7 +799,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(commit.getCommitShortInfo().getCommitDate(), equalTo(commit.getCommitDate()));
         assertThat(commit.getCommitShortInfo().getMessage(), equalTo("creating an RC branch"));
 
-        File f = commit.getFiles().get(0);
+        File f = commit.listFiles().toList().get(0);
         assertThat(f.getLinesChanged(), equalTo(48));
         assertThat(f.getLinesAdded(), equalTo(40));
         assertThat(f.getLinesDeleted(), equalTo(8));
@@ -1145,7 +1122,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     private void tryTeamCreation(GitHub gitHub) throws IOException {
         GHOrganization o = gitHub.getOrganization("HudsonLabs");
-        GHTeam t = o.createTeam("auto team", Permission.PUSH);
+        GHTeam t = o.createTeam("auto team").permission(Permission.PUSH).create();
         t.add(o.getRepository("auto-test"));
     }
 
@@ -1403,7 +1380,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(r.getTotalCount(), greaterThan(0));
 
         GHCommit firstCommit = r.iterator().next();
-        assertThat(firstCommit.getFiles(), is(not(empty())));
+        assertThat(firstCommit.listFiles().toList(), is(not(empty())));
     }
 
     /**
@@ -1594,7 +1571,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat("It is dark!", equalTo(t3.getDescription()));
 
             // Test deprecated methods
-            t.setDescription("Deprecated");
+            t.set().description("Deprecated");
             t = r.getLabel("test");
 
             // By using the old instance t when calling setDescription it also sets color to the old value
@@ -1602,7 +1579,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat("123456", equalTo(t.getColor()));
             assertThat("Deprecated", equalTo(t.getDescription()));
 
-            t.setColor("000000");
+            t.set().color("000000");
             t = r.getLabel("test");
             assertThat("000000", equalTo(t.getColor()));
             assertThat("Deprecated", equalTo(t.getDescription()));

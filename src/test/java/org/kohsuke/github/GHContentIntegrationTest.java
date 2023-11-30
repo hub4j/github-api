@@ -70,8 +70,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     public void testGetRepository() throws Exception {
         GHRepository testRepo = gitHub.getRepositoryById(repo.getId());
         assertThat(testRepo.getName(), equalTo(repo.getName()));
-        testRepo = gitHub.getRepositoryById(Long.toString(repo.getId()));
-        assertThat(testRepo.getName(), equalTo(repo.getName()));
     }
 
     /**
@@ -138,9 +136,11 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testCRUDContent() throws Exception {
-        GHContentUpdateResponse created = repo.createContent("this is an awesome file I created\n",
-                "Creating a file for integration tests.",
-                createdFilename);
+        GHContentUpdateResponse created = repo.createContent()
+                .content("this is an awesome file I created\n")
+                .message("Creating a file for integration tests.")
+                .path(createdFilename)
+                .commit();
         int expectedRequestCount = mockGitHub.getRequestCount();
         GHContent createdContent = created.getContent();
 

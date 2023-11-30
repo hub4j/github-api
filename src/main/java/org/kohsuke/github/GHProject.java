@@ -100,17 +100,6 @@ public class GHProject extends GHObject {
     }
 
     /**
-     * Gets node id.
-     *
-     * @return the node id
-     * @deprecated Use {@link GHObject#getNodeId()}
-     */
-    @Deprecated
-    public String getNode_id() {
-        return getNodeId();
-    }
-
-    /**
      * Gets name.
      *
      * @return the name
@@ -154,30 +143,6 @@ public class GHProject extends GHObject {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getCreator() {
         return creator;
-    }
-
-    /**
-     * Wrap gh project.
-     *
-     * @param root
-     *            the root
-     * @return the gh project
-     */
-    @Deprecated
-    public GHProject wrap(GitHub root) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
-     * Wrap gh project.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh project
-     */
-    @Deprecated
-    public GHProject wrap(GHRepository repo) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

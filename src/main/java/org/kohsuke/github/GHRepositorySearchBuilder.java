@@ -60,48 +60,6 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * Forks gh repository search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh repository search builder
-     * @deprecated use {@link #fork(GHFork)} instead.
-     */
-    @Deprecated
-    public GHRepositorySearchBuilder forks(String v) {
-        return q("fork", v);
-    }
-
-    /**
-     * Searching in forks
-     *
-     * The default search mode is {@link Fork#PARENT_ONLY}. In that mode, forks are not included in search results.
-     *
-     * <p>
-     * Passing {@link Fork#PARENT_AND_FORKS} or {@link Fork#FORKS_ONLY} will show results from forks, but only if they
-     * have more stars than the parent repository.
-     *
-     * <p>
-     * IMPORTANT: Regardless of this setting, no search results will ever be returned for forks with equal or fewer
-     * stars than the parent repository. Forks with less stars than the parent repository are not included in the index
-     * for code searching.
-     *
-     * @param fork
-     *            search mode for forks
-     *
-     * @return the gh repository search builder
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-in-forks">Searching
-     *      in forks</a>
-     * @deprecated use {@link #fork(GHFork)} instead.
-     */
-    @Deprecated
-    public GHRepositorySearchBuilder fork(Fork fork) {
-        return q("fork", fork.toString());
-    }
-
-    /**
      * Searching in forks
      *
      * The default search mode is {@link Fork#PARENT_ONLY}. In that mode, forks are not included in search results.

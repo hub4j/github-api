@@ -88,21 +88,6 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
     }
 
     /**
-     * Specifies whether the repository is a template.
-     *
-     * @param enabled
-     *            true if enabled
-     * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     * @deprecated Use {@link #isTemplate(boolean)} method instead
-     */
-    @Deprecated
-    public GHCreateRepositoryBuilder templateRepository(boolean enabled) throws IOException {
-        return isTemplate(enabled);
-    }
-
-    /**
      * Specifies the ownership of the repository.
      *
      * @param owner

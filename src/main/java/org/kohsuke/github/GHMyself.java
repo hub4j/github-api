@@ -151,7 +151,7 @@ public class GHMyself extends GHUser {
      */
     public synchronized Map<String, GHRepository> getAllRepositories() throws IOException {
         Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
-        for (GHRepository r : listAllRepositories()) {
+        for (GHRepository r : listRepositories()) {
             repositories.put(r.getName(), r);
         }
         return Collections.unmodifiableMap(repositories);
@@ -204,17 +204,6 @@ public class GHMyself extends GHUser {
                 .withUrlPath("/user/repos")
                 .toIterable(GHRepository[].class, null)
                 .withPageSize(pageSize);
-    }
-
-    /**
-     * List all repositories paged iterable.
-     *
-     * @return the paged iterable
-     * @deprecated Use {@link #listRepositories()}
-     */
-    @Deprecated
-    public PagedIterable<GHRepository> listAllRepositories() {
-        return listRepositories();
     }
 
     /**

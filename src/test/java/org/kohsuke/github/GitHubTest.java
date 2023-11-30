@@ -43,7 +43,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
 
         assertThat(repo.getFullName(), equalTo("hub4j/github-api"));
 
-        GHRepository repo2 = gitHub.getRepositoryById(Long.toString(repo.getId()));
+        GHRepository repo2 = gitHub.getRepositoryById(repo.getId());
         assertThat(repo2.getFullName(), equalTo("hub4j/github-api"));
 
         try {
@@ -236,7 +236,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                     .language("js")
                     .sort(GHContentSearchBuilder.Sort.INDEXED)
                     .order(GHDirection.DESC)
-                    .fork(GHFork.PARENT_ONLY.toString())
+                    .fork(GHFork.PARENT_ONLY)
                     .list();
 
             final PagedSearchIterable<GHContent> resultsWithForksDeprecated = gitHub.searchContent()
@@ -244,7 +244,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                     .language("js")
                     .sort(GHContentSearchBuilder.Sort.INDEXED)
                     .order(GHDirection.DESC)
-                    .fork(GHFork.PARENT_AND_FORKS.toString())
+                    .fork(GHFork.PARENT_AND_FORKS)
                     .list();
 
             assertThat(resultsDeprecated.getTotalCount(), equalTo(results.getTotalCount()));

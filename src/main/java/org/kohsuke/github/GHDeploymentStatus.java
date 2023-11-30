@@ -44,19 +44,6 @@ public class GHDeploymentStatus extends GHObject {
      *
      * @return the gh deployment status
      */
-    @Deprecated
-    public GHDeploymentStatus wrap(GHRepository owner) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
-     * Wrap gh deployment status.
-     *
-     * @param owner
-     *            the owner
-     *
-     * @return the gh deployment status
-     */
     GHDeploymentStatus lateBind(GHRepository owner) {
         this.owner = owner;
         return this;
@@ -64,19 +51,6 @@ public class GHDeploymentStatus extends GHObject {
 
     /**
      * Gets target url.
-     *
-     * @return the target url
-     * @deprecated Target url is deprecated in favor of {@link #getLogUrl() getLogUrl}
-     */
-    @Deprecated
-    public URL getTargetUrl() {
-        return GitHubClient.parseURL(target_url);
-    }
-
-    /**
-     * Gets target url.
-     * <p>
-     * This method replaces {@link #getTargetUrl() getTargetUrl}}.
      *
      * @return the target url
      * @deprecated until preview feature has graduated to stable

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 
 import javax.annotation.Nonnull;
@@ -50,4 +51,42 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
      * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+
+    /**
+     * Wait until the API abuse "wait time" is passed.
+     */
+    public static final GitHubRateLimitHandler WAIT = new GitHubRateLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            try {
+                Thread.sleep(parseWaitTime(connectorResponse));
+            } catch (InterruptedException ex) {
+                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);
+            }
+        }
+
+        private long parseWaitTime(GitHubConnectorResponse connectorResponse) {
+            String v = connectorResponse.header("X-RateLimit-Reset");
+            if (v == null)
+                return 60 * 1000; // can't tell, return 1 min
+
+            return Math.max(1000, Long.parseLong(v) * 1000 - System.currentTimeMillis());
+        }
+    };
+
+    /**
+     * Fail immediately.
+     */
+    public static final GitHubRateLimitHandler FAIL = new GitHubRateLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            throw new HttpException("API rate limit reached",
+                    connectorResponse.statusCode(),
+                    connectorResponse.header("Status"),
+                    connectorResponse.request().url().toString())
+                            .withResponseHeaderFields(connectorResponse.allHeaders());
+
+        }
+    };
+
 }

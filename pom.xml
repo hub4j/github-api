@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
-  <artifactId>github-api</artifactId>
+  <artifactId>github-api2</artifactId>
   <version>2.0-alpha1-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
@@ -118,9 +118,6 @@
             <excludes>
               <exclude>/org/kohsuke/github/extras/HttpClient*</exclude>
               <exclude>/org/kohsuke/github/example/*</exclude>
-              <exclude>/org/kohsuke/github/extras/OkHttpConnector*</exclude>
-              <exclude>/org/kohsuke/github/extras/OkHttp3Connector*</exclude>
-              <exclude>/org/kohsuke/github/extras/okhttp3/ObsoleteUrlFactory*</exclude>
             </excludes>
           </configuration>
           <executions>
@@ -175,19 +172,15 @@
                       <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector.**</exclude>
                       <exclude>org.kohsuke.github.extras.HttpClientGitHubConnector</exclude>
 
-                      <!-- Code implemented externally -->
-                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory.**</exclude>
-                      <exclude>org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory</exclude>
+                      <!-- V2.x changes -->
+                      <exclude>org.kohsuke.github.connector.GitHubConnectorResponseHttpUrlConnectionAdapter</exclude>
+                      <exclude>org.kohsuke.github.GHRepositorySearchBuilder.Fork</exclude>
+
+                      <!-- Deprecated -->
+                      <exclude>org.kohsuke.github.GHPerson.1</exclude>
 
                       <!-- Sample only -->
                       <exclude>org.kohsuke.github.example.*</exclude>
-
-                      <!-- Deprecated -->
-                      <exclude>org.kohsuke.github.extras.OkHttpConnector</exclude>
-                      <exclude>org.kohsuke.github.extras.OkHttp3Connector</exclude>
-                      <exclude>org.kohsuke.github.EnforcementLevel</exclude>
-                      <exclude>org.kohsuke.github.GHPerson.1</exclude>
-                      <exclude>org.kohsuke.github.GHCompare.User</exclude>
 
                       <!-- Unbridged test changes -->
                       <exclude>org.kohsuke.github.GHCommit.GHAuthor</exclude>
@@ -600,20 +593,6 @@
       <version>${okhttp3.version}</version>
       <optional>true</optional>
     </dependency>
-    <!-- This is the last version of okhttp3 that support UrlConnection -->
-    <!-- The class using this has been deprecated, this dependency can be remove when that class is. -->
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp-urlconnection</artifactId>
-      <version>3.12.3</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp</groupId>
-      <artifactId>okhttp-urlconnection</artifactId>
-      <version>2.7.5</version>
-      <optional>true</optional>
-    </dependency>
     <dependency>
       <groupId>org.kohsuke</groupId>
       <artifactId>wordnet-random-name</artifactId>
@@ -700,23 +679,6 @@
                   <useSystemClassLoader>false</useSystemClassLoader>
                   <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
                   <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
-                  <!-- Run some test passes with trace logging turned on -->
-                  <systemPropertyVariables>
-                    <java.util.logging.config.file>src/test/resources/test-trace-logging.properties</java.util.logging.config.file>
-                  </systemPropertyVariables>
-                </configuration>
-              </execution>
-              <execution>
-                <id>java11-urlconnection-test</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>test</goal>
-                </goals>
-                <configuration>
-                  <classesDirectory>${project.basedir}/target/${project.artifactId}-${project.version}.jar</classesDirectory>
-                  <useSystemClassLoader>false</useSystemClassLoader>
-                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
-                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=urlconnection</argLine>
                   <!-- Run some test passes with trace logging turned on -->
                   <systemPropertyVariables>
                     <java.util.logging.config.file>src/test/resources/test-trace-logging.properties</java.util.logging.config.file>

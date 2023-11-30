@@ -411,19 +411,6 @@ public class GHCommit {
     }
 
     /**
-     * List of files changed/added/removed in this commit.
-     *
-     * @return Can be empty but never null.
-     * @throws IOException
-     *             on error
-     * @deprecated Use {@link #listFiles()} instead.
-     */
-    @Deprecated
-    public List<File> getFiles() throws IOException {
-        return listFiles().toList();
-    }
-
-    /**
      * List of files changed/added/removed in this commit. Uses a paginated list if the files returned by GitHub exceed
      * 300 in quantity.
      *

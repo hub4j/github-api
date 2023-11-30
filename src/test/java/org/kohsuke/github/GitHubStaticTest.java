@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.net.MalformedURLException;
@@ -375,7 +374,6 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
         // This should never happen if the internal method isn't used
         final GHRepository readRepoFinal = readRepo;
-        assertThrows(NullPointerException.class, () -> readRepoFinal.getRoot());
         assertThrows(NullPointerException.class, () -> readRepoFinal.root());
         assertThat(readRepoFinal.isOffline(), is(true));
         assertThat(readRepo.getResponseHeaderFields(), nullValue());
@@ -383,7 +381,6 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         readRepo = GitHub.getMappingObjectReader().forType(GHRepository.class).readValue(repoString);
 
         // This should never happen if the internal method isn't used
-        assertThat(readRepo.getRoot().getConnector(), equalTo(GitHubConnector.OFFLINE));
         assertThat(readRepo.getResponseHeaderFields(), nullValue());
 
         String readRepoString = GitHub.getMappingObjectWriter().writeValueAsString(readRepo);

@@ -56,18 +56,6 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Sets root.
-     *
-     * @param root
-     *            the root
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRoot(GitHub root) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets account.
      *
      * @return the account
@@ -78,36 +66,12 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Sets account.
-     *
-     * @param account
-     *            the account
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setAccount(GHUser account) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets access token url.
      *
      * @return the access token url
      */
     public String getAccessTokenUrl() {
         return accessTokenUrl;
-    }
-
-    /**
-     * Sets access token url.
-     *
-     * @param accessTokenUrl
-     *            the access token url
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setAccessTokenUrl(String accessTokenUrl) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -125,10 +89,9 @@ public class GHAppInstallation extends GHObject {
      * @return the paged iterable
      * @deprecated This method cannot work on a {@link GHAppInstallation} retrieved from
      *             {@link GHApp#listInstallations()} (for example), except when resorting to unsupported hacks involving
-     *             {@link GHAppInstallation#setRoot(GitHub)} to switch from an application client to an installation
-     *             client. This method will be removed. You should instead use an installation client (with an
-     *             installation token, not a JWT), retrieve a {@link GHAuthenticatedAppInstallation} from
-     *             {@link GitHub#getInstallation()}, then call
+     *             setRoot(GitHub) to switch from an application client to an installation client. This method will be
+     *             removed. You should instead use an installation client (with an installation token, not a JWT),
+     *             retrieve a {@link GHAuthenticatedAppInstallation} from {@link GitHub#getInstallation()}, then call
      *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
      */
     @Deprecated
@@ -151,36 +114,12 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Sets repositories url.
-     *
-     * @param repositoriesUrl
-     *            the repositories url
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRepositoriesUrl(String repositoriesUrl) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets app id.
      *
      * @return the app id
      */
     public long getAppId() {
         return appId;
-    }
-
-    /**
-     * Sets app id.
-     *
-     * @param appId
-     *            the app id
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setAppId(long appId) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -193,18 +132,6 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Sets target id.
-     *
-     * @param targetId
-     *            the target id
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setTargetId(long targetId) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets target type.
      *
      * @return the target type
@@ -214,36 +141,12 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Sets target type.
-     *
-     * @param targetType
-     *            the target type
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setTargetType(GHTargetType targetType) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets permissions.
      *
      * @return the permissions
      */
     public Map<String, GHPermissionType> getPermissions() {
         return Collections.unmodifiableMap(permissions);
-    }
-
-    /**
-     * Sets permissions.
-     *
-     * @param permissions
-     *            the permissions
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setPermissions(Map<String, GHPermissionType> permissions) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**
@@ -258,18 +161,6 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Sets events.
-     *
-     * @param events
-     *            the events
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setEvents(List<GHEvent> events) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets single file name.
      *
      * @return the single file name
@@ -279,36 +170,12 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Sets single file name.
-     *
-     * @param singleFileName
-     *            the single file name
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setSingleFileName(String singleFileName) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Gets repository selection.
      *
      * @return the repository selection
      */
     public GHRepositorySelection getRepositorySelection() {
         return repositorySelection;
-    }
-
-    /**
-     * Sets repository selection.
-     *
-     * @param repositorySelection
-     *            the repository selection
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

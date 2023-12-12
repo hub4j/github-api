@@ -128,6 +128,13 @@ public class GHCommitQueryBuilder {
         return until(new Date(timestamp));
     }
 
+    /**
+     * Page gh commit query builder.
+     *
+     * @param page
+     *            the page
+     * @return the gh commit query builder
+     */
     public GHCommitQueryBuilder page(int page) {
         req.with("page", page);
         return this;

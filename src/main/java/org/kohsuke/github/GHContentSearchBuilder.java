@@ -182,6 +182,13 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
         return this;
     }
 
+    /**
+     * Page gh content search builder.
+     *
+     * @param page
+     *            the page
+     * @return the gh content search builder
+     */
     public GHContentSearchBuilder page(int page) {
         req.with("page", page);
         return this;

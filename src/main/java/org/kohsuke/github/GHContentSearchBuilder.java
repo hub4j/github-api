@@ -182,6 +182,11 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
         return this;
     }
 
+    public GHContentSearchBuilder page(int page) {
+        req.with("page", page);
+        return this;
+    }
+
     /**
      * The enum Sort.
      */

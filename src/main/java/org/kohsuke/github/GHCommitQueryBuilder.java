@@ -128,6 +128,11 @@ public class GHCommitQueryBuilder {
         return until(new Date(timestamp));
     }
 
+    public GHCommitQueryBuilder page(int page) {
+        req.with("page", page);
+        return this;
+    }
+
     /**
      * Lists up the commits with the criteria built so far.
      *

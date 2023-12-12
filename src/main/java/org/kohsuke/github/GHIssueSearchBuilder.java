@@ -104,6 +104,11 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
         return this;
     }
 
+    public GHIssueSearchBuilder page(int page) {
+        req.with("page", page);
+        return this;
+    }
+
     /**
      * The enum Sort.
      */

@@ -238,6 +238,11 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
         return this;
     }
 
+    public GHCommitSearchBuilder page(int page) {
+        req.with("page", page);
+        return this;
+    }
+
     /**
      * The enum Sort.
      */

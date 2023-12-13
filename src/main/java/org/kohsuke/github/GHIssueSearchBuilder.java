@@ -105,6 +105,18 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     }
 
     /**
+     * Page gh content search builder.
+     *
+     * @param page
+     *            the page
+     * @return the gh content search builder
+     */
+    public GHIssueSearchBuilder page(int page) {
+        req.with("page", page);
+        return this;
+    }
+
+    /**
      * The enum Sort.
      */
     public enum Sort {

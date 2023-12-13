@@ -220,7 +220,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .withName("bar", checkRun.getName())
                 .create();
         assertThat(new Date(999_999_000), equalTo(updated.getStartedAt()));
-        assertThat("foo", equalTo(updated.getName()));
+        assertThat("bar", equalTo(updated.getName()));
         assertThat(checkRun.getOutput().getAnnotationsCount(), equalTo(1));
     }
 }

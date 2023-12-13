@@ -110,7 +110,7 @@ public final class GHCheckRunBuilder {
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withName(@CheckForNull String name, String oldName) {
-        if(oldName == null){
+        if (oldName == null) {
             throw new GHException("Can not update uncreated check run");
         }
         requester.with("name", name);

@@ -10,7 +10,8 @@ public class GHRepositoryTrafficReferralBase {
     /**
      * Instantiates a new Gh repository traffic referral base.
      */
-    GHRepositoryTrafficReferralBase() {}
+    GHRepositoryTrafficReferralBase() {
+    }
 
     /**
      * Instantiates a new Gh repository traffic referral base.

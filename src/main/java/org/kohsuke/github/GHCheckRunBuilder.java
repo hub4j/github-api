@@ -107,6 +107,8 @@ public final class GHCheckRunBuilder {
      *
      * @param name
      *            the name
+     * @param oldName
+     *            the old name
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withName(@CheckForNull String name, String oldName) {

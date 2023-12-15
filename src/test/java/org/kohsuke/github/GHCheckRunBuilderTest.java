@@ -244,11 +244,12 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                                 GHCheckRun.AnnotationLevel.NOTICE,
                                 "hello to you too").withTitle("Look here")))
                 .create();
-        Assert.assertThrows(GHException.class, () -> checkRun.update()
-                .withStatus(GHCheckRun.Status.COMPLETED)
-                .withConclusion(GHCheckRun.Conclusion.SUCCESS)
-                .withCompletedAt(new Date(999_999_999))
-                .withName("bar", null)
-                .create());
+        Assert.assertThrows(GHException.class,
+                () -> checkRun.update()
+                        .withStatus(GHCheckRun.Status.COMPLETED)
+                        .withConclusion(GHCheckRun.Conclusion.SUCCESS)
+                        .withCompletedAt(new Date(999_999_999))
+                        .withName("bar", null)
+                        .create());
     }
 }

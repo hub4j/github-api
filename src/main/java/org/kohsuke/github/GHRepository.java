@@ -2102,7 +2102,6 @@ public class GHRepository extends GHObject {
         return new GHCommitQueryBuilder(this);
     }
 
-
     /**
      * List releases with pagination through a builder pattern.
      *

@@ -2102,6 +2102,16 @@ public class GHRepository extends GHObject {
         return new GHCommitQueryBuilder(this);
     }
 
+
+    /**
+     * List releases with pagination through a builder pattern.
+     *
+     * @return the gh release query builder
+     */
+    public GHReleaseQueryBuilder queryReleases() {
+        return new GHReleaseQueryBuilder(this);
+    }
+
     /**
      * Lists up all the commit comments in this repository.
      *

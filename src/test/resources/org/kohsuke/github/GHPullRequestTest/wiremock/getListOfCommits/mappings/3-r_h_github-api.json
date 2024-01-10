@@ -1,0 +1,50 @@
+{
+  "id": "ee0f111d-456c-411d-8715-773cdb8e2711",
+  "name": "repos_hub4j-test-org_github-api",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_h_github-api.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 10 Jan 2024 13:13:29 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"9fece8eb364e723fad2ce210466991057c7d5961d18fb7679a4356a87638ffd3\"",
+      "Last-Modified": "Tue, 31 Jan 2023 10:03:44 GMT",
+      "github-authentication-token-expiration": "2024-02-08 10:25:04 +0000",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-accepted-github-permissions": "metadata=read",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4003",
+      "X-RateLimit-Reset": "1704892797",
+      "X-RateLimit-Used": "997",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "5369:20111B:445BA41:4527BFB:659E97F9"
+    }
+  },
+  "uuid": "ee0f111d-456c-411d-8715-773cdb8e2711",
+  "persistent": true,
+  "insertionIndex": 3
+}

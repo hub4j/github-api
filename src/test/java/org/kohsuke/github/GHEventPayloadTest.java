@@ -1424,6 +1424,76 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Discussion comment created.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void discussion_comment_created() throws Exception {
+        final GHEventPayload.DiscussionComment discussionCommentPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.DiscussionComment.class);
+
+        assertThat(discussionCommentPayload.getAction(), is("created"));
+        assertThat(discussionCommentPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(discussionCommentPayload.getSender().getLogin(), is("gsmet"));
+
+        GHRepositoryDiscussion discussion = discussionCommentPayload.getDiscussion();
+
+        GHRepositoryDiscussion.Category category = discussion.getCategory();
+
+        assertThat(category.getId(), is(33522033L));
+        assertThat(category.getNodeId(), is("DIC_kwDOEq3cwc4B_4Fx"));
+        assertThat(category.getEmoji(), is(":pray:"));
+        assertThat(category.getName(), is("Q&A"));
+        assertThat(category.getDescription(), is("Ask the community for help"));
+        assertThat(category.getCreatedAt().getTime(), is(1636991431000L));
+        assertThat(category.getUpdatedAt().getTime(), is(1636991431000L));
+        assertThat(category.getSlug(), is("q-a"));
+        assertThat(category.isAnswerable(), is(true));
+
+        assertThat(discussion.getAnswerHtmlUrl(), is(nullValue()));
+        assertThat(discussion.getAnswerChosenAt(), is(nullValue()));
+        assertThat(discussion.getAnswerChosenBy(), is(nullValue()));
+
+        assertThat(discussion.getHtmlUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/discussions/162"));
+        assertThat(discussion.getId(), is(6090566L));
+        assertThat(discussion.getNodeId(), is("D_kwDOEq3cwc4AXO9G"));
+        assertThat(discussion.getNumber(), is(162));
+        assertThat(discussion.getTitle(), is("New test question"));
+
+        assertThat(discussion.getUser().getLogin(), is("gsmet"));
+        assertThat(discussion.getUser().getId(), is(1279749L));
+        assertThat(discussion.getUser().getNodeId(), is("MDQ6VXNlcjEyNzk3NDk="));
+
+        assertThat(discussion.getState(), is(GHRepositoryDiscussion.State.OPEN));
+        assertThat(discussion.isLocked(), is(false));
+        assertThat(discussion.getComments(), is(1));
+        assertThat(discussion.getCreatedAt().getTime(), is(1705586390000L));
+        assertThat(discussion.getUpdatedAt().getTime(), is(1705586399000L));
+        assertThat(discussion.getAuthorAssociation(), is(GHCommentAuthorAssociation.OWNER));
+        assertThat(discussion.getActiveLockReason(), is(nullValue()));
+        assertThat(discussion.getBody(), is("Test question"));
+
+        GHRepositoryDiscussionComment comment = discussionCommentPayload.getComment();
+
+        assertThat(comment.getHtmlUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/discussions/162#discussioncomment-8169669"));
+        assertThat(comment.getId(), is(8169669L));
+        assertThat(comment.getNodeId(), is("DC_kwDOEq3cwc4AfKjF"));
+        assertThat(comment.getAuthorAssociation(), is(GHCommentAuthorAssociation.OWNER));
+        assertThat(comment.getCreatedAt().getTime(), is(1705586398000L));
+        assertThat(comment.getUpdatedAt().getTime(), is(1705586399000L));
+        assertThat(comment.getBody(), is("Test comment."));
+        assertThat(comment.getUser().getLogin(), is("gsmet"));
+        assertThat(comment.getUser().getId(), is(1279749L));
+        assertThat(comment.getUser().getNodeId(), is("MDQ6VXNlcjEyNzk3NDk="));
+        assertThat(comment.getParentId(), is(nullValue()));
+        assertThat(comment.getChildCommentCount(), is(0));
+    }
+
+    /**
      * Starred.
      *
      * @throws Exception

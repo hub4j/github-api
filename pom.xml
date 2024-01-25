@@ -33,7 +33,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>4.7.3.0</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.8.1.0</spotbugs-maven-plugin.version>
     <spotbugs.version>4.7.3</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>2.2</hamcrest.version>
@@ -93,7 +93,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.2.2</version>
+          <version>3.2.3</version>
           <configuration>
             <!-- SUREFIRE-1226 workaround -->
             <trimStackTrace>false</trimStackTrace>
@@ -291,12 +291,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.4.2</version>
+        <version>3.5.0</version>
         <dependencies>
           <dependency>
             <groupId>org.apache.bcel</groupId>
             <artifactId>bcel</artifactId>
-            <version>6.6.1</version>
+            <version>6.8.0</version>
           </dependency>
         </dependencies>
       </plugin>

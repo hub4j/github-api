@@ -7,8 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 /**
  * <p>
@@ -21,6 +20,11 @@ public class GHCodeScanningAlertInstanceTest extends AbstractGitHubWireMockTest 
     private static final String REPO_NAME = "Pixi";
     private GHCodeScanningAlert alert;
 
+    /**
+     * Load a dismissed alert from the code scanning api web response
+     *
+     * @throws Exception the exception
+     */
     @Before
     public void setUp() throws Exception {
         GHRepository repo = gitHub.getRepository(GITHUB_API_TEST_ORG + "/" + REPO_NAME);
@@ -35,6 +39,10 @@ public class GHCodeScanningAlertInstanceTest extends AbstractGitHubWireMockTest 
         return dismissedAlerts.get(0);
     }
 
+    /**
+     * Test that an alert returns a list of its own instances
+     * @throws IOException could not get a compatible response
+     */
     @Test
     public void testListAlertInstances() throws IOException {
         // Arrange
@@ -53,6 +61,12 @@ public class GHCodeScanningAlertInstanceTest extends AbstractGitHubWireMockTest 
         assertThat(instance.getMessage(), not((Object) null));
         assertThat(instance.getLocation(), not((Object) null));
 
+        assertThat(instance.getMessage().getText(), not(emptyOrNullString()));
+
+        assertThat(instance.getAnalysisKey(), not((Object) null));
+        assertThat(instance.getClassifications(), not((Object) null));
+        assertThat(instance.getEnvironment(), notNullValue());
+
         GHCodeScanningAlertInstance.Location location = instance.getLocation();
         // Can't assert on exact values with having to hardcode values from
         // json file, hence making the assertions generics
@@ -60,6 +74,6 @@ public class GHCodeScanningAlertInstanceTest extends AbstractGitHubWireMockTest 
         assertThat(location.getStartLine(), greaterThanOrEqualTo(0L));
         assertThat(location.getEndLine(), greaterThanOrEqualTo(0L));
         assertThat(location.getStartColumn(), greaterThanOrEqualTo(0L));
-        assertThat(location.getStartColumn(), greaterThanOrEqualTo(0L));
+        assertThat(location.getEndColumn(), greaterThanOrEqualTo(0L));
     }
 }

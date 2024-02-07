@@ -3525,6 +3525,11 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists the code scanning alerts of this repository.
+     * <p>
+     * See: <a href=
+     * "https://docs.github.com/en/rest/code-scanning/code-scanning?apiVersion=2022-11-28#list-code-scanning-alerts-for-a-repository">List
+     * code scanning alerts for a repository</a>
+     * </p>
      *
      * @return the paged iterable
      */
@@ -3534,6 +3539,11 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists the code scanning alerts of this repository filtered on the alert status
+     * <p>
+     * See: <a href=
+     * "https://docs.github.com/en/rest/code-scanning/code-scanning?apiVersion=2022-11-28#list-code-scanning-alerts-for-a-repository">List
+     * code scanning alerts for a repository</a>
+     * </p>
      *
      * @param state
      *            alert status to filter on
@@ -3545,6 +3555,11 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists the code scanning alerts of this repository filtered on the code scanning tool name
+     * <p>
+     * See: <a href=
+     * "https://docs.github.com/en/rest/code-scanning/code-scanning?apiVersion=2022-11-28#list-code-scanning-alerts-for-a-repository">List
+     * code scanning alerts for a repository</a>
+     * </p>
      *
      * @param toolName
      *            name of code scanning tool that creates alerts
@@ -3561,6 +3576,11 @@ public class GHRepository extends GHObject {
 
     /**
      * Get code scanning alert by id
+     *
+     * <p>See:
+     * <a href=
+     * "https://docs.github.com/en/rest/code-scanning/code-scanning?apiVersion=2022-11-28#get-a-code-scanning-alert">
+     * Get a code scanning alert</a></p>
      *
      * @param id
      *            id of the code scanning alert

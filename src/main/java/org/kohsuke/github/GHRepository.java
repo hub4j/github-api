@@ -3577,10 +3577,11 @@ public class GHRepository extends GHObject {
     /**
      * Get code scanning alert by id
      *
-     * <p>See:
-     * <a href=
+     * <p>
+     * See: <a href=
      * "https://docs.github.com/en/rest/code-scanning/code-scanning?apiVersion=2022-11-28#get-a-code-scanning-alert">
-     * Get a code scanning alert</a></p>
+     * Get a code scanning alert</a>
+     * </p>
      *
      * @param id
      *            id of the code scanning alert

@@ -23,7 +23,8 @@ public class GHCodeScanningAlertInstanceTest extends AbstractGitHubWireMockTest 
     /**
      * Load a dismissed alert from the code scanning api web response
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -41,7 +42,9 @@ public class GHCodeScanningAlertInstanceTest extends AbstractGitHubWireMockTest 
 
     /**
      * Test that an alert returns a list of its own instances
-     * @throws IOException could not get a compatible response
+     *
+     * @throws IOException
+     *             could not get a compatible response
      */
     @Test
     public void testListAlertInstances() throws IOException {

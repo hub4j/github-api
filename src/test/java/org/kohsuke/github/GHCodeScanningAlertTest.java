@@ -27,7 +27,8 @@ public class GHCodeScanningAlertTest extends AbstractGitHubWireMockTest {
     /**
      * Set up the test with alerts from a purpose-made repo
      *
-     * @throws Exception trouble
+     * @throws Exception
+     *             trouble
      */
     @Before
     public void setUp() throws Exception {
@@ -35,8 +36,7 @@ public class GHCodeScanningAlertTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Check that we can get a list of alerts for a repo and that the response contains
-     * values in its required fields.
+     * Check that we can get a list of alerts for a repo and that the response contains values in its required fields.
      */
     @Test
     public void testListCodeScanningAlerts() {
@@ -82,9 +82,12 @@ public class GHCodeScanningAlertTest extends AbstractGitHubWireMockTest {
     /**
      * Get the data for a single alert and verify that the additional details are filled in.
      *
-     * @throws IOException encountered an error while retrieving a response
-     * @throws InvocationTargetException tried to reflectively invoke a method incorrectly
-     * @throws IllegalAccessException tried to reflectively invoke a method that didn't want to be called
+     * @throws IOException
+     *             encountered an error while retrieving a response
+     * @throws InvocationTargetException
+     *             tried to reflectively invoke a method incorrectly
+     * @throws IllegalAccessException
+     *             tried to reflectively invoke a method that didn't want to be called
      */
     @Test
     public void testGetCodeScanningAlert() throws IOException, InvocationTargetException, IllegalAccessException {

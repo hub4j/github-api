@@ -234,7 +234,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
 
     private void testAppInstallation(GHAppInstallation appInstallation) throws IOException {
         Map<String, GHPermissionType> appPermissions = appInstallation.getPermissions();
-        GHUser appAccount = appInstallation.getAccount();
+        GHPerson appAccount = appInstallation.getAccount();
 
         assertThat(appInstallation.getId(), is((long) 11111111));
         assertThat(appAccount.getId(), is((long) 111111111));

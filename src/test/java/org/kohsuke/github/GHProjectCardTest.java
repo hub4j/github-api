@@ -131,6 +131,13 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
+    public void testGetContent() throws IOException {
+        card.getContent();
+        assertThat(card.getNote(), equalTo("This is a card"));
+        assertThat(card.isArchived(), is(false));
+    }
+
+    @Test
     public void testDeleteCard() throws IOException {
         card.delete();
         try {

@@ -11,7 +11,9 @@ import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -20,7 +22,18 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.notNullValue;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -230,6 +243,75 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getEvent(), equalTo(GHEvent.WORKFLOW_DISPATCH));
         assertThat(workflowRun.getStatus(), equalTo(Status.COMPLETED));
         assertThat(workflowRun.getConclusion(), equalTo(Conclusion.SUCCESS));
+    }
+
+    /**
+     * Test search on created and head sha.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testSearchOnCreatedAndHeadSha() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        Instant before = Instant.parse("2024-02-09T10:19:00.00Z");
+
+        String mainBranchHeadSha = repo.getBranch(MAIN_BRANCH).getSHA1();
+        String secondBranchHeadSha = repo.getBranch(SECOND_BRANCH).getSHA1();
+
+        workflow.dispatch(MAIN_BRANCH);
+        workflow.dispatch(SECOND_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                SECOND_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        List<GHWorkflowRun> mainBranchHeadShaWorkflowRuns = repo.queryWorkflowRuns()
+                .headSha(mainBranchHeadSha)
+                .created(">=" + before.toString())
+                .list()
+                .toList();
+        List<GHWorkflowRun> secondBranchHeadShaWorkflowRuns = repo.queryWorkflowRuns()
+                .headSha(secondBranchHeadSha)
+                .created(">=" + before.toString())
+                .list()
+                .toList();
+
+        assertThat(mainBranchHeadShaWorkflowRuns, hasSize(greaterThanOrEqualTo(1)));
+        assertThat(mainBranchHeadShaWorkflowRuns, everyItem(hasProperty("headSha", equalTo(mainBranchHeadSha))));
+        // Ideally, we would use everyItem() but the bridge method is in the way
+        for (GHWorkflowRun workflowRun : mainBranchHeadShaWorkflowRuns) {
+            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(Date.from(before)));
+        }
+
+        assertThat(secondBranchHeadShaWorkflowRuns, hasSize(greaterThanOrEqualTo(1)));
+        assertThat(secondBranchHeadShaWorkflowRuns, everyItem(hasProperty("headSha", equalTo(secondBranchHeadSha))));
+        // Ideally, we would use everyItem() but the bridge method is in the way
+        for (GHWorkflowRun workflowRun : secondBranchHeadShaWorkflowRuns) {
+            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(Date.from(before)));
+        }
+
+        List<GHWorkflowRun> mainBranchHeadShaWorkflowRunsBefore = repo.queryWorkflowRuns()
+                .headSha(repo.getBranch(MAIN_BRANCH).getSHA1())
+                .created("<" + before.toString())
+                .list()
+                .toList();
+        // Ideally, we would use that but the bridge method is causing issues
+        // assertThat(mainBranchHeadShaWorkflowRunsBefore, everyItem(hasProperty("createdAt",
+        // lessThan(Date.from(before)))));
+        for (GHWorkflowRun workflowRun : mainBranchHeadShaWorkflowRunsBefore) {
+            assertThat(workflowRun.getCreatedAt(), lessThan(Date.from(before)));
+        }
     }
 
     /**

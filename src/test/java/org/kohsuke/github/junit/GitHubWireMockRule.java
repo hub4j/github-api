@@ -1,9 +1,11 @@
 package org.kohsuke.github.junit;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.common.FileSource;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
+import com.github.tomakehurst.wiremock.extension.ResponseDefinitionTransformer;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
 import com.github.tomakehurst.wiremock.http.*;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
@@ -21,6 +23,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
@@ -44,6 +48,12 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     private final static boolean testWithOrg = System.getProperty("test.github.org", "true") == "true";
     private final static boolean useProxy = takeSnapshot
             || System.getProperty("test.github.useProxy", "false") != "false";
+
+    private final static Pattern ACTIONS_USER_CONTENT_PATTERN = Pattern
+            .compile("https://pipelines[a-z0-9]*\\.actions\\.githubusercontent\\.com", Pattern.CASE_INSENSITIVE);
+    private final static Pattern BLOB_CORE_WINDOWS_PATTERN = Pattern
+            .compile("https://([a-z0-9]*\\.blob\\.core\\.windows\\.net)", Pattern.CASE_INSENSITIVE);
+    private final static String ORIGINAL_HOST = "originalHost";
 
     /**
      * Customize record spec.
@@ -132,6 +142,15 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     }
 
     /**
+     * Actions user content server.
+     *
+     * @return the wire mock server
+     */
+    public WireMockServer blobCoreWindowsNetServer() {
+        return servers.get("blob-core-windows-net");
+    }
+
+    /**
      * Checks if is use proxy.
      *
      * @return true, if is use proxy
@@ -182,6 +201,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                 || isUseProxy()) {
             initializeServer("actions-user-content");
         }
+
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_blob-core-windows-net").exists()
+                || isUseProxy()) {
+            initializeServer("blob-core-windows-net", new ProxyToOriginalHostTransformer(this));
+        }
     }
 
     /**
@@ -213,6 +237,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                     .stubFor(proxyAllTo("https://pipelines.actions.githubusercontent.com").atPriority(100));
         }
 
+        if (this.blobCoreWindowsNetServer() != null) {
+            this.blobCoreWindowsNetServer()
+                    .stubFor(any(anyUrl()).willReturn(aResponse().withTransformers(ProxyToOriginalHostTransformer.NAME))
+                            .atPriority(100));
+        }
     }
 
     /**
@@ -235,6 +264,8 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         recordSnapshot(this.codeloadServer(), "https://codeload.github.com", true);
 
         recordSnapshot(this.actionsUserContentServer(), "https://pipelines.actions.githubusercontent.com", true);
+
+        recordSnapshot(this.blobCoreWindowsNetServer(), "https://productionresults.blob.core.windows.net", true);
     }
 
     private void recordSnapshot(WireMockServer server, String target, boolean isRawServer) {
@@ -354,6 +385,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                                     "https://pipelines.actions.githubusercontent.com");
                         }
 
+                        if (this.blobCoreWindowsNetServer() != null) {
+                            fileText = fileText.replace(this.blobCoreWindowsNetServer().baseUrl(),
+                                    "https://productionresults.blob.core.windows.net");
+                        }
+
                         // point bodyFile in the mapping to the renamed body file
                         if (renamedFilePath != null && filePath.toString().contains("mappings")) {
                             fileText = fileText.replace(filePath.getFileName().toString(),
@@ -440,8 +476,14 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
         body = replaceTargetServerUrl(body,
                 this.actionsUserContentServer(),
-                "https://pipelines.actions.githubusercontent.com",
+                ACTIONS_USER_CONTENT_PATTERN,
                 "/actions-user-content");
+
+        body = replaceTargetServerUrl(body,
+                this.blobCoreWindowsNetServer(),
+                BLOB_CORE_WINDOWS_PATTERN,
+                "/blob-core-windows-net");
+
         return body;
     }
 
@@ -454,6 +496,19 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             body = body.replace(rawTarget, wireMockServer.baseUrl());
         } else {
             body = body.replace(rawTarget, this.apiServer().baseUrl() + inactiveTarget);
+        }
+        return body;
+    }
+
+    @NonNull
+    private String replaceTargetServerUrl(String body,
+            WireMockServer wireMockServer,
+            Pattern regexp,
+            String inactiveTarget) {
+        if (wireMockServer != null) {
+            body = regexp.matcher(body).replaceAll(wireMockServer.baseUrl());
+        } else {
+            body = regexp.matcher(body).replaceAll(this.apiServer().baseUrl() + inactiveTarget);
         }
         return body;
     }
@@ -513,16 +568,60 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
         private void fixLocationHeader(Response response, Collection<HttpHeader> headers) {
             // For redirects, the Location header points to the new target.
-            HttpHeader linkHeader = response.getHeaders().getHeader("Location");
-            if (linkHeader.isPresent()) {
+            HttpHeader locationHeader = response.getHeaders().getHeader("Location");
+            if (locationHeader.isPresent()) {
+                String originalLocationHeaderValue = locationHeader.firstValue();
+                String rewrittenLocationHeaderValue = rule.mapToMockGitHub(originalLocationHeaderValue);
+
                 headers.removeIf(item -> item.keyEquals("Location"));
-                headers.add(HttpHeader.httpHeader("Location", rule.mapToMockGitHub(linkHeader.firstValue())));
+
+                // in the case of the blob.core.windows.net server, we need to keep the original host around
+                // as the host name is dynamic
+                // this is a hack as we pass the original host as an additional parameter which will
+                // end up in the request we push to the GitHub server but that is the best we can do
+                // given Wiremock's infrastructure
+                Matcher matcher = BLOB_CORE_WINDOWS_PATTERN.matcher(originalLocationHeaderValue);
+                if (matcher.find() && rule.isUseProxy()) {
+                    rewrittenLocationHeaderValue += "&" + ORIGINAL_HOST + "=" + matcher.group(1);
+                }
+
+                headers.add(HttpHeader.httpHeader("Location", rewrittenLocationHeaderValue));
             }
         }
 
         @Override
         public String getName() {
             return "github-api-url-rewrite";
+        }
+    }
+
+    private static class ProxyToOriginalHostTransformer extends ResponseDefinitionTransformer {
+
+        private static final String NAME = "proxy-to-original-host";
+
+        private final GitHubWireMockRule rule;
+
+        private ProxyToOriginalHostTransformer(GitHubWireMockRule rule) {
+            this.rule = rule;
+        }
+
+        @Override
+        public String getName() {
+            return NAME;
+        }
+
+        @Override
+        public ResponseDefinition transform(Request request,
+                ResponseDefinition responseDefinition,
+                FileSource files,
+                Parameters parameters) {
+            if (!rule.isUseProxy() || !request.queryParameter(ORIGINAL_HOST).isPresent()) {
+                return responseDefinition;
+            }
+
+            String originalHost = request.queryParameter(ORIGINAL_HOST).firstValue();
+
+            return ResponseDefinitionBuilder.like(responseDefinition).proxiedFrom("https://" + originalHost).build();
         }
     }
 }

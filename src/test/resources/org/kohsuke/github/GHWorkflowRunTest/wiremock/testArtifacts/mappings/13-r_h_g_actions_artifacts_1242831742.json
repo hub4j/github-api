@@ -1,8 +1,8 @@
 {
-  "id": "7a8a1233-c399-475e-ae4a-e4f7c328f762",
-  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_artifacts",
+  "id": "ef58f085-1ee4-4f3c-91b6-97246ceddee3",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_artifacts_1242831742",
   "request": {
-    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/artifacts?per_page=2",
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/artifacts/1242831742",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -11,26 +11,20 @@
     }
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "11-r_h_g_actions_artifacts.json",
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/actions/artifacts#get-an-artifact\"}",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Tue, 13 Feb 2024 20:56:11 GMT",
+      "Date": "Tue, 13 Feb 2024 20:56:12 GMT",
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "private, max-age=60, s-maxage=60",
-      "Vary": [
-        "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding, Accept, X-Requested-With"
-      ],
-      "ETag": "W/\"ac901ba38c8700b2ddfa49107bbadfc17a93e7e1b59fe8e9c721f2f0631b04fc\"",
       "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4984",
+      "X-RateLimit-Remaining": "4982",
       "X-RateLimit-Reset": "1707861343",
-      "X-RateLimit-Used": "16",
+      "X-RateLimit-Used": "18",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -40,11 +34,13 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "A14E:3FD50:1598F65:15C7932:65CBD76B",
-      "Link": "<https://api.github.com/repositories/348674220/actions/artifacts?per_page=2&page=2>; rel=\"next\", <https://api.github.com/repositories/348674220/actions/artifacts?per_page=2&page=35>; rel=\"last\""
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "A158:3FD50:1599268:15C7C47:65CBD76B"
     }
   },
-  "uuid": "7a8a1233-c399-475e-ae4a-e4f7c328f762",
+  "uuid": "ef58f085-1ee4-4f3c-91b6-97246ceddee3",
   "persistent": true,
-  "insertionIndex": 11
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-artifacts-1242831742",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-artifacts-1242831742-2",
+  "insertionIndex": 13
 }

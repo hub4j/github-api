@@ -311,7 +311,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         checkArtifactProperties(artifacts.get(0), "artifact1");
         checkArtifactProperties(artifacts.get(1), "artifact2");
 
-        // Test download
+        // Test download from upload-artifact@v3 infrastructure
         String artifactContent = artifacts.get(0).download((is) -> {
             try (ZipInputStream zis = new ZipInputStream(is)) {
                 StringBuilder sb = new StringBuilder();
@@ -329,7 +329,25 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
             }
         });
 
-        assertThat(artifactContent, is("artifact1"));
+        // Test download from upload-artifact@v4 infrastructure
+        artifactContent = artifacts.get(1).download((is) -> {
+            try (ZipInputStream zis = new ZipInputStream(is)) {
+                StringBuilder sb = new StringBuilder();
+
+                ZipEntry ze = zis.getNextEntry();
+                assertThat(ze.getName(), is("artifact2.txt"));
+
+                // the scanner has to be kept open to avoid closing zis
+                Scanner scanner = new Scanner(zis);
+                while (scanner.hasNextLine()) {
+                    sb.append(scanner.nextLine());
+                }
+
+                return sb.toString();
+            }
+        });
+
+        assertThat(artifactContent, is("artifact2"));
 
         // Test GHRepository#getArtifact(long) as we are sure we have artifacts around
         GHArtifact artifactById = repo.getArtifact(artifacts.get(0).getId());

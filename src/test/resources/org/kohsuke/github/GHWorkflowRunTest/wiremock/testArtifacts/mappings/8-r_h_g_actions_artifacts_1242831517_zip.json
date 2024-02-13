@@ -1,0 +1,41 @@
+{
+  "id": "ee1b66e1-3d5c-4eb3-bd47-e9b35914acb5",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_artifacts_1242831517_zip",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/artifacts/1242831517/zip",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 302,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 13 Feb 2024 20:56:10 GMT",
+      "Content-Type": "text/html;charset=utf-8",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4987",
+      "X-RateLimit-Reset": "1707861343",
+      "X-RateLimit-Used": "13",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "8232:23CC0B:144955A:1476AB3:65CBD769",
+      "Location": "https://productionresults.blob.core.windows.net/actions-results/92a9e79d-ed85-4732-a5ad-1f062c2d74fe/workflow-job-run-ca395085-040a-526b-2ce8-bdc85f692774/artifacts/41e13e5872dd3fedca6f5f5f561c6596ac66faa24903c2c39be6d405b37f3d25.zip?rscd=attachment%3B+filename%3D%22artifact2.zip%22&se=2024-02-13T21%3A06%3A10Z&sig=hHop7npL6%2Bpy3iIOyxNzxQy2uxv5%2Fi6RsbKqfG5SSgs%3D&sp=r&spr=https&sr=b&st=2024-02-13T20%3A56%3A10Z&sv=2021-12-02&originalHost=productionresultssa17.blob.core.windows.net"
+    }
+  },
+  "uuid": "ee1b66e1-3d5c-4eb3-bd47-e9b35914acb5",
+  "persistent": true,
+  "insertionIndex": 8
+}

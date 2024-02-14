@@ -1,0 +1,54 @@
+{
+  "id": "545eb0d7-85c4-429b-bf70-971f9f65ac0d",
+  "name": "repos_hub4j-test-org_ghissuetest",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHIssueTest",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_h_ghissuetest.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 14 Feb 2024 10:21:48 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"b2ac2191c1e9b1f08faeaaccb75edaddcb0a246463bc332277b765141bae9ead\"",
+      "Last-Modified": "Thu, 22 Sep 2022 09:33:16 GMT",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2024-03-15 10:12:46 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4950",
+      "X-RateLimit-Reset": "1707909241",
+      "X-RateLimit-Used": "50",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C384:22C8E2:401191F:40BE064:65CC943C"
+    }
+  },
+  "uuid": "545eb0d7-85c4-429b-bf70-971f9f65ac0d",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHIssueTest",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-GHIssueTest-2",
+  "insertionIndex": 3
+}

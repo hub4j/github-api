@@ -24,6 +24,7 @@
 
 package org.kohsuke.github;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.kohsuke.github.GHCheckRun.Status;
 
@@ -195,4 +196,60 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         assertThat(checkRun.getOutput().getAnnotationsCount(), equalTo(1));
     }
 
+    /**
+     * Update check run with name.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void updateCheckRunWithName() throws Exception {
+        GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")
+                .createCheckRun("foo", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
+                .withStatus(GHCheckRun.Status.IN_PROGRESS)
+                .withStartedAt(new Date(999_999_000))
+                .add(new GHCheckRunBuilder.Output("Some Title", "what happened…")
+                        .add(new GHCheckRunBuilder.Annotation("stuff.txt",
+                                1,
+                                GHCheckRun.AnnotationLevel.NOTICE,
+                                "hello to you too").withTitle("Look here")))
+                .create();
+        GHCheckRun updated = checkRun.update()
+                .withStatus(GHCheckRun.Status.COMPLETED)
+                .withConclusion(GHCheckRun.Conclusion.SUCCESS)
+                .withCompletedAt(new Date(999_999_999))
+                .withName("bar", checkRun.getName())
+                .create();
+        assertThat(new Date(999_999_000), equalTo(updated.getStartedAt()));
+        assertThat("bar", equalTo(updated.getName()));
+        assertThat(checkRun.getOutput().getAnnotationsCount(), equalTo(1));
+    }
+
+    /**
+     * Update the check run with name exception.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void updateCheckRunWithNameException() throws Exception {
+        snapshotNotAllowed();
+        GHCheckRun checkRun = getInstallationGithub().getRepository("hub4j-test-org/test-checks")
+                .createCheckRun("foo", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
+                .withStatus(GHCheckRun.Status.IN_PROGRESS)
+                .withStartedAt(new Date(999_999_000))
+                .add(new GHCheckRunBuilder.Output("Some Title", "what happened…")
+                        .add(new GHCheckRunBuilder.Annotation("stuff.txt",
+                                1,
+                                GHCheckRun.AnnotationLevel.NOTICE,
+                                "hello to you too").withTitle("Look here")))
+                .create();
+        Assert.assertThrows(GHException.class,
+                () -> checkRun.update()
+                        .withStatus(GHCheckRun.Status.COMPLETED)
+                        .withConclusion(GHCheckRun.Conclusion.SUCCESS)
+                        .withCompletedAt(new Date(999_999_999))
+                        .withName("bar", null)
+                        .create());
+    }
 }

@@ -29,7 +29,7 @@ jobs:
           MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
         run: mvn -B clean install site -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: maven-target-directory
           path: target/

@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-
 /**
  * The enum GHIssueStateReason.
  */

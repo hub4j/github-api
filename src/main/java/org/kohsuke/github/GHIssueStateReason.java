@@ -1,5 +1,9 @@
 package org.kohsuke.github;
 
+
+/**
+ * The enum GHIssueStateReason.
+ */
 public enum GHIssueStateReason {
 
     /** Completed **/

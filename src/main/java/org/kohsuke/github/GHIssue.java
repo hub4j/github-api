@@ -316,6 +316,8 @@ public class GHIssue extends GHObject implements Reactable {
     /**
      * Closes this issue.
      *
+     * @param reason
+     *            the reason the issue was closed
      * @throws IOException
      *             the io exception
      */

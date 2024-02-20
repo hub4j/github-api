@@ -23,10 +23,10 @@ public interface AuthorizationProvider {
      *
      * <pre>
      * {@code
-     *  &#64;Override
-     *  public String getEncodedAuthorization() {
-     *  return "Bearer myBearerToken";
-     *  }
+     * &#64;Override
+     * public String getEncodedAuthorization() {
+     *     return "Bearer myBearerToken";
+     * }
      * }
      * </pre>
      *

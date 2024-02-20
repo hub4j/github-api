@@ -11,7 +11,9 @@ import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -82,8 +84,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         assertThat(workflowRun.getWorkflowId(), equalTo(workflow.getId()));
         assertThat(workflowRun.getId(), notNullValue());
@@ -135,8 +137,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(SLOW_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.IN_PROGRESS,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         assertThat(workflowRun.getId(), notNullValue());
 
@@ -184,8 +186,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRunToDelete = getWorkflowRun(FAST_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         assertThat(workflowRunToDelete.getId(), notNullValue());
 
@@ -222,14 +224,83 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
                 SECOND_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         assertThat(workflowRun.getWorkflowId(), equalTo(workflow.getId()));
         assertThat(workflowRun.getHeadBranch(), equalTo(SECOND_BRANCH));
         assertThat(workflowRun.getEvent(), equalTo(GHEvent.WORKFLOW_DISPATCH));
         assertThat(workflowRun.getStatus(), equalTo(Status.COMPLETED));
         assertThat(workflowRun.getConclusion(), equalTo(Conclusion.SUCCESS));
+    }
+
+    /**
+     * Test search on created and head sha.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testSearchOnCreatedAndHeadSha() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        Instant before = Instant.parse("2024-02-09T10:19:00.00Z");
+
+        String mainBranchHeadSha = repo.getBranch(MAIN_BRANCH).getSHA1();
+        String secondBranchHeadSha = repo.getBranch(SECOND_BRANCH).getSHA1();
+
+        workflow.dispatch(MAIN_BRANCH);
+        workflow.dispatch(SECOND_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                SECOND_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        List<GHWorkflowRun> mainBranchHeadShaWorkflowRuns = repo.queryWorkflowRuns()
+                .headSha(mainBranchHeadSha)
+                .created(">=" + before.toString())
+                .list()
+                .toList();
+        List<GHWorkflowRun> secondBranchHeadShaWorkflowRuns = repo.queryWorkflowRuns()
+                .headSha(secondBranchHeadSha)
+                .created(">=" + before.toString())
+                .list()
+                .toList();
+
+        assertThat(mainBranchHeadShaWorkflowRuns, hasSize(greaterThanOrEqualTo(1)));
+        assertThat(mainBranchHeadShaWorkflowRuns, everyItem(hasProperty("headSha", equalTo(mainBranchHeadSha))));
+        // Ideally, we would use everyItem() but the bridge method is in the way
+        for (GHWorkflowRun workflowRun : mainBranchHeadShaWorkflowRuns) {
+            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(Date.from(before)));
+        }
+
+        assertThat(secondBranchHeadShaWorkflowRuns, hasSize(greaterThanOrEqualTo(1)));
+        assertThat(secondBranchHeadShaWorkflowRuns, everyItem(hasProperty("headSha", equalTo(secondBranchHeadSha))));
+        // Ideally, we would use everyItem() but the bridge method is in the way
+        for (GHWorkflowRun workflowRun : secondBranchHeadShaWorkflowRuns) {
+            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(Date.from(before)));
+        }
+
+        List<GHWorkflowRun> mainBranchHeadShaWorkflowRunsBefore = repo.queryWorkflowRuns()
+                .headSha(repo.getBranch(MAIN_BRANCH).getSHA1())
+                .created("<" + before.toString())
+                .list()
+                .toList();
+        // Ideally, we would use that but the bridge method is causing issues
+        // assertThat(mainBranchHeadShaWorkflowRunsBefore, everyItem(hasProperty("createdAt",
+        // lessThan(Date.from(before)))));
+        for (GHWorkflowRun workflowRun : mainBranchHeadShaWorkflowRunsBefore) {
+            assertThat(workflowRun.getCreatedAt(), lessThan(Date.from(before)));
+        }
     }
 
     /**
@@ -255,8 +326,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         List<String> logsArchiveEntries = new ArrayList<>();
         String fullLogContent = workflowRun
@@ -299,8 +370,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(ARTIFACTS_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         List<GHArtifact> artifacts = new ArrayList<>(workflowRun.listArtifacts().toList());
         artifacts.sort((a1, a2) -> a1.getName().compareTo(a2.getName()));
@@ -403,8 +474,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(MULTI_JOBS_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         List<GHWorkflowJob> jobs = workflowRun.listJobs()
                 .toList()

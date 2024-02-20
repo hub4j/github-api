@@ -172,7 +172,7 @@ public class HttpClientGitHubConnector implements GitHubConnector {
         return redirectedURI;
     }
 
-    // This implements the exact same rules as the ones applied in RedirectFilter
+    // This implements the exact same rules as the ones applied in jdk.internal.net.http.RedirectFilter
     private static BodyPublisher getRedirectedPublisher(HttpRequest originalRequest,
             int originalStatusCode,
             String newMethod) {

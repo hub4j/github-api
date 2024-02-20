@@ -86,7 +86,7 @@ jobs:
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Codecov Report 
       if: matrix.os == 'ubuntu' && matrix.java == '17'
-      uses: codecov/codecov-action@v3.1.4
+      uses: codecov/codecov-action@v4.0.0
 
   test-java-8:
     name: test Java 8 (no-build)

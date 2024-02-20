@@ -1639,8 +1639,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
-     * A discussion was created, edited, deleted, pinned, unpinned, locked, unlocked, transferred, category_changed,
-     * answered, or unanswered.
+     * A discussion was closed, reopened, created, edited, deleted, pinned, unpinned, locked, unlocked, transferred,
+     * category_changed, answered, or unanswered.
      *
      * @see <a href=
      *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion">
@@ -1670,6 +1670,40 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHLabel getLabel() {
             return label;
+        }
+    }
+
+    /**
+     * A discussion comment was created, deleted, or edited.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion_comment">
+     *      discussion event</a>
+     */
+    public static class DiscussionComment extends GHEventPayload {
+
+        private GHRepositoryDiscussion discussion;
+
+        private GHRepositoryDiscussionComment comment;
+
+        /**
+         * Gets discussion.
+         *
+         * @return the discussion
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHRepositoryDiscussion getDiscussion() {
+            return discussion;
+        }
+
+        /**
+         * Gets discussion comment.
+         *
+         * @return the discussion
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHRepositoryDiscussionComment getComment() {
+            return comment;
         }
     }
 

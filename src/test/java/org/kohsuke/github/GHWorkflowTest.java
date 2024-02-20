@@ -121,9 +121,9 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
         workflow.dispatch("main", Collections.singletonMap("parameter", "value"));
         verify(postRequestedFor(
                 urlPathEqualTo("/repos/hub4j-test-org/GHWorkflowTest/actions/workflows/6817859/dispatches"))
-                        .withRequestBody(containing("inputs"))
-                        .withRequestBody(containing("parameter"))
-                        .withRequestBody(containing("value")));
+                .withRequestBody(containing("inputs"))
+                .withRequestBody(containing("parameter"))
+                .withRequestBody(containing("value")));
     }
 
     /**

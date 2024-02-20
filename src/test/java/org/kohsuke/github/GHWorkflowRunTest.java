@@ -84,8 +84,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         assertThat(workflowRun.getWorkflowId(), equalTo(workflow.getId()));
         assertThat(workflowRun.getId(), notNullValue());
@@ -137,8 +137,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(SLOW_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.IN_PROGRESS,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         assertThat(workflowRun.getId(), notNullValue());
 
@@ -186,8 +186,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRunToDelete = getWorkflowRun(FAST_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         assertThat(workflowRunToDelete.getId(), notNullValue());
 
@@ -224,8 +224,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
                 SECOND_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         assertThat(workflowRun.getWorkflowId(), equalTo(workflow.getId()));
         assertThat(workflowRun.getHeadBranch(), equalTo(SECOND_BRANCH));
@@ -326,8 +326,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         List<String> logsArchiveEntries = new ArrayList<>();
         String fullLogContent = workflowRun
@@ -370,8 +370,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(ARTIFACTS_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         List<GHArtifact> artifacts = new ArrayList<>(workflowRun.listArtifacts().toList());
         artifacts.sort((a1, a2) -> a1.getName().compareTo(a2.getName()));
@@ -456,8 +456,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         GHWorkflowRun workflowRun = getWorkflowRun(MULTI_JOBS_WORKFLOW_NAME,
                 MAIN_BRANCH,
                 Status.COMPLETED,
-                latestPreexistingWorkflowRunId).orElseThrow(
-                        () -> new IllegalStateException("We must have a valid workflow run starting from here"));
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
         List<GHWorkflowJob> jobs = workflowRun.listJobs()
                 .toList()

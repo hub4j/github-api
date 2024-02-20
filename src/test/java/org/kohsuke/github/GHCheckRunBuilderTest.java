@@ -74,7 +74,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                                 "hello to you too").withTitle("Look here"))
                         .add(new GHCheckRunBuilder.Image("Unikitty",
                                 "https://i.pinimg.com/474x/9e/65/c0/9e65c0972294f1e10f648c9780a79fab.jpg")
-                                        .withCaption("Princess Unikitty")))
+                                .withCaption("Princess Unikitty")))
                 .add(new GHCheckRunBuilder.Action("Help", "what I need help with", "doit"))
                 .create();
         assertThat(checkRun.getStatus(), equalTo(Status.COMPLETED));

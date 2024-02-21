@@ -179,6 +179,32 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Get list of commits from searched PR.
+     *
+     * This would result in a wrong API URL used, resulting in a GHFileNotFoundException.
+     *
+     * For more details, please have a look at the bug description in https://github.com/hub4j/github-api/issues/1778.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void getListOfCommits() throws Exception {
+        String name = "getListOfCommits";
+        GHPullRequestSearchBuilder builder = getRepository().searchPullRequests().isClosed();
+        Optional<GHPullRequest> firstPR = builder.list().toList().stream().findFirst();
+
+        try {
+            String val = firstPR.get().listCommits().toArray()[0].getApiUrl().toString();
+            assertThat(val, notNullValue());
+        } catch (GHFileNotFoundException e) {
+            if (e.getMessage().contains("/issues/")) {
+                fail("Issued a request against the wrong path");
+            }
+        }
+    }
+
+    /**
      * Close pull request.
      *
      * @throws Exception

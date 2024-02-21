@@ -12,6 +12,7 @@ import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.recording.RecordSpecBuilder;
 import com.google.gson.*;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -250,9 +251,9 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     @Override
     protected void after() {
         super.after();
-        if (!isTakeSnapshot()) {
-            return;
-        }
+        // if (!isTakeSnapshot()) {
+        // return;
+        // }
 
         recordSnapshot(this.apiServer(), "https://api.github.com", false);
 
@@ -316,6 +317,16 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         return server.countRequestsMatching(RequestPatternBuilder.allRequests().build()).getCount();
     }
 
+    private static class MappingFile {
+        Path filePath;
+        String name; // name from the mapping file contents
+        String insertionIndex; // insertionIndex from the mapping file contents
+        String bodyFileName;
+        Path bodyPath; // body file from the mapping file contents
+        Path renamedFilePath;
+        Path renamedBodyPath;
+    }
+
     private void formatTestResources(Path path, boolean isRawServer) {
         // The more consistent we can make the json output the more meaningful it will be.
         Gson g = new Gson().newBuilder()
@@ -335,6 +346,63 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                 .create();
 
         try {
+
+            Map<String, MappingFile> mappingFiles = new HashMap<>();
+
+            // Match all the ids to request indexes
+            Files.walk(path).forEach(filePath -> {
+                try {
+                    if ("mappings".equalsIgnoreCase(filePath.getParent().getFileName().toString())) {
+                        if (!filePath.getFileName().toString().endsWith(".json")) {
+                            throw new RuntimeException("Mapping files must be .json files.");
+                        }
+
+                        String fileText = new String(Files.readAllBytes(filePath));
+                        Object parsedObject = g.fromJson(fileText, Object.class);
+                        MappingFile file = createMappingFileRecord(filePath, (Map<String, Object>) parsedObject);
+                        if (mappingFiles.containsKey(filePath.toString())) {
+                            throw new RuntimeException("Duplicate mapping.");
+                        }
+                        mappingFiles.put(filePath.toString(), file);
+
+                        if (file.renamedFilePath != null) {
+                            if (mappingFiles.containsKey(file.renamedFilePath.toString())) {
+                                throw new RuntimeException("Duplicate rename target.");
+                            }
+                            mappingFiles.put(file.renamedFilePath.toString(), file);
+                        }                        
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException("Files could not be read: " + filePath.toString(), e);
+                }
+            });
+
+            Files.walk(path).forEach(filePath -> {
+                try {
+                    // Get the record
+                    MappingFile file = mappingFiles.get(filePath.toString());
+                    if (file == null) {
+                        return;
+                    }
+
+                    // move the mapping file
+                    moveFile(file.filePath, file.renamedFilePath);
+                    // move the body file
+                    moveFile(file.bodyPath, file.renamedBodyPath);
+
+                    // rewrite the mapping file (including bodyfileName fixup.)
+                    fixContents(file.renamedFilePath, file);
+                    if (!isRawServer) {
+                        fixContents(file.renamedBodyPath, file);
+                    }
+
+                    // if not a raw server and body file is json, rewrite body file
+
+                } catch (Exception e) {
+                    throw new RuntimeException("Files could not be written: " + filePath.toString(), e);
+                }
+            });
+
             Map<String, String> idToIndex = new HashMap<>();
 
             // Match all the ids to request indexes
@@ -408,6 +476,52 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         } catch (IOException e) {
             throw new RuntimeException("Files could not be written");
         }
+    }
+
+    private static MappingFile createMappingFileRecord(Path filePath, Map<String, Object> parsedObject) {
+        MappingFile result = new MappingFile();
+        result.filePath = filePath;
+        result.insertionIndex = Long.toString(((Double) parsedObject.getOrDefault("insertionIndex", 0.0)).longValue());
+        result.name = (String) parsedObject.get("name");
+
+        result.renamedFilePath = getPathWithShortenedFileName(filePath, result.name, result.insertionIndex);
+
+        Map<String, Object> responseObject = (Map<String, Object>) parsedObject.get("response");
+        if (responseObject != null) {
+            result.bodyFileName = (String) responseObject.get("bodyFileName");
+            if (result.bodyFileName != null) {
+                result.bodyPath = filePath.getParent().resolveSibling("__files").resolve(result.bodyFileName);
+                result.renamedBodyPath = getPathWithShortenedFileName(result.bodyPath,
+                        result.name,
+                        result.insertionIndex);
+            }
+        }
+
+        return result;
+    }
+
+    private static Path getPathWithShortenedFileName(Path filePath, String name, String insertionIndex) {
+        String extension = FilenameUtils.getExtension(filePath.getFileName().toString());
+        // Add an underscore to the start and end for easier pattern matching.
+        String fileName = "_" + name + "_";
+
+        // Shorten early segments of the file name
+        // which tend to be repetative - "repos_hub4j-test-org_{repository}".
+        // also shorten multiple underscores in these segments
+        fileName = fileName.replaceAll("^_([a-zA-Z])[^_]+_+([a-zA-Z])[^_]+_+([a-zA-Z])[^_]+_+([^_])", "_$1_$2_$3_$4");
+        fileName = fileName.replaceAll("^_([a-zA-Z])[^_]+_+([a-zA-Z])[^_]+_+([^_])", "_$1_$2_$3");
+
+        // Any remaining segment that longer the 32 characters, truncate to 8
+        fileName = fileName.replaceAll("_([^_]{8})[^_]{23}[^_]+_", "_$1_");
+
+        // If the file name is still longer than 60 characters, truncate it
+        fileName = fileName.replaceAll("^_(.{60}).+_$", "_$1_");
+
+        // Remove outer underscores
+        fileName = fileName.substring(1, fileName.length() - 1);
+        Path targetPath = filePath.resolveSibling(insertionIndex + "-" + fileName + "." + extension);
+
+        return filePath.equals(targetPath) ? null : targetPath;
     }
 
     private void addMappingId(Map<String, Object> parsedObject, Map<String, String> idToIndex) {

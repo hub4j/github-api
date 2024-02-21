@@ -66,9 +66,6 @@ jobs:
         os: [ ubuntu, windows ]
         java: [ 11, 17 ]
     steps:
-    - name: Support longpaths on Windows
-      if: ${{ matrix.os == 'windows' }}
-      run: git config --global core.longpaths true
     - uses: actions/checkout@v4
     - name: Set up JDK
       uses: actions/setup-java@v4

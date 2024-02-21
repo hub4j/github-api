@@ -426,6 +426,18 @@ public class GitHubRequest implements GitHubConnectorRequest {
         }
 
         /**
+         * Removes the named request HTTP header.
+         *
+         * @param name
+         *            the name
+         * @return the request builder
+         */
+        public B removeHeader(String name) {
+            headers.remove(name);
+            return (B) this;
+        }
+
+        /**
          * Sets the request HTTP header.
          * <p>
          * If a header of the same name is already set, this method overrides it.

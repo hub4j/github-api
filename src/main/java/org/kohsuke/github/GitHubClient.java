@@ -452,7 +452,7 @@ class GitHubClient {
 
         int retries = retryCount;
         sendRequestTraceId.set(Integer.toHexString(request.hashCode()));
-        GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);
+        GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request, authorizationProvider);
         do {
             GitHubConnectorResponse connectorResponse = null;
             try {
@@ -492,7 +492,7 @@ class GitHubClient {
         detectOTPRequired(connectorResponse);
         detectInvalidCached404Response(connectorResponse, request);
         detectExpiredToken(connectorResponse, request);
-        detectRedirect(connectorResponse);
+        detectRedirect(connectorResponse, request);
         if (rateLimitHandler.isError(connectorResponse)) {
             rateLimitHandler.onError(connectorResponse);
             throw new RetryRequestException();
@@ -514,32 +514,103 @@ class GitHubClient {
         if (Objects.isNull(originalAuthorization) || originalAuthorization.isEmpty()) {
             return;
         }
-        GitHubConnectorRequest updatedRequest = prepareConnectorRequest(request);
+        GitHubConnectorRequest updatedRequest = prepareConnectorRequest(request, authorizationProvider);
         String updatedAuthorization = updatedRequest.header("Authorization");
         if (!originalAuthorization.equals(updatedAuthorization)) {
             throw new RetryRequestException(updatedRequest);
         }
     }
 
-    private void detectRedirect(GitHubConnectorResponse connectorResponse) throws IOException {
-        if (connectorResponse.statusCode() == HTTP_MOVED_PERM || connectorResponse.statusCode() == HTTP_MOVED_TEMP) {
-            // GitHubClient depends on GitHubConnector implementations to follow any redirects automatically
-            // If this is not done and a redirect is requested, throw in order to maintain security and consistency
-            throw new HttpException(
-                    "GitHubConnnector did not automatically follow redirect.\n"
-                            + "Change your http client configuration to automatically follow redirects as appropriate.",
+    private void detectRedirect(GitHubConnectorResponse connectorResponse, GitHubRequest request) throws IOException {
+        if (isRedirecting(connectorResponse.statusCode())) {
+            // For redirects, GitHub expects the Authorization header to be removed.
+            // GitHubConnector implementations can follow any redirects automatically as long as they remove the header
+            // as well.
+            // Okhttp does this.
+            // https://github.com/square/okhttp/blob/f9dfd4e8cc070ca2875a67d8f7ad939d95e7e296/okhttp/src/main/kotlin/okhttp3/internal/http/RetryAndFollowUpInterceptor.kt#L313-L318
+            // GitHubClient always strips Authorization from detected redirects for security.
+            // This problem was discovered when upload-artifact@v4 was released as the new
+            // service we are redirected to for downloading the artifacts doesn't support
+            // having the Authorization header set.
+            // See also https://github.com/arduino/report-size-deltas/pull/83 for more context
+
+            GitHubConnectorRequest updatedRequest = prepareRedirectRequest(connectorResponse, request);
+            throw new RetryRequestException(updatedRequest);
+        }
+    }
+
+    private GitHubConnectorRequest prepareRedirectRequest(GitHubConnectorResponse connectorResponse,
+            GitHubRequest request) throws IOException {
+        URI requestUri = URI.create(request.url().toString());
+        URI redirectedUri = getRedirectedUri(requestUri, connectorResponse);
+        boolean sameHost = redirectedUri.getHost().equalsIgnoreCase(request.url().getHost());
+
+        // mimicking the behavior of Redirect#NORMAL which was the behavior we used before
+        // Always redirect, except from HTTPS URLs to HTTP URLs.
+        if (!requestUri.getScheme().equalsIgnoreCase(redirectedUri.getScheme())
+                && !"https".equalsIgnoreCase(redirectedUri.getScheme())) {
+            throw new HttpException("Attemped to redirect to a different scheme and the target scheme as not https.",
                     connectorResponse.statusCode(),
                     "Redirect",
                     connectorResponse.request().url().toString());
         }
+
+        String redirectedMethod = getRedirectedMethod(connectorResponse.statusCode(), request.method());
+
+        // let's build the new redirected request
+        GitHubRequest.Builder<?> requestBuilder = request.toBuilder()
+                .setRawUrlPath(redirectedUri.toString())
+                .method(redirectedMethod);
+        // if we redirect to a different host (even https), we remove the Authorization header
+        AuthorizationProvider provider = authorizationProvider;
+        if (!sameHost) {
+            requestBuilder.removeHeader("Authorization");
+            provider = AuthorizationProvider.ANONYMOUS;
+        }
+        return prepareConnectorRequest(requestBuilder.build(), provider);
     }
 
-    private GitHubConnectorRequest prepareConnectorRequest(GitHubRequest request) throws IOException {
+    private static URI getRedirectedUri(URI requestUri, GitHubConnectorResponse connectorResponse) throws IOException {
+        URI redirectedURI;
+        redirectedURI = Optional.of(connectorResponse.header("Location"))
+                .map(URI::create)
+                .orElseThrow(() -> new IOException("Invalid redirection"));
+
+        // redirect could be relative to original URL, but if not
+        // then redirect is used.
+        redirectedURI = requestUri.resolve(redirectedURI);
+        return redirectedURI;
+    }
+
+    // This implements the exact same rules as the ones applied in jdk.internal.net.http.RedirectFilter
+    private static boolean isRedirecting(int statusCode) {
+        return statusCode == HTTP_MOVED_PERM || statusCode == HTTP_MOVED_TEMP || statusCode == 303 || statusCode == 307
+                || statusCode == 308;
+    }
+
+    // This implements the exact same rules as the ones applied in jdk.internal.net.http.RedirectFilter
+    private static String getRedirectedMethod(int statusCode, String originalMethod) {
+        switch (statusCode) {
+            case HTTP_MOVED_PERM :
+            case HTTP_MOVED_TEMP :
+                return originalMethod.equals("POST") ? "GET" : originalMethod;
+            case 303 :
+                return "GET";
+            case 307 :
+            case 308 :
+                return originalMethod;
+            default :
+                return originalMethod;
+        }
+    }
+
+    private static GitHubConnectorRequest prepareConnectorRequest(GitHubRequest request,
+            AuthorizationProvider authorizationProvider) throws IOException {
         GitHubRequest.Builder<?> builder = request.toBuilder();
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
         if (!request.allHeaders().containsKey("Authorization")) {
-            String authorization = getEncodedAuthorization();
+            String authorization = authorizationProvider.getEncodedAuthorization();
             if (authorization != null) {
                 builder.setHeader("Authorization", authorization);
             }
@@ -725,7 +796,8 @@ class GitHubClient {
             // "If-Modified-Since" or "If-None-Match" values.
             // This makes GitHub give us current data (not incorrectly cached data)
             throw new RetryRequestException(
-                    prepareConnectorRequest(request.toBuilder().setHeader("Cache-Control", "no-cache").build()));
+                    prepareConnectorRequest(request.toBuilder().setHeader("Cache-Control", "no-cache").build(),
+                            authorizationProvider));
         }
     }
 

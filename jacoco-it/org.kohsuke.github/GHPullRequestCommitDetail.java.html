@@ -39,7 +39,7 @@ import java.net.URL;
         value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
                 &quot;URF_UNREAD_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="nc" id="L42">public class GHPullRequestCommitDetail {</span>
+<span class="fc" id="L42">public class GHPullRequestCommitDetail {</span>
     private GHPullRequest owner;
 
     /**
@@ -49,21 +49,21 @@ import java.net.URL;
      *            the owner
      */
     void wrapUp(GHPullRequest owner) {
-<span class="nc" id="L52">        this.owner = owner;</span>
-<span class="nc" id="L53">    }</span>
+<span class="fc" id="L52">        this.owner = owner;</span>
+<span class="fc" id="L53">    }</span>
 
     /**
      * The type Authorship.
      *
      * @deprecated Use {@link GitUser}
      */
-<span class="nc" id="L60">    public static class Authorship extends GitUser {</span>
+<span class="fc" id="L60">    public static class Authorship extends GitUser {</span>
     }
 
     /**
      * The type Tree.
      */
-<span class="nc" id="L66">    public static class Tree {</span>
+<span class="fc" id="L66">    public static class Tree {</span>
 
         /** The sha. */
         String sha;
@@ -93,7 +93,7 @@ import java.net.URL;
     /**
      * The type Commit.
      */
-<span class="nc" id="L96">    public static class Commit {</span>
+<span class="fc" id="L96">    public static class Commit {</span>
 
         /** The author. */
         Authorship author;
@@ -173,7 +173,7 @@ import java.net.URL;
     /**
      * The type CommitPointer.
      */
-<span class="nc" id="L176">    public static class CommitPointer {</span>
+<span class="fc" id="L176">    public static class CommitPointer {</span>
 
         /** The sha. */
         String sha;
@@ -254,7 +254,7 @@ import java.net.URL;
      * @return the api url
      */
     public URL getApiUrl() {
-<span class="nc" id="L257">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L257">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -286,4 +286,4 @@ import java.net.URL;
 <span class="nc" id="L286">        return newValue;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1639,8 +1639,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
-     * A discussion was created, edited, deleted, pinned, unpinned, locked, unlocked, transferred, category_changed,
-     * answered, or unanswered.
+     * A discussion was closed, reopened, created, edited, deleted, pinned, unpinned, locked, unlocked, transferred,
+     * category_changed, answered, or unanswered.
      *
      * @see &lt;a href=
      *      &quot;https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion&quot;&gt;
@@ -1674,13 +1674,47 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
+     * A discussion comment was created, deleted, or edited.
+     *
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion_comment&quot;&gt;
+     *      discussion event&lt;/a&gt;
+     */
+<span class="fc" id="L1683">    public static class DiscussionComment extends GHEventPayload {</span>
+
+        private GHRepositoryDiscussion discussion;
+
+        private GHRepositoryDiscussionComment comment;
+
+        /**
+         * Gets discussion.
+         *
+         * @return the discussion
+         */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
+        public GHRepositoryDiscussion getDiscussion() {
+<span class="fc" id="L1696">            return discussion;</span>
+        }
+
+        /**
+         * Gets discussion comment.
+         *
+         * @return the discussion
+         */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
+        public GHRepositoryDiscussionComment getComment() {
+<span class="fc" id="L1706">            return comment;</span>
+        }
+    }
+
+    /**
      * A star was created or deleted on a repository.
      *
      * @see &lt;a href=
      *      &quot;https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star&quot;&gt;star
      *      event&lt;/a&gt;
      */
-<span class="fc" id="L1683">    public static class Star extends GHEventPayload {</span>
+<span class="fc" id="L1717">    public static class Star extends GHEventPayload {</span>
 
         private String starredAt;
 
@@ -1690,7 +1724,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          * @return the date when the star is added
          */
         public Date getStarredAt() {
-<span class="fc" id="L1693">            return GitHubClient.parseDate(starredAt);</span>
+<span class="fc" id="L1727">            return GitHubClient.parseDate(starredAt);</span>
         }
     }
 
@@ -1701,7 +1735,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      *      &quot;https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#projects_v2_item&quot;&gt;star
      *      event&lt;/a&gt;
      */
-<span class="fc" id="L1704">    public static class ProjectsV2Item extends GHEventPayload {</span>
+<span class="fc" id="L1738">    public static class ProjectsV2Item extends GHEventPayload {</span>
 
         private GHProjectsV2Item projectsV2Item;
         private GHProjectsV2ItemChanges changes;
@@ -1713,7 +1747,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHProjectsV2Item getProjectsV2Item() {
-<span class="fc" id="L1716">            return projectsV2Item;</span>
+<span class="fc" id="L1750">            return projectsV2Item;</span>
         }
 
         /**
@@ -1722,8 +1756,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          * @return the changes
          */
         public GHProjectsV2ItemChanges getChanges() {
-<span class="fc" id="L1725">            return changes;</span>
+<span class="fc" id="L1759">            return changes;</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

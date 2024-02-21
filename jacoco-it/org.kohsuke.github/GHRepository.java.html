@@ -1508,7 +1508,7 @@ import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 <span class="nc" id="L1508">        } catch (FileNotFoundException x) {</span>
 <span class="nc" id="L1509">            throw (FileNotFoundException) new FileNotFoundException(&quot;Failed to delete &quot; + getOwnerName() + &quot;/&quot; + name</span>
                     + &quot;; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916&quot;)
-<span class="nc" id="L1511">                            .initCause(x);</span>
+<span class="nc" id="L1511">                    .initCause(x);</span>
 <span class="fc" id="L1512">        }</span>
 <span class="fc" id="L1513">    }</span>
 
@@ -3667,4 +3667,4 @@ import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 <span class="fc" id="L3667">        }</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

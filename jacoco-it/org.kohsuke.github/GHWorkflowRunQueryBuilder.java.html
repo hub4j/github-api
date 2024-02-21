@@ -111,13 +111,41 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
     }
 
     /**
+     * Created workflow run query builder.
+     *
+     * @param created
+     *            a range following the Query for dates syntax
+     *
+     * @return the gh workflow run query builder
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates&quot;&gt;Query
+     *      for dates&lt;/a&gt;
+     */
+    public GHWorkflowRunQueryBuilder created(String created) {
+<span class="fc" id="L125">        req.with(&quot;created&quot;, created);</span>
+<span class="fc" id="L126">        return this;</span>
+    }
+
+    /**
+     * Head sha workflow run query builder.
+     *
+     * @param headSha
+     *            the head sha
+     * @return the gh workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder headSha(String headSha) {
+<span class="fc" id="L137">        req.with(&quot;head_sha&quot;, headSha);</span>
+<span class="fc" id="L138">        return this;</span>
+    }
+
+    /**
      * List.
      *
      * @return the paged iterable
      */
     @Override
     public PagedIterable&lt;GHWorkflowRun&gt; list() {
-<span class="fc" id="L120">        return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl(&quot;actions/runs&quot;)));</span>
+<span class="fc" id="L148">        return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl(&quot;actions/runs&quot;)));</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

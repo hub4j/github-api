@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepositoryDiscussionComment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRepositoryDiscussionComment.java</span></div><h1>GHRepositoryDiscussionComment.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+import java.net.URL;
+
+/**
+ * A discussion comment in the repository.
+ * &lt;p&gt;
+ * This is different from Teams discussions (see {@link GHDiscussion}).
+ * &lt;p&gt;
+ * The discussion_comment event exposes the GraphQL object (more or less - the ids are handled differently for instance)
+ * directly. The new Discussions API is only available through GraphQL so for now you cannot execute any actions on this
+ * object.
+ *
+ * @author Guillaume Smet
+ * @see &lt;a href=&quot;https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussion&quot;&gt;The GraphQL
+ *      API for Discussions&lt;/a&gt;
+ */
+<span class="fc" id="L19">public class GHRepositoryDiscussionComment extends GHObject {</span>
+
+    private String htmlUrl;
+
+    private Long parentId;
+    private int childCommentCount;
+
+    private GHUser user;
+    private GHCommentAuthorAssociation authorAssociation;
+    private String body;
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L36">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * Gets the parent comment id.
+     *
+     * @return the parent comment id
+     */
+    public Long getParentId() {
+<span class="fc" id="L45">        return parentId;</span>
+    }
+
+    /**
+     * Gets the number of child comments.
+     *
+     * @return the number of child comments
+     */
+    public int getChildCommentCount() {
+<span class="fc" id="L54">        return childCommentCount;</span>
+    }
+
+    /**
+     * Gets the user.
+     *
+     * @return the user
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public GHUser getUser() throws IOException {
+<span class="fc" id="L65">        return root().intern(user);</span>
+    }
+
+    /**
+     * Gets the author association.
+     *
+     * @return the author association
+     */
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+<span class="fc" id="L74">        return authorAssociation;</span>
+    }
+
+    /**
+     * Gets the body.
+     *
+     * @return the body
+     */
+    public String getBody() {
+<span class="fc" id="L83">        return body;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

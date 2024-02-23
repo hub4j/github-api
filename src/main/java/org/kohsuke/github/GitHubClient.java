@@ -543,7 +543,10 @@ class GitHubClient {
             GitHubRequest request) throws IOException {
         URI requestUri = URI.create(request.url().toString());
         URI redirectedUri = getRedirectedUri(requestUri, connectorResponse);
-        boolean sameHost = redirectedUri.getHost().equalsIgnoreCase(request.url().getHost());
+        // If we switch ports on the same host, we consider that as a different host
+        // This is slightly different from Redirect#NORMAL, but needed for local testing
+        boolean sameHost = redirectedUri.getHost().equalsIgnoreCase(request.url().getHost())
+                && redirectedUri.getPort() == request.url().getPort();
 
         // mimicking the behavior of Redirect#NORMAL which was the behavior we used before
         // Always redirect, except from HTTPS URLs to HTTP URLs.

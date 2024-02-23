@@ -275,7 +275,9 @@ public class GHRelease extends GHObject {
         String url = getUploadUrl();
         // strip the helpful garbage from the url
         int endIndex = url.indexOf('{');
-        if (endIndex != -1) url = url.substring(0, endIndex);
+        if (endIndex != -1) {
+            url = url.substring(0, endIndex);
+        }
         url += "?name=" + URLEncoder.encode(filename, "UTF-8");
         return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);
     }

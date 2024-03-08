@@ -1,0 +1,51 @@
+{
+  "id": "4f51068b-4bec-4ecb-88ac-cad5e2c42eda",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_branches_main",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/branches/main",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "10-r_h_g_branches_main.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 09 Feb 2024 10:47:25 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"b1e97026788774190a2dc395e213aebff55f67eeff1eac1a7c32a1a6bbe0d8e2\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4838",
+      "X-RateLimit-Reset": "1707477016",
+      "X-RateLimit-Used": "162",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "81DE:359F08:6EE6E46:7008CA2:65C602BD"
+    }
+  },
+  "uuid": "4f51068b-4bec-4ecb-88ac-cad5e2c42eda",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-branches-main",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-branches-main-2",
+  "insertionIndex": 10
+}

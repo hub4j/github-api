@@ -356,8 +356,8 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             if (!filePath.equals(renamedFilePath)) {
                 Files.move(filePath, renamedFilePath);
             }
-            if (bodyPath != null && !bodyPath.equals(renamedFilePath)) {
-                Files.move(filePath, renamedFilePath);
+            if (bodyPath != null && !bodyPath.equals(renamedBodyPath)) {
+                Files.move(bodyPath, renamedBodyPath);
             }
         }
 

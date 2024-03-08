@@ -355,6 +355,10 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     @SuppressWarnings("resource")
     @Test
     public void testArtifacts() throws IOException {
+        // Recorded with Authorization, then manually updated
+        snapshotNotAllowed();
+
+        mockGitHub.customizeRecordSpec(recordSpecBuilder -> recordSpecBuilder.captureHeader("Authorization"));
         GHWorkflow workflow = repo.getWorkflow(ARTIFACTS_WORKFLOW_PATH);
 
         long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();

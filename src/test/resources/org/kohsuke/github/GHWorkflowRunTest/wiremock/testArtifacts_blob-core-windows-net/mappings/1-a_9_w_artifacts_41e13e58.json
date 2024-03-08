@@ -7,6 +7,9 @@
     "headers": {
       "Accept": {
         "equalTo": "application/vnd.github.v3+json"
+      },
+      "Authorization": {
+        "absent" : true
       }
     }
   },

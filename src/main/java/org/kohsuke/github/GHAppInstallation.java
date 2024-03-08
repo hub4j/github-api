@@ -46,7 +46,7 @@ public class GHAppInstallation extends GHObject {
     @JsonProperty("repository_selection")
     private GHRepositorySelection repositorySelection;
     private String htmlUrl;
-    private Date suspendedAt;
+    private String suspendedAt;
     private GHUser suspendedBy;
 
     /**
@@ -319,9 +319,8 @@ public class GHAppInstallation extends GHObject {
      *
      * @return the suspended at
      */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public Date getSuspendedAt() {
-        return suspendedAt;
+        return GitHubClient.parseDate(suspendedAt);
     }
 
     /**

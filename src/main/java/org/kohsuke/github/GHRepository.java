@@ -1508,7 +1508,7 @@ public class GHRepository extends GHObject {
         } catch (FileNotFoundException x) {
             throw (FileNotFoundException) new FileNotFoundException("Failed to delete " + getOwnerName() + "/" + name
                     + "; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916")
-                            .initCause(x);
+                    .initCause(x);
         }
     }
 

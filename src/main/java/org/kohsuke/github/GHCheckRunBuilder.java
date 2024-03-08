@@ -103,6 +103,23 @@ public final class GHCheckRunBuilder {
     }
 
     /**
+     * With name.
+     *
+     * @param name
+     *            the name
+     * @param oldName
+     *            the old name
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withName(@CheckForNull String name, String oldName) {
+        if (oldName == null) {
+            throw new GHException("Can not update uncreated check run");
+        }
+        requester.with("name", name);
+        return this;
+    }
+
+    /**
      * With details URL.
      *
      * @param detailsURL

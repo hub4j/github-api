@@ -35,7 +35,7 @@ jobs:
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install -DskipTests --file pom.xml
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: maven-target-directory
         path: target/
@@ -86,7 +86,7 @@ jobs:
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Codecov Report 
       if: matrix.os == 'ubuntu' && matrix.java == '17'
-      uses: codecov/codecov-action@v3.1.4
+      uses: codecov/codecov-action@v4.0.0
 
   test-java-8:
     name: test Java 8 (no-build)
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
     - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
         name: maven-target-directory
         path: target

@@ -1,0 +1,47 @@
+{
+  "id": "61db4e6e-f767-4ac6-ad47-4008ba850d1a",
+  "name": "repos_bndtools_bnd",
+  "request": {
+    "url": "/repos/bndtools/bnd",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-r_b_bnd.json",
+    "headers": {
+      "Date": "Tue, 19 May 2020 23:58:07 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4983",
+      "X-RateLimit-Reset": "1589935075",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"1a59fa793bef38ba268640007d48b566\"",
+      "Last-Modified": "Tue, 19 May 2020 13:56:51 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FE57:05CD:20923:28641:5EC4728E"
+    }
+  },
+  "uuid": "61db4e6e-f767-4ac6-ad47-4008ba850d1a",
+  "persistent": true,
+  "insertionIndex": 2
+}

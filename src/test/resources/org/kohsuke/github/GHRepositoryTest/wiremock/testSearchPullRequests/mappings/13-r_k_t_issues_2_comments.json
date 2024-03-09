@@ -1,0 +1,57 @@
+{
+  "id": "1868398e-38c8-4adb-b1d4-c5ed4bb624c1",
+  "name": "repos_kgromov_temp-testsearchpullrequests_issues_2_comments",
+  "request": {
+    "url": "/repos/kgromov/temp-testSearchPullRequests/issues/2/comments",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"body\":\"@kgromov approved\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "13-r_k_t_issues_2_comments.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 11 Nov 2023 00:45:25 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"bd0a0b30b6982b8b367c25195956260f68e76fb9c8e19c3b1f62322e56521f33\"",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, gist, repo, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4749",
+      "X-RateLimit-Reset": "1699664715",
+      "X-RateLimit-Used": "251",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FFA2:669F:2800717F:2873530F:654ECEA4",
+      "Location": "https://api.github.com/repos/kgromov/temp-testSearchPullRequests/issues/comments/1806603013"
+    }
+  },
+  "uuid": "1868398e-38c8-4adb-b1d4-c5ed4bb624c1",
+  "persistent": true,
+  "insertionIndex": 13
+}

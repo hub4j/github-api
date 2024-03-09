@@ -1,0 +1,52 @@
+{
+  "id": "531a14a5-5fb1-41e7-a3df-4a5fe33d6f82",
+  "name": "gists_11a257b91982aafd6370089ef877a682",
+  "request": {
+    "url": "/gists/11a257b91982aafd6370089ef877a682",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"files\":{\"abc.txt\":{\"filename\":\"ab.txt\"},\"def.txt\":null,\"ghi.txt\":{\"content\":\"gh\"},\"jkl.txt\":{\"filename\":\"klm.txt\",\"content\":\"nop\"}}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "5-gists_11a257b91982aafd6370089ef877a682.json",
+    "headers": {
+      "Date": "Mon, 27 Apr 2020 17:24:09 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4972",
+      "X-RateLimit-Reset": "1588010944",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"83d6c9cbd2997429e8c33c292c7ebb3f\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FA20:78D7:86A7E:A5823:5EA71538"
+    }
+  },
+  "uuid": "531a14a5-5fb1-41e7-a3df-4a5fe33d6f82",
+  "persistent": true,
+  "insertionIndex": 5
+}

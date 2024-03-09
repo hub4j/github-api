@@ -1,0 +1,46 @@
+{
+  "id": "2b24a93c-7d7e-481e-a3fd-681ff45d09e2",
+  "name": "organizations_7544739_team_3451996_discussions",
+  "request": {
+    "url": "/organizations/7544739/team/3451996/discussions",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "7-organizations_7544739_team_3451996_discussions.json",
+    "headers": {
+      "Date": "Fri, 05 Jun 2020 23:08:35 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4723",
+      "X-RateLimit-Reset": "1591398935",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"06cde48be7ded909e2643d7c62bc1b40\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "read:discussion, write:discussion",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CFFB:979C:1DBF9D:23C489:5EDAD073"
+    }
+  },
+  "uuid": "2b24a93c-7d7e-481e-a3fd-681ff45d09e2",
+  "persistent": true,
+  "insertionIndex": 7
+}

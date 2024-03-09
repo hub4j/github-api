@@ -1,0 +1,44 @@
+{
+  "id": "7e3768e1-e5c1-457a-9354-f5d9ef504fc2",
+  "name": "search_issues",
+  "request": {
+    "url": "/search/issues?sort=updated&q=mentions%3Akohsuke+is%3Aopen&page=2",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "34-search_issues.json",
+    "headers": {
+      "Date": "Sat, 22 Feb 2020 02:24:40 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "27",
+      "X-RateLimit-Reset": "1582338330",
+      "Cache-Control": "no-cache",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "EC02:6D35:5FF58A:726A13:5E5090E7",
+      "Link": "<https://api.github.com/search/issues?sort=updated&q=mentions%3Akohsuke+is%3Aopen&page=1>; rel=\"prev\", <https://api.github.com/search/issues?sort=updated&q=mentions%3Akohsuke+is%3Aopen&page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "7e3768e1-e5c1-457a-9354-f5d9ef504fc2",
+  "persistent": true,
+  "insertionIndex": 34
+}

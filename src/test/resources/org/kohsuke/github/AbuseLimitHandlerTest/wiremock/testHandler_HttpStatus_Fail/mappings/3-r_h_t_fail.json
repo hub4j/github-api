@@ -1,0 +1,50 @@
+{
+  "id": "574da117-6845-46d8-b2c1-4415546ca670",
+  "name": "repos_hub4j-test-org_temp-testratelimithandler_fail",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testHandler_Fail",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_h_t_fail.json",
+    "headers": {
+      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4922",
+      "X-RateLimit-Reset": "{{testStartDate offset='3 seconds' format='unix'}}",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"858224998ac7d1fd6dcd43f73d375297\"",
+      "Last-Modified": "Thu, 06 Feb 2020 18:33:43 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CC37:2605:3FADC:4EA8C:5E3C5C02"
+    }
+  },
+  "uuid": "574da117-6845-46d8-b2c1-4415546ca670",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-temp-testHandler_Fail",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-temp-testHandler_Fail-2",
+  "insertionIndex": 3
+}

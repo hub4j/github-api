@@ -1,0 +1,54 @@
+{
+  "id": "ab4f80a2-9005-4292-b7dc-afdfc3dfe294",
+  "name": "repos_hub4j-test-org_github-api-test_milestones",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api-test/milestones",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"description\":\"Test Milestone\",\"title\":\"Test Milestone Title3\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "3-r_h_g_milestones.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 11 Sep 2021 07:32:38 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"6247f3407e12b549963c5927175cbbe3fde3c35c271f742c9e26cd1ab8d4eb19\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4893",
+      "X-RateLimit-Reset": "1631346154",
+      "X-RateLimit-Used": "107",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D390:32F3:2FD932:348606:613C5B95",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api-test/milestones/1"
+    }
+  },
+  "uuid": "ab4f80a2-9005-4292-b7dc-afdfc3dfe294",
+  "persistent": true,
+  "insertionIndex": 3
+}

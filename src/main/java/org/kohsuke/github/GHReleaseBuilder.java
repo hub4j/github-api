@@ -105,6 +105,19 @@ public class GHReleaseBuilder {
     }
 
     /**
+     * Optional.
+     *
+     * @param generateReleaseNotes
+     *            {@code true} to instruct GitHub to generate release name and notes automatically. {@code false} to
+     *            suppress automatic generation. Default is {@code false}.
+     * @return the gh release builder
+     */
+    public GHReleaseBuilder generateReleaseNotes(boolean generateReleaseNotes) {
+        builder.with("generate_release_notes", generateReleaseNotes);
+        return this;
+    }
+
+    /**
      * Values for whether this release should be the latest.
      */
     public static enum MakeLatest {

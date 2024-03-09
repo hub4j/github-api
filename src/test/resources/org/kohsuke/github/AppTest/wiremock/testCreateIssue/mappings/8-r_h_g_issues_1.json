@@ -1,0 +1,49 @@
+{
+  "id": "84e98afa-b226-46f1-aa09-b103191ec0d8",
+  "name": "repos_hub4j-test-org_github-api-test_issues_1",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api-test/issues/1",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "8-r_h_g_issues_1.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 11 Sep 2021 07:32:39 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"53d51b439c282d3488deaebff8924e91a56364af2f4ddefdf2dfd800e6055599\"",
+      "Last-Modified": "Sat, 11 Sep 2021 07:32:39 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4888",
+      "X-RateLimit-Reset": "1631346154",
+      "X-RateLimit-Used": "112",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "D39A:860A:4176D3:468FB7:613C5B97"
+    }
+  },
+  "uuid": "84e98afa-b226-46f1-aa09-b103191ec0d8",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-test-issues-1",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-github-api-test-issues-1-2",
+  "insertionIndex": 8
+}

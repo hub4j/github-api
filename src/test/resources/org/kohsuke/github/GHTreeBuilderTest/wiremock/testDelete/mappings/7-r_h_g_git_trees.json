@@ -1,0 +1,58 @@
+{
+  "id": "c7f39a2b-e126-4a9a-96a5-f3ae55c6c333",
+  "name": "repos_hub4j-test-org_ghtreebuildertest_git_trees",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHTreeBuilderTest/git/trees",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"base_tree\":\"172349212fb19ffa4f33dcced3263c6963dc750a\",\"tree\":[{\"path\":\"doc/readme.txt\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"fbbc875b17d1e17da06b4ee8fda46e2596c41f3c\"},{\"path\":\"data/val1.dat\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"aed2973e4b8a7ff1b30ff5c4751e5a2b38989e74\"}]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "7-r_h_g_git_trees.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 20 Jun 2023 05:28:47 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"cc5396cc7dbc55b26008e889b238f9df01a65a0142ff0627a62834f9dfaa44f1\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2023-06-24 09:37:03 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4939",
+      "X-RateLimit-Reset": "1687242459",
+      "X-RateLimit-Used": "61",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E6F9:6FC5:3DA3361:3E2BC16:6491390E",
+      "Location": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/trees/0efbfcf79def8e437d825e0116def4be6be56026"
+    }
+  },
+  "uuid": "c7f39a2b-e126-4a9a-96a5-f3ae55c6c333",
+  "persistent": true,
+  "insertionIndex": 7
+}

@@ -1,0 +1,49 @@
+{
+  "id": "36e33c12-afd0-490c-afd7-a2bbf73e5f2c",
+  "name": "repos_hub4j-test-org_committest_commits_dabf0e89fe7107d6e294a924561533ecf80f2384",
+  "request": {
+    "url": "/repos/hub4j-test-org/CommitTest/commits/dabf0e89fe7107d6e294a924561533ecf80f2384",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "4-r_h_c_commits_dabf0e89.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 23 Jun 2023 13:45:41 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"6ea0a1de87eb2456ac1d04542fb8c991256a409b20e279ad0167e2d6136b1acd\"",
+      "Last-Modified": "Fri, 23 Jun 2023 09:52:45 GMT",
+      "github-authentication-token-expiration": "2023-07-19 10:23:39 +0100",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4709",
+      "X-RateLimit-Reset": "1687528241",
+      "X-RateLimit-Used": "291",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "6C08:AE59:7FC1753:80FE2C3:6495A204"
+    }
+  },
+  "uuid": "36e33c12-afd0-490c-afd7-a2bbf73e5f2c",
+  "persistent": true,
+  "insertionIndex": 4
+}

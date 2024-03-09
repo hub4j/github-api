@@ -1,0 +1,44 @@
+{
+  "id": "da8e77a6-987d-40af-86d5-fc170c504715",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_artifacts_1242831742_zip",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/artifacts/1242831742/zip",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      },
+      "Authorization": {
+        "equalTo": "Basic cGxhY2Vob2xkZXItdXNlcjpwbGFjZWhvbGRlci1wYXNzd29yZA=="
+      }
+    }
+  },
+  "response": {
+    "status": 302,
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 13 Feb 2024 20:56:08 GMT",
+      "Content-Type": "text/html;charset=utf-8",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4988",
+      "X-RateLimit-Reset": "1707861343",
+      "X-RateLimit-Used": "12",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "8230:3A6BFF:147FAC7:14ACFDC:65CBD768",
+      "Location": "https://pipelines.actions.githubusercontent.com/u72ug1Ib1ZBCtek798HyrDYOU28rBK6ssrOKf37ZxrpgUbk95I/_apis/pipelines/1/runs/75/signedartifactscontent?artifactName=artifact1&urlExpires=2024-02-13T20%3A57%3A08.8035464Z&urlSigningMethod=HMACV2&urlSignature=V5LQZfOCN4yxeW3luEsxnxohpUdIpNTXhLFbFsPF3hw%3D"
+    }
+  },
+  "uuid": "da8e77a6-987d-40af-86d5-fc170c504715",
+  "persistent": true,
+  "insertionIndex": 7
+}

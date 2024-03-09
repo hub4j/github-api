@@ -1,6 +1,6 @@
 name: CI
 
-on: 
+on:
   push:
     branches:
       - main
@@ -84,7 +84,7 @@ jobs:
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
-    - name: Codecov Report 
+    - name: Codecov Report
       if: matrix.os == 'ubuntu' && matrix.java == '17'
       uses: codecov/codecov-action@v4.1.0
 
@@ -92,7 +92,7 @@ jobs:
     name: test Java 8 (no-build)
     needs: build
     runs-on: ubuntu-latest
-    steps: 
+    steps:
     - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
       with:
@@ -103,6 +103,6 @@ jobs:
       with:
         java-version: 8
         distribution: 'temurin'
-        cache: 'maven'   
+        cache: 'maven'
     - name: Maven Test (no build) Java 8
       run: mvn -B surefire:test -DfailIfNoTests -Dsurefire.excludesFile=src/test/resources/slow-or-flaky-tests.txt

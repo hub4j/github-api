@@ -14,7 +14,7 @@ import java.util.List;
 public class GHPullRequestReviewBuilder {
     private final GHPullRequest pr;
     private final Requester builder;
-    private final List<DraftReviewComment> comments = new ArrayList<DraftReviewComment>();
+    private final List<ReviewComment> comments = new ArrayList<ReviewComment>();
 
     /**
      * Instantiates a new GH pull request review builder.
@@ -75,16 +75,50 @@ public class GHPullRequestReviewBuilder {
      * Comment gh pull request review builder.
      *
      * @param body
-     *            The relative path to the file that necessitates a review comment.
+     *            Text of the review comment.
      * @param path
+     *            The relative path to the file that necessitates a review comment.
+     * @param position
      *            The position in the diff where you want to add a review comment. Note this value is not the same as
      *            the line number in the file. For help finding the position value, read the note below.
-     * @param position
-     *            Text of the review comment.
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder comment(String body, String path, int position) {
         comments.add(new DraftReviewComment(body, path, position));
+        return this;
+    }
+
+    /**
+     * Add a multi-line comment to the gh pull request review builder.
+     *
+     * @param body
+     *            Text of the review comment.
+     * @param path
+     *            The relative path to the file that necessitates a review comment.
+     * @param startLine
+     *            The first line in the pull request diff that the multi-line comment applies to.
+     * @param line
+     *            The last line of the range that the comment applies to.
+     * @return the gh pull request review builder
+     */
+    public GHPullRequestReviewBuilder multiLineComment(String body, String path, int startLine, int line) {
+        this.comments.add(new MultilineDraftReviewComment(body, path, startLine, line));
+        return this;
+    }
+
+    /**
+     * Add a single line comment to the gh pull request review builder.
+     *
+     * @param body
+     *            Text of the review comment.
+     * @param path
+     *            The relative path to the file that necessitates a review comment.
+     * @param line
+     *            The line of the blob in the pull request diff that the comment applies to.
+     * @return the gh pull request review builder
+     */
+    public GHPullRequestReviewBuilder singleLineComment(String body, String path, int line) {
+        this.comments.add(new SingleLineDraftReviewComment(body, path, line));
         return this;
     }
 
@@ -103,7 +137,29 @@ public class GHPullRequestReviewBuilder {
                 .wrapUp(pr);
     }
 
-    private static class DraftReviewComment {
+    /**
+     * Common properties of the review comments, regardless of how the comment is positioned on the gh pull request.
+     */
+    private interface ReviewComment {
+        /**
+         * Gets body.
+         *
+         * @return the body.
+         */
+        String getBody();
+
+        /**
+         * Gets path.
+         *
+         * @return the path.
+         */
+        String getPath();
+    }
+
+    /**
+     * Single line comment using the relative position in the diff.
+     */
+    private static class DraftReviewComment implements ReviewComment {
         private String body;
         private String path;
         private int position;
@@ -114,20 +170,10 @@ public class GHPullRequestReviewBuilder {
             this.position = position;
         }
 
-        /**
-         * Gets body.
-         *
-         * @return the body
-         */
         public String getBody() {
             return body;
         }
 
-        /**
-         * Gets path.
-         *
-         * @return the path
-         */
         public String getPath() {
             return path;
         }
@@ -139,6 +185,81 @@ public class GHPullRequestReviewBuilder {
          */
         public int getPosition() {
             return position;
+        }
+    }
+
+    /**
+     * Multi-line comment.
+     */
+    private static class MultilineDraftReviewComment implements ReviewComment {
+        private final String body;
+        private final String path;
+        private final int line;
+        private final int start_line;
+
+        MultilineDraftReviewComment(final String body, final String path, final int startLine, final int line) {
+            this.body = body;
+            this.path = path;
+            this.line = line;
+            this.start_line = startLine;
+        }
+
+        public String getBody() {
+            return this.body;
+        }
+
+        public String getPath() {
+            return this.path;
+        }
+
+        /**
+         * Gets end line of the comment.
+         *
+         * @return the end line of the comment.
+         */
+        public int getLine() {
+            return line;
+        }
+
+        /**
+         * Gets start line of the comment.
+         *
+         * @return the start line of the comment.
+         */
+        public int getStartLine() {
+            return start_line;
+        }
+    }
+
+    /**
+     * Single line comment.
+     */
+    private static class SingleLineDraftReviewComment implements ReviewComment {
+        private final String body;
+        private final String path;
+        private final int line;
+
+        SingleLineDraftReviewComment(final String body, final String path, final int line) {
+            this.body = body;
+            this.path = path;
+            this.line = line;
+        }
+
+        public String getBody() {
+            return this.body;
+        }
+
+        public String getPath() {
+            return this.path;
+        }
+
+        /**
+         * Gets line of the comment.
+         *
+         * @return the line of the comment.
+         */
+        public int getLine() {
+            return line;
         }
     }
 }

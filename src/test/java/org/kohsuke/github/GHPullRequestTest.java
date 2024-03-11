@@ -908,6 +908,44 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test refreshing a PR coming from the search results.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void refreshFromSearchResults() throws Exception {
+        // To re-record, uncomment the Thread.sleep() calls below
+        snapshotNotAllowed();
+
+        String prName = "refreshFromSearchResults";
+        GHRepository repository = getRepository();
+
+        repository.createPullRequest(prName, "test/stable", "main", "## test");
+
+        // we need to wait a bit for the pull request to be indexed by GitHub
+        // Thread.sleep(2000);
+
+        GHPullRequest pullRequestFromSearchResults = repository.searchPullRequests()
+                .isOpen()
+                .titleLike(prName)
+                .list()
+                .toList()
+                .get(0);
+
+        pullRequestFromSearchResults.getMergeableState();
+
+        // wait a bit for the mergeable state to get populated
+        // Thread.sleep(5000);
+
+        assertThat("Pull request is supposed to have been refreshed and have a mergeable state",
+                pullRequestFromSearchResults.getMergeableState(),
+                equalTo("clean"));
+
+        pullRequestFromSearchResults.close();
+    }
+
+    /**
      * Gets the repository.
      *
      * @return the repository

@@ -231,6 +231,10 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void pullRequestReviews() throws Exception {
         String name = "testPullRequestReviews";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
+
+        List<GHPullRequestReview> reviews = p.listReviews().toList();
+        assertThat(reviews.size(), is(0));
+
         GHPullRequestReview draftReview = p.createReview()
                 .body("Some draft review")
                 .comment("Some niggle", "README.md", 1)
@@ -238,7 +242,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
         assertThat(draftReview.getCommitId(), notNullValue());
-        List<GHPullRequestReview> reviews = p.listReviews().toList();
+        reviews = p.listReviews().toList();
         assertThat(reviews.size(), is(1));
         GHPullRequestReview review = reviews.get(0);
         assertThat(review.getState(), is(GHPullRequestReviewState.PENDING));
@@ -916,6 +920,24 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                 equalTo("clean"));
 
         pullRequestFromSearchResults.close();
+
+    /**
+     * Create/Delete reaction for pull requests.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    public void reactions() throws Exception {
+        String name = "createPullRequest";
+        GHRepository repo = getRepository();
+        GHPullRequest p = repo.createPullRequest(name, "test/stable", "main", "## test");
+
+        assertThat(p.listReactions().toList(), hasSize(0));
+        GHReaction reaction = p.createReaction(ReactionContent.CONFUSED);
+        assertThat(p.listReactions().toList(), hasSize(1));
+
+        p.deleteReaction(reaction);
+        assertThat(p.listReactions().toList(), hasSize(0));
     }
 
     /**

@@ -1,0 +1,56 @@
+{
+  "id": "1d2b9ccc-9d91-4d42-acef-c2fa86f0bf5d",
+  "name": "repos_hub4j-test-org_github-api_issues_474_reactions",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/474/reactions",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"content\":\"confused\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "6-r_h_g_issues_474_reactions.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 09 Mar 2024 12:59:07 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"d70bafb1428febb231edc17d9dc7ef69dee15034c9487a7acefe473b07373045\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4975",
+      "X-RateLimit-Reset": "1709992629",
+      "X-RateLimit-Used": "25",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "8A1A:21CA73:DEE694E:E075D7C:65EC5D1B"
+    }
+  },
+  "uuid": "1d2b9ccc-9d91-4d42-acef-c2fa86f0bf5d",
+  "persistent": true,
+  "insertionIndex": 6
+}

@@ -1,0 +1,51 @@
+{
+  "id": "710af30b-1087-4496-9aea-ee3e56802ec9",
+  "name": "repos_hub4j-test-org_github-api_issues_474_reactions",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/474/reactions",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "[]",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 09 Mar 2024 12:59:08 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"1edf80ecd98d11d98113d5aa3cef7021f4a60d76d4a01328e8d3552451f43ce4\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4972",
+      "X-RateLimit-Reset": "1709992629",
+      "X-RateLimit-Used": "28",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "8A3E:E7267:668F781:674B189:65EC5D1C"
+    }
+  },
+  "uuid": "710af30b-1087-4496-9aea-ee3e56802ec9",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-issues-474-reactions",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-github-api-issues-474-reactions-3",
+  "insertionIndex": 9
+}

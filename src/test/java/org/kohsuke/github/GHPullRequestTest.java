@@ -231,6 +231,10 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void pullRequestReviews() throws Exception {
         String name = "testPullRequestReviews";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
+
+        List<GHPullRequestReview> reviews = p.listReviews().toList();
+        assertThat(reviews.size(), is(0));
+
         GHPullRequestReview draftReview = p.createReview()
                 .body("Some draft review")
                 .comment("Some niggle", "README.md", 1)
@@ -238,7 +242,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
         assertThat(draftReview.getCommitId(), notNullValue());
-        List<GHPullRequestReview> reviews = p.listReviews().toList();
+        reviews = p.listReviews().toList();
         assertThat(reviews.size(), is(1));
         GHPullRequestReview review = reviews.get(0);
         assertThat(review.getState(), is(GHPullRequestReviewState.PENDING));

@@ -888,6 +888,25 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Create/Delete reaction for pull requests.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    public void reactions() throws Exception {
+        String name = "createPullRequest";
+        GHRepository repo = getRepository();
+        GHPullRequest p = repo.createPullRequest(name, "test/stable", "main", "## test");
+
+        assertThat(p.listReactions().toList(), hasSize(0));
+        GHReaction reaction = p.createReaction(ReactionContent.CONFUSED);
+        assertThat(p.listReactions().toList(), hasSize(1));
+
+        p.deleteReaction(reaction);
+        assertThat(p.listReactions().toList(), hasSize(0));
+    }
+
+    /**
      * Test refreshing a PR coming from the search results.
      *
      * @throws Exception
@@ -920,24 +939,6 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                 equalTo("clean"));
 
         pullRequestFromSearchResults.close();
-
-    /**
-     * Create/Delete reaction for pull requests.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    public void reactions() throws Exception {
-        String name = "createPullRequest";
-        GHRepository repo = getRepository();
-        GHPullRequest p = repo.createPullRequest(name, "test/stable", "main", "## test");
-
-        assertThat(p.listReactions().toList(), hasSize(0));
-        GHReaction reaction = p.createReaction(ReactionContent.CONFUSED);
-        assertThat(p.listReactions().toList(), hasSize(1));
-
-        p.deleteReaction(reaction);
-        assertThat(p.listReactions().toList(), hasSize(0));
     }
 
     /**

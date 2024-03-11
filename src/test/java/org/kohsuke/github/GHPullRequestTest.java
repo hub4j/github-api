@@ -893,6 +893,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
      * @throws Exception
      *             the exception
      */
+    @Test
     public void reactions() throws Exception {
         String name = "createPullRequest";
         GHRepository repo = getRepository();

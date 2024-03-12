@@ -983,6 +983,12 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("Codertocat"));
     }
 
+    /**
+     * Installation event.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     @Payload("installation_created")
     public void InstallationCreatedEvent() throws Exception {

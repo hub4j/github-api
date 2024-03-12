@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -268,9 +267,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Installation extends GHEventPayload {
 
-        private List<GHRepository> ghRepositories = null;
-
         private List<Repository> repositories;
+        private List<GHRepository> ghRepositories = null;
 
         /**
          * Gets repositories. For the "deleted" action please rather call {@link #getRawRepositories()}
@@ -299,8 +297,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
 
             return Collections.unmodifiableList(ghRepositories);
         }
-
-        ;
 
         /**
          * Returns a list of raw, unpopulated repositories. Useful when calling from within Installation event with
@@ -339,7 +335,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
 
             /**
              * Get the id.
-             * 
+             *
              * @return the id
              */
             public long getId() {
@@ -348,7 +344,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
 
             /**
              * Gets the full name.
-             * 
+             *
              * @return the full name
              */
             public String getFullName() {

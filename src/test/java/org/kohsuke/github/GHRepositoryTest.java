@@ -1618,6 +1618,19 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Creates the template repository
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void templateRepository() throws Exception {
+        GHRepository repo = getRepository();
+
+        assertThat(repo.getTemplateRepository().getName(), is("github-api-template"));
+    }
+
+    /**
      * Test to check star method by verifying stargarzer count.
      *
      * @throws Exception

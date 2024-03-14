@@ -72,32 +72,26 @@ abstract class GitHubConnectorResponseErrorHandler {
             }
         }
 
-        private boolean isServiceDown(GitHubConnectorResponse connectorResponse) {
+        private boolean isServiceDown(GitHubConnectorResponse connectorResponse) throws IOException {
             if (connectorResponse.statusCode() < HTTP_INTERNAL_ERROR) {
                 return false;
             }
 
             String contentTypeHeader = connectorResponse.header(CONTENT_TYPE);
             if (contentTypeHeader != null && contentTypeHeader.contains(TEXT_HTML)) {
-                try {
-                    BufferedReader bufReader = new BufferedReader(
-                            new InputStreamReader(connectorResponse.bodyStream()));
-                    String line;
-                    int hardLineCap = 25;
-                    // <title> node is expected in the beginning anyway.
-                    // This way we do not load the raw long images' Strings, which are later in the HTML code
-                    // Regex or .contains would result in iterating the whole HTML document, if it didn't match
-                    // UNICORN_TITLE
-                    while ((line = bufReader.readLine()) != null) {
-                        if (line.trim().startsWith(UNICORN_TITLE)) {
-                            return true;
-                        }
-                        hardLineCap--;
-                        if (hardLineCap <= 0) {
-                            break;
-                        }
+                BufferedReader bufReader = new BufferedReader(
+                        new InputStreamReader(connectorResponse.bodyStream()));
+                String line;
+                int hardLineCap = 25;
+                // <title> node is expected in the beginning anyway.
+                // This way we do not load the raw long images' Strings, which are later in the HTML code
+                // Regex or .contains would result in iterating the whole HTML document, if it didn't match
+                // UNICORN_TITLE
+                while (hardLineCap > 0 && (line = bufReader.readLine()) != null) {
+                    if (line.trim().startsWith(UNICORN_TITLE)) {
+                        return true;
                     }
-                } catch (Exception ignored) {
+                    hardLineCap--;
                 }
             }
 

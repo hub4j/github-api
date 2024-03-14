@@ -1001,9 +1001,9 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getInstallation().getAccount().getLogin(), is("CronFire"));
 
         assertThat(event.getRepositories().isEmpty(), is(false));
-        assertThat(event.getRepositories().get(0).getId(), is(1296269));
+        assertThat(event.getRepositories().get(0).getId(), is(1296269L));
         assertThat(event.getRawRepositories().isEmpty(), is(false));
-        assertThat(event.getRawRepositories().get(0).getId(), is(1296269));
+        assertThat(event.getRawRepositories().get(0).getId(), is(1296269L));
 
         assertThat(event.getSender().getLogin(), is("Haarolean"));
     }
@@ -1026,8 +1026,12 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getInstallation().getAccount().getLogin(), is("octocat"));
 
         assertThrows(IllegalStateException.class, () -> event.getRepositories().isEmpty());
-        assertThat(event.getRepositories().isEmpty(), is(false));
-        assertThat(event.getRepositories().get(0).getId(), is(1296269));
+        assertThat(event.getRawRepositories().isEmpty(), is(false));
+        assertThat(event.getRawRepositories().get(0).getId(), is(1296269L));
+        assertThat(event.getRawRepositories().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxMjk2MjY5"));
+        assertThat(event.getRawRepositories().get(0).getName(), is("Hello-World"));
+        assertThat(event.getRawRepositories().get(0).getFullName(), is("octocat/Hello-World"));
+        assertThat(event.getRawRepositories().get(0).isPrivate(), is(false));
 
         assertThat(event.getSender().getLogin(), is("octocat"));
     }

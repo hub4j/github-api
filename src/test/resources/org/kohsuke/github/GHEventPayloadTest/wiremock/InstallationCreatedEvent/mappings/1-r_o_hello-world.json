@@ -12,7 +12,7 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "repos_octocat_hello-world-1.json",
+    "bodyFileName": "1-r_o_hello-world.json",
     "headers": {
       "Server": "GitHub.com",
       "Date": "Thu, 03 Feb 2022 14:07:49 GMT",

@@ -1,10 +1,12 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -265,16 +267,47 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App Installation</a>
      */
     public static class Installation extends GHEventPayload {
-        private List<GHRepository> repositories;
+
+        private List<Repository> repositories;
+        private List<GHRepository> ghRepositories = null;
 
         /**
-         * Gets repositories.
+         * Gets repositories. For the "deleted" action please rather call {@link #getRawRepositories()}
          *
          * @return the repositories
          */
         public List<GHRepository> getRepositories() {
+            if ("deleted".equalsIgnoreCase(getAction())) {
+                throw new IllegalStateException("Can't call #getRepositories() on Installation event "
+                        + "with 'deleted' action. Call #getRawRepositories() instead.");
+            }
+
+            if (ghRepositories == null) {
+                ghRepositories = new ArrayList<>(repositories.size());
+                try {
+                    for (Repository singleRepo : repositories) {
+                        // populate each repository
+                        // the repository information provided here is so limited
+                        // as to be unusable without populating, so we do it eagerly
+                        ghRepositories.add(this.root().getRepositoryById(singleRepo.getId()));
+                    }
+                } catch (IOException e) {
+                    throw new GHException("Failed to refresh repositories", e);
+                }
+            }
+
+            return Collections.unmodifiableList(ghRepositories);
+        }
+
+        /**
+         * Returns a list of raw, unpopulated repositories. Useful when calling from within Installation event with
+         * action "deleted". You can't fetch the info for repositories of an already deleted installation.
+         *
+         * @return the list of raw Repository records
+         */
+        public List<Repository> getRawRepositories() {
             return Collections.unmodifiableList(repositories);
-        };
+        }
 
         /**
          * Late bind.
@@ -286,17 +319,64 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
                         "Expected installation payload, but got something else. Maybe we've got another type of event?");
             }
             super.lateBind();
-            if (repositories != null && !repositories.isEmpty()) {
-                try {
-                    for (GHRepository singleRepo : repositories) {
-                        // populate each repository
-                        // the repository information provided here is so limited
-                        // as to be unusable without populating, so we do it eagerly
-                        singleRepo.populate();
-                    }
-                } catch (IOException e) {
-                    throw new GHException("Failed to refresh repositories", e);
-                }
+        }
+
+        /**
+         * A special minimal implementation of a {@link GHRepository} which contains only fields from "Properties of
+         * repositories" from <a href=
+         * "https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#installation">here</a>
+         */
+        public static class Repository {
+            private long id;
+            private String fullName;
+            private String name;
+            private String nodeId;
+            @JsonProperty(value = "private")
+            private boolean isPrivate;
+
+            /**
+             * Get the id.
+             *
+             * @return the id
+             */
+            public long getId() {
+                return id;
+            }
+
+            /**
+             * Gets the full name.
+             *
+             * @return the full name
+             */
+            public String getFullName() {
+                return fullName;
+            }
+
+            /**
+             * Gets the name.
+             *
+             * @return the name
+             */
+            public String getName() {
+                return name;
+            }
+
+            /**
+             * Gets the node id.
+             *
+             * @return the node id
+             */
+            public String getNodeId() {
+                return nodeId;
+            }
+
+            /**
+             * Gets the repository private flag.
+             *
+             * @return whether the repository is private
+             */
+            public boolean isPrivate() {
+                return isPrivate;
             }
         }
     }

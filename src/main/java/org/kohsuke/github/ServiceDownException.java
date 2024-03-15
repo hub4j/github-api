@@ -13,6 +13,13 @@ import java.io.IOException;
  * @author <a href="mailto:rbudinsk@redhat.com">Rastislav Budinsky</a>
  */
 public class ServiceDownException extends HttpException {
+
+    /**
+     * Instantiates a new service down exception.
+     *
+     * @param connectorResponse
+     *            the connector response to base this on
+     */
     public ServiceDownException(GitHubConnectorResponse connectorResponse) {
         super(connectorResponse);
     }

@@ -79,8 +79,7 @@ abstract class GitHubConnectorResponseErrorHandler {
 
             String contentTypeHeader = connectorResponse.header(CONTENT_TYPE);
             if (contentTypeHeader != null && contentTypeHeader.contains(TEXT_HTML)) {
-                BufferedReader bufReader = new BufferedReader(
-                        new InputStreamReader(connectorResponse.bodyStream()));
+                BufferedReader bufReader = new BufferedReader(new InputStreamReader(connectorResponse.bodyStream()));
                 String line;
                 int hardLineCap = 25;
                 // <title> node is expected in the beginning anyway.

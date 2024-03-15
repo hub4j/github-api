@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import javax.annotation.Nonnull;
 
@@ -79,18 +80,20 @@ abstract class GitHubConnectorResponseErrorHandler {
 
             String contentTypeHeader = connectorResponse.header(CONTENT_TYPE);
             if (contentTypeHeader != null && contentTypeHeader.contains(TEXT_HTML)) {
-                BufferedReader bufReader = new BufferedReader(new InputStreamReader(connectorResponse.bodyStream()));
-                String line;
-                int hardLineCap = 25;
-                // <title> node is expected in the beginning anyway.
-                // This way we do not load the raw long images' Strings, which are later in the HTML code
-                // Regex or .contains would result in iterating the whole HTML document, if it didn't match
-                // UNICORN_TITLE
-                while (hardLineCap > 0 && (line = bufReader.readLine()) != null) {
-                    if (line.trim().startsWith(UNICORN_TITLE)) {
-                        return true;
+                try (BufferedReader bufReader = new BufferedReader(
+                        new InputStreamReader(connectorResponse.bodyStream(), StandardCharsets.UTF_8))) {
+                    String line;
+                    int hardLineCap = 25;
+                    // <title> node is expected in the beginning anyway.
+                    // This way we do not load the raw long images' Strings, which are later in the HTML code
+                    // Regex or .contains would result in iterating the whole HTML document, if it didn't match
+                    // UNICORN_TITLE
+                    while (hardLineCap > 0 && (line = bufReader.readLine()) != null) {
+                        if (line.trim().startsWith(UNICORN_TITLE)) {
+                            return true;
+                        }
+                        hardLineCap--;
                     }
-                    hardLineCap--;
                 }
             }
 

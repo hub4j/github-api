@@ -76,6 +76,18 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test get repository created from a template repository
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGetRepositoryWithTemplateRepositoryInfo() throws Exception {
+        GHRepository testRepo = gitHub.getRepositoryById(repo.getId());
+        assertThat(testRepo.getTemplateRepository(), notNullValue());
+    }
+
+    /**
      * Test get file content.
      *
      * @throws Exception

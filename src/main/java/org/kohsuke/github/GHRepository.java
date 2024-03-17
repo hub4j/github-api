@@ -78,7 +78,7 @@ import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 @SuppressWarnings({ "UnusedDeclaration" })
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GHRepository extends GHObject {
+public class GHRepository extends GHObject implements Cloneable {
 
     private String nodeId, description, homepage, name, full_name;
 
@@ -119,6 +119,8 @@ public class GHRepository extends GHObject {
     private Map<Integer, GHMilestone> milestones = Collections.synchronizedMap(new WeakHashMap<>());
 
     private String default_branch, language;
+
+    private GHRepository template_repository;
 
     private Map<String, GHCommit> commits = Collections.synchronizedMap(new WeakHashMap<>());
 
@@ -949,6 +951,15 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Get Repository template was the repository created from.
+     *
+     * @return the repository template
+     */
+    public GHRepository getTemplateRepository() throws CloneNotSupportedException {
+        return (GHRepository) template_repository.clone();
+    }
+
+    /**
      * Gets size.
      *
      * @return the size
@@ -1415,6 +1426,14 @@ public class GHRepository extends GHObject {
      */
     public void setPrivate(boolean value) throws IOException {
         set().private_(value);
+    }
+
+    /**
+     * Sets repository template
+     *
+     */
+    public void setTemplateRepository(GHRepository value) throws IOException {
+        set().templateRepository(value);
     }
 
     /**

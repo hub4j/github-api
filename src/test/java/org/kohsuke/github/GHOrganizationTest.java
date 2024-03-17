@@ -155,6 +155,29 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test create repository with template.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testCreateRepositoryWithTemplateAndGHRepository() throws IOException {
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository templateRepository = org.getRepository(GITHUB_API_TEMPLATE_TEST);
+
+        GHRepository repository = org.createRepository(GITHUB_API_TEST)
+                .fromTemplateRepository(templateRepository)
+                .owner(GITHUB_API_TEST_ORG)
+                .create();
+
+        assertThat(repository, notNullValue());
+        assertThat(repository.getReadme(), notNullValue());
+
+    }
+
+    /**
      * Test invite user.
      *
      * @throws IOException

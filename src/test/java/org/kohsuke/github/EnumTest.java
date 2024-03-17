@@ -53,7 +53,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHMyself.RepositoryListFilter.values().length, equalTo(5));
 
         assertThat(GHOrganization.Role.values().length, equalTo(2));
-        assertThat(GHOrganization.Permission.values().length, equalTo(5));
+        assertThat(GHOrganization.Permission.values().length, equalTo(6));
 
         assertThat(GHPermissionType.values().length, equalTo(5));
 
@@ -82,7 +82,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHRepositorySelection.values().length, equalTo(2));
 
         assertThat(GHTeam.Role.values().length, equalTo(2));
-        assertThat(GHTeam.Privacy.values().length, equalTo(2));
+        assertThat(GHTeam.Privacy.values().length, equalTo(3));
 
         assertThat(GHUserSearchBuilder.Sort.values().length, equalTo(3));
 

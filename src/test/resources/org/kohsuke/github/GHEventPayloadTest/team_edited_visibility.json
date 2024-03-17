@@ -1,0 +1,61 @@
+{
+    "changes": {
+        "privacy": {
+            "from": "closed"
+        }
+    },
+    "action": "edited",
+    "team": {
+        "name": "New team",
+        "id": 9709063,
+        "node_id": "T_kwDOBNft-M4AlCYH",
+        "slug": "new-team",
+        "description": "New description",
+        "privacy": "secret",
+        "notification_setting": "notifications_enabled",
+        "url": "https://api.github.com/organizations/81260024/team/9709063",
+        "html_url": "https://github.com/orgs/gsmet-bot-playground/teams/new-team",
+        "members_url": "https://api.github.com/organizations/81260024/team/9709063/members{/member}",
+        "repositories_url": "https://api.github.com/organizations/81260024/team/9709063/repos",
+        "permission": "pull",
+        "parent": null
+    },
+    "organization": {
+        "login": "gsmet-bot-playground",
+        "id": 81260024,
+        "node_id": "MDEyOk9yZ2FuaXphdGlvbjgxMjYwMDI0",
+        "url": "https://api.github.com/orgs/gsmet-bot-playground",
+        "repos_url": "https://api.github.com/orgs/gsmet-bot-playground/repos",
+        "events_url": "https://api.github.com/orgs/gsmet-bot-playground/events",
+        "hooks_url": "https://api.github.com/orgs/gsmet-bot-playground/hooks",
+        "issues_url": "https://api.github.com/orgs/gsmet-bot-playground/issues",
+        "members_url": "https://api.github.com/orgs/gsmet-bot-playground/members{/member}",
+        "public_members_url": "https://api.github.com/orgs/gsmet-bot-playground/public_members{/member}",
+        "avatar_url": "https://avatars.githubusercontent.com/u/81260024?v=4",
+        "description": null
+    },
+    "sender": {
+        "login": "gsmet",
+        "id": 1279749,
+        "node_id": "MDQ6VXNlcjEyNzk3NDk=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/1279749?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/gsmet",
+        "html_url": "https://github.com/gsmet",
+        "followers_url": "https://api.github.com/users/gsmet/followers",
+        "following_url": "https://api.github.com/users/gsmet/following{/other_user}",
+        "gists_url": "https://api.github.com/users/gsmet/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/gsmet/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/gsmet/subscriptions",
+        "organizations_url": "https://api.github.com/users/gsmet/orgs",
+        "repos_url": "https://api.github.com/users/gsmet/repos",
+        "events_url": "https://api.github.com/users/gsmet/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/gsmet/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    "installation": {
+        "id": 16779846,
+        "node_id": "MDIzOkludGVncmF0aW9uSW5zdGFsbGF0aW9uMTY3Nzk4NDY="
+    }
+}

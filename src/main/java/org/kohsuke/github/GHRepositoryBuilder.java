@@ -174,6 +174,8 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *
      * @param repositoryTemplate
      *            GHRepository
+     * @throws IOException
+     *             In case of any networking error or error from the server.
      * @return a builder to continue with building
      *
      */

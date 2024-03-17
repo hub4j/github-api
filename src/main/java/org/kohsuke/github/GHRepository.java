@@ -953,6 +953,8 @@ public class GHRepository extends GHObject implements Cloneable {
     /**
      * Get Repository template was the repository created from.
      *
+     * @throws CloneNotSupportedException
+     *             if the template repository is not cloneable
      * @return the repository template
      */
     public GHRepository getTemplateRepository() throws CloneNotSupportedException {
@@ -1431,6 +1433,10 @@ public class GHRepository extends GHObject implements Cloneable {
     /**
      * Sets repository template
      *
+     * @param value
+     *            the GitHub repository used as a template
+     * @throws IOException
+     *             the io exception
      */
     public void setTemplateRepository(GHRepository value) throws IOException {
         set().templateRepository(value);

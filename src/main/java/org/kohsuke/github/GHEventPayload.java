@@ -1901,7 +1901,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         /**
          * Gets the changes made to the team.
          *
-         * @return the changes made to the team
+         * @return the changes made to the team, null unless action is "edited".
          */
         public GHTeamChanges getChanges() {
             return changes;

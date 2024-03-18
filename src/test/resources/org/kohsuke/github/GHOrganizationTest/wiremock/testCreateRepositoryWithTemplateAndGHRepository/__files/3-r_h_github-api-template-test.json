@@ -4,6 +4,7 @@
   "name": "github-api-template-test",
   "full_name": "hub4j-test-org/github-api-template-test",
   "private": true,
+  "is_template": true,
   "owner": {
     "login": "hub4j-test-org",
     "id": 7544739,

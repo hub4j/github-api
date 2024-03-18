@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThrows;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -175,6 +176,43 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(repository, notNullValue());
         assertThat(repository.getReadme(), notNullValue());
 
+    }
+
+    /**
+     * Test create repository with template repository null.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testCreateRepositoryFromTemplateRepositoryNull() throws IOException {
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        assertThrows(NullPointerException.class, () -> {
+            org.createRepository(GITHUB_API_TEST).fromTemplateRepository(null).owner(GITHUB_API_TEST_ORG).create();
+        });
+    }
+
+    /**
+     * Test create repository when repository template is not a template.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testCreateRepositoryWhenRepositoryTemplateIsNotATemplate() throws IOException {
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository templateRepository = org.getRepository(GITHUB_API_TEMPLATE_TEST);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            org.createRepository(GITHUB_API_TEST)
+                    .fromTemplateRepository(templateRepository)
+                    .owner(GITHUB_API_TEST_ORG)
+                    .create();
+        });
     }
 
     /**

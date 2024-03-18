@@ -170,20 +170,6 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Set template repository as GHRepository.
-     *
-     * @param repositoryTemplate
-     *            GHRepository
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     * @return a builder to continue with building
-     *
-     */
-    public S templateRepository(GHRepository repositoryTemplate) throws IOException {
-        return with("template_repository", repositoryTemplate);
-    }
-
-    /**
      * Sets the repository visibility.
      *
      * @param visibility

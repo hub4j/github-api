@@ -143,6 +143,9 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
     @Preview(BAPTISTE)
     public GHCreateRepositoryBuilder fromTemplateRepository(GHRepository templateRepository) {
         Objects.requireNonNull(templateRepository, "templateRepository cannot be null");
+        if (!templateRepository.isTemplate()) {
+            throw new IllegalArgumentException("The provided repository is not a template repository.");
+        }
         return fromTemplateRepository(templateRepository.getOwnerName(), templateRepository.getName());
     }
 

@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static org.kohsuke.github.internal.Previews.BAPTISTE;
 
@@ -129,6 +130,23 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
     public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
         requester.withPreview(BAPTISTE).withUrlPath("/repos/" + templateOwner + "/" + templateRepo + "/generate");
         return this;
+    }
+
+    /**
+     * Create repository from template repository.
+     *
+     * @param templateRepository
+     *            the template repository as a GHRepository
+     * @return a builder to continue with building
+     * @see <a href="https://developer.github.com/v3/previews/">GitHub API Previews</a>
+     */
+    @Preview(BAPTISTE)
+    public GHCreateRepositoryBuilder fromTemplateRepository(GHRepository templateRepository) {
+        Objects.requireNonNull(templateRepository, "templateRepository cannot be null");
+        if (!templateRepository.isTemplate()) {
+            throw new IllegalArgumentException("The provided repository is not a template repository.");
+        }
+        return fromTemplateRepository(templateRepository.getOwnerName(), templateRepository.getName());
     }
 
     /**

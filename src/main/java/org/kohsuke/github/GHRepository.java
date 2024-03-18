@@ -120,6 +120,8 @@ public class GHRepository extends GHObject {
 
     private String default_branch, language;
 
+    private GHRepository template_repository;
+
     private Map<String, GHCommit> commits = Collections.synchronizedMap(new WeakHashMap<>());
 
     @SkipFromToString
@@ -234,7 +236,7 @@ public class GHRepository extends GHObject {
         return getDeployment(deploymentId).createStatus(ghDeploymentState);
     }
 
-    private static class GHRepoPermission {
+    static class GHRepoPermission {
         boolean pull, push, admin;
     }
 
@@ -946,6 +948,16 @@ public class GHRepository extends GHObject {
     @Deprecated
     public String getMasterBranch() {
         return default_branch;
+    }
+
+    /**
+     * Get Repository template was the repository created from.
+     *
+     * @return the repository template
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+    public GHRepository getTemplateRepository() {
+        return (GHRepository) template_repository;
     }
 
     /**

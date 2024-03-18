@@ -31,7 +31,17 @@ public class HttpClientGitHubConnector implements GitHubConnector {
      * Instantiates a new HttpClientGitHubConnector with a default HttpClient.
      */
     public HttpClientGitHubConnector() {
-        this(HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build());
+        // GitHubClient handles redirects manually as Java HttpClient copies all the headers when redirecting
+        // even when redirecting to a different host which is problematic as we don't want
+        // to push the Authorization header when redirected to a different host.
+        // This problem was discovered when upload-artifact@v4 was released as the new
+        // service we are redirected to for downloading the artifacts doesn't support
+        // having the Authorization header set.
+        // The new implementation does not push the Authorization header when redirected
+        // to a different host, which is similar to what Okhttp is doing:
+        // https://github.com/square/okhttp/blob/f9dfd4e8cc070ca2875a67d8f7ad939d95e7e296/okhttp/src/main/kotlin/okhttp3/internal/http/RetryAndFollowUpInterceptor.kt#L313-L318
+        // See also https://github.com/arduino/report-size-deltas/pull/83 for more context
+        this(HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build());
     }
 
     /**

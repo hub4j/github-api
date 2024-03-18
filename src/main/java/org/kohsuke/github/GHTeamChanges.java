@@ -8,9 +8,8 @@ import org.kohsuke.github.internal.EnumUtils;
 /**
  * Changes made to a team.
  *
- * @see <a href=
- *      "https://docs.github.com/en/webhooks/webhook-events-and-payloads?actionType=edited#team">team
- *      event edited action</a>
+ * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads?actionType=edited#team">team event
+ *      edited action</a>
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHTeamChanges {

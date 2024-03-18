@@ -452,7 +452,7 @@ class GitHubClient {
 
 <span class="fc" id="L453">        int retries = retryCount;</span>
 <span class="fc" id="L454">        sendRequestTraceId.set(Integer.toHexString(request.hashCode()));</span>
-<span class="fc" id="L455">        GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request);</span>
+<span class="fc" id="L455">        GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request, authorizationProvider);</span>
         do {
 <span class="fc" id="L457">            GitHubConnectorResponse connectorResponse = null;</span>
             try {
@@ -492,7 +492,7 @@ class GitHubClient {
 <span class="fc" id="L492">        detectOTPRequired(connectorResponse);</span>
 <span class="fc" id="L493">        detectInvalidCached404Response(connectorResponse, request);</span>
 <span class="fc" id="L494">        detectExpiredToken(connectorResponse, request);</span>
-<span class="fc" id="L495">        detectRedirect(connectorResponse);</span>
+<span class="fc" id="L495">        detectRedirect(connectorResponse, request);</span>
 <span class="fc bfc" id="L496" title="All 2 branches covered.">        if (rateLimitHandler.isError(connectorResponse)) {</span>
 <span class="fc" id="L497">            rateLimitHandler.onError(connectorResponse);</span>
 <span class="fc" id="L498">            throw new RetryRequestException();</span>
@@ -514,105 +514,179 @@ class GitHubClient {
 <span class="pc bpc" id="L514" title="1 of 4 branches missed.">        if (Objects.isNull(originalAuthorization) || originalAuthorization.isEmpty()) {</span>
 <span class="fc" id="L515">            return;</span>
         }
-<span class="fc" id="L517">        GitHubConnectorRequest updatedRequest = prepareConnectorRequest(request);</span>
+<span class="fc" id="L517">        GitHubConnectorRequest updatedRequest = prepareConnectorRequest(request, authorizationProvider);</span>
 <span class="fc" id="L518">        String updatedAuthorization = updatedRequest.header(&quot;Authorization&quot;);</span>
 <span class="fc bfc" id="L519" title="All 2 branches covered.">        if (!originalAuthorization.equals(updatedAuthorization)) {</span>
 <span class="fc" id="L520">            throw new RetryRequestException(updatedRequest);</span>
         }
 <span class="fc" id="L522">    }</span>
 
-    private void detectRedirect(GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="pc bpc" id="L525" title="2 of 4 branches missed.">        if (connectorResponse.statusCode() == HTTP_MOVED_PERM || connectorResponse.statusCode() == HTTP_MOVED_TEMP) {</span>
-            // GitHubClient depends on GitHubConnector implementations to follow any redirects automatically
-            // If this is not done and a redirect is requested, throw in order to maintain security and consistency
-<span class="nc" id="L528">            throw new HttpException(</span>
-                    &quot;GitHubConnnector did not automatically follow redirect.\n&quot;
-                            + &quot;Change your http client configuration to automatically follow redirects as appropriate.&quot;,
-<span class="nc" id="L531">                    connectorResponse.statusCode(),</span>
-                    &quot;Redirect&quot;,
-<span class="nc" id="L533">                    connectorResponse.request().url().toString());</span>
-        }
-<span class="fc" id="L535">    }</span>
+    private void detectRedirect(GitHubConnectorResponse connectorResponse, GitHubRequest request) throws IOException {
+<span class="fc bfc" id="L525" title="All 2 branches covered.">        if (isRedirecting(connectorResponse.statusCode())) {</span>
+            // For redirects, GitHub expects the Authorization header to be removed.
+            // GitHubConnector implementations can follow any redirects automatically as long as they remove the header
+            // as well.
+            // Okhttp does this.
+            // https://github.com/square/okhttp/blob/f9dfd4e8cc070ca2875a67d8f7ad939d95e7e296/okhttp/src/main/kotlin/okhttp3/internal/http/RetryAndFollowUpInterceptor.kt#L313-L318
+            // GitHubClient always strips Authorization from detected redirects for security.
+            // This problem was discovered when upload-artifact@v4 was released as the new
+            // service we are redirected to for downloading the artifacts doesn't support
+            // having the Authorization header set.
+            // See also https://github.com/arduino/report-size-deltas/pull/83 for more context
 
-    private GitHubConnectorRequest prepareConnectorRequest(GitHubRequest request) throws IOException {
-<span class="fc" id="L538">        GitHubRequest.Builder&lt;?&gt; builder = request.toBuilder();</span>
+<span class="fc" id="L537">            GitHubConnectorRequest updatedRequest = prepareRedirectRequest(connectorResponse, request);</span>
+<span class="fc" id="L538">            throw new RetryRequestException(updatedRequest);</span>
+        }
+<span class="fc" id="L540">    }</span>
+
+    private GitHubConnectorRequest prepareRedirectRequest(GitHubConnectorResponse connectorResponse,
+            GitHubRequest request) throws IOException {
+<span class="fc" id="L544">        URI requestUri = URI.create(request.url().toString());</span>
+<span class="fc" id="L545">        URI redirectedUri = getRedirectedUri(requestUri, connectorResponse);</span>
+        // If we switch ports on the same host, we consider that as a different host
+        // This is slightly different from Redirect#NORMAL, but needed for local testing
+<span class="pc bpc" id="L548" title="1 of 2 branches missed.">        boolean sameHost = redirectedUri.getHost().equalsIgnoreCase(request.url().getHost())</span>
+<span class="fc bfc" id="L549" title="All 2 branches covered.">                &amp;&amp; redirectedUri.getPort() == request.url().getPort();</span>
+
+        // mimicking the behavior of Redirect#NORMAL which was the behavior we used before
+        // Always redirect, except from HTTPS URLs to HTTP URLs.
+<span class="pc bpc" id="L553" title="1 of 2 branches missed.">        if (!requestUri.getScheme().equalsIgnoreCase(redirectedUri.getScheme())</span>
+<span class="nc bnc" id="L554" title="All 2 branches missed.">                &amp;&amp; !&quot;https&quot;.equalsIgnoreCase(redirectedUri.getScheme())) {</span>
+<span class="nc" id="L555">            throw new HttpException(&quot;Attemped to redirect to a different scheme and the target scheme as not https.&quot;,</span>
+<span class="nc" id="L556">                    connectorResponse.statusCode(),</span>
+                    &quot;Redirect&quot;,
+<span class="nc" id="L558">                    connectorResponse.request().url().toString());</span>
+        }
+
+<span class="fc" id="L561">        String redirectedMethod = getRedirectedMethod(connectorResponse.statusCode(), request.method());</span>
+
+        // let's build the new redirected request
+<span class="fc" id="L564">        GitHubRequest.Builder&lt;?&gt; requestBuilder = request.toBuilder()</span>
+<span class="fc" id="L565">                .setRawUrlPath(redirectedUri.toString())</span>
+<span class="fc" id="L566">                .method(redirectedMethod);</span>
+        // if we redirect to a different host (even https), we remove the Authorization header
+<span class="fc" id="L568">        AuthorizationProvider provider = authorizationProvider;</span>
+<span class="fc bfc" id="L569" title="All 2 branches covered.">        if (!sameHost) {</span>
+<span class="fc" id="L570">            requestBuilder.removeHeader(&quot;Authorization&quot;);</span>
+<span class="fc" id="L571">            provider = AuthorizationProvider.ANONYMOUS;</span>
+        }
+<span class="fc" id="L573">        return prepareConnectorRequest(requestBuilder.build(), provider);</span>
+    }
+
+    private static URI getRedirectedUri(URI requestUri, GitHubConnectorResponse connectorResponse) throws IOException {
+        URI redirectedURI;
+<span class="fc" id="L578">        redirectedURI = Optional.of(connectorResponse.header(&quot;Location&quot;))</span>
+<span class="fc" id="L579">                .map(URI::create)</span>
+<span class="pc" id="L580">                .orElseThrow(() -&gt; new IOException(&quot;Invalid redirection&quot;));</span>
+
+        // redirect could be relative to original URL, but if not
+        // then redirect is used.
+<span class="fc" id="L584">        redirectedURI = requestUri.resolve(redirectedURI);</span>
+<span class="fc" id="L585">        return redirectedURI;</span>
+    }
+
+    // This implements the exact same rules as the ones applied in jdk.internal.net.http.RedirectFilter
+    private static boolean isRedirecting(int statusCode) {
+<span class="pc bpc" id="L590" title="4 of 10 branches missed.">        return statusCode == HTTP_MOVED_PERM || statusCode == HTTP_MOVED_TEMP || statusCode == 303 || statusCode == 307</span>
+                || statusCode == 308;
+    }
+
+    // This implements the exact same rules as the ones applied in jdk.internal.net.http.RedirectFilter
+    private static String getRedirectedMethod(int statusCode, String originalMethod) {
+<span class="pc bpc" id="L596" title="3 of 4 branches missed.">        switch (statusCode) {</span>
+            case HTTP_MOVED_PERM :
+            case HTTP_MOVED_TEMP :
+<span class="pc bpc" id="L599" title="1 of 2 branches missed.">                return originalMethod.equals(&quot;POST&quot;) ? &quot;GET&quot; : originalMethod;</span>
+            case 303 :
+<span class="nc" id="L601">                return &quot;GET&quot;;</span>
+            case 307 :
+            case 308 :
+<span class="nc" id="L604">                return originalMethod;</span>
+            default :
+<span class="nc" id="L606">                return originalMethod;</span>
+        }
+    }
+
+    private static GitHubConnectorRequest prepareConnectorRequest(GitHubRequest request,
+            AuthorizationProvider authorizationProvider) throws IOException {
+<span class="fc" id="L612">        GitHubRequest.Builder&lt;?&gt; builder = request.toBuilder();</span>
         // if the authentication is needed but no credential is given, try it anyway (so that some calls
         // that do work with anonymous access in the reduced form should still work.)
-<span class="fc bfc" id="L541" title="All 2 branches covered.">        if (!request.allHeaders().containsKey(&quot;Authorization&quot;)) {</span>
-<span class="fc" id="L542">            String authorization = getEncodedAuthorization();</span>
-<span class="fc bfc" id="L543" title="All 2 branches covered.">            if (authorization != null) {</span>
-<span class="fc" id="L544">                builder.setHeader(&quot;Authorization&quot;, authorization);</span>
+<span class="fc bfc" id="L615" title="All 2 branches covered.">        if (!request.allHeaders().containsKey(&quot;Authorization&quot;)) {</span>
+<span class="fc" id="L616">            String authorization = authorizationProvider.getEncodedAuthorization();</span>
+<span class="fc bfc" id="L617" title="All 2 branches covered.">            if (authorization != null) {</span>
+<span class="fc" id="L618">                builder.setHeader(&quot;Authorization&quot;, authorization);</span>
             }
         }
-<span class="fc bfc" id="L547" title="All 2 branches covered.">        if (request.header(&quot;Accept&quot;) == null) {</span>
-<span class="fc" id="L548">            builder.setHeader(&quot;Accept&quot;, &quot;application/vnd.github.v3+json&quot;);</span>
+<span class="fc bfc" id="L621" title="All 2 branches covered.">        if (request.header(&quot;Accept&quot;) == null) {</span>
+<span class="fc" id="L622">            builder.setHeader(&quot;Accept&quot;, &quot;application/vnd.github.v3+json&quot;);</span>
         }
-<span class="fc" id="L550">        builder.setHeader(&quot;Accept-Encoding&quot;, &quot;gzip&quot;);</span>
+<span class="fc" id="L624">        builder.setHeader(&quot;Accept-Encoding&quot;, &quot;gzip&quot;);</span>
 
-<span class="fc bfc" id="L552" title="All 2 branches covered.">        if (request.hasBody()) {</span>
-<span class="fc bfc" id="L553" title="All 2 branches covered.">            if (request.body() != null) {</span>
-<span class="fc" id="L554">                builder.contentType(defaultString(request.contentType(), &quot;application/x-www-form-urlencoded&quot;));</span>
+<span class="fc bfc" id="L626" title="All 2 branches covered.">        if (request.hasBody()) {</span>
+<span class="fc bfc" id="L627" title="All 2 branches covered.">            if (request.body() != null) {</span>
+<span class="fc" id="L628">                builder.contentType(defaultString(request.contentType(), &quot;application/x-www-form-urlencoded&quot;));</span>
             } else {
-<span class="fc" id="L556">                builder.contentType(&quot;application/json&quot;);</span>
-<span class="fc" id="L557">                Map&lt;String, Object&gt; json = new HashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L558" title="All 2 branches covered.">                for (GitHubRequest.Entry e : request.args()) {</span>
-<span class="fc" id="L559">                    json.put(e.key, e.value);</span>
-<span class="fc" id="L560">                }</span>
-<span class="fc" id="L561">                builder.with(new ByteArrayInputStream(getMappingObjectWriter().writeValueAsBytes(json)));</span>
+<span class="fc" id="L630">                builder.contentType(&quot;application/json&quot;);</span>
+<span class="fc" id="L631">                Map&lt;String, Object&gt; json = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L632" title="All 2 branches covered.">                for (GitHubRequest.Entry e : request.args()) {</span>
+<span class="fc" id="L633">                    json.put(e.key, e.value);</span>
+<span class="fc" id="L634">                }</span>
+<span class="fc" id="L635">                builder.with(new ByteArrayInputStream(getMappingObjectWriter().writeValueAsBytes(json)));</span>
             }
 
         }
 
-<span class="fc" id="L566">        return builder.build();</span>
+<span class="fc" id="L640">        return builder.build();</span>
     }
 
     private void logRequest(@Nonnull final GitHubConnectorRequest request) {
-<span class="fc" id="L570">        LOGGER.log(FINE,</span>
-<span class="fc" id="L571">                () -&gt; String.format(&quot;(%s) GitHub API request: %s %s&quot;,</span>
-<span class="fc" id="L572">                        sendRequestTraceId.get(),</span>
-<span class="fc" id="L573">                        request.method(),</span>
-<span class="fc" id="L574">                        request.url().toString()));</span>
-<span class="fc" id="L575">    }</span>
+<span class="fc" id="L644">        LOGGER.log(FINE,</span>
+<span class="fc" id="L645">                () -&gt; String.format(&quot;(%s) GitHub API request: %s %s&quot;,</span>
+<span class="fc" id="L646">                        sendRequestTraceId.get(),</span>
+<span class="fc" id="L647">                        request.method(),</span>
+<span class="fc" id="L648">                        request.url().toString()));</span>
+<span class="fc" id="L649">    }</span>
 
     private void logResponse(@Nonnull final GitHubConnectorResponse response) {
-<span class="fc" id="L578">        LOGGER.log(FINER, () -&gt; {</span>
-<span class="fc" id="L579">            return String.format(&quot;(%s) GitHub API response: %s&quot;,</span>
-<span class="fc" id="L580">                    sendRequestTraceId.get(),</span>
-<span class="fc" id="L581">                    response.request().url().toString(),</span>
-<span class="fc" id="L582">                    response.statusCode());</span>
+<span class="fc" id="L652">        LOGGER.log(FINER, () -&gt; {</span>
+<span class="fc" id="L653">            return String.format(&quot;(%s) GitHub API response: %s&quot;,</span>
+<span class="fc" id="L654">                    sendRequestTraceId.get(),</span>
+<span class="fc" id="L655">                    response.request().url().toString(),</span>
+<span class="fc" id="L656">                    response.statusCode());</span>
         });
-<span class="fc" id="L584">    }</span>
+<span class="fc" id="L658">    }</span>
 
     private void logResponseBody(@Nonnull final GitHubConnectorResponse response) {
-<span class="fc" id="L587">        LOGGER.log(FINEST, () -&gt; {</span>
+<span class="fc" id="L661">        LOGGER.log(FINEST, () -&gt; {</span>
             String body;
             try {
-<span class="fc" id="L590">                body = GitHubResponse.getBodyAsString(response);</span>
-<span class="fc" id="L591">            } catch (Throwable e) {</span>
-<span class="fc" id="L592">                body = &quot;Error reading response body&quot;;</span>
-<span class="fc" id="L593">            }</span>
-<span class="fc" id="L594">            return String.format(&quot;(%s) GitHub API response body: %s&quot;, sendRequestTraceId.get(), body);</span>
+<span class="fc" id="L664">                body = GitHubResponse.getBodyAsString(response);</span>
+<span class="fc" id="L665">            } catch (Throwable e) {</span>
+<span class="fc" id="L666">                body = &quot;Error reading response body&quot;;</span>
+<span class="fc" id="L667">            }</span>
+<span class="fc" id="L668">            return String.format(&quot;(%s) GitHub API response body: %s&quot;, sendRequestTraceId.get(), body);</span>
 
         });
-<span class="fc" id="L597">    }</span>
+<span class="fc" id="L671">    }</span>
 
     @Nonnull
     private static &lt;T&gt; GitHubResponse&lt;T&gt; createResponse(@Nonnull GitHubConnectorResponse connectorResponse,
             @CheckForNull BodyHandler&lt;T&gt; handler) throws IOException {
-<span class="fc" id="L602">        T body = null;</span>
-<span class="fc bfc" id="L603" title="All 2 branches covered.">        if (handler != null) {</span>
-<span class="fc bfc" id="L604" title="All 2 branches covered.">            if (!shouldIgnoreBody(connectorResponse)) {</span>
-<span class="fc" id="L605">                body = handler.apply(connectorResponse);</span>
+<span class="fc" id="L676">        T body = null;</span>
+<span class="fc bfc" id="L677" title="All 2 branches covered.">        if (handler != null) {</span>
+<span class="fc bfc" id="L678" title="All 2 branches covered.">            if (!shouldIgnoreBody(connectorResponse)) {</span>
+<span class="fc" id="L679">                body = handler.apply(connectorResponse);</span>
             }
         }
-<span class="fc" id="L608">        return new GitHubResponse&lt;&gt;(connectorResponse, body);</span>
+<span class="fc" id="L682">        return new GitHubResponse&lt;&gt;(connectorResponse, body);</span>
     }
 
     private static boolean shouldIgnoreBody(@Nonnull GitHubConnectorResponse connectorResponse) {
-<span class="pc bpc" id="L612" title="1 of 2 branches missed.">        if (connectorResponse.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {</span>
+<span class="pc bpc" id="L686" title="1 of 2 branches missed.">        if (connectorResponse.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {</span>
             // special case handling for 304 unmodified, as the content will be &quot;&quot;
-<span class="nc" id="L614">            return true;</span>
-<span class="fc bfc" id="L615" title="All 2 branches covered.">        } else if (connectorResponse.statusCode() == HttpURLConnection.HTTP_ACCEPTED) {</span>
+<span class="nc" id="L688">            return true;</span>
+<span class="fc bfc" id="L689" title="All 2 branches covered.">        } else if (connectorResponse.statusCode() == HttpURLConnection.HTTP_ACCEPTED) {</span>
 
             // Response code 202 means data is being generated or an action that can require some time is triggered.
             // This happens in specific cases:
@@ -620,13 +694,13 @@ class GitHubClient {
             // fork creation - See https://developer.github.com/v3/repos/forks/#create-a-fork
             // workflow run cancellation - See https://docs.github.com/en/rest/reference/actions#cancel-a-workflow-run
 
-<span class="fc" id="L623">            LOGGER.log(FINE,</span>
-<span class="fc" id="L624">                    () -&gt; String.format(&quot;(%s) Received HTTP_ACCEPTED(202) from %s. Please try again in 5 seconds.&quot;,</span>
-<span class="fc" id="L625">                            sendRequestTraceId.get(),</span>
-<span class="fc" id="L626">                            connectorResponse.request().url().toString()));</span>
-<span class="fc" id="L627">            return true;</span>
+<span class="fc" id="L697">            LOGGER.log(FINE,</span>
+<span class="fc" id="L698">                    () -&gt; String.format(&quot;(%s) Received HTTP_ACCEPTED(202) from %s. Please try again in 5 seconds.&quot;,</span>
+<span class="fc" id="L699">                            sendRequestTraceId.get(),</span>
+<span class="fc" id="L700">                            connectorResponse.request().url().toString()));</span>
+<span class="fc" id="L701">            return true;</span>
         } else {
-<span class="fc" id="L629">            return false;</span>
+<span class="fc" id="L703">            return false;</span>
         }
     }
 
@@ -637,38 +711,38 @@ class GitHubClient {
             @Nonnull GitHubConnectorRequest connectorRequest,
             @CheckForNull GitHubConnectorResponse connectorResponse) throws IOException {
         // If we're already throwing a GHIOException, pass through
-<span class="fc bfc" id="L640" title="All 2 branches covered.">        if (e instanceof GHIOException) {</span>
-<span class="fc" id="L641">            return e;</span>
+<span class="fc bfc" id="L714" title="All 2 branches covered.">        if (e instanceof GHIOException) {</span>
+<span class="fc" id="L715">            return e;</span>
         }
 
-<span class="fc" id="L644">        int statusCode = -1;</span>
-<span class="fc" id="L645">        String message = null;</span>
-<span class="fc" id="L646">        Map&lt;String, List&lt;String&gt;&gt; headers = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L647">        String errorMessage = null;</span>
+<span class="fc" id="L718">        int statusCode = -1;</span>
+<span class="fc" id="L719">        String message = null;</span>
+<span class="fc" id="L720">        Map&lt;String, List&lt;String&gt;&gt; headers = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L721">        String errorMessage = null;</span>
 
-<span class="fc bfc" id="L649" title="All 2 branches covered.">        if (connectorResponse != null) {</span>
-<span class="fc" id="L650">            statusCode = connectorResponse.statusCode();</span>
-<span class="fc" id="L651">            message = connectorResponse.header(&quot;Status&quot;);</span>
-<span class="fc" id="L652">            headers = connectorResponse.allHeaders();</span>
-<span class="fc bfc" id="L653" title="All 2 branches covered.">            if (connectorResponse.statusCode() &gt;= HTTP_BAD_REQUEST) {</span>
-<span class="fc" id="L654">                errorMessage = GitHubResponse.getBodyAsStringOrNull(connectorResponse);</span>
+<span class="fc bfc" id="L723" title="All 2 branches covered.">        if (connectorResponse != null) {</span>
+<span class="fc" id="L724">            statusCode = connectorResponse.statusCode();</span>
+<span class="fc" id="L725">            message = connectorResponse.header(&quot;Status&quot;);</span>
+<span class="fc" id="L726">            headers = connectorResponse.allHeaders();</span>
+<span class="fc bfc" id="L727" title="All 2 branches covered.">            if (connectorResponse.statusCode() &gt;= HTTP_BAD_REQUEST) {</span>
+<span class="fc" id="L728">                errorMessage = GitHubResponse.getBodyAsStringOrNull(connectorResponse);</span>
             }
         }
 
-<span class="fc bfc" id="L658" title="All 2 branches covered.">        if (errorMessage != null) {</span>
-<span class="pc bpc" id="L659" title="1 of 2 branches missed.">            if (e instanceof FileNotFoundException) {</span>
+<span class="fc bfc" id="L732" title="All 2 branches covered.">        if (errorMessage != null) {</span>
+<span class="pc bpc" id="L733" title="1 of 2 branches missed.">            if (e instanceof FileNotFoundException) {</span>
                 // pass through 404 Not Found to allow the caller to handle it intelligently
-<span class="fc" id="L661">                e = new GHFileNotFoundException(e.getMessage() + &quot; &quot; + errorMessage, e)</span>
-<span class="fc" id="L662">                        .withResponseHeaderFields(headers);</span>
-<span class="nc bnc" id="L663" title="All 2 branches missed.">            } else if (statusCode &gt;= 0) {</span>
-<span class="nc" id="L664">                e = new HttpException(errorMessage, statusCode, message, connectorRequest.url().toString(), e);</span>
+<span class="fc" id="L735">                e = new GHFileNotFoundException(e.getMessage() + &quot; &quot; + errorMessage, e)</span>
+<span class="fc" id="L736">                        .withResponseHeaderFields(headers);</span>
+<span class="nc bnc" id="L737" title="All 2 branches missed.">            } else if (statusCode &gt;= 0) {</span>
+<span class="nc" id="L738">                e = new HttpException(errorMessage, statusCode, message, connectorRequest.url().toString(), e);</span>
             } else {
-<span class="nc" id="L666">                e = new GHIOException(errorMessage).withResponseHeaderFields(headers);</span>
+<span class="nc" id="L740">                e = new GHIOException(errorMessage).withResponseHeaderFields(headers);</span>
             }
-<span class="fc bfc" id="L668" title="All 2 branches covered.">        } else if (!(e instanceof FileNotFoundException)) {</span>
-<span class="fc" id="L669">            e = new HttpException(statusCode, message, connectorRequest.url().toString(), e);</span>
+<span class="fc bfc" id="L742" title="All 2 branches covered.">        } else if (!(e instanceof FileNotFoundException)) {</span>
+<span class="fc" id="L743">            e = new HttpException(statusCode, message, connectorRequest.url().toString(), e);</span>
         }
-<span class="fc" id="L671">        return e;</span>
+<span class="fc" id="L745">        return e;</span>
     }
 
     private static void logRetryConnectionError(IOException e, URL url, int retries) throws IOException {
@@ -676,30 +750,30 @@ class GitHubClient {
 
         // WARNING: These are unsupported environment variables.
         // The GitHubClient class is internal and may change at any time.
-<span class="fc" id="L679">        int minRetryInterval = Math.max(DEFAULT_MINIMUM_RETRY_MILLIS,</span>
-<span class="fc" id="L680">                Integer.getInteger(GitHubClient.class.getName() + &quot;.minRetryInterval&quot;, DEFAULT_MINIMUM_RETRY_MILLIS));</span>
-<span class="fc" id="L681">        int maxRetryInterval = Math.max(DEFAULT_MAXIMUM_RETRY_MILLIS,</span>
-<span class="fc" id="L682">                Integer.getInteger(GitHubClient.class.getName() + &quot;.maxRetryInterval&quot;, DEFAULT_MAXIMUM_RETRY_MILLIS));</span>
+<span class="fc" id="L753">        int minRetryInterval = Math.max(DEFAULT_MINIMUM_RETRY_MILLIS,</span>
+<span class="fc" id="L754">                Integer.getInteger(GitHubClient.class.getName() + &quot;.minRetryInterval&quot;, DEFAULT_MINIMUM_RETRY_MILLIS));</span>
+<span class="fc" id="L755">        int maxRetryInterval = Math.max(DEFAULT_MAXIMUM_RETRY_MILLIS,</span>
+<span class="fc" id="L756">                Integer.getInteger(GitHubClient.class.getName() + &quot;.maxRetryInterval&quot;, DEFAULT_MAXIMUM_RETRY_MILLIS));</span>
 
-<span class="pc bpc" id="L684" title="1 of 2 branches missed.">        long sleepTime = maxRetryInterval &lt;= minRetryInterval</span>
-<span class="fc" id="L685">                ? minRetryInterval</span>
-<span class="pc" id="L686">                : ThreadLocalRandom.current().nextLong(minRetryInterval, maxRetryInterval);</span>
+<span class="pc bpc" id="L758" title="1 of 2 branches missed.">        long sleepTime = maxRetryInterval &lt;= minRetryInterval</span>
+<span class="fc" id="L759">                ? minRetryInterval</span>
+<span class="pc" id="L760">                : ThreadLocalRandom.current().nextLong(minRetryInterval, maxRetryInterval);</span>
 
-<span class="fc" id="L688">        LOGGER.log(INFO,</span>
-<span class="fc" id="L689">                () -&gt; String.format(</span>
+<span class="fc" id="L762">        LOGGER.log(INFO,</span>
+<span class="fc" id="L763">                () -&gt; String.format(</span>
                         &quot;(%s) %s while connecting to %s: '%s'. Sleeping %d milliseconds before retrying (%d retries remaining)&quot;,
-<span class="fc" id="L691">                        sendRequestTraceId.get(),</span>
-<span class="fc" id="L692">                        e.getClass().toString(),</span>
-<span class="fc" id="L693">                        url.toString(),</span>
-<span class="fc" id="L694">                        e.getMessage(),</span>
-<span class="fc" id="L695">                        sleepTime,</span>
-<span class="fc" id="L696">                        retries));</span>
+<span class="fc" id="L765">                        sendRequestTraceId.get(),</span>
+<span class="fc" id="L766">                        e.getClass().toString(),</span>
+<span class="fc" id="L767">                        url.toString(),</span>
+<span class="fc" id="L768">                        e.getMessage(),</span>
+<span class="fc" id="L769">                        sleepTime,</span>
+<span class="fc" id="L770">                        retries));</span>
         try {
-<span class="fc" id="L698">            Thread.sleep(sleepTime);</span>
-<span class="nc" id="L699">        } catch (InterruptedException ie) {</span>
-<span class="nc" id="L700">            throw (IOException) new InterruptedIOException().initCause(e);</span>
-<span class="fc" id="L701">        }</span>
-<span class="fc" id="L702">    }</span>
+<span class="fc" id="L772">            Thread.sleep(sleepTime);</span>
+<span class="nc" id="L773">        } catch (InterruptedException ie) {</span>
+<span class="nc" id="L774">            throw (IOException) new InterruptedIOException().initCause(e);</span>
+<span class="fc" id="L775">        }</span>
+<span class="fc" id="L776">    }</span>
 
     private void detectInvalidCached404Response(GitHubConnectorResponse connectorResponse, GitHubRequest request)
             throws IOException {
@@ -713,68 +787,69 @@ class GitHubClient {
         // scenarios. If GitHub ever fixes their issue and/or begins providing accurate ETags to
         // their 404 responses, this will result in at worst two requests being made for each 404
         // responses. However, only the second request will count against rate limit.
-<span class="fc bfc" id="L716" title="All 4 branches covered.">        if (connectorResponse.statusCode() == 404 &amp;&amp; Objects.equals(connectorResponse.request().method(), &quot;GET&quot;)</span>
-<span class="fc bfc" id="L717" title="All 2 branches covered.">                &amp;&amp; connectorResponse.header(&quot;ETag&quot;) != null</span>
-<span class="pc bpc" id="L718" title="1 of 2 branches missed.">                &amp;&amp; !Objects.equals(connectorResponse.request().header(&quot;Cache-Control&quot;), &quot;no-cache&quot;)) {</span>
-<span class="fc" id="L719">            LOGGER.log(FINE,</span>
-<span class="fc" id="L720">                    () -&gt; String.format(</span>
+<span class="fc bfc" id="L790" title="All 4 branches covered.">        if (connectorResponse.statusCode() == 404 &amp;&amp; Objects.equals(connectorResponse.request().method(), &quot;GET&quot;)</span>
+<span class="fc bfc" id="L791" title="All 2 branches covered.">                &amp;&amp; connectorResponse.header(&quot;ETag&quot;) != null</span>
+<span class="pc bpc" id="L792" title="1 of 2 branches missed.">                &amp;&amp; !Objects.equals(connectorResponse.request().header(&quot;Cache-Control&quot;), &quot;no-cache&quot;)) {</span>
+<span class="fc" id="L793">            LOGGER.log(FINE,</span>
+<span class="fc" id="L794">                    () -&gt; String.format(</span>
                             &quot;(%s) Encountered GitHub invalid cached 404 from %s. Retrying with \&quot;Cache-Control\&quot;=\&quot;no-cache\&quot;...&quot;,
-<span class="fc" id="L722">                            sendRequestTraceId.get(),</span>
-<span class="fc" id="L723">                            connectorResponse.request().url()));</span>
+<span class="fc" id="L796">                            sendRequestTraceId.get(),</span>
+<span class="fc" id="L797">                            connectorResponse.request().url()));</span>
             // Setting &quot;Cache-Control&quot; to &quot;no-cache&quot; stops the cache from supplying
             // &quot;If-Modified-Since&quot; or &quot;If-None-Match&quot; values.
             // This makes GitHub give us current data (not incorrectly cached data)
-<span class="fc" id="L727">            throw new RetryRequestException(</span>
-<span class="fc" id="L728">                    prepareConnectorRequest(request.toBuilder().setHeader(&quot;Cache-Control&quot;, &quot;no-cache&quot;).build()));</span>
+<span class="fc" id="L801">            throw new RetryRequestException(</span>
+<span class="fc" id="L802">                    prepareConnectorRequest(request.toBuilder().setHeader(&quot;Cache-Control&quot;, &quot;no-cache&quot;).build(),</span>
+                            authorizationProvider));
         }
-<span class="fc" id="L730">    }</span>
+<span class="fc" id="L805">    }</span>
 
     private void noteRateLimit(@Nonnull RateLimitTarget rateLimitTarget,
             @Nonnull GitHubConnectorResponse connectorResponse) {
         try {
-<span class="fc" id="L735">            int limit = connectorResponse.parseInt(&quot;X-RateLimit-Limit&quot;);</span>
-<span class="fc" id="L736">            int remaining = connectorResponse.parseInt(&quot;X-RateLimit-Remaining&quot;);</span>
-<span class="fc" id="L737">            int reset = connectorResponse.parseInt(&quot;X-RateLimit-Reset&quot;);</span>
-<span class="fc" id="L738">            GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, connectorResponse);</span>
-<span class="fc" id="L739">            updateRateLimit(GHRateLimit.fromRecord(observed, rateLimitTarget));</span>
-<span class="fc" id="L740">        } catch (NumberFormatException e) {</span>
-<span class="fc" id="L741">            LOGGER.log(FINER,</span>
-<span class="fc" id="L742">                    () -&gt; String.format(&quot;(%s) Missing or malformed X-RateLimit header: %s&quot;,</span>
-<span class="fc" id="L743">                            sendRequestTraceId.get(),</span>
-<span class="fc" id="L744">                            e.getMessage()));</span>
-<span class="fc" id="L745">        }</span>
-<span class="fc" id="L746">    }</span>
+<span class="fc" id="L810">            int limit = connectorResponse.parseInt(&quot;X-RateLimit-Limit&quot;);</span>
+<span class="fc" id="L811">            int remaining = connectorResponse.parseInt(&quot;X-RateLimit-Remaining&quot;);</span>
+<span class="fc" id="L812">            int reset = connectorResponse.parseInt(&quot;X-RateLimit-Reset&quot;);</span>
+<span class="fc" id="L813">            GHRateLimit.Record observed = new GHRateLimit.Record(limit, remaining, reset, connectorResponse);</span>
+<span class="fc" id="L814">            updateRateLimit(GHRateLimit.fromRecord(observed, rateLimitTarget));</span>
+<span class="fc" id="L815">        } catch (NumberFormatException e) {</span>
+<span class="fc" id="L816">            LOGGER.log(FINER,</span>
+<span class="fc" id="L817">                    () -&gt; String.format(&quot;(%s) Missing or malformed X-RateLimit header: %s&quot;,</span>
+<span class="fc" id="L818">                            sendRequestTraceId.get(),</span>
+<span class="fc" id="L819">                            e.getMessage()));</span>
+<span class="fc" id="L820">        }</span>
+<span class="fc" id="L821">    }</span>
 
     private static void detectOTPRequired(@Nonnull GitHubConnectorResponse connectorResponse) throws GHIOException {
         // 401 Unauthorized == bad creds or OTP request
-<span class="fc bfc" id="L750" title="All 2 branches covered.">        if (connectorResponse.statusCode() == HTTP_UNAUTHORIZED) {</span>
+<span class="fc bfc" id="L825" title="All 2 branches covered.">        if (connectorResponse.statusCode() == HTTP_UNAUTHORIZED) {</span>
             // In the case of a user with 2fa enabled, a header with X-GitHub-OTP
             // will be returned indicating the user needs to respond with an otp
-<span class="fc bfc" id="L753" title="All 2 branches covered.">            if (connectorResponse.header(&quot;X-GitHub-OTP&quot;) != null) {</span>
-<span class="fc" id="L754">                throw new GHOTPRequiredException().withResponseHeaderFields(connectorResponse.allHeaders());</span>
+<span class="fc bfc" id="L828" title="All 2 branches covered.">            if (connectorResponse.header(&quot;X-GitHub-OTP&quot;) != null) {</span>
+<span class="fc" id="L829">                throw new GHOTPRequiredException().withResponseHeaderFields(connectorResponse.allHeaders());</span>
             }
         }
-<span class="fc" id="L757">    }</span>
+<span class="fc" id="L832">    }</span>
 
     /**
      * Require credential.
      */
     void requireCredential() {
-<span class="fc bfc" id="L763" title="All 2 branches covered.">        if (isAnonymous())</span>
-<span class="fc" id="L764">            throw new IllegalStateException(</span>
+<span class="fc bfc" id="L838" title="All 2 branches covered.">        if (isAnonymous())</span>
+<span class="fc" id="L839">            throw new IllegalStateException(</span>
                     &quot;This operation requires a credential but none is given to the GitHub constructor&quot;);
-<span class="fc" id="L766">    }</span>
+<span class="fc" id="L841">    }</span>
 
     private static class GHApiInfo {
         private String rate_limit_url;
 
         void check(String apiUrl) throws IOException {
-<span class="fc bfc" id="L772" title="All 2 branches covered.">            if (rate_limit_url == null)</span>
-<span class="fc" id="L773">                throw new IOException(apiUrl + &quot; doesn't look like GitHub API URL&quot;);</span>
+<span class="fc bfc" id="L847" title="All 2 branches covered.">            if (rate_limit_url == null)</span>
+<span class="fc" id="L848">                throw new IOException(apiUrl + &quot; doesn't look like GitHub API URL&quot;);</span>
 
             // make sure that the URL is legitimate
-<span class="fc" id="L776">            new URL(rate_limit_url);</span>
-<span class="fc" id="L777">        }</span>
+<span class="fc" id="L851">            new URL(rate_limit_url);</span>
+<span class="fc" id="L852">        }</span>
     }
 
     /**
@@ -807,10 +882,10 @@ class GitHubClient {
      */
     private boolean isPrivateModeEnabled() {
         try {
-<span class="fc" id="L810">            GitHubResponse&lt;?&gt; response = sendRequest(GitHubRequest.newBuilder().withApiUrl(getApiUrl()), null);</span>
-<span class="pc bpc" id="L811" title="1 of 4 branches missed.">            return response.statusCode() == HTTP_UNAUTHORIZED &amp;&amp; response.header(&quot;X-GitHub-Media-Type&quot;) != null;</span>
-<span class="nc" id="L812">        } catch (IOException e) {</span>
-<span class="nc" id="L813">            return false;</span>
+<span class="fc" id="L885">            GitHubResponse&lt;?&gt; response = sendRequest(GitHubRequest.newBuilder().withApiUrl(getApiUrl()), null);</span>
+<span class="pc bpc" id="L886" title="1 of 4 branches missed.">            return response.statusCode() == HTTP_UNAUTHORIZED &amp;&amp; response.header(&quot;X-GitHub-Media-Type&quot;) != null;</span>
+<span class="nc" id="L887">        } catch (IOException e) {</span>
+<span class="nc" id="L888">            return false;</span>
         }
     }
 
@@ -823,9 +898,9 @@ class GitHubClient {
      */
     static URL parseURL(String s) {
         try {
-<span class="fc bfc" id="L826" title="All 2 branches covered.">            return s == null ? null : new URL(s);</span>
-<span class="fc" id="L827">        } catch (MalformedURLException e) {</span>
-<span class="fc" id="L828">            throw new IllegalStateException(&quot;Invalid URL: &quot; + s);</span>
+<span class="fc bfc" id="L901" title="All 2 branches covered.">            return s == null ? null : new URL(s);</span>
+<span class="fc" id="L902">        } catch (MalformedURLException e) {</span>
+<span class="fc" id="L903">            throw new IllegalStateException(&quot;Invalid URL: &quot; + s);</span>
         }
     }
 
@@ -837,10 +912,10 @@ class GitHubClient {
      * @return the date
      */
     static Date parseDate(String timestamp) {
-<span class="fc bfc" id="L840" title="All 2 branches covered.">        if (timestamp == null)</span>
-<span class="fc" id="L841">            return null;</span>
+<span class="fc bfc" id="L915" title="All 2 branches covered.">        if (timestamp == null)</span>
+<span class="fc" id="L916">            return null;</span>
 
-<span class="fc" id="L843">        return Date.from(parseInstant(timestamp));</span>
+<span class="fc" id="L918">        return Date.from(parseInstant(timestamp));</span>
     }
 
     /**
@@ -851,14 +926,14 @@ class GitHubClient {
      * @return the instant
      */
     static Instant parseInstant(String timestamp) {
-<span class="fc bfc" id="L854" title="All 2 branches covered.">        if (timestamp == null)</span>
-<span class="fc" id="L855">            return null;</span>
+<span class="fc bfc" id="L929" title="All 2 branches covered.">        if (timestamp == null)</span>
+<span class="fc" id="L930">            return null;</span>
 
-<span class="fc bfc" id="L857" title="All 2 branches covered.">        if (timestamp.charAt(4) == '/') {</span>
+<span class="fc bfc" id="L932" title="All 2 branches covered.">        if (timestamp.charAt(4) == '/') {</span>
             // Unsure where this is used, but retained for compatibility.
-<span class="fc" id="L859">            return Instant.from(DATE_TIME_PARSER_SLASHES.parse(timestamp));</span>
+<span class="fc" id="L934">            return Instant.from(DATE_TIME_PARSER_SLASHES.parse(timestamp));</span>
         } else {
-<span class="fc" id="L861">            return Instant.from(DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(timestamp));</span>
+<span class="fc" id="L936">            return Instant.from(DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(timestamp));</span>
         }
     }
 
@@ -870,7 +945,7 @@ class GitHubClient {
      * @return the string
      */
     static String printDate(Date dt) {
-<span class="fc" id="L873">        return DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(dt.getTime()).truncatedTo(ChronoUnit.SECONDS));</span>
+<span class="fc" id="L948">        return DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(dt.getTime()).truncatedTo(ChronoUnit.SECONDS));</span>
     }
 
     /**
@@ -880,7 +955,7 @@ class GitHubClient {
      */
     @Nonnull
     static ObjectWriter getMappingObjectWriter() {
-<span class="fc" id="L883">        return MAPPER.writer();</span>
+<span class="fc" id="L958">        return MAPPER.writer();</span>
     }
 
     /**
@@ -892,9 +967,9 @@ class GitHubClient {
      */
     @Nonnull
     static ObjectReader getMappingObjectReader(@Nonnull GitHub root) {
-<span class="fc" id="L895">        ObjectReader reader = getMappingObjectReader((GitHubConnectorResponse) null);</span>
-<span class="fc" id="L896">        ((InjectableValues.Std) reader.getInjectableValues()).addValue(GitHub.class, root);</span>
-<span class="fc" id="L897">        return reader;</span>
+<span class="fc" id="L970">        ObjectReader reader = getMappingObjectReader((GitHubConnectorResponse) null);</span>
+<span class="fc" id="L971">        ((InjectableValues.Std) reader.getInjectableValues()).addValue(GitHub.class, root);</span>
+<span class="fc" id="L972">        return reader;</span>
     }
 
     /**
@@ -913,21 +988,21 @@ class GitHubClient {
      */
     @Nonnull
     static ObjectReader getMappingObjectReader(@CheckForNull GitHubConnectorResponse connectorResponse) {
-<span class="fc" id="L916">        Map&lt;String, Object&gt; injected = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L991">        Map&lt;String, Object&gt; injected = new HashMap&lt;&gt;();</span>
 
         // Required or many things break
-<span class="fc" id="L919">        injected.put(GitHubConnectorResponse.class.getName(), null);</span>
-<span class="fc" id="L920">        injected.put(GitHub.class.getName(), null);</span>
+<span class="fc" id="L994">        injected.put(GitHubConnectorResponse.class.getName(), null);</span>
+<span class="fc" id="L995">        injected.put(GitHub.class.getName(), null);</span>
 
-<span class="fc bfc" id="L922" title="All 2 branches covered.">        if (connectorResponse != null) {</span>
-<span class="fc" id="L923">            injected.put(GitHubConnectorResponse.class.getName(), connectorResponse);</span>
-<span class="fc" id="L924">            GitHubConnectorRequest request = connectorResponse.request();</span>
+<span class="fc bfc" id="L997" title="All 2 branches covered.">        if (connectorResponse != null) {</span>
+<span class="fc" id="L998">            injected.put(GitHubConnectorResponse.class.getName(), connectorResponse);</span>
+<span class="fc" id="L999">            GitHubConnectorRequest request = connectorResponse.request();</span>
             // This is cheating, but it is an acceptable cheat for now.
-<span class="pc bpc" id="L926" title="1 of 2 branches missed.">            if (request instanceof GitHubRequest) {</span>
-<span class="fc" id="L927">                injected.putAll(((GitHubRequest) connectorResponse.request()).injectedMappingValues());</span>
+<span class="pc bpc" id="L1001" title="1 of 2 branches missed.">            if (request instanceof GitHubRequest) {</span>
+<span class="fc" id="L1002">                injected.putAll(((GitHubRequest) connectorResponse.request()).injectedMappingValues());</span>
             }
         }
-<span class="fc" id="L930">        return MAPPER.reader(new InjectableValues.Std(injected));</span>
+<span class="fc" id="L1005">        return MAPPER.reader(new InjectableValues.Std(injected));</span>
     }
 
     /**
@@ -942,7 +1017,7 @@ class GitHubClient {
      * @return the map
      */
     static &lt;K, V&gt; Map&lt;K, V&gt; unmodifiableMapOrNull(Map&lt;? extends K, ? extends V&gt; map) {
-<span class="fc bfc" id="L945" title="All 2 branches covered.">        return map == null ? null : Collections.unmodifiableMap(map);</span>
+<span class="fc bfc" id="L1020" title="All 2 branches covered.">        return map == null ? null : Collections.unmodifiableMap(map);</span>
     }
 
     /**
@@ -955,7 +1030,7 @@ class GitHubClient {
      * @return the list
      */
     static &lt;T&gt; List&lt;T&gt; unmodifiableListOrNull(List&lt;? extends T&gt; list) {
-<span class="fc bfc" id="L958" title="All 2 branches covered.">        return list == null ? null : Collections.unmodifiableList(list);</span>
+<span class="fc bfc" id="L1033" title="All 2 branches covered.">        return list == null ? null : Collections.unmodifiableList(list);</span>
     }
 
     /**
@@ -970,8 +1045,8 @@ class GitHubClient {
          * Instantiates a new retry request exception.
          */
         RetryRequestException() {
-<span class="fc" id="L973">            this(null);</span>
-<span class="fc" id="L974">        }</span>
+<span class="fc" id="L1048">            this(null);</span>
+<span class="fc" id="L1049">        }</span>
 
         /**
          * Instantiates a new retry request exception.
@@ -979,9 +1054,9 @@ class GitHubClient {
          * @param connectorRequest
          *            the connector request
          */
-<span class="fc" id="L982">        RetryRequestException(GitHubConnectorRequest connectorRequest) {</span>
-<span class="fc" id="L983">            this.connectorRequest = connectorRequest;</span>
-<span class="fc" id="L984">        }</span>
+<span class="fc" id="L1057">        RetryRequestException(GitHubConnectorRequest connectorRequest) {</span>
+<span class="fc" id="L1058">            this.connectorRequest = connectorRequest;</span>
+<span class="fc" id="L1059">        }</span>
     }
 
     /**

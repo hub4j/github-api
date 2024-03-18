@@ -274,9 +274,12 @@ import static java.lang.String.*;
 <span class="fc" id="L274">        Requester builder = owner.root().createRequest().method(&quot;POST&quot;);</span>
 <span class="fc" id="L275">        String url = getUploadUrl();</span>
         // strip the helpful garbage from the url
-<span class="fc" id="L277">        url = url.substring(0, url.indexOf('{'));</span>
-<span class="fc" id="L278">        url += &quot;?name=&quot; + URLEncoder.encode(filename, &quot;UTF-8&quot;);</span>
-<span class="fc" id="L279">        return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);</span>
+<span class="fc" id="L277">        int endIndex = url.indexOf('{');</span>
+<span class="pc bpc" id="L278" title="1 of 2 branches missed.">        if (endIndex != -1) {</span>
+<span class="fc" id="L279">            url = url.substring(0, endIndex);</span>
+        }
+<span class="fc" id="L281">        url += &quot;?name=&quot; + URLEncoder.encode(filename, &quot;UTF-8&quot;);</span>
+<span class="fc" id="L282">        return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);</span>
     }
 
     /**
@@ -290,7 +293,7 @@ import static java.lang.String.*;
      */
     @Deprecated
     public List&lt;GHAsset&gt; assets() {
-<span class="fc" id="L293">        return Collections.unmodifiableList(assets);</span>
+<span class="fc" id="L296">        return Collections.unmodifiableList(assets);</span>
     }
 
     /**
@@ -305,7 +308,7 @@ import static java.lang.String.*;
      */
     @Deprecated
     public List&lt;GHAsset&gt; getAssets() throws IOException {
-<span class="fc" id="L308">        return listAssets().toList();</span>
+<span class="fc" id="L311">        return listAssets().toList();</span>
     }
 
     /**
@@ -316,8 +319,8 @@ import static java.lang.String.*;
      *             the io exception
      */
     public PagedIterable&lt;GHAsset&gt; listAssets() throws IOException {
-<span class="fc" id="L319">        Requester builder = owner.root().createRequest();</span>
-<span class="fc" id="L320">        return builder.withUrlPath(getApiTailUrl(&quot;assets&quot;)).toIterable(GHAsset[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L322">        Requester builder = owner.root().createRequest();</span>
+<span class="fc" id="L323">        return builder.withUrlPath(getApiTailUrl(&quot;assets&quot;)).toIterable(GHAsset[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -327,8 +330,8 @@ import static java.lang.String.*;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L330">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(owner.getApiTailUrl(&quot;releases/&quot; + getId())).send();</span>
-<span class="fc" id="L331">    }</span>
+<span class="fc" id="L333">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(owner.getApiTailUrl(&quot;releases/&quot; + getId())).send();</span>
+<span class="fc" id="L334">    }</span>
 
     /**
      * Updates this release via a builder.
@@ -336,11 +339,11 @@ import static java.lang.String.*;
      * @return the gh release updater
      */
     public GHReleaseUpdater update() {
-<span class="fc" id="L339">        return new GHReleaseUpdater(this);</span>
+<span class="fc" id="L342">        return new GHReleaseUpdater(this);</span>
     }
 
     private String getApiTailUrl(String end) {
-<span class="fc" id="L343">        return owner.getApiTailUrl(format(&quot;releases/%s/%s&quot;, getId(), end));</span>
+<span class="fc" id="L346">        return owner.getApiTailUrl(format(&quot;releases/%s/%s&quot;, getId(), end));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

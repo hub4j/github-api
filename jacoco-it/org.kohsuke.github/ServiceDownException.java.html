@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ServiceDownException.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">ServiceDownException.java</span></div><h1>ServiceDownException.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import org.kohsuke.github.connector.GitHubConnectorResponse;
+
+import java.io.IOException;
+
+/**
+ * Special {@link IOException} case for http exceptions, when {@link HttpException} is thrown due to GitHub service
+ * being down.
+ *
+ * Inherits from {@link HttpException} to maintain compatibility with existing clients.
+ *
+ * @author &lt;a href=&quot;mailto:rbudinsk@redhat.com&quot;&gt;Rastislav Budinsky&lt;/a&gt;
+ */
+public class ServiceDownException extends HttpException {
+
+    /**
+     * Instantiates a new service down exception.
+     *
+     * @param connectorResponse
+     *            the connector response to base this on
+     */
+    public ServiceDownException(GitHubConnectorResponse connectorResponse) {
+<span class="fc" id="L24">        super(connectorResponse);</span>
+<span class="fc" id="L25">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

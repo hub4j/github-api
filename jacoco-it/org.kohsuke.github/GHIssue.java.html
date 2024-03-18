@@ -590,7 +590,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 <span class="fc" id="L590">                .method(&quot;POST&quot;)</span>
 <span class="fc" id="L591">                .withPreview(SQUIRREL_GIRL)</span>
 <span class="fc" id="L592">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="fc" id="L593">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L593">                .withUrlPath(getIssuesApiRoute() + &quot;/reactions&quot;)</span>
 <span class="fc" id="L594">                .fetch(GHReaction.class);</span>
     }
 
@@ -606,7 +606,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
 <span class="fc" id="L606">        owner.root()</span>
 <span class="fc" id="L607">                .createRequest()</span>
 <span class="fc" id="L608">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L609">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
+<span class="fc" id="L609">                .withUrlPath(getIssuesApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
 <span class="fc" id="L610">                .send();</span>
 <span class="fc" id="L611">    }</span>
 
@@ -619,7 +619,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
     public PagedIterable&lt;GHReaction&gt; listReactions() {
 <span class="fc" id="L620">        return root().createRequest()</span>
 <span class="fc" id="L621">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L622">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L622">                .withUrlPath(getIssuesApiRoute() + &quot;/reactions&quot;)</span>
 <span class="fc" id="L623">                .toIterable(GHReaction[].class, null);</span>
     }
 

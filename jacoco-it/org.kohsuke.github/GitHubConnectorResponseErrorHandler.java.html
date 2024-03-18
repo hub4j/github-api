@@ -3,12 +3,16 @@
 import org.jetbrains.annotations.NotNull;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import javax.annotation.Nonnull;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
 // TODO: Auto-generated Javadoc
@@ -17,7 +21,7 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
  *
  * @author Liam Newman
  */
-<span class="fc" id="L20">abstract class GitHubConnectorResponseErrorHandler {</span>
+<span class="fc" id="L24">abstract class GitHubConnectorResponseErrorHandler {</span>
 
     /**
      * Called to detect an error handled by this handler.
@@ -48,19 +52,52 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 
     /** The status http bad request or greater. */
-<span class="fc" id="L51">    static GitHubConnectorResponseErrorHandler STATUS_HTTP_BAD_REQUEST_OR_GREATER = new GitHubConnectorResponseErrorHandler() {</span>
+<span class="fc" id="L55">    static GitHubConnectorResponseErrorHandler STATUS_HTTP_BAD_REQUEST_OR_GREATER = new GitHubConnectorResponseErrorHandler() {</span>
+        private static final String CONTENT_TYPE = &quot;Content-type&quot;;
+        private static final String TEXT_HTML = &quot;text/html&quot;;
+        private static final String UNICORN_TITLE = &quot;&lt;title&gt;Unicorn!&quot;;
+
         @Override
         public boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L54" title="All 2 branches covered.">            return connectorResponse.statusCode() &gt;= HTTP_BAD_REQUEST;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">            return connectorResponse.statusCode() &gt;= HTTP_BAD_REQUEST;</span>
         }
 
         @Override
         public void onError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (connectorResponse.statusCode() == HTTP_NOT_FOUND) {</span>
-<span class="fc" id="L60">                throw new FileNotFoundException(connectorResponse.request().url().toString());</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            if (connectorResponse.statusCode() == HTTP_NOT_FOUND) {</span>
+<span class="fc" id="L68">                throw new FileNotFoundException(connectorResponse.request().url().toString());</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">            } else if (isServiceDown(connectorResponse)) {</span>
+<span class="fc" id="L70">                throw new ServiceDownException(connectorResponse);</span>
             } else {
-<span class="fc" id="L62">                throw new HttpException(connectorResponse);</span>
+<span class="fc" id="L72">                throw new HttpException(connectorResponse);</span>
             }
+        }
+
+        private boolean isServiceDown(GitHubConnectorResponse connectorResponse) throws IOException {
+<span class="fc bfc" id="L77" title="All 2 branches covered.">            if (connectorResponse.statusCode() &lt; HTTP_INTERNAL_ERROR) {</span>
+<span class="fc" id="L78">                return false;</span>
+            }
+
+<span class="fc" id="L81">            String contentTypeHeader = connectorResponse.header(CONTENT_TYPE);</span>
+<span class="pc bpc" id="L82" title="2 of 4 branches missed.">            if (contentTypeHeader != null &amp;&amp; contentTypeHeader.contains(TEXT_HTML)) {</span>
+<span class="fc" id="L83">                try (BufferedReader bufReader = new BufferedReader(</span>
+<span class="fc" id="L84">                        new InputStreamReader(connectorResponse.bodyStream(), StandardCharsets.UTF_8))) {</span>
+                    String line;
+<span class="fc" id="L86">                    int hardLineCap = 25;</span>
+                    // &lt;title&gt; node is expected in the beginning anyway.
+                    // This way we do not load the raw long images' Strings, which are later in the HTML code
+                    // Regex or .contains would result in iterating the whole HTML document, if it didn't match
+                    // UNICORN_TITLE
+<span class="pc bpc" id="L91" title="2 of 4 branches missed.">                    while (hardLineCap &gt; 0 &amp;&amp; (line = bufReader.readLine()) != null) {</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">                        if (line.trim().startsWith(UNICORN_TITLE)) {</span>
+<span class="fc" id="L93">                            return true;</span>
+                        }
+<span class="fc" id="L95">                        hardLineCap--;</span>
+                    }
+<span class="fc" id="L97">                }</span>
+            }
+
+<span class="nc" id="L100">            return false;</span>
         }
     };
 }

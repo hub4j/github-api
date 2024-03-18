@@ -426,6 +426,18 @@ public class GitHubRequest implements GitHubConnectorRequest {
         }
 
         /**
+         * Removes the named request HTTP header.
+         *
+         * @param name
+         *            the name
+         * @return the request builder
+         */
+        public B removeHeader(String name) {
+<span class="fc" id="L436">            headers.remove(name);</span>
+<span class="fc" id="L437">            return (B) this;</span>
+        }
+
+        /**
          * Sets the request HTTP header.
          * &lt;p&gt;
          * If a header of the same name is already set, this method overrides it.
@@ -437,10 +449,10 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B setHeader(String name, String value) {
-<span class="fc" id="L440">            List&lt;String&gt; field = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L441">            field.add(value);</span>
-<span class="fc" id="L442">            headers.put(name, field);</span>
-<span class="fc" id="L443">            return (B) this;</span>
+<span class="fc" id="L452">            List&lt;String&gt; field = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L453">            field.add(value);</span>
+<span class="fc" id="L454">            headers.put(name, field);</span>
+<span class="fc" id="L455">            return (B) this;</span>
         }
 
         /**
@@ -453,13 +465,13 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B withHeader(String name, String value) {
-<span class="fc" id="L456">            List&lt;String&gt; field = headers.get(name);</span>
-<span class="fc bfc" id="L457" title="All 2 branches covered.">            if (field == null) {</span>
-<span class="fc" id="L458">                setHeader(name, value);</span>
+<span class="fc" id="L468">            List&lt;String&gt; field = headers.get(name);</span>
+<span class="fc bfc" id="L469" title="All 2 branches covered.">            if (field == null) {</span>
+<span class="fc" id="L470">                setHeader(name, value);</span>
             } else {
-<span class="fc" id="L460">                field.add(value);</span>
+<span class="fc" id="L472">                field.add(value);</span>
             }
-<span class="fc" id="L462">            return (B) this;</span>
+<span class="fc" id="L474">            return (B) this;</span>
         }
 
         /**
@@ -470,7 +482,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B injectMappingValue(@NonNull Object value) {
-<span class="fc" id="L473">            return injectMappingValue(value.getClass().getName(), value);</span>
+<span class="fc" id="L485">            return injectMappingValue(value.getClass().getName(), value);</span>
         }
 
         /**
@@ -483,8 +495,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B injectMappingValue(@NonNull String name, Object value) {
-<span class="fc" id="L486">            this.injectedMappingValues.put(name, value);</span>
-<span class="fc" id="L487">            return (B) this;</span>
+<span class="fc" id="L498">            this.injectedMappingValues.put(name, value);</span>
+<span class="fc" id="L499">            return (B) this;</span>
         }
 
         /**
@@ -495,7 +507,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the b
          */
         public B withPreview(String name) {
-<span class="fc" id="L498">            return withHeader(&quot;Accept&quot;, name);</span>
+<span class="fc" id="L510">            return withHeader(&quot;Accept&quot;, name);</span>
         }
 
         /**
@@ -506,7 +518,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the b
          */
         public B withPreview(Previews preview) {
-<span class="fc" id="L509">            return withPreview(preview.mediaType());</span>
+<span class="fc" id="L521">            return withPreview(preview.mediaType());</span>
         }
 
         /**
@@ -517,11 +529,11 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B with(Map&lt;String, Object&gt; map) {
-<span class="fc bfc" id="L520" title="All 2 branches covered.">            for (Map.Entry&lt;String, Object&gt; entry : map.entrySet()) {</span>
-<span class="fc" id="L521">                with(entry.getKey(), entry.getValue());</span>
-<span class="fc" id="L522">            }</span>
+<span class="fc bfc" id="L532" title="All 2 branches covered.">            for (Map.Entry&lt;String, Object&gt; entry : map.entrySet()) {</span>
+<span class="fc" id="L533">                with(entry.getKey(), entry.getValue());</span>
+<span class="fc" id="L534">            }</span>
 
-<span class="fc" id="L524">            return (B) this;</span>
+<span class="fc" id="L536">            return (B) this;</span>
         }
 
         /**
@@ -534,7 +546,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B with(String key, int value) {
-<span class="fc" id="L537">            return with(key, (Object) value);</span>
+<span class="fc" id="L549">            return with(key, (Object) value);</span>
         }
 
         /**
@@ -547,7 +559,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B with(String key, long value) {
-<span class="fc" id="L550">            return with(key, (Object) value);</span>
+<span class="fc" id="L562">            return with(key, (Object) value);</span>
         }
 
         /**
@@ -560,7 +572,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B with(String key, boolean value) {
-<span class="fc" id="L563">            return with(key, (Object) value);</span>
+<span class="fc" id="L575">            return with(key, (Object) value);</span>
         }
 
         /**
@@ -573,9 +585,9 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B with(String key, Enum&lt;?&gt; e) {
-<span class="fc bfc" id="L576" title="All 2 branches covered.">            if (e == null)</span>
-<span class="fc" id="L577">                return with(key, (Object) null);</span>
-<span class="fc" id="L578">            return with(key, transformEnum(e));</span>
+<span class="fc bfc" id="L588" title="All 2 branches covered.">            if (e == null)</span>
+<span class="fc" id="L589">                return with(key, (Object) null);</span>
+<span class="fc" id="L590">            return with(key, transformEnum(e));</span>
         }
 
         /**
@@ -588,7 +600,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B with(String key, String value) {
-<span class="fc" id="L591">            return with(key, (Object) value);</span>
+<span class="fc" id="L603">            return with(key, (Object) value);</span>
         }
 
         /**
@@ -601,7 +613,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B with(String key, Collection&lt;?&gt; value) {
-<span class="fc" id="L604">            return with(key, (Object) value);</span>
+<span class="fc" id="L616">            return with(key, (Object) value);</span>
         }
 
         /**
@@ -614,7 +626,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B with(String key, Map&lt;?, ?&gt; value) {
-<span class="fc" id="L617">            return with(key, (Object) value);</span>
+<span class="fc" id="L629">            return with(key, (Object) value);</span>
         }
 
         /**
@@ -627,9 +639,9 @@ public class GitHubRequest implements GitHubConnectorRequest {
          *             Signals that an I/O exception has occurred.
          */
         public B with(@WillClose InputStream body) throws IOException {
-<span class="fc" id="L630">            this.body = IOUtils.toByteArray(body);</span>
-<span class="fc" id="L631">            IOUtils.closeQuietly(body);</span>
-<span class="fc" id="L632">            return (B) this;</span>
+<span class="fc" id="L642">            this.body = IOUtils.toByteArray(body);</span>
+<span class="fc" id="L643">            IOUtils.closeQuietly(body);</span>
+<span class="fc" id="L644">            return (B) this;</span>
         }
 
         /**
@@ -642,8 +654,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B withNullable(String key, Object value) {
-<span class="fc" id="L645">            args.add(new Entry(key, value));</span>
-<span class="fc" id="L646">            return (B) this;</span>
+<span class="fc" id="L657">            args.add(new Entry(key, value));</span>
+<span class="fc" id="L658">            return (B) this;</span>
         }
 
         /**
@@ -656,10 +668,10 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B with(String key, Object value) {
-<span class="fc bfc" id="L659" title="All 2 branches covered.">            if (value != null) {</span>
-<span class="fc" id="L660">                args.add(new Entry(key, value));</span>
+<span class="fc bfc" id="L671" title="All 2 branches covered.">            if (value != null) {</span>
+<span class="fc" id="L672">                args.add(new Entry(key, value));</span>
             }
-<span class="fc" id="L662">            return (B) this;</span>
+<span class="fc" id="L674">            return (B) this;</span>
         }
 
         /**
@@ -672,8 +684,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B set(String key, Object value) {
-<span class="fc" id="L675">            remove(key);</span>
-<span class="fc" id="L676">            return with(key, value);</span>
+<span class="fc" id="L687">            remove(key);</span>
+<span class="fc" id="L688">            return with(key, value);</span>
 
         }
 
@@ -685,14 +697,14 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B remove(String key) {
-<span class="fc bfc" id="L688" title="All 2 branches covered.">            for (int index = 0; index &lt; args.size();) {</span>
-<span class="fc bfc" id="L689" title="All 2 branches covered.">                if (args.get(index).key.equals(key)) {</span>
-<span class="fc" id="L690">                    args.remove(index);</span>
+<span class="fc bfc" id="L700" title="All 2 branches covered.">            for (int index = 0; index &lt; args.size();) {</span>
+<span class="fc bfc" id="L701" title="All 2 branches covered.">                if (args.get(index).key.equals(key)) {</span>
+<span class="fc" id="L702">                    args.remove(index);</span>
                 } else {
-<span class="fc" id="L692">                    index++;</span>
+<span class="fc" id="L704">                    index++;</span>
                 }
             }
-<span class="fc" id="L695">            return (B) this;</span>
+<span class="fc" id="L707">            return (B) this;</span>
         }
 
         /**
@@ -703,8 +715,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B method(@Nonnull String method) {
-<span class="fc" id="L706">            this.method = method;</span>
-<span class="fc" id="L707">            return (B) this;</span>
+<span class="fc" id="L718">            this.method = method;</span>
+<span class="fc" id="L719">            return (B) this;</span>
         }
 
         /**
@@ -715,8 +727,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B rateLimit(@Nonnull RateLimitTarget rateLimitTarget) {
-<span class="fc" id="L718">            this.rateLimitTarget = rateLimitTarget;</span>
-<span class="fc" id="L719">            return (B) this;</span>
+<span class="fc" id="L730">            this.rateLimitTarget = rateLimitTarget;</span>
+<span class="fc" id="L731">            return (B) this;</span>
         }
 
         /**
@@ -727,8 +739,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B contentType(String contentType) {
-<span class="fc" id="L730">            this.setHeader(&quot;Content-type&quot;, contentType);</span>
-<span class="fc" id="L731">            return (B) this;</span>
+<span class="fc" id="L742">            this.setHeader(&quot;Content-type&quot;, contentType);</span>
+<span class="fc" id="L743">            return (B) this;</span>
         }
 
         /**
@@ -745,13 +757,13 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         B setRawUrlPath(@Nonnull String rawUrlPath) {
-<span class="fc" id="L748">            Objects.requireNonNull(rawUrlPath);</span>
+<span class="fc" id="L760">            Objects.requireNonNull(rawUrlPath);</span>
             // This method should only work for full urls, which must start with &quot;http&quot;
-<span class="fc bfc" id="L750" title="All 2 branches covered.">            if (!rawUrlPath.startsWith(&quot;http&quot;)) {</span>
-<span class="fc" id="L751">                throw new GHException(&quot;Raw URL must start with 'http'&quot;);</span>
+<span class="fc bfc" id="L762" title="All 2 branches covered.">            if (!rawUrlPath.startsWith(&quot;http&quot;)) {</span>
+<span class="fc" id="L763">                throw new GHException(&quot;Raw URL must start with 'http'&quot;);</span>
             }
-<span class="fc" id="L753">            this.urlPath = rawUrlPath;</span>
-<span class="fc" id="L754">            return (B) this;</span>
+<span class="fc" id="L765">            this.urlPath = rawUrlPath;</span>
+<span class="fc" id="L766">            return (B) this;</span>
         }
 
         /**
@@ -768,24 +780,24 @@ public class GitHubRequest implements GitHubConnectorRequest {
          */
         public B withUrlPath(@Nonnull String urlPath, @Nonnull String... urlPathItems) {
             // full url may be set and reset as needed
-<span class="fc bfc" id="L771" title="All 4 branches covered.">            if (urlPathItems.length == 0 &amp;&amp; !urlPath.startsWith(&quot;/&quot;)) {</span>
-<span class="fc" id="L772">                return setRawUrlPath(urlPath);</span>
+<span class="fc bfc" id="L783" title="All 4 branches covered.">            if (urlPathItems.length == 0 &amp;&amp; !urlPath.startsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L784">                return setRawUrlPath(urlPath);</span>
             }
 
             // Once full url is set, do not allow path setting
-<span class="pc bpc" id="L776" title="1 of 2 branches missed.">            if (!this.urlPath.startsWith(&quot;/&quot;)) {</span>
-<span class="nc" id="L777">                throw new GHException(&quot;Cannot append to url path after setting a full url&quot;);</span>
+<span class="pc bpc" id="L788" title="1 of 2 branches missed.">            if (!this.urlPath.startsWith(&quot;/&quot;)) {</span>
+<span class="nc" id="L789">                throw new GHException(&quot;Cannot append to url path after setting a full url&quot;);</span>
             }
 
-<span class="fc" id="L780">            String tailUrlPath = urlPath;</span>
-<span class="fc bfc" id="L781" title="All 2 branches covered.">            if (urlPathItems.length != 0) {</span>
-<span class="fc" id="L782">                tailUrlPath += &quot;/&quot; + String.join(&quot;/&quot;, urlPathItems);</span>
+<span class="fc" id="L792">            String tailUrlPath = urlPath;</span>
+<span class="fc bfc" id="L793" title="All 2 branches covered.">            if (urlPathItems.length != 0) {</span>
+<span class="fc" id="L794">                tailUrlPath += &quot;/&quot; + String.join(&quot;/&quot;, urlPathItems);</span>
             }
 
-<span class="fc" id="L785">            tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, &quot;/&quot;);</span>
+<span class="fc" id="L797">            tailUrlPath = StringUtils.prependIfMissing(tailUrlPath, &quot;/&quot;);</span>
 
-<span class="fc" id="L787">            this.urlPath = urlPathEncode(tailUrlPath);</span>
-<span class="fc" id="L788">            return (B) this;</span>
+<span class="fc" id="L799">            this.urlPath = urlPathEncode(tailUrlPath);</span>
+<span class="fc" id="L800">            return (B) this;</span>
         }
 
         /**
@@ -796,8 +808,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B inBody() {
-<span class="fc" id="L799">            forceBody = true;</span>
-<span class="fc" id="L800">            return (B) this;</span>
+<span class="fc" id="L811">            forceBody = true;</span>
+<span class="fc" id="L812">            return (B) this;</span>
         }
     }
 
@@ -820,10 +832,10 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @param value
          *            the value
          */
-<span class="fc" id="L823">        protected Entry(String key, Object value) {</span>
-<span class="fc" id="L824">            this.key = key;</span>
-<span class="fc" id="L825">            this.value = value;</span>
-<span class="fc" id="L826">        }</span>
+<span class="fc" id="L835">        protected Entry(String key, Object value) {</span>
+<span class="fc" id="L836">            this.key = key;</span>
+<span class="fc" id="L837">            this.value = value;</span>
+<span class="fc" id="L838">        }</span>
     }
 
     /**
@@ -835,9 +847,9 @@ public class GitHubRequest implements GitHubConnectorRequest {
      */
     private static String urlPathEncode(String value) {
         try {
-<span class="fc" id="L838">            return new URI(null, null, value, null, null).toASCIIString();</span>
-<span class="nc" id="L839">        } catch (URISyntaxException ex) {</span>
-<span class="nc" id="L840">            throw new AssertionError(ex);</span>
+<span class="fc" id="L850">            return new URI(null, null, value, null, null).toASCIIString();</span>
+<span class="nc" id="L851">        } catch (URISyntaxException ex) {</span>
+<span class="nc" id="L852">            throw new AssertionError(ex);</span>
         }
     }
 

@@ -2,6 +2,7 @@
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,40 +22,42 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
  *
  * @author Kohsuke Kawaguchi
  */
-<span class="fc" id="L24">public class GHTeam extends GHObject implements Refreshable {</span>
+<span class="fc" id="L25">public class GHTeam extends GHObject implements Refreshable {</span>
     private String html_url;
     private String name;
     private String permission;
     private String slug;
     private String description;
-    private Privacy privacy;
+    private String privacy;
 
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
     /**
      * The Enum Privacy.
      */
-<span class="fc" id="L37">    public enum Privacy {</span>
+<span class="fc" id="L38">    public enum Privacy {</span>
 
         /** The secret. */
-<span class="fc" id="L40">        SECRET,</span>
+<span class="fc" id="L41">        SECRET,</span>
         /** The closed. */
         // only visible to organization owners and members of this team.
-<span class="fc" id="L43">        CLOSED // visible to all members of this organization.</span>
+<span class="fc" id="L44">        CLOSED, // visible to all members of this organization.</span>
+        /** Unknown privacy value */
+<span class="fc" id="L46">        UNKNOWN</span>
     }
 
     /**
      * Member's role in a team.
      */
-<span class="fc" id="L49">    public enum Role {</span>
+<span class="fc" id="L52">    public enum Role {</span>
 
         /** A normal member of the team. */
-<span class="fc" id="L52">        MEMBER,</span>
+<span class="fc" id="L55">        MEMBER,</span>
         /**
          * Able to add/remove other team members, promote other team members to team maintainer, and edit the team's
          * name and description.
          */
-<span class="fc" id="L57">        MAINTAINER</span>
+<span class="fc" id="L60">        MAINTAINER</span>
     }
 
     /**
@@ -65,8 +68,8 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      * @return the GH team
      */
     GHTeam wrapUp(GHOrganization owner) {
-<span class="fc" id="L68">        this.organization = owner;</span>
-<span class="fc" id="L69">        return this;</span>
+<span class="fc" id="L71">        this.organization = owner;</span>
+<span class="fc" id="L72">        return this;</span>
     }
 
     /**
@@ -77,7 +80,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      * @return the GH team
      */
     GHTeam wrapUp(GitHub root) { // auto-wrapUp when organization is known from GET /user/teams
-<span class="fc" id="L80">        return wrapUp(organization);</span>
+<span class="fc" id="L83">        return wrapUp(organization);</span>
     }
 
     /**
@@ -86,7 +89,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L89">        return name;</span>
+<span class="fc" id="L92">        return name;</span>
     }
 
     /**
@@ -95,7 +98,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      * @return the permission
      */
     public String getPermission() {
-<span class="fc" id="L98">        return permission;</span>
+<span class="fc" id="L101">        return permission;</span>
     }
 
     /**
@@ -104,7 +107,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      * @return the slug
      */
     public String getSlug() {
-<span class="fc" id="L107">        return slug;</span>
+<span class="fc" id="L110">        return slug;</span>
     }
 
     /**
@@ -113,7 +116,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L116">        return description;</span>
+<span class="fc" id="L119">        return description;</span>
     }
 
     /**
@@ -122,7 +125,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      * @return the privacy state.
      */
     public Privacy getPrivacy() {
-<span class="fc" id="L125">        return privacy;</span>
+<span class="fc" id="L128">        return EnumUtils.getNullableEnumOrDefault(Privacy.class, privacy, Privacy.UNKNOWN);</span>
     }
 
     /**
@@ -134,8 +137,8 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public void setDescription(String description) throws IOException {
-<span class="fc" id="L137">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;description&quot;, description).withUrlPath(api(&quot;&quot;)).send();</span>
-<span class="fc" id="L138">    }</span>
+<span class="fc" id="L140">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;description&quot;, description).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="fc" id="L141">    }</span>
 
     /**
      * Updates the team's privacy setting.
@@ -146,8 +149,8 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public void setPrivacy(Privacy privacy) throws IOException {
-<span class="fc" id="L149">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;privacy&quot;, privacy).withUrlPath(api(&quot;&quot;)).send();</span>
-<span class="fc" id="L150">    }</span>
+<span class="fc" id="L152">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;privacy&quot;, privacy).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="fc" id="L153">    }</span>
 
     /**
      * Retrieves the discussions.
@@ -158,7 +161,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      */
     @Nonnull
     public PagedIterable&lt;GHDiscussion&gt; listDiscussions() throws IOException {
-<span class="fc" id="L161">        return GHDiscussion.readAll(this);</span>
+<span class="fc" id="L164">        return GHDiscussion.readAll(this);</span>
     }
 
     /**
@@ -171,7 +174,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listMembers(String role) throws IOException {
-<span class="fc" id="L174">        return root().createRequest().withUrlPath(api(&quot;/members&quot;)).with(&quot;role&quot;, role).toIterable(GHUser[].class, null);</span>
+<span class="fc" id="L177">        return root().createRequest().withUrlPath(api(&quot;/members&quot;)).with(&quot;role&quot;, role).toIterable(GHUser[].class, null);</span>
     }
 
     /**
@@ -184,7 +187,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listMembers(Role role) throws IOException {
-<span class="fc" id="L187">        return listMembers(transformEnum(role));</span>
+<span class="fc" id="L190">        return listMembers(transformEnum(role));</span>
     }
 
     /**
@@ -199,7 +202,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      */
     @Nonnull
     public GHDiscussion getDiscussion(long discussionNumber) throws IOException {
-<span class="fc" id="L202">        return GHDiscussion.read(this, discussionNumber);</span>
+<span class="fc" id="L205">        return GHDiscussion.read(this, discussionNumber);</span>
     }
 
     /**
@@ -210,7 +213,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listMembers() throws IOException {
-<span class="fc" id="L213">        return listMembers(&quot;all&quot;);</span>
+<span class="fc" id="L216">        return listMembers(&quot;all&quot;);</span>
     }
 
     /**
@@ -221,9 +224,9 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public PagedIterable&lt;GHTeam&gt; listChildTeams() throws IOException {
-<span class="fc" id="L224">        return root().createRequest()</span>
-<span class="fc" id="L225">                .withUrlPath(api(&quot;/teams&quot;))</span>
-<span class="fc" id="L226">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this.organization));</span>
+<span class="fc" id="L227">        return root().createRequest()</span>
+<span class="fc" id="L228">                .withUrlPath(api(&quot;/teams&quot;))</span>
+<span class="fc" id="L229">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this.organization));</span>
     }
 
     /**
@@ -234,7 +237,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public Set&lt;GHUser&gt; getMembers() throws IOException {
-<span class="fc" id="L237">        return listMembers().toSet();</span>
+<span class="fc" id="L240">        return listMembers().toSet();</span>
     }
 
     /**
@@ -246,10 +249,10 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      */
     public boolean hasMember(GHUser user) {
         try {
-<span class="fc" id="L249">            root().createRequest().withUrlPath(api(&quot;/memberships/&quot; + user.getLogin())).send();</span>
-<span class="fc" id="L250">            return true;</span>
-<span class="fc" id="L251">        } catch (@SuppressWarnings(&quot;unused&quot;) IOException ignore) {</span>
-<span class="fc" id="L252">            return false;</span>
+<span class="fc" id="L252">            root().createRequest().withUrlPath(api(&quot;/memberships/&quot; + user.getLogin())).send();</span>
+<span class="fc" id="L253">            return true;</span>
+<span class="fc" id="L254">        } catch (@SuppressWarnings(&quot;unused&quot;) IOException ignore) {</span>
+<span class="fc" id="L255">            return false;</span>
         }
     }
 
@@ -261,11 +264,11 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public Map&lt;String, GHRepository&gt; getRepositories() throws IOException {
-<span class="fc" id="L264">        Map&lt;String, GHRepository&gt; m = new TreeMap&lt;&gt;();</span>
-<span class="fc bfc" id="L265" title="All 2 branches covered.">        for (GHRepository r : listRepositories()) {</span>
-<span class="fc" id="L266">            m.put(r.getName(), r);</span>
-<span class="fc" id="L267">        }</span>
-<span class="fc" id="L268">        return m;</span>
+<span class="fc" id="L267">        Map&lt;String, GHRepository&gt; m = new TreeMap&lt;&gt;();</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">        for (GHRepository r : listRepositories()) {</span>
+<span class="fc" id="L269">            m.put(r.getName(), r);</span>
+<span class="fc" id="L270">        }</span>
+<span class="fc" id="L271">        return m;</span>
     }
 
     /**
@@ -274,7 +277,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories() {
-<span class="fc" id="L277">        return root().createRequest().withUrlPath(api(&quot;/repos&quot;)).toIterable(GHRepository[].class, null);</span>
+<span class="fc" id="L280">        return root().createRequest().withUrlPath(api(&quot;/repos&quot;)).toIterable(GHRepository[].class, null);</span>
     }
 
     /**
@@ -289,8 +292,8 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-<span class="nc" id="L292">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
-<span class="nc" id="L293">    }</span>
+<span class="nc" id="L295">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
+<span class="nc" id="L296">    }</span>
 
     /**
      * Adds a member to the team
@@ -305,12 +308,12 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public void add(GHUser user, Role role) throws IOException {
-<span class="fc" id="L308">        root().createRequest()</span>
-<span class="fc" id="L309">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L310">                .with(&quot;role&quot;, role)</span>
-<span class="fc" id="L311">                .withUrlPath(api(&quot;/memberships/&quot; + user.getLogin()))</span>
-<span class="fc" id="L312">                .send();</span>
-<span class="fc" id="L313">    }</span>
+<span class="fc" id="L311">        root().createRequest()</span>
+<span class="fc" id="L312">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L313">                .with(&quot;role&quot;, role)</span>
+<span class="fc" id="L314">                .withUrlPath(api(&quot;/memberships/&quot; + user.getLogin()))</span>
+<span class="fc" id="L315">                .send();</span>
+<span class="fc" id="L316">    }</span>
 
     /**
      * Removes a member to the team.
@@ -321,8 +324,8 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public void remove(GHUser u) throws IOException {
-<span class="fc" id="L324">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
-<span class="fc" id="L325">    }</span>
+<span class="fc" id="L327">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
+<span class="fc" id="L328">    }</span>
 
     /**
      * Add.
@@ -333,8 +336,8 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public void add(GHRepository r) throws IOException {
-<span class="fc" id="L336">        add(r, (GHOrganization.RepositoryRole) null);</span>
-<span class="fc" id="L337">    }</span>
+<span class="fc" id="L339">        add(r, (GHOrganization.RepositoryRole) null);</span>
+<span class="fc" id="L340">    }</span>
 
     /**
      * * Add.
@@ -349,8 +352,8 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      */
     @Deprecated
     public void add(GHRepository r, GHOrganization.Permission permission) throws IOException {
-<span class="fc" id="L352">        add(r, GHOrganization.RepositoryRole.from(permission));</span>
-<span class="fc" id="L353">    }</span>
+<span class="fc" id="L355">        add(r, GHOrganization.RepositoryRole.from(permission));</span>
+<span class="fc" id="L356">    }</span>
 
     /**
      * Add.
@@ -363,13 +366,13 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public void add(GHRepository r, GHOrganization.RepositoryRole permission) throws IOException {
-<span class="fc" id="L366">        root().createRequest()</span>
-<span class="fc" id="L367">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L368">                .with(&quot;permission&quot;,</span>
-<span class="fc" id="L369">                        Optional.ofNullable(permission).map(GHOrganization.RepositoryRole::toString).orElse(null))</span>
-<span class="fc" id="L370">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
-<span class="fc" id="L371">                .send();</span>
-<span class="fc" id="L372">    }</span>
+<span class="fc" id="L369">        root().createRequest()</span>
+<span class="fc" id="L370">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L371">                .with(&quot;permission&quot;,</span>
+<span class="fc" id="L372">                        Optional.ofNullable(permission).map(GHOrganization.RepositoryRole::toString).orElse(null))</span>
+<span class="fc" id="L373">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
+<span class="fc" id="L374">                .send();</span>
+<span class="fc" id="L375">    }</span>
 
     /**
      * Remove.
@@ -380,11 +383,11 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public void remove(GHRepository r) throws IOException {
-<span class="nc" id="L383">        root().createRequest()</span>
-<span class="nc" id="L384">                .method(&quot;DELETE&quot;)</span>
-<span class="nc" id="L385">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
-<span class="nc" id="L386">                .send();</span>
-<span class="nc" id="L387">    }</span>
+<span class="nc" id="L386">        root().createRequest()</span>
+<span class="nc" id="L387">                .method(&quot;DELETE&quot;)</span>
+<span class="nc" id="L388">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
+<span class="nc" id="L389">                .send();</span>
+<span class="nc" id="L390">    }</span>
 
     /**
      * Deletes this team.
@@ -393,17 +396,17 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="nc" id="L396">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;&quot;)).send();</span>
-<span class="nc" id="L397">    }</span>
+<span class="nc" id="L399">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="nc" id="L400">    }</span>
 
     private String api(String tail) {
-<span class="fc bfc" id="L400" title="All 2 branches covered.">        if (organization == null) {</span>
+<span class="fc bfc" id="L403" title="All 2 branches covered.">        if (organization == null) {</span>
             // Teams returned from pull requests to do not have an organization. Attempt to use url.
-<span class="fc" id="L402">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="fc" id="L403">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;) + tail;</span>
+<span class="fc" id="L405">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="fc" id="L406">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;) + tail;</span>
         }
 
-<span class="fc" id="L406">        return &quot;/organizations/&quot; + organization.getId() + &quot;/team/&quot; + getId() + tail;</span>
+<span class="fc" id="L409">        return &quot;/organizations/&quot; + organization.getId() + &quot;/team/&quot; + getId() + tail;</span>
     }
 
     /**
@@ -418,7 +421,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      *             the io exception
      */
     public GHDiscussion.Creator createDiscussion(String title) throws IOException {
-<span class="fc" id="L421">        return GHDiscussion.create(this).title(title);</span>
+<span class="fc" id="L424">        return GHDiscussion.create(this).title(title);</span>
     }
 
     /**
@@ -430,8 +433,8 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHOrganization getOrganization() throws IOException {
-<span class="fc" id="L433">        refresh(organization);</span>
-<span class="fc" id="L434">        return organization;</span>
+<span class="fc" id="L436">        refresh(organization);</span>
+<span class="fc" id="L437">        return organization;</span>
     }
 
     /**
@@ -442,8 +445,8 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      */
     @Override
     public void refresh() throws IOException {
-<span class="fc" id="L445">        root().createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root());</span>
-<span class="fc" id="L446">    }</span>
+<span class="fc" id="L448">        root().createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root());</span>
+<span class="fc" id="L449">    }</span>
 
     /**
      * Gets the html url.
@@ -452,7 +455,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="fc" id="L455">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L458">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -464,16 +467,16 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      */
     @Override
     public boolean equals(Object o) {
-<span class="fc bfc" id="L467" title="All 2 branches covered.">        if (this == o) {</span>
-<span class="fc" id="L468">            return true;</span>
+<span class="fc bfc" id="L470" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L471">            return true;</span>
         }
-<span class="pc bpc" id="L470" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
-<span class="nc" id="L471">            return false;</span>
+<span class="pc bpc" id="L473" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L474">            return false;</span>
         }
-<span class="fc" id="L473">        GHTeam ghTeam = (GHTeam) o;</span>
-<span class="pc bpc" id="L474" title="2 of 4 branches missed.">        return Objects.equals(name, ghTeam.name) &amp;&amp; Objects.equals(getUrl(), ghTeam.getUrl())</span>
-<span class="pc bpc" id="L475" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(permission, ghTeam.permission) &amp;&amp; Objects.equals(slug, ghTeam.slug)</span>
-<span class="pc bpc" id="L476" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(description, ghTeam.description) &amp;&amp; privacy == ghTeam.privacy;</span>
+<span class="fc" id="L476">        GHTeam ghTeam = (GHTeam) o;</span>
+<span class="pc bpc" id="L477" title="2 of 4 branches missed.">        return Objects.equals(name, ghTeam.name) &amp;&amp; Objects.equals(getUrl(), ghTeam.getUrl())</span>
+<span class="pc bpc" id="L478" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(permission, ghTeam.permission) &amp;&amp; Objects.equals(slug, ghTeam.slug)</span>
+<span class="pc bpc" id="L479" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(description, ghTeam.description) &amp;&amp; Objects.equals(privacy, ghTeam.privacy);</span>
     }
 
     /**
@@ -483,7 +486,7 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L486">        return Objects.hash(name, getUrl(), permission, slug, description, privacy);</span>
+<span class="fc" id="L489">        return Objects.hash(name, getUrl(), permission, slug, description, privacy);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

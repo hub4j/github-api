@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCreateRepositoryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCreateRepositoryBuilder.java</span></div><h1>GHCreateRepositoryBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static org.kohsuke.github.internal.Previews.BAPTISTE;
 
@@ -23,15 +24,15 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *            the api tail
      */
     public GHCreateRepositoryBuilder(String name, GitHub root, String apiTail) {
-<span class="fc" id="L26">        super(GHCreateRepositoryBuilder.class, root, null);</span>
-<span class="fc" id="L27">        requester.method(&quot;POST&quot;).withUrlPath(apiTail);</span>
+<span class="fc" id="L27">        super(GHCreateRepositoryBuilder.class, root, null);</span>
+<span class="fc" id="L28">        requester.method(&quot;POST&quot;).withUrlPath(apiTail);</span>
 
         try {
-<span class="fc" id="L30">            name(name);</span>
-<span class="nc" id="L31">        } catch (IOException e) {</span>
+<span class="fc" id="L31">            name(name);</span>
+<span class="nc" id="L32">        } catch (IOException e) {</span>
             // not going to happen here
-<span class="fc" id="L33">        }</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L34">        }</span>
+<span class="fc" id="L35">    }</span>
 
     /**
      * Creates a default .gitignore
@@ -43,7 +44,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder gitignoreTemplate(String language) throws IOException {
-<span class="nc" id="L46">        return with(&quot;gitignore_template&quot;, language);</span>
+<span class="nc" id="L47">        return with(&quot;gitignore_template&quot;, language);</span>
     }
 
     /**
@@ -56,7 +57,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder licenseTemplate(String license) throws IOException {
-<span class="nc" id="L59">        return with(&quot;license_template&quot;, license);</span>
+<span class="nc" id="L60">        return with(&quot;license_template&quot;, license);</span>
     }
 
     /**
@@ -69,7 +70,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder autoInit(boolean enabled) throws IOException {
-<span class="fc" id="L72">        return with(&quot;auto_init&quot;, enabled);</span>
+<span class="fc" id="L73">        return with(&quot;auto_init&quot;, enabled);</span>
     }
 
     /**
@@ -82,9 +83,9 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder team(GHTeam team) throws IOException {
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (team != null)</span>
-<span class="fc" id="L86">            return with(&quot;team_id&quot;, team.getId());</span>
-<span class="nc" id="L87">        return this;</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (team != null)</span>
+<span class="fc" id="L87">            return with(&quot;team_id&quot;, team.getId());</span>
+<span class="nc" id="L88">        return this;</span>
     }
 
     /**
@@ -99,7 +100,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      */
     @Deprecated
     public GHCreateRepositoryBuilder templateRepository(boolean enabled) throws IOException {
-<span class="nc" id="L102">        return isTemplate(enabled);</span>
+<span class="nc" id="L103">        return isTemplate(enabled);</span>
     }
 
     /**
@@ -112,7 +113,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder owner(String owner) throws IOException {
-<span class="fc" id="L115">        return with(&quot;owner&quot;, owner);</span>
+<span class="fc" id="L116">        return with(&quot;owner&quot;, owner);</span>
     }
 
     /**
@@ -127,8 +128,25 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      */
     @Preview(BAPTISTE)
     public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
-<span class="fc" id="L130">        requester.withPreview(BAPTISTE).withUrlPath(&quot;/repos/&quot; + templateOwner + &quot;/&quot; + templateRepo + &quot;/generate&quot;);</span>
-<span class="fc" id="L131">        return this;</span>
+<span class="fc" id="L131">        requester.withPreview(BAPTISTE).withUrlPath(&quot;/repos/&quot; + templateOwner + &quot;/&quot; + templateRepo + &quot;/generate&quot;);</span>
+<span class="fc" id="L132">        return this;</span>
+    }
+
+    /**
+     * Create repository from template repository.
+     *
+     * @param templateRepository
+     *            the template repository as a GHRepository
+     * @return a builder to continue with building
+     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/&quot;&gt;GitHub API Previews&lt;/a&gt;
+     */
+    @Preview(BAPTISTE)
+    public GHCreateRepositoryBuilder fromTemplateRepository(GHRepository templateRepository) {
+<span class="fc" id="L145">        Objects.requireNonNull(templateRepository, &quot;templateRepository cannot be null&quot;);</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (!templateRepository.isTemplate()) {</span>
+<span class="fc" id="L147">            throw new IllegalArgumentException(&quot;The provided repository is not a template repository.&quot;);</span>
+        }
+<span class="fc" id="L149">        return fromTemplateRepository(templateRepository.getOwnerName(), templateRepository.getName());</span>
     }
 
     /**
@@ -139,7 +157,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             if repository cannot be created
      */
     public GHRepository create() throws IOException {
-<span class="fc" id="L142">        return done();</span>
+<span class="fc" id="L160">        return done();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

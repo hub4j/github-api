@@ -1812,7 +1812,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * A project v2 item was archived, converted, created, edited, restored, deleted, or reordered.
      *
      * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#projects_v2_item">star
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#projects_v2_item">projects_v2_item
      *      event</a>
      */
     public static class ProjectsV2Item extends GHEventPayload {
@@ -1837,6 +1837,171 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         public GHProjectsV2ItemChanges getChanges() {
             return changes;
+        }
+    }
+
+    /**
+     * A team_add event was triggered.
+     *
+     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#team_add">team_add event</a>
+     */
+    public static class TeamAdd extends GHEventPayload {
+
+        private GHTeam team;
+
+        /**
+         * Gets the team.
+         *
+         * @return the team
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHTeam getTeam() {
+            return team;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (team == null) {
+                throw new IllegalStateException(
+                        "Expected team payload, but got something else. Maybe we've got another type of event?");
+            }
+            super.lateBind();
+            GHOrganization organization = getOrganization();
+            if (organization == null) {
+                throw new IllegalStateException("Organization must not be null");
+            }
+            team.wrapUp(organization);
+        }
+    }
+
+    /**
+     * A team event was triggered.
+     *
+     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#team">team event</a>
+     */
+    public static class Team extends GHEventPayload {
+
+        private GHTeam team;
+
+        private GHTeamChanges changes;
+
+        /**
+         * Gets the team.
+         *
+         * @return the team
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHTeam getTeam() {
+            return team;
+        }
+
+        /**
+         * Gets the changes made to the team.
+         *
+         * @return the changes made to the team, null unless action is "edited".
+         */
+        public GHTeamChanges getChanges() {
+            return changes;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (team == null) {
+                throw new IllegalStateException(
+                        "Expected team payload, but got something else. Maybe we've got another type of event?");
+            }
+            super.lateBind();
+            GHOrganization organization = getOrganization();
+            if (organization == null) {
+                throw new IllegalStateException("Organization must not be null");
+            }
+            team.wrapUp(organization);
+        }
+    }
+
+    /**
+     * A member event was triggered.
+     *
+     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#member">member event</a>
+     */
+    public static class Member extends GHEventPayload {
+
+        private GHUser member;
+
+        private GHMemberChanges changes;
+
+        /**
+         * Gets the member.
+         *
+         * @return the member
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHUser getMember() {
+            return member;
+        }
+
+        /**
+         * Gets the changes made to the member.
+         *
+         * @return the changes made to the member
+         */
+        public GHMemberChanges getChanges() {
+            return changes;
+        }
+    }
+
+    /**
+     * A membership event was triggered.
+     *
+     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#membership">membership event</a>
+     */
+    public static class Membership extends GHEventPayload {
+
+        private GHTeam team;
+
+        private GHUser member;
+
+        /**
+         * Gets the team.
+         *
+         * @return the team
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHTeam getTeam() {
+            return team;
+        }
+
+        /**
+         * Gets the member.
+         *
+         * @return the member
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHUser getMember() {
+            return member;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (team == null) {
+                throw new IllegalStateException(
+                        "Expected membership payload, but got something else. Maybe we've got another type of event?");
+            }
+            super.lateBind();
+            GHOrganization organization = getOrganization();
+            if (organization == null) {
+                throw new IllegalStateException("Organization must not be null");
+            }
+            team.wrapUp(organization);
         }
     }
 }

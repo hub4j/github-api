@@ -234,7 +234,7 @@ public class GHRepository extends GHObject {
         return getDeployment(deploymentId).createStatus(ghDeploymentState);
     }
 
-    private static class GHRepoPermission {
+    static class GHRepoPermission {
         boolean pull, push, admin;
     }
 

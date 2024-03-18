@@ -1,0 +1,49 @@
+{
+  "id": "ef58f085-1ee4-4f3c-91b6-97246ceddee3",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_artifacts_1242831742",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/artifacts/1242831742",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      },
+      "Authorization": {
+        "equalTo": "Basic cGxhY2Vob2xkZXItdXNlcjpwbGFjZWhvbGRlci1wYXNzd29yZA=="
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/actions/artifacts#get-an-artifact\"}",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 13 Feb 2024 20:56:12 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4982",
+      "X-RateLimit-Reset": "1707861343",
+      "X-RateLimit-Used": "18",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "X-GitHub-Request-Id": "A158:3FD50:1599268:15C7C47:65CBD76B"
+    }
+  },
+  "uuid": "ef58f085-1ee4-4f3c-91b6-97246ceddee3",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-artifacts-1242831742",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-GHWorkflowRunTest-actions-artifacts-1242831742-2",
+  "insertionIndex": 13
+}

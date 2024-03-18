@@ -415,10 +415,14 @@ public class GHPullRequest extends GHIssue implements Refreshable {
             return; // cannot populate, will have to live with what we have
         }
 
-        URL url = getUrl();
-        if (url != null) {
-            root().createRequest().withPreview(SHADOW_CAT).setRawUrlPath(url.toString()).fetchInto(this).wrapUp(owner);
-        }
+        // we do not want to use getUrl() here as it points to the issues API
+        // and not the pull request one
+        URL absoluteUrl = GitHubRequest.getApiURL(root().getApiUrl(), getApiRoute());
+        root().createRequest()
+                .withPreview(SHADOW_CAT)
+                .setRawUrlPath(absoluteUrl.toString())
+                .fetchInto(this)
+                .wrapUp(owner);
     }
 
     /**

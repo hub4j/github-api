@@ -4,7 +4,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.kohsuke.github.GHCheckRun.Conclusion;
 import org.kohsuke.github.GHCheckRun.Status;
-import org.kohsuke.github.GHOrganization.Permission;
 import org.kohsuke.github.GHProjectsV2Item.ContentType;
 import org.kohsuke.github.GHProjectsV2ItemChanges.FieldType;
 import org.kohsuke.github.GHTeam.Privacy;
@@ -1715,8 +1714,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(member.getLogin(), is("yrodiere"));
 
         GHMemberChanges changes = memberPayload.getChanges();
-        assertThat(changes.getPermission().getFrom(), is(Permission.ADMIN));
-        assertThat(changes.getPermission().getTo(), is(Permission.TRIAGE));
+        assertThat(changes.getPermission().getFrom(), is("admin"));
+        assertThat(changes.getPermission().getTo(), is("triage"));
     }
 
     /**
@@ -1741,7 +1740,33 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
         GHMemberChanges changes = memberPayload.getChanges();
         assertThat(changes.getPermission().getFrom(), is(nullValue()));
-        assertThat(changes.getPermission().getTo(), is(Permission.ADMIN));
+        assertThat(changes.getPermission().getTo(), is("admin"));
+    }
+
+    /**
+     * Member added with role name defined.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void member_added_role_name() throws Exception {
+        final GHEventPayload.Member memberPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Member.class);
+
+        assertThat(memberPayload.getAction(), is("added"));
+
+        assertThat(memberPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+        assertThat(memberPayload.getRepository().getName(), is("github-automation-with-quarkus-demo-playground"));
+
+        GHUser member = memberPayload.getMember();
+        assertThat(member.getId(), is(412878L));
+        assertThat(member.getLogin(), is("yrodiere"));
+
+        GHMemberChanges changes = memberPayload.getChanges();
+        assertThat(changes.getPermission().getFrom(), is(nullValue()));
+        assertThat(changes.getPermission().getTo(), is("write"));
+        assertThat(changes.getRoleName().getTo(), is("maintain"));
     }
 
     /**

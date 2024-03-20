@@ -9,8 +9,31 @@ env:
   JAVA_11_PLUS_MAVEN_OPTS: "--add-opens jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Maven Install and Site with Code Coverage
+        env:
+          MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
+        run: mvn -B clean install site -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: maven-release-target-directory
+          path: target/
+          retention-days: 3
+          
+  publish_package:
+    runs-on: ubuntu-latest
+    needs: build
     steps:
       - uses: actions/checkout@v4
       - name: Set up Maven Central Repository
@@ -24,17 +47,7 @@ jobs:
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - name: Maven Install and Site with Code Coverage
-        env:
-          MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-        run: mvn -B clean install site -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: maven-target-directory
-          path: target/
-          retention-days: 3
-        
       - name: Publish package
         run: mvn -B clean deploy -DskipTests -Prelease
         env:
@@ -42,3 +55,30 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.OSSRH_TOKEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSPHRASE }}
+
+  publish_gh_pages:
+    runs-on: ubuntu-latest
+    needs: build
+    if:  ${{ github.ref == 'refs/heads/release/v1.x' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
+  
+      - uses: actions/download-artifact@v4
+        with:
+          name: maven-release-target-directory
+          path: target
+          
+      - name: Checkout GH Pages
+        run: |
+          git checkout -B gh-pages origin/gh-pages
+          find . -type f -and -not -path './target/*' -and -not -path './.*' -and -not -name CNAME -delete
+          cp -r ./target/site/* ./
+
+      - name: Publish GH Pages
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Release (${{ github.actor }}): v${{ steps.release.outputs.version }}" 
+          branch: gh-pages
+          

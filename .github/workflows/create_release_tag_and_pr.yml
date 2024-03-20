@@ -1,4 +1,4 @@
-name: Creat New Release Tag
+name: Create New Release Tag and PR
 
 on: workflow_dispatch
 

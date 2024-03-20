@@ -64,7 +64,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  
-  
+
+      - name: Set Release Version
+        id: release
+        run: |
+          echo "version=$(mvn -B help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
+
       - uses: actions/download-artifact@v4
         with:
           name: maven-release-target-directory

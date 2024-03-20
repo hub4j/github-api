@@ -21,11 +21,11 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Reset staging/main Staging
+      - name: Reset staging/main
         id: staging
         run: |
-          git checkout -Bt staging/main
-          git push -f
+          git checkout -B staging/main
+          git push --set-upstream -f origin staging/main
 
       - name: Set Release Version
         id: release

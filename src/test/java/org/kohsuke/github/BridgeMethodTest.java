@@ -62,6 +62,15 @@ public class BridgeMethodTest extends Assert {
 
         verifyBridgeMethods(GHTeam.class, "getId", int.class, long.class, String.class);
 
+        verifyBridgeMethods(GHMemberChanges.FromToPermission.class,
+                "getTo",
+                String.class,
+                GHOrganization.Permission.class);
+        verifyBridgeMethods(GHMemberChanges.FromToPermission.class,
+                "getFrom",
+                String.class,
+                GHOrganization.Permission.class);
+
         // verifyBridgeMethods(GitHub.class, "getMyself", GHMyself.class, GHUser.class);
 
     }

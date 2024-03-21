@@ -1,4 +1,4 @@
-name: Creat New Release Tag
+name: Create New Release Tag and PR
 
 on: workflow_dispatch
 
@@ -11,12 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
+
+      - name: Reset staging/main
+        id: staging
+        run: |
+          git checkout -B staging/main
+          git push --set-upstream -f origin staging/main
 
       - name: Set Release Version
         id: release
@@ -29,7 +38,7 @@ jobs:
           commit_message: "Prepare release (${{ github.actor }}): github-api-${{ steps.release.outputs.version }}" 
           tagging_message: 'github-api-${{ steps.release.outputs.version }}'
           branch: staging/main
-          
+
       - name: Increment Snapshot Version
         run: |
           mvn versions:set versions:commit -DnextSnapshot 
@@ -38,7 +47,7 @@ jobs:
         with:
           commit_message: "Prepare for next development iteration"
           branch: staging/main
-          
+
       - name: pull-request to main
         uses: repo-sync/pull-request@v2
         with:

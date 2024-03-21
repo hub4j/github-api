@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api-unbridged</artifactId>
-  <version>1.320</version>
+  <version>1.321</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>

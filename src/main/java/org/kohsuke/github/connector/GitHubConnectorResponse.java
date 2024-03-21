@@ -7,7 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 
@@ -59,20 +58,6 @@ public abstract class GitHubConnectorResponse implements Closeable {
             caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList<>(entry.getValue())));
         }
         this.headers = Collections.unmodifiableMap(caseInsensitiveMap);
-    }
-
-    /**
-     * Get this response as a {@link HttpURLConnection}.
-     *
-     * @return an object that implements at least the response related methods of {@link HttpURLConnection}.
-     * @deprecated This method is present only to provide backward compatibility with other deprecated components.
-     */
-    @Deprecated
-    @Nonnull
-    public HttpURLConnection toHttpURLConnection() {
-        HttpURLConnection connection;
-        connection = new GitHubConnectorResponseHttpUrlConnectionAdapter(this);
-        return connection;
     }
 
     /**

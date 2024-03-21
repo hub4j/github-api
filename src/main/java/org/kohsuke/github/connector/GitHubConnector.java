@@ -1,8 +1,7 @@
 package org.kohsuke.github.connector;
 
-import org.kohsuke.github.HttpConnector;
+import org.kohsuke.github.GHIOException;
 import org.kohsuke.github.internal.DefaultGitHubConnector;
-import org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter;
 
 import java.io.IOException;
 
@@ -47,9 +46,11 @@ public interface GitHubConnector {
 
     /**
      * Stub implementation that is always off-line.
-     *
-     * This connector currently uses {@link GitHubConnectorHttpConnectorAdapter} to maintain backward compatibility as
-     * much as possible.
      */
-    GitHubConnector OFFLINE = new GitHubConnectorHttpConnectorAdapter(HttpConnector.OFFLINE);
+    GitHubConnector OFFLINE = new GitHubConnector() {
+        @Override
+        public GitHubConnectorResponse send(GitHubConnectorRequest connectorRequest) throws IOException {
+            throw new GHIOException("Offline");
+        }
+    };
 }

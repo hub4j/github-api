@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
 import org.kohsuke.github.GitHubBuilder;
-import org.kohsuke.github.HttpConnector;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
@@ -36,7 +35,6 @@ public class DefaultGitHubConnectorTest extends AbstractGitHubWireMockTest {
     @Test
     public void testCreate() throws Exception {
         GitHubConnector connector;
-        GitHubConnectorHttpConnectorAdapter adapter;
 
         boolean usingHttpClient = false;
         try {
@@ -49,22 +47,11 @@ public class DefaultGitHubConnectorTest extends AbstractGitHubWireMockTest {
 
         connector = DefaultGitHubConnector.create("default");
 
-        if (usingHttpClient) {
-            assertThat(connector, instanceOf(HttpClientGitHubConnector.class));
-        } else {
-            assertThat(connector, instanceOf(GitHubConnectorHttpConnectorAdapter.class));
-            adapter = (GitHubConnectorHttpConnectorAdapter) connector;
-            assertThat(adapter.httpConnector, equalTo(HttpConnector.DEFAULT));
-        }
+        assertThat(connector, instanceOf(HttpClientGitHubConnector.class));
 
         connector = DefaultGitHubConnector.create("okhttp");
 
         Assert.assertThrows(IllegalStateException.class, () -> DefaultGitHubConnector.create(""));
-
-        assertThat(GitHubConnectorHttpConnectorAdapter.adapt(HttpConnector.DEFAULT),
-                sameInstance(GitHubConnector.DEFAULT));
-        assertThat(GitHubConnectorHttpConnectorAdapter.adapt(HttpConnector.OFFLINE),
-                sameInstance(GitHubConnector.OFFLINE));
 
         gitHub = new GitHubBuilder().withConnector(new GitHubConnector() {
             @Override

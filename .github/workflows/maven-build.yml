@@ -35,11 +35,6 @@ jobs:
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install -DskipTests --file pom.xml
-    - uses: actions/upload-artifact@v4
-      with:
-        name: maven-target-directory
-        path: target/
-        retention-days: 3
   site:
     name: site (Java 17)
     runs-on: ubuntu-latest
@@ -87,22 +82,3 @@ jobs:
     - name: Codecov Report
       if: matrix.os == 'ubuntu' && matrix.java == '17'
       uses: codecov/codecov-action@v4.1.0
-
-  test-java-8:
-    name: test Java 8 (no-build)
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v4
-      with:
-        name: maven-target-directory
-        path: target
-    - name: Set up JDK
-      uses: actions/setup-java@v4
-      with:
-        java-version: 8
-        distribution: 'temurin'
-        cache: 'maven'
-    - name: Maven Test (no build) Java 8
-      run: mvn -B surefire:test -DfailIfNoTests -Dsurefire.excludesFile=src/test/resources/slow-or-flaky-tests.txt

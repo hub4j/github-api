@@ -160,7 +160,6 @@
                     </limits>
                     <excludes>
                       <!-- V2.x changes -->
-                      <exclude>org.kohsuke.github.connector.GitHubConnectorResponseHttpUrlConnectionAdapter</exclude>
                       <exclude>org.kohsuke.github.GHRepositorySearchBuilder.Fork</exclude>
 
                       <!-- Deprecated -->

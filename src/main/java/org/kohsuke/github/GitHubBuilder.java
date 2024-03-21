@@ -5,7 +5,6 @@ import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
-import org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -106,7 +105,7 @@ public class GitHubBuilder implements Cloneable {
      * <p>
      * See class javadoc for the relationship between these coordinates.
      *
-     * @return the git hub builder
+     * @return the GitHubBuilder
      * @throws IOException
      *             the io exception
      */
@@ -122,9 +121,9 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * From property file git hub builder.
+     * From property file GitHubBuilder.
      *
-     * @return the git hub builder
+     * @return the GitHubBuilder
      * @throws IOException
      *             the io exception
      */
@@ -135,11 +134,11 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * From property file git hub builder.
+     * From property file GitHubBuilder.
      *
      * @param propertyFileName
      *            the property file name
-     * @return the git hub builder
+     * @return the GitHubBuilder
      * @throws IOException
      *             the io exception
      */
@@ -157,11 +156,11 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * From properties git hub builder.
+     * From properties GitHubBuilder.
      *
      * @param props
      *            the props
-     * @return the git hub builder
+     * @return the GitHubBuilder
      */
     public static GitHubBuilder fromProperties(Properties props) {
         GitHubBuilder self = new GitHubBuilder();
@@ -180,14 +179,14 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * With endpoint git hub builder.
+     * With endpoint GitHubBuilder.
      *
      * @param endpoint
      *            The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
      *            "https://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
      *            historical reasons, this parameter still accepts the bare domain name, but that's considered
      *            deprecated.
-     * @return the git hub builder
+     * @return the GitHubBuilder
      */
     public GitHubBuilder withEndpoint(String endpoint) {
         this.endpoint = endpoint;
@@ -195,24 +194,24 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * With o auth token git hub builder.
+     * With o auth token GitHubBuilder.
      *
      * @param oauthToken
      *            the oauth token
-     * @return the git hub builder
+     * @return the GitHubBuilder
      */
     public GitHubBuilder withOAuthToken(String oauthToken) {
         return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken));
     }
 
     /**
-     * With o auth token git hub builder.
+     * With o auth token GitHubBuilder.
      *
      * @param oauthToken
      *            the oauth token
      * @param user
      *            the user
-     * @return the git hub builder
+     * @return the GitHubBuilder
      */
     public GitHubBuilder withOAuthToken(String oauthToken, String user) {
         return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken, user));
@@ -225,7 +224,7 @@ public class GitHubBuilder implements Cloneable {
      *
      * @param authorizationProvider
      *            the authorization provider
-     * @return the git hub builder
+     * @return the GitHubBuilder
      *
      */
     public GitHubBuilder withAuthorizationProvider(final AuthorizationProvider authorizationProvider) {
@@ -246,34 +245,22 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * With jwt token git hub builder.
+     * With jwt token GitHubBuilder.
      *
      * @param jwtToken
      *            the jwt token
-     * @return the git hub builder
+     * @return the GitHubBuilder
      */
     public GitHubBuilder withJwtToken(String jwtToken) {
         return withAuthorizationProvider(ImmutableAuthorizationProvider.fromJwtToken(jwtToken));
     }
 
     /**
-     * With connector git hub builder.
+     * With connector GitHubBuilder.
      *
      * @param connector
      *            the connector
-     * @return the git hub builder
-     */
-    @Deprecated
-    public GitHubBuilder withConnector(@Nonnull HttpConnector connector) {
-        return withConnector(GitHubConnectorHttpConnectorAdapter.adapt(connector));
-    }
-
-    /**
-     * With connector git hub builder.
-     *
-     * @param connector
-     *            the connector
-     * @return the git hub builder
+     * @return the GitHubBuilder
      */
     public GitHubBuilder withConnector(GitHubConnector connector) {
         this.connector = connector;
@@ -299,7 +286,7 @@ public class GitHubBuilder implements Cloneable {
      *
      * @param handler
      *            the handler
-     * @return the git hub builder
+     * @return the GitHubBuilder
      * @see #withRateLimitChecker(RateLimitChecker)
      */
     public GitHubBuilder withRateLimitHandler(GitHubRateLimitHandler handler) {
@@ -317,7 +304,7 @@ public class GitHubBuilder implements Cloneable {
      *
      * @param handler
      *            the handler
-     * @return the git hub builder
+     * @return the GitHubBuilder
      */
     public GitHubBuilder withAbuseLimitHandler(GitHubAbuseLimitHandler handler) {
         this.abuseLimitHandler = handler;
@@ -329,7 +316,7 @@ public class GitHubBuilder implements Cloneable {
      *
      * @param coreRateLimitChecker
      *            the {@link RateLimitChecker} for core GitHub API requests
-     * @return the git hub builder
+     * @return the GitHubBuilder
      * @see #withRateLimitChecker(RateLimitChecker, RateLimitTarget)
      */
     public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker coreRateLimitChecker) {
@@ -358,7 +345,7 @@ public class GitHubBuilder implements Cloneable {
      *            the {@link RateLimitChecker} for requests
      * @param rateLimitTarget
      *            the {@link RateLimitTarget} specifying which rate limit record to check
-     * @return the git hub builder
+     * @return the GitHubBuilder
      */
     public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker rateLimitChecker,
             @Nonnull RateLimitTarget rateLimitTarget) {
@@ -369,7 +356,7 @@ public class GitHubBuilder implements Cloneable {
     /**
      * Builds a {@link GitHub} instance.
      *
-     * @return the git hub
+     * @return the github
      * @throws IOException
      *             the io exception
      */
@@ -385,7 +372,7 @@ public class GitHubBuilder implements Cloneable {
     /**
      * Clone.
      *
-     * @return the git hub builder
+     * @return the GitHubBuilder
      */
     @Override
     public GitHubBuilder clone() {

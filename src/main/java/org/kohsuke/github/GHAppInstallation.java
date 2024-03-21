@@ -191,6 +191,16 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
+     * Gets suspended by.
+     *
+     * @return the suspended by
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getSuspendedBy() {
+        return suspendedBy;
+    }
+
+    /**
      * Delete a Github App installation
      * <p>
      * You must use a JWT to access this endpoint.

@@ -1,7 +1,6 @@
 package org.kohsuke.github.internal;
 
 import okhttp3.OkHttpClient;
-import org.kohsuke.github.HttpConnector;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.extras.HttpClientGitHubConnector;
 import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
@@ -20,9 +19,6 @@ public final class DefaultGitHubConnector {
 
     /**
      * Creates a {@link GitHubConnector} that will be used as the default connector.
-     *
-     * This method currently defaults to returning an instance of {@link GitHubConnectorHttpConnectorAdapter}. This
-     * preserves backward compatibility with {@link HttpConnector}.
      *
      * <p>
      * For testing purposes, the system property {@code test.github.connector} can be set to change the default.
@@ -45,11 +41,7 @@ public final class DefaultGitHubConnector {
         } else if (defaultConnectorProperty.equalsIgnoreCase("httpclient")) {
             return new HttpClientGitHubConnector();
         } else if (defaultConnectorProperty.equalsIgnoreCase("default")) {
-            try {
-                return new HttpClientGitHubConnector();
-            } catch (UnsupportedOperationException | LinkageError e) {
-                return new GitHubConnectorHttpConnectorAdapter(HttpConnector.DEFAULT);
-            }
+            return new HttpClientGitHubConnector();
         } else {
             throw new IllegalStateException(
                     "Property 'test.github.connector' must reference a valid built-in connector - okhttp, httpclient, or default.");

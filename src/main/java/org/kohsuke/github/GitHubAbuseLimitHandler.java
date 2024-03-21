@@ -86,7 +86,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
                     connectorResponse.statusCode(),
                     connectorResponse.header("Status"),
                     connectorResponse.request().url().toString())
-                            .withResponseHeaderFields(connectorResponse.allHeaders());
+                    .withResponseHeaderFields(connectorResponse.allHeaders());
         }
     };
 }

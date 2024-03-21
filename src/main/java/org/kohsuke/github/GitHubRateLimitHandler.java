@@ -84,7 +84,7 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
                     connectorResponse.statusCode(),
                     connectorResponse.header("Status"),
                     connectorResponse.request().url().toString())
-                            .withResponseHeaderFields(connectorResponse.allHeaders());
+                    .withResponseHeaderFields(connectorResponse.allHeaders());
 
         }
     };

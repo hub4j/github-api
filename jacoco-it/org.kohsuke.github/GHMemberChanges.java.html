@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMemberChanges.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMemberChanges.java</span></div><h1>GHMemberChanges.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
@@ -7,9 +8,11 @@ import org.kohsuke.github.internal.EnumUtils;
  * Changes made to a team.
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
-<span class="fc" id="L10">public class GHMemberChanges {</span>
+<span class="fc" id="L11">public class GHMemberChanges {</span>
 
     private FromToPermission permission;
+
+    private FromRoleName roleName;
 
     /**
      * Get changes to permission.
@@ -17,13 +20,25 @@ import org.kohsuke.github.internal.EnumUtils;
      * @return changes to permission
      */
     public FromToPermission getPermission() {
-<span class="fc" id="L20">        return permission;</span>
+<span class="fc" id="L23">        return permission;</span>
+    }
+
+    /**
+     * Get changes to the role name.
+     * &lt;p&gt;
+     * Apparently, it is recommended to use this rather than permission if defined. But it will only be defined when
+     * adding and not when editing.
+     *
+     * @return changes to role name
+     */
+    public FromRoleName getRoleName() {
+<span class="fc" id="L35">        return roleName;</span>
     }
 
     /**
      * Changes to permission.
      */
-<span class="fc" id="L26">    public static class FromToPermission {</span>
+<span class="fc" id="L41">    public static class FromToPermission {</span>
 
         private String from;
 
@@ -34,9 +49,9 @@ import org.kohsuke.github.internal.EnumUtils;
          *
          * @return the from
          */
-        public GHOrganization.Permission getFrom() {
-<span class="fc" id="L38">            return EnumUtils</span>
-<span class="fc" id="L39">                    .getNullableEnumOrDefault(GHOrganization.Permission.class, from, GHOrganization.Permission.UNKNOWN);</span>
+        @WithBridgeMethods(value = GHOrganization.Permission.class, adapterMethod = &quot;stringToOrgPermission&quot;)
+        public String getFrom() {
+<span class="fc" id="L54">            return from;</span>
         }
 
         /**
@@ -44,9 +59,42 @@ import org.kohsuke.github.internal.EnumUtils;
          *
          * @return the to
          */
-        public GHOrganization.Permission getTo() {
-<span class="fc" id="L48">            return EnumUtils</span>
-<span class="fc" id="L49">                    .getNullableEnumOrDefault(GHOrganization.Permission.class, to, GHOrganization.Permission.UNKNOWN);</span>
+        @WithBridgeMethods(value = GHOrganization.Permission.class, adapterMethod = &quot;stringToOrgPermission&quot;)
+        public String getTo() {
+<span class="fc" id="L64">            return to;</span>
+        }
+
+        @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;, justification = &quot;Bridge method of getFrom and getTo&quot;)
+        private Object stringToOrgPermission(String permissionType, Class type) {
+<span class="nc bnc" id="L69" title="All 5 branches missed.">            switch (permissionType) {</span>
+                case &quot;admin&quot; :
+<span class="nc" id="L71">                    return GHOrganization.Permission.ADMIN;</span>
+                case &quot;none&quot; :
+<span class="nc" id="L73">                    return GHOrganization.Permission.UNKNOWN;</span>
+                case &quot;read&quot; :
+<span class="nc" id="L75">                    return GHOrganization.Permission.PULL;</span>
+                case &quot;write&quot; :
+<span class="nc" id="L77">                    return GHOrganization.Permission.PUSH;</span>
+                default :
+<span class="nc" id="L79">                    return EnumUtils.getNullableEnumOrDefault(GHPermissionType.class, to, GHPermissionType.UNKNOWN);</span>
+            }
+        }
+    }
+
+    /**
+     * Changes to role name.
+     */
+<span class="fc" id="L87">    public static class FromRoleName {</span>
+
+        private String to;
+
+        /**
+         * Gets the to.
+         *
+         * @return the to
+         */
+        public String getTo() {
+<span class="fc" id="L97">            return to;</span>
         }
     }
 }

@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
@@ -87,14 +86,8 @@ public class GHCheckRun extends GHObject {
      * @return Status of the check run
      * @see Status
      */
-    @WithBridgeMethods(value = String.class, adapterMethod = "statusAsStr")
     public Status getStatus() {
         return Status.from(status);
-    }
-
-    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getStatus")
-    private Object statusAsStr(Status status, Class type) {
-        return status;
     }
 
     /**
@@ -139,14 +132,8 @@ public class GHCheckRun extends GHObject {
      * @return Status of the check run
      * @see Conclusion
      */
-    @WithBridgeMethods(value = String.class, adapterMethod = "conclusionAsStr")
     public Conclusion getConclusion() {
         return Conclusion.from(conclusion);
-    }
-
-    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getConclusion")
-    private Object conclusionAsStr(Conclusion conclusion, Class type) {
-        return conclusion;
     }
 
     /**
@@ -240,7 +227,6 @@ public class GHCheckRun extends GHObject {
      *
      * @return HTML URL
      */
-    @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }

@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -79,14 +78,8 @@ public abstract class GHObject extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    @WithBridgeMethods(value = String.class, adapterMethod = "createdAtStr")
     public Date getCreatedAt() throws IOException {
         return GitHubClient.parseDate(createdAt);
-    }
-
-    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getCreatedAt")
-    private Object createdAtStr(Date id, Class type) {
-        return createdAt;
     }
 
     /**
@@ -94,20 +87,9 @@ public abstract class GHObject extends GitHubInteractiveObject {
      *
      * @return API URL of this object.
      */
-    @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
     public URL getUrl() {
         return GitHubClient.parseURL(url);
     }
-
-    /**
-     * Gets html url.
-     *
-     * @return URL of this object for humans, which renders some HTML.
-     * @throws IOException
-     *             on error
-     */
-    @WithBridgeMethods(value = String.class, adapterMethod = "urlToString")
-    public abstract URL getHtmlUrl() throws IOException;
 
     /**
      * When was this resource last updated?.
@@ -135,23 +117,8 @@ public abstract class GHObject extends GitHubInteractiveObject {
      *
      * @return Unique ID number of this resource.
      */
-    @WithBridgeMethods(value = { String.class, int.class }, adapterMethod = "longToStringOrInt")
     public long getId() {
         return id;
-    }
-
-    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getId")
-    private Object longToStringOrInt(long id, Class type) {
-        if (type == String.class)
-            return String.valueOf(id);
-        if (type == int.class)
-            return (int) id;
-        throw new AssertionError("Unexpected type: " + type);
-    }
-
-    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getHtmlUrl")
-    private Object urlToString(URL url, Class type) {
-        return url == null ? null : url.toString();
     }
 
     /**

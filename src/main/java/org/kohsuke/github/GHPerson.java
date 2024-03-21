@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -73,7 +71,7 @@ public abstract class GHPerson extends GHObject {
      */
     public synchronized Map<String, GHRepository> getRepositories() throws IOException {
         Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
-        for (GHRepository r : listRepositories(100)) {
+        for (GHRepository r : listRepositories().withPageSize(100)) {
             repositories.put(r.getName(), r);
         }
         return Collections.unmodifiableMap(repositories);
@@ -87,59 +85,10 @@ public abstract class GHPerson extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories() {
-        return listRepositories(30);
-    }
-
-    /**
-     * Lists up all the repositories using the specified page size.
-     *
-     * @param pageSize
-     *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
-     *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
-     * @return the paged iterable
-     */
-    public PagedIterable<GHRepository> listRepositories(final int pageSize) {
         return root().createRequest()
                 .withUrlPath("/users/" + login + "/repos")
                 .toIterable(GHRepository[].class, null)
-                .withPageSize(pageSize);
-    }
-
-    /**
-     * Loads repository list in a paginated fashion.
-     *
-     * <p>
-     * For a person with a lot of repositories, GitHub returns the list of repositories in a paginated fashion. Unlike
-     * {@link #getRepositories()}, this method allows the caller to start processing data as it arrives.
-     * <p>
-     * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped into
-     * {@link Error}.
-     *
-     * @param pageSize
-     *            the page size
-     * @return the iterable
-     * @deprecated Use {@link #listRepositories()}
-     */
-    @Deprecated
-    public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
-        return () -> {
-            final PagedIterator<GHRepository> pager;
-            GitHubPageIterator<GHRepository[]> iterator = GitHubPageIterator.create(root().getClient(),
-                    GHRepository[].class,
-                    root().createRequest().withUrlPath("users", login, "repos").build(),
-                    pageSize);
-            pager = new PagedIterator<>(iterator, null);
-
-            return new Iterator<List<GHRepository>>() {
-                public boolean hasNext() {
-                    return pager.hasNext();
-                }
-
-                public List<GHRepository> next() {
-                    return pager.nextPage();
-                }
-            };
-        };
+                .withPageSize(30);
     }
 
     /**
@@ -275,7 +224,6 @@ public abstract class GHPerson extends GHObject {
      *
      * @return the html url
      */
-    @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }

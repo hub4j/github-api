@@ -89,32 +89,6 @@ public class GHCommit {
     }
 
     /**
-     * The type GHAuthor.
-     *
-     * @deprecated Use {@link GitUser} instead.
-     */
-    @Deprecated
-    public static class GHAuthor extends GitUser {
-
-        /**
-         * Instantiates a new GH author.
-         */
-        public GHAuthor() {
-            super();
-        }
-
-        /**
-         * Instantiates a new GH author.
-         *
-         * @param user
-         *            the user
-         */
-        public GHAuthor(GitUser user) {
-            super(user);
-        }
-    }
-
-    /**
      * The type Stats.
      */
     public static class Stats {

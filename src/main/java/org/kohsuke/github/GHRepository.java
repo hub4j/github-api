@@ -24,7 +24,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -450,18 +449,6 @@ public class GHRepository extends GHObject {
                 .with("sha", sha)
                 .withUrlPath(getApiTailUrl("git/refs"))
                 .fetch(GHRef.class);
-    }
-
-    /**
-     * Gets releases.
-     *
-     * @return the releases
-     * @throws IOException
-     *             the io exception
-     * @deprecated use {@link #listReleases()}
-     */
-    public List<GHRelease> getReleases() throws IOException {
-        return listReleases().toList();
     }
 
     /**
@@ -896,7 +883,6 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getCollaborators() throws IOException {
         return new GHPersonSet<GHUser>(listCollaborators().toList());
     }
@@ -2379,25 +2365,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Returns a set that represents the post-commit hook URLs. The returned set is live, and changes made to them are
-     * reflected to GitHub.
-     *
-     * @return the post commit hooks
-     * @deprecated Use {@link #getHooks()} and {@link #createHook(String, Map, Collection, boolean)}
-     */
-    @SuppressFBWarnings(value = { "DMI_COLLECTION_OF_URLS", "EI_EXPOSE_REP" },
-            justification = "It causes a performance degradation, but we have already exposed it to the API")
-    @Deprecated
-    public Set<URL> getPostCommitHooks() {
-        synchronized (this) {
-            if (postCommitHooks == null) {
-                postCommitHooks = setupPostCommitHooks();
-            }
-            return postCommitHooks;
-        }
-    }
-
-    /**
      * Live set view of the post-commit hook.
      */
     @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
@@ -2490,22 +2457,6 @@ public class GHRepository extends GHObject {
      */
     public GHBranch getBranch(String name) throws IOException {
         return root().createRequest().withUrlPath(getApiTailUrl("branches/" + name)).fetch(GHBranch.class).wrap(this);
-    }
-
-    /**
-     * Gets milestones.
-     *
-     * @return the milestones
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #listMilestones(GHIssueState)}
-     */
-    public Map<Integer, GHMilestone> getMilestones() throws IOException {
-        Map<Integer, GHMilestone> milestones = new TreeMap<Integer, GHMilestone>();
-        for (GHMilestone m : listMilestones(GHIssueState.OPEN)) {
-            milestones.put(m.getNumber(), m);
-        }
-        return milestones;
     }
 
     /**

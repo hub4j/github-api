@@ -437,7 +437,6 @@ public class GHTeam extends GHObject implements Refreshable {
      *
      * @return the html url
      */
-    @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }

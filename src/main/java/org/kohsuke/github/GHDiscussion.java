@@ -34,7 +34,6 @@ public class GHDiscussion extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Override
     public URL getHtmlUrl() throws IOException {
         return GitHubClient.parseURL(htmlUrl);
     }

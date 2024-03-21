@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -240,7 +239,7 @@ public class GHCompare {
      */
     public static class InnerCommit {
         private String url, sha, message;
-        private User author, committer;
+        private GitUser author, committer;
         private Tree tree;
 
         /**
@@ -275,7 +274,6 @@ public class GHCompare {
          *
          * @return the author
          */
-        @WithBridgeMethods(value = User.class, castRequired = true)
         public GitUser getAuthor() {
             return author;
         }
@@ -285,7 +283,6 @@ public class GHCompare {
          *
          * @return the committer
          */
-        @WithBridgeMethods(value = User.class, castRequired = true)
         public GitUser getCommitter() {
             return committer;
         }
@@ -323,14 +320,6 @@ public class GHCompare {
         public String getSha() {
             return sha;
         }
-    }
-
-    /**
-     * The type User.
-     *
-     * @deprecated use {@link GitUser} instead.
-     */
-    public static class User extends GitUser {
     }
 
     /**

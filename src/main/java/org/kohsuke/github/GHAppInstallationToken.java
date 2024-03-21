@@ -1,8 +1,5 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import java.io.IOException;
 import java.util.*;
 
@@ -65,13 +62,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    @WithBridgeMethods(value = String.class, adapterMethod = "expiresAtStr")
     public Date getExpiresAt() throws IOException {
         return GitHubClient.parseDate(expires_at);
-    }
-
-    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getExpiresAt")
-    private Object expiresAtStr(Date id, Class type) {
-        return expires_at;
     }
 }

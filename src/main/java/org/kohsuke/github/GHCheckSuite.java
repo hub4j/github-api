@@ -202,16 +202,6 @@ public class GHCheckSuite extends GHObject {
     }
 
     /**
-     * Check suite doesn't have a HTML URL.
-     *
-     * @return null
-     */
-    @Override
-    public URL getHtmlUrl() {
-        return null;
-    }
-
-    /**
      * The Class HeadCommit.
      */
     public static class HeadCommit {

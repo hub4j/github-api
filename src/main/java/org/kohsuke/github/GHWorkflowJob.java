@@ -135,7 +135,6 @@ public class GHWorkflowJob extends GHObject {
      *
      * @return the html url
      */
-    @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }

@@ -13,7 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -1019,19 +1018,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository(gitHub);
         GHPersonSet<GHUser> collaborators = repo.getCollaborators();
         assertThat(collaborators.size(), greaterThan(0));
-    }
-
-    /**
-     * Gets the post commit hooks.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void getPostCommitHooks() throws Exception {
-        GHRepository repo = getRepository(gitHub);
-        Set<URL> postcommitHooks = repo.getPostCommitHooks();
-        assertThat(postcommitHooks, is(empty()));
     }
 
     /**

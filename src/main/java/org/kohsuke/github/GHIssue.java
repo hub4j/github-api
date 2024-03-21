@@ -24,7 +24,6 @@
 
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.internal.EnumUtils;
@@ -263,7 +262,6 @@ public class GHIssue extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public GHIssueComment comment(String message) throws IOException {
         GHIssueComment r = root().createRequest()
                 .method("POST")
@@ -402,7 +400,6 @@ public class GHIssue extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public List<GHLabel> addLabels(String... names) throws IOException {
         return _addLabels(Arrays.asList(names));
     }
@@ -418,7 +415,6 @@ public class GHIssue extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public List<GHLabel> addLabels(GHLabel... labels) throws IOException {
         return addLabels(Arrays.asList(labels));
     }
@@ -434,7 +430,6 @@ public class GHIssue extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public List<GHLabel> addLabels(Collection<GHLabel> labels) throws IOException {
         return _addLabels(GHLabel.toNames(labels));
     }
@@ -458,7 +453,6 @@ public class GHIssue extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception, throws {@link GHFileNotFoundException} if label was not present.
      */
-    @WithBridgeMethods(void.class)
     public List<GHLabel> removeLabel(String name) throws IOException {
         return Arrays.asList(root().createRequest()
                 .method("DELETE")
@@ -477,7 +471,6 @@ public class GHIssue extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public List<GHLabel> removeLabels(String... names) throws IOException {
         return _removeLabels(Arrays.asList(names));
     }
@@ -494,7 +487,6 @@ public class GHIssue extends GHObject implements Reactable {
      *             the io exception
      * @see #removeLabels(String...) #removeLabels(String...)
      */
-    @WithBridgeMethods(void.class)
     public List<GHLabel> removeLabels(GHLabel... labels) throws IOException {
         return removeLabels(Arrays.asList(labels));
     }
@@ -510,7 +502,6 @@ public class GHIssue extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public List<GHLabel> removeLabels(Collection<GHLabel> labels) throws IOException {
         return _removeLabels(GHLabel.toNames(labels));
     }

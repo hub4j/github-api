@@ -23,18 +23,6 @@ public class GHProjectColumn extends GHObject {
     private String project_url;
 
     /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    public URL getHtmlUrl() throws IOException {
-        return null;
-    }
-
-    /**
      * Wrap gh project column.
      *
      * @param root

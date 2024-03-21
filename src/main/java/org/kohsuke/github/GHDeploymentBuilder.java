@@ -129,9 +129,7 @@ public class GHDeploymentBuilder {
      * @param transientEnvironment
      *            the environment is transient
      * @return the gh deployment builder
-     * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public GHDeploymentBuilder transientEnvironment(boolean transientEnvironment) {
         builder.with("transient_environment", transientEnvironment);
         return this;
@@ -143,9 +141,7 @@ public class GHDeploymentBuilder {
      * @param productionEnvironment
      *            the environment is used by end-users directly
      * @return the gh deployment builder
-     * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public GHDeploymentBuilder productionEnvironment(boolean productionEnvironment) {
         builder.with("production_environment", productionEnvironment);
         return this;

@@ -8,7 +8,6 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -369,10 +368,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(gitCommit.getAuthor().getName(), equalTo("Liam Newman"));
         assertThat(gitCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
 
-        // Check that GHCommit.GHAuthor bridge method still works
-        assertThat(getGHAuthor(gitCommit).getName(), equalTo("Liam Newman"));
-        assertThat(getGHAuthor(gitCommit).getEmail(), equalTo("bitwiseman@gmail.com"));
-
         assertThat(gitCommit.getAuthor().getName(), equalTo("Liam Newman"));
         assertThat(gitCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
         assertThat(gitCommit.getCommitter().getName(), equalTo("Liam Newman"));
@@ -382,66 +377,10 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(ghCommit.getAuthor().getName(), equalTo("Liam Newman"));
         assertThat(ghCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
 
-        // Check that GHCommit.GHAuthor bridge method still works
-        assertThat(getGHAuthor(ghCommit.getCommitShortInfo()).getName(), equalTo("Liam Newman"));
-        assertThat(getGHAuthor(ghCommit.getCommitShortInfo()).getEmail(), equalTo("bitwiseman@gmail.com"));
-
         assertThat(ghCommit.getCommitter().getName(), equalTo("Liam Newman"));
         assertThat(ghCommit.getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
 
         return expectedRequestCount;
-    }
-
-    /**
-     * Gets the GH author.
-     *
-     * @param commit
-     *            the commit
-     * @return the GH author
-     * @throws GHException
-     *             the GH exception
-     * @throws IllegalAccessException
-     *             the illegal access exception
-     * @throws IllegalArgumentException
-     *             the illegal argument exception
-     * @throws InvocationTargetException
-     *             the invocation target exception
-     */
-    GHCommit.GHAuthor getGHAuthor(GitCommit commit)
-            throws GHException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        for (Method method : commit.getClass().getMethods()) {
-            if (method.getName().equals("getAuthor") && method.getReturnType().equals(GHCommit.GHAuthor.class)) {
-                return (GHCommit.GHAuthor) method.invoke(commit);
-            }
-        }
-        System.out.println("Unable to find bridge method");
-        return null;
-    }
-
-    /**
-     * Gets the GH author.
-     *
-     * @param commit
-     *            the commit
-     * @return the GH author
-     * @throws GHException
-     *             the GH exception
-     * @throws IllegalAccessException
-     *             the illegal access exception
-     * @throws IllegalArgumentException
-     *             the illegal argument exception
-     * @throws InvocationTargetException
-     *             the invocation target exception
-     */
-    GHCommit.GHAuthor getGHAuthor(GHCommit.ShortInfo commit)
-            throws GHException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        for (Method method : commit.getClass().getMethods()) {
-            if (method.getName().equals("getAuthor") && method.getReturnType().equals(GHCommit.GHAuthor.class)) {
-                return (GHCommit.GHAuthor) method.invoke(commit);
-            }
-        }
-        System.out.println("Unable to find bridge method");
-        return null;
     }
 
     /**

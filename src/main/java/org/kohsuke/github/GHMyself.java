@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -39,23 +38,6 @@ public class GHMyself extends GHUser {
     }
 
     /**
-     * Gets emails.
-     *
-     * @return the emails
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #getEmails2()}
-     */
-    public List<String> getEmails() throws IOException {
-        List<GHEmail> src = getEmails2();
-        List<String> r = new ArrayList<String>(src.size());
-        for (GHEmail e : src) {
-            r.add(e.getEmail());
-        }
-        return r;
-    }
-
-    /**
      * Returns the read-only list of e-mail addresses configured for you.
      * <p>
      * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
@@ -65,7 +47,7 @@ public class GHMyself extends GHUser {
      * @throws IOException
      *             the io exception
      */
-    public List<GHEmail> getEmails2() throws IOException {
+    public List<GHEmail> getEmails() throws IOException {
         return root().createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null).toList();
     }
 

@@ -1126,15 +1126,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         t.add(o.getRepository("auto-test"));
     }
 
-    private void testPostCommitHook(GitHub gitHub) throws IOException {
-        GHRepository r = gitHub.getMyself().getRepository("foo");
-        Set<URL> hooks = r.getPostCommitHooks();
-        hooks.add(new URL("http://kohsuke.org/test"));
-        // System.out.println(hooks);
-        hooks.remove(new URL("http://kohsuke.org/test"));
-        // System.out.println(hooks);
-    }
-
     /**
      * Test org repositories.
      *

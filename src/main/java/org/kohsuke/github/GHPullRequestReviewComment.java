@@ -191,7 +191,6 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      *
      * @return the html url
      */
-    @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }

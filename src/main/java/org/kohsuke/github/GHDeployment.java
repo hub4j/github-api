@@ -127,9 +127,7 @@ public class GHDeployment extends GHObject {
      * The environment defined when the deployment was first created.
      *
      * @return the original deployment environment
-     * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.FLASH)
     public String getOriginalEnvironment() {
         return original_environment;
     }
@@ -148,9 +146,7 @@ public class GHDeployment extends GHObject {
      * future.
      *
      * @return the environment is transient
-     * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public boolean isTransientEnvironment() {
         return transient_environment;
     }
@@ -159,9 +155,7 @@ public class GHDeployment extends GHObject {
      * Specifies if the given environment is one that end-users directly interact with.
      *
      * @return the environment is used by end-users directly
-     * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public boolean isProductionEnvironment() {
         return production_environment;
     }
@@ -193,17 +187,6 @@ public class GHDeployment extends GHObject {
      */
     public String getSha() {
         return sha;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() {
-        return null;
     }
 
     /**

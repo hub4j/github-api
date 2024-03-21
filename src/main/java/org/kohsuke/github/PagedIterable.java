@@ -132,38 +132,6 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     }
 
     /**
-     * Eagerly walk {@link Iterable} and return the result in a list.
-     *
-     * @return the list
-     * @deprecated Use {@link #toList()} instead.
-     */
-    @Nonnull
-    @Deprecated
-    public List<T> asList() {
-        try {
-            return this.toList();
-        } catch (IOException e) {
-            throw new GHException("Failed to retrieve list: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Eagerly walk {@link Iterable} and return the result in a set.
-     *
-     * @return the set
-     * @deprecated Use {@link #toSet()} instead.
-     */
-    @Nonnull
-    @Deprecated
-    public Set<T> asSet() {
-        try {
-            return this.toSet();
-        } catch (IOException e) {
-            throw new GHException("Failed to retrieve list: " + e.getMessage(), e);
-        }
-    }
-
-    /**
      * Concatenates a list of arrays into a single array.
      *
      * @param type

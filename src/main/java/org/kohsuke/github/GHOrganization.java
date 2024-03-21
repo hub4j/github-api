@@ -203,18 +203,6 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Gets members.
-     *
-     * @return the members
-     * @throws IOException
-     *             the io exception
-     * @deprecated use {@link #listMembers()}
-     */
-    public List<GHUser> getMembers() throws IOException {
-        return listMembers().toList();
-    }
-
-    /**
      * All the members of this organization.
      *
      * @return the paged iterable
@@ -482,7 +470,7 @@ public class GHOrganization extends GHPerson {
      */
     public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
         List<GHRepository> r = new ArrayList<GHRepository>();
-        for (GHRepository repository : listRepositories(100)) {
+        for (GHRepository repository : listRepositories().withPageSize(100)) {
             List<GHPullRequest> pullRequests = repository.queryPullRequests().state(GHIssueState.OPEN).list().toList();
             if (pullRequests.size() > 0) {
                 r.add(repository);
@@ -522,17 +510,14 @@ public class GHOrganization extends GHPerson {
     /**
      * Lists up all the repositories using the specified page size.
      *
-     * @param pageSize
-     *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
-     *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
      * @return the paged iterable
      */
     @Override
-    public PagedIterable<GHRepository> listRepositories(final int pageSize) {
+    public PagedIterable<GHRepository> listRepositories() {
         return root().createRequest()
                 .withUrlPath("/orgs/" + login + "/repos")
                 .toIterable(GHRepository[].class, null)
-                .withPageSize(pageSize);
+                .withPageSize(30);
     }
 
     /**

@@ -98,7 +98,12 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         if (owner == null) {
             // Issues returned from search to do not have an owner. Attempt to use url.
             final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
+            // The url sourced above is of the form '/repos/<owner>/<reponame>/issues/', which
+            // subsequently issues requests against the `/issues/` handler, causing a 404 when
+            // asking for, say, a list of commits associated with a PR. Replace the `/issues/`
+            // with `/pulls/` to avoid that.
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/")
+                    .replace("/issues/", "/pulls/");
         }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/pulls/" + number;
     }
@@ -396,10 +401,14 @@ public class GHPullRequest extends GHIssue implements Refreshable {
             return; // cannot populate, will have to live with what we have
         }
 
-        URL url = getUrl();
-        if (url != null) {
-            root().createRequest().withPreview(SHADOW_CAT).setRawUrlPath(url.toString()).fetchInto(this).wrapUp(owner);
-        }
+        // we do not want to use getUrl() here as it points to the issues API
+        // and not the pull request one
+        URL absoluteUrl = GitHubRequest.getApiURL(root().getApiUrl(), getApiRoute());
+        root().createRequest()
+                .withPreview(SHADOW_CAT)
+                .setRawUrlPath(absoluteUrl.toString())
+                .fetchInto(this)
+                .wrapUp(owner);
     }
 
     /**

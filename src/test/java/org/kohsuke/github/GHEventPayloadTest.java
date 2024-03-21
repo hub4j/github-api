@@ -6,6 +6,7 @@ import org.kohsuke.github.GHCheckRun.Conclusion;
 import org.kohsuke.github.GHCheckRun.Status;
 import org.kohsuke.github.GHProjectsV2Item.ContentType;
 import org.kohsuke.github.GHProjectsV2ItemChanges.FieldType;
+import org.kohsuke.github.GHTeam.Privacy;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -962,8 +963,33 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     @Test
-    @Payload("installation")
-    public void InstallationEvent() throws Exception {
+    @Payload("installation_created")
+    public void InstallationCreatedEvent() throws Exception {
+        final GHEventPayload.Installation event = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .build()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Installation.class);
+
+        assertThat(event.getAction(), is("created"));
+        assertThat(event.getInstallation().getId(), is(43898337L));
+        assertThat(event.getInstallation().getAccount().getLogin(), is("CronFire"));
+
+        assertThat(event.getRepositories().isEmpty(), is(false));
+        assertThat(event.getRepositories().get(0).getId(), is(1296269L));
+        assertThat(event.getRawRepositories().isEmpty(), is(false));
+        assertThat(event.getRawRepositories().get(0).getId(), is(1296269L));
+
+        assertThat(event.getSender().getLogin(), is("Haarolean"));
+    }
+
+    /**
+     * Installation event.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    @Payload("installation_deleted")
+    public void InstallationDeletedEvent() throws Exception {
         final GHEventPayload.Installation event = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build()
                 .parseEventPayload(payload.asReader(), GHEventPayload.Installation.class);
@@ -972,12 +998,13 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getInstallation().getId(), is(2L));
         assertThat(event.getInstallation().getAccount().getLogin(), is("octocat"));
 
-        assertThat(event.getRepositories().get(0).getId(), is(1296269L));
-        assertThat(event.getRepositories().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxMjk2MjY5"));
-        assertThat(event.getRepositories().get(0).getName(), is("Hello-World"));
-        assertThat(event.getRepositories().get(0).getFullName(), is("octocat/Hello-World"));
-        assertThat(event.getRepositories().get(0).isPrivate(), is(false));
-        assertThat(event.getRepositories().get(0).getOwner().getLogin(), is("octocat"));
+        assertThrows(IllegalStateException.class, () -> event.getRepositories().isEmpty());
+        assertThat(event.getRawRepositories().isEmpty(), is(false));
+        assertThat(event.getRawRepositories().get(0).getId(), is(1296269L));
+        assertThat(event.getRawRepositories().get(0).getNodeId(), is("MDEwOlJlcG9zaXRvcnkxMjk2MjY5"));
+        assertThat(event.getRawRepositories().get(0).getName(), is("Hello-World"));
+        assertThat(event.getRawRepositories().get(0).getFullName(), is("octocat/Hello-World"));
+        assertThat(event.getRawRepositories().get(0).isPrivate(), is(false));
 
         assertThat(event.getSender().getLogin(), is("octocat"));
     }
@@ -1396,6 +1423,76 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Discussion comment created.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void discussion_comment_created() throws Exception {
+        final GHEventPayload.DiscussionComment discussionCommentPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.DiscussionComment.class);
+
+        assertThat(discussionCommentPayload.getAction(), is("created"));
+        assertThat(discussionCommentPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(discussionCommentPayload.getSender().getLogin(), is("gsmet"));
+
+        GHRepositoryDiscussion discussion = discussionCommentPayload.getDiscussion();
+
+        GHRepositoryDiscussion.Category category = discussion.getCategory();
+
+        assertThat(category.getId(), is(33522033L));
+        assertThat(category.getNodeId(), is("DIC_kwDOEq3cwc4B_4Fx"));
+        assertThat(category.getEmoji(), is(":pray:"));
+        assertThat(category.getName(), is("Q&A"));
+        assertThat(category.getDescription(), is("Ask the community for help"));
+        assertThat(category.getCreatedAt().getTime(), is(1636991431000L));
+        assertThat(category.getUpdatedAt().getTime(), is(1636991431000L));
+        assertThat(category.getSlug(), is("q-a"));
+        assertThat(category.isAnswerable(), is(true));
+
+        assertThat(discussion.getAnswerHtmlUrl(), is(nullValue()));
+        assertThat(discussion.getAnswerChosenAt(), is(nullValue()));
+        assertThat(discussion.getAnswerChosenBy(), is(nullValue()));
+
+        assertThat(discussion.getHtmlUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/discussions/162"));
+        assertThat(discussion.getId(), is(6090566L));
+        assertThat(discussion.getNodeId(), is("D_kwDOEq3cwc4AXO9G"));
+        assertThat(discussion.getNumber(), is(162));
+        assertThat(discussion.getTitle(), is("New test question"));
+
+        assertThat(discussion.getUser().getLogin(), is("gsmet"));
+        assertThat(discussion.getUser().getId(), is(1279749L));
+        assertThat(discussion.getUser().getNodeId(), is("MDQ6VXNlcjEyNzk3NDk="));
+
+        assertThat(discussion.getState(), is(GHRepositoryDiscussion.State.OPEN));
+        assertThat(discussion.isLocked(), is(false));
+        assertThat(discussion.getComments(), is(1));
+        assertThat(discussion.getCreatedAt().getTime(), is(1705586390000L));
+        assertThat(discussion.getUpdatedAt().getTime(), is(1705586399000L));
+        assertThat(discussion.getAuthorAssociation(), is(GHCommentAuthorAssociation.OWNER));
+        assertThat(discussion.getActiveLockReason(), is(nullValue()));
+        assertThat(discussion.getBody(), is("Test question"));
+
+        GHRepositoryDiscussionComment comment = discussionCommentPayload.getComment();
+
+        assertThat(comment.getHtmlUrl().toString(),
+                is("https://github.com/gsmet/quarkus-bot-java-playground/discussions/162#discussioncomment-8169669"));
+        assertThat(comment.getId(), is(8169669L));
+        assertThat(comment.getNodeId(), is("DC_kwDOEq3cwc4AfKjF"));
+        assertThat(comment.getAuthorAssociation(), is(GHCommentAuthorAssociation.OWNER));
+        assertThat(comment.getCreatedAt().getTime(), is(1705586398000L));
+        assertThat(comment.getUpdatedAt().getTime(), is(1705586399000L));
+        assertThat(comment.getBody(), is("Test comment."));
+        assertThat(comment.getUser().getLogin(), is("gsmet"));
+        assertThat(comment.getUser().getId(), is(1279749L));
+        assertThat(comment.getUser().getNodeId(), is("MDQ6VXNlcjEyNzk3NDk="));
+        assertThat(comment.getParentId(), is(nullValue()));
+        assertThat(comment.getChildCommentCount(), is(0));
+    }
+
+    /**
      * Starred.
      *
      * @throws Exception
@@ -1538,5 +1635,251 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 is("PVTI_lADOBNft-M4AEjBWzgB7VzY"));
         assertThat(projectsV2ItemPayload.getChanges().getPreviousProjectsV2ItemNodeId().getTo(),
                 is("PVTI_lADOBNft-M4AEjBWzgB7VzY"));
+    }
+
+    /**
+     * Membership added.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void membership_added() throws Exception {
+        final GHEventPayload.Membership membershipPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Membership.class);
+
+        assertThat(membershipPayload.getAction(), is("added"));
+
+        assertThat(membershipPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+
+        GHUser member = membershipPayload.getMember();
+        assertThat(member.getId(), is(1279749L));
+        assertThat(member.getLogin(), is("gsmet"));
+
+        GHTeam team = membershipPayload.getTeam();
+        assertThat(team.getId(), is(9709063L));
+        assertThat(team.getName(), is("New team"));
+        assertThat(team.getNodeId(), is("T_kwDOBNft-M4AlCYH"));
+        assertThat(team.getDescription(), is("Description"));
+        assertThat(team.getPrivacy(), is(Privacy.CLOSED));
+        assertThat(team.getOrganization().getLogin(), is("gsmet-bot-playground"));
+    }
+
+    /**
+     * Member edited.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void member_edited() throws Exception {
+        final GHEventPayload.Member memberPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Member.class);
+
+        assertThat(memberPayload.getAction(), is("edited"));
+
+        assertThat(memberPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+        assertThat(memberPayload.getRepository().getName(), is("github-automation-with-quarkus-demo-playground"));
+
+        GHUser member = memberPayload.getMember();
+        assertThat(member.getId(), is(412878L));
+        assertThat(member.getLogin(), is("yrodiere"));
+
+        GHMemberChanges changes = memberPayload.getChanges();
+        assertThat(changes.getPermission().getFrom(), is("admin"));
+        assertThat(changes.getPermission().getTo(), is("triage"));
+    }
+
+    /**
+     * Member added.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void member_added() throws Exception {
+        final GHEventPayload.Member memberPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Member.class);
+
+        assertThat(memberPayload.getAction(), is("added"));
+
+        assertThat(memberPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+        assertThat(memberPayload.getRepository().getName(), is("github-automation-with-quarkus-demo-playground"));
+
+        GHUser member = memberPayload.getMember();
+        assertThat(member.getId(), is(412878L));
+        assertThat(member.getLogin(), is("yrodiere"));
+
+        GHMemberChanges changes = memberPayload.getChanges();
+        assertThat(changes.getPermission().getFrom(), is(nullValue()));
+        assertThat(changes.getPermission().getTo(), is("admin"));
+    }
+
+    /**
+     * Member added with role name defined.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void member_added_role_name() throws Exception {
+        final GHEventPayload.Member memberPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Member.class);
+
+        assertThat(memberPayload.getAction(), is("added"));
+
+        assertThat(memberPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+        assertThat(memberPayload.getRepository().getName(), is("github-automation-with-quarkus-demo-playground"));
+
+        GHUser member = memberPayload.getMember();
+        assertThat(member.getId(), is(412878L));
+        assertThat(member.getLogin(), is("yrodiere"));
+
+        GHMemberChanges changes = memberPayload.getChanges();
+        assertThat(changes.getPermission().getFrom(), is(nullValue()));
+        assertThat(changes.getPermission().getTo(), is("write"));
+        assertThat(changes.getRoleName().getTo(), is("maintain"));
+    }
+
+    /**
+     * TeamAdd.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void team_add() throws Exception {
+        final GHEventPayload.TeamAdd teamAddPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.TeamAdd.class);
+
+        assertThat(teamAddPayload.getAction(), is(nullValue()));
+
+        assertThat(teamAddPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+        assertThat(teamAddPayload.getRepository().getName(), is("github-automation-with-quarkus-demo-playground"));
+
+        GHTeam team = teamAddPayload.getTeam();
+        assertThat(team.getId(), is(9709063L));
+        assertThat(team.getName(), is("New team"));
+        assertThat(team.getNodeId(), is("T_kwDOBNft-M4AlCYH"));
+        assertThat(team.getDescription(), is("Description"));
+        assertThat(team.getPrivacy(), is(Privacy.CLOSED));
+        assertThat(team.getOrganization().getLogin(), is("gsmet-bot-playground"));
+    }
+
+    /**
+     * Team created.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void team_created() throws Exception {
+        final GHEventPayload.Team teamPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Team.class);
+
+        assertThat(teamPayload.getAction(), is("created"));
+
+        assertThat(teamPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+
+        GHTeam team = teamPayload.getTeam();
+        assertThat(team.getId(), is(9709063L));
+        assertThat(team.getName(), is("New team"));
+        assertThat(team.getNodeId(), is("T_kwDOBNft-M4AlCYH"));
+        assertThat(team.getDescription(), is("Description"));
+        assertThat(team.getPrivacy(), is(Privacy.CLOSED));
+        assertThat(team.getOrganization().getLogin(), is("gsmet-bot-playground"));
+    }
+
+    /**
+     * Team edited description.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void team_edited_description() throws Exception {
+        final GHEventPayload.Team teamPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Team.class);
+
+        assertThat(teamPayload.getAction(), is("edited"));
+
+        assertThat(teamPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+
+        GHTeam team = teamPayload.getTeam();
+        assertThat(team.getId(), is(9709063L));
+        assertThat(team.getName(), is("New team"));
+        assertThat(team.getNodeId(), is("T_kwDOBNft-M4AlCYH"));
+        assertThat(team.getDescription(), is("New description"));
+        assertThat(team.getPrivacy(), is(Privacy.CLOSED));
+        assertThat(team.getOrganization().getLogin(), is("gsmet-bot-playground"));
+
+        GHTeamChanges changes = teamPayload.getChanges();
+        assertThat(changes.getDescription().getFrom(), is("Description"));
+        assertThat(changes.getName(), is(nullValue()));
+        assertThat(changes.getPrivacy(), is(nullValue()));
+        assertThat(changes.getRepository(), is(nullValue()));
+    }
+
+    /**
+     * Team edited visibility.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void team_edited_visibility() throws Exception {
+        final GHEventPayload.Team teamPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Team.class);
+
+        assertThat(teamPayload.getAction(), is("edited"));
+
+        assertThat(teamPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+
+        GHTeam team = teamPayload.getTeam();
+        assertThat(team.getId(), is(9709063L));
+        assertThat(team.getName(), is("New team"));
+        assertThat(team.getNodeId(), is("T_kwDOBNft-M4AlCYH"));
+        assertThat(team.getDescription(), is("New description"));
+        assertThat(team.getPrivacy(), is(Privacy.SECRET));
+        assertThat(team.getOrganization().getLogin(), is("gsmet-bot-playground"));
+
+        GHTeamChanges changes = teamPayload.getChanges();
+        assertThat(changes.getDescription(), is(nullValue()));
+        assertThat(changes.getName(), is(nullValue()));
+        assertThat(changes.getPrivacy().getFrom(), is(Privacy.CLOSED));
+        assertThat(changes.getRepository(), is(nullValue()));
+    }
+
+    /**
+     * Team edited repository permission.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void team_edited_permission() throws Exception {
+        final GHEventPayload.Team teamPayload = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Team.class);
+
+        assertThat(teamPayload.getAction(), is("edited"));
+
+        assertThat(teamPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
+        assertThat(teamPayload.getRepository().getName(), is("github-automation-with-quarkus-demo-app"));
+
+        GHTeam team = teamPayload.getTeam();
+        assertThat(team.getId(), is(9709063L));
+        assertThat(team.getName(), is("New team"));
+        assertThat(team.getNodeId(), is("T_kwDOBNft-M4AlCYH"));
+        assertThat(team.getDescription(), is("New description"));
+        assertThat(team.getPrivacy(), is(Privacy.SECRET));
+        assertThat(team.getOrganization().getLogin(), is("gsmet-bot-playground"));
+
+        GHTeamChanges changes = teamPayload.getChanges();
+        assertThat(changes.getDescription(), is(nullValue()));
+        assertThat(changes.getName(), is(nullValue()));
+        assertThat(changes.getPrivacy(), is(nullValue()));
+        assertThat(changes.getRepository().getPermissions().hadPushAccess(), is(false));
+        assertThat(changes.getRepository().getPermissions().hadPullAccess(), is(true));
+        assertThat(changes.getRepository().getPermissions().hadAdminAccess(), is(false));
     }
 }

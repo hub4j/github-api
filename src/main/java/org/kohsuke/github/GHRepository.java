@@ -120,6 +120,8 @@ public class GHRepository extends GHObject {
 
     private String default_branch, language;
 
+    private GHRepository template_repository;
+
     private Map<String, GHCommit> commits = Collections.synchronizedMap(new WeakHashMap<>());
 
     @SkipFromToString
@@ -201,7 +203,7 @@ public class GHRepository extends GHObject {
                 .wrap(this);
     }
 
-    private static class GHRepoPermission {
+    static class GHRepoPermission {
         boolean pull, push, admin;
     }
 
@@ -856,6 +858,16 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Get Repository template was the repository created from.
+     *
+     * @return the repository template
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+    public GHRepository getTemplateRepository() {
+        return (GHRepository) template_repository;
+    }
+
+    /**
      * Gets size.
      *
      * @return the size
@@ -1383,7 +1395,7 @@ public class GHRepository extends GHObject {
         } catch (FileNotFoundException x) {
             throw (FileNotFoundException) new FileNotFoundException("Failed to delete " + getOwnerName() + "/" + name
                     + "; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916")
-                            .initCause(x);
+                    .initCause(x);
         }
     }
 

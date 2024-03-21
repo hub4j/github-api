@@ -3,11 +3,15 @@ package org.kohsuke.github;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.*;
 
@@ -69,6 +73,28 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     public void listInstallations() throws IOException {
         GHApp app = gitHub.getApp();
         List<GHAppInstallation> installations = app.listInstallations().toList();
+        assertThat(installations.size(), is(1));
+
+        GHAppInstallation appInstallation = installations.get(0);
+        testAppInstallation(appInstallation);
+    }
+
+    /**
+     * List installations that have been updated since a given date.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     *
+     * @throws ParseException
+     *             Issue parsing date string.
+     */
+    @Test
+    public void listInstallationsSince() throws IOException, ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date localDate = simpleDateFormat.parse("2023-11-01");
+        GHApp app = gitHub.getApp();
+        List<GHAppInstallation> installations = app.listInstallations(localDate).toList();
         assertThat(installations.size(), is(1));
 
         GHAppInstallation appInstallation = installations.get(0);

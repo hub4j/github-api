@@ -111,6 +111,34 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
     }
 
     /**
+     * Created workflow run query builder.
+     *
+     * @param created
+     *            a range following the Query for dates syntax
+     *
+     * @return the gh workflow run query builder
+     * @see <a href=
+     *      "https://docs.github.com/en/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates">Query
+     *      for dates</a>
+     */
+    public GHWorkflowRunQueryBuilder created(String created) {
+        req.with("created", created);
+        return this;
+    }
+
+    /**
+     * Head sha workflow run query builder.
+     *
+     * @param headSha
+     *            the head sha
+     * @return the gh workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder headSha(String headSha) {
+        req.with("head_sha", headSha);
+        return this;
+    }
+
+    /**
      * List.
      *
      * @return the paged iterable

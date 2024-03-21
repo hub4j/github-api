@@ -182,6 +182,32 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Get list of commits from searched PR.
+     *
+     * This would result in a wrong API URL used, resulting in a GHFileNotFoundException.
+     *
+     * For more details, please have a look at the bug description in https://github.com/hub4j/github-api/issues/1778.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void getListOfCommits() throws Exception {
+        String name = "getListOfCommits";
+        GHPullRequestSearchBuilder builder = getRepository().searchPullRequests().isClosed();
+        Optional<GHPullRequest> firstPR = builder.list().toList().stream().findFirst();
+
+        try {
+            String val = firstPR.get().listCommits().toArray()[0].getApiUrl().toString();
+            assertThat(val, notNullValue());
+        } catch (GHFileNotFoundException e) {
+            if (e.getMessage().contains("/issues/")) {
+                fail("Issued a request against the wrong path");
+            }
+        }
+    }
+
+    /**
      * Close pull request.
      *
      * @throws Exception
@@ -208,6 +234,10 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void pullRequestReviews() throws Exception {
         String name = "testPullRequestReviews";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
+
+        List<GHPullRequestReview> reviews = p.listReviews().toList();
+        assertThat(reviews.size(), is(0));
+
         GHPullRequestReview draftReview = p.createReview()
                 .body("Some draft review")
                 .comment("Some niggle", "README.md", 1)
@@ -215,7 +245,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
         assertThat(draftReview.getCommitId(), notNullValue());
-        List<GHPullRequestReview> reviews = p.listReviews().toList();
+        reviews = p.listReviews().toList();
         assertThat(reviews.size(), is(1));
         GHPullRequestReview review = reviews.get(0);
         assertThat(review.getState(), is(GHPullRequestReviewState.PENDING));
@@ -866,6 +896,64 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
         assertThat(review, notNullValue());
         assertThat(reviewer, notNullValue());
+    }
+
+    /**
+     * Create/Delete reaction for pull requests.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void reactions() throws Exception {
+        String name = "createPullRequest";
+        GHRepository repo = getRepository();
+        GHPullRequest p = repo.createPullRequest(name, "test/stable", "main", "## test");
+
+        assertThat(p.listReactions().toList(), hasSize(0));
+        GHReaction reaction = p.createReaction(ReactionContent.CONFUSED);
+        assertThat(p.listReactions().toList(), hasSize(1));
+
+        p.deleteReaction(reaction);
+        assertThat(p.listReactions().toList(), hasSize(0));
+    }
+
+    /**
+     * Test refreshing a PR coming from the search results.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void refreshFromSearchResults() throws Exception {
+        // To re-record, uncomment the Thread.sleep() calls below
+        snapshotNotAllowed();
+
+        String prName = "refreshFromSearchResults";
+        GHRepository repository = getRepository();
+
+        repository.createPullRequest(prName, "test/stable", "main", "## test");
+
+        // we need to wait a bit for the pull request to be indexed by GitHub
+        // Thread.sleep(2000);
+
+        GHPullRequest pullRequestFromSearchResults = repository.searchPullRequests()
+                .isOpen()
+                .titleLike(prName)
+                .list()
+                .toList()
+                .get(0);
+
+        pullRequestFromSearchResults.getMergeableState();
+
+        // wait a bit for the mergeable state to get populated
+        // Thread.sleep(5000);
+
+        assertThat("Pull request is supposed to have been refreshed and have a mergeable state",
+                pullRequestFromSearchResults.getMergeableState(),
+                equalTo("clean"));
+
+        pullRequestFromSearchResults.close();
     }
 
     /**

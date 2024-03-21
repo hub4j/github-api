@@ -408,7 +408,9 @@ public class GHOrganization extends GHPerson {
         /** The triage. */
         TRIAGE,
         /** The pull. */
-        PULL
+        PULL,
+        /** Unknown, before we add the new permission to the enum */
+        UNKNOWN
     }
 
     /**

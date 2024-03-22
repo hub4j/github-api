@@ -6,7 +6,7 @@
     "method": "GET",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.baptiste-preview+json, application/vnd.github.nebula-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     }
   },

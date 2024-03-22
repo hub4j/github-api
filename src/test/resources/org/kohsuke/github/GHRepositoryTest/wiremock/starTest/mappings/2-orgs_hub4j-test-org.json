@@ -1,12 +1,12 @@
 {
-  "id": "d319a11c-9dce-4642-a18a-175f6cdbde6d",
+  "id": "858cde49-3a3c-491c-8f33-dc268fbd15bc",
   "name": "orgs_hub4j-test-org",
   "request": {
     "url": "/orgs/hub4j-test-org",
     "method": "GET",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.v3+json"
+        "equalTo": "application/vnd.github+json"
       }
     }
   },
@@ -14,35 +14,38 @@
     "status": 200,
     "bodyFileName": "2-orgs_hub4j-test-org.json",
     "headers": {
-      "Date": "Wed, 04 Dec 2019 17:07:18 GMT",
-      "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
-      "Status": "200 OK",
-      "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4956",
-      "X-RateLimit-Reset": "1575482837",
+      "Date": "Fri, 22 Mar 2024 23:30:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "Accept-Encoding"
+        "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"1de516fab0228945881043c1bc527c88\"",
-      "Last-Modified": "Mon, 20 Apr 2015 00:42:30 GMT",
-      "X-OAuth-Scopes": "gist, notifications, read:org, read:public_key, read:repo_hook, repo",
+      "ETag": "W/\"d775258babdff774738e81ff5ed973c032d4b61c79fbc8bf86955a7a97dba337\"",
+      "Last-Modified": "Thu, 04 Jun 2020 05:56:10 GMT",
+      "X-OAuth-Scopes": "public_repo",
       "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
-      "X-GitHub-Media-Type": "unknown, github.v3",
-      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "github-authentication-token-expiration": "2024-04-07 21:59:15 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4992",
+      "X-RateLimit-Reset": "1711153584",
+      "X-RateLimit-Used": "8",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
       "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
       "X-Frame-Options": "deny",
       "X-Content-Type-Options": "nosniff",
-      "X-XSS-Protection": "1; mode=block",
+      "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "A585:3D530:D2A1AF3:FAB1EAD:5DE7E7C5"
+      "X-GitHub-Request-Id": "F8D2:108673:340FD8:45290A:65FE1496"
     }
   },
-  "uuid": "d319a11c-9dce-4642-a18a-175f6cdbde6d",
+  "uuid": "858cde49-3a3c-491c-8f33-dc268fbd15bc",
   "persistent": true,
   "insertionIndex": 2
 }

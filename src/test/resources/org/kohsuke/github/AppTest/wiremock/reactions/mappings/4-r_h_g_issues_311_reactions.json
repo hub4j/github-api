@@ -6,7 +6,7 @@
     "method": "POST",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     },
     "bodyPatterns": [

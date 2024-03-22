@@ -1,12 +1,12 @@
 {
-  "id" : "7b5cb47c-4ce5-4a04-9ef3-caeb2533d99c",
+  "id": "7b5cb47c-4ce5-4a04-9ef3-caeb2533d99c",
   "name" : "search_repositories",
   "request" : {
     "url" : "/search/repositories?sort=stars&order=desc&q=tetris+language%3Aassembly",
     "method" : "GET",
     "headers" : {
       "Accept" : {
-        "equalTo" : "application/vnd.github.v3+json"
+        "equalTo" : "application/vnd.github+json"
       }
     }
   },

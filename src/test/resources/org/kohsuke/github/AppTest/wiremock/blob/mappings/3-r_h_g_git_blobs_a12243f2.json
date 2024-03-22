@@ -6,7 +6,7 @@
     "method": "GET",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.v3.raw"
+        "equalTo": "application/vnd.github.raw"
       }
     }
   },

@@ -11,7 +11,7 @@
     ],
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.machine-man-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     }
   },

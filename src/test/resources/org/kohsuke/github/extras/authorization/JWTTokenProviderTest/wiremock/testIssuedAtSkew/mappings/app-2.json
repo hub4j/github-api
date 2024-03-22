@@ -9,7 +9,7 @@
         "matches": "^Bearer (?<JWTHeader>ey\\S*)\\.(?<JWTPayload>\\S*)\\.(?<JWTSignature>\\S*)$"
       },
       "Accept": {
-        "equalTo": "application/vnd.github.machine-man-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     }
   },

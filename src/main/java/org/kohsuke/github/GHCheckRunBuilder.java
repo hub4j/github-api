@@ -28,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -48,7 +47,6 @@ import java.util.Locale;
  * @see <a href="https://developer.github.com/v3/checks/runs/#update-a-check-run">documentation</a>
  */
 @SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Jackson serializes these even without a getter")
-@Preview(Previews.ANTIOPE)
 public final class GHCheckRunBuilder {
 
     /** The repo. */
@@ -78,7 +76,6 @@ public final class GHCheckRunBuilder {
         this(repo,
                 repo.root()
                         .createRequest()
-                        .withPreview(Previews.ANTIOPE)
                         .method("POST")
                         .with("name", name)
                         .with("head_sha", headSHA)
@@ -95,11 +92,7 @@ public final class GHCheckRunBuilder {
      */
     GHCheckRunBuilder(GHRepository repo, long checkId) {
         this(repo,
-                repo.root()
-                        .createRequest()
-                        .withPreview(Previews.ANTIOPE)
-                        .method("PATCH")
-                        .withUrlPath(repo.getApiTailUrl("check-runs/" + checkId)));
+                repo.root().createRequest().method("PATCH").withUrlPath(repo.getApiTailUrl("check-runs/" + checkId)));
     }
 
     /**
@@ -254,7 +247,6 @@ public final class GHCheckRunBuilder {
             extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());
             run = repo.root()
                     .createRequest()
-                    .withPreview(Previews.ANTIOPE)
                     .method("PATCH")
                     .with("output", output2)
                     .withUrlPath(repo.getApiTailUrl("check-runs/" + run.getId()))

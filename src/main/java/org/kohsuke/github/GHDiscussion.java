@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.net.URL;
@@ -166,7 +165,6 @@ public class GHDiscussion extends GHObject {
      *
      * @return a {@link GHDiscussion.Updater}
      */
-    @Preview(Previews.SQUIRREL_GIRL)
     public GHDiscussion.Updater update() {
         return new GHDiscussion.Updater(this);
     }
@@ -176,7 +174,6 @@ public class GHDiscussion extends GHObject {
      *
      * @return a {@link GHDiscussion.Setter}
      */
-    @Preview(Previews.SQUIRREL_GIRL)
     public GHDiscussion.Setter set() {
         return new GHDiscussion.Setter(this);
     }

@@ -10,9 +10,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.kohsuke.github.internal.Previews.ANTIOPE;
-import static org.kohsuke.github.internal.Previews.GROOT;
-
 // TODO: Auto-generated Javadoc
 /**
  * A commit in a repository.
@@ -494,11 +491,9 @@ public class GHCommit {
      *
      * @return {@link PagedIterable} with the pull requests which contain this commit
      */
-    @Preview(GROOT)
     public PagedIterable<GHPullRequest> listPullRequests() {
         return owner.root()
                 .createRequest()
-                .withPreview(GROOT)
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/pulls", owner.getOwnerName(), owner.getName(), sha))
                 .toIterable(GHPullRequest[].class, item -> item.wrapUp(owner));
     }
@@ -510,11 +505,9 @@ public class GHCommit {
      * @throws IOException
      *             the io exception
      */
-    @Preview(GROOT)
     public PagedIterable<GHBranch> listBranchesWhereHead() throws IOException {
         return owner.root()
                 .createRequest()
-                .withPreview(GROOT)
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/branches-where-head",
                         owner.getOwnerName(),
                         owner.getName(),
@@ -604,7 +597,6 @@ public class GHCommit {
      * @throws IOException
      *             on error
      */
-    @Preview(ANTIOPE)
     public PagedIterable<GHCheckRun> getCheckRuns() throws IOException {
         return owner.getCheckRuns(sha);
     }

@@ -26,8 +26,6 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.util.*;
 
-import static org.kohsuke.github.internal.Previews.INERTIA;
-
 // TODO: Auto-generated Javadoc
 /**
  * Represents an user of GitHub.
@@ -141,12 +139,8 @@ public class GHUser extends GHPerson {
      *
      * @return the paged iterable
      */
-    @Preview(INERTIA)
     public PagedIterable<GHProject> listProjects() {
-        return root().createRequest()
-                .withPreview(INERTIA)
-                .withUrlPath(getApiTailUrl("projects"))
-                .toIterable(GHProject[].class, null);
+        return root().createRequest().withUrlPath(getApiTailUrl("projects")).toIterable(GHProject[].class, null);
     }
 
     private PagedIterable<GHRepository> listRepositories(final String suffix) {

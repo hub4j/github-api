@@ -41,8 +41,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
-
 // TODO: Auto-generated Javadoc
 /**
  * Represents an issue on GitHub.
@@ -564,11 +562,9 @@ public class GHIssue extends GHObject implements Reactable {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return root().createRequest()
                 .method("POST")
-                .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getIssuesApiRoute() + "/reactions")
                 .fetch(GHReaction.class);
@@ -595,10 +591,8 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * @return the paged iterable
      */
-    @Preview(SQUIRREL_GIRL)
     public PagedIterable<GHReaction> listReactions() {
         return root().createRequest()
-                .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getIssuesApiRoute() + "/reactions")
                 .toIterable(GHReaction[].class, null);
     }

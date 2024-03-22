@@ -30,7 +30,6 @@ import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
-import org.kohsuke.github.internal.Previews;
 
 import java.io.*;
 import java.util.*;
@@ -41,9 +40,6 @@ import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
-import static org.kohsuke.github.internal.Previews.INERTIA;
-import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -1016,9 +1012,8 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/apps/#get-the-authenticated-github-app">Get the authenticated
      *      GitHub App</a>
      */
-    @Preview(MACHINE_MAN)
     public GHApp getApp() throws IOException {
-        return createRequest().withPreview(MACHINE_MAN).withUrlPath("/app").fetch(GHApp.class);
+        return createRequest().withUrlPath("/app").fetch(GHApp.class);
     }
 
     /**
@@ -1064,7 +1059,6 @@ public class GitHub {
      *             the io exception
      * @see <a href="https://docs.github.com/en/rest/apps/installations">GitHub App installations</a>
      */
-    @Preview(MACHINE_MAN)
     public GHAuthenticatedAppInstallation getInstallation() throws IOException {
         return new GHAuthenticatedAppInstallation(this);
     }
@@ -1101,7 +1095,7 @@ public class GitHub {
      *             the io exception
      */
     public GHProject getProject(long id) throws IOException {
-        return createRequest().withPreview(INERTIA).withUrlPath("/projects/" + id).fetch(GHProject.class);
+        return createRequest().withUrlPath("/projects/" + id).fetch(GHProject.class);
     }
 
     /**
@@ -1114,10 +1108,7 @@ public class GitHub {
      *             the io exception
      */
     public GHProjectColumn getProjectColumn(long id) throws IOException {
-        return createRequest().withPreview(INERTIA)
-                .withUrlPath("/projects/columns/" + id)
-                .fetch(GHProjectColumn.class)
-                .lateBind(this);
+        return createRequest().withUrlPath("/projects/columns/" + id).fetch(GHProjectColumn.class).lateBind(this);
     }
 
     /**
@@ -1130,10 +1121,7 @@ public class GitHub {
      *             the io exception
      */
     public GHProjectCard getProjectCard(long id) throws IOException {
-        return createRequest().withPreview(INERTIA)
-                .withUrlPath("/projects/columns/cards/" + id)
-                .fetch(GHProjectCard.class)
-                .lateBind(this);
+        return createRequest().withUrlPath("/projects/columns/cards/" + id).fetch(GHProjectCard.class).lateBind(this);
     }
 
     /**
@@ -1158,7 +1146,6 @@ public class GitHub {
      *
      * @return the gh commit search builder
      */
-    @Preview(Previews.CLOAK)
     public GHCommitSearchBuilder searchCommits() {
         return new GHCommitSearchBuilder(this);
     }

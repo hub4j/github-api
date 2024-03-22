@@ -5,8 +5,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
-
 // TODO: Auto-generated Javadoc
 /**
  * A comment attached to a commit (or a specific line in a specific file of a commit.)
@@ -142,12 +140,10 @@ public class GHCommitComment extends GHObject implements Reactable {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return owner.root()
                 .createRequest()
                 .method("POST")
-                .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getApiTail() + "/reactions")
                 .fetch(GHReaction.class);
@@ -174,11 +170,9 @@ public class GHCommitComment extends GHObject implements Reactable {
      *
      * @return the paged iterable
      */
-    @Preview(SQUIRREL_GIRL)
     public PagedIterable<GHReaction> listReactions() {
         return owner.root()
                 .createRequest()
-                .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiTail() + "/reactions")
                 .toIterable(GHReaction[].class, item -> owner.root());
     }

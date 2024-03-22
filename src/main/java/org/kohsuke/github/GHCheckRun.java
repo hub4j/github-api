@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
-import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.net.URL;
@@ -383,7 +382,6 @@ public class GHCheckRun extends GHObject {
      *
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
-    @Preview(Previews.ANTIOPE)
     public @NonNull GHCheckRunBuilder update() {
         return new GHCheckRunBuilder(owner, getId());
     }

@@ -590,9 +590,11 @@ class GitHubClient {
             }
         }
         if (request.header("Accept") == null) {
-            builder.setHeader("Accept", "application/vnd.github.v3+json");
+            builder.setHeader("Accept", "application/vnd.github+json");
         }
         builder.setHeader("Accept-Encoding", "gzip");
+
+        builder.setHeader("X-GitHub-Api-Version", "2022-11-28");
 
         if (request.hasBody()) {
             if (request.body() != null) {

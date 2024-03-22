@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import org.kohsuke.github.internal.Previews;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
@@ -208,8 +206,6 @@ public class GHDeployment extends GHObject {
     public PagedIterable<GHDeploymentStatus> listStatuses() {
         return root().createRequest()
                 .withUrlPath(statuses_url)
-                .withPreview(Previews.ANT_MAN)
-                .withPreview(Previews.FLASH)
                 .toIterable(GHDeploymentStatus[].class, item -> item.lateBind(owner));
     }
 

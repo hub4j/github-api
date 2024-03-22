@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import org.kohsuke.github.internal.Previews;
-
 import java.io.IOException;
 
 // TODO: Auto-generated Javadoc
@@ -28,11 +26,7 @@ public class GHDeploymentStatusBuilder {
     GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
-        this.builder = repo.root()
-                .createRequest()
-                .withPreview(Previews.ANT_MAN)
-                .withPreview(Previews.FLASH)
-                .method("POST");
+        this.builder = repo.root().createRequest().method("POST");
 
         this.builder.with("state", state);
     }

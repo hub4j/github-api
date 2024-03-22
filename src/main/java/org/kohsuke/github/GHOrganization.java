@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.kohsuke.github.internal.Previews.INERTIA;
-
 // TODO: Auto-generated Javadoc
 /**
  * The type GHOrganization.
@@ -342,7 +340,6 @@ public class GHOrganization extends GHPerson {
      */
     public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
         return root().createRequest()
-                .withPreview(INERTIA)
                 .with("state", status)
                 .withUrlPath(String.format("/orgs/%s/projects", login))
                 .toIterable(GHProject[].class, null);
@@ -373,7 +370,6 @@ public class GHOrganization extends GHPerson {
     public GHProject createProject(String name, String body) throws IOException {
         return root().createRequest()
                 .method("POST")
-                .withPreview(INERTIA)
                 .with("name", name)
                 .with("body", body)
                 .withUrlPath(String.format("/orgs/%s/projects", login))

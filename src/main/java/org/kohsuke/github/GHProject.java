@@ -30,8 +30,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
-import static org.kohsuke.github.internal.Previews.INERTIA;
-
 // TODO: Auto-generated Javadoc
 /**
  * A GitHub project.
@@ -157,7 +155,7 @@ public class GHProject extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root().createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
+        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -261,7 +259,7 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root().createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -274,7 +272,6 @@ public class GHProject extends GHObject {
     public PagedIterable<GHProjectColumn> listColumns() throws IOException {
         final GHProject project = this;
         return root().createRequest()
-                .withPreview(INERTIA)
                 .withUrlPath(String.format("/projects/%d/columns", getId()))
                 .toIterable(GHProjectColumn[].class, item -> item.lateBind(project));
     }
@@ -291,7 +288,6 @@ public class GHProject extends GHObject {
     public GHProjectColumn createColumn(String name) throws IOException {
         return root().createRequest()
                 .method("POST")
-                .withPreview(INERTIA)
                 .with("name", name)
                 .withUrlPath(String.format("/projects/%d/columns", getId()))
                 .fetch(GHProjectColumn.class)

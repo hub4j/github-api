@@ -2,8 +2,6 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
-
 // TODO: Auto-generated Javadoc
 /**
  * Reaction to issue, comment, PR, and so on.
@@ -11,7 +9,6 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  * @author Kohsuke Kawaguchi
  * @see Reactable
  */
-@Preview(SQUIRREL_GIRL)
 public class GHReaction extends GHObject {
 
     private GHUser user;

@@ -31,8 +31,6 @@ import java.net.URL;
 
 import javax.annotation.CheckForNull;
 
-import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
-
 // TODO: Auto-generated Javadoc
 /**
  * Review comment to the pull request.
@@ -392,12 +390,10 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return owner.root()
                 .createRequest()
                 .method("POST")
-                .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
                 .withUrlPath(getApiRoute() + "/reactions")
                 .fetch(GHReaction.class);
@@ -424,11 +420,9 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      *
      * @return the paged iterable
      */
-    @Preview(SQUIRREL_GIRL)
     public PagedIterable<GHReaction> listReactions() {
         return owner.root()
                 .createRequest()
-                .withPreview(SQUIRREL_GIRL)
                 .withUrlPath(getApiRoute() + "/reactions")
                 .toIterable(GHReaction[].class, item -> owner.root());
     }

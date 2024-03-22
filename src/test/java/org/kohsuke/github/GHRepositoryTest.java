@@ -219,10 +219,10 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listStargazers() throws IOException {
         GHRepository repository = getRepository();
-        assertThat(repository.listStargazers2().toList(), is(empty()));
+        assertThat(repository.listStargazers().toList(), is(empty()));
 
         repository = gitHub.getOrganization("hub4j").getRepository("github-api");
-        Iterable<GHStargazer> stargazers = repository.listStargazers2();
+        Iterable<GHStargazer> stargazers = repository.listStargazers();
         GHStargazer stargazer = stargazers.iterator().next();
         assertThat(stargazer.getStarredAt(), equalTo(new Date(1271650383000L)));
         assertThat(stargazer.getUser().getLogin(), equalTo("nielswind"));
@@ -1577,11 +1577,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         String owner = "hub4j-test-org";
         GHRepository repository = getRepository();
         assertThat(repository.getOwner().getLogin(), equalTo(owner));
-        assertThat(repository.getStargazersCount(), is(0));
+        assertThat(repository.getStargazersCount(), is(1));
         repository.star();
-        assertThat(repository.listStargazers2().toList().size(), is(1));
+        assertThat(repository.listStargazers().toList().size(), is(2));
         repository.unstar();
-        assertThat(repository.listStargazers().toList().size(), is(0));
+        assertThat(repository.listStargazers().toList().size(), is(1));
     }
 
     /**

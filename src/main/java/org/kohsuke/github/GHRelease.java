@@ -266,9 +266,7 @@ public class GHRelease extends GHObject {
     /**
      * Re-fetch the assets of this release.
      *
-     * @return the assets
-     * @throws IOException
-     *             the io exception
+     * @return the assets iterable
      */
     public PagedIterable<GHAsset> listAssets() {
         Requester builder = owner.root().createRequest();

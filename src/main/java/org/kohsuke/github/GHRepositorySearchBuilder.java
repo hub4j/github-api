@@ -62,11 +62,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     /**
      * Searching in forks
      *
-     * The default search mode is {@link Fork#PARENT_ONLY}. In that mode, forks are not included in search results.
+     * The default search mode is {@link GHFork#PARENT_ONLY}. In that mode, forks are not included in search results.
      *
      * <p>
-     * Passing {@link Fork#PARENT_AND_FORKS} or {@link Fork#FORKS_ONLY} will show results from forks, but only if they
-     * have more stars than the parent repository.
+     * Passing {@link GHFork#PARENT_AND_FORKS} or {@link GHFork#FORKS_ONLY} will show results from forks, but only if
+     * they have more stars than the parent repository.
      *
      * <p>
      * IMPORTANT: Regardless of this setting, no search results will ever be returned for forks with equal or fewer

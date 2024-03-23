@@ -42,8 +42,8 @@
   },
   "uuid": "4084a968-c974-41d7-a8af-b49a9eed6c52",
   "persistent": true,
-  "scenarioName": "scenario-2-repos-hub4j-test-org-test-repo-visibility",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-2-repos-hub4j-test-org-test-repo-visibility-2",
+  "scenarioName": "scenario-1-repos-hub4j-test-org-test-repo-visibility",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-test-repo-visibility-2",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-test-repo-visibility-3",
   "insertionIndex": 3
 }

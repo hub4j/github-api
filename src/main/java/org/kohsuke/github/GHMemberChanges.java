@@ -45,7 +45,7 @@ public class GHMemberChanges {
         /**
          * Gets the from.
          *
-         * Cannot use {@link GHOrganization.Permission.ADMIN} due to messy underlying design.
+         * Cannot use {@link GHOrganization.Permission#ADMIN} due to messy underlying design.
          *
          * @return the from
          */
@@ -56,7 +56,7 @@ public class GHMemberChanges {
         /**
          * Gets the to.
          *
-         * Cannot use {@link GHOrganization.Permission.ADMIN} due to messy underlying design.
+         * Cannot use {@link GHOrganization.Permission#ADMIN} due to messy underlying design.
          *
          * @return the to
          */

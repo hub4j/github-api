@@ -18,7 +18,6 @@ import static java.lang.String.*;
 /**
  * Release in a github repository.
  *
- * @see GHRepository#getReleases() GHRepository#getReleases()
  * @see GHRepository#listReleases() () GHRepository#listReleases()
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
@@ -259,39 +258,17 @@ public class GHRelease extends GHObject {
      * Get the cached assets.
      *
      * @return the assets
-     *
-     * @deprecated This should be the default behavior of {@link #getAssets()} in a future release. This method is
-     *             introduced in addition to enable a transition to using cached asset information while keeping the
-     *             existing logic in place for backwards compatibility.
      */
-    @Deprecated
-    public List<GHAsset> assets() {
+    public List<GHAsset> getAssets() {
         return Collections.unmodifiableList(assets);
     }
 
     /**
      * Re-fetch the assets of this release.
      *
-     * @return the assets
-     * @throws IOException
-     *             the io exception
-     * @deprecated The behavior of this method will change in a future release. It will then provide cached assets as
-     *             provided by {@link #assets()}. Use {@link #listAssets()} instead to fetch up-to-date information of
-     *             assets.
+     * @return the assets iterable
      */
-    @Deprecated
-    public List<GHAsset> getAssets() throws IOException {
-        return listAssets().toList();
-    }
-
-    /**
-     * Re-fetch the assets of this release.
-     *
-     * @return the assets
-     * @throws IOException
-     *             the io exception
-     */
-    public PagedIterable<GHAsset> listAssets() throws IOException {
+    public PagedIterable<GHAsset> listAssets() {
         Requester builder = owner.root().createRequest();
         return builder.withUrlPath(getApiTailUrl("assets")).toIterable(GHAsset[].class, item -> item.wrap(this));
     }

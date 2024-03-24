@@ -6,7 +6,7 @@
     "method": "PATCH",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.nebula-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     },
     "bodyPatterns": [
@@ -48,8 +48,8 @@
   },
   "uuid": "36b64f54-a9e2-4fa7-80dd-d6464f521355",
   "persistent": true,
-  "scenarioName": "scenario-3-repos-hub4j-test-org-test-repo-visibility",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-3-repos-hub4j-test-org-test-repo-visibility-2",
+  "scenarioName": "scenario-1-repos-hub4j-test-org-test-repo-visibility",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-test-repo-visibility-3",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-test-repo-visibility-4",
   "insertionIndex": 4
 }

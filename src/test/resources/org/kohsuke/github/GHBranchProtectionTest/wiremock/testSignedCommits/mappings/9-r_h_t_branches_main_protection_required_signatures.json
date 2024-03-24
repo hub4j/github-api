@@ -6,7 +6,7 @@
     "method": "GET",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.zzzax-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     }
   },

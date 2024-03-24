@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.kohsuke.github.internal.Previews.GAMBIT;
-import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
-
 // TODO: Auto-generated Javadoc
 /**
  * A Github App Installation.
@@ -97,12 +94,10 @@ public class GHAppInstallation extends GHObject {
      *             retrieve a {@link GHAuthenticatedAppInstallation} from {@link GitHub#getInstallation()}, then call
      *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
      */
-    @Deprecated
-    @Preview(MACHINE_MAN)
     public PagedSearchIterable<GHRepository> listRepositories() {
         GitHubRequest request;
 
-        request = root().createRequest().withPreview(MACHINE_MAN).withUrlPath("/installation/repositories").build();
+        request = root().createRequest().withUrlPath("/installation/repositories").build();
 
         return new PagedSearchIterable<>(root(), request, GHAppInstallationRepositoryResult.class);
     }
@@ -209,13 +204,8 @@ public class GHAppInstallation extends GHObject {
      *             on error
      * @see <a href="https://developer.github.com/v3/apps/#delete-an-installation">Delete an installation</a>
      */
-    @Preview(GAMBIT)
     public void deleteInstallation() throws IOException {
-        root().createRequest()
-                .method("DELETE")
-                .withPreview(GAMBIT)
-                .withUrlPath(String.format("/app/installations/%d", getId()))
-                .send();
+        root().createRequest().method("DELETE").withUrlPath(String.format("/app/installations/%d", getId())).send();
     }
 
     /**

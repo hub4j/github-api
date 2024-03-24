@@ -245,11 +245,6 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit.getCore().getRemaining(), equalTo(rateLimit.getRemaining()));
         assertThat(rateLimit.getCore().getResetEpochSeconds(), equalTo(rateLimit.getResetEpochSeconds()));
         assertThat(rateLimit.getCore().getResetDate(), equalTo(rateLimit.getResetDate()));
-
-        // Additional checks for deprecated values
-        assertThat(rateLimit.limit, equalTo(rateLimit.getLimit()));
-        assertThat(rateLimit.remaining, equalTo(rateLimit.getRemaining()));
-        assertThat(rateLimit.reset.getTime(), equalTo(rateLimit.getResetEpochSeconds()));
     }
 
     /**

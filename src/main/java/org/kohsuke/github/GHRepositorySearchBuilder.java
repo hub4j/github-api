@@ -62,11 +62,11 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     /**
      * Searching in forks
      *
-     * The default search mode is {@link Fork#PARENT_ONLY}. In that mode, forks are not included in search results.
+     * The default search mode is {@link GHFork#PARENT_ONLY}. In that mode, forks are not included in search results.
      *
      * <p>
-     * Passing {@link Fork#PARENT_AND_FORKS} or {@link Fork#FORKS_ONLY} will show results from forks, but only if they
-     * have more stars than the parent repository.
+     * Passing {@link GHFork#PARENT_AND_FORKS} or {@link GHFork#FORKS_ONLY} will show results from forks, but only if
+     * they have more stars than the parent repository.
      *
      * <p>
      * IMPORTANT: Regardless of this setting, no search results will ever be returned for forks with equal or fewer
@@ -232,58 +232,6 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
         FORKS,
         /** The updated. */
         UPDATED
-    }
-
-    /**
-     * The enum for Fork search mode.
-     *
-     * @deprecated Kept for backward compatibility. Use {@link GHFork} instead.
-     */
-    @Deprecated
-    public enum Fork {
-
-        /**
-         * Search in the parent repository and in forks with more stars than the parent repository.
-         *
-         * Forks with the same or fewer stars than the parent repository are still ignored.
-         */
-        PARENT_AND_FORKS("true"),
-
-        /**
-         * Search only in forks with more stars than the parent repository.
-         *
-         * The parent repository is ignored. If no forks have more stars than the parent, no results will be returned.
-         */
-        FORKS_ONLY("only"),
-
-        /**
-         * (Default) Search only the parent repository.
-         *
-         * Forks are ignored.
-         */
-        PARENT_ONLY("");
-
-        private String filterMode;
-
-        /**
-         * Instantiates a new fork.
-         *
-         * @param mode
-         *            the mode
-         */
-        Fork(final String mode) {
-            this.filterMode = mode;
-        }
-
-        /**
-         * To string.
-         *
-         * @return the string
-         */
-        @Override
-        public String toString() {
-            return filterMode;
-        }
     }
 
     private static class RepositorySearchResult extends SearchResult<GHRepository> {

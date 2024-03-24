@@ -7,8 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.internal.Previews.INERTIA;
-
 // TODO: Auto-generated Javadoc
 /**
  * The type GHProjectCard.
@@ -199,7 +197,7 @@ public class GHProjectCard extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root().createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
+        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -218,6 +216,6 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root().createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 }

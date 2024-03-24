@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import org.kohsuke.github.internal.Previews;
-
 import java.net.URL;
 import java.util.Locale;
 
@@ -53,9 +51,7 @@ public class GHDeploymentStatus extends GHObject {
      * Gets target url.
      *
      * @return the target url
-     * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public URL getLogUrl() {
         return GitHubClient.parseURL(log_url);
     }
@@ -73,9 +69,7 @@ public class GHDeploymentStatus extends GHObject {
      * Gets deployment environment url.
      *
      * @return the deployment environment url
-     * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public URL getEnvironmentUrl() {
         return GitHubClient.parseURL(environment_url);
     }
@@ -96,17 +90,6 @@ public class GHDeploymentStatus extends GHObject {
      */
     public GHDeploymentState getState() {
         return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() {
-        return null;
     }
 
     /**

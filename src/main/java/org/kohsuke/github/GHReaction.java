@@ -2,10 +2,6 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.net.URL;
-
-import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
-
 // TODO: Auto-generated Javadoc
 /**
  * Reaction to issue, comment, PR, and so on.
@@ -13,7 +9,6 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  * @author Kohsuke Kawaguchi
  * @see Reactable
  */
-@Preview(SQUIRREL_GIRL)
 public class GHReaction extends GHObject {
 
     private GHUser user;
@@ -36,15 +31,5 @@ public class GHReaction extends GHObject {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getUser() {
         return user;
-    }
-
-    /**
-     * Reaction has no HTML URL. Don't call this method.
-     *
-     * @return the html url
-     */
-    @Deprecated
-    public URL getHtmlUrl() {
-        return null;
     }
 }

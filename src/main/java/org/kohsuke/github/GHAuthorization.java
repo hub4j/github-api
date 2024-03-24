@@ -137,17 +137,6 @@ public class GHAuthorization extends GHObject {
     }
 
     /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() {
-        return null;
-    }
-
-    /**
      * Gets note.
      *
      * @return the note

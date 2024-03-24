@@ -6,7 +6,7 @@
     "method": "DELETE",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.v3+json"
+        "equalTo": "application/vnd.github+json"
       }
     }
   },

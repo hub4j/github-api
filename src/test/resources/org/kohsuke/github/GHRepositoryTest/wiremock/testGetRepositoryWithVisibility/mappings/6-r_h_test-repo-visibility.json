@@ -6,7 +6,7 @@
     "method": "GET",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.baptiste-preview+json, application/vnd.github.nebula-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     }
   },
@@ -42,8 +42,8 @@
   },
   "uuid": "3c1a7599-4bfb-44f4-8793-8e7201031953",
   "persistent": true,
-  "scenarioName": "scenario-2-repos-hub4j-test-org-test-repo-visibility",
-  "requiredScenarioState": "scenario-2-repos-hub4j-test-org-test-repo-visibility-2",
-  "newScenarioState": "scenario-2-repos-hub4j-test-org-test-repo-visibility-3",
+  "scenarioName": "scenario-1-repos-hub4j-test-org-test-repo-visibility",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-test-repo-visibility-5",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-test-repo-visibility-6",
   "insertionIndex": 6
 }

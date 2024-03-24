@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.net.URL;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -111,17 +110,6 @@ public class GHAsset extends GHObject {
      */
     public String getState() {
         return state;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() {
-        return null;
     }
 
     /**

@@ -55,17 +55,6 @@ public class ArchTests {
             .withImportOption(new ImportOption.DoNotIncludeJars())
             .importPackages("org.kohsuke.github");
 
-    private static final DescribedPredicate<JavaAnnotation<?>> previewAnnotationWithNoMediaType = new DescribedPredicate<JavaAnnotation<?>>(
-            "preview has no required media types defined") {
-
-        @Override
-        public boolean test(JavaAnnotation<?> javaAnnotation) {
-            boolean isPreview = javaAnnotation.getRawType().isEquivalentTo(Preview.class);
-            Object[] values = (Object[]) javaAnnotation.getProperties().get("value");
-            return isPreview && values != null && values.length < 1;
-        }
-    };
-
     /**
      * Before class.
      */

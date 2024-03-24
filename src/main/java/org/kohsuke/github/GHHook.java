@@ -4,7 +4,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -91,17 +90,6 @@ public abstract class GHHook extends GHObject {
      */
     public void delete() throws IOException {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() {
-        return null;
     }
 
     /**

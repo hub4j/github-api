@@ -23,7 +23,6 @@
  */
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
@@ -50,14 +49,6 @@ public class GHPullRequestCommitDetail {
      */
     void wrapUp(GHPullRequest owner) {
         this.owner = owner;
-    }
-
-    /**
-     * The type Authorship.
-     *
-     * @deprecated Use {@link GitUser}
-     */
-    public static class Authorship extends GitUser {
     }
 
     /**
@@ -96,10 +87,10 @@ public class GHPullRequestCommitDetail {
     public static class Commit {
 
         /** The author. */
-        Authorship author;
+        GitUser author;
 
         /** The committer. */
-        Authorship committer;
+        GitUser committer;
 
         /** The message. */
         String message;
@@ -118,7 +109,6 @@ public class GHPullRequestCommitDetail {
          *
          * @return the author
          */
-        @WithBridgeMethods(value = Authorship.class, castRequired = true)
         public GitUser getAuthor() {
             return author;
         }
@@ -128,7 +118,6 @@ public class GHPullRequestCommitDetail {
          *
          * @return the committer
          */
-        @WithBridgeMethods(value = Authorship.class, castRequired = true)
         public GitUser getCommitter() {
             return committer;
         }

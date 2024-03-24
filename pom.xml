@@ -268,7 +268,7 @@
             <annotationProcessorPath>
               <groupId>org.jenkins-ci</groupId>
               <artifactId>annotation-indexer</artifactId>
-              <version>1.12</version>
+              <version>1.17</version>
             </annotationProcessorPath>
           </annotationProcessorPaths>
         </configuration>

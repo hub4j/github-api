@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
-
 // TODO: Auto-generated Javadoc
 /**
  * Lists up pull requests with some filtering and sorting.
@@ -108,8 +106,7 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
      */
     @Override
     public PagedIterable<GHPullRequest> list() {
-        return req.withPreview(SHADOW_CAT)
-                .withUrlPath(repo.getApiTailUrl("pulls"))
+        return req.withUrlPath(repo.getApiTailUrl("pulls"))
                 .toIterable(GHPullRequest[].class, item -> item.wrapUp(repo));
     }
 }

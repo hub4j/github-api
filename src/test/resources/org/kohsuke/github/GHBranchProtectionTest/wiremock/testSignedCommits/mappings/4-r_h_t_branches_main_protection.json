@@ -13,7 +13,7 @@
     ],
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.luke-cage-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     }
   },

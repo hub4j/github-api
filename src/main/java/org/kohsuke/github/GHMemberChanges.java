@@ -1,8 +1,6 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.kohsuke.github.internal.EnumUtils;
 
 /**
  * Changes made to a team.
@@ -47,9 +45,10 @@ public class GHMemberChanges {
         /**
          * Gets the from.
          *
+         * Cannot use {@link GHOrganization.Permission#ADMIN} due to messy underlying design.
+         *
          * @return the from
          */
-        @WithBridgeMethods(value = GHOrganization.Permission.class, adapterMethod = "stringToOrgPermission")
         public String getFrom() {
             return from;
         }
@@ -57,27 +56,12 @@ public class GHMemberChanges {
         /**
          * Gets the to.
          *
+         * Cannot use {@link GHOrganization.Permission#ADMIN} due to messy underlying design.
+         *
          * @return the to
          */
-        @WithBridgeMethods(value = GHOrganization.Permission.class, adapterMethod = "stringToOrgPermission")
         public String getTo() {
             return to;
-        }
-
-        @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD", justification = "Bridge method of getFrom and getTo")
-        private Object stringToOrgPermission(String permissionType, Class type) {
-            switch (permissionType) {
-                case "admin" :
-                    return GHOrganization.Permission.ADMIN;
-                case "none" :
-                    return GHOrganization.Permission.UNKNOWN;
-                case "read" :
-                    return GHOrganization.Permission.PULL;
-                case "write" :
-                    return GHOrganization.Permission.PUSH;
-                default :
-                    return EnumUtils.getNullableEnumOrDefault(GHPermissionType.class, to, GHPermissionType.UNKNOWN);
-            }
         }
     }
 

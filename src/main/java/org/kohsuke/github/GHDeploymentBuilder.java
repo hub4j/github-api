@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,11 +23,7 @@ public class GHDeploymentBuilder {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Acceptable")
     public GHDeploymentBuilder(GHRepository repo) {
         this.repo = repo;
-        this.builder = repo.root()
-                .createRequest()
-                .withPreview(Previews.ANT_MAN)
-                .withPreview(Previews.FLASH)
-                .method("POST");
+        this.builder = repo.root().createRequest().method("POST");
     }
 
     /**
@@ -129,9 +124,7 @@ public class GHDeploymentBuilder {
      * @param transientEnvironment
      *            the environment is transient
      * @return the gh deployment builder
-     * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public GHDeploymentBuilder transientEnvironment(boolean transientEnvironment) {
         builder.with("transient_environment", transientEnvironment);
         return this;
@@ -143,9 +136,7 @@ public class GHDeploymentBuilder {
      * @param productionEnvironment
      *            the environment is used by end-users directly
      * @return the gh deployment builder
-     * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public GHDeploymentBuilder productionEnvironment(boolean productionEnvironment) {
         builder.with("production_environment", productionEnvironment);
         return this;

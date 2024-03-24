@@ -15,14 +15,6 @@ public enum GHPullRequestReviewState {
     /** The changes requested. */
     CHANGES_REQUESTED,
 
-    /**
-     * The request changes.
-     *
-     * @deprecated This was the thing when this API was in preview, but it changed when it became public. Use
-     *             {@link #CHANGES_REQUESTED}. Left here for compatibility.
-     */
-    REQUEST_CHANGES,
-
     /** The commented. */
     COMMENTED,
 
@@ -33,9 +25,8 @@ public enum GHPullRequestReviewState {
      * Action string.
      *
      * @return the string
-     * @deprecated This was an internal method accidentally exposed. Left here for compatibility.
      */
-    public String action() {
+    String action() {
         GHPullRequestReviewEvent e = toEvent();
         return e == null ? null : e.action();
     }
@@ -52,8 +43,6 @@ public enum GHPullRequestReviewState {
             case APPROVED :
                 return GHPullRequestReviewEvent.APPROVE;
             case CHANGES_REQUESTED :
-                return GHPullRequestReviewEvent.REQUEST_CHANGES;
-            case REQUEST_CHANGES :
                 return GHPullRequestReviewEvent.REQUEST_CHANGES;
             case COMMENTED :
                 return GHPullRequestReviewEvent.COMMENT;

@@ -172,13 +172,6 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     }
 
     /**
-     * Retrieves the actual content stored here.
-     *
-     * @return the input stream
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    /**
      * Retrieves the actual bytes of the blob.
      *
      * @return the input stream

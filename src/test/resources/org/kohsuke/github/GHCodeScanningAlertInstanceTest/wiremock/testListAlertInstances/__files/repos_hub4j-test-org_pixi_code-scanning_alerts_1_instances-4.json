@@ -1,0 +1,20 @@
+[
+  {
+    "ref": "refs/heads/master",
+    "analysis_key": ".github/workflows/codeql-analysis.yml:analyze",
+    "environment": "{\"language\":\"javascript\"}",
+    "state": "open",
+    "commit_sha": "b3cfb0474bb3d5b5cd499a17e448281abbd256d7",
+    "message": {
+      "text": "Disabling SCE is strongly discouraged."
+    },
+    "location": {
+      "path": "app/pixi.html",
+      "start_line": 179,
+      "end_line": 179,
+      "start_column": 4,
+      "end_column": 31
+    },
+    "classifications": []
+  }
+]

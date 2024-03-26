@@ -3656,6 +3656,38 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Get the top 10 popular contents over the last 14 days.
+     *
+     * @return list of top referral paths
+     * @throws IOException
+     *             the io exception
+     * @link https://docs.github.com/en/rest/metrics/traffic?apiVersion=2022-11-28#get-top-referral-paths
+     */
+    public List<GHRepositoryTrafficTopReferralPath> getTopReferralPaths() throws IOException {
+        return root().createRequest()
+                .method("GET")
+                .withUrlPath("/repos/%s/%s/traffic/popular/paths", getOwnerName(), name)
+                .toIterable(GHRepositoryTrafficTopReferralPath[].class, null)
+                .toList();
+    }
+
+    /**
+     * Get the top 10 referrers over the last 14 days.
+     *
+     * @return list of top referrers
+     * @throws IOException
+     *             the io exception
+     * @link https://docs.github.com/en/rest/metrics/traffic?apiVersion=2022-11-28#get-top-referral-sources
+     */
+    public List<GHRepositoryTrafficTopReferralSources> getTopReferralSources() throws IOException {
+        return root().createRequest()
+                .method("GET")
+                .withUrlPath("/repos/%s/%s/traffic/popular/referrers", getOwnerName(), name)
+                .toIterable(GHRepositoryTrafficTopReferralSources[].class, null)
+                .toList();
+    }
+
+    /**
      * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
      *
      * Consumer must call {@link #done()} to commit changes.

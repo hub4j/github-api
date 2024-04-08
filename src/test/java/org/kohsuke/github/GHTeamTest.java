@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThrows;
@@ -409,6 +411,27 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         GHTeam team = org.getTeamBySlug(teamSlug);
 
         assertThrows(GHFileNotFoundException.class, () -> team.connectToExternalGroup(12345));
+    }
+
+    /**
+     * Test delete connection to external group
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testDeleteExternalGroupConnection() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        team.deleteExternalGroupConnection();
+
+        mockGitHub.apiServer()
+                .verify(1,
+                        deleteRequestedFor(urlPathEqualTo("/orgs/" + team.getOrganization().getLogin() + "/teams/"
+                                + team.getSlug() + "/external-groups")));
     }
 
 }

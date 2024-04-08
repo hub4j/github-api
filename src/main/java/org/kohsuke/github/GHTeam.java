@@ -495,6 +495,18 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
+     * Remove the connection of the team to an external group
+     *
+     * @throws IOException
+     *             in case of failure
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#remove-the-connection-between-an-external-group-and-a-team">documentation</a>
+     */
+    public void deleteExternalGroupConnection() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(publicApi(EXTERNAL_GROUPS)).send();
+    }
+
+    /**
      * Gets organization.
      *
      * @return the organization

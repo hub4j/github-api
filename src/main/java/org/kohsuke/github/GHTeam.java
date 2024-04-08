@@ -454,6 +454,47 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
+     * Connect an external group to the team
+     *
+     * @param group
+     *            the group to connect
+     * @return the external group
+     * @throws IOException
+     *             in case of failure
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#update-the-connection-between-an-external-group-and-a-team">documentation</a>
+     */
+    public GHExternalGroup connectToExternalGroup(final GHExternalGroup group) throws IOException {
+        return connectToExternalGroup(group.getId());
+    }
+
+    /**
+     * Connect an external group to the team
+     *
+     * @param group_id
+     *            the identifier of the group to connect
+     * @return the external group
+     * @throws IOException
+     *             in case of failure
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#update-the-connection-between-an-external-group-and-a-team">documentation</a>
+     */
+    public GHExternalGroup connectToExternalGroup(final long group_id) throws IOException {
+        try {
+            return root().createRequest()
+                    .method("PATCH")
+                    .with("group_id", group_id)
+                    .withUrlPath(publicApi(EXTERNAL_GROUPS))
+                    .fetch(GHExternalGroup.class)
+                    .wrapUp(getOrganization());
+        } catch (final HttpException e) {
+            throw EnterpriseManagedSupport.forOrganization(getOrganization())
+                    .handleException(e, "Could not connect team to external group")
+                    .orElse(e);
+        }
+    }
+
+    /**
      * Gets organization.
      *
      * @return the organization

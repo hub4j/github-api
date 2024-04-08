@@ -6,11 +6,7 @@ import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 import javax.annotation.Nonnull;
 
@@ -23,6 +19,12 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
  * @author Kohsuke Kawaguchi
  */
 public class GHTeam extends GHObject implements Refreshable {
+
+    /**
+     * Path for external group-related operations
+     */
+    private static final String EXTERNAL_GROUPS = "/external-groups";
+
     private String html_url;
     private String name;
     private String permission;
@@ -409,6 +411,10 @@ public class GHTeam extends GHObject implements Refreshable {
         return "/organizations/" + organization.getId() + "/team/" + getId() + tail;
     }
 
+    private String publicApi(String tail) throws IOException {
+        return "/orgs/" + getOrganization().login + "/teams/" + getSlug() + tail;
+    }
+
     /**
      * Begins the creation of a new instance.
      *
@@ -422,6 +428,29 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public GHDiscussion.Creator createDiscussion(String title) throws IOException {
         return GHDiscussion.create(this).title(title);
+    }
+
+    /**
+     * Get the external groups connected to the team
+     *
+     * @return the external groups
+     * @throws IOException
+     *             the io exception
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-a-connection-between-an-external-group-and-a-team">documentation</a>
+     */
+    public List<GHExternalGroup> getExternalGroups() throws IOException {
+        try {
+            return root().createRequest()
+                    .method("GET")
+                    .withUrlPath(publicApi(EXTERNAL_GROUPS))
+                    .fetch(GHExternalGroups.class)
+                    .getGroups();
+        } catch (final HttpException e) {
+            throw EnterpriseManagedSupport.forOrganization(getOrganization())
+                    .handleException(e, "Could not retrieve team external groups")
+                    .orElse(e);
+        }
     }
 
     /**

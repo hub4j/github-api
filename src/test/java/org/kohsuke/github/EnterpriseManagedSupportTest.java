@@ -20,6 +20,9 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
     private static final String UNKNOWN_ERROR = "{\"message\":\"Unknown error\","
             + "\"documentation_url\": \"https://docs.github.com/rest/unknown#unknown\"}";
 
+    private static final String TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR = "{\"message\":\"This team cannot be externally managed since it has explicit members.\","
+            + "\"documentation_url\": \"https://docs.github.com/rest/teams/external-groups#list-a-connection-between-an-external-group-and-a-team\"}";
+
     /**
      * Test to ensure that only HttpExceptions are handled
      *
@@ -143,4 +146,39 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
         assertThat(error.getDocumentationUrl(), notNullValue());
     }
 
+    /**
+     * Test to validate another compliant use case.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testHandleTeamCannotBeExternallyManagedHttpException() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        final HttpException inputException = new HttpException(TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR,
+                400,
+                "Error",
+                org.getUrl().toString());
+
+        final Optional<GHIOException> maybeException = EnterpriseManagedSupport.forOrganization(org)
+                .handleException(inputException, "Scenario");
+
+        assertThat(maybeException.isPresent(), is(true));
+
+        final GHIOException exception = maybeException.get();
+
+        assertThat(exception.getMessage(), equalTo("Scenario"));
+        assertThat(exception.getCause(), is(inputException));
+
+        assertThat(exception, instanceOf(GHTeamCannotBeExternallyManagedException.class));
+
+        final GHTeamCannotBeExternallyManagedException failure = (GHTeamCannotBeExternallyManagedException) exception;
+
+        final GHError error = failure.getError();
+
+        assertThat(error, notNullValue());
+        assertThat(error.getMessage(), equalTo(EnterpriseManagedSupport.TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR));
+        assertThat(error.getDocumentationUrl(), notNullValue());
+    }
 }

@@ -16,6 +16,7 @@ class EnterpriseManagedSupport {
 
     static final String COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS = "Could not retrieve organization external groups";
     static final String NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR = "This organization is not part of externally managed enterprise.";
+    static final String TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR = "This team cannot be externally managed since it has explicit members.";
 
     private static final Logger LOGGER = Logger.getLogger(EnterpriseManagedSupport.class.getName());
 
@@ -34,6 +35,8 @@ class EnterpriseManagedSupport {
                         .readValue(responseMessage);
                 if (NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR.equals(error.getMessage())) {
                     return Optional.of(new GHNotExternallyManagedEnterpriseException(scenario, error, he));
+                } else if (TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR.equals(error.getMessage())) {
+                    return Optional.of(new GHTeamCannotBeExternallyManagedException(scenario, error, he));
                 }
             } catch (final JsonProcessingException e) {
                 // We can ignore it

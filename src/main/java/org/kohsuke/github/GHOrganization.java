@@ -189,6 +189,39 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * List up all the external groups.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization">documentation</a>
+     */
+    public PagedIterable<GHExternalGroup> listExternalGroups() throws IOException {
+        return listExternalGroups(null);
+    }
+
+    /**
+     * List up all the external groups with a given text in their name
+     *
+     * @param displayName
+     *            the text that must be part of the returned groups name
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization">documentation</a>
+     */
+    public PagedIterable<GHExternalGroup> listExternalGroups(final String displayName) throws IOException {
+        final Requester requester = root().createRequest()
+                .withUrlPath(String.format("/orgs/%s/external-groups", login));
+        if (displayName != null) {
+            requester.with("display_name", displayName);
+        }
+        return new GHExternalGroupsIterable(this, requester);
+    }
+
+    /**
      * Member's role in an organization.
      */
     public enum Role {

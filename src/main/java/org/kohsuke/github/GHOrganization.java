@@ -222,6 +222,30 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * Gets a single external group by ID.
+     *
+     * @param groupId
+     *            id of the external group that we want to query for
+     * @return the external group
+     * @throws IOException
+     *             the io exception
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#get-an-external-group">documentation</a>
+     */
+    public GHExternalGroup getExternalGroup(final long groupId) throws IOException {
+        try {
+            return root().createRequest()
+                    .withUrlPath(String.format("/orgs/%s/external-group/%d", login, groupId))
+                    .fetch(GHExternalGroup.class)
+                    .wrapUp(this);
+        } catch (final HttpException e) {
+            throw EnterpriseManagedSupport.forOrganization(this)
+                    .handleException(e, "Could not retrieve organization external group")
+                    .orElse(e);
+        }
+    }
+
+    /**
      * Member's role in an organization.
      */
     public enum Role {

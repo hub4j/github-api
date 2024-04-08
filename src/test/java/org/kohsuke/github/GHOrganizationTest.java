@@ -694,4 +694,47 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(error.getDocumentationUrl(), notNullValue());
     }
 
+    /**
+     * Test get external group
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetExternalGroup() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        GHExternalGroup group = org.getExternalGroup(467431L);
+
+        assertThat(group, not(isExternalGroupSummary()));
+
+        assertThat(group.getId(), equalTo(467431L));
+        assertThat(group.getName(), equalTo("acme-developers"));
+        assertThat(group.getUpdatedAt(), notNullValue());
+
+        assertThat(group.getMembers(), notNullValue());
+        assertThat(membersSummary(group),
+                hasItems("158311279:john-doe_acme:John Doe:john.doe@acme.corp",
+                        "166731041:jane-doe_acme:Jane Doe:jane.doe@acme.corp"));
+
+        assertThat(group.getTeams(), notNullValue());
+        assertThat(teamSummary(group), hasItems("9891173:ACME-DEVELOPERS"));
+    }
+
+    /**
+     * Test get external group for not enterprise managed organization
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetExternalGroupNotEnterpriseManagedOrganization() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        final GHIOException failure = assertThrows(GHNotExternallyManagedEnterpriseException.class,
+                () -> org.getExternalGroup(12345));
+
+        assertThat(failure.getMessage(), equalTo("Could not retrieve organization external group"));
+    }
+
 }

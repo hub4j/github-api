@@ -173,8 +173,9 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      * @param owner
      *            the owner
      */
-    void wrapUp(final GHOrganization owner) {
+    GHExternalGroup wrapUp(final GHOrganization owner) {
         this.organization = owner;
+        return this;
     }
 
     /**

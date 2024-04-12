@@ -379,6 +379,19 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * List up all the security managers.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHTeam> listSecurityManagers() throws IOException {
+        return root().createRequest()
+                .withUrlPath(String.format("/orgs/%s/security-managers", login))
+                .toIterable(GHTeam[].class, item -> item.wrapUp(this));
+    }
+
+    /**
      * Conceals the membership.
      *
      * @param u

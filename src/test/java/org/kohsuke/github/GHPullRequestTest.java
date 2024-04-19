@@ -234,6 +234,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHPullRequestReview draftReview = p.createReview()
                 .body("Some draft review")
                 .comment("Some niggle", "README.md", 1)
+                .singleLineComment("A single line comment", "README.md", 2)
+                .multiLineComment("A multiline comment", "README.md", 2, 3)
                 .create();
         assertThat(draftReview.getState(), is(GHPullRequestReviewState.PENDING));
         assertThat(draftReview.getBody(), is("Some draft review"));
@@ -246,9 +248,16 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(review.getCommitId(), notNullValue());
         draftReview.submit("Some review comment", GHPullRequestReviewEvent.COMMENT);
         List<GHPullRequestReviewComment> comments = review.listReviewComments().toList();
-        assertThat(comments.size(), equalTo(1));
+        assertThat(comments.size(), equalTo(3));
         GHPullRequestReviewComment comment = comments.get(0);
         assertThat(comment.getBody(), equalTo("Some niggle"));
+        comment = comments.get(1);
+        assertThat(comment.getBody(), equalTo("A single line comment"));
+        assertThat(comment.getLine(), equalTo(2));
+        comment = comments.get(2);
+        assertThat(comment.getBody(), equalTo("A multiline comment"));
+        assertThat(comment.getStartLine(), equalTo(2));
+        assertThat(comment.getLine(), equalTo(3));
         draftReview = p.createReview().body("Some new review").comment("Some niggle", "README.md", 1).create();
         draftReview.delete();
     }
@@ -267,8 +276,11 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             // System.out.println(p.getUrl());
             assertThat(p.listReviewComments().toList(), is(empty()));
             p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
+            p.createReviewComment("A single line review comment", p.getHead().getSha(), "README.md", 2, null);
+            p.createReviewComment("A multiline review comment", p.getHead().getSha(), "README.md", 2, 3);
             List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
-            assertThat(comments.size(), equalTo(1));
+            assertThat(comments.size(), equalTo(3));
+
             GHPullRequestReviewComment comment = comments.get(0);
             assertThat(comment.getBody(), equalTo("Sample review comment"));
             assertThat(comment.getInReplyToId(), equalTo(-1L));
@@ -293,6 +305,15 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             assertThat(comment.getHtmlUrl(), notNullValue());
             assertThat(comment.getHtmlUrl().toString(),
                     containsString("hub4j-test-org/github-api/pull/" + p.getNumber()));
+
+            comment = comments.get(1);
+            assertThat(comment.getBody(), equalTo("A single line review comment"));
+            assertThat(comment.getLine(), equalTo(2));
+
+            comment = comments.get(2);
+            assertThat(comment.getBody(), equalTo("A multiline review comment"));
+            assertThat(comment.getStartLine(), equalTo(2));
+            assertThat(comment.getLine(), equalTo(3));
 
             comment.createReaction(ReactionContent.EYES);
             GHReaction toBeRemoved = comment.createReaction(ReactionContent.CONFUSED);

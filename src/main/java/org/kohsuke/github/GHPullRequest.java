@@ -572,9 +572,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, Integer startLine,
-                                                          Integer endLine)
-            throws IOException {
+    public GHPullRequestReviewComment createReviewComment(String body,
+            String sha,
+            String path,
+            Integer startLine,
+            Integer endLine) throws IOException {
         return root().createRequest()
                 .method("POST")
                 .with("body", body)

@@ -590,7 +590,7 @@ public class GHIssue extends GHObject implements Reactable {
                 .method("POST")
                 .withPreview(SQUIRREL_GIRL)
                 .with("content", content.getContent())
-                .withUrlPath(getApiRoute() + "/reactions")
+                .withUrlPath(getIssuesApiRoute() + "/reactions")
                 .fetch(GHReaction.class);
     }
 
@@ -606,7 +606,7 @@ public class GHIssue extends GHObject implements Reactable {
         owner.root()
                 .createRequest()
                 .method("DELETE")
-                .withUrlPath(getApiRoute(), "reactions", String.valueOf(reaction.getId()))
+                .withUrlPath(getIssuesApiRoute(), "reactions", String.valueOf(reaction.getId()))
                 .send();
     }
 
@@ -619,7 +619,7 @@ public class GHIssue extends GHObject implements Reactable {
     public PagedIterable<GHReaction> listReactions() {
         return root().createRequest()
                 .withPreview(SQUIRREL_GIRL)
-                .withUrlPath(getApiRoute() + "/reactions")
+                .withUrlPath(getIssuesApiRoute() + "/reactions")
                 .toIterable(GHReaction[].class, null);
     }
 

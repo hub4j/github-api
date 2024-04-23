@@ -784,6 +784,16 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("egoh"));
     }
 
+    @Test
+    public void repository_transferred() throws Exception {
+        final GHEventPayload.RepositoryChanges event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.RepositoryChanges.class);
+        assertThat(event.getAction(), is("transferred"));
+        assertThat(event.getChanges().getOwner().getFrom().getUser().getLogin(), is("egoh"));
+        assertThat(event.getChanges().getOwner().getFrom().getUser().getId(), is(30L));
+        assertThat(event.getChanges().getOwner().getFrom().getUser().getType(), is("User"));
+    }
+
     /**
      * Status.
      *

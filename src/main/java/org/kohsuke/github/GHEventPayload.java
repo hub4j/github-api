@@ -1464,6 +1464,28 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
 
         public static class GHRepositoryChanges {
             private FromRepository repository;
+            private Owner owner;
+
+            public Owner getOwner() {
+                return owner;
+            }
+
+            public static class Owner {
+                private FromOwner from;
+
+                public FromOwner getFrom() {
+                    return from;
+                }
+            }
+
+            public static class FromOwner {
+                private GHUser user;
+
+                @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+                public GHUser getUser() {
+                    return user;
+                }
+            }
 
             public FromRepository getRepository() {
                 return repository;

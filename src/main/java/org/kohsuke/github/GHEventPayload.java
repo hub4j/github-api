@@ -1458,54 +1458,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     public static class RepositoryChanges extends GHEventPayload {
         private GHRepositoryChanges changes;
 
+        /**
+         * Get changes.
+         *
+         * @return GHRepositoryChanges
+         */
         public GHRepositoryChanges getChanges() {
             return changes;
-        }
-
-        public static class GHRepositoryChanges {
-            private FromRepository repository;
-            private Owner owner;
-
-            public Owner getOwner() {
-                return owner;
-            }
-
-            public static class Owner {
-                private FromOwner from;
-
-                public FromOwner getFrom() {
-                    return from;
-                }
-            }
-
-            public static class FromOwner {
-                private GHUser user;
-
-                @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-                public GHUser getUser() {
-                    return user;
-                }
-            }
-
-            public FromRepository getRepository() {
-                return repository;
-            }
-
-            public static class FromRepository {
-                private FromName name;
-
-                public FromName getName() {
-                    return name;
-                }
-            }
-
-            public static class FromName {
-                private String from;
-
-                public String getFrom() {
-                    return from;
-                }
-            }
         }
     }
 

@@ -772,6 +772,12 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));
     }
 
+    /**
+     * Repository renamed.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void repository_renamed() throws Exception {
         final GHEventPayload.RepositoryChanges event = GitHub.offline()
@@ -784,6 +790,12 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getSender().getLogin(), is("egoh"));
     }
 
+    /**
+     * Repository ownership transferred.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void repository_transferred() throws Exception {
         final GHEventPayload.RepositoryChanges event = GitHub.offline()

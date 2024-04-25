@@ -40,15 +40,26 @@ public class GHRepositoryChanges {
      */
     public static class FromOwner {
         private GHUser user;
+        private GHOrganization organization;
 
         /**
-         * Get user from which this repository was transferrred.
+         * Get user from which this repository was transferred.
          *
          * @return user
          */
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHUser getUser() {
             return user;
+        }
+
+        /**
+         * Get organization from which this repository was transferred.
+         *
+         * @return GHOrganization
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHOrganization getOrganization() {
+            return organization;
         }
     }
 

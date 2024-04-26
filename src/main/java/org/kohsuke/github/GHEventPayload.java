@@ -1445,17 +1445,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/repos">Repositories</a>
      */
     public static class Repository extends GHEventPayload {
-
-    }
-
-    /**
-     * A repository was renamed or transferred.
-     *
-     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#repository">
-     *      repository event</a>
-     * @see <a href="https://docs.github.com/en/rest/reference/repos">Repositories</a>
-     */
-    public static class RepositoryChanges extends GHEventPayload {
         private GHRepositoryChanges changes;
 
         /**
@@ -1466,6 +1455,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         public GHRepositoryChanges getChanges() {
             return changes;
         }
+
     }
 
     /**

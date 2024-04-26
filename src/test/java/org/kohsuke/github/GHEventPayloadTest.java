@@ -780,8 +780,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void repository_renamed() throws Exception {
-        final GHEventPayload.RepositoryChanges event = GitHub.offline()
-                .parseEventPayload(payload.asReader(), GHEventPayload.RepositoryChanges.class);
+        final GHEventPayload.Repository event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Repository.class);
         assertThat(event.getAction(), is("renamed"));
         assertThat(event.getChanges().getRepository().getName().getFrom(), is("react-workshop"));
         assertThat(event.getRepository().getName(), is("react-workshop-renamed"));
@@ -798,8 +798,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void repository_transferred_to_org() throws Exception {
-        final GHEventPayload.RepositoryChanges event = GitHub.offline()
-                .parseEventPayload(payload.asReader(), GHEventPayload.RepositoryChanges.class);
+        final GHEventPayload.Repository event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Repository.class);
         assertThat(event.getAction(), is("transferred"));
         assertThat(event.getChanges().getOwner().getFrom().getUser().getLogin(), is("eleanorgoh"));
         assertThat(event.getChanges().getOwner().getFrom().getUser().getId(), is(66235606L));
@@ -814,8 +814,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void repository_transferred_to_user() throws Exception {
-        final GHEventPayload.RepositoryChanges event = GitHub.offline()
-                .parseEventPayload(payload.asReader(), GHEventPayload.RepositoryChanges.class);
+        final GHEventPayload.Repository event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Repository.class);
         assertThat(event.getAction(), is("transferred"));
         assertThat(event.getChanges().getOwner().getFrom().getOrganization().getLogin(), is("EJG-Organization"));
         assertThat(event.getChanges().getOwner().getFrom().getOrganization().getId(), is(168135412L));

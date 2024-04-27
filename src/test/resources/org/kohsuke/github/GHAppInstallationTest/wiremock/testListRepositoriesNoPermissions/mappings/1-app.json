@@ -1,0 +1,41 @@
+{
+  "id": "bb7cf5bb-fba2-45b3-afd8-939b2c24787a",
+  "name": "app",
+  "request": {
+    "url": "/app",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.machine-man-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "1-app.json",
+    "headers": {
+      "Date": "Thu, 05 Nov 2020 20:42:31 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "public, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"b3d319dbb4dba93fbda071208d874e5ab566d827e1ad1d7dc59f26d68694dc48\"",
+      "X-GitHub-Media-Type": "github.v3; param=machine-man-preview; format=json",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "9294:AE05:BDAC761:DB35838:5FA463B6"
+    }
+  },
+  "uuid": "bb7cf5bb-fba2-45b3-afd8-939b2c24787a",
+  "persistent": true,
+  "insertionIndex": 1
+}

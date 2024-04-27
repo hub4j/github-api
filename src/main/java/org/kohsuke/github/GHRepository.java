@@ -103,6 +103,8 @@ public class GHRepository extends GHObject {
 
     private boolean allow_rebase_merge;
 
+    private boolean allow_forking;
+
     private boolean delete_branch_on_merge;
 
     @JsonProperty("private")
@@ -117,6 +119,8 @@ public class GHRepository extends GHObject {
     private Map<Integer, GHMilestone> milestones = Collections.synchronizedMap(new WeakHashMap<>());
 
     private String default_branch, language;
+
+    private GHRepository template_repository;
 
     private Map<String, GHCommit> commits = Collections.synchronizedMap(new WeakHashMap<>());
 
@@ -232,7 +236,7 @@ public class GHRepository extends GHObject {
         return getDeployment(deploymentId).createStatus(ghDeploymentState);
     }
 
-    private static class GHRepoPermission {
+    static class GHRepoPermission {
         boolean pull, push, admin;
     }
 
@@ -716,6 +720,15 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Is allow private forks
+     *
+     * @return the boolean
+     */
+    public boolean isAllowForking() {
+        return allow_forking;
+    }
+
+    /**
      * Automatically deleting head branches when pull requests are merged.
      *
      * @return the boolean
@@ -935,6 +948,16 @@ public class GHRepository extends GHObject {
     @Deprecated
     public String getMasterBranch() {
         return default_branch;
+    }
+
+    /**
+     * Get Repository template was the repository created from.
+     *
+     * @return the repository template
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+    public GHRepository getTemplateRepository() {
+        return (GHRepository) template_repository;
     }
 
     /**
@@ -1462,6 +1485,18 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Allow private fork.
+     *
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void allowForking(boolean value) throws IOException {
+        set().allowForking(value);
+    }
+
+    /**
      * After pull requests are merged, you can have head branches deleted automatically.
      *
      * @param value
@@ -1485,7 +1520,7 @@ public class GHRepository extends GHObject {
         } catch (FileNotFoundException x) {
             throw (FileNotFoundException) new FileNotFoundException("Failed to delete " + getOwnerName() + "/" + name
                     + "; might not exist, or you might need the delete_repo scope in your token: http://stackoverflow.com/a/19327004/12916")
-                            .initCause(x);
+                    .initCause(x);
         }
     }
 
@@ -1676,6 +1711,15 @@ public class GHRepository extends GHObject {
      */
     public GHPullRequestQueryBuilder queryPullRequests() {
         return new GHPullRequestQueryBuilder(this);
+    }
+
+    /**
+     * Retrieves pull requests according to search terms.
+     *
+     * @return gh pull request search builder for current repository
+     */
+    public GHPullRequestSearchBuilder searchPullRequests() {
+        return new GHPullRequestSearchBuilder(this.root()).repo(this);
     }
 
     /**
@@ -2737,6 +2781,47 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Create a repository variable.
+     *
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @param value
+     *            the value
+     * @throws IOException
+     *             the io exception
+     */
+    public void createVariable(String name, String value) throws IOException {
+        GHRepositoryVariable.create(this).name(name).value(value).done();
+    }
+
+    /**
+     * Gets a variable by name
+     *
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @return the variable
+     * @throws IOException
+     *             the io exception
+     */
+    @Deprecated
+    public GHRepositoryVariable getRepoVariable(String name) throws IOException {
+        return getVariable(name);
+    }
+
+    /**
+     * Gets a repository variable.
+     *
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @return the variable
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepositoryVariable getVariable(String name) throws IOException {
+        return GHRepositoryVariable.read(this, name);
+    }
+
+    /**
      * Creates a new content, or update an existing content.
      *
      * @return the gh content builder
@@ -2857,14 +2942,31 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHDeployKey addDeployKey(String title, String key) throws IOException {
+        return addDeployKey(title, key, false);
+    }
+
+    /**
+     * Add deploy key gh deploy key.
+     *
+     * @param title
+     *            the title
+     * @param key
+     *            the key
+     * @param readOnly
+     *            read-only ability of the key
+     * @return the gh deploy key
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeployKey addDeployKey(String title, String key, boolean readOnly) throws IOException {
         return root().createRequest()
                 .method("POST")
                 .with("title", title)
                 .with("key", key)
+                .with("read_only", readOnly)
                 .withUrlPath(getApiTailUrl("keys"))
                 .fetch(GHDeployKey.class)
                 .lateBind(this);
-
     }
 
     /**

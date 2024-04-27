@@ -1,0 +1,56 @@
+{
+  "id": "684608d7-77a7-4a67-942e-17a211f405c9",
+  "name": "orgs_hub4j-test-org_hooks",
+  "request": {
+    "url": "/orgs/hub4j-test-org/hooks",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"name\":\"web\",\"active\":true,\"config\":{\"url\":\"http://www.google.com/\"}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "16-o_h_hooks.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 24 Sep 2021 05:58:40 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"9994b0b99b97094891bcbf6e9cb3000a85264226343e50aeba17f928a61e0d34\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org_hook",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4824",
+      "X-RateLimit-Reset": "1632465781",
+      "X-RateLimit-Used": "176",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DBDC:7B63:CB934:200B45:614D6910",
+      "Location": "https://api.github.com/orgs/hub4j-test-org/hooks/319833957"
+    }
+  },
+  "uuid": "684608d7-77a7-4a67-942e-17a211f405c9",
+  "persistent": true,
+  "scenarioName": "scenario-3-orgs-hub4j-test-org-hooks",
+  "requiredScenarioState": "scenario-3-orgs-hub4j-test-org-hooks-2",
+  "insertionIndex": 16
+}

@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.google.common.collect.ImmutableSet;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
@@ -9,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -17,12 +19,18 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class AbstractGHAppInstallationTest.
  */
 public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
+
+    private static String ENV_GITHUB_APP_ID = "GITHUB_APP_ID";
+    private static String ENV_GITHUB_APP_JWK_PATH = "GITHUB_APP_JWK_PATH";
+    private static String ENV_GITHUB_APP_ORG = "GITHUB_APP_ORG";
+    private static String ENV_GITHUB_APP_REPO = "GITHUB_APP_REPO";
 
     private static String TEST_APP_ID_1 = "82994";
     private static String TEST_APP_ID_2 = "83009";
@@ -44,16 +52,23 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
      * Instantiates a new abstract GH app installation test.
      */
     protected AbstractGHAppInstallationTest() {
+        String appId = System.getenv(ENV_GITHUB_APP_ID);
+        String appJwkPath = System.getenv(ENV_GITHUB_APP_JWK_PATH);
         try {
-            jwtProvider1 = new JWTTokenProvider(TEST_APP_ID_1,
-                    new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_1).getFile()));
-            jwtProvider2 = new JWTTokenProvider(TEST_APP_ID_2,
-                    new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_2).getFile()).toPath());
-            jwtProvider3 = new JWTTokenProvider(TEST_APP_ID_3,
-                    new String(
-                            Files.readAllBytes(
-                                    new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_3).getFile()).toPath()),
-                            StandardCharsets.UTF_8));
+            if (appId != null && appJwkPath != null) {
+                jwtProvider1 = new JWTTokenProvider(appId, Paths.get(appJwkPath));
+                jwtProvider2 = jwtProvider1;
+                jwtProvider3 = jwtProvider1;
+            } else {
+                jwtProvider1 = new JWTTokenProvider(TEST_APP_ID_1,
+                        new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_1).getFile()));
+                jwtProvider2 = new JWTTokenProvider(TEST_APP_ID_2,
+                        new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_2).getFile()).toPath());
+                jwtProvider3 = new JWTTokenProvider(TEST_APP_ID_3,
+                        new String(Files.readAllBytes(
+                                new File(this.getClass().getResource(PRIVATE_KEY_FILE_APP_3).getFile()).toPath()),
+                                StandardCharsets.UTF_8));
+            }
         } catch (GeneralSecurityException | IOException e) {
             throw new RuntimeException("These should never fail", e);
         }
@@ -89,17 +104,28 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
      *             Signals that an I/O exception has occurred.
      */
     protected GHAppInstallation getAppInstallationWithToken(String jwtToken) throws IOException {
+        if (jwtToken.startsWith("Bearer ")) {
+            jwtToken = jwtToken.substring("Bearer ".length());
+        }
+
         GitHub gitHub = getGitHubBuilder().withJwtToken(jwtToken)
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
                 .build();
 
-        GHAppInstallation appInstallation = gitHub.getApp()
-                .listInstallations()
-                .toList()
-                .stream()
-                .filter(it -> it.getAccount().login.equals("hub4j-test-org"))
-                .findFirst()
-                .get();
+        GHApp app = gitHub.getApp();
+
+        GHAppInstallation appInstallation;
+        if (ImmutableSet.of(TEST_APP_ID_1, TEST_APP_ID_2, TEST_APP_ID_3).contains(Long.toString(app.getId()))) {
+            List<GHAppInstallation> installations = app.listInstallations().toList();
+            appInstallation = installations.stream()
+                    .filter(it -> it.getAccount().login.equals("hub4j-test-org"))
+                    .findFirst()
+                    .get();
+        } else {
+            // We may be processing a custom JWK, for a custom GHApp: fetch a relevant repository dynamically
+            appInstallation = app.getInstallationByRepository(System.getenv(ENV_GITHUB_APP_ORG),
+                    System.getenv(ENV_GITHUB_APP_REPO));
+        }
 
         // TODO: this is odd
         // appInstallation

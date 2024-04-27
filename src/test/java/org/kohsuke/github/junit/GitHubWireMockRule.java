@@ -1,15 +1,18 @@
 package org.kohsuke.github.junit;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.common.FileSource;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Parameters;
+import com.github.tomakehurst.wiremock.extension.ResponseDefinitionTransformer;
 import com.github.tomakehurst.wiremock.extension.ResponseTransformer;
 import com.github.tomakehurst.wiremock.http.*;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
 import com.github.tomakehurst.wiremock.recording.RecordSpecBuilder;
 import com.google.gson.*;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +23,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
@@ -43,6 +48,12 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     private final static boolean testWithOrg = System.getProperty("test.github.org", "true") == "true";
     private final static boolean useProxy = takeSnapshot
             || System.getProperty("test.github.useProxy", "false") != "false";
+
+    private final static Pattern ACTIONS_USER_CONTENT_PATTERN = Pattern
+            .compile("https://pipelines[a-z0-9]*\\.actions\\.githubusercontent\\.com", Pattern.CASE_INSENSITIVE);
+    private final static Pattern BLOB_CORE_WINDOWS_PATTERN = Pattern
+            .compile("https://([a-z0-9]*\\.blob\\.core\\.windows\\.net)", Pattern.CASE_INSENSITIVE);
+    private final static String ORIGINAL_HOST = "originalHost";
 
     /**
      * Customize record spec.
@@ -131,6 +142,15 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     }
 
     /**
+     * Actions user content server.
+     *
+     * @return the wire mock server
+     */
+    public WireMockServer blobCoreWindowsNetServer() {
+        return servers.get("blob-core-windows-net");
+    }
+
+    /**
      * Checks if is use proxy.
      *
      * @return true, if is use proxy
@@ -181,6 +201,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                 || isUseProxy()) {
             initializeServer("actions-user-content");
         }
+
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_blob-core-windows-net").exists()
+                || isUseProxy()) {
+            initializeServer("blob-core-windows-net", new ProxyToOriginalHostTransformer(this));
+        }
     }
 
     /**
@@ -212,6 +237,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                     .stubFor(proxyAllTo("https://pipelines.actions.githubusercontent.com").atPriority(100));
         }
 
+        if (this.blobCoreWindowsNetServer() != null) {
+            this.blobCoreWindowsNetServer()
+                    .stubFor(any(anyUrl()).willReturn(aResponse().withTransformers(ProxyToOriginalHostTransformer.NAME))
+                            .atPriority(100));
+        }
     }
 
     /**
@@ -234,6 +264,8 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         recordSnapshot(this.codeloadServer(), "https://codeload.github.com", true);
 
         recordSnapshot(this.actionsUserContentServer(), "https://pipelines.actions.githubusercontent.com", true);
+
+        recordSnapshot(this.blobCoreWindowsNetServer(), "https://productionresults.blob.core.windows.net", true);
     }
 
     private void recordSnapshot(WireMockServer server, String target, boolean isRawServer) {
@@ -284,6 +316,77 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         return server.countRequestsMatching(RequestPatternBuilder.allRequests().build()).getCount();
     }
 
+    private static class MappingFileDetails {
+        final Path filePath;
+        final Path bodyPath; // body file from the mapping file contents
+        final Path renamedFilePath;
+        final Path renamedBodyPath;
+
+        MappingFileDetails(Path filePath, Map<String, Object> parsedObject) {
+            this.filePath = filePath;
+            String insertionIndex = Long
+                    .toString(((Double) parsedObject.getOrDefault("insertionIndex", 0.0)).longValue());
+
+            String name = (String) parsedObject.get("name");
+            if (name == null) {
+                // if name is not present, use url and id to generate a name
+                Map<String, Object> request = (Map<String, Object>) parsedObject.get("request");
+                // ignore
+                name = ((String) request.get("url")).split("[?]")[0].replaceAll("_", "-").replaceAll("[\\\\/]", "_");
+                if (name.startsWith("_")) {
+                    name = name.substring(1);
+                }
+                name += "_" + (String) parsedObject.get("id");
+            }
+
+            this.renamedFilePath = getPathWithShortenedFileName(this.filePath, name, insertionIndex);
+
+            Map<String, Object> responseObject = (Map<String, Object>) parsedObject.get("response");
+            String bodyFileName = responseObject == null ? null : (String) responseObject.get("bodyFileName");
+            if (bodyFileName != null) {
+                this.bodyPath = filePath.getParent().resolveSibling("__files").resolve(bodyFileName);
+                this.renamedBodyPath = getPathWithShortenedFileName(this.bodyPath, name, insertionIndex);
+            } else {
+                this.bodyPath = null;
+                this.renamedBodyPath = null;
+            }
+        }
+
+        void renameFiles() throws IOException {
+            if (!filePath.equals(renamedFilePath)) {
+                Files.move(filePath, renamedFilePath);
+            }
+            if (bodyPath != null && !bodyPath.equals(renamedBodyPath)) {
+                Files.move(bodyPath, renamedBodyPath);
+            }
+        }
+
+        private static Path getPathWithShortenedFileName(Path filePath, String name, String insertionIndex) {
+            String extension = FilenameUtils.getExtension(filePath.getFileName().toString());
+            // Add an underscore to the start and end for easier pattern matching.
+            String fileName = "_" + name + "_";
+
+            // Shorten early segments of the file name
+            // which tend to be repetative - "repos_hub4j-test-org_{repository}".
+            // also shorten multiple underscores in these segments
+            fileName = fileName.replaceAll("^_([a-zA-Z0-9])[^_]+_+([a-zA-Z0-9])[^_]+_+([a-zA-Z0-9])[^_]+_+([^_])",
+                    "_$1_$2_$3_$4");
+            fileName = fileName.replaceAll("^_([a-zA-Z0-9])[^_]+_+([a-zA-Z0-9])[^_]+_+([^_])", "_$1_$2_$3");
+
+            // Any remaining segment that longer the 32 characters, truncate to 8
+            fileName = fileName.replaceAll("_([^_]{8})[^_]{23}[^_]+_", "_$1_");
+
+            // If the file name is still longer than 60 characters, truncate it
+            fileName = fileName.replaceAll("^_(.{60}).+_$", "_$1_");
+
+            // Remove outer underscores
+            fileName = fileName.substring(1, fileName.length() - 1);
+            Path targetPath = filePath.resolveSibling(insertionIndex + "-" + fileName + "." + extension);
+
+            return targetPath;
+        }
+    }
+
     private void formatTestResources(Path path, boolean isRawServer) {
         // The more consistent we can make the json output the more meaningful it will be.
         Gson g = new Gson().newBuilder()
@@ -303,100 +406,103 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                 .create();
 
         try {
-            Map<String, String> idToIndex = new HashMap<>();
+
+            Map<String, MappingFileDetails> mappingFiles = new HashMap<>();
 
             // Match all the ids to request indexes
             Files.walk(path).forEach(filePath -> {
                 try {
-                    if (filePath.toString().endsWith(".json") && filePath.toString().contains("/mappings/")) {
+                    if ("mappings".equalsIgnoreCase(filePath.getParent().getFileName().toString())) {
+                        if (!filePath.getFileName().toString().endsWith(".json")) {
+                            throw new RuntimeException("Mapping files must be .json files.");
+                        }
+
                         String fileText = new String(Files.readAllBytes(filePath));
-                        Object parsedObject = g.fromJson(fileText, Object.class);
-                        addMappingId((Map<String, Object>) parsedObject, idToIndex);
+                        Map<String, Object> parsedObject = (Map<String, Object>) g.fromJson(fileText, Object.class);
+                        MappingFileDetails mapping = new MappingFileDetails(filePath, parsedObject);
+                        if (mappingFiles.containsKey(filePath.toString())) {
+                            throw new RuntimeException("Duplicate mapping.");
+                        }
+                        mappingFiles.put(filePath.toString(), mapping);
+
+                        if (!filePath.equals(mapping.renamedFilePath)) {
+                            if (mappingFiles.containsKey(mapping.renamedFilePath.toString())) {
+                                throw new RuntimeException(
+                                        "Duplicate rename target: " + mapping.renamedFilePath.toString());
+                            }
+                            mappingFiles.put(mapping.renamedFilePath.toString(), mapping);
+                        }
                     }
                 } catch (Exception e) {
                     throw new RuntimeException("Files could not be read: " + filePath.toString(), e);
                 }
             });
 
-            // Update all
             Files.walk(path).forEach(filePath -> {
                 try {
-                    Map.Entry<String, String> entry = getId(filePath, idToIndex);
-                    if (entry != null) {
-                        filePath = renameFileToIndex(filePath, entry);
-                    }
-                    // For raw server, only fix up mapping files
-                    if (isRawServer && !filePath.toString().contains("mappings")) {
+                    // Get the record
+                    MappingFileDetails mapping = mappingFiles.get(filePath.toString());
+                    if (mapping == null) {
                         return;
                     }
-                    if (filePath.toString().endsWith(".json")) {
-                        String fileText = new String(Files.readAllBytes(filePath));
-                        // while recording responses we replaced all github calls localhost
-                        // now we reverse that for storage.
-                        fileText = fileText.replace(this.apiServer().baseUrl(), "https://api.github.com");
 
-                        if (this.rawServer() != null) {
-                            fileText = fileText.replace(this.rawServer().baseUrl(),
-                                    "https://raw.githubusercontent.com");
-                        }
+                    // rename the mapping file and body file if needed
+                    mapping.renameFiles();
 
-                        if (this.uploadsServer() != null) {
-                            fileText = fileText.replace(this.uploadsServer().baseUrl(), "https://uploads.github.com");
-                        }
-
-                        if (this.codeloadServer() != null) {
-                            fileText = fileText.replace(this.codeloadServer().baseUrl(), "https://codeload.github.com");
-                        }
-
-                        if (this.actionsUserContentServer() != null) {
-                            fileText = fileText.replace(this.actionsUserContentServer().baseUrl(),
-                                    "https://pipelines.actions.githubusercontent.com");
-                        }
-
-                        // point bodyFile in the mapping to the renamed body file
-                        if (entry != null && filePath.toString().contains("mappings")) {
-                            fileText = fileText.replace("-" + entry.getKey(), "-" + entry.getValue());
-                        }
-
-                        // Can be Array or Map
-                        Object parsedObject = g.fromJson(fileText, Object.class);
-                        fileText = g.toJson(parsedObject);
-                        Files.write(filePath, fileText.getBytes());
+                    // rewrite the mapping file (including bodyfileName fixup)
+                    fixJsonContents(g, mapping.renamedFilePath, mapping.bodyPath, mapping.renamedBodyPath);
+                    // if not a raw server and body file is json, rewrite body file
+                    if (!isRawServer && mapping.renamedBodyPath != null
+                            && mapping.renamedBodyPath.toString().endsWith(".json")) {
+                        fixJsonContents(g, mapping.renamedBodyPath, null, null);
                     }
                 } catch (Exception e) {
                     throw new RuntimeException("Files could not be written: " + filePath.toString(), e);
                 }
             });
+
         } catch (IOException e) {
             throw new RuntimeException("Files could not be written");
         }
     }
 
-    private void addMappingId(Map<String, Object> parsedObject, Map<String, String> idToIndex) {
-        String id = (String) parsedObject.getOrDefault("id", null);
-        long insertionIndex = ((Double) parsedObject.getOrDefault("insertionIndex", 0.0)).longValue();
-        if (id != null && insertionIndex > 0) {
-            idToIndex.put(id, Long.toString(insertionIndex));
+    private void fixJsonContents(Gson g, Path filePath, Path bodyPath, Path renamedBodyPath) throws IOException {
+        String fileText = new String(Files.readAllBytes(filePath));
+        // while recording responses we replaced all github calls localhost
+        // now we reverse that for storage.
+        fileText = fileText.replace(this.apiServer().baseUrl(), "https://api.github.com");
+
+        if (this.rawServer() != null) {
+            fileText = fileText.replace(this.rawServer().baseUrl(), "https://raw.githubusercontent.com");
         }
-    }
 
-    private Map.Entry<String, String> getId(Path filePath, Map<String, String> idToIndex) throws IOException {
-        Path targetPath = filePath;
-        String filePathString = filePath.toString();
-        for (Map.Entry<String, String> item : idToIndex.entrySet()) {
-            if (filePathString.contains(item.getKey())) {
-                return item;
-            }
+        if (this.uploadsServer() != null) {
+            fileText = fileText.replace(this.uploadsServer().baseUrl(), "https://uploads.github.com");
         }
-        return null;
-    }
 
-    private Path renameFileToIndex(Path filePath, Map.Entry<String, String> idToIndex) throws IOException {
-        String filePathString = filePath.toString();
-        Path targetPath = new File(filePathString.replace(idToIndex.getKey(), idToIndex.getValue())).toPath();
-        Files.move(filePath, targetPath);
+        if (this.codeloadServer() != null) {
+            fileText = fileText.replace(this.codeloadServer().baseUrl(), "https://codeload.github.com");
+        }
 
-        return targetPath;
+        if (this.actionsUserContentServer() != null) {
+            fileText = fileText.replace(this.actionsUserContentServer().baseUrl(),
+                    "https://pipelines.actions.githubusercontent.com");
+        }
+
+        if (this.blobCoreWindowsNetServer() != null) {
+            fileText = fileText.replace(this.blobCoreWindowsNetServer().baseUrl(),
+                    "https://productionresults.blob.core.windows.net");
+        }
+
+        // point body file path to the renamed body file
+        if (bodyPath != null) {
+            fileText = fileText.replace(bodyPath.getFileName().toString(), renamedBodyPath.getFileName().toString());
+        }
+
+        // Can be Array or Map
+        Object parsedObject = g.fromJson(fileText, Object.class);
+        String outputFileText = g.toJson(parsedObject);
+        Files.write(filePath, outputFileText.getBytes());
     }
 
     /**
@@ -418,8 +524,14 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
         body = replaceTargetServerUrl(body,
                 this.actionsUserContentServer(),
-                "https://pipelines.actions.githubusercontent.com",
+                ACTIONS_USER_CONTENT_PATTERN,
                 "/actions-user-content");
+
+        body = replaceTargetServerUrl(body,
+                this.blobCoreWindowsNetServer(),
+                BLOB_CORE_WINDOWS_PATTERN,
+                "/blob-core-windows-net");
+
         return body;
     }
 
@@ -432,6 +544,19 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             body = body.replace(rawTarget, wireMockServer.baseUrl());
         } else {
             body = body.replace(rawTarget, this.apiServer().baseUrl() + inactiveTarget);
+        }
+        return body;
+    }
+
+    @NonNull
+    private String replaceTargetServerUrl(String body,
+            WireMockServer wireMockServer,
+            Pattern regexp,
+            String inactiveTarget) {
+        if (wireMockServer != null) {
+            body = regexp.matcher(body).replaceAll(wireMockServer.baseUrl());
+        } else {
+            body = regexp.matcher(body).replaceAll(this.apiServer().baseUrl() + inactiveTarget);
         }
         return body;
     }
@@ -491,10 +616,24 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
         private void fixLocationHeader(Response response, Collection<HttpHeader> headers) {
             // For redirects, the Location header points to the new target.
-            HttpHeader linkHeader = response.getHeaders().getHeader("Location");
-            if (linkHeader.isPresent()) {
+            HttpHeader locationHeader = response.getHeaders().getHeader("Location");
+            if (locationHeader.isPresent()) {
+                String originalLocationHeaderValue = locationHeader.firstValue();
+                String rewrittenLocationHeaderValue = rule.mapToMockGitHub(originalLocationHeaderValue);
+
                 headers.removeIf(item -> item.keyEquals("Location"));
-                headers.add(HttpHeader.httpHeader("Location", rule.mapToMockGitHub(linkHeader.firstValue())));
+
+                // in the case of the blob.core.windows.net server, we need to keep the original host around
+                // as the host name is dynamic
+                // this is a hack as we pass the original host as an additional parameter which will
+                // end up in the request we push to the GitHub server but that is the best we can do
+                // given Wiremock's infrastructure
+                Matcher matcher = BLOB_CORE_WINDOWS_PATTERN.matcher(originalLocationHeaderValue);
+                if (matcher.find() && rule.isUseProxy()) {
+                    rewrittenLocationHeaderValue += "&" + ORIGINAL_HOST + "=" + matcher.group(1);
+                }
+
+                headers.add(HttpHeader.httpHeader("Location", rewrittenLocationHeaderValue));
             }
         }
 
@@ -504,4 +643,33 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         }
     }
 
+    private static class ProxyToOriginalHostTransformer extends ResponseDefinitionTransformer {
+
+        private static final String NAME = "proxy-to-original-host";
+
+        private final GitHubWireMockRule rule;
+
+        private ProxyToOriginalHostTransformer(GitHubWireMockRule rule) {
+            this.rule = rule;
+        }
+
+        @Override
+        public String getName() {
+            return NAME;
+        }
+
+        @Override
+        public ResponseDefinition transform(Request request,
+                ResponseDefinition responseDefinition,
+                FileSource files,
+                Parameters parameters) {
+            if (!rule.isUseProxy() || !request.queryParameter(ORIGINAL_HOST).isPresent()) {
+                return responseDefinition;
+            }
+
+            String originalHost = request.queryParameter(ORIGINAL_HOST).firstValue();
+
+            return ResponseDefinitionBuilder.like(responseDefinition).proxiedFrom("https://" + originalHost).build();
+        }
+    }
 }

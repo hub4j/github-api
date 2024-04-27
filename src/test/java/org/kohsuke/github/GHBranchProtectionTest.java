@@ -2,7 +2,14 @@ package org.kohsuke.github;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.kohsuke.github.GHBranchProtection.AllowDeletions;
+import org.kohsuke.github.GHBranchProtection.AllowForcePushes;
+import org.kohsuke.github.GHBranchProtection.AllowForkSyncing;
+import org.kohsuke.github.GHBranchProtection.BlockCreations;
 import org.kohsuke.github.GHBranchProtection.EnforceAdmins;
+import org.kohsuke.github.GHBranchProtection.LockBranch;
+import org.kohsuke.github.GHBranchProtection.RequiredConversationResolution;
+import org.kohsuke.github.GHBranchProtection.RequiredLinearHistory;
 import org.kohsuke.github.GHBranchProtection.RequiredReviews;
 import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 
@@ -45,9 +52,17 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
                 .addRequiredChecks("test-status-check")
                 .requireBranchIsUpToDate()
                 .requireCodeOwnReviews()
+                .requireLastPushApproval()
                 .dismissStaleReviews()
                 .requiredReviewers(2)
+                .allowDeletions()
+                .allowForcePushes()
+                .allowForkSyncing()
+                .blockCreations()
                 .includeAdmins()
+                .lockBranch()
+                .requiredConversationResolution()
+                .requiredLinearHistory()
                 .enable();
 
         verifyBranchProtection(protection);
@@ -67,11 +82,40 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
         assertThat(requiredReviews, notNullValue());
         assertThat(requiredReviews.isDismissStaleReviews(), is(true));
         assertThat(requiredReviews.isRequireCodeOwnerReviews(), is(true));
+        assertThat(requiredReviews.isRequireLastPushApproval(), is(true));
         assertThat(requiredReviews.getRequiredReviewers(), equalTo(2));
+
+        AllowDeletions allowDeletions = protection.getAllowDeletions();
+        assertThat(allowDeletions, notNullValue());
+        assertThat(allowDeletions.isEnabled(), is(true));
+
+        AllowForcePushes allowForcePushes = protection.getAllowForcePushes();
+        assertThat(allowForcePushes, notNullValue());
+        assertThat(allowForcePushes.isEnabled(), is(true));
+
+        AllowForkSyncing allowForkSyncing = protection.getAllowForkSyncing();
+        assertThat(allowForkSyncing, notNullValue());
+        assertThat(allowForkSyncing.isEnabled(), is(true));
+
+        BlockCreations blockCreations = protection.getBlockCreations();
+        assertThat(blockCreations, notNullValue());
+        assertThat(blockCreations.isEnabled(), is(true));
 
         EnforceAdmins enforceAdmins = protection.getEnforceAdmins();
         assertThat(enforceAdmins, notNullValue());
         assertThat(enforceAdmins.isEnabled(), is(true));
+
+        LockBranch lockBranch = protection.getLockBranch();
+        assertThat(lockBranch, notNullValue());
+        assertThat(lockBranch.isEnabled(), is(true));
+
+        RequiredConversationResolution requiredConversationResolution = protection.getRequiredConversationResolution();
+        assertThat(requiredConversationResolution, notNullValue());
+        assertThat(requiredConversationResolution.isEnabled(), is(true));
+
+        RequiredLinearHistory requiredLinearHistory = protection.getRequiredLinearHistory();
+        assertThat(requiredLinearHistory, notNullValue());
+        assertThat(requiredLinearHistory.isEnabled(), is(true));
     }
 
     /**

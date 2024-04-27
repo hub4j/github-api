@@ -12,11 +12,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum GHMarketplacePriceModel {
 
     /** The free. */
-    FREE("free"),
+    FREE("FREE"),
     /** The per unit. */
-    PER_UNIT("per-unit"),
+    PER_UNIT("PER_UNIT"),
     /** The flat rate. */
-    FLAT_RATE("flat-rate");
+    FLAT_RATE("FLAT_RATE");
 
     @JsonValue
     private final String internalName;

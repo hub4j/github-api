@@ -1,0 +1,48 @@
+{
+  "id": "86d25665-0dd1-4c8f-a117-10cb44dab855",
+  "name": "search_issues",
+  "request": {
+    "url": "/search/issues?q=repo%3Ahub4j-test-org%2Fgithub-api+is%3Aclosed+is%3Apr&page=9",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "12-search_issues.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 10 Jan 2024 13:13:35 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-cache",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "github-authentication-token-expiration": "2024-02-08 10:25:04 +0000",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "30",
+      "X-RateLimit-Remaining": "21",
+      "X-RateLimit-Reset": "1704892470",
+      "X-RateLimit-Used": "9",
+      "X-RateLimit-Resource": "search",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "5998:8F432:47DCBE8:48A9E1E:659E97FF",
+      "Link": "<https://api.github.com/search/issues?q=repo%3Ahub4j-test-org%2Fgithub-api+is%3Aclosed+is%3Apr&page=8>; rel=\"prev\", <https://api.github.com/search/issues?q=repo%3Ahub4j-test-org%2Fgithub-api+is%3Aclosed+is%3Apr&page=10>; rel=\"next\", <https://api.github.com/search/issues?q=repo%3Ahub4j-test-org%2Fgithub-api+is%3Aclosed+is%3Apr&page=16>; rel=\"last\", <https://api.github.com/search/issues?q=repo%3Ahub4j-test-org%2Fgithub-api+is%3Aclosed+is%3Apr&page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "86d25665-0dd1-4c8f-a117-10cb44dab855",
+  "persistent": true,
+  "insertionIndex": 12
+}

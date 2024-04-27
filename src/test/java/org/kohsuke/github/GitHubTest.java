@@ -397,4 +397,20 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                 org.getResponseHeaderFields().keySet().contains("CacHe-ControL"));
         assertThat(org.getResponseHeaderFields().get("cachE-cOntrol").get(0), is("private, max-age=60, s-maxage=60"));
     }
+
+    /**
+     * Test expect GitHub {@link ServiceDownException}
+     *
+     */
+    @Test
+    public void testCatchServiceDownException() {
+        snapshotNotAllowed();
+        try {
+            GHRepository repo = gitHub.getRepository("hub4j-test-org/github-api");
+            repo.getFileContent("ghcontent-ro/service-down");
+            fail("Exception was expected");
+        } catch (IOException e) {
+            assertThat(e.getClass().getName(), equalToIgnoringCase(ServiceDownException.class.getName()));
+        }
+    }
 }

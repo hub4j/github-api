@@ -1,0 +1,48 @@
+{
+  "id": "5d12f119-f036-4a78-a192-3af769a82f87",
+  "name": "users_rtyler_followers",
+  "request": {
+    "url": "/users/rtyler/followers",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-u_r_followers.json",
+    "headers": {
+      "Date": "Sun, 08 Sep 2019 07:01:11 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4969",
+      "X-RateLimit-Reset": "1567929276",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"dd9b3c995ba6c5f222f409fb1407a292\"",
+      "X-OAuth-Scopes": "gist, notifications, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Link": "<https://api.github.com/user/26594/followers?page=2>; rel=\"next\", <https://api.github.com/user/26594/followers?page=14>; rel=\"last\"",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FDFE:80B1:5E8F56:6D2EEB:5D74A737"
+    }
+  },
+  "uuid": "5d12f119-f036-4a78-a192-3af769a82f87",
+  "persistent": true,
+  "insertionIndex": 3
+}

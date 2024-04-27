@@ -1,0 +1,57 @@
+{
+  "id": "7ca37ba3-c5b3-4c37-8590-46610325fc1c",
+  "name": "repos_hub4j-test-org_testcreaterelease_releases",
+  "request": {
+    "url": "/repos/hub4j-test-org/testCreateRelease/releases",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"tag_name\":\"testCreateDoubleReleaseFails\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "2-r_h_t_releases.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 11 Jun 2021 07:05:00 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"1abc54330badd89bb2fb1b3c95846e2a9bf84da1c8618f66614fad4460f52dc5\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4993",
+      "X-RateLimit-Reset": "1623398211",
+      "X-RateLimit-Used": "7",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "E688:E6B8:79DF6A:7E42B9:60C30B1C",
+      "Location": "https://api.github.com/repos/hub4j-test-org/testCreateRelease/releases/44460489"
+    }
+  },
+  "uuid": "7ca37ba3-c5b3-4c37-8590-46610325fc1c",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-testCreateRelease-releases",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-testCreateRelease-releases-2",
+  "insertionIndex": 2
+}

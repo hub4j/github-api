@@ -7,6 +7,7 @@ import org.kohsuke.github.internal.EnumUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,6 +46,8 @@ public class GHAppInstallation extends GHObject {
     @JsonProperty("repository_selection")
     private GHRepositorySelection repositorySelection;
     private String htmlUrl;
+    private String suspendedAt;
+    private GHUser suspendedBy;
 
     /**
      * Gets the html url.
@@ -312,6 +315,25 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
+     * Gets suspended at.
+     *
+     * @return the suspended at
+     */
+    public Date getSuspendedAt() {
+        return GitHubClient.parseDate(suspendedAt);
+    }
+
+    /**
+     * Gets suspended by.
+     *
+     * @return the suspended by
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getSuspendedBy() {
+        return suspendedBy;
+    }
+
+    /**
      * Delete a Github App installation
      * <p>
      * You must use a JWT to access this endpoint.
@@ -360,5 +382,26 @@ public class GHAppInstallation extends GHObject {
     @BetaApi
     public GHAppCreateTokenBuilder createToken() {
         return new GHAppCreateTokenBuilder(root(), String.format("/app/installations/%d/access_tokens", getId()));
+    }
+
+    /**
+     * Shows whether the user or organization account actively subscribes to a plan listed by the authenticated GitHub
+     * App. When someone submits a plan change that won't be processed until the end of their billing cycle, you will
+     * also see the upcoming pending change.
+     *
+     * <p>
+     * GitHub Apps must use a JWT to access this endpoint.
+     * <p>
+     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
+     *
+     * @return a GHMarketplaceAccountPlan instance
+     * @throws IOException
+     *             it may throw an {@link IOException}
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account">Get
+     *      a subscription plan for an account</a>
+     */
+    public GHMarketplaceAccountPlan getMarketplaceAccount() throws IOException {
+        return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();
     }
 }

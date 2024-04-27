@@ -1,0 +1,54 @@
+{
+  "id": "2635385d-0572-4a8b-aeab-401b91ddaa17",
+  "name": "repos_kohsuke_sandbox-ant_commits_8ae38db0ea5837313ab5f39d43a6f73de3bd9000_comments",
+  "request": {
+    "url": "/repos/kohsuke/sandbox-ant/commits/8ae38db0ea5837313ab5f39d43a6f73de3bd9000/comments",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"body\":\"[testing](http://kohsuse.org/)\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "4-r_k_s_commits_8ae38db0_comments.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 09 Apr 2022 12:14:10 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"a232677fa1d916e4cda58e87464973589ce645615da19fbffd671e3d5a92d16f\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4996",
+      "X-RateLimit-Reset": "1649510049",
+      "X-RateLimit-Used": "4",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BF0E:020C:7D95C4:82E123:62517892",
+      "Location": "https://api.github.com/repos/kohsuke/sandbox-ant/comments/70874649"
+    }
+  },
+  "uuid": "2635385d-0572-4a8b-aeab-401b91ddaa17",
+  "persistent": true,
+  "insertionIndex": 4
+}

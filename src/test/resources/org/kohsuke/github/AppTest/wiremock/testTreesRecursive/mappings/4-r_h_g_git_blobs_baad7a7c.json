@@ -1,0 +1,50 @@
+{
+  "id": "a881db90-b2ae-495c-8f9b-4d28c0d9d7b1",
+  "name": "repos_hub4j_github-api_git_blobs_baad7a7c4cf409f610a0e8c7eba17664eb655c44",
+  "request": {
+    "url": "/repos/hub4j/github-api/git/blobs/baad7a7c4cf409f610a0e8c7eba17664eb655c44",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "4-r_h_g_git_blobs_baad7a7c.json",
+    "headers": {
+      "Date": "Sat, 23 Jan 2021 05:43:34 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"75d761883b619016f721d151adc0b7ed844aa41e692edaf9ba4c85f9b69f379c\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4849",
+      "X-RateLimit-Reset": "1611382753",
+      "x-ratelimit-used": "151",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "DA61:8B45:32BCF:3C994:600BB785"
+    }
+  },
+  "uuid": "a881db90-b2ae-495c-8f9b-4d28c0d9d7b1",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-github-api-git-blobs-baad7a7c4cf409f610a0e8c7eba17664eb655c44",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-github-api-git-blobs-baad7a7c4cf409f610a0e8c7eba17664eb655c44-2",
+  "insertionIndex": 4
+}

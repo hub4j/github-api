@@ -15,7 +15,9 @@ public enum GHPermissionType {
     /** The read. */
     READ(10),
     /** The none. */
-    NONE(0);
+    NONE(0),
+    /** The unknown permission type returned when an unrecognized permission type is returned. */
+    UNKNOWN(-5);
 
     private final int level;
 

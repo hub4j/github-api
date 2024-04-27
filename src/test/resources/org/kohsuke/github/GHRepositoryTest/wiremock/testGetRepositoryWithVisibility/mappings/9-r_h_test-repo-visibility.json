@@ -1,0 +1,49 @@
+{
+  "id": "5b704b0e-6fa2-4f95-b242-82ac6ca14b67",
+  "name": "repos_hub4j-test-org_test-repo-visibility",
+  "request": {
+    "url": "/repos/hub4j-test-org/test-repo-visibility",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.baptiste-preview+json, application/vnd.github.nebula-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "9-r_h_test-repo-visibility.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 02 Apr 2021 15:48:48 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"4c697e5a40fbd53ff86631073ce8d5693d79e8061d797c3dd52dbfaa9a8d5391\"",
+      "Last-Modified": "Fri, 02 Apr 2021 15:48:48 GMT",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.baptiste-preview; format=json, github.nebula-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4977",
+      "X-RateLimit-Reset": "1617382057",
+      "X-RateLimit-Used": "23",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "366E:58C4:9E6090:10C3066:60673CE0"
+    }
+  },
+  "uuid": "5b704b0e-6fa2-4f95-b242-82ac6ca14b67",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-test-repo-visibility",
+  "requiredScenarioState": "scenario-2-repos-hub4j-test-org-test-repo-visibility-3",
+  "newScenarioState": "scenario-2-repos-hub4j-test-org-test-repo-visibility-4",
+  "insertionIndex": 9
+}

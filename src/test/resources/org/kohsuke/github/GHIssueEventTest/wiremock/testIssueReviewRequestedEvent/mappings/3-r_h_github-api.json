@@ -1,0 +1,47 @@
+{
+  "id": "ba591819-9179-4224-b196-2faa59081747",
+  "name": "repos_hub4j-test-org_github-api",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_h_github-api.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 24 Jul 2021 20:18:08 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"2affa6fd513193d1f22514f645d9e3d102e7e81cf3f48ec507984d5069a0eb8e\"",
+      "Last-Modified": "Mon, 19 Apr 2021 20:09:00 GMT",
+      "X-OAuth-Scopes": "gist, notifications, repo, user",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4987",
+      "X-RateLimit-Reset": "1627160834",
+      "X-RateLimit-Used": "13",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "9B61:A97D:3BA1A57:3D53A39:60FC757F"
+    }
+  },
+  "uuid": "ba591819-9179-4224-b196-2faa59081747",
+  "persistent": true,
+  "insertionIndex": 3
+}

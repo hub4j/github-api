@@ -1,0 +1,48 @@
+{
+  "id": "6f8a70ef-2168-4fad-8f28-d1ad0584525d",
+  "name": "organizations_107424_repos",
+  "request": {
+    "url": "/organizations/107424/repos?per_page=100&page=21",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "23-organizations_107424_repos.json",
+    "headers": {
+      "Date": "Sat, 26 Oct 2019 01:28:24 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4357",
+      "X-RateLimit-Reset": "1572055286",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding"
+      ],
+      "ETag": "W/\"567a6bb7dcae1d867da8b781f159682c\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CAC4:1CC6:AE6FC1:CCCF03:5DB3A136",
+      "Link": "<https://api.github.com/organizations/107424/repos?per_page=100&page=20>; rel=\"prev\", <https://api.github.com/organizations/107424/repos?per_page=100&page=22>; rel=\"next\", <https://api.github.com/organizations/107424/repos?per_page=100&page=23>; rel=\"last\", <https://api.github.com/organizations/107424/repos?per_page=100&page=1>; rel=\"first\""
+    }
+  },
+  "uuid": "6f8a70ef-2168-4fad-8f28-d1ad0584525d",
+  "persistent": true,
+  "insertionIndex": 23
+}

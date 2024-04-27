@@ -1,0 +1,45 @@
+{
+  "id": "e2aa00b9-f24e-4650-8341-7f08ec5aea99",
+  "name": "orgs_hub4j-test-org_teams",
+  "request": {
+    "url": "/orgs/hub4j-test-org/teams",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-o_h_teams.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 17 Mar 2020 21:36:27 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4987",
+      "X-RateLimit-Reset": "1584484223",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"54e42fc30d88d2a30340b56bbe54f211\"",
+      "X-OAuth-Scopes": "admin:org, admin:public_key, admin:repo_hook, notifications, repo, user",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CA95:081B:10E14F:25E8B9:5E7142DB"
+    }
+  },
+  "uuid": "e2aa00b9-f24e-4650-8341-7f08ec5aea99",
+  "persistent": true,
+  "insertionIndex": 3
+}

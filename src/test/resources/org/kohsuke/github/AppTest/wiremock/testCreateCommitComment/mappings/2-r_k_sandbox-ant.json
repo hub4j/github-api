@@ -1,0 +1,50 @@
+{
+  "id": "b97b4020-2034-463b-880c-033c9a5bc8bc",
+  "name": "repos_kohsuke_sandbox-ant",
+  "request": {
+    "url": "/repos/kohsuke/sandbox-ant",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-r_k_sandbox-ant.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 09 Apr 2022 12:14:09 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"708705a6eaa6180bb27ec64e5722d0b31c0d2398032e1ba2b8c1f99144743635\"",
+      "Last-Modified": "Tue, 13 Aug 2019 14:56:58 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4998",
+      "X-RateLimit-Reset": "1649510049",
+      "X-RateLimit-Used": "2",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BF0A:93CF:1861CEF:18D36E5:62517891"
+    }
+  },
+  "uuid": "b97b4020-2034-463b-880c-033c9a5bc8bc",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-kohsuke-sandbox-ant",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-kohsuke-sandbox-ant-2",
+  "insertionIndex": 2
+}

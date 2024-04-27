@@ -1,0 +1,47 @@
+{
+  "id": "016089dd-969c-436e-a2b7-f72b2349e389",
+  "name": "orgs_eclipse-ee4j",
+  "request": {
+    "url": "/orgs/eclipse-ee4j",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "50-orgs_eclipse-ee4j.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 04 Mar 2022 09:08:10 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"977fac13d0cbb869955d86f2b41314ac63a08b9df1a1ab1396dffe5c37387362\"",
+      "Last-Modified": "Mon, 28 Feb 2022 16:59:46 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4950",
+      "X-RateLimit-Reset": "1646388479",
+      "X-RateLimit-Used": "50",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "B5D0:050C:3E06015:3F1E859:6221D6FA"
+    }
+  },
+  "uuid": "016089dd-969c-436e-a2b7-f72b2349e389",
+  "persistent": true,
+  "insertionIndex": 50
+}

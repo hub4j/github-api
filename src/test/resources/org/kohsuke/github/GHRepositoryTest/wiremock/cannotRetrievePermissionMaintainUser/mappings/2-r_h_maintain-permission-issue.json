@@ -1,0 +1,51 @@
+{
+  "id": "1c85c1aa-c054-4ee0-88ac-7a1f093140ce",
+  "name": "repos_hub4j-test-org_maintain-permission-issue",
+  "request": {
+    "url": "/repos/hub4j-test-org/maintain-permission-issue",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-r_h_maintain-permission-issue.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Mon, 05 Jun 2023 08:56:43 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"aff085d3b49db6fbe3ef8f48e6ca4fe314d68abfdbd7b6e866c4122a3eb0e611\"",
+      "Last-Modified": "Mon, 05 Jun 2023 08:29:48 GMT",
+      "X-OAuth-Scopes": "admin:org, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2023-07-05 08:21:35 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4953",
+      "X-RateLimit-Reset": "1685955508",
+      "X-RateLimit-Used": "47",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C925:6C90:53F8419:AC45847:647DA34A"
+    }
+  },
+  "uuid": "1c85c1aa-c054-4ee0-88ac-7a1f093140ce",
+  "persistent": true,
+  "insertionIndex": 2
+}

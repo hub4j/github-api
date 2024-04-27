@@ -1,0 +1,48 @@
+{
+  "id": "b55e29c0-75a2-4a55-99da-566c09a9bccf",
+  "name": "repos_kohsuke_test_issues_comments_8547251_reactions",
+  "request": {
+    "url": "/repos/kohsuke/test/issues/comments/8547251/reactions",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "12-r_k_t_issues_comments_8547251_reactions.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 08 Apr 2022 17:53:04 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"2394c9c6a2a9fa85202f46fd7b53d9d846897711a33a433c53559d62949bcac8\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4914",
+      "X-RateLimit-Reset": "1649442146",
+      "X-RateLimit-Used": "86",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BEC6:93CF:16E74E:175553:62507680"
+    }
+  },
+  "uuid": "b55e29c0-75a2-4a55-99da-566c09a9bccf",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-kohsuke-test-issues-comments-8547251-reactions",
+  "requiredScenarioState": "scenario-2-repos-kohsuke-test-issues-comments-8547251-reactions-3",
+  "insertionIndex": 12
+}

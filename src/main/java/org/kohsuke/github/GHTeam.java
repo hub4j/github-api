@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +28,7 @@ public class GHTeam extends GHObject implements Refreshable {
     private String permission;
     private String slug;
     private String description;
-    private Privacy privacy;
+    private String privacy;
 
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
 
@@ -40,7 +41,9 @@ public class GHTeam extends GHObject implements Refreshable {
         SECRET,
         /** The closed. */
         // only visible to organization owners and members of this team.
-        CLOSED // visible to all members of this organization.
+        CLOSED, // visible to all members of this organization.
+        /** Unknown privacy value */
+        UNKNOWN
     }
 
     /**
@@ -122,7 +125,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @return the privacy state.
      */
     public Privacy getPrivacy() {
-        return privacy;
+        return EnumUtils.getNullableEnumOrDefault(Privacy.class, privacy, Privacy.UNKNOWN);
     }
 
     /**
@@ -473,7 +476,7 @@ public class GHTeam extends GHObject implements Refreshable {
         GHTeam ghTeam = (GHTeam) o;
         return Objects.equals(name, ghTeam.name) && Objects.equals(getUrl(), ghTeam.getUrl())
                 && Objects.equals(permission, ghTeam.permission) && Objects.equals(slug, ghTeam.slug)
-                && Objects.equals(description, ghTeam.description) && privacy == ghTeam.privacy;
+                && Objects.equals(description, ghTeam.description) && Objects.equals(privacy, ghTeam.privacy);
     }
 
     /**

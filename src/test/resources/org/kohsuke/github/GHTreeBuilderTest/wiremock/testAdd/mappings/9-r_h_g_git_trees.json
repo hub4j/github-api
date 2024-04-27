@@ -1,0 +1,55 @@
+{
+  "id": "147c0065-7cf6-4132-b569-56ec28b8c094",
+  "name": "repos_hub4j-test-org_ghtreebuildertest_git_trees",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHTreeBuilderTest/git/trees",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"base_tree\":\"2acb295eef8d5eaf34d8915fad20db132745e9a0\",\"tree\":[{\"path\":\"app/run.sh\",\"mode\":\"100755\",\"type\":\"blob\",\"sha\":\"e9ba7ba07276a794d493db90e0384940ce2b757b\"},{\"path\":\"doc/readme.txt\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"fbbc875b17d1e17da06b4ee8fda46e2596c41f3c\"},{\"path\":\"data/val1.dat\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"aed2973e4b8a7ff1b30ff5c4751e5a2b38989e74\"},{\"path\":\"data/val2.dat\",\"mode\":\"100644\",\"type\":\"blob\",\"sha\":\"5bd8bb897b13225c93a1d26baa88c96b7bd5d817\"}]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "9-r_h_g_git_trees.json",
+    "headers": {
+      "Date": "Sun, 24 Jan 2021 22:57:30 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"2928af9db8594f7448b6fd027b78902837019326b08b4de029ae971288015f7b\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "Location": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/trees/b09a1698f3aeb1d462c3492007760e2579734c74",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4912",
+      "X-RateLimit-Reset": "1611531841",
+      "x-ratelimit-used": "88",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F907:0DDF:341D94:3C9467:600DFB59"
+    }
+  },
+  "uuid": "147c0065-7cf6-4132-b569-56ec28b8c094",
+  "persistent": true,
+  "insertionIndex": 9
+}

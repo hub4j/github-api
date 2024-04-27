@@ -321,12 +321,11 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
         String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);
 
         Requester requester = root().createRequest()
-                .method("POST")
+                .method("PUT")
                 .with("path", path)
                 .with("message", commitMessage)
                 .with("sha", sha)
-                .with("content", encodedContent)
-                .method("PUT");
+                .with("content", encodedContent);
 
         if (branch != null) {
             requester.with("branch", branch);
@@ -368,11 +367,10 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
         Requester requester = root().createRequest()
-                .method("POST")
+                .method("DELETE")
                 .with("path", path)
                 .with("message", commitMessage)
-                .with("sha", sha)
-                .method("DELETE");
+                .with("sha", sha);
 
         if (branch != null) {
             requester.with("branch", branch);

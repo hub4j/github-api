@@ -32,19 +32,62 @@ public class CommitTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * List files.
+     * Test get files.
      *
      * @throws Exception
      *             the exception
      */
     @Test // issue 230
-    public void listFiles() throws Exception {
+    public void getFiles() throws Exception {
         GHRepository repo = gitHub.getRepository("stapler/stapler");
         PagedIterable<GHCommit> commits = repo.queryCommits().path("pom.xml").list();
         for (GHCommit commit : Iterables.limit(commits, 10)) {
             GHCommit expected = repo.getCommit(commit.getSHA1());
             assertThat(commit.getFiles().size(), equalTo(expected.getFiles().size()));
         }
+    }
+
+    /**
+     * Test list files where there are less than 300 files in a commit.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test // issue 1669
+    public void listFilesWhereCommitHasSmallChange() throws Exception {
+        GHRepository repo = getRepository();
+        GHCommit commit = repo.getCommit("dabf0e89fe7107d6e294a924561533ecf80f2384");
+
+        assertThat(commit.listFiles().toList().size(), equalTo(28));
+    }
+
+    /**
+     * Test list files where there are more than 300 files in a commit.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test // issue 1669
+    public void listFilesWhereCommitHasLargeChange() throws Exception {
+        GHRepository repo = getRepository();
+        GHCommit commit = repo.getCommit("b83812aa76bb7c3c43da96fbf8aec1e45db87624");
+
+        assertThat(commit.listFiles().toList().size(), equalTo(691));
+    }
+
+    /**
+     * Tests the commit message.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void getMessage() throws Exception {
+        GHRepository repo = getRepository();
+        GHCommit commit = repo.getCommit("dabf0e89fe7107d6e294a924561533ecf80f2384");
+
+        assertThat(commit.getCommitShortInfo().getMessage(), notNullValue());
+        assertThat(commit.getCommitShortInfo().getMessage(), equalTo("A commit with a few files"));
     }
 
     /**
@@ -287,5 +330,20 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         assertThat(commit.getCommitShortInfo().getCommitDate().toInstant().getEpochSecond(), equalTo(1609207652L));
         assertThat(commit.getCommitShortInfo().getCommitDate(),
                 equalTo(commit.getCommitShortInfo().getCommitter().getDate()));
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("CommitTest");
     }
 }

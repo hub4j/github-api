@@ -1,0 +1,53 @@
+{
+  "id": "b1eec35d-bc33-49b6-a44b-4dcf13cc0f1b",
+  "name": "repos_hub4j-test-org_test-checks_check-runs",
+  "request": {
+    "url": "/repos/hub4j-test-org/test-checks/check-runs",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.antiope-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"conclusion\":\"success\",\"output\":{\"title\":\"Some Title\",\"summary\":\"what happened…\",\"text\":\"Hello Text!\",\"annotations\":[{\"path\":\"stuff.txt\",\"start_line\":1,\"end_line\":1,\"annotation_level\":\"notice\",\"message\":\"hello to you too\",\"title\":\"Look here\"}],\"images\":[{\"alt\":\"Unikitty\",\"image_url\":\"https://i.pinimg.com/474x/9e/65/c0/9e65c0972294f1e10f648c9780a79fab.jpg\",\"caption\":\"Princess Unikitty\"}]},\"completed_at\":\"1970-01-12T13:46:39Z\",\"name\":\"foo\",\"started_at\":\"1970-01-12T13:46:39Z\",\"external_id\":\"whatever\",\"details_url\":\"http://nowhere.net/stuff\",\"actions\":[{\"label\":\"Help\",\"description\":\"what I need help with\",\"identifier\":\"doit\"}],\"head_sha\":\"89a9ae301e35e667756034fdc933b1fc94f63fc1\",\"status\":\"completed\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "5-r_h_t_check-runs.json",
+    "headers": {
+      "Date": "Thu, 19 Nov 2020 15:00:18 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Server": "GitHub.com",
+      "Status": "201 Created",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With",
+        "Accept-Encoding"
+      ],
+      "ETag": "\"881eff325ad3c93b47e4bc404290c9c24492d9d4ce976bd5c2c09530821a9a76\"",
+      "Location": "https://api.github.com/repos/hub4j-test-org/test-checks/check-runs/1424883286",
+      "X-GitHub-Media-Type": "github.v3; param=antiope-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4842",
+      "X-RateLimit-Reset": "1605800044",
+      "X-RateLimit-Used": "158",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "FF99:D6FC:191914:1E0C87:5FB68881"
+    }
+  },
+  "uuid": "b1eec35d-bc33-49b6-a44b-4dcf13cc0f1b",
+  "persistent": true,
+  "insertionIndex": 5
+}

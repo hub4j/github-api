@@ -1,0 +1,47 @@
+{
+  "id": "dc528185-62a6-431c-b570-3a1c768fe91c",
+  "name": "users_gsmet",
+  "request": {
+    "url": "/users/gsmet",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "4-users_gsmet.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 21 Apr 2022 10:56:50 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"93ed71936dd0a92c3d1561cfdfbe7ea961c27ab15c76ec2608bcccba0b3c3284\"",
+      "Last-Modified": "Thu, 14 Apr 2022 20:01:34 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4979",
+      "X-RateLimit-Reset": "1650541694",
+      "X-RateLimit-Used": "21",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C184:1227B:12AEABF:12F6177:62613872"
+    }
+  },
+  "uuid": "dc528185-62a6-431c-b570-3a1c768fe91c",
+  "persistent": true,
+  "insertionIndex": 4
+}

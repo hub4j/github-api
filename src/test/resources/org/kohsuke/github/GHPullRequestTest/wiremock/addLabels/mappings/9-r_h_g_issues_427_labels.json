@@ -1,0 +1,54 @@
+{
+  "id": "3d7c7ea1-fe75-4a59-a2c0-73bc38a3d299",
+  "name": "repos_hub4j-test-org_github-api_issues_427_labels",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/427/labels",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"labels\":[\"addLabels_label_name_1\"]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "9-r_h_g_issues_427_labels.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 13 Mar 2021 01:54:00 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"2f80c320a0edd8f013bcc0faf5052d1c2b2ec1b738c44a1bbe92bb1edb5ac93f\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "unknown, github.v3",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4971",
+      "X-RateLimit-Reset": "1615604003",
+      "X-RateLimit-Used": "29",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C596:3EFB:4DABED:533190:604C1B38"
+    }
+  },
+  "uuid": "3d7c7ea1-fe75-4a59-a2c0-73bc38a3d299",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-hub4j-test-org-github-api-issues-427-labels",
+  "requiredScenarioState": "scenario-2-repos-hub4j-test-org-github-api-issues-427-labels-2",
+  "insertionIndex": 9
+}

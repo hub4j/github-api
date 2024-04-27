@@ -1,0 +1,41 @@
+{
+  "name": "users_kartikpatodi",
+  "request": {
+    "url": "/users/kartikpatodi",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "1-users_kartikpatodi.json",
+    "headers": {
+      "server": "GitHub.com",
+      "date": "Mon, 04 Apr 2022 19:10:00 GMT",
+      "content-type": "application/json; charset=utf-8",
+      "status": "200 OK",
+      "cache-control": "public, max-age=60, s-maxage=60",
+      "vary": "Accept, Accept-Encoding, Accept, X-Requested-With",
+      "etag": "W/\"960f568b7a2dd1591a136e36748cc44e\"",
+      "last-modified": "Thu, 24 Feb 2022 13:54:34 GMT",
+      "x-github-media-type": "unknown, github.v3",
+      "strict-transport-security": "max-age=31536000; includeSubdomains; preload",
+      "x-frame-options": "deny",
+      "x-content-type-options": "nosniff",
+      "x-xss-protection": "1; mode=block",
+      "referrer-policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "content-security-policy": "default-src 'none'",
+      "X-Ratelimit-Limit": "60",
+      "X-Ratelimit-Remaining": "47",
+      "X-Ratelimit-Reset": "1649100347",
+      "Accept-Ranges": "bytes",
+      "X-GitHub-Request-Id": "45F4:0D15:1B4EE4:373E4C:624B4288"
+    }
+  },
+  "uuid": "39860a04-002b-45da-aae7-70c97031c79e",
+  "persistent": true,
+  "insertionIndex": 1
+}

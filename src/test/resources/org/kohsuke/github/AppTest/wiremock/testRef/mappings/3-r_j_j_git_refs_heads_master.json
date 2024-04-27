@@ -1,0 +1,52 @@
+{
+  "id": "aeb1be80-5a4d-41b4-8909-874e67e77231",
+  "name": "repos_jenkinsci_jenkins_git_refs_heads_master",
+  "request": {
+    "url": "/repos/jenkinsci/jenkins/git/refs/heads/master",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_j_j_git_refs_heads_master.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 16 Nov 2023 22:19:37 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"9bb627afc1ba31f865b1662e772822de0ea8d6c725e756db95c2f35ce1388451\"",
+      "Last-Modified": "Thu, 16 Nov 2023 21:47:32 GMT",
+      "X-Poll-Interval": "300",
+      "X-OAuth-Scopes": "read:user, repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2023-12-16 21:17:23 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4996",
+      "X-RateLimit-Reset": "1700176776",
+      "X-RateLimit-Used": "4",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F4A4:3C4E58:1F0459:2BAB0C:65569579"
+    }
+  },
+  "uuid": "aeb1be80-5a4d-41b4-8909-874e67e77231",
+  "persistent": true,
+  "insertionIndex": 3
+}

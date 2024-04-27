@@ -1,0 +1,46 @@
+{
+  "id": "abca14dd-149a-458c-8aa6-a774c620cc44",
+  "name": "repos_codertocat_hello-world_pulls_2",
+  "request": {
+    "url": "/repos/Codertocat/Hello-World/pulls/2",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.shadow-cat-preview+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_c_h_pulls_2.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 31 Jul 2020 21:47:31 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4980",
+      "X-RateLimit-Reset": "1596235134",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"6f504844c60099cd7bf7576af481d6b8\"",
+      "Last-Modified": "Sat, 11 Jul 2020 10:41:23 GMT",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete_repo, gist, notifications, repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; param=shadow-cat-preview; format=json",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F660:5BE7:14CF46:300F25:5F249173"
+    }
+  },
+  "uuid": "abca14dd-149a-458c-8aa6-a774c620cc44",
+  "persistent": true,
+  "insertionIndex": 3
+}

@@ -1,0 +1,46 @@
+{
+  "id": "f86d49aa-06b3-40c2-a2d4-0b4931507558",
+  "name": "repos_hub4j-test-org_ghworkflowruntest_actions_runs",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHWorkflowRunTest/actions/runs?branch=main&status=action_required&event=pull_request&per_page=20",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_h_g_actions_runs.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 17 Aug 2022 11:47:31 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"666022f8289ae5c2b7a98a0ecb77d141f908f2a97ca2c7d8d0131acd0d6ba0dd\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4950",
+      "X-RateLimit-Reset": "1660739435",
+      "X-RateLimit-Used": "50",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "8BC2:ED57:E8651C:EDA047:62FCD553"
+    }
+  },
+  "uuid": "f86d49aa-06b3-40c2-a2d4-0b4931507558",
+  "persistent": true,
+  "insertionIndex": 3
+}

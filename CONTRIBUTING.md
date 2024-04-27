@@ -73,6 +73,9 @@ a Java VM option). For example:
 The above command will create snapshot WireMock data files under the path `src/test/resources/org/kohsuhke/github/YourTestClassName/wiremock`.
 Each method will get a separate directory that will hold the data files for that test method.
 
+*Note:* if you are using personal github account don't forget to change `getTempRepository()` to `gitHub.getRepository("${your_account}/${test_method_name}")`
+in order to match with snapshot file name for wiremock. To double-check run test without `-Dtest.github.org=false` flag after snapshot is saved.
+
 Add all files including the generated data to your commit and submit a PR.
 
 ### Modifying existing tests

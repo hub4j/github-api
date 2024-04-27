@@ -70,6 +70,9 @@ public class GitHub {
     private final ConcurrentMap<String, GHUser> users;
     private final ConcurrentMap<String, GHOrganization> orgs;
 
+    @Nonnull
+    private final GitHubSanityCachedValue<GHMeta> sanityCachedMeta = new GitHubSanityCachedValue<>();
+
     /**
      * Creates a client API root object.
      *
@@ -916,6 +919,23 @@ public class GitHub {
     }
 
     /**
+     * List public events for a user
+     * <a href="https://docs.github.com/en/rest/activity/events?apiVersion=2022-11-28#list-public-events-for-a-user">see
+     * API documentation</a>
+     *
+     * @param login
+     *            the login (user) to look public events for
+     * @return the events
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHEventInfo> getUserPublicEvents(String login) throws IOException {
+        return createRequest().withUrlPath("/users/" + login + "/events/public")
+                .toIterable(GHEventInfo[].class, null)
+                .toList();
+    }
+
+    /**
      * Gets a single gist by ID.
      *
      * @param id
@@ -1170,6 +1190,38 @@ public class GitHub {
     }
 
     /**
+     * Returns the GitHub App identified by the given slug
+     *
+     * @param slug
+     *            the slug of the application
+     * @return the app
+     * @throws IOException
+     *             the IO exception
+     * @see <a href="https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#get-an-app">Get an app</a>
+     */
+    public GHApp getApp(@Nonnull String slug) throws IOException {
+        return createRequest().withUrlPath("/apps/" + slug).fetch(GHApp.class);
+    }
+
+    /**
+     * Creates a GitHub App from a manifest.
+     *
+     * @param code
+     *            temporary code returned during the manifest flow
+     * @return the app
+     * @throws IOException
+     *             the IO exception
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest">Get an
+     *      app</a>
+     */
+    public GHAppFromManifest createAppFromManifest(@Nonnull String code) throws IOException {
+        return createRequest().method("POST")
+                .withUrlPath("/app-manifests/" + code + "/conversions")
+                .fetch(GHAppFromManifest.class);
+    }
+
+    /**
      * Returns the GitHub App Installation associated with the authentication credentials used.
      * <p>
      * You must use an installation token to access this endpoint; otherwise consider {@link #getApp()} and its various
@@ -1204,7 +1256,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
      */
     public GHMeta getMeta() throws IOException {
-        return createRequest().withUrlPath("/meta").fetch(GHMeta.class);
+        return this.sanityCachedMeta.get(() -> createRequest().withUrlPath("/meta").fetch(GHMeta.class));
     }
 
     /**
@@ -1286,6 +1338,15 @@ public class GitHub {
      */
     public GHIssueSearchBuilder searchIssues() {
         return new GHIssueSearchBuilder(this);
+    }
+
+    /**
+     * Search for pull requests.
+     *
+     * @return gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder searchPullRequests() {
+        return new GHPullRequestSearchBuilder(this);
     }
 
     /**

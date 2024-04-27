@@ -1,0 +1,48 @@
+{
+  "id": "1e877c4a-980d-4d3d-ab86-7525f99558ef",
+  "name": "user",
+  "request": {
+    "url": "/user",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "1-user.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Wed, 06 Apr 2022 13:19:44 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"65ac0e73527e3adc4df6bbbde94bb21480926587df8832f0bab8a5fc1bc746c9\"",
+      "Last-Modified": "Wed, 09 Mar 2022 12:59:44 GMT",
+      "X-OAuth-Scopes": "admin:public_key, admin:repo_hook, delete_repo, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-05-06 06:00:00 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4986",
+      "X-RateLimit-Reset": "1649254722",
+      "X-RateLimit-Used": "14",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F727:8122:1167F00:208AC47:624D936F"
+    }
+  },
+  "uuid": "1e877c4a-980d-4d3d-ab86-7525f99558ef",
+  "persistent": true,
+  "insertionIndex": 1
+}

@@ -1,0 +1,54 @@
+{
+  "id": "eeab61fe-6ac9-4c95-9fc7-e8cd6e373fcc",
+  "name": "repos_hub4j-test-org_github-api_pulls_comments_902875759_reactions",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/comments/902875759/reactions",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"content\":\"rocket\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "11-r_h_g_pulls_comments_902875759_reactions.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 21 Jun 2022 17:18:22 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"4b2d342135a3ae806e9a1b2eac1a06b18d23a89d674dc9d5f22dfbe2f33658f0\"",
+      "X-OAuth-Scopes": "admin:gpg_key, notifications, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-07-17 15:27:30 UTC",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4985",
+      "X-RateLimit-Reset": "1655835493",
+      "X-RateLimit-Used": "15",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "AF72:DDCC:3B69BE:3CFD28:62B1FD5E"
+    }
+  },
+  "uuid": "eeab61fe-6ac9-4c95-9fc7-e8cd6e373fcc",
+  "persistent": true,
+  "insertionIndex": 11
+}

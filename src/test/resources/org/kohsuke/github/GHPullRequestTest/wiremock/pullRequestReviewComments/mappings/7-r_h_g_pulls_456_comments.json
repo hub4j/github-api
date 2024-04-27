@@ -1,0 +1,50 @@
+{
+  "id": "567785f1-9e06-4054-86c9-4a10605ec52a",
+  "name": "repos_hub4j-test-org_github-api_pulls_456_comments",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/456/comments",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "7-r_h_g_pulls_456_comments.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Tue, 21 Jun 2022 17:18:20 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"53d5962598630d2c8c75bc71115eb7887c93b96424168d2183c1e9b2beedff65\"",
+      "X-OAuth-Scopes": "admin:gpg_key, notifications, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2022-07-17 15:27:30 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4989",
+      "X-RateLimit-Reset": "1655835493",
+      "X-RateLimit-Used": "11",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "AF6A:BA0B:4D2C30:4ED8D6:62B1FD5B"
+    }
+  },
+  "uuid": "567785f1-9e06-4054-86c9-4a10605ec52a",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-pulls-456-comments",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-github-api-pulls-456-comments-2",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-pulls-456-comments-3",
+  "insertionIndex": 7
+}

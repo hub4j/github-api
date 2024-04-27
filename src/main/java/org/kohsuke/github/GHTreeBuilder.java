@@ -22,7 +22,7 @@ public class GHTreeBuilder {
     // Issue #636: Create Tree no longer accepts null value in sha field
     @JsonInclude(Include.NON_NULL)
     @SuppressFBWarnings("URF_UNREAD_FIELD")
-    private static final class TreeEntry {
+    private static class TreeEntry {
 
         private final String path;
         private final String mode;
@@ -34,6 +34,22 @@ public class GHTreeBuilder {
             this.path = path;
             this.mode = mode;
             this.type = type;
+        }
+    }
+
+    private static class DeleteTreeEntry extends TreeEntry {
+        /**
+         * According to reference doc https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28#create-a-tree: if
+         * sha value is null then the file will be deleted. That's why in this DTO sha is always {@literal null} and is
+         * included to json.
+         */
+        @JsonInclude
+        private final String sha = null;
+
+        private DeleteTreeEntry(String path) {
+            // The `mode` and `type` parameters are required by the API, but their values are ignored during delete.
+            // Supply reasonable placeholders.
+            super(path, "100644", "blob");
         }
     }
 
@@ -160,6 +176,19 @@ public class GHTreeBuilder {
      */
     public GHTreeBuilder add(String path, String content, boolean executable) {
         return add(path, content.getBytes(StandardCharsets.UTF_8), executable);
+    }
+
+    /**
+     * Removes an entry with the given path from base tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder delete(String path) {
+        TreeEntry entry = new DeleteTreeEntry(path);
+        treeEntries.add(entry);
+        return this;
     }
 
     private String getApiTail() {

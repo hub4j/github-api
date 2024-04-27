@@ -1,0 +1,50 @@
+{
+  "id": "d20ccc54-34c2-48cc-a456-7e98e1d247e2",
+  "name": "repos_kohsuke_sandbox-ant_commits_8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
+  "request": {
+    "url": "/repos/kohsuke/sandbox-ant/commits/8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_k_s_commits_8ae38db0.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sat, 09 Apr 2022 12:14:09 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"875d3e8c72cd8f14529b6225c641b6de181d365d8c3606a2d95ab2c20467abc1\"",
+      "Last-Modified": "Tue, 24 Apr 2012 22:54:20 GMT",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4997",
+      "X-RateLimit-Reset": "1649510049",
+      "X-RateLimit-Used": "3",
+      "X-RateLimit-Resource": "core",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "BF0C:E0D7:1AE1E0E:1B55A2D:62517891"
+    }
+  },
+  "uuid": "d20ccc54-34c2-48cc-a456-7e98e1d247e2",
+  "persistent": true,
+  "scenarioName": "scenario-2-repos-kohsuke-sandbox-ant-commits-8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-2-repos-kohsuke-sandbox-ant-commits-8ae38db0ea5837313ab5f39d43a6f73de3bd9000-2",
+  "insertionIndex": 3
+}

@@ -1037,6 +1037,30 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test user public event api.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testUserPublicEventApi() throws Exception {
+        for (GHEventInfo ev : gitHub.getUserPublicEvents("PierreBtz")) {
+            if (ev.getType() == GHEvent.PULL_REQUEST) {
+                if (ev.getId() == 27449881624L) {
+                    assertThat(ev.getActorLogin(), equalTo("PierreBtz"));
+                    assertThat(ev.getOrganization().getLogin(), equalTo("hub4j"));
+                    assertThat(ev.getRepository().getFullName(), equalTo("hub4j/github-api"));
+                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseDate("2023-03-02T16:37:49Z")));
+                    assertThat(ev.getType(), equalTo(GHEvent.PULL_REQUEST));
+                }
+
+                GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
+                assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
+            }
+        }
+    }
+
+    /**
      * Test app.
      *
      * @throws IOException
@@ -1253,9 +1277,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testRef() throws IOException {
-        GHRef mainRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/main");
+        GHRef mainRef = gitHub.getRepository("jenkinsci/jenkins").getRef("heads/master");
         assertThat(mainRef.getUrl().toString(),
-                equalTo(mockGitHub.apiServer().baseUrl() + "/repos/jenkinsci/jenkins/git/refs/heads/main"));
+                equalTo(mockGitHub.apiServer().baseUrl() + "/repos/jenkinsci/jenkins/git/refs/heads/master"));
     }
 
     /**
@@ -1283,18 +1307,43 @@ public class AppTest extends AbstractGitHubWireMockTest {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Ignore("Needs mocking check")
     @Test
     public void testAddDeployKey() throws IOException {
         GHRepository myRepository = getTestRepository();
         final GHDeployKey newDeployKey = myRepository.addDeployKey("test",
-                "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUt0RAycC5cS42JKh6SecfFZBR1RrF+2hYMctz4mk74/arBE+wFb7fnSHGzdGKX2h5CFOWODifRCJVhB7hlVxodxe+QkQQYAEL/x1WVCJnGgTGQGOrhOMj95V3UE5pQKhsKD608C+u5tSofcWXLToP1/wZ7U4/AHjqYi08OLsWToHCax55TZkvdt2jo0hbIoYU+XI9Q8Uv4ONDN1oabiOdgeKi8+crvHAuvNleiBhWVBzFh8KdfzaH5uNdw7ihhFjEd1vzqACsjCINCjdMfzl6jD9ExuWuE92nZJnucls2cEoNC6k2aPmrZDg9hA32FXVpyseY+bDUWFU6LO2LG6PB kohsuke@atlas");
+                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIATWwMLytklB44O66isWRKOB3Qd7Ysc7q7EyWTmT0bG9 test@example.com");
         try {
             assertThat(newDeployKey.getId(), notNullValue());
 
             GHDeployKey k = Iterables.find(myRepository.getDeployKeys(), new Predicate<GHDeployKey>() {
                 public boolean apply(GHDeployKey deployKey) {
-                    return newDeployKey.getId() == deployKey.getId();
+                    return newDeployKey.getId() == deployKey.getId() && !deployKey.isRead_only();
+                }
+            });
+            assertThat(k, notNullValue());
+        } finally {
+            newDeployKey.delete();
+        }
+    }
+
+    /**
+     * Test add deploy key read-only.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testAddDeployKeyAsReadOnly() throws IOException {
+        GHRepository myRepository = getTestRepository();
+        final GHDeployKey newDeployKey = myRepository.addDeployKey("test",
+                "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIATWwMLytklB44O66isWRKOB3Qd7Ysc7q7EyWTmT0bG9 test@example.com",
+                true);
+        try {
+            assertThat(newDeployKey.getId(), notNullValue());
+
+            GHDeployKey k = Iterables.find(myRepository.getDeployKeys(), new Predicate<GHDeployKey>() {
+                public boolean apply(GHDeployKey deployKey) {
+                    return newDeployKey.getId() == deployKey.getId() && deployKey.isRead_only();
                 }
             });
             assertThat(k, notNullValue());
@@ -1378,6 +1427,47 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 assertThat(comment, notNullValue());
             }
         }
+    }
+
+    /**
+     * Test searching for pull requests.
+     *
+     * @throws IOException
+     *             the exception
+     */
+    @Test
+    public void testPullRequestSearch() throws Exception {
+        GHRepository repository = gitHub.getRepository("kgromov/temp-testPullRequestSearch");
+        String mainHead = repository.getRef("heads/main").getObject().getSha();
+        GHRef headBranch = repository.createRef("refs/heads/kgromov-test", mainHead);
+        repository.createContent()
+                .content("Empty content")
+                .message("test search")
+                .path(headBranch.getRef())
+                .branch(headBranch.getRef())
+                .commit();
+        GHPullRequest newPR = repository
+                .createPullRequest("New PR", headBranch.getRef(), "refs/heads/main", "Hello, merged PR");
+        newPR.setLabels("test");
+        Thread.sleep(1000);
+
+        List<GHPullRequest> pullRequests = gitHub.searchPullRequests()
+                .repo(repository)
+                .createdByMe()
+                .isOpen()
+                .label("test")
+                .list()
+                .toList();
+        assertThat(pullRequests.size(), is(1));
+        assertThat(pullRequests.get(0).getNumber(), is(newPR.getNumber()));
+
+        int totalCount = gitHub.searchPullRequests()
+                .repo(repository)
+                .author(repository.getOwner())
+                .isMerged()
+                .list()
+                .getTotalCount();
+        assertThat(totalCount, is(0));
     }
 
     /**

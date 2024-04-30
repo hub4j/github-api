@@ -54,19 +54,19 @@ public class GHPullRequestCommitDetail {
         this.owner = owner;
     }
 
-	/**
-	 * Type for the GitHub user
-	 */
-	public static class GHCommitDetailAuthor {
-		String login;
+    /**
+     * Type for the GitHub user
+     */
+    public static class GHCommitDetailAuthor {
+        String login;
 
-		/**
-		 * GitHub user login
-		 */
-		public String getLogin() {
-			return login;
-		}
-	}
+        /**
+         * GitHub user login
+         */
+        public String getLogin() {
+            return login;
+        }
+    }
 
     /**
      * The type Authorship.
@@ -302,19 +302,19 @@ public class GHPullRequestCommitDetail {
         return newValue;
     }
 
-	/**
-	 * Gets the GitHub user - author of the commit.
-	 *
-	 */
-	public GHCommitDetailAuthor getAuthor() {
-		return author;
-	}
+    /**
+     * Gets the GitHub user - author of the commit.
+     *
+     */
+    public GHCommitDetailAuthor getAuthor() {
+        return author;
+    }
 
-	/**
-	 * Gets the GitHub user - committer of the commit.
-	 *
-	 */
-	public GHCommitDetailAuthor getCommitter() {
-		return committer;
-	}
+    /**
+     * Gets the GitHub user - committer of the commit.
+     *
+     */
+    public GHCommitDetailAuthor getCommitter() {
+        return committer;
+    }
 }

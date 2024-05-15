@@ -222,6 +222,54 @@ public class GHBranchProtection extends GitHubInteractiveObject {
     }
 
     /**
+     * The type Check.
+     */
+    public static class Check {
+        @JsonProperty
+        private String context;
+
+        @JsonProperty
+        private Integer app_id;
+
+        /**
+         * no-arg constructor for the serializer
+         */
+        public Check() {
+        }
+
+        /**
+         * Regular constructor for use in user business logic
+         *
+         * @param context
+         *            the context string of the check
+         * @param appId
+         *            the application ID the check is supposed to come from
+         */
+        public Check(String context, Integer appId) {
+            this.context = context;
+            this.app_id = appId;
+        }
+
+        /**
+         * The context string of the check
+         *
+         * @return the string
+         */
+        public String getContext() {
+            return context;
+        }
+
+        /**
+         * The application ID the check is supposed to come from. The value "-1" indicates "any source".
+         *
+         * @return the integer
+         */
+        public Integer getAppId() {
+            return app_id;
+        }
+    }
+
+    /**
      * The type AllowForcePushes.
      */
     public static class AllowForcePushes {
@@ -463,6 +511,9 @@ public class GHBranchProtection extends GitHubInteractiveObject {
         private Collection<String> contexts;
 
         @JsonProperty
+        private Collection<Check> checks;
+
+        @JsonProperty
         private boolean strict;
 
         @JsonProperty
@@ -475,6 +526,15 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          */
         public Collection<String> getContexts() {
             return Collections.unmodifiableCollection(contexts);
+        }
+
+        /**
+         * Gets checks.
+         *
+         * @return the checks
+         */
+        public Collection<Check> getChecks() {
+            return Collections.unmodifiableCollection(checks);
         }
 
         /**

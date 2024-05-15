@@ -50,8 +50,11 @@ public class GHBranchProtectionBuilder {
      *            the checks
      * @return the gh branch protection builder
      */
-    public GHBranchProtectionBuilder addRequiredChecks(Collection<String> checks) {
-        getStatusChecks().contexts.addAll(checks);
+    public GHBranchProtectionBuilder addRequiredChecksWithAppIds(Collection<GHBranchProtection.Check> checks) {
+        if (!(getStatusChecks() instanceof StatusChecksWithAppId)) {
+            statusChecks = new StatusChecksWithAppId();
+        }
+        ((StatusChecksWithAppId) getStatusChecks()).checks.addAll(checks);
         return this;
     }
 
@@ -62,8 +65,37 @@ public class GHBranchProtectionBuilder {
      *            the checks
      * @return the gh branch protection builder
      */
+    @Deprecated
+    public GHBranchProtectionBuilder addRequiredChecks(Collection<String> checks) {
+        if (!(getStatusChecks() instanceof StatusChecksDeprecated)) {
+            statusChecks = new StatusChecksDeprecated();
+        }
+        ((StatusChecksDeprecated) getStatusChecks()).contexts.addAll(checks);
+        return this;
+    }
+
+    /**
+     * Add required checks gh branch protection builder.
+     *
+     * @param checks
+     *            the checks
+     * @return the gh branch protection builder
+     */
+    @Deprecated
     public GHBranchProtectionBuilder addRequiredChecks(String... checks) {
         addRequiredChecks(Arrays.asList(checks));
+        return this;
+    }
+
+    /**
+     * Add required checks gh branch protection builder.
+     *
+     * @param checks
+     *            the checks
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder addRequiredChecksWithAppIds(GHBranchProtection.Check... checks) {
+        addRequiredChecksWithAppIds(Arrays.asList(checks));
         return this;
     }
 
@@ -532,7 +564,7 @@ public class GHBranchProtectionBuilder {
 
     private StatusChecks getStatusChecks() {
         if (statusChecks == null) {
-            statusChecks = new StatusChecks();
+            statusChecks = new StatusChecksWithAppId();
         }
         return statusChecks;
     }
@@ -546,8 +578,15 @@ public class GHBranchProtectionBuilder {
         private Set<String> users = new HashSet<String>();
     }
 
-    private static class StatusChecks {
-        final List<String> contexts = new ArrayList<String>();
+    private static abstract class StatusChecks {
         boolean strict;
+    }
+
+    private static class StatusChecksWithAppId extends StatusChecks {
+        final List<GHBranchProtection.Check> checks = new ArrayList<>();
+    }
+
+    private static class StatusChecksDeprecated extends StatusChecks {
+        final List<String> contexts = new ArrayList<>();
     }
 }

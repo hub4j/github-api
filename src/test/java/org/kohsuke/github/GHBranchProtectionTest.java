@@ -190,6 +190,21 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Checks with app ids are being populated
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testChecksWithAppIds() throws Exception {
+        GHBranchProtection protection = branch.enableProtection()
+                .addRequiredChecksWithAppIds(new GHBranchProtection.Check("context", -1))
+                .enable();
+
+        assertThat(protection.getRequiredStatusChecks().getChecks().isEmpty(), is(false));
+    }
+
+    /**
      * Test get protection.
      *
      * @throws Exception

@@ -246,7 +246,8 @@ public class GHOrganization extends GHPerson {
      * @throws IOException
      *             the io exception
      *
-     * @see <a href= "https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#get-organization-membership-for-a-user">documentation</a>
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#get-organization-membership-for-a-user">documentation</a>
      */
     public GHMembership getMembership(String username) throws IOException {
         return root().createRequest()

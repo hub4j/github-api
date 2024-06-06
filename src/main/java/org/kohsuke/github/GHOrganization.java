@@ -2,17 +2,12 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static org.kohsuke.github.internal.Previews.INERTIA;
 
 // TODO: Auto-generated Javadoc
+
 /**
  * The type GHOrganization.
  *
@@ -238,6 +233,23 @@ public class GHOrganization extends GHPerson {
         } catch (IOException ignore) {
             return false;
         }
+    }
+
+    /**
+     * Obtains the object that represents the user membership. In order to get a user's membership with an organization,
+     * the authenticated user must be an organization member. The state parameter in the response can be used to
+     * identify the user's membership status.
+     *
+     * @param username
+     *            the user's username
+     * @return the GHMembership if the username belongs to the organisation, otherwise null
+     * @throws IOException
+     *             the io exception
+     */
+    public GHMembership getMembership(String username) throws IOException {
+        return root().createRequest()
+                .withUrlPath("/orgs/" + login + "/memberships/" + username)
+                .fetch(GHMembership.class);
     }
 
     /**

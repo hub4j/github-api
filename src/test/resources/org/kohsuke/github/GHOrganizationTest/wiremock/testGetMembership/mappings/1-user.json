@@ -1,0 +1,50 @@
+{
+  "id": "9983abe7-ee83-40fb-9f7d-8b25b979c8dd",
+  "name": "user",
+  "request": {
+    "url": "/user",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "1-user.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 06 Jun 2024 15:38:49 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"cc47b0608e8170439c172bb015abe17c1576806969dcb252ee43f686f15345f7\"",
+      "Last-Modified": "Wed, 05 Jun 2024 12:59:50 GMT",
+      "github-authentication-token-expiration": "2024-06-13 16:25:54 +0100",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-accepted-github-permissions": "allows_permissionless_access=true",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4844",
+      "X-RateLimit-Reset": "1717690187",
+      "X-RateLimit-Used": "156",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "1A65:181293:B94C8:C2871:6661D808"
+    }
+  },
+  "uuid": "9983abe7-ee83-40fb-9f7d-8b25b979c8dd",
+  "persistent": true,
+  "insertionIndex": 1
+}

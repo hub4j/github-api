@@ -1,0 +1,49 @@
+{
+  "id": "cd3ae3f9-47a8-4d17-8f41-16f18b0e5607",
+  "name": "orgs_mock-organisation_memberships_fv316",
+  "request": {
+    "url": "/orgs/mock-organisation/memberships/fv316",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-o_m_m_fv316.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 06 Jun 2024 15:38:51 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"d9663a5538f0cd0a09014e4587127f36e837fae231bf3aeca7c86a57f033e250\"",
+      "github-authentication-token-expiration": "2024-06-13 16:25:54 +0100",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-accepted-github-permissions": "members=read",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4838",
+      "X-RateLimit-Reset": "1717690187",
+      "X-RateLimit-Used": "162",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "B4D6:3283A7:2BC7A3D:2E26C30:6661D80B"
+    }
+  },
+  "uuid": "cd3ae3f9-47a8-4d17-8f41-16f18b0e5607",
+  "persistent": true,
+  "insertionIndex": 3
+}

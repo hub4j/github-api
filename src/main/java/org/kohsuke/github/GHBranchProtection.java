@@ -225,11 +225,8 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type Check.
      */
     public static class Check {
-        @JsonProperty
         private String context;
-
-        @JsonProperty
-        private Integer app_id;
+        private Integer appId;
 
         /**
          * no-arg constructor for the serializer
@@ -247,7 +244,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          */
         public Check(String context, Integer appId) {
             this.context = context;
-            this.app_id = appId;
+            this.appId = appId;
         }
 
         /**
@@ -265,7 +262,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the integer
          */
         public Integer getAppId() {
-            return app_id;
+            return appId;
         }
     }
 

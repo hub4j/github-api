@@ -13,6 +13,8 @@ import org.kohsuke.github.GHBranchProtection.RequiredLinearHistory;
 import org.kohsuke.github.GHBranchProtection.RequiredReviews;
 import org.kohsuke.github.GHBranchProtection.RequiredStatusChecks;
 
+import java.util.ArrayList;
+
 import static org.hamcrest.Matchers.*;
 
 // TODO: Auto-generated Javadoc
@@ -198,10 +200,18 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     @Test
     public void testChecksWithAppIds() throws Exception {
         GHBranchProtection protection = branch.enableProtection()
-                .addRequiredChecksWithAppIds(new GHBranchProtection.Check("context", -1))
+                .addRequiredChecksWithAppIds(new GHBranchProtection.Check("context", -1),
+                        new GHBranchProtection.Check("context2", 123))
                 .enable();
 
-        assertThat(protection.getRequiredStatusChecks().getChecks().isEmpty(), is(false));
+        ArrayList<GHBranchProtection.Check> resultChecks = new ArrayList<>(
+                protection.getRequiredStatusChecks().getChecks());
+
+        assertThat(resultChecks.size(), is(2));
+        assertThat(resultChecks.get(0).getContext(), is("context"));
+        assertThat(resultChecks.get(0).getAppId(), nullValue());
+        assertThat(resultChecks.get(1).getContext(), is("context2"));
+        assertThat(resultChecks.get(1).getAppId(), is(123));
     }
 
     /**

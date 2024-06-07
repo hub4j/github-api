@@ -255,8 +255,6 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         GHMembership membership = org.getMembership("fv316");
 
-        System.out.println("membership");
-        System.out.println(membership.user.login);
         assertThat(membership, notNullValue());
         assertThat(membership.getRole(), equalTo(GHMembership.Role.ADMIN));
         assertThat(membership.getState(), equalTo(GHMembership.State.ACTIVE));

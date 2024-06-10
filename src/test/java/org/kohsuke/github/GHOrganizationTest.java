@@ -251,7 +251,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testGetMembership() throws IOException {
-        GHOrganization org = gitHub.getOrganization("mock-organisation");
+        GHOrganization org = gitHub.getOrganization("hub4j-test-org");
 
         GHMembership membership = org.getMembership("fv316");
 
@@ -259,7 +259,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(membership.getRole(), equalTo(GHMembership.Role.ADMIN));
         assertThat(membership.getState(), equalTo(GHMembership.State.ACTIVE));
         assertThat(membership.getUser().getLogin(), equalTo("fv316"));
-        assertThat(membership.getOrganization().login, equalTo("mock-organisation"));
+        assertThat(membership.getOrganization().login, equalTo("hub4j-test-org"));
     }
 
     /**

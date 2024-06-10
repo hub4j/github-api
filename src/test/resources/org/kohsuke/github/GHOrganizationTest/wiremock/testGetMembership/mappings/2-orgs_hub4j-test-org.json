@@ -1,8 +1,8 @@
 {
-  "id": "cd3ae3f9-47a8-4d17-8f41-16f18b0e5607",
-  "name": "orgs_mock-organisation_memberships_fv316",
+  "id": "9f6e328b-67ee-4481-8bcc-8b33b990dbd2",
+  "name": "orgs_hub4j-test-org",
   "request": {
-    "url": "/orgs/mock-organisation/memberships/fv316",
+    "url": "/orgs/hub4j-test-org",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -12,25 +12,26 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "3-o_m_m_fv316.json",
+    "bodyFileName": "2-orgs_hub4j-test-org.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Thu, 06 Jun 2024 15:38:51 GMT",
+      "Date": "Mon, 10 Jun 2024 09:07:19 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"d9663a5538f0cd0a09014e4587127f36e837fae231bf3aeca7c86a57f033e250\"",
-      "github-authentication-token-expiration": "2024-06-13 16:25:54 +0100",
+      "ETag": "W/\"67969e1a2c33b92087f1e2d76d07a944a80920a84bf07593fff4ec8c8d00f612\"",
+      "Last-Modified": "Thu, 04 Jun 2020 05:56:10 GMT",
+      "github-authentication-token-expiration": "2024-06-17 10:06:09 +0100",
       "X-GitHub-Media-Type": "github.v3; format=json",
-      "x-accepted-github-permissions": "members=read",
+      "x-accepted-github-permissions": "allows_permissionless_access=true",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4838",
-      "X-RateLimit-Reset": "1717690187",
-      "X-RateLimit-Used": "162",
+      "X-RateLimit-Remaining": "4977",
+      "X-RateLimit-Reset": "1718013850",
+      "X-RateLimit-Used": "23",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -40,10 +41,10 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "B4D6:3283A7:2BC7A3D:2E26C30:6661D80B"
+      "X-GitHub-Request-Id": "56D5:19B6F6:69C4020:6A85446:6666C247"
     }
   },
-  "uuid": "cd3ae3f9-47a8-4d17-8f41-16f18b0e5607",
+  "uuid": "9f6e328b-67ee-4481-8bcc-8b33b990dbd2",
   "persistent": true,
-  "insertionIndex": 3
+  "insertionIndex": 2
 }

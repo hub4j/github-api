@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
 
 // TODO: Auto-generated Javadoc
+
 /**
  * The Class GHOrganizationTest.
  */
@@ -243,6 +244,25 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test get user membership
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetMembership() throws IOException {
+        GHOrganization org = gitHub.getOrganization("hub4j-test-org");
+
+        GHMembership membership = org.getMembership("fv316");
+
+        assertThat(membership, notNullValue());
+        assertThat(membership.getRole(), equalTo(GHMembership.Role.ADMIN));
+        assertThat(membership.getState(), equalTo(GHMembership.State.ACTIVE));
+        assertThat(membership.getUser().getLogin(), equalTo("fv316"));
+        assertThat(membership.getOrganization().login, equalTo("hub4j-test-org"));
+    }
+
+    /**
      * Test list members with filter.
      *
      * @throws IOException
@@ -375,7 +395,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         GHRepository repo = org.getRepository(REPO_NAME);
 
         // Create team with access to repository. Check access was granted.
-        GHTeam team = org.createTeam(TEAM_NAME_CREATE, GHOrganization.Permission.PUSH, repo);
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE, Permission.PUSH, repo);
         assertThat(team.getRepositories().containsKey(REPO_NAME), is(true));
         assertThat(team.getPermission(), equalTo(Permission.PUSH.toString().toLowerCase()));
     }
@@ -424,7 +444,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // Create team with access to repository. Check access was granted.
         GHTeam team = org.createTeam(TEAM_NAME_CREATE).create();
 
-        team.add(repo, GHOrganization.Permission.PUSH);
+        team.add(repo, Permission.PUSH);
 
         assertThat(
                 repo.getTeams()
@@ -453,7 +473,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // Create team with access to repository. Check access was granted.
         GHTeam team = org.createTeam(TEAM_NAME_CREATE).create();
 
-        RepositoryRole role = RepositoryRole.from(GHOrganization.Permission.TRIAGE);
+        RepositoryRole role = RepositoryRole.from(Permission.TRIAGE);
         team.add(repo, role);
 
         // 'getPermission' does not return triage even though the UI shows that value

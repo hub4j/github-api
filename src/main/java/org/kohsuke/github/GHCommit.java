@@ -265,7 +265,7 @@ public class GHCommit {
         int id;
 
         /** The login. */
-        @SuppressFBWarnings(value = "UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD", justification = "used in backend code")
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "used in backend code")
         public String login;
     }
 

@@ -257,7 +257,7 @@ public class GHCommit {
 
         /** The gravatar id. */
         // TODO: what if someone who doesn't have an account on GitHub makes a commit?
-        @SuppressFBWarnings(value = "UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD", justification = "We don't provide it in API now")
+        @SuppressFBWarnings(value = "UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD", justification = "used in backend code")
         public String url, avatar_url, gravatar_id;
 
         /** The id. */
@@ -265,7 +265,7 @@ public class GHCommit {
         int id;
 
         /** The login. */
-        @SuppressFBWarnings(value = "UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD", justification = "only used in the backend code")
+        @SuppressFBWarnings(value = "UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD", justification = "used in backend code")
         public String login;
     }
 

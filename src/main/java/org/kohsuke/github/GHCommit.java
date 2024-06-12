@@ -253,19 +253,20 @@ public class GHCommit {
     /**
      * The Class User.
      */
-    static class User {
+    public static class User {
 
         /** The gravatar id. */
         // TODO: what if someone who doesn't have an account on GitHub makes a commit?
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        String url, avatar_url, gravatar_id;
+        @SuppressFBWarnings(value = "UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD", justification = "used in backend code")
+        public String url, avatar_url, gravatar_id;
 
         /** The id. */
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         int id;
 
         /** The login. */
-        String login;
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "used in backend code")
+        public String login;
     }
 
     /** The sha. */
@@ -469,6 +470,17 @@ public class GHCommit {
         }
         populate();
         return resolveUser(author);
+    }
+
+    /**
+     * Gets author.
+     *
+     * @return the author
+     * @throws IOException
+     *             the io exception
+     */
+    public User getAuthorRaw() throws IOException {
+        return author;
     }
 
     /**

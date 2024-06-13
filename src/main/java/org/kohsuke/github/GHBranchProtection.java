@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -226,6 +227,8 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      */
     public static class Check {
         private String context;
+
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         private Integer appId;
 
         /**
@@ -240,7 +243,9 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @param context
          *            the context string of the check
          * @param appId
-         *            the application ID the check is supposed to come from
+         *            the application ID the check is supposed to come from. Pass "-1" to explicitly allow any app to
+         *            set the status. Pass "null" to automatically select the GitHub App that has recently provided this
+         *            check.
          */
         public Check(String context, Integer appId) {
             this.context = context;

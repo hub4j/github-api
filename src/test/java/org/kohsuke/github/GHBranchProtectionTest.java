@@ -200,18 +200,20 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     @Test
     public void testChecksWithAppIds() throws Exception {
         GHBranchProtection protection = branch.enableProtection()
-                .addRequiredChecksWithAppIds(new GHBranchProtection.Check("context", -1),
-                        new GHBranchProtection.Check("context2", 123))
+                .addRequiredChecks(new GHBranchProtection.Check("context", -1),
+                        new GHBranchProtection.Check("context2", 123),
+                        new GHBranchProtection.Check("context3", null))
                 .enable();
 
         ArrayList<GHBranchProtection.Check> resultChecks = new ArrayList<>(
                 protection.getRequiredStatusChecks().getChecks());
 
-        assertThat(resultChecks.size(), is(2));
+        assertThat(resultChecks.size(), is(3));
         assertThat(resultChecks.get(0).getContext(), is("context"));
         assertThat(resultChecks.get(0).getAppId(), nullValue());
         assertThat(resultChecks.get(1).getContext(), is("context2"));
         assertThat(resultChecks.get(1).getAppId(), is(123));
+        assertThat(resultChecks.get(2).getContext(), is("context3"));
     }
 
     /**

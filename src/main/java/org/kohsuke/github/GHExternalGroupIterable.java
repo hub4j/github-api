@@ -4,8 +4,6 @@ import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 
-// TODO: Auto-generated Javadoc
-
 /**
  * Iterable for external group listing.
  *

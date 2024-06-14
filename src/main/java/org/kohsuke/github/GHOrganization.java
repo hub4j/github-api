@@ -218,7 +218,7 @@ public class GHOrganization extends GHPerson {
         if (displayName != null) {
             requester.with("display_name", displayName);
         }
-        return new GHExternalGroupsIterable(this, requester);
+        return new GHExternalGroupIterable(this, requester);
     }
 
     /**

@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
  *
  * @author Miguel Esteban Gutiérrez
  */
-class GHExternalGroupsIterable extends PagedIterable<GHExternalGroup> {
+class GHExternalGroupIterable extends PagedIterable<GHExternalGroup> {
 
     private static final GHExternalGroup[] GH_EXTERNAL_GROUPS = new GHExternalGroup[0];
 
@@ -29,7 +29,7 @@ class GHExternalGroupsIterable extends PagedIterable<GHExternalGroup> {
      * @param requestBuilder
      *            the request builder
      */
-    GHExternalGroupsIterable(final GHOrganization owner, final GitHubRequest.Builder<?> requestBuilder) {
+    GHExternalGroupIterable(final GHOrganization owner, final GitHubRequest.Builder<?> requestBuilder) {
         this.owner = owner;
         this.request = requestBuilder.build();
     }

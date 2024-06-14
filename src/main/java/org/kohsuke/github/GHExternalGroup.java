@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -25,16 +24,14 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
         /**
          * The identifier of the team
          */
-        @JsonProperty("team_id")
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-        private long id;
+        private long teamId;
 
         /**
          * The name of the team
          */
-        @JsonProperty("team_name")
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-        private String name;
+        private String teamName;
 
         /**
          * Get the linked team identifier
@@ -42,7 +39,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the id
          */
         public long getId() {
-            return id;
+            return teamId;
         }
 
         /**
@@ -51,7 +48,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the name
          */
         public String getName() {
-            return name;
+            return teamName;
         }
 
     }
@@ -64,30 +61,26 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
         /**
          * The internal user ID of the identity
          */
-        @JsonProperty("member_id")
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-        private long id;
+        private long memberId;
 
         /**
          * The handle/login for the user
          */
-        @JsonProperty("member_login")
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-        private String login;
+        private String memberLogin;
 
         /**
          * The user display name/profile name
          */
-        @JsonProperty("member_name")
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-        private String name;
+        private String memberName;
 
         /**
          * The email attached to the user
          */
-        @JsonProperty("member_email")
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-        private String email;
+        private String memberEmail;
 
         /**
          * Get the linked member identifier
@@ -95,7 +88,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the id
          */
         public long getId() {
-            return id;
+            return memberId;
         }
 
         /**
@@ -104,7 +97,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the login
          */
         public String getLogin() {
-            return login;
+            return memberLogin;
         }
 
         /**
@@ -113,7 +106,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the name
          */
         public String getName() {
-            return name;
+            return memberName;
         }
 
         /**
@@ -122,7 +115,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the email
          */
         public String getEmail() {
-            return email;
+            return memberEmail;
         }
 
     }
@@ -130,17 +123,14 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
     /**
      * The identifier of the external group
      */
-    @JsonProperty("group_id")
-
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private long id;
+    private long groupId;
 
     /**
      * The name of the external group
      */
-    @JsonProperty("group_name")
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private String name;
+    private String groupName;
 
     /**
      * The date when the group was last updated at
@@ -206,7 +196,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      * @return the id
      */
     public long getId() {
-        return id;
+        return groupId;
     }
 
     /**
@@ -215,7 +205,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      * @return the name
      */
     public String getName() {
-        return name;
+        return groupName;
     }
 
     /**

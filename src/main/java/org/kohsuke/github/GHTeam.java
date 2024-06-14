@@ -441,11 +441,11 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public List<GHExternalGroup> getExternalGroups() throws IOException {
         try {
-            return root().createRequest()
+            return Collections.unmodifiableList(Arrays.asList(root().createRequest()
                     .method("GET")
                     .withUrlPath(publicApi(EXTERNAL_GROUPS))
-                    .fetch(GHExternalGroups.class)
-                    .getGroups();
+                    .fetch(GHExternalGroupPage.class)
+                    .getGroups()));
         } catch (final HttpException e) {
             throw EnterpriseManagedSupport.forOrganization(getOrganization())
                     .filterException(e, "Could not retrieve team external groups")
@@ -570,4 +570,5 @@ public class GHTeam extends GHObject implements Refreshable {
     public int hashCode() {
         return Objects.hash(name, getUrl(), permission, slug, description, privacy);
     }
+
 }

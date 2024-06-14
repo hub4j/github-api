@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
@@ -11,13 +12,11 @@ import javax.annotation.Nonnull;
  */
 class GHExternalGroupIterable extends PagedIterable<GHExternalGroup> {
 
-    private static final GHExternalGroup[] GH_EXTERNAL_GROUPS = new GHExternalGroup[0];
-
     private final GHOrganization owner;
 
     private final GitHubRequest request;
 
-    private GHExternalGroups result;
+    private GHExternalGroupPage result;
 
     /**
      * Instantiates a new GH external groups iterable.
@@ -43,7 +42,8 @@ class GHExternalGroupIterable extends PagedIterable<GHExternalGroup> {
     @Override
     public PagedIterator<GHExternalGroup> _iterator(int pageSize) {
         return new PagedIterator<>(
-                adapt(GitHubPageIterator.create(owner.root().getClient(), GHExternalGroups.class, request, pageSize)),
+                adapt(GitHubPageIterator
+                        .create(owner.root().getClient(), GHExternalGroupPage.class, request, pageSize)),
                 null);
     }
 
@@ -54,7 +54,7 @@ class GHExternalGroupIterable extends PagedIterable<GHExternalGroup> {
      *            the base
      * @return the iterator
      */
-    private Iterator<GHExternalGroup[]> adapt(final Iterator<GHExternalGroups> base) {
+    private Iterator<GHExternalGroup[]> adapt(final Iterator<GHExternalGroupPage> base) {
         return new Iterator<GHExternalGroup[]>() {
             public boolean hasNext() {
                 try {
@@ -65,12 +65,12 @@ class GHExternalGroupIterable extends PagedIterable<GHExternalGroup> {
             }
 
             public GHExternalGroup[] next() {
-                GHExternalGroups v = base.next();
+                GHExternalGroupPage v = base.next();
                 if (result == null) {
                     result = v;
                 }
-                v.getGroups().forEach(g -> g.wrapUp(owner));
-                return v.getGroups().toArray(GH_EXTERNAL_GROUPS);
+                Arrays.stream(v.getGroups()).forEach(g -> g.wrapUp(owner));
+                return v.getGroups();
             }
         };
     }

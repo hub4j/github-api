@@ -60,7 +60,7 @@ class GHExternalGroupIterable extends PagedIterable<GHExternalGroup> {
                 try {
                     return base.hasNext();
                 } catch (final GHException e) {
-                    throw EnterpriseManagedSupport.forOrganization(owner).handleException(e).orElse(e);
+                    throw EnterpriseManagedSupport.forOrganization(owner).filterException(e).orElse(e);
                 }
             }
 

@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
- * Utility class for helping with operation for enterprise managed resources.
+ * Utility class for helping with operations for enterprise managed resources.
  *
  * @author Miguel Esteban Gutiérrez
  */
@@ -26,7 +26,7 @@ class EnterpriseManagedSupport {
         this.organization = organization;
     }
 
-    Optional<GHIOException> handleException(final HttpException he, final String scenario) {
+    Optional<GHIOException> filterException(final HttpException he, final String scenario) {
         if (he.getResponseCode() == 400) {
             final String responseMessage = he.getMessage();
             try {
@@ -46,10 +46,10 @@ class EnterpriseManagedSupport {
         return Optional.empty();
     }
 
-    Optional<GHException> handleException(final GHException e) {
+    Optional<GHException> filterException(final GHException e) {
         if (e.getCause() instanceof HttpException) {
             final HttpException he = (HttpException) e.getCause();
-            return handleException(he, COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS)
+            return filterException(he, COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS)
                     .map(translated -> new GHException(COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS, translated));
         }
         return Optional.empty();

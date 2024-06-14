@@ -37,7 +37,7 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
         final GHException inputException = new GHException("Test", inputCause);
 
         final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
-                .handleException(inputException);
+                .filterException(inputException);
 
         assertThat(maybeException.isPresent(), is(false));
     }
@@ -59,7 +59,7 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
         final GHException inputException = new GHException("Test", inputCause);
 
         final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
-                .handleException(inputException);
+                .filterException(inputException);
 
         assertThat(maybeException.isPresent(), is(false));
     }
@@ -78,7 +78,7 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
         final GHException inputException = new GHException("Test", inputCause);
 
         final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
-                .handleException(inputException);
+                .filterException(inputException);
 
         assertThat(maybeException.isPresent(), is(false));
     }
@@ -97,7 +97,7 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
         final GHException inputException = new GHException("Test", inputCause);
 
         final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
-                .handleException(inputException);
+                .filterException(inputException);
 
         assertThat(maybeException.isPresent(), is(false));
     }
@@ -119,7 +119,7 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
         final GHException inputException = new GHException("Test", inputCause);
 
         final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
-                .handleException(inputException);
+                .filterException(inputException);
 
         assertThat(maybeException.isPresent(), is(true));
 
@@ -162,7 +162,7 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
                 org.getUrl().toString());
 
         final Optional<GHIOException> maybeException = EnterpriseManagedSupport.forOrganization(org)
-                .handleException(inputException, "Scenario");
+                .filterException(inputException, "Scenario");
 
         assertThat(maybeException.isPresent(), is(true));
 

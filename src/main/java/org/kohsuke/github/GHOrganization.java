@@ -240,7 +240,7 @@ public class GHOrganization extends GHPerson {
                     .wrapUp(this);
         } catch (final HttpException e) {
             throw EnterpriseManagedSupport.forOrganization(this)
-                    .handleException(e, "Could not retrieve organization external group")
+                    .filterException(e, "Could not retrieve organization external group")
                     .orElse(e);
         }
     }

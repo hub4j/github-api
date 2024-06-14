@@ -448,7 +448,7 @@ public class GHTeam extends GHObject implements Refreshable {
                     .getGroups();
         } catch (final HttpException e) {
             throw EnterpriseManagedSupport.forOrganization(getOrganization())
-                    .handleException(e, "Could not retrieve team external groups")
+                    .filterException(e, "Could not retrieve team external groups")
                     .orElse(e);
         }
     }
@@ -489,7 +489,7 @@ public class GHTeam extends GHObject implements Refreshable {
                     .wrapUp(getOrganization());
         } catch (final HttpException e) {
             throw EnterpriseManagedSupport.forOrganization(getOrganization())
-                    .handleException(e, "Could not connect team to external group")
+                    .filterException(e, "Could not connect team to external group")
                     .orElse(e);
         }
     }

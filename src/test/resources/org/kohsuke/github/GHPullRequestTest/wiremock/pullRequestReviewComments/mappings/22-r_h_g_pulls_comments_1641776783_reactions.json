@@ -1,38 +1,44 @@
 {
-  "id": "d2146565-0d4b-42f5-a373-cd7d76c3708d",
-  "name": "orgs_hub4j-test-org",
+  "id": "191e5380-b2d1-421f-bd27-136e3f7ab22a",
+  "name": "repos_hub4j-test-org_github-api_pulls_comments_1641776783_reactions",
   "request": {
-    "url": "/orgs/hub4j-test-org",
-    "method": "GET",
+    "url": "/repos/hub4j-test-org/github-api/pulls/comments/1641776783/reactions",
+    "method": "POST",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.v3+json"
+        "equalTo": "application/vnd.github.squirrel-girl-preview+json"
       }
-    }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"content\":\"confused\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "2-orgs_hub4j-test-org.json",
+    "status": 201,
+    "bodyFileName": "22-r_h_g_pulls_comments_1641776783_reactions.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Sun, 16 Jun 2024 10:20:01 GMT",
+      "Date": "Sun, 16 Jun 2024 10:20:10 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
         "Accept-Encoding, Accept, X-Requested-With"
       ],
-      "ETag": "W/\"1a25138946edf22ffb0d2a4077820d7ce4ede3f21fcb684ab25abfedf6fe863c\"",
-      "Last-Modified": "Thu, 04 Jun 2020 05:56:10 GMT",
+      "ETag": "\"da086e7f978ec062d2e5c29c44d18c53ba98087eeb68d68bbee556f5711c1cee\"",
       "X-OAuth-Scopes": "repo, user, write:discussion",
-      "X-Accepted-OAuth-Scopes": "admin:org, read:org, repo, user, write:org",
+      "X-Accepted-OAuth-Scopes": "",
       "github-authentication-token-expiration": "2024-09-14 09:21:47 UTC",
-      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-GitHub-Media-Type": "github.v3; param=squirrel-girl-preview; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4814",
+      "X-RateLimit-Remaining": "4794",
       "X-RateLimit-Reset": "1718536663",
-      "X-RateLimit-Used": "186",
+      "X-RateLimit-Used": "206",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -42,10 +48,12 @@
       "X-XSS-Protection": "0",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "CAA1:3AF55A:C2C9AAC:C440C06:666EBC51"
+      "X-GitHub-Request-Id": "CAB6:3353D6:1E0FFF85:1E462CBF:666EBC5A"
     }
   },
-  "uuid": "d2146565-0d4b-42f5-a373-cd7d76c3708d",
+  "uuid": "191e5380-b2d1-421f-bd27-136e3f7ab22a",
   "persistent": true,
-  "insertionIndex": 2
+  "scenarioName": "scenario-2-repos-hub4j-test-org-github-api-pulls-comments-1641776783-reactions",
+  "requiredScenarioState": "scenario-2-repos-hub4j-test-org-github-api-pulls-comments-1641776783-reactions-2",
+  "insertionIndex": 22
 }

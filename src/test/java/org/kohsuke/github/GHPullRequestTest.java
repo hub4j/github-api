@@ -257,11 +257,10 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(comment.getBody(), equalTo("Some niggle"));
         comment = comments.get(1);
         assertThat(comment.getBody(), equalTo("A single line comment"));
-        assertThat(comment.getLine(), equalTo(2));
+        assertThat(comment.getPosition(), equalTo(4));
         comment = comments.get(2);
         assertThat(comment.getBody(), equalTo("A multiline comment"));
-        assertThat(comment.getStartLine(), equalTo(2));
-        assertThat(comment.getLine(), equalTo(3));
+        assertThat(comment.getPosition(), equalTo(5));
         draftReview = p.createReview().body("Some new review").comment("Some niggle", "README.md", 1).create();
         draftReview.delete();
     }
@@ -329,7 +328,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             comment.createReaction(ReactionContent.LAUGH);
             GHPullRequestReviewCommentReactions commentReactions = p.listReviewComments()
                     .toList()
-                    .get(0)
+                    .get(2)
                     .getReactions();
             assertThat(commentReactions.getUrl().toString(), equalTo(comment.getUrl().toString().concat("/reactions")));
             assertThat(commentReactions.getTotalCount(), equalTo(8));
@@ -362,19 +361,19 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             assertThat(reply.getInReplyToId(), equalTo(comment.getId()));
             comments = p.listReviewComments().toList();
 
-            assertThat(comments.size(), equalTo(2));
+            assertThat(comments.size(), equalTo(4));
 
             comment.update("Updated review comment");
             comments = p.listReviewComments().toList();
-            comment = comments.get(0);
+            comment = comments.get(2);
             assertThat(comment.getBody(), equalTo("Updated review comment"));
 
             comment.delete();
             comments = p.listReviewComments().toList();
             // Reply is still present after delete of original comment, but no longer has replyToId
-            assertThat(comments.size(), equalTo(1));
-            assertThat(comments.get(0).getId(), equalTo(reply.getId()));
-            assertThat(comments.get(0).getInReplyToId(), equalTo(-1L));
+            assertThat(comments.size(), equalTo(3));
+            assertThat(comments.get(2).getId(), equalTo(reply.getId()));
+            assertThat(comments.get(2).getInReplyToId(), equalTo(-1L));
         } finally {
             p.close();
         }

@@ -8,12 +8,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItems;
+import static org.junit.Assert.assertThrows;
+import static org.kohsuke.github.ExternalGroupsTestingSupport.*;
+import static org.kohsuke.github.ExternalGroupsTestingSupport.Matchers.isExternalGroupSummary;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -263,4 +264,174 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
             }
         }
     }
+
+    /**
+     * Test get external groups.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetExternalGroups() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+        final List<GHExternalGroup> groups = team.getExternalGroups();
+
+        assertThat(groups, notNullValue());
+        assertThat(groups.size(), equalTo(1));
+        assertThat(groupSummary(groups), hasItems("467431:acme-developers"));
+
+        groups.forEach(group -> assertThat(group, isExternalGroupSummary()));
+    }
+
+    /**
+     * Test get external groups from not enterprise managed organization.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetExternalGroupsNotEnterpriseManagedOrganization() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        final GHIOException failure = assertThrows(GHNotExternallyManagedEnterpriseException.class,
+                () -> team.getExternalGroups());
+        assertThat(failure.getMessage(), equalTo("Could not retrieve team external groups"));
+    }
+
+    /**
+     * Test get external groups from team that cannot be externally managed.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetExternalGroupsTeamCannotBeExternallyManaged() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        final GHIOException failure = assertThrows(GHTeamCannotBeExternallyManagedException.class,
+                () -> team.getExternalGroups());
+        assertThat(failure.getMessage(), equalTo("Could not retrieve team external groups"));
+    }
+
+    /**
+     * Test connect to external group by id.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testConnectToExternalGroupById() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        final GHExternalGroup group = team.connectToExternalGroup(467431);
+
+        assertThat(group.getId(), equalTo(467431L));
+        assertThat(group.getName(), equalTo("acme-developers"));
+        assertThat(group.getUpdatedAt(), notNullValue());
+
+        assertThat(group.getMembers(), notNullValue());
+        assertThat(membersSummary(group),
+                hasItems("158311279:john-doe_acme:John Doe:john.doe@acme.corp",
+                        "166731041:jane-doe_acme:Jane Doe:jane.doe@acme.corp"));
+
+        assertThat(group.getTeams(), notNullValue());
+        assertThat(teamSummary(group), hasItems("34519919:ACME-DEVELOPERS"));
+    }
+
+    /**
+     * Test fail to connect to external group from other organization.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testConnectToExternalGroupByGroup() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+        GHExternalGroup group = org.getExternalGroup(467431);
+
+        GHExternalGroup connectedGroup = team.connectToExternalGroup(group);
+
+        assertThat(connectedGroup.getId(), equalTo(467431L));
+        assertThat(connectedGroup.getName(), equalTo("acme-developers"));
+        assertThat(connectedGroup.getUpdatedAt(), notNullValue());
+
+        assertThat(connectedGroup.getMembers(), notNullValue());
+        assertThat(membersSummary(connectedGroup),
+                hasItems("158311279:john-doe_acme:John Doe:john.doe@acme.corp",
+                        "166731041:jane-doe_acme:Jane Doe:jane.doe@acme.corp"));
+
+        assertThat(group.getTeams(), notNullValue());
+        assertThat(teamSummary(connectedGroup), hasItems("34519919:ACME-DEVELOPERS"));
+    }
+
+    /**
+     * Test failure when connecting to external group by id.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testFailConnectToExternalGroupWhenTeamHasMembers() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        final GHIOException failure = assertThrows(GHTeamCannotBeExternallyManagedException.class,
+                () -> team.connectToExternalGroup(467431));
+        assertThat(failure.getMessage(), equalTo("Could not connect team to external group"));
+    }
+
+    /**
+     * Test failure when connecting to external group by id.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testFailConnectToExternalGroupTeamIsNotAvailableInOrg() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        assertThrows(GHFileNotFoundException.class, () -> team.connectToExternalGroup(12345));
+    }
+
+    /**
+     * Test delete connection to external group
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testDeleteExternalGroupConnection() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        team.deleteExternalGroupConnection();
+
+        mockGitHub.apiServer()
+                .verify(1,
+                        deleteRequestedFor(urlPathEqualTo("/orgs/" + team.getOrganization().getLogin() + "/teams/"
+                                + team.getSlug() + "/external-groups")));
+    }
+
 }

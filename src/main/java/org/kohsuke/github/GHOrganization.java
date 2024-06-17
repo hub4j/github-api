@@ -2,17 +2,12 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static org.kohsuke.github.internal.Previews.INERTIA;
 
 // TODO: Auto-generated Javadoc
+
 /**
  * The type GHOrganization.
  *
@@ -194,6 +189,63 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * List up all the external groups.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization">documentation</a>
+     */
+    public PagedIterable<GHExternalGroup> listExternalGroups() throws IOException {
+        return listExternalGroups(null);
+    }
+
+    /**
+     * List up all the external groups with a given text in their name
+     *
+     * @param displayName
+     *            the text that must be part of the returned groups name
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization">documentation</a>
+     */
+    public PagedIterable<GHExternalGroup> listExternalGroups(final String displayName) throws IOException {
+        final Requester requester = root().createRequest()
+                .withUrlPath(String.format("/orgs/%s/external-groups", login));
+        if (displayName != null) {
+            requester.with("display_name", displayName);
+        }
+        return new GHExternalGroupIterable(this, requester);
+    }
+
+    /**
+     * Gets a single external group by ID.
+     *
+     * @param groupId
+     *            id of the external group that we want to query for
+     * @return the external group
+     * @throws IOException
+     *             the io exception
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#get-an-external-group">documentation</a>
+     */
+    public GHExternalGroup getExternalGroup(final long groupId) throws IOException {
+        try {
+            return root().createRequest()
+                    .withUrlPath(String.format("/orgs/%s/external-group/%d", login, groupId))
+                    .fetch(GHExternalGroup.class)
+                    .wrapUp(this);
+        } catch (final HttpException e) {
+            throw EnterpriseManagedSupport.forOrganization(this)
+                    .filterException(e, "Could not retrieve organization external group")
+                    .orElse(e);
+        }
+    }
+
+    /**
      * Member's role in an organization.
      */
     public enum Role {
@@ -238,6 +290,26 @@ public class GHOrganization extends GHPerson {
         } catch (IOException ignore) {
             return false;
         }
+    }
+
+    /**
+     * Obtains the object that represents the user membership. In order to get a user's membership with an organization,
+     * the authenticated user must be an organization member. The state parameter in the response can be used to
+     * identify the user's membership status.
+     *
+     * @param username
+     *            the user's username
+     * @return the GHMembership if the username belongs to the organisation, otherwise null
+     * @throws IOException
+     *             the io exception
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#get-organization-membership-for-a-user">documentation</a>
+     */
+    public GHMembership getMembership(String username) throws IOException {
+        return root().createRequest()
+                .withUrlPath("/orgs/" + login + "/memberships/" + username)
+                .fetch(GHMembership.class);
     }
 
     /**

@@ -336,6 +336,25 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test list security managers.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListSecurityManagers() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        List<GHTeam> securityManagers = org.listSecurityManagers().toList();
+
+        assertThat(securityManagers, notNullValue());
+        // In case more are added in the future
+        assertThat(securityManagers.size(), greaterThanOrEqualTo(1));
+        assertThat(securityManagers.stream().map(GHTeam::getName).collect(Collectors.toList()),
+                hasItems("security team"));
+    }
+
+    /**
      * Test list outside collaborators.
      *
      * @throws IOException

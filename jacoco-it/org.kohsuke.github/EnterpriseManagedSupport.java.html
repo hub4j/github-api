@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnterpriseManagedSupport.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">EnterpriseManagedSupport.java</span></div><h1>EnterpriseManagedSupport.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Optional;
+import java.util.logging.Logger;
+
+/**
+ * Utility class for helping with operations for enterprise managed resources.
+ *
+ * @author Miguel Esteban Gutiérrez
+ */
+class EnterpriseManagedSupport {
+
+    static final String COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS = &quot;Could not retrieve organization external groups&quot;;
+    static final String NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR = &quot;This organization is not part of externally managed enterprise.&quot;;
+    static final String TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR = &quot;This team cannot be externally managed since it has explicit members.&quot;;
+
+<span class="fc" id="L21">    private static final Logger LOGGER = Logger.getLogger(EnterpriseManagedSupport.class.getName());</span>
+
+    private final GHOrganization organization;
+
+<span class="fc" id="L25">    private EnterpriseManagedSupport(GHOrganization organization) {</span>
+<span class="fc" id="L26">        this.organization = organization;</span>
+<span class="fc" id="L27">    }</span>
+
+    Optional&lt;GHIOException&gt; filterException(final HttpException he, final String scenario) {
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (he.getResponseCode() == 400) {</span>
+<span class="fc" id="L31">            final String responseMessage = he.getMessage();</span>
+            try {
+<span class="fc" id="L33">                final GHError error = GitHubClient.getMappingObjectReader(this.organization.root())</span>
+<span class="fc" id="L34">                        .forType(GHError.class)</span>
+<span class="fc" id="L35">                        .readValue(responseMessage);</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">                if (NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR.equals(error.getMessage())) {</span>
+<span class="fc" id="L37">                    return Optional.of(new GHNotExternallyManagedEnterpriseException(scenario, error, he));</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">                } else if (TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR.equals(error.getMessage())) {</span>
+<span class="fc" id="L39">                    return Optional.of(new GHTeamCannotBeExternallyManagedException(scenario, error, he));</span>
+                }
+<span class="fc" id="L41">            } catch (final JsonProcessingException e) {</span>
+                // We can ignore it
+<span class="fc" id="L43">                LOGGER.warning(() -&gt; logUnexpectedFailure(e, responseMessage));</span>
+<span class="fc" id="L44">            }</span>
+        }
+<span class="fc" id="L46">        return Optional.empty();</span>
+    }
+
+    Optional&lt;GHException&gt; filterException(final GHException e) {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (e.getCause() instanceof HttpException) {</span>
+<span class="fc" id="L51">            final HttpException he = (HttpException) e.getCause();</span>
+<span class="fc" id="L52">            return filterException(he, COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS)</span>
+<span class="fc" id="L53">                    .map(translated -&gt; new GHException(COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS, translated));</span>
+        }
+<span class="fc" id="L55">        return Optional.empty();</span>
+    }
+
+    static EnterpriseManagedSupport forOrganization(final GHOrganization org) {
+<span class="fc" id="L59">        return new EnterpriseManagedSupport(org);</span>
+    }
+
+    private static String logUnexpectedFailure(final JsonProcessingException exception, final String payload) {
+<span class="fc" id="L63">        final StringWriter sw = new StringWriter();</span>
+<span class="fc" id="L64">        final PrintWriter pw = new PrintWriter(sw);</span>
+<span class="fc" id="L65">        exception.printStackTrace(pw);</span>
+<span class="fc" id="L66">        return String.format(&quot;Could not parse GitHub error response: '%s'. Full stacktrace follows:%n%s&quot;, payload, sw);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

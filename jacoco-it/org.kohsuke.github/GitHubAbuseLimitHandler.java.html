@@ -28,9 +28,47 @@ import javax.annotation.Nonnull;
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L32" title="All 2 branches covered.">        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN</span>
-<span class="fc bfc" id="L33" title="All 2 branches covered.">                &amp;&amp; connectorResponse.header(&quot;Retry-After&quot;) != null;</span>
+    boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
+<span class="fc bfc" id="L32" title="All 4 branches covered.">        return isForbidden(connectorResponse) &amp;&amp; hasRetryOrLimitHeader(connectorResponse);</span>
+    }
+
+    /**
+     * Checks if the response status code is HTTP_FORBIDDEN (403).
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @return true if the status code is HTTP_FORBIDDEN
+     */
+    private boolean isForbidden(GitHubConnectorResponse connectorResponse) {
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN;</span>
+    }
+
+    /**
+     * Checks if the response contains either &quot;Retry-After&quot; or &quot;gh-limited-by&quot; headers. GitHub does not guarantee the
+     * presence of the Retry-After header. However, the gh-limited-by header is included in the response when the error
+     * is due to rate limiting
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @return true if either &quot;Retry-After&quot; or &quot;gh-limited-by&quot; headers are present
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#handle-rate-limit-errors-appropriately&lt;/a&gt;
+     */
+    private boolean hasRetryOrLimitHeader(GitHubConnectorResponse connectorResponse) {
+<span class="fc bfc" id="L58" title="All 4 branches covered.">        return hasHeader(connectorResponse, &quot;Retry-After&quot;) || hasHeader(connectorResponse, &quot;gh-limited-by&quot;);</span>
+    }
+
+    /**
+     * Checks if the response contains a specific header.
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @param headerName
+     *            the name of the header to check for
+     * @return true if the specified header is present
+     */
+    private boolean hasHeader(GitHubConnectorResponse connectorResponse, String headerName) {
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        return connectorResponse.header(headerName) != null;</span>
     }
 
     /**

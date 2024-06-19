@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHExternalGroupIterable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHExternalGroupIterable.java</span></div><h1>GHExternalGroupIterable.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.util.Arrays;
+import java.util.Iterator;
+
+import javax.annotation.Nonnull;
+
+/**
+ * Iterable for external group listing.
+ *
+ * @author Miguel Esteban Gutiérrez
+ */
+class GHExternalGroupIterable extends PagedIterable&lt;GHExternalGroup&gt; {
+
+    private final GHOrganization owner;
+
+    private final GitHubRequest request;
+
+    private GHExternalGroupPage result;
+
+    /**
+     * Instantiates a new GH external groups iterable.
+     *
+     * @param owner
+     *            the owner
+     * @param requestBuilder
+     *            the request builder
+     */
+<span class="fc" id="L29">    GHExternalGroupIterable(final GHOrganization owner, final GitHubRequest.Builder&lt;?&gt; requestBuilder) {</span>
+<span class="fc" id="L30">        this.owner = owner;</span>
+<span class="fc" id="L31">        this.request = requestBuilder.build();</span>
+<span class="fc" id="L32">    }</span>
+
+    /**
+     * Iterator.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
+     */
+    @Nonnull
+    @Override
+    public PagedIterator&lt;GHExternalGroup&gt; _iterator(int pageSize) {
+<span class="fc" id="L44">        return new PagedIterator&lt;&gt;(</span>
+<span class="fc" id="L45">                adapt(GitHubPageIterator</span>
+<span class="fc" id="L46">                        .create(owner.root().getClient(), GHExternalGroupPage.class, request, pageSize)),</span>
+                null);
+    }
+
+    /**
+     * Adapt.
+     *
+     * @param base
+     *            the base
+     * @return the iterator
+     */
+    private Iterator&lt;GHExternalGroup[]&gt; adapt(final Iterator&lt;GHExternalGroupPage&gt; base) {
+<span class="fc" id="L58">        return new Iterator&lt;GHExternalGroup[]&gt;() {</span>
+            public boolean hasNext() {
+                try {
+<span class="fc" id="L61">                    return base.hasNext();</span>
+<span class="fc" id="L62">                } catch (final GHException e) {</span>
+<span class="fc" id="L63">                    throw EnterpriseManagedSupport.forOrganization(owner).filterException(e).orElse(e);</span>
+                }
+            }
+
+            public GHExternalGroup[] next() {
+<span class="fc" id="L68">                GHExternalGroupPage v = base.next();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">                if (result == null) {</span>
+<span class="fc" id="L70">                    result = v;</span>
+                }
+<span class="fc" id="L72">                Arrays.stream(v.getGroups()).forEach(g -&gt; g.wrapUp(owner));</span>
+<span class="fc" id="L73">                return v.getGroups();</span>
+            }
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

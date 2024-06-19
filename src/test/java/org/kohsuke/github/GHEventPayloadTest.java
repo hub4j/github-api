@@ -773,6 +773,57 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Repository renamed.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void repository_renamed() throws Exception {
+        final GHEventPayload.Repository event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Repository.class);
+        assertThat(event.getAction(), is("renamed"));
+        assertThat(event.getChanges().getRepository().getName().getFrom(), is("react-workshop"));
+        assertThat(event.getRepository().getName(), is("react-workshop-renamed"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("EJG-Organization"));
+        assertThat(event.getOrganization().getLogin(), is("EJG-Organization"));
+        assertThat(event.getSender().getLogin(), is("eleanorgoh"));
+    }
+
+    /**
+     * Repository ownership transferred to an organization.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void repository_transferred_to_org() throws Exception {
+        final GHEventPayload.Repository event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Repository.class);
+        assertThat(event.getAction(), is("transferred"));
+        assertThat(event.getChanges().getOwner().getFrom().getUser().getLogin(), is("eleanorgoh"));
+        assertThat(event.getChanges().getOwner().getFrom().getUser().getId(), is(66235606L));
+        assertThat(event.getChanges().getOwner().getFrom().getUser().getType(), is("User"));
+    }
+
+    /**
+     * Repository ownership transferred to a user.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void repository_transferred_to_user() throws Exception {
+        final GHEventPayload.Repository event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Repository.class);
+        assertThat(event.getAction(), is("transferred"));
+        assertThat(event.getChanges().getOwner().getFrom().getOrganization().getLogin(), is("EJG-Organization"));
+        assertThat(event.getChanges().getOwner().getFrom().getOrganization().getId(), is(168135412L));
+        assertThat(event.getRepository().getOwner().getLogin(), is("eleanorgoh"));
+        assertThat(event.getRepository().getOwner().getType(), is("User"));
+    }
+
+    /**
      * Status.
      *
      * @throws Exception

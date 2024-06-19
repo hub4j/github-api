@@ -1,0 +1,4 @@
+{
+  "message": "This team cannot be externally managed since it has explicit members.",
+  "documentation_url": "https://docs.github.com/rest/teams/external-groups#list-a-connection-between-an-external-group-and-a-team"
+}

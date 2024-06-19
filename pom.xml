@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.321</version>
+  <version>1.322</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -44,7 +44,7 @@
     <jacoco.coverage.target.class.method>0.50</jacoco.coverage.target.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
-    <jjwt.suite.version>0.12.3</jjwt.suite.version>
+    <jjwt.suite.version>0.12.5</jjwt.suite.version>
 
     <jacoco.surefire.argLine />
     <surefire.argLine />
@@ -223,7 +223,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.4.1</version>
+          <version>3.6.3</version>
           <configuration>
             <release>8</release>
             <failOnWarnings>true</failOnWarnings>
@@ -350,7 +350,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.4.1</version>
         <configuration>
           <archive>
             <manifestEntries>
@@ -526,7 +526,7 @@
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
-      <version>4.2.0</version>
+      <version>4.2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>

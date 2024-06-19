@@ -28,9 +28,47 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
-        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
-                && connectorResponse.header("Retry-After") != null;
+    boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
+        return isForbidden(connectorResponse) && hasRetryOrLimitHeader(connectorResponse);
+    }
+
+    /**
+     * Checks if the response status code is HTTP_FORBIDDEN (403).
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @return true if the status code is HTTP_FORBIDDEN
+     */
+    private boolean isForbidden(GitHubConnectorResponse connectorResponse) {
+        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN;
+    }
+
+    /**
+     * Checks if the response contains either "Retry-After" or "gh-limited-by" headers. GitHub does not guarantee the
+     * presence of the Retry-After header. However, the gh-limited-by header is included in the response when the error
+     * is due to rate limiting
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @return true if either "Retry-After" or "gh-limited-by" headers are present
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#handle-rate-limit-errors-appropriately</a>
+     */
+    private boolean hasRetryOrLimitHeader(GitHubConnectorResponse connectorResponse) {
+        return hasHeader(connectorResponse, "Retry-After") || hasHeader(connectorResponse, "gh-limited-by");
+    }
+
+    /**
+     * Checks if the response contains a specific header.
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @param headerName
+     *            the name of the header to check for
+     * @return true if the specified header is present
+     */
+    private boolean hasHeader(GitHubConnectorResponse connectorResponse, String headerName) {
+        return connectorResponse.header(headerName) != null;
     }
 
     /**

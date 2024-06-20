@@ -1,0 +1,53 @@
+{
+  "id": "de4adb08-6e53-44df-a204-2ff2f26dfa83",
+  "name": "repos_hub4j-test-org_github-api_stargazers",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/stargazers",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.star+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "6-r_h_g_stargazers.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 22 Mar 2024 23:30:31 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"fead5a58c83ebad3c41b156dda7de3125dfbca812b6cba7c2fb00d4a806ad53d\"",
+      "X-OAuth-Scopes": "public_repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2024-04-07 21:59:15 UTC",
+      "X-GitHub-Media-Type": "github.v3; param=star; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4988",
+      "X-RateLimit-Reset": "1711153584",
+      "X-RateLimit-Used": "12",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F87E:EED56:3B20FA:4DBEBB:65FE1497"
+    }
+  },
+  "uuid": "de4adb08-6e53-44df-a204-2ff2f26dfa83",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-stargazers",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-stargazers-2",
+  "insertionIndex": 6
+}

@@ -1628,11 +1628,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         String owner = "hub4j-test-org";
         GHRepository repository = getRepository();
         assertThat(repository.getOwner().getLogin(), equalTo(owner));
-        assertThat(repository.getStargazersCount(), is(0));
+        assertThat(repository.getStargazersCount(), is(1));
         repository.star();
-        assertThat(repository.listStargazers2().toList().size(), is(1));
+        assertThat(repository.listStargazers2().toList().size(), is(2));
         repository.unstar();
-        assertThat(repository.listStargazers().toList().size(), is(0));
+        assertThat(repository.listStargazers().toList().size(), is(1));
     }
 
     /**

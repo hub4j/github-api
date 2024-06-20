@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import org.junit.Test;
 import org.kohsuke.github.GHPullRequest.MergeMethod;
+import org.kohsuke.github.internal.Previews;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -18,6 +19,10 @@ public class EnumTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void touchEnums() {
+        // Previews is deprecated but we want to maintain coverage until we remove it
+        assertThat(Previews.values().length, equalTo(16));
+        assertThat(Previews.ANTIOPE.mediaType(), equalTo("application/vnd.github.antiope-preview+json"));
+
         assertThat(GHCheckRun.AnnotationLevel.values().length, equalTo(3));
         assertThat(GHCheckRun.Conclusion.values().length, equalTo(9));
         assertThat(GHCheckRun.Status.values().length, equalTo(4));

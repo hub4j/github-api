@@ -6,11 +6,7 @@
     "method": "GET",
     "headers": {
       "Accept": {
-<<<<<<< HEAD
         "equalTo": "application/vnd.github.star+json"
-=======
-        "equalTo": "application/vnd.github+json"
->>>>>>> upstream/main
       }
     }
   },

@@ -1512,36 +1512,6 @@ public class GHRepository extends GHObject {
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
         return root().createRequest().withUrlPath(getApiTailUrl("pulls/" + i)).fetch(GHPullRequest.class).wrapUp(this);
-<<<<<<< HEAD
-=======
-    }
-
-    /**
-     * Retrieves all the pull requests of a particular state.
-     *
-     * @param state
-     *            the state
-     * @return the pull requests
-     * @throws IOException
-     *             the io exception
-     * @see #listPullRequests(GHIssueState) #listPullRequests(GHIssueState)
-     */
-    public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
-        return queryPullRequests().state(state).list().toList();
-    }
-
-    /**
-     * Retrieves all the pull requests of a particular state.
-     *
-     * @param state
-     *            the state
-     * @return the paged iterable
-     * @deprecated Use {@link #queryPullRequests()}
-     */
-    @Deprecated
-    public PagedIterable<GHPullRequest> listPullRequests(GHIssueState state) {
-        return queryPullRequests().state(state).list();
->>>>>>> upstream/main
     }
 
     /**
@@ -3228,10 +3198,6 @@ public class GHRepository extends GHObject {
         // For Push event repository records, they take the form "https://github.com/{fullName}".
         // All other occurrences of "url" take the form "https://api.github.com/...".
         // 2. For Installation event payloads, the URL is not provided at all.
-<<<<<<< HEAD
-=======
-
->>>>>>> upstream/main
         root().createRequest().withUrlPath(getApiTailUrl("")).fetchInto(this);
     }
 

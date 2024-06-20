@@ -52,22 +52,6 @@ public class GHDeploymentStatus extends GHObject {
      *
      * @return the target url
      */
-<<<<<<< HEAD
-=======
-    @Deprecated
-    public URL getTargetUrl() {
-        return GitHubClient.parseURL(target_url);
-    }
-
-    /**
-     * Gets target url.
-     * <p>
-     * This method replaces {@link #getTargetUrl() getTargetUrl}}.
-     *
-     * @return the target url
-     * @deprecated until preview feature has graduated to stable
-     */
->>>>>>> upstream/main
     public URL getLogUrl() {
         return GitHubClient.parseURL(log_url);
     }

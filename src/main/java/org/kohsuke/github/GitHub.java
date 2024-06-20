@@ -30,10 +30,6 @@ import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
-<<<<<<< HEAD
-=======
-import org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter;
->>>>>>> upstream/main
 
 import java.io.*;
 import java.util.*;

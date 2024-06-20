@@ -35,11 +35,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-<<<<<<< HEAD
-=======
-import javax.annotation.CheckForNull;
-
->>>>>>> upstream/main
 // TODO: Auto-generated Javadoc
 /**
  * A pull request.

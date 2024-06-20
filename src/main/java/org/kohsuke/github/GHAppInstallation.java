@@ -94,10 +94,6 @@ public class GHAppInstallation extends GHObject {
      *             retrieve a {@link GHAuthenticatedAppInstallation} from {@link GitHub#getInstallation()}, then call
      *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
      */
-<<<<<<< HEAD
-=======
-    @Deprecated
->>>>>>> upstream/main
     public PagedSearchIterable<GHRepository> listRepositories() {
         GitHubRequest request;
 

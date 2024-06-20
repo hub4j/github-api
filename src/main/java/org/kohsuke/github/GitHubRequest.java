@@ -509,7 +509,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          */
         @Deprecated
         public B withPreview(String name) {
-            return withAccept(name);
+            return withHeader("Accept", name);
         }
 
         /**
@@ -532,7 +532,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the b
          */
         public B withAccept(String name) {
-            return withHeader("Accept", name);
+            return withPreview(name);
         }
 
         /**

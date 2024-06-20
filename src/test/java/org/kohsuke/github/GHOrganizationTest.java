@@ -145,6 +145,10 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // second isTemplate() does not call populate()
         assertThat(repository.isTemplate(), equalTo(true));
         assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 3));
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/main
     }
 
     /**

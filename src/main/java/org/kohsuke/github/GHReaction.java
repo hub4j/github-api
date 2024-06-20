@@ -2,6 +2,12 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+<<<<<<< HEAD
+=======
+import java.io.IOException;
+import java.net.URL;
+
+>>>>>>> upstream/main
 // TODO: Auto-generated Javadoc
 /**
  * Reaction to issue, comment, PR, and so on.

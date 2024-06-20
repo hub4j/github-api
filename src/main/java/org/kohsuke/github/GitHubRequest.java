@@ -506,11 +506,42 @@ public class GitHubRequest implements GitHubConnectorRequest {
          *            the name
          * @return the b
          */
+<<<<<<< HEAD
         public B withAccept(String name) {
+=======
+        @Deprecated
+        public B withPreview(String name) {
+>>>>>>> upstream/main
             return withHeader("Accept", name);
         }
 
         /**
+<<<<<<< HEAD
+=======
+         * With preview.
+         *
+         * @param preview
+         *            the preview
+         * @return the b
+         */
+        @Deprecated
+        public B withPreview(Previews preview) {
+            return withPreview(preview.mediaType());
+        }
+
+        /**
+         * With accept header.
+         *
+         * @param name
+         *            the name
+         * @return the b
+         */
+        public B withAccept(String name) {
+            return withPreview(name);
+        }
+
+        /**
+>>>>>>> upstream/main
          * With requester.
          *
          * @param map

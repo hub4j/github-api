@@ -60,14 +60,6 @@ import javax.annotation.Nullable;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
-import static org.kohsuke.github.internal.Previews.ANTIOPE;
-import static org.kohsuke.github.internal.Previews.ANT_MAN;
-import static org.kohsuke.github.internal.Previews.BAPTISTE;
-import static org.kohsuke.github.internal.Previews.FLASH;
-import static org.kohsuke.github.internal.Previews.INERTIA;
-import static org.kohsuke.github.internal.Previews.MERCY;
-import static org.kohsuke.github.internal.Previews.NEBULA;
-import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -195,8 +187,6 @@ public class GHRepository extends GHObject {
                 .with("task", task)
                 .with("environment", environment)
                 .withUrlPath(getApiTailUrl("deployments"))
-                .withPreview(ANT_MAN)
-                .withPreview(FLASH)
                 .toIterable(GHDeployment[].class, item -> item.wrap(this));
     }
 
@@ -212,8 +202,6 @@ public class GHRepository extends GHObject {
     public GHDeployment getDeployment(long id) throws IOException {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("deployments/" + id))
-                .withPreview(ANT_MAN)
-                .withPreview(FLASH)
                 .fetch(GHDeployment.class)
                 .wrap(this);
     }
@@ -829,7 +817,6 @@ public class GHRepository extends GHObject {
      *
      * @return the visibility
      */
-    @Preview(NEBULA)
     public Visibility getVisibility() {
         if (visibility == null) {
             try {
@@ -847,7 +834,6 @@ public class GHRepository extends GHObject {
      *
      * @return the boolean
      */
-    @Preview(BAPTISTE)
     public boolean isTemplate() {
         // isTemplate is still in preview, we do not want to retrieve it unless needed.
         if (isTemplate == null) {
@@ -1437,11 +1423,9 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    @Preview(NEBULA)
     public void setVisibility(final Visibility value) throws IOException {
         root().createRequest()
                 .method("PATCH")
-                .withPreview(NEBULA)
                 .with("name", name)
                 .with("visibility", value)
                 .withUrlPath(getApiTailUrl(""))
@@ -1670,11 +1654,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
-        return root().createRequest()
-                .withPreview(SHADOW_CAT)
-                .withUrlPath(getApiTailUrl("pulls/" + i))
-                .fetch(GHPullRequest.class)
-                .wrapUp(this);
+        return root().createRequest().withUrlPath(getApiTailUrl("pulls/" + i)).fetch(GHPullRequest.class).wrapUp(this);
     }
 
     /**
@@ -1799,7 +1779,6 @@ public class GHRepository extends GHObject {
             boolean draft) throws IOException {
         return root().createRequest()
                 .method("POST")
-                .withPreview(SHADOW_CAT)
                 .with("title", title)
                 .with("head", head)
                 .with("base", base)
@@ -2091,7 +2070,7 @@ public class GHRepository extends GHObject {
 
         // https://developer.github.com/v3/media/ describes this media type
         return root().createRequest()
-                .withHeader("Accept", "application/vnd.github.v3.raw")
+                .withHeader("Accept", "application/vnd.github.raw")
                 .withUrlPath(target)
                 .fetchStream(Requester::copyInputStream);
     }
@@ -2245,11 +2224,9 @@ public class GHRepository extends GHObject {
      * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */
-    @Preview(ANTIOPE)
     public PagedIterable<GHCheckRun> getCheckRuns(String ref) throws IOException {
         GitHubRequest request = root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
-                .withPreview(ANTIOPE)
                 .build();
         return new GHCheckRunsIterable(this, request);
     }
@@ -2267,12 +2244,10 @@ public class GHRepository extends GHObject {
      * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */
-    @Preview(ANTIOPE)
     public PagedIterable<GHCheckRun> getCheckRuns(String ref, Map<String, Object> params) throws IOException {
         GitHubRequest request = root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
                 .with(params)
-                .withPreview(ANTIOPE)
                 .build();
         return new GHCheckRunsIterable(this, request);
     }
@@ -2340,7 +2315,6 @@ public class GHRepository extends GHObject {
      *            the commit hash
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
-    @Preview(ANTIOPE)
     public @NonNull GHCheckRunBuilder createCheckRun(@NonNull String name, @NonNull String headSHA) {
         return new GHCheckRunBuilder(this, name, headSHA);
     }
@@ -2352,7 +2326,6 @@ public class GHRepository extends GHObject {
      *            the existing checkId
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
-    @Preview(BAPTISTE)
     public @NonNull GHCheckRunBuilder updateCheckRun(long checkId) {
         return new GHCheckRunBuilder(this, checkId);
     }
@@ -3153,7 +3126,6 @@ public class GHRepository extends GHObject {
     public GHProject createProject(String name, String body) throws IOException {
         return root().createRequest()
                 .method("POST")
-                .withPreview(INERTIA)
                 .with("name", name)
                 .with("body", body)
                 .withUrlPath(getApiTailUrl("projects"))
@@ -3172,7 +3144,6 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
         return root().createRequest()
-                .withPreview(INERTIA)
                 .with("state", status)
                 .withUrlPath(getApiTailUrl("projects"))
                 .toIterable(GHProject[].class, item -> item.lateBind(this));
@@ -3449,10 +3420,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<String> listTopics() throws IOException {
-        Topics topics = root().createRequest()
-                .withPreview(MERCY)
-                .withUrlPath(getApiTailUrl("topics"))
-                .fetch(Topics.class);
+        Topics topics = root().createRequest().withUrlPath(getApiTailUrl("topics")).fetch(Topics.class);
         return topics.names;
     }
 
@@ -3466,12 +3434,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void setTopics(List<String> topics) throws IOException {
-        root().createRequest()
-                .method("PUT")
-                .with("names", topics)
-                .withPreview(MERCY)
-                .withUrlPath(getApiTailUrl("topics"))
-                .send();
+        root().createRequest().method("PUT").with("names", topics).withUrlPath(getApiTailUrl("topics")).send();
     }
 
     /**
@@ -3608,7 +3571,7 @@ public class GHRepository extends GHObject {
         // All other occurrences of "url" take the form "https://api.github.com/...".
         // 2. For Installation event payloads, the URL is not provided at all.
 
-        root().createRequest().withPreview(BAPTISTE).withPreview(NEBULA).withUrlPath(getApiTailUrl("")).fetchInto(this);
+        root().createRequest().withUrlPath(getApiTailUrl("")).fetchInto(this);
     }
 
     /**

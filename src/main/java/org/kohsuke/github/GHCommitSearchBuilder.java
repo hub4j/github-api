@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
-import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 
@@ -13,7 +12,6 @@ import java.io.IOException;
  * @author Marc de Verdelhan
  * @see GitHub#searchCommits() GitHub#searchCommits()
  */
-@Preview(Previews.CLOAK)
 public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
 
     /**
@@ -24,7 +22,6 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
      */
     GHCommitSearchBuilder(GitHub root) {
         super(root, CommitSearchResult.class);
-        req.withPreview(Previews.CLOAK);
     }
 
     /**

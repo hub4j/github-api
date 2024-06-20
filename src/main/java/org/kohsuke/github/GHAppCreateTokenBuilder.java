@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
-
 // TODO: Auto-generated Javadoc
 /**
  * Creates a access token for a GitHub App Installation.
@@ -108,12 +106,8 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    @Preview(MACHINE_MAN)
     public GHAppInstallationToken create() throws IOException {
-        return builder.method("POST")
-                .withPreview(MACHINE_MAN)
-                .withUrlPath(apiUrlTail)
-                .fetch(GHAppInstallationToken.class);
+        return builder.method("POST").withUrlPath(apiUrlTail).fetch(GHAppInstallationToken.class);
     }
 
 }

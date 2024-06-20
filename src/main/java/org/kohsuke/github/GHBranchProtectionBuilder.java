@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.kohsuke.github.internal.Previews.LUKE_CAGE;
-
 // TODO: Auto-generated Javadoc
 /**
  * Builder to configure the branch protection settings.
@@ -567,7 +565,7 @@ public class GHBranchProtectionBuilder {
     }
 
     private Requester requester() {
-        return branch.root().createRequest().withPreview(LUKE_CAGE);
+        return branch.root().createRequest();
     }
 
     private static class Restrictions {

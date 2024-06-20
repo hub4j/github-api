@@ -1,7 +1,5 @@
 package org.kohsuke.github.internal;
 
-import java.lang.Deprecated;
-
 /**
  * Provides the media type strings for GitHub API previews
  *

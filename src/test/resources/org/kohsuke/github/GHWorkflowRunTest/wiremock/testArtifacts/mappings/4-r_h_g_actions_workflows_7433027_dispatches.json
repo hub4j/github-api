@@ -9,7 +9,7 @@
         "equalTo": "application/vnd.github+json"
       },
       "Authorization": {
-        "equalTo": "token placeholder-password"
+        "equalTo": "Basic cGxhY2Vob2xkZXItdXNlcjpwbGFjZWhvbGRlci1wYXNzd29yZA=="
       }
     },
     "bodyPatterns": [

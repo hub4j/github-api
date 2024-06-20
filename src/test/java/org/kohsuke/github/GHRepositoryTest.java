@@ -222,7 +222,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(repository.listStargazers().toList(), is(empty()));
 
         repository = gitHub.getOrganization("hub4j").getRepository("github-api");
-        Iterable<GHStargazer> stargazers = repository.listStargazers();
+        Iterable<GHStargazer> stargazers = repository.listStargazers2();
         GHStargazer stargazer = stargazers.iterator().next();
         assertThat(stargazer.getStarredAt(), equalTo(new Date(1271650383000L)));
         assertThat(stargazer.getUser().getLogin(), equalTo("nielswind"));

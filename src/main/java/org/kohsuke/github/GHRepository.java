@@ -2255,7 +2255,19 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists all the users who have starred this repo based on new version of the API, having extended information like
-     * the time when the repository was starred. For compatibility with the old API see {@link #listStargazers()}
+     * the time when the repository was starred.
+     *
+     * @return the paged iterable
+     * @deprecated Use {@link #listStargazers()}
+     */
+    @Deprecated
+    public PagedIterable<GHStargazer> listStargazers2() {
+        return listStargazers();
+    }
+
+    /**
+     * Lists all the users who have starred this repo based on new version of the API, having extended information like
+     * the time when the repository was starred.
      *
      * @return the paged iterable
      */

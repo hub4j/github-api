@@ -1,0 +1,34 @@
+{
+  "id": "53046453-bf1e-49ad-9c78-dabbad7587f7",
+  "name": "u72ug1ib1zbctek798hyrdyou28rbk6ssrokf37zxrpgubk95i__apis_pipelines_1_runs_139_signedlogcontent_4",
+  "request": {
+    "url": "/u72ug1Ib1ZBCtek798HyrDYOU28rBK6ssrOKf37ZxrpgUbk95I/_apis/pipelines/1/runs/139/signedlogcontent/4?urlExpires=2021-04-05T15%3A44%3A10.8371854Z&urlSigningMethod=HMACV1&urlSignature=uQbYtzzKCaCe0FzhPYJV0y1bcSdRhvUa6rcfDXGGXnE%3D",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github.v3+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-u_a_p_1_runs_139_signedlogcontent_4.txt",
+    "headers": {
+      "Cache-Control": "no-store,no-cache",
+      "Pragma": "no-cache",
+      "Content-Type": "text/plain; charset=utf-8",
+      "Vary": "Accept-Encoding",
+      "Strict-Transport-Security": "max-age=2592000",
+      "X-TFS-ProcessId": "34235e3d-7521-424c-ae95-23b6414e1cc4",
+      "ActivityId": "faa24bd7-85df-4ab4-be58-17b0c6aab679",
+      "X-TFS-Session": "faa24bd7-85df-4ab4-be58-17b0c6aab679",
+      "X-VSS-E2EID": "faa24bd7-85df-4ab4-be58-17b0c6aab679",
+      "X-VSS-SenderDeploymentId": "2c974d96-2c30-cef5-eff2-3e0511a903a5",
+      "X-MSEdge-Ref": "Ref A: FD222374D0654565B97884C60B71CBAD Ref B: MRS20EDGE0121 Ref C: 2021-04-05T15:43:10Z",
+      "Date": "Mon, 05 Apr 2021 15:43:11 GMT"
+    }
+  },
+  "uuid": "53046453-bf1e-49ad-9c78-dabbad7587f7",
+  "persistent": true,
+  "insertionIndex": 2
+}

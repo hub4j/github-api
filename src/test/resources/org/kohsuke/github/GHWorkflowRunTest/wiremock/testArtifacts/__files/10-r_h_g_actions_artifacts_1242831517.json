@@ -1,0 +1,19 @@
+{
+  "id": 1242831517,
+  "node_id": "MDg6QXJ0aWZhY3QxMjQyODMxNTE3",
+  "name": "artifact2",
+  "size_in_bytes": 152,
+  "url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/artifacts/1242831517",
+  "archive_download_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/artifacts/1242831517/zip",
+  "expired": false,
+  "created_at": "2024-02-13T20:55:59Z",
+  "updated_at": "2024-02-13T20:55:59Z",
+  "expires_at": "2024-05-13T20:55:47Z",
+  "workflow_run": {
+    "id": 7892624040,
+    "repository_id": 348674220,
+    "head_repository_id": 348674220,
+    "head_branch": "main",
+    "head_sha": "22e72d028675d6b32e2fcc72299163dbbabd80b4"
+  }
+}

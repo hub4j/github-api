@@ -1,0 +1,24 @@
+{
+  "groups": [
+    {
+      "group_id": 467430,
+      "group_name": "acme-asset-owners",
+      "updated_at": "2023-09-13T16:41:29Z"
+    },
+    {
+      "group_id": 467431,
+      "group_name": "acme-developers",
+      "updated_at": "2023-09-13T16:41:28Z"
+    },
+    {
+      "group_id": 467432,
+      "group_name": "acme-product-owners",
+      "updated_at": "2023-09-13T16:41:27Z"
+    },
+    {
+      "group_id": 467433,
+      "group_name": "acme-technical-leads",
+      "updated_at": "2023-09-13T16:41:28Z"
+    }
+  ]
+}

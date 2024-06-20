@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThrows;
+import static org.kohsuke.github.ExternalGroupsTestingSupport.*;
+import static org.kohsuke.github.ExternalGroupsTestingSupport.Matchers.*;
 
 // TODO: Auto-generated Javadoc
+
 /**
  * The Class GHOrganizationTest.
  */
@@ -26,6 +31,16 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
     /** The Constant TEAM_NAME_CREATE. */
     public static final String TEAM_NAME_CREATE = "create-team-test";
+
+    /**
+     * Enable response templating to allow support validating pagination of external groups
+     *
+     * @return the updated WireMock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
+    }
 
     /**
      * Clean up team.
@@ -155,6 +170,66 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test create repository with template.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testCreateRepositoryWithTemplateAndGHRepository() throws IOException {
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository templateRepository = org.getRepository(GITHUB_API_TEMPLATE_TEST);
+
+        GHRepository repository = org.createRepository(GITHUB_API_TEST)
+                .fromTemplateRepository(templateRepository)
+                .owner(GITHUB_API_TEST_ORG)
+                .create();
+
+        assertThat(repository, notNullValue());
+        assertThat(repository.getReadme(), notNullValue());
+
+    }
+
+    /**
+     * Test create repository with template repository null.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testCreateRepositoryFromTemplateRepositoryNull() throws IOException {
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        assertThrows(NullPointerException.class, () -> {
+            org.createRepository(GITHUB_API_TEST).fromTemplateRepository(null).owner(GITHUB_API_TEST_ORG).create();
+        });
+    }
+
+    /**
+     * Test create repository when repository template is not a template.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testCreateRepositoryWhenRepositoryTemplateIsNotATemplate() throws IOException {
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository templateRepository = org.getRepository(GITHUB_API_TEMPLATE_TEST);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            org.createRepository(GITHUB_API_TEST)
+                    .fromTemplateRepository(templateRepository)
+                    .owner(GITHUB_API_TEST_ORG)
+                    .create();
+        });
+    }
+
+    /**
      * Test invite user.
      *
      * @throws IOException
@@ -179,6 +254,25 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         // Check the invitation has worked.
         // assertTrue(org.hasMember(user));
+    }
+
+    /**
+     * Test get user membership
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetMembership() throws IOException {
+        GHOrganization org = gitHub.getOrganization("hub4j-test-org");
+
+        GHMembership membership = org.getMembership("fv316");
+
+        assertThat(membership, notNullValue());
+        assertThat(membership.getRole(), equalTo(GHMembership.Role.ADMIN));
+        assertThat(membership.getState(), equalTo(GHMembership.State.ACTIVE));
+        assertThat(membership.getUser().getLogin(), equalTo("fv316"));
+        assertThat(membership.getOrganization().login, equalTo("hub4j-test-org"));
     }
 
     /**
@@ -239,6 +333,25 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                         "PauloMigAlmeida",
                         "Sage-Pierce",
                         "timja"));
+    }
+
+    /**
+     * Test list security managers.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListSecurityManagers() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        List<GHTeam> securityManagers = org.listSecurityManagers().toList();
+
+        assertThat(securityManagers, notNullValue());
+        // In case more are added in the future
+        assertThat(securityManagers.size(), greaterThanOrEqualTo(1));
+        assertThat(securityManagers.stream().map(GHTeam::getName).collect(Collectors.toList()),
+                hasItems("security team"));
     }
 
     /**
@@ -314,7 +427,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         GHRepository repo = org.getRepository(REPO_NAME);
 
         // Create team with access to repository. Check access was granted.
-        GHTeam team = org.createTeam(TEAM_NAME_CREATE, GHOrganization.Permission.PUSH, repo);
+        GHTeam team = org.createTeam(TEAM_NAME_CREATE, Permission.PUSH, repo);
         assertThat(team.getRepositories().containsKey(REPO_NAME), is(true));
         assertThat(team.getPermission(), equalTo(Permission.PUSH.toString().toLowerCase()));
     }
@@ -363,7 +476,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // Create team with access to repository. Check access was granted.
         GHTeam team = org.createTeam(TEAM_NAME_CREATE).create();
 
-        team.add(repo, GHOrganization.Permission.PUSH);
+        team.add(repo, Permission.PUSH);
 
         assertThat(
                 repo.getTeams()
@@ -392,7 +505,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // Create team with access to repository. Check access was granted.
         GHTeam team = org.createTeam(TEAM_NAME_CREATE).create();
 
-        RepositoryRole role = RepositoryRole.from(GHOrganization.Permission.TRIAGE);
+        RepositoryRole role = RepositoryRole.from(Permission.TRIAGE);
         team.add(repo, role);
 
         // 'getPermission' does not return triage even though the UI shows that value
@@ -497,4 +610,150 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // Assert
         assertThat(org.areOrganizationProjectsEnabled(), is(false));
     }
+
+    /**
+     * Test list external groups without pagination.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListExternalGroupsWithoutPagination() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        List<GHExternalGroup> groups = org.listExternalGroups().toList();
+
+        assertThat(groups, notNullValue());
+        // In case more are added in the future
+        assertThat(groups.size(), greaterThanOrEqualTo(4));
+        assertThat(groupSummary(groups),
+                hasItems("467430:acme-asset-owners",
+                        "467431:acme-developers",
+                        "467432:acme-product-owners",
+                        "467433:acme-technical-leads"));
+
+        groups.forEach(group -> assertThat(group, isExternalGroupSummary()));
+
+        // We are doing one request to get the organization and one to get the external groups
+        assertThat(mockGitHub.getRequestCount(), greaterThanOrEqualTo(2));
+    }
+
+    /**
+     * Test list external groups with pagination.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListExternalGroupsWithPagination() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        List<GHExternalGroup> groups = org.listExternalGroups().withPageSize(2).toList();
+
+        assertThat(groups, notNullValue());
+        // In case more are added in the future
+        assertThat(groups.size(), greaterThanOrEqualTo(4));
+        assertThat(groupSummary(groups),
+                hasItems("467430:acme-asset-owners",
+                        "467431:acme-developers",
+                        "467432:acme-product-owners",
+                        "467433:acme-technical-leads"));
+
+        groups.forEach(group -> assertThat(group, isExternalGroupSummary()));
+
+        // We are doing one request to get the organization and two to traverse the two pages
+        assertThat(mockGitHub.getRequestCount(), greaterThanOrEqualTo(3));
+    }
+
+    /**
+     * Test list external groups with name filtering.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListExternalGroupsWithFilter() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        List<GHExternalGroup> groups = org.listExternalGroups("acme").toList();
+
+        assertThat(groups, notNullValue());
+        // In case more are added in the future
+        assertThat(groups.size(), greaterThanOrEqualTo(4));
+        assertThat(groupSummary(groups),
+                hasItems("467430:acme-asset-owners",
+                        "467431:acme-developers",
+                        "467432:acme-product-owners",
+                        "467433:acme-technical-leads"));
+
+        groups.forEach(group -> assertThat(group, isExternalGroupSummary()));
+    }
+
+    /**
+     * Test list external groups without pagination for non enterprise managed organization.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListExternalGroupsNotEnterpriseManagedOrganization() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        final GHNotExternallyManagedEnterpriseException failure = assertThrows(
+                GHNotExternallyManagedEnterpriseException.class,
+                () -> org.listExternalGroups().toList());
+
+        assertThat(failure.getMessage(), equalTo("Could not retrieve organization external groups"));
+
+        final GHError error = failure.getError();
+
+        assertThat(error, notNullValue());
+        assertThat(error.getMessage(),
+                equalTo(EnterpriseManagedSupport.NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR));
+        assertThat(error.getDocumentationUrl(), notNullValue());
+    }
+
+    /**
+     * Test get external group
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetExternalGroup() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        GHExternalGroup group = org.getExternalGroup(467431L);
+
+        assertThat(group, not(isExternalGroupSummary()));
+
+        assertThat(group.getId(), equalTo(467431L));
+        assertThat(group.getName(), equalTo("acme-developers"));
+        assertThat(group.getUpdatedAt(), notNullValue());
+
+        assertThat(group.getMembers(), notNullValue());
+        assertThat(membersSummary(group),
+                hasItems("158311279:john-doe_acme:John Doe:john.doe@acme.corp",
+                        "166731041:jane-doe_acme:Jane Doe:jane.doe@acme.corp"));
+
+        assertThat(group.getTeams(), notNullValue());
+        assertThat(teamSummary(group), hasItems("9891173:ACME-DEVELOPERS"));
+    }
+
+    /**
+     * Test get external group for not enterprise managed organization
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetExternalGroupNotEnterpriseManagedOrganization() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        final GHIOException failure = assertThrows(GHNotExternallyManagedEnterpriseException.class,
+                () -> org.getExternalGroup(12345));
+
+        assertThat(failure.getMessage(), equalTo("Could not retrieve organization external group"));
+    }
+
 }

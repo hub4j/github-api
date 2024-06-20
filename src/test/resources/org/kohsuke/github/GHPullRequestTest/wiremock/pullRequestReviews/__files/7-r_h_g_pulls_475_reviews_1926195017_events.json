@@ -1,0 +1,39 @@
+{
+  "id": 1926195017,
+  "node_id": "PRR_kwDODFTdCc5yz2dJ",
+  "user": {
+    "login": "gsmet",
+    "id": 1279749,
+    "node_id": "MDQ6VXNlcjEyNzk3NDk=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1279749?u=e462a6165ea17647aed446ca31fae604338ae18c&v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/gsmet",
+    "html_url": "https://github.com/gsmet",
+    "followers_url": "https://api.github.com/users/gsmet/followers",
+    "following_url": "https://api.github.com/users/gsmet/following{/other_user}",
+    "gists_url": "https://api.github.com/users/gsmet/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/gsmet/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/gsmet/subscriptions",
+    "organizations_url": "https://api.github.com/users/gsmet/orgs",
+    "repos_url": "https://api.github.com/users/gsmet/repos",
+    "events_url": "https://api.github.com/users/gsmet/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/gsmet/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "body": "Some review comment",
+  "state": "COMMENTED",
+  "html_url": "https://github.com/hub4j-test-org/github-api/pull/475#pullrequestreview-1926195017",
+  "pull_request_url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/475",
+  "author_association": "MEMBER",
+  "_links": {
+    "html": {
+      "href": "https://github.com/hub4j-test-org/github-api/pull/475#pullrequestreview-1926195017"
+    },
+    "pull_request": {
+      "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/475"
+    }
+  },
+  "submitted_at": "2024-03-09T13:29:44Z",
+  "commit_id": "07374fe73aff1c2024a8d4114b32406c7a8e89b7"
+}

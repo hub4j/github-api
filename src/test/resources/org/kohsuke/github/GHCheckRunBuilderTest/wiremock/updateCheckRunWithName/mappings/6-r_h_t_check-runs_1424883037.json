@@ -6,7 +6,7 @@
     "method": "PATCH",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.antiope-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     },
     "bodyPatterns": [

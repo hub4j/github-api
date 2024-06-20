@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.322-SNAPSHOT</version>
+  <version>1.323-SNAPSHOT</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -18,12 +18,12 @@
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
       <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
     </snapshotRepository>
     <repository>
       <id>sonatype-nexus-staging</id>
       <name>Nexus Release Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
     <site>
       <id>github-pages</id>
@@ -44,7 +44,7 @@
     <jacoco.coverage.target.class.method>0.50</jacoco.coverage.target.class.method>
     <!-- For non-ci builds we'd like the build to still complete if jacoco metrics aren't met. -->
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
-    <jjwt.suite.version>0.12.3</jjwt.suite.version>
+    <jjwt.suite.version>0.12.5</jjwt.suite.version>
 
     <jacoco.surefire.argLine />
     <surefire.argLine />
@@ -233,7 +233,7 @@
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
           <artifactId>nexus-staging-maven-plugin</artifactId>
-          <version>1.6.13</version>
+          <version>1.7.0</version>
           <extensions>true</extensions>
           <configuration>
             <serverId>sonatype-nexus-staging</serverId>
@@ -350,7 +350,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.4.1</version>
         <configuration>
           <archive>
             <manifestEntries>

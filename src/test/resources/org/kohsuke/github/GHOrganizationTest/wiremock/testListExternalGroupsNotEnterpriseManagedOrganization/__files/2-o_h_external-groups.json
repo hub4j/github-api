@@ -1,0 +1,4 @@
+{
+  "message": "This organization is not part of externally managed enterprise.",
+  "documentation_url": "https://docs.github.com/rest/teams/external-groups#list-external-groups-in-an-organization"
+}

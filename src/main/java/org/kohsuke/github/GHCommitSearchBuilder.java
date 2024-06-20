@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -246,6 +247,9 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
         COMMITTER_DATE
     }
 
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     private static class CommitSearchResult extends SearchResult<GHCommit> {
         private GHCommit[] items;
 

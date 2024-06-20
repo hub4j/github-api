@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 
 import javax.annotation.CheckForNull;
@@ -75,6 +77,7 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
      * @param baseInstance
      *            optional instance on which to base this builder.
      */
+    @SuppressFBWarnings(value = { "CT_CONSTRUCTOR_THROW" }, justification = "argument validation, internal class")
     protected AbstractBuilder(@Nonnull Class<R> finalReturnType,
             @Nonnull Class<S> intermediateReturnType,
             @Nonnull GitHub root,

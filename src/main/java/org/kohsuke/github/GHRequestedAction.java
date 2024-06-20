@@ -31,7 +31,7 @@ public class GHRequestedAction extends GHObject {
      *
      * @return the identifier
      */
-    String getIdentifier() {
+    public String getIdentifier() {
         return identifier;
     }
 

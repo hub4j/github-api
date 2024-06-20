@@ -1,5 +1,6 @@
 package org.kohsuke.github.extras;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
@@ -23,6 +24,7 @@ import javax.annotation.Nonnull;
  *
  * @author Liam Newman
  */
+@SuppressFBWarnings(value = { "CT_CONSTRUCTOR_THROW" }, justification = "Basic validation")
 public class HttpClientGitHubConnector implements GitHubConnector {
 
     private final HttpClient client;

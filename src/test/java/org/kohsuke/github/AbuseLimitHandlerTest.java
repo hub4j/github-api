@@ -294,4 +294,26 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(4));
     }
 
+    /**
+     * Tests the behavior of the GitHub API client when the abuse limit handler is set to WAIT then the handler waits
+     * appropriately when secondary rate limits are encountered.
+     *
+     * @throws Exception
+     *             if any error occurs during the test execution.
+     */
+    @Test
+    public void testHandler_Wait_Secondary_Limits() throws Exception {
+        // Customized response that templates the date to keep things working
+        snapshotNotAllowed();
+
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withAbuseLimitHandler(GitHubAbuseLimitHandler.WAIT)
+                .build();
+
+        gitHub.getMyself();
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        getTempRepository();
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
+    }
 }

@@ -54,6 +54,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
 
     private final URL url;
 
+    @SuppressFBWarnings(value = { "CT_CONSTRUCTOR_THROW" }, justification = "Basic argument validation")
     private GitHubRequest(@Nonnull List<Entry> args,
             @Nonnull Map<String, List<String>> headers,
             @Nonnull Map<String, Object> injectedMappingValues,

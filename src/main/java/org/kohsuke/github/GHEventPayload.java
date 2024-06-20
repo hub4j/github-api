@@ -1241,6 +1241,16 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/repos">Repositories</a>
      */
     public static class Repository extends GHEventPayload {
+        private GHRepositoryChanges changes;
+
+        /**
+         * Get changes.
+         *
+         * @return GHRepositoryChanges
+         */
+        public GHRepositoryChanges getChanges() {
+            return changes;
+        }
 
     }
 

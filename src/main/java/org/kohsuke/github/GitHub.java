@@ -111,6 +111,7 @@ public class GitHub {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
+    @SuppressFBWarnings(value = { "CT_CONSTRUCTOR_THROW" }, justification = "internal constructor")
     GitHub(String apiUrl,
             GitHubConnector connector,
             GitHubRateLimitHandler rateLimitHandler,

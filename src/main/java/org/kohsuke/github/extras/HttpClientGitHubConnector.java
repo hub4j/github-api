@@ -17,7 +17,6 @@ public class HttpClientGitHubConnector implements GitHubConnector {
      * Instantiates a new Impatient http connector.
      */
     public HttpClientGitHubConnector() {
-        throw new UnsupportedOperationException("java.net.http.HttpClient is only supported in Java 11+.");
     }
 
     @Override

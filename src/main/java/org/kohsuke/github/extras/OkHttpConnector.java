@@ -4,6 +4,7 @@ import com.squareup.okhttp.CacheControl;
 import com.squareup.okhttp.ConnectionSpec;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkUrlFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.HttpConnector;
 import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
 
@@ -31,6 +32,7 @@ import javax.net.ssl.SSLSocketFactory;
  * @see OkHttpGitHubConnector
  */
 @Deprecated
+@SuppressFBWarnings(value = { "CT_CONSTRUCTOR_THROW" }, justification = "Deprecated")
 public class OkHttpConnector implements HttpConnector {
     private static final String HEADER_NAME = "Cache-Control";
     private final OkUrlFactory urlFactory;

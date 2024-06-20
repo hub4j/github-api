@@ -1,5 +1,7 @@
 package org.kohsuke.github.internal;
 
+import java.lang.Deprecated;
+
 /**
  * Provides the media type strings for GitHub API previews
  *
@@ -7,6 +9,7 @@ package org.kohsuke.github.internal;
  *
  * @author Kohsuke Kawaguchi
  */
+@Deprecated
 public enum Previews {
 
     /**

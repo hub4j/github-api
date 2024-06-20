@@ -2468,7 +2468,7 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHStargazer> listStargazers2() {
         return root().createRequest()
-                .withPreview("application/vnd.github.v3.star+json")
+                .withAccept("application/vnd.github.star+json")
                 .withUrlPath(getApiTailUrl("stargazers"))
                 .toIterable(GHStargazer[].class, item -> item.wrapUp(this));
     }

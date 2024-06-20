@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - main-2.x
       - '!/refs/heads/dependabot/*'
   pull_request:
     branches:

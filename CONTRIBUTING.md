@@ -8,7 +8,7 @@ Run `mvn spotless:apply` to fix any formatting, etc issues.
 
 If the following does not succeed, you will not pass the pull request checks.
 
-`mvn -D enable-ci clean install site` 
+`mvn -D enable-ci clean install site "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"` 
 
 ## Using WireMock and Snapshots
 

@@ -103,7 +103,8 @@ public abstract class RateLimitChecker {
          */
         public LiteralValue(int sleepAtOrBelow) {
             if (sleepAtOrBelow < 0) {
-                throw new IllegalArgumentException("sleepAtOrBelow must >= 0");
+                // ignore negative numbers
+                sleepAtOrBelow = 0;
             }
             this.sleepAtOrBelow = sleepAtOrBelow;
         }

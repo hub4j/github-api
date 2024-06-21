@@ -4,7 +4,7 @@
     "method": "DELETE",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.gambit-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     }
   },

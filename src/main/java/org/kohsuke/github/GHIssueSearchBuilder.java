@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 // TODO: Auto-generated Javadoc
 /**
  * Search issues.
@@ -117,6 +119,9 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
         UPDATED
     }
 
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     private static class IssueSearchResult extends SearchResult<GHIssue> {
         private GHIssue[] items;
 

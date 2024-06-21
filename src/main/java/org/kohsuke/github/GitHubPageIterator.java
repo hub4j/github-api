@@ -52,10 +52,6 @@ class GitHubPageIterator<T> implements Iterator<T> {
     private GitHubResponse<T> finalResponse = null;
 
     private GitHubPageIterator(GitHubClient client, Class<T> type, GitHubRequest request) {
-        if (!"GET".equals(request.method())) {
-            throw new IllegalStateException("Request method \"GET\" is required for page iterator.");
-        }
-
         this.client = client;
         this.type = type;
         this.nextRequest = request;
@@ -81,6 +77,10 @@ class GitHubPageIterator<T> implements Iterator<T> {
         if (pageSize > 0) {
             GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
             request = builder.build();
+        }
+
+        if (!"GET".equals(request.method())) {
+            throw new IllegalArgumentException("Request method \"GET\" is required for page iterator.");
         }
 
         return new GitHubPageIterator<>(client, type, request);

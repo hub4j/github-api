@@ -1,9 +1,13 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 // TODO: Auto-generated Javadoc
 /**
  * Represents the one page of check-runs result when listing check-runs.
  */
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+        justification = "JSON API")
 class GHCheckRunsPage {
     private int total_count;
     private GHCheckRun[] check_runs;

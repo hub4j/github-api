@@ -134,7 +134,7 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         assertThat(uc.getHeaderField(1), notNullValue());
                         assertThat(uc.getHeaderField(1), equalTo(uc.getHeaderField(key)));
 
-                        assertThat(uc.getRequestProperty("Accept"), equalTo("application/vnd.github.v3+json"));
+                        assertThat(uc.getRequestProperty("Accept"), equalTo("application/vnd.github+json"));
 
                         Assert.assertThrows(IllegalStateException.class, () -> uc.getRequestProperties());
 

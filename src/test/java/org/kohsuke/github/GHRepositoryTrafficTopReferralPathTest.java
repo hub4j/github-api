@@ -1,15 +1,18 @@
 package org.kohsuke.github;
 
-import org.junit.Assert;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
 import org.junit.Test;
 
 public class GHRepositoryTrafficTopReferralPathTest {
     @Test
     public void test() {
         GHRepositoryTrafficTopReferralPath testee = new GHRepositoryTrafficTopReferralPath(1, 2, "path", "title");
-        Assert.assertEquals(1, testee.getCount());
-        Assert.assertEquals(2, testee.getUniques());
-        Assert.assertEquals("path", testee.getPath());
-        Assert.assertEquals("title", testee.getTitle());
+        assertThat(testee.getCount(), is(equalTo(1)));
+        assertThat(testee.getUniques(), is(equalTo(2)));
+        assertThat(testee.getPath(), is(equalTo("path")));
+        assertThat(testee.getTitle(), is(equalTo("title")));
     }
 }

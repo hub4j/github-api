@@ -3640,7 +3640,7 @@ public class GHRepository extends GHObject {
      *
      * @return list of top referrers
      * @throws IOException
-     *                     the io exception
+     *             the io exception
      */
     public List<GHRepositoryTrafficTopReferralSources> getTopReferralSources() throws IOException {
         return root().createRequest()

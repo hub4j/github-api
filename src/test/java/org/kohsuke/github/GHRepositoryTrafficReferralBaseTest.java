@@ -6,7 +6,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+/**
+ * Unit test for {@link GHRepositoryTrafficReferralBase}.
+ */
 public class GHRepositoryTrafficReferralBaseTest {
+
+    /**
+     * Test the constructor.
+     */
     @Test
     public void test() {
         GHRepositoryTrafficReferralBase testee = new GHRepositoryTrafficReferralBase(1, 2);

@@ -11,8 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static org.kohsuke.github.internal.Previews.LUKE_CAGE;
+import java.util.stream.Collectors;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -50,8 +49,8 @@ public class GHBranchProtectionBuilder {
      *            the checks
      * @return the gh branch protection builder
      */
-    public GHBranchProtectionBuilder addRequiredChecks(Collection<String> checks) {
-        getStatusChecks().contexts.addAll(checks);
+    public GHBranchProtectionBuilder addRequiredStatusChecks(Collection<GHBranchProtection.Check> checks) {
+        getStatusChecks().checks.addAll(checks);
         return this;
     }
 
@@ -62,8 +61,36 @@ public class GHBranchProtectionBuilder {
      *            the checks
      * @return the gh branch protection builder
      */
+    @Deprecated
+    public GHBranchProtectionBuilder addRequiredChecks(Collection<String> checks) {
+        getStatusChecks().checks.addAll(checks.stream()
+                .map(context -> new GHBranchProtection.Check(context, null))
+                .collect(Collectors.toList()));
+        return this;
+    }
+
+    /**
+     * Add required checks gh branch protection builder.
+     *
+     * @param checks
+     *            the checks
+     * @return the gh branch protection builder
+     */
+    @Deprecated
     public GHBranchProtectionBuilder addRequiredChecks(String... checks) {
         addRequiredChecks(Arrays.asList(checks));
+        return this;
+    }
+
+    /**
+     * Add required checks gh branch protection builder.
+     *
+     * @param checks
+     *            the checks
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder addRequiredChecks(GHBranchProtection.Check... checks) {
+        addRequiredStatusChecks(Arrays.asList(checks));
         return this;
     }
 
@@ -538,7 +565,7 @@ public class GHBranchProtectionBuilder {
     }
 
     private Requester requester() {
-        return branch.root().createRequest().withPreview(LUKE_CAGE);
+        return branch.root().createRequest();
     }
 
     private static class Restrictions {
@@ -547,7 +574,7 @@ public class GHBranchProtectionBuilder {
     }
 
     private static class StatusChecks {
-        final List<String> contexts = new ArrayList<String>();
+        final List<GHBranchProtection.Check> checks = new ArrayList<>();
         boolean strict;
     }
 }

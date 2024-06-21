@@ -1,13 +1,12 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-
-import static org.kohsuke.github.internal.Previews.ZZZAX;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -64,7 +63,6 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    @Preview(ZZZAX)
     public void enabledSignedCommits() throws IOException {
         requester().method("POST").withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);
     }
@@ -75,7 +73,6 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    @Preview(ZZZAX)
     public void disableSignedCommits() throws IOException {
         requester().method("DELETE").withUrlPath(url + REQUIRE_SIGNATURES_URI).send();
     }
@@ -168,7 +165,6 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    @Preview(ZZZAX)
     public boolean getRequiredSignatures() throws IOException {
         return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;
     }
@@ -201,7 +197,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
     }
 
     private Requester requester() {
-        return root().createRequest().withPreview(ZZZAX);
+        return root().createRequest();
     }
 
     /**
@@ -218,6 +214,55 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          */
         public boolean isEnabled() {
             return enabled;
+        }
+    }
+
+    /**
+     * The type Check.
+     */
+    public static class Check {
+        private String context;
+
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        private Integer appId;
+
+        /**
+         * no-arg constructor for the serializer
+         */
+        public Check() {
+        }
+
+        /**
+         * Regular constructor for use in user business logic
+         *
+         * @param context
+         *            the context string of the check
+         * @param appId
+         *            the application ID the check is supposed to come from. Pass "-1" to explicitly allow any app to
+         *            set the status. Pass "null" to automatically select the GitHub App that has recently provided this
+         *            check.
+         */
+        public Check(String context, Integer appId) {
+            this.context = context;
+            this.appId = appId;
+        }
+
+        /**
+         * The context string of the check
+         *
+         * @return the string
+         */
+        public String getContext() {
+            return context;
+        }
+
+        /**
+         * The application ID the check is supposed to come from. The value "-1" indicates "any source".
+         *
+         * @return the integer
+         */
+        public Integer getAppId() {
+            return appId;
         }
     }
 
@@ -463,6 +508,9 @@ public class GHBranchProtection extends GitHubInteractiveObject {
         private Collection<String> contexts;
 
         @JsonProperty
+        private Collection<Check> checks;
+
+        @JsonProperty
         private boolean strict;
 
         @JsonProperty
@@ -475,6 +523,15 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          */
         public Collection<String> getContexts() {
             return Collections.unmodifiableCollection(contexts);
+        }
+
+        /**
+         * Gets checks.
+         *
+         * @return the checks
+         */
+        public Collection<Check> getChecks() {
+            return Collections.unmodifiableCollection(checks);
         }
 
         /**

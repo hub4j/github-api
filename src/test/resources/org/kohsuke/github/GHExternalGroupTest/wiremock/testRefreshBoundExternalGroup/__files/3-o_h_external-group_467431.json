@@ -1,0 +1,25 @@
+{
+  "group_id": 467431,
+  "group_name": "acme-developers",
+  "updated_at": "2023-09-13T16:41:28Z",
+  "members": [
+    {
+      "member_id": 158311279,
+      "member_login": "john-doe_acme",
+      "member_name": "John Doe",
+      "member_email": "john.doe@acme.corp"
+    },
+    {
+      "member_id": 166731041,
+      "member_login": "jane-doe_acme",
+      "member_name": "Jane Doe",
+      "member_email": "jane.doe@acme.corp"
+    }
+  ],
+  "teams": [
+    {
+      "team_id": 9891173,
+      "team_name": "ACME-DEVELOPERS"
+    }
+  ]
+}

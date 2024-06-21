@@ -3619,8 +3619,8 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Get the top 10 popular contents over the last 14 days.
-     * {@link https://docs.github.com/en/rest/metrics/traffic?apiVersion=2022-11-28#get-top-referral-paths}
+     * Get the top 10 popular contents over the last 14 days as described on
+     * https://docs.github.com/en/rest/metrics/traffic?apiVersion=2022-11-28#get-top-referral-paths
      *
      * @return list of top referral paths
      * @throws IOException
@@ -3635,12 +3635,12 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Get the top 10 referrers over the last 14 days.
-     * {@link https://docs.github.com/en/rest/metrics/traffic?apiVersion=2022-11-28#get-top-referral-sources}
+     * Get the top 10 referrers over the last 14 days as described on
+     * https://docs.github.com/en/rest/metrics/traffic?apiVersion=2022-11-28#get-top-referral-sources
      *
      * @return list of top referrers
      * @throws IOException
-     *             the io exception
+     *                     the io exception
      */
     public List<GHRepositoryTrafficTopReferralSources> getTopReferralSources() throws IOException {
         return root().createRequest()

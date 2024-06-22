@@ -88,3 +88,7 @@ jobs:
     - name: Codecov Report
       if: matrix.os == 'ubuntu' && matrix.java == '17'
       uses: codecov/codecov-action@v4.4.1
+      with:
+        # we do not want to have coverage not reported for a PR. 
+        fail_ci_if_error: true
+        token: ${{ secrets.CODECOV_TOKEN }}

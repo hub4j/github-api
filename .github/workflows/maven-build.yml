@@ -87,11 +87,12 @@ jobs:
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Codecov Report
       if: matrix.os == 'ubuntu' && matrix.java == '17'
-      uses: codecov/codecov-action@v4.4.1
+      uses: codecov/codecov-action@v4.5.0
       with:
         # we do not want to have coverage not reported for a PR. 
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
+        verbose: true
 
   test-java-8:
     name: test Java 8 (no-build)

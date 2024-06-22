@@ -91,8 +91,9 @@ jobs:
       with:
         # we do not want to have coverage not reported for a PR. 
         fail_ci_if_error: true
-        token: ${{ secrets.CODECOV_TOKEN }}
         verbose: true
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   test-java-8:
     name: test Java 8 (no-build)

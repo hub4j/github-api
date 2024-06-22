@@ -28,6 +28,7 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.jsonwebtoken.lang.Arrays;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.function.InputStreamFunction;
 import org.kohsuke.github.internal.EnumUtils;
@@ -3627,11 +3628,10 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHRepositoryTrafficTopReferralPath> getTopReferralPaths() throws IOException {
-        return root().createRequest()
+        return Arrays.asList(root().createRequest()
                 .method("GET")
                 .withUrlPath("/repos/%s/%s/traffic/popular/paths", getOwnerName(), name)
-                .toIterable(GHRepositoryTrafficTopReferralPath[].class, null)
-                .toList();
+                .fetch(GHRepositoryTrafficTopReferralPath[].class));
     }
 
     /**
@@ -3643,11 +3643,10 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public List<GHRepositoryTrafficTopReferralSources> getTopReferralSources() throws IOException {
-        return root().createRequest()
+        return Arrays.asList(root().createRequest()
                 .method("GET")
                 .withUrlPath("/repos/%s/%s/traffic/popular/referrers", getOwnerName(), name)
-                .toIterable(GHRepositoryTrafficTopReferralSources[].class, null)
-                .toList();
+                .fetch(GHRepositoryTrafficTopReferralSources[].class));
     }
 
     /**

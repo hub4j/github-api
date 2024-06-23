@@ -93,7 +93,7 @@ jobs:
         path: target/
         retention-days: 3
   codecov-upload:
-    name: Upload coverage data to codecov.io
+    name: codecov-upload (Upload to codecov.io)
     needs: test
     runs-on: ubuntu-latest
     steps:

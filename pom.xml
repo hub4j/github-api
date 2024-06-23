@@ -562,7 +562,7 @@
     <dependency>
       <groupId>org.kohsuke.stapler</groupId>
       <artifactId>stapler</artifactId>
-      <version>1.263</version>
+      <version>1881.vd39f3ee5c629</version>
       <scope>test</scope>
     </dependency>
     <dependency>

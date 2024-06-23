@@ -1,6 +1,3 @@
-codecov: 
-  token: 60beb13f-9655-4bb5-a4c9-76719caf779f
-  require_ci_to_pass: yes
 ignore:
   - "**/extras/okhttp3/ObsoleteUrlFactory**"
   - "**/extras/OkHttpConnector"

@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import org.kohsuke.github.internal.Previews;
-
 import java.io.IOException;
 
 // TODO: Auto-generated Javadoc
@@ -45,11 +43,7 @@ public class GHDeploymentStatusBuilder {
     GHDeploymentStatusBuilder(GHRepository repo, long deploymentId, GHDeploymentState state) {
         this.repo = repo;
         this.deploymentId = deploymentId;
-        this.builder = repo.root()
-                .createRequest()
-                .withPreview(Previews.ANT_MAN)
-                .withPreview(Previews.FLASH)
-                .method("POST");
+        this.builder = repo.root().createRequest().method("POST");
 
         this.builder.with("state", state);
     }
@@ -63,7 +57,6 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      * @deprecated until preview feature has graduated to stable
      */
-    @Preview({ Previews.ANT_MAN, Previews.FLASH })
     public GHDeploymentStatusBuilder autoInactive(boolean autoInactive) {
         this.builder.with("auto_inactive", autoInactive);
         return this;
@@ -90,7 +83,6 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.FLASH)
     public GHDeploymentStatusBuilder environment(String environment) {
         this.builder.with("environment", environment);
         return this;
@@ -104,7 +96,6 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder environmentUrl(String environmentUrl) {
         this.builder.with("environment_url", environmentUrl);
         return this;
@@ -120,7 +111,6 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
         this.builder.with("log_url", logUrl);
         return this;

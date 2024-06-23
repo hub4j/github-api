@@ -6,8 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.internal.Previews.INERTIA;
-
 // TODO: Auto-generated Javadoc
 /**
  * The type GHProjectColumn.
@@ -130,7 +128,7 @@ public class GHProjectColumn extends GHObject {
     }
 
     private void edit(String key, Object value) throws IOException {
-        root().createRequest().method("PATCH").withPreview(INERTIA).with(key, value).withUrlPath(getApiRoute()).send();
+        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -149,7 +147,7 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-        root().createRequest().withPreview(INERTIA).method("DELETE").withUrlPath(getApiRoute()).send();
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -162,7 +160,6 @@ public class GHProjectColumn extends GHObject {
     public PagedIterable<GHProjectCard> listCards() throws IOException {
         final GHProjectColumn column = this;
         return root().createRequest()
-                .withPreview(INERTIA)
                 .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
                 .toIterable(GHProjectCard[].class, item -> item.lateBind(column));
     }
@@ -179,7 +176,6 @@ public class GHProjectColumn extends GHObject {
     public GHProjectCard createCard(String note) throws IOException {
         return root().createRequest()
                 .method("POST")
-                .withPreview(INERTIA)
                 .with("note", note)
                 .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
                 .fetch(GHProjectCard.class)
@@ -199,7 +195,6 @@ public class GHProjectColumn extends GHObject {
         String contentType = issue instanceof GHPullRequest ? "PullRequest" : "Issue";
         return root().createRequest()
                 .method("POST")
-                .withPreview(INERTIA)
                 .with("content_type", contentType)
                 .with("content_id", issue.getId())
                 .withUrlPath(String.format("/projects/columns/%d/cards", getId()))

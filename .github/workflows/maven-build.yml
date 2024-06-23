@@ -88,6 +88,10 @@ jobs:
     - name: Codecov Report
       if: matrix.os == 'ubuntu' && matrix.java == '17'
       uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
+        verbose: true
 
   test-java-8:
     name: test Java 8 (no-build)

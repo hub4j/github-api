@@ -105,6 +105,7 @@ jobs:
     - name: Codecov Report
       uses: codecov/codecov-action@v4.5.0
       with:
+        # Codecov token from https://app.codecov.io/gh/hub4j/github-api/settings
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
         verbose: true

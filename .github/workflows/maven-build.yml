@@ -87,7 +87,7 @@ jobs:
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Codecov Report
       if: matrix.os == 'ubuntu' && matrix.java == '17'
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4.1.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true

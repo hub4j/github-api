@@ -2,6 +2,8 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.lang.Deprecated;
+
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
@@ -94,6 +96,7 @@ public class GHAppInstallation extends GHObject {
      *             retrieve a {@link GHAuthenticatedAppInstallation} from {@link GitHub#getInstallation()}, then call
      *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
      */
+    @Deprecated
     public PagedSearchIterable<GHRepository> listRepositories() {
         GitHubRequest request;
 
@@ -221,6 +224,7 @@ public class GHAppInstallation extends GHObject {
      * @deprecated Use {@link GHAppInstallation#createToken()} instead.
      */
     @BetaApi
+    @Deprecated
     public GHAppCreateTokenBuilder createToken(Map<String, GHPermissionType> permissions) {
         return new GHAppCreateTokenBuilder(root(),
                 String.format("/app/installations/%d/access_tokens", getId()),

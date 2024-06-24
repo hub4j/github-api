@@ -69,28 +69,6 @@ public class GitCommit {
     };
 
     /**
-     * Instantiates a new git commit.
-     *
-     * @param commit
-     *            the commit
-     */
-    GitCommit(GitCommit commit) {
-        // copy constructor used to cast to GitCommit.ShortInfo and from there
-        // to GHCommit, for GHContentUpdateResponse bridge method to GHCommit
-        this.owner = commit.getOwner();
-        this.sha = commit.getSha();
-        this.node_id = commit.getNodeId();
-        this.url = commit.getUrl();
-        this.html_url = commit.getHtmlUrl();
-        this.author = commit.getAuthor();
-        this.committer = commit.getCommitter();
-        this.message = commit.getMessage();
-        this.verification = commit.getVerification();
-        this.tree = commit.getTree();
-        this.parents = commit.getParents();
-    }
-
-    /**
      * Gets owner.
      *
      * @return the repository that contains the commit.

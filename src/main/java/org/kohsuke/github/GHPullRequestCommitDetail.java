@@ -41,6 +41,8 @@ import java.net.URL;
         justification = "JSON API")
 public class GHPullRequestCommitDetail {
     private GHPullRequest owner;
+    private GHCommitDetailAuthor author;
+    private GHCommitDetailAuthor committer;
 
     /**
      * Wrap up.
@@ -51,6 +53,20 @@ public class GHPullRequestCommitDetail {
     void wrapUp(GHPullRequest owner) {
         this.owner = owner;
     }
+
+	/**
+	 * Type for the GitHub user
+	 */
+	public static class GHCommitDetailAuthor {
+		String login;
+
+		/**
+		 * GitHub user login
+		 */
+		public String getLogin() {
+			return login;
+		}
+	}
 
     /**
      * The type Authorship.
@@ -285,4 +301,20 @@ public class GHPullRequestCommitDetail {
         System.arraycopy(parents, 0, newValue, 0, parents.length);
         return newValue;
     }
+
+	/**
+	 * Gets the GitHub user - author of the commit.
+	 *
+	 */
+	public GHCommitDetailAuthor getAuthor() {
+		return author;
+	}
+
+	/**
+	 * Gets the GitHub user - committer of the commit.
+	 *
+	 */
+	public GHCommitDetailAuthor getCommitter() {
+		return committer;
+	}
 }

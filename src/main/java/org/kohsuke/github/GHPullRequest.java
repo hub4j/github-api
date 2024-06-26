@@ -523,6 +523,15 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
+     * Create gh pull request review comment builder.
+     *
+     * @return the gh pull request review comment builder.
+     */
+    public GHPullRequestReviewCommentBuilder createReviewComment() {
+        return new GHPullRequestReviewCommentBuilder(this);
+    }
+
+    /**
      * Create review comment gh pull request review comment.
      *
      * @param body
@@ -536,7 +545,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the gh pull request review comment
      * @throws IOException
      *             the io exception
+     * @deprecated use {@link #createReviewComment()}
      */
+    @Deprecated
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
             throws IOException {
         return root().createRequest()
@@ -545,42 +556,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
                 .with("commit_id", sha)
                 .with("path", path)
                 .with("position", position)
-                .withUrlPath(getApiRoute() + COMMENTS_ACTION)
-                .fetch(GHPullRequestReviewComment.class)
-                .wrapUp(this);
-    }
-
-    /**
-     * Create review comment gh pull request review comment.
-     *
-     * @param body
-     *            the body
-     * @param sha
-     *            the sha
-     * @param path
-     *            the path
-     * @param startLine
-     *            For a single line comment, the line of the blob in the pull request diff that the comment applies to.
-     *            For a multi-line comment, the first line in the pull request diff that the comment applies to.
-     * @param endLine
-     *            For a multi-line comment, the last line of the range that the comment applies to. Otherwise, keep it
-     *            null.
-     * @return the gh pull request review comment
-     * @throws IOException
-     *             the io exception
-     */
-    public GHPullRequestReviewComment createReviewComment(String body,
-            String sha,
-            String path,
-            Integer startLine,
-            Integer endLine) throws IOException {
-        return root().createRequest()
-                .method("POST")
-                .with("body", body)
-                .with("commit_id", sha)
-                .with("path", path)
-                .with("start_line", endLine != null ? startLine : null)
-                .with("line", endLine != null ? endLine : startLine)
                 .withUrlPath(getApiRoute() + COMMENTS_ACTION)
                 .fetch(GHPullRequestReviewComment.class)
                 .wrapUp(this);

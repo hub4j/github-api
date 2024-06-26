@@ -13,7 +13,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -266,6 +277,38 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Comments objects in pull request review builder.
+     */
+    @Test
+    public void commentsInPullRequestReviewBuilder() {
+        GHPullRequestReviewBuilder.DraftReviewComment draftReviewComment = new GHPullRequestReviewBuilder.DraftReviewComment(
+                "comment",
+                "path/to/file.txt",
+                1);
+        assertThat(draftReviewComment.getBody(), equalTo("comment"));
+        assertThat(draftReviewComment.getPath(), equalTo("path/to/file.txt"));
+        assertThat(draftReviewComment.getPosition(), equalTo(1));
+
+        GHPullRequestReviewBuilder.SingleLineDraftReviewComment singleLineDraftReviewComment = new GHPullRequestReviewBuilder.SingleLineDraftReviewComment(
+                "comment",
+                "path/to/file.txt",
+                2);
+        assertThat(singleLineDraftReviewComment.getBody(), equalTo("comment"));
+        assertThat(singleLineDraftReviewComment.getPath(), equalTo("path/to/file.txt"));
+        assertThat(singleLineDraftReviewComment.getLine(), equalTo(2));
+
+        GHPullRequestReviewBuilder.MultilineDraftReviewComment multilineDraftReviewComment = new GHPullRequestReviewBuilder.MultilineDraftReviewComment(
+                "comment",
+                "path/to/file.txt",
+                1,
+                2);
+        assertThat(multilineDraftReviewComment.getBody(), equalTo("comment"));
+        assertThat(multilineDraftReviewComment.getPath(), equalTo("path/to/file.txt"));
+        assertThat(multilineDraftReviewComment.getStartLine(), equalTo(1));
+        assertThat(multilineDraftReviewComment.getLine(), equalTo(2));
+    }
+
+    /**
      * Pull request review comments.
      *
      * @throws Exception
@@ -276,11 +319,27 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         String name = "pullRequestReviewComments";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
         try {
-            // System.out.println(p.getUrl());
             assertThat(p.listReviewComments().toList(), is(empty()));
-            p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
-            p.createReviewComment("A single line review comment", p.getHead().getSha(), "README.md", 2, null);
-            p.createReviewComment("A multiline review comment", p.getHead().getSha(), "README.md", 2, 3);
+
+            p.createReviewComment()
+                    .commitId(p.getHead().getSha())
+                    .body("Sample review comment")
+                    .path("README.md")
+                    .position(1)
+                    .create();
+            p.createReviewComment()
+                    .commitId(p.getHead().getSha())
+                    .body("A single line review comment")
+                    .path("README.md")
+                    .line(2)
+                    .create();
+            p.createReviewComment()
+                    .commitId(p.getHead().getSha())
+                    .body("A multiline review comment")
+                    .path("README.md")
+                    .startLine(2)
+                    .line(3)
+                    .create();
             List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
             assertThat(comments.size(), equalTo(3));
 

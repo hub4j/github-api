@@ -14,7 +14,7 @@ import java.util.List;
 public class GHPullRequestReviewBuilder {
     private final GHPullRequest pr;
     private final Requester builder;
-    private final List<ReviewComment> comments = new ArrayList<ReviewComment>();
+    private final List<ReviewComment> comments = new ArrayList<>();
 
     /**
      * Instantiates a new GH pull request review builder.
@@ -159,7 +159,7 @@ public class GHPullRequestReviewBuilder {
     /**
      * Single line comment using the relative position in the diff.
      */
-    private static class DraftReviewComment implements ReviewComment {
+    static class DraftReviewComment implements ReviewComment {
         private String body;
         private String path;
         private int position;
@@ -191,7 +191,7 @@ public class GHPullRequestReviewBuilder {
     /**
      * Multi-line comment.
      */
-    private static class MultilineDraftReviewComment implements ReviewComment {
+    static class MultilineDraftReviewComment implements ReviewComment {
         private final String body;
         private final String path;
         private final int line;
@@ -234,7 +234,7 @@ public class GHPullRequestReviewBuilder {
     /**
      * Single line comment.
      */
-    private static class SingleLineDraftReviewComment implements ReviewComment {
+    static class SingleLineDraftReviewComment implements ReviewComment {
         private final String body;
         private final String path;
         private final int line;

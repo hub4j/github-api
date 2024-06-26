@@ -190,9 +190,6 @@
                       <exclude>org.kohsuke.github.GHCompare.User</exclude>
 
                       <!-- TODO: Some coverage, but more needed -->
-                      <exclude>org.kohsuke.github.GHPullRequestReviewBuilder.DraftReviewComment</exclude>
-                      <exclude>org.kohsuke.github.GHPullRequestReviewBuilder.MultilineDraftReviewComment</exclude>
-                      <exclude>org.kohsuke.github.GHPullRequestReviewBuilder.SingleLineDraftReviewComment</exclude>
                       <exclude>org.kohsuke.github.GHIssue.PullRequest</exclude>
                       <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
                       <exclude>org.kohsuke.github.GHRepositorySearchBuilder</exclude>

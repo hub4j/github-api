@@ -69,7 +69,7 @@ public class GHPullRequestReviewCommentBuilder {
      *            the position
      * @return the gh pull request review comment builder
      * @implNote As position is deprecated in GitHub API, only keep this for internal usage (for retro-compatibility
-     * with {@link GHPullRequest#createReviewComment(String, String, String, int)}).
+     *           with {@link GHPullRequest#createReviewComment(String, String, String, int)}).
      */
     GHPullRequestReviewCommentBuilder position(int position) {
         builder.with("position", position);
@@ -77,7 +77,7 @@ public class GHPullRequestReviewCommentBuilder {
     }
 
     /**
-     *  A single line of the blob in the pull request diff that the comment applies to.
+     * A single line of the blob in the pull request diff that the comment applies to.
      * <p>
      * {@link #line(int)} and {@link #lines(int, int)} will overwrite each other's values.
      * </p>

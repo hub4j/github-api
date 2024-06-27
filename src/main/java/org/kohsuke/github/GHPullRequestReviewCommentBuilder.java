@@ -90,6 +90,7 @@ public class GHPullRequestReviewCommentBuilder {
      */
     public GHPullRequestReviewCommentBuilder line(int line) {
         builder.with("line", line);
+        builder.remove("start_line");
         return this;
     }
 

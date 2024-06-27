@@ -77,11 +77,9 @@ public class GHPullRequestReviewCommentBuilder {
     }
 
     /**
-     * For a single line comment, the line of the blob in the pull request diff that the comment applies to. For a
-     * multi-line comment, the last line of the range that your comment applies to (in this case, it's recommended to
-     * use {@link #lines(int, int)} instead).
+     *  A single line of the blob in the pull request diff that the comment applies to.
      * <p>
-     * Be careful, this value can be overridden by {@link #lines(int, int)}.
+     * {@link #line(int)} and {@link #lines(int, int)} will overwrite each other's values.
      * </p>
      *
      * @param line

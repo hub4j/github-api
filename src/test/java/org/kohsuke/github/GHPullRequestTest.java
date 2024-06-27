@@ -337,8 +337,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                     .commitId(p.getHead().getSha())
                     .body("A multiline review comment")
                     .path("README.md")
-                    .startLine(2)
-                    .line(3)
+                    .lines(2, 3)
                     .create();
             List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
             assertThat(comments.size(), equalTo(3));

@@ -550,15 +550,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     @Deprecated
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
             throws IOException {
-        return root().createRequest()
-                .method("POST")
-                .with("body", body)
-                .with("commit_id", sha)
-                .with("path", path)
-                .with("position", position)
-                .withUrlPath(getApiRoute() + COMMENTS_ACTION)
-                .fetch(GHPullRequestReviewComment.class)
-                .wrapUp(this);
+        return createReviewComment().body(body).commitId(sha).path(path).position(position).create();
     }
 
     /**

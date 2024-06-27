@@ -68,17 +68,21 @@ public class GHPullRequestReviewCommentBuilder {
      * @param position
      *            the position
      * @return the gh pull request review comment builder
-     * @deprecated This parameter is deprecated in GitHub API, use {@link #line(int)} instead.
+     * @implNote As position is deprecated in GitHub API, only keep this for internal usage (for retro-compatibility
+     * with {@link GHPullRequest#createReviewComment(String, String, String, int)}).
      */
-    @Deprecated
-    public GHPullRequestReviewCommentBuilder position(int position) {
+    GHPullRequestReviewCommentBuilder position(int position) {
         builder.with("position", position);
         return this;
     }
 
     /**
      * For a single line comment, the line of the blob in the pull request diff that the comment applies to. For a
-     * multi-line comment, the last line of the range that your comment applies to.
+     * multi-line comment, the last line of the range that your comment applies to (in this case, it's recommended to
+     * use {@link #lines(int, int)} instead).
+     * <p>
+     * Be careful, this value can be overridden by {@link #lines(int, int)}.
+     * </p>
      *
      * @param line
      *            the line number
@@ -91,13 +95,19 @@ public class GHPullRequestReviewCommentBuilder {
 
     /**
      * The first line in the pull request diff that your multi-line comment applies to.
+     * <p>
+     * Be careful, the end line value can be overridden by {@link #line(int)} (usually used for single line comments).
+     * </p>
      *
-     * @param line
-     *            the line number
+     * @param startLine
+     *            the start line number of the comment
+     * @param endLine
+     *            the end line number of the comment
      * @return the gh pull request review comment builder
      */
-    public GHPullRequestReviewCommentBuilder startLine(int line) {
-        builder.with("start_line", line);
+    public GHPullRequestReviewCommentBuilder lines(int startLine, int endLine) {
+        builder.with("start_line", startLine);
+        builder.with("line", endLine);
         return this;
     }
 

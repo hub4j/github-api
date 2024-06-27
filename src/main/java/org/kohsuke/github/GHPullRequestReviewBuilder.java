@@ -97,12 +97,12 @@ public class GHPullRequestReviewBuilder {
      *            The relative path to the file that necessitates a review comment.
      * @param startLine
      *            The first line in the pull request diff that the multi-line comment applies to.
-     * @param line
+     * @param endLine
      *            The last line of the range that the comment applies to.
      * @return the gh pull request review builder
      */
-    public GHPullRequestReviewBuilder multiLineComment(String body, String path, int startLine, int line) {
-        this.comments.add(new MultilineDraftReviewComment(body, path, startLine, line));
+    public GHPullRequestReviewBuilder multiLineComment(String body, String path, int startLine, int endLine) {
+        this.comments.add(new MultilineDraftReviewComment(body, path, startLine, endLine));
         return this;
     }
 

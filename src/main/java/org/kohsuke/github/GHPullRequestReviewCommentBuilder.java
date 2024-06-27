@@ -94,9 +94,9 @@ public class GHPullRequestReviewCommentBuilder {
     }
 
     /**
-     * The first line in the pull request diff that your multi-line comment applies to.
+     * The range of lines in the pull request diff that this comment applies to.
      * <p>
-     * Be careful, the end line value can be overridden by {@link #line(int)} (usually used for single line comments).
+     * {@link #line(int)} and {@link #lines(int, int)} will overwrite each other's values.
      * </p>
      *
      * @param startLine

@@ -2,8 +2,6 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.lang.Deprecated;
-
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;

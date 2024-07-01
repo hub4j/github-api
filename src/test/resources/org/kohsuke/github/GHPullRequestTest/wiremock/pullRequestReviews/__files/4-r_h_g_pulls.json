@@ -1,15 +1,15 @@
 {
-  "url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/484",
-  "id": 1922732948,
-  "node_id": "PR_kwDODFTdCc5ympOU",
-  "html_url": "https://github.com/hub4j-test-org/github-api/pull/484",
-  "diff_url": "https://github.com/hub4j-test-org/github-api/pull/484.diff",
-  "patch_url": "https://github.com/hub4j-test-org/github-api/pull/484.patch",
-  "issue_url": "https://api.github.com/repos/hub4j-test-org/github-api/issues/484",
-  "number": 484,
+  "url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/482",
+  "id": 1922717147,
+  "node_id": "PR_kwDODFTdCc5ymlXb",
+  "html_url": "https://github.com/hub4j-test-org/github-api/pull/482",
+  "diff_url": "https://github.com/hub4j-test-org/github-api/pull/482.diff",
+  "patch_url": "https://github.com/hub4j-test-org/github-api/pull/482.patch",
+  "issue_url": "https://api.github.com/repos/hub4j-test-org/github-api/issues/482",
+  "number": 482,
   "state": "open",
   "locked": false,
-  "title": "pullRequestReviewComments",
+  "title": "testPullRequestReviews",
   "user": {
     "login": "maximevw",
     "id": 48218208,
@@ -31,8 +31,8 @@
     "site_admin": false
   },
   "body": "## test",
-  "created_at": "2024-06-16T10:20:02Z",
-  "updated_at": "2024-06-16T10:20:02Z",
+  "created_at": "2024-06-16T09:55:52Z",
+  "updated_at": "2024-06-16T09:55:52Z",
   "closed_at": null,
   "merged_at": null,
   "merge_commit_sha": null,
@@ -43,10 +43,10 @@
   "labels": [],
   "milestone": null,
   "draft": false,
-  "commits_url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/484/commits",
-  "review_comments_url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/484/comments",
+  "commits_url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/482/commits",
+  "review_comments_url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/482/comments",
   "review_comment_url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/comments{/number}",
-  "comments_url": "https://api.github.com/repos/hub4j-test-org/github-api/issues/484/comments",
+  "comments_url": "https://api.github.com/repos/hub4j-test-org/github-api/issues/482/comments",
   "statuses_url": "https://api.github.com/repos/hub4j-test-org/github-api/statuses/07374fe73aff1c2024a8d4114b32406c7a8e89b7",
   "head": {
     "label": "hub4j-test-org:test/stable",
@@ -140,7 +140,7 @@
       "deployments_url": "https://api.github.com/repos/hub4j-test-org/github-api/deployments",
       "created_at": "2019-09-06T23:26:04Z",
       "updated_at": "2024-03-22T23:30:32Z",
-      "pushed_at": "2024-06-16T09:56:32Z",
+      "pushed_at": "2024-06-16T09:42:30Z",
       "git_url": "git://github.com/hub4j-test-org/github-api.git",
       "ssh_url": "git@github.com:hub4j-test-org/github-api.git",
       "clone_url": "https://github.com/hub4j-test-org/github-api.git",
@@ -271,7 +271,7 @@
       "deployments_url": "https://api.github.com/repos/hub4j-test-org/github-api/deployments",
       "created_at": "2019-09-06T23:26:04Z",
       "updated_at": "2024-03-22T23:30:32Z",
-      "pushed_at": "2024-06-16T09:56:32Z",
+      "pushed_at": "2024-06-16T09:42:30Z",
       "git_url": "git://github.com/hub4j-test-org/github-api.git",
       "ssh_url": "git@github.com:hub4j-test-org/github-api.git",
       "clone_url": "https://github.com/hub4j-test-org/github-api.git",
@@ -312,25 +312,25 @@
   },
   "_links": {
     "self": {
-      "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/484"
+      "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/482"
     },
     "html": {
-      "href": "https://github.com/hub4j-test-org/github-api/pull/484"
+      "href": "https://github.com/hub4j-test-org/github-api/pull/482"
     },
     "issue": {
-      "href": "https://api.github.com/repos/hub4j-test-org/github-api/issues/484"
+      "href": "https://api.github.com/repos/hub4j-test-org/github-api/issues/482"
     },
     "comments": {
-      "href": "https://api.github.com/repos/hub4j-test-org/github-api/issues/484/comments"
+      "href": "https://api.github.com/repos/hub4j-test-org/github-api/issues/482/comments"
     },
     "review_comments": {
-      "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/484/comments"
+      "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/482/comments"
     },
     "review_comment": {
       "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/comments{/number}"
     },
     "commits": {
-      "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/484/commits"
+      "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/482/commits"
     },
     "statuses": {
       "href": "https://api.github.com/repos/hub4j-test-org/github-api/statuses/07374fe73aff1c2024a8d4114b32406c7a8e89b7"

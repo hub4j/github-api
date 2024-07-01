@@ -1,0 +1,48 @@
+{
+  "id": "8108f0e0-5de3-4794-8f85-b9940ebbbce7",
+  "name": "user",
+  "request": {
+    "url": "/user",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "1-user.json",
+    "headers": {
+      "Server": "istio-envoy",
+      "Date": "Mon, 01 Jul 2024 08:22:45 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"18e79cac306e2b256847587d121593af4c51df3d8d367e392289c99bfbeb77f0\"",
+      "Last-Modified": "Fri, 23 Feb 2024 21:51:51 GMT",
+      "github-authentication-token-expiration": "2024-07-31 10:13:04 +0200",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-accepted-github-permissions": "allows_permissionless_access=true",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4132",
+      "X-RateLimit-Reset": "1719823001",
+      "X-RateLimit-Used": "868",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "x-envoy-upstream-service-time": "71",
+      "X-GitHub-Request-Id": "4E8A:279108:27D16D3:2855622:66826755"
+    }
+  },
+  "uuid": "8108f0e0-5de3-4794-8f85-b9940ebbbce7",
+  "persistent": true,
+  "insertionIndex": 1
+}

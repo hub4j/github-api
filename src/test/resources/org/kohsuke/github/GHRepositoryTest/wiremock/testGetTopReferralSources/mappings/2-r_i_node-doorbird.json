@@ -1,0 +1,48 @@
+{
+  "id": "0b16951e-7447-44a8-95d5-a86a6a37b600",
+  "name": "repos_ihrigb_node-doorbird",
+  "request": {
+    "url": "/repos/ihrigb/node-doorbird",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-r_i_node-doorbird.json",
+    "headers": {
+      "Server": "istio-envoy",
+      "Date": "Mon, 01 Jul 2024 08:22:45 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"55d3ba68210c42d7349064b62572ac3f5649ea91cda0e535dafffd6cdc8d366d\"",
+      "Last-Modified": "Thu, 20 Jun 2024 20:02:34 GMT",
+      "github-authentication-token-expiration": "2024-07-31 10:13:04 +0200",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-accepted-github-permissions": "metadata=read",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4130",
+      "X-RateLimit-Reset": "1719823001",
+      "X-RateLimit-Used": "870",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "x-envoy-upstream-service-time": "125",
+      "X-GitHub-Request-Id": "BB97:1A6A5B:337D621:3417090:66826755"
+    }
+  },
+  "uuid": "0b16951e-7447-44a8-95d5-a86a6a37b600",
+  "persistent": true,
+  "insertionIndex": 2
+}

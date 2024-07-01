@@ -41,6 +41,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.AbstractSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -3616,6 +3617,36 @@ public class GHRepository extends GHObject {
      */
     public void unstar() throws IOException {
         root().createRequest().method("DELETE").withUrlPath(String.format("/user/starred/%s", full_name)).send();
+    }
+
+    /**
+     * Get the top 10 popular contents over the last 14 days as described on
+     * https://docs.github.com/en/rest/metrics/traffic?apiVersion=2022-11-28#get-top-referral-paths
+     *
+     * @return list of top referral paths
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHRepositoryTrafficTopReferralPath> getTopReferralPaths() throws IOException {
+        return Arrays.asList(root().createRequest()
+                .method("GET")
+                .withUrlPath(getApiTailUrl("/traffic/popular/paths"))
+                .fetch(GHRepositoryTrafficTopReferralPath[].class));
+    }
+
+    /**
+     * Get the top 10 referrers over the last 14 days as described on
+     * https://docs.github.com/en/rest/metrics/traffic?apiVersion=2022-11-28#get-top-referral-sources
+     *
+     * @return list of top referrers
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHRepositoryTrafficTopReferralSources> getTopReferralSources() throws IOException {
+        return Arrays.asList(root().createRequest()
+                .method("GET")
+                .withUrlPath(getApiTailUrl("/traffic/popular/referrers"))
+                .fetch(GHRepositoryTrafficTopReferralSources[].class));
     }
 
     /**

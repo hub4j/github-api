@@ -14,7 +14,7 @@ import java.util.List;
 public class GHPullRequestReviewBuilder {
     private final GHPullRequest pr;
     private final Requester builder;
-<span class="fc" id="L17">    private final List&lt;DraftReviewComment&gt; comments = new ArrayList&lt;DraftReviewComment&gt;();</span>
+<span class="fc" id="L17">    private final List&lt;ReviewComment&gt; comments = new ArrayList&lt;&gt;();</span>
 
     /**
      * Instantiates a new GH pull request review builder.
@@ -75,17 +75,51 @@ public class GHPullRequestReviewBuilder {
      * Comment gh pull request review builder.
      *
      * @param body
-     *            The relative path to the file that necessitates a review comment.
+     *            Text of the review comment.
      * @param path
+     *            The relative path to the file that necessitates a review comment.
+     * @param position
      *            The position in the diff where you want to add a review comment. Note this value is not the same as
      *            the line number in the file. For help finding the position value, read the note below.
-     * @param position
-     *            Text of the review comment.
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder comment(String body, String path, int position) {
 <span class="fc" id="L87">        comments.add(new DraftReviewComment(body, path, position));</span>
 <span class="fc" id="L88">        return this;</span>
+    }
+
+    /**
+     * Add a multi-line comment to the gh pull request review builder.
+     *
+     * @param body
+     *            Text of the review comment.
+     * @param path
+     *            The relative path to the file that necessitates a review comment.
+     * @param startLine
+     *            The first line in the pull request diff that the multi-line comment applies to.
+     * @param endLine
+     *            The last line of the range that the comment applies to.
+     * @return the gh pull request review builder
+     */
+    public GHPullRequestReviewBuilder multiLineComment(String body, String path, int startLine, int endLine) {
+<span class="fc" id="L105">        this.comments.add(new MultilineDraftReviewComment(body, path, startLine, endLine));</span>
+<span class="fc" id="L106">        return this;</span>
+    }
+
+    /**
+     * Add a single line comment to the gh pull request review builder.
+     *
+     * @param body
+     *            Text of the review comment.
+     * @param path
+     *            The relative path to the file that necessitates a review comment.
+     * @param line
+     *            The line of the blob in the pull request diff that the comment applies to.
+     * @return the gh pull request review builder
+     */
+    public GHPullRequestReviewBuilder singleLineComment(String body, String path, int line) {
+<span class="fc" id="L121">        this.comments.add(new SingleLineDraftReviewComment(body, path, line));</span>
+<span class="fc" id="L122">        return this;</span>
     }
 
     /**
@@ -96,40 +130,52 @@ public class GHPullRequestReviewBuilder {
      *             the io exception
      */
     public GHPullRequestReview create() throws IOException {
-<span class="fc" id="L99">        return builder.method(&quot;POST&quot;)</span>
-<span class="fc" id="L100">                .with(&quot;comments&quot;, comments)</span>
-<span class="fc" id="L101">                .withUrlPath(pr.getApiRoute() + &quot;/reviews&quot;)</span>
-<span class="fc" id="L102">                .fetch(GHPullRequestReview.class)</span>
-<span class="fc" id="L103">                .wrapUp(pr);</span>
+<span class="fc" id="L133">        return builder.method(&quot;POST&quot;)</span>
+<span class="fc" id="L134">                .with(&quot;comments&quot;, comments)</span>
+<span class="fc" id="L135">                .withUrlPath(pr.getApiRoute() + &quot;/reviews&quot;)</span>
+<span class="fc" id="L136">                .fetch(GHPullRequestReview.class)</span>
+<span class="fc" id="L137">                .wrapUp(pr);</span>
     }
 
-    private static class DraftReviewComment {
-        private String body;
-        private String path;
-        private int position;
-
-<span class="fc" id="L111">        DraftReviewComment(String body, String path, int position) {</span>
-<span class="fc" id="L112">            this.body = body;</span>
-<span class="fc" id="L113">            this.path = path;</span>
-<span class="fc" id="L114">            this.position = position;</span>
-<span class="fc" id="L115">        }</span>
-
+    /**
+     * Common properties of the review comments, regardless of how the comment is positioned on the gh pull request.
+     */
+    private interface ReviewComment {
         /**
          * Gets body.
          *
-         * @return the body
+         * @return the body.
          */
-        public String getBody() {
-<span class="nc" id="L123">            return body;</span>
-        }
+        String getBody();
 
         /**
          * Gets path.
          *
-         * @return the path
+         * @return the path.
          */
+        String getPath();
+    }
+
+    /**
+     * Single line comment using the relative position in the diff.
+     */
+    static class DraftReviewComment implements ReviewComment {
+        private String body;
+        private String path;
+        private int position;
+
+<span class="fc" id="L167">        DraftReviewComment(String body, String path, int position) {</span>
+<span class="fc" id="L168">            this.body = body;</span>
+<span class="fc" id="L169">            this.path = path;</span>
+<span class="fc" id="L170">            this.position = position;</span>
+<span class="fc" id="L171">        }</span>
+
+        public String getBody() {
+<span class="fc" id="L174">            return body;</span>
+        }
+
         public String getPath() {
-<span class="nc" id="L132">            return path;</span>
+<span class="fc" id="L178">            return path;</span>
         }
 
         /**
@@ -138,8 +184,83 @@ public class GHPullRequestReviewBuilder {
          * @return the position
          */
         public int getPosition() {
-<span class="nc" id="L141">            return position;</span>
+<span class="fc" id="L187">            return position;</span>
+        }
+    }
+
+    /**
+     * Multi-line comment.
+     */
+    static class MultilineDraftReviewComment implements ReviewComment {
+        private final String body;
+        private final String path;
+        private final int line;
+        private final int start_line;
+
+<span class="fc" id="L200">        MultilineDraftReviewComment(final String body, final String path, final int startLine, final int line) {</span>
+<span class="fc" id="L201">            this.body = body;</span>
+<span class="fc" id="L202">            this.path = path;</span>
+<span class="fc" id="L203">            this.line = line;</span>
+<span class="fc" id="L204">            this.start_line = startLine;</span>
+<span class="fc" id="L205">        }</span>
+
+        public String getBody() {
+<span class="fc" id="L208">            return this.body;</span>
+        }
+
+        public String getPath() {
+<span class="fc" id="L212">            return this.path;</span>
+        }
+
+        /**
+         * Gets end line of the comment.
+         *
+         * @return the end line of the comment.
+         */
+        public int getLine() {
+<span class="fc" id="L221">            return line;</span>
+        }
+
+        /**
+         * Gets start line of the comment.
+         *
+         * @return the start line of the comment.
+         */
+        public int getStartLine() {
+<span class="fc" id="L230">            return start_line;</span>
+        }
+    }
+
+    /**
+     * Single line comment.
+     */
+    static class SingleLineDraftReviewComment implements ReviewComment {
+        private final String body;
+        private final String path;
+        private final int line;
+
+<span class="fc" id="L242">        SingleLineDraftReviewComment(final String body, final String path, final int line) {</span>
+<span class="fc" id="L243">            this.body = body;</span>
+<span class="fc" id="L244">            this.path = path;</span>
+<span class="fc" id="L245">            this.line = line;</span>
+<span class="fc" id="L246">        }</span>
+
+        public String getBody() {
+<span class="fc" id="L249">            return this.body;</span>
+        }
+
+        public String getPath() {
+<span class="fc" id="L253">            return this.path;</span>
+        }
+
+        /**
+         * Gets line of the comment.
+         *
+         * @return the line of the comment.
+         */
+        public int getLine() {
+<span class="fc" id="L262">            return line;</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

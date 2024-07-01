@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-import static org.kohsuke.github.internal.Previews.INERTIA;
-
 // TODO: Auto-generated Javadoc
 
 /**
@@ -13,7 +11,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
  *
  * @author Kohsuke Kawaguchi
  */
-<span class="fc" id="L16">public class GHOrganization extends GHPerson {</span>
+<span class="fc" id="L14">public class GHOrganization extends GHPerson {</span>
 
     private boolean has_organization_projects;
 
@@ -41,10 +39,10 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
             String homepage,
             String team,
             boolean isPublic) throws IOException {
-<span class="nc" id="L44">        GHTeam t = getTeams().get(team);</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (t == null)</span>
-<span class="nc" id="L46">            throw new IllegalArgumentException(&quot;No such team: &quot; + team);</span>
-<span class="nc" id="L47">        return createRepository(name, description, homepage, t, isPublic);</span>
+<span class="nc" id="L42">        GHTeam t = getTeams().get(team);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (t == null)</span>
+<span class="nc" id="L44">            throw new IllegalArgumentException(&quot;No such team: &quot; + team);</span>
+<span class="nc" id="L45">        return createRepository(name, description, homepage, t, isPublic);</span>
     }
 
     /**
@@ -71,13 +69,13 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
             String homepage,
             GHTeam team,
             boolean isPublic) throws IOException {
-<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (team == null)</span>
-<span class="nc" id="L75">            throw new IllegalArgumentException(&quot;Invalid team&quot;);</span>
-<span class="nc" id="L76">        return createRepository(name).description(description)</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">                .homepage(homepage)</span>
-<span class="nc" id="L78">                .private_(!isPublic)</span>
-<span class="nc" id="L79">                .team(team)</span>
-<span class="nc" id="L80">                .create();</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (team == null)</span>
+<span class="nc" id="L73">            throw new IllegalArgumentException(&quot;Invalid team&quot;);</span>
+<span class="nc" id="L74">        return createRepository(name).description(description)</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                .homepage(homepage)</span>
+<span class="nc" id="L76">                .private_(!isPublic)</span>
+<span class="nc" id="L77">                .team(team)</span>
+<span class="nc" id="L78">                .create();</span>
     }
 
     /**
@@ -91,7 +89,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the gh create repository builder
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
-<span class="fc" id="L94">        return new GHCreateRepositoryBuilder(name, root(), &quot;/orgs/&quot; + login + &quot;/repos&quot;);</span>
+<span class="fc" id="L92">        return new GHCreateRepositoryBuilder(name, root(), &quot;/orgs/&quot; + login + &quot;/repos&quot;);</span>
     }
 
     /**
@@ -102,11 +100,11 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public Map&lt;String, GHTeam&gt; getTeams() throws IOException {
-<span class="fc" id="L105">        Map&lt;String, GHTeam&gt; r = new TreeMap&lt;String, GHTeam&gt;();</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">        for (GHTeam t : listTeams()) {</span>
-<span class="fc" id="L107">            r.put(t.getName(), t);</span>
-<span class="fc" id="L108">        }</span>
-<span class="fc" id="L109">        return r;</span>
+<span class="fc" id="L103">        Map&lt;String, GHTeam&gt; r = new TreeMap&lt;String, GHTeam&gt;();</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        for (GHTeam t : listTeams()) {</span>
+<span class="fc" id="L105">            r.put(t.getName(), t);</span>
+<span class="fc" id="L106">        }</span>
+<span class="fc" id="L107">        return r;</span>
     }
 
     /**
@@ -117,9 +115,9 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHTeam&gt; listTeams() throws IOException {
-<span class="fc" id="L120">        return root().createRequest()</span>
-<span class="fc" id="L121">                .withUrlPath(String.format(&quot;/orgs/%s/teams&quot;, login))</span>
-<span class="fc" id="L122">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L118">        return root().createRequest()</span>
+<span class="fc" id="L119">                .withUrlPath(String.format(&quot;/orgs/%s/teams&quot;, login))</span>
+<span class="fc" id="L120">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -134,7 +132,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Deprecated
     public GHTeam getTeam(int teamId) throws IOException {
-<span class="nc" id="L137">        return getTeam((long) teamId);</span>
+<span class="nc" id="L135">        return getTeam((long) teamId);</span>
     }
 
     /**
@@ -148,10 +146,10 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @see &lt;a href= &quot;https://developer.github.com/v3/teams/#get-team-by-name&quot;&gt;documentation&lt;/a&gt;
      */
     public GHTeam getTeam(long teamId) throws IOException {
-<span class="fc" id="L151">        return root().createRequest()</span>
-<span class="fc" id="L152">                .withUrlPath(String.format(&quot;/organizations/%d/team/%d&quot;, getId(), teamId))</span>
-<span class="fc" id="L153">                .fetch(GHTeam.class)</span>
-<span class="fc" id="L154">                .wrapUp(this);</span>
+<span class="fc" id="L149">        return root().createRequest()</span>
+<span class="fc" id="L150">                .withUrlPath(String.format(&quot;/organizations/%d/team/%d&quot;, getId(), teamId))</span>
+<span class="fc" id="L151">                .fetch(GHTeam.class)</span>
+<span class="fc" id="L152">                .wrapUp(this);</span>
     }
 
     /**
@@ -164,11 +162,11 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHTeam getTeamByName(String name) throws IOException {
-<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        for (GHTeam t : listTeams()) {</span>
-<span class="fc bfc" id="L168" title="All 2 branches covered.">            if (t.getName().equals(name))</span>
-<span class="fc" id="L169">                return t;</span>
-<span class="fc" id="L170">        }</span>
-<span class="nc" id="L171">        return null;</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">        for (GHTeam t : listTeams()) {</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">            if (t.getName().equals(name))</span>
+<span class="fc" id="L167">                return t;</span>
+<span class="fc" id="L168">        }</span>
+<span class="nc" id="L169">        return null;</span>
     }
 
     /**
@@ -182,10 +180,10 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @see &lt;a href= &quot;https://developer.github.com/v3/teams/#get-team-by-name&quot;&gt;documentation&lt;/a&gt;
      */
     public GHTeam getTeamBySlug(String slug) throws IOException {
-<span class="fc" id="L185">        return root().createRequest()</span>
-<span class="fc" id="L186">                .withUrlPath(String.format(&quot;/orgs/%s/teams/%s&quot;, login, slug))</span>
-<span class="fc" id="L187">                .fetch(GHTeam.class)</span>
-<span class="fc" id="L188">                .wrapUp(this);</span>
+<span class="fc" id="L183">        return root().createRequest()</span>
+<span class="fc" id="L184">                .withUrlPath(String.format(&quot;/orgs/%s/teams/%s&quot;, login, slug))</span>
+<span class="fc" id="L185">                .fetch(GHTeam.class)</span>
+<span class="fc" id="L186">                .wrapUp(this);</span>
     }
 
     /**
@@ -198,7 +196,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *      &quot;https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization&quot;&gt;documentation&lt;/a&gt;
      */
     public PagedIterable&lt;GHExternalGroup&gt; listExternalGroups() throws IOException {
-<span class="fc" id="L201">        return listExternalGroups(null);</span>
+<span class="fc" id="L199">        return listExternalGroups(null);</span>
     }
 
     /**
@@ -213,12 +211,12 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *      &quot;https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization&quot;&gt;documentation&lt;/a&gt;
      */
     public PagedIterable&lt;GHExternalGroup&gt; listExternalGroups(final String displayName) throws IOException {
-<span class="fc" id="L216">        final Requester requester = root().createRequest()</span>
-<span class="fc" id="L217">                .withUrlPath(String.format(&quot;/orgs/%s/external-groups&quot;, login));</span>
-<span class="fc bfc" id="L218" title="All 2 branches covered.">        if (displayName != null) {</span>
-<span class="fc" id="L219">            requester.with(&quot;display_name&quot;, displayName);</span>
+<span class="fc" id="L214">        final Requester requester = root().createRequest()</span>
+<span class="fc" id="L215">                .withUrlPath(String.format(&quot;/orgs/%s/external-groups&quot;, login));</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">        if (displayName != null) {</span>
+<span class="fc" id="L217">            requester.with(&quot;display_name&quot;, displayName);</span>
         }
-<span class="fc" id="L221">        return new GHExternalGroupIterable(this, requester);</span>
+<span class="fc" id="L219">        return new GHExternalGroupIterable(this, requester);</span>
     }
 
     /**
@@ -234,26 +232,26 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     public GHExternalGroup getExternalGroup(final long groupId) throws IOException {
         try {
-<span class="fc" id="L237">            return root().createRequest()</span>
-<span class="fc" id="L238">                    .withUrlPath(String.format(&quot;/orgs/%s/external-group/%d&quot;, login, groupId))</span>
-<span class="fc" id="L239">                    .fetch(GHExternalGroup.class)</span>
-<span class="fc" id="L240">                    .wrapUp(this);</span>
-<span class="fc" id="L241">        } catch (final HttpException e) {</span>
-<span class="fc" id="L242">            throw EnterpriseManagedSupport.forOrganization(this)</span>
-<span class="fc" id="L243">                    .filterException(e, &quot;Could not retrieve organization external group&quot;)</span>
-<span class="fc" id="L244">                    .orElse(e);</span>
+<span class="fc" id="L235">            return root().createRequest()</span>
+<span class="fc" id="L236">                    .withUrlPath(String.format(&quot;/orgs/%s/external-group/%d&quot;, login, groupId))</span>
+<span class="fc" id="L237">                    .fetch(GHExternalGroup.class)</span>
+<span class="fc" id="L238">                    .wrapUp(this);</span>
+<span class="fc" id="L239">        } catch (final HttpException e) {</span>
+<span class="fc" id="L240">            throw EnterpriseManagedSupport.forOrganization(this)</span>
+<span class="fc" id="L241">                    .filterException(e, &quot;Could not retrieve organization external group&quot;)</span>
+<span class="fc" id="L242">                    .orElse(e);</span>
         }
     }
 
     /**
      * Member's role in an organization.
      */
-<span class="fc" id="L251">    public enum Role {</span>
+<span class="fc" id="L249">    public enum Role {</span>
 
         /** The admin. */
-<span class="fc" id="L254">        ADMIN,</span>
+<span class="fc" id="L252">        ADMIN,</span>
         /** The user is an owner of the organization. */
-<span class="fc" id="L256">        MEMBER /** The user is a non-owner member of the organization. */</span>
+<span class="fc" id="L254">        MEMBER /** The user is a non-owner member of the organization. */</span>
     }
 
     /**
@@ -269,12 +267,12 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *      &quot;https://developer.github.com/v3/orgs/members/#add-or-update-organization-membership&quot;&gt;documentation&lt;/a&gt;
      */
     public void add(GHUser user, Role role) throws IOException {
-<span class="fc" id="L272">        root().createRequest()</span>
-<span class="fc" id="L273">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L274">                .with(&quot;role&quot;, role.name().toLowerCase())</span>
-<span class="fc" id="L275">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/memberships/&quot; + user.getLogin())</span>
-<span class="fc" id="L276">                .send();</span>
-<span class="fc" id="L277">    }</span>
+<span class="fc" id="L270">        root().createRequest()</span>
+<span class="fc" id="L271">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L272">                .with(&quot;role&quot;, role.name().toLowerCase())</span>
+<span class="fc" id="L273">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/memberships/&quot; + user.getLogin())</span>
+<span class="fc" id="L274">                .send();</span>
+<span class="fc" id="L275">    }</span>
 
     /**
      * Checks if this organization has the specified user as a member.
@@ -285,10 +283,10 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     public boolean hasMember(GHUser user) {
         try {
-<span class="fc" id="L288">            root().createRequest().withUrlPath(&quot;/orgs/&quot; + login + &quot;/members/&quot; + user.getLogin()).send();</span>
-<span class="fc" id="L289">            return true;</span>
-<span class="fc" id="L290">        } catch (IOException ignore) {</span>
-<span class="fc" id="L291">            return false;</span>
+<span class="fc" id="L286">            root().createRequest().withUrlPath(&quot;/orgs/&quot; + login + &quot;/members/&quot; + user.getLogin()).send();</span>
+<span class="fc" id="L287">            return true;</span>
+<span class="fc" id="L288">        } catch (IOException ignore) {</span>
+<span class="fc" id="L289">            return false;</span>
         }
     }
 
@@ -307,9 +305,9 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *      &quot;https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#get-organization-membership-for-a-user&quot;&gt;documentation&lt;/a&gt;
      */
     public GHMembership getMembership(String username) throws IOException {
-<span class="fc" id="L310">        return root().createRequest()</span>
-<span class="fc" id="L311">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/memberships/&quot; + username)</span>
-<span class="fc" id="L312">                .fetch(GHMembership.class);</span>
+<span class="fc" id="L308">        return root().createRequest()</span>
+<span class="fc" id="L309">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/memberships/&quot; + username)</span>
+<span class="fc" id="L310">                .fetch(GHMembership.class);</span>
     }
 
     /**
@@ -322,8 +320,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void remove(GHUser user) throws IOException {
-<span class="nc" id="L325">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/orgs/&quot; + login + &quot;/members/&quot; + user.getLogin()).send();</span>
-<span class="nc" id="L326">    }</span>
+<span class="nc" id="L323">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/orgs/&quot; + login + &quot;/members/&quot; + user.getLogin()).send();</span>
+<span class="nc" id="L324">    }</span>
 
     /**
      * Checks if this organization has the specified user as a public member.
@@ -334,10 +332,10 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     public boolean hasPublicMember(GHUser user) {
         try {
-<span class="fc" id="L337">            root().createRequest().withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + user.getLogin()).send();</span>
-<span class="fc" id="L338">            return true;</span>
-<span class="fc" id="L339">        } catch (IOException ignore) {</span>
-<span class="fc" id="L340">            return false;</span>
+<span class="fc" id="L335">            root().createRequest().withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + user.getLogin()).send();</span>
+<span class="fc" id="L336">            return true;</span>
+<span class="fc" id="L337">        } catch (IOException ignore) {</span>
+<span class="fc" id="L338">            return false;</span>
         }
     }
 
@@ -350,8 +348,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void publicize(GHUser u) throws IOException {
-<span class="nc" id="L353">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + u.getLogin()).send();</span>
-<span class="nc" id="L354">    }</span>
+<span class="nc" id="L351">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + u.getLogin()).send();</span>
+<span class="nc" id="L352">    }</span>
 
     /**
      * Gets members.
@@ -362,7 +360,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @deprecated use {@link #listMembers()}
      */
     public List&lt;GHUser&gt; getMembers() throws IOException {
-<span class="nc" id="L365">        return listMembers().toList();</span>
+<span class="nc" id="L363">        return listMembers().toList();</span>
     }
 
     /**
@@ -373,7 +371,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listMembers() throws IOException {
-<span class="nc" id="L376">        return listMembers(&quot;members&quot;);</span>
+<span class="nc" id="L374">        return listMembers(&quot;members&quot;);</span>
     }
 
     /**
@@ -384,7 +382,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listPublicMembers() throws IOException {
-<span class="nc" id="L387">        return listMembers(&quot;public_members&quot;);</span>
+<span class="nc" id="L385">        return listMembers(&quot;public_members&quot;);</span>
     }
 
     /**
@@ -395,11 +393,11 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listOutsideCollaborators() throws IOException {
-<span class="fc" id="L398">        return listMembers(&quot;outside_collaborators&quot;);</span>
+<span class="fc" id="L396">        return listMembers(&quot;outside_collaborators&quot;);</span>
     }
 
     private PagedIterable&lt;GHUser&gt; listMembers(String suffix) throws IOException {
-<span class="fc" id="L402">        return listMembers(suffix, null, null);</span>
+<span class="fc" id="L400">        return listMembers(suffix, null, null);</span>
     }
 
     /**
@@ -412,7 +410,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listMembersWithFilter(String filter) throws IOException {
-<span class="fc" id="L415">        return listMembers(&quot;members&quot;, filter, null);</span>
+<span class="fc" id="L413">        return listMembers(&quot;members&quot;, filter, null);</span>
     }
 
     /**
@@ -425,7 +423,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listOutsideCollaboratorsWithFilter(String filter) throws IOException {
-<span class="fc" id="L428">        return listMembers(&quot;outside_collaborators&quot;, filter, null);</span>
+<span class="fc" id="L426">        return listMembers(&quot;outside_collaborators&quot;, filter, null);</span>
     }
 
     /**
@@ -438,16 +436,16 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHUser&gt; listMembersWithRole(String role) throws IOException {
-<span class="fc" id="L441">        return listMembers(&quot;members&quot;, null, role);</span>
+<span class="fc" id="L439">        return listMembers(&quot;members&quot;, null, role);</span>
     }
 
     private PagedIterable&lt;GHUser&gt; listMembers(final String suffix, final String filter, String role)
             throws IOException {
-<span class="fc" id="L446">        return root().createRequest()</span>
-<span class="fc" id="L447">                .withUrlPath(String.format(&quot;/orgs/%s/%s&quot;, login, suffix))</span>
-<span class="fc" id="L448">                .with(&quot;filter&quot;, filter)</span>
-<span class="fc" id="L449">                .with(&quot;role&quot;, role)</span>
-<span class="fc" id="L450">                .toIterable(GHUser[].class, null);</span>
+<span class="fc" id="L444">        return root().createRequest()</span>
+<span class="fc" id="L445">                .withUrlPath(String.format(&quot;/orgs/%s/%s&quot;, login, suffix))</span>
+<span class="fc" id="L446">                .with(&quot;filter&quot;, filter)</span>
+<span class="fc" id="L447">                .with(&quot;role&quot;, role)</span>
+<span class="fc" id="L448">                .toIterable(GHUser[].class, null);</span>
     }
 
     /**
@@ -458,9 +456,9 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHTeam&gt; listSecurityManagers() throws IOException {
-<span class="fc" id="L461">        return root().createRequest()</span>
-<span class="fc" id="L462">                .withUrlPath(String.format(&quot;/orgs/%s/security-managers&quot;, login))</span>
-<span class="fc" id="L463">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L459">        return root().createRequest()</span>
+<span class="fc" id="L460">                .withUrlPath(String.format(&quot;/orgs/%s/security-managers&quot;, login))</span>
+<span class="fc" id="L461">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -472,11 +470,11 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void conceal(GHUser u) throws IOException {
-<span class="nc" id="L475">        root().createRequest()</span>
-<span class="nc" id="L476">                .method(&quot;DELETE&quot;)</span>
-<span class="nc" id="L477">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + u.getLogin())</span>
-<span class="nc" id="L478">                .send();</span>
-<span class="nc" id="L479">    }</span>
+<span class="nc" id="L473">        root().createRequest()</span>
+<span class="nc" id="L474">                .method(&quot;DELETE&quot;)</span>
+<span class="nc" id="L475">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + u.getLogin())</span>
+<span class="nc" id="L476">                .send();</span>
+<span class="nc" id="L477">    }</span>
 
     /**
      * Are projects enabled for organization boolean.
@@ -484,7 +482,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the boolean
      */
     public boolean areOrganizationProjectsEnabled() {
-<span class="fc" id="L487">        return has_organization_projects;</span>
+<span class="fc" id="L485">        return has_organization_projects;</span>
     }
 
     /**
@@ -496,16 +494,16 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void enableOrganizationProjects(boolean newStatus) throws IOException {
-<span class="fc" id="L499">        edit(&quot;has_organization_projects&quot;, newStatus);</span>
-<span class="fc" id="L500">    }</span>
+<span class="fc" id="L497">        edit(&quot;has_organization_projects&quot;, newStatus);</span>
+<span class="fc" id="L498">    }</span>
 
     private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L503">        root().createRequest()</span>
-<span class="fc" id="L504">                .withUrlPath(String.format(&quot;/orgs/%s&quot;, login))</span>
-<span class="fc" id="L505">                .method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L506">                .with(key, value)</span>
-<span class="fc" id="L507">                .fetchInto(this);</span>
-<span class="fc" id="L508">    }</span>
+<span class="fc" id="L501">        root().createRequest()</span>
+<span class="fc" id="L502">                .withUrlPath(String.format(&quot;/orgs/%s&quot;, login))</span>
+<span class="fc" id="L503">                .method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L504">                .with(key, value)</span>
+<span class="fc" id="L505">                .fetchInto(this);</span>
+<span class="fc" id="L506">    }</span>
 
     /**
      * Returns the projects for this organization.
@@ -517,11 +515,10 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHProject&gt; listProjects(final GHProject.ProjectStateFilter status) throws IOException {
-<span class="nc" id="L520">        return root().createRequest()</span>
-<span class="nc" id="L521">                .withPreview(INERTIA)</span>
-<span class="nc" id="L522">                .with(&quot;state&quot;, status)</span>
-<span class="nc" id="L523">                .withUrlPath(String.format(&quot;/orgs/%s/projects&quot;, login))</span>
-<span class="nc" id="L524">                .toIterable(GHProject[].class, null);</span>
+<span class="nc" id="L518">        return root().createRequest()</span>
+<span class="nc" id="L519">                .with(&quot;state&quot;, status)</span>
+<span class="nc" id="L520">                .withUrlPath(String.format(&quot;/orgs/%s/projects&quot;, login))</span>
+<span class="nc" id="L521">                .toIterable(GHProject[].class, null);</span>
     }
 
     /**
@@ -532,7 +529,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public PagedIterable&lt;GHProject&gt; listProjects() throws IOException {
-<span class="nc" id="L535">        return listProjects(GHProject.ProjectStateFilter.OPEN);</span>
+<span class="nc" id="L532">        return listProjects(GHProject.ProjectStateFilter.OPEN);</span>
     }
 
     /**
@@ -547,13 +544,12 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHProject createProject(String name, String body) throws IOException {
-<span class="fc" id="L550">        return root().createRequest()</span>
-<span class="fc" id="L551">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L552">                .withPreview(INERTIA)</span>
-<span class="fc" id="L553">                .with(&quot;name&quot;, name)</span>
-<span class="fc" id="L554">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L555">                .withUrlPath(String.format(&quot;/orgs/%s/projects&quot;, login))</span>
-<span class="fc" id="L556">                .fetch(GHProject.class);</span>
+<span class="fc" id="L547">        return root().createRequest()</span>
+<span class="fc" id="L548">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L549">                .with(&quot;name&quot;, name)</span>
+<span class="fc" id="L550">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L551">                .withUrlPath(String.format(&quot;/orgs/%s/projects&quot;, login))</span>
+<span class="fc" id="L552">                .fetch(GHProject.class);</span>
     }
 
     /**
@@ -561,20 +557,20 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *
      * @see RepositoryRole
      */
-<span class="fc" id="L564">    public enum Permission {</span>
+<span class="fc" id="L560">    public enum Permission {</span>
 
         /** The admin. */
-<span class="fc" id="L567">        ADMIN,</span>
+<span class="fc" id="L563">        ADMIN,</span>
         /** The maintain. */
-<span class="fc" id="L569">        MAINTAIN,</span>
+<span class="fc" id="L565">        MAINTAIN,</span>
         /** The push. */
-<span class="fc" id="L571">        PUSH,</span>
+<span class="fc" id="L567">        PUSH,</span>
         /** The triage. */
-<span class="fc" id="L573">        TRIAGE,</span>
+<span class="fc" id="L569">        TRIAGE,</span>
         /** The pull. */
-<span class="fc" id="L575">        PULL,</span>
+<span class="fc" id="L571">        PULL,</span>
         /** Unknown, before we add the new permission to the enum */
-<span class="fc" id="L577">        UNKNOWN</span>
+<span class="fc" id="L573">        UNKNOWN</span>
     }
 
     /**
@@ -583,9 +579,9 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
     public static class RepositoryRole {
         private final String permission;
 
-<span class="fc" id="L586">        private RepositoryRole(String permission) {</span>
-<span class="fc" id="L587">            this.permission = permission;</span>
-<span class="fc" id="L588">        }</span>
+<span class="fc" id="L582">        private RepositoryRole(String permission) {</span>
+<span class="fc" id="L583">            this.permission = permission;</span>
+<span class="fc" id="L584">        }</span>
 
         /**
          * Custom.
@@ -595,7 +591,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
          * @return the repository role
          */
         public static RepositoryRole custom(String permission) {
-<span class="fc" id="L598">            return new RepositoryRole(permission);</span>
+<span class="fc" id="L594">            return new RepositoryRole(permission);</span>
         }
 
         /**
@@ -606,7 +602,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
          * @return the repository role
          */
         public static RepositoryRole from(Permission permission) {
-<span class="fc" id="L609">            return custom(permission.toString().toLowerCase());</span>
+<span class="fc" id="L605">            return custom(permission.toString().toLowerCase());</span>
         }
 
         /**
@@ -616,7 +612,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
          */
         @Override
         public String toString() {
-<span class="fc" id="L619">            return permission;</span>
+<span class="fc" id="L615">            return permission;</span>
         }
     }
 
@@ -637,13 +633,13 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Deprecated
     public GHTeam createTeam(String name, Permission p, Collection&lt;GHRepository&gt; repositories) throws IOException {
-<span class="fc" id="L640">        Requester post = root().createRequest().method(&quot;POST&quot;).with(&quot;name&quot;, name).with(&quot;permission&quot;, p);</span>
-<span class="fc" id="L641">        List&lt;String&gt; repo_names = new ArrayList&lt;String&gt;();</span>
-<span class="fc bfc" id="L642" title="All 2 branches covered.">        for (GHRepository r : repositories) {</span>
-<span class="fc" id="L643">            repo_names.add(login + &quot;/&quot; + r.getName());</span>
-<span class="fc" id="L644">        }</span>
-<span class="fc" id="L645">        post.with(&quot;repo_names&quot;, repo_names);</span>
-<span class="fc" id="L646">        return post.withUrlPath(&quot;/orgs/&quot; + login + &quot;/teams&quot;).fetch(GHTeam.class).wrapUp(this);</span>
+<span class="fc" id="L636">        Requester post = root().createRequest().method(&quot;POST&quot;).with(&quot;name&quot;, name).with(&quot;permission&quot;, p);</span>
+<span class="fc" id="L637">        List&lt;String&gt; repo_names = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L638" title="All 2 branches covered.">        for (GHRepository r : repositories) {</span>
+<span class="fc" id="L639">            repo_names.add(login + &quot;/&quot; + r.getName());</span>
+<span class="fc" id="L640">        }</span>
+<span class="fc" id="L641">        post.with(&quot;repo_names&quot;, repo_names);</span>
+<span class="fc" id="L642">        return post.withUrlPath(&quot;/orgs/&quot; + login + &quot;/teams&quot;).fetch(GHTeam.class).wrapUp(this);</span>
     }
 
     /**
@@ -663,7 +659,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Deprecated
     public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {
-<span class="fc" id="L666">        return createTeam(name, p, Arrays.asList(repositories));</span>
+<span class="fc" id="L662">        return createTeam(name, p, Arrays.asList(repositories));</span>
     }
 
     /**
@@ -680,13 +676,13 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Deprecated
     public GHTeam createTeam(String name, Collection&lt;GHRepository&gt; repositories) throws IOException {
-<span class="fc" id="L683">        Requester post = root().createRequest().method(&quot;POST&quot;).with(&quot;name&quot;, name);</span>
-<span class="fc" id="L684">        List&lt;String&gt; repo_names = new ArrayList&lt;String&gt;();</span>
-<span class="fc bfc" id="L685" title="All 2 branches covered.">        for (GHRepository r : repositories) {</span>
-<span class="fc" id="L686">            repo_names.add(login + &quot;/&quot; + r.getName());</span>
-<span class="fc" id="L687">        }</span>
-<span class="fc" id="L688">        post.with(&quot;repo_names&quot;, repo_names);</span>
-<span class="fc" id="L689">        return post.withUrlPath(&quot;/orgs/&quot; + login + &quot;/teams&quot;).fetch(GHTeam.class).wrapUp(this);</span>
+<span class="fc" id="L679">        Requester post = root().createRequest().method(&quot;POST&quot;).with(&quot;name&quot;, name);</span>
+<span class="fc" id="L680">        List&lt;String&gt; repo_names = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L681" title="All 2 branches covered.">        for (GHRepository r : repositories) {</span>
+<span class="fc" id="L682">            repo_names.add(login + &quot;/&quot; + r.getName());</span>
+<span class="fc" id="L683">        }</span>
+<span class="fc" id="L684">        post.with(&quot;repo_names&quot;, repo_names);</span>
+<span class="fc" id="L685">        return post.withUrlPath(&quot;/orgs/&quot; + login + &quot;/teams&quot;).fetch(GHTeam.class).wrapUp(this);</span>
     }
 
     /**
@@ -703,7 +699,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Deprecated
     public GHTeam createTeam(String name, GHRepository... repositories) throws IOException {
-<span class="fc" id="L706">        return createTeam(name, Arrays.asList(repositories));</span>
+<span class="fc" id="L702">        return createTeam(name, Arrays.asList(repositories));</span>
     }
 
     /**
@@ -717,7 +713,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      * @return the gh create repository builder
      */
     public GHTeamBuilder createTeam(String name) {
-<span class="fc" id="L720">        return new GHTeamBuilder(root(), login, name);</span>
+<span class="fc" id="L716">        return new GHTeamBuilder(root(), login, name);</span>
     }
 
     /**
@@ -731,14 +727,14 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public List&lt;GHRepository&gt; getRepositoriesWithOpenPullRequests() throws IOException {
-<span class="nc" id="L734">        List&lt;GHRepository&gt; r = new ArrayList&lt;GHRepository&gt;();</span>
-<span class="nc bnc" id="L735" title="All 2 branches missed.">        for (GHRepository repository : listRepositories(100)) {</span>
-<span class="nc" id="L736">            List&lt;GHPullRequest&gt; pullRequests = repository.getPullRequests(GHIssueState.OPEN);</span>
-<span class="nc bnc" id="L737" title="All 2 branches missed.">            if (pullRequests.size() &gt; 0) {</span>
-<span class="nc" id="L738">                r.add(repository);</span>
+<span class="nc" id="L730">        List&lt;GHRepository&gt; r = new ArrayList&lt;GHRepository&gt;();</span>
+<span class="nc bnc" id="L731" title="All 2 branches missed.">        for (GHRepository repository : listRepositories(100)) {</span>
+<span class="nc" id="L732">            List&lt;GHPullRequest&gt; pullRequests = repository.getPullRequests(GHIssueState.OPEN);</span>
+<span class="nc bnc" id="L733" title="All 2 branches missed.">            if (pullRequests.size() &gt; 0) {</span>
+<span class="nc" id="L734">                r.add(repository);</span>
             }
-<span class="nc" id="L740">        }</span>
-<span class="nc" id="L741">        return r;</span>
+<span class="nc" id="L736">        }</span>
+<span class="nc" id="L737">        return r;</span>
     }
 
     /**
@@ -749,11 +745,11 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
-<span class="nc" id="L752">        List&lt;GHPullRequest&gt; all = new ArrayList&lt;GHPullRequest&gt;();</span>
-<span class="nc bnc" id="L753" title="All 2 branches missed.">        for (GHRepository r : getRepositoriesWithOpenPullRequests()) {</span>
-<span class="nc" id="L754">            all.addAll(r.getPullRequests(GHIssueState.OPEN));</span>
-<span class="nc" id="L755">        }</span>
-<span class="nc" id="L756">        return all;</span>
+<span class="nc" id="L748">        List&lt;GHPullRequest&gt; all = new ArrayList&lt;GHPullRequest&gt;();</span>
+<span class="nc bnc" id="L749" title="All 2 branches missed.">        for (GHRepository r : getRepositoriesWithOpenPullRequests()) {</span>
+<span class="nc" id="L750">            all.addAll(r.getPullRequests(GHIssueState.OPEN));</span>
+<span class="nc" id="L751">        }</span>
+<span class="nc" id="L752">        return all;</span>
     }
 
     /**
@@ -764,9 +760,9 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             Signals that an I/O exception has occurred.
      */
     public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
-<span class="nc" id="L767">        return root().createRequest()</span>
-<span class="nc" id="L768">                .withUrlPath(String.format(&quot;/orgs/%s/events&quot;, login))</span>
-<span class="nc" id="L769">                .toIterable(GHEventInfo[].class, null);</span>
+<span class="nc" id="L763">        return root().createRequest()</span>
+<span class="nc" id="L764">                .withUrlPath(String.format(&quot;/orgs/%s/events&quot;, login))</span>
+<span class="nc" id="L765">                .toIterable(GHEventInfo[].class, null);</span>
     }
 
     /**
@@ -779,10 +775,10 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     @Override
     public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize) {
-<span class="fc" id="L782">        return root().createRequest()</span>
-<span class="fc" id="L783">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/repos&quot;)</span>
-<span class="fc" id="L784">                .toIterable(GHRepository[].class, null)</span>
-<span class="fc" id="L785">                .withPageSize(pageSize);</span>
+<span class="fc" id="L778">        return root().createRequest()</span>
+<span class="fc" id="L779">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/repos&quot;)</span>
+<span class="fc" id="L780">                .toIterable(GHRepository[].class, null)</span>
+<span class="fc" id="L781">                .withPageSize(pageSize);</span>
     }
 
     /**
@@ -793,7 +789,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public List&lt;GHHook&gt; getHooks() throws IOException {
-<span class="nc" id="L796">        return GHHooks.orgContext(this).getHooks();</span>
+<span class="nc" id="L792">        return GHHooks.orgContext(this).getHooks();</span>
     }
 
     /**
@@ -806,7 +802,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHHook getHook(int id) throws IOException {
-<span class="fc" id="L809">        return GHHooks.orgContext(this).getHook(id);</span>
+<span class="fc" id="L805">        return GHHooks.orgContext(this).getHook(id);</span>
     }
 
     /**
@@ -818,8 +814,8 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public void deleteHook(int id) throws IOException {
-<span class="fc" id="L821">        GHHooks.orgContext(this).deleteHook(id);</span>
-<span class="fc" id="L822">    }</span>
+<span class="fc" id="L817">        GHHooks.orgContext(this).deleteHook(id);</span>
+<span class="fc" id="L818">    }</span>
 
     /**
      * See https://api.github.com/hooks for possible names and their configuration scheme. TODO: produce type-safe
@@ -839,7 +835,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      */
     public GHHook createHook(String name, Map&lt;String, String&gt; config, Collection&lt;GHEvent&gt; events, boolean active)
             throws IOException {
-<span class="fc" id="L842">        return GHHooks.orgContext(this).createHook(name, config, events, active);</span>
+<span class="fc" id="L838">        return GHHooks.orgContext(this).createHook(name, config, events, active);</span>
     }
 
     /**
@@ -854,7 +850,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHHook createWebHook(URL url, Collection&lt;GHEvent&gt; events) throws IOException {
-<span class="fc" id="L857">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
+<span class="fc" id="L853">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
     }
 
     /**
@@ -867,7 +863,7 @@ import static org.kohsuke.github.internal.Previews.INERTIA;
      *             the io exception
      */
     public GHHook createWebHook(URL url) throws IOException {
-<span class="fc" id="L870">        return createWebHook(url, null);</span>
+<span class="fc" id="L866">        return createWebHook(url, null);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

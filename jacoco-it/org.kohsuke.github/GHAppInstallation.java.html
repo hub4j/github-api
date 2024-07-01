@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.kohsuke.github.internal.Previews.GAMBIT;
-import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
-
 // TODO: Auto-generated Javadoc
 /**
  * A Github App Installation.
@@ -26,7 +23,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
  * @see GHApp#getInstallationByRepository(String, String) GHApp#getInstallationByRepository(String, String)
  * @see GHApp#getInstallationByUser(String) GHApp#getInstallationByUser(String)
  */
-<span class="fc" id="L29">public class GHAppInstallation extends GHObject {</span>
+<span class="fc" id="L26">public class GHAppInstallation extends GHObject {</span>
     private GHUser account;
 
     @JsonProperty(&quot;access_tokens_url&quot;)
@@ -55,7 +52,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="nc" id="L58">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="nc" id="L55">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -67,7 +64,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setRoot(GitHub root) {
-<span class="fc" id="L70">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L67">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -77,7 +74,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getAccount() {
-<span class="fc" id="L80">        return account;</span>
+<span class="fc" id="L77">        return account;</span>
     }
 
     /**
@@ -89,7 +86,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setAccount(GHUser account) {
-<span class="fc" id="L92">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L89">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -98,7 +95,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the access token url
      */
     public String getAccessTokenUrl() {
-<span class="fc" id="L101">        return accessTokenUrl;</span>
+<span class="fc" id="L98">        return accessTokenUrl;</span>
     }
 
     /**
@@ -110,7 +107,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setAccessTokenUrl(String accessTokenUrl) {
-<span class="fc" id="L113">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L110">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -119,7 +116,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the repositories url
      */
     public String getRepositoriesUrl() {
-<span class="fc" id="L122">        return repositoriesUrl;</span>
+<span class="fc" id="L119">        return repositoriesUrl;</span>
     }
 
     /**
@@ -135,13 +132,12 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
      */
     @Deprecated
-    @Preview(MACHINE_MAN)
     public PagedSearchIterable&lt;GHRepository&gt; listRepositories() {
         GitHubRequest request;
 
-<span class="fc" id="L142">        request = root().createRequest().withPreview(MACHINE_MAN).withUrlPath(&quot;/installation/repositories&quot;).build();</span>
+<span class="fc" id="L138">        request = root().createRequest().withUrlPath(&quot;/installation/repositories&quot;).build();</span>
 
-<span class="fc" id="L144">        return new PagedSearchIterable&lt;&gt;(root(), request, GHAppInstallationRepositoryResult.class);</span>
+<span class="fc" id="L140">        return new PagedSearchIterable&lt;&gt;(root(), request, GHAppInstallationRepositoryResult.class);</span>
     }
 
     private static class GHAppInstallationRepositoryResult extends SearchResult&lt;GHRepository&gt; {
@@ -149,7 +145,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
 
         @Override
         GHRepository[] getItems(GitHub root) {
-<span class="fc" id="L152">            return repositories;</span>
+<span class="fc" id="L148">            return repositories;</span>
         }
     }
 
@@ -162,7 +158,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setRepositoriesUrl(String repositoriesUrl) {
-<span class="fc" id="L165">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L161">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -171,7 +167,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the app id
      */
     public long getAppId() {
-<span class="fc" id="L174">        return appId;</span>
+<span class="fc" id="L170">        return appId;</span>
     }
 
     /**
@@ -183,7 +179,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setAppId(long appId) {
-<span class="fc" id="L186">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L182">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -192,7 +188,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the target id
      */
     public long getTargetId() {
-<span class="fc" id="L195">        return targetId;</span>
+<span class="fc" id="L191">        return targetId;</span>
     }
 
     /**
@@ -204,7 +200,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setTargetId(long targetId) {
-<span class="fc" id="L207">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L203">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -213,7 +209,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the target type
      */
     public GHTargetType getTargetType() {
-<span class="fc" id="L216">        return targetType;</span>
+<span class="fc" id="L212">        return targetType;</span>
     }
 
     /**
@@ -225,7 +221,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setTargetType(GHTargetType targetType) {
-<span class="fc" id="L228">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L224">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -234,7 +230,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the permissions
      */
     public Map&lt;String, GHPermissionType&gt; getPermissions() {
-<span class="fc" id="L237">        return Collections.unmodifiableMap(permissions);</span>
+<span class="fc" id="L233">        return Collections.unmodifiableMap(permissions);</span>
     }
 
     /**
@@ -246,7 +242,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setPermissions(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="fc" id="L249">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L245">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -255,9 +251,9 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the events
      */
     public List&lt;GHEvent&gt; getEvents() {
-<span class="fc" id="L258">        return events.stream()</span>
-<span class="fc" id="L259">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
-<span class="fc" id="L260">                .collect(Collectors.toList());</span>
+<span class="fc" id="L254">        return events.stream()</span>
+<span class="fc" id="L255">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
+<span class="fc" id="L256">                .collect(Collectors.toList());</span>
     }
 
     /**
@@ -269,7 +265,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setEvents(List&lt;GHEvent&gt; events) {
-<span class="fc" id="L272">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L268">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -278,7 +274,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the single file name
      */
     public String getSingleFileName() {
-<span class="fc" id="L281">        return singleFileName;</span>
+<span class="fc" id="L277">        return singleFileName;</span>
     }
 
     /**
@@ -290,7 +286,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setSingleFileName(String singleFileName) {
-<span class="fc" id="L293">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L289">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -299,7 +295,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the repository selection
      */
     public GHRepositorySelection getRepositorySelection() {
-<span class="fc" id="L302">        return repositorySelection;</span>
+<span class="fc" id="L298">        return repositorySelection;</span>
     }
 
     /**
@@ -311,7 +307,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @Deprecated
     public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-<span class="fc" id="L314">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L310">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -320,7 +316,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      * @return the suspended at
      */
     public Date getSuspendedAt() {
-<span class="fc" id="L323">        return GitHubClient.parseDate(suspendedAt);</span>
+<span class="fc" id="L319">        return GitHubClient.parseDate(suspendedAt);</span>
     }
 
     /**
@@ -330,7 +326,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getSuspendedBy() {
-<span class="fc" id="L333">        return suspendedBy;</span>
+<span class="fc" id="L329">        return suspendedBy;</span>
     }
 
     /**
@@ -342,14 +338,9 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      *             on error
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#delete-an-installation&quot;&gt;Delete an installation&lt;/a&gt;
      */
-    @Preview(GAMBIT)
     public void deleteInstallation() throws IOException {
-<span class="fc" id="L347">        root().createRequest()</span>
-<span class="fc" id="L348">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L349">                .withPreview(GAMBIT)</span>
-<span class="fc" id="L350">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, getId()))</span>
-<span class="fc" id="L351">                .send();</span>
-<span class="fc" id="L352">    }</span>
+<span class="fc" id="L342">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(String.format(&quot;/app/installations/%d&quot;, getId())).send();</span>
+<span class="fc" id="L343">    }</span>
 
     /**
      * Starts a builder that creates a new App Installation Token.
@@ -365,8 +356,8 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @BetaApi
     public GHAppCreateTokenBuilder createToken(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="nc" id="L368">        return new GHAppCreateTokenBuilder(root(),</span>
-<span class="nc" id="L369">                String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()),</span>
+<span class="nc" id="L359">        return new GHAppCreateTokenBuilder(root(),</span>
+<span class="nc" id="L360">                String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()),</span>
                 permissions);
     }
 
@@ -381,7 +372,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      */
     @BetaApi
     public GHAppCreateTokenBuilder createToken() {
-<span class="fc" id="L384">        return new GHAppCreateTokenBuilder(root(), String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()));</span>
+<span class="fc" id="L375">        return new GHAppCreateTokenBuilder(root(), String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()));</span>
     }
 
     /**
@@ -402,7 +393,7 @@ import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
      *      a subscription plan for an account&lt;/a&gt;
      */
     public GHMarketplaceAccountPlan getMarketplaceAccount() throws IOException {
-<span class="fc" id="L405">        return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();</span>
+<span class="fc" id="L396">        return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

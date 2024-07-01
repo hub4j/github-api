@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHDeployment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHDeployment.java</span></div><h1>GHDeployment.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
-import org.kohsuke.github.internal.Previews;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
@@ -16,7 +14,7 @@ import java.util.Map;
  *      String, String)
  * @see GHRepository#getDeployment(long) GHRepository#getDeployment(long)
  */
-<span class="fc" id="L19">public class GHDeployment extends GHObject {</span>
+<span class="fc" id="L17">public class GHDeployment extends GHObject {</span>
     private GHRepository owner;
 
     /** The sha. */
@@ -63,8 +61,8 @@ import java.util.Map;
      * @return the GH deployment
      */
     GHDeployment wrap(GHRepository owner) {
-<span class="fc" id="L66">        this.owner = owner;</span>
-<span class="fc" id="L67">        return this;</span>
+<span class="fc" id="L64">        this.owner = owner;</span>
+<span class="fc" id="L65">        return this;</span>
     }
 
     /**
@@ -73,7 +71,7 @@ import java.util.Map;
      * @return the statuses url
      */
     public URL getStatusesUrl() {
-<span class="nc" id="L76">        return GitHubClient.parseURL(statuses_url);</span>
+<span class="nc" id="L74">        return GitHubClient.parseURL(statuses_url);</span>
     }
 
     /**
@@ -82,7 +80,7 @@ import java.util.Map;
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-<span class="nc" id="L85">        return GitHubClient.parseURL(repository_url);</span>
+<span class="nc" id="L83">        return GitHubClient.parseURL(repository_url);</span>
     }
 
     /**
@@ -91,7 +89,7 @@ import java.util.Map;
      * @return the task
      */
     public String getTask() {
-<span class="fc" id="L94">        return task;</span>
+<span class="fc" id="L92">        return task;</span>
     }
 
     /**
@@ -101,7 +99,7 @@ import java.util.Map;
      * @return the payload
      */
     public String getPayload() {
-<span class="fc" id="L104">        return (String) payload;</span>
+<span class="fc" id="L102">        return (String) payload;</span>
     }
 
     /**
@@ -111,7 +109,7 @@ import java.util.Map;
      * @return the payload
      */
     public Map&lt;String, Object&gt; getPayloadMap() {
-<span class="fc" id="L114">        return Collections.unmodifiableMap((Map&lt;String, Object&gt;) payload);</span>
+<span class="fc" id="L112">        return Collections.unmodifiableMap((Map&lt;String, Object&gt;) payload);</span>
     }
 
     /**
@@ -120,7 +118,7 @@ import java.util.Map;
      * @return the payload
      */
     public Object getPayloadObject() {
-<span class="fc" id="L123">        return payload;</span>
+<span class="fc" id="L121">        return payload;</span>
     }
 
     /**
@@ -129,9 +127,8 @@ import java.util.Map;
      * @return the original deployment environment
      * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.FLASH)
     public String getOriginalEnvironment() {
-<span class="fc" id="L134">        return original_environment;</span>
+<span class="fc" id="L131">        return original_environment;</span>
     }
 
     /**
@@ -140,7 +137,7 @@ import java.util.Map;
      * @return the environment
      */
     public String getEnvironment() {
-<span class="fc" id="L143">        return environment;</span>
+<span class="fc" id="L140">        return environment;</span>
     }
 
     /**
@@ -150,9 +147,8 @@ import java.util.Map;
      * @return the environment is transient
      * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public boolean isTransientEnvironment() {
-<span class="fc" id="L155">        return transient_environment;</span>
+<span class="fc" id="L151">        return transient_environment;</span>
     }
 
     /**
@@ -161,9 +157,8 @@ import java.util.Map;
      * @return the environment is used by end-users directly
      * @deprecated until preview feature has graduated to stable
      */
-    @Preview(Previews.ANT_MAN)
     public boolean isProductionEnvironment() {
-<span class="fc" id="L166">        return production_environment;</span>
+<span class="fc" id="L161">        return production_environment;</span>
     }
 
     /**
@@ -174,7 +169,7 @@ import java.util.Map;
      *             the io exception
      */
     public GHUser getCreator() throws IOException {
-<span class="fc" id="L177">        return root().intern(creator);</span>
+<span class="fc" id="L172">        return root().intern(creator);</span>
     }
 
     /**
@@ -183,7 +178,7 @@ import java.util.Map;
      * @return the ref
      */
     public String getRef() {
-<span class="fc" id="L186">        return ref;</span>
+<span class="fc" id="L181">        return ref;</span>
     }
 
     /**
@@ -192,7 +187,7 @@ import java.util.Map;
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L195">        return sha;</span>
+<span class="fc" id="L190">        return sha;</span>
     }
 
     /**
@@ -203,7 +198,7 @@ import java.util.Map;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L206">        return null;</span>
+<span class="nc" id="L201">        return null;</span>
     }
 
     /**
@@ -214,7 +209,7 @@ import java.util.Map;
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
-<span class="fc" id="L217">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
+<span class="fc" id="L212">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
     }
 
     /**
@@ -223,11 +218,9 @@ import java.util.Map;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHDeploymentStatus&gt; listStatuses() {
-<span class="fc" id="L226">        return root().createRequest()</span>
-<span class="fc" id="L227">                .withUrlPath(statuses_url)</span>
-<span class="fc" id="L228">                .withPreview(Previews.ANT_MAN)</span>
-<span class="fc" id="L229">                .withPreview(Previews.FLASH)</span>
-<span class="fc" id="L230">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.lateBind(owner));</span>
+<span class="fc" id="L221">        return root().createRequest()</span>
+<span class="fc" id="L222">                .withUrlPath(statuses_url)</span>
+<span class="fc" id="L223">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.lateBind(owner));</span>
     }
 
     /**
@@ -237,7 +230,7 @@ import java.util.Map;
      */
     // test only
     GHRepository getOwner() {
-<span class="fc" id="L240">        return owner;</span>
+<span class="fc" id="L233">        return owner;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

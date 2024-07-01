@@ -502,8 +502,30 @@ import static java.util.Objects.requireNonNull;
 <span class="fc" id="L502">        IN_PROGRESS,</span>
         /** The completed. */
 <span class="fc" id="L504">        COMPLETED,</span>
+        /** The action required. */
+<span class="fc" id="L506">        ACTION_REQUIRED,</span>
+        /** The cancelled. */
+<span class="fc" id="L508">        CANCELLED,</span>
+        /** The failure. */
+<span class="fc" id="L510">        FAILURE,</span>
+        /** The neutral. */
+<span class="fc" id="L512">        NEUTRAL,</span>
+        /** The skipped. */
+<span class="fc" id="L514">        SKIPPED,</span>
+        /** The stale. */
+<span class="fc" id="L516">        STALE,</span>
+        /** The success. */
+<span class="fc" id="L518">        SUCCESS,</span>
+        /** The timed out. */
+<span class="fc" id="L520">        TIMED_OUT,</span>
+        /** The requested. */
+<span class="fc" id="L522">        REQUESTED,</span>
+        /** The waiting. */
+<span class="fc" id="L524">        WAITING,</span>
+        /** The pending. */
+<span class="fc" id="L526">        PENDING,</span>
         /** The unknown. */
-<span class="fc" id="L506">        UNKNOWN;</span>
+<span class="fc" id="L528">        UNKNOWN;</span>
 
         /**
          * From.
@@ -513,7 +535,7 @@ import static java.util.Objects.requireNonNull;
          * @return the status
          */
         public static Status from(String value) {
-<span class="fc" id="L516">            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);</span>
+<span class="fc" id="L538">            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);</span>
         }
 
         /**
@@ -523,35 +545,35 @@ import static java.util.Objects.requireNonNull;
          */
         @Override
         public String toString() {
-<span class="fc" id="L526">            return name().toLowerCase(Locale.ROOT);</span>
+<span class="fc" id="L548">            return name().toLowerCase(Locale.ROOT);</span>
         }
     }
 
     /**
      * The Enum Conclusion.
      */
-<span class="fc" id="L533">    public static enum Conclusion {</span>
+<span class="fc" id="L555">    public static enum Conclusion {</span>
 
         /** The action required. */
-<span class="fc" id="L536">        ACTION_REQUIRED,</span>
+<span class="fc" id="L558">        ACTION_REQUIRED,</span>
         /** The cancelled. */
-<span class="fc" id="L538">        CANCELLED,</span>
+<span class="fc" id="L560">        CANCELLED,</span>
         /** The failure. */
-<span class="fc" id="L540">        FAILURE,</span>
+<span class="fc" id="L562">        FAILURE,</span>
         /** The neutral. */
-<span class="fc" id="L542">        NEUTRAL,</span>
+<span class="fc" id="L564">        NEUTRAL,</span>
         /** The success. */
-<span class="fc" id="L544">        SUCCESS,</span>
+<span class="fc" id="L566">        SUCCESS,</span>
         /** The skipped. */
-<span class="fc" id="L546">        SKIPPED,</span>
+<span class="fc" id="L568">        SKIPPED,</span>
         /** The stale. */
-<span class="fc" id="L548">        STALE,</span>
+<span class="fc" id="L570">        STALE,</span>
         /** The timed out. */
-<span class="fc" id="L550">        TIMED_OUT,</span>
+<span class="fc" id="L572">        TIMED_OUT,</span>
         /** Start up fail */
-<span class="fc" id="L552">        STARTUP_FAILURE,</span>
+<span class="fc" id="L574">        STARTUP_FAILURE,</span>
         /** The unknown. */
-<span class="fc" id="L554">        UNKNOWN;</span>
+<span class="fc" id="L576">        UNKNOWN;</span>
 
         /**
          * From.
@@ -561,7 +583,7 @@ import static java.util.Objects.requireNonNull;
          * @return the conclusion
          */
         public static Conclusion from(String value) {
-<span class="fc" id="L564">            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);</span>
+<span class="fc" id="L586">            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);</span>
         }
 
         /**
@@ -571,8 +593,8 @@ import static java.util.Objects.requireNonNull;
          */
         @Override
         public String toString() {
-<span class="fc" id="L574">            return name().toLowerCase(Locale.ROOT);</span>
+<span class="fc" id="L596">            return name().toLowerCase(Locale.ROOT);</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

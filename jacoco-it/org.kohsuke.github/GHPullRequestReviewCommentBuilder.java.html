@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHPullRequestReviewCommentBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHPullRequestReviewCommentBuilder.java</span></div><h1>GHPullRequestReviewCommentBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+
+// TODO: Auto-generated Javadoc
+
+/**
+ * Builds up a creation of new {@link GHPullRequestReviewComment}.
+ *
+ * @see GHPullRequest#createReviewComment()
+ */
+public class GHPullRequestReviewCommentBuilder {
+    private final GHPullRequest pr;
+    private final Requester builder;
+
+    /**
+     * Instantiates a new GH pull request review comment builder.
+     *
+     * @param pr
+     *            the pr
+     */
+<span class="fc" id="L22">    GHPullRequestReviewCommentBuilder(GHPullRequest pr) {</span>
+<span class="fc" id="L23">        this.pr = pr;</span>
+<span class="fc" id="L24">        this.builder = pr.root().createRequest();</span>
+<span class="fc" id="L25">    }</span>
+
+    /**
+     * The SHA of the commit that needs a review. Not using the latest commit SHA may render your review comment
+     * outdated if a subsequent commit modifies the line you specify as the position. Defaults to the most recent commit
+     * in the pull request when you do not specify a value.
+     *
+     * @param commitId
+     *            the commit id
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder commitId(String commitId) {
+<span class="fc" id="L37">        builder.with(&quot;commit_id&quot;, commitId);</span>
+<span class="fc" id="L38">        return this;</span>
+    }
+
+    /**
+     * The text of the pull request review comment.
+     *
+     * @param body
+     *            the body
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder body(String body) {
+<span class="fc" id="L49">        builder.with(&quot;body&quot;, body);</span>
+<span class="fc" id="L50">        return this;</span>
+    }
+
+    /**
+     * The relative path to the file that necessitates a comment.
+     *
+     * @param path
+     *            the path
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder path(String path) {
+<span class="fc" id="L61">        builder.with(&quot;path&quot;, path);</span>
+<span class="fc" id="L62">        return this;</span>
+    }
+
+    /**
+     * The position in the diff where you want to add a review comment.
+     *
+     * @param position
+     *            the position
+     * @return the gh pull request review comment builder
+     * @implNote As position is deprecated in GitHub API, only keep this for internal usage (for retro-compatibility
+     *           with {@link GHPullRequest#createReviewComment(String, String, String, int)}).
+     */
+    GHPullRequestReviewCommentBuilder position(int position) {
+<span class="fc" id="L75">        builder.with(&quot;position&quot;, position);</span>
+<span class="fc" id="L76">        return this;</span>
+    }
+
+    /**
+     * A single line of the blob in the pull request diff that the comment applies to.
+     * &lt;p&gt;
+     * {@link #line(int)} and {@link #lines(int, int)} will overwrite each other's values.
+     * &lt;/p&gt;
+     *
+     * @param line
+     *            the line number
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder line(int line) {
+<span class="fc" id="L90">        builder.with(&quot;line&quot;, line);</span>
+<span class="fc" id="L91">        builder.remove(&quot;start_line&quot;);</span>
+<span class="fc" id="L92">        return this;</span>
+    }
+
+    /**
+     * The range of lines in the pull request diff that this comment applies to.
+     * &lt;p&gt;
+     * {@link #line(int)} and {@link #lines(int, int)} will overwrite each other's values.
+     * &lt;/p&gt;
+     *
+     * @param startLine
+     *            the start line number of the comment
+     * @param endLine
+     *            the end line number of the comment
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder lines(int startLine, int endLine) {
+<span class="fc" id="L108">        builder.with(&quot;start_line&quot;, startLine);</span>
+<span class="fc" id="L109">        builder.with(&quot;line&quot;, endLine);</span>
+<span class="fc" id="L110">        return this;</span>
+    }
+
+    /**
+     * Create gh pull request review comment.
+     *
+     * @return the gh pull request review comment builder
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequestReviewComment create() throws IOException {
+<span class="fc" id="L121">        return builder.method(&quot;POST&quot;)</span>
+<span class="fc" id="L122">                .withUrlPath(pr.getApiRoute() + &quot;/comments&quot;)</span>
+<span class="fc" id="L123">                .fetch(GHPullRequestReviewComment.class)</span>
+<span class="fc" id="L124">                .wrapUp(pr);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

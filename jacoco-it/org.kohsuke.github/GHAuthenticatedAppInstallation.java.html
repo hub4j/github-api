@@ -2,8 +2,6 @@
 
 import javax.annotation.Nonnull;
 
-import static org.kohsuke.github.internal.Previews.MACHINE_MAN;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Github App Installation corresponding to the installation token used in a client.
@@ -19,21 +17,20 @@ public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
      *            the root
      */
     protected GHAuthenticatedAppInstallation(@Nonnull GitHub root) {
-<span class="fc" id="L22">        super(root);</span>
-<span class="fc" id="L23">    }</span>
+<span class="fc" id="L20">        super(root);</span>
+<span class="fc" id="L21">    }</span>
 
     /**
      * List repositories that this app installation can access.
      *
      * @return the paged iterable
      */
-    @Preview(MACHINE_MAN)
     public PagedSearchIterable&lt;GHRepository&gt; listRepositories() {
         GitHubRequest request;
 
-<span class="fc" id="L34">        request = root().createRequest().withPreview(MACHINE_MAN).withUrlPath(&quot;/installation/repositories&quot;).build();</span>
+<span class="fc" id="L31">        request = root().createRequest().withUrlPath(&quot;/installation/repositories&quot;).build();</span>
 
-<span class="fc" id="L36">        return new PagedSearchIterable&lt;&gt;(root(), request, GHAuthenticatedAppInstallationRepositoryResult.class);</span>
+<span class="fc" id="L33">        return new PagedSearchIterable&lt;&gt;(root(), request, GHAuthenticatedAppInstallationRepositoryResult.class);</span>
     }
 
     private static class GHAuthenticatedAppInstallationRepositoryResult extends SearchResult&lt;GHRepository&gt; {
@@ -41,9 +38,9 @@ public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
 
         @Override
         GHRepository[] getItems(GitHub root) {
-<span class="fc" id="L44">            return repositories;</span>
+<span class="fc" id="L41">            return repositories;</span>
         }
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

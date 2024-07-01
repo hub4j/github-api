@@ -52,14 +52,10 @@ import javax.annotation.Nonnull;
 <span class="fc" id="L52">    private GitHubResponse&lt;T&gt; finalResponse = null;</span>
 
 <span class="fc" id="L54">    private GitHubPageIterator(GitHubClient client, Class&lt;T&gt; type, GitHubRequest request) {</span>
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (!&quot;GET&quot;.equals(request.method())) {</span>
-<span class="nc" id="L56">            throw new IllegalStateException(&quot;Request method \&quot;GET\&quot; is required for page iterator.&quot;);</span>
-        }
-
-<span class="fc" id="L59">        this.client = client;</span>
-<span class="fc" id="L60">        this.type = type;</span>
-<span class="fc" id="L61">        this.nextRequest = request;</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L55">        this.client = client;</span>
+<span class="fc" id="L56">        this.type = type;</span>
+<span class="fc" id="L57">        this.nextRequest = request;</span>
+<span class="fc" id="L58">    }</span>
 
     /**
      * Loads paginated resources.
@@ -78,9 +74,13 @@ import javax.annotation.Nonnull;
      */
     static &lt;T&gt; GitHubPageIterator&lt;T&gt; create(GitHubClient client, Class&lt;T&gt; type, GitHubRequest request, int pageSize) {
 
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        if (pageSize &gt; 0) {</span>
-<span class="fc" id="L82">            GitHubRequest.Builder&lt;?&gt; builder = request.toBuilder().with(&quot;per_page&quot;, pageSize);</span>
-<span class="fc" id="L83">            request = builder.build();</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (pageSize &gt; 0) {</span>
+<span class="fc" id="L78">            GitHubRequest.Builder&lt;?&gt; builder = request.toBuilder().with(&quot;per_page&quot;, pageSize);</span>
+<span class="fc" id="L79">            request = builder.build();</span>
+        }
+
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (!&quot;GET&quot;.equals(request.method())) {</span>
+<span class="nc" id="L83">            throw new IllegalArgumentException(&quot;Request method \&quot;GET\&quot; is required for page iterator.&quot;);</span>
         }
 
 <span class="fc" id="L86">        return new GitHubPageIterator&lt;&gt;(client, type, request);</span>
@@ -180,4 +180,4 @@ import javax.annotation.Nonnull;
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

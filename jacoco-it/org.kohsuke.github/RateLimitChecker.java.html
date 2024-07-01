@@ -103,10 +103,11 @@ import java.util.logging.Logger;
          */
 <span class="fc" id="L104">        public LiteralValue(int sleepAtOrBelow) {</span>
 <span class="pc bpc" id="L105" title="1 of 2 branches missed.">            if (sleepAtOrBelow &lt; 0) {</span>
-<span class="nc" id="L106">                throw new IllegalArgumentException(&quot;sleepAtOrBelow must &gt;= 0&quot;);</span>
+                // ignore negative numbers
+<span class="nc" id="L107">                sleepAtOrBelow = 0;</span>
             }
-<span class="fc" id="L108">            this.sleepAtOrBelow = sleepAtOrBelow;</span>
-<span class="fc" id="L109">        }</span>
+<span class="fc" id="L109">            this.sleepAtOrBelow = sleepAtOrBelow;</span>
+<span class="fc" id="L110">        }</span>
 
         /**
          * Check rate limit.
@@ -121,13 +122,13 @@ import java.util.logging.Logger;
          */
         @Override
         protected boolean checkRateLimit(GHRateLimit.Record record, long count) throws InterruptedException {
-<span class="fc bfc" id="L124" title="All 2 branches covered.">            if (record.getRemaining() &lt;= sleepAtOrBelow) {</span>
-<span class="fc" id="L125">                return sleepUntilReset(record);</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            if (record.getRemaining() &lt;= sleepAtOrBelow) {</span>
+<span class="fc" id="L126">                return sleepUntilReset(record);</span>
             }
-<span class="fc" id="L127">            return false;</span>
+<span class="fc" id="L128">            return false;</span>
         }
 
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

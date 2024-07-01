@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">AbstractBuilder.java</span></div><h1>AbstractBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 
 import javax.annotation.CheckForNull;
@@ -75,22 +77,23 @@ abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject {
      * @param baseInstance
      *            optional instance on which to base this builder.
      */
+    @SuppressFBWarnings(value = { &quot;CT_CONSTRUCTOR_THROW&quot; }, justification = &quot;argument validation, internal class&quot;)
     protected AbstractBuilder(@Nonnull Class&lt;R&gt; finalReturnType,
             @Nonnull Class&lt;S&gt; intermediateReturnType,
             @Nonnull GitHub root,
             @CheckForNull R baseInstance) {
-<span class="fc" id="L82">        super(root);</span>
-<span class="fc" id="L83">        this.requester = root.createRequest();</span>
-<span class="fc" id="L84">        this.returnType = finalReturnType;</span>
-<span class="fc" id="L85">        this.commitChangesImmediately = returnType.equals(intermediateReturnType);</span>
-<span class="pc bpc" id="L86" title="1 of 4 branches missed.">        if (!commitChangesImmediately &amp;&amp; !intermediateReturnType.isInstance(this)) {</span>
-<span class="nc" id="L87">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L85">        super(root);</span>
+<span class="fc" id="L86">        this.requester = root.createRequest();</span>
+<span class="fc" id="L87">        this.returnType = finalReturnType;</span>
+<span class="fc" id="L88">        this.commitChangesImmediately = returnType.equals(intermediateReturnType);</span>
+<span class="pc bpc" id="L89" title="1 of 4 branches missed.">        if (!commitChangesImmediately &amp;&amp; !intermediateReturnType.isInstance(this)) {</span>
+<span class="nc" id="L90">            throw new IllegalArgumentException(</span>
                     &quot;Argument \&quot;intermediateReturnType\&quot;: This instance must be castable to intermediateReturnType or finalReturnType must be equal to intermediateReturnType.&quot;);
         }
 
-<span class="fc" id="L91">        this.baseInstance = baseInstance;</span>
-<span class="fc" id="L92">        this.updateInPlace = false;</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L94">        this.baseInstance = baseInstance;</span>
+<span class="fc" id="L95">        this.updateInPlace = false;</span>
+<span class="fc" id="L96">    }</span>
 
     /**
      * Finishes an update, committing changes.
@@ -105,12 +108,12 @@ abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject {
     @BetaApi
     public R done() throws IOException {
         R result;
-<span class="pc bpc" id="L108" title="3 of 4 branches missed.">        if (updateInPlace &amp;&amp; baseInstance != null) {</span>
-<span class="nc" id="L109">            result = requester.fetchInto(baseInstance);</span>
+<span class="pc bpc" id="L111" title="3 of 4 branches missed.">        if (updateInPlace &amp;&amp; baseInstance != null) {</span>
+<span class="nc" id="L112">            result = requester.fetchInto(baseInstance);</span>
         } else {
-<span class="fc" id="L111">            result = requester.fetch(returnType);</span>
+<span class="fc" id="L114">            result = requester.fetch(returnType);</span>
         }
-<span class="fc" id="L113">        return result;</span>
+<span class="fc" id="L116">        return result;</span>
     }
 
     /**
@@ -133,8 +136,8 @@ abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject {
     @Nonnull
     @BetaApi
     protected S with(@Nonnull String name, Object value) throws IOException {
-<span class="fc" id="L136">        requester.with(name, value);</span>
-<span class="fc" id="L137">        return continueOrDone();</span>
+<span class="fc" id="L139">        requester.with(name, value);</span>
+<span class="fc" id="L140">        return continueOrDone();</span>
     }
 
     /**
@@ -156,13 +159,13 @@ abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject {
         // This little bit of roughness in this base class means all inheriting builders get to create Updater and
         // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as
         // well.
-<span class="fc bfc" id="L159" title="All 2 branches covered.">        if (commitChangesImmediately) {</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (commitChangesImmediately) {</span>
             // These casts look strange and risky, but they they're actually guaranteed safe due to the return path
             // being based on the previous comparison of class instances passed to the constructor.
-<span class="fc" id="L162">            return (S) done();</span>
+<span class="fc" id="L165">            return (S) done();</span>
         } else {
-<span class="fc" id="L164">            return (S) this;</span>
+<span class="fc" id="L167">            return (S) this;</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

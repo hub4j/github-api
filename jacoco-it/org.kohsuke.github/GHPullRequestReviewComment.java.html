@@ -31,8 +31,6 @@ import java.net.URL;
 
 import javax.annotation.CheckForNull;
 
-import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
-
 // TODO: Auto-generated Javadoc
 /**
  * Review comment to the pull request.
@@ -42,25 +40,25 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  * @see GHPullRequest#createReviewComment(String, String, String, int) GHPullRequest#createReviewComment(String, String,
  *      String, int)
  */
-<span class="fc" id="L45">public class GHPullRequestReviewComment extends GHObject implements Reactable {</span>
+<span class="fc" id="L43">public class GHPullRequestReviewComment extends GHObject implements Reactable {</span>
 
     /** The owner. */
     GHPullRequest owner;
 
-<span class="fc" id="L50">    private Long pull_request_review_id = -1L;</span>
+<span class="fc" id="L48">    private Long pull_request_review_id = -1L;</span>
     private String body;
     private GHUser user;
     private String path;
     private String html_url;
     private String pull_request_url;
-<span class="fc" id="L56">    private int position = -1;</span>
-<span class="fc" id="L57">    private int original_position = -1;</span>
-<span class="fc" id="L58">    private long in_reply_to_id = -1L;</span>
-<span class="fc" id="L59">    private Integer start_line = -1;</span>
-<span class="fc" id="L60">    private Integer original_start_line = -1;</span>
+<span class="fc" id="L54">    private int position = -1;</span>
+<span class="fc" id="L55">    private int original_position = -1;</span>
+<span class="fc" id="L56">    private long in_reply_to_id = -1L;</span>
+<span class="fc" id="L57">    private Integer start_line = -1;</span>
+<span class="fc" id="L58">    private Integer original_start_line = -1;</span>
     private String start_side;
-<span class="fc" id="L62">    private int line = -1;</span>
-<span class="fc" id="L63">    private int original_line = -1;</span>
+<span class="fc" id="L60">    private int line = -1;</span>
+<span class="fc" id="L61">    private int original_line = -1;</span>
     private String side;
     private String diff_hunk;
     private String commit_id;
@@ -84,11 +82,11 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @Deprecated
     public static GHPullRequestReviewComment draft(String body, String path, int position) {
-<span class="nc" id="L87">        GHPullRequestReviewComment result = new GHPullRequestReviewComment();</span>
-<span class="nc" id="L88">        result.body = body;</span>
-<span class="nc" id="L89">        result.path = path;</span>
-<span class="nc" id="L90">        result.position = position;</span>
-<span class="nc" id="L91">        return result;</span>
+<span class="nc" id="L85">        GHPullRequestReviewComment result = new GHPullRequestReviewComment();</span>
+<span class="nc" id="L86">        result.body = body;</span>
+<span class="nc" id="L87">        result.path = path;</span>
+<span class="nc" id="L88">        result.position = position;</span>
+<span class="nc" id="L89">        return result;</span>
     }
 
     /**
@@ -99,8 +97,8 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the GH pull request review comment
      */
     GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
-<span class="fc" id="L102">        this.owner = owner;</span>
-<span class="fc" id="L103">        return this;</span>
+<span class="fc" id="L100">        this.owner = owner;</span>
+<span class="fc" id="L101">        return this;</span>
     }
 
     /**
@@ -110,7 +108,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHPullRequest getParent() {
-<span class="fc" id="L113">        return owner;</span>
+<span class="fc" id="L111">        return owner;</span>
     }
 
     /**
@@ -119,7 +117,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L122">        return body;</span>
+<span class="fc" id="L120">        return body;</span>
     }
 
     /**
@@ -130,7 +128,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-<span class="fc" id="L133">        return owner.root().getUser(user.getLogin());</span>
+<span class="fc" id="L131">        return owner.root().getUser(user.getLogin());</span>
     }
 
     /**
@@ -139,7 +137,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the path
      */
     public String getPath() {
-<span class="fc" id="L142">        return path;</span>
+<span class="fc" id="L140">        return path;</span>
     }
 
     /**
@@ -149,7 +147,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @CheckForNull
     public int getPosition() {
-<span class="fc" id="L152">        return position;</span>
+<span class="fc" id="L150">        return position;</span>
     }
 
     /**
@@ -158,7 +156,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the original position
      */
     public int getOriginalPosition() {
-<span class="nc" id="L161">        return original_position;</span>
+<span class="nc" id="L159">        return original_position;</span>
     }
 
     /**
@@ -167,7 +165,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the diff hunk
      */
     public String getDiffHunk() {
-<span class="fc" id="L170">        return diff_hunk;</span>
+<span class="fc" id="L168">        return diff_hunk;</span>
     }
 
     /**
@@ -176,7 +174,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the commit id
      */
     public String getCommitId() {
-<span class="fc" id="L179">        return commit_id;</span>
+<span class="fc" id="L177">        return commit_id;</span>
     }
 
     /**
@@ -185,7 +183,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the commit id
      */
     public String getOriginalCommitId() {
-<span class="fc" id="L188">        return original_commit_id;</span>
+<span class="fc" id="L186">        return original_commit_id;</span>
     }
 
     /**
@@ -194,7 +192,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the author association to the project
      */
     public GHCommentAuthorAssociation getAuthorAssociation() {
-<span class="fc" id="L197">        return author_association;</span>
+<span class="fc" id="L195">        return author_association;</span>
     }
 
     /**
@@ -204,7 +202,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @CheckForNull
     public long getInReplyToId() {
-<span class="fc" id="L207">        return in_reply_to_id;</span>
+<span class="fc" id="L205">        return in_reply_to_id;</span>
     }
 
     /**
@@ -214,7 +212,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @Override
     public URL getHtmlUrl() {
-<span class="fc" id="L217">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L215">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -223,7 +221,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L226">        return getApiRoute(false);</span>
+<span class="fc" id="L224">        return getApiRoute(false);</span>
     }
 
     /**
@@ -235,8 +233,8 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the api route
      */
     protected String getApiRoute(boolean includePullNumber) {
-<span class="fc" id="L238">        return &quot;/repos/&quot; + owner.getRepository().getFullName() + &quot;/pulls&quot;</span>
-<span class="fc bfc" id="L239" title="All 2 branches covered.">                + (includePullNumber ? &quot;/&quot; + owner.getNumber() : &quot;&quot;) + &quot;/comments/&quot; + getId();</span>
+<span class="fc" id="L236">        return &quot;/repos/&quot; + owner.getRepository().getFullName() + &quot;/pulls&quot;</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">                + (includePullNumber ? &quot;/&quot; + owner.getNumber() : &quot;&quot;) + &quot;/comments/&quot; + getId();</span>
     }
 
     /**
@@ -245,7 +243,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the start line
      */
     public int getStartLine() {
-<span class="pc bpc" id="L248" title="1 of 2 branches missed.">        return start_line != null ? start_line : -1;</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        return start_line != null ? start_line : -1;</span>
     }
 
     /**
@@ -254,7 +252,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the original start line
      */
     public int getOriginalStartLine() {
-<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        return original_start_line != null ? original_start_line : -1;</span>
+<span class="pc bpc" id="L255" title="1 of 2 branches missed.">        return original_start_line != null ? original_start_line : -1;</span>
     }
 
     /**
@@ -263,7 +261,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return {@link Side} the side of the first line
      */
     public Side getStartSide() {
-<span class="fc" id="L266">        return Side.from(start_side);</span>
+<span class="fc" id="L264">        return Side.from(start_side);</span>
     }
 
     /**
@@ -272,7 +270,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the line to which the comment applies
      */
     public int getLine() {
-<span class="fc" id="L275">        return line;</span>
+<span class="fc" id="L273">        return line;</span>
     }
 
     /**
@@ -281,7 +279,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the line to which the comment applies
      */
     public int getOriginalLine() {
-<span class="fc" id="L284">        return original_line;</span>
+<span class="fc" id="L282">        return original_line;</span>
     }
 
     /**
@@ -291,7 +289,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return {@link Side} the side if the diff to which the comment applies
      */
     public Side getSide() {
-<span class="fc" id="L294">        return Side.from(side);</span>
+<span class="fc" id="L292">        return Side.from(side);</span>
     }
 
     /**
@@ -300,7 +298,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return {@link Long} the ID of the pull request review
      */
     public Long getPullRequestReviewId() {
-<span class="nc bnc" id="L303" title="All 2 branches missed.">        return pull_request_review_id != null ? pull_request_review_id : -1;</span>
+<span class="nc bnc" id="L301" title="All 2 branches missed.">        return pull_request_review_id != null ? pull_request_review_id : -1;</span>
     }
 
     /**
@@ -309,7 +307,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return {@link URL} the URL of the pull request
      */
     public URL getPullRequestUrl() {
-<span class="fc" id="L312">        return GitHubClient.parseURL(pull_request_url);</span>
+<span class="fc" id="L310">        return GitHubClient.parseURL(pull_request_url);</span>
     }
 
     /**
@@ -318,7 +316,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return {@link String} the body in html format
      */
     public String getBodyHtml() {
-<span class="fc" id="L321">        return body_html;</span>
+<span class="fc" id="L319">        return body_html;</span>
     }
 
     /**
@@ -327,7 +325,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return {@link String} the body text
      */
     public String getBodyText() {
-<span class="fc" id="L330">        return body_text;</span>
+<span class="fc" id="L328">        return body_text;</span>
     }
 
     /**
@@ -336,19 +334,19 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return {@link GHPullRequestReviewCommentReactions} the reaction rollup
      */
     public GHPullRequestReviewCommentReactions getReactions() {
-<span class="fc" id="L339">        return reactions;</span>
+<span class="fc" id="L337">        return reactions;</span>
     }
 
     /**
      * The side of the diff to which the comment applies
      */
-<span class="fc" id="L345">    public static enum Side {</span>
+<span class="fc" id="L343">    public static enum Side {</span>
         /** Right side */
-<span class="fc" id="L347">        RIGHT,</span>
+<span class="fc" id="L345">        RIGHT,</span>
         /** Left side */
-<span class="fc" id="L349">        LEFT,</span>
+<span class="fc" id="L347">        LEFT,</span>
         /** Unknown side */
-<span class="fc" id="L351">        UNKNOWN;</span>
+<span class="fc" id="L349">        UNKNOWN;</span>
 
         /**
          * From.
@@ -358,7 +356,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
          * @return the status
          */
         public static Side from(String value) {
-<span class="fc" id="L361">            return EnumUtils.getEnumOrDefault(Side.class, value, Side.UNKNOWN);</span>
+<span class="fc" id="L359">            return EnumUtils.getEnumOrDefault(Side.class, value, Side.UNKNOWN);</span>
         }
 
     }
@@ -372,9 +370,9 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void update(String body) throws IOException {
-<span class="fc" id="L375">        owner.root().createRequest().method(&quot;PATCH&quot;).with(&quot;body&quot;, body).withUrlPath(getApiRoute()).fetchInto(this);</span>
-<span class="fc" id="L376">        this.body = body;</span>
-<span class="fc" id="L377">    }</span>
+<span class="fc" id="L373">        owner.root().createRequest().method(&quot;PATCH&quot;).with(&quot;body&quot;, body).withUrlPath(getApiRoute()).fetchInto(this);</span>
+<span class="fc" id="L374">        this.body = body;</span>
+<span class="fc" id="L375">    }</span>
 
     /**
      * Deletes this review comment.
@@ -383,8 +381,8 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L386">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L387">    }</span>
+<span class="fc" id="L384">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L385">    }</span>
 
     /**
      * Create a new comment that replies to this comment.
@@ -396,13 +394,13 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             the io exception
      */
     public GHPullRequestReviewComment reply(String body) throws IOException {
-<span class="fc" id="L399">        return owner.root()</span>
-<span class="fc" id="L400">                .createRequest()</span>
-<span class="fc" id="L401">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L402">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L403">                .withUrlPath(getApiRoute(true) + &quot;/replies&quot;)</span>
-<span class="fc" id="L404">                .fetch(GHPullRequestReviewComment.class)</span>
-<span class="fc" id="L405">                .wrapUp(owner);</span>
+<span class="fc" id="L397">        return owner.root()</span>
+<span class="fc" id="L398">                .createRequest()</span>
+<span class="fc" id="L399">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L400">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L401">                .withUrlPath(getApiRoute(true) + &quot;/replies&quot;)</span>
+<span class="fc" id="L402">                .fetch(GHPullRequestReviewComment.class)</span>
+<span class="fc" id="L403">                .wrapUp(owner);</span>
     }
 
     /**
@@ -414,15 +412,13 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Preview(SQUIRREL_GIRL)
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="fc" id="L419">        return owner.root()</span>
-<span class="fc" id="L420">                .createRequest()</span>
-<span class="fc" id="L421">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L422">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L423">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="fc" id="L424">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L425">                .fetch(GHReaction.class);</span>
+<span class="fc" id="L416">        return owner.root()</span>
+<span class="fc" id="L417">                .createRequest()</span>
+<span class="fc" id="L418">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L419">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="fc" id="L420">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L421">                .fetch(GHReaction.class);</span>
     }
 
     /**
@@ -434,25 +430,23 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      *             Signals that an I/O exception has occurred.
      */
     public void deleteReaction(GHReaction reaction) throws IOException {
-<span class="fc" id="L437">        owner.root()</span>
-<span class="fc" id="L438">                .createRequest()</span>
-<span class="fc" id="L439">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L440">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
-<span class="fc" id="L441">                .send();</span>
-<span class="fc" id="L442">    }</span>
+<span class="fc" id="L433">        owner.root()</span>
+<span class="fc" id="L434">                .createRequest()</span>
+<span class="fc" id="L435">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L436">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
+<span class="fc" id="L437">                .send();</span>
+<span class="fc" id="L438">    }</span>
 
     /**
      * List reactions.
      *
      * @return the paged iterable
      */
-    @Preview(SQUIRREL_GIRL)
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L451">        return owner.root()</span>
-<span class="fc" id="L452">                .createRequest()</span>
-<span class="fc" id="L453">                .withPreview(SQUIRREL_GIRL)</span>
-<span class="fc" id="L454">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L455">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
+<span class="fc" id="L446">        return owner.root()</span>
+<span class="fc" id="L447">                .createRequest()</span>
+<span class="fc" id="L448">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L449">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

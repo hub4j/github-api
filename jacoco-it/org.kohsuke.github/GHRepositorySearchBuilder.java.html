@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepositorySearchBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRepositorySearchBuilder.java</span></div><h1>GHRepositorySearchBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 // TODO: Auto-generated Javadoc
 /**
  * Search repositories.
@@ -16,16 +18,16 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      *            the root
      */
     GHRepositorySearchBuilder(GitHub root) {
-<span class="fc" id="L19">        super(root, RepositorySearchResult.class);</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L21">        super(root, RepositorySearchResult.class);</span>
+<span class="fc" id="L22">    }</span>
 
     /**
      * {@inheritDoc}
      */
     @Override
     public GHRepositorySearchBuilder q(String term) {
-<span class="fc" id="L27">        super.q(term);</span>
-<span class="fc" id="L28">        return this;</span>
+<span class="fc" id="L29">        super.q(term);</span>
+<span class="fc" id="L30">        return this;</span>
     }
 
     /**
@@ -33,8 +35,8 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      */
     @Override
     GHRepositorySearchBuilder q(String qualifier, String value) {
-<span class="fc" id="L36">        super.q(qualifier, value);</span>
-<span class="fc" id="L37">        return this;</span>
+<span class="fc" id="L38">        super.q(qualifier, value);</span>
+<span class="fc" id="L39">        return this;</span>
     }
 
     /**
@@ -45,7 +47,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder in(String v) {
-<span class="nc" id="L48">        return q(&quot;in:&quot; + v);</span>
+<span class="nc" id="L50">        return q(&quot;in:&quot; + v);</span>
     }
 
     /**
@@ -56,7 +58,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder size(String v) {
-<span class="nc" id="L59">        return q(&quot;size:&quot; + v);</span>
+<span class="nc" id="L61">        return q(&quot;size:&quot; + v);</span>
     }
 
     /**
@@ -69,7 +71,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      */
     @Deprecated
     public GHRepositorySearchBuilder forks(String v) {
-<span class="fc" id="L72">        return q(&quot;fork&quot;, v);</span>
+<span class="fc" id="L74">        return q(&quot;fork&quot;, v);</span>
     }
 
     /**
@@ -98,7 +100,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      */
     @Deprecated
     public GHRepositorySearchBuilder fork(Fork fork) {
-<span class="fc" id="L101">        return q(&quot;fork&quot;, fork.toString());</span>
+<span class="fc" id="L103">        return q(&quot;fork&quot;, fork.toString());</span>
     }
 
     /**
@@ -126,7 +128,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      *
      */
     public GHRepositorySearchBuilder fork(GHFork fork) {
-<span class="fc" id="L129">        return q(&quot;fork&quot;, fork.toString());</span>
+<span class="fc" id="L131">        return q(&quot;fork&quot;, fork.toString());</span>
     }
 
     /**
@@ -143,12 +145,12 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      *      by repository visibility&lt;/a&gt;
      */
     public GHRepositorySearchBuilder visibility(GHRepository.Visibility visibility) {
-<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (visibility == GHRepository.Visibility.UNKNOWN) {</span>
-<span class="fc" id="L147">            throw new GHException(</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (visibility == GHRepository.Visibility.UNKNOWN) {</span>
+<span class="fc" id="L149">            throw new GHException(</span>
                     &quot;UNKNOWN is a placeholder for unexpected values encountered when reading data. It cannot be passed as a search parameter.&quot;);
         }
 
-<span class="fc" id="L151">        return q(&quot;is:&quot; + visibility);</span>
+<span class="fc" id="L153">        return q(&quot;is:&quot; + visibility);</span>
     }
 
     /**
@@ -159,7 +161,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder created(String v) {
-<span class="nc" id="L162">        return q(&quot;created:&quot; + v);</span>
+<span class="nc" id="L164">        return q(&quot;created:&quot; + v);</span>
     }
 
     /**
@@ -170,7 +172,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder pushed(String v) {
-<span class="nc" id="L173">        return q(&quot;pushed:&quot; + v);</span>
+<span class="nc" id="L175">        return q(&quot;pushed:&quot; + v);</span>
     }
 
     /**
@@ -181,7 +183,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder user(String v) {
-<span class="fc" id="L184">        return q(&quot;user:&quot; + v);</span>
+<span class="fc" id="L186">        return q(&quot;user:&quot; + v);</span>
     }
 
     /**
@@ -192,7 +194,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder repo(String v) {
-<span class="nc" id="L195">        return q(&quot;repo:&quot; + v);</span>
+<span class="nc" id="L197">        return q(&quot;repo:&quot; + v);</span>
     }
 
     /**
@@ -203,7 +205,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder language(String v) {
-<span class="fc" id="L206">        return q(&quot;language:&quot; + v);</span>
+<span class="fc" id="L208">        return q(&quot;language:&quot; + v);</span>
     }
 
     /**
@@ -214,7 +216,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder stars(String v) {
-<span class="nc" id="L217">        return q(&quot;stars:&quot; + v);</span>
+<span class="nc" id="L219">        return q(&quot;stars:&quot; + v);</span>
     }
 
     /**
@@ -225,7 +227,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder topic(String v) {
-<span class="nc" id="L228">        return q(&quot;topic:&quot; + v);</span>
+<span class="nc" id="L230">        return q(&quot;topic:&quot; + v);</span>
     }
 
     /**
@@ -236,7 +238,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder org(String v) {
-<span class="fc" id="L239">        return q(&quot;org:&quot; + v);</span>
+<span class="fc" id="L241">        return q(&quot;org:&quot; + v);</span>
     }
 
     /**
@@ -247,8 +249,8 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder order(GHDirection v) {
-<span class="fc" id="L250">        req.with(&quot;order&quot;, v);</span>
-<span class="fc" id="L251">        return this;</span>
+<span class="fc" id="L252">        req.with(&quot;order&quot;, v);</span>
+<span class="fc" id="L253">        return this;</span>
     }
 
     /**
@@ -259,21 +261,21 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      * @return the gh repository search builder
      */
     public GHRepositorySearchBuilder sort(Sort sort) {
-<span class="fc" id="L262">        req.with(&quot;sort&quot;, sort);</span>
-<span class="fc" id="L263">        return this;</span>
+<span class="fc" id="L264">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L265">        return this;</span>
     }
 
     /**
      * The enum Sort.
      */
-<span class="fc" id="L269">    public enum Sort {</span>
+<span class="fc" id="L271">    public enum Sort {</span>
 
         /** The stars. */
-<span class="fc" id="L272">        STARS,</span>
+<span class="fc" id="L274">        STARS,</span>
         /** The forks. */
-<span class="fc" id="L274">        FORKS,</span>
+<span class="fc" id="L276">        FORKS,</span>
         /** The updated. */
-<span class="fc" id="L276">        UPDATED</span>
+<span class="fc" id="L278">        UPDATED</span>
     }
 
     /**
@@ -281,7 +283,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      *
      * @deprecated Kept for backward compatibility. Use {@link GHFork} instead.
      */
-<span class="fc" id="L284">    @Deprecated</span>
+<span class="fc" id="L286">    @Deprecated</span>
     public enum Fork {
 
         /**
@@ -289,21 +291,21 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
          *
          * Forks with the same or fewer stars than the parent repository are still ignored.
          */
-<span class="fc" id="L292">        PARENT_AND_FORKS(&quot;true&quot;),</span>
+<span class="fc" id="L294">        PARENT_AND_FORKS(&quot;true&quot;),</span>
 
         /**
          * Search only in forks with more stars than the parent repository.
          *
          * The parent repository is ignored. If no forks have more stars than the parent, no results will be returned.
          */
-<span class="fc" id="L299">        FORKS_ONLY(&quot;only&quot;),</span>
+<span class="fc" id="L301">        FORKS_ONLY(&quot;only&quot;),</span>
 
         /**
          * (Default) Search only the parent repository.
          *
          * Forks are ignored.
          */
-<span class="fc" id="L306">        PARENT_ONLY(&quot;&quot;);</span>
+<span class="fc" id="L308">        PARENT_ONLY(&quot;&quot;);</span>
 
         private String filterMode;
 
@@ -313,9 +315,9 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
          * @param mode
          *            the mode
          */
-<span class="fc" id="L316">        Fork(final String mode) {</span>
-<span class="fc" id="L317">            this.filterMode = mode;</span>
-<span class="fc" id="L318">        }</span>
+<span class="fc" id="L318">        Fork(final String mode) {</span>
+<span class="fc" id="L319">            this.filterMode = mode;</span>
+<span class="fc" id="L320">        }</span>
 
         /**
          * To string.
@@ -324,18 +326,21 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
          */
         @Override
         public String toString() {
-<span class="fc" id="L327">            return filterMode;</span>
+<span class="fc" id="L329">            return filterMode;</span>
         }
     }
 
+    @SuppressFBWarnings(
+            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
     private static class RepositorySearchResult extends SearchResult&lt;GHRepository&gt; {
         private GHRepository[] items;
 
         @Override
         GHRepository[] getItems(GitHub root) {
-<span class="fc bfc" id="L336" title="All 2 branches covered.">            for (GHRepository item : items) {</span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">            for (GHRepository item : items) {</span>
             }
-<span class="fc" id="L338">            return items;</span>
+<span class="fc" id="L343">            return items;</span>
         }
     }
 
@@ -346,7 +351,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder&lt;GHRepository&g
      */
     @Override
     protected String getApiUrl() {
-<span class="fc" id="L349">        return &quot;/search/repositories&quot;;</span>
+<span class="fc" id="L354">        return &quot;/search/repositories&quot;;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -5,8 +5,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
-
 // TODO: Auto-generated Javadoc
 /**
  * Reaction to issue, comment, PR, and so on.
@@ -14,8 +12,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
  * @author Kohsuke Kawaguchi
  * @see Reactable
  */
-@Preview(SQUIRREL_GIRL)
-<span class="fc" id="L18">public class GHReaction extends GHObject {</span>
+<span class="fc" id="L15">public class GHReaction extends GHObject {</span>
 
     private GHUser user;
     private ReactionContent content;
@@ -26,7 +23,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      * @return the content
      */
     public ReactionContent getContent() {
-<span class="fc" id="L29">        return content;</span>
+<span class="fc" id="L26">        return content;</span>
     }
 
     /**
@@ -36,7 +33,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getUser() {
-<span class="fc" id="L39">        return user;</span>
+<span class="fc" id="L36">        return user;</span>
     }
 
     /**
@@ -46,7 +43,7 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @Deprecated
     public URL getHtmlUrl() {
-<span class="nc" id="L49">        return null;</span>
+<span class="nc" id="L46">        return null;</span>
     }
 
     /**
@@ -60,8 +57,8 @@ import static org.kohsuke.github.internal.Previews.SQUIRREL_GIRL;
      */
     @Deprecated
     public void delete() throws IOException {
-<span class="fc" id="L63">        throw new UnsupportedOperationException(</span>
+<span class="fc" id="L60">        throw new UnsupportedOperationException(</span>
                 &quot;This method is not supported anymore. Please use Reactable#deleteReaction(GHReaction).&quot;);
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

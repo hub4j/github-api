@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - main-2.x
       - '!/refs/heads/dependabot/*'
   pull_request:
     branches:
@@ -84,9 +85,30 @@ jobs:
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
-    - name: Codecov Report
+    - name: Save coverage data
       if: matrix.os == 'ubuntu' && matrix.java == '17'
-      uses: codecov/codecov-action@v4.4.1
+      uses: actions/upload-artifact@v4
+      with:
+        name: maven-test-target-directory
+        path: target/
+        retention-days: 3
+  codecov-upload:
+    name: codecov-upload (Upload to codecov.io)
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: maven-test-target-directory
+        path: target
+    - name: Codecov Report
+      uses: codecov/codecov-action@v4.5.0
+      with:
+        # Codecov token from https://app.codecov.io/gh/hub4j/github-api/settings
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
+        verbose: true
 
   test-java-8:
     name: test Java 8 (no-build)

@@ -1,7 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
-import org.kohsuke.github.internal.Previews;
 
 import java.io.IOException;
 
@@ -12,7 +12,6 @@ import java.io.IOException;
  * @author Marc de Verdelhan
  * @see GitHub#searchCommits() GitHub#searchCommits()
  */
-@Preview(Previews.CLOAK)
 public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
 
     /**
@@ -23,7 +22,6 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
      */
     GHCommitSearchBuilder(GitHub root) {
         super(root, CommitSearchResult.class);
-        req.withPreview(Previews.CLOAK);
     }
 
     /**
@@ -249,6 +247,9 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
         COMMITTER_DATE
     }
 
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
     private static class CommitSearchResult extends SearchResult<GHCommit> {
         private GHCommit[] items;
 

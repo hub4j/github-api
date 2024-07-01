@@ -37,9 +37,6 @@ import java.util.Objects;
 
 import javax.annotation.CheckForNull;
 
-import static org.kohsuke.github.internal.Previews.LYDIAN;
-import static org.kohsuke.github.internal.Previews.SHADOW_CAT;
-
 // TODO: Auto-generated Javadoc
 /**
  * A pull request.
@@ -418,11 +415,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         // we do not want to use getUrl() here as it points to the issues API
         // and not the pull request one
         URL absoluteUrl = GitHubRequest.getApiURL(root().getApiUrl(), getApiRoute());
-        root().createRequest()
-                .withPreview(SHADOW_CAT)
-                .setRawUrlPath(absoluteUrl.toString())
-                .fetchInto(this)
-                .wrapUp(owner);
+        root().createRequest().setRawUrlPath(absoluteUrl.toString()).fetchInto(this).wrapUp(owner);
     }
 
     /**
@@ -530,6 +523,15 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
+     * Create gh pull request review comment builder.
+     *
+     * @return the gh pull request review comment builder.
+     */
+    public GHPullRequestReviewCommentBuilder createReviewComment() {
+        return new GHPullRequestReviewCommentBuilder(this);
+    }
+
+    /**
      * Create review comment gh pull request review comment.
      *
      * @param body
@@ -543,18 +545,12 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the gh pull request review comment
      * @throws IOException
      *             the io exception
+     * @deprecated use {@link #createReviewComment()}
      */
+    @Deprecated
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
             throws IOException {
-        return root().createRequest()
-                .method("POST")
-                .with("body", body)
-                .with("commit_id", sha)
-                .with("path", path)
-                .with("position", position)
-                .withUrlPath(getApiRoute() + COMMENTS_ACTION)
-                .fetch(GHPullRequestReviewComment.class)
-                .wrapUp(this);
+        return createReviewComment().body(body).commitId(sha).path(path).position(position).create();
     }
 
     /**
@@ -616,10 +612,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    @Preview(LYDIAN)
     public void updateBranch() throws IOException {
         root().createRequest()
-                .withPreview(LYDIAN)
                 .method("PUT")
                 .with("expected_head_sha", head.getSha())
                 .withUrlPath(getApiRoute() + "/update-branch")

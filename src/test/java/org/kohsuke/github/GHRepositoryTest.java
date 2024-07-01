@@ -1628,11 +1628,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         String owner = "hub4j-test-org";
         GHRepository repository = getRepository();
         assertThat(repository.getOwner().getLogin(), equalTo(owner));
-        assertThat(repository.getStargazersCount(), is(0));
+        assertThat(repository.getStargazersCount(), is(1));
         repository.star();
-        assertThat(repository.listStargazers2().toList().size(), is(1));
+        assertThat(repository.listStargazers2().toList().size(), is(2));
         repository.unstar();
-        assertThat(repository.listStargazers().toList().size(), is(0));
+        assertThat(repository.listStargazers().toList().size(), is(1));
     }
 
     /**
@@ -1821,6 +1821,32 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         search = repository.searchPullRequests().assigned(myself).mentions(myself);
         searchResult = search.list();
         this.verifySingleResult(searchResult, mergedPR);
+    }
+
+    /**
+     * Test getTopReferralPaths.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGetTopReferralPaths() throws Exception {
+        GHRepository repository = gitHub.getRepository("ihrigb/node-doorbird");
+        List<GHRepositoryTrafficTopReferralPath> referralPaths = repository.getTopReferralPaths();
+        assertThat(referralPaths.size(), greaterThan(0));
+    }
+
+    /**
+     * Test getTopReferralSources.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGetTopReferralSources() throws Exception {
+        GHRepository repository = gitHub.getRepository("ihrigb/node-doorbird");
+        List<GHRepositoryTrafficTopReferralSources> referralSources = repository.getTopReferralSources();
+        assertThat(referralSources.size(), greaterThan(0));
     }
 
     private void verifyEmptyResult(PagedSearchIterable<GHPullRequest> searchResult) {

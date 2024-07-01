@@ -102,7 +102,7 @@ final class JwtBuilderUtil {
      * Without this class, JwtBuilderUtil.buildJwt() immediately throws NoClassDefFoundError when called. With this
      * class the error is thrown when DefaultBuilder.build() is called allowing us to catch and handle it.
      */
-    private static class DefaultBuilderImpl implements IJwtBuilder {
+    private static final class DefaultBuilderImpl implements IJwtBuilder {
         /**
          * This method builds a JWT using 0.12.x or later versions of jjwt library
          *
@@ -135,7 +135,7 @@ final class JwtBuilderUtil {
     /**
      * A class to encapsulate building a JWT using reflection.
      */
-    private static class ReflectionBuilderImpl implements IJwtBuilder {
+    private static final class ReflectionBuilderImpl implements IJwtBuilder {
 
         private Method setIssuedAtMethod;
         private Method setExpirationMethod;

@@ -7,6 +7,7 @@ package org.kohsuke.github.internal;
  *
  * @author Kohsuke Kawaguchi
  */
+@Deprecated
 public enum Previews {
 
     /**

@@ -6,7 +6,7 @@
     "method": "POST",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.ant-man-preview+json, application/vnd.github.flash-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     },
     "bodyPatterns": [

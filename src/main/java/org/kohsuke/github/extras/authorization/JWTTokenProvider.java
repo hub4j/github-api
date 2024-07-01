@@ -1,5 +1,6 @@
 package org.kohsuke.github.extras.authorization;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import javax.annotation.Nonnull;
  * authenticate as an application. This token provider does not provide any kind of caching, and will always request a
  * new token to the API.
  */
+@SuppressFBWarnings(value = { "CT_CONSTRUCTOR_THROW" }, justification = "TODO")
 public class JWTTokenProvider implements AuthorizationProvider {
 
     private final PrivateKey privateKey;

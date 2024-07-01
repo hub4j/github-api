@@ -1,0 +1,57 @@
+{
+  "id": "67d09d77-c9ee-4c8a-8570-39b3a8415c40",
+  "name": "repos_hub4j-test-org_github-api_pulls_482_reviews",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/482/reviews",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"comments\":[{\"body\":\"Some niggle\",\"path\":\"README.md\",\"position\":1},{\"body\":\"A single line comment\",\"path\":\"README.md\",\"line\":2},{\"body\":\"A multiline comment\",\"path\":\"README.md\",\"line\":3,\"start_line\":2}],\"body\":\"Some draft review\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "6-r_h_g_pulls_482_reviews.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sun, 16 Jun 2024 09:55:54 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"b94ef0eeeaefe771d12aaa0fa07cd4e22284db93b05d8b221cb6db0109beb031\"",
+      "X-OAuth-Scopes": "repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2024-09-14 09:21:47 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4369",
+      "X-RateLimit-Reset": "1718532974",
+      "X-RateLimit-Used": "631",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C5DE:0FA7:1444FC98:146AE179:666EB6A9"
+    }
+  },
+  "uuid": "67d09d77-c9ee-4c8a-8570-39b3a8415c40",
+  "persistent": true,
+  "insertionIndex": 6
+}

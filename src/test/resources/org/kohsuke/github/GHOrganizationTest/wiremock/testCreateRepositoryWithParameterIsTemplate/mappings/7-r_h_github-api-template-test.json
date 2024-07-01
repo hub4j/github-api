@@ -6,7 +6,7 @@
     "method": "GET",
     "headers": {
       "Accept": {
-        "equalTo": "application/vnd.github.baptiste-preview+json, application/vnd.github.nebula-preview+json"
+        "equalTo": "application/vnd.github+json"
       }
     }
   },
@@ -43,5 +43,8 @@
   },
   "uuid": "51d54e86-a714-457b-88d6-5c045631a074",
   "persistent": true,
+  "scenarioName": "testCreateRepositoryWithParameterIsTemplate-template-repo",
+  "requiredScenarioState": "with-template-1",
+  "newScenarioState": "with-template-2",
   "insertionIndex": 7
 }

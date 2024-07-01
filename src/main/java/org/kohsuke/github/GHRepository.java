@@ -3630,7 +3630,7 @@ public class GHRepository extends GHObject {
     public List<GHRepositoryTrafficTopReferralPath> getTopReferralPaths() throws IOException {
         return Arrays.asList(root().createRequest()
                 .method("GET")
-                .withUrlPath("/repos/%s/%s/traffic/popular/paths", getOwnerName(), name)
+                .withUrlPath(getApiTailUrl("/traffic/popular/paths"))
                 .fetch(GHRepositoryTrafficTopReferralPath[].class));
     }
 
@@ -3645,7 +3645,7 @@ public class GHRepository extends GHObject {
     public List<GHRepositoryTrafficTopReferralSources> getTopReferralSources() throws IOException {
         return Arrays.asList(root().createRequest()
                 .method("GET")
-                .withUrlPath("/repos/%s/%s/traffic/popular/referrers", getOwnerName(), name)
+                .withUrlPath(getApiTailUrl("/traffic/popular/referrers"))
                 .fetch(GHRepositoryTrafficTopReferralSources[].class));
     }
 

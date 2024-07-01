@@ -1823,6 +1823,20 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         this.verifySingleResult(searchResult, mergedPR);
     }
 
+    @Test
+    public void testGetTopReferralPaths() throws Exception {
+        GHRepository repository = gitHub.getRepository("ihrigb/node-doorbird");
+        List<GHRepositoryTrafficTopReferralPath> referralPaths = repository.getTopReferralPaths();
+        assertThat(referralPaths.size(), greaterThan(0));
+    }
+
+    @Test
+    public void testGetTopReferralSources() throws Exception {
+        GHRepository repository = gitHub.getRepository("ihrigb/node-doorbird");
+        List<GHRepositoryTrafficTopReferralSources> referralSources = repository.getTopReferralSources();
+        assertThat(referralSources.size(), greaterThan(0));
+    }
+
     private void verifyEmptyResult(PagedSearchIterable<GHPullRequest> searchResult) {
         assertThat(searchResult.getTotalCount(), is(0));
     }

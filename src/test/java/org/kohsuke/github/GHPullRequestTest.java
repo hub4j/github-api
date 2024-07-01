@@ -321,8 +321,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         try {
             assertThat(p.listReviewComments().toList(), is(empty()));
 
-             // Call the deprecated method to ensure continued support
-             p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
+            // Call the deprecated method to ensure continued support
+            p.createReviewComment("Sample review comment", p.getHead().getSha(), "README.md", 1);
             p.createReviewComment()
                     .commitId(p.getHead().getSha())
                     .body("A single line review comment")

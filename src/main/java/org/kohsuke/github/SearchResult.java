@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 // TODO: Auto-generated Javadoc
 /**
  * Represents the result of a search.
@@ -13,11 +11,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 abstract class SearchResult<T> {
 
     /** The total count. */
-    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     int total_count;
 
     /** The incomplete results. */
-    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     boolean incomplete_results;
 
     /**

@@ -1,0 +1,38 @@
+{
+  "id": 2121304234,
+  "node_id": "PRR_kwDODFTdCc5-cIiq",
+  "user": {
+    "login": "maximevw",
+    "id": 48218208,
+    "node_id": "MDQ6VXNlcjQ4MjE4MjA4",
+    "avatar_url": "https://avatars.githubusercontent.com/u/48218208?u=dddf34bffc2dba9093e2c24ade2191b0336261cf&v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/maximevw",
+    "html_url": "https://github.com/maximevw",
+    "followers_url": "https://api.github.com/users/maximevw/followers",
+    "following_url": "https://api.github.com/users/maximevw/following{/other_user}",
+    "gists_url": "https://api.github.com/users/maximevw/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/maximevw/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/maximevw/subscriptions",
+    "organizations_url": "https://api.github.com/users/maximevw/orgs",
+    "repos_url": "https://api.github.com/users/maximevw/repos",
+    "events_url": "https://api.github.com/users/maximevw/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/maximevw/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "body": "Some draft review",
+  "state": "PENDING",
+  "html_url": "https://github.com/hub4j-test-org/github-api/pull/482#pullrequestreview-2121304234",
+  "pull_request_url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/482",
+  "author_association": "MEMBER",
+  "_links": {
+    "html": {
+      "href": "https://github.com/hub4j-test-org/github-api/pull/482#pullrequestreview-2121304234"
+    },
+    "pull_request": {
+      "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/482"
+    }
+  },
+  "commit_id": "07374fe73aff1c2024a8d4114b32406c7a8e89b7"
+}

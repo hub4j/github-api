@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 
-import static org.kohsuke.github.internal.Previews.ZZZAX;
-
 // TODO: Auto-generated Javadoc
 /**
  * The type GHBranchProtection.
@@ -65,7 +63,6 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    @Preview(ZZZAX)
     public void enabledSignedCommits() throws IOException {
         requester().method("POST").withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);
     }
@@ -76,7 +73,6 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    @Preview(ZZZAX)
     public void disableSignedCommits() throws IOException {
         requester().method("DELETE").withUrlPath(url + REQUIRE_SIGNATURES_URI).send();
     }
@@ -169,7 +165,6 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    @Preview(ZZZAX)
     public boolean getRequiredSignatures() throws IOException {
         return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;
     }
@@ -202,7 +197,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
     }
 
     private Requester requester() {
-        return root().createRequest().withPreview(ZZZAX);
+        return root().createRequest();
     }
 
     /**

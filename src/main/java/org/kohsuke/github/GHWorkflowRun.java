@@ -502,6 +502,28 @@ public class GHWorkflowRun extends GHObject {
         IN_PROGRESS,
         /** The completed. */
         COMPLETED,
+        /** The action required. */
+        ACTION_REQUIRED,
+        /** The cancelled. */
+        CANCELLED,
+        /** The failure. */
+        FAILURE,
+        /** The neutral. */
+        NEUTRAL,
+        /** The skipped. */
+        SKIPPED,
+        /** The stale. */
+        STALE,
+        /** The success. */
+        SUCCESS,
+        /** The timed out. */
+        TIMED_OUT,
+        /** The requested. */
+        REQUESTED,
+        /** The waiting. */
+        WAITING,
+        /** The pending. */
+        PENDING,
         /** The unknown. */
         UNKNOWN;
 

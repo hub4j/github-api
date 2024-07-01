@@ -1823,6 +1823,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         this.verifySingleResult(searchResult, mergedPR);
     }
 
+    /**
+     * Test getTopReferralPaths.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testGetTopReferralPaths() throws Exception {
         GHRepository repository = gitHub.getRepository("ihrigb/node-doorbird");
@@ -1830,6 +1836,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(referralPaths.size(), greaterThan(0));
     }
 
+    /**
+     * Test getTopReferralSources.
+     *
+     * @throws Exception
+     *             the exception
+     */
     @Test
     public void testGetTopReferralSources() throws Exception {
         GHRepository repository = gitHub.getRepository("ihrigb/node-doorbird");

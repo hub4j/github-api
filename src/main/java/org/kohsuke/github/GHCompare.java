@@ -176,6 +176,12 @@ public class GHCompare {
             return new PagedIterable<Commit>() {
                 @Nonnull
                 @Override
+                public Paginator<Commit> _paginator(int pageSize, int startPage) {
+                    throw new UnsupportedOperationException("Paginator nor supported if not using paginated commits.");
+                }
+
+                @Nonnull
+                @Override
                 public PagedIterator<Commit> _iterator(int pageSize) {
                     return new PagedIterator<>(Collections.singleton(commits).iterator(), null);
                 }
@@ -373,6 +379,21 @@ public class GHCompare {
         public GHCompareCommitsIterable() {
         }
 
+        @Nonnull
+        @Override
+        public Paginator<Commit> _paginator(int pageSize, int startPage) {
+            GitHubRequest request = getRequest();
+
+            // page_size must be set for GHCompare commit pagination
+            if (pageSize == 0) {
+                pageSize = 10;
+            }
+            return new Paginator<>(
+                    adapt(GitHubPaginator
+                            .create(owner.root().getClient(), GHCompare.class, request, pageSize, startPage)),
+                    null);
+        }
+
         /**
          * Iterator.
          *
@@ -383,11 +404,7 @@ public class GHCompare {
         @Nonnull
         @Override
         public PagedIterator<Commit> _iterator(int pageSize) {
-            GitHubRequest request = owner.root()
-                    .createRequest()
-                    .injectMappingValue("GHCompare_usePaginatedCommits", usePaginatedCommits)
-                    .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf("/compare/"))))
-                    .build();
+            GitHubRequest request = getRequest();
 
             // page_size must be set for GHCompare commit pagination
             if (pageSize == 0) {
@@ -396,6 +413,14 @@ public class GHCompare {
             return new PagedIterator<>(
                     adapt(GitHubPageIterator.create(owner.root().getClient(), GHCompare.class, request, pageSize)),
                     item -> item.wrapUp(owner));
+        }
+
+        private GitHubRequest getRequest() {
+            return owner.root()
+                    .createRequest()
+                    .injectMappingValue("GHCompare_usePaginatedCommits", usePaginatedCommits)
+                    .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf("/compare/"))))
+                    .build();
         }
 
         /**
@@ -417,6 +442,60 @@ public class GHCompare {
                         result = v;
                     }
                     return v.commits;
+                }
+            };
+        }
+
+        protected NavigablePageIterator<Commit[]> adapt(final NavigablePageIterator<GHCompare> base) {
+            return new NavigablePageIterator<Commit[]>() {
+                @Override
+                public boolean hasPrevious() {
+                    return base.hasPrevious();
+                }
+
+                @Override
+                public Commit[] previous() {
+                    return base.previous().commits;
+                }
+
+                @Override
+                public Commit[] first() {
+                    return base.first().commits;
+                }
+
+                @Override
+                public Commit[] last() {
+                    return base.last().commits;
+                }
+
+                @Override
+                public int totalCount() {
+                    return base.totalCount();
+                }
+
+                @Override
+                public int currentPage() {
+                    return base.currentPage();
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return base.hasNext();
+                }
+
+                @Override
+                public Commit[] next() {
+                    return base.next().commits;
+                }
+
+                @Override
+                public Commit[] jumpToPage(int page) {
+                    return base.jumpToPage(page).commits;
+                }
+
+                @Override
+                public void refresh() {
+                    base.refresh();
                 }
             };
         }

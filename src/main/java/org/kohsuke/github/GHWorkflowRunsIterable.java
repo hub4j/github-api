@@ -27,6 +27,15 @@ class GHWorkflowRunsIterable extends PagedIterable<GHWorkflowRun> {
         this.request = requestBuilder.build();
     }
 
+    @Nonnull
+    @Override
+    public Paginator<GHWorkflowRun> _paginator(int pageSize, int startPage) {
+        return new Paginator<>(
+                adapt(GitHubPaginator
+                        .create(owner.root().getClient(), GHWorkflowRunsPage.class, request, pageSize, startPage)),
+                null);
+    }
+
     /**
      * Iterator.
      *
@@ -61,6 +70,67 @@ class GHWorkflowRunsIterable extends PagedIterable<GHWorkflowRun> {
                     result = v;
                 }
                 return v.getWorkflowRuns(owner);
+            }
+        };
+    }
+
+    protected NavigablePageIterator<GHWorkflowRun[]> adapt(final NavigablePageIterator<GHWorkflowRunsPage> base) {
+        return new NavigablePageIterator<GHWorkflowRun[]>() {
+            @Override
+            public boolean hasPrevious() {
+                return base.hasPrevious();
+            }
+
+            @Override
+            public GHWorkflowRun[] previous() {
+                GHWorkflowRunsPage v = base.previous();
+
+                return v.getWorkflowRuns(owner);
+            }
+
+            @Override
+            public GHWorkflowRun[] first() {
+                GHWorkflowRunsPage v = base.first();
+
+                return v.getWorkflowRuns(owner);
+            }
+
+            @Override
+            public GHWorkflowRun[] last() {
+                GHWorkflowRunsPage v = base.last();
+
+                return v.getWorkflowRuns(owner);
+            }
+
+            @Override
+            public int totalCount() {
+                return base.totalCount();
+            }
+
+            @Override
+            public int currentPage() {
+                return base.currentPage();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return base.hasNext();
+            }
+
+            @Override
+            public GHWorkflowRun[] next() {
+                GHWorkflowRunsPage v = base.next();
+                return v.getWorkflowRuns(owner);
+            }
+
+            @Override
+            public GHWorkflowRun[] jumpToPage(int page) {
+                return base.jumpToPage(page).getWorkflowRuns(owner);
+            }
+
+            @Override
+            public void refresh() {
+                base.refresh();
             }
         };
     }

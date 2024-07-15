@@ -91,6 +91,10 @@ public class GHRepositoryRule {
     /**
      * Gets a parameter. ({@link GHRepositoryRule.Parameters Parameters} provides a list of available parameters.)
      *
+     * @param parameter
+     *            the parameter
+     * @param <T>
+     *            the type of the parameter
      * @return the parameters
      */
     public <T> Optional<T> getParameter(Parameter<T> parameter) {

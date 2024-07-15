@@ -13,6 +13,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+/**
+ * Test class for GHRepositoryRule.
+ */
 public class GHRepositoryRuleTest {
     /**
      * Test to cover the constructor of the Parameters class.

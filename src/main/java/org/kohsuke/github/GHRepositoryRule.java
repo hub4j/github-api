@@ -201,8 +201,14 @@ public class GHRepositoryRule {
      * Available parameters for a ruleset.
      */
     public interface Parameters {
+        /**
+         * update_allows_fetch_and_merge paramter
+         */
         public static final BooleanParameter UPDATE_ALLOWS_FETCH_AND_MERGE = new BooleanParameter(
                 "update_allows_fetch_and_merge");
+        /**
+         * required_deployment_environments parameter
+         */
         public static final ListParameter<String> REQUIRED_DEPLOYMENT_ENVIRONMENTS = new ListParameter<String>(
                 "required_deployment_environments") {
             @Override
@@ -211,16 +217,34 @@ public class GHRepositoryRule {
                 };
             }
         };
+        /**
+         * dismiss_stale_reviews_on_push parameter
+         */
         public static final BooleanParameter DISMISS_STALE_REVIEWS_ON_PUSH = new BooleanParameter(
                 "dismiss_stale_reviews_on_push");
+        /**
+         * require_code_owner_review parameter
+         */
         public static final BooleanParameter REQUIRE_CODE_OWNER_REVIEW = new BooleanParameter(
                 "require_code_owner_review");
+        /**
+         * require_last_push_approval parameter
+         */
         public static final BooleanParameter REQUIRE_LAST_PUSH_APPROVAL = new BooleanParameter(
                 "require_last_push_approval");
+        /**
+         * required_approving_review_count parameter
+         */
         public static final IntegerParameter REQUIRED_APPROVING_REVIEW_COUNT = new IntegerParameter(
                 "required_approving_review_count");
+        /**
+         * required_review_thread_resolution parameter
+         */
         public static final BooleanParameter REQUIRED_REVIEW_THREAD_RESOLUTION = new BooleanParameter(
                 "required_review_thread_resolution");
+        /**
+         * required_status_checks parameter
+         */
         public static final ListParameter<StatusCheckConfiguration> REQUIRED_STATUS_CHECKS = new ListParameter<StatusCheckConfiguration>(
                 "required_status_checks") {
             @Override
@@ -229,10 +253,22 @@ public class GHRepositoryRule {
                 };
             }
         };
+        /**
+         * strict_required_status_checks_policy parameter
+         */
         public static final BooleanParameter STRICT_REQUIRED_STATUS_CHECKS_POLICY = new BooleanParameter(
                 "strict_required_status_checks_policy");
+        /**
+         * name parameter
+         */
         public static final StringParameter NAME = new StringParameter("name");
+        /**
+         * negate parameter
+         */
         public static final BooleanParameter NEGATE = new BooleanParameter("negate");
+        /**
+         * operator parameter
+         */
         public static final Parameter<Operator> OPERATOR = new Parameter<Operator>("operator") {
             @Override
             TypeReference<Operator> getType() {
@@ -240,7 +276,13 @@ public class GHRepositoryRule {
                 };
             }
         };
+        /**
+         * regex parameter
+         */
         public static final StringParameter REGEX = new StringParameter("regex");
+        /**
+         * workflows parameter
+         */
         public static final ListParameter<WorkflowFileReference> WORKFLOWS = new ListParameter<WorkflowFileReference>(
                 "workflows") {
             @Override
@@ -249,6 +291,9 @@ public class GHRepositoryRule {
                 };
             }
         };
+        /**
+         * code_scanning_tools parameter
+         */
         public static final ListParameter<CodeScanningTool> CODE_SCANNING_TOOLS = new ListParameter<CodeScanningTool>(
                 "code_scanning_tools") {
             @Override

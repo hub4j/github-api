@@ -101,21 +101,84 @@ public class GHRepositoryRule {
      * The type of the ruleset.
      */
     public static enum Type {
+        /**
+         * creation
+         */
         creation,
+
+        /**
+         * update
+         */
         update,
+
+        /**
+         * deletion
+         */
         deletion,
+
+        /**
+         * required_linear_history
+         */
         required_linear_history,
+
+        /**
+         * required_deployments
+         */
         required_deployments,
+
+        /**
+         * required_signatures
+         */
         required_signatures,
+
+        /**
+         * pull_request
+         */
         pull_request,
+
+        /**
+         * required_status_checks
+         */
         required_status_checks,
+
+        /**
+         * non_fast_forward
+         */
         non_fast_forward,
+
+        /**
+         * commit_message_pattern
+         */
         commit_message_pattern,
+
+        /**
+         * commit_author_email_pattern
+         */
         commit_author_email_pattern,
+
+        /**
+         * committer_email_pattern
+         */
         committer_email_pattern,
+
+        /**
+         * branch_name_pattern
+         */
         branch_name_pattern,
+
+        /**
+         * tag_name_pattern
+         */
         tag_name_pattern,
+
+        /**
+         * workflows
+         */
         workflows,
+
+        /**
+         * code_scanning
+         */
         code_scanning
     }
 
@@ -123,7 +186,15 @@ public class GHRepositoryRule {
      * The source of the ruleset type.
      */
     public enum RulesetSourceType {
-        Repository, Organization
+        /**
+         * Repository
+         */
+        Repository,
+
+        /**
+         * Organization
+         */
+        Organization
     }
 
     /**
@@ -363,7 +434,25 @@ public class GHRepositoryRule {
      * Operator parameter.
      */
     public static enum Operator {
-        starts_with, ends_with, contains, regex
+        /**
+         * starts_with
+         */
+        starts_with,
+
+        /**
+         * ends_with
+         */
+        ends_with,
+
+        /**
+         * contains
+         */
+        contains,
+
+        /**
+         * regex
+         */
+        regex
     }
 
     /**
@@ -501,13 +590,54 @@ public class GHRepositoryRule {
      * Alerts threshold parameter.
      */
     public static enum AlertsThreshold {
-        none, errors, errors_and_warnings, all
+        /**
+         * none
+         */
+        none,
+
+        /**
+         * errors
+         */
+        errors,
+
+        /**
+         * errors_and_warnings
+         */
+        errors_and_warnings,
+
+        /**
+         * all
+         */
+        all
     }
 
     /**
      * Security alerts threshold parameter.
      */
     public static enum SecurityAlertsThreshold {
-        none, critical, high_or_higher, medium_or_higher, all
+        /**
+         * none
+         */
+        none,
+
+        /**
+         * critical
+         */
+        critical,
+
+        /**
+         * high_or_higher
+         */
+        high_or_higher,
+
+        /**
+         * medium_or_higher
+         */
+        medium_or_higher,
+
+        /**
+         * all
+         */
+        all
     }
 }

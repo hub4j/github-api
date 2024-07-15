@@ -3,9 +3,11 @@ package org.kohsuke.github;
 import org.junit.Test;
 import org.kohsuke.github.GHRepositoryRule.AlertsThreshold;
 import org.kohsuke.github.GHRepositoryRule.CodeScanningTool;
+import org.kohsuke.github.GHRepositoryRule.Operator;
 import org.kohsuke.github.GHRepositoryRule.Parameters;
 import org.kohsuke.github.GHRepositoryRule.SecurityAlertsThreshold;
 import org.kohsuke.github.GHRepositoryRule.StatusCheckConfiguration;
+import org.kohsuke.github.GHRepositoryRule.StringParameter;
 import org.kohsuke.github.GHRepositoryRule.WorkflowFileReference;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,6 +29,7 @@ public class GHRepositoryRuleTest {
         assertThat(Parameters.OPERATOR.getType(), is(notNullValue()));
         assertThat(Parameters.WORKFLOWS.getType(), is(notNullValue()));
         assertThat(Parameters.CODE_SCANNING_TOOLS.getType(), is(notNullValue()));
+        assertThat(new StringParameter("any").getType(), is(notNullValue()));
     }
 
     /**
@@ -63,5 +66,13 @@ public class GHRepositoryRuleTest {
         assertThat(codeScanningTool.getAlertsThreshold(), is(equalTo(AlertsThreshold.errors)));
         assertThat(codeScanningTool.getSecurityAlertsThreshold(), is(equalTo(SecurityAlertsThreshold.high_or_higher)));
         assertThat(codeScanningTool.getTool(), is(equalTo("tool")));
+    }
+
+    /**
+     * Tests to cover Operator enum.
+     */
+    @Test
+    public void testOperator() {
+        assertThat(Operator.ends_with, is(notNullValue()));
     }
 }

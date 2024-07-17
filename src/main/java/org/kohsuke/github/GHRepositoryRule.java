@@ -2,9 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,38 +19,6 @@ public class GHRepositoryRule {
     private Map<String, JsonNode> parameters;
 
     /**
-     * Instantiates a new GH repository rule.
-     */
-    public GHRepositoryRule() {
-    }
-
-    /**
-     * Instantiates a new GH repository rule.
-     *
-     * @param type
-     *            the type
-     * @param ruleset_type_source
-     *            the ruleset type source
-     * @param ruleset_source
-     *            the ruleset source
-     * @param ruleset_id
-     *            the ruleset id
-     * @param parameters
-     *            the parameters
-     */
-    public GHRepositoryRule(Type type,
-            RulesetSourceType ruleset_type_source,
-            String ruleset_source,
-            long ruleset_id,
-            Map<String, JsonNode> parameters) {
-        this.type = type;
-        this.ruleset_source_type = ruleset_type_source;
-        this.ruleset_source = ruleset_source;
-        this.ruleset_id = ruleset_id;
-        this.parameters = new HashMap<>(parameters);
-    }
-
-    /**
      * Gets the type.
      *
      * @return the type
@@ -67,7 +33,7 @@ public class GHRepositoryRule {
      * @return the ruleset source type
      */
     public RulesetSourceType getRulesetSourceType() {
-        return this.ruleset_source_type;
+        return this.rulesetSourceType;
     }
 
     /**
@@ -76,7 +42,7 @@ public class GHRepositoryRule {
      * @return the ruleset source
      */
     public String getRulesetSource() {
-        return this.ruleset_source;
+        return this.rulesetSource;
     }
 
     /**
@@ -85,7 +51,7 @@ public class GHRepositoryRule {
      * @return the ruleset id
      */
     public long getRulesetId() {
-        return this.ruleset_id;
+        return this.rulesetId;
     }
 
     /**
@@ -108,82 +74,82 @@ public class GHRepositoryRule {
         /**
          * creation
          */
-        creation,
+        CREATION,
 
         /**
          * update
          */
-        update,
+        UPDATE,
 
         /**
          * deletion
          */
-        deletion,
+        DELETION,
 
         /**
          * required_linear_history
          */
-        required_linear_history,
+        REQUIRED_LINEAR_HISTORY,
 
         /**
          * required_deployments
          */
-        required_deployments,
+        REQUIRED_DEPLOYMENTS,
 
         /**
          * required_signatures
          */
-        required_signatures,
+        REQUIRED_SIGNATURES,
 
         /**
          * pull_request
          */
-        pull_request,
+        PULL_REQUEST,
 
         /**
          * required_status_checks
          */
-        required_status_checks,
+        REQUIRED_STATUS_CHECKS,
 
         /**
          * non_fast_forward
          */
-        non_fast_forward,
+        NON_FAST_FORWARD,
 
         /**
          * commit_message_pattern
          */
-        commit_message_pattern,
+        COMMIT_MESSAGE_PATTERN,
 
         /**
          * commit_author_email_pattern
          */
-        commit_author_email_pattern,
+        COMMIT_AUTHOR_EMAIL_PATTERN,
 
         /**
          * committer_email_pattern
          */
-        committer_email_pattern,
+        COMMITTER_EMAIL_PATTERN,
 
         /**
          * branch_name_pattern
          */
-        branch_name_pattern,
+        BRANCH_NAME_PATTERN,
 
         /**
          * tag_name_pattern
          */
-        tag_name_pattern,
+        TAG_NAME_PATTERN,
 
         /**
          * workflows
          */
-        workflows,
+        WORKFLOWS,
 
         /**
          * code_scanning
          */
-        code_scanning
+        CODE_SCANNING
     }
 
     /**
@@ -193,12 +159,12 @@ public class GHRepositoryRule {
         /**
          * Repository
          */
-        Repository,
+        REPOSITORY,
 
         /**
          * Organization
          */
-        Organization
+        ORGANIZATION
     }
 
     /**
@@ -316,8 +282,6 @@ public class GHRepositoryRule {
      */
     public abstract static class Parameter<T> implements Function<JsonNode, T> {
 
-        private final static ObjectMapper objectMapper = new ObjectMapper();
-
         private final String key;
 
         /**
@@ -349,7 +313,7 @@ public class GHRepositoryRule {
             if (jsonNode == null) {
                 return null;
             }
-            return objectMapper.convertValue(jsonNode, getType());
+            return GitHubClient.getObjectMapper().convertValue(jsonNode, getType());
         }
     }
 
@@ -439,7 +403,7 @@ public class GHRepositoryRule {
      */
     public static class StatusCheckConfiguration {
         private String context;
-        private Integer integration_id;
+        private Integer integrationId;
 
         /**
          * Instantiates a new status check configuration.
@@ -452,12 +416,12 @@ public class GHRepositoryRule {
          *
          * @param context
          *            the context
-         * @param integration_id
+         * @param integrationId
          *            the integration id
          */
-        public StatusCheckConfiguration(String context, Integer integration_id) {
+        public StatusCheckConfiguration(String context, Integer integrationId) {
             this.context = context;
-            this.integration_id = integration_id;
+            this.integrationId = integrationId;
         }
 
         /**
@@ -475,7 +439,7 @@ public class GHRepositoryRule {
          * @return the integration id
          */
         public Integer getIntegrationId() {
-            return this.integration_id;
+            return this.integrationId;
         }
     }
 
@@ -486,22 +450,22 @@ public class GHRepositoryRule {
         /**
          * starts_with
          */
-        starts_with,
+        STARTS_WITH,
 
         /**
          * ends_with
          */
-        ends_with,
+        ENDS_WITH,
 
         /**
          * contains
          */
-        contains,
+        CONTAINS,
 
         /**
          * regex
          */
-        regex
+        REGEX
     }
 
     /**
@@ -510,7 +474,7 @@ public class GHRepositoryRule {
     public static class WorkflowFileReference {
         private String path;
         private String ref;
-        private int repository_id;
+        private int repositoryId;
         private String sha;
 
         /**
@@ -526,15 +490,15 @@ public class GHRepositoryRule {
          *            the path
          * @param ref
          *            the ref
-         * @param repository_id
+         * @param repositoryId
          *            the repository id
          * @param sha
          *            the sha
          */
-        public WorkflowFileReference(String path, String ref, int repository_id, String sha) {
+        public WorkflowFileReference(String path, String ref, int repositoryId, String sha) {
             this.path = path;
             this.ref = ref;
-            this.repository_id = repository_id;
+            this.repositoryId = repositoryId;
             this.sha = sha;
         }
 
@@ -562,7 +526,7 @@ public class GHRepositoryRule {
          * @return the repository id
          */
         public int getRepositoryId() {
-            return this.repository_id;
+            return this.repositoryId;
         }
 
         /**
@@ -579,8 +543,8 @@ public class GHRepositoryRule {
      * Code scanning tool parameter.
      */
     public static class CodeScanningTool {
-        private AlertsThreshold alerts_threshold;
-        private SecurityAlertsThreshold security_alerts_threshold;
+        private AlertsThreshold alertsThreshold;
+        private SecurityAlertsThreshold securityAlertsThreshold;
         private String tool;
 
         /**
@@ -592,18 +556,18 @@ public class GHRepositoryRule {
         /**
          * Instantiates a new code scanning tool.
          *
-         * @param alerts_threshold
+         * @param alertsThreshold
          *            the alerts threshold
-         * @param security_alerts_threshold
+         * @param securityAlertsThreshold
          *            the security alerts threshold
          * @param tool
          *            the tool
          */
-        public CodeScanningTool(AlertsThreshold alerts_threshold,
-                SecurityAlertsThreshold security_alerts_threshold,
+        public CodeScanningTool(AlertsThreshold alertsThreshold,
+                SecurityAlertsThreshold securityAlertsThreshold,
                 String tool) {
-            this.alerts_threshold = alerts_threshold;
-            this.security_alerts_threshold = security_alerts_threshold;
+            this.alertsThreshold = alertsThreshold;
+            this.securityAlertsThreshold = securityAlertsThreshold;
             this.tool = tool;
         }
 
@@ -613,7 +577,7 @@ public class GHRepositoryRule {
          * @return the alerts threshold
          */
         public AlertsThreshold getAlertsThreshold() {
-            return this.alerts_threshold;
+            return this.alertsThreshold;
         }
 
         /**
@@ -622,7 +586,7 @@ public class GHRepositoryRule {
          * @return the security alerts threshold
          */
         public SecurityAlertsThreshold getSecurityAlertsThreshold() {
-            return this.security_alerts_threshold;
+            return this.securityAlertsThreshold;
         }
 
         /**
@@ -642,22 +606,22 @@ public class GHRepositoryRule {
         /**
          * none
          */
-        none,
+        NONE,
 
         /**
          * errors
          */
-        errors,
+        ERRORS,
 
         /**
          * errors_and_warnings
          */
-        errors_and_warnings,
+        ERRORS_AND_WARNINGS,
 
         /**
          * all
          */
-        all
+        ALL
     }
 
     /**
@@ -667,26 +631,26 @@ public class GHRepositoryRule {
         /**
          * none
          */
-        none,
+        NONE,
 
         /**
          * critical
          */
-        critical,
+        CRITICAL,
 
         /**
          * high_or_higher
          */
-        high_or_higher,
+        HIGH_OR_HIGHER,
 
         /**
          * medium_or_higher
          */
-        medium_or_higher,
+        MEDIUM_OR_HIGHER,
 
         /**
          * all
          */
-        all
+        ALL
     }
 }

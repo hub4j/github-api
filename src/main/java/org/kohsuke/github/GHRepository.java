@@ -620,12 +620,9 @@ public class GHRepository extends GHObject {
      * @return the owner name
      */
     public String getOwnerName() {
-        // consistency of the GitHub API is super... some serialized forms of
-        // GHRepository populate
-        // a full GHUser while others populate only the owner and email. This later form
-        // is super helpful
-        // in putting the login in owner.name not owner.login... thankfully we can
-        // easily identify this
+        // consistency of the GitHub API is super... some serialized forms of GHRepository populate
+        // a full GHUser while others populate only the owner and email. This later form is super helpful
+        // in putting the login in owner.name not owner.login... thankfully we can easily identify this
         // second set because owner.login will be null
         return owner.login != null ? owner.login : owner.name;
     }
@@ -3663,11 +3660,11 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public List<GHRepositoryRule> getRulesForBranch(String branch) throws IOException {
-        return Arrays.asList(root().createRequest()
+    public PagedIterable<GHRepositoryRule> listRulesForBranch(String branch) throws IOException {
+        return root().createRequest()
                 .method("GET")
                 .withUrlPath(getApiTailUrl("/rules/branches/" + branch))
-                .fetch(GHRepositoryRule[].class));
+                .toIterable(GHRepositoryRule[].class, null);
     }
 
     /**

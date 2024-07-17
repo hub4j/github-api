@@ -62,9 +62,9 @@ public class GHRepositoryRuleTest {
     @Test
     public void testCodeScanningTool() {
         CodeScanningTool codeScanningTool = new CodeScanningTool();
-        codeScanningTool = new CodeScanningTool(AlertsThreshold.errors, SecurityAlertsThreshold.high_or_higher, "tool");
-        assertThat(codeScanningTool.getAlertsThreshold(), is(equalTo(AlertsThreshold.errors)));
-        assertThat(codeScanningTool.getSecurityAlertsThreshold(), is(equalTo(SecurityAlertsThreshold.high_or_higher)));
+        codeScanningTool = new CodeScanningTool(AlertsThreshold.ERRORS, SecurityAlertsThreshold.HIGH_OR_HIGHER, "tool");
+        assertThat(codeScanningTool.getAlertsThreshold(), is(equalTo(AlertsThreshold.ERRORS)));
+        assertThat(codeScanningTool.getSecurityAlertsThreshold(), is(equalTo(SecurityAlertsThreshold.HIGH_OR_HIGHER)));
         assertThat(codeScanningTool.getTool(), is(equalTo("tool")));
     }
 
@@ -73,6 +73,6 @@ public class GHRepositoryRuleTest {
      */
     @Test
     public void testOperator() {
-        assertThat(Operator.ends_with, is(notNullValue()));
+        assertThat(Operator.ENDS_WITH, is(notNullValue()));
     }
 }

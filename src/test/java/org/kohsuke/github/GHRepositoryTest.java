@@ -1860,24 +1860,24 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void testGetRulesForBranch() throws Exception {
         GHRepository repository = gitHub.getRepository("ihrigb/node-doorbird");
-        List<GHRepositoryRule> rules = repository.getRulesForBranch("main");
+        List<GHRepositoryRule> rules = repository.listRulesForBranch("main").toList();
         assertThat(rules.size(), equalTo(3));
 
         GHRepositoryRule rule = rules.get(0);
-        assertThat(rule.getType(), is(equalTo(GHRepositoryRule.Type.deletion)));
-        assertThat(rule.getRulesetSourceType(), is(equalTo(GHRepositoryRule.RulesetSourceType.Repository)));
+        assertThat(rule.getType(), is(equalTo(GHRepositoryRule.Type.DELETION)));
+        assertThat(rule.getRulesetSourceType(), is(equalTo(GHRepositoryRule.RulesetSourceType.REPOSITORY)));
         assertThat(rule.getRulesetSource(), is(equalTo("ihrigb/node-doorbird")));
         assertThat(rule.getRulesetId(), is(equalTo(1170520L)));
 
         rule = rules.get(1);
-        assertThat(rule.getType(), is(equalTo(GHRepositoryRule.Type.non_fast_forward)));
-        assertThat(rule.getRulesetSourceType(), is(equalTo(GHRepositoryRule.RulesetSourceType.Repository)));
+        assertThat(rule.getType(), is(equalTo(GHRepositoryRule.Type.NON_FAST_FORWARD)));
+        assertThat(rule.getRulesetSourceType(), is(equalTo(GHRepositoryRule.RulesetSourceType.REPOSITORY)));
         assertThat(rule.getRulesetSource(), is(equalTo("ihrigb/node-doorbird")));
         assertThat(rule.getRulesetId(), is(equalTo(1170520L)));
 
         rule = rules.get(2);
-        assertThat(rule.getType(), is(equalTo(GHRepositoryRule.Type.pull_request)));
-        assertThat(rule.getRulesetSourceType(), is(equalTo(GHRepositoryRule.RulesetSourceType.Repository)));
+        assertThat(rule.getType(), is(equalTo(GHRepositoryRule.Type.PULL_REQUEST)));
+        assertThat(rule.getRulesetSourceType(), is(equalTo(GHRepositoryRule.RulesetSourceType.REPOSITORY)));
         assertThat(rule.getRulesetSource(), is(equalTo("ihrigb/node-doorbird")));
         assertThat(rule.getRulesetId(), is(equalTo(1170520L)));
 

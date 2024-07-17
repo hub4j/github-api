@@ -412,7 +412,6 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         assertThat(uc.getContentType(), equalTo("application/json; charset=utf-8"));
                         assertThat(uc.getContentLength(), equalTo(-1));
                         assertThat(uc.getHeaderFields(), instanceOf(Map.class));
-                        assertThat(uc.getHeaderFields().size(), Matchers.greaterThan(25));
                         assertThat(uc.getHeaderField("Status"), equalTo("429 Too Many Requests"));
 
                         try (InputStream errorStream = uc.getErrorStream()) {

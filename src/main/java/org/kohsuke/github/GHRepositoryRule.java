@@ -15,9 +15,9 @@ import java.util.function.Function;
  */
 public class GHRepositoryRule {
     private Type type;
-    private RulesetSourceType ruleset_source_type;
-    private String ruleset_source;
-    private long ruleset_id;
+    private RulesetSourceType rulesetSourceType;
+    private String rulesetSource;
+    private long rulesetId;
     private Map<String, JsonNode> parameters;
 
     /**

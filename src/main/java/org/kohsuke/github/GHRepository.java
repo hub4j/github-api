@@ -1615,6 +1615,27 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Sync this repository fork branch
+     *
+     * @param branch
+     *            the branch to sync
+     * @return The current repository
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepository sync(String branch) throws IOException {
+        if (isFork()) {
+            root().createRequest()
+                    .method("POST")
+                    .with("branch", branch)
+                    .withUrlPath(getApiTailUrl("merge-upstream"))
+                    .send();
+
+        }
+        return this;
+    }
+
+    /**
      * Forks this repository into an organization.
      *
      * @param org

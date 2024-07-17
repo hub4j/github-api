@@ -1,0 +1,17 @@
+[
+  {
+    "name": "main",
+    "commit": {
+      "sha": "c5b97d5ae6c19d5c5df71a34c7fbeeda2479ccbc",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/c5b97d5ae6c19d5c5df71a34c7fbeeda2479ccbc"
+    },
+    "protected": true,
+    "protection": {
+      "required_status_checks": {
+        "enforcement_level": "non_admins",
+        "contexts": [],
+      }
+    },
+    "protection_url": "https://api.github.com/repos/hub4j-test-org/github-api/branches/main/protection"
+  }
+]

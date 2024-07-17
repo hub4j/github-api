@@ -48,6 +48,18 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test sync of fork
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void sync() throws IOException {
+        GHRepository r = getRepository();
+        r.sync("main");
+    }
+
+    /**
      * Test zipball.
      *
      * @throws IOException

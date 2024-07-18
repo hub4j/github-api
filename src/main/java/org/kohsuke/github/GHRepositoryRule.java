@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.kohsuke.github.internal.EnumUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -12,8 +13,8 @@ import java.util.function.Function;
  * Represents a repository rule.
  */
 public class GHRepositoryRule {
-    private Type type;
-    private RulesetSourceType rulesetSourceType;
+    private String type;
+    private String rulesetSourceType;
     private String rulesetSource;
     private long rulesetId;
     private Map<String, JsonNode> parameters;
@@ -24,7 +25,7 @@ public class GHRepositoryRule {
      * @return the type
      */
     public Type getType() {
-        return this.type;
+        return EnumUtils.getEnumOrDefault(Type.class, this.type, Type.UNKNOWN);
     }
 
     /**
@@ -33,7 +34,7 @@ public class GHRepositoryRule {
      * @return the ruleset source type
      */
     public RulesetSourceType getRulesetSourceType() {
-        return this.rulesetSourceType;
+        return EnumUtils.getEnumOrDefault(RulesetSourceType.class, this.rulesetSourceType, RulesetSourceType.UNKNOWN);
     }
 
     /**
@@ -71,6 +72,11 @@ public class GHRepositoryRule {
      * The type of the ruleset.
      */
     public static enum Type {
+        /**
+         * unknown
+         */
+        UNKNOWN,
+
         /**
          * creation
          */
@@ -157,6 +163,11 @@ public class GHRepositoryRule {
      */
     public enum RulesetSourceType {
         /**
+         * unknown
+         */
+        UNKNOWN,
+
+        /**
          * Repository
          */
         REPOSITORY,
@@ -172,7 +183,7 @@ public class GHRepositoryRule {
      */
     public interface Parameters {
         /**
-         * update_allows_fetch_and_merge paramter
+         * update_allows_fetch_and_merge parameter
          */
         public static final BooleanParameter UPDATE_ALLOWS_FETCH_AND_MERGE = new BooleanParameter(
                 "update_allows_fetch_and_merge");

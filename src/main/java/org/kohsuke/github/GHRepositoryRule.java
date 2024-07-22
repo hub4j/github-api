@@ -63,6 +63,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      * @param <T>
      *            the type of the parameter
      * @return the parameters
+     * @throws IOException
+     *             if an I/O error occurs
      */
     public <T> Optional<T> getParameter(Parameter<T> parameter) throws IOException {
         if (this.parameters == null) {

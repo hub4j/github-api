@@ -1,10 +1,12 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
+import org.kohsuke.github.GHRepositoryRule.AlertsThreshold;
 import org.kohsuke.github.GHRepositoryRule.CodeScanningTool;
 import org.kohsuke.github.GHRepositoryRule.Operator;
 import org.kohsuke.github.GHRepositoryRule.Parameter;
 import org.kohsuke.github.GHRepositoryRule.Parameters;
+import org.kohsuke.github.GHRepositoryRule.SecurityAlertsThreshold;
 import org.kohsuke.github.GHRepositoryRule.StatusCheckConfiguration;
 import org.kohsuke.github.GHRepositoryRule.StringParameter;
 import org.kohsuke.github.GHRepositoryRule.WorkflowFileReference;
@@ -65,6 +67,22 @@ public class GHRepositoryRuleTest {
         assertThat(codeScanningTool.getAlertsThreshold(), is(nullValue()));
         assertThat(codeScanningTool.getSecurityAlertsThreshold(), is(nullValue()));
         assertThat(codeScanningTool.getTool(), is(nullValue()));
+    }
+
+    /**
+     * Tests to cover AlertsThreshold enum.
+     */
+    @Test
+    public void testAlertsThreshold() {
+        assertThat(AlertsThreshold.ERRORS, is(notNullValue()));
+    }
+
+    /**
+     * Tests to cover SecurityAlertsThreshold enum.
+     */
+    @Test
+    public void testSecurityAlertsThreshold() {
+        assertThat(SecurityAlertsThreshold.HIGH_OR_HIGHER, is(notNullValue()));
     }
 
     /**

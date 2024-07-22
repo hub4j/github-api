@@ -77,6 +77,9 @@ public class GHRepositoryRuleTest {
 
     /**
      * Tests that apply on null JsonNode returns null.
+     *
+     * @throws Exception
+     *             if something goes wrong.
      */
     @Test
     public void testParameterReturnsNullOnNullArg() throws Exception {

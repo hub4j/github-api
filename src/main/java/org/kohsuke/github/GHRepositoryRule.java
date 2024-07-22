@@ -332,7 +332,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
             if (jsonNode == null) {
                 return null;
             }
-            return GitHubClient.getMappingObjectReader(root).readValue(jsonNode);
+            return GitHubClient.getMappingObjectReader(root).forType(this.getType()).readValue(jsonNode);
         }
     }
 

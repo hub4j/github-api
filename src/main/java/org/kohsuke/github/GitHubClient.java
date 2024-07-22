@@ -951,16 +951,6 @@ class GitHubClient {
     }
 
     /**
-     * Gets an {@link ObjectMapper}.
-     *
-     * @return an {@link ObjectMapper} instance
-     */
-    @Nonnull
-    static ObjectMapper getObjectMapper() {
-        return MAPPER;
-    }
-
-    /**
      * Gets an {@link ObjectWriter}.
      *
      * @return an {@link ObjectWriter} instance that can be further configured.

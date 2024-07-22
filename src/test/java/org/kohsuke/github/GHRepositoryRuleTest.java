@@ -1,11 +1,10 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
-import org.kohsuke.github.GHRepositoryRule.AlertsThreshold;
 import org.kohsuke.github.GHRepositoryRule.CodeScanningTool;
 import org.kohsuke.github.GHRepositoryRule.Operator;
+import org.kohsuke.github.GHRepositoryRule.Parameter;
 import org.kohsuke.github.GHRepositoryRule.Parameters;
-import org.kohsuke.github.GHRepositoryRule.SecurityAlertsThreshold;
 import org.kohsuke.github.GHRepositoryRule.StatusCheckConfiguration;
 import org.kohsuke.github.GHRepositoryRule.StringParameter;
 import org.kohsuke.github.GHRepositoryRule.WorkflowFileReference;
@@ -14,6 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * Test class for GHRepositoryRule.
@@ -38,9 +38,9 @@ public class GHRepositoryRuleTest {
     @Test
     public void testStatusCheckConfiguration() {
         StatusCheckConfiguration statusCheckConfiguration = new StatusCheckConfiguration();
-        statusCheckConfiguration = new StatusCheckConfiguration("context", 3);
-        assertThat(statusCheckConfiguration.getContext(), is(equalTo("context")));
-        assertThat(statusCheckConfiguration.getIntegrationId(), is(equalTo(3)));
+        statusCheckConfiguration = new StatusCheckConfiguration();
+        assertThat(statusCheckConfiguration.getContext(), is(nullValue()));
+        assertThat(statusCheckConfiguration.getIntegrationId(), is(nullValue()));
     }
 
     /**
@@ -49,11 +49,10 @@ public class GHRepositoryRuleTest {
     @Test
     public void testWorkflowFileReference() {
         WorkflowFileReference workflowFileReference = new WorkflowFileReference();
-        workflowFileReference = new WorkflowFileReference("path", "ref", 13, "sha");
-        assertThat(workflowFileReference.getPath(), is(equalTo("path")));
-        assertThat(workflowFileReference.getRef(), is(equalTo("ref")));
-        assertThat(workflowFileReference.getRepositoryId(), is(equalTo(13)));
-        assertThat(workflowFileReference.getSha(), is(equalTo("sha")));
+        assertThat(workflowFileReference.getPath(), is(nullValue()));
+        assertThat(workflowFileReference.getRef(), is(nullValue()));
+        assertThat(workflowFileReference.getRepositoryId(), is(equalTo(0L)));
+        assertThat(workflowFileReference.getSha(), is(nullValue()));
     }
 
     /**
@@ -62,10 +61,10 @@ public class GHRepositoryRuleTest {
     @Test
     public void testCodeScanningTool() {
         CodeScanningTool codeScanningTool = new CodeScanningTool();
-        codeScanningTool = new CodeScanningTool(AlertsThreshold.ERRORS, SecurityAlertsThreshold.HIGH_OR_HIGHER, "tool");
-        assertThat(codeScanningTool.getAlertsThreshold(), is(equalTo(AlertsThreshold.ERRORS)));
-        assertThat(codeScanningTool.getSecurityAlertsThreshold(), is(equalTo(SecurityAlertsThreshold.HIGH_OR_HIGHER)));
-        assertThat(codeScanningTool.getTool(), is(equalTo("tool")));
+        codeScanningTool = new CodeScanningTool();
+        assertThat(codeScanningTool.getAlertsThreshold(), is(nullValue()));
+        assertThat(codeScanningTool.getSecurityAlertsThreshold(), is(nullValue()));
+        assertThat(codeScanningTool.getTool(), is(nullValue()));
     }
 
     /**
@@ -74,5 +73,14 @@ public class GHRepositoryRuleTest {
     @Test
     public void testOperator() {
         assertThat(Operator.ENDS_WITH, is(notNullValue()));
+    }
+
+    /**
+     * Tests that apply on null JsonNode returns null.
+     */
+    @Test
+    public void testParameterReturnsNullOnNullArg() throws Exception {
+        Parameter<String> parameter = new StringParameter("any");
+        assertThat(parameter.apply(null, null), is(nullValue()));
     }
 }

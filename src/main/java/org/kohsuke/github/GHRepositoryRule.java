@@ -4,15 +4,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.kohsuke.github.internal.EnumUtils;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Represents a repository rule.
  */
-public class GHRepositoryRule {
+public class GHRepositoryRule extends GitHubInteractiveObject {
     private String type;
     private String rulesetSourceType;
     private String rulesetSource;
@@ -64,8 +64,15 @@ public class GHRepositoryRule {
      *            the type of the parameter
      * @return the parameters
      */
-    public <T> Optional<T> getParameter(Parameter<T> parameter) {
-        return Optional.ofNullable(this.parameters).map(p -> p.get(parameter.getKey())).map(parameter);
+    public <T> Optional<T> getParameter(Parameter<T> parameter) throws IOException {
+        if (this.parameters == null) {
+            return Optional.empty();
+        }
+        JsonNode jsonNode = this.parameters.get(parameter.getKey());
+        if (jsonNode == null) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(parameter.apply(jsonNode, root()));
     }
 
     /**
@@ -291,7 +298,7 @@ public class GHRepositoryRule {
      * @param <T>
      *            the type of the parameter
      */
-    public abstract static class Parameter<T> implements Function<JsonNode, T> {
+    public abstract static class Parameter<T> {
 
         private final String key;
 
@@ -319,12 +326,11 @@ public class GHRepositoryRule {
             return this.key;
         }
 
-        @Override
-        public T apply(JsonNode jsonNode) {
+        T apply(JsonNode jsonNode, GitHub root) throws IOException {
             if (jsonNode == null) {
                 return null;
             }
-            return GitHubClient.getObjectMapper().convertValue(jsonNode, getType());
+            return GitHubClient.getMappingObjectReader(root).readValue(jsonNode);
         }
     }
 
@@ -417,25 +423,6 @@ public class GHRepositoryRule {
         private Integer integrationId;
 
         /**
-         * Instantiates a new status check configuration.
-         */
-        public StatusCheckConfiguration() {
-        }
-
-        /**
-         * Instantiates a new status check configuration.
-         *
-         * @param context
-         *            the context
-         * @param integrationId
-         *            the integration id
-         */
-        public StatusCheckConfiguration(String context, Integer integrationId) {
-            this.context = context;
-            this.integrationId = integrationId;
-        }
-
-        /**
          * Gets the context.
          *
          * @return the context
@@ -485,33 +472,8 @@ public class GHRepositoryRule {
     public static class WorkflowFileReference {
         private String path;
         private String ref;
-        private int repositoryId;
+        private long repositoryId;
         private String sha;
-
-        /**
-         * Instantiates a new workflow file reference.
-         */
-        public WorkflowFileReference() {
-        }
-
-        /**
-         * Instantiates a new workflow file reference.
-         *
-         * @param path
-         *            the path
-         * @param ref
-         *            the ref
-         * @param repositoryId
-         *            the repository id
-         * @param sha
-         *            the sha
-         */
-        public WorkflowFileReference(String path, String ref, int repositoryId, String sha) {
-            this.path = path;
-            this.ref = ref;
-            this.repositoryId = repositoryId;
-            this.sha = sha;
-        }
 
         /**
          * Gets the path.
@@ -536,7 +498,7 @@ public class GHRepositoryRule {
          *
          * @return the repository id
          */
-        public int getRepositoryId() {
+        public long getRepositoryId() {
             return this.repositoryId;
         }
 
@@ -557,30 +519,6 @@ public class GHRepositoryRule {
         private AlertsThreshold alertsThreshold;
         private SecurityAlertsThreshold securityAlertsThreshold;
         private String tool;
-
-        /**
-         * Instantiates a new code scanning tool.
-         */
-        public CodeScanningTool() {
-        }
-
-        /**
-         * Instantiates a new code scanning tool.
-         *
-         * @param alertsThreshold
-         *            the alerts threshold
-         * @param securityAlertsThreshold
-         *            the security alerts threshold
-         * @param tool
-         *            the tool
-         */
-        public CodeScanningTool(AlertsThreshold alertsThreshold,
-                SecurityAlertsThreshold securityAlertsThreshold,
-                String tool) {
-            this.alertsThreshold = alertsThreshold;
-            this.securityAlertsThreshold = securityAlertsThreshold;
-            this.tool = tool;
-        }
 
         /**
          * Gets the alerts threshold.

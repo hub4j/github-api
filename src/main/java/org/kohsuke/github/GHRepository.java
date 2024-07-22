@@ -1624,14 +1624,11 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public GHRepository sync(String branch) throws IOException {
-        if (isFork()) {
-            root().createRequest()
-                    .method("POST")
-                    .with("branch", branch)
-                    .withUrlPath(getApiTailUrl("merge-upstream"))
-                    .send();
-
-        }
+        root().createRequest()
+                .method("POST")
+                .with("branch", branch)
+                .withUrlPath(getApiTailUrl("merge-upstream"))
+                .send();
         return this;
     }
 

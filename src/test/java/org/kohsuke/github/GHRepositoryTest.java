@@ -56,7 +56,25 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void sync() throws IOException {
         GHRepository r = getRepository();
-        r.sync("main");
+        GHBranchSync sync = r.sync("main");
+        assertThat(sync.getOwner().getFullName(), equalTo("hub4j-test-org/github-api"));
+        assertThat(sync.getMessage(), equalTo("Successfully fetched and fast-forwarded from upstream github-api:main"));
+        assertThat(sync.getMergeType(), equalTo("fast-forward"));
+        assertThat(sync.getBaseBranch(), equalTo("github-api:main"));
+    }
+
+    /**
+     * Test sync of repository not a fork
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test(expected = HttpException.class)
+    public void syncNoFork() throws IOException {
+        GHRepository r = getRepository();
+        GHBranchSync sync = r.sync("main");
+        fail("Should have thrown an exception");
+
     }
 
     /**

@@ -1,0 +1,5 @@
+{
+  "message": "Validation Failed",
+  "documentation_url": "https://docs.github.com/rest/branches/branches#sync-a-fork-branch-with-the-upstream-repository",
+  "status": "422"
+}

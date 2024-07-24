@@ -1623,13 +1623,13 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHRepository sync(String branch) throws IOException {
-        root().createRequest()
+    public GHBranchSync sync(String branch) throws IOException {
+        return root().createRequest()
                 .method("POST")
                 .with("branch", branch)
                 .withUrlPath(getApiTailUrl("merge-upstream"))
-                .send();
-        return this;
+                .fetch(GHBranchSync.class)
+                .wrap(this);
     }
 
     /**

@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class GHBranchSync extends GitHubInteractiveObject {
@@ -9,10 +8,8 @@ public class GHBranchSync extends GitHubInteractiveObject {
 
     private String message;
 
-    @JsonProperty("merge_type")
     private String mergeType;
 
-    @JsonProperty("base_branch")
     private String baseBranch;
 
     /**

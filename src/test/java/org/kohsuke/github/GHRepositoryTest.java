@@ -493,7 +493,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         }
 
         if (false) {
-            // can't easily test this; there's no private repository visible to the test user
+            // can't easily test this; there's no private repository visible to the test
+            // user
             r = gitHub.getOrganization("cloudbees").getRepository("private-repo-not-writable-by-me");
             try {
                 r.getPermission("jglick");
@@ -1159,7 +1160,8 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRefsWithPrefix.get(0).getRef(), equalTo(ghRefs.get(0).getRef()));
 
         // git/refs/heads/gh-pages
-        // passing a specific ref to listRefs will fail to parse due to returning a single item not an array
+        // passing a specific ref to listRefs will fail to parse due to returning a
+        // single item not an array
         try {
             ghRefs = repo.listRefs("heads/gh-pages").toList();
             fail();
@@ -1847,6 +1849,45 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repository = gitHub.getRepository("ihrigb/node-doorbird");
         List<GHRepositoryTrafficTopReferralSources> referralSources = repository.getTopReferralSources();
         assertThat(referralSources.size(), greaterThan(0));
+    }
+
+    /**
+     * Test getRulesForBranch.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGetRulesForBranch() throws Exception {
+        GHRepository repository = gitHub.getRepository("ihrigb/node-doorbird");
+        List<GHRepositoryRule> rules = repository.listRulesForBranch("main").toList();
+        assertThat(rules.size(), equalTo(3));
+
+        GHRepositoryRule rule = rules.get(0);
+        assertThat(rule.getType(), is(equalTo(GHRepositoryRule.Type.DELETION)));
+        assertThat(rule.getRulesetSourceType(), is(equalTo(GHRepositoryRule.RulesetSourceType.REPOSITORY)));
+        assertThat(rule.getRulesetSource(), is(equalTo("ihrigb/node-doorbird")));
+        assertThat(rule.getRulesetId(), is(equalTo(1170520L)));
+
+        rule = rules.get(1);
+        assertThat(rule.getType(), is(equalTo(GHRepositoryRule.Type.NON_FAST_FORWARD)));
+        assertThat(rule.getRulesetSourceType(), is(equalTo(GHRepositoryRule.RulesetSourceType.REPOSITORY)));
+        assertThat(rule.getRulesetSource(), is(equalTo("ihrigb/node-doorbird")));
+        assertThat(rule.getRulesetId(), is(equalTo(1170520L)));
+
+        rule = rules.get(2);
+        assertThat(rule.getType(), is(equalTo(GHRepositoryRule.Type.PULL_REQUEST)));
+        assertThat(rule.getRulesetSourceType(), is(equalTo(GHRepositoryRule.RulesetSourceType.REPOSITORY)));
+        assertThat(rule.getRulesetSource(), is(equalTo("ihrigb/node-doorbird")));
+        assertThat(rule.getRulesetId(), is(equalTo(1170520L)));
+
+        // check parameters
+        assertThat(rule.getParameter(GHRepositoryRule.Parameters.NEGATE).isPresent(), is(equalTo(false)));
+        assertThat(rule.getParameter(GHRepositoryRule.Parameters.REQUIRED_APPROVING_REVIEW_COUNT).get(),
+                is(equalTo(1)));
+        assertThat(rule.getParameter(GHRepositoryRule.Parameters.DISMISS_STALE_REVIEWS_ON_PUSH).get(),
+                is(equalTo(true)));
+        assertThat(rule.getParameter(GHRepositoryRule.Parameters.REQUIRE_CODE_OWNER_REVIEW).get(), is(equalTo(false)));
     }
 
     private void verifyEmptyResult(PagedSearchIterable<GHPullRequest> searchResult) {

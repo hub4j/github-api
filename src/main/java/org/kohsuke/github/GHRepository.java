@@ -1007,7 +1007,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists all
-     * <a href="https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/">the
+     * <a href= "https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/">the
      * available assignees</a> to which issues may be assigned.
      *
      * @return the paged iterable
@@ -2240,7 +2240,7 @@ public class GHRepository extends GHObject {
      * @return check runs for given ref
      * @throws IOException
      *             the io exception
-     * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
+     * @see <a href= "https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */
     public PagedIterable<GHCheckRun> getCheckRuns(String ref) throws IOException {
@@ -2260,7 +2260,7 @@ public class GHRepository extends GHObject {
      * @return check runs for the given ref
      * @throws IOException
      *             the io exception
-     * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
+     * @see <a href= "https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */
     public PagedIterable<GHCheckRun> getCheckRuns(String ref, Map<String, Object> params) throws IOException {
@@ -3586,7 +3586,8 @@ public class GHRepository extends GHObject {
 
         // We don't use the URL provided in the JSON because it is not reliable:
         // 1. There is bug in Push event payloads that returns the wrong url.
-        // For Push event repository records, they take the form "https://github.com/{fullName}".
+        // For Push event repository records, they take the form
+        // "https://github.com/{fullName}".
         // All other occurrences of "url" take the form "https://api.github.com/...".
         // 2. For Installation event payloads, the URL is not provided at all.
 
@@ -3665,6 +3666,23 @@ public class GHRepository extends GHObject {
                 .method("GET")
                 .withUrlPath(getApiTailUrl("/traffic/popular/referrers"))
                 .fetch(GHRepositoryTrafficTopReferralSources[].class));
+    }
+
+    /**
+     * Get all active rules that apply to the specified branch
+     * (https://docs.github.com/en/rest/repos/rules?apiVersion=2022-11-28#get-rules-for-a-branch).
+     *
+     * @param branch
+     *            the branch
+     * @return the rules for branch
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHRepositoryRule> listRulesForBranch(String branch) throws IOException {
+        return root().createRequest()
+                .method("GET")
+                .withUrlPath(getApiTailUrl("/rules/branches/" + branch))
+                .toIterable(GHRepositoryRule[].class, null);
     }
 
     /**

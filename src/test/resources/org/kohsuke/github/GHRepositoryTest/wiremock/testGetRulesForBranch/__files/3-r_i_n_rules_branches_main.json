@@ -1,0 +1,27 @@
+[
+  {
+    "type": "deletion",
+    "ruleset_source_type": "Repository",
+    "ruleset_source": "ihrigb/node-doorbird",
+    "ruleset_id": 1170520
+  },
+  {
+    "type": "non_fast_forward",
+    "ruleset_source_type": "Repository",
+    "ruleset_source": "ihrigb/node-doorbird",
+    "ruleset_id": 1170520
+  },
+  {
+    "type": "pull_request",
+    "parameters": {
+      "required_approving_review_count": 1,
+      "dismiss_stale_reviews_on_push": true,
+      "require_code_owner_review": false,
+      "require_last_push_approval": false,
+      "required_review_thread_resolution": false
+    },
+    "ruleset_source_type": "Repository",
+    "ruleset_source": "ihrigb/node-doorbird",
+    "ruleset_id": 1170520
+  }
+]

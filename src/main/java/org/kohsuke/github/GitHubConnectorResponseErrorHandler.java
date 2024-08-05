@@ -24,6 +24,17 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 abstract class GitHubConnectorResponseErrorHandler {
 
     /**
+     * The HTTP 429 Too Many Requests response status code indicates the user has sent too many requests in a given
+     * amount of time ("rate limiting").
+     *
+     * A Retry-After header might be included to this response indicating how long to wait before making a new request.
+     *
+     * Why is this hardcoded here? The HttpURLConnection class is missing the status codes above 415, so the constant
+     * needs to be sourced from elsewhere.
+     */
+    public static final int TOO_MANY_REQUESTS = 429;
+
+    /**
      * Called to detect an error handled by this handler.
      *
      * @param connectorResponse

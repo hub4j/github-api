@@ -29,7 +29,19 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      */
     @Override
     boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
-        return isForbidden(connectorResponse) && hasRetryOrLimitHeader(connectorResponse);
+        return isTooManyRequests(connectorResponse)
+                || (isForbidden(connectorResponse) && hasRetryOrLimitHeader(connectorResponse));
+    }
+
+    /**
+     * Checks if the response status code is TOO_MANY_REQUESTS (429).
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @return true if the status code is TOO_MANY_REQUESTS
+     */
+    private boolean isTooManyRequests(GitHubConnectorResponse connectorResponse) {
+        return connectorResponse.statusCode() == TOO_MANY_REQUESTS;
     }
 
     /**

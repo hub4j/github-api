@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -226,5 +227,21 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     public void verifyLdapdn() throws IOException {
         GHUser u = gitHub.getUser("kartikpatodi");
         assertThat(u.getLdapDn().orElse(""), not(emptyString()));
+    }
+
+    /**
+     * Verify suspended_at.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void verifySuspendedAt() throws IOException {
+        GHUser normal = gitHub.getUser("normal");
+        assertThat(normal.getSuspendedAt(), is(nullValue()));
+
+        GHUser suspended = gitHub.getUser("suspended");
+        Date suspendedAt = new Date(Instant.parse("2024-08-08T00:00:00Z").toEpochMilli());
+        assertThat(suspended.getSuspendedAt(), equalTo(suspendedAt));
     }
 }

@@ -3081,6 +3081,25 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * List contributors paged iterable.
+     *
+     * @param includeAnonymous
+     *            whether to include anonymous contributors
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<Contributor> listContributors(boolean includeAnonymous) throws IOException {
+        if (includeAnonymous) {
+            return root().createRequest()
+                    .withUrlPath(getApiTailUrl("contributors"))
+                    .with("anon", "true")
+                    .toIterable(Contributor[].class, null);
+        }
+        return listContributors();
+    }
+
+    /**
      * The type Contributor.
      */
     public static class Contributor extends GHUser {

@@ -502,6 +502,30 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * List contributors.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void listContributorsAnon() throws IOException {
+        GHRepository r = gitHub.getOrganization("hub4j").getRepository("github-api");
+        int i = 0;
+        boolean kohsuke = false;
+
+        for (GHRepository.Contributor c : r.listContributors(true)) {
+            if (c.getLogin().equals("kohsuke")) {
+                assertThat(c.getContributions(), greaterThan(0));
+                kohsuke = true;
+            }
+            if (i++ > 5) {
+                break;
+            }
+        }
+
+        assertThat(kohsuke, is(true));
+    }
+    /**
      * Gets the permission.
      *
      * @throws Exception

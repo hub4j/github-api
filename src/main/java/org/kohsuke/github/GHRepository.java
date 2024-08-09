@@ -3088,6 +3088,7 @@ public class GHRepository extends GHObject {
      * @return the paged iterable
      * @throws IOException
      *             the io exception
+     * @link https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repository-contributors
      */
     public PagedIterable<Contributor> listContributors(boolean includeAnonymous) throws IOException {
         if (includeAnonymous) {

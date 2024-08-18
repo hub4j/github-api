@@ -107,7 +107,7 @@ public abstract class AbuseLimitHandler extends GitHubAbuseLimitHandler {
      * and parse it as either a number or a date (the spec allows both).
      * If no header is found, wait for a reasonably amount of time.
      */
-    protected long parseWaitTime(HttpURLConnection uc) {
+    long parseWaitTime(HttpURLConnection uc) {
         String v = uc.getHeaderField("Retry-After");
         if (v == null) {
             // can't tell, wait for unambiguously over one minute per GitHub guidance

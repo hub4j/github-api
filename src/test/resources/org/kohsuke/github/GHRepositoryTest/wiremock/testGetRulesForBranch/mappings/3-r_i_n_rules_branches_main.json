@@ -1,0 +1,47 @@
+{
+  "id": "5d5471fe-6842-47d0-876e-0083b8d7708f",
+  "name": "repos_ihrigb_node-doorbird_rules_branches_main",
+  "request": {
+    "url": "/repos/ihrigb/node-doorbird/rules/branches/main",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_i_n_rules_branches_main.json",
+    "headers": {
+      "Date": "Mon, 15 Jul 2024 08:30:50 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"bfdf4f7b088f8bb098a04db8694a3e420c4e6953de47a7a0fb0f1c8f756a1854\"",
+      "X-OAuth-Scopes": "admin:org, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2024-08-14 08:24:53 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4983",
+      "X-RateLimit-Reset": "1721035644",
+      "X-RateLimit-Used": "17",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-GitHub-Request-Id": "E229:31B5A3:74633C:759FE7:6694DE39"
+    }
+  },
+  "uuid": "5d5471fe-6842-47d0-876e-0083b8d7708f",
+  "persistent": true,
+  "insertionIndex": 3
+}

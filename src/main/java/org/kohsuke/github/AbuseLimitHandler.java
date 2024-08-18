@@ -103,9 +103,8 @@ public abstract class AbuseLimitHandler extends GitHubAbuseLimitHandler {
     };
 
     /*
-     * Exposed for testability. Given an http response, find the retry-after header field
-     * and parse it as either a number or a date (the spec allows both).
-     * If no header is found, wait for a reasonably amount of time.
+     * Exposed for testability. Given an http response, find the retry-after header field and parse it as either a
+     * number or a date (the spec allows both). If no header is found, wait for a reasonably amount of time.
      */
     long parseWaitTime(HttpURLConnection uc) {
         String v = uc.getHeaderField("Retry-After");

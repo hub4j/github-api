@@ -438,6 +438,12 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(2));
     }
 
+    /**
+     * Tests the behavior of the GitHub API client when the abuse limit handler with a date retry.
+     *
+     * @throws Exception
+     *             if any error occurs during the test execution.
+     */
     @Test
     public void testHandler_Wait_Secondary_Limits_Too_Many_Requests_Date_Retry_After() throws Exception {
         // Customized response that templates the date to keep things working
@@ -490,6 +496,12 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(2));
     }
 
+    /**
+     * Tests the behavior of the GitHub API client when the abuse limit handler with a no retry after header.
+     *
+     * @throws Exception
+     *             if any error occurs during the test execution.
+     */
     @Test
     public void testHandler_Wait_Secondary_Limits_Too_Many_Requests_No_Retry_After() throws Exception {
         // Customized response that templates the date to keep things working

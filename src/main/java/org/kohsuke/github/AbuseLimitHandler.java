@@ -5,6 +5,9 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import javax.annotation.Nonnull;
 
@@ -86,13 +89,6 @@ public abstract class AbuseLimitHandler extends GitHubAbuseLimitHandler {
             }
         }
 
-        private long parseWaitTime(HttpURLConnection uc) {
-            String v = uc.getHeaderField("Retry-After");
-            if (v == null)
-                return 60 * 1000; // can't tell, return 1 min
-
-            return Math.max(1000, Long.parseLong(v) * 1000);
-        }
     };
 
     /**
@@ -105,4 +101,25 @@ public abstract class AbuseLimitHandler extends GitHubAbuseLimitHandler {
             throw e;
         }
     };
+
+    /*
+     * Exposed for testability. Given an http response, find the retry-after header field and parse it as either a
+     * number or a date (the spec allows both). If no header is found, wait for a reasonably amount of time.
+     */
+    long parseWaitTime(HttpURLConnection uc) {
+        String v = uc.getHeaderField("Retry-After");
+        if (v == null) {
+            // can't tell, wait for unambiguously over one minute per GitHub guidance
+            return 61 * 1000;
+        }
+
+        try {
+            return Math.max(1000, Long.parseLong(v) * 1000);
+        } catch (NumberFormatException nfe) {
+            // The retry-after header could be a number in seconds, or an http-date
+            ZonedDateTime zdt = ZonedDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);
+            return ChronoUnit.MILLIS.between(ZonedDateTime.now(), zdt);
+        }
+    }
+
 }

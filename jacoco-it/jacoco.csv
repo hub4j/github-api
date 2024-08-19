@@ -14,9 +14,9 @@ GitHub API for Java,org.kohsuke.github.internal,Previews,0,126,0,0,0,21,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHOrganization,258,697,13,11,46,108,22,43,15,38
 GitHub API for Java,org.kohsuke.github,GHHooks,3,13,0,0,1,2,1,2,1,2
 GitHub API for Java,org.kohsuke.github,GHCommit,16,366,5,11,4,72,7,33,2,30
-GitHub API for Java,org.kohsuke.github,GHRepositoryTraffic,0,18,0,0,0,8,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHLabelChanges.GHFrom,0,6,0,0,0,2,0,2,0,2
-GitHub API for Java,org.kohsuke.github,GHUser,120,183,4,6,16,29,13,17,9,16
+GitHub API for Java,org.kohsuke.github,GHRepositoryTraffic,0,18,0,0,0,8,0,4,0,4
+GitHub API for Java,org.kohsuke.github,GHUser,120,187,4,6,16,30,13,18,9,17
 GitHub API for Java,org.kohsuke.github,GHThread.Subject,0,3,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHCheckRun.Conclusion,0,68,0,0,0,12,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHPermission,6,10,0,0,2,2,2,2,2,2
@@ -28,17 +28,19 @@ GitHub API for Java,org.kohsuke.github,GHTree,5,64,1,5,2,11,2,8,1,6
 GitHub API for Java,org.kohsuke.github,GHEventPayload.CommentChanges,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHPullRequestReviewState,8,58,4,4,3,13,4,5,0,3
 GitHub API for Java,org.kohsuke.github,GHMyself,178,86,8,0,31,20,12,9,8,9
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters.5.new TypeReference() {...},0,6,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHArtifact,20,90,1,1,3,15,2,11,1,11
 GitHub API for Java,org.kohsuke.github,GHThread,123,42,9,1,19,9,11,8,6,8
 GitHub API for Java,org.kohsuke.github,GHBlob,25,28,1,1,5,7,3,5,2,5
 GitHub API for Java,org.kohsuke.github,GHDeploymentBuilder,40,71,0,0,10,16,5,7,5,7
 GitHub API for Java,org.kohsuke.github,GHRepositoryStatistics.PunchCardItem,0,57,0,0,0,9,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHMarketplaceListAccountBuilder,0,47,0,0,0,10,0,4,0,4
-GitHub API for Java,org.kohsuke.github,GitHubRateLimitChecker,43,116,9,13,7,32,7,10,0,6
 GitHub API for Java,org.kohsuke.github,GitHubRequest,23,313,2,26,6,60,4,30,2,18
+GitHub API for Java,org.kohsuke.github,GitHubRateLimitChecker,43,116,9,13,7,32,7,10,0,6
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Discussion,0,9,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHPullRequest,83,438,2,8,18,98,12,42,11,38
 GitHub API for Java,org.kohsuke.github,ReactionContent,2,93,1,3,1,16,1,5,0,4
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.CodeScanningTool,0,12,0,0,0,4,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHRef,0,174,1,11,0,35,1,15,0,10
 GitHub API for Java,org.kohsuke.github,GHEventPayload.CheckRun,14,36,2,2,3,11,3,6,1,6
 GitHub API for Java,org.kohsuke.github,GHTreeBuilder,41,145,1,3,7,24,2,10,1,9
@@ -46,6 +48,7 @@ GitHub API for Java,org.kohsuke.github,GHCheckRun.Output,0,19,0,0,0,6,0,6,0,6
 GitHub API for Java,org.kohsuke.github,GHEventPayload.WorkflowRun,10,33,3,3,2,10,3,4,0,4
 GitHub API for Java,org.kohsuke.github,GHEmail,40,0,2,0,10,0,8,0,7,0
 GitHub API for Java,org.kohsuke.github,GHInvitation,49,0,0,0,6,0,4,0,4,0
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters.4.new TypeReference() {...},0,6,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,PagedSearchIterable.new Iterator() {...},0,33,0,2,0,6,0,4,0,3
 GitHub API for Java,org.kohsuke.github,GHAsset,32,95,2,0,7,19,4,14,3,14
 GitHub API for Java,org.kohsuke.github,GHContentWithLicense,0,9,0,0,0,3,0,2,0,2
@@ -57,48 +60,54 @@ GitHub API for Java,org.kohsuke.github,GHPullRequestReviewBuilder.MultilineDraft
 GitHub API for Java,org.kohsuke.github,GHCommitStatus,15,42,1,3,2,8,2,7,1,6
 GitHub API for Java,org.kohsuke.github,GHPullRequestSearchBuilder.PullRequestSearchResult,0,3,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GitCommit,2,124,2,2,1,36,2,21,0,21
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule,2,44,1,3,1,10,1,7,0,6
 GitHub API for Java,org.kohsuke.github,GHCompare.new PagedIterable() {...},0,16,0,0,0,2,0,2,0,2
-GitHub API for Java,org.kohsuke.github,GHBranchProtectionBuilder,243,288,22,4,43,69,23,38,12,36
 GitHub API for Java,org.kohsuke.github,GHEventPayload.DeploymentStatus,0,37,1,1,0,11,1,6,0,6
+GitHub API for Java,org.kohsuke.github,GHBranchProtectionBuilder,243,288,22,4,43,69,23,38,12,36
 GitHub API for Java,org.kohsuke.github,GHRepositoryChanges.FromOwner,0,9,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHAuthorization,3,37,0,0,1,11,1,11,1,11
-GitHub API for Java,org.kohsuke.github,GHMarketplacePendingChange,0,16,0,0,0,5,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHEventPayload.CommentChanges.GHFrom,0,6,0,0,0,2,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHMarketplacePendingChange,0,16,0,0,0,5,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Ping,0,3,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHRepository.new AbstractSet() {...},89,24,9,1,19,5,8,3,3,3
 GitHub API for Java,org.kohsuke.github,GHPerson,68,152,1,7,16,45,9,22,8,19
 GitHub API for Java,org.kohsuke.github,GHMarketplacePriceModel,3,32,0,0,1,7,1,2,1,2
 GitHub API for Java,org.kohsuke.github,GitHubClient.GHApiInfo,0,22,0,2,0,4,0,2,0,1
 GitHub API for Java,org.kohsuke.github,GHCheckRunsIterable.new Iterator() {...},0,33,0,2,0,6,0,4,0,3
-GitHub API for Java,org.kohsuke.github,GHExternalGroup,0,76,0,0,0,17,0,11,0,11
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.StatusCheckConfiguration,0,9,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHIssueChanges.GHFrom,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHProjectCard,91,104,6,2,23,20,12,12,8,12
+GitHub API for Java,org.kohsuke.github,GHExternalGroup,0,76,0,0,0,17,0,11,0,11
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.IntegerParameter.new TypeReference() {...},0,6,0,0,0,1,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters.3.new TypeReference() {...},0,6,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHExternalGroup.GHLinkedExternalMember,0,15,0,0,0,5,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHEventPayload.CheckSuite,11,23,2,2,2,8,2,3,0,3
 GitHub API for Java,org.kohsuke.github,GHCommit.new AbstractList() {...},0,19,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHEventPayload.DiscussionComment,0,9,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHDeploymentStatus,11,33,0,0,3,9,3,8,3,8
-GitHub API for Java,org.kohsuke.github,GHNotificationStream.new Iterator() {...},35,166,8,14,10,39,7,9,0,5
 GitHub API for Java,org.kohsuke.github,GHIOException,4,17,0,0,1,8,1,4,1,4
+GitHub API for Java,org.kohsuke.github,GHNotificationStream.new Iterator() {...},35,166,8,14,10,39,7,9,0,5
 GitHub API for Java,org.kohsuke.github,GHCheckRunsIterable,0,31,0,0,0,7,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHTreeBuilder.TreeEntry,0,12,0,0,0,5,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHPullRequestQueryBuilder.Sort,0,27,0,0,0,5,0,1,0,1
-GitHub API for Java,org.kohsuke.github,AbuseLimitHandler,0,35,0,0,0,9,0,3,0,3
+GitHub API for Java,org.kohsuke.github,AbuseLimitHandler,0,60,0,2,0,16,0,5,0,4
 GitHub API for Java,org.kohsuke.github,GHTagObject,0,32,0,0,0,11,0,10,0,10
 GitHub API for Java,org.kohsuke.github,GHWorkflowsIterable,0,41,0,0,0,10,0,3,0,3
-GitHub API for Java,org.kohsuke.github,GHRepository.Contributor,7,6,0,0,2,2,2,2,2,2
 GitHub API for Java,org.kohsuke.github,GHCommit.File,0,35,0,0,0,11,0,11,0,11
 GitHub API for Java,org.kohsuke.github,GHMarketplaceAccountPlan,0,9,0,0,0,3,0,3,0,3
+GitHub API for Java,org.kohsuke.github,GHRepository.Contributor,7,6,0,0,2,2,2,2,2,2
 GitHub API for Java,org.kohsuke.github,GHPullRequestCommitDetail.Commit,19,3,0,0,6,1,6,1,6,1
 GitHub API for Java,org.kohsuke.github,GHMarketplacePlanForAccountBuilder,0,31,0,0,0,6,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters.2.new TypeReference() {...},0,6,0,0,0,1,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.WorkflowFileReference,0,15,0,0,0,5,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHMarketplaceAccountType,6,15,0,0,1,3,1,1,1,1
 GitHub API for Java,org.kohsuke.github,GHPullRequestChanges.GHCommitPointer,0,9,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHVerification,0,15,0,0,0,5,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHPullRequestSearchBuilder,13,437,8,8,0,81,8,37,0,37
 GitHub API for Java,org.kohsuke.github,GitHubPageContentsIterable,0,49,0,0,0,12,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHUserSearchBuilder.Sort,0,21,0,0,0,4,0,1,0,1
-GitHub API for Java,org.kohsuke.github,GHRepositoryBuilder,10,104,0,0,2,19,2,18,2,18
 GitHub API for Java,org.kohsuke.github,GHPullRequestReviewCommentBuilder,0,96,0,0,0,22,0,8,0,8
+GitHub API for Java,org.kohsuke.github,GHRepositoryBuilder,10,104,0,0,2,19,2,18,2,18
 GitHub API for Java,org.kohsuke.github,GHIssue.PullRequest,12,3,0,0,3,1,3,1,3,1
 GitHub API for Java,org.kohsuke.github,GHPullRequestReviewBuilder.DraftReviewComment,0,21,0,0,0,8,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHRateLimit,30,291,7,29,4,70,7,28,0,17
@@ -119,18 +128,20 @@ GitHub API for Java,org.kohsuke.github,GHIssueState,0,21,0,0,0,4,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHPullRequestCommitDetail.Tree,7,3,0,0,2,1,2,1,2,1
 GitHub API for Java,org.kohsuke.github,GHReleaseBuilder.MakeLatest,0,26,0,0,0,5,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHAppInstallationsIterable,0,36,0,0,0,7,0,3,0,3
-GitHub API for Java,org.kohsuke.github,GHCheckRunsPage,3,27,0,2,1,4,1,3,1,2
 GitHub API for Java,org.kohsuke.github,GHRepositoryStatistics.CodeFrequency,0,58,0,0,0,10,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHVerification.Reason,0,111,0,0,0,19,0,1,0,1
-GitHub API for Java,org.kohsuke.github,GHRepositoryPublicKey,2,14,0,0,1,5,1,4,1,4
+GitHub API for Java,org.kohsuke.github,GHCheckRunsPage,3,27,0,2,1,4,1,3,1,2
 GitHub API for Java,org.kohsuke.github,GHTeamChanges.FromRepositoryPermissions,5,31,6,6,0,4,6,4,0,4
+GitHub API for Java,org.kohsuke.github,GHRepositoryPublicKey,2,14,0,0,1,5,1,4,1,4
 GitHub API for Java,org.kohsuke.github,GHPullRequestCommitDetail.Authorship,0,3,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHBranchProtectionBuilder.Restrictions,13,0,0,0,3,0,1,0,1,0
 GitHub API for Java,org.kohsuke.github,GHProject.ProjectState,0,15,0,0,0,3,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters.1.new TypeReference() {...},0,6,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHBranchProtection.BlockCreations,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHWorkflowRunQueryBuilder,25,74,0,0,6,16,3,8,3,8
-GitHub API for Java,org.kohsuke.github,GHCompare.Commit,0,6,0,0,0,2,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters,0,76,0,0,0,15,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHEventPayload.CommitComment,0,24,1,1,0,8,1,4,0,4
+GitHub API for Java,org.kohsuke.github,GHCompare.Commit,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GitHubConnectorResponseErrorHandler.new GitHubConnectorResponseErrorHandler() {...},2,85,4,14,1,19,4,9,0,4
 GitHub API for Java,org.kohsuke.github,GHRepositoryStatistics.Participation,5,11,0,0,1,3,1,3,1,3
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Fork,0,11,0,0,0,3,0,3,0,3
@@ -143,6 +154,7 @@ GitHub API for Java,org.kohsuke.github,GHProjectsV2Item,14,26,0,0,1,6,1,6,1,6
 GitHub API for Java,org.kohsuke.github,GHCommitSearchBuilder,156,82,1,1,16,14,15,8,14,8
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Public,0,3,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHTeam,69,564,8,14,10,92,11,41,3,38
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Operator,0,27,0,0,0,5,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHProjectsV2ItemChanges.FromToDate,0,11,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHRepositoryVariable.Creator,0,19,0,0,0,3,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHPullRequestReviewEvent,8,44,3,4,3,9,3,5,0,3
@@ -152,11 +164,11 @@ GitHub API for Java,org.kohsuke.github,GHLicense,7,113,2,8,3,36,3,17,1,14
 GitHub API for Java,org.kohsuke.github,GitHubConnectorResponseErrorHandler,0,8,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHOrgHook,0,29,0,0,0,5,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHTeamChanges,0,15,0,0,0,5,0,5,0,5
-GitHub API for Java,org.kohsuke.github,GHVerifiedKey,22,0,2,0,4,0,3,0,2,0
 GitHub API for Java,org.kohsuke.github,GHLabel.Creator,0,19,0,0,0,3,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GHVerifiedKey,22,0,2,0,4,0,3,0,2,0
 GitHub API for Java,org.kohsuke.github,GHEventPayload.PullRequest,5,31,1,3,1,11,1,7,0,6
-GitHub API for Java,org.kohsuke.github,GHPullRequestReviewCommentReactions,0,61,0,0,0,20,0,11,0,11
 GitHub API for Java,org.kohsuke.github,GHRepositoryStatistics.ContributorStats.Week,0,44,0,0,0,6,0,6,0,6
+GitHub API for Java,org.kohsuke.github,GHPullRequestReviewCommentReactions,0,61,0,0,0,20,0,11,0,11
 GitHub API for Java,org.kohsuke.github,GHEvent,0,403,0,2,0,69,0,3,0,2
 GitHub API for Java,org.kohsuke.github,GHDiscussion.Setter,0,17,0,0,0,3,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHExternalGroupPage,0,17,0,0,0,7,0,4,0,4
@@ -165,7 +177,9 @@ GitHub API for Java,org.kohsuke.github,GHWorkflowRun.HeadCommit,0,22,0,0,0,7,0,7
 GitHub API for Java,org.kohsuke.github,GHAppInstallationsPage,3,6,0,0,1,2,1,2,1,2
 GitHub API for Java,org.kohsuke.github,SearchResult,0,3,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,RateLimitChecker.LiteralValue,2,19,1,3,1,7,1,3,0,2
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.AlertsThreshold,0,27,0,0,0,5,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHRepositoryVariableBuilder,0,33,0,2,0,7,0,4,0,3
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.IntegerParameter,0,9,0,0,0,3,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHCheckRun.Status,0,38,0,0,0,7,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHObject.new ToStringStyle() {...},2,24,2,4,2,9,2,3,0,2
 GitHub API for Java,org.kohsuke.github,GHRepositoryChanges.FromRepository,0,6,0,0,0,2,0,2,0,2
@@ -175,6 +189,7 @@ GitHub API for Java,org.kohsuke.github,GHEventPayload,0,34,0,0,0,11,0,10,0,10
 GitHub API for Java,org.kohsuke.github,GHWorkflowRunsIterable,0,32,0,0,0,7,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHError,0,10,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHKey,0,58,0,0,0,9,0,8,0,8
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.ListParameter,0,4,0,0,0,2,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GitUser,0,36,0,0,0,12,0,6,0,6
 GitHub API for Java,org.kohsuke.github,GHEventPayload.InstallationRepositories,15,48,4,6,4,14,4,6,0,5
 GitHub API for Java,org.kohsuke.github,GHWorkflowJob.Step,0,25,0,0,0,7,0,7,0,7
@@ -186,8 +201,8 @@ GitHub API for Java,org.kohsuke.github,GHMilestoneState,0,15,0,0,0,3,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHRepositoryChanges.Owner,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHWorkflowRun.Conclusion,0,74,0,0,0,13,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHRepositoryViewTraffic.DailyInfo,0,11,0,0,0,4,0,2,0,2
-GitHub API for Java,org.kohsuke.github,GHIssueQueryBuilder,0,79,0,4,0,18,0,10,0,8
 GitHub API for Java,org.kohsuke.github,GHPullRequestChanges.GHFrom,0,6,0,0,0,2,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHIssueQueryBuilder,0,79,0,4,0,18,0,10,0,8
 GitHub API for Java,org.kohsuke.github,GHProjectsV2Item.ContentType,0,27,0,0,0,5,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Issue,5,25,1,1,1,9,2,5,1,5
 GitHub API for Java,org.kohsuke.github,GHPullRequestQueryBuilder,0,88,1,3,0,17,1,9,0,8
@@ -199,31 +214,34 @@ GitHub API for Java,org.kohsuke.github,GHIssueSearchBuilder.Sort,0,21,0,0,0,4,0,
 GitHub API for Java,org.kohsuke.github,GHAppInstallationsIterable.new Iterator() {...},0,30,0,2,0,6,0,4,0,3
 GitHub API for Java,org.kohsuke.github,GHCommitSearchBuilder.Sort,0,15,0,0,0,3,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHCodeownersError,0,24,0,0,0,8,0,8,0,8
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.RulesetSourceType,0,21,0,0,0,4,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHWorkflowRun.Status,0,104,0,0,0,18,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHApp,6,180,0,2,0,36,1,24,1,23
-GitHub API for Java,org.kohsuke.github,GHMembership.State,0,15,0,0,0,3,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GitCommit.new AbstractList() {...},0,19,0,0,0,3,0,3,0,3
+GitHub API for Java,org.kohsuke.github,GHMembership.State,0,15,0,0,0,3,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHArtifactsIterable.new Iterator() {...},0,33,1,1,0,6,1,3,0,3
 GitHub API for Java,org.kohsuke.github,PagedSearchIterable,11,50,0,2,3,14,2,6,2,5
 GitHub API for Java,org.kohsuke.github,GHCommitSearchBuilder.CommitSearchResult,1,33,0,2,1,6,0,2,0,1
 GitHub API for Java,org.kohsuke.github,GHWorkflowRunsIterable.new Iterator() {...},0,33,1,1,0,6,1,3,0,3
 GitHub API for Java,org.kohsuke.github,GHObject.new ReflectionToStringBuilder() {...},0,24,1,3,0,2,1,3,0,2
 GitHub API for Java,org.kohsuke.github,GHContentSearchBuilder.Sort,0,15,0,0,0,3,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GHTargetType,6,15,0,0,1,3,1,1,1,1
 GitHub API for Java,org.kohsuke.github,GHExternalGroupIterable.new Iterator() {...},0,54,0,2,0,9,0,5,0,4
 GitHub API for Java,org.kohsuke.github,Requester,0,82,0,0,0,15,0,12,0,12
-GitHub API for Java,org.kohsuke.github,GHTargetType,6,15,0,0,1,3,1,1,1,1
 GitHub API for Java,org.kohsuke.github,GHContentBuilder,0,94,0,0,0,21,0,8,0,8
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Membership,10,25,2,2,2,9,2,4,0,4
 GitHub API for Java,org.kohsuke.github,GHBranchProtection.EnforceAdmins,3,6,0,0,1,2,1,2,1,2
-GitHub API for Java,org.kohsuke.github,GHMarketplaceUserPurchase,11,19,0,0,3,6,3,6,3,6
 GitHub API for Java,org.kohsuke.github,GitHubSanityCachedValue,9,44,3,1,0,11,3,3,1,3
+GitHub API for Java,org.kohsuke.github,GHMarketplaceUserPurchase,11,19,0,0,3,6,3,6,3,6
 GitHub API for Java,org.kohsuke.github,EnterpriseManagedSupport,0,120,0,8,0,27,0,12,0,8
 GitHub API for Java,org.kohsuke.github,GHRepositorySelection,5,15,0,0,1,3,1,1,1,1
+GitHub API for Java,org.kohsuke.github,GHBranchSync,28,20,0,0,1,7,1,6,1,6
 GitHub API for Java,org.kohsuke.github,GHSearchBuilder,0,99,0,4,0,18,0,7,0,5
 GitHub API for Java,org.kohsuke.github,GHBranch,59,105,7,2,10,26,7,13,3,12
 GitHub API for Java,org.kohsuke.github,GHRepoHook,0,35,0,0,0,5,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHCompare.InnerCommit,0,21,0,0,0,7,0,7,0,7
 GitHub API for Java,org.kohsuke.github,GHDiscussion.Creator,0,23,0,0,0,4,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.StringParameter.new TypeReference() {...},0,6,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHPersonSet,16,25,1,3,7,7,4,4,3,3
 GitHub API for Java,org.kohsuke.github,GHEventPayload.WorkflowDispatch,0,13,0,0,0,4,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHPermissionType,0,65,0,6,0,12,0,6,0,3
@@ -233,16 +251,17 @@ GitHub API for Java,org.kohsuke.github,GHArtifactsIterable,0,32,0,0,0,7,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Installation,12,63,1,7,3,15,1,7,0,4
 GitHub API for Java,org.kohsuke.github,GHCommit.User,0,3,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,ServiceDownException,0,4,0,0,0,2,0,1,0,1
-GitHub API for Java,org.kohsuke.github,GHSubscription,0,46,0,0,0,12,0,10,0,10
 GitHub API for Java,org.kohsuke.github,GHRepositoryCloneTraffic.DailyInfo,0,11,0,0,0,4,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHSubscription,0,46,0,0,0,12,0,10,0,10
 GitHub API for Java,org.kohsuke.github,GHUserSearchBuilder,71,35,0,0,9,7,7,5,7,5
-GitHub API for Java,org.kohsuke.github,GHCommitState,0,27,0,0,0,5,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHGistUpdater,0,128,0,0,0,24,0,11,0,11
+GitHub API for Java,org.kohsuke.github,GHCommitState,0,27,0,0,0,5,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHPullRequest.MergeMethod,0,21,0,0,0,4,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.BooleanParameter.new TypeReference() {...},0,6,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHReleaseUpdater,40,66,0,0,10,14,5,5,5,5
 GitHub API for Java,org.kohsuke.github,GHMemberChanges.FromRoleName,0,6,0,0,0,2,0,2,0,2
-GitHub API for Java,org.kohsuke.github,GHBranchProtection.RequiredLinearHistory,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHTeamCannotBeExternallyManagedException,0,6,0,0,0,2,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GHBranchProtection.RequiredLinearHistory,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Release,0,11,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHCommitFileIterable,1,80,2,4,0,16,2,4,0,3
 GitHub API for Java,org.kohsuke.github,GHIssueCommentQueryBuilder,0,53,0,0,0,8,0,5,0,5
@@ -252,6 +271,7 @@ GitHub API for Java,org.kohsuke.github,GitHub,219,1005,4,36,28,161,17,89,14,72
 GitHub API for Java,org.kohsuke.github,GHPullRequestChanges,0,12,0,0,0,4,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHRepositoryStatistics,20,107,7,1,7,23,4,9,0,9
 GitHub API for Java,org.kohsuke.github,GitHubInteractiveObject,0,32,0,4,0,9,0,7,0,5
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Type,0,105,0,0,0,18,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHBranchProtection.RequiredSignatures,6,0,0,0,2,0,2,0,2,0
 GitHub API for Java,org.kohsuke.github,GitCommit.Tree,0,9,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHRepositoryDiscussion.Category,3,32,0,0,1,10,1,10,1,10
@@ -261,8 +281,8 @@ GitHub API for Java,org.kohsuke.github,GHDeploymentState,0,45,0,0,0,8,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHIssueBuilder,9,95,5,3,3,23,5,6,1,6
 GitHub API for Java,org.kohsuke.github,GHDiscussion.Updater,0,17,0,0,0,3,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GitHub.LoginLoadingUserAuthorizationProvider,1,42,1,3,1,14,1,4,0,3
-GitHub API for Java,org.kohsuke.github,GHRepositoryTraffic.DailyInfo,0,27,0,0,0,10,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHRepositoryTrafficTopReferralSources,0,14,0,0,0,6,0,3,0,3
+GitHub API for Java,org.kohsuke.github,GHRepositoryTraffic.DailyInfo,0,27,0,0,0,10,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHContent,74,250,4,4,12,54,9,25,5,25
 GitHub API for Java,org.kohsuke.github,GHDiscussionBuilder,0,44,0,2,0,9,0,5,0,4
 GitHub API for Java,org.kohsuke.github,GHIssueQueryBuilder.ForRepository,0,64,0,0,0,13,0,8,0,8
@@ -271,32 +291,32 @@ GitHub API for Java,org.kohsuke.github,GHWorkflow,18,144,1,3,2,26,1,15,0,14
 GitHub API for Java,org.kohsuke.github,GHWorkflowRun,20,321,5,9,3,51,5,38,0,36
 GitHub API for Java,org.kohsuke.github,GHCommitFilesPage,6,6,0,0,3,3,1,2,1,2
 GitHub API for Java,org.kohsuke.github,GHRepositorySearchBuilder.RepositorySearchResult,0,20,0,2,0,2,0,2,0,1
-GitHub API for Java,org.kohsuke.github,GHEventPayload.IssueComment,0,41,1,1,0,12,1,7,0,7
 GitHub API for Java,org.kohsuke.github,GHBranchProtection.AllowForkSyncing,0,6,0,0,0,2,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHEventPayload.IssueComment,0,41,1,1,0,12,1,7,0,7
+GitHub API for Java,org.kohsuke.github,GHRepositoryStatistics.CommitActivity,5,13,0,0,1,4,1,4,1,4
 GitHub API for Java,org.kohsuke.github,GHRepositorySearchBuilder.Fork,0,35,0,0,0,8,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHTreeBuilder.DeleteTreeEntry,0,10,0,0,0,3,0,1,0,1
-GitHub API for Java,org.kohsuke.github,GHRepositoryStatistics.CommitActivity,5,13,0,0,1,4,1,4,1,4
 GitHub API for Java,org.kohsuke.github,GHRepositoryVariable,8,73,0,0,4,15,2,9,2,9
-GitHub API for Java,org.kohsuke.github,GitHubAbuseLimitHandler,0,45,0,12,0,5,0,11,0,5
+GitHub API for Java,org.kohsuke.github,GitHubAbuseLimitHandler,0,57,0,16,0,7,0,14,0,6
 GitHub API for Java,org.kohsuke.github,GHPullRequestCommitDetail,30,11,0,0,7,4,5,3,5,3
 GitHub API for Java,org.kohsuke.github,GHHooks.Context,29,123,4,2,4,21,3,5,0,5
 GitHub API for Java,org.kohsuke.github,GHRepositoryChanges.FromName,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHCheckRun,9,136,3,7,3,29,5,20,2,18
 GitHub API for Java,org.kohsuke.github,GHPullRequestReviewComment.Side,0,27,0,0,0,5,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHEventPayload.WorkflowJob,10,22,2,2,2,8,2,3,0,3
-GitHub API for Java,org.kohsuke.github,GHAppInstallation.GHAppInstallationRepositoryResult,0,3,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHRepositoryDiscussion,3,58,0,0,1,15,1,15,1,15
-GitHub API for Java,org.kohsuke.github,GHIssueStateReason,0,21,0,0,0,4,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GHAppInstallation.GHAppInstallationRepositoryResult,0,3,0,0,0,1,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHWorkflowsPage,3,27,0,2,1,4,1,3,1,2
+GitHub API for Java,org.kohsuke.github,GHIssueStateReason,0,21,0,0,0,4,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHRepositoryViewTraffic,0,18,0,0,0,7,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHBranchProtection.AllowDeletions,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHPullRequestFileDetail,39,0,0,0,12,0,12,0,12,0
-GitHub API for Java,org.kohsuke.github,EnforcementLevel,26,0,0,0,5,0,2,0,2,0
 GitHub API for Java,org.kohsuke.github,GHCommitPointer,12,22,1,1,3,6,3,5,2,5
-GitHub API for Java,org.kohsuke.github,GHTeam.Privacy,0,21,0,0,0,4,0,1,0,1
+GitHub API for Java,org.kohsuke.github,EnforcementLevel,26,0,0,0,5,0,2,0,2,0
 GitHub API for Java,org.kohsuke.github,RateLimitHandler,0,35,0,0,0,9,0,3,0,3
-GitHub API for Java,org.kohsuke.github,GitHubRequest.Builder,14,395,2,22,3,86,3,40,1,30
+GitHub API for Java,org.kohsuke.github,GHTeam.Privacy,0,21,0,0,0,4,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHCommit.ShortInfo,12,24,2,2,4,8,2,4,1,3
+GitHub API for Java,org.kohsuke.github,GitHubRequest.Builder,14,395,2,22,3,86,3,40,1,30
 GitHub API for Java,org.kohsuke.github,GitHubPageContentsIterable.GitHubPageContentsIterator,0,13,0,0,0,4,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHProjectsV2ItemChanges.FieldType,0,39,0,0,0,7,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GitHubRateLimitHandler,0,17,0,4,0,3,0,4,0,2
@@ -305,8 +325,8 @@ GitHub API for Java,org.kohsuke.github,GHHook,4,77,1,3,1,13,2,8,1,7
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Installation.Repository,0,18,0,0,0,6,0,6,0,6
 GitHub API for Java,org.kohsuke.github,GHProjectsV2ItemChanges.FieldValue,0,13,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHReleaseBuilder,16,86,0,0,4,18,2,8,2,8
-GitHub API for Java,org.kohsuke.github,GHEventPayload.Push.PushCommit,6,35,0,0,2,11,2,10,2,10
 GitHub API for Java,org.kohsuke.github,GHIssueChanges,0,9,0,0,0,3,0,3,0,3
+GitHub API for Java,org.kohsuke.github,GHEventPayload.Push.PushCommit,6,35,0,0,2,11,2,10,2,10
 GitHub API for Java,org.kohsuke.github,GHIssueComment,47,141,1,3,12,25,5,12,4,11
 GitHub API for Java,org.kohsuke.github,GHEventPayload.PullRequestReviewComment,5,34,2,2,1,11,2,5,0,5
 GitHub API for Java,org.kohsuke.github,GHCheckRun.AnnotationLevel,0,21,0,0,0,4,0,1,0,1
@@ -325,26 +345,29 @@ GitHub API for Java,org.kohsuke.github,GHOrganization.RepositoryRole,0,19,0,0,0,
 GitHub API for Java,org.kohsuke.github,Refreshable,0,5,0,2,0,3,0,2,0,1
 GitHub API for Java,org.kohsuke.github,GHReaction,2,14,0,0,1,4,1,4,1,4
 GitHub API for Java,org.kohsuke.github,GHIssue,148,640,6,14,36,124,18,56,14,50
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.BooleanParameter,0,9,0,0,0,3,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameter,0,21,0,2,0,7,0,4,0,3
 GitHub API for Java,org.kohsuke.github,GHAppCreateTokenBuilder,9,76,0,2,3,15,1,6,1,5
 GitHub API for Java,org.kohsuke.github,GHBranchProtection.RequiredReviews,6,15,0,0,2,5,2,5,2,5
 GitHub API for Java,org.kohsuke.github,GHEnterpriseManagedUsersException,0,11,0,0,0,4,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHPullRequestReview,42,134,0,2,12,28,4,14,4,13
 GitHub API for Java,org.kohsuke.github,GHCompare.User,0,3,0,0,0,1,0,1,0,1
-GitHub API for Java,org.kohsuke.github,GHCheckRunBuilder,5,287,6,16,1,61,6,18,0,13
 GitHub API for Java,org.kohsuke.github,GHDeployment,10,79,0,0,3,19,3,17,3,17
+GitHub API for Java,org.kohsuke.github,GHCheckRunBuilder,5,287,6,16,1,61,6,18,0,13
 GitHub API for Java,org.kohsuke.github,GHOrganization.Role,0,15,0,0,0,3,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHCheckRunBuilder.Output,0,44,1,3,0,14,1,5,0,4
 GitHub API for Java,org.kohsuke.github,GHPullRequestReviewBuilder.SingleLineDraftReviewComment,0,21,0,0,0,8,0,4,0,4
-GitHub API for Java,org.kohsuke.github,GHRepository.Visibility,0,38,0,0,0,7,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHMembership,24,36,1,1,3,8,3,6,2,6
+GitHub API for Java,org.kohsuke.github,GHRepository.Visibility,0,38,0,0,0,7,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHRepositoryTrafficTopReferralPath,0,20,0,0,0,8,0,4,0,4
-GitHub API for Java,org.kohsuke.github,GHRateLimit.Record,17,216,5,29,3,43,4,25,0,12
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.StringParameter,0,9,0,0,0,3,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHFork,0,35,0,0,0,8,0,3,0,3
+GitHub API for Java,org.kohsuke.github,GHRateLimit.Record,17,216,5,29,3,43,4,25,0,12
 GitHub API for Java,org.kohsuke.github,GHMyself.RepositoryListFilter,0,33,0,0,0,6,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHWorkflowJob,18,125,1,1,2,26,1,21,0,21
-GitHub API for Java,org.kohsuke.github,GHGistFile,12,12,0,0,4,4,4,4,4,4
 GitHub API for Java,org.kohsuke.github,GHExternalGroup.GHLinkedTeam,0,9,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHCompare.GHCompareCommitsIterable,2,69,1,1,1,12,1,4,0,4
+GitHub API for Java,org.kohsuke.github,GHGistFile,12,12,0,0,4,4,4,4,4,4
 GitHub API for Java,org.kohsuke.github,GHBranchProtection.Check,0,18,0,0,0,8,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHContentUpdateResponse,0,17,0,0,0,4,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHTreeEntry,9,55,3,3,4,12,4,9,1,9
@@ -352,8 +375,8 @@ GitHub API for Java,org.kohsuke.github,GitHubPageIterator,18,174,4,20,3,46,4,17,
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Push,3,43,0,0,1,14,1,13,1,13
 GitHub API for Java,org.kohsuke.github,GHCheckRunBuilder.Action,0,12,0,0,0,5,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHCompare,13,113,0,4,3,25,1,18,1,16
-GitHub API for Java,org.kohsuke.github,GHProjectColumn,68,136,2,2,13,26,8,11,7,10
 GitHub API for Java,org.kohsuke.github,GHLabel,28,178,5,11,3,41,6,22,1,19
+GitHub API for Java,org.kohsuke.github,GHProjectColumn,68,136,2,2,13,26,8,11,7,10
 GitHub API for Java,org.kohsuke.github,MarkdownMode,0,20,0,0,0,4,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHPullRequestReviewBuilder,17,92,0,0,4,18,2,6,2,6
 GitHub API for Java,org.kohsuke.github,GHBranchProtection.Restrictions,20,0,0,0,6,0,6,0,6,0
@@ -368,6 +391,7 @@ GitHub API for Java,org.kohsuke.github,HttpException,26,69,2,0,7,19,3,6,2,6
 GitHub API for Java,org.kohsuke.github,GHIssueRename,0,15,0,0,0,5,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHCommit.GHAuthor,3,4,0,0,2,2,1,1,1,1
 GitHub API for Java,org.kohsuke.github,GHCommit.Stats,0,3,0,0,0,1,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.SecurityAlertsThreshold,0,33,0,0,0,6,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHTag,6,19,1,1,2,6,3,3,2,3
 GitHub API for Java,org.kohsuke.github,GHRef.GHObject,0,13,0,0,0,4,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHRepositorySearchBuilder.Sort,0,21,0,0,0,4,0,1,0,1
@@ -394,14 +418,19 @@ GitHub API for Java,org.kohsuke.github,GitHubClient.RetryRequestException,0,10,0
 GitHub API for Java,org.kohsuke.github,GHRepositoryCloneTraffic,0,20,0,0,0,7,0,4,0,4
 GitHub API for Java,org.kohsuke.github,GHRepositoryDiscussionComment,0,25,0,0,0,7,0,7,0,7
 GitHub API for Java,org.kohsuke.github,GHBranchProtectionBuilder.StatusChecks,0,8,0,0,0,2,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters.new GHRepositoryRule.Parameter() {...},0,9,0,0,0,2,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters.new GHRepositoryRule.ListParameter() {...},0,9,0,0,0,2,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters.new GHRepositoryRule.ListParameter() {...},0,9,0,0,0,2,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters.new GHRepositoryRule.ListParameter() {...},0,9,0,0,0,2,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHRepositoryRule.Parameters.new GHRepositoryRule.ListParameter() {...},0,9,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHMarketplaceListAccountBuilder.Sort,0,15,0,0,0,3,0,1,0,1
-GitHub API for Java,org.kohsuke.github,AbstractBuilder,15,58,4,6,2,16,3,6,0,4
 GitHub API for Java,org.kohsuke.github,GHEventInfo.GHEventRepository,0,3,0,0,0,1,0,1,0,1
+GitHub API for Java,org.kohsuke.github,AbstractBuilder,15,58,4,6,2,16,3,6,0,4
 GitHub API for Java,org.kohsuke.github,GHNotExternallyManagedEnterpriseException,0,6,0,0,0,2,0,1,0,1
-GitHub API for Java,org.kohsuke.github,GHLabel.Updater,0,16,0,0,0,3,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHTeamChanges.FromPrivacy,0,10,0,0,0,2,0,2,0,2
-GitHub API for Java,org.kohsuke.github,GHRequestedAction,19,0,0,0,7,0,6,0,6,0
+GitHub API for Java,org.kohsuke.github,GHLabel.Updater,0,16,0,0,0,3,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GitHubClient,103,1352,30,120,22,311,28,111,2,61
+GitHub API for Java,org.kohsuke.github,GHRequestedAction,19,0,0,0,7,0,6,0,6,0
 GitHub API for Java,org.kohsuke.github,GHCompare.Status,0,27,0,0,0,5,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHHooks.OrgContext,2,28,0,0,1,6,1,4,1,4
 GitHub API for Java,org.kohsuke.github,GHRelease,50,190,3,1,10,32,9,22,7,22
@@ -409,11 +438,11 @@ GitHub API for Java,org.kohsuke.github,GHIssueQueryBuilder.Sort,0,21,0,0,0,4,0,1
 GitHub API for Java,org.kohsuke.github,GHBranchProtection.LockBranch,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GitHubResponse,25,136,1,7,7,36,2,13,1,10
 GitHub API for Java,org.kohsuke.github,GHCheckRunBuilder.Image,0,14,0,0,0,6,0,2,0,2
-GitHub API for Java,org.kohsuke.github,GitHubBuilder,107,234,9,9,27,61,13,25,6,23
 GitHub API for Java,org.kohsuke.github,GHUserSearchBuilder.UserSearchResult,0,3,0,0,0,1,0,1,0,1
+GitHub API for Java,org.kohsuke.github,GitHubBuilder,107,234,9,9,27,61,13,25,6,23
 GitHub API for Java,org.kohsuke.github,GHEventPayload.PullRequestReview,5,31,2,2,1,10,2,4,0,4
-GitHub API for Java,org.kohsuke.github,GitHub.AuthorizationRefreshGitHubWrapper,11,24,1,1,3,6,1,2,0,2
 GitHub API for Java,org.kohsuke.github,GHIssueSearchBuilder.IssueSearchResult,0,20,0,2,0,2,0,2,0,1
+GitHub API for Java,org.kohsuke.github,GitHub.AuthorizationRefreshGitHubWrapper,11,24,1,1,3,6,1,2,0,2
 GitHub API for Java,org.kohsuke.github,GHFileNotFoundException,7,17,0,0,3,7,2,3,2,3
 GitHub API for Java,org.kohsuke.github,GHCheckRunBuilder.Annotation,15,34,0,0,6,11,3,3,3,3
 GitHub API for Java,org.kohsuke.github,GHAppFromManifest,0,15,0,0,0,5,0,5,0,5
@@ -421,7 +450,7 @@ GitHub API for Java,org.kohsuke.github,GitHubRequest.Entry,0,9,0,0,0,4,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Label,0,9,0,0,0,3,0,3,0,3
 GitHub API for Java,org.kohsuke.github,GHTeamChanges.FromRepository,0,6,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHProjectsV2ItemChanges.FromTo,0,9,0,0,0,3,0,3,0,3
-GitHub API for Java,org.kohsuke.github,GHRepository,785,2628,40,56,145,469,84,215,53,198
+GitHub API for Java,org.kohsuke.github,GHRepository,785,2675,40,56,145,479,84,217,53,200
 GitHub API for Java,org.kohsuke.github,GHHooks.RepoContext,0,39,0,0,0,8,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHRepository.Setter,0,26,0,0,0,4,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHCommentAuthorAssociation,0,51,0,0,0,9,0,1,0,1
@@ -429,13 +458,13 @@ GitHub API for Java,org.kohsuke.github,GHCheckSuite,7,114,4,10,3,24,6,18,2,15
 GitHub API for Java,org.kohsuke.github,GHStargazer,0,17,0,0,0,6,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHPullRequest.AutoMerge,0,15,0,0,0,5,0,5,0,5
 GitHub API for Java,org.kohsuke.github,GHTeam.Role,0,15,0,0,0,3,0,1,0,1
-GitHub API for Java,org.kohsuke.github,GHEventPayload.Team,10,25,2,2,2,9,2,4,0,4
-GitHub API for Java,org.kohsuke.github,AbuseLimitHandler.new AbuseLimitHandler() {...},10,22,1,1,3,7,1,3,0,3
-GitHub API for Java,org.kohsuke.github,GHProject,144,110,8,0,28,22,16,12,12,12
+GitHub API for Java,org.kohsuke.github,AbuseLimitHandler.new AbuseLimitHandler() {...},8,9,0,0,2,4,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHBranchProtection.AllowForcePushes,0,6,0,0,0,2,0,2,0,2
+GitHub API for Java,org.kohsuke.github,GHProject,144,110,8,0,28,22,16,12,12,12
+GitHub API for Java,org.kohsuke.github,GHEventPayload.Team,10,25,2,2,2,9,2,4,0,4
 GitHub API for Java,org.kohsuke.github,AbuseLimitHandler.new AbuseLimitHandler() {...},0,5,0,0,0,2,0,2,0,2
-GitHub API for Java,org.kohsuke.github,RateLimitTarget,0,33,0,0,0,6,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHLabelBuilder,0,45,0,2,0,9,0,5,0,4
+GitHub API for Java,org.kohsuke.github,RateLimitTarget,0,33,0,0,0,6,0,1,0,1
 GitHub API for Java,org.kohsuke.github,GHEventPayload.Star,0,7,0,0,0,2,0,2,0,2
 GitHub API for Java,org.kohsuke.github,GHTeamBuilder,0,84,0,0,0,16,0,7,0,7
 GitHub API for Java,org.kohsuke.github,GHPullRequestSearchBuilder.Sort,0,27,0,0,0,5,0,1,0,1

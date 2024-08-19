@@ -1007,7 +1007,7 @@ import static java.util.Objects.requireNonNull;
 
     /**
      * Lists all
-     * &lt;a href=&quot;https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/&quot;&gt;the
+     * &lt;a href= &quot;https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/&quot;&gt;the
      * available assignees&lt;/a&gt; to which issues may be assigned.
      *
      * @return the paged iterable
@@ -1615,6 +1615,24 @@ import static java.util.Objects.requireNonNull;
     }
 
     /**
+     * Sync this repository fork branch
+     *
+     * @param branch
+     *            the branch to sync
+     * @return The current repository
+     * @throws IOException
+     *             the io exception
+     */
+    public GHBranchSync sync(String branch) throws IOException {
+<span class="fc" id="L1627">        return root().createRequest()</span>
+<span class="fc" id="L1628">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L1629">                .with(&quot;branch&quot;, branch)</span>
+<span class="fc" id="L1630">                .withUrlPath(getApiTailUrl(&quot;merge-upstream&quot;))</span>
+<span class="fc" id="L1631">                .fetch(GHBranchSync.class)</span>
+<span class="fc" id="L1632">                .wrap(this);</span>
+    }
+
+    /**
      * Forks this repository into an organization.
      *
      * @param org
@@ -1624,25 +1642,25 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHRepository forkTo(GHOrganization org) throws IOException {
-<span class="fc" id="L1627">        root().createRequest()</span>
-<span class="fc" id="L1628">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L1629">                .with(&quot;organization&quot;, org.getLogin())</span>
-<span class="fc" id="L1630">                .withUrlPath(getApiTailUrl(&quot;forks&quot;))</span>
-<span class="fc" id="L1631">                .send();</span>
+<span class="fc" id="L1645">        root().createRequest()</span>
+<span class="fc" id="L1646">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L1647">                .with(&quot;organization&quot;, org.getLogin())</span>
+<span class="fc" id="L1648">                .withUrlPath(getApiTailUrl(&quot;forks&quot;))</span>
+<span class="fc" id="L1649">                .send();</span>
 
         // this API is asynchronous. we need to wait for a bit
-<span class="pc bpc" id="L1634" title="1 of 2 branches missed.">        for (int i = 0; i &lt; 10; i++) {</span>
-<span class="fc" id="L1635">            GHRepository r = org.getRepository(name);</span>
-<span class="pc bpc" id="L1636" title="1 of 2 branches missed.">            if (r != null) {</span>
-<span class="fc" id="L1637">                return r;</span>
+<span class="pc bpc" id="L1652" title="1 of 2 branches missed.">        for (int i = 0; i &lt; 10; i++) {</span>
+<span class="fc" id="L1653">            GHRepository r = org.getRepository(name);</span>
+<span class="pc bpc" id="L1654" title="1 of 2 branches missed.">            if (r != null) {</span>
+<span class="fc" id="L1655">                return r;</span>
             }
             try {
-<span class="nc" id="L1640">                Thread.sleep(3000);</span>
-<span class="nc" id="L1641">            } catch (InterruptedException e) {</span>
-<span class="nc" id="L1642">                throw (IOException) new InterruptedIOException().initCause(e);</span>
-<span class="nc" id="L1643">            }</span>
+<span class="nc" id="L1658">                Thread.sleep(3000);</span>
+<span class="nc" id="L1659">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L1660">                throw (IOException) new InterruptedIOException().initCause(e);</span>
+<span class="nc" id="L1661">            }</span>
         }
-<span class="nc" id="L1645">        throw new IOException(this + &quot; was forked into &quot; + org.getLogin() + &quot; but can't find the new repository&quot;);</span>
+<span class="nc" id="L1663">        throw new IOException(this + &quot; was forked into &quot; + org.getLogin() + &quot; but can't find the new repository&quot;);</span>
     }
 
     /**
@@ -1655,7 +1673,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
-<span class="fc" id="L1658">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;pulls/&quot; + i)).fetch(GHPullRequest.class).wrapUp(this);</span>
+<span class="fc" id="L1676">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;pulls/&quot; + i)).fetch(GHPullRequest.class).wrapUp(this);</span>
     }
 
     /**
@@ -1669,7 +1687,7 @@ import static java.util.Objects.requireNonNull;
      * @see #listPullRequests(GHIssueState) #listPullRequests(GHIssueState)
      */
     public List&lt;GHPullRequest&gt; getPullRequests(GHIssueState state) throws IOException {
-<span class="nc" id="L1672">        return queryPullRequests().state(state).list().toList();</span>
+<span class="nc" id="L1690">        return queryPullRequests().state(state).list().toList();</span>
     }
 
     /**
@@ -1682,7 +1700,7 @@ import static java.util.Objects.requireNonNull;
      */
     @Deprecated
     public PagedIterable&lt;GHPullRequest&gt; listPullRequests(GHIssueState state) {
-<span class="fc" id="L1685">        return queryPullRequests().state(state).list();</span>
+<span class="fc" id="L1703">        return queryPullRequests().state(state).list();</span>
     }
 
     /**
@@ -1691,7 +1709,7 @@ import static java.util.Objects.requireNonNull;
      * @return the gh pull request query builder
      */
     public GHPullRequestQueryBuilder queryPullRequests() {
-<span class="fc" id="L1694">        return new GHPullRequestQueryBuilder(this);</span>
+<span class="fc" id="L1712">        return new GHPullRequestQueryBuilder(this);</span>
     }
 
     /**
@@ -1700,7 +1718,7 @@ import static java.util.Objects.requireNonNull;
      * @return gh pull request search builder for current repository
      */
     public GHPullRequestSearchBuilder searchPullRequests() {
-<span class="fc" id="L1703">        return new GHPullRequestSearchBuilder(this.root()).repo(this);</span>
+<span class="fc" id="L1721">        return new GHPullRequestSearchBuilder(this.root()).repo(this);</span>
     }
 
     /**
@@ -1721,7 +1739,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHPullRequest createPullRequest(String title, String head, String base, String body) throws IOException {
-<span class="fc" id="L1724">        return createPullRequest(title, head, base, body, true);</span>
+<span class="fc" id="L1742">        return createPullRequest(title, head, base, body, true);</span>
     }
 
     /**
@@ -1748,7 +1766,7 @@ import static java.util.Objects.requireNonNull;
             String base,
             String body,
             boolean maintainerCanModify) throws IOException {
-<span class="fc" id="L1751">        return createPullRequest(title, head, base, body, maintainerCanModify, false);</span>
+<span class="fc" id="L1769">        return createPullRequest(title, head, base, body, maintainerCanModify, false);</span>
     }
 
     /**
@@ -1778,17 +1796,17 @@ import static java.util.Objects.requireNonNull;
             String body,
             boolean maintainerCanModify,
             boolean draft) throws IOException {
-<span class="fc" id="L1781">        return root().createRequest()</span>
-<span class="fc" id="L1782">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L1783">                .with(&quot;title&quot;, title)</span>
-<span class="fc" id="L1784">                .with(&quot;head&quot;, head)</span>
-<span class="fc" id="L1785">                .with(&quot;base&quot;, base)</span>
-<span class="fc" id="L1786">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L1787">                .with(&quot;maintainer_can_modify&quot;, maintainerCanModify)</span>
-<span class="fc" id="L1788">                .with(&quot;draft&quot;, draft)</span>
-<span class="fc" id="L1789">                .withUrlPath(getApiTailUrl(&quot;pulls&quot;))</span>
-<span class="fc" id="L1790">                .fetch(GHPullRequest.class)</span>
-<span class="fc" id="L1791">                .wrapUp(this);</span>
+<span class="fc" id="L1799">        return root().createRequest()</span>
+<span class="fc" id="L1800">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L1801">                .with(&quot;title&quot;, title)</span>
+<span class="fc" id="L1802">                .with(&quot;head&quot;, head)</span>
+<span class="fc" id="L1803">                .with(&quot;base&quot;, base)</span>
+<span class="fc" id="L1804">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L1805">                .with(&quot;maintainer_can_modify&quot;, maintainerCanModify)</span>
+<span class="fc" id="L1806">                .with(&quot;draft&quot;, draft)</span>
+<span class="fc" id="L1807">                .withUrlPath(getApiTailUrl(&quot;pulls&quot;))</span>
+<span class="fc" id="L1808">                .fetch(GHPullRequest.class)</span>
+<span class="fc" id="L1809">                .wrapUp(this);</span>
     }
 
     /**
@@ -1799,7 +1817,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public List&lt;GHHook&gt; getHooks() throws IOException {
-<span class="fc" id="L1802">        return GHHooks.repoContext(this, owner).getHooks();</span>
+<span class="fc" id="L1820">        return GHHooks.repoContext(this, owner).getHooks();</span>
     }
 
     /**
@@ -1812,7 +1830,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHHook getHook(int id) throws IOException {
-<span class="fc" id="L1815">        return GHHooks.repoContext(this, owner).getHook(id);</span>
+<span class="fc" id="L1833">        return GHHooks.repoContext(this, owner).getHook(id);</span>
     }
 
     /**
@@ -1824,8 +1842,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public void deleteHook(int id) throws IOException {
-<span class="fc" id="L1827">        GHHooks.repoContext(this, owner).deleteHook(id);</span>
-<span class="fc" id="L1828">    }</span>
+<span class="fc" id="L1845">        GHHooks.repoContext(this, owner).deleteHook(id);</span>
+<span class="fc" id="L1846">    }</span>
 
     /**
      * Sets {@link #getCompare(String, String)} to return a {@link GHCompare} that uses a paginated commit list instead
@@ -1839,8 +1857,8 @@ import static java.util.Objects.requireNonNull;
      *            true if you want commits returned in paginated form.
      */
     public void setCompareUsePaginatedCommits(boolean value) {
-<span class="fc" id="L1842">        compareUsePaginatedCommits = value;</span>
-<span class="fc" id="L1843">    }</span>
+<span class="fc" id="L1860">        compareUsePaginatedCommits = value;</span>
+<span class="fc" id="L1861">    }</span>
 
     /**
      * Gets a comparison between 2 points in the repository. This would be similar to calling
@@ -1856,15 +1874,15 @@ import static java.util.Objects.requireNonNull;
      *             on failure communicating with GitHub
      */
     public GHCompare getCompare(String id1, String id2) throws IOException {
-<span class="fc" id="L1859">        final Requester requester = root().createRequest()</span>
-<span class="fc" id="L1860">                .withUrlPath(getApiTailUrl(String.format(&quot;compare/%s...%s&quot;, id1, id2)));</span>
+<span class="fc" id="L1877">        final Requester requester = root().createRequest()</span>
+<span class="fc" id="L1878">                .withUrlPath(getApiTailUrl(String.format(&quot;compare/%s...%s&quot;, id1, id2)));</span>
 
-<span class="fc bfc" id="L1862" title="All 2 branches covered.">        if (compareUsePaginatedCommits) {</span>
-<span class="fc" id="L1863">            requester.with(&quot;per_page&quot;, 1).with(&quot;page&quot;, 1);</span>
+<span class="fc bfc" id="L1880" title="All 2 branches covered.">        if (compareUsePaginatedCommits) {</span>
+<span class="fc" id="L1881">            requester.with(&quot;per_page&quot;, 1).with(&quot;page&quot;, 1);</span>
         }
-<span class="fc" id="L1865">        requester.injectMappingValue(&quot;GHCompare_usePaginatedCommits&quot;, compareUsePaginatedCommits);</span>
-<span class="fc" id="L1866">        GHCompare compare = requester.fetch(GHCompare.class);</span>
-<span class="fc" id="L1867">        return compare.lateBind(this);</span>
+<span class="fc" id="L1883">        requester.injectMappingValue(&quot;GHCompare_usePaginatedCommits&quot;, compareUsePaginatedCommits);</span>
+<span class="fc" id="L1884">        GHCompare compare = requester.fetch(GHCompare.class);</span>
+<span class="fc" id="L1885">        return compare.lateBind(this);</span>
     }
 
     /**
@@ -1879,7 +1897,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHCompare getCompare(GHCommit id1, GHCommit id2) throws IOException {
-<span class="nc" id="L1882">        return getCompare(id1.getSHA1(), id2.getSHA1());</span>
+<span class="nc" id="L1900">        return getCompare(id1.getSHA1(), id2.getSHA1());</span>
     }
 
     /**
@@ -1895,21 +1913,21 @@ import static java.util.Objects.requireNonNull;
      */
     public GHCompare getCompare(GHBranch id1, GHBranch id2) throws IOException {
 
-<span class="nc" id="L1898">        GHRepository owner1 = id1.getOwner();</span>
-<span class="nc" id="L1899">        GHRepository owner2 = id2.getOwner();</span>
+<span class="nc" id="L1916">        GHRepository owner1 = id1.getOwner();</span>
+<span class="nc" id="L1917">        GHRepository owner2 = id2.getOwner();</span>
 
         // If the owner of the branches is different, we have a cross-fork compare.
-<span class="nc bnc" id="L1902" title="All 4 branches missed.">        if (owner1 != null &amp;&amp; owner2 != null) {</span>
-<span class="nc" id="L1903">            String ownerName1 = owner1.getOwnerName();</span>
-<span class="nc" id="L1904">            String ownerName2 = owner2.getOwnerName();</span>
-<span class="nc bnc" id="L1905" title="All 2 branches missed.">            if (!StringUtils.equals(ownerName1, ownerName2)) {</span>
-<span class="nc" id="L1906">                String qualifiedName1 = String.format(&quot;%s:%s&quot;, ownerName1, id1.getName());</span>
-<span class="nc" id="L1907">                String qualifiedName2 = String.format(&quot;%s:%s&quot;, ownerName2, id2.getName());</span>
-<span class="nc" id="L1908">                return getCompare(qualifiedName1, qualifiedName2);</span>
+<span class="nc bnc" id="L1920" title="All 4 branches missed.">        if (owner1 != null &amp;&amp; owner2 != null) {</span>
+<span class="nc" id="L1921">            String ownerName1 = owner1.getOwnerName();</span>
+<span class="nc" id="L1922">            String ownerName2 = owner2.getOwnerName();</span>
+<span class="nc bnc" id="L1923" title="All 2 branches missed.">            if (!StringUtils.equals(ownerName1, ownerName2)) {</span>
+<span class="nc" id="L1924">                String qualifiedName1 = String.format(&quot;%s:%s&quot;, ownerName1, id1.getName());</span>
+<span class="nc" id="L1925">                String qualifiedName2 = String.format(&quot;%s:%s&quot;, ownerName2, id2.getName());</span>
+<span class="nc" id="L1926">                return getCompare(qualifiedName1, qualifiedName2);</span>
             }
         }
 
-<span class="nc" id="L1912">        return getCompare(id1.getName(), id2.getName());</span>
+<span class="nc" id="L1930">        return getCompare(id1.getName(), id2.getName());</span>
     }
 
     /**
@@ -1920,7 +1938,7 @@ import static java.util.Objects.requireNonNull;
      *             on failure communicating with GitHub
      */
     public GHRef[] getRefs() throws IOException {
-<span class="fc" id="L1923">        return listRefs().toArray();</span>
+<span class="fc" id="L1941">        return listRefs().toArray();</span>
     }
 
     /**
@@ -1931,7 +1949,7 @@ import static java.util.Objects.requireNonNull;
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public PagedIterable&lt;GHRef&gt; listRefs() throws IOException {
-<span class="fc" id="L1934">        return listRefs(&quot;&quot;);</span>
+<span class="fc" id="L1952">        return listRefs(&quot;&quot;);</span>
     }
 
     /**
@@ -1944,7 +1962,7 @@ import static java.util.Objects.requireNonNull;
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef[] getRefs(String refType) throws IOException {
-<span class="fc" id="L1947">        return listRefs(refType).toArray();</span>
+<span class="fc" id="L1965">        return listRefs(refType).toArray();</span>
     }
 
     /**
@@ -1957,7 +1975,7 @@ import static java.util.Objects.requireNonNull;
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public PagedIterable&lt;GHRef&gt; listRefs(String refType) throws IOException {
-<span class="fc" id="L1960">        return GHRef.readMatching(this, refType);</span>
+<span class="fc" id="L1978">        return GHRef.readMatching(this, refType);</span>
     }
 
     /**
@@ -1970,7 +1988,7 @@ import static java.util.Objects.requireNonNull;
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
     public GHRef getRef(String refName) throws IOException {
-<span class="fc" id="L1973">        return GHRef.read(this, refName);</span>
+<span class="fc" id="L1991">        return GHRef.read(this, refName);</span>
     }
 
     /**
@@ -1984,7 +2002,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHTagObject getTagObject(String sha) throws IOException {
-<span class="nc" id="L1987">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;git/tags/&quot; + sha)).fetch(GHTagObject.class).wrap(this);</span>
+<span class="nc" id="L2005">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;git/tags/&quot; + sha)).fetch(GHTagObject.class).wrap(this);</span>
     }
 
     /**
@@ -1997,8 +2015,8 @@ import static java.util.Objects.requireNonNull;
      *             on failure communicating with GitHub, potentially due to an invalid tree type being requested
      */
     public GHTree getTree(String sha) throws IOException {
-<span class="fc" id="L2000">        String url = String.format(&quot;/repos/%s/%s/git/trees/%s&quot;, getOwnerName(), name, sha);</span>
-<span class="fc" id="L2001">        return root().createRequest().withUrlPath(url).fetch(GHTree.class).wrap(this);</span>
+<span class="fc" id="L2018">        String url = String.format(&quot;/repos/%s/%s/git/trees/%s&quot;, getOwnerName(), name, sha);</span>
+<span class="fc" id="L2019">        return root().createRequest().withUrlPath(url).fetch(GHTree.class).wrap(this);</span>
     }
 
     /**
@@ -2007,7 +2025,7 @@ import static java.util.Objects.requireNonNull;
      * @return the gh tree builder
      */
     public GHTreeBuilder createTree() {
-<span class="fc" id="L2010">        return new GHTreeBuilder(this);</span>
+<span class="fc" id="L2028">        return new GHTreeBuilder(this);</span>
     }
 
     /**
@@ -2023,8 +2041,8 @@ import static java.util.Objects.requireNonNull;
      *             on failure communicating with GitHub, potentially due to an invalid tree type being requested
      */
     public GHTree getTreeRecursive(String sha, int recursive) throws IOException {
-<span class="fc" id="L2026">        String url = String.format(&quot;/repos/%s/%s/git/trees/%s&quot;, getOwnerName(), name, sha);</span>
-<span class="fc" id="L2027">        return root().createRequest().with(&quot;recursive&quot;, recursive).withUrlPath(url).fetch(GHTree.class).wrap(this);</span>
+<span class="fc" id="L2044">        String url = String.format(&quot;/repos/%s/%s/git/trees/%s&quot;, getOwnerName(), name, sha);</span>
+<span class="fc" id="L2045">        return root().createRequest().with(&quot;recursive&quot;, recursive).withUrlPath(url).fetch(GHTree.class).wrap(this);</span>
     }
 
     /**
@@ -2042,8 +2060,8 @@ import static java.util.Objects.requireNonNull;
      * @see #readBlob(String) #readBlob(String)
      */
     public GHBlob getBlob(String blobSha) throws IOException {
-<span class="fc" id="L2045">        String target = getApiTailUrl(&quot;git/blobs/&quot; + blobSha);</span>
-<span class="fc" id="L2046">        return root().createRequest().withUrlPath(target).fetch(GHBlob.class);</span>
+<span class="fc" id="L2063">        String target = getApiTailUrl(&quot;git/blobs/&quot; + blobSha);</span>
+<span class="fc" id="L2064">        return root().createRequest().withUrlPath(target).fetch(GHBlob.class);</span>
     }
 
     /**
@@ -2052,7 +2070,7 @@ import static java.util.Objects.requireNonNull;
      * @return the gh blob builder
      */
     public GHBlobBuilder createBlob() {
-<span class="fc" id="L2055">        return new GHBlobBuilder(this);</span>
+<span class="fc" id="L2073">        return new GHBlobBuilder(this);</span>
     }
 
     /**
@@ -2067,13 +2085,13 @@ import static java.util.Objects.requireNonNull;
      * @see #getBlob(String) #getBlob(String)
      */
     public InputStream readBlob(String blobSha) throws IOException {
-<span class="fc" id="L2070">        String target = getApiTailUrl(&quot;git/blobs/&quot; + blobSha);</span>
+<span class="fc" id="L2088">        String target = getApiTailUrl(&quot;git/blobs/&quot; + blobSha);</span>
 
         // https://developer.github.com/v3/media/ describes this media type
-<span class="fc" id="L2073">        return root().createRequest()</span>
-<span class="fc" id="L2074">                .withHeader(&quot;Accept&quot;, &quot;application/vnd.github.raw&quot;)</span>
-<span class="fc" id="L2075">                .withUrlPath(target)</span>
-<span class="fc" id="L2076">                .fetchStream(Requester::copyInputStream);</span>
+<span class="fc" id="L2091">        return root().createRequest()</span>
+<span class="fc" id="L2092">                .withHeader(&quot;Accept&quot;, &quot;application/vnd.github.raw&quot;)</span>
+<span class="fc" id="L2093">                .withUrlPath(target)</span>
+<span class="fc" id="L2094">                .fetchStream(Requester::copyInputStream);</span>
     }
 
     /**
@@ -2086,15 +2104,15 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHCommit getCommit(String sha1) throws IOException {
-<span class="fc" id="L2089">        GHCommit c = commits.get(sha1);</span>
-<span class="pc bpc" id="L2090" title="1 of 2 branches missed.">        if (c == null) {</span>
-<span class="fc" id="L2091">            c = root().createRequest()</span>
-<span class="fc" id="L2092">                    .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s&quot;, getOwnerName(), name, sha1))</span>
-<span class="fc" id="L2093">                    .fetch(GHCommit.class)</span>
-<span class="fc" id="L2094">                    .wrapUp(this);</span>
-<span class="fc" id="L2095">            commits.put(sha1, c);</span>
+<span class="fc" id="L2107">        GHCommit c = commits.get(sha1);</span>
+<span class="pc bpc" id="L2108" title="1 of 2 branches missed.">        if (c == null) {</span>
+<span class="fc" id="L2109">            c = root().createRequest()</span>
+<span class="fc" id="L2110">                    .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s&quot;, getOwnerName(), name, sha1))</span>
+<span class="fc" id="L2111">                    .fetch(GHCommit.class)</span>
+<span class="fc" id="L2112">                    .wrapUp(this);</span>
+<span class="fc" id="L2113">            commits.put(sha1, c);</span>
         }
-<span class="fc" id="L2097">        return c;</span>
+<span class="fc" id="L2115">        return c;</span>
     }
 
     /**
@@ -2103,7 +2121,7 @@ import static java.util.Objects.requireNonNull;
      * @return the gh commit builder
      */
     public GHCommitBuilder createCommit() {
-<span class="fc" id="L2106">        return new GHCommitBuilder(this);</span>
+<span class="fc" id="L2124">        return new GHCommitBuilder(this);</span>
     }
 
     /**
@@ -2112,9 +2130,9 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHCommit&gt; listCommits() {
-<span class="fc" id="L2115">        return root().createRequest()</span>
-<span class="fc" id="L2116">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits&quot;, getOwnerName(), name))</span>
-<span class="fc" id="L2117">                .toIterable(GHCommit[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L2133">        return root().createRequest()</span>
+<span class="fc" id="L2134">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits&quot;, getOwnerName(), name))</span>
+<span class="fc" id="L2135">                .toIterable(GHCommit[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -2123,7 +2141,7 @@ import static java.util.Objects.requireNonNull;
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder queryCommits() {
-<span class="fc" id="L2126">        return new GHCommitQueryBuilder(this);</span>
+<span class="fc" id="L2144">        return new GHCommitQueryBuilder(this);</span>
     }
 
     /**
@@ -2132,9 +2150,9 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHCommitComment&gt; listCommitComments() {
-<span class="fc" id="L2135">        return root().createRequest()</span>
-<span class="fc" id="L2136">                .withUrlPath(String.format(&quot;/repos/%s/%s/comments&quot;, getOwnerName(), name))</span>
-<span class="fc" id="L2137">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L2153">        return root().createRequest()</span>
+<span class="fc" id="L2154">                .withUrlPath(String.format(&quot;/repos/%s/%s/comments&quot;, getOwnerName(), name))</span>
+<span class="fc" id="L2155">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -2146,9 +2164,9 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHCommitComment&gt; listCommitComments(String commitSha) {
-<span class="fc" id="L2149">        return root().createRequest()</span>
-<span class="fc" id="L2150">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, getOwnerName(), name, commitSha))</span>
-<span class="fc" id="L2151">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L2167">        return root().createRequest()</span>
+<span class="fc" id="L2168">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, getOwnerName(), name, commitSha))</span>
+<span class="fc" id="L2169">                .toIterable(GHCommitComment[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -2159,8 +2177,8 @@ import static java.util.Objects.requireNonNull;
      *             as usual but also if you don't use the preview connector
      */
     public GHLicense getLicense() throws IOException {
-<span class="fc" id="L2162">        GHContentWithLicense lic = getLicenseContent_();</span>
-<span class="fc bfc" id="L2163" title="All 2 branches covered.">        return lic != null ? lic.license : null;</span>
+<span class="fc" id="L2180">        GHContentWithLicense lic = getLicenseContent_();</span>
+<span class="fc bfc" id="L2181" title="All 2 branches covered.">        return lic != null ? lic.license : null;</span>
     }
 
     /**
@@ -2171,17 +2189,17 @@ import static java.util.Objects.requireNonNull;
      *             as usual but also if you don't use the preview connector
      */
     public GHContent getLicenseContent() throws IOException {
-<span class="fc" id="L2174">        return getLicenseContent_();</span>
+<span class="fc" id="L2192">        return getLicenseContent_();</span>
     }
 
     private GHContentWithLicense getLicenseContent_() throws IOException {
         try {
-<span class="fc" id="L2179">            return root().createRequest()</span>
-<span class="fc" id="L2180">                    .withUrlPath(getApiTailUrl(&quot;license&quot;))</span>
-<span class="fc" id="L2181">                    .fetch(GHContentWithLicense.class)</span>
-<span class="fc" id="L2182">                    .wrap(this);</span>
-<span class="fc" id="L2183">        } catch (FileNotFoundException e) {</span>
-<span class="fc" id="L2184">            return null;</span>
+<span class="fc" id="L2197">            return root().createRequest()</span>
+<span class="fc" id="L2198">                    .withUrlPath(getApiTailUrl(&quot;license&quot;))</span>
+<span class="fc" id="L2199">                    .fetch(GHContentWithLicense.class)</span>
+<span class="fc" id="L2200">                    .wrap(this);</span>
+<span class="fc" id="L2201">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L2202">            return null;</span>
         }
     }
 
@@ -2195,9 +2213,9 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public PagedIterable&lt;GHCommitStatus&gt; listCommitStatuses(final String sha1) throws IOException {
-<span class="fc" id="L2198">        return root().createRequest()</span>
-<span class="fc" id="L2199">                .withUrlPath(String.format(&quot;/repos/%s/%s/statuses/%s&quot;, getOwnerName(), name, sha1))</span>
-<span class="fc" id="L2200">                .toIterable(GHCommitStatus[].class, null);</span>
+<span class="fc" id="L2216">        return root().createRequest()</span>
+<span class="fc" id="L2217">                .withUrlPath(String.format(&quot;/repos/%s/%s/statuses/%s&quot;, getOwnerName(), name, sha1))</span>
+<span class="fc" id="L2218">                .toIterable(GHCommitStatus[].class, null);</span>
     }
 
     /**
@@ -2210,8 +2228,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHCommitStatus getLastCommitStatus(String sha1) throws IOException {
-<span class="fc" id="L2213">        List&lt;GHCommitStatus&gt; v = listCommitStatuses(sha1).toList();</span>
-<span class="pc bpc" id="L2214" title="1 of 2 branches missed.">        return v.isEmpty() ? null : v.get(0);</span>
+<span class="fc" id="L2231">        List&lt;GHCommitStatus&gt; v = listCommitStatuses(sha1).toList();</span>
+<span class="pc bpc" id="L2232" title="1 of 2 branches missed.">        return v.isEmpty() ? null : v.get(0);</span>
     }
 
     /**
@@ -2222,14 +2240,14 @@ import static java.util.Objects.requireNonNull;
      * @return check runs for given ref
      * @throws IOException
      *             the io exception
-     * @see &lt;a href=&quot;https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref&quot;&gt;List check runs
+     * @see &lt;a href= &quot;https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref&quot;&gt;List check runs
      *      for a specific ref&lt;/a&gt;
      */
     public PagedIterable&lt;GHCheckRun&gt; getCheckRuns(String ref) throws IOException {
-<span class="fc" id="L2229">        GitHubRequest request = root().createRequest()</span>
-<span class="fc" id="L2230">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/check-runs&quot;, getOwnerName(), name, ref))</span>
-<span class="fc" id="L2231">                .build();</span>
-<span class="fc" id="L2232">        return new GHCheckRunsIterable(this, request);</span>
+<span class="fc" id="L2247">        GitHubRequest request = root().createRequest()</span>
+<span class="fc" id="L2248">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/check-runs&quot;, getOwnerName(), name, ref))</span>
+<span class="fc" id="L2249">                .build();</span>
+<span class="fc" id="L2250">        return new GHCheckRunsIterable(this, request);</span>
     }
 
     /**
@@ -2242,15 +2260,15 @@ import static java.util.Objects.requireNonNull;
      * @return check runs for the given ref
      * @throws IOException
      *             the io exception
-     * @see &lt;a href=&quot;https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref&quot;&gt;List check runs
+     * @see &lt;a href= &quot;https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref&quot;&gt;List check runs
      *      for a specific ref&lt;/a&gt;
      */
     public PagedIterable&lt;GHCheckRun&gt; getCheckRuns(String ref, Map&lt;String, Object&gt; params) throws IOException {
-<span class="fc" id="L2249">        GitHubRequest request = root().createRequest()</span>
-<span class="fc" id="L2250">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/check-runs&quot;, getOwnerName(), name, ref))</span>
-<span class="fc" id="L2251">                .with(params)</span>
-<span class="fc" id="L2252">                .build();</span>
-<span class="fc" id="L2253">        return new GHCheckRunsIterable(this, request);</span>
+<span class="fc" id="L2267">        GitHubRequest request = root().createRequest()</span>
+<span class="fc" id="L2268">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/check-runs&quot;, getOwnerName(), name, ref))</span>
+<span class="fc" id="L2269">                .with(params)</span>
+<span class="fc" id="L2270">                .build();</span>
+<span class="fc" id="L2271">        return new GHCheckRunsIterable(this, request);</span>
     }
 
     /**
@@ -2275,14 +2293,14 @@ import static java.util.Objects.requireNonNull;
             String targetUrl,
             String description,
             String context) throws IOException {
-<span class="nc" id="L2278">        return root().createRequest()</span>
-<span class="nc" id="L2279">                .method(&quot;POST&quot;)</span>
-<span class="nc" id="L2280">                .with(&quot;state&quot;, state)</span>
-<span class="nc" id="L2281">                .with(&quot;target_url&quot;, targetUrl)</span>
-<span class="nc" id="L2282">                .with(&quot;description&quot;, description)</span>
-<span class="nc" id="L2283">                .with(&quot;context&quot;, context)</span>
-<span class="nc" id="L2284">                .withUrlPath(String.format(&quot;/repos/%s/%s/statuses/%s&quot;, getOwnerName(), this.name, sha1))</span>
-<span class="nc" id="L2285">                .fetch(GHCommitStatus.class);</span>
+<span class="nc" id="L2296">        return root().createRequest()</span>
+<span class="nc" id="L2297">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L2298">                .with(&quot;state&quot;, state)</span>
+<span class="nc" id="L2299">                .with(&quot;target_url&quot;, targetUrl)</span>
+<span class="nc" id="L2300">                .with(&quot;description&quot;, description)</span>
+<span class="nc" id="L2301">                .with(&quot;context&quot;, context)</span>
+<span class="nc" id="L2302">                .withUrlPath(String.format(&quot;/repos/%s/%s/statuses/%s&quot;, getOwnerName(), this.name, sha1))</span>
+<span class="nc" id="L2303">                .fetch(GHCommitStatus.class);</span>
     }
 
     /**
@@ -2304,7 +2322,7 @@ import static java.util.Objects.requireNonNull;
      */
     public GHCommitStatus createCommitStatus(String sha1, GHCommitState state, String targetUrl, String description)
             throws IOException {
-<span class="nc" id="L2307">        return createCommitStatus(sha1, state, targetUrl, description, null);</span>
+<span class="nc" id="L2325">        return createCommitStatus(sha1, state, targetUrl, description, null);</span>
     }
 
     /**
@@ -2317,7 +2335,7 @@ import static java.util.Objects.requireNonNull;
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
     public @NonNull GHCheckRunBuilder createCheckRun(@NonNull String name, @NonNull String headSHA) {
-<span class="fc" id="L2320">        return new GHCheckRunBuilder(this, name, headSHA);</span>
+<span class="fc" id="L2338">        return new GHCheckRunBuilder(this, name, headSHA);</span>
     }
 
     /**
@@ -2328,7 +2346,7 @@ import static java.util.Objects.requireNonNull;
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
     public @NonNull GHCheckRunBuilder updateCheckRun(long checkId) {
-<span class="nc" id="L2331">        return new GHCheckRunBuilder(this, checkId);</span>
+<span class="nc" id="L2349">        return new GHCheckRunBuilder(this, checkId);</span>
     }
 
     /**
@@ -2339,9 +2357,9 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
-<span class="nc" id="L2342">        return root().createRequest()</span>
-<span class="nc" id="L2343">                .withUrlPath(String.format(&quot;/repos/%s/%s/events&quot;, getOwnerName(), name))</span>
-<span class="nc" id="L2344">                .toIterable(GHEventInfo[].class, null);</span>
+<span class="nc" id="L2360">        return root().createRequest()</span>
+<span class="nc" id="L2361">                .withUrlPath(String.format(&quot;/repos/%s/%s/events&quot;, getOwnerName(), name))</span>
+<span class="nc" id="L2362">                .toIterable(GHEventInfo[].class, null);</span>
     }
 
     /**
@@ -2354,7 +2372,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public PagedIterable&lt;GHLabel&gt; listLabels() throws IOException {
-<span class="fc" id="L2357">        return GHLabel.readAll(this);</span>
+<span class="fc" id="L2375">        return GHLabel.readAll(this);</span>
     }
 
     /**
@@ -2367,7 +2385,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHLabel getLabel(String name) throws IOException {
-<span class="fc" id="L2370">        return GHLabel.read(this, name);</span>
+<span class="fc" id="L2388">        return GHLabel.read(this, name);</span>
     }
 
     /**
@@ -2382,7 +2400,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHLabel createLabel(String name, String color) throws IOException {
-<span class="fc" id="L2385">        return GHLabel.create(this).name(name).color(color).description(&quot;&quot;).done();</span>
+<span class="fc" id="L2403">        return GHLabel.create(this).name(name).color(color).description(&quot;&quot;).done();</span>
     }
 
     /**
@@ -2399,7 +2417,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHLabel createLabel(String name, String color, String description) throws IOException {
-<span class="fc" id="L2402">        return GHLabel.create(this).name(name).color(color).description(description).done();</span>
+<span class="fc" id="L2420">        return GHLabel.create(this).name(name).color(color).description(description).done();</span>
     }
 
     /**
@@ -2408,9 +2426,9 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHInvitation&gt; listInvitations() {
-<span class="nc" id="L2411">        return root().createRequest()</span>
-<span class="nc" id="L2412">                .withUrlPath(String.format(&quot;/repos/%s/%s/invitations&quot;, getOwnerName(), name))</span>
-<span class="nc" id="L2413">                .toIterable(GHInvitation[].class, null);</span>
+<span class="nc" id="L2429">        return root().createRequest()</span>
+<span class="nc" id="L2430">                .withUrlPath(String.format(&quot;/repos/%s/%s/invitations&quot;, getOwnerName(), name))</span>
+<span class="nc" id="L2431">                .toIterable(GHInvitation[].class, null);</span>
     }
 
     /**
@@ -2421,7 +2439,7 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHUser&gt; listSubscribers() {
-<span class="fc" id="L2424">        return listUsers(&quot;subscribers&quot;);</span>
+<span class="fc" id="L2442">        return listUsers(&quot;subscribers&quot;);</span>
     }
 
     /**
@@ -2431,7 +2449,7 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHUser&gt; listStargazers() {
-<span class="fc" id="L2434">        return listUsers(&quot;stargazers&quot;);</span>
+<span class="fc" id="L2452">        return listUsers(&quot;stargazers&quot;);</span>
     }
 
     /**
@@ -2441,18 +2459,18 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHStargazer&gt; listStargazers2() {
-<span class="fc" id="L2444">        return root().createRequest()</span>
-<span class="fc" id="L2445">                .withAccept(&quot;application/vnd.github.star+json&quot;)</span>
-<span class="fc" id="L2446">                .withUrlPath(getApiTailUrl(&quot;stargazers&quot;))</span>
-<span class="fc" id="L2447">                .toIterable(GHStargazer[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L2462">        return root().createRequest()</span>
+<span class="fc" id="L2463">                .withAccept(&quot;application/vnd.github.star+json&quot;)</span>
+<span class="fc" id="L2464">                .withUrlPath(getApiTailUrl(&quot;stargazers&quot;))</span>
+<span class="fc" id="L2465">                .toIterable(GHStargazer[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     private PagedIterable&lt;GHUser&gt; listUsers(final String suffix) {
-<span class="fc" id="L2451">        return listUsers(root().createRequest(), suffix);</span>
+<span class="fc" id="L2469">        return listUsers(root().createRequest(), suffix);</span>
     }
 
     private PagedIterable&lt;GHUser&gt; listUsers(Requester requester, final String suffix) {
-<span class="fc" id="L2455">        return requester.withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);</span>
+<span class="fc" id="L2473">        return requester.withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);</span>
     }
 
     /**
@@ -2473,7 +2491,7 @@ import static java.util.Objects.requireNonNull;
      */
     public GHHook createHook(String name, Map&lt;String, String&gt; config, Collection&lt;GHEvent&gt; events, boolean active)
             throws IOException {
-<span class="fc" id="L2476">        return GHHooks.repoContext(this, owner).createHook(name, config, events, active);</span>
+<span class="fc" id="L2494">        return GHHooks.repoContext(this, owner).createHook(name, config, events, active);</span>
     }
 
     /**
@@ -2488,7 +2506,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHHook createWebHook(URL url, Collection&lt;GHEvent&gt; events) throws IOException {
-<span class="fc" id="L2491">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
+<span class="fc" id="L2509">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
     }
 
     /**
@@ -2501,7 +2519,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHHook createWebHook(URL url) throws IOException {
-<span class="fc" id="L2504">        return createWebHook(url, null);</span>
+<span class="fc" id="L2522">        return createWebHook(url, null);</span>
     }
 
     /**
@@ -2515,11 +2533,11 @@ import static java.util.Objects.requireNonNull;
             justification = &quot;It causes a performance degradation, but we have already exposed it to the API&quot;)
     @Deprecated
     public Set&lt;URL&gt; getPostCommitHooks() {
-<span class="fc" id="L2518">        synchronized (this) {</span>
-<span class="pc bpc" id="L2519" title="1 of 2 branches missed.">            if (postCommitHooks == null) {</span>
-<span class="fc" id="L2520">                postCommitHooks = setupPostCommitHooks();</span>
+<span class="fc" id="L2536">        synchronized (this) {</span>
+<span class="pc bpc" id="L2537" title="1 of 2 branches missed.">            if (postCommitHooks == null) {</span>
+<span class="fc" id="L2538">                postCommitHooks = setupPostCommitHooks();</span>
             }
-<span class="fc" id="L2522">            return postCommitHooks;</span>
+<span class="fc" id="L2540">            return postCommitHooks;</span>
         }
     }
 
@@ -2534,54 +2552,54 @@ import static java.util.Objects.requireNonNull;
     @SuppressFBWarnings(value = &quot;DMI_COLLECTION_OF_URLS&quot;,
             justification = &quot;It causes a performance degradation, but we have already exposed it to the API&quot;)
     private Set&lt;URL&gt; setupPostCommitHooks() {
-<span class="fc" id="L2537">        return new AbstractSet&lt;URL&gt;() {</span>
+<span class="fc" id="L2555">        return new AbstractSet&lt;URL&gt;() {</span>
             private List&lt;URL&gt; getPostCommitHooks() {
                 try {
-<span class="fc" id="L2540">                    List&lt;URL&gt; r = new ArrayList&lt;&gt;();</span>
-<span class="pc bpc" id="L2541" title="1 of 2 branches missed.">                    for (GHHook h : getHooks()) {</span>
-<span class="nc bnc" id="L2542" title="All 2 branches missed.">                        if (h.getName().equals(&quot;web&quot;)) {</span>
-<span class="nc" id="L2543">                            r.add(new URL(h.getConfig().get(&quot;url&quot;)));</span>
+<span class="fc" id="L2558">                    List&lt;URL&gt; r = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L2559" title="1 of 2 branches missed.">                    for (GHHook h : getHooks()) {</span>
+<span class="nc bnc" id="L2560" title="All 2 branches missed.">                        if (h.getName().equals(&quot;web&quot;)) {</span>
+<span class="nc" id="L2561">                            r.add(new URL(h.getConfig().get(&quot;url&quot;)));</span>
                         }
-<span class="nc" id="L2545">                    }</span>
-<span class="fc" id="L2546">                    return r;</span>
-<span class="nc" id="L2547">                } catch (IOException e) {</span>
-<span class="nc" id="L2548">                    throw new GHException(&quot;Failed to retrieve post-commit hooks&quot;, e);</span>
+<span class="nc" id="L2563">                    }</span>
+<span class="fc" id="L2564">                    return r;</span>
+<span class="nc" id="L2565">                } catch (IOException e) {</span>
+<span class="nc" id="L2566">                    throw new GHException(&quot;Failed to retrieve post-commit hooks&quot;, e);</span>
                 }
             }
 
             @Override
             public Iterator&lt;URL&gt; iterator() {
-<span class="nc" id="L2554">                return getPostCommitHooks().iterator();</span>
+<span class="nc" id="L2572">                return getPostCommitHooks().iterator();</span>
             }
 
             @Override
             public int size() {
-<span class="fc" id="L2559">                return getPostCommitHooks().size();</span>
+<span class="fc" id="L2577">                return getPostCommitHooks().size();</span>
             }
 
             @Override
             public boolean add(URL url) {
                 try {
-<span class="nc" id="L2565">                    createWebHook(url);</span>
-<span class="nc" id="L2566">                    return true;</span>
-<span class="nc" id="L2567">                } catch (IOException e) {</span>
-<span class="nc" id="L2568">                    throw new GHException(&quot;Failed to update post-commit hooks&quot;, e);</span>
+<span class="nc" id="L2583">                    createWebHook(url);</span>
+<span class="nc" id="L2584">                    return true;</span>
+<span class="nc" id="L2585">                } catch (IOException e) {</span>
+<span class="nc" id="L2586">                    throw new GHException(&quot;Failed to update post-commit hooks&quot;, e);</span>
                 }
             }
 
             @Override
             public boolean remove(Object url) {
                 try {
-<span class="nc" id="L2575">                    String _url = ((URL) url).toExternalForm();</span>
-<span class="nc bnc" id="L2576" title="All 2 branches missed.">                    for (GHHook h : getHooks()) {</span>
-<span class="nc bnc" id="L2577" title="All 4 branches missed.">                        if (h.getName().equals(&quot;web&quot;) &amp;&amp; h.getConfig().get(&quot;url&quot;).equals(_url)) {</span>
-<span class="nc" id="L2578">                            h.delete();</span>
-<span class="nc" id="L2579">                            return true;</span>
+<span class="nc" id="L2593">                    String _url = ((URL) url).toExternalForm();</span>
+<span class="nc bnc" id="L2594" title="All 2 branches missed.">                    for (GHHook h : getHooks()) {</span>
+<span class="nc bnc" id="L2595" title="All 4 branches missed.">                        if (h.getName().equals(&quot;web&quot;) &amp;&amp; h.getConfig().get(&quot;url&quot;).equals(_url)) {</span>
+<span class="nc" id="L2596">                            h.delete();</span>
+<span class="nc" id="L2597">                            return true;</span>
                         }
-<span class="nc" id="L2581">                    }</span>
-<span class="nc" id="L2582">                    return false;</span>
-<span class="nc" id="L2583">                } catch (IOException e) {</span>
-<span class="nc" id="L2584">                    throw new GHException(&quot;Failed to update post-commit hooks&quot;, e);</span>
+<span class="nc" id="L2599">                    }</span>
+<span class="nc" id="L2600">                    return false;</span>
+<span class="nc" id="L2601">                } catch (IOException e) {</span>
+<span class="nc" id="L2602">                    throw new GHException(&quot;Failed to update post-commit hooks&quot;, e);</span>
                 }
             }
         };
@@ -2595,14 +2613,14 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public Map&lt;String, GHBranch&gt; getBranches() throws IOException {
-<span class="fc" id="L2598">        Map&lt;String, GHBranch&gt; r = new TreeMap&lt;String, GHBranch&gt;();</span>
-<span class="fc" id="L2599">        for (GHBranch p : root().createRequest()</span>
-<span class="fc" id="L2600">                .withUrlPath(getApiTailUrl(&quot;branches&quot;))</span>
-<span class="fc" id="L2601">                .toIterable(GHBranch[].class, item -&gt; item.wrap(this))</span>
-<span class="fc bfc" id="L2602" title="All 2 branches covered.">                .toArray()) {</span>
-<span class="fc" id="L2603">            r.put(p.getName(), p);</span>
+<span class="fc" id="L2616">        Map&lt;String, GHBranch&gt; r = new TreeMap&lt;String, GHBranch&gt;();</span>
+<span class="fc" id="L2617">        for (GHBranch p : root().createRequest()</span>
+<span class="fc" id="L2618">                .withUrlPath(getApiTailUrl(&quot;branches&quot;))</span>
+<span class="fc" id="L2619">                .toIterable(GHBranch[].class, item -&gt; item.wrap(this))</span>
+<span class="fc bfc" id="L2620" title="All 2 branches covered.">                .toArray()) {</span>
+<span class="fc" id="L2621">            r.put(p.getName(), p);</span>
         }
-<span class="fc" id="L2605">        return r;</span>
+<span class="fc" id="L2623">        return r;</span>
     }
 
     /**
@@ -2615,7 +2633,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHBranch getBranch(String name) throws IOException {
-<span class="fc" id="L2618">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;branches/&quot; + name)).fetch(GHBranch.class).wrap(this);</span>
+<span class="fc" id="L2636">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;branches/&quot; + name)).fetch(GHBranch.class).wrap(this);</span>
     }
 
     /**
@@ -2627,11 +2645,11 @@ import static java.util.Objects.requireNonNull;
      * @deprecated Use {@link #listMilestones(GHIssueState)}
      */
     public Map&lt;Integer, GHMilestone&gt; getMilestones() throws IOException {
-<span class="nc" id="L2630">        Map&lt;Integer, GHMilestone&gt; milestones = new TreeMap&lt;Integer, GHMilestone&gt;();</span>
-<span class="nc bnc" id="L2631" title="All 2 branches missed.">        for (GHMilestone m : listMilestones(GHIssueState.OPEN)) {</span>
-<span class="nc" id="L2632">            milestones.put(m.getNumber(), m);</span>
-<span class="nc" id="L2633">        }</span>
-<span class="nc" id="L2634">        return milestones;</span>
+<span class="nc" id="L2648">        Map&lt;Integer, GHMilestone&gt; milestones = new TreeMap&lt;Integer, GHMilestone&gt;();</span>
+<span class="nc bnc" id="L2649" title="All 2 branches missed.">        for (GHMilestone m : listMilestones(GHIssueState.OPEN)) {</span>
+<span class="nc" id="L2650">            milestones.put(m.getNumber(), m);</span>
+<span class="nc" id="L2651">        }</span>
+<span class="nc" id="L2652">        return milestones;</span>
     }
 
     /**
@@ -2642,10 +2660,10 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHMilestone&gt; listMilestones(final GHIssueState state) {
-<span class="nc" id="L2645">        return root().createRequest()</span>
-<span class="nc" id="L2646">                .with(&quot;state&quot;, state)</span>
-<span class="nc" id="L2647">                .withUrlPath(getApiTailUrl(&quot;milestones&quot;))</span>
-<span class="nc" id="L2648">                .toIterable(GHMilestone[].class, item -&gt; item.lateBind(this));</span>
+<span class="nc" id="L2663">        return root().createRequest()</span>
+<span class="nc" id="L2664">                .with(&quot;state&quot;, state)</span>
+<span class="nc" id="L2665">                .withUrlPath(getApiTailUrl(&quot;milestones&quot;))</span>
+<span class="nc" id="L2666">                .toIterable(GHMilestone[].class, item -&gt; item.lateBind(this));</span>
     }
 
     /**
@@ -2658,13 +2676,13 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHMilestone getMilestone(int number) throws IOException {
-<span class="fc" id="L2661">        GHMilestone m = milestones.get(number);</span>
-<span class="pc bpc" id="L2662" title="1 of 2 branches missed.">        if (m == null) {</span>
-<span class="fc" id="L2663">            m = root().createRequest().withUrlPath(getApiTailUrl(&quot;milestones/&quot; + number)).fetch(GHMilestone.class);</span>
-<span class="fc" id="L2664">            m.owner = this;</span>
-<span class="fc" id="L2665">            milestones.put(m.getNumber(), m);</span>
+<span class="fc" id="L2679">        GHMilestone m = milestones.get(number);</span>
+<span class="pc bpc" id="L2680" title="1 of 2 branches missed.">        if (m == null) {</span>
+<span class="fc" id="L2681">            m = root().createRequest().withUrlPath(getApiTailUrl(&quot;milestones/&quot; + number)).fetch(GHMilestone.class);</span>
+<span class="fc" id="L2682">            m.owner = this;</span>
+<span class="fc" id="L2683">            milestones.put(m.getNumber(), m);</span>
         }
-<span class="fc" id="L2667">        return m;</span>
+<span class="fc" id="L2685">        return m;</span>
     }
 
     /**
@@ -2677,7 +2695,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHContent getFileContent(String path) throws IOException {
-<span class="fc" id="L2680">        return getFileContent(path, null);</span>
+<span class="fc" id="L2698">        return getFileContent(path, null);</span>
     }
 
     /**
@@ -2692,10 +2710,10 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHContent getFileContent(String path, String ref) throws IOException {
-<span class="fc" id="L2695">        Requester requester = root().createRequest();</span>
-<span class="fc" id="L2696">        String target = getApiTailUrl(&quot;contents/&quot; + path);</span>
+<span class="fc" id="L2713">        Requester requester = root().createRequest();</span>
+<span class="fc" id="L2714">        String target = getApiTailUrl(&quot;contents/&quot; + path);</span>
 
-<span class="fc" id="L2698">        return requester.with(&quot;ref&quot;, ref).withUrlPath(target).fetch(GHContent.class).wrap(this);</span>
+<span class="fc" id="L2716">        return requester.with(&quot;ref&quot;, ref).withUrlPath(target).fetch(GHContent.class).wrap(this);</span>
     }
 
     /**
@@ -2708,7 +2726,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public List&lt;GHContent&gt; getDirectoryContent(String path) throws IOException {
-<span class="fc" id="L2711">        return getDirectoryContent(path, null);</span>
+<span class="fc" id="L2729">        return getDirectoryContent(path, null);</span>
     }
 
     /**
@@ -2723,16 +2741,16 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public List&lt;GHContent&gt; getDirectoryContent(String path, String ref) throws IOException {
-<span class="fc" id="L2726">        Requester requester = root().createRequest();</span>
-<span class="fc bfc" id="L2727" title="All 2 branches covered.">        while (path.endsWith(&quot;/&quot;)) {</span>
-<span class="fc" id="L2728">            path = path.substring(0, path.length() - 1);</span>
+<span class="fc" id="L2744">        Requester requester = root().createRequest();</span>
+<span class="fc bfc" id="L2745" title="All 2 branches covered.">        while (path.endsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L2746">            path = path.substring(0, path.length() - 1);</span>
         }
-<span class="fc" id="L2730">        String target = getApiTailUrl(&quot;contents/&quot; + path);</span>
+<span class="fc" id="L2748">        String target = getApiTailUrl(&quot;contents/&quot; + path);</span>
 
-<span class="fc" id="L2732">        return requester.with(&quot;ref&quot;, ref)</span>
-<span class="fc" id="L2733">                .withUrlPath(target)</span>
-<span class="fc" id="L2734">                .toIterable(GHContent[].class, item -&gt; item.wrap(this))</span>
-<span class="fc" id="L2735">                .toList();</span>
+<span class="fc" id="L2750">        return requester.with(&quot;ref&quot;, ref)</span>
+<span class="fc" id="L2751">                .withUrlPath(target)</span>
+<span class="fc" id="L2752">                .toIterable(GHContent[].class, item -&gt; item.wrap(this))</span>
+<span class="fc" id="L2753">                .toList();</span>
     }
 
     /**
@@ -2743,8 +2761,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHContent getReadme() throws IOException {
-<span class="fc" id="L2746">        Requester requester = root().createRequest();</span>
-<span class="fc" id="L2747">        return requester.withUrlPath(getApiTailUrl(&quot;readme&quot;)).fetch(GHContent.class).wrap(this);</span>
+<span class="fc" id="L2764">        Requester requester = root().createRequest();</span>
+<span class="fc" id="L2765">        return requester.withUrlPath(getApiTailUrl(&quot;readme&quot;)).fetch(GHContent.class).wrap(this);</span>
     }
 
     /**
@@ -2758,8 +2776,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public void createVariable(String name, String value) throws IOException {
-<span class="fc" id="L2761">        GHRepositoryVariable.create(this).name(name).value(value).done();</span>
-<span class="fc" id="L2762">    }</span>
+<span class="fc" id="L2779">        GHRepositoryVariable.create(this).name(name).value(value).done();</span>
+<span class="fc" id="L2780">    }</span>
 
     /**
      * Gets a variable by name
@@ -2772,7 +2790,7 @@ import static java.util.Objects.requireNonNull;
      */
     @Deprecated
     public GHRepositoryVariable getRepoVariable(String name) throws IOException {
-<span class="fc" id="L2775">        return getVariable(name);</span>
+<span class="fc" id="L2793">        return getVariable(name);</span>
     }
 
     /**
@@ -2785,7 +2803,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHRepositoryVariable getVariable(String name) throws IOException {
-<span class="fc" id="L2788">        return GHRepositoryVariable.read(this, name);</span>
+<span class="fc" id="L2806">        return GHRepositoryVariable.read(this, name);</span>
     }
 
     /**
@@ -2794,7 +2812,7 @@ import static java.util.Objects.requireNonNull;
      * @return the gh content builder
      */
     public GHContentBuilder createContent() {
-<span class="fc" id="L2797">        return new GHContentBuilder(this);</span>
+<span class="fc" id="L2815">        return new GHContentBuilder(this);</span>
     }
 
     /**
@@ -2812,7 +2830,7 @@ import static java.util.Objects.requireNonNull;
      */
     @Deprecated
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
-<span class="fc" id="L2815">        return createContent().content(content).message(commitMessage).path(path).commit();</span>
+<span class="fc" id="L2833">        return createContent().content(content).message(commitMessage).path(path).commit();</span>
     }
 
     /**
@@ -2833,7 +2851,7 @@ import static java.util.Objects.requireNonNull;
     @Deprecated
     public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch)
             throws IOException {
-<span class="fc" id="L2836">        return createContent().content(content).message(commitMessage).path(path).branch(branch).commit();</span>
+<span class="fc" id="L2854">        return createContent().content(content).message(commitMessage).path(path).branch(branch).commit();</span>
     }
 
     /**
@@ -2852,7 +2870,7 @@ import static java.util.Objects.requireNonNull;
     @Deprecated
     public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path)
             throws IOException {
-<span class="nc" id="L2855">        return createContent().content(contentBytes).message(commitMessage).path(path).commit();</span>
+<span class="nc" id="L2873">        return createContent().content(contentBytes).message(commitMessage).path(path).commit();</span>
     }
 
     /**
@@ -2873,7 +2891,7 @@ import static java.util.Objects.requireNonNull;
     @Deprecated
     public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch)
             throws IOException {
-<span class="nc" id="L2876">        return createContent().content(contentBytes).message(commitMessage).path(path).branch(branch).commit();</span>
+<span class="nc" id="L2894">        return createContent().content(contentBytes).message(commitMessage).path(path).branch(branch).commit();</span>
     }
 
     /**
@@ -2888,13 +2906,13 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHMilestone createMilestone(String title, String description) throws IOException {
-<span class="fc" id="L2891">        return root().createRequest()</span>
-<span class="fc" id="L2892">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L2893">                .with(&quot;title&quot;, title)</span>
-<span class="fc" id="L2894">                .with(&quot;description&quot;, description)</span>
-<span class="fc" id="L2895">                .withUrlPath(getApiTailUrl(&quot;milestones&quot;))</span>
-<span class="fc" id="L2896">                .fetch(GHMilestone.class)</span>
-<span class="fc" id="L2897">                .lateBind(this);</span>
+<span class="fc" id="L2909">        return root().createRequest()</span>
+<span class="fc" id="L2910">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L2911">                .with(&quot;title&quot;, title)</span>
+<span class="fc" id="L2912">                .with(&quot;description&quot;, description)</span>
+<span class="fc" id="L2913">                .withUrlPath(getApiTailUrl(&quot;milestones&quot;))</span>
+<span class="fc" id="L2914">                .fetch(GHMilestone.class)</span>
+<span class="fc" id="L2915">                .lateBind(this);</span>
     }
 
     /**
@@ -2909,7 +2927,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHDeployKey addDeployKey(String title, String key) throws IOException {
-<span class="fc" id="L2912">        return addDeployKey(title, key, false);</span>
+<span class="fc" id="L2930">        return addDeployKey(title, key, false);</span>
     }
 
     /**
@@ -2926,14 +2944,14 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHDeployKey addDeployKey(String title, String key, boolean readOnly) throws IOException {
-<span class="fc" id="L2929">        return root().createRequest()</span>
-<span class="fc" id="L2930">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L2931">                .with(&quot;title&quot;, title)</span>
-<span class="fc" id="L2932">                .with(&quot;key&quot;, key)</span>
-<span class="fc" id="L2933">                .with(&quot;read_only&quot;, readOnly)</span>
-<span class="fc" id="L2934">                .withUrlPath(getApiTailUrl(&quot;keys&quot;))</span>
-<span class="fc" id="L2935">                .fetch(GHDeployKey.class)</span>
-<span class="fc" id="L2936">                .lateBind(this);</span>
+<span class="fc" id="L2947">        return root().createRequest()</span>
+<span class="fc" id="L2948">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L2949">                .with(&quot;title&quot;, title)</span>
+<span class="fc" id="L2950">                .with(&quot;key&quot;, key)</span>
+<span class="fc" id="L2951">                .with(&quot;read_only&quot;, readOnly)</span>
+<span class="fc" id="L2952">                .withUrlPath(getApiTailUrl(&quot;keys&quot;))</span>
+<span class="fc" id="L2953">                .fetch(GHDeployKey.class)</span>
+<span class="fc" id="L2954">                .lateBind(this);</span>
     }
 
     /**
@@ -2944,10 +2962,10 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public List&lt;GHDeployKey&gt; getDeployKeys() throws IOException {
-<span class="fc" id="L2947">        return root().createRequest()</span>
-<span class="fc" id="L2948">                .withUrlPath(getApiTailUrl(&quot;keys&quot;))</span>
-<span class="fc" id="L2949">                .toIterable(GHDeployKey[].class, item -&gt; item.lateBind(this))</span>
-<span class="fc" id="L2950">                .toList();</span>
+<span class="fc" id="L2965">        return root().createRequest()</span>
+<span class="fc" id="L2966">                .withUrlPath(getApiTailUrl(&quot;keys&quot;))</span>
+<span class="fc" id="L2967">                .toIterable(GHDeployKey[].class, item -&gt; item.lateBind(this))</span>
+<span class="fc" id="L2968">                .toList();</span>
     }
 
     /**
@@ -2961,14 +2979,14 @@ import static java.util.Objects.requireNonNull;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getSource() throws IOException {
-<span class="pc bpc" id="L2964" title="1 of 4 branches missed.">        if (fork &amp;&amp; source == null) {</span>
-<span class="fc" id="L2965">            populate();</span>
+<span class="pc bpc" id="L2982" title="1 of 4 branches missed.">        if (fork &amp;&amp; source == null) {</span>
+<span class="fc" id="L2983">            populate();</span>
         }
-<span class="fc bfc" id="L2967" title="All 2 branches covered.">        if (source == null) {</span>
-<span class="fc" id="L2968">            return null;</span>
+<span class="fc bfc" id="L2985" title="All 2 branches covered.">        if (source == null) {</span>
+<span class="fc" id="L2986">            return null;</span>
         }
 
-<span class="fc" id="L2971">        return source;</span>
+<span class="fc" id="L2989">        return source;</span>
     }
 
     /**
@@ -2983,14 +3001,14 @@ import static java.util.Objects.requireNonNull;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getParent() throws IOException {
-<span class="pc bpc" id="L2986" title="1 of 4 branches missed.">        if (fork &amp;&amp; parent == null) {</span>
-<span class="fc" id="L2987">            populate();</span>
+<span class="pc bpc" id="L3004" title="1 of 4 branches missed.">        if (fork &amp;&amp; parent == null) {</span>
+<span class="fc" id="L3005">            populate();</span>
         }
 
-<span class="fc bfc" id="L2990" title="All 2 branches covered.">        if (parent == null) {</span>
-<span class="fc" id="L2991">            return null;</span>
+<span class="fc bfc" id="L3008" title="All 2 branches covered.">        if (parent == null) {</span>
+<span class="fc" id="L3009">            return null;</span>
         }
-<span class="fc" id="L2993">        return parent;</span>
+<span class="fc" id="L3011">        return parent;</span>
     }
 
     /**
@@ -3005,13 +3023,13 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
-<span class="fc" id="L3008">        return root().createRequest()</span>
-<span class="fc" id="L3009">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L3010">                .with(&quot;subscribed&quot;, subscribed)</span>
-<span class="fc" id="L3011">                .with(&quot;ignored&quot;, ignored)</span>
-<span class="fc" id="L3012">                .withUrlPath(getApiTailUrl(&quot;subscription&quot;))</span>
-<span class="fc" id="L3013">                .fetch(GHSubscription.class)</span>
-<span class="fc" id="L3014">                .wrapUp(this);</span>
+<span class="fc" id="L3026">        return root().createRequest()</span>
+<span class="fc" id="L3027">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L3028">                .with(&quot;subscribed&quot;, subscribed)</span>
+<span class="fc" id="L3029">                .with(&quot;ignored&quot;, ignored)</span>
+<span class="fc" id="L3030">                .withUrlPath(getApiTailUrl(&quot;subscription&quot;))</span>
+<span class="fc" id="L3031">                .fetch(GHSubscription.class)</span>
+<span class="fc" id="L3032">                .wrapUp(this);</span>
     }
 
     /**
@@ -3023,12 +3041,12 @@ import static java.util.Objects.requireNonNull;
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-<span class="pc" id="L3026">            return root().createRequest()</span>
-<span class="fc" id="L3027">                    .withUrlPath(getApiTailUrl(&quot;subscription&quot;))</span>
-<span class="nc" id="L3028">                    .fetch(GHSubscription.class)</span>
-<span class="nc" id="L3029">                    .wrapUp(this);</span>
-<span class="fc" id="L3030">        } catch (FileNotFoundException e) {</span>
-<span class="fc" id="L3031">            return null;</span>
+<span class="pc" id="L3044">            return root().createRequest()</span>
+<span class="fc" id="L3045">                    .withUrlPath(getApiTailUrl(&quot;subscription&quot;))</span>
+<span class="nc" id="L3046">                    .fetch(GHSubscription.class)</span>
+<span class="nc" id="L3047">                    .wrapUp(this);</span>
+<span class="fc" id="L3048">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L3049">            return null;</span>
         }
     }
 
@@ -3046,9 +3064,9 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public List&lt;GHCodeownersError&gt; listCodeownersErrors() throws IOException {
-<span class="fc" id="L3049">        return root().createRequest()</span>
-<span class="fc" id="L3050">                .withUrlPath(getApiTailUrl(&quot;codeowners/errors&quot;))</span>
-<span class="fc" id="L3051">                .fetch(GHCodeownersErrors.class).errors;</span>
+<span class="fc" id="L3067">        return root().createRequest()</span>
+<span class="fc" id="L3068">                .withUrlPath(getApiTailUrl(&quot;codeowners/errors&quot;))</span>
+<span class="fc" id="L3069">                .fetch(GHCodeownersErrors.class).errors;</span>
     }
 
     /**
@@ -3059,13 +3077,13 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public PagedIterable&lt;Contributor&gt; listContributors() throws IOException {
-<span class="fc" id="L3062">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;contributors&quot;)).toIterable(Contributor[].class, null);</span>
+<span class="fc" id="L3080">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;contributors&quot;)).toIterable(Contributor[].class, null);</span>
     }
 
     /**
      * The type Contributor.
      */
-<span class="fc" id="L3068">    public static class Contributor extends GHUser {</span>
+<span class="fc" id="L3086">    public static class Contributor extends GHUser {</span>
         private int contributions;
 
         /**
@@ -3074,7 +3092,7 @@ import static java.util.Objects.requireNonNull;
          * @return the contributions
          */
         public int getContributions() {
-<span class="fc" id="L3077">            return contributions;</span>
+<span class="fc" id="L3095">            return contributions;</span>
         }
 
         /**
@@ -3085,7 +3103,7 @@ import static java.util.Objects.requireNonNull;
         @Override
         public int hashCode() {
             // We ignore contributions in the calculation
-<span class="nc" id="L3088">            return super.hashCode();</span>
+<span class="nc" id="L3106">            return super.hashCode();</span>
         }
 
         /**
@@ -3098,7 +3116,7 @@ import static java.util.Objects.requireNonNull;
         @Override
         public boolean equals(Object obj) {
             // We ignore contributions in the calculation
-<span class="nc" id="L3101">            return super.equals(obj);</span>
+<span class="nc" id="L3119">            return super.equals(obj);</span>
         }
     }
 
@@ -3110,7 +3128,7 @@ import static java.util.Objects.requireNonNull;
     public GHRepositoryStatistics getStatistics() {
         // TODO: Use static object and introduce refresh() method,
         // instead of returning new object each time.
-<span class="fc" id="L3113">        return new GHRepositoryStatistics(this);</span>
+<span class="fc" id="L3131">        return new GHRepositoryStatistics(this);</span>
     }
 
     /**
@@ -3125,13 +3143,13 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHProject createProject(String name, String body) throws IOException {
-<span class="nc" id="L3128">        return root().createRequest()</span>
-<span class="nc" id="L3129">                .method(&quot;POST&quot;)</span>
-<span class="nc" id="L3130">                .with(&quot;name&quot;, name)</span>
-<span class="nc" id="L3131">                .with(&quot;body&quot;, body)</span>
-<span class="nc" id="L3132">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
-<span class="nc" id="L3133">                .fetch(GHProject.class)</span>
-<span class="nc" id="L3134">                .lateBind(this);</span>
+<span class="nc" id="L3146">        return root().createRequest()</span>
+<span class="nc" id="L3147">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L3148">                .with(&quot;name&quot;, name)</span>
+<span class="nc" id="L3149">                .with(&quot;body&quot;, body)</span>
+<span class="nc" id="L3150">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
+<span class="nc" id="L3151">                .fetch(GHProject.class)</span>
+<span class="nc" id="L3152">                .lateBind(this);</span>
     }
 
     /**
@@ -3144,10 +3162,10 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public PagedIterable&lt;GHProject&gt; listProjects(final GHProject.ProjectStateFilter status) throws IOException {
-<span class="nc" id="L3147">        return root().createRequest()</span>
-<span class="nc" id="L3148">                .with(&quot;state&quot;, status)</span>
-<span class="nc" id="L3149">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
-<span class="nc" id="L3150">                .toIterable(GHProject[].class, item -&gt; item.lateBind(this));</span>
+<span class="nc" id="L3165">        return root().createRequest()</span>
+<span class="nc" id="L3166">                .with(&quot;state&quot;, status)</span>
+<span class="nc" id="L3167">                .withUrlPath(getApiTailUrl(&quot;projects&quot;))</span>
+<span class="nc" id="L3168">                .toIterable(GHProject[].class, item -&gt; item.lateBind(this));</span>
     }
 
     /**
@@ -3158,7 +3176,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public PagedIterable&lt;GHProject&gt; listProjects() throws IOException {
-<span class="nc" id="L3161">        return listProjects(GHProject.ProjectStateFilter.OPEN);</span>
+<span class="nc" id="L3179">        return listProjects(GHProject.ProjectStateFilter.OPEN);</span>
     }
 
     /**
@@ -3176,14 +3194,14 @@ import static java.util.Objects.requireNonNull;
      * @see GitHub#renderMarkdown(String) GitHub#renderMarkdown(String)
      */
     public Reader renderMarkdown(String text, MarkdownMode mode) throws IOException {
-<span class="fc" id="L3179">        return new InputStreamReader(</span>
-<span class="fc" id="L3180">                root().createRequest()</span>
-<span class="fc" id="L3181">                        .method(&quot;POST&quot;)</span>
-<span class="fc" id="L3182">                        .with(&quot;text&quot;, text)</span>
-<span class="pc bpc" id="L3183" title="1 of 2 branches missed.">                        .with(&quot;mode&quot;, mode == null ? null : mode.toString())</span>
-<span class="fc" id="L3184">                        .with(&quot;context&quot;, getFullName())</span>
-<span class="fc" id="L3185">                        .withUrlPath(&quot;/markdown&quot;)</span>
-<span class="fc" id="L3186">                        .fetchStream(Requester::copyInputStream),</span>
+<span class="fc" id="L3197">        return new InputStreamReader(</span>
+<span class="fc" id="L3198">                root().createRequest()</span>
+<span class="fc" id="L3199">                        .method(&quot;POST&quot;)</span>
+<span class="fc" id="L3200">                        .with(&quot;text&quot;, text)</span>
+<span class="pc bpc" id="L3201" title="1 of 2 branches missed.">                        .with(&quot;mode&quot;, mode == null ? null : mode.toString())</span>
+<span class="fc" id="L3202">                        .with(&quot;context&quot;, getFullName())</span>
+<span class="fc" id="L3203">                        .withUrlPath(&quot;/markdown&quot;)</span>
+<span class="fc" id="L3204">                        .fetchStream(Requester::copyInputStream),</span>
                 &quot;UTF-8&quot;);
     }
 
@@ -3193,7 +3211,7 @@ import static java.util.Objects.requireNonNull;
      * @return the gh notification stream
      */
     public GHNotificationStream listNotifications() {
-<span class="nc" id="L3196">        return new GHNotificationStream(root(), getApiTailUrl(&quot;/notifications&quot;));</span>
+<span class="nc" id="L3214">        return new GHNotificationStream(root(), getApiTailUrl(&quot;/notifications&quot;));</span>
     }
 
     /**
@@ -3205,7 +3223,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHRepositoryViewTraffic getViewTraffic() throws IOException {
-<span class="fc" id="L3208">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;/traffic/views&quot;)).fetch(GHRepositoryViewTraffic.class);</span>
+<span class="fc" id="L3226">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;/traffic/views&quot;)).fetch(GHRepositoryViewTraffic.class);</span>
     }
 
     /**
@@ -3217,9 +3235,9 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHRepositoryCloneTraffic getCloneTraffic() throws IOException {
-<span class="fc" id="L3220">        return root().createRequest()</span>
-<span class="fc" id="L3221">                .withUrlPath(getApiTailUrl(&quot;/traffic/clones&quot;))</span>
-<span class="fc" id="L3222">                .fetch(GHRepositoryCloneTraffic.class);</span>
+<span class="fc" id="L3238">        return root().createRequest()</span>
+<span class="fc" id="L3239">                .withUrlPath(getApiTailUrl(&quot;/traffic/clones&quot;))</span>
+<span class="fc" id="L3240">                .fetch(GHRepositoryCloneTraffic.class);</span>
     }
 
     /**
@@ -3229,7 +3247,7 @@ import static java.util.Objects.requireNonNull;
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L3232">        return (&quot;Repository:&quot; + getOwnerName() + &quot;:&quot; + name).hashCode();</span>
+<span class="nc" id="L3250">        return (&quot;Repository:&quot; + getOwnerName() + &quot;:&quot; + name).hashCode();</span>
     }
 
     /**
@@ -3241,11 +3259,11 @@ import static java.util.Objects.requireNonNull;
      */
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L3244" title="1 of 2 branches missed.">        if (obj instanceof GHRepository) {</span>
-<span class="fc" id="L3245">            GHRepository that = (GHRepository) obj;</span>
-<span class="pc bpc" id="L3246" title="1 of 4 branches missed.">            return this.getOwnerName().equals(that.getOwnerName()) &amp;&amp; this.name.equals(that.name);</span>
+<span class="pc bpc" id="L3262" title="1 of 2 branches missed.">        if (obj instanceof GHRepository) {</span>
+<span class="fc" id="L3263">            GHRepository that = (GHRepository) obj;</span>
+<span class="pc bpc" id="L3264" title="1 of 4 branches missed.">            return this.getOwnerName().equals(that.getOwnerName()) &amp;&amp; this.name.equals(that.name);</span>
         }
-<span class="nc" id="L3248">        return false;</span>
+<span class="nc" id="L3266">        return false;</span>
     }
 
     /**
@@ -3256,10 +3274,10 @@ import static java.util.Objects.requireNonNull;
      * @return the api tail url
      */
     String getApiTailUrl(String tail) {
-<span class="fc bfc" id="L3259" title="All 4 branches covered.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;)) {</span>
-<span class="fc" id="L3260">            tail = '/' + tail;</span>
+<span class="fc bfc" id="L3277" title="All 4 branches covered.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L3278">            tail = '/' + tail;</span>
         }
-<span class="fc" id="L3262">        return &quot;/repos/&quot; + full_name + tail;</span>
+<span class="fc" id="L3280">        return &quot;/repos/&quot; + full_name + tail;</span>
     }
 
     /**
@@ -3271,9 +3289,9 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public PagedIterable&lt;GHIssueEvent&gt; listIssueEvents() throws IOException {
-<span class="fc" id="L3274">        return root().createRequest()</span>
-<span class="fc" id="L3275">                .withUrlPath(getApiTailUrl(&quot;issues/events&quot;))</span>
-<span class="fc" id="L3276">                .toIterable(GHIssueEvent[].class, null);</span>
+<span class="fc" id="L3292">        return root().createRequest()</span>
+<span class="fc" id="L3293">                .withUrlPath(getApiTailUrl(&quot;issues/events&quot;))</span>
+<span class="fc" id="L3294">                .toIterable(GHIssueEvent[].class, null);</span>
     }
 
     /**
@@ -3286,7 +3304,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHIssueEvent getIssueEvent(long id) throws IOException {
-<span class="fc" id="L3289">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;issues/events/&quot; + id)).fetch(GHIssueEvent.class);</span>
+<span class="fc" id="L3307">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;issues/events/&quot; + id)).fetch(GHIssueEvent.class);</span>
     }
 
     /**
@@ -3295,7 +3313,7 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHWorkflow&gt; listWorkflows() {
-<span class="fc" id="L3298">        return new GHWorkflowsIterable(this);</span>
+<span class="fc" id="L3316">        return new GHWorkflowsIterable(this);</span>
     }
 
     /**
@@ -3308,7 +3326,7 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHWorkflow getWorkflow(long id) throws IOException {
-<span class="fc" id="L3311">        return getWorkflow(String.valueOf(id));</span>
+<span class="fc" id="L3329">        return getWorkflow(String.valueOf(id));</span>
     }
 
     /**
@@ -3321,10 +3339,10 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHWorkflow getWorkflow(String nameOrId) throws IOException {
-<span class="fc" id="L3324">        return root().createRequest()</span>
-<span class="fc" id="L3325">                .withUrlPath(getApiTailUrl(&quot;actions/workflows&quot;), nameOrId)</span>
-<span class="fc" id="L3326">                .fetch(GHWorkflow.class)</span>
-<span class="fc" id="L3327">                .wrapUp(this);</span>
+<span class="fc" id="L3342">        return root().createRequest()</span>
+<span class="fc" id="L3343">                .withUrlPath(getApiTailUrl(&quot;actions/workflows&quot;), nameOrId)</span>
+<span class="fc" id="L3344">                .fetch(GHWorkflow.class)</span>
+<span class="fc" id="L3345">                .wrapUp(this);</span>
     }
 
     /**
@@ -3333,7 +3351,7 @@ import static java.util.Objects.requireNonNull;
      * @return the workflow run query builder
      */
     public GHWorkflowRunQueryBuilder queryWorkflowRuns() {
-<span class="fc" id="L3336">        return new GHWorkflowRunQueryBuilder(this);</span>
+<span class="fc" id="L3354">        return new GHWorkflowRunQueryBuilder(this);</span>
     }
 
     /**
@@ -3346,10 +3364,10 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHWorkflowRun getWorkflowRun(long id) throws IOException {
-<span class="fc" id="L3349">        return root().createRequest()</span>
-<span class="fc" id="L3350">                .withUrlPath(getApiTailUrl(&quot;actions/runs&quot;), String.valueOf(id))</span>
-<span class="fc" id="L3351">                .fetch(GHWorkflowRun.class)</span>
-<span class="fc" id="L3352">                .wrapUp(this);</span>
+<span class="fc" id="L3367">        return root().createRequest()</span>
+<span class="fc" id="L3368">                .withUrlPath(getApiTailUrl(&quot;actions/runs&quot;), String.valueOf(id))</span>
+<span class="fc" id="L3369">                .fetch(GHWorkflowRun.class)</span>
+<span class="fc" id="L3370">                .wrapUp(this);</span>
     }
 
     /**
@@ -3358,7 +3376,7 @@ import static java.util.Objects.requireNonNull;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHArtifact&gt; listArtifacts() {
-<span class="fc" id="L3361">        return new GHArtifactsIterable(this, root().createRequest().withUrlPath(getApiTailUrl(&quot;actions/artifacts&quot;)));</span>
+<span class="fc" id="L3379">        return new GHArtifactsIterable(this, root().createRequest().withUrlPath(getApiTailUrl(&quot;actions/artifacts&quot;)));</span>
     }
 
     /**
@@ -3371,10 +3389,10 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHArtifact getArtifact(long id) throws IOException {
-<span class="fc" id="L3374">        return root().createRequest()</span>
-<span class="fc" id="L3375">                .withUrlPath(getApiTailUrl(&quot;actions/artifacts&quot;), String.valueOf(id))</span>
-<span class="fc" id="L3376">                .fetch(GHArtifact.class)</span>
-<span class="fc" id="L3377">                .wrapUp(this);</span>
+<span class="fc" id="L3392">        return root().createRequest()</span>
+<span class="fc" id="L3393">                .withUrlPath(getApiTailUrl(&quot;actions/artifacts&quot;), String.valueOf(id))</span>
+<span class="fc" id="L3394">                .fetch(GHArtifact.class)</span>
+<span class="fc" id="L3395">                .wrapUp(this);</span>
     }
 
     /**
@@ -3387,10 +3405,10 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHWorkflowJob getWorkflowJob(long id) throws IOException {
-<span class="fc" id="L3390">        return root().createRequest()</span>
-<span class="fc" id="L3391">                .withUrlPath(getApiTailUrl(&quot;/actions/jobs&quot;), String.valueOf(id))</span>
-<span class="fc" id="L3392">                .fetch(GHWorkflowJob.class)</span>
-<span class="fc" id="L3393">                .wrapUp(this);</span>
+<span class="fc" id="L3408">        return root().createRequest()</span>
+<span class="fc" id="L3409">                .withUrlPath(getApiTailUrl(&quot;/actions/jobs&quot;), String.valueOf(id))</span>
+<span class="fc" id="L3410">                .fetch(GHWorkflowJob.class)</span>
+<span class="fc" id="L3411">                .wrapUp(this);</span>
     }
 
     /**
@@ -3401,10 +3419,10 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public GHRepositoryPublicKey getPublicKey() throws IOException {
-<span class="fc" id="L3404">        return root().createRequest()</span>
-<span class="fc" id="L3405">                .withUrlPath(getApiTailUrl(&quot;/actions/secrets/public-key&quot;))</span>
-<span class="fc" id="L3406">                .fetch(GHRepositoryPublicKey.class)</span>
-<span class="fc" id="L3407">                .wrapUp(this);</span>
+<span class="fc" id="L3422">        return root().createRequest()</span>
+<span class="fc" id="L3423">                .withUrlPath(getApiTailUrl(&quot;/actions/secrets/public-key&quot;))</span>
+<span class="fc" id="L3424">                .fetch(GHRepositoryPublicKey.class)</span>
+<span class="fc" id="L3425">                .wrapUp(this);</span>
     }
 
     // Only used within listTopics().
@@ -3421,8 +3439,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public List&lt;String&gt; listTopics() throws IOException {
-<span class="fc" id="L3424">        Topics topics = root().createRequest().withUrlPath(getApiTailUrl(&quot;topics&quot;)).fetch(Topics.class);</span>
-<span class="fc" id="L3425">        return topics.names;</span>
+<span class="fc" id="L3442">        Topics topics = root().createRequest().withUrlPath(getApiTailUrl(&quot;topics&quot;)).fetch(Topics.class);</span>
+<span class="fc" id="L3443">        return topics.names;</span>
     }
 
     /**
@@ -3435,8 +3453,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public void setTopics(List&lt;String&gt; topics) throws IOException {
-<span class="fc" id="L3438">        root().createRequest().method(&quot;PUT&quot;).with(&quot;names&quot;, topics).withUrlPath(getApiTailUrl(&quot;topics&quot;)).send();</span>
-<span class="fc" id="L3439">    }</span>
+<span class="fc" id="L3456">        root().createRequest().method(&quot;PUT&quot;).with(&quot;names&quot;, topics).withUrlPath(getApiTailUrl(&quot;topics&quot;)).send();</span>
+<span class="fc" id="L3457">    }</span>
 
     /**
      * Set/Update a repository secret
@@ -3452,13 +3470,13 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public void createSecret(String secretName, String encryptedValue, String publicKeyId) throws IOException {
-<span class="fc" id="L3455">        root().createRequest()</span>
-<span class="fc" id="L3456">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L3457">                .with(&quot;encrypted_value&quot;, encryptedValue)</span>
-<span class="fc" id="L3458">                .with(&quot;key_id&quot;, publicKeyId)</span>
-<span class="fc" id="L3459">                .withUrlPath(getApiTailUrl(&quot;actions/secrets&quot;) + &quot;/&quot; + secretName)</span>
-<span class="fc" id="L3460">                .send();</span>
-<span class="fc" id="L3461">    }</span>
+<span class="fc" id="L3473">        root().createRequest()</span>
+<span class="fc" id="L3474">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L3475">                .with(&quot;encrypted_value&quot;, encryptedValue)</span>
+<span class="fc" id="L3476">                .with(&quot;key_id&quot;, publicKeyId)</span>
+<span class="fc" id="L3477">                .withUrlPath(getApiTailUrl(&quot;actions/secrets&quot;) + &quot;/&quot; + secretName)</span>
+<span class="fc" id="L3478">                .send();</span>
+<span class="fc" id="L3479">    }</span>
 
     /**
      * Create a tag. See https://developer.github.com/v3/git/tags/#create-a-tag-object
@@ -3476,15 +3494,15 @@ import static java.util.Objects.requireNonNull;
      *             Signals that an I/O exception has occurred.
      */
     public GHTagObject createTag(String tag, String message, String object, String type) throws IOException {
-<span class="fc" id="L3479">        return root().createRequest()</span>
-<span class="fc" id="L3480">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L3481">                .with(&quot;tag&quot;, tag)</span>
-<span class="fc" id="L3482">                .with(&quot;message&quot;, message)</span>
-<span class="fc" id="L3483">                .with(&quot;object&quot;, object)</span>
-<span class="fc" id="L3484">                .with(&quot;type&quot;, type)</span>
-<span class="fc" id="L3485">                .withUrlPath(getApiTailUrl(&quot;git/tags&quot;))</span>
-<span class="fc" id="L3486">                .fetch(GHTagObject.class)</span>
-<span class="fc" id="L3487">                .wrap(this);</span>
+<span class="fc" id="L3497">        return root().createRequest()</span>
+<span class="fc" id="L3498">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L3499">                .with(&quot;tag&quot;, tag)</span>
+<span class="fc" id="L3500">                .with(&quot;message&quot;, message)</span>
+<span class="fc" id="L3501">                .with(&quot;object&quot;, object)</span>
+<span class="fc" id="L3502">                .with(&quot;type&quot;, type)</span>
+<span class="fc" id="L3503">                .withUrlPath(getApiTailUrl(&quot;git/tags&quot;))</span>
+<span class="fc" id="L3504">                .fetch(GHTagObject.class)</span>
+<span class="fc" id="L3505">                .wrap(this);</span>
     }
 
     /**
@@ -3501,7 +3519,7 @@ import static java.util.Objects.requireNonNull;
      *             The IO exception.
      */
     public &lt;T&gt; T readZip(InputStreamFunction&lt;T&gt; streamFunction, String ref) throws IOException {
-<span class="fc" id="L3504">        return downloadArchive(&quot;zip&quot;, ref, streamFunction);</span>
+<span class="fc" id="L3522">        return downloadArchive(&quot;zip&quot;, ref, streamFunction);</span>
     }
 
     /**
@@ -3518,7 +3536,7 @@ import static java.util.Objects.requireNonNull;
      *             The IO exception.
      */
     public &lt;T&gt; T readTar(InputStreamFunction&lt;T&gt; streamFunction, String ref) throws IOException {
-<span class="fc" id="L3521">        return downloadArchive(&quot;tar&quot;, ref, streamFunction);</span>
+<span class="fc" id="L3539">        return downloadArchive(&quot;tar&quot;, ref, streamFunction);</span>
     }
 
     /**
@@ -3535,24 +3553,24 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public &lt;T&gt; void dispatch(String eventType, @Nullable T clientPayload) throws IOException {
-<span class="fc" id="L3538">        root().createRequest()</span>
-<span class="fc" id="L3539">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L3540">                .withUrlPath(getApiTailUrl(&quot;dispatches&quot;))</span>
-<span class="fc" id="L3541">                .with(&quot;event_type&quot;, eventType)</span>
-<span class="fc" id="L3542">                .with(&quot;client_payload&quot;, clientPayload)</span>
-<span class="fc" id="L3543">                .send();</span>
-<span class="fc" id="L3544">    }</span>
+<span class="fc" id="L3556">        root().createRequest()</span>
+<span class="fc" id="L3557">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L3558">                .withUrlPath(getApiTailUrl(&quot;dispatches&quot;))</span>
+<span class="fc" id="L3559">                .with(&quot;event_type&quot;, eventType)</span>
+<span class="fc" id="L3560">                .with(&quot;client_payload&quot;, clientPayload)</span>
+<span class="fc" id="L3561">                .send();</span>
+<span class="fc" id="L3562">    }</span>
 
     private &lt;T&gt; T downloadArchive(@Nonnull String type,
             @CheckForNull String ref,
             @Nonnull InputStreamFunction&lt;T&gt; streamFunction) throws IOException {
-<span class="fc" id="L3549">        requireNonNull(streamFunction, &quot;Sink must not be null&quot;);</span>
-<span class="fc" id="L3550">        String tailUrl = getApiTailUrl(type + &quot;ball&quot;);</span>
-<span class="pc bpc" id="L3551" title="1 of 2 branches missed.">        if (ref != null) {</span>
-<span class="nc" id="L3552">            tailUrl += &quot;/&quot; + ref;</span>
+<span class="fc" id="L3567">        requireNonNull(streamFunction, &quot;Sink must not be null&quot;);</span>
+<span class="fc" id="L3568">        String tailUrl = getApiTailUrl(type + &quot;ball&quot;);</span>
+<span class="pc bpc" id="L3569" title="1 of 2 branches missed.">        if (ref != null) {</span>
+<span class="nc" id="L3570">            tailUrl += &quot;/&quot; + ref;</span>
         }
-<span class="fc" id="L3554">        final Requester builder = root().createRequest().method(&quot;GET&quot;).withUrlPath(tailUrl);</span>
-<span class="fc" id="L3555">        return builder.fetchStream(streamFunction);</span>
+<span class="fc" id="L3572">        final Requester builder = root().createRequest().method(&quot;GET&quot;).withUrlPath(tailUrl);</span>
+<span class="fc" id="L3573">        return builder.fetchStream(streamFunction);</span>
     }
 
     /**
@@ -3562,18 +3580,19 @@ import static java.util.Objects.requireNonNull;
      *             Signals that an I/O exception has occurred.
      */
     void populate() throws IOException {
-<span class="fc bfc" id="L3565" title="All 2 branches covered.">        if (isOffline()) {</span>
-<span class="fc" id="L3566">            return; // can't populate if the root is offline</span>
+<span class="fc bfc" id="L3583" title="All 2 branches covered.">        if (isOffline()) {</span>
+<span class="fc" id="L3584">            return; // can't populate if the root is offline</span>
         }
 
         // We don't use the URL provided in the JSON because it is not reliable:
         // 1. There is bug in Push event payloads that returns the wrong url.
-        // For Push event repository records, they take the form &quot;https://github.com/{fullName}&quot;.
+        // For Push event repository records, they take the form
+        // &quot;https://github.com/{fullName}&quot;.
         // All other occurrences of &quot;url&quot; take the form &quot;https://api.github.com/...&quot;.
         // 2. For Installation event payloads, the URL is not provided at all.
 
-<span class="fc" id="L3575">        root().createRequest().withUrlPath(getApiTailUrl(&quot;&quot;)).fetchInto(this);</span>
-<span class="fc" id="L3576">    }</span>
+<span class="fc" id="L3594">        root().createRequest().withUrlPath(getApiTailUrl(&quot;&quot;)).fetchInto(this);</span>
+<span class="fc" id="L3595">    }</span>
 
     /**
      * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
@@ -3590,13 +3609,13 @@ import static java.util.Objects.requireNonNull;
          *            the repository
          */
         protected Updater(@Nonnull GHRepository repository) {
-<span class="fc" id="L3593">            super(Updater.class, repository.root(), null);</span>
+<span class="fc" id="L3612">            super(Updater.class, repository.root(), null);</span>
             // even when we don't change the name, we need to send it in
             // this requirement may be out-of-date, but we do not want to break it
-<span class="fc" id="L3596">            requester.with(&quot;name&quot;, repository.name);</span>
+<span class="fc" id="L3615">            requester.with(&quot;name&quot;, repository.name);</span>
 
-<span class="fc" id="L3598">            requester.method(&quot;PATCH&quot;).withUrlPath(repository.getApiTailUrl(&quot;&quot;));</span>
-<span class="fc" id="L3599">        }</span>
+<span class="fc" id="L3617">            requester.method(&quot;PATCH&quot;).withUrlPath(repository.getApiTailUrl(&quot;&quot;));</span>
+<span class="fc" id="L3618">        }</span>
     }
 
     /**
@@ -3606,8 +3625,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public void star() throws IOException {
-<span class="fc" id="L3609">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(String.format(&quot;/user/starred/%s&quot;, full_name)).send();</span>
-<span class="fc" id="L3610">    }</span>
+<span class="fc" id="L3628">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(String.format(&quot;/user/starred/%s&quot;, full_name)).send();</span>
+<span class="fc" id="L3629">    }</span>
 
     /**
      * Unstar a repository.
@@ -3616,8 +3635,8 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public void unstar() throws IOException {
-<span class="fc" id="L3619">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(String.format(&quot;/user/starred/%s&quot;, full_name)).send();</span>
-<span class="fc" id="L3620">    }</span>
+<span class="fc" id="L3638">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(String.format(&quot;/user/starred/%s&quot;, full_name)).send();</span>
+<span class="fc" id="L3639">    }</span>
 
     /**
      * Get the top 10 popular contents over the last 14 days as described on
@@ -3628,10 +3647,10 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public List&lt;GHRepositoryTrafficTopReferralPath&gt; getTopReferralPaths() throws IOException {
-<span class="fc" id="L3631">        return Arrays.asList(root().createRequest()</span>
-<span class="fc" id="L3632">                .method(&quot;GET&quot;)</span>
-<span class="fc" id="L3633">                .withUrlPath(getApiTailUrl(&quot;/traffic/popular/paths&quot;))</span>
-<span class="fc" id="L3634">                .fetch(GHRepositoryTrafficTopReferralPath[].class));</span>
+<span class="fc" id="L3650">        return Arrays.asList(root().createRequest()</span>
+<span class="fc" id="L3651">                .method(&quot;GET&quot;)</span>
+<span class="fc" id="L3652">                .withUrlPath(getApiTailUrl(&quot;/traffic/popular/paths&quot;))</span>
+<span class="fc" id="L3653">                .fetch(GHRepositoryTrafficTopReferralPath[].class));</span>
     }
 
     /**
@@ -3643,10 +3662,27 @@ import static java.util.Objects.requireNonNull;
      *             the io exception
      */
     public List&lt;GHRepositoryTrafficTopReferralSources&gt; getTopReferralSources() throws IOException {
-<span class="fc" id="L3646">        return Arrays.asList(root().createRequest()</span>
-<span class="fc" id="L3647">                .method(&quot;GET&quot;)</span>
-<span class="fc" id="L3648">                .withUrlPath(getApiTailUrl(&quot;/traffic/popular/referrers&quot;))</span>
-<span class="fc" id="L3649">                .fetch(GHRepositoryTrafficTopReferralSources[].class));</span>
+<span class="fc" id="L3665">        return Arrays.asList(root().createRequest()</span>
+<span class="fc" id="L3666">                .method(&quot;GET&quot;)</span>
+<span class="fc" id="L3667">                .withUrlPath(getApiTailUrl(&quot;/traffic/popular/referrers&quot;))</span>
+<span class="fc" id="L3668">                .fetch(GHRepositoryTrafficTopReferralSources[].class));</span>
+    }
+
+    /**
+     * Get all active rules that apply to the specified branch
+     * (https://docs.github.com/en/rest/repos/rules?apiVersion=2022-11-28#get-rules-for-a-branch).
+     *
+     * @param branch
+     *            the branch
+     * @return the rules for branch
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable&lt;GHRepositoryRule&gt; listRulesForBranch(String branch) throws IOException {
+<span class="fc" id="L3682">        return root().createRequest()</span>
+<span class="fc" id="L3683">                .method(&quot;GET&quot;)</span>
+<span class="fc" id="L3684">                .withUrlPath(getApiTailUrl(&quot;/rules/branches/&quot; + branch))</span>
+<span class="fc" id="L3685">                .toIterable(GHRepositoryRule[].class, null);</span>
     }
 
     /**
@@ -3664,13 +3700,13 @@ import static java.util.Objects.requireNonNull;
          *            the repository
          */
         protected Setter(@Nonnull GHRepository repository) {
-<span class="fc" id="L3667">            super(GHRepository.class, repository.root(), null);</span>
+<span class="fc" id="L3703">            super(GHRepository.class, repository.root(), null);</span>
             // even when we don't change the name, we need to send it in
             // this requirement may be out-of-date, but we do not want to break it
-<span class="fc" id="L3670">            requester.with(&quot;name&quot;, repository.name);</span>
+<span class="fc" id="L3706">            requester.with(&quot;name&quot;, repository.name);</span>
 
-<span class="fc" id="L3672">            requester.method(&quot;PATCH&quot;).withUrlPath(repository.getApiTailUrl(&quot;&quot;));</span>
-<span class="fc" id="L3673">        }</span>
+<span class="fc" id="L3708">            requester.method(&quot;PATCH&quot;).withUrlPath(repository.getApiTailUrl(&quot;&quot;));</span>
+<span class="fc" id="L3709">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

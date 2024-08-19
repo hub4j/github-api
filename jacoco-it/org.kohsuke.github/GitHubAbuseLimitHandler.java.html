@@ -29,7 +29,19 @@ import javax.annotation.Nonnull;
      */
     @Override
     boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L32" title="All 4 branches covered.">        return isForbidden(connectorResponse) &amp;&amp; hasRetryOrLimitHeader(connectorResponse);</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        return isTooManyRequests(connectorResponse)</span>
+<span class="fc bfc" id="L33" title="All 4 branches covered.">                || (isForbidden(connectorResponse) &amp;&amp; hasRetryOrLimitHeader(connectorResponse));</span>
+    }
+
+    /**
+     * Checks if the response status code is TOO_MANY_REQUESTS (429).
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @return true if the status code is TOO_MANY_REQUESTS
+     */
+    private boolean isTooManyRequests(GitHubConnectorResponse connectorResponse) {
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        return connectorResponse.statusCode() == TOO_MANY_REQUESTS;</span>
     }
 
     /**
@@ -40,7 +52,7 @@ import javax.annotation.Nonnull;
      * @return true if the status code is HTTP_FORBIDDEN
      */
     private boolean isForbidden(GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN;</span>
     }
 
     /**
@@ -55,7 +67,7 @@ import javax.annotation.Nonnull;
      *      &quot;https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#handle-rate-limit-errors-appropriately&lt;/a&gt;
      */
     private boolean hasRetryOrLimitHeader(GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L58" title="All 4 branches covered.">        return hasHeader(connectorResponse, &quot;Retry-After&quot;) || hasHeader(connectorResponse, &quot;gh-limited-by&quot;);</span>
+<span class="fc bfc" id="L70" title="All 4 branches covered.">        return hasHeader(connectorResponse, &quot;Retry-After&quot;) || hasHeader(connectorResponse, &quot;gh-limited-by&quot;);</span>
     }
 
     /**
@@ -68,7 +80,7 @@ import javax.annotation.Nonnull;
      * @return true if the specified header is present
      */
     private boolean hasHeader(GitHubConnectorResponse connectorResponse, String headerName) {
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        return connectorResponse.header(headerName) != null;</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        return connectorResponse.header(headerName) != null;</span>
     }
 
     /**

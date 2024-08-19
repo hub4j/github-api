@@ -16,6 +16,7 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 // TODO: Auto-generated Javadoc
@@ -98,22 +99,14 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         // getting an input stream in an error case should throw
                         IOException ioEx = Assert.assertThrows(IOException.class, () -> uc.getInputStream());
 
-                        try (InputStream errorStream = uc.getErrorStream()) {
-                            assertThat(errorStream, notNullValue());
-                            String errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
-                            assertThat(errorString, containsString("Must have push access to repository"));
-                        }
+                        checkErrorMessageMatches(uc, "Must have push access to repository");
 
                         // calling again should still error
                         ioEx = Assert.assertThrows(IOException.class, () -> uc.getInputStream());
 
                         // calling again on a GitHubConnectorResponse should yield the same value
                         if (uc.toString().contains("GitHubConnectorResponseHttpUrlConnectionAdapter")) {
-                            try (InputStream errorStream = uc.getErrorStream()) {
-                                assertThat(errorStream, notNullValue());
-                                String errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
-                                assertThat(errorString, containsString("Must have push access to repository"));
-                            }
+                            checkErrorMessageMatches(uc, "Must have push access to repository");
                         } else {
                             try (InputStream errorStream = uc.getErrorStream()) {
                                 assertThat(errorStream, notNullValue());
@@ -126,7 +119,7 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         }
 
                         assertThat(uc.getHeaderFields(), instanceOf(Map.class));
-                        assertThat(uc.getHeaderFields().size(), Matchers.greaterThan(25));
+                        assertThat(uc.getHeaderFields().size(), greaterThan(25));
                         assertThat(uc.getHeaderField("Status"), equalTo("403 Forbidden"));
 
                         String key = uc.getHeaderFieldKey(1);
@@ -349,16 +342,203 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         assertThat(uc.getContentType(), equalTo("application/json; charset=utf-8"));
                         assertThat(uc.getContentLength(), equalTo(-1));
                         assertThat(uc.getHeaderFields(), instanceOf(Map.class));
-                        assertThat(uc.getHeaderFields().size(), Matchers.greaterThan(25));
+                        assertThat(uc.getHeaderFields().size(), greaterThan(25));
                         assertThat(uc.getHeaderField("Status"), equalTo("403 Forbidden"));
 
-                        try (InputStream errorStream = uc.getErrorStream()) {
-                            assertThat(errorStream, notNullValue());
-                            String errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
-                            assertThat(errorString,
-                                    containsString(
-                                            "You have exceeded a secondary rate limit. Please wait a few minutes before you try again"));
-                        }
+                        checkErrorMessageMatches(uc,
+                                "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
+                        AbuseLimitHandler.FAIL.onError(e, uc);
+                    }
+                })
+                .build();
+
+        gitHub.getMyself();
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+        try {
+            getTempRepository();
+            fail();
+        } catch (Exception e) {
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.getMessage(), equalTo("Abuse limit reached"));
+        }
+        assertThat(mockGitHub.getRequestCount(), equalTo(2));
+    }
+
+    /**
+     * This is making an assertion about the behaviour of the mock, so it's useful for making sure we're on the right
+     * mock, but should not be used to validate assumptions about the behaviour of the actual GitHub API.
+     */
+    private static void checkErrorMessageMatches(HttpURLConnection uc, String substring) throws IOException {
+        try (InputStream errorStream = uc.getErrorStream()) {
+            assertThat(errorStream, notNullValue());
+            String errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
+            assertThat(errorString, containsString(substring));
+        }
+    }
+
+    /**
+     * Tests the behavior of the GitHub API client when the abuse limit handler is set to WAIT then the handler waits
+     * appropriately when secondary rate limits are encountered.
+     *
+     * @throws Exception
+     *             if any error occurs during the test execution.
+     */
+    @Test
+    public void testHandler_Wait_Secondary_Limits_Too_Many_Requests() throws Exception {
+        // Customized response that templates the date to keep things working
+        snapshotNotAllowed();
+        final HttpURLConnection[] savedConnection = new HttpURLConnection[1];
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withAbuseLimitHandler(new AbuseLimitHandler() {
+                    /**
+                     * Overriding method because the actual method will wait for one minute causing slowness in unit
+                     * tests
+                     */
+                    @Override
+                    public void onError(IOException e, HttpURLConnection uc) throws IOException {
+                        savedConnection[0] = uc;
+                        // Verify the test data is what we expected it to be for this test case
+                        assertThat(uc.getDate(), Matchers.greaterThanOrEqualTo(new Date().getTime() - 10000));
+                        assertThat(uc.getExpiration(), equalTo(0L));
+                        assertThat(uc.getIfModifiedSince(), equalTo(0L));
+                        assertThat(uc.getLastModified(), equalTo(1581014017000L));
+                        assertThat(uc.getRequestMethod(), equalTo("GET"));
+                        assertThat(uc.getResponseCode(), equalTo(429));
+                        assertThat(uc.getResponseMessage(), containsString("Many"));
+                        assertThat(uc.getURL().toString(),
+                                endsWith(
+                                        "/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests"));
+                        assertThat(uc.getContentLength(), equalTo(-1));
+                        assertThat(uc.getHeaderFields(), instanceOf(Map.class));
+                        assertThat(uc.getHeaderField("Status"), equalTo("429 Too Many Requests"));
+                        assertThat(uc.getHeaderField("Retry-After"), equalTo("42"));
+
+                        checkErrorMessageMatches(uc,
+                                "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
+                        // Because we've overridden onError to bypass the wait, we don't cover the wait calculation
+                        // logic
+                        // Manually invoke it to make sure it's what we intended
+                        long waitTime = parseWaitTime(uc);
+                        assertThat(waitTime, equalTo(42 * 1000l));
+
+                        AbuseLimitHandler.FAIL.onError(e, uc);
+                    }
+                })
+                .build();
+
+        gitHub.getMyself();
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+        try {
+            getTempRepository();
+            fail();
+        } catch (Exception e) {
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.getMessage(), equalTo("Abuse limit reached"));
+        }
+        assertThat(mockGitHub.getRequestCount(), equalTo(2));
+    }
+
+    /**
+     * Tests the behavior of the GitHub API client when the abuse limit handler with a date retry.
+     *
+     * @throws Exception
+     *             if any error occurs during the test execution.
+     */
+    @Test
+    public void testHandler_Wait_Secondary_Limits_Too_Many_Requests_Date_Retry_After() throws Exception {
+        // Customized response that templates the date to keep things working
+        snapshotNotAllowed();
+        final HttpURLConnection[] savedConnection = new HttpURLConnection[1];
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withAbuseLimitHandler(new AbuseLimitHandler() {
+                    /**
+                     * Overriding method because the actual method will wait for one minute causing slowness in unit
+                     * tests
+                     */
+                    @Override
+                    public void onError(IOException e, HttpURLConnection uc) throws IOException {
+                        savedConnection[0] = uc;
+                        // Verify the test data is what we expected it to be for this test case
+                        assertThat(uc.getRequestMethod(), equalTo("GET"));
+                        assertThat(uc.getResponseCode(), equalTo(429));
+                        assertThat(uc.getResponseMessage(), containsString("Many"));
+                        assertThat(uc.getURL().toString(),
+                                endsWith(
+                                        "/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests_Date_Retry_After"));
+                        assertThat(uc.getContentLength(), equalTo(-1));
+                        assertThat(uc.getHeaderField("Status"), equalTo("429 Too Many Requests"));
+                        assertThat(uc.getHeaderField("Retry-After"), startsWith("Mon"));
+
+                        checkErrorMessageMatches(uc,
+                                "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
+
+                        // Because we've overridden onError to bypass the wait, we don't cover the wait calculation
+                        // logic
+                        // Manually invoke it to make sure it's what we intended
+                        long waitTime = parseWaitTime(uc);
+                        // The exact value here will depend on when the test is run, but it should be positive, and huge
+                        assertThat(waitTime, greaterThan(1000 * 1000l));
+
+                        AbuseLimitHandler.FAIL.onError(e, uc);
+                    }
+                })
+                .build();
+
+        gitHub.getMyself();
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+        try {
+            getTempRepository();
+            fail();
+        } catch (Exception e) {
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.getMessage(), equalTo("Abuse limit reached"));
+        }
+        assertThat(mockGitHub.getRequestCount(), equalTo(2));
+    }
+
+    /**
+     * Tests the behavior of the GitHub API client when the abuse limit handler with a no retry after header.
+     *
+     * @throws Exception
+     *             if any error occurs during the test execution.
+     */
+    @Test
+    public void testHandler_Wait_Secondary_Limits_Too_Many_Requests_No_Retry_After() throws Exception {
+        // Customized response that templates the date to keep things working
+        snapshotNotAllowed();
+        final HttpURLConnection[] savedConnection = new HttpURLConnection[1];
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withAbuseLimitHandler(new AbuseLimitHandler() {
+                    /**
+                     * Overriding method because the actual method will wait for one minute causing slowness in unit
+                     * tests
+                     */
+                    @Override
+                    public void onError(IOException e, HttpURLConnection uc) throws IOException {
+                        savedConnection[0] = uc;
+                        // Verify the test data is what we expected it to be for this test case
+                        assertThat(uc.getRequestMethod(), equalTo("GET"));
+                        assertThat(uc.getResponseCode(), equalTo(429));
+                        assertThat(uc.getResponseMessage(), containsString("Many"));
+                        assertThat(uc.getURL().toString(),
+                                endsWith(
+                                        "/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests_No_Retry_After"));
+                        assertThat(uc.getContentEncoding(), nullValue());
+                        assertThat(uc.getContentType(), equalTo("application/json; charset=utf-8"));
+                        assertThat(uc.getContentLength(), equalTo(-1));
+                        assertThat(uc.getHeaderFields(), instanceOf(Map.class));
+                        assertThat(uc.getHeaderField("Status"), equalTo("429 Too Many Requests"));
+                        assertThat(uc.getHeaderField("Retry-After"), nullValue());
+
+                        checkErrorMessageMatches(uc,
+                                "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
+
+                        // Because we've overridden onError to bypass the wait, we don't cover the wait calculation
+                        // logic
+                        // Manually invoke it to make sure it's what we intended
+                        long waitTime = parseWaitTime(uc);
+                        assertThat(waitTime, greaterThan(60000l));
+
                         AbuseLimitHandler.FAIL.onError(e, uc);
                     }
                 })

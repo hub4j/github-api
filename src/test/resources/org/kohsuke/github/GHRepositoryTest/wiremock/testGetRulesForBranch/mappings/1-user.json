@@ -1,0 +1,48 @@
+{
+  "id": "3db4f955-4396-42bc-9025-19cf605fc06c",
+  "name": "user",
+  "request": {
+    "url": "/user",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "1-user.json",
+    "headers": {
+      "Date": "Mon, 15 Jul 2024 08:30:49 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"ddc9069d08e23a7137c1afd3a7582b40343a9531d163859e421e699865eed231\"",
+      "Last-Modified": "Mon, 08 Jul 2024 08:46:37 GMT",
+      "X-OAuth-Scopes": "admin:org, repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2024-08-14 08:24:53 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4986",
+      "X-RateLimit-Reset": "1721035644",
+      "X-RateLimit-Used": "14",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-GitHub-Request-Id": "2F9F:1AB9D3:A03037B:A25F83C:6694DE39"
+    }
+  },
+  "uuid": "3db4f955-4396-42bc-9025-19cf605fc06c",
+  "persistent": true,
+  "insertionIndex": 1
+}

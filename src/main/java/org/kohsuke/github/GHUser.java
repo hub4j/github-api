@@ -40,7 +40,7 @@ public class GHUser extends GHPerson {
     protected String ldap_dn;
 
     /** The suspended_at */
-    private String suspended_at;
+    private String suspendedAt;
 
     /**
      * Gets keys.
@@ -276,7 +276,7 @@ public class GHUser extends GHPerson {
      */
     public Date getSuspendedAt() throws IOException {
         super.populate();
-        return GitHubClient.parseDate(suspended_at);
+        return GitHubClient.parseDate(suspendedAt);
     }
 
     /**

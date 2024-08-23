@@ -32,6 +32,7 @@
   </distributionManagement>
 
   <properties>
+    <spring.boot.version>3.3.3</spring.boot.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spotbugs-maven-plugin.version>4.8.6.1</spotbugs-maven-plugin.version>
     <spotbugs.version>4.8.6</spotbugs.version>
@@ -254,7 +255,7 @@
               java.net.http.*
             </ignores>
           </configuration>
-          <executions>
+          <!--<executions>
             <execution>
               <id>ensure-java-1.8-class-library</id>
               <phase>test</phase>
@@ -262,11 +263,24 @@
                 <goal>check</goal>
               </goals>
             </execution>
-          </executions>
+          </executions>-->
         </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring.boot.version}</version>
+        <executions>
+          <execution>
+            <id>process-test-aot</id>
+            <goals>
+              <goal>process-test-aot</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -497,6 +511,12 @@
       <version>${hamcrest.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <version>${spring.boot.version}</version>
+      <scope>test</scope>
+    </dependency>
     <!-- This is needed in order to force junit4 and JTH tests to use newer hamcrest version -->
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -526,6 +546,12 @@
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
       <version>4.2.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>5.10.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>

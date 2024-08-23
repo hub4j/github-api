@@ -1,0 +1,4 @@
+# YAML for Spring Boot AOT tests
+spring:
+  main:
+    web-application-type: none

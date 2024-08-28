@@ -35,5 +35,7 @@
       "Server": "github.com"
     }
   },
-  "insertionIndex": 1
+  "scenarioName": "testAutomatedSecurityFixSettings",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "Started"
 }

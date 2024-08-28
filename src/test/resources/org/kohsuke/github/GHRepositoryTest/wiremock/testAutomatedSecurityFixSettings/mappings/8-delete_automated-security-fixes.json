@@ -1,6 +1,6 @@
 {
   "request": {
-    "url": "/repos/hub4j-test-org/temp-testAutomatedSecurityFixSettings/automated-security-fixes",
+    "urlPattern": "/repos/hub4j-test-org/temp-testAutomatedSecurityFixSettings/automated-security-fixes.*",
     "method": "DELETE"
   },
   "response": {
@@ -9,5 +9,8 @@
       "wiremock-mapping-file": "8-delete_automated-security-fixes.json"
     }
   },
-  "insertionIndex": 8
+  "persistent": true,
+  "scenarioName": "testAutomatedSecurityFixSettings",
+  "requiredScenarioState": "8",
+  "newScenarioState": "9"
 }

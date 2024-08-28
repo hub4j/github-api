@@ -1,6 +1,6 @@
 {
   "request": {
-    "url": "/repos/hub4j-test-org/temp-testAutomatedSecurityFixSettings/automated-security-fixes",
+    "urlPattern": "/repos/hub4j-test-org/temp-testAutomatedSecurityFixSettings/automated-security-fixes.*",
     "method": "GET"
   },
   "response": {
@@ -10,5 +10,8 @@
       "wiremock-mapping-file": "6-get_automated-security-fixes_enabled.json"
     }
   },
-  "insertionIndex": 6
+  "persistent": true,
+  "scenarioName": "testAutomatedSecurityFixSettings",
+  "requiredScenarioState": "6",
+  "newScenarioState": "7"
 }

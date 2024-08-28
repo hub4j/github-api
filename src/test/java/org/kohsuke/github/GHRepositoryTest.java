@@ -1950,11 +1950,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(initialPaused, is(instanceOf(Boolean.class)));
 
         repo.enableAutomatedSecurityFixes(true);
-        assertTrue("isAutomatedSecurityFixesEnabled should be true", repo.isAutomatedSecurityFixesEnabled());
-        assertFalse("isAutomatedSecurityFixesPaused should be false", repo.isAutomatedSecurityFixesPaused());
+        assertThat(repo.isAutomatedSecurityFixesEnabled(), is(true));
+        assertThat(repo.isAutomatedSecurityFixesPaused(), is(false));
 
         repo.enableAutomatedSecurityFixes(false);
-        assertFalse("isAutomatedSecurityFixesEnabled should be true", repo.isAutomatedSecurityFixesEnabled());
-        assertFalse("isAutomatedSecurityFixesPaused should be false", repo.isAutomatedSecurityFixesPaused());
+        assertThat(repo.isAutomatedSecurityFixesEnabled(), is(false));
+        assertThat(repo.isAutomatedSecurityFixesPaused(), is(false));
     }
 }

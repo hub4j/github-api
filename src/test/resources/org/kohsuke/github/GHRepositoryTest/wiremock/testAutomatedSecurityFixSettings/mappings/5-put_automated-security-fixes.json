@@ -1,6 +1,6 @@
 {
   "request": {
-    "url": "/repos/ranma2913/temp-testAutomatedSecurityFixSettings/automated-security-fixes",
+    "url": "/repos/hub4j-test-org/temp-testAutomatedSecurityFixSettings/automated-security-fixes",
     "method": "PUT"
   },
   "response": {

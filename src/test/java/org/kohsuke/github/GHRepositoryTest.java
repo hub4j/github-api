@@ -1,13 +1,14 @@
 package org.kohsuke.github;
 
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.*;
-import static org.kohsuke.github.GHVerification.Reason.GPGVERIFY_ERROR;
-import static org.kohsuke.github.GHVerification.Reason.UNKNOWN_SIGNATURE_TYPE;
-
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.Sets;
+import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
+import org.junit.Test;
+import org.kohsuke.github.GHCheckRun.Conclusion;
+import org.kohsuke.github.GHOrganization.RepositoryRole;
+import org.kohsuke.github.GHRepository.Visibility;
+
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,15 +16,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import org.kohsuke.github.GHCheckRun.Conclusion;
-import org.kohsuke.github.GHOrganization.RepositoryRole;
-import org.kohsuke.github.GHRepository.Visibility;
+
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.Assert.*;
+import static org.kohsuke.github.GHVerification.Reason.GPGVERIFY_ERROR;
+import static org.kohsuke.github.GHVerification.Reason.UNKNOWN_SIGNATURE_TYPE;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -765,6 +765,9 @@ public class GHRepository extends GHObject {
     /**
      * Shows whether automated security fixes are enabled or disabled.
      *
+     * @link <a href=
+     *       "https://docs.github.com/en/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository">Check
+     *       if automated security fixes are enabled for a repository</a>
      * @return the boolean
      */
     public boolean isAutomatedSecurityFixesEnabled() throws IOException {
@@ -774,6 +777,9 @@ public class GHRepository extends GHObject {
     /**
      * Shows whether automated security fixes are paused or not.
      *
+     * @link <a href=
+     *       "https://docs.github.com/en/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository">Check
+     *       if automated security fixes are enabled for a repository</a>
      * @return the boolean
      */
     public boolean isAutomatedSecurityFixesPaused() throws IOException {

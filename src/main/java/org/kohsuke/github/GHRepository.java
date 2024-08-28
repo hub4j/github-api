@@ -23,15 +23,14 @@
  */
 package org.kohsuke.github;
 
+import static java.util.Arrays.asList;
+import static java.util.Objects.requireNonNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.apache.commons.lang3.StringUtils;
-import org.kohsuke.github.function.InputStreamFunction;
-import org.kohsuke.github.internal.EnumUtils;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,12 +54,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static java.util.Arrays.asList;
-import static java.util.Objects.requireNonNull;
+import org.apache.commons.lang3.StringUtils;
+import org.kohsuke.github.function.InputStreamFunction;
+import org.kohsuke.github.internal.EnumUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -764,10 +762,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Shows whether automated security fixes are enabled or disabled.
-     *
-     * @link <a href=
-     *       "https://docs.github.com/en/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository">Check
-     *       if automated security fixes are enabled for a repository</a>
+     * <a href="https://docs.github.com/en/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository">...</a>
      * @return the boolean
      */
     public boolean isAutomatedSecurityFixesEnabled() throws IOException {
@@ -776,10 +771,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Shows whether automated security fixes are paused or not.
-     *
-     * @link <a href=
-     *       "https://docs.github.com/en/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository">Check
-     *       if automated security fixes are enabled for a repository</a>
+     * <a href="https://docs.github.com/en/rest/repos/repos#check-if-automated-security-fixes-are-enabled-for-a-repository">...</a>
      * @return the boolean
      */
     public boolean isAutomatedSecurityFixesPaused() throws IOException {

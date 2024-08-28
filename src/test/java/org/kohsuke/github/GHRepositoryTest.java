@@ -1944,9 +1944,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void testAutomatedSecurityFixSettings() throws IOException {
         GHRepository repo = getTempRepository();
-        var initialEnabled = repo.isAutomatedSecurityFixesEnabled();
+        Object initialEnabled = repo.isAutomatedSecurityFixesEnabled();
         assertThat(initialEnabled, is(instanceOf(Boolean.class)));
-        var initialPaused = repo.isAutomatedSecurityFixesPaused();
+        Object initialPaused = repo.isAutomatedSecurityFixesPaused();
         assertThat(initialPaused, is(instanceOf(Boolean.class)));
 
         repo.enableAutomatedSecurityFixes(true);

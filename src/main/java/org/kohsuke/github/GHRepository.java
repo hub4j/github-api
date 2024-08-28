@@ -126,6 +126,41 @@ public class GHRepository extends GHObject {
     private boolean compareUsePaginatedCommits;
 
     /**
+     * Extra API call to /automated-security-fixes to get the status of automated security fixes.
+     *
+     * @return GHAutomatedSecurityFixes
+     * @throws IOException
+     */
+    public GHAutomatedSecurityFixes getAutomatedSecurityFixes() throws IOException {
+        return root().createRequest()
+                .method("GET")
+                .with("name", name)
+                .withUrlPath(getApiTailUrl("/automated-security-fixes"))
+                .fetch(GHAutomatedSecurityFixes.class);
+    }
+
+    public static class GHAutomatedSecurityFixes {
+        private boolean enabled;
+        private boolean paused;
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public boolean isPaused() {
+            return paused;
+        }
+
+        public void setPaused(boolean paused) {
+            this.paused = paused;
+        }
+    }
+
+    /**
      * Read.
      *
      * @param root
@@ -621,7 +656,8 @@ public class GHRepository extends GHObject {
      */
     public String getOwnerName() {
         // consistency of the GitHub API is super... some serialized forms of GHRepository populate
-        // a full GHUser while others populate only the owner and email. This later form is super helpful
+        // a full GHUser while others populate only the owner and email. This later form is super
+        // helpful
         // in putting the login in owner.name not owner.login... thankfully we can easily identify this
         // second set because owner.login will be null
         return owner.login != null ? owner.login : owner.name;
@@ -727,6 +763,24 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Shows whether automated security fixes are enabled or disabled.
+     *
+     * @return the boolean
+     */
+    public boolean isAutomatedSecurityFixesEnabled() throws IOException {
+        return this.getAutomatedSecurityFixes().isEnabled();
+    }
+
+    /**
+     * Shows whether automated security fixes are paused or not.
+     *
+     * @return the boolean
+     */
+    public boolean isAutomatedSecurityFixesPaused() throws IOException {
+        return this.getAutomatedSecurityFixes().isPaused();
+    }
+
+    /**
      * Returns the number of all forks of this repository. This not only counts direct forks, but also forks of forks,
      * and so on.
      *
@@ -766,9 +820,7 @@ public class GHRepository extends GHObject {
         return _private;
     }
 
-    /**
-     * Visibility of a repository.
-     */
+    /** Visibility of a repository. */
     public enum Visibility {
 
         /** The public. */
@@ -783,9 +835,11 @@ public class GHRepository extends GHObject {
         /**
          * Placeholder for unexpected data values.
          *
+         * <p>
          * This avoids throwing exceptions during data binding or reading when the list of allowed values returned from
          * GitHub is expanded.
          *
+         * <p>
          * Do not pass this value to any methods. If this value is returned during a request, check the log output and
          * report an issue for the missing value.
          */
@@ -927,6 +981,7 @@ public class GHRepository extends GHObject {
     /**
      * Gets default branch.
      *
+     * <p>
      * Name is an artifact of when "master" was the most common default.
      *
      * @return the default branch
@@ -956,9 +1011,7 @@ public class GHRepository extends GHObject {
         return size;
     }
 
-    /**
-     * Affiliation of a repository collaborator.
-     */
+    /** Affiliation of a repository collaborator. */
     public enum CollaboratorAffiliation {
 
         /** The all. */
@@ -1187,7 +1240,6 @@ public class GHRepository extends GHObject {
      *            the permission level
      * @param users
      *            the users
-     *
      * @throws IOException
      *             the io exception
      */
@@ -1493,6 +1545,22 @@ public class GHRepository extends GHObject {
         set().deleteBranchOnMerge(value);
     }
 
+    public void enableAutomatedSecurityFixes(boolean value) throws IOException {
+        if (value) {
+            root().createRequest()
+                    .method("PUT")
+                    .with("name", name)
+                    .withUrlPath(getApiTailUrl("/automated-security-fixes"))
+                    .send();
+        } else {
+            root().createRequest()
+                    .method("DELETE")
+                    .with("name", name)
+                    .withUrlPath(getApiTailUrl("/automated-security-fixes"))
+                    .send();
+        }
+    }
+
     /**
      * Deletes this repository.
      *
@@ -1551,9 +1619,7 @@ public class GHRepository extends GHObject {
         return new Setter(this);
     }
 
-    /**
-     * Sort orders for listing forks.
-     */
+    /** Sort orders for listing forks. */
     public enum ForkSort {
 
         /** The newest. */
@@ -1849,6 +1915,7 @@ public class GHRepository extends GHObject {
      * Sets {@link #getCompare(String, String)} to return a {@link GHCompare} that uses a paginated commit list instead
      * of limiting to 250 results.
      *
+     * <p>
      * By default, {@link GHCompare} returns all commits in the comparison as part of the request, limited to 250
      * results. More recently GitHub added the ability to return the commits as a paginated query allowing for more than
      * 250 results.
@@ -1861,8 +1928,8 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets a comparison between 2 points in the repository. This would be similar to calling
-     * <code>git log id1...id2</code> against a local repository.
+     * Gets a comparison between 2 points in the repository. This would be similar to calling <code>
+     * git log id1...id2</code> against a local repository.
      *
      * @param id1
      *            an identifier for the first point to compare from, this can be a sha1 ID (for a commit, tag etc) or a
@@ -2160,7 +2227,6 @@ public class GHRepository extends GHObject {
      *
      * @param commitSha
      *            the hash of the commit
-     *
      * @return the paged iterable
      */
     public PagedIterable<GHCommitComment> listCommitComments(String commitSha) {
@@ -2364,6 +2430,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists labels in this repository.
+     *
      * <p>
      * https://developer.github.com/v3/issues/labels/#list-all-labels-for-this-repository
      *
@@ -2433,6 +2500,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists all the subscribers (aka watchers.)
+     *
      * <p>
      * https://developer.github.com/v3/activity/watching/
      *
@@ -2541,9 +2609,7 @@ public class GHRepository extends GHObject {
         }
     }
 
-    /**
-     * Live set view of the post-commit hook.
-     */
+    /** Live set view of the post-commit hook. */
     @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
             justification = "It causes a performance degradation, but we have already exposed it to the API")
     @SkipFromToString
@@ -3080,9 +3146,7 @@ public class GHRepository extends GHObject {
         return root().createRequest().withUrlPath(getApiTailUrl("contributors")).toIterable(Contributor[].class, null);
     }
 
-    /**
-     * The type Contributor.
-     */
+    /** The type Contributor. */
     public static class Contributor extends GHUser {
         private int contributions;
 
@@ -3181,6 +3245,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Render a Markdown document.
+     *
      * <p>
      * In {@linkplain MarkdownMode#GFM GFM mode}, issue numbers and user mentions are linked accordingly.
      *
@@ -3597,6 +3662,7 @@ public class GHRepository extends GHObject {
     /**
      * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
      *
+     * <p>
      * Consumer must call {@link #done()} to commit changes.
      */
     @BetaApi
@@ -3688,6 +3754,7 @@ public class GHRepository extends GHObject {
     /**
      * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
      *
+     * <p>
      * Consumer must call {@link #done()} to commit changes.
      */
     @BetaApi

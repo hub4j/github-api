@@ -1,0 +1,13 @@
+{
+  "request": {
+    "url": "/repos/ranma2913/temp-testAutomatedSecurityFixSettings/automated-security-fixes",
+    "method": "DELETE"
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "wiremock-mapping-file": "8-delete_automated-security-fixes.json"
+    }
+  },
+  "insertionIndex": 8
+}

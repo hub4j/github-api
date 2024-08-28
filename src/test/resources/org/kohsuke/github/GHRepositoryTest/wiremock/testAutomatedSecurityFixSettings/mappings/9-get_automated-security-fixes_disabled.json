@@ -1,0 +1,14 @@
+{
+  "request": {
+    "url": "/repos/ranma2913/temp-testAutomatedSecurityFixSettings/automated-security-fixes",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"enabled\":false,\"paused\":false}",
+    "headers": {
+        "wiremock-mapping-file": "9-get_automated-security-fixes_disabled.json"
+    }
+  },
+    "insertionIndex": 9
+}

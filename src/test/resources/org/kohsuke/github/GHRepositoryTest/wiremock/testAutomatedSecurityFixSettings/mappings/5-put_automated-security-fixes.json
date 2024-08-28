@@ -1,0 +1,13 @@
+{
+  "request": {
+    "url": "/repos/ranma2913/temp-testAutomatedSecurityFixSettings/automated-security-fixes",
+    "method": "PUT"
+  },
+  "response": {
+    "status": 204,
+    "headers": {
+      "wiremock-mapping-file": "5-put_automated-security-fixes.json"
+    }
+  },
+  "insertionIndex": 5
+}

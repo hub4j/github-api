@@ -147,16 +147,8 @@ public class GHRepository extends GHObject {
             return enabled;
         }
 
-        public void setEnabled(boolean enabled) {
-            this.enabled = enabled;
-        }
-
         public boolean isPaused() {
             return paused;
-        }
-
-        public void setPaused(boolean paused) {
-            this.paused = paused;
         }
     }
 

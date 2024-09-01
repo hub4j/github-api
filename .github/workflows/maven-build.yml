@@ -60,6 +60,8 @@ jobs:
       run: mvn -B clean site -D enable-ci --file pom.xml
   test:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
+    # Does not require build output, but orders execution to prevent launching test workflows when simple build fails 
+    needs: build
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
@@ -127,4 +129,23 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
     - name: Maven Test (no build) Java 8
+      run: mvn -B surefire:test -DfailIfNoTests -Dsurefire.excludesFile=src/test/resources/slow-or-flaky-tests.txt
+
+  test-java-11:
+    name: test Java 11 (no-build)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: maven-target-directory
+        path: target
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: 8
+        distribution: 'temurin'
+        cache: 'maven'
+    - name: Maven Test (no build) Java 11
       run: mvn -B surefire:test -DfailIfNoTests -Dsurefire.excludesFile=src/test/resources/slow-or-flaky-tests.txt

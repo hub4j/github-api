@@ -3,166 +3,97 @@
     "name": "org.kohsuke.github.AbstractBuilder"
   },
   {
-    "name": "org.kohsuke.github.AbuseLimitHandler$1"
-  },
-  {
-    "name": "org.kohsuke.github.AbuseLimitHandler$2"
-  },
-  {
-    "name": "org.kohsuke.github.AbuseLimitHandler"
-  },
-  {
-    "name": "org.kohsuke.github.authorization.AnonymousAuthorizationProvider"
-  },
-  {
-    "name": "org.kohsuke.github.authorization.AppInstallationAuthorizationProvider$AppInstallationProvider"
-  },
-  {
-    "name": "org.kohsuke.github.authorization.AppInstallationAuthorizationProvider"
-  },
-  {
-    "name": "org.kohsuke.github.authorization.AuthorizationProvider"
-  },
-  {
-    "name": "org.kohsuke.github.authorization.ImmutableAuthorizationProvider"
-  },
-  {
-    "name": "org.kohsuke.github.authorization.ImmutableAuthorizationProvider$UserProvider"
-  },
-  {
-    "name": "org.kohsuke.github.authorization.OrgAppInstallationAuthorizationProvider"
-  },
-  {
-    "name": "org.kohsuke.github.authorization.UserAuthorizationProvider"
-  },
-  {
     "name": "org.kohsuke.github.BetaApi"
-  },
-  {
-    "name": "org.kohsuke.github.connector.GitHubConnector"
-  },
-  {
-    "name": "org.kohsuke.github.connector.GitHubConnectorRequest"
-  },
-  {
-    "name": "org.kohsuke.github.connector.GitHubConnectorResponse$ByteArrayResponse"
-  },
-  {
-    "name": "org.kohsuke.github.connector.GitHubConnectorResponse"
-  },
-  {
-    "name": "org.kohsuke.github.connector.GitHubConnectorResponseHttpUrlConnectionAdapter"
   },
   {
     "name": "org.kohsuke.github.EnforcementLevel"
   },
   {
-    "name": "org.kohsuke.github.EnterpriseManagedSupport"
+    "name": "org.kohsuke.github.GHRepositoryRule"
   },
   {
-    "name": "org.kohsuke.github.example.dataobject.ReadOnlyObjects"
+    "name": "org.kohsuke.github.GHRepositoryRule$AlertsThreshold"
   },
   {
-    "name": "org.kohsuke.github.example.dataobject.ReadOnlyObjects$GHMetaExample"
+    "name": "org.kohsuke.github.GHRepositoryRule$BooleanParameter"
   },
   {
-    "name": "org.kohsuke.github.example.dataobject.ReadOnlyObjects$GHMetaGettersFinal"
+    "name": "org.kohsuke.github.GHRepositoryRule$BooleanParameter$1"
   },
   {
-    "name": "org.kohsuke.github.example.dataobject.ReadOnlyObjects$GHMetaGettersFinalCreator"
+    "name": "org.kohsuke.github.GHRepositoryRule$CodeScanningTool"
   },
   {
-    "name": "org.kohsuke.github.example.dataobject.ReadOnlyObjects$GHMetaGettersUnmodifiable"
+    "name": "org.kohsuke.github.GHRepositoryRule$IntegerParameter"
   },
   {
-    "name": "org.kohsuke.github.example.dataobject.ReadOnlyObjects$GHMetaPackage"
+    "name": "org.kohsuke.github.GHRepositoryRule$IntegerParameter$1"
   },
   {
-    "name": "org.kohsuke.github.example.dataobject.ReadOnlyObjects$GHMetaPublic"
+    "name": "org.kohsuke.github.GHRepositoryRule$ListParameter"
   },
   {
-    "name": "org.kohsuke.github.extras.authorization.JwtBuilderUtil$1"
+    "name": "org.kohsuke.github.GHRepositoryRule$Operator"
   },
   {
-    "name": "org.kohsuke.github.extras.authorization.JwtBuilderUtil"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameter"
   },
   {
-    "name": "org.kohsuke.github.extras.authorization.JwtBuilderUtil$DefaultBuilderImpl"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters"
   },
   {
-    "name": "org.kohsuke.github.extras.authorization.JwtBuilderUtil$IJwtBuilder"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$1"
   },
   {
-    "name": "org.kohsuke.github.extras.authorization.JwtBuilderUtil$ReflectionBuilderImpl"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$1$1"
   },
   {
-    "name": "org.kohsuke.github.extras.authorization.JWTTokenProvider"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$2"
   },
   {
-    "name": "org.kohsuke.github.extras.HttpClientGitHubConnector"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$2$1"
   },
   {
-    "name": "org.kohsuke.github.extras.ImpatientHttpConnector"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$3"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$1"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$3$1"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$BufferedRequestBody"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$4"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$4$1"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$DelegatingHttpsURLConnection"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$5"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$OkHttpsURLConnection"
+    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$5$1"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$OkHttpURLConnection"
+    "name": "org.kohsuke.github.GHRepositoryRule$RulesetSourceType"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$OkHttpURLConnection$NetworkInterceptor"
+    "name": "org.kohsuke.github.GHRepositoryRule$SecurityAlertsThreshold"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$OutputStreamRequestBody$1"
+    "name": "org.kohsuke.github.GHRepositoryRule$StatusCheckConfiguration"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$OutputStreamRequestBody"
+    "name": "org.kohsuke.github.GHRepositoryRule$StringParameter"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$ResponseBodyInputStream"
+    "name": "org.kohsuke.github.GHRepositoryRule$StringParameter$1"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$StreamedRequestBody"
+    "name": "org.kohsuke.github.GHRepositoryRule$Type"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$UnexpectedException"
+    "name": "org.kohsuke.github.GHRepositoryRule$WorkflowFileReference"
   },
   {
-    "name": "org.kohsuke.github.extras.okhttp3.OkHttpConnector"
-  },
-  {
-    "name": "org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector"
-  },
-  {
-    "name": "org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector$OkHttpGitHubConnectorResponse"
-  },
-  {
-    "name": "org.kohsuke.github.extras.OkHttp3Connector"
-  },
-  {
-    "name": "org.kohsuke.github.extras.OkHttpConnector"
-  },
-  {
-    "name": "org.kohsuke.github.function.FunctionThrows"
-  },
-  {
-    "name": "org.kohsuke.github.function.InputStreamFunction"
-  },
-  {
-    "name": "org.kohsuke.github.function.SupplierThrows"
+    "name": "org.kohsuke.github.GHBranchSync"
   },
   {
     "name": "org.kohsuke.github.GHApp"
@@ -483,15 +414,6 @@
     "name": "org.kohsuke.github.GHDiscussion"
   },
   {
-    "name": "org.kohsuke.github.GHDiscussion$Creator"
-  },
-  {
-    "name": "org.kohsuke.github.GHDiscussion$Setter"
-  },
-  {
-    "name": "org.kohsuke.github.GHDiscussion$Updater"
-  },
-  {
     "name": "org.kohsuke.github.GHDiscussionBuilder"
   },
   {
@@ -630,9 +552,6 @@
     "name": "org.kohsuke.github.GHEventPayload$WorkflowRun"
   },
   {
-    "name": "org.kohsuke.github.GHException"
-  },
-  {
     "name": "org.kohsuke.github.GHExternalGroup"
   },
   {
@@ -651,9 +570,6 @@
     "name": "org.kohsuke.github.GHExternalGroupPage"
   },
   {
-    "name": "org.kohsuke.github.GHFileNotFoundException"
-  },
-  {
     "name": "org.kohsuke.github.GHFork"
   },
   {
@@ -666,31 +582,13 @@
     "name": "org.kohsuke.github.GHGistFile"
   },
   {
-    "name": "org.kohsuke.github.GHGistUpdater"
-  },
-  {
     "name": "org.kohsuke.github.GHHook"
   },
   {
     "name": "org.kohsuke.github.GHHooks$1"
   },
   {
-    "name": "org.kohsuke.github.GHHooks"
-  },
-  {
-    "name": "org.kohsuke.github.GHHooks$Context"
-  },
-  {
-    "name": "org.kohsuke.github.GHHooks$OrgContext"
-  },
-  {
-    "name": "org.kohsuke.github.GHHooks$RepoContext"
-  },
-  {
     "name": "org.kohsuke.github.GHInvitation"
-  },
-  {
-    "name": "org.kohsuke.github.GHIOException"
   },
   {
     "name": "org.kohsuke.github.GHIssue"
@@ -888,9 +786,6 @@
     "name": "org.kohsuke.github.GHPerson"
   },
   {
-    "name": "org.kohsuke.github.GHPersonSet"
-  },
-  {
     "name": "org.kohsuke.github.GHProject"
   },
   {
@@ -1048,9 +943,6 @@
   },
   {
     "name": "org.kohsuke.github.GHReleaseBuilder$MakeLatest"
-  },
-  {
-    "name": "org.kohsuke.github.GHReleaseUpdater"
   },
   {
     "name": "org.kohsuke.github.GHRepoHook"
@@ -1365,37 +1257,10 @@
     "name": "org.kohsuke.github.GitHub$AuthorizationRefreshGitHubWrapper"
   },
   {
-    "name": "org.kohsuke.github.GitHub"
-  },
-  {
-    "name": "org.kohsuke.github.GitHub$DependentAuthorizationProvider"
-  },
-  {
-    "name": "org.kohsuke.github.GitHub$LoginLoadingUserAuthorizationProvider"
-  },
-  {
-    "name": "org.kohsuke.github.GitHubAbuseLimitHandler"
-  },
-  {
     "name": "org.kohsuke.github.GitHubBuilder"
   },
   {
-    "name": "org.kohsuke.github.GitHubClient$BodyHandler"
-  },
-  {
-    "name": "org.kohsuke.github.GitHubClient"
-  },
-  {
-    "name": "org.kohsuke.github.GitHubClient$GHApiInfo"
-  },
-  {
-    "name": "org.kohsuke.github.GitHubClient$RetryRequestException"
-  },
-  {
     "name": "org.kohsuke.github.GitHubConnectorResponseErrorHandler$1"
-  },
-  {
-    "name": "org.kohsuke.github.GitHubConnectorResponseErrorHandler"
   },
   {
     "name": "org.kohsuke.github.GitHubInteractiveObject"
@@ -1408,12 +1273,6 @@
   },
   {
     "name": "org.kohsuke.github.GitHubPageIterator"
-  },
-  {
-    "name": "org.kohsuke.github.GitHubRateLimitChecker"
-  },
-  {
-    "name": "org.kohsuke.github.GitHubRateLimitHandler"
   },
   {
     "name": "org.kohsuke.github.GitHubRequest$1"
@@ -1437,27 +1296,6 @@
     "name": "org.kohsuke.github.GitUser"
   },
   {
-    "name": "org.kohsuke.github.HttpConnector"
-  },
-  {
-    "name": "org.kohsuke.github.HttpException"
-  },
-  {
-    "name": "org.kohsuke.github.internal.DefaultGitHubConnector"
-  },
-  {
-    "name": "org.kohsuke.github.internal.EnumUtils"
-  },
-  {
-    "name": "org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter"
-  },
-  {
-    "name": "org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter$HttpURLConnectionGitHubConnectorResponse"
-  },
-  {
-    "name": "org.kohsuke.github.internal.Previews"
-  },
-  {
     "name": "org.kohsuke.github.JsonRateLimit"
   },
   {
@@ -1465,9 +1303,6 @@
   },
   {
     "name": "org.kohsuke.github.PagedIterable"
-  },
-  {
-    "name": "org.kohsuke.github.PagedIterator"
   },
   {
     "name": "org.kohsuke.github.PagedSearchIterable$1"
@@ -1482,9 +1317,6 @@
     "name": "org.kohsuke.github.RateLimitChecker$1"
   },
   {
-    "name": "org.kohsuke.github.RateLimitChecker"
-  },
-  {
     "name": "org.kohsuke.github.RateLimitChecker$LiteralValue"
   },
   {
@@ -1494,22 +1326,10 @@
     "name": "org.kohsuke.github.RateLimitHandler$2"
   },
   {
-    "name": "org.kohsuke.github.RateLimitHandler"
-  },
-  {
     "name": "org.kohsuke.github.RateLimitTarget"
   },
   {
-    "name": "org.kohsuke.github.Reactable"
-  },
-  {
     "name": "org.kohsuke.github.ReactionContent"
-  },
-  {
-    "name": "org.kohsuke.github.Refreshable"
-  },
-  {
-    "name": "org.kohsuke.github.Requester"
   },
   {
     "name": "org.kohsuke.github.SearchResult"
@@ -1519,8 +1339,5 @@
   },
   {
     "name": "org.kohsuke.github.SkipFromToString"
-  },
-  {
-    "name": "org.kohsuke.github.TrafficInfo"
   }
 ]

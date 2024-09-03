@@ -620,9 +620,12 @@ public class GHRepository extends GHObject {
      * @return the owner name
      */
     public String getOwnerName() {
-        // consistency of the GitHub API is super... some serialized forms of GHRepository populate
-        // a full GHUser while others populate only the owner and email. This later form is super helpful
-        // in putting the login in owner.name not owner.login... thankfully we can easily identify this
+        // consistency of the GitHub API is super... some serialized forms of
+        // GHRepository populate
+        // a full GHUser while others populate only the owner and email. This later form
+        // is super helpful
+        // in putting the login in owner.name not owner.login... thankfully we can
+        // easily identify this
         // second set because owner.login will be null
         return owner.login != null ? owner.login : owner.name;
     }
@@ -3683,6 +3686,21 @@ public class GHRepository extends GHObject {
                 .method("GET")
                 .withUrlPath(getApiTailUrl("/rules/branches/" + branch))
                 .toIterable(GHRepositoryRule[].class, null);
+    }
+
+    /**
+     * Check, if vulnerability alerts are enabled for this repository
+     * (https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#check-if-vulnerability-alerts-are-enabled-for-a-repository).
+     *
+     * @return true, if vulnerability alerts are enabled
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isVulnerabilityAlertsEnabled() throws IOException {
+        return root().createRequest()
+                .method("GET")
+                .withUrlPath(getApiTailUrl("/vulnerability-alerts"))
+                .fetchHttpStatusCode() == 204;
     }
 
     /**

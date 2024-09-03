@@ -1924,6 +1924,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
      * Test getVulnerabilityAlerts.
      *
      * @throws Exception
+     *             the exception
      */
     @Test
     public void testIsVulnerabilityAlertsEnabled() throws Exception {

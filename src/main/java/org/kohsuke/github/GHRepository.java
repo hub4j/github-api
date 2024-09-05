@@ -3746,6 +3746,21 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Check, if vulnerability alerts are enabled for this repository
+     * (https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#check-if-vulnerability-alerts-are-enabled-for-a-repository).
+     *
+     * @return true, if vulnerability alerts are enabled
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isVulnerabilityAlertsEnabled() throws IOException {
+        return root().createRequest()
+                .method("GET")
+                .withUrlPath(getApiTailUrl("/vulnerability-alerts"))
+                .fetchHttpStatusCode() == 204;
+    }
+
+    /**
      * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
      *
      * <p>

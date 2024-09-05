@@ -1,0 +1,33 @@
+The class "%1$s" needs to be configured or excluded for reflection / serialization and was not mentioned in one of the following resources:
+
+src/main/resources/META-INF/reflect-config.json - example:
+
+  {
+    "name": "%1$s",
+    "allPublicFields": true,
+    "allDeclaredFields": true,
+    "queryAllPublicConstructors": true,
+    "queryAllDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredClasses": true
+  }
+
+src/main/resources/META-INF/serialization.json - example:
+
+  {
+    "name": "%1$s"
+  }
+
+src/test/resources/no-reflect-and-serialization-list - example:
+
+  %1$s
+
+Please add it to either no-reflect-and-serialization-list or to serialization.json and / or reflect-config.json
+
+

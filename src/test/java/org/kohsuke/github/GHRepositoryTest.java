@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 import static org.kohsuke.github.GHVerification.Reason.GPGVERIFY_ERROR;
 import static org.kohsuke.github.GHVerification.Reason.UNKNOWN_SIGNATURE_TYPE;
 
@@ -1948,5 +1948,25 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(searchResult.getTotalCount(), is(2));
         assertThat(searchResult.toList().get(0).getNumber(), is(expectedPR1.getNumber()));
         assertThat(searchResult.toList().get(1).getNumber(), is(expectedPR2.getNumber()));
+    }
+
+    /**
+     * Test repository automated security fix settings.
+     */
+    @Test
+    public void testAutomatedSecurityFixSettings() throws IOException {
+        GHRepository repo = getTempRepository();
+        Object initialEnabled = repo.isAutomatedSecurityFixesEnabled();
+        assertThat(initialEnabled, is(instanceOf(Boolean.class)));
+        Object initialPaused = repo.isAutomatedSecurityFixesPaused();
+        assertThat(initialPaused, is(instanceOf(Boolean.class)));
+
+        repo.enableAutomatedSecurityFixes(true);
+        assertThat(repo.isAutomatedSecurityFixesEnabled(), is(true));
+        assertThat(repo.isAutomatedSecurityFixesPaused(), is(false));
+
+        repo.enableAutomatedSecurityFixes(false);
+        assertThat(repo.isAutomatedSecurityFixesEnabled(), is(false));
+        assertThat(repo.isAutomatedSecurityFixesPaused(), is(false));
     }
 }

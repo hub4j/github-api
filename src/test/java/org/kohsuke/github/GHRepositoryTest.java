@@ -1944,6 +1944,18 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(rule.getParameter(GHRepositoryRule.Parameters.REQUIRE_CODE_OWNER_REVIEW).get(), is(equalTo(false)));
     }
 
+    /**
+     * Test getVulnerabilityAlerts.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testIsVulnerabilityAlertsEnabled() throws Exception {
+        GHRepository repository = gitHub.getRepository("ihrigb/node-doorbird");
+        assertThat(repository.isVulnerabilityAlertsEnabled(), is(true));
+    }
+
     private void verifyEmptyResult(PagedSearchIterable<GHPullRequest> searchResult) {
         assertThat(searchResult.getTotalCount(), is(0));
     }

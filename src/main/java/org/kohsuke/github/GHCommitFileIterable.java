@@ -41,6 +41,12 @@ class GHCommitFileIterable extends PagedIterable<GHCommit.File> {
         this.files = files != null ? files.toArray(new File[0]) : null;
     }
 
+    @Nonnull
+    @Override
+    public Paginator<File> _paginator(int pageSize, int startPage) {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * Iterator.
      *

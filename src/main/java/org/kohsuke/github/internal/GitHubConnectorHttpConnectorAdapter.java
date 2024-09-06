@@ -126,7 +126,7 @@ public final class GitHubConnectorHttpConnectorAdapter implements GitHubConnecto
                 $method.setAccessible(true);
                 $method.set(connection, method);
             } catch (Exception x) {
-                throw (IOException) new IOException("Failed to set the custom verb").initCause(x);
+                throw (IOException) new IOException("Failed to set the custom verb", x);
             }
             // sun.net.www.protocol.https.DelegatingHttpsURLConnection delegates to another HttpURLConnection
             try {

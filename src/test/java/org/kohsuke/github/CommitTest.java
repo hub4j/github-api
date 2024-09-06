@@ -214,6 +214,20 @@ public class CommitTest extends AbstractGitHubWireMockTest {
                 listedPrs.stream().findFirst().filter(it -> it.getNumber() == prNumber).isPresent());
     }
 
+    @Test
+    public void listPullRequestsPaginationWrapUpTest() throws Exception {
+        GHRepository repo = gitHub.getOrganization("hub4j-test-org").getRepository("listPrsListHeads");
+
+        GHCommit commit = repo.getCommit("6b9956fe8c3d030dbc49c9d4c4166b0ceb4198fc");
+
+        Paginator<GHPullRequest> paginator = commit.listPullRequests().withPageSize(3).paginator();
+
+        assertThat(paginator.nextPage().get(0).owner, notNullValue());
+        assertThat(paginator.previousPage().get(0).owner, notNullValue());
+        assertThat(paginator.firstPageList().get(0).owner, notNullValue());
+        assertThat(paginator.lastPageList().get(0).owner, notNullValue());
+    }
+
     /**
      * List pull requests of commit with 2 pull requests.
      *

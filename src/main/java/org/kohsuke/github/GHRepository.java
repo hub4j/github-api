@@ -38,6 +38,7 @@ import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -895,7 +896,7 @@ public class GHRepository extends GHObject {
 
     /**
      * Lists all
-     * <a href="https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/">the
+     * <a href= "https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/">the
      * available assignees</a> to which issues may be assigned.
      *
      * @return the paged iterable
@@ -1468,6 +1469,24 @@ public class GHRepository extends GHObject {
             }
         }
         throw new IOException(this + " was forked but can't find the new repository");
+    }
+
+    /**
+     * Sync this repository fork branch
+     *
+     * @param branch
+     *            the branch to sync
+     * @return The current repository
+     * @throws IOException
+     *             the io exception
+     */
+    public GHBranchSync sync(String branch) throws IOException {
+        return root().createRequest()
+                .method("POST")
+                .with("branch", branch)
+                .withUrlPath(getApiTailUrl("merge-upstream"))
+                .fetch(GHBranchSync.class)
+                .wrap(this);
     }
 
     /**
@@ -2051,7 +2070,7 @@ public class GHRepository extends GHObject {
      * @return check runs for given ref
      * @throws IOException
      *             the io exception
-     * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
+     * @see <a href= "https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */
     public PagedIterable<GHCheckRun> getCheckRuns(String ref) throws IOException {
@@ -2071,7 +2090,7 @@ public class GHRepository extends GHObject {
      * @return check runs for the given ref
      * @throws IOException
      *             the io exception
-     * @see <a href="https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
+     * @see <a href= "https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */
     public PagedIterable<GHCheckRun> getCheckRuns(String ref, Map<String, Object> params) throws IOException {
@@ -3207,7 +3226,8 @@ public class GHRepository extends GHObject {
 
         // We don't use the URL provided in the JSON because it is not reliable:
         // 1. There is bug in Push event payloads that returns the wrong url.
-        // For Push event repository records, they take the form "https://github.com/{fullName}".
+        // For Push event repository records, they take the form
+        // "https://github.com/{fullName}".
         // All other occurrences of "url" take the form "https://api.github.com/...".
         // 2. For Installation event payloads, the URL is not provided at all.
         root().createRequest().withUrlPath(getApiTailUrl("")).fetchInto(this);
@@ -3255,6 +3275,68 @@ public class GHRepository extends GHObject {
      */
     public void unstar() throws IOException {
         root().createRequest().method("DELETE").withUrlPath(String.format("/user/starred/%s", full_name)).send();
+    }
+
+    /**
+     * Get the top 10 popular contents over the last 14 days as described on
+     * https://docs.github.com/en/rest/metrics/traffic?apiVersion=2022-11-28#get-top-referral-paths
+     *
+     * @return list of top referral paths
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHRepositoryTrafficTopReferralPath> getTopReferralPaths() throws IOException {
+        return Arrays.asList(root().createRequest()
+                .method("GET")
+                .withUrlPath(getApiTailUrl("/traffic/popular/paths"))
+                .fetch(GHRepositoryTrafficTopReferralPath[].class));
+    }
+
+    /**
+     * Get the top 10 referrers over the last 14 days as described on
+     * https://docs.github.com/en/rest/metrics/traffic?apiVersion=2022-11-28#get-top-referral-sources
+     *
+     * @return list of top referrers
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHRepositoryTrafficTopReferralSources> getTopReferralSources() throws IOException {
+        return Arrays.asList(root().createRequest()
+                .method("GET")
+                .withUrlPath(getApiTailUrl("/traffic/popular/referrers"))
+                .fetch(GHRepositoryTrafficTopReferralSources[].class));
+    }
+
+    /**
+     * Get all active rules that apply to the specified branch
+     * (https://docs.github.com/en/rest/repos/rules?apiVersion=2022-11-28#get-rules-for-a-branch).
+     *
+     * @param branch
+     *            the branch
+     * @return the rules for branch
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHRepositoryRule> listRulesForBranch(String branch) throws IOException {
+        return root().createRequest()
+                .method("GET")
+                .withUrlPath(getApiTailUrl("/rules/branches/" + branch))
+                .toIterable(GHRepositoryRule[].class, null);
+    }
+
+    /**
+     * Check, if vulnerability alerts are enabled for this repository
+     * (https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#check-if-vulnerability-alerts-are-enabled-for-a-repository).
+     *
+     * @return true, if vulnerability alerts are enabled
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isVulnerabilityAlertsEnabled() throws IOException {
+        return root().createRequest()
+                .method("GET")
+                .withUrlPath(getApiTailUrl("/vulnerability-alerts"))
+                .fetchHttpStatusCode() == 204;
     }
 
     /**

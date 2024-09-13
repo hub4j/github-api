@@ -49,7 +49,7 @@ public class GHLicense extends GHObject {
 
     /** The name. */
     // these fields are always present, even in the short form
-    protected String key, name;
+    protected String key, name, spdxId;
 
     /** The featured. */
     // the rest is only after populated
@@ -83,6 +83,15 @@ public class GHLicense extends GHObject {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets SPDX ID.
+     *
+     * @return the spdx id
+     */
+    public String getSpdxId() {
+        return spdxId;
     }
 
     /**

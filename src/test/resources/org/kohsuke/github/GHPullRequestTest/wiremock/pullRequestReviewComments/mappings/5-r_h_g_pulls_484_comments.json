@@ -1,0 +1,53 @@
+{
+  "id": "d7b1db5e-d26a-4122-bf11-d883fa8a237f",
+  "name": "repos_hub4j-test-org_github-api_pulls_484_comments",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/484/comments",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "[]",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sun, 16 Jun 2024 10:20:03 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"1b5805e5b5590e41a379084e0302960f5b511ecf3553fc6d28e46f603b15210e\"",
+      "X-OAuth-Scopes": "repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2024-09-14 09:21:47 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4811",
+      "X-RateLimit-Reset": "1718536663",
+      "X-RateLimit-Used": "189",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CAA4:2EA35F:1EE4E57A:1F1B44EE:666EBC53"
+    }
+  },
+  "uuid": "d7b1db5e-d26a-4122-bf11-d883fa8a237f",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-pulls-484-comments",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-github-api-pulls-484-comments-2",
+  "insertionIndex": 5
+}

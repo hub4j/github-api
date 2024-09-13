@@ -1,0 +1,49 @@
+{
+  "id": "4022161d-3ae8-4b11-a389-9c14ab9f2d23",
+  "name": "repos_ihrigb_node-doorbird",
+  "request": {
+    "url": "/repos/ihrigb/node-doorbird",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-r_i_node-doorbird.json",
+    "headers": {
+      "Server": "istio-envoy",
+      "Date": "Mon, 01 Jul 2024 08:23:11 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"55d3ba68210c42d7349064b62572ac3f5649ea91cda0e535dafffd6cdc8d366d\"",
+      "Last-Modified": "Thu, 20 Jun 2024 20:02:34 GMT",
+      "github-authentication-token-expiration": "2024-07-31 10:13:04 +0200",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-accepted-github-permissions": "metadata=read",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4024",
+      "X-RateLimit-Reset": "1719823001",
+      "X-RateLimit-Used": "976",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "x-envoy-upstream-service-time": "152",
+      "x-envoy-decorator-operation": "unicorn-api.github-production.svc.cluster.local:80/*",
+      "X-GitHub-Request-Id": "4EF8:23E496:33C7BC8:3461A9E:6682676E"
+    }
+  },
+  "uuid": "4022161d-3ae8-4b11-a389-9c14ab9f2d23",
+  "persistent": true,
+  "insertionIndex": 2
+}

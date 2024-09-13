@@ -37,6 +37,9 @@ public class GHUser extends GHPerson {
     /** The ldap dn. */
     protected String ldap_dn;
 
+    /** The suspended_at */
+    private String suspendedAt;
+
     /**
      * Gets keys.
      *
@@ -257,6 +260,18 @@ public class GHUser extends GHPerson {
     public Optional<String> getLdapDn() throws IOException {
         super.populate();
         return Optional.ofNullable(ldap_dn);
+    }
+
+    /**
+     * When was this user suspended?.
+     *
+     * @return updated date
+     * @throws IOException
+     *             on error
+     */
+    public Date getSuspendedAt() throws IOException {
+        super.populate();
+        return GitHubClient.parseDate(suspendedAt);
     }
 
     /**

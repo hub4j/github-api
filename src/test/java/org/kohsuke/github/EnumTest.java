@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
-import org.kohsuke.github.GHPullRequest.MergeMethod;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -24,9 +23,13 @@ public class EnumTest extends AbstractGitHubWireMockTest {
 
         assertThat(GHCommentAuthorAssociation.values().length, equalTo(8));
 
+        assertThat(GHCommitSearchBuilder.Sort.values().length, equalTo(2));
+
         assertThat(GHCommitState.values().length, equalTo(4));
 
         assertThat(GHCompare.Status.values().length, equalTo(4));
+
+        assertThat(GHContentSearchBuilder.Sort.values().length, equalTo(2));
 
         assertThat(GHDeploymentState.values().length, equalTo(7));
 
@@ -36,9 +39,16 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHEvent.ALL.symbol(), equalTo("*"));
         assertThat(GHEvent.PULL_REQUEST.symbol(), equalTo(GHEvent.PULL_REQUEST.toString().toLowerCase()));
 
+        assertThat(GHFork.values().length, equalTo(3));
+        assertThat(GHFork.PARENT_ONLY.toString(), equalTo(""));
+
+        assertThat(GHIssueQueryBuilder.Sort.values().length, equalTo(3));
+
         assertThat(GHIssueSearchBuilder.Sort.values().length, equalTo(3));
 
         assertThat(GHIssueState.values().length, equalTo(3));
+
+        assertThat(GHIssueStateReason.values().length, equalTo(3));
 
         assertThat(GHMarketplaceAccountType.values().length, equalTo(2));
 
@@ -60,9 +70,15 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHProject.ProjectState.values().length, equalTo(2));
         assertThat(GHProject.ProjectStateFilter.values().length, equalTo(3));
 
-        assertThat(MergeMethod.values().length, equalTo(3));
+        assertThat(GHProjectsV2Item.ContentType.values().length, equalTo(4));
+
+        assertThat(GHProjectsV2ItemChanges.FieldType.values().length, equalTo(6));
+
+        assertThat(GHPullRequest.MergeMethod.values().length, equalTo(3));
 
         assertThat(GHPullRequestQueryBuilder.Sort.values().length, equalTo(4));
+
+        assertThat(GHPullRequestReviewComment.Side.values().length, equalTo(3));
 
         assertThat(GHPullRequestReviewEvent.values().length, equalTo(4));
         assertThat(GHPullRequestReviewEvent.PENDING.toState(), equalTo(GHPullRequestReviewState.PENDING));
@@ -73,20 +89,34 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHPullRequestReviewState.APPROVED.action(), equalTo(GHPullRequestReviewEvent.APPROVE.action()));
         assertThat(GHPullRequestReviewState.DISMISSED.toEvent(), nullValue());
 
+        assertThat(GHPullRequestSearchBuilder.Sort.values().length, equalTo(4));
+
+        assertThat(GHReleaseBuilder.MakeLatest.values().length, equalTo(3));
+
         assertThat(GHRepository.CollaboratorAffiliation.values().length, equalTo(3));
         assertThat(GHRepository.ForkSort.values().length, equalTo(3));
         assertThat(GHRepository.Visibility.values().length, equalTo(4));
 
+        assertThat(GHRepositoryDiscussion.State.values().length, equalTo(3));
+
         assertThat(GHRepositorySearchBuilder.Sort.values().length, equalTo(3));
 
         assertThat(GHRepositorySelection.values().length, equalTo(2));
+
+        assertThat(GHTargetType.values().length, equalTo(2));
 
         assertThat(GHTeam.Role.values().length, equalTo(2));
         assertThat(GHTeam.Privacy.values().length, equalTo(3));
 
         assertThat(GHUserSearchBuilder.Sort.values().length, equalTo(3));
 
-        assertThat(GHIssueQueryBuilder.Sort.values().length, equalTo(3));
-    }
+        assertThat(GHVerification.Reason.values().length, equalTo(18));
 
+        assertThat(GHWorkflowRun.Status.values().length, equalTo(15));
+        assertThat(GHWorkflowRun.Conclusion.values().length, equalTo(10));
+
+        assertThat(MarkdownMode.values().length, equalTo(2));
+
+        assertThat(ReactionContent.values().length, equalTo(8));
+    }
 }

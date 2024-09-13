@@ -275,6 +275,7 @@ public class GHUser extends GHPerson {
      *             on error
      */
     public Date getSuspendedAt() throws IOException {
+        super.populate();
         return GitHubClient.parseDate(suspendedAt);
     }
 

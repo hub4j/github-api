@@ -344,6 +344,22 @@ public class GHCommit {
 	}
 
 	/**
+	 * Gets commit author.
+	 * @return
+	 */
+	public GitUser getCommitAuthor() {
+		return commit.getAuthor();
+	}
+
+	/**
+	 * Gets commit committer.
+	 * @return
+	 */
+	public GitUser getCommitCommitter() {
+		return commit.getCommitter();
+	}
+
+	/**
 	 * Gets message.
 	 *
 	 * @return the commit message

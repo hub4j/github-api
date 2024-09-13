@@ -275,7 +275,8 @@ import java.util.*;
      *             on error
      */
     public Date getSuspendedAt() throws IOException {
-<span class="fc" id="L278">        return GitHubClient.parseDate(suspendedAt);</span>
+<span class="fc" id="L278">        super.populate();</span>
+<span class="fc" id="L279">        return GitHubClient.parseDate(suspendedAt);</span>
     }
 
     /**
@@ -285,7 +286,7 @@ import java.util.*;
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L288">        return login.hashCode();</span>
+<span class="fc" id="L289">        return login.hashCode();</span>
     }
 
     /**
@@ -297,11 +298,11 @@ import java.util.*;
      */
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L300" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
-<span class="fc" id="L301">            GHUser that = (GHUser) obj;</span>
-<span class="fc" id="L302">            return this.login.equals(that.login);</span>
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
+<span class="fc" id="L302">            GHUser that = (GHUser) obj;</span>
+<span class="fc" id="L303">            return this.login.equals(that.login);</span>
         }
-<span class="nc" id="L304">        return false;</span>
+<span class="nc" id="L305">        return false;</span>
     }
 
     /**
@@ -312,9 +313,9 @@ import java.util.*;
      * @return the api tail url
      */
     String getApiTailUrl(String tail) {
-<span class="pc bpc" id="L315" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
-<span class="fc" id="L316">            tail = '/' + tail;</span>
-<span class="fc" id="L317">        return &quot;/users/&quot; + login + tail;</span>
+<span class="pc bpc" id="L316" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
+<span class="fc" id="L317">            tail = '/' + tail;</span>
+<span class="fc" id="L318">        return &quot;/users/&quot; + login + tail;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

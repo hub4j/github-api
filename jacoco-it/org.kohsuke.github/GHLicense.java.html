@@ -49,7 +49,7 @@ import java.util.Objects;
 
     /** The name. */
     // these fields are always present, even in the short form
-    protected String key, name;
+    protected String key, name, spdxId;
 
     /** The featured. */
     // the rest is only after populated
@@ -86,6 +86,15 @@ import java.util.Objects;
     }
 
     /**
+     * Gets SPDX ID.
+     *
+     * @return the spdx id
+     */
+    public String getSpdxId() {
+<span class="fc" id="L94">        return spdxId;</span>
+    }
+
+    /**
      * Featured licenses are bold in the new repository drop-down.
      *
      * @return True if the license is featured, false otherwise
@@ -93,8 +102,8 @@ import java.util.Objects;
      *             the io exception
      */
     public Boolean isFeatured() throws IOException {
-<span class="fc" id="L96">        populate();</span>
-<span class="fc" id="L97">        return featured;</span>
+<span class="fc" id="L105">        populate();</span>
+<span class="fc" id="L106">        return featured;</span>
     }
 
     /**
@@ -105,8 +114,8 @@ import java.util.Objects;
      *             Signals that an I/O exception has occurred.
      */
     public URL getHtmlUrl() throws IOException {
-<span class="fc" id="L108">        populate();</span>
-<span class="fc" id="L109">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L117">        populate();</span>
+<span class="fc" id="L118">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -117,8 +126,8 @@ import java.util.Objects;
      *             the io exception
      */
     public String getDescription() throws IOException {
-<span class="fc" id="L120">        populate();</span>
-<span class="fc" id="L121">        return description;</span>
+<span class="fc" id="L129">        populate();</span>
+<span class="fc" id="L130">        return description;</span>
     }
 
     /**
@@ -129,8 +138,8 @@ import java.util.Objects;
      *             the io exception
      */
     public String getCategory() throws IOException {
-<span class="fc" id="L132">        populate();</span>
-<span class="fc" id="L133">        return category;</span>
+<span class="fc" id="L141">        populate();</span>
+<span class="fc" id="L142">        return category;</span>
     }
 
     /**
@@ -141,8 +150,8 @@ import java.util.Objects;
      *             the io exception
      */
     public String getImplementation() throws IOException {
-<span class="fc" id="L144">        populate();</span>
-<span class="fc" id="L145">        return implementation;</span>
+<span class="fc" id="L153">        populate();</span>
+<span class="fc" id="L154">        return implementation;</span>
     }
 
     /**
@@ -153,8 +162,8 @@ import java.util.Objects;
      *             the io exception
      */
     public List&lt;String&gt; getRequired() throws IOException {
-<span class="fc" id="L156">        populate();</span>
-<span class="fc" id="L157">        return Collections.unmodifiableList(required);</span>
+<span class="fc" id="L165">        populate();</span>
+<span class="fc" id="L166">        return Collections.unmodifiableList(required);</span>
     }
 
     /**
@@ -165,8 +174,8 @@ import java.util.Objects;
      *             the io exception
      */
     public List&lt;String&gt; getPermitted() throws IOException {
-<span class="fc" id="L168">        populate();</span>
-<span class="fc" id="L169">        return Collections.unmodifiableList(permitted);</span>
+<span class="fc" id="L177">        populate();</span>
+<span class="fc" id="L178">        return Collections.unmodifiableList(permitted);</span>
     }
 
     /**
@@ -177,8 +186,8 @@ import java.util.Objects;
      *             the io exception
      */
     public List&lt;String&gt; getForbidden() throws IOException {
-<span class="fc" id="L180">        populate();</span>
-<span class="fc" id="L181">        return Collections.unmodifiableList(forbidden);</span>
+<span class="fc" id="L189">        populate();</span>
+<span class="fc" id="L190">        return Collections.unmodifiableList(forbidden);</span>
     }
 
     /**
@@ -189,8 +198,8 @@ import java.util.Objects;
      *             the io exception
      */
     public String getBody() throws IOException {
-<span class="fc" id="L192">        populate();</span>
-<span class="fc" id="L193">        return body;</span>
+<span class="fc" id="L201">        populate();</span>
+<span class="fc" id="L202">        return body;</span>
     }
 
     /**
@@ -202,18 +211,18 @@ import java.util.Objects;
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-<span class="fc bfc" id="L205" title="All 2 branches covered.">        if (description != null)</span>
-<span class="fc" id="L206">            return; // already populated</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (description != null)</span>
+<span class="fc" id="L215">            return; // already populated</span>
 
-<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        if (isOffline()) {</span>
-<span class="nc" id="L209">            return; // cannot populate, will have to live with what we have</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (isOffline()) {</span>
+<span class="nc" id="L218">            return; // cannot populate, will have to live with what we have</span>
         }
 
-<span class="fc" id="L212">        URL url = getUrl();</span>
-<span class="fc bfc" id="L213" title="All 2 branches covered.">        if (url != null) {</span>
-<span class="fc" id="L214">            root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);</span>
+<span class="fc" id="L221">        URL url = getUrl();</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        if (url != null) {</span>
+<span class="fc" id="L223">            root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);</span>
         }
-<span class="fc" id="L216">    }</span>
+<span class="fc" id="L225">    }</span>
 
     /**
      * Equals.
@@ -224,13 +233,13 @@ import java.util.Objects;
      */
     @Override
     public boolean equals(Object o) {
-<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (this == o)</span>
-<span class="nc" id="L228">            return true;</span>
-<span class="fc bfc" id="L229" title="All 2 branches covered.">        if (!(o instanceof GHLicense))</span>
-<span class="fc" id="L230">            return false;</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (this == o)</span>
+<span class="nc" id="L237">            return true;</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (!(o instanceof GHLicense))</span>
+<span class="fc" id="L239">            return false;</span>
 
-<span class="fc" id="L232">        GHLicense that = (GHLicense) o;</span>
-<span class="fc" id="L233">        return Objects.equals(getUrl(), that.getUrl());</span>
+<span class="fc" id="L241">        GHLicense that = (GHLicense) o;</span>
+<span class="fc" id="L242">        return Objects.equals(getUrl(), that.getUrl());</span>
     }
 
     /**
@@ -240,7 +249,7 @@ import java.util.Objects;
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L243">        return Objects.hashCode(getUrl());</span>
+<span class="nc" id="L252">        return Objects.hashCode(getUrl());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

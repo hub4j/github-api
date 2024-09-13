@@ -3686,6 +3686,21 @@ import static java.util.Objects.requireNonNull;
     }
 
     /**
+     * Check, if vulnerability alerts are enabled for this repository
+     * (https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#check-if-vulnerability-alerts-are-enabled-for-a-repository).
+     *
+     * @return true, if vulnerability alerts are enabled
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isVulnerabilityAlertsEnabled() throws IOException {
+<span class="fc" id="L3697">        return root().createRequest()</span>
+<span class="fc" id="L3698">                .method(&quot;GET&quot;)</span>
+<span class="fc" id="L3699">                .withUrlPath(getApiTailUrl(&quot;/vulnerability-alerts&quot;))</span>
+<span class="pc bpc" id="L3700" title="1 of 2 branches missed.">                .fetchHttpStatusCode() == 204;</span>
+    }
+
+    /**
      * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
      *
      * Consumer must call {@link #done()} to commit changes.
@@ -3700,13 +3715,13 @@ import static java.util.Objects.requireNonNull;
          *            the repository
          */
         protected Setter(@Nonnull GHRepository repository) {
-<span class="fc" id="L3703">            super(GHRepository.class, repository.root(), null);</span>
+<span class="fc" id="L3718">            super(GHRepository.class, repository.root(), null);</span>
             // even when we don't change the name, we need to send it in
             // this requirement may be out-of-date, but we do not want to break it
-<span class="fc" id="L3706">            requester.with(&quot;name&quot;, repository.name);</span>
+<span class="fc" id="L3721">            requester.with(&quot;name&quot;, repository.name);</span>
 
-<span class="fc" id="L3708">            requester.method(&quot;PATCH&quot;).withUrlPath(repository.getApiTailUrl(&quot;&quot;));</span>
-<span class="fc" id="L3709">        }</span>
+<span class="fc" id="L3723">            requester.method(&quot;PATCH&quot;).withUrlPath(repository.getApiTailUrl(&quot;&quot;));</span>
+<span class="fc" id="L3724">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

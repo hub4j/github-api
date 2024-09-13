@@ -335,6 +335,24 @@ public class GHCommit {
         return owner;
     }
 
+	/**
+	 * Gets commit verification.
+	 * @return
+	 */
+	public GHVerification getVerification() {
+		return commit.getVerification();
+	}
+
+	/**
+	 * Gets message.
+	 *
+	 * @return the commit message
+	 * @throws IOException
+	 *             the io exception
+	 */
+	public String getMessage() throws IOException {
+		return getCommitShortInfo().getMessage();
+	}
     /**
      * Gets lines changed.
      *

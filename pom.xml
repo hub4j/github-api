@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.324</version>
+  <version>1.325</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -32,11 +32,12 @@
   </distributionManagement>
 
   <properties>
+    <spring.boot.version>3.3.3</spring.boot.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spotbugs-maven-plugin.version>4.8.6.1</spotbugs-maven-plugin.version>
     <spotbugs.version>4.8.6</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
-    <hamcrest.version>2.2</hamcrest.version>
+    <hamcrest.version>3.0</hamcrest.version>
     <okhttp3.version>4.12.0</okhttp3.version>
     <okio.version>3.9.0</okio.version>
     <!-- Using this as the minimum bar for code coverage.  Adding methods without covering them will fail this. -->
@@ -84,12 +85,12 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>versions-maven-plugin</artifactId>
-          <version>2.16.2</version>
+          <version>2.17.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-help-plugin</artifactId>
-          <version>3.4.0</version>
+          <version>3.5.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -222,7 +223,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.7.0</version>
+          <version>3.8.0</version>
           <configuration>
             <release>8</release>
             <failOnWarnings>true</failOnWarnings>
@@ -240,33 +241,27 @@
             <autoReleaseAfterClose>true</autoReleaseAfterClose>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>animal-sniffer-maven-plugin</artifactId>
-          <version>1.22</version>
-          <configuration>
-            <signature>
-              <groupId>org.codehaus.mojo.signature</groupId>
-              <artifactId>java18</artifactId>
-              <version>1.0</version>
-            </signature>
-            <ignores>
-              java.net.http.*
-            </ignores>
-          </configuration>
-          <executions>
-            <execution>
-              <id>ensure-java-1.8-class-library</id>
-              <phase>test</phase>
-              <goals>
-                <goal>check</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
+      <!--
+      This plugin is used to generate AOT metadata during tests so that it can be
+      compared against those in META-INF/native-image/org.kohsuke/github-api/*.
+      The tests are located in src/test/java/org.kohsuke.aot
+      -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring.boot.version}</version>
+        <executions>
+          <execution>
+            <id>process-test-aot</id>
+            <goals>
+              <goal>process-test-aot</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -275,7 +270,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.1</version>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <useReleaseProfile>false</useReleaseProfile>
@@ -290,7 +285,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.6.1</version>
+        <version>3.7.0</version>
         <dependencies>
           <dependency>
             <groupId>org.apache.bcel</groupId>
@@ -472,7 +467,7 @@
       <dependency>
         <groupId>com.fasterxml.jackson</groupId>
         <artifactId>jackson-bom</artifactId>
-        <version>2.17.1</version>
+        <version>2.17.2</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>   
@@ -495,6 +490,16 @@
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest</artifactId>
       <version>${hamcrest.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!--
+    This plugin is used to start a spring boot application during tests
+    to generate AOT metadata. See also spring-boot-maven-plugin
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <version>${spring.boot.version}</version>
       <scope>test</scope>
     </dependency>
     <!-- This is needed in order to force junit4 and JTH tests to use newer hamcrest version -->
@@ -525,7 +530,14 @@
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
-      <version>4.2.1</version>
+      <version>4.2.2</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- junit vintage engine is used because junit4 and junit5 tests are required -->
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>5.10.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -535,7 +547,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.8.0</version>
+      <version>2.16.1</version>
     </dependency>
     <dependency>
       <groupId>com.infradna.tool</groupId>
@@ -629,7 +641,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>4.11.0</version>
+      <version>5.13.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -653,7 +665,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>2.0.13</version>
+      <version>2.0.16</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

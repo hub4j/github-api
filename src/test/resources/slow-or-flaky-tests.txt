@@ -4,3 +4,6 @@
 **/RequesterRetryTest
 **/RateLimitCheckerTest
 **/RateLimitHandlerTest
+**/AotIntegrationTest
+**/ArchTests
+**/GHPullRequestMockTest

@@ -341,16 +341,6 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withAbuseLimitHandler(GitHubAbuseLimitHandler.WAIT)
-                .build();
-
-        gitHub.getMyself();
-        assertThat(mockGitHub.getRequestCount(), equalTo(1));
-
-        getTempRepository();
-        assertThat(mockGitHub.getRequestCount(), equalTo(3));
-
-        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withAbuseLimitHandler(new GitHubAbuseLimitHandler() {
                     /**
                      * Overriding method because the actual method will wait for one minute causing slowness in unit
@@ -369,7 +359,7 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         assertThat(connectorResponse.request().url().toString(),
                                 endsWith("/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits"));
                         assertThat(connectorResponse.header("X-RateLimit-Limit"), equalTo("5000"));
-                        assertThat(connectorResponse.header("X-RateLimit-Remaining"), equalTo(4000));
+                        assertThat(connectorResponse.header("X-RateLimit-Remaining"), equalTo("4000"));
                         assertThat(connectorResponse.header("X-Foo"), is(nullValue())); // equalTo(20));
                         assertThat(connectorResponse.header("gh-limited-by"),
                                 equalTo("search-elapsed-time-shared-grouped"));
@@ -378,25 +368,27 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         // assertThat(uc.getContentLength(), equalTo(-1));
                         assertThat(connectorResponse.allHeaders(), instanceOf(Map.class));
                         assertThat(connectorResponse.allHeaders().size(), greaterThan(25));
+
+                        assertThat(GitHubAbuseLimitHandler.DEFAULT_WAIT_MILLIS, equalTo(61 * 1000l));
+                        GitHubAbuseLimitHandler.DEFAULT_WAIT_MILLIS = 3210l;
+                        long waitTime = parseWaitTime(connectorResponse);
+                        assertThat(waitTime, equalTo(GitHubAbuseLimitHandler.DEFAULT_WAIT_MILLIS));
+
                         assertThat(connectorResponse.header("Status"), equalTo("403 Forbidden"));
 
+                        
                         checkErrorMessageMatches(connectorResponse,
                                 "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
-                        GitHubAbuseLimitHandler.FAIL.onError(connectorResponse);
+                        GitHubAbuseLimitHandler.WAIT.onError(connectorResponse);
                     }
                 })
                 .build();
 
         gitHub.getMyself();
         assertThat(mockGitHub.getRequestCount(), equalTo(1));
-        try {
-            getTempRepository();
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getMessage(), equalTo("Abuse limit reached"));
-        }
-        assertThat(mockGitHub.getRequestCount(), equalTo(2));
+
+        getTempRepository();
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));    
     }
 
     /**
@@ -443,31 +435,24 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                                         "/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests"));
                         assertThat(connectorResponse.allHeaders(), instanceOf(Map.class));
                         assertThat(connectorResponse.header("Status"), equalTo("429 Too Many Requests"));
-                        assertThat(connectorResponse.header("Retry-After"), equalTo("42"));
+                        assertThat(connectorResponse.header("Retry-After"), equalTo("8"));
 
                         checkErrorMessageMatches(connectorResponse,
                                 "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
-                        // Because we've overridden onError to bypass the wait, we don't cover the wait calculation
-                        // logic
-                        // Manually invoke it to make sure it's what we intended
-                        long waitTime = parseWaitTime(connectorResponse);
-                        assertThat(waitTime, equalTo(42 * 1000l));
 
-                        GitHubAbuseLimitHandler.FAIL.onError(connectorResponse);
+                        long waitTime = parseWaitTime(connectorResponse);
+                        assertThat(waitTime, equalTo(8 * 1000l));
+
+                        GitHubAbuseLimitHandler.WAIT.onError(connectorResponse);
                     }
                 })
                 .build();
 
         gitHub.getMyself();
         assertThat(mockGitHub.getRequestCount(), equalTo(1));
-        try {
-            getTempRepository();
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getMessage(), equalTo("Abuse limit reached"));
-        }
-        assertThat(mockGitHub.getRequestCount(), equalTo(2));
+
+        getTempRepository();
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));    
     }
 
     /**
@@ -495,33 +480,26 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                                 endsWith(
                                         "/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests_Date_Retry_After"));
                         assertThat(connectorResponse.header("Status"), equalTo("429 Too Many Requests"));
-                        assertThat(connectorResponse.header("Retry-After"), startsWith("Mon"));
+                        assertThat(connectorResponse.header("Retry-After"), containsString("GMT"));
 
                         checkErrorMessageMatches(connectorResponse,
                                 "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
 
-                        // Because we've overridden onError to bypass the wait, we don't cover the wait calculation
-                        // logic
-                        // Manually invoke it to make sure it's what we intended
                         long waitTime = parseWaitTime(connectorResponse);
-                        // The exact value here will depend on when the test is run, but it should be positive, and huge
-                        assertThat(waitTime, greaterThan(1000 * 1000l));
+                        // The exact value here will depend on when the test is run
+                        assertThat(waitTime, Matchers.lessThan(GitHubAbuseLimitHandler.DEFAULT_WAIT_MILLIS));
+                        assertThat(waitTime, Matchers.greaterThan(3 * 1000l));
 
-                        GitHubAbuseLimitHandler.FAIL.onError(connectorResponse);
+                        GitHubAbuseLimitHandler.WAIT.onError(connectorResponse);
                     }
                 })
                 .build();
 
         gitHub.getMyself();
         assertThat(mockGitHub.getRequestCount(), equalTo(1));
-        try {
-            getTempRepository();
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getMessage(), equalTo("Abuse limit reached"));
-        }
-        assertThat(mockGitHub.getRequestCount(), equalTo(2));
+
+        getTempRepository();
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));    
     }
 
     /**
@@ -557,13 +535,11 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         checkErrorMessageMatches(connectorResponse,
                                 "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
 
-                        // Because we've overridden onError to bypass the wait, we don't cover the wait calculation
-                        // logic
-                        // Manually invoke it to make sure it's what we intended
+                        GitHubAbuseLimitHandler.DEFAULT_WAIT_MILLIS = 3210l;
                         long waitTime = parseWaitTime(connectorResponse);
-                        assertThat(waitTime, greaterThan(60000l));
-
-                        GitHubAbuseLimitHandler.FAIL.onError(connectorResponse);
+                        assertThat(waitTime, equalTo(GitHubAbuseLimitHandler.DEFAULT_WAIT_MILLIS));
+        
+                        GitHubAbuseLimitHandler.WAIT.onError(connectorResponse);
                     }
                 })
                 .build();

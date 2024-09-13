@@ -135,6 +135,9 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
         }
     };
 
+    // If "Retry-After" missing, wait for unambiguously over one minute per GitHub guidance
+    static long DEFAULT_WAIT_MILLIS = 61 * 1000;
+
     /*
      * Exposed for testability. Given an http response, find the retry-after header field and parse it as either a
      * number or a date (the spec allows both). If no header is found, wait for a reasonably amount of time.
@@ -142,8 +145,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
     static long parseWaitTime(GitHubConnectorResponse connectorResponse) {
         String v = connectorResponse.header("Retry-After");
         if (v == null) {
-            // can't tell, wait for unambiguously over one minute per GitHub guidance
-            return 61 * 1000;
+            return DEFAULT_WAIT_MILLIS;
         }
 
         try {

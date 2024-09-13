@@ -416,8 +416,8 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         assertThat(e.getCause().getMessage(), equalTo("unknown protocol: gopher"));
 
         e = Assert.assertThrows(GHException.class, () -> GitHubRequest.getApiURL("bogus", "/endpoint"));
-        assertThat(e.getCause(), instanceOf(MalformedURLException.class));
-        assertThat(e.getCause().getMessage(), equalTo("no protocol: bogus/endpoint"));
+        assertThat(e.getCause(), instanceOf(IllegalArgumentException.class));
+        assertThat(e.getCause().getMessage(), equalTo("URI is not absolute"));
 
         e = Assert.assertThrows(GHException.class,
                 () -> GitHubRequest.getApiURL(null, "gopher://api.test.github.com/endpoint"));

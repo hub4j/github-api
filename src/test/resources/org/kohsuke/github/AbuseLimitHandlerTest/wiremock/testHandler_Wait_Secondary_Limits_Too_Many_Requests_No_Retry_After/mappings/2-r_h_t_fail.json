@@ -1,8 +1,8 @@
 {
   "id": "79fb1092-8bf3-4274-bc8e-ca126c9d9261",
-  "name": "repos_hub4j-test-org_temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests_Date_Retry_After",
+  "name": "repos_hub4j-test-org_temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests_No_Retry_After",
   "request": {
-    "url": "/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests_Date_Retry_After",
+    "url": "/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests_No_Retry_After",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -18,7 +18,7 @@
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "429 Too Many Requests",
-      "Retry-After": "{{now offset='8 seconds' timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
+      "gh-limited-by": "search-elapsed-time-shared-grouped",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [
         "Accept, Authorization, Cookie, X-GitHub-OTP",
@@ -40,10 +40,10 @@
       "X-GitHub-Request-Id": "CC37:2605:3F982:4E949:5E3C5BFC"
     }
   },
-  "uuid": "22fb1092-8bf3-4274-bc8e-ca126c9d9261",
+  "uuid": "39fb1092-8bf3-4274-bc8e-ca126c9d9261",
   "persistent": true,
-  "scenarioName": "scenario-1-repos-hub4j-test-org-temp-testHandler_Wait_Secondary_Limits2",
+  "scenarioName": "scenario-1-repos-hub4j-test-org-temp-testHandler_Wait_Secondary_Limits3",
   "requiredScenarioState": "Started",
-  "newScenarioState": "scenario-1-repos-hub4j-test-org-temp-testHandler_Wait_Secondary_Limits2-2",
+  "newScenarioState": "scenario-1-repos-hub4j-test-org-temp-testHandler_Wait_Secondary_Limits3-2",
   "insertionIndex": 2
 }

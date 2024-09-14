@@ -1,8 +1,8 @@
 {
   "id": "574da117-6845-46d8-b2c1-4415546ca670",
-  "name": "repos_hub4j-test-org_temp-testHandler_Wait_Secondary_Limits",
+  "name": "repos_hub4j-test-org_temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests",
   "request": {
-    "url": "/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits",
+    "url": "/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits_Too_Many_Requests",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -42,7 +42,7 @@
       "X-GitHub-Request-Id": "CC37:2605:3FADC:4EA8C:5E3C5C02"
     }
   },
-  "uuid": "174da117-6845-46d8-b2c1-4415546ca670",
+  "uuid": "574da117-6845-46d8-b2c1-4415546ca670",
   "persistent": true,
   "scenarioName": "scenario-1-repos-hub4j-test-org-temp-testHandler_Wait_Secondary_Limits1",
   "requiredScenarioState": "scenario-1-repos-hub4j-test-org-temp-testHandler_Wait_Secondary_Limits1-2",

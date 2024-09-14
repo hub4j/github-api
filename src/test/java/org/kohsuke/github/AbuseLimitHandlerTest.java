@@ -376,7 +376,6 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
 
                         assertThat(connectorResponse.header("Status"), equalTo("403 Forbidden"));
 
-                        
                         checkErrorMessageMatches(connectorResponse,
                                 "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
                         GitHubAbuseLimitHandler.WAIT.onError(connectorResponse);
@@ -388,7 +387,7 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(1));
 
         getTempRepository();
-        assertThat(mockGitHub.getRequestCount(), equalTo(3));    
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
     }
 
     /**
@@ -452,7 +451,7 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(1));
 
         getTempRepository();
-        assertThat(mockGitHub.getRequestCount(), equalTo(3));    
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
     }
 
     /**
@@ -499,7 +498,7 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(1));
 
         getTempRepository();
-        assertThat(mockGitHub.getRequestCount(), equalTo(3));    
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
     }
 
     /**
@@ -538,7 +537,7 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                         GitHubAbuseLimitHandler.DEFAULT_WAIT_MILLIS = 3210l;
                         long waitTime = parseWaitTime(connectorResponse);
                         assertThat(waitTime, equalTo(GitHubAbuseLimitHandler.DEFAULT_WAIT_MILLIS));
-        
+
                         GitHubAbuseLimitHandler.WAIT.onError(connectorResponse);
                     }
                 })

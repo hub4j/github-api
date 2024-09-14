@@ -9,7 +9,6 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -67,14 +66,11 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
     public void testHandler_Fail() throws Exception {
         // Customized response that templates the date to keep things working
         snapshotNotAllowed();
-        final HttpURLConnection[] savedConnection = new HttpURLConnection[1];
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withAbuseLimitHandler(new GitHubAbuseLimitHandler() {
                     @Override
                     public void onError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-                        savedConnection[0] = null;
-                        HttpURLConnection uc = null;
                         // Verify
                         // assertThat(GitHubClient.parseInstant(connectorResponse.header("Date")).toEpochMilli(),
                         // Matchers.greaterThanOrEqualTo(new Date().getTime() - 10000));

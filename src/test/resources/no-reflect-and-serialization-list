@@ -69,18 +69,6 @@ org.kohsuke.github.extras.authorization.JwtBuilderUtil$ReflectionBuilderImpl
 org.kohsuke.github.extras.authorization.JWTTokenProvider
 org.kohsuke.github.extras.HttpClientGitHubConnector
 org.kohsuke.github.extras.HttpClientGitHubConnector$HttpClientGitHubConnectorResponse
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$1
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$BufferedRequestBody
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$DelegatingHttpsURLConnection
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$OkHttpsURLConnection
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$OkHttpURLConnection
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$OkHttpURLConnection$NetworkInterceptor
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$OutputStreamRequestBody$1
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$OutputStreamRequestBody
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$ResponseBodyInputStream
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$StreamedRequestBody
-org.kohsuke.github.extras.okhttp3.ObsoleteUrlFactory$UnexpectedException
 org.kohsuke.github.extras.okhttp3.OkHttpConnector
 org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector
 org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector$OkHttpGitHubConnectorResponse
@@ -91,7 +79,5 @@ org.kohsuke.github.function.InputStreamFunction
 org.kohsuke.github.function.SupplierThrows
 org.kohsuke.github.internal.DefaultGitHubConnector
 org.kohsuke.github.internal.EnumUtils
-org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter
-org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter$HttpURLConnectionGitHubConnectorResponse
 org.kohsuke.github.internal.Previews
 org.kohsuke.github.EnterpriseManagedSupport

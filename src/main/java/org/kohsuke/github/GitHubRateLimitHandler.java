@@ -5,9 +5,10 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.net.HttpURLConnection;
 
 import javax.annotation.Nonnull;
+
+import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -31,7 +32,7 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
      */
     @Override
     boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN
+        return connectorResponse.statusCode() == HTTP_FORBIDDEN
                 && "0".equals(connectorResponse.header("X-RateLimit-Remaining"));
     }
 

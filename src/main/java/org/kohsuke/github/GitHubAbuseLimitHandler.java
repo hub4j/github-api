@@ -4,12 +4,13 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.net.HttpURLConnection;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import javax.annotation.Nonnull;
+
+import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -56,7 +57,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      * @return true if the status code is HTTP_FORBIDDEN
      */
     private boolean isForbidden(GitHubConnectorResponse connectorResponse) {
-        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN;
+        return connectorResponse.statusCode() == HTTP_FORBIDDEN;
     }
 
     /**

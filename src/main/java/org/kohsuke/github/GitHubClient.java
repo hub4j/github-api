@@ -22,11 +22,15 @@ import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.net.ssl.SSLHandshakeException;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
-import static java.net.HttpURLConnection.*;
+import static java.net.HttpURLConnection.HTTP_ACCEPTED;
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static java.net.HttpURLConnection.HTTP_MOVED_PERM;
+import static java.net.HttpURLConnection.HTTP_MOVED_TEMP;
+import static java.net.HttpURLConnection.HTTP_NOT_MODIFIED;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.util.logging.Level.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
@@ -440,13 +444,6 @@ class GitHubClient {
                 if (retries > 0 && e.connectorRequest != null) {
                     connectorRequest = e.connectorRequest;
                 }
-            } catch (SocketException | SocketTimeoutException | SSLHandshakeException e) {
-                // These transient errors thrown by HttpURLConnection
-                if (retries > 0) {
-                    logRetryConnectionError(e, connectorRequest.url(), retries);
-                    continue;
-                }
-                throw interpretApiError(e, connectorRequest, connectorResponse);
             } catch (IOException e) {
                 throw interpretApiError(e, connectorRequest, connectorResponse);
             } finally {
@@ -656,10 +653,10 @@ class GitHubClient {
     }
 
     private static boolean shouldIgnoreBody(@Nonnull GitHubConnectorResponse connectorResponse) {
-        if (connectorResponse.statusCode() == HttpURLConnection.HTTP_NOT_MODIFIED) {
+        if (connectorResponse.statusCode() == HTTP_NOT_MODIFIED) {
             // special case handling for 304 unmodified, as the content will be ""
             return true;
-        } else if (connectorResponse.statusCode() == HttpURLConnection.HTTP_ACCEPTED) {
+        } else if (connectorResponse.statusCode() == HTTP_ACCEPTED) {
 
             // Response code 202 means data is being generated or an action that can require some time is triggered.
             // This happens in specific cases:

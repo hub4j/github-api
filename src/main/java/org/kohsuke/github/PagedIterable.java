@@ -37,9 +37,6 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      * @return the paged iterable
      */
     public PagedIterable<T> withPageSize(int size) {
-        if (size < 0) {
-            size = 0;
-        }
         this.pageSize = size;
         return this;
     }

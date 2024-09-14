@@ -598,7 +598,6 @@ public class GHOrganization extends GHPerson {
      * List all the repositories using a default of 30 items page size.
      *
      * @return the paged iterable
-     * @deprecated Use #listRepositories().withPageSize() instead.
      */
     @Override
     public PagedIterable<GHRepository> listRepositories() {

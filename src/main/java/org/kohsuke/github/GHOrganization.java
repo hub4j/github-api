@@ -546,7 +546,7 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * List up repositories that has some open pull requests.
+     * List repositories that has some open pull requests.
      * <p>
      * This used to be an efficient method that didn't involve traversing every repository, but now it doesn't do any
      * optimization.
@@ -595,9 +595,10 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Lists up all the repositories using the specified page size.
+     * List all the repositories using a default of 30 items page size.
      *
      * @return the paged iterable
+     * @deprecated Use #listRepositories().withPageSize() instead.
      */
     @Override
     public PagedIterable<GHRepository> listRepositories() {

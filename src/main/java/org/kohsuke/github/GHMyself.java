@@ -38,6 +38,19 @@ public class GHMyself extends GHUser {
     }
 
     /**
+     * Gets emails.
+     *
+     * @return the emails
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@link #getEmails2()}
+     */
+    @Deprecated
+    public List<String> getEmails() throws IOException {
+        return listEmails().toList().stream().map(email -> email.getEmail()).toList();
+    }
+
+    /**
      * Returns the read-only list of e-mail addresses configured for you.
      * <p>
      * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
@@ -46,9 +59,23 @@ public class GHMyself extends GHUser {
      * @return Always non-null.
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #listEmails()}
      */
-    public List<GHEmail> getEmails() throws IOException {
-        return root().createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null).toList();
+    @Deprecated
+    public List<GHEmail> getEmails2() throws IOException {
+        return listEmails().toList();
+    }
+
+    /**
+     * Returns the read-only list of e-mail addresses configured for you.
+     * <p>
+     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
+     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
+     *
+     * @return Always non-null.
+     */
+    public PagedIterable<GHEmail> listEmails() {
+        return root().createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null);
     }
 
     /**

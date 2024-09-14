@@ -78,7 +78,7 @@ public abstract class GHPerson extends GHObject {
     }
 
     /**
-     * Lists up all the repositories using a 30 items page size.
+     * List all the repositories using a default of 30 items page size.
      * <p>
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      *
@@ -89,6 +89,20 @@ public abstract class GHPerson extends GHObject {
                 .withUrlPath("/users/" + login + "/repos")
                 .toIterable(GHRepository[].class, null)
                 .withPageSize(30);
+    }
+
+    /**
+     * Lists up all the repositories using the specified page size.
+     *
+     * @param pageSize
+     *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
+     *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     * @return the paged iterable
+     * @deprecated Use #listRepositories().withPageSize() instead.
+     */
+    @Deprecated
+    public PagedIterable<GHRepository> listRepositories(final int pageSize) {
+        return listRepositories().withPageSize(pageSize);
     }
 
     /**

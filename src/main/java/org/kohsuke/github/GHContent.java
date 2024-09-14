@@ -124,7 +124,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     @Deprecated
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public String getContent() throws IOException {
-        return new String(Base64.getMimeDecoder().decode(getEncodedContent()));
+        return new String(readDecodedContent());
     }
 
     /**
@@ -180,11 +180,22 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public InputStream read() throws IOException {
-        refresh(content);
+        return new ByteArrayInputStream(readDecodedContent());
+    }
+
+    /**
+     * Retrieves the decoded bytes of the blob.
+     *
+     * @return the input stream
+     * @throws IOException
+     *             the io exception
+     */
+    private byte[] readDecodedContent() throws IOException {
+        String encodedContent = getEncodedContent();
         if (encoding.equals("base64")) {
             try {
                 Base64.Decoder decoder = Base64.getMimeDecoder();
-                return new ByteArrayInputStream(decoder.decode(content.getBytes(StandardCharsets.US_ASCII)));
+                return decoder.decode(encodedContent.getBytes(StandardCharsets.US_ASCII));
             } catch (IllegalArgumentException e) {
                 throw new AssertionError(e); // US-ASCII is mandatory
             }

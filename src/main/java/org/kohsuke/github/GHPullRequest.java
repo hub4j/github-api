@@ -295,11 +295,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * for test purposes only.
      *
      * @return the mergeable no refresh
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    @Deprecated
-    Boolean getMergeableNoRefresh() throws IOException {
+    Boolean getMergeableNoRefresh() {
         return mergeable;
     }
 

@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -51,34 +50,6 @@ public class GHBranchProtectionBuilder {
      */
     public GHBranchProtectionBuilder addRequiredStatusChecks(Collection<GHBranchProtection.Check> checks) {
         getStatusChecks().checks.addAll(checks);
-        return this;
-    }
-
-    /**
-     * Add required checks gh branch protection builder.
-     *
-     * @param checks
-     *            the checks
-     * @return the gh branch protection builder
-     */
-    @Deprecated
-    public GHBranchProtectionBuilder addRequiredChecks(Collection<String> checks) {
-        getStatusChecks().checks.addAll(checks.stream()
-                .map(context -> new GHBranchProtection.Check(context, null))
-                .collect(Collectors.toList()));
-        return this;
-    }
-
-    /**
-     * Add required checks gh branch protection builder.
-     *
-     * @param checks
-     *            the checks
-     * @return the gh branch protection builder
-     */
-    @Deprecated
-    public GHBranchProtectionBuilder addRequiredChecks(String... checks) {
-        addRequiredChecks(Arrays.asList(checks));
         return this;
     }
 

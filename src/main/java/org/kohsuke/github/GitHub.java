@@ -97,7 +97,7 @@ public class GitHub {
      *            The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
      *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
      *            historical reasons, this parameter still accepts the bare domain name, but that's considered
-     *            deprecated. Password is also considered deprecated as it is no longer required for api usage.
+     *            deprecated.
      * @param connector
      *            a connector
      * @param rateLimitHandler

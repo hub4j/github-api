@@ -51,7 +51,7 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     public void testEnableBranchProtections() throws Exception {
         // team/user restrictions require an organization repo to test against
         GHBranchProtection protection = branch.enableProtection()
-                .addRequiredChecks("test-status-check")
+                .addRequiredChecks(new GHBranchProtection.Check("test-status-check", null))
                 .requireBranchIsUpToDate()
                 .requireCodeOwnReviews()
                 .requireLastPushApproval()

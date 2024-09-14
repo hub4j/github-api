@@ -8,7 +8,7 @@ import java.util.*;
  * A Github App Installation Token.
  *
  * @author Paulo Miguel Almeida
- * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
+ * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
 public class GHAppInstallationToken extends GitHubInteractiveObject {
     private String token;

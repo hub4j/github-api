@@ -238,7 +238,7 @@ public class GitHubBuilder implements Cloneable {
      * @param appInstallationToken
      *            A string containing the GitHub App installation token
      * @return the configured Builder from given GitHub App installation token.
-     * @see GHAppInstallation#createToken(java.util.Map) GHAppInstallation#createToken(java.util.Map)
+     * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
      */
     public GitHubBuilder withAppInstallationToken(String appInstallationToken) {
         return withAuthorizationProvider(ImmutableAuthorizationProvider.fromAppInstallationToken(appInstallationToken));

@@ -49,7 +49,6 @@ public class GHInvitation extends GHObject {
      *
      * @return the html url
      */
-    @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }

@@ -13,10 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.kohsuke.github.extras.okhttp3.OkHttpConnector;
 
 import java.io.Closeable;
 import java.io.InputStream;
@@ -57,17 +55,6 @@ public class ArchTests {
             .withImportOption(new ImportOption.DoNotIncludeJars())
             .importPackages("org.kohsuke.github");
 
-    private static final DescribedPredicate<JavaAnnotation<?>> previewAnnotationWithNoMediaType = new DescribedPredicate<JavaAnnotation<?>>(
-            "preview has no required media types defined") {
-
-        @Override
-        public boolean test(JavaAnnotation<?> javaAnnotation) {
-            boolean isPreview = javaAnnotation.getRawType().isEquivalentTo(Preview.class);
-            Object[] values = (Object[]) javaAnnotation.getProperties().get("value");
-            return isPreview && values != null && values.length < 1;
-        }
-    };
-
     /**
      * Before class.
      */
@@ -92,16 +79,6 @@ public class ArchTests {
                 .because(reason);
 
         onlyAssertThatRule.check(testClassFiles);
-    }
-
-    /**
-     * Test api stability.
-     */
-    @Test
-    public void testApiStability() {
-        assertThat("OkHttpConnector must implement HttpConnector",
-                Arrays.asList(OkHttpConnector.class.getInterfaces()),
-                Matchers.containsInAnyOrder(HttpConnector.class));
     }
 
     /**

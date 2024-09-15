@@ -2,9 +2,11 @@ package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.junit.Test;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
+
+import javax.annotation.Nonnull;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -61,7 +63,7 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(RateLimitHandler.FAIL)
+                .withRateLimitHandler(GitHubRateLimitHandler.FAIL)
                 .build();
 
         gitHub.getMyself();
@@ -91,7 +93,7 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(RateLimitHandler.FAIL)
+                .withRateLimitHandler(GitHubRateLimitHandler.FAIL)
                 .build();
 
         gitHub.getMyself();
@@ -124,7 +126,7 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(RateLimitHandler.WAIT)
+                .withRateLimitHandler(GitHubRateLimitHandler.WAIT)
                 .build();
 
         gitHub.getMyself();
@@ -146,9 +148,9 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(new RateLimitHandler() {
+                .withRateLimitHandler(new GitHubRateLimitHandler() {
                     @Override
-                    public void onError(IOException e, HttpURLConnection uc) throws IOException {
+                    public void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
                     }
                 })
                 .build();

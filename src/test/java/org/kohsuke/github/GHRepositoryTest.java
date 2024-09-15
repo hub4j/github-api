@@ -13,7 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -129,7 +128,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         String httpTransport = "https://github.com/hub4j-test-org/temp-testGetters.git";
         assertThat(r.getHttpTransportUrl(), equalTo(httpTransport));
-        assertThat(r.gitHttpTransportUrl(), equalTo(httpTransport));
 
         assertThat(r.getName(), equalTo("temp-testGetters"));
         assertThat(r.getFullName(), equalTo("hub4j-test-org/temp-testGetters"));
@@ -251,7 +249,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listStargazers() throws IOException {
         GHRepository repository = getRepository();
-        assertThat(repository.listStargazers2().toList(), is(empty()));
+        assertThat(repository.listStargazers().toList(), is(empty()));
 
         repository = gitHub.getOrganization("hub4j").getRepository("github-api");
         Iterable<GHStargazer> stargazers = repository.listStargazers2();
@@ -599,7 +597,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         users.add(user);
         users.add(gitHub.getUser("jimmysombrero2"));
-        repo.addCollaborators(users, GHOrganization.Permission.PUSH);
+        repo.addCollaborators(users, RepositoryRole.from(GHOrganization.Permission.PUSH));
 
         GHPersonSet<GHUser> collabs = repo.getCollaborators();
         GHUser colabUser = collabs.byLogin("jimmysombrero");
@@ -814,42 +812,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
 
         ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHFork.PARENT_ONLY);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
-    }
-
-    /**
-     * Gh repository search builder fork deprecated enum.
-     */
-    @Test
-    public void ghRepositorySearchBuilderForkDeprecatedEnum() {
-        GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_AND_FORKS);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.FORKS_ONLY);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:only")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_ONLY);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
-    }
-
-    /**
-     * Gh repository search builder fork deprecated string.
-     */
-    @Test
-    public void ghRepositorySearchBuilderForkDeprecatedString() {
-        GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(GHFork.PARENT_AND_FORKS.toString());
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(GHFork.FORKS_ONLY.toString());
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:only")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(null);
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
     }
 
@@ -1087,19 +1049,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository(gitHub);
         GHPersonSet<GHUser> collaborators = repo.getCollaborators();
         assertThat(collaborators.size(), greaterThan(0));
-    }
-
-    /**
-     * Gets the post commit hooks.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void getPostCommitHooks() throws Exception {
-        GHRepository repo = getRepository(gitHub);
-        Set<URL> postcommitHooks = repo.getPostCommitHooks();
-        assertThat(postcommitHooks, is(empty()));
     }
 
     /**
@@ -1662,22 +1611,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(repository.getOwner().getLogin(), equalTo(owner));
         assertThat(repository.getStargazersCount(), is(1));
         repository.star();
-        assertThat(repository.listStargazers2().toList().size(), is(2));
+        assertThat(repository.listStargazers().toList().size(), is(2));
         repository.unstar();
         assertThat(repository.listStargazers().toList().size(), is(1));
-    }
-
-    /**
-     * Test to check getRepoVariable method.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testRepoActionVariable() throws Exception {
-        GHRepository repository = getRepository();
-        GHRepositoryVariable variable = repository.getRepoVariable("myvar");
-        assertThat(variable.getValue(), is("this is my var value"));
     }
 
     /**

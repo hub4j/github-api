@@ -218,18 +218,6 @@ public class GHMilestone extends GHObject {
      *            the repo
      * @return the gh milestone
      */
-    @Deprecated
-    public GHMilestone wrap(GHRepository repo) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
-     * Wrap gh milestone.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh milestone
-     */
     GHMilestone lateBind(GHRepository repo) {
         this.owner = repo;
         return this;

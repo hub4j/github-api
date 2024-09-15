@@ -2,8 +2,6 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.net.URL;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class GHRequestedAction.
@@ -53,17 +51,6 @@ public class GHRequestedAction extends GHObject {
      */
     String getDescription() {
         return description;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() {
-        return null;
     }
 
 }

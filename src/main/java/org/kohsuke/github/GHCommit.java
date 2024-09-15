@@ -58,18 +58,6 @@ public class GHCommit {
         };
 
         /**
-         * Instantiates a new short info.
-         *
-         * @param commit
-         *            the commit
-         */
-        ShortInfo(GitCommit commit) {
-            // Inherited copy constructor, used for bridge method from {@link GitCommit},
-            // which is used in {@link GHContentUpdateResponse}) to {@link GHCommit}.
-            super(commit);
-        }
-
-        /**
          * Gets the parent SHA 1 s.
          *
          * @return the parent SHA 1 s
@@ -83,32 +71,6 @@ public class GHCommit {
             return shortInfoParents;
         }
 
-    }
-
-    /**
-     * The type GHAuthor.
-     *
-     * @deprecated Use {@link GitUser} instead.
-     */
-    @Deprecated
-    public static class GHAuthor extends GitUser {
-
-        /**
-         * Instantiates a new GH author.
-         */
-        public GHAuthor() {
-            super();
-        }
-
-        /**
-         * Instantiates a new GH author.
-         *
-         * @param user
-         *            the user
-         */
-        public GHAuthor(GitUser user) {
-            super(user);
-        }
     }
 
     /**
@@ -405,19 +367,6 @@ public class GHCommit {
      */
     public URL getUrl() {
         return GitHubClient.parseURL(url);
-    }
-
-    /**
-     * List of files changed/added/removed in this commit.
-     *
-     * @return Can be empty but never null.
-     * @throws IOException
-     *             on error
-     * @deprecated Use {@link #listFiles()} instead.
-     */
-    @Deprecated
-    public List<File> getFiles() throws IOException {
-        return listFiles().toList();
     }
 
     /**

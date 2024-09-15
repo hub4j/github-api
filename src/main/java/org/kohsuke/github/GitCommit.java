@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.AbstractList;
@@ -70,28 +69,6 @@ public class GitCommit {
     };
 
     /**
-     * Instantiates a new git commit.
-     *
-     * @param commit
-     *            the commit
-     */
-    GitCommit(GitCommit commit) {
-        // copy constructor used to cast to GitCommit.ShortInfo and from there
-        // to GHCommit, for GHContentUpdateResponse bridge method to GHCommit
-        this.owner = commit.getOwner();
-        this.sha = commit.getSha();
-        this.node_id = commit.getNodeId();
-        this.url = commit.getUrl();
-        this.html_url = commit.getHtmlUrl();
-        this.author = commit.getAuthor();
-        this.committer = commit.getCommitter();
-        this.message = commit.getMessage();
-        this.verification = commit.getVerification();
-        this.tree = commit.getTree();
-        this.parents = commit.getParents();
-    }
-
-    /**
      * Gets owner.
      *
      * @return the repository that contains the commit.
@@ -151,15 +128,8 @@ public class GitCommit {
      *
      * @return the author
      */
-    @WithBridgeMethods(value = GHCommit.GHAuthor.class, adapterMethod = "gitUserToGHAuthor")
     public GitUser getAuthor() {
         return author;
-    }
-
-    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD",
-            justification = "bridge method of getAuthor & getCommitter")
-    private Object gitUserToGHAuthor(GitUser author, Class targetType) {
-        return new GHCommit.GHAuthor(author);
     }
 
     /**
@@ -176,7 +146,6 @@ public class GitCommit {
      *
      * @return the committer
      */
-    @WithBridgeMethods(value = GHCommit.GHAuthor.class, adapterMethod = "gitUserToGHAuthor")
     public GitUser getCommitter() {
         return committer;
     }

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -102,18 +101,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
         private GHUser author;
         private int total;
         private List<Week> weeks;
-
-        /**
-         * Gets the html url.
-         *
-         * @return the html url
-         * @throws IOException
-         *             Signals that an I/O exception has occurred.
-         */
-        @Override
-        public URL getHtmlUrl() throws IOException {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
 
         /**
          * Gets author.
@@ -288,18 +275,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
         public long getWeek() {
             return week;
         }
-
-        /**
-         * Gets the html url.
-         *
-         * @return the html url
-         * @throws IOException
-         *             Signals that an I/O exception has occurred.
-         */
-        @Override
-        public URL getHtmlUrl() throws IOException {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
     }
 
     /**
@@ -400,18 +375,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
     public static class Participation extends GHObject {
         private List<Integer> all;
         private List<Integer> owner;
-
-        /**
-         * Gets the html url.
-         *
-         * @return the html url
-         * @throws IOException
-         *             Signals that an I/O exception has occurred.
-         */
-        @Override
-        public URL getHtmlUrl() throws IOException {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
 
         /**
          * Gets all commits.

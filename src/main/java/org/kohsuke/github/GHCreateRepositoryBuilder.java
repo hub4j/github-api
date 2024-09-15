@@ -87,21 +87,6 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
     }
 
     /**
-     * Specifies whether the repository is a template.
-     *
-     * @param enabled
-     *            true if enabled
-     * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     * @deprecated Use {@link #isTemplate(boolean)} method instead
-     */
-    @Deprecated
-    public GHCreateRepositoryBuilder templateRepository(boolean enabled) throws IOException {
-        return isTemplate(enabled);
-    }
-
-    /**
      * Specifies the ownership of the repository.
      *
      * @param owner
@@ -122,7 +107,6 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @param templateRepo
      *            template repository
      * @return a builder to continue with building
-     * @see <a href="https://developer.github.com/v3/previews/">GitHub API Previews</a>
      */
     public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
         requester.withUrlPath("/repos/" + templateOwner + "/" + templateRepo + "/generate");
@@ -135,7 +119,6 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @param templateRepository
      *            the template repository as a GHRepository
      * @return a builder to continue with building
-     * @see <a href="https://developer.github.com/v3/previews/">GitHub API Previews</a>
      */
     public GHCreateRepositoryBuilder fromTemplateRepository(GHRepository templateRepository) {
         Objects.requireNonNull(templateRepository, "templateRepository cannot be null");

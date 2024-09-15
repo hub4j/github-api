@@ -28,7 +28,7 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
     protected GitHubBuilder getGitHubBuilder() {
         return super.getGitHubBuilder()
                 // ensure that only JWT will be used against the tests below
-                .withPassword(null, null)
+                .withOAuthToken(null, null)
                 .withJwtToken("bogus");
     }
 

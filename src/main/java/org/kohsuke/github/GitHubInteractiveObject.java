@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Objects;
 
@@ -37,19 +36,6 @@ abstract class GitHubInteractiveObject {
      */
     GitHubInteractiveObject(GitHub root) {
         this.root = root;
-    }
-
-    /**
-     * Get the root {@link GitHub} instance for this object.
-     *
-     * @return the root {@link GitHub} instance
-     *
-     * @deprecated For access to the {@link GitHub} instance, use a local copy instead of pulling it out of objects.
-     */
-    @Deprecated
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GitHub getRoot() {
-        return root();
     }
 
     /**

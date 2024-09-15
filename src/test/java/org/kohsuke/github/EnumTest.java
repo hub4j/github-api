@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import org.junit.Test;
-import org.kohsuke.github.internal.Previews;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -18,10 +17,6 @@ public class EnumTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void touchEnums() {
-        // Previews is deprecated but we want to maintain coverage until we remove it
-        assertThat(Previews.values().length, equalTo(16));
-        assertThat(Previews.ANTIOPE.mediaType(), equalTo("application/vnd.github.antiope-preview+json"));
-
         assertThat(GHCheckRun.AnnotationLevel.values().length, equalTo(3));
         assertThat(GHCheckRun.Conclusion.values().length, equalTo(9));
         assertThat(GHCheckRun.Status.values().length, equalTo(4));
@@ -89,7 +84,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHPullRequestReviewEvent.PENDING.toState(), equalTo(GHPullRequestReviewState.PENDING));
         assertThat(GHPullRequestReviewEvent.PENDING.action(), nullValue());
 
-        assertThat(GHPullRequestReviewState.values().length, equalTo(6));
+        assertThat(GHPullRequestReviewState.values().length, equalTo(5));
         assertThat(GHPullRequestReviewState.PENDING.toEvent(), equalTo(GHPullRequestReviewEvent.PENDING));
         assertThat(GHPullRequestReviewState.APPROVED.action(), equalTo(GHPullRequestReviewEvent.APPROVE.action()));
         assertThat(GHPullRequestReviewState.DISMISSED.toEvent(), nullValue());
@@ -105,8 +100,6 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHRepositoryDiscussion.State.values().length, equalTo(3));
 
         assertThat(GHRepositorySearchBuilder.Sort.values().length, equalTo(3));
-        assertThat(GHRepositorySearchBuilder.Fork.values().length, equalTo(3));
-        assertThat(GHRepositorySearchBuilder.Fork.PARENT_ONLY.toString(), equalTo(""));
 
         assertThat(GHRepositorySelection.values().length, equalTo(2));
 

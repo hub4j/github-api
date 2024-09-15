@@ -1,9 +1,5 @@
 package org.kohsuke.github.authorization;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 import javax.annotation.CheckForNull;
 
 /**
@@ -70,31 +66,6 @@ public class ImmutableAuthorizationProvider implements AuthorizationProvider {
      */
     public static AuthorizationProvider fromJwtToken(String jwtToken) {
         return new ImmutableAuthorizationProvider(String.format("Bearer %s", jwtToken));
-    }
-
-    /**
-     * Builds and returns a {@link AuthorizationProvider} from the given user/password pair
-     *
-     * @param login
-     *            The login for the user, usually the same as the username
-     * @param password
-     *            The password for the associated user
-     * @return a correctly configured {@link AuthorizationProvider} that will always return the credentials for the same
-     *         user and password combo
-     * @deprecated Login with password credentials are no longer supported by GitHub
-     */
-    @Deprecated
-    public static AuthorizationProvider fromLoginAndPassword(String login, String password) {
-        try {
-            String authorization = (String.format("%s:%s", login, password));
-            String charsetName = StandardCharsets.UTF_8.name();
-            String b64encoded = Base64.getEncoder().encodeToString(authorization.getBytes(charsetName));
-            String encodedAuthorization = String.format("Basic %s", b64encoded);
-            return new UserProvider(encodedAuthorization, login);
-        } catch (UnsupportedEncodingException e) {
-            // If UTF-8 isn't supported, there are bigger problems
-            throw new IllegalStateException("Could not generate encoded authorization", e);
-        }
     }
 
     @Override

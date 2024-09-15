@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
@@ -18,6 +17,8 @@ import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+
+import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -86,7 +87,7 @@ class GitHubResponse<T> {
     @CheckForNull
     static <T> T parseBody(GitHubConnectorResponse connectorResponse, Class<T> type) throws IOException {
 
-        if (connectorResponse.statusCode() == HttpURLConnection.HTTP_NO_CONTENT) {
+        if (connectorResponse.statusCode() == HTTP_NO_CONTENT) {
             if (type != null && type.isArray()) {
                 // no content for array should be empty array
                 return type.cast(Array.newInstance(type.getComponentType(), 0));

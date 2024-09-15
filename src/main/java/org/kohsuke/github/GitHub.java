@@ -25,13 +25,11 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
-import org.kohsuke.github.internal.GitHubConnectorHttpConnectorAdapter;
 
 import java.io.*;
 import java.util.*;
@@ -99,7 +97,7 @@ public class GitHub {
      *            The URL of GitHub (or GitHub enterprise) API endpoint, such as "https://api.github.com" or
      *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
      *            historical reasons, this parameter still accepts the bare domain name, but that's considered
-     *            deprecated. Password is also considered deprecated as it is no longer required for api usage.
+     *            deprecated.
      * @param connector
      *            a connector
      * @param rateLimitHandler
@@ -282,26 +280,6 @@ public class GitHub {
      *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
      *            historical reasons, this parameter still accepts the bare domain name, but that's considered
      *            deprecated.
-     * @param oauthAccessToken
-     *            the oauth access token
-     * @return the git hub
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #connectToEnterpriseWithOAuth(String, String, String)}
-     */
-    @Deprecated
-    public static GitHub connectToEnterprise(String apiUrl, String oauthAccessToken) throws IOException {
-        return connectToEnterpriseWithOAuth(apiUrl, null, oauthAccessToken);
-    }
-
-    /**
-     * Version that connects to GitHub Enterprise.
-     *
-     * @param apiUrl
-     *            The URL of GitHub (or GitHub Enterprise) API endpoint, such as "https://api.github.com" or
-     *            "http://ghe.acme.com/api/v3". Note that GitHub Enterprise has <code>/api/v3</code> in the URL. For
-     *            historical reasons, this parameter still accepts the bare domain name, but that's considered
-     *            deprecated.
      * @param login
      *            the login
      * @param oauthAccessToken
@@ -313,25 +291,6 @@ public class GitHub {
     public static GitHub connectToEnterpriseWithOAuth(String apiUrl, String login, String oauthAccessToken)
             throws IOException {
         return new GitHubBuilder().withEndpoint(apiUrl).withOAuthToken(oauthAccessToken, login).build();
-    }
-
-    /**
-     * Version that connects to GitHub Enterprise.
-     *
-     * @param apiUrl
-     *            the api url
-     * @param login
-     *            the login
-     * @param password
-     *            the password
-     * @return the git hub
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use with caution. Login with password is not a preferred method.
-     */
-    @Deprecated
-    public static GitHub connectToEnterprise(String apiUrl, String login, String password) throws IOException {
-        return new GitHubBuilder().withEndpoint(apiUrl).withPassword(login, password).build();
     }
 
     /**
@@ -347,45 +306,6 @@ public class GitHub {
      */
     public static GitHub connect(String login, String oauthAccessToken) throws IOException {
         return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).build();
-    }
-
-    /**
-     * Connect git hub.
-     *
-     * @param login
-     *            the login
-     * @param oauthAccessToken
-     *            the oauth access token
-     * @param password
-     *            the password
-     * @return the git hub
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #connectUsingOAuth(String)}.
-     */
-    @Deprecated
-    public static GitHub connect(String login, String oauthAccessToken, String password) throws IOException {
-        return new GitHubBuilder().withOAuthToken(oauthAccessToken, login).withPassword(login, password).build();
-    }
-
-    /**
-     * Connect using password git hub.
-     *
-     * @param login
-     *            the login
-     * @param password
-     *            the password
-     * @return the git hub
-     * @throws IOException
-     *             the io exception
-     * @see <a href=
-     *      "https://developer.github.com/changes/2020-02-14-deprecating-password-auth/#changes-to-make">Deprecating
-     *      password authentication and OAuth authorizations API</a>
-     * @deprecated Use {@link #connectUsingOAuth(String)} instead.
-     */
-    @Deprecated
-    public static GitHub connectUsingPassword(String login, String password) throws IOException {
-        return new GitHubBuilder().withPassword(login, password).build();
     }
 
     /**
@@ -480,30 +400,6 @@ public class GitHub {
     }
 
     /**
-     * Gets connector.
-     *
-     * @return the connector
-     * @deprecated HttpConnector has been replaced by GitHubConnector which is generally not useful outside of this
-     *             library. If you are using this method, file an issue describing your use case.
-     */
-    @Deprecated
-    public HttpConnector getConnector() {
-        return client.getConnector();
-    }
-
-    /**
-     * Sets the custom connector used to make requests to GitHub.
-     *
-     * @param connector
-     *            the connector
-     * @deprecated HttpConnector should not be changed. If you find yourself needing to do this, file an issue.
-     */
-    @Deprecated
-    public void setConnector(@Nonnull HttpConnector connector) {
-        client.setConnector(GitHubConnectorHttpConnectorAdapter.adapt(connector));
-    }
-
-    /**
      * Gets api url.
      *
      * @return the api url
@@ -568,7 +464,6 @@ public class GitHub {
      *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-    @WithBridgeMethods(value = GHUser.class)
     public GHMyself getMyself() throws IOException {
         client.requireCredential();
         return setMyself();
@@ -682,22 +577,6 @@ public class GitHub {
             throw new IllegalArgumentException("Repository name must be in format owner/repo");
         }
         return GHRepository.read(this, tokens[0], tokens[1]);
-    }
-
-    /**
-     * Gets the repository object from its ID.
-     *
-     * @param id
-     *            the id
-     * @return the repository by id
-     * @throws IOException
-     *             the io exception
-     * @deprecated Do not use this method. It was added due to misunderstanding of the type of parameter. Use
-     *             {@link #getRepositoryById(long)} instead
-     */
-    @Deprecated
-    public GHRepository getRepositoryById(String id) throws IOException {
-        return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class);
     }
 
     /**
@@ -884,27 +763,6 @@ public class GitHub {
     }
 
     /**
-     * Gets a single team by ID.
-     * <p>
-     * This method is no longer supported and throws an UnsupportedOperationException.
-     *
-     * @param id
-     *            the id
-     * @return the team
-     * @throws IOException
-     *             the io exception
-     * @see <a href="https://developer.github.com/v3/teams/#get-team-legacy">deprecation notice</a>
-     * @see <a href="https://github.blog/changelog/2022-02-22-sunset-notice-deprecated-teams-api-endpoints/">sunset
-     *      notice</a>
-     * @deprecated Use {@link GHOrganization#getTeam(long)}
-     */
-    @Deprecated
-    public GHTeam getTeam(int id) throws IOException {
-        throw new UnsupportedOperationException(
-                "This method is not supported anymore. Please use GHOrganization#getTeam(long).");
-    }
-
-    /**
      * Public events visible to you. Equivalent of what's displayed on https://github.com/
      *
      * @return the events
@@ -977,37 +835,11 @@ public class GitHub {
     }
 
     /**
-     * Creates a new repository.
-     *
-     * @param name
-     *            the name
-     * @param description
-     *            the description
-     * @param homepage
-     *            the homepage
-     * @param isPublic
-     *            the is public
-     * @return Newly created repository.
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
-     */
-    @Deprecated
-    public GHRepository createRepository(String name, String description, String homepage, boolean isPublic)
-            throws IOException {
-        return createRepository(name).description(description).homepage(homepage).private_(!isPublic).create();
-    }
-
-    /**
      * Starts a builder that creates a new repository.
      *
      * <p>
      * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()} to
      * finally create a repository.
-     *
-     * <p>
-     * To create a repository in an organization, see
-     * {@link GHOrganization#createRepository(String, String, String, GHTeam, boolean)}
      *
      * @param name
      *            the name

@@ -10,7 +10,6 @@ import java.util.Map;
  * Creates a access token for a GitHub App Installation.
  *
  * @author Paulo Miguel Almeida
- * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
 public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
@@ -32,22 +31,6 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
         super(root);
         this.apiUrlTail = apiUrlTail;
         this.builder = root.createRequest();
-    }
-
-    /**
-     * Instantiates a new GH app create token builder.
-     *
-     * @param root
-     *            the root
-     * @param apiUrlTail
-     *            the api url tail
-     * @param permissions
-     *            the permissions
-     */
-    @BetaApi
-    GHAppCreateTokenBuilder(GitHub root, String apiUrlTail, Map<String, GHPermissionType> permissions) {
-        this(root, apiUrlTail);
-        permissions(permissions);
     }
 
     /**

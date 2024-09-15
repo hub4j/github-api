@@ -30,33 +30,6 @@ import static java.util.logging.Level.FINEST;
 @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHRateLimit {
 
-    /**
-     * Remaining calls that can be made.
-     *
-     * @deprecated This field should never have been made public. Use {@link #getRemaining()}
-     */
-    @Deprecated
-    public int remaining;
-
-    /**
-     * Allotted API call per hour.
-     *
-     * @deprecated This field should never have been made public. Use {@link #getLimit()}
-     */
-    @Deprecated
-    public int limit;
-
-    /**
-     * The time at which the current rate limit window resets in UTC epoch seconds. WARNING: this field was implemented
-     * using {@link Date#Date(long)} which expects UTC epoch milliseconds, so this Date instance is meaningless as a
-     * date. To use this field in any meaningful way, it must be converted to a long using {@link Date#getTime()}
-     * multiplied by 1000.
-     *
-     * @deprecated This field should never have been made public. Use {@link #getResetDate()}
-     */
-    @Deprecated
-    public Date reset;
-
     @Nonnull
     private final Record core;
 
@@ -150,12 +123,6 @@ public class GHRateLimit {
         this.search = search;
         this.graphql = graphql;
         this.integrationManifest = integrationManifest;
-
-        // Deprecated fields
-        this.remaining = core.getRemaining();
-        this.limit = core.getLimit();
-        // This is wrong but is how this was implemented. Kept for backward compat.
-        this.reset = new Date(core.getResetEpochSeconds());
     }
 
     /**

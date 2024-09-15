@@ -32,7 +32,7 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
         // GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
 
         GHRepository repository = getTempRepository();
-        assertThat(repository.getReleases(), is(empty()));
+        assertThat(repository.listReleases().toList(), is(empty()));
 
         GHMilestone milestone = repository.createMilestone("Initial Release", "first one");
         GHIssue issue = repository.createIssue("Test Issue")
@@ -55,20 +55,20 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
 
     private void updateAsset(GHRelease release, GHAsset asset) throws IOException {
         asset.setLabel("test label");
-        assertThat(release.getAssets().get(0).getLabel(), equalTo("test label"));
+        assertThat(release.listAssets().toList().get(0).getLabel(), equalTo("test label"));
     }
 
     private void deleteAsset(GHRelease release, GHAsset asset) throws IOException {
         asset.delete();
-        assertThat(release.getAssets(), is(empty()));
+        assertThat(release.listAssets().toList(), is(empty()));
     }
 
     private GHAsset uploadAsset(GHRelease release) throws IOException {
         GHAsset asset = release.uploadAsset(new File("LICENSE.txt"), "application/text");
         assertThat(asset, notNullValue());
-        List<GHAsset> cachedAssets = release.assets();
+        List<GHAsset> cachedAssets = release.getAssets();
         assertThat(cachedAssets, is(empty()));
-        List<GHAsset> assets = release.getAssets();
+        List<GHAsset> assets = release.listAssets().toList();
         assertThat(assets.size(), equalTo(1));
         assertThat(assets.get(0).getName(), equalTo("LICENSE.txt"));
         assertThat(assets.get(0).getSize(), equalTo(1104L));
@@ -87,7 +87,7 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
                 .name("Test Release")
                 .body("How exciting!  To be able to programmatically create releases is a dream come true!")
                 .create();
-        List<GHRelease> releases = repository.getReleases();
+        List<GHRelease> releases = repository.listReleases().toList();
         assertThat(releases.size(), equalTo(1));
         GHRelease release = releases.get(0);
         assertThat(release.getName(), equalTo("Test Release"));

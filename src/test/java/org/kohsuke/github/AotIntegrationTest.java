@@ -1,4 +1,4 @@
-package org.kohsuke.aot;
+package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,6 +77,7 @@ public class AotIntegrationTest {
                 .map(jsonNode -> jsonNode.get("name"))
                 .map(JsonNode::toString)
                 .map(reflectConfigEntryClassName -> reflectConfigEntryClassName.replace("\"", ""))
-                .filter(x -> x.contains("org.kohsuke.github"));
+                .filter(x -> x.contains("org.kohsuke.github"))
+                .filter(x -> !x.contains("org.kohsuke.github.AotTest"));
     }
 }

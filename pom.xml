@@ -226,7 +226,7 @@
       <!--
       This plugin is used to generate AOT metadata during tests so that it can be
       compared against those in META-INF/native-image/org.kohsuke/github-api/*.
-      The tests are located in src/test/java/org.kohsuke.aot
+      The tests are start with the name "Aot..." 
       -->
       <plugin>
         <groupId>org.springframework.boot</groupId>

@@ -1,4 +1,4 @@
-package org.kohsuke.aot;
+package org.kohsuke.github;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.aot.hint.MemberCategory;

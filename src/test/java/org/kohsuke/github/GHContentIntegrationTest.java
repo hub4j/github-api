@@ -8,11 +8,11 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThrows;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -242,17 +242,15 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:49Z")));
         assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:49Z")));
 
-        // Changed this to assert null since bridge methods are missing.
-        assertThat(ghCommit, nullValue());
-        // assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Creating a file for integration tests."));
-        // assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-        // Assert.assertThrows(GHException.class, () -> ghCommit.getCommitShortInfo().getCommentCount());
+        assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Creating a file for integration tests."));
+        assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+        assertThrows(GHException.class, () -> ghCommit.getCommitShortInfo().getCommentCount());
 
-        // ghCommit.populate();
-        // assertThat("Populate GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+        ghCommit.populate();
+        assertThat("Populate GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
 
-        // expectedRequestCount = checkCommitUserInfo(gitCommit, ghCommit, expectedRequestCount);
-        // assertThat("Resolved GHUser for GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+        expectedRequestCount = checkCommitUserInfo(gitCommit, ghCommit, expectedRequestCount);
+        assertThat("Resolved GHUser for GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
 
         expectedRequestCount = checkCommitTree(gitCommit, ghCommit, expectedRequestCount);
 
@@ -271,13 +269,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     GHCommit getGHCommit(GHContentUpdateResponse resp) throws Exception {
-        for (Method method : resp.getClass().getMethods()) {
-            if (method.getName().equals("getCommit") && method.getReturnType().equals(GHCommit.class)) {
-                return (GHCommit) method.invoke(resp);
-            }
-        }
-        System.out.println("Unable to find bridge method");
-        return null;
+        return resp.getCommit().toGHCommit();
     }
 
     /**
@@ -303,16 +295,14 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:51Z")));
         assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:51Z")));
 
-        // Changed this to assert null since bridge methods are missing.
-        assertThat(ghCommit, nullValue());
-        // assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Updated file for integration tests."));
-        // assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+        assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Updated file for integration tests."));
+        assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
-        // ghCommit.populate();
-        // assertThat("Populate GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+        ghCommit.populate();
+        assertThat("Populate GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
 
-        // expectedRequestCount = checkCommitUserInfo(gitCommit, ghCommit, expectedRequestCount);
-        // assertThat("GHUser already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+        expectedRequestCount = checkCommitUserInfo(gitCommit, ghCommit, expectedRequestCount);
+        assertThat("GHUser already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
         expectedRequestCount = checkCommitTree(gitCommit, ghCommit, expectedRequestCount);
 
@@ -342,11 +332,9 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 equalTo("https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/" + gitCommit.getSHA1()));
         assertThat(gitCommit.getVerification(), notNullValue());
 
-        // Changed this to assert null since bridge methods are missing.
-        assertThat(ghCommit, nullValue());
-        // assertThat(ghCommit.getSHA1(), notNullValue());
-        // assertThat(ghCommit.getUrl().toString(),
-        // endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + ghCommit.getSHA1()));
+        assertThat(ghCommit.getSHA1(), notNullValue());
+        assertThat(ghCommit.getUrl().toString(),
+                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + ghCommit.getSHA1()));
 
         return expectedRequestCount;
     }
@@ -402,16 +390,13 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/" + gitCommit.getTree().getSha()));
         assertThat("GHTree already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
-        // Changed this to assert null since bridge methods are missing.
-        assertThat(ghCommit, nullValue());
-        // assertThat(ghCommit.getTree().getSha(), notNullValue());
-        // assertThat("GHCommit has to resolve GHTree", mockGitHub.getRequestCount(), equalTo(expectedRequestCount +=
-        // 1));
-        // assertThat(ghCommit.getTree().getUrl().toString(),
-        // endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/" + ghCommit.getTree().getSha()));
-        // assertThat("GHCommit resolving GHTree is not cached",
-        // mockGitHub.getRequestCount(),
-        // equalTo(expectedRequestCount += 2));
+        assertThat(ghCommit.getTree().getSha(), notNullValue());
+        assertThat("GHCommit has to resolve GHTree", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+        assertThat(ghCommit.getTree().getUrl().toString(),
+                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/" + ghCommit.getTree().getSha()));
+        assertThat("GHCommit resolving GHTree is not cached",
+                mockGitHub.getRequestCount(),
+                equalTo(expectedRequestCount += 2));
 
         return expectedRequestCount;
     }
@@ -432,10 +417,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     int checkCommitParents(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
         assertThat(gitCommit.getParentSHA1s().size(), is(greaterThan(0)));
         assertThat(gitCommit.getParentSHA1s().get(0), notNullValue());
-        // Changed this to assert null since bridge methods are missing.
-        assertThat(ghCommit, nullValue());
-        // assertThat(ghCommit.getParentSHA1s().size(), is(greaterThan(0)));
-        // assertThat(ghCommit.getParentSHA1s().get(0), notNullValue());
+        assertThat(ghCommit.getParentSHA1s().size(), is(greaterThan(0)));
+        assertThat(ghCommit.getParentSHA1s().get(0), notNullValue());
 
         return expectedRequestCount;
     }

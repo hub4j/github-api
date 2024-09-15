@@ -58,6 +58,18 @@ public class GHCommit {
         };
 
         /**
+         * Instantiates a new short info.
+         *
+         * @param commit
+         *            the commit
+         */
+        ShortInfo(GitCommit commit) {
+            // Inherited copy constructor, used for bridge method from {@link GitCommit},
+            // which is used in {@link GHContentUpdateResponse}) to {@link GHCommit}.
+            super(commit);
+        }
+
+        /**
          * Gets the parent SHA 1 s.
          *
          * @return the parent SHA 1 s

@@ -381,8 +381,16 @@
         <artifactId>japicmp-maven-plugin</artifactId>
         <version>0.21.2</version>
         <configuration>
+          <oldVersion>
+            <dependency>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>${project.artifactId}</artifactId>
+              <version>2.0.0-alpha-1</version>
+              <type>jar</type>
+            </dependency>
+          </oldVersion>
           <parameter>
-            <!-- <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications> -->
+            <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications> -->
             <!-- <breakBuildBasedOnSemanticVersioning>true</breakBuildBasedOnSemanticVersioning> -->
             <onlyModified>true</onlyModified>
             <includeSynthetic>true</includeSynthetic>

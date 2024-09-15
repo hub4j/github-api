@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.Sets;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -1049,6 +1051,75 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository(gitHub);
         GHPersonSet<GHUser> collaborators = repo.getCollaborators();
         assertThat(collaborators.size(), greaterThan(0));
+    }
+
+    /**
+     * Gets the post commit hooks.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void getPostCommitHooks() throws Exception {
+        GHRepository repo = getRepository(gitHub);
+        Set<URL> postcommitHooks = setupPostCommitHooks(repo);
+        assertThat(postcommitHooks, is(empty()));
+    }
+
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
+            justification = "It causes a performance degradation, but we have already exposed it to the API")
+    private Set<URL> setupPostCommitHooks(final GHRepository repo) {
+        return new AbstractSet<URL>() {
+            private List<URL> getPostCommitHooks() {
+                try {
+                    List<URL> r = new ArrayList<>();
+                    for (GHHook h : repo.getHooks()) {
+                        if (h.getName().equals("web")) {
+                            r.add(new URL(h.getConfig().get("url")));
+                        }
+                    }
+                    return r;
+                } catch (IOException e) {
+                    throw new GHException("Failed to retrieve post-commit hooks", e);
+                }
+            }
+
+            @Override
+            public Iterator<URL> iterator() {
+                return getPostCommitHooks().iterator();
+            }
+
+            @Override
+            public int size() {
+                return getPostCommitHooks().size();
+            }
+
+            @Override
+            public boolean add(URL url) {
+                try {
+                    repo.createWebHook(url);
+                    return true;
+                } catch (IOException e) {
+                    throw new GHException("Failed to update post-commit hooks", e);
+                }
+            }
+
+            @Override
+            public boolean remove(Object url) {
+                try {
+                    String _url = ((URL) url).toExternalForm();
+                    for (GHHook h : repo.getHooks()) {
+                        if (h.getName().equals("web") && h.getConfig().get("url").equals(_url)) {
+                            h.delete();
+                            return true;
+                        }
+                    }
+                    return false;
+                } catch (IOException e) {
+                    throw new GHException("Failed to update post-commit hooks", e);
+                }
+            }
+        };
     }
 
     /**

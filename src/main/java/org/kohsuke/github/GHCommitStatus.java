@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.net.URL;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -80,14 +79,4 @@ public class GHCommitStatus extends GHObject {
         return context;
     }
 
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() {
-        return null;
-    }
 }

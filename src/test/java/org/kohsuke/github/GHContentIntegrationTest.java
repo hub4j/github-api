@@ -2,19 +2,17 @@ package org.kohsuke.github;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThrows;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -69,8 +67,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     @Test
     public void testGetRepository() throws Exception {
         GHRepository testRepo = gitHub.getRepositoryById(repo.getId());
-        assertThat(testRepo.getName(), equalTo(repo.getName()));
-        testRepo = gitHub.getRepositoryById(Long.toString(repo.getId()));
         assertThat(testRepo.getName(), equalTo(repo.getName()));
     }
 
@@ -152,9 +148,11 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testCRUDContent() throws Exception {
-        GHContentUpdateResponse created = repo.createContent("this is an awesome file I created\n",
-                "Creating a file for integration tests.",
-                createdFilename);
+        GHContentUpdateResponse created = repo.createContent()
+                .content("this is an awesome file I created\n")
+                .message("Creating a file for integration tests.")
+                .path(createdFilename)
+                .commit();
         int expectedRequestCount = mockGitHub.getRequestCount();
         GHContent createdContent = created.getContent();
 
@@ -246,7 +244,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
         assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Creating a file for integration tests."));
         assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-        Assert.assertThrows(GHException.class, () -> ghCommit.getCommitShortInfo().getCommentCount());
+        assertThrows(GHException.class, () -> ghCommit.getCommitShortInfo().getCommentCount());
 
         ghCommit.populate();
         assertThat("Populate GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
@@ -271,13 +269,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
      *             the exception
      */
     GHCommit getGHCommit(GHContentUpdateResponse resp) throws Exception {
-        for (Method method : resp.getClass().getMethods()) {
-            if (method.getName().equals("getCommit") && method.getReturnType().equals(GHCommit.class)) {
-                return (GHCommit) method.invoke(resp);
-            }
-        }
-        System.out.println("Unable to find bridge method");
-        return null;
+        return resp.getCommit().toGHCommit();
     }
 
     /**
@@ -340,7 +332,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 equalTo("https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/" + gitCommit.getSHA1()));
         assertThat(gitCommit.getVerification(), notNullValue());
 
-        assertThat(ghCommit, notNullValue());
         assertThat(ghCommit.getSHA1(), notNullValue());
         assertThat(ghCommit.getUrl().toString(),
                 endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + ghCommit.getSHA1()));
@@ -365,10 +356,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(gitCommit.getAuthor().getName(), equalTo("Liam Newman"));
         assertThat(gitCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
 
-        // Check that GHCommit.GHAuthor bridge method still works
-        assertThat(getGHAuthor(gitCommit).getName(), equalTo("Liam Newman"));
-        assertThat(getGHAuthor(gitCommit).getEmail(), equalTo("bitwiseman@gmail.com"));
-
         assertThat(gitCommit.getAuthor().getName(), equalTo("Liam Newman"));
         assertThat(gitCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
         assertThat(gitCommit.getCommitter().getName(), equalTo("Liam Newman"));
@@ -378,66 +365,10 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(ghCommit.getAuthor().getName(), equalTo("Liam Newman"));
         assertThat(ghCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
 
-        // Check that GHCommit.GHAuthor bridge method still works
-        assertThat(getGHAuthor(ghCommit.getCommitShortInfo()).getName(), equalTo("Liam Newman"));
-        assertThat(getGHAuthor(ghCommit.getCommitShortInfo()).getEmail(), equalTo("bitwiseman@gmail.com"));
-
         assertThat(ghCommit.getCommitter().getName(), equalTo("Liam Newman"));
         assertThat(ghCommit.getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
 
         return expectedRequestCount;
-    }
-
-    /**
-     * Gets the GH author.
-     *
-     * @param commit
-     *            the commit
-     * @return the GH author
-     * @throws GHException
-     *             the GH exception
-     * @throws IllegalAccessException
-     *             the illegal access exception
-     * @throws IllegalArgumentException
-     *             the illegal argument exception
-     * @throws InvocationTargetException
-     *             the invocation target exception
-     */
-    GHCommit.GHAuthor getGHAuthor(GitCommit commit)
-            throws GHException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        for (Method method : commit.getClass().getMethods()) {
-            if (method.getName().equals("getAuthor") && method.getReturnType().equals(GHCommit.GHAuthor.class)) {
-                return (GHCommit.GHAuthor) method.invoke(commit);
-            }
-        }
-        System.out.println("Unable to find bridge method");
-        return null;
-    }
-
-    /**
-     * Gets the GH author.
-     *
-     * @param commit
-     *            the commit
-     * @return the GH author
-     * @throws GHException
-     *             the GH exception
-     * @throws IllegalAccessException
-     *             the illegal access exception
-     * @throws IllegalArgumentException
-     *             the illegal argument exception
-     * @throws InvocationTargetException
-     *             the invocation target exception
-     */
-    GHCommit.GHAuthor getGHAuthor(GHCommit.ShortInfo commit)
-            throws GHException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        for (Method method : commit.getClass().getMethods()) {
-            if (method.getName().equals("getAuthor") && method.getReturnType().equals(GHCommit.GHAuthor.class)) {
-                return (GHCommit.GHAuthor) method.invoke(commit);
-            }
-        }
-        System.out.println("Unable to find bridge method");
-        return null;
     }
 
     /**
@@ -485,9 +416,10 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
      */
     int checkCommitParents(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
         assertThat(gitCommit.getParentSHA1s().size(), is(greaterThan(0)));
-        assertThat(ghCommit.getParentSHA1s().size(), is(greaterThan(0)));
         assertThat(gitCommit.getParentSHA1s().get(0), notNullValue());
+        assertThat(ghCommit.getParentSHA1s().size(), is(greaterThan(0)));
         assertThat(ghCommit.getParentSHA1s().get(0), notNullValue());
+
         return expectedRequestCount;
     }
 

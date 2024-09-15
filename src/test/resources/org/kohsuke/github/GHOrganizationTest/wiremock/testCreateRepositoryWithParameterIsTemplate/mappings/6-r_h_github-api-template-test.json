@@ -47,8 +47,5 @@
   },
   "uuid": "3164c9df-abab-453d-982a-3d446781039d",
   "persistent": true,
-  "scenarioName": "testCreateRepositoryWithParameterIsTemplate-template-repo",
-  "requiredScenarioState": "Started",
-  "newScenarioState": "with-template-1",
   "insertionIndex": 6
 }

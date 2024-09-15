@@ -86,19 +86,6 @@ public class GHArtifact extends GHObject {
     }
 
     /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() throws IOException {
-        return null;
-    }
-
-    /**
      * Deletes the artifact.
      *
      * @throws IOException

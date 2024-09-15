@@ -86,32 +86,6 @@ public class GHCommit {
     }
 
     /**
-     * The type GHAuthor.
-     *
-     * @deprecated Use {@link GitUser} instead.
-     */
-    @Deprecated
-    public static class GHAuthor extends GitUser {
-
-        /**
-         * Instantiates a new GH author.
-         */
-        public GHAuthor() {
-            super();
-        }
-
-        /**
-         * Instantiates a new GH author.
-         *
-         * @param user
-         *            the user
-         */
-        public GHAuthor(GitUser user) {
-            super(user);
-        }
-    }
-
-    /**
      * The type Stats.
      */
     public static class Stats {
@@ -405,19 +379,6 @@ public class GHCommit {
      */
     public URL getUrl() {
         return GitHubClient.parseURL(url);
-    }
-
-    /**
-     * List of files changed/added/removed in this commit.
-     *
-     * @return Can be empty but never null.
-     * @throws IOException
-     *             on error
-     * @deprecated Use {@link #listFiles()} instead.
-     */
-    @Deprecated
-    public List<File> getFiles() throws IOException {
-        return listFiles().toList();
     }
 
     /**

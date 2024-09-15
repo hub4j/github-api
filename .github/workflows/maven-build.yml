@@ -112,25 +112,6 @@ jobs:
         fail_ci_if_error: true
         verbose: true
 
-  test-java-8:
-    name: test Java 8 (no-build)
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v4
-      with:
-        name: maven-target-directory
-        path: target
-    - name: Set up JDK
-      uses: actions/setup-java@v4
-      with:
-        java-version: 8
-        distribution: 'temurin'
-        cache: 'maven'
-    - name: Maven Test (no build) Java 8
-      run: mvn -B surefire:test -DfailIfNoTests -Dsurefire.excludesFile=src/test/resources/slow-or-flaky-tests.txt
-
   test-java-11:
     name: test Java 11 (no-build)
     needs: build
@@ -144,7 +125,7 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v4
       with:
-        java-version: 8
+        java-version: 11
         distribution: 'temurin'
         cache: 'maven'
     - name: Maven Test (no build) Java 11

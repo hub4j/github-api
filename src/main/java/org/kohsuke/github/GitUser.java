@@ -63,18 +63,4 @@ public class GitUser {
     public GitUser() {
         // Empty constructor for Jackson binding
     }
-
-    /**
-     * Instantiates a new git user.
-     *
-     * @param user
-     *            the user
-     */
-    public GitUser(GitUser user) {
-        // Copy constructor to convert to GHCommit.GHAuthor
-        name = user.getName();
-        email = user.getEmail();
-        date = user.getDate().toString();
-        username = user.getUsername();
-    }
 }

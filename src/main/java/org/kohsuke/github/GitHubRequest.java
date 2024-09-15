@@ -5,7 +5,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
-import org.kohsuke.github.internal.Previews;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -111,7 +110,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
                 // backward compatibility
                 apiUrl = GitHubClient.GITHUB_URL;
             }
-            return new URL(apiUrl + tailApiUrl);
+            return new URI(apiUrl + tailApiUrl).toURL();
         } catch (Exception e) {
             // The data going into constructing this URL should be controlled by the GitHub API framework,
             // so a malformed URL here is a framework runtime error.
@@ -507,32 +506,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
          *            the name
          * @return the b
          */
-        @Deprecated
-        public B withPreview(String name) {
-            return withHeader("Accept", name);
-        }
-
-        /**
-         * With preview.
-         *
-         * @param preview
-         *            the preview
-         * @return the b
-         */
-        @Deprecated
-        public B withPreview(Previews preview) {
-            return withPreview(preview.mediaType());
-        }
-
-        /**
-         * With accept header.
-         *
-         * @param name
-         *            the name
-         * @return the b
-         */
         public B withAccept(String name) {
-            return withPreview(name);
+            return withHeader("Accept", name);
         }
 
         /**

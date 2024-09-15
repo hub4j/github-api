@@ -21,30 +21,6 @@ public class GHProjectColumn extends GHObject {
     private String project_url;
 
     /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    public URL getHtmlUrl() throws IOException {
-        return null;
-    }
-
-    /**
-     * Wrap gh project column.
-     *
-     * @param root
-     *            the root
-     * @return the gh project column
-     */
-    @Deprecated
-    public GHProjectColumn wrap(GitHub root) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
      * Wrap gh project column.
      *
      * @param root
@@ -53,18 +29,6 @@ public class GHProjectColumn extends GHObject {
      */
     GHProjectColumn lateBind(GitHub root) {
         return this;
-    }
-
-    /**
-     * Wrap gh project column.
-     *
-     * @param project
-     *            the project
-     * @return the gh project column
-     */
-    @Deprecated
-    public GHProjectColumn wrap(GHProject project) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

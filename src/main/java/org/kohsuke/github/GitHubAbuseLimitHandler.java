@@ -3,9 +3,14 @@ package org.kohsuke.github;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
+import java.io.InterruptedIOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import javax.annotation.Nonnull;
+
+import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -52,7 +57,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      * @return true if the status code is HTTP_FORBIDDEN
      */
     private boolean isForbidden(GitHubConnectorResponse connectorResponse) {
-        return connectorResponse.statusCode() == HttpURLConnection.HTTP_FORBIDDEN;
+        return connectorResponse.statusCode() == HTTP_FORBIDDEN;
     }
 
     /**
@@ -102,4 +107,55 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      *
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+
+    /**
+     * Wait until the API abuse "wait time" is passed.
+     */
+    public static final GitHubAbuseLimitHandler WAIT = new GitHubAbuseLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            try {
+                Thread.sleep(parseWaitTime(connectorResponse));
+            } catch (InterruptedException ex) {
+                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);
+            }
+        }
+    };
+
+    /**
+     * Fail immediately.
+     */
+    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            throw new HttpException("Abuse limit reached",
+                    connectorResponse.statusCode(),
+                    connectorResponse.header("Status"),
+                    connectorResponse.request().url().toString())
+                    .withResponseHeaderFields(connectorResponse.allHeaders());
+        }
+    };
+
+    // If "Retry-After" missing, wait for unambiguously over one minute per GitHub guidance
+    static long DEFAULT_WAIT_MILLIS = 61 * 1000;
+
+    /*
+     * Exposed for testability. Given an http response, find the retry-after header field and parse it as either a
+     * number or a date (the spec allows both). If no header is found, wait for a reasonably amount of time.
+     */
+    static long parseWaitTime(GitHubConnectorResponse connectorResponse) {
+        String v = connectorResponse.header("Retry-After");
+        if (v == null) {
+            return DEFAULT_WAIT_MILLIS;
+        }
+
+        try {
+            return Math.max(1000, Long.parseLong(v) * 1000);
+        } catch (NumberFormatException nfe) {
+            // The retry-after header could be a number in seconds, or an http-date
+            ZonedDateTime zdt = ZonedDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);
+            return ChronoUnit.MILLIS.between(ZonedDateTime.now(), zdt);
+        }
+    }
+
 }

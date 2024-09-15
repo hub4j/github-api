@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -42,7 +42,7 @@ public class GHHookTest {
         String orgRepo = "KostyaSha-org/test";
 
         // some login based user that has access to application
-        final GitHub gitHub = GitHub.connectUsingPassword(user1Login, user1Pass);
+        final GitHub gitHub = GitHub.connect(user1Login, user1Pass);
         gitHub.getMyself();
 
         // we request read

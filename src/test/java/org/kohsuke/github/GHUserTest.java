@@ -159,7 +159,7 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     @Test
     public void listPublicRepositoriesPageSize62() throws IOException {
         GHUser user = gitHub.getUser("kohsuke");
-        Iterator<GHRepository> itr = user.listRepositories().withPageSize(62).iterator();
+        Iterator<GHRepository> itr = user.listRepositories(62).iterator();
         int i = 0;
         for (; i < 115; i++) {
             assertThat(itr.hasNext(), is(true));

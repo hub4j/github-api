@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -46,13 +45,9 @@ public class GHMyself extends GHUser {
      *             the io exception
      * @deprecated Use {@link #getEmails2()}
      */
+    @Deprecated
     public List<String> getEmails() throws IOException {
-        List<GHEmail> src = getEmails2();
-        List<String> r = new ArrayList<String>(src.size());
-        for (GHEmail e : src) {
-            r.add(e.getEmail());
-        }
-        return r;
+        return listEmails().toList().stream().map(email -> email.getEmail()).toList();
     }
 
     /**
@@ -64,9 +59,23 @@ public class GHMyself extends GHUser {
      * @return Always non-null.
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #listEmails()}
      */
+    @Deprecated
     public List<GHEmail> getEmails2() throws IOException {
-        return root().createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null).toList();
+        return listEmails().toList();
+    }
+
+    /**
+     * Returns the read-only list of e-mail addresses configured for you.
+     * <p>
+     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
+     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
+     *
+     * @return Always non-null.
+     */
+    public PagedIterable<GHEmail> listEmails() {
+        return root().createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null);
     }
 
     /**
@@ -151,7 +160,7 @@ public class GHMyself extends GHUser {
      */
     public synchronized Map<String, GHRepository> getAllRepositories() throws IOException {
         Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
-        for (GHRepository r : listAllRepositories()) {
+        for (GHRepository r : listRepositories()) {
             repositories.put(r.getName(), r);
         }
         return Collections.unmodifiableMap(repositories);
@@ -204,17 +213,6 @@ public class GHMyself extends GHUser {
                 .withUrlPath("/user/repos")
                 .toIterable(GHRepository[].class, null)
                 .withPageSize(pageSize);
-    }
-
-    /**
-     * List all repositories paged iterable.
-     *
-     * @return the paged iterable
-     * @deprecated Use {@link #listRepositories()}
-     */
-    @Deprecated
-    public PagedIterable<GHRepository> listAllRepositories() {
-        return listRepositories();
     }
 
     /**

@@ -609,6 +609,23 @@
                 </configuration>
               </execution>
               <execution>
+                <id>httpclient-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <classesDirectory>${project.basedir}/target/${project.artifactId}-${project.version}.jar</classesDirectory>
+                  <useSystemClassLoader>false</useSystemClassLoader>
+                  <excludesFile>src/test/resources/slow-or-flaky-tests.txt</excludesFile>
+                  <argLine>@{jacoco.surefire.argLine} ${surefire.argLine} -Dtest.github.connector=httpclient</argLine>
+                  <!-- Run some test passes with trace logging turned on -->
+                  <systemPropertyVariables>
+                    <java.util.logging.config.file>src/test/resources/test-trace-logging.properties</java.util.logging.config.file>
+                  </systemPropertyVariables>
+                </configuration>
+              </execution>
+              <execution>
                 <id>slow-or-flaky-test</id>
                 <phase>integration-test</phase>
                 <goals>

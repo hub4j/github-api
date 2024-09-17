@@ -22,6 +22,12 @@ import javax.annotation.Nonnull;
 public abstract class RateLimitHandler extends GitHubRateLimitHandler {
 
     /**
+     * Create default RateLimitHandler instance
+     */
+    public RateLimitHandler() {
+    }
+
+    /**
      * Called when the library encounters HTTP error indicating that the API rate limit has been exceeded.
      *
      * <p>

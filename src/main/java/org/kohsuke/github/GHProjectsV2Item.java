@@ -23,6 +23,12 @@ import java.util.Date;
  */
 public class GHProjectsV2Item extends GHObject {
 
+    /**
+     * Create default GHProjectsV2Item instance
+     */
+    public GHProjectsV2Item() {
+    }
+
     private String projectNodeId;
     private String contentNodeId;
     private String contentType;

@@ -15,6 +15,12 @@ import static org.hamcrest.Matchers.*;
 public class GHGistTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHGistTest instance
+     */
+    public GHGistTest() {
+    }
+
+    /**
      * Lifecycle test.
      *
      * @throws Exception

@@ -14,6 +14,13 @@ import java.util.List;
  * @see GitHub#listMarketplacePlans()
  */
 public class GHMarketplacePlan extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHMarketplacePlan instance
+     */
+    public GHMarketplacePlan() {
+    }
+
     private String url;
     private String accountsUrl;
     private long id;

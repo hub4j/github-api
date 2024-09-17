@@ -39,6 +39,12 @@ import java.util.Locale;
  */
 public class GHProject extends GHObject {
 
+    /**
+     * Create default GHProject instance
+     */
+    public GHProject() {
+    }
+
     /** The owner. */
     protected GHObject owner;
 

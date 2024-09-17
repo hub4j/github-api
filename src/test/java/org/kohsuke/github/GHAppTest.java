@@ -25,6 +25,12 @@ import static org.junit.Assert.assertThrows;
 public class GHAppTest extends AbstractGHAppInstallationTest {
 
     /**
+     * Create default GHAppTest instance
+     */
+    public GHAppTest() {
+    }
+
+    /**
      * Gets the git hub builder.
      *
      * @return the git hub builder

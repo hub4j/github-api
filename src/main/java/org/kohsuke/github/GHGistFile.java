@@ -10,6 +10,12 @@ package org.kohsuke.github;
  */
 public class GHGistFile {
 
+    /**
+     * Create default GHGistFile instance
+     */
+    public GHGistFile() {
+    }
+
     /** The file name. */
     /* package almost final */ String fileName;
 

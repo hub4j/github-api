@@ -99,6 +99,13 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
                     "URF_UNREAD_FIELD" },
             justification = "JSON API")
     public static class ContributorStats extends GHObject {
+
+        /**
+         * Create default ContributorStats instance
+         */
+        public ContributorStats() {
+        }
+
         private GHUser author;
         private int total;
         private List<Week> weeks;
@@ -184,6 +191,12 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
                 justification = "JSON API")
         public static class Week {
 
+            /**
+             * Create default Week instance
+             */
+            public Week() {
+            }
+
             private long w;
             private int a;
             private int d;
@@ -258,6 +271,13 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
             justification = "JSON API")
     public static class CommitActivity extends GHObject {
+
+        /**
+         * Create default CommitActivity instance
+         */
+        public CommitActivity() {
+        }
+
         private List<Integer> days;
         private int total;
         private long week;
@@ -398,6 +418,13 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * The type Participation.
      */
     public static class Participation extends GHObject {
+
+        /**
+         * Create default Participation instance
+         */
+        public Participation() {
+        }
+
         private List<Integer> all;
         private List<Integer> owner;
 

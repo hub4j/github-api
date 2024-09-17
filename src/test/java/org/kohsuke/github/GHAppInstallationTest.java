@@ -19,6 +19,12 @@ import static org.hamcrest.Matchers.*;
 public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
 
     /**
+     * Create default GHAppInstallationTest instance
+     */
+    public GHAppInstallationTest() {
+    }
+
+    /**
      * Test list repositories two repos.
      *
      * @throws IOException

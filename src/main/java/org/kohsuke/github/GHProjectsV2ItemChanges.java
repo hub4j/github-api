@@ -14,6 +14,12 @@ import java.util.Date;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHProjectsV2ItemChanges {
 
+    /**
+     * Create default GHProjectsV2ItemChanges instance
+     */
+    public GHProjectsV2ItemChanges() {
+    }
+
     private FieldValue fieldValue;
 
     private FromToDate archivedAt;
@@ -52,6 +58,12 @@ public class GHProjectsV2ItemChanges {
      */
     public static class FieldValue {
 
+        /**
+         * Create default FieldValue instance
+         */
+        public FieldValue() {
+        }
+
         private String fieldNodeId;
         private String fieldType;
 
@@ -79,6 +91,12 @@ public class GHProjectsV2ItemChanges {
      */
     public static class FromTo {
 
+        /**
+         * Create default FromTo instance
+         */
+        public FromTo() {
+        }
+
         private String from;
         private String to;
 
@@ -105,6 +123,12 @@ public class GHProjectsV2ItemChanges {
      * The Class FromToDate.
      */
     public static class FromToDate {
+
+        /**
+         * Create default FromToDate instance
+         */
+        public FromToDate() {
+        }
 
         private String from;
         private String to;

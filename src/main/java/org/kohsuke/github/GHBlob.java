@@ -16,6 +16,13 @@ import java.util.Base64;
  * @see <a href="https://developer.github.com/v3/git/blobs/#get-a-blob">Get a blob</a>
  */
 public class GHBlob {
+
+    /**
+     * Create default GHBlob instance
+     */
+    public GHBlob() {
+    }
+
     private String content, encoding, url, sha;
     private long size;
 

@@ -1,13 +1,13 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -16,6 +16,12 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public class GHMyself extends GHUser {
+
+    /**
+     * Create default GHMyself instance
+     */
+    public GHMyself() {
+    }
 
     /**
      * Type of repositories returned during listing.
@@ -47,12 +53,7 @@ public class GHMyself extends GHUser {
      * @deprecated Use {@link #getEmails2()}
      */
     public List<String> getEmails() throws IOException {
-        List<GHEmail> src = getEmails2();
-        List<String> r = new ArrayList<String>(src.size());
-        for (GHEmail e : src) {
-            r.add(e.getEmail());
-        }
-        return r;
+        return listEmails().toList().stream().map(email -> email.getEmail()).collect(Collectors.toList());
     }
 
     /**
@@ -65,8 +66,21 @@ public class GHMyself extends GHUser {
      * @throws IOException
      *             the io exception
      */
+    @Deprecated
     public List<GHEmail> getEmails2() throws IOException {
-        return root().createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null).toList();
+        return listEmails().toList();
+    }
+
+    /**
+     * Returns the read-only list of e-mail addresses configured for you.
+     * <p>
+     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
+     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
+     *
+     * @return Always non-null.
+     */
+    public PagedIterable<GHEmail> listEmails() {
+        return root().createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null);
     }
 
     /**

@@ -14,6 +14,13 @@ import java.util.*;
  * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
  */
 public class GHAppInstallationToken extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHAppInstallationToken instance
+     */
+    public GHAppInstallationToken() {
+    }
+
     private String token;
 
     /** The expires at. */

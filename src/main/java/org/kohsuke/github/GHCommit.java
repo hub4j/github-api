@@ -116,6 +116,12 @@ public class GHCommit {
      */
     public static class Stats {
 
+        /**
+         * Create default Stats instance
+         */
+        public Stats() {
+        }
+
         /** The deletions. */
         int total, additions, deletions;
     }
@@ -125,6 +131,12 @@ public class GHCommit {
      */
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "It's being initialized by JSON deserialization")
     public static class File {
+
+        /**
+         * Create default File instance
+         */
+        public File() {
+        }
 
         /** The status. */
         String status;
@@ -239,6 +251,12 @@ public class GHCommit {
      * The type Parent.
      */
     public static class Parent {
+
+        /**
+         * Create default Parent instance
+         */
+        public Parent() {
+        }
 
         /** The url. */
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")

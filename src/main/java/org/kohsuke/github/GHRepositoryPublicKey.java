@@ -12,6 +12,13 @@ import java.net.URL;
  * @author Aditya Bansal
  */
 public class GHRepositoryPublicKey extends GHObject {
+
+    /**
+     * Create default GHRepositoryPublicKey instance
+     */
+    public GHRepositoryPublicKey() {
+    }
+
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;

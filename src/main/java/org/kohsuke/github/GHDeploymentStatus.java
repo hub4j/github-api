@@ -8,6 +8,13 @@ import java.util.Locale;
  * The type GHDeploymentStatus.
  */
 public class GHDeploymentStatus extends GHObject {
+
+    /**
+     * Create default GHDeploymentStatus instance
+     */
+    public GHDeploymentStatus() {
+    }
+
     private GHRepository owner;
 
     /** The creator. */

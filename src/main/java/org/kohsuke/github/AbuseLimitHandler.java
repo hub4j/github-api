@@ -26,6 +26,12 @@ import javax.annotation.Nonnull;
 public abstract class AbuseLimitHandler extends GitHubAbuseLimitHandler {
 
     /**
+     * Create default AbuseLimitHandler instance
+     */
+    public AbuseLimitHandler() {
+    }
+
+    /**
      * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
      *
      * <p>

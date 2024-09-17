@@ -29,6 +29,12 @@ import static org.junit.Assert.assertThrows;
  */
 public class AppTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default AppTest instance
+     */
+    public AppTest() {
+    }
+
     /** The Constant GITHUB_API_TEST_REPO. */
     static final String GITHUB_API_TEST_REPO = "github-api-test";
 

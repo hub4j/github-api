@@ -20,6 +20,12 @@ import javax.annotation.Nonnull;
 public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {
 
     /**
+     * Create default GitHubRateLimitHandler instance
+     */
+    public GitHubRateLimitHandler() {
+    }
+
+    /**
      * Checks if is error.
      *
      * @param connectorResponse

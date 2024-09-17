@@ -20,6 +20,12 @@ import java.util.Map;
         justification = "JSON API")
 public abstract class GHHook extends GHObject {
 
+    /**
+     * Create default GHHook instance
+     */
+    public GHHook() {
+    }
+
     /** The name. */
     String name;
 

@@ -6,5 +6,12 @@ package org.kohsuke.github;
  * @author Kevin Harrington mad.hephaestus@gmail.com
  */
 public class GHOTPRequiredException extends GHIOException {
+
+    /**
+     * Create default GHOTPRequiredException instance
+     */
+    public GHOTPRequiredException() {
+    }
+
     // ...
 }

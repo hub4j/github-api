@@ -30,8 +30,6 @@ public interface GitHubConnector {
      * @return a GitHubConnectorResponse for the request
      * @throws IOException
      *             if there is an I/O error
-     *
-     * @author Liam Newman
      */
     GitHubConnectorResponse send(GitHubConnectorRequest connectorRequest) throws IOException;
 

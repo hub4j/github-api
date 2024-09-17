@@ -1,4 +1,4 @@
-package org.kohsuke.aot;
+package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +24,12 @@ import static org.junit.Assert.fail;
  */
 @SpringBootTest
 public class AotIntegrationTest {
+
+    /**
+     * Create default AotIntegrationTest instance
+     */
+    public AotIntegrationTest() {
+    }
 
     /**
      * Test to check if all required classes are registered for AOT.
@@ -77,6 +83,7 @@ public class AotIntegrationTest {
                 .map(jsonNode -> jsonNode.get("name"))
                 .map(JsonNode::toString)
                 .map(reflectConfigEntryClassName -> reflectConfigEntryClassName.replace("\"", ""))
-                .filter(x -> x.contains("org.kohsuke.github"));
+                .filter(x -> x.contains("org.kohsuke.github"))
+                .filter(x -> !x.contains("org.kohsuke.github.AotTest"));
     }
 }

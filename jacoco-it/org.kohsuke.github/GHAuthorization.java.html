@@ -15,7 +15,13 @@ import java.util.List;
  * @see GitHub#createToken(Collection, String, String) GitHub#createToken(Collection, String, String)
  * @see &lt;a href=&quot;http://developer.github.com/v3/oauth/#create-a-new-authorization&quot;&gt;API documentation&lt;/a&gt;
  */
-<span class="fc" id="L18">public class GHAuthorization extends GHObject {</span>
+public class GHAuthorization extends GHObject {
+
+    /**
+     * Create default GHAuthorization instance
+     */
+<span class="fc" id="L23">    public GHAuthorization() {</span>
+<span class="fc" id="L24">    }</span>
 
     /** The Constant USER. */
     public static final String USER = &quot;user&quot;;
@@ -88,7 +94,7 @@ import java.util.List;
      * @return the scopes
      */
     public List&lt;String&gt; getScopes() {
-<span class="fc" id="L91">        return Collections.unmodifiableList(scopes);</span>
+<span class="fc" id="L97">        return Collections.unmodifiableList(scopes);</span>
     }
 
     /**
@@ -97,7 +103,7 @@ import java.util.List;
      * @return the token
      */
     public String getToken() {
-<span class="fc" id="L100">        return token;</span>
+<span class="fc" id="L106">        return token;</span>
     }
 
     /**
@@ -106,7 +112,7 @@ import java.util.List;
      * @return the token last eight
      */
     public String getTokenLastEight() {
-<span class="fc" id="L109">        return token_last_eight;</span>
+<span class="fc" id="L115">        return token_last_eight;</span>
     }
 
     /**
@@ -115,7 +121,7 @@ import java.util.List;
      * @return the hashed token
      */
     public String getHashedToken() {
-<span class="fc" id="L118">        return hashed_token;</span>
+<span class="fc" id="L124">        return hashed_token;</span>
     }
 
     /**
@@ -124,7 +130,7 @@ import java.util.List;
      * @return the app url
      */
     public URL getAppUrl() {
-<span class="fc" id="L127">        return GitHubClient.parseURL(app.url);</span>
+<span class="fc" id="L133">        return GitHubClient.parseURL(app.url);</span>
     }
 
     /**
@@ -133,30 +139,7 @@ import java.util.List;
      * @return the app name
      */
     public String getAppName() {
-<span class="fc" id="L136">        return app.name;</span>
-    }
-
-    /**
-     * Gets api url.
-     *
-     * @return the api url
-     * @deprecated use {@link #getUrl()}
-     */
-    @Deprecated
-    @SuppressFBWarnings(value = &quot;NM_CONFUSING&quot;, justification = &quot;It's a part of the library API, cannot be changed&quot;)
-    public URL getApiURL() {
-<span class="nc" id="L148">        return getUrl();</span>
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() {
-<span class="fc" id="L159">        return null;</span>
+<span class="fc" id="L142">        return app.name;</span>
     }
 
     /**
@@ -165,7 +148,7 @@ import java.util.List;
      * @return the note
      */
     public String getNote() {
-<span class="fc" id="L168">        return note;</span>
+<span class="fc" id="L151">        return note;</span>
     }
 
     /**
@@ -174,7 +157,7 @@ import java.util.List;
      * @return the note url
      */
     public URL getNoteUrl() {
-<span class="fc" id="L177">        return GitHubClient.parseURL(note_url);</span>
+<span class="fc" id="L160">        return GitHubClient.parseURL(note_url);</span>
     }
 
     /**
@@ -183,7 +166,7 @@ import java.util.List;
      * @return the fingerprint
      */
     public String getFingerprint() {
-<span class="fc" id="L186">        return fingerprint;</span>
+<span class="fc" id="L169">        return fingerprint;</span>
     }
 
     @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; },

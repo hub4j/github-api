@@ -11,7 +11,14 @@ import java.net.URL;
  * @see GitHub#getMyMarketplacePurchases()
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
-<span class="fc" id="L14">public class GHMarketplaceAccount extends GitHubInteractiveObject {</span>
+public class GHMarketplaceAccount extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHMarketplaceAccount instance
+     */
+<span class="fc" id="L19">    public GHMarketplaceAccount() {</span>
+<span class="fc" id="L20">    }</span>
+
     private String url;
     private long id;
     private String login;
@@ -25,7 +32,7 @@ import java.net.URL;
      * @return the url
      */
     public URL getUrl() {
-<span class="fc" id="L28">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L35">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -34,7 +41,7 @@ import java.net.URL;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L37">        return id;</span>
+<span class="fc" id="L44">        return id;</span>
     }
 
     /**
@@ -43,7 +50,7 @@ import java.net.URL;
      * @return the login
      */
     public String getLogin() {
-<span class="fc" id="L46">        return login;</span>
+<span class="fc" id="L53">        return login;</span>
     }
 
     /**
@@ -52,7 +59,7 @@ import java.net.URL;
      * @return the email
      */
     public String getEmail() {
-<span class="nc" id="L55">        return email;</span>
+<span class="nc" id="L62">        return email;</span>
     }
 
     /**
@@ -61,7 +68,7 @@ import java.net.URL;
      * @return the organization billing email
      */
     public String getOrganizationBillingEmail() {
-<span class="fc" id="L64">        return organizationBillingEmail;</span>
+<span class="fc" id="L71">        return organizationBillingEmail;</span>
     }
 
     /**
@@ -70,7 +77,7 @@ import java.net.URL;
      * @return the type
      */
     public GHMarketplaceAccountType getType() {
-<span class="fc" id="L73">        return type;</span>
+<span class="fc" id="L80">        return type;</span>
     }
 
     /**
@@ -91,7 +98,7 @@ import java.net.URL;
      *      a subscription plan for an account&lt;/a&gt;
      */
     public GHMarketplaceAccountPlan getPlan() throws IOException {
-<span class="fc" id="L94">        return new GHMarketplacePlanForAccountBuilder(root(), this.id).createRequest();</span>
+<span class="fc" id="L101">        return new GHMarketplacePlanForAccountBuilder(root(), this.id).createRequest();</span>
     }
 
 }

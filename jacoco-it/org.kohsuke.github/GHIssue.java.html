@@ -24,7 +24,6 @@
 
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.internal.EnumUtils;
@@ -52,7 +51,14 @@ import java.util.Objects;
  * @see GitHub#searchIssues() GitHub#searchIssues()
  * @see GHIssueSearchBuilder
  */
-<span class="fc" id="L55">public class GHIssue extends GHObject implements Reactable {</span>
+public class GHIssue extends GHObject implements Reactable {
+
+    /**
+     * Create default GHIssue instance
+     */
+<span class="fc" id="L59">    public GHIssue() {</span>
+<span class="fc" id="L60">    }</span>
+
     private static final String ASSIGNEES = &quot;assignees&quot;;
 
     /** The owner. */
@@ -113,19 +119,19 @@ import java.util.Objects;
      * @return the GH issue
      */
     GHIssue wrap(GHRepository owner) {
-<span class="fc" id="L116">        this.owner = owner;</span>
-<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (milestone != null)</span>
-<span class="fc" id="L118">            milestone.lateBind(owner);</span>
-<span class="fc" id="L119">        return this;</span>
+<span class="fc" id="L122">        this.owner = owner;</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        if (milestone != null)</span>
+<span class="fc" id="L124">            milestone.lateBind(owner);</span>
+<span class="fc" id="L125">        return this;</span>
     }
 
     private String getRepositoryUrlPath() {
-<span class="fc" id="L123">        String url = getUrl().toString();</span>
-<span class="fc" id="L124">        int index = url.indexOf(&quot;/issues&quot;);</span>
-<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        if (index == -1) {</span>
-<span class="nc" id="L126">            index = url.indexOf(&quot;/pulls&quot;);</span>
+<span class="fc" id="L129">        String url = getUrl().toString();</span>
+<span class="fc" id="L130">        int index = url.indexOf(&quot;/issues&quot;);</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if (index == -1) {</span>
+<span class="nc" id="L132">            index = url.indexOf(&quot;/pulls&quot;);</span>
         }
-<span class="fc" id="L128">        return url.substring(0, index);</span>
+<span class="fc" id="L134">        return url.substring(0, index);</span>
     }
 
     /**
@@ -136,16 +142,16 @@ import java.util.Objects;
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
         try {
-<span class="fc" id="L139">            synchronized (this) {</span>
-<span class="fc bfc" id="L140" title="All 2 branches covered.">                if (owner == null) {</span>
-<span class="fc" id="L141">                    String repositoryUrlPath = getRepositoryUrlPath();</span>
-<span class="fc" id="L142">                    wrap(root().createRequest().withUrlPath(repositoryUrlPath).fetch(GHRepository.class));</span>
+<span class="fc" id="L145">            synchronized (this) {</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">                if (owner == null) {</span>
+<span class="fc" id="L147">                    String repositoryUrlPath = getRepositoryUrlPath();</span>
+<span class="fc" id="L148">                    wrap(root().createRequest().withUrlPath(repositoryUrlPath).fetch(GHRepository.class));</span>
                 }
-<span class="fc" id="L144">            }</span>
-<span class="nc" id="L145">        } catch (IOException e) {</span>
-<span class="nc" id="L146">            throw new GHException(&quot;Failed to fetch repository&quot;, e);</span>
-<span class="fc" id="L147">        }</span>
-<span class="fc" id="L148">        return owner;</span>
+<span class="fc" id="L150">            }</span>
+<span class="nc" id="L151">        } catch (IOException e) {</span>
+<span class="nc" id="L152">            throw new GHException(&quot;Failed to fetch repository&quot;, e);</span>
+<span class="fc" id="L153">        }</span>
+<span class="fc" id="L154">        return owner;</span>
     }
 
     /**
@@ -154,7 +160,7 @@ import java.util.Objects;
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L157">        return body;</span>
+<span class="fc" id="L163">        return body;</span>
     }
 
     /**
@@ -163,7 +169,7 @@ import java.util.Objects;
      * @return the number
      */
     public int getNumber() {
-<span class="fc" id="L166">        return number;</span>
+<span class="fc" id="L172">        return number;</span>
     }
 
     /**
@@ -172,7 +178,7 @@ import java.util.Objects;
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="nc" id="L175">        return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L181">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -181,7 +187,7 @@ import java.util.Objects;
      * @return the title
      */
     public String getTitle() {
-<span class="fc" id="L184">        return title;</span>
+<span class="fc" id="L190">        return title;</span>
     }
 
     /**
@@ -190,7 +196,7 @@ import java.util.Objects;
      * @return the boolean
      */
     public boolean isLocked() {
-<span class="fc" id="L193">        return locked;</span>
+<span class="fc" id="L199">        return locked;</span>
     }
 
     /**
@@ -199,7 +205,7 @@ import java.util.Objects;
      * @return the state
      */
     public GHIssueState getState() {
-<span class="fc" id="L202">        return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L208">        return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -208,7 +214,7 @@ import java.util.Objects;
      * @return the state reason
      */
     public GHIssueStateReason getStateReason() {
-<span class="fc" id="L211">        return EnumUtils.getNullableEnumOrDefault(GHIssueStateReason.class, state_reason, GHIssueStateReason.UNKNOWN);</span>
+<span class="fc" id="L217">        return EnumUtils.getNullableEnumOrDefault(GHIssueStateReason.class, state_reason, GHIssueStateReason.UNKNOWN);</span>
     }
 
     /**
@@ -217,10 +223,10 @@ import java.util.Objects;
      * @return the labels
      */
     public Collection&lt;GHLabel&gt; getLabels() {
-<span class="pc bpc" id="L220" title="1 of 2 branches missed.">        if (labels == null) {</span>
-<span class="nc" id="L221">            return Collections.emptyList();</span>
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">        if (labels == null) {</span>
+<span class="nc" id="L227">            return Collections.emptyList();</span>
         }
-<span class="fc" id="L223">        return Collections.unmodifiableList(labels);</span>
+<span class="fc" id="L229">        return Collections.unmodifiableList(labels);</span>
     }
 
     /**
@@ -229,18 +235,7 @@ import java.util.Objects;
      * @return the closed at
      */
     public Date getClosedAt() {
-<span class="nc" id="L232">        return GitHubClient.parseDate(closed_at);</span>
-    }
-
-    /**
-     * Gets api url.
-     *
-     * @return API URL of this object.
-     * @deprecated use {@link #getUrl()}
-     */
-    @Deprecated
-    public URL getApiURL() {
-<span class="nc" id="L243">        return getUrl();</span>
+<span class="nc" id="L238">        return GitHubClient.parseDate(closed_at);</span>
     }
 
     /**
@@ -250,8 +245,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void lock() throws IOException {
-<span class="fc" id="L253">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute() + &quot;/lock&quot;).send();</span>
-<span class="fc" id="L254">    }</span>
+<span class="fc" id="L248">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute() + &quot;/lock&quot;).send();</span>
+<span class="fc" id="L249">    }</span>
 
     /**
      * Unlock.
@@ -260,8 +255,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void unlock() throws IOException {
-<span class="fc" id="L263">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute() + &quot;/lock&quot;).send();</span>
-<span class="fc" id="L264">    }</span>
+<span class="fc" id="L258">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute() + &quot;/lock&quot;).send();</span>
+<span class="fc" id="L259">    }</span>
 
     /**
      * Updates the issue by adding a comment.
@@ -272,34 +267,33 @@ import java.util.Objects;
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public GHIssueComment comment(String message) throws IOException {
-<span class="fc" id="L277">        GHIssueComment r = root().createRequest()</span>
-<span class="fc" id="L278">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L279">                .with(&quot;body&quot;, message)</span>
-<span class="fc" id="L280">                .withUrlPath(getIssuesApiRoute() + &quot;/comments&quot;)</span>
-<span class="fc" id="L281">                .fetch(GHIssueComment.class);</span>
-<span class="fc" id="L282">        return r.wrapUp(this);</span>
+<span class="fc" id="L271">        GHIssueComment r = root().createRequest()</span>
+<span class="fc" id="L272">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L273">                .with(&quot;body&quot;, message)</span>
+<span class="fc" id="L274">                .withUrlPath(getIssuesApiRoute() + &quot;/comments&quot;)</span>
+<span class="fc" id="L275">                .fetch(GHIssueComment.class);</span>
+<span class="fc" id="L276">        return r.wrapUp(this);</span>
     }
 
     private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L286">        root().createRequest().with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L287">    }</span>
+<span class="fc" id="L280">        root().createRequest().with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L281">    }</span>
 
     private void edit(Map&lt;String, Object&gt; map) throws IOException {
-<span class="fc" id="L290">        root().createRequest().with(map).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L291">    }</span>
+<span class="fc" id="L284">        root().createRequest().with(map).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L285">    }</span>
 
     /**
      * Identical to edit(), but allows null for the value.
      */
     private void editNullable(String key, Object value) throws IOException {
-<span class="nc" id="L297">        root().createRequest().withNullable(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="nc" id="L298">    }</span>
+<span class="nc" id="L291">        root().createRequest().withNullable(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="nc" id="L292">    }</span>
 
     private void editIssue(String key, Object value) throws IOException {
-<span class="fc" id="L301">        root().createRequest().withNullable(key, value).method(&quot;PATCH&quot;).withUrlPath(getIssuesApiRoute()).send();</span>
-<span class="fc" id="L302">    }</span>
+<span class="fc" id="L295">        root().createRequest().withNullable(key, value).method(&quot;PATCH&quot;).withUrlPath(getIssuesApiRoute()).send();</span>
+<span class="fc" id="L296">    }</span>
 
     /**
      * Closes this issue.
@@ -308,8 +302,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void close() throws IOException {
-<span class="fc" id="L311">        edit(&quot;state&quot;, &quot;closed&quot;);</span>
-<span class="fc" id="L312">    }</span>
+<span class="fc" id="L305">        edit(&quot;state&quot;, &quot;closed&quot;);</span>
+<span class="fc" id="L306">    }</span>
 
     /**
      * Closes this issue.
@@ -320,11 +314,11 @@ import java.util.Objects;
      *             the io exception
      */
     public void close(GHIssueStateReason reason) throws IOException {
-<span class="fc" id="L323">        Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L324">        map.put(&quot;state&quot;, &quot;closed&quot;);</span>
-<span class="fc" id="L325">        map.put(&quot;state_reason&quot;, reason.name().toLowerCase(Locale.ENGLISH));</span>
-<span class="fc" id="L326">        edit(map);</span>
-<span class="fc" id="L327">    }</span>
+<span class="fc" id="L317">        Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L318">        map.put(&quot;state&quot;, &quot;closed&quot;);</span>
+<span class="fc" id="L319">        map.put(&quot;state_reason&quot;, reason.name().toLowerCase(Locale.ENGLISH));</span>
+<span class="fc" id="L320">        edit(map);</span>
+<span class="fc" id="L321">    }</span>
 
     /**
      * Reopens this issue.
@@ -333,8 +327,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void reopen() throws IOException {
-<span class="nc" id="L336">        edit(&quot;state&quot;, &quot;open&quot;);</span>
-<span class="nc" id="L337">    }</span>
+<span class="nc" id="L330">        edit(&quot;state&quot;, &quot;open&quot;);</span>
+<span class="nc" id="L331">    }</span>
 
     /**
      * Sets title.
@@ -345,8 +339,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void setTitle(String title) throws IOException {
-<span class="fc" id="L348">        edit(&quot;title&quot;, title);</span>
-<span class="fc" id="L349">    }</span>
+<span class="fc" id="L342">        edit(&quot;title&quot;, title);</span>
+<span class="fc" id="L343">    }</span>
 
     /**
      * Sets body.
@@ -357,8 +351,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void setBody(String body) throws IOException {
-<span class="nc" id="L360">        edit(&quot;body&quot;, body);</span>
-<span class="nc" id="L361">    }</span>
+<span class="nc" id="L354">        edit(&quot;body&quot;, body);</span>
+<span class="nc" id="L355">    }</span>
 
     /**
      * Sets the milestone for this issue.
@@ -369,12 +363,12 @@ import java.util.Objects;
      *             The io exception
      */
     public void setMilestone(GHMilestone milestone) throws IOException {
-<span class="fc bfc" id="L372" title="All 2 branches covered.">        if (milestone == null) {</span>
-<span class="fc" id="L373">            editIssue(&quot;milestone&quot;, null);</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">        if (milestone == null) {</span>
+<span class="fc" id="L367">            editIssue(&quot;milestone&quot;, null);</span>
         } else {
-<span class="fc" id="L375">            editIssue(&quot;milestone&quot;, milestone.getNumber());</span>
+<span class="fc" id="L369">            editIssue(&quot;milestone&quot;, milestone.getNumber());</span>
         }
-<span class="fc" id="L377">    }</span>
+<span class="fc" id="L371">    }</span>
 
     /**
      * Assign to.
@@ -385,8 +379,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void assignTo(GHUser user) throws IOException {
-<span class="fc" id="L388">        setAssignees(user);</span>
-<span class="fc" id="L389">    }</span>
+<span class="fc" id="L382">        setAssignees(user);</span>
+<span class="fc" id="L383">    }</span>
 
     /**
      * Sets labels on the target to a specific list.
@@ -397,8 +391,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void setLabels(String... labels) throws IOException {
-<span class="fc" id="L400">        editIssue(&quot;labels&quot;, labels);</span>
-<span class="fc" id="L401">    }</span>
+<span class="fc" id="L394">        editIssue(&quot;labels&quot;, labels);</span>
+<span class="fc" id="L395">    }</span>
 
     /**
      * Adds labels to the issue.
@@ -411,9 +405,8 @@ import java.util.Objects;
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public List&lt;GHLabel&gt; addLabels(String... names) throws IOException {
-<span class="fc" id="L416">        return _addLabels(Arrays.asList(names));</span>
+<span class="fc" id="L409">        return _addLabels(Arrays.asList(names));</span>
     }
 
     /**
@@ -427,9 +420,8 @@ import java.util.Objects;
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public List&lt;GHLabel&gt; addLabels(GHLabel... labels) throws IOException {
-<span class="fc" id="L432">        return addLabels(Arrays.asList(labels));</span>
+<span class="fc" id="L424">        return addLabels(Arrays.asList(labels));</span>
     }
 
     /**
@@ -443,17 +435,16 @@ import java.util.Objects;
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public List&lt;GHLabel&gt; addLabels(Collection&lt;GHLabel&gt; labels) throws IOException {
-<span class="fc" id="L448">        return _addLabels(GHLabel.toNames(labels));</span>
+<span class="fc" id="L439">        return _addLabels(GHLabel.toNames(labels));</span>
     }
 
     private List&lt;GHLabel&gt; _addLabels(Collection&lt;String&gt; names) throws IOException {
-<span class="fc" id="L452">        return Arrays.asList(root().createRequest()</span>
-<span class="fc" id="L453">                .with(&quot;labels&quot;, names)</span>
-<span class="fc" id="L454">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L455">                .withUrlPath(getIssuesApiRoute() + &quot;/labels&quot;)</span>
-<span class="fc" id="L456">                .fetch(GHLabel[].class));</span>
+<span class="fc" id="L443">        return Arrays.asList(root().createRequest()</span>
+<span class="fc" id="L444">                .with(&quot;labels&quot;, names)</span>
+<span class="fc" id="L445">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L446">                .withUrlPath(getIssuesApiRoute() + &quot;/labels&quot;)</span>
+<span class="fc" id="L447">                .fetch(GHLabel[].class));</span>
     }
 
     /**
@@ -467,12 +458,11 @@ import java.util.Objects;
      * @throws IOException
      *             the io exception, throws {@link GHFileNotFoundException} if label was not present.
      */
-    @WithBridgeMethods(void.class)
     public List&lt;GHLabel&gt; removeLabel(String name) throws IOException {
-<span class="fc" id="L472">        return Arrays.asList(root().createRequest()</span>
-<span class="fc" id="L473">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L474">                .withUrlPath(getIssuesApiRoute() + &quot;/labels&quot;, name)</span>
-<span class="fc" id="L475">                .fetch(GHLabel[].class));</span>
+<span class="fc" id="L462">        return Arrays.asList(root().createRequest()</span>
+<span class="fc" id="L463">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L464">                .withUrlPath(getIssuesApiRoute() + &quot;/labels&quot;, name)</span>
+<span class="fc" id="L465">                .fetch(GHLabel[].class));</span>
     }
 
     /**
@@ -486,9 +476,8 @@ import java.util.Objects;
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public List&lt;GHLabel&gt; removeLabels(String... names) throws IOException {
-<span class="fc" id="L491">        return _removeLabels(Arrays.asList(names));</span>
+<span class="fc" id="L480">        return _removeLabels(Arrays.asList(names));</span>
     }
 
     /**
@@ -503,9 +492,8 @@ import java.util.Objects;
      *             the io exception
      * @see #removeLabels(String...) #removeLabels(String...)
      */
-    @WithBridgeMethods(void.class)
     public List&lt;GHLabel&gt; removeLabels(GHLabel... labels) throws IOException {
-<span class="fc" id="L508">        return removeLabels(Arrays.asList(labels));</span>
+<span class="fc" id="L496">        return removeLabels(Arrays.asList(labels));</span>
     }
 
     /**
@@ -519,21 +507,20 @@ import java.util.Objects;
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(void.class)
     public List&lt;GHLabel&gt; removeLabels(Collection&lt;GHLabel&gt; labels) throws IOException {
-<span class="fc" id="L524">        return _removeLabels(GHLabel.toNames(labels));</span>
+<span class="fc" id="L511">        return _removeLabels(GHLabel.toNames(labels));</span>
     }
 
     private List&lt;GHLabel&gt; _removeLabels(Collection&lt;String&gt; names) throws IOException {
-<span class="fc" id="L528">        List&lt;GHLabel&gt; remainingLabels = Collections.emptyList();</span>
-<span class="fc bfc" id="L529" title="All 2 branches covered.">        for (String name : names) {</span>
+<span class="fc" id="L515">        List&lt;GHLabel&gt; remainingLabels = Collections.emptyList();</span>
+<span class="fc bfc" id="L516" title="All 2 branches covered.">        for (String name : names) {</span>
             try {
-<span class="fc" id="L531">                remainingLabels = removeLabel(name);</span>
-<span class="fc" id="L532">            } catch (GHFileNotFoundException e) {</span>
+<span class="fc" id="L518">                remainingLabels = removeLabel(name);</span>
+<span class="fc" id="L519">            } catch (GHFileNotFoundException e) {</span>
                 // when trying to remove multiple labels, we ignore already removed
-<span class="fc" id="L534">            }</span>
-<span class="fc" id="L535">        }</span>
-<span class="fc" id="L536">        return remainingLabels;</span>
+<span class="fc" id="L521">            }</span>
+<span class="fc" id="L522">        }</span>
+<span class="fc" id="L523">        return remainingLabels;</span>
     }
 
     /**
@@ -545,7 +532,7 @@ import java.util.Objects;
      * @see #listComments() #listComments()
      */
     public List&lt;GHIssueComment&gt; getComments() throws IOException {
-<span class="fc" id="L548">        return listComments().toList();</span>
+<span class="fc" id="L535">        return listComments().toList();</span>
     }
 
     /**
@@ -558,9 +545,9 @@ import java.util.Objects;
      * @see #queryComments() queryComments to apply filters.
      */
     public PagedIterable&lt;GHIssueComment&gt; listComments() throws IOException {
-<span class="fc" id="L561">        return root().createRequest()</span>
-<span class="fc" id="L562">                .withUrlPath(getIssuesApiRoute() + &quot;/comments&quot;)</span>
-<span class="fc" id="L563">                .toIterable(GHIssueComment[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L548">        return root().createRequest()</span>
+<span class="fc" id="L549">                .withUrlPath(getIssuesApiRoute() + &quot;/comments&quot;)</span>
+<span class="fc" id="L550">                .toIterable(GHIssueComment[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -570,7 +557,7 @@ import java.util.Objects;
      * @see &lt;a href=&quot;https://docs.github.com/en/rest/issues/comments#list-issue-comments&quot;&gt;List issue comments&lt;/a&gt;
      */
     public GHIssueCommentQueryBuilder queryComments() {
-<span class="fc" id="L573">        return new GHIssueCommentQueryBuilder(this);</span>
+<span class="fc" id="L560">        return new GHIssueCommentQueryBuilder(this);</span>
     }
 
     /**
@@ -583,11 +570,11 @@ import java.util.Objects;
      *             Signals that an I/O exception has occurred.
      */
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="fc" id="L586">        return root().createRequest()</span>
-<span class="fc" id="L587">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L588">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="fc" id="L589">                .withUrlPath(getIssuesApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L590">                .fetch(GHReaction.class);</span>
+<span class="fc" id="L573">        return root().createRequest()</span>
+<span class="fc" id="L574">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L575">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="fc" id="L576">                .withUrlPath(getIssuesApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L577">                .fetch(GHReaction.class);</span>
     }
 
     /**
@@ -599,12 +586,12 @@ import java.util.Objects;
      *             Signals that an I/O exception has occurred.
      */
     public void deleteReaction(GHReaction reaction) throws IOException {
-<span class="fc" id="L602">        owner.root()</span>
-<span class="fc" id="L603">                .createRequest()</span>
-<span class="fc" id="L604">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L605">                .withUrlPath(getIssuesApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
-<span class="fc" id="L606">                .send();</span>
-<span class="fc" id="L607">    }</span>
+<span class="fc" id="L589">        owner.root()</span>
+<span class="fc" id="L590">                .createRequest()</span>
+<span class="fc" id="L591">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L592">                .withUrlPath(getIssuesApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
+<span class="fc" id="L593">                .send();</span>
+<span class="fc" id="L594">    }</span>
 
     /**
      * List reactions.
@@ -612,9 +599,9 @@ import java.util.Objects;
      * @return the paged iterable
      */
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L615">        return root().createRequest()</span>
-<span class="fc" id="L616">                .withUrlPath(getIssuesApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L617">                .toIterable(GHReaction[].class, null);</span>
+<span class="fc" id="L602">        return root().createRequest()</span>
+<span class="fc" id="L603">                .withUrlPath(getIssuesApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L604">                .toIterable(GHReaction[].class, null);</span>
     }
 
     /**
@@ -626,8 +613,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void addAssignees(GHUser... assignees) throws IOException {
-<span class="nc" id="L629">        addAssignees(Arrays.asList(assignees));</span>
-<span class="nc" id="L630">    }</span>
+<span class="nc" id="L616">        addAssignees(Arrays.asList(assignees));</span>
+<span class="nc" id="L617">    }</span>
 
     /**
      * Add assignees.
@@ -638,12 +625,12 @@ import java.util.Objects;
      *             the io exception
      */
     public void addAssignees(Collection&lt;GHUser&gt; assignees) throws IOException {
-<span class="nc" id="L641">        root().createRequest()</span>
-<span class="nc" id="L642">                .method(&quot;POST&quot;)</span>
-<span class="nc" id="L643">                .with(ASSIGNEES, getLogins(assignees))</span>
-<span class="nc" id="L644">                .withUrlPath(getIssuesApiRoute() + &quot;/assignees&quot;)</span>
-<span class="nc" id="L645">                .fetchInto(this);</span>
-<span class="nc" id="L646">    }</span>
+<span class="nc" id="L628">        root().createRequest()</span>
+<span class="nc" id="L629">                .method(&quot;POST&quot;)</span>
+<span class="nc" id="L630">                .with(ASSIGNEES, getLogins(assignees))</span>
+<span class="nc" id="L631">                .withUrlPath(getIssuesApiRoute() + &quot;/assignees&quot;)</span>
+<span class="nc" id="L632">                .fetchInto(this);</span>
+<span class="nc" id="L633">    }</span>
 
     /**
      * Sets assignees.
@@ -654,8 +641,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void setAssignees(GHUser... assignees) throws IOException {
-<span class="fc" id="L657">        setAssignees(Arrays.asList(assignees));</span>
-<span class="fc" id="L658">    }</span>
+<span class="fc" id="L644">        setAssignees(Arrays.asList(assignees));</span>
+<span class="fc" id="L645">    }</span>
 
     /**
      * Sets assignees.
@@ -666,12 +653,12 @@ import java.util.Objects;
      *             the io exception
      */
     public void setAssignees(Collection&lt;GHUser&gt; assignees) throws IOException {
-<span class="fc" id="L669">        root().createRequest()</span>
-<span class="fc" id="L670">                .method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L671">                .with(ASSIGNEES, getLogins(assignees))</span>
-<span class="fc" id="L672">                .withUrlPath(getIssuesApiRoute())</span>
-<span class="fc" id="L673">                .send();</span>
-<span class="fc" id="L674">    }</span>
+<span class="fc" id="L656">        root().createRequest()</span>
+<span class="fc" id="L657">                .method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L658">                .with(ASSIGNEES, getLogins(assignees))</span>
+<span class="fc" id="L659">                .withUrlPath(getIssuesApiRoute())</span>
+<span class="fc" id="L660">                .send();</span>
+<span class="fc" id="L661">    }</span>
 
     /**
      * Remove assignees.
@@ -682,8 +669,8 @@ import java.util.Objects;
      *             the io exception
      */
     public void removeAssignees(GHUser... assignees) throws IOException {
-<span class="nc" id="L685">        removeAssignees(Arrays.asList(assignees));</span>
-<span class="nc" id="L686">    }</span>
+<span class="nc" id="L672">        removeAssignees(Arrays.asList(assignees));</span>
+<span class="nc" id="L673">    }</span>
 
     /**
      * Remove assignees.
@@ -694,13 +681,13 @@ import java.util.Objects;
      *             the io exception
      */
     public void removeAssignees(Collection&lt;GHUser&gt; assignees) throws IOException {
-<span class="nc" id="L697">        root().createRequest()</span>
-<span class="nc" id="L698">                .method(&quot;DELETE&quot;)</span>
-<span class="nc" id="L699">                .with(ASSIGNEES, getLogins(assignees))</span>
-<span class="nc" id="L700">                .inBody()</span>
-<span class="nc" id="L701">                .withUrlPath(getIssuesApiRoute() + &quot;/assignees&quot;)</span>
-<span class="nc" id="L702">                .fetchInto(this);</span>
-<span class="nc" id="L703">    }</span>
+<span class="nc" id="L684">        root().createRequest()</span>
+<span class="nc" id="L685">                .method(&quot;DELETE&quot;)</span>
+<span class="nc" id="L686">                .with(ASSIGNEES, getLogins(assignees))</span>
+<span class="nc" id="L687">                .inBody()</span>
+<span class="nc" id="L688">                .withUrlPath(getIssuesApiRoute() + &quot;/assignees&quot;)</span>
+<span class="nc" id="L689">                .fetchInto(this);</span>
+<span class="nc" id="L690">    }</span>
 
     /**
      * Gets api route.
@@ -708,7 +695,7 @@ import java.util.Objects;
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L711">        return getIssuesApiRoute();</span>
+<span class="fc" id="L698">        return getIssuesApiRoute();</span>
     }
 
     /**
@@ -717,13 +704,13 @@ import java.util.Objects;
      * @return the issues api route
      */
     protected String getIssuesApiRoute() {
-<span class="fc bfc" id="L720" title="All 2 branches covered.">        if (owner == null) {</span>
+<span class="fc bfc" id="L707" title="All 2 branches covered.">        if (owner == null) {</span>
             // Issues returned from search to do not have an owner. Attempt to use url.
-<span class="fc" id="L722">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="fc" id="L723">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="fc" id="L709">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="fc" id="L710">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
         }
-<span class="fc" id="L725">        GHRepository repo = getRepository();</span>
-<span class="fc" id="L726">        return &quot;/repos/&quot; + repo.getOwnerName() + &quot;/&quot; + repo.getName() + &quot;/issues/&quot; + number;</span>
+<span class="fc" id="L712">        GHRepository repo = getRepository();</span>
+<span class="fc" id="L713">        return &quot;/repos/&quot; + repo.getOwnerName() + &quot;/&quot; + repo.getName() + &quot;/issues/&quot; + number;</span>
     }
 
     /**
@@ -734,7 +721,7 @@ import java.util.Objects;
      *             the io exception
      */
     public GHUser getAssignee() throws IOException {
-<span class="fc" id="L737">        return root().intern(assignee);</span>
+<span class="fc" id="L724">        return root().intern(assignee);</span>
     }
 
     /**
@@ -743,7 +730,7 @@ import java.util.Objects;
      * @return the assignees
      */
     public List&lt;GHUser&gt; getAssignees() {
-<span class="nc" id="L746">        return Collections.unmodifiableList(Arrays.asList(assignees));</span>
+<span class="nc" id="L733">        return Collections.unmodifiableList(Arrays.asList(assignees));</span>
     }
 
     /**
@@ -754,7 +741,7 @@ import java.util.Objects;
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-<span class="fc" id="L757">        return root().intern(user);</span>
+<span class="fc" id="L744">        return root().intern(user);</span>
     }
 
     /**
@@ -769,14 +756,14 @@ import java.util.Objects;
      *             the io exception
      */
     public GHUser getClosedBy() throws IOException {
-<span class="nc bnc" id="L772" title="All 2 branches missed.">        if (!&quot;closed&quot;.equals(state))</span>
-<span class="nc" id="L773">            return null;</span>
+<span class="nc bnc" id="L759" title="All 2 branches missed.">        if (!&quot;closed&quot;.equals(state))</span>
+<span class="nc" id="L760">            return null;</span>
 
         // TODO
         /*
          * if (closed_by==null) { closed_by = owner.getIssue(number).getClosed_by(); }
          */
-<span class="nc" id="L779">        return root().intern(closed_by);</span>
+<span class="nc" id="L766">        return root().intern(closed_by);</span>
     }
 
     /**
@@ -785,7 +772,7 @@ import java.util.Objects;
      * @return the comments count
      */
     public int getCommentsCount() {
-<span class="fc" id="L788">        return comments;</span>
+<span class="fc" id="L775">        return comments;</span>
     }
 
     /**
@@ -794,7 +781,7 @@ import java.util.Objects;
      * @return the pull request
      */
     public PullRequest getPullRequest() {
-<span class="nc" id="L797">        return pull_request;</span>
+<span class="nc" id="L784">        return pull_request;</span>
     }
 
     /**
@@ -803,7 +790,7 @@ import java.util.Objects;
      * @return the boolean
      */
     public boolean isPullRequest() {
-<span class="nc bnc" id="L806" title="All 2 branches missed.">        return pull_request != null;</span>
+<span class="nc bnc" id="L793" title="All 2 branches missed.">        return pull_request != null;</span>
     }
 
     /**
@@ -813,14 +800,21 @@ import java.util.Objects;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHMilestone getMilestone() {
-<span class="fc" id="L816">        return milestone;</span>
+<span class="fc" id="L803">        return milestone;</span>
     }
 
     /**
      * The type PullRequest.
      */
     @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
-<span class="fc" id="L823">    public static class PullRequest {</span>
+    public static class PullRequest {
+
+        /**
+         * Create default PullRequest instance
+         */
+<span class="fc" id="L815">        public PullRequest() {</span>
+<span class="fc" id="L816">        }</span>
+
         private String diff_url, patch_url, html_url;
 
         /**
@@ -829,7 +823,7 @@ import java.util.Objects;
          * @return the diff url
          */
         public URL getDiffUrl() {
-<span class="nc" id="L832">            return GitHubClient.parseURL(diff_url);</span>
+<span class="nc" id="L826">            return GitHubClient.parseURL(diff_url);</span>
         }
 
         /**
@@ -838,7 +832,7 @@ import java.util.Objects;
          * @return the patch url
          */
         public URL getPatchUrl() {
-<span class="nc" id="L841">            return GitHubClient.parseURL(patch_url);</span>
+<span class="nc" id="L835">            return GitHubClient.parseURL(patch_url);</span>
         }
 
         /**
@@ -847,7 +841,7 @@ import java.util.Objects;
          * @return the url
          */
         public URL getUrl() {
-<span class="nc" id="L850">            return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L844">            return GitHubClient.parseURL(html_url);</span>
         }
     }
 
@@ -859,11 +853,11 @@ import java.util.Objects;
      * @return the logins
      */
     protected static List&lt;String&gt; getLogins(Collection&lt;GHUser&gt; users) {
-<span class="fc" id="L862">        List&lt;String&gt; names = new ArrayList&lt;String&gt;(users.size());</span>
-<span class="fc bfc" id="L863" title="All 2 branches covered.">        for (GHUser a : users) {</span>
-<span class="fc" id="L864">            names.add(a.getLogin());</span>
-<span class="fc" id="L865">        }</span>
-<span class="fc" id="L866">        return names;</span>
+<span class="fc" id="L856">        List&lt;String&gt; names = new ArrayList&lt;String&gt;(users.size());</span>
+<span class="fc bfc" id="L857" title="All 2 branches covered.">        for (GHUser a : users) {</span>
+<span class="fc" id="L858">            names.add(a.getLogin());</span>
+<span class="fc" id="L859">        }</span>
+<span class="fc" id="L860">        return names;</span>
     }
 
     /**
@@ -874,9 +868,9 @@ import java.util.Objects;
      *             the io exception
      */
     public PagedIterable&lt;GHIssueEvent&gt; listEvents() throws IOException {
-<span class="fc" id="L877">        return root().createRequest()</span>
-<span class="fc" id="L878">                .withUrlPath(getRepository().getApiTailUrl(String.format(&quot;/issues/%s/events&quot;, number)))</span>
-<span class="fc" id="L879">                .toIterable(GHIssueEvent[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L871">        return root().createRequest()</span>
+<span class="fc" id="L872">                .withUrlPath(getRepository().getApiTailUrl(String.format(&quot;/issues/%s/events&quot;, number)))</span>
+<span class="fc" id="L873">                .toIterable(GHIssueEvent[].class, item -&gt; item.wrapUp(this));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

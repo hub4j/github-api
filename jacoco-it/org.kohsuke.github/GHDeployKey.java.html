@@ -9,7 +9,13 @@ import java.util.Date;
 /**
  * The type GHDeployKey.
  */
-<span class="fc" id="L12">public class GHDeployKey {</span>
+public class GHDeployKey {
+
+    /**
+     * Create default GHDeployKey instance
+     */
+<span class="fc" id="L17">    public GHDeployKey() {</span>
+<span class="fc" id="L18">    }</span>
 
     /** The title. */
     protected String url, key, title;
@@ -39,7 +45,7 @@ import java.util.Date;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L42">        return id;</span>
+<span class="fc" id="L48">        return id;</span>
     }
 
     /**
@@ -48,7 +54,7 @@ import java.util.Date;
      * @return the key
      */
     public String getKey() {
-<span class="nc" id="L51">        return key;</span>
+<span class="nc" id="L57">        return key;</span>
     }
 
     /**
@@ -57,7 +63,7 @@ import java.util.Date;
      * @return the title
      */
     public String getTitle() {
-<span class="fc" id="L60">        return title;</span>
+<span class="fc" id="L66">        return title;</span>
     }
 
     /**
@@ -66,7 +72,7 @@ import java.util.Date;
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L69">        return url;</span>
+<span class="nc" id="L75">        return url;</span>
     }
 
     /**
@@ -75,7 +81,7 @@ import java.util.Date;
      * @return the boolean
      */
     public boolean isVerified() {
-<span class="nc" id="L78">        return verified;</span>
+<span class="nc" id="L84">        return verified;</span>
     }
 
     /**
@@ -84,7 +90,7 @@ import java.util.Date;
      * @return the created_at
      */
     public Date getCreatedAt() {
-<span class="fc" id="L87">        return GitHubClient.parseDate(created_at);</span>
+<span class="fc" id="L93">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -93,7 +99,7 @@ import java.util.Date;
      * @return the last_used
      */
     public Date getLastUsedAt() {
-<span class="fc" id="L96">        return GitHubClient.parseDate(last_used);</span>
+<span class="fc" id="L102">        return GitHubClient.parseDate(last_used);</span>
     }
 
     /**
@@ -102,7 +108,7 @@ import java.util.Date;
      * @return the added_by
      */
     public String getAdded_by() {
-<span class="fc" id="L105">        return added_by;</span>
+<span class="fc" id="L111">        return added_by;</span>
     }
 
     /**
@@ -111,19 +117,7 @@ import java.util.Date;
      * @return true if the key can only read. False if the key has write permission as well.
      */
     public boolean isRead_only() {
-<span class="fc" id="L114">        return read_only;</span>
-    }
-
-    /**
-     * Wrap gh deploy key.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh deploy key
-     */
-    @Deprecated
-    public GHDeployKey wrap(GHRepository repo) {
-<span class="nc" id="L126">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L120">        return read_only;</span>
     }
 
     /**
@@ -134,8 +128,8 @@ import java.util.Date;
      * @return the gh deploy key
      */
     GHDeployKey lateBind(GHRepository repo) {
-<span class="fc" id="L137">        this.owner = repo;</span>
-<span class="fc" id="L138">        return this;</span>
+<span class="fc" id="L131">        this.owner = repo;</span>
+<span class="fc" id="L132">        return this;</span>
     }
 
     /**
@@ -144,14 +138,14 @@ import java.util.Date;
      * @return the string
      */
     public String toString() {
-<span class="fc" id="L147">        return new ToStringBuilder(this).append(&quot;title&quot;, title)</span>
-<span class="fc" id="L148">                .append(&quot;id&quot;, id)</span>
-<span class="fc" id="L149">                .append(&quot;key&quot;, key)</span>
-<span class="fc" id="L150">                .append(&quot;created_at&quot;, created_at)</span>
-<span class="fc" id="L151">                .append(&quot;last_used&quot;, last_used)</span>
-<span class="fc" id="L152">                .append(&quot;added_by&quot;, added_by)</span>
-<span class="fc" id="L153">                .append(&quot;read_only&quot;, read_only)</span>
-<span class="fc" id="L154">                .toString();</span>
+<span class="fc" id="L141">        return new ToStringBuilder(this).append(&quot;title&quot;, title)</span>
+<span class="fc" id="L142">                .append(&quot;id&quot;, id)</span>
+<span class="fc" id="L143">                .append(&quot;key&quot;, key)</span>
+<span class="fc" id="L144">                .append(&quot;created_at&quot;, created_at)</span>
+<span class="fc" id="L145">                .append(&quot;last_used&quot;, last_used)</span>
+<span class="fc" id="L146">                .append(&quot;added_by&quot;, added_by)</span>
+<span class="fc" id="L147">                .append(&quot;read_only&quot;, read_only)</span>
+<span class="fc" id="L148">                .toString();</span>
     }
 
     /**
@@ -161,11 +155,11 @@ import java.util.Date;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L164">        owner.root()</span>
-<span class="fc" id="L165">                .createRequest()</span>
-<span class="fc" id="L166">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L167">                .withUrlPath(String.format(&quot;/repos/%s/%s/keys/%d&quot;, owner.getOwnerName(), owner.getName(), id))</span>
-<span class="fc" id="L168">                .send();</span>
-<span class="fc" id="L169">    }</span>
+<span class="fc" id="L158">        owner.root()</span>
+<span class="fc" id="L159">                .createRequest()</span>
+<span class="fc" id="L160">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L161">                .withUrlPath(String.format(&quot;/repos/%s/%s/keys/%d&quot;, owner.getOwnerName(), owner.getName(), id))</span>
+<span class="fc" id="L162">                .send();</span>
+<span class="fc" id="L163">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -13,7 +13,14 @@ import java.util.List;
  * @author Paulo Miguel Almeida
  * @see GitHub#listMarketplacePlans()
  */
-<span class="fc" id="L16">public class GHMarketplacePlan extends GitHubInteractiveObject {</span>
+public class GHMarketplacePlan extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHMarketplacePlan instance
+     */
+<span class="fc" id="L21">    public GHMarketplacePlan() {</span>
+<span class="fc" id="L22">    }</span>
+
     private String url;
     private String accountsUrl;
     private long id;
@@ -35,7 +42,7 @@ import java.util.List;
      * @return the url
      */
     public URL getUrl() {
-<span class="fc" id="L38">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L45">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -44,7 +51,7 @@ import java.util.List;
      * @return the accounts url
      */
     public String getAccountsUrl() {
-<span class="fc" id="L47">        return accountsUrl;</span>
+<span class="fc" id="L54">        return accountsUrl;</span>
     }
 
     /**
@@ -53,7 +60,7 @@ import java.util.List;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L56">        return id;</span>
+<span class="fc" id="L63">        return id;</span>
     }
 
     /**
@@ -62,7 +69,7 @@ import java.util.List;
      * @return the number
      */
     public long getNumber() {
-<span class="fc" id="L65">        return number;</span>
+<span class="fc" id="L72">        return number;</span>
     }
 
     /**
@@ -71,7 +78,7 @@ import java.util.List;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L74">        return name;</span>
+<span class="fc" id="L81">        return name;</span>
     }
 
     /**
@@ -80,7 +87,7 @@ import java.util.List;
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L83">        return description;</span>
+<span class="fc" id="L90">        return description;</span>
     }
 
     /**
@@ -89,7 +96,7 @@ import java.util.List;
      * @return the monthly price in cents
      */
     public long getMonthlyPriceInCents() {
-<span class="fc" id="L92">        return monthlyPriceInCents;</span>
+<span class="fc" id="L99">        return monthlyPriceInCents;</span>
     }
 
     /**
@@ -98,7 +105,7 @@ import java.util.List;
      * @return the yearly price in cents
      */
     public long getYearlyPriceInCents() {
-<span class="nc" id="L101">        return yearlyPriceInCents;</span>
+<span class="nc" id="L108">        return yearlyPriceInCents;</span>
     }
 
     /**
@@ -107,7 +114,7 @@ import java.util.List;
      * @return the price model
      */
     public GHMarketplacePriceModel getPriceModel() {
-<span class="fc" id="L110">        return priceModel;</span>
+<span class="fc" id="L117">        return priceModel;</span>
     }
 
     /**
@@ -116,7 +123,7 @@ import java.util.List;
      * @return the boolean
      */
     public boolean isFreeTrial() {
-<span class="nc" id="L119">        return freeTrial;</span>
+<span class="nc" id="L126">        return freeTrial;</span>
     }
 
     /**
@@ -125,7 +132,7 @@ import java.util.List;
      * @return the unit name
      */
     public String getUnitName() {
-<span class="nc" id="L128">        return unitName;</span>
+<span class="nc" id="L135">        return unitName;</span>
     }
 
     /**
@@ -134,7 +141,7 @@ import java.util.List;
      * @return the state
      */
     public String getState() {
-<span class="fc" id="L137">        return state;</span>
+<span class="fc" id="L144">        return state;</span>
     }
 
     /**
@@ -143,7 +150,7 @@ import java.util.List;
      * @return the bullets
      */
     public List&lt;String&gt; getBullets() {
-<span class="fc" id="L146">        return Collections.unmodifiableList(bullets);</span>
+<span class="fc" id="L153">        return Collections.unmodifiableList(bullets);</span>
     }
 
     /**
@@ -167,7 +174,7 @@ import java.util.List;
      *      all GitHub accounts (user or organization) on a specific plan&lt;/a&gt;
      */
     public GHMarketplaceListAccountBuilder listAccounts() {
-<span class="fc" id="L170">        return new GHMarketplaceListAccountBuilder(root(), this.id);</span>
+<span class="fc" id="L177">        return new GHMarketplaceListAccountBuilder(root(), this.id);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -11,7 +11,14 @@ import java.util.Date;
  * @author Martin van Zijl
  * @see &lt;a href=&quot;https://developer.github.com/v3/issues/events/&quot;&gt;Github documentation for issue events&lt;/a&gt;
  */
-<span class="fc" id="L14">public class GHIssueEvent extends GitHubInteractiveObject {</span>
+public class GHIssueEvent extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHIssueEvent instance
+     */
+<span class="fc" id="L19">    public GHIssueEvent() {</span>
+<span class="fc" id="L20">    }</span>
+
     private long id;
     private String node_id;
     private String url;
@@ -35,7 +42,7 @@ import java.util.Date;
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L38">        return id;</span>
+<span class="fc" id="L45">        return id;</span>
     }
 
     /**
@@ -44,7 +51,7 @@ import java.util.Date;
      * @return the node id
      */
     public String getNodeId() {
-<span class="nc" id="L47">        return node_id;</span>
+<span class="nc" id="L54">        return node_id;</span>
     }
 
     /**
@@ -53,7 +60,7 @@ import java.util.Date;
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L56">        return url;</span>
+<span class="nc" id="L63">        return url;</span>
     }
 
     /**
@@ -63,7 +70,7 @@ import java.util.Date;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getActor() {
-<span class="nc" id="L66">        return actor;</span>
+<span class="nc" id="L73">        return actor;</span>
     }
 
     /**
@@ -72,7 +79,7 @@ import java.util.Date;
      * @return the event
      */
     public String getEvent() {
-<span class="fc" id="L75">        return event;</span>
+<span class="fc" id="L82">        return event;</span>
     }
 
     /**
@@ -81,7 +88,7 @@ import java.util.Date;
      * @return the commit id
      */
     public String getCommitId() {
-<span class="nc" id="L84">        return commit_id;</span>
+<span class="nc" id="L91">        return commit_id;</span>
     }
 
     /**
@@ -90,7 +97,7 @@ import java.util.Date;
      * @return the commit url
      */
     public String getCommitUrl() {
-<span class="nc" id="L93">        return commit_url;</span>
+<span class="nc" id="L100">        return commit_url;</span>
     }
 
     /**
@@ -99,7 +106,7 @@ import java.util.Date;
      * @return the created at
      */
     public Date getCreatedAt() {
-<span class="fc" id="L102">        return GitHubClient.parseDate(created_at);</span>
+<span class="fc" id="L109">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -109,7 +116,7 @@ import java.util.Date;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHIssue getIssue() {
-<span class="fc" id="L112">        return issue;</span>
+<span class="fc" id="L119">        return issue;</span>
     }
 
     /**
@@ -120,7 +127,7 @@ import java.util.Date;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHMilestone getMilestone() {
-<span class="fc" id="L123">        return milestone;</span>
+<span class="fc" id="L130">        return milestone;</span>
     }
 
     /**
@@ -131,7 +138,7 @@ import java.util.Date;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHLabel getLabel() {
-<span class="fc" id="L134">        return label;</span>
+<span class="fc" id="L141">        return label;</span>
     }
 
     /**
@@ -142,7 +149,7 @@ import java.util.Date;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getAssignee() {
-<span class="fc" id="L145">        return assignee;</span>
+<span class="fc" id="L152">        return assignee;</span>
     }
 
     /**
@@ -152,7 +159,7 @@ import java.util.Date;
      * @return the GHIssueRename
      */
     public GHIssueRename getRename() {
-<span class="fc" id="L155">        return this.rename;</span>
+<span class="fc" id="L162">        return this.rename;</span>
     }
 
     /**
@@ -169,7 +176,7 @@ import java.util.Date;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getReviewRequester() {
-<span class="fc" id="L172">        return this.reviewRequester;</span>
+<span class="fc" id="L179">        return this.reviewRequester;</span>
     }
 
     /**
@@ -186,7 +193,7 @@ import java.util.Date;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getRequestedReviewer() {
-<span class="fc" id="L189">        return this.requestedReviewer;</span>
+<span class="fc" id="L196">        return this.requestedReviewer;</span>
     }
 
     /**
@@ -197,8 +204,8 @@ import java.util.Date;
      * @return the GH issue event
      */
     GHIssueEvent wrapUp(GHIssue parent) {
-<span class="fc" id="L200">        this.issue = parent;</span>
-<span class="fc" id="L201">        return this;</span>
+<span class="fc" id="L207">        this.issue = parent;</span>
+<span class="fc" id="L208">        return this;</span>
     }
 
     /**
@@ -208,11 +215,11 @@ import java.util.Date;
      */
     @Override
     public String toString() {
-<span class="nc" id="L211">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
-<span class="nc" id="L212">                getIssue().getNumber(),</span>
-<span class="nc" id="L213">                getEvent(),</span>
-<span class="nc" id="L214">                getActor().getLogin(),</span>
-<span class="nc" id="L215">                getCreatedAt().toString());</span>
+<span class="nc" id="L218">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
+<span class="nc" id="L219">                getIssue().getNumber(),</span>
+<span class="nc" id="L220">                getEvent(),</span>
+<span class="nc" id="L221">                getActor().getLogin(),</span>
+<span class="nc" id="L222">                getCreatedAt().toString());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHAppInstallationToken.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHAppInstallationToken.java</span></div><h1>GHAppInstallationToken.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 import java.io.IOException;
 import java.util.*;
 
@@ -11,9 +8,16 @@ import java.util.*;
  * A Github App Installation Token.
  *
  * @author Paulo Miguel Almeida
- * @see GHAppInstallation#createToken(Map) GHAppInstallation#createToken(Map)
+ * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
-<span class="fc" id="L16">public class GHAppInstallationToken extends GitHubInteractiveObject {</span>
+public class GHAppInstallationToken extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHAppInstallationToken instance
+     */
+<span class="fc" id="L18">    public GHAppInstallationToken() {</span>
+<span class="fc" id="L19">    }</span>
+
     private String token;
 
     /** The expires at. */
@@ -23,36 +27,12 @@ import java.util.*;
     private GHRepositorySelection repositorySelection;
 
     /**
-     * Sets root.
-     *
-     * @param root
-     *            the root
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRoot(GitHub root) {
-<span class="fc" id="L34">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
-    }
-
-    /**
      * Gets permissions.
      *
      * @return the permissions
      */
     public Map&lt;String, String&gt; getPermissions() {
-<span class="fc" id="L43">        return Collections.unmodifiableMap(permissions);</span>
-    }
-
-    /**
-     * Sets permissions.
-     *
-     * @param permissions
-     *            the permissions
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setPermissions(Map&lt;String, String&gt; permissions) {
-<span class="fc" id="L55">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L35">        return Collections.unmodifiableMap(permissions);</span>
     }
 
     /**
@@ -61,19 +41,7 @@ import java.util.*;
      * @return the token
      */
     public String getToken() {
-<span class="fc" id="L64">        return token;</span>
-    }
-
-    /**
-     * Sets token.
-     *
-     * @param token
-     *            the token
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setToken(String token) {
-<span class="nc" id="L76">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L44">        return token;</span>
     }
 
     /**
@@ -82,19 +50,7 @@ import java.util.*;
      * @return the repositories
      */
     public List&lt;GHRepository&gt; getRepositories() {
-<span class="fc" id="L85">        return GitHubClient.unmodifiableListOrNull(repositories);</span>
-    }
-
-    /**
-     * Sets repositories.
-     *
-     * @param repositories
-     *            the repositories
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRepositories(List&lt;GHRepository&gt; repositories) {
-<span class="fc" id="L97">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L53">        return GitHubClient.unmodifiableListOrNull(repositories);</span>
     }
 
     /**
@@ -103,19 +59,7 @@ import java.util.*;
      * @return the repository selection
      */
     public GHRepositorySelection getRepositorySelection() {
-<span class="fc" id="L106">        return repositorySelection;</span>
-    }
-
-    /**
-     * Sets repository selection.
-     *
-     * @param repositorySelection
-     *            the repository selection
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-<span class="fc" id="L118">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L62">        return repositorySelection;</span>
     }
 
     /**
@@ -125,14 +69,8 @@ import java.util.*;
      * @throws IOException
      *             on error
      */
-    @WithBridgeMethods(value = String.class, adapterMethod = &quot;expiresAtStr&quot;)
     public Date getExpiresAt() throws IOException {
-<span class="fc" id="L130">        return GitHubClient.parseDate(expires_at);</span>
-    }
-
-    @SuppressFBWarnings(value = &quot;UPM_UNCALLED_PRIVATE_METHOD&quot;, justification = &quot;Bridge method of getExpiresAt&quot;)
-    private Object expiresAtStr(Date id, Class type) {
-<span class="nc" id="L135">        return expires_at;</span>
+<span class="fc" id="L73">        return GitHubClient.parseDate(expires_at);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

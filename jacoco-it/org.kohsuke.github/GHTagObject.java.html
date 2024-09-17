@@ -10,7 +10,14 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="fc" id="L13">public class GHTagObject extends GitHubInteractiveObject {</span>
+public class GHTagObject extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHTagObject instance
+     */
+<span class="fc" id="L18">    public GHTagObject() {</span>
+<span class="fc" id="L19">    }</span>
+
     private GHRepository owner;
 
     private String tag;
@@ -29,8 +36,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the GH tag object
      */
     GHTagObject wrap(GHRepository owner) {
-<span class="fc" id="L32">        this.owner = owner;</span>
-<span class="fc" id="L33">        return this;</span>
+<span class="fc" id="L39">        this.owner = owner;</span>
+<span class="fc" id="L40">        return this;</span>
     }
 
     /**
@@ -40,7 +47,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L43">        return owner;</span>
+<span class="fc" id="L50">        return owner;</span>
     }
 
     /**
@@ -49,7 +56,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the tag
      */
     public String getTag() {
-<span class="fc" id="L52">        return tag;</span>
+<span class="fc" id="L59">        return tag;</span>
     }
 
     /**
@@ -58,7 +65,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L61">        return sha;</span>
+<span class="fc" id="L68">        return sha;</span>
     }
 
     /**
@@ -67,7 +74,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the url
      */
     public String getUrl() {
-<span class="fc" id="L70">        return url;</span>
+<span class="fc" id="L77">        return url;</span>
     }
 
     /**
@@ -76,7 +83,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the message
      */
     public String getMessage() {
-<span class="fc" id="L79">        return message;</span>
+<span class="fc" id="L86">        return message;</span>
     }
 
     /**
@@ -85,7 +92,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the tagger
      */
     public GitUser getTagger() {
-<span class="fc" id="L88">        return tagger;</span>
+<span class="fc" id="L95">        return tagger;</span>
     }
 
     /**
@@ -94,7 +101,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the object
      */
     public GHRef.GHObject getObject() {
-<span class="fc" id="L97">        return object;</span>
+<span class="fc" id="L104">        return object;</span>
     }
 
     /**
@@ -103,7 +110,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return the Verification status
      */
     public GHVerification getVerification() {
-<span class="fc" id="L106">        return verification;</span>
+<span class="fc" id="L113">        return verification;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

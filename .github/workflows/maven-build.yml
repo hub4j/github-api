@@ -146,7 +146,7 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v4
       with:
-        java-version: 8
+        java-version: 11
         distribution: 'temurin'
         cache: 'maven'
     - name: Maven Test (no build) Java 11

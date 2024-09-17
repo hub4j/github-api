@@ -25,6 +25,12 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 public class GHHookTest {
 
     /**
+     * Create default GHHookTest instance
+     */
+    public GHHookTest() {
+    }
+
+    /**
      * Expose responce headers.
      *
      * @throws Exception

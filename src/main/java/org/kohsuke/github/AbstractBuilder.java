@@ -7,7 +7,6 @@ import java.io.IOException;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-// TODO: Auto-generated Javadoc
 /**
  * An abstract data object builder/updater.
  *
@@ -42,7 +41,7 @@ import javax.annotation.Nonnull;
  *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link R}, this builder will commit changes after each call to {@link #with(String, Object)}.
  */
-abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
+abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements GitHubRequestBuilderDone<R> {
 
     @Nonnull
     private final Class<R> returnType;
@@ -58,9 +57,9 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
 
     // TODO: Not sure how update-in-place behavior should be controlled
     // However, it certainly can be controlled dynamically down to the instance level or inherited for all children of
-    // some
+    // some connection.
+
     /** The update in place. */
-    // connection.
     protected boolean updateInPlace;
 
     /**
@@ -96,14 +95,9 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject {
     }
 
     /**
-     * Finishes an update, committing changes.
-     *
-     * This method may update-in-place or not. Either way it returns the resulting instance.
-     *
-     * @return an instance with updated current data
-     * @throws IOException
-     *             if there is an I/O Exception
+     * {@inheritDoc}
      */
+    @Override
     @Nonnull
     @BetaApi
     public R done() throws IOException {

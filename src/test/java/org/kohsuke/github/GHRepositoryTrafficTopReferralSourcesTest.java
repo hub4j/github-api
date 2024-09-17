@@ -12,6 +12,12 @@ import static org.hamcrest.Matchers.is;
 public class GHRepositoryTrafficTopReferralSourcesTest {
 
     /**
+     * Create default GHRepositoryTrafficTopReferralSourcesTest instance
+     */
+    public GHRepositoryTrafficTopReferralSourcesTest() {
+    }
+
+    /**
      * Test the constructor.
      */
     @Test

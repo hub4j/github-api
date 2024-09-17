@@ -30,6 +30,12 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default GHWorkflowRunTest instance
+     */
+    public GHWorkflowRunTest() {
+    }
+
     private static final String REPO_NAME = "hub4j-test-org/GHWorkflowRunTest";
     private static final String MAIN_BRANCH = "main";
     private static final String SECOND_BRANCH = "second-branch";

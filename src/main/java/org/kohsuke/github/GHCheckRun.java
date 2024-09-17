@@ -24,6 +24,12 @@ import java.util.Locale;
         justification = "JSON API")
 public class GHCheckRun extends GHObject {
 
+    /**
+     * Create default GHCheckRun instance
+     */
+    public GHCheckRun() {
+    }
+
     /** The owner. */
     @JsonProperty("repository")
     GHRepository owner;
@@ -326,6 +332,13 @@ public class GHCheckRun extends GHObject {
      * @see <a href="https://developer.github.com/v3/checks/runs/#output-object">documentation</a>
      */
     public static class Output {
+
+        /**
+         * Create default Output instance
+         */
+        public Output() {
+        }
+
         private String title;
         private String summary;
         private String text;

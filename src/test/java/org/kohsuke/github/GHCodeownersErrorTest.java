@@ -15,6 +15,12 @@ import static org.hamcrest.Matchers.*;
 public class GHCodeownersErrorTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHCodeownersErrorTest instance
+     */
+    public GHCodeownersErrorTest() {
+    }
+
+    /**
      * Gets the {@code CODEOWNERS} errors.
      *
      * @throws IOException

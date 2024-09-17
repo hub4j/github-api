@@ -17,6 +17,12 @@ import static org.hamcrest.Matchers.*;
 public class GHTagTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHTagTest instance
+     */
+    public GHTagTest() {
+    }
+
+    /**
      * Clean up tags.
      *
      * @throws Exception

@@ -35,6 +35,12 @@ import java.net.URL;
  */
 public class GHPullRequestFileDetail {
 
+    /**
+     * Create default GHPullRequestFileDetail instance
+     */
+    public GHPullRequestFileDetail() {
+    }
+
     /** The sha. */
     String sha;
 

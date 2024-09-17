@@ -1,4 +1,4 @@
-package org.kohsuke.aot;
+package org.kohsuke.github;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -8,7 +8,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
  * required for test purpose.
  */
 @SpringBootApplication
-public class AotTestApplication {
+class AotTestApplication {
 
     /**
      * Runs a spring boot application to generate AOT hints

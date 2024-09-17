@@ -1,4 +1,4 @@
-package org.kohsuke.github.junit;
+package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.common.Gzip.unGzipToString;
 
-// TODO: Auto-generated Javadoc
 /**
  * The standard WireMockRule eagerly initializes a WireMockServer. This version suptakes a laze approach allowing us to
  * automatically isolate snapshots for each method.

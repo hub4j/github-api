@@ -17,6 +17,12 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default GHGistUpdaterTest instance
+     */
+    public GHGistUpdaterTest() {
+    }
+
     private GHGist gist;
 
     /**

@@ -16,6 +16,12 @@ import static org.hamcrest.Matchers.notNullValue;
 public class GHPersonTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHPersonTest instance
+     */
+    public GHPersonTest() {
+    }
+
+    /**
      * Test fields for organization.
      *
      * @throws Exception

@@ -21,6 +21,12 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class GHWorkflowTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default GHWorkflowTest instance
+     */
+    public GHWorkflowTest() {
+    }
+
     private static String REPO_NAME = "hub4j-test-org/GHWorkflowTest";
 
     private GHRepository repo;

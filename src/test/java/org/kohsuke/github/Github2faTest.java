@@ -17,6 +17,12 @@ import static org.hamcrest.Matchers.*;
 public class Github2faTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default Github2faTest instance
+     */
+    public Github2faTest() {
+    }
+
+    /**
      * Test 2 fa token.
      *
      * @throws IOException

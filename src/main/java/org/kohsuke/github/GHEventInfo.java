@@ -14,6 +14,13 @@ import java.util.*;
  */
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHEventInfo extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHEventInfo instance
+     */
+    public GHEventInfo() {
+    }
+
     // we don't want to expose Jackson dependency to the user. This needs databinding
     private ObjectNode payload;
 
@@ -44,6 +51,13 @@ public class GHEventInfo extends GitHubInteractiveObject {
                     "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "JSON API")
     public static class GHEventRepository {
+
+        /**
+         * Create default GHEventRepository instance
+         */
+        public GHEventRepository() {
+        }
+
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         private long id;
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")

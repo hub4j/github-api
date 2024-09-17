@@ -30,6 +30,12 @@ import static org.hamcrest.Matchers.nullValue;
 public class GHIssueTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHIssueTest instance
+     */
+    public GHIssueTest() {
+    }
+
+    /**
      * Clean up.
      *
      * @throws Exception

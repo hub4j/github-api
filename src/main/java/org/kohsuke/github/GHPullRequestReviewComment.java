@@ -42,6 +42,12 @@ import javax.annotation.CheckForNull;
  */
 public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
+    /**
+     * Create default GHPullRequestReviewComment instance
+     */
+    public GHPullRequestReviewComment() {
+    }
+
     /** The owner. */
     GHPullRequest owner;
 

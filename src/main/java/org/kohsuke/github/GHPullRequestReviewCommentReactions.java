@@ -14,6 +14,12 @@ import java.net.URL;
  */
 public class GHPullRequestReviewCommentReactions {
 
+    /**
+     * Create default GHPullRequestReviewCommentReactions instance
+     */
+    public GHPullRequestReviewCommentReactions() {
+    }
+
     private String url;
 
     private int total_count = -1;

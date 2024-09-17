@@ -1,4 +1,4 @@
-package org.kohsuke.aot;
+package org.kohsuke.github;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.aot.hint.MemberCategory;
@@ -25,6 +25,12 @@ public class AotTestRuntimeHints implements RuntimeHintsRegistrar {
     private static final String CLASSPATH_IDENTIFIER = "/target/classes";
 
     private static final String LOCATION_PATTERN_OF_ORG_KOHSUKE_GITHUB_CLASSES = "classpath*:org/kohsuke/github/**/*.class";
+
+    /**
+     * Default constructor.
+     */
+    public AotTestRuntimeHints() {
+    }
 
     @Override
     public void registerHints(@NotNull RuntimeHints hints, ClassLoader classLoader) {

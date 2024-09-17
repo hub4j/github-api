@@ -41,6 +41,12 @@ import javax.annotation.CheckForNull;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHPullRequestReview extends GHObject {
 
+    /**
+     * Create default GHPullRequestReview instance
+     */
+    public GHPullRequestReview() {
+    }
+
     /** The owner. */
     GHPullRequest owner;
 

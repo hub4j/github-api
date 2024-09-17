@@ -15,6 +15,12 @@ import java.util.Locale;
  */
 public class GHMilestone extends GHObject {
 
+    /**
+     * Create default GHMilestone instance
+     */
+    public GHMilestone() {
+    }
+
     /** The owner. */
     GHRepository owner;
 

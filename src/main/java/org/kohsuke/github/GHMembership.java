@@ -17,6 +17,12 @@ import java.util.Locale;
         justification = "JSON API")
 public class GHMembership extends GitHubInteractiveObject {
 
+    /**
+     * Create default GHMembership instance
+     */
+    public GHMembership() {
+    }
+
     /** The url. */
     String url;
 

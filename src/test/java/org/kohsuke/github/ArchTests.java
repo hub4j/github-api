@@ -69,6 +69,12 @@ public class ArchTests {
     };
 
     /**
+     * Default constructor.
+     */
+    public ArchTests() {
+    }
+
+    /**
      * Before class.
      */
     @BeforeClass

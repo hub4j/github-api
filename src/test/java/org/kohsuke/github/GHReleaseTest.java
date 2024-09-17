@@ -13,6 +13,12 @@ import static org.junit.Assert.assertThrows;
 public class GHReleaseTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHReleaseTest instance
+     */
+    public GHReleaseTest() {
+    }
+
+    /**
      * Test create simple release.
      *
      * @throws Exception

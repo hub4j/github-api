@@ -73,6 +73,12 @@ import static java.util.Objects.requireNonNull;
         justification = "JSON API")
 public class GHRepository extends GHObject {
 
+    /**
+     * Create default GHRepository instance
+     */
+    public GHRepository() {
+    }
+
     private String nodeId, description, homepage, name, full_name;
 
     private String html_url; // this is the UI
@@ -3084,6 +3090,13 @@ public class GHRepository extends GHObject {
      * The type Contributor.
      */
     public static class Contributor extends GHUser {
+
+        /**
+         * Create default Contributor instance
+         */
+        public Contributor() {
+        }
+
         private int contributions;
 
         /**

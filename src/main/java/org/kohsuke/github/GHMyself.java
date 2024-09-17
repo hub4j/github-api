@@ -50,10 +50,11 @@ public class GHMyself extends GHUser {
      * @return the emails
      * @throws IOException
      *             the io exception
-     * @deprecated Use {@link #getEmails2()}
+     * @deprecated Use {@link #listEmails()}
      */
+    @Deprecated
     public List<String> getEmails() throws IOException {
-        return listEmails().toList().stream().map(email -> email.getEmail()).collect(Collectors.toList());
+        return getEmails2().stream().map(email -> email.getEmail()).collect(Collectors.toList());
     }
 
     /**

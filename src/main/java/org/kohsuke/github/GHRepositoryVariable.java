@@ -12,6 +12,12 @@ import javax.annotation.Nonnull;
  */
 public class GHRepositoryVariable extends GitHubInteractiveObject {
 
+    /**
+     * Create default GHRepositoryVariable instance
+     */
+    public GHRepositoryVariable() {
+    }
+
     private static final String SLASH = "/";
 
     private static final String VARIABLE_NAMESPACE = "actions/variables";

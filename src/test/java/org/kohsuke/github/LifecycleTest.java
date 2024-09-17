@@ -19,6 +19,12 @@ import static org.hamcrest.Matchers.*;
 public class LifecycleTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default LifecycleTest instance
+     */
+    public LifecycleTest() {
+    }
+
+    /**
      * Test create repository.
      *
      * @throws IOException

@@ -9,6 +9,13 @@ package org.kohsuke.github;
  *      documentation for renamed event</a>
  */
 public class GHIssueRename {
+
+    /**
+     * Create default GHIssueRename instance
+     */
+    public GHIssueRename() {
+    }
+
     private String from = "";
     private String to = "";
 

@@ -22,6 +22,12 @@ import java.util.logging.Logger;
  */
 public abstract class RateLimitChecker {
 
+    /**
+     * Create default RateLimitChecker instance
+     */
+    public RateLimitChecker() {
+    }
+
     private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());
 
     /** The Constant NONE. */

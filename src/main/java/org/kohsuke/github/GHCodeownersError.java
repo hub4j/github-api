@@ -8,6 +8,13 @@ package org.kohsuke.github;
  * @author Michael Grant
  */
 public class GHCodeownersError {
+
+    /**
+     * Create default GHCodeownersError instance
+     */
+    public GHCodeownersError() {
+    }
+
     private int line, column;
 
     private String kind, source, suggestion, message, path;

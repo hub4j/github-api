@@ -26,6 +26,12 @@ import static org.junit.Assert.fail;
 public class AotIntegrationTest {
 
     /**
+     * Create default AotIntegrationTest instance
+     */
+    public AotIntegrationTest() {
+    }
+
+    /**
      * Test to check if all required classes are registered for AOT.
      *
      * @throws IOException

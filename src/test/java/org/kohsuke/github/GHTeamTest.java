@@ -23,6 +23,12 @@ import static org.kohsuke.github.ExternalGroupsTestingSupport.Matchers.isExterna
 public class GHTeamTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHTeamTest instance
+     */
+    public GHTeamTest() {
+    }
+
+    /**
      * Test set description.
      *
      * @throws IOException

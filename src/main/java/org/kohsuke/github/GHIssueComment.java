@@ -38,6 +38,12 @@ import java.net.URL;
  */
 public class GHIssueComment extends GHObject implements Reactable {
 
+    /**
+     * Create default GHIssueComment instance
+     */
+    public GHIssueComment() {
+    }
+
     /** The owner. */
     GHIssue owner;
 

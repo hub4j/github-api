@@ -47,6 +47,12 @@ import java.util.Objects;
         justification = "JSON API")
 public class GHLicense extends GHObject {
 
+    /**
+     * Create default GHLicense instance
+     */
+    public GHLicense() {
+    }
+
     /** The name. */
     // these fields are always present, even in the short form
     protected String key, name, spdxId;

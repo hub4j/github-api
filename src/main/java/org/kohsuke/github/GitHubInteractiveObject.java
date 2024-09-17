@@ -6,7 +6,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Objects;
 
-// TODO: Auto-generated Javadoc
 /**
  * Defines a base class that all classes in this library that interact with GitHub inherit from.
  *

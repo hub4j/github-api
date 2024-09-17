@@ -1,4 +1,4 @@
-package org.kohsuke.github.junit;
+package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.VerificationException;
@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO: Auto-generated Javadoc
 /**
  * The standard WireMockRule eagerly initializes a WireMockServer. This version supports multiple servers in one rule
  * and takes a lazy approach to intitialization allowing us to isolate files snapshots for each method.

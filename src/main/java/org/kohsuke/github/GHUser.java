@@ -34,6 +34,12 @@ import java.util.*;
  */
 public class GHUser extends GHPerson {
 
+    /**
+     * Create default GHUser instance
+     */
+    public GHUser() {
+    }
+
     /** The ldap dn. */
     protected String ldap_dn;
 

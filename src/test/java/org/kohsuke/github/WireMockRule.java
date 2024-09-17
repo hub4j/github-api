@@ -1,4 +1,4 @@
-package org.kohsuke.github.junit;
+package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.admin.model.*;
@@ -34,7 +34,6 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class WireMockRule.
  *

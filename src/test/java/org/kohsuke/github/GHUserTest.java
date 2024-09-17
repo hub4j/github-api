@@ -21,6 +21,12 @@ import static org.hamcrest.Matchers.notNullValue;
 public class GHUserTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHUserTest instance
+     */
+    public GHUserTest() {
+    }
+
+    /**
      * Checks if is member of.
      *
      * @throws IOException

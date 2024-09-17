@@ -13,6 +13,12 @@ import static org.hamcrest.Matchers.*;
 public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHVerificationReasonTest instance
+     */
+    public GHVerificationReasonTest() {
+    }
+
+    /**
      * Test expired key.
      *
      * @throws Exception

@@ -19,6 +19,13 @@ import java.util.Collections;
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
 public class GHBranchProtection extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHBranchProtection instance
+     */
+    public GHBranchProtection() {
+    }
+
     private static final String REQUIRE_SIGNATURES_URI = "/required_signatures";
 
     @JsonProperty
@@ -204,6 +211,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type AllowDeletions.
      */
     public static class AllowDeletions {
+
+        /**
+         * Create default AllowDeletions instance
+         */
+        public AllowDeletions() {
+        }
+
         @JsonProperty
         private boolean enabled;
 
@@ -270,6 +284,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type AllowForcePushes.
      */
     public static class AllowForcePushes {
+
+        /**
+         * Create default AllowForcePushes instance
+         */
+        public AllowForcePushes() {
+        }
+
         @JsonProperty
         private boolean enabled;
 
@@ -287,6 +308,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type AllowForkSyncing.
      */
     public static class AllowForkSyncing {
+
+        /**
+         * Create default AllowForkSyncing instance
+         */
+        public AllowForkSyncing() {
+        }
+
         @JsonProperty
         private boolean enabled;
 
@@ -304,6 +332,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type BlockCreations.
      */
     public static class BlockCreations {
+
+        /**
+         * Create default BlockCreations instance
+         */
+        public BlockCreations() {
+        }
+
         @JsonProperty
         private boolean enabled;
 
@@ -321,6 +356,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type EnforceAdmins.
      */
     public static class EnforceAdmins {
+
+        /**
+         * Create default EnforceAdmins instance
+         */
+        public EnforceAdmins() {
+        }
+
         @JsonProperty
         private boolean enabled;
 
@@ -350,6 +392,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type LockBranch.
      */
     public static class LockBranch {
+
+        /**
+         * Create default LockBranch instance
+         */
+        public LockBranch() {
+        }
+
         @JsonProperty
         private boolean enabled;
 
@@ -367,6 +416,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type RequiredConversationResolution.
      */
     public static class RequiredConversationResolution {
+
+        /**
+         * Create default RequiredConversationResolution instance
+         */
+        public RequiredConversationResolution() {
+        }
+
         @JsonProperty
         private boolean enabled;
 
@@ -384,6 +440,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type RequiredLinearHistory.
      */
     public static class RequiredLinearHistory {
+
+        /**
+         * Create default RequiredLinearHistory instance
+         */
+        public RequiredLinearHistory() {
+        }
+
         @JsonProperty
         private boolean enabled;
 
@@ -401,6 +464,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type RequiredReviews.
      */
     public static class RequiredReviews {
+
+        /**
+         * Create default RequiredReviews instance
+         */
+        public RequiredReviews() {
+        }
+
         @JsonProperty("dismissal_restrictions")
         private Restrictions dismissalRestriction;
 
@@ -504,6 +574,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type RequiredStatusChecks.
      */
     public static class RequiredStatusChecks {
+
+        /**
+         * Create default RequiredStatusChecks instance
+         */
+        public RequiredStatusChecks() {
+        }
+
         @JsonProperty
         private Collection<String> contexts;
 
@@ -557,6 +634,13 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type Restrictions.
      */
     public static class Restrictions {
+
+        /**
+         * Create default Restrictions instance
+         */
+        public Restrictions() {
+        }
+
         @JsonProperty
         private Collection<GHTeam> teams;
 

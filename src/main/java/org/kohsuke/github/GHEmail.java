@@ -37,6 +37,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 public class GHEmail {
 
+    /**
+     * Create default GHEmail instance
+     */
+    public GHEmail() {
+    }
+
     /** The email. */
     protected String email;
 

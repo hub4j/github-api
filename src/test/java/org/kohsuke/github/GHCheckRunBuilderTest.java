@@ -41,6 +41,12 @@ import static org.hamcrest.Matchers.*;
 public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
 
     /**
+     * Create default GHCheckRunBuilderTest instance
+     */
+    public GHCheckRunBuilderTest() {
+    }
+
+    /**
      * Gets the installation github.
      *
      * @return the installation github

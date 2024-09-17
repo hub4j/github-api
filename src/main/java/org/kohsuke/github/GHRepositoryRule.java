@@ -16,6 +16,13 @@ import java.util.Optional;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public class GHRepositoryRule extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHRepositoryRule instance
+     */
+    public GHRepositoryRule() {
+    }
+
     private String type;
     private String rulesetSourceType;
     private String rulesetSource;
@@ -424,6 +431,13 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      * Status check configuration parameter.
      */
     public static class StatusCheckConfiguration {
+
+        /**
+         * Create default StatusCheckConfiguration instance
+         */
+        public StatusCheckConfiguration() {
+        }
+
         private String context;
         private Integer integrationId;
 
@@ -475,6 +489,13 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      * Workflow file reference parameter.
      */
     public static class WorkflowFileReference {
+
+        /**
+         * Create default WorkflowFileReference instance
+         */
+        public WorkflowFileReference() {
+        }
+
         private String path;
         private String ref;
         private long repositoryId;
@@ -521,6 +542,13 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      * Code scanning tool parameter.
      */
     public static class CodeScanningTool {
+
+        /**
+         * Create default CodeScanningTool instance
+         */
+        public CodeScanningTool() {
+        }
+
         private AlertsThreshold alertsThreshold;
         private SecurityAlertsThreshold securityAlertsThreshold;
         private String tool;

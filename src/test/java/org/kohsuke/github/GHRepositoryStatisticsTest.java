@@ -14,6 +14,12 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default GHRepositoryStatisticsTest instance
+     */
+    public GHRepositoryStatisticsTest() {
+    }
+
     /** The max iterations. */
     public static int MAX_ITERATIONS = 3;
 

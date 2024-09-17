@@ -1044,6 +1044,19 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test getEmails.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetEmails() throws IOException {
+        List<String> emails = gitHub.getMyself().getEmails();
+        assertThat(emails.size(), equalTo(2));
+        assertThat(emails, contains("bitwiseman@gmail.com", "bitwiseman@users.noreply.github.com"));
+    }
+
+    /**
      * Test app.
      *
      * @throws IOException

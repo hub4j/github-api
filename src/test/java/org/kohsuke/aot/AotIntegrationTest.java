@@ -47,9 +47,9 @@ public class AotIntegrationTest {
                 .collect(Collectors.toList());
 
         Stream<String> generatedReflectConfigStreamOfClassNames = readAotConfigToStreamOfClassNames(
-                "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/github-api/reflect-config.json");
+                "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/github-api-unbridged/reflect-config.json");
         Stream<String> generatedSerializationStreamOfNames = readAotConfigToStreamOfClassNames(
-                "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/github-api/serialization-config.json");
+                "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/github-api-unbridged/serialization-config.json");
         Stream<String> generatedAotConfigClassNames = Stream.concat(generatedReflectConfigStreamOfClassNames,
                 generatedSerializationStreamOfNames);
 

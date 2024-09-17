@@ -3,14 +3,14 @@ package org.kohsuke.github;
 import java.util.Collection;
 
 public class GHRule {
-	private String type;
+	private RuleType type;
 	private Parameters parameters;
 
-	public String getType() {
+	public RuleType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(RuleType type) {
 		this.type = type;
 	}
 
@@ -25,6 +25,10 @@ public class GHRule {
 
 	public GHRule wrap() {
 		return this;
+	}
+
+	public enum RuleType {
+		required_status_checks
 	}
 
 	public static class Parameters {

@@ -87,21 +87,6 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
     }
 
     /**
-     * Specifies whether the repository is a template.
-     *
-     * @param enabled
-     *            true if enabled
-     * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     * @deprecated Use {@link #isTemplate(boolean)} method instead
-     */
-    @Deprecated
-    public GHCreateRepositoryBuilder templateRepository(boolean enabled) throws IOException {
-<span class="nc" id="L101">        return isTemplate(enabled);</span>
-    }
-
-    /**
      * Specifies the ownership of the repository.
      *
      * @param owner
@@ -111,7 +96,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder owner(String owner) throws IOException {
-<span class="fc" id="L114">        return with(&quot;owner&quot;, owner);</span>
+<span class="fc" id="L99">        return with(&quot;owner&quot;, owner);</span>
     }
 
     /**
@@ -122,11 +107,10 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      * @param templateRepo
      *            template repository
      * @return a builder to continue with building
-     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/&quot;&gt;GitHub API Previews&lt;/a&gt;
      */
     public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
-<span class="fc" id="L128">        requester.withUrlPath(&quot;/repos/&quot; + templateOwner + &quot;/&quot; + templateRepo + &quot;/generate&quot;);</span>
-<span class="fc" id="L129">        return this;</span>
+<span class="fc" id="L112">        requester.withUrlPath(&quot;/repos/&quot; + templateOwner + &quot;/&quot; + templateRepo + &quot;/generate&quot;);</span>
+<span class="fc" id="L113">        return this;</span>
     }
 
     /**
@@ -135,14 +119,13 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      * @param templateRepository
      *            the template repository as a GHRepository
      * @return a builder to continue with building
-     * @see &lt;a href=&quot;https://developer.github.com/v3/previews/&quot;&gt;GitHub API Previews&lt;/a&gt;
      */
     public GHCreateRepositoryBuilder fromTemplateRepository(GHRepository templateRepository) {
-<span class="fc" id="L141">        Objects.requireNonNull(templateRepository, &quot;templateRepository cannot be null&quot;);</span>
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (!templateRepository.isTemplate()) {</span>
-<span class="fc" id="L143">            throw new IllegalArgumentException(&quot;The provided repository is not a template repository.&quot;);</span>
+<span class="fc" id="L124">        Objects.requireNonNull(templateRepository, &quot;templateRepository cannot be null&quot;);</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (!templateRepository.isTemplate()) {</span>
+<span class="fc" id="L126">            throw new IllegalArgumentException(&quot;The provided repository is not a template repository.&quot;);</span>
         }
-<span class="fc" id="L145">        return fromTemplateRepository(templateRepository.getOwnerName(), templateRepository.getName());</span>
+<span class="fc" id="L128">        return fromTemplateRepository(templateRepository.getOwnerName(), templateRepository.getName());</span>
     }
 
     /**
@@ -153,7 +136,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             if repository cannot be created
      */
     public GHRepository create() throws IOException {
-<span class="fc" id="L156">        return done();</span>
+<span class="fc" id="L139">        return done();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

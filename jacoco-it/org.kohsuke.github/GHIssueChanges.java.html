@@ -9,7 +9,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @see GHEventPayload.Issue
  */
 @SuppressFBWarnings(&quot;UWF_UNWRITTEN_FIELD&quot;)
-<span class="fc" id="L12">public class GHIssueChanges {</span>
+public class GHIssueChanges {
+
+    /**
+     * Create default GHIssueChanges instance
+     */
+<span class="fc" id="L17">    public GHIssueChanges() {</span>
+<span class="fc" id="L18">    }</span>
 
     private GHFrom title;
     private GHFrom body;
@@ -20,7 +26,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return old issue title (or null if not changed)
      */
     public GHFrom getTitle() {
-<span class="fc" id="L23">        return title;</span>
+<span class="fc" id="L29">        return title;</span>
     }
 
     /**
@@ -29,13 +35,20 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return old issue body (or null if not changed)
      */
     public GHFrom getBody() {
-<span class="fc" id="L32">        return body;</span>
+<span class="fc" id="L38">        return body;</span>
     }
 
     /**
      * Wrapper for changed values.
      */
-<span class="fc" id="L38">    public static class GHFrom {</span>
+    public static class GHFrom {
+
+        /**
+         * Create default GHFrom instance
+         */
+<span class="fc" id="L49">        public GHFrom() {</span>
+<span class="fc" id="L50">        }</span>
+
         private String from;
 
         /**
@@ -44,7 +57,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
          * @return previous value
          */
         public String getFrom() {
-<span class="fc" id="L47">            return from;</span>
+<span class="fc" id="L60">            return from;</span>
         }
     }
 }

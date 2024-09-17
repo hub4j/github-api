@@ -8,9 +8,16 @@
  * @see &lt;a href=&quot;https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#renamed&quot;&gt;Github
  *      documentation for renamed event&lt;/a&gt;
  */
-<span class="fc" id="L11">public class GHIssueRename {</span>
-<span class="fc" id="L12">    private String from = &quot;&quot;;</span>
-<span class="fc" id="L13">    private String to = &quot;&quot;;</span>
+public class GHIssueRename {
+
+    /**
+     * Create default GHIssueRename instance
+     */
+<span class="fc" id="L16">    public GHIssueRename() {</span>
+<span class="fc" id="L17">    }</span>
+
+<span class="fc" id="L19">    private String from = &quot;&quot;;</span>
+<span class="fc" id="L20">    private String to = &quot;&quot;;</span>
 
     /**
      * Old issue name.
@@ -18,7 +25,7 @@
      * @return old issue name
      */
     public String getFrom() {
-<span class="fc" id="L21">        return this.from;</span>
+<span class="fc" id="L28">        return this.from;</span>
     }
 
     /**
@@ -27,7 +34,7 @@
      * @return new issue name
      */
     public String getTo() {
-<span class="fc" id="L30">        return this.to;</span>
+<span class="fc" id="L37">        return this.to;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

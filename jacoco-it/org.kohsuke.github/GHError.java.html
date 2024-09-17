@@ -11,7 +11,13 @@ import java.net.URL;
  *
  * @author Miguel Esteban Gutiérrez
  */
-<span class="fc" id="L14">public class GHError implements Serializable {</span>
+public class GHError implements Serializable {
+
+    /**
+     * Create default GHError instance
+     */
+<span class="fc" id="L19">    public GHError() {</span>
+<span class="fc" id="L20">    }</span>
 
     /**
      * The serial version UID of the error
@@ -37,7 +43,7 @@ import java.net.URL;
      * @return the message
      */
     public String getMessage() {
-<span class="fc" id="L40">        return message;</span>
+<span class="fc" id="L46">        return message;</span>
     }
 
     /**
@@ -46,7 +52,7 @@ import java.net.URL;
      * @return the url
      */
     public URL getDocumentationUrl() {
-<span class="fc" id="L49">        return GitHubClient.parseURL(documentation);</span>
+<span class="fc" id="L55">        return GitHubClient.parseURL(documentation);</span>
     }
 
 }

@@ -16,7 +16,13 @@ import java.net.URL;
         value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
                 &quot;UUF_UNUSED_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="nc" id="L19">public class GHInvitation extends GHObject {</span>
+public class GHInvitation extends GHObject {
+
+    /**
+     * Create default GHInvitation instance
+     */
+<span class="nc" id="L24">    public GHInvitation() {</span>
+<span class="nc" id="L25">    }</span>
 
     private int id;
     private GHRepository repository;
@@ -31,8 +37,8 @@ import java.net.URL;
      *             the io exception
      */
     public void accept() throws IOException {
-<span class="nc" id="L34">        root().createRequest().method(&quot;PATCH&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
-<span class="nc" id="L35">    }</span>
+<span class="nc" id="L40">        root().createRequest().method(&quot;PATCH&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
+<span class="nc" id="L41">    }</span>
 
     /**
      * Decline a repository invitation.
@@ -41,17 +47,16 @@ import java.net.URL;
      *             the io exception
      */
     public void decline() throws IOException {
-<span class="nc" id="L44">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
-<span class="nc" id="L45">    }</span>
+<span class="nc" id="L50">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/repository_invitations/&quot; + id).send();</span>
+<span class="nc" id="L51">    }</span>
 
     /**
      * Gets the html url.
      *
      * @return the html url
      */
-    @Override
     public URL getHtmlUrl() {
-<span class="nc" id="L54">        return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L59">        return GitHubClient.parseURL(html_url);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

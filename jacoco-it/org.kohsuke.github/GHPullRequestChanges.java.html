@@ -9,7 +9,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @see GHEventPayload.PullRequest
  */
 @SuppressFBWarnings(&quot;UWF_UNWRITTEN_FIELD&quot;)
-<span class="fc" id="L12">public class GHPullRequestChanges {</span>
+public class GHPullRequestChanges {
+
+    /**
+     * Create default GHPullRequestChanges instance
+     */
+<span class="fc" id="L17">    public GHPullRequestChanges() {</span>
+<span class="fc" id="L18">    }</span>
 
     private GHCommitPointer base;
     private GHFrom title;
@@ -21,7 +27,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return old target branch info (or null if not changed)
      */
     public GHCommitPointer getBase() {
-<span class="fc" id="L24">        return base;</span>
+<span class="fc" id="L30">        return base;</span>
     }
 
     /**
@@ -30,7 +36,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return old pull request title (or null if not changed)
      */
     public GHFrom getTitle() {
-<span class="fc" id="L33">        return title;</span>
+<span class="fc" id="L39">        return title;</span>
     }
 
     /**
@@ -39,7 +45,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      * @return old pull request body (or null if not changed)
      */
     public GHFrom getBody() {
-<span class="fc" id="L42">        return body;</span>
+<span class="fc" id="L48">        return body;</span>
     }
 
     /**
@@ -47,7 +53,14 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
      *
      * @see org.kohsuke.github.GHCommitPointer
      */
-<span class="fc" id="L50">    public static class GHCommitPointer {</span>
+    public static class GHCommitPointer {
+
+        /**
+         * Create default GHCommitPointer instance
+         */
+<span class="fc" id="L61">        public GHCommitPointer() {</span>
+<span class="fc" id="L62">        }</span>
+
         private GHFrom ref;
         private GHFrom sha;
 
@@ -58,7 +71,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
          * @return the ref
          */
         public GHFrom getRef() {
-<span class="fc" id="L61">            return ref;</span>
+<span class="fc" id="L74">            return ref;</span>
         }
 
         /**
@@ -67,14 +80,21 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
          * @return sha
          */
         public GHFrom getSha() {
-<span class="fc" id="L70">            return sha;</span>
+<span class="fc" id="L83">            return sha;</span>
         }
     }
 
     /**
      * Wrapper for changed values.
      */
-<span class="fc" id="L77">    public static class GHFrom {</span>
+    public static class GHFrom {
+
+        /**
+         * Create default GHFrom instance
+         */
+<span class="fc" id="L95">        public GHFrom() {</span>
+<span class="fc" id="L96">        }</span>
+
         private String from;
 
         /**
@@ -83,7 +103,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
          * @return previous value
          */
         public String getFrom() {
-<span class="fc" id="L86">            return from;</span>
+<span class="fc" id="L106">            return from;</span>
         }
     }
 }

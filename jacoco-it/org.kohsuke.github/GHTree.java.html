@@ -18,7 +18,13 @@ import java.util.List;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-<span class="fc" id="L21">public class GHTree {</span>
+public class GHTree {
+
+    /**
+     * Create default GHTree instance
+     */
+<span class="fc" id="L26">    public GHTree() {</span>
+<span class="fc" id="L27">    }</span>
 
     /** The repo. */
     /* package almost final */GHRepository repo;
@@ -33,7 +39,7 @@ import java.util.List;
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L36">        return sha;</span>
+<span class="fc" id="L42">        return sha;</span>
     }
 
     /**
@@ -42,7 +48,7 @@ import java.util.List;
      * @return the tree
      */
     public List&lt;GHTreeEntry&gt; getTree() {
-<span class="fc" id="L45">        return Collections.unmodifiableList(Arrays.asList(tree));</span>
+<span class="fc" id="L51">        return Collections.unmodifiableList(Arrays.asList(tree));</span>
     }
 
     /**
@@ -55,11 +61,11 @@ import java.util.List;
      * @return the entry
      */
     public GHTreeEntry getEntry(String path) {
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        for (GHTreeEntry e : tree) {</span>
-<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (e.getPath().equals(path))</span>
-<span class="fc" id="L60">                return e;</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        for (GHTreeEntry e : tree) {</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">            if (e.getPath().equals(path))</span>
+<span class="fc" id="L66">                return e;</span>
         }
-<span class="nc" id="L62">        return null;</span>
+<span class="nc" id="L68">        return null;</span>
     }
 
     /**
@@ -68,7 +74,7 @@ import java.util.List;
      * @return true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
      */
     public boolean isTruncated() {
-<span class="nc" id="L71">        return truncated;</span>
+<span class="nc" id="L77">        return truncated;</span>
     }
 
     /**
@@ -78,7 +84,7 @@ import java.util.List;
      * @return the url
      */
     public URL getUrl() {
-<span class="fc" id="L81">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L87">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -89,11 +95,11 @@ import java.util.List;
      * @return the GH tree
      */
     GHTree wrap(GHRepository repo) {
-<span class="fc" id="L92">        this.repo = repo;</span>
-<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (GHTreeEntry e : tree) {</span>
-<span class="fc" id="L94">            e.tree = this;</span>
+<span class="fc" id="L98">        this.repo = repo;</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        for (GHTreeEntry e : tree) {</span>
+<span class="fc" id="L100">            e.tree = this;</span>
         }
-<span class="fc" id="L96">        return this;</span>
+<span class="fc" id="L102">        return this;</span>
     }
 
 }

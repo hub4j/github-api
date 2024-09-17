@@ -23,7 +23,14 @@ import java.util.stream.Collectors;
  * @see GHApp#getInstallationByRepository(String, String) GHApp#getInstallationByRepository(String, String)
  * @see GHApp#getInstallationByUser(String) GHApp#getInstallationByUser(String)
  */
-<span class="fc" id="L26">public class GHAppInstallation extends GHObject {</span>
+public class GHAppInstallation extends GHObject {
+
+    /**
+     * Create default GHAppInstallation instance
+     */
+<span class="fc" id="L31">    public GHAppInstallation() {</span>
+<span class="fc" id="L32">    }</span>
+
     private GHUser account;
 
     @JsonProperty(&quot;access_tokens_url&quot;)
@@ -52,19 +59,7 @@ import java.util.stream.Collectors;
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="nc" id="L55">        return GitHubClient.parseURL(htmlUrl);</span>
-    }
-
-    /**
-     * Sets root.
-     *
-     * @param root
-     *            the root
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRoot(GitHub root) {
-<span class="fc" id="L67">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="nc" id="L62">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -74,19 +69,7 @@ import java.util.stream.Collectors;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getAccount() {
-<span class="fc" id="L77">        return account;</span>
-    }
-
-    /**
-     * Sets account.
-     *
-     * @param account
-     *            the account
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setAccount(GHUser account) {
-<span class="fc" id="L89">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L72">        return account;</span>
     }
 
     /**
@@ -95,19 +78,7 @@ import java.util.stream.Collectors;
      * @return the access token url
      */
     public String getAccessTokenUrl() {
-<span class="fc" id="L98">        return accessTokenUrl;</span>
-    }
-
-    /**
-     * Sets access token url.
-     *
-     * @param accessTokenUrl
-     *            the access token url
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setAccessTokenUrl(String accessTokenUrl) {
-<span class="fc" id="L110">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L81">        return accessTokenUrl;</span>
     }
 
     /**
@@ -116,7 +87,7 @@ import java.util.stream.Collectors;
      * @return the repositories url
      */
     public String getRepositoriesUrl() {
-<span class="fc" id="L119">        return repositoriesUrl;</span>
+<span class="fc" id="L90">        return repositoriesUrl;</span>
     }
 
     /**
@@ -125,19 +96,18 @@ import java.util.stream.Collectors;
      * @return the paged iterable
      * @deprecated This method cannot work on a {@link GHAppInstallation} retrieved from
      *             {@link GHApp#listInstallations()} (for example), except when resorting to unsupported hacks involving
-     *             {@link GHAppInstallation#setRoot(GitHub)} to switch from an application client to an installation
-     *             client. This method will be removed. You should instead use an installation client (with an
-     *             installation token, not a JWT), retrieve a {@link GHAuthenticatedAppInstallation} from
-     *             {@link GitHub#getInstallation()}, then call
+     *             setRoot(GitHub) to switch from an application client to an installation client. This method will be
+     *             removed. You should instead use an installation client (with an installation token, not a JWT),
+     *             retrieve a {@link GHAuthenticatedAppInstallation} from {@link GitHub#getInstallation()}, then call
      *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
      */
     @Deprecated
     public PagedSearchIterable&lt;GHRepository&gt; listRepositories() {
         GitHubRequest request;
 
-<span class="fc" id="L138">        request = root().createRequest().withUrlPath(&quot;/installation/repositories&quot;).build();</span>
+<span class="fc" id="L108">        request = root().createRequest().withUrlPath(&quot;/installation/repositories&quot;).build();</span>
 
-<span class="fc" id="L140">        return new PagedSearchIterable&lt;&gt;(root(), request, GHAppInstallationRepositoryResult.class);</span>
+<span class="fc" id="L110">        return new PagedSearchIterable&lt;&gt;(root(), request, GHAppInstallationRepositoryResult.class);</span>
     }
 
     private static class GHAppInstallationRepositoryResult extends SearchResult&lt;GHRepository&gt; {
@@ -145,20 +115,8 @@ import java.util.stream.Collectors;
 
         @Override
         GHRepository[] getItems(GitHub root) {
-<span class="fc" id="L148">            return repositories;</span>
+<span class="fc" id="L118">            return repositories;</span>
         }
-    }
-
-    /**
-     * Sets repositories url.
-     *
-     * @param repositoriesUrl
-     *            the repositories url
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRepositoriesUrl(String repositoriesUrl) {
-<span class="fc" id="L161">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -167,19 +125,7 @@ import java.util.stream.Collectors;
      * @return the app id
      */
     public long getAppId() {
-<span class="fc" id="L170">        return appId;</span>
-    }
-
-    /**
-     * Sets app id.
-     *
-     * @param appId
-     *            the app id
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setAppId(long appId) {
-<span class="fc" id="L182">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L128">        return appId;</span>
     }
 
     /**
@@ -188,19 +134,7 @@ import java.util.stream.Collectors;
      * @return the target id
      */
     public long getTargetId() {
-<span class="fc" id="L191">        return targetId;</span>
-    }
-
-    /**
-     * Sets target id.
-     *
-     * @param targetId
-     *            the target id
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setTargetId(long targetId) {
-<span class="fc" id="L203">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L137">        return targetId;</span>
     }
 
     /**
@@ -209,19 +143,7 @@ import java.util.stream.Collectors;
      * @return the target type
      */
     public GHTargetType getTargetType() {
-<span class="fc" id="L212">        return targetType;</span>
-    }
-
-    /**
-     * Sets target type.
-     *
-     * @param targetType
-     *            the target type
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setTargetType(GHTargetType targetType) {
-<span class="fc" id="L224">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L146">        return targetType;</span>
     }
 
     /**
@@ -230,19 +152,7 @@ import java.util.stream.Collectors;
      * @return the permissions
      */
     public Map&lt;String, GHPermissionType&gt; getPermissions() {
-<span class="fc" id="L233">        return Collections.unmodifiableMap(permissions);</span>
-    }
-
-    /**
-     * Sets permissions.
-     *
-     * @param permissions
-     *            the permissions
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setPermissions(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="fc" id="L245">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L155">        return Collections.unmodifiableMap(permissions);</span>
     }
 
     /**
@@ -251,21 +161,9 @@ import java.util.stream.Collectors;
      * @return the events
      */
     public List&lt;GHEvent&gt; getEvents() {
-<span class="fc" id="L254">        return events.stream()</span>
-<span class="fc" id="L255">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
-<span class="fc" id="L256">                .collect(Collectors.toList());</span>
-    }
-
-    /**
-     * Sets events.
-     *
-     * @param events
-     *            the events
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setEvents(List&lt;GHEvent&gt; events) {
-<span class="fc" id="L268">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L164">        return events.stream()</span>
+<span class="fc" id="L165">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
+<span class="fc" id="L166">                .collect(Collectors.toList());</span>
     }
 
     /**
@@ -274,19 +172,7 @@ import java.util.stream.Collectors;
      * @return the single file name
      */
     public String getSingleFileName() {
-<span class="fc" id="L277">        return singleFileName;</span>
-    }
-
-    /**
-     * Sets single file name.
-     *
-     * @param singleFileName
-     *            the single file name
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setSingleFileName(String singleFileName) {
-<span class="fc" id="L289">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L175">        return singleFileName;</span>
     }
 
     /**
@@ -295,19 +181,7 @@ import java.util.stream.Collectors;
      * @return the repository selection
      */
     public GHRepositorySelection getRepositorySelection() {
-<span class="fc" id="L298">        return repositorySelection;</span>
-    }
-
-    /**
-     * Sets repository selection.
-     *
-     * @param repositorySelection
-     *            the repository selection
-     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
-     */
-    @Deprecated
-    public void setRepositorySelection(GHRepositorySelection repositorySelection) {
-<span class="fc" id="L310">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L184">        return repositorySelection;</span>
     }
 
     /**
@@ -316,7 +190,7 @@ import java.util.stream.Collectors;
      * @return the suspended at
      */
     public Date getSuspendedAt() {
-<span class="fc" id="L319">        return GitHubClient.parseDate(suspendedAt);</span>
+<span class="fc" id="L193">        return GitHubClient.parseDate(suspendedAt);</span>
     }
 
     /**
@@ -326,7 +200,7 @@ import java.util.stream.Collectors;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getSuspendedBy() {
-<span class="fc" id="L329">        return suspendedBy;</span>
+<span class="fc" id="L203">        return suspendedBy;</span>
     }
 
     /**
@@ -339,8 +213,8 @@ import java.util.stream.Collectors;
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#delete-an-installation&quot;&gt;Delete an installation&lt;/a&gt;
      */
     public void deleteInstallation() throws IOException {
-<span class="fc" id="L342">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(String.format(&quot;/app/installations/%d&quot;, getId())).send();</span>
-<span class="fc" id="L343">    }</span>
+<span class="fc" id="L216">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(String.format(&quot;/app/installations/%d&quot;, getId())).send();</span>
+<span class="fc" id="L217">    }</span>
 
     /**
      * Starts a builder that creates a new App Installation Token.
@@ -354,11 +228,9 @@ import java.util.stream.Collectors;
      * @return a GHAppCreateTokenBuilder instance
      * @deprecated Use {@link GHAppInstallation#createToken()} instead.
      */
-    @BetaApi
+    @Deprecated
     public GHAppCreateTokenBuilder createToken(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="nc" id="L359">        return new GHAppCreateTokenBuilder(root(),</span>
-<span class="nc" id="L360">                String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()),</span>
-                permissions);
+<span class="fc" id="L233">        return createToken().permissions(permissions);</span>
     }
 
     /**
@@ -370,9 +242,8 @@ import java.util.stream.Collectors;
      *
      * @return a GHAppCreateTokenBuilder instance
      */
-    @BetaApi
     public GHAppCreateTokenBuilder createToken() {
-<span class="fc" id="L375">        return new GHAppCreateTokenBuilder(root(), String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()));</span>
+<span class="fc" id="L246">        return new GHAppCreateTokenBuilder(root(), String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()));</span>
     }
 
     /**
@@ -393,7 +264,7 @@ import java.util.stream.Collectors;
      *      a subscription plan for an account&lt;/a&gt;
      */
     public GHMarketplaceAccountPlan getMarketplaceAccount() throws IOException {
-<span class="fc" id="L396">        return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();</span>
+<span class="fc" id="L267">        return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

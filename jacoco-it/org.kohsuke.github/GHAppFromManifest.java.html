@@ -6,7 +6,13 @@
  * @author Daniel Baur
  * @see GitHub#createAppFromManifest(String)
  */
-<span class="fc" id="L9">public class GHAppFromManifest extends GHApp {</span>
+public class GHAppFromManifest extends GHApp {
+
+    /**
+     * Create default GHAppFromManifest instance
+     */
+<span class="fc" id="L14">    public GHAppFromManifest() {</span>
+<span class="fc" id="L15">    }</span>
 
     private String clientId;
     private String clientSecret;
@@ -19,7 +25,7 @@
      * @return the client id
      */
     public String getClientId() {
-<span class="fc" id="L22">        return clientId;</span>
+<span class="fc" id="L28">        return clientId;</span>
     }
 
     /**
@@ -28,7 +34,7 @@
      * @return the client secret
      */
     public String getClientSecret() {
-<span class="fc" id="L31">        return clientSecret;</span>
+<span class="fc" id="L37">        return clientSecret;</span>
     }
 
     /**
@@ -37,7 +43,7 @@
      * @return the webhook secret
      */
     public String getWebhookSecret() {
-<span class="fc" id="L40">        return webhookSecret;</span>
+<span class="fc" id="L46">        return webhookSecret;</span>
     }
 
     /**
@@ -46,7 +52,7 @@
      * @return the pem
      */
     public String getPem() {
-<span class="fc" id="L49">        return pem;</span>
+<span class="fc" id="L55">        return pem;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

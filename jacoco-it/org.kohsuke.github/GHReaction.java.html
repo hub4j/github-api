@@ -2,9 +2,6 @@
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.io.IOException;
-import java.net.URL;
-
 // TODO: Auto-generated Javadoc
 /**
  * Reaction to issue, comment, PR, and so on.
@@ -12,7 +9,13 @@ import java.net.URL;
  * @author Kohsuke Kawaguchi
  * @see Reactable
  */
-<span class="fc" id="L15">public class GHReaction extends GHObject {</span>
+public class GHReaction extends GHObject {
+
+    /**
+     * Create default GHReaction instance
+     */
+<span class="fc" id="L17">    public GHReaction() {</span>
+<span class="fc" id="L18">    }</span>
 
     private GHUser user;
     private ReactionContent content;
@@ -23,7 +26,7 @@ import java.net.URL;
      * @return the content
      */
     public ReactionContent getContent() {
-<span class="fc" id="L26">        return content;</span>
+<span class="fc" id="L29">        return content;</span>
     }
 
     /**
@@ -33,32 +36,7 @@ import java.net.URL;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getUser() {
-<span class="fc" id="L36">        return user;</span>
-    }
-
-    /**
-     * Reaction has no HTML URL. Don't call this method.
-     *
-     * @return the html url
-     */
-    @Deprecated
-    public URL getHtmlUrl() {
-<span class="nc" id="L46">        return null;</span>
-    }
-
-    /**
-     * Removes this reaction.
-     *
-     * @throws IOException
-     *             the io exception
-     * @see &lt;a href=&quot;https://github.blog/changelog/2022-02-11-legacy-delete-reactions-rest-api-removed/&quot;&gt;Legacy Delete
-     *      reactions REST API removed&lt;/a&gt;
-     * @deprecated this API is no longer supported by GitHub, keeping it as is for old versions of GitHub Enterprise
-     */
-    @Deprecated
-    public void delete() throws IOException {
-<span class="fc" id="L60">        throw new UnsupportedOperationException(</span>
-                &quot;This method is not supported anymore. Please use Reactable#deleteReaction(GHReaction).&quot;);
+<span class="fc" id="L39">        return user;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

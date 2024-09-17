@@ -12,37 +12,19 @@ import java.net.URL;
  *
  * @author Gunnar Skjold
  */
-<span class="fc" id="L15">public class GHProjectColumn extends GHObject {</span>
+public class GHProjectColumn extends GHObject {
+
+    /**
+     * Create default GHProjectColumn instance
+     */
+<span class="fc" id="L20">    public GHProjectColumn() {</span>
+<span class="fc" id="L21">    }</span>
 
     /** The project. */
     protected GHProject project;
 
     private String name;
     private String project_url;
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    public URL getHtmlUrl() throws IOException {
-<span class="nc" id="L32">        return null;</span>
-    }
-
-    /**
-     * Wrap gh project column.
-     *
-     * @param root
-     *            the root
-     * @return the gh project column
-     */
-    @Deprecated
-    public GHProjectColumn wrap(GitHub root) {
-<span class="nc" id="L44">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
-    }
 
     /**
      * Wrap gh project column.
@@ -52,19 +34,7 @@ import java.net.URL;
      * @return the gh project column
      */
     GHProjectColumn lateBind(GitHub root) {
-<span class="fc" id="L55">        return this;</span>
-    }
-
-    /**
-     * Wrap gh project column.
-     *
-     * @param project
-     *            the project
-     * @return the gh project column
-     */
-    @Deprecated
-    public GHProjectColumn wrap(GHProject project) {
-<span class="nc" id="L67">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+<span class="fc" id="L37">        return this;</span>
     }
 
     /**
@@ -75,8 +45,8 @@ import java.net.URL;
      * @return the gh project column
      */
     GHProjectColumn lateBind(GHProject project) {
-<span class="fc" id="L78">        this.project = project;</span>
-<span class="fc" id="L79">        return lateBind(project.root());</span>
+<span class="fc" id="L48">        this.project = project;</span>
+<span class="fc" id="L49">        return lateBind(project.root());</span>
     }
 
     /**
@@ -88,13 +58,13 @@ import java.net.URL;
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHProject getProject() throws IOException {
-<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (project == null) {</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (project == null) {</span>
             try {
-<span class="nc" id="L93">                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);</span>
-<span class="nc" id="L94">            } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L95">            }</span>
+<span class="nc" id="L63">                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);</span>
+<span class="nc" id="L64">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L65">            }</span>
         }
-<span class="nc" id="L97">        return project;</span>
+<span class="nc" id="L67">        return project;</span>
     }
 
     /**
@@ -103,7 +73,7 @@ import java.net.URL;
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L106">        return name;</span>
+<span class="fc" id="L76">        return name;</span>
     }
 
     /**
@@ -112,7 +82,7 @@ import java.net.URL;
      * @return the project url
      */
     public URL getProjectUrl() {
-<span class="nc" id="L115">        return GitHubClient.parseURL(project_url);</span>
+<span class="nc" id="L85">        return GitHubClient.parseURL(project_url);</span>
     }
 
     /**
@@ -124,12 +94,12 @@ import java.net.URL;
      *             the io exception
      */
     public void setName(String name) throws IOException {
-<span class="fc" id="L127">        edit(&quot;name&quot;, name);</span>
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L97">        edit(&quot;name&quot;, name);</span>
+<span class="fc" id="L98">    }</span>
 
     private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L131">        root().createRequest().method(&quot;PATCH&quot;).with(key, value).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L101">        root().createRequest().method(&quot;PATCH&quot;).with(key, value).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L102">    }</span>
 
     /**
      * Gets api route.
@@ -137,7 +107,7 @@ import java.net.URL;
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L140">        return String.format(&quot;/projects/columns/%d&quot;, getId());</span>
+<span class="fc" id="L110">        return String.format(&quot;/projects/columns/%d&quot;, getId());</span>
     }
 
     /**
@@ -147,8 +117,8 @@ import java.net.URL;
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L150">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L151">    }</span>
+<span class="fc" id="L120">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L121">    }</span>
 
     /**
      * List cards paged iterable.
@@ -158,10 +128,10 @@ import java.net.URL;
      *             the io exception
      */
     public PagedIterable&lt;GHProjectCard&gt; listCards() throws IOException {
-<span class="nc" id="L161">        final GHProjectColumn column = this;</span>
-<span class="nc" id="L162">        return root().createRequest()</span>
-<span class="nc" id="L163">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="nc" id="L164">                .toIterable(GHProjectCard[].class, item -&gt; item.lateBind(column));</span>
+<span class="nc" id="L131">        final GHProjectColumn column = this;</span>
+<span class="nc" id="L132">        return root().createRequest()</span>
+<span class="nc" id="L133">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="nc" id="L134">                .toIterable(GHProjectCard[].class, item -&gt; item.lateBind(column));</span>
     }
 
     /**
@@ -174,12 +144,12 @@ import java.net.URL;
      *             the io exception
      */
     public GHProjectCard createCard(String note) throws IOException {
-<span class="fc" id="L177">        return root().createRequest()</span>
-<span class="fc" id="L178">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L179">                .with(&quot;note&quot;, note)</span>
-<span class="fc" id="L180">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="fc" id="L181">                .fetch(GHProjectCard.class)</span>
-<span class="fc" id="L182">                .lateBind(this);</span>
+<span class="fc" id="L147">        return root().createRequest()</span>
+<span class="fc" id="L148">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L149">                .with(&quot;note&quot;, note)</span>
+<span class="fc" id="L150">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="fc" id="L151">                .fetch(GHProjectCard.class)</span>
+<span class="fc" id="L152">                .lateBind(this);</span>
     }
 
     /**
@@ -192,14 +162,14 @@ import java.net.URL;
      *             the io exception
      */
     public GHProjectCard createCard(GHIssue issue) throws IOException {
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        String contentType = issue instanceof GHPullRequest ? &quot;PullRequest&quot; : &quot;Issue&quot;;</span>
-<span class="fc" id="L196">        return root().createRequest()</span>
-<span class="fc" id="L197">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L198">                .with(&quot;content_type&quot;, contentType)</span>
-<span class="fc" id="L199">                .with(&quot;content_id&quot;, issue.getId())</span>
-<span class="fc" id="L200">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="fc" id="L201">                .fetch(GHProjectCard.class)</span>
-<span class="fc" id="L202">                .lateBind(this);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        String contentType = issue instanceof GHPullRequest ? &quot;PullRequest&quot; : &quot;Issue&quot;;</span>
+<span class="fc" id="L166">        return root().createRequest()</span>
+<span class="fc" id="L167">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L168">                .with(&quot;content_type&quot;, contentType)</span>
+<span class="fc" id="L169">                .with(&quot;content_id&quot;, issue.getId())</span>
+<span class="fc" id="L170">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="fc" id="L171">                .fetch(GHProjectCard.class)</span>
+<span class="fc" id="L172">                .lateBind(this);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

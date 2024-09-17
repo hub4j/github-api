@@ -7,10 +7,17 @@ import java.io.IOException;
  * &lt;p&gt;
  * This will result in the &quot;Authorization&quot; header not being added to a request.
  */
-<span class="fc" id="L10">public class AnonymousAuthorizationProvider implements AuthorizationProvider {</span>
+public class AnonymousAuthorizationProvider implements AuthorizationProvider {
+
+    /**
+     * Create default AnonymousAuthorizationProvider instance
+     */
+<span class="fc" id="L15">    public AnonymousAuthorizationProvider() {</span>
+<span class="fc" id="L16">    }</span>
+
     @Override
     public String getEncodedAuthorization() throws IOException {
-<span class="fc" id="L13">        return null;</span>
+<span class="fc" id="L20">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

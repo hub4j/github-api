@@ -11,7 +11,14 @@ import java.util.Date;
  * @author Paulo Miguel Almeida
  * @see GitHub#getMyMarketplacePurchases()
  */
-<span class="fc" id="L14">public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {</span>
+public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHMarketplaceUserPurchase instance
+     */
+<span class="fc" id="L19">    public GHMarketplaceUserPurchase() {</span>
+<span class="fc" id="L20">    }</span>
+
     private String billingCycle;
     private String nextBillingDate;
     private boolean onFreeTrial;
@@ -29,7 +36,7 @@ import java.util.Date;
      * @return the billing cycle
      */
     public String getBillingCycle() {
-<span class="fc" id="L32">        return billingCycle;</span>
+<span class="fc" id="L39">        return billingCycle;</span>
     }
 
     /**
@@ -38,7 +45,7 @@ import java.util.Date;
      * @return the next billing date
      */
     public Date getNextBillingDate() {
-<span class="nc" id="L41">        return GitHubClient.parseDate(nextBillingDate);</span>
+<span class="nc" id="L48">        return GitHubClient.parseDate(nextBillingDate);</span>
     }
 
     /**
@@ -47,7 +54,7 @@ import java.util.Date;
      * @return the boolean
      */
     public boolean isOnFreeTrial() {
-<span class="fc" id="L50">        return onFreeTrial;</span>
+<span class="fc" id="L57">        return onFreeTrial;</span>
     }
 
     /**
@@ -56,7 +63,7 @@ import java.util.Date;
      * @return the free trial ends on
      */
     public Date getFreeTrialEndsOn() {
-<span class="fc" id="L59">        return GitHubClient.parseDate(freeTrialEndsOn);</span>
+<span class="fc" id="L66">        return GitHubClient.parseDate(freeTrialEndsOn);</span>
     }
 
     /**
@@ -65,7 +72,7 @@ import java.util.Date;
      * @return the unit count
      */
     public Long getUnitCount() {
-<span class="nc" id="L68">        return unitCount;</span>
+<span class="nc" id="L75">        return unitCount;</span>
     }
 
     /**
@@ -74,7 +81,7 @@ import java.util.Date;
      * @return the updated at
      */
     public Date getUpdatedAt() {
-<span class="nc" id="L77">        return GitHubClient.parseDate(updatedAt);</span>
+<span class="nc" id="L84">        return GitHubClient.parseDate(updatedAt);</span>
     }
 
     /**
@@ -83,7 +90,7 @@ import java.util.Date;
      * @return the account
      */
     public GHMarketplaceAccount getAccount() {
-<span class="fc" id="L86">        return account;</span>
+<span class="fc" id="L93">        return account;</span>
     }
 
     /**
@@ -92,7 +99,7 @@ import java.util.Date;
      * @return the plan
      */
     public GHMarketplacePlan getPlan() {
-<span class="fc" id="L95">        return plan;</span>
+<span class="fc" id="L102">        return plan;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

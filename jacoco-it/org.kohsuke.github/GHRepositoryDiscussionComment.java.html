@@ -16,7 +16,13 @@ import java.net.URL;
  * @see &lt;a href=&quot;https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussion&quot;&gt;The GraphQL
  *      API for Discussions&lt;/a&gt;
  */
-<span class="fc" id="L19">public class GHRepositoryDiscussionComment extends GHObject {</span>
+public class GHRepositoryDiscussionComment extends GHObject {
+
+    /**
+     * Create default GHRepositoryDiscussionComment instance
+     */
+<span class="fc" id="L24">    public GHRepositoryDiscussionComment() {</span>
+<span class="fc" id="L25">    }</span>
 
     private String htmlUrl;
 
@@ -33,7 +39,7 @@ import java.net.URL;
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L36">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L42">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -42,7 +48,7 @@ import java.net.URL;
      * @return the parent comment id
      */
     public Long getParentId() {
-<span class="fc" id="L45">        return parentId;</span>
+<span class="fc" id="L51">        return parentId;</span>
     }
 
     /**
@@ -51,7 +57,7 @@ import java.net.URL;
      * @return the number of child comments
      */
     public int getChildCommentCount() {
-<span class="fc" id="L54">        return childCommentCount;</span>
+<span class="fc" id="L60">        return childCommentCount;</span>
     }
 
     /**
@@ -62,7 +68,7 @@ import java.net.URL;
      *             Signals that an I/O exception has occurred.
      */
     public GHUser getUser() throws IOException {
-<span class="fc" id="L65">        return root().intern(user);</span>
+<span class="fc" id="L71">        return root().intern(user);</span>
     }
 
     /**
@@ -71,7 +77,7 @@ import java.net.URL;
      * @return the author association
      */
     public GHCommentAuthorAssociation getAuthorAssociation() {
-<span class="fc" id="L74">        return authorAssociation;</span>
+<span class="fc" id="L80">        return authorAssociation;</span>
     }
 
     /**
@@ -80,7 +86,7 @@ import java.net.URL;
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L83">        return body;</span>
+<span class="fc" id="L89">        return body;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

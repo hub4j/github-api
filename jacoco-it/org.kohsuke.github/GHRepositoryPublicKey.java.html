@@ -2,20 +2,16 @@
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.IOException;
+import java.net.URL;
+
 // TODO: Auto-generated Javadoc
 /**
  * A public key for the given repository.
  *
  * @author Aditya Bansal
  */
-public class GHRepositoryPublicKey extends GHObject {
-
-    /**
-     * Create default GHRepositoryPublicKey instance
-     */
-<span class="fc" id="L16">    public GHRepositoryPublicKey() {</span>
-<span class="fc" id="L17">    }</span>
-
+<span class="fc" id="L14">public class GHRepositoryPublicKey extends GHObject {</span>
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
@@ -24,12 +20,24 @@ public class GHRepositoryPublicKey extends GHObject {
     private String key;
 
     /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Override
+    public URL getHtmlUrl() throws IOException {
+<span class="nc" id="L31">        return null;</span>
+    }
+
+    /**
      * Gets the key id.
      *
      * @return the key id
      */
     public String getKeyId() {
-<span class="fc" id="L32">        return keyId;</span>
+<span class="fc" id="L40">        return keyId;</span>
     }
 
     /**
@@ -38,7 +46,7 @@ public class GHRepositoryPublicKey extends GHObject {
      * @return the key
      */
     public String getKey() {
-<span class="fc" id="L41">        return key;</span>
+<span class="fc" id="L49">        return key;</span>
     }
 
     /**
@@ -49,8 +57,8 @@ public class GHRepositoryPublicKey extends GHObject {
      * @return the GH repository public key
      */
     GHRepositoryPublicKey wrapUp(GHRepository owner) {
-<span class="fc" id="L52">        this.owner = owner;</span>
-<span class="fc" id="L53">        return this;</span>
+<span class="fc" id="L60">        this.owner = owner;</span>
+<span class="fc" id="L61">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

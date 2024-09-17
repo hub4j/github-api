@@ -12,27 +12,21 @@ import java.net.URL;
  *      documentation in the response schema&lt;/a&gt;
  * @see GHPullRequestReviewComment
  */
-public class GHPullRequestReviewCommentReactions {
-
-    /**
-     * Create default GHPullRequestReviewCommentReactions instance
-     */
-<span class="fc" id="L20">    public GHPullRequestReviewCommentReactions() {</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L15">public class GHPullRequestReviewCommentReactions {</span>
 
     private String url;
 
-<span class="fc" id="L25">    private int total_count = -1;</span>
-<span class="fc" id="L26">    @JsonProperty(&quot;+1&quot;)</span>
+<span class="fc" id="L19">    private int total_count = -1;</span>
+<span class="fc" id="L20">    @JsonProperty(&quot;+1&quot;)</span>
     private int plus_one = -1;
-<span class="fc" id="L28">    @JsonProperty(&quot;-1&quot;)</span>
+<span class="fc" id="L22">    @JsonProperty(&quot;-1&quot;)</span>
     private int minus_one = -1;
-<span class="fc" id="L30">    private int laugh = -1;</span>
-<span class="fc" id="L31">    private int confused = -1;</span>
-<span class="fc" id="L32">    private int heart = -1;</span>
-<span class="fc" id="L33">    private int hooray = -1;</span>
-<span class="fc" id="L34">    private int eyes = -1;</span>
-<span class="fc" id="L35">    private int rocket = -1;</span>
+<span class="fc" id="L24">    private int laugh = -1;</span>
+<span class="fc" id="L25">    private int confused = -1;</span>
+<span class="fc" id="L26">    private int heart = -1;</span>
+<span class="fc" id="L27">    private int hooray = -1;</span>
+<span class="fc" id="L28">    private int eyes = -1;</span>
+<span class="fc" id="L29">    private int rocket = -1;</span>
 
     /**
      * Gets the URL of the comment's reactions
@@ -40,7 +34,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the URL of the comment's reactions
      */
     public URL getUrl() {
-<span class="fc" id="L43">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L37">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -49,7 +43,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of total reactions
      */
     public int getTotalCount() {
-<span class="fc" id="L52">        return total_count;</span>
+<span class="fc" id="L46">        return total_count;</span>
     }
 
     /**
@@ -58,7 +52,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of +1 reactions
      */
     public int getPlusOne() {
-<span class="fc" id="L61">        return plus_one;</span>
+<span class="fc" id="L55">        return plus_one;</span>
     }
 
     /**
@@ -67,7 +61,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of -1 reactions
      */
     public int getMinusOne() {
-<span class="fc" id="L70">        return minus_one;</span>
+<span class="fc" id="L64">        return minus_one;</span>
     }
 
     /**
@@ -76,7 +70,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of laugh reactions
      */
     public int getLaugh() {
-<span class="fc" id="L79">        return laugh;</span>
+<span class="fc" id="L73">        return laugh;</span>
     }
 
     /**
@@ -85,7 +79,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of confused reactions
      */
     public int getConfused() {
-<span class="fc" id="L88">        return confused;</span>
+<span class="fc" id="L82">        return confused;</span>
     }
 
     /**
@@ -94,7 +88,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of heart reactions
      */
     public int getHeart() {
-<span class="fc" id="L97">        return heart;</span>
+<span class="fc" id="L91">        return heart;</span>
     }
 
     /**
@@ -103,7 +97,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of hooray reactions
      */
     public int getHooray() {
-<span class="fc" id="L106">        return hooray;</span>
+<span class="fc" id="L100">        return hooray;</span>
     }
 
     /**
@@ -112,7 +106,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of eyes reactions
      */
     public int getEyes() {
-<span class="fc" id="L115">        return eyes;</span>
+<span class="fc" id="L109">        return eyes;</span>
     }
 
     /**
@@ -121,7 +115,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of rocket reactions
      */
     public int getRocket() {
-<span class="fc" id="L124">        return rocket;</span>
+<span class="fc" id="L118">        return rocket;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

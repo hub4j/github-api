@@ -10,14 +10,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-public class GHTag extends GitHubInteractiveObject {
-
-    /**
-     * Create default GHTag instance
-     */
-<span class="fc" id="L18">    public GHTag() {</span>
-<span class="fc" id="L19">    }</span>
-
+<span class="fc" id="L13">public class GHTag extends GitHubInteractiveObject {</span>
     private GHRepository owner;
 
     private String name;
@@ -31,10 +24,10 @@ public class GHTag extends GitHubInteractiveObject {
      * @return the GH tag
      */
     GHTag wrap(GHRepository owner) {
-<span class="fc" id="L34">        this.owner = owner;</span>
-<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (commit != null)</span>
-<span class="fc" id="L36">            commit.wrapUp(owner);</span>
-<span class="fc" id="L37">        return this;</span>
+<span class="fc" id="L27">        this.owner = owner;</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (commit != null)</span>
+<span class="fc" id="L29">            commit.wrapUp(owner);</span>
+<span class="fc" id="L30">        return this;</span>
     }
 
     /**
@@ -44,7 +37,7 @@ public class GHTag extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="nc" id="L47">        return owner;</span>
+<span class="nc" id="L40">        return owner;</span>
     }
 
     /**
@@ -53,7 +46,7 @@ public class GHTag extends GitHubInteractiveObject {
      * @return the name
      */
     public String getName() {
-<span class="nc" id="L56">        return name;</span>
+<span class="nc" id="L49">        return name;</span>
     }
 
     /**
@@ -63,7 +56,7 @@ public class GHTag extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHCommit getCommit() {
-<span class="fc" id="L66">        return commit;</span>
+<span class="fc" id="L59">        return commit;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

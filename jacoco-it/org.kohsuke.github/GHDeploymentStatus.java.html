@@ -7,14 +7,7 @@ import java.util.Locale;
 /**
  * The type GHDeploymentStatus.
  */
-public class GHDeploymentStatus extends GHObject {
-
-    /**
-     * Create default GHDeploymentStatus instance
-     */
-<span class="fc" id="L15">    public GHDeploymentStatus() {</span>
-<span class="fc" id="L16">    }</span>
-
+<span class="fc" id="L10">public class GHDeploymentStatus extends GHObject {</span>
     private GHRepository owner;
 
     /** The creator. */
@@ -49,18 +42,45 @@ public class GHDeploymentStatus extends GHObject {
      *
      * @return the gh deployment status
      */
+    @Deprecated
+    public GHDeploymentStatus wrap(GHRepository owner) {
+<span class="nc" id="L47">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
+    }
+
+    /**
+     * Wrap gh deployment status.
+     *
+     * @param owner
+     *            the owner
+     *
+     * @return the gh deployment status
+     */
     GHDeploymentStatus lateBind(GHRepository owner) {
-<span class="fc" id="L53">        this.owner = owner;</span>
-<span class="fc" id="L54">        return this;</span>
+<span class="fc" id="L59">        this.owner = owner;</span>
+<span class="fc" id="L60">        return this;</span>
     }
 
     /**
      * Gets target url.
      *
      * @return the target url
+     * @deprecated Target url is deprecated in favor of {@link #getLogUrl() getLogUrl}
+     */
+    @Deprecated
+    public URL getTargetUrl() {
+<span class="fc" id="L71">        return GitHubClient.parseURL(target_url);</span>
+    }
+
+    /**
+     * Gets target url.
+     * &lt;p&gt;
+     * This method replaces {@link #getTargetUrl() getTargetUrl}}.
+     *
+     * @return the target url
+     * @deprecated until preview feature has graduated to stable
      */
     public URL getLogUrl() {
-<span class="fc" id="L63">        return GitHubClient.parseURL(log_url);</span>
+<span class="fc" id="L83">        return GitHubClient.parseURL(log_url);</span>
     }
 
     /**
@@ -69,16 +89,17 @@ public class GHDeploymentStatus extends GHObject {
      * @return the deployment url
      */
     public URL getDeploymentUrl() {
-<span class="fc" id="L72">        return GitHubClient.parseURL(deployment_url);</span>
+<span class="fc" id="L92">        return GitHubClient.parseURL(deployment_url);</span>
     }
 
     /**
      * Gets deployment environment url.
      *
      * @return the deployment environment url
+     * @deprecated until preview feature has graduated to stable
      */
     public URL getEnvironmentUrl() {
-<span class="nc" id="L81">        return GitHubClient.parseURL(environment_url);</span>
+<span class="nc" id="L102">        return GitHubClient.parseURL(environment_url);</span>
     }
 
     /**
@@ -87,7 +108,7 @@ public class GHDeploymentStatus extends GHObject {
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-<span class="fc" id="L90">        return GitHubClient.parseURL(repository_url);</span>
+<span class="fc" id="L111">        return GitHubClient.parseURL(repository_url);</span>
     }
 
     /**
@@ -96,7 +117,18 @@ public class GHDeploymentStatus extends GHObject {
      * @return the state
      */
     public GHDeploymentState getState() {
-<span class="fc" id="L99">        return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L120">        return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));</span>
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+<span class="nc" id="L131">        return null;</span>
     }
 
     /**
@@ -106,7 +138,7 @@ public class GHDeploymentStatus extends GHObject {
      */
     // test only
     GHRepository getOwner() {
-<span class="fc" id="L109">        return owner;</span>
+<span class="fc" id="L141">        return owner;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

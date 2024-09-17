@@ -33,13 +33,7 @@ import java.net.URL;
  * @see GHPullRequest#listFiles() GHPullRequest#listFiles()
  * @see &lt;a href=&quot;https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files&quot;&gt;List pull requests files&lt;/a&gt;
  */
-public class GHPullRequestFileDetail {
-
-    /**
-     * Create default GHPullRequestFileDetail instance
-     */
-<span class="nc" id="L41">    public GHPullRequestFileDetail() {</span>
-<span class="nc" id="L42">    }</span>
+<span class="nc" id="L36">public class GHPullRequestFileDetail {</span>
 
     /** The sha. */
     String sha;
@@ -82,7 +76,7 @@ public class GHPullRequestFileDetail {
      *      files&lt;/a&gt;
      */
     public String getSha() {
-<span class="nc" id="L85">        return sha;</span>
+<span class="nc" id="L79">        return sha;</span>
     }
 
     /**
@@ -91,7 +85,7 @@ public class GHPullRequestFileDetail {
      * @return the filename
      */
     public String getFilename() {
-<span class="nc" id="L94">        return filename;</span>
+<span class="nc" id="L88">        return filename;</span>
     }
 
     /**
@@ -100,7 +94,7 @@ public class GHPullRequestFileDetail {
      * @return the status
      */
     public String getStatus() {
-<span class="nc" id="L103">        return status;</span>
+<span class="nc" id="L97">        return status;</span>
     }
 
     /**
@@ -109,7 +103,7 @@ public class GHPullRequestFileDetail {
      * @return the additions
      */
     public int getAdditions() {
-<span class="nc" id="L112">        return additions;</span>
+<span class="nc" id="L106">        return additions;</span>
     }
 
     /**
@@ -118,7 +112,7 @@ public class GHPullRequestFileDetail {
      * @return the deletions
      */
     public int getDeletions() {
-<span class="nc" id="L121">        return deletions;</span>
+<span class="nc" id="L115">        return deletions;</span>
     }
 
     /**
@@ -127,7 +121,7 @@ public class GHPullRequestFileDetail {
      * @return the changes
      */
     public int getChanges() {
-<span class="nc" id="L130">        return changes;</span>
+<span class="nc" id="L124">        return changes;</span>
     }
 
     /**
@@ -136,7 +130,7 @@ public class GHPullRequestFileDetail {
      * @return the blob url
      */
     public URL getBlobUrl() {
-<span class="nc" id="L139">        return GitHubClient.parseURL(blob_url);</span>
+<span class="nc" id="L133">        return GitHubClient.parseURL(blob_url);</span>
     }
 
     /**
@@ -145,7 +139,7 @@ public class GHPullRequestFileDetail {
      * @return the raw url
      */
     public URL getRawUrl() {
-<span class="nc" id="L148">        return GitHubClient.parseURL(raw_url);</span>
+<span class="nc" id="L142">        return GitHubClient.parseURL(raw_url);</span>
     }
 
     /**
@@ -154,7 +148,7 @@ public class GHPullRequestFileDetail {
      * @return the contents url
      */
     public URL getContentsUrl() {
-<span class="nc" id="L157">        return GitHubClient.parseURL(contents_url);</span>
+<span class="nc" id="L151">        return GitHubClient.parseURL(contents_url);</span>
     }
 
     /**
@@ -163,7 +157,7 @@ public class GHPullRequestFileDetail {
      * @return the patch
      */
     public String getPatch() {
-<span class="nc" id="L166">        return patch;</span>
+<span class="nc" id="L160">        return patch;</span>
     }
 
     /**
@@ -172,7 +166,7 @@ public class GHPullRequestFileDetail {
      * @return the previous filename
      */
     public String getPreviousFilename() {
-<span class="nc" id="L175">        return previous_filename;</span>
+<span class="nc" id="L169">        return previous_filename;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

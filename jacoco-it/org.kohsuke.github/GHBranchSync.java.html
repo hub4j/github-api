@@ -5,13 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * The type Gh branch sync.
  */
-public class GHBranchSync extends GitHubInteractiveObject {
-
-    /**
-     * Create default GHBranchSync instance
-     */
-<span class="fc" id="L13">    public GHBranchSync() {</span>
-<span class="fc" id="L14">    }</span>
+<span class="fc" id="L8">public class GHBranchSync extends GitHubInteractiveObject {</span>
 
     /**
      * The Repository that this branch is in.
@@ -40,7 +34,7 @@ public class GHBranchSync extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L43">        return owner;</span>
+<span class="fc" id="L37">        return owner;</span>
     }
 
     /**
@@ -49,7 +43,7 @@ public class GHBranchSync extends GitHubInteractiveObject {
      * @return the message
      */
     public String getMessage() {
-<span class="fc" id="L52">        return message;</span>
+<span class="fc" id="L46">        return message;</span>
     }
 
     /**
@@ -58,7 +52,7 @@ public class GHBranchSync extends GitHubInteractiveObject {
      * @return the merge type
      */
     public String getMergeType() {
-<span class="fc" id="L61">        return mergeType;</span>
+<span class="fc" id="L55">        return mergeType;</span>
     }
 
     /**
@@ -67,7 +61,7 @@ public class GHBranchSync extends GitHubInteractiveObject {
      * @return the base branch
      */
     public String getBaseBranch() {
-<span class="fc" id="L70">        return baseBranch;</span>
+<span class="fc" id="L64">        return baseBranch;</span>
     }
 
     /**
@@ -77,7 +71,7 @@ public class GHBranchSync extends GitHubInteractiveObject {
      */
     @Override
     public String toString() {
-<span class="nc" id="L80">        return &quot;GHBranchSync{&quot; + &quot;message='&quot; + message + '\'' + &quot;, mergeType='&quot; + mergeType + '\'' + &quot;, baseBranch='&quot;</span>
+<span class="nc" id="L74">        return &quot;GHBranchSync{&quot; + &quot;message='&quot; + message + '\'' + &quot;, mergeType='&quot; + mergeType + '\'' + &quot;, baseBranch='&quot;</span>
                 + baseBranch + '\'' + '}';
     }
 
@@ -89,8 +83,8 @@ public class GHBranchSync extends GitHubInteractiveObject {
      * @return the GH branch sync
      */
     GHBranchSync wrap(GHRepository repo) {
-<span class="fc" id="L92">        this.owner = repo;</span>
-<span class="fc" id="L93">        return this;</span>
+<span class="fc" id="L86">        this.owner = repo;</span>
+<span class="fc" id="L87">        return this;</span>
     }
 
 }

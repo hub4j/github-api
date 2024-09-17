@@ -15,13 +15,7 @@ import java.util.Locale;
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-public class GHMembership extends GitHubInteractiveObject {
-
-    /**
-     * Create default GHMembership instance
-     */
-<span class="fc" id="L23">    public GHMembership() {</span>
-<span class="fc" id="L24">    }</span>
+<span class="fc" id="L18">public class GHMembership extends GitHubInteractiveObject {</span>
 
     /** The url. */
     String url;
@@ -44,7 +38,7 @@ public class GHMembership extends GitHubInteractiveObject {
      * @return the url
      */
     public URL getUrl() {
-<span class="nc" id="L47">        return GitHubClient.parseURL(url);</span>
+<span class="nc" id="L41">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -53,7 +47,7 @@ public class GHMembership extends GitHubInteractiveObject {
      * @return the state
      */
     public State getState() {
-<span class="fc" id="L56">        return Enum.valueOf(State.class, state.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L50">        return Enum.valueOf(State.class, state.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -62,7 +56,7 @@ public class GHMembership extends GitHubInteractiveObject {
      * @return the role
      */
     public Role getRole() {
-<span class="fc" id="L65">        return Enum.valueOf(Role.class, role.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L59">        return Enum.valueOf(Role.class, role.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -72,7 +66,7 @@ public class GHMembership extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getUser() {
-<span class="fc" id="L75">        return user;</span>
+<span class="fc" id="L69">        return user;</span>
     }
 
     /**
@@ -82,7 +76,7 @@ public class GHMembership extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHOrganization getOrganization() {
-<span class="fc" id="L85">        return organization;</span>
+<span class="fc" id="L79">        return organization;</span>
     }
 
     /**
@@ -93,8 +87,8 @@ public class GHMembership extends GitHubInteractiveObject {
      * @see GHMyself#getMembership(GHOrganization) GHMyself#getMembership(GHOrganization)
      */
     public void activate() throws IOException {
-<span class="nc" id="L96">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;state&quot;, State.ACTIVE).withUrlPath(url).fetchInto(this);</span>
-<span class="nc" id="L97">    }</span>
+<span class="nc" id="L90">        root().createRequest().method(&quot;PATCH&quot;).with(&quot;state&quot;, State.ACTIVE).withUrlPath(url).fetchInto(this);</span>
+<span class="nc" id="L91">    }</span>
 
     /**
      * Wrap.
@@ -104,34 +98,34 @@ public class GHMembership extends GitHubInteractiveObject {
      * @return the GH membership
      */
     GHMembership wrap(GitHub root) {
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (user != null)</span>
-<span class="fc" id="L108">            user = root.getUser(user);</span>
-<span class="fc" id="L109">        return this;</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (user != null)</span>
+<span class="fc" id="L102">            user = root.getUser(user);</span>
+<span class="fc" id="L103">        return this;</span>
     }
 
     /**
      * Role of a user in an organization.
      */
-<span class="fc" id="L115">    public enum Role {</span>
+<span class="fc" id="L109">    public enum Role {</span>
         /**
          * Organization owner.
          */
-<span class="fc" id="L119">        ADMIN,</span>
+<span class="fc" id="L113">        ADMIN,</span>
         /**
          * Non-owner organization member.
          */
-<span class="fc" id="L123">        MEMBER;</span>
+<span class="fc" id="L117">        MEMBER;</span>
     }
 
     /**
      * Whether a role is currently active or waiting for acceptance (pending).
      */
-<span class="fc" id="L129">    public enum State {</span>
+<span class="fc" id="L123">    public enum State {</span>
 
         /** The active. */
-<span class="fc" id="L132">        ACTIVE,</span>
+<span class="fc" id="L126">        ACTIVE,</span>
         /** The pending. */
-<span class="fc" id="L134">        PENDING;</span>
+<span class="fc" id="L128">        PENDING;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

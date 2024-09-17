@@ -6,14 +6,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * Changes made to a repository.
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
-public class GHRepositoryChanges {
-
-    /**
-     * Create default GHRepositoryChanges instance
-     */
-<span class="fc" id="L14">    public GHRepositoryChanges() {</span>
-<span class="fc" id="L15">    }</span>
-
+<span class="fc" id="L9">public class GHRepositoryChanges {</span>
     private FromRepository repository;
     private Owner owner;
 
@@ -23,20 +16,13 @@ public class GHRepositoryChanges {
      * @return Owner
      */
     public Owner getOwner() {
-<span class="fc" id="L26">        return owner;</span>
+<span class="fc" id="L19">        return owner;</span>
     }
 
     /**
      * Outer object of owner from whom this repository was transferred.
      */
-    public static class Owner {
-
-        /**
-         * Create default Owner instance
-         */
-<span class="fc" id="L37">        public Owner() {</span>
-<span class="fc" id="L38">        }</span>
-
+<span class="fc" id="L25">    public static class Owner {</span>
         private FromOwner from;
 
         /**
@@ -45,21 +31,14 @@ public class GHRepositoryChanges {
          * @return FromOwner
          */
         public FromOwner getFrom() {
-<span class="fc" id="L48">            return from;</span>
+<span class="fc" id="L34">            return from;</span>
         }
     }
 
     /**
      * Owner from whom this repository was transferred.
      */
-    public static class FromOwner {
-
-        /**
-         * Create default FromOwner instance
-         */
-<span class="fc" id="L60">        public FromOwner() {</span>
-<span class="fc" id="L61">        }</span>
-
+<span class="fc" id="L41">    public static class FromOwner {</span>
         private GHUser user;
         private GHOrganization organization;
 
@@ -70,7 +49,7 @@ public class GHRepositoryChanges {
          */
         @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHUser getUser() {
-<span class="fc" id="L73">            return user;</span>
+<span class="fc" id="L52">            return user;</span>
         }
 
         /**
@@ -80,7 +59,7 @@ public class GHRepositoryChanges {
          */
         @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHOrganization getOrganization() {
-<span class="fc" id="L83">            return organization;</span>
+<span class="fc" id="L62">            return organization;</span>
         }
     }
 
@@ -90,20 +69,13 @@ public class GHRepositoryChanges {
      * @return FromRepository
      */
     public FromRepository getRepository() {
-<span class="fc" id="L93">        return repository;</span>
+<span class="fc" id="L72">        return repository;</span>
     }
 
     /**
      * Repository object from which the name was changed.
      */
-    public static class FromRepository {
-
-        /**
-         * Create default FromRepository instance
-         */
-<span class="fc" id="L104">        public FromRepository() {</span>
-<span class="fc" id="L105">        }</span>
-
+<span class="fc" id="L78">    public static class FromRepository {</span>
         private FromName name;
 
         /**
@@ -112,21 +84,14 @@ public class GHRepositoryChanges {
          * @return FromName
          */
         public FromName getName() {
-<span class="fc" id="L115">            return name;</span>
+<span class="fc" id="L87">            return name;</span>
         }
     }
 
     /**
      * Repository name that was changed.
      */
-    public static class FromName {
-
-        /**
-         * Create default FromName instance
-         */
-<span class="fc" id="L127">        public FromName() {</span>
-<span class="fc" id="L128">        }</span>
-
+<span class="fc" id="L94">    public static class FromName {</span>
         private String from;
 
         /**
@@ -135,7 +100,7 @@ public class GHRepositoryChanges {
          * @return String
          */
         public String getFrom() {
-<span class="fc" id="L138">            return from;</span>
+<span class="fc" id="L103">            return from;</span>
         }
     }
 }

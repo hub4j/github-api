@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 
@@ -26,8 +27,8 @@ import javax.annotation.Nonnull;
  */
 public abstract class GitHubConnectorResponse implements Closeable {
 
-<span class="fc" id="L29">    private static final Comparator&lt;String&gt; nullableCaseInsensitiveComparator = Comparator</span>
-<span class="fc" id="L30">            .nullsFirst(String.CASE_INSENSITIVE_ORDER);</span>
+<span class="fc" id="L30">    private static final Comparator&lt;String&gt; nullableCaseInsensitiveComparator = Comparator</span>
+<span class="fc" id="L31">            .nullsFirst(String.CASE_INSENSITIVE_ORDER);</span>
 
     private final int statusCode;
 
@@ -48,17 +49,31 @@ public abstract class GitHubConnectorResponse implements Closeable {
      */
     protected GitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
             int statusCode,
-<span class="fc" id="L51">            @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers) {</span>
-<span class="fc" id="L52">        this.request = request;</span>
-<span class="fc" id="L53">        this.statusCode = statusCode;</span>
+<span class="fc" id="L52">            @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers) {</span>
+<span class="fc" id="L53">        this.request = request;</span>
+<span class="fc" id="L54">        this.statusCode = statusCode;</span>
 
         // Response header field names must be case-insensitive.
-<span class="fc" id="L56">        TreeMap&lt;String, List&lt;String&gt;&gt; caseInsensitiveMap = new TreeMap&lt;&gt;(nullableCaseInsensitiveComparator);</span>
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; entry : headers.entrySet()) {</span>
-<span class="fc" id="L58">            caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList&lt;&gt;(entry.getValue())));</span>
-<span class="fc" id="L59">        }</span>
-<span class="fc" id="L60">        this.headers = Collections.unmodifiableMap(caseInsensitiveMap);</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L57">        TreeMap&lt;String, List&lt;String&gt;&gt; caseInsensitiveMap = new TreeMap&lt;&gt;(nullableCaseInsensitiveComparator);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; entry : headers.entrySet()) {</span>
+<span class="fc" id="L59">            caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList&lt;&gt;(entry.getValue())));</span>
+<span class="fc" id="L60">        }</span>
+<span class="fc" id="L61">        this.headers = Collections.unmodifiableMap(caseInsensitiveMap);</span>
+<span class="fc" id="L62">    }</span>
+
+    /**
+     * Get this response as a {@link HttpURLConnection}.
+     *
+     * @return an object that implements at least the response related methods of {@link HttpURLConnection}.
+     * @deprecated This method is present only to provide backward compatibility with other deprecated components.
+     */
+    @Deprecated
+    @Nonnull
+    public HttpURLConnection toHttpURLConnection() {
+        HttpURLConnection connection;
+<span class="fc" id="L74">        connection = new GitHubConnectorResponseHttpUrlConnectionAdapter(this);</span>
+<span class="fc" id="L75">        return connection;</span>
+    }
 
     /**
      * Gets the value of a header field for this response.
@@ -69,11 +84,11 @@ public abstract class GitHubConnectorResponse implements Closeable {
      */
     @CheckForNull
     public String header(String name) {
-<span class="fc" id="L72">        String result = null;</span>
-<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (headers.containsKey(name)) {</span>
-<span class="fc" id="L74">            result = headers.get(name).get(0);</span>
+<span class="fc" id="L87">        String result = null;</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (headers.containsKey(name)) {</span>
+<span class="fc" id="L89">            result = headers.get(name).get(0);</span>
         }
-<span class="fc" id="L76">        return result;</span>
+<span class="fc" id="L91">        return result;</span>
     }
 
     /**
@@ -93,7 +108,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
      */
     @Nonnull
     public GitHubConnectorRequest request() {
-<span class="fc" id="L96">        return request;</span>
+<span class="fc" id="L111">        return request;</span>
     }
 
     /**
@@ -102,7 +117,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
      * @return the status code for this response.
      */
     public int statusCode() {
-<span class="fc" id="L105">        return statusCode;</span>
+<span class="fc" id="L120">        return statusCode;</span>
     }
 
     /**
@@ -113,7 +128,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
     @Nonnull
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable map of unmodifiable lists&quot;)
     public Map&lt;String, List&lt;String&gt;&gt; allHeaders() {
-<span class="fc" id="L116">        return headers;</span>
+<span class="fc" id="L131">        return headers;</span>
     }
 
     /**
@@ -126,13 +141,13 @@ public abstract class GitHubConnectorResponse implements Closeable {
      *             if an I/O Exception occurs.
      */
     protected InputStream wrapStream(InputStream stream) throws IOException {
-<span class="fc" id="L129">        String encoding = header(&quot;Content-Encoding&quot;);</span>
-<span class="pc bpc" id="L130" title="1 of 4 branches missed.">        if (encoding == null || stream == null)</span>
-<span class="fc" id="L131">            return stream;</span>
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (encoding.equals(&quot;gzip&quot;))</span>
-<span class="fc" id="L133">            return new GZIPInputStream(stream);</span>
+<span class="fc" id="L144">        String encoding = header(&quot;Content-Encoding&quot;);</span>
+<span class="pc bpc" id="L145" title="1 of 4 branches missed.">        if (encoding == null || stream == null)</span>
+<span class="fc" id="L146">            return stream;</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (encoding.equals(&quot;gzip&quot;))</span>
+<span class="fc" id="L148">            return new GZIPInputStream(stream);</span>
 
-<span class="nc" id="L135">        throw new UnsupportedOperationException(&quot;Unexpected Content-Encoding: &quot; + encoding);</span>
+<span class="nc" id="L150">        throw new UnsupportedOperationException(&quot;Unexpected Content-Encoding: &quot; + encoding);</span>
     }
 
     /**
@@ -146,10 +161,10 @@ public abstract class GitHubConnectorResponse implements Closeable {
      */
     public final int parseInt(String name) throws NumberFormatException {
         try {
-<span class="fc" id="L149">            String headerValue = header(name);</span>
-<span class="fc" id="L150">            return Integer.parseInt(headerValue);</span>
-<span class="fc" id="L151">        } catch (NumberFormatException e) {</span>
-<span class="fc" id="L152">            throw new NumberFormatException(name + &quot;: &quot; + e.getMessage());</span>
+<span class="fc" id="L164">            String headerValue = header(name);</span>
+<span class="fc" id="L165">            return Integer.parseInt(headerValue);</span>
+<span class="fc" id="L166">        } catch (NumberFormatException e) {</span>
+<span class="fc" id="L167">            throw new NumberFormatException(name + &quot;: &quot; + e.getMessage());</span>
         }
     }
 
@@ -158,9 +173,9 @@ public abstract class GitHubConnectorResponse implements Closeable {
      */
     public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
 
-<span class="fc" id="L161">        private boolean inputStreamRead = false;</span>
-<span class="fc" id="L162">        private byte[] inputBytes = null;</span>
-<span class="fc" id="L163">        private boolean isClosed = false;</span>
+<span class="fc" id="L176">        private boolean inputStreamRead = false;</span>
+<span class="fc" id="L177">        private byte[] inputBytes = null;</span>
+<span class="fc" id="L178">        private boolean isClosed = false;</span>
 
         /**
          * Constructor for ByteArray Response
@@ -175,8 +190,8 @@ public abstract class GitHubConnectorResponse implements Closeable {
         protected ByteArrayResponse(@Nonnull GitHubConnectorRequest request,
                 int statusCode,
                 @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers) {
-<span class="fc" id="L178">            super(request, statusCode, headers);</span>
-<span class="fc" id="L179">        }</span>
+<span class="fc" id="L193">            super(request, statusCode, headers);</span>
+<span class="fc" id="L194">        }</span>
 
         /**
          * {@inheritDoc}
@@ -184,26 +199,26 @@ public abstract class GitHubConnectorResponse implements Closeable {
         @Override
         @Nonnull
         public InputStream bodyStream() throws IOException {
-<span class="pc bpc" id="L187" title="1 of 2 branches missed.">            if (isClosed) {</span>
-<span class="nc" id="L188">                throw new IOException(&quot;Response is closed&quot;);</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">            if (isClosed) {</span>
+<span class="fc" id="L203">                throw new IOException(&quot;Response is closed&quot;);</span>
             }
-<span class="fc" id="L190">            synchronized (this) {</span>
-<span class="fc bfc" id="L191" title="All 2 branches covered.">                if (!inputStreamRead) {</span>
-<span class="fc" id="L192">                    InputStream rawStream = rawBodyStream();</span>
-<span class="fc" id="L193">                    try (InputStream stream = wrapStream(rawStream)) {</span>
-<span class="pc bpc" id="L194" title="1 of 2 branches missed.">                        if (stream != null) {</span>
-<span class="fc" id="L195">                            inputBytes = IOUtils.toByteArray(stream);</span>
+<span class="fc" id="L205">            synchronized (this) {</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">                if (!inputStreamRead) {</span>
+<span class="fc" id="L207">                    InputStream rawStream = rawBodyStream();</span>
+<span class="fc" id="L208">                    try (InputStream stream = wrapStream(rawStream)) {</span>
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">                        if (stream != null) {</span>
+<span class="fc" id="L210">                            inputBytes = IOUtils.toByteArray(stream);</span>
                         }
                     }
-<span class="fc" id="L198">                    inputStreamRead = true;</span>
+<span class="fc" id="L213">                    inputStreamRead = true;</span>
                 }
-<span class="fc" id="L200">            }</span>
+<span class="fc" id="L215">            }</span>
 
-<span class="pc bpc" id="L202" title="1 of 2 branches missed.">            if (inputBytes == null) {</span>
-<span class="nc" id="L203">                throw new IOException(&quot;Response body missing, stream null&quot;);</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">            if (inputBytes == null) {</span>
+<span class="nc" id="L218">                throw new IOException(&quot;Response body missing, stream null&quot;);</span>
             }
 
-<span class="fc" id="L206">            return new ByteArrayInputStream(inputBytes);</span>
+<span class="fc" id="L221">            return new ByteArrayInputStream(inputBytes);</span>
         }
 
         /**
@@ -221,9 +236,9 @@ public abstract class GitHubConnectorResponse implements Closeable {
 
         @Override
         public void close() throws IOException {
-<span class="fc" id="L224">            isClosed = true;</span>
-<span class="fc" id="L225">            this.inputBytes = null;</span>
-<span class="fc" id="L226">        }</span>
+<span class="fc" id="L239">            isClosed = true;</span>
+<span class="fc" id="L240">            this.inputBytes = null;</span>
+<span class="fc" id="L241">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

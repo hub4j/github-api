@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
@@ -17,8 +18,6 @@ import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
-import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -33,7 +32,7 @@ import static java.net.HttpURLConnection.HTTP_NO_CONTENT;
  */
 class GitHubResponse&lt;T&gt; {
 
-<span class="fc" id="L36">    private static final Logger LOGGER = Logger.getLogger(GitHubResponse.class.getName());</span>
+<span class="fc" id="L35">    private static final Logger LOGGER = Logger.getLogger(GitHubResponse.class.getName());</span>
 
     private final int statusCode;
 
@@ -51,11 +50,11 @@ class GitHubResponse&lt;T&gt; {
      * @param body
      *            the body
      */
-<span class="fc" id="L54">    GitHubResponse(GitHubResponse&lt;T&gt; response, @CheckForNull T body) {</span>
-<span class="fc" id="L55">        this.statusCode = response.statusCode();</span>
-<span class="fc" id="L56">        this.headers = response.headers;</span>
-<span class="fc" id="L57">        this.body = body;</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L53">    GitHubResponse(GitHubResponse&lt;T&gt; response, @CheckForNull T body) {</span>
+<span class="fc" id="L54">        this.statusCode = response.statusCode();</span>
+<span class="fc" id="L55">        this.headers = response.headers;</span>
+<span class="fc" id="L56">        this.body = body;</span>
+<span class="fc" id="L57">    }</span>
 
     /**
      * Instantiates a new git hub response.
@@ -65,11 +64,11 @@ class GitHubResponse&lt;T&gt; {
      * @param body
      *            the body
      */
-<span class="fc" id="L68">    GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {</span>
-<span class="fc" id="L69">        this.statusCode = connectorResponse.statusCode();</span>
-<span class="fc" id="L70">        this.headers = connectorResponse.allHeaders();</span>
-<span class="fc" id="L71">        this.body = body;</span>
-<span class="fc" id="L72">    }</span>
+<span class="fc" id="L67">    GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {</span>
+<span class="fc" id="L68">        this.statusCode = connectorResponse.statusCode();</span>
+<span class="fc" id="L69">        this.headers = connectorResponse.allHeaders();</span>
+<span class="fc" id="L70">        this.body = body;</span>
+<span class="fc" id="L71">    }</span>
 
     /**
      * Parses a {@link GitHubConnectorResponse} body into a new instance of {@link T}.
@@ -87,26 +86,26 @@ class GitHubResponse&lt;T&gt; {
     @CheckForNull
     static &lt;T&gt; T parseBody(GitHubConnectorResponse connectorResponse, Class&lt;T&gt; type) throws IOException {
 
-<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (connectorResponse.statusCode() == HTTP_NO_CONTENT) {</span>
-<span class="pc bpc" id="L91" title="1 of 4 branches missed.">            if (type != null &amp;&amp; type.isArray()) {</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (connectorResponse.statusCode() == HttpURLConnection.HTTP_NO_CONTENT) {</span>
+<span class="pc bpc" id="L90" title="1 of 4 branches missed.">            if (type != null &amp;&amp; type.isArray()) {</span>
                 // no content for array should be empty array
-<span class="fc" id="L93">                return type.cast(Array.newInstance(type.getComponentType(), 0));</span>
+<span class="fc" id="L92">                return type.cast(Array.newInstance(type.getComponentType(), 0));</span>
             } else {
                 // no content for object should be null
-<span class="fc" id="L96">                return null;</span>
+<span class="fc" id="L95">                return null;</span>
             }
         }
 
-<span class="fc" id="L100">        String data = getBodyAsString(connectorResponse);</span>
+<span class="fc" id="L99">        String data = getBodyAsString(connectorResponse);</span>
         try {
-<span class="fc" id="L102">            InjectableValues.Std inject = new InjectableValues.Std();</span>
-<span class="fc" id="L103">            inject.addValue(GitHubConnectorResponse.class, connectorResponse);</span>
+<span class="fc" id="L101">            InjectableValues.Std inject = new InjectableValues.Std();</span>
+<span class="fc" id="L102">            inject.addValue(GitHubConnectorResponse.class, connectorResponse);</span>
 
-<span class="fc" id="L105">            return GitHubClient.getMappingObjectReader(connectorResponse).forType(type).readValue(data);</span>
-<span class="fc" id="L106">        } catch (JsonMappingException | JsonParseException e) {</span>
-<span class="fc" id="L107">            String message = &quot;Failed to deserialize: &quot; + data;</span>
-<span class="fc" id="L108">            LOGGER.log(Level.FINE, message);</span>
-<span class="fc" id="L109">            throw e;</span>
+<span class="fc" id="L104">            return GitHubClient.getMappingObjectReader(connectorResponse).forType(type).readValue(data);</span>
+<span class="fc" id="L105">        } catch (JsonMappingException | JsonParseException e) {</span>
+<span class="fc" id="L106">            String message = &quot;Failed to deserialize: &quot; + data;</span>
+<span class="fc" id="L107">            LOGGER.log(Level.FINE, message);</span>
+<span class="fc" id="L108">            throw e;</span>
         }
     }
 
@@ -126,13 +125,13 @@ class GitHubResponse&lt;T&gt; {
     @CheckForNull
     static &lt;T&gt; T parseBody(GitHubConnectorResponse connectorResponse, T instance) throws IOException {
 
-<span class="fc" id="L129">        String data = getBodyAsString(connectorResponse);</span>
+<span class="fc" id="L128">        String data = getBodyAsString(connectorResponse);</span>
         try {
-<span class="fc" id="L131">            return GitHubClient.getMappingObjectReader(connectorResponse).withValueToUpdate(instance).readValue(data);</span>
-<span class="nc" id="L132">        } catch (JsonMappingException | JsonParseException e) {</span>
-<span class="nc" id="L133">            String message = &quot;Failed to deserialize: &quot; + data;</span>
-<span class="nc" id="L134">            LOGGER.log(Level.FINE, message);</span>
-<span class="nc" id="L135">            throw e;</span>
+<span class="fc" id="L130">            return GitHubClient.getMappingObjectReader(connectorResponse).withValueToUpdate(instance).readValue(data);</span>
+<span class="nc" id="L131">        } catch (JsonMappingException | JsonParseException e) {</span>
+<span class="nc" id="L132">            String message = &quot;Failed to deserialize: &quot; + data;</span>
+<span class="nc" id="L133">            LOGGER.log(Level.FINE, message);</span>
+<span class="nc" id="L134">            throw e;</span>
         }
     }
 
@@ -147,9 +146,9 @@ class GitHubResponse&lt;T&gt; {
      */
     @Nonnull
     static String getBodyAsString(GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc" id="L150">        InputStream inputStream = connectorResponse.bodyStream();</span>
-<span class="fc" id="L151">        try (InputStreamReader r = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {</span>
-<span class="fc" id="L152">            return IOUtils.toString(r);</span>
+<span class="fc" id="L149">        InputStream inputStream = connectorResponse.bodyStream();</span>
+<span class="fc" id="L150">        try (InputStreamReader r = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {</span>
+<span class="fc" id="L151">            return IOUtils.toString(r);</span>
         }
     }
 
@@ -162,10 +161,10 @@ class GitHubResponse&lt;T&gt; {
      */
     static String getBodyAsStringOrNull(GitHubConnectorResponse connectorResponse) {
         try {
-<span class="fc" id="L165">            return getBodyAsString(connectorResponse);</span>
-<span class="nc" id="L166">        } catch (IOException e) {</span>
+<span class="fc" id="L164">            return getBodyAsString(connectorResponse);</span>
+<span class="nc" id="L165">        } catch (IOException e) {</span>
         }
-<span class="nc" id="L168">        return null;</span>
+<span class="nc" id="L167">        return null;</span>
     }
 
     /**
@@ -174,7 +173,7 @@ class GitHubResponse&lt;T&gt; {
      * @return the status code for this response.
      */
     public int statusCode() {
-<span class="fc" id="L177">        return statusCode;</span>
+<span class="fc" id="L176">        return statusCode;</span>
     }
 
     /**
@@ -186,7 +185,7 @@ class GitHubResponse&lt;T&gt; {
      */
     @Nonnull
     public List&lt;String&gt; headers(String field) {
-<span class="nc" id="L189">        return headers.get(field);</span>
+<span class="nc" id="L188">        return headers.get(field);</span>
     }
 
     /**
@@ -198,12 +197,12 @@ class GitHubResponse&lt;T&gt; {
      */
     @CheckForNull
     public String header(String name) {
-<span class="fc" id="L201">        String result = null;</span>
-<span class="fc" id="L202">        List&lt;String&gt; rawResult = headers.get(name);</span>
-<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (rawResult != null) {</span>
-<span class="fc" id="L204">            result = rawResult.get(0);</span>
+<span class="fc" id="L200">        String result = null;</span>
+<span class="fc" id="L201">        List&lt;String&gt; rawResult = headers.get(name);</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (rawResult != null) {</span>
+<span class="fc" id="L203">            result = rawResult.get(0);</span>
         }
-<span class="fc" id="L206">        return result;</span>
+<span class="fc" id="L205">        return result;</span>
     }
 
     /**
@@ -212,7 +211,7 @@ class GitHubResponse&lt;T&gt; {
      * @return body of the response
      */
     public T body() {
-<span class="fc" id="L215">        return body;</span>
+<span class="fc" id="L214">        return body;</span>
     }
 
 }

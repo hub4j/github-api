@@ -63,5 +63,19 @@ public class GitUser {
 <span class="fc" id="L63">    public GitUser() {</span>
         // Empty constructor for Jackson binding
 <span class="fc" id="L65">    }</span>
+
+    /**
+     * Instantiates a new git user.
+     *
+     * @param user
+     *            the user
+     */
+<span class="fc" id="L73">    public GitUser(GitUser user) {</span>
+        // Copy constructor to convert to GHCommit.GHAuthor
+<span class="fc" id="L75">        name = user.getName();</span>
+<span class="fc" id="L76">        email = user.getEmail();</span>
+<span class="fc" id="L77">        date = user.getDate().toString();</span>
+<span class="fc" id="L78">        username = user.getUsername();</span>
+<span class="fc" id="L79">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

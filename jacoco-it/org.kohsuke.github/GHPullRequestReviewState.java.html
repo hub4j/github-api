@@ -15,20 +15,29 @@
     /** The changes requested. */
 <span class="fc" id="L16">    CHANGES_REQUESTED,</span>
 
+    /**
+     * The request changes.
+     *
+     * @deprecated This was the thing when this API was in preview, but it changed when it became public. Use
+     *             {@link #CHANGES_REQUESTED}. Left here for compatibility.
+     */
+<span class="fc" id="L24">    REQUEST_CHANGES,</span>
+
     /** The commented. */
-<span class="fc" id="L19">    COMMENTED,</span>
+<span class="fc" id="L27">    COMMENTED,</span>
 
     /** The dismissed. */
-<span class="fc" id="L22">    DISMISSED;</span>
+<span class="fc" id="L30">    DISMISSED;</span>
 
     /**
      * Action string.
      *
      * @return the string
+     * @deprecated This was an internal method accidentally exposed. Left here for compatibility.
      */
-    String action() {
-<span class="fc" id="L30">        GHPullRequestReviewEvent e = toEvent();</span>
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        return e == null ? null : e.action();</span>
+    public String action() {
+<span class="fc" id="L39">        GHPullRequestReviewEvent e = toEvent();</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        return e == null ? null : e.action();</span>
     }
 
     /**
@@ -37,17 +46,19 @@
      * @return the GH pull request review event
      */
     GHPullRequestReviewEvent toEvent() {
-<span class="pc bpc" id="L40" title="2 of 5 branches missed.">        switch (this) {</span>
+<span class="pc bpc" id="L49" title="3 of 6 branches missed.">        switch (this) {</span>
             case PENDING :
-<span class="fc" id="L42">                return GHPullRequestReviewEvent.PENDING;</span>
+<span class="fc" id="L51">                return GHPullRequestReviewEvent.PENDING;</span>
             case APPROVED :
-<span class="fc" id="L44">                return GHPullRequestReviewEvent.APPROVE;</span>
+<span class="fc" id="L53">                return GHPullRequestReviewEvent.APPROVE;</span>
             case CHANGES_REQUESTED :
-<span class="nc" id="L46">                return GHPullRequestReviewEvent.REQUEST_CHANGES;</span>
+<span class="nc" id="L55">                return GHPullRequestReviewEvent.REQUEST_CHANGES;</span>
+            case REQUEST_CHANGES :
+<span class="nc" id="L57">                return GHPullRequestReviewEvent.REQUEST_CHANGES;</span>
             case COMMENTED :
-<span class="nc" id="L48">                return GHPullRequestReviewEvent.COMMENT;</span>
+<span class="nc" id="L59">                return GHPullRequestReviewEvent.COMMENT;</span>
         }
-<span class="fc" id="L50">        return null;</span>
+<span class="fc" id="L61">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

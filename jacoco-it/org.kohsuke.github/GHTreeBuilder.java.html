@@ -77,7 +77,33 @@ public class GHTreeBuilder {
     }
 
     /**
-     * Specialized version of entry() for adding an existing blob referred by its SHA.
+     * Adds a new entry to the tree. Exactly one of the parameters {@code sha} and {@code content} must be non-null.
+     *
+     * @param path
+     *            the path
+     * @param mode
+     *            the mode
+     * @param type
+     *            the type
+     * @param sha
+     *            the sha
+     * @param content
+     *            the content
+     * @return the gh tree builder
+     * @deprecated use {@link #add(String, String, boolean)} or {@link #add(String, byte[], boolean)} instead.
+     */
+    @Deprecated
+    public GHTreeBuilder entry(String path, String mode, String type, String sha, String content) {
+<span class="nc" id="L97">        TreeEntry entry = new TreeEntry(path, mode, type);</span>
+<span class="nc" id="L98">        entry.sha = sha;</span>
+<span class="nc" id="L99">        entry.content = content;</span>
+<span class="nc" id="L100">        treeEntries.add(entry);</span>
+<span class="nc" id="L101">        return this;</span>
+    }
+
+    /**
+     * Specialized version of {@link #entry(String, String, String, String, String)} for adding an existing blob
+     * referred by its SHA.
      *
      * @param path
      *            the path
@@ -90,14 +116,15 @@ public class GHTreeBuilder {
      */
     @Deprecated
     public GHTreeBuilder shaEntry(String path, String sha, boolean executable) {
-<span class="fc bfc" id="L93" title="All 2 branches covered.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
-<span class="fc" id="L94">        entry.sha = sha;</span>
-<span class="fc" id="L95">        treeEntries.add(entry);</span>
-<span class="fc" id="L96">        return this;</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L120">        entry.sha = sha;</span>
+<span class="fc" id="L121">        treeEntries.add(entry);</span>
+<span class="fc" id="L122">        return this;</span>
     }
 
     /**
-     * Specialized version of entry() for adding an existing blob specified {@code content}.
+     * Specialized version of {@link #entry(String, String, String, String, String)} for adding a text file with the
+     * specified {@code content}.
      *
      * @param path
      *            the path
@@ -110,10 +137,10 @@ public class GHTreeBuilder {
      */
     @Deprecated
     public GHTreeBuilder textEntry(String path, String content, boolean executable) {
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
-<span class="fc" id="L114">        entry.content = content;</span>
-<span class="fc" id="L115">        treeEntries.add(entry);</span>
-<span class="fc" id="L116">        return this;</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L141">        entry.content = content;</span>
+<span class="fc" id="L142">        treeEntries.add(entry);</span>
+<span class="fc" id="L143">        return this;</span>
     }
 
     /**
@@ -129,10 +156,10 @@ public class GHTreeBuilder {
      */
     public GHTreeBuilder add(String path, byte[] content, boolean executable) {
         try {
-<span class="fc" id="L132">            String dataSha = repo.createBlob().binaryContent(content).create().getSha();</span>
-<span class="fc" id="L133">            return shaEntry(path, dataSha, executable);</span>
-<span class="nc" id="L134">        } catch (IOException e) {</span>
-<span class="nc" id="L135">            throw new GHException(&quot;Cannot create binary content of '&quot; + path + &quot;'&quot;, e);</span>
+<span class="fc" id="L159">            String dataSha = repo.createBlob().binaryContent(content).create().getSha();</span>
+<span class="fc" id="L160">            return shaEntry(path, dataSha, executable);</span>
+<span class="nc" id="L161">        } catch (IOException e) {</span>
+<span class="nc" id="L162">            throw new GHException(&quot;Cannot create binary content of '&quot; + path + &quot;'&quot;, e);</span>
         }
     }
 
@@ -148,7 +175,7 @@ public class GHTreeBuilder {
      * @return this GHTreeBuilder
      */
     public GHTreeBuilder add(String path, String content, boolean executable) {
-<span class="fc" id="L151">        return add(path, content.getBytes(StandardCharsets.UTF_8), executable);</span>
+<span class="fc" id="L178">        return add(path, content.getBytes(StandardCharsets.UTF_8), executable);</span>
     }
 
     /**
@@ -159,13 +186,13 @@ public class GHTreeBuilder {
      * @return this GHTreeBuilder
      */
     public GHTreeBuilder delete(String path) {
-<span class="fc" id="L162">        TreeEntry entry = new DeleteTreeEntry(path);</span>
-<span class="fc" id="L163">        treeEntries.add(entry);</span>
-<span class="fc" id="L164">        return this;</span>
+<span class="fc" id="L189">        TreeEntry entry = new DeleteTreeEntry(path);</span>
+<span class="fc" id="L190">        treeEntries.add(entry);</span>
+<span class="fc" id="L191">        return this;</span>
     }
 
     private String getApiTail() {
-<span class="fc" id="L168">        return String.format(&quot;/repos/%s/%s/git/trees&quot;, repo.getOwnerName(), repo.getName());</span>
+<span class="fc" id="L195">        return String.format(&quot;/repos/%s/%s/git/trees&quot;, repo.getOwnerName(), repo.getName());</span>
     }
 
     /**
@@ -176,8 +203,8 @@ public class GHTreeBuilder {
      *             the io exception
      */
     public GHTree create() throws IOException {
-<span class="fc" id="L179">        req.with(&quot;tree&quot;, treeEntries);</span>
-<span class="fc" id="L180">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHTree.class).wrap(repo);</span>
+<span class="fc" id="L206">        req.with(&quot;tree&quot;, treeEntries);</span>
+<span class="fc" id="L207">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHTree.class).wrap(repo);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

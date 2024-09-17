@@ -14,14 +14,7 @@ import java.util.Map;
  *      String, String)
  * @see GHRepository#getDeployment(long) GHRepository#getDeployment(long)
  */
-public class GHDeployment extends GHObject {
-
-    /**
-     * Create default GHDeployment instance
-     */
-<span class="fc" id="L22">    public GHDeployment() {</span>
-<span class="fc" id="L23">    }</span>
-
+<span class="fc" id="L17">public class GHDeployment extends GHObject {</span>
     private GHRepository owner;
 
     /** The sha. */
@@ -68,8 +61,8 @@ public class GHDeployment extends GHObject {
      * @return the GH deployment
      */
     GHDeployment wrap(GHRepository owner) {
-<span class="fc" id="L71">        this.owner = owner;</span>
-<span class="fc" id="L72">        return this;</span>
+<span class="fc" id="L64">        this.owner = owner;</span>
+<span class="fc" id="L65">        return this;</span>
     }
 
     /**
@@ -78,7 +71,7 @@ public class GHDeployment extends GHObject {
      * @return the statuses url
      */
     public URL getStatusesUrl() {
-<span class="nc" id="L81">        return GitHubClient.parseURL(statuses_url);</span>
+<span class="nc" id="L74">        return GitHubClient.parseURL(statuses_url);</span>
     }
 
     /**
@@ -87,7 +80,7 @@ public class GHDeployment extends GHObject {
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-<span class="nc" id="L90">        return GitHubClient.parseURL(repository_url);</span>
+<span class="nc" id="L83">        return GitHubClient.parseURL(repository_url);</span>
     }
 
     /**
@@ -96,7 +89,7 @@ public class GHDeployment extends GHObject {
      * @return the task
      */
     public String getTask() {
-<span class="fc" id="L99">        return task;</span>
+<span class="fc" id="L92">        return task;</span>
     }
 
     /**
@@ -106,7 +99,7 @@ public class GHDeployment extends GHObject {
      * @return the payload
      */
     public String getPayload() {
-<span class="fc" id="L109">        return (String) payload;</span>
+<span class="fc" id="L102">        return (String) payload;</span>
     }
 
     /**
@@ -116,7 +109,7 @@ public class GHDeployment extends GHObject {
      * @return the payload
      */
     public Map&lt;String, Object&gt; getPayloadMap() {
-<span class="fc" id="L119">        return Collections.unmodifiableMap((Map&lt;String, Object&gt;) payload);</span>
+<span class="fc" id="L112">        return Collections.unmodifiableMap((Map&lt;String, Object&gt;) payload);</span>
     }
 
     /**
@@ -125,16 +118,17 @@ public class GHDeployment extends GHObject {
      * @return the payload
      */
     public Object getPayloadObject() {
-<span class="fc" id="L128">        return payload;</span>
+<span class="fc" id="L121">        return payload;</span>
     }
 
     /**
      * The environment defined when the deployment was first created.
      *
      * @return the original deployment environment
+     * @deprecated until preview feature has graduated to stable
      */
     public String getOriginalEnvironment() {
-<span class="fc" id="L137">        return original_environment;</span>
+<span class="fc" id="L131">        return original_environment;</span>
     }
 
     /**
@@ -143,7 +137,7 @@ public class GHDeployment extends GHObject {
      * @return the environment
      */
     public String getEnvironment() {
-<span class="fc" id="L146">        return environment;</span>
+<span class="fc" id="L140">        return environment;</span>
     }
 
     /**
@@ -151,18 +145,20 @@ public class GHDeployment extends GHObject {
      * future.
      *
      * @return the environment is transient
+     * @deprecated until preview feature has graduated to stable
      */
     public boolean isTransientEnvironment() {
-<span class="fc" id="L156">        return transient_environment;</span>
+<span class="fc" id="L151">        return transient_environment;</span>
     }
 
     /**
      * Specifies if the given environment is one that end-users directly interact with.
      *
      * @return the environment is used by end-users directly
+     * @deprecated until preview feature has graduated to stable
      */
     public boolean isProductionEnvironment() {
-<span class="fc" id="L165">        return production_environment;</span>
+<span class="fc" id="L161">        return production_environment;</span>
     }
 
     /**
@@ -173,7 +169,7 @@ public class GHDeployment extends GHObject {
      *             the io exception
      */
     public GHUser getCreator() throws IOException {
-<span class="fc" id="L176">        return root().intern(creator);</span>
+<span class="fc" id="L172">        return root().intern(creator);</span>
     }
 
     /**
@@ -182,7 +178,7 @@ public class GHDeployment extends GHObject {
      * @return the ref
      */
     public String getRef() {
-<span class="fc" id="L185">        return ref;</span>
+<span class="fc" id="L181">        return ref;</span>
     }
 
     /**
@@ -191,7 +187,18 @@ public class GHDeployment extends GHObject {
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L194">        return sha;</span>
+<span class="fc" id="L190">        return sha;</span>
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @deprecated This object has no HTML URL.
+     */
+    @Override
+    public URL getHtmlUrl() {
+<span class="nc" id="L201">        return null;</span>
     }
 
     /**
@@ -202,7 +209,7 @@ public class GHDeployment extends GHObject {
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
-<span class="fc" id="L205">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
+<span class="fc" id="L212">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
     }
 
     /**
@@ -211,9 +218,9 @@ public class GHDeployment extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHDeploymentStatus&gt; listStatuses() {
-<span class="fc" id="L214">        return root().createRequest()</span>
-<span class="fc" id="L215">                .withUrlPath(statuses_url)</span>
-<span class="fc" id="L216">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.lateBind(owner));</span>
+<span class="fc" id="L221">        return root().createRequest()</span>
+<span class="fc" id="L222">                .withUrlPath(statuses_url)</span>
+<span class="fc" id="L223">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.lateBind(owner));</span>
     }
 
     /**
@@ -223,7 +230,7 @@ public class GHDeployment extends GHObject {
      */
     // test only
     GHRepository getOwner() {
-<span class="fc" id="L226">        return owner;</span>
+<span class="fc" id="L233">        return owner;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

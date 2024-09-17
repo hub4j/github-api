@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMyself.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMyself.java</span></div><h1>GHMyself.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -15,33 +15,27 @@ import java.util.stream.Collectors;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHMyself extends GHUser {
-
-    /**
-     * Create default GHMyself instance
-     */
-<span class="fc" id="L23">    public GHMyself() {</span>
-<span class="fc" id="L24">    }</span>
+<span class="fc" id="L18">public class GHMyself extends GHUser {</span>
 
     /**
      * Type of repositories returned during listing.
      */
-<span class="fc" id="L29">    public enum RepositoryListFilter {</span>
+<span class="fc" id="L23">    public enum RepositoryListFilter {</span>
 
         /** All public and private repositories that current user has access or collaborates to. */
-<span class="fc" id="L32">        ALL,</span>
+<span class="fc" id="L26">        ALL,</span>
 
         /** Public and private repositories owned by current user. */
-<span class="fc" id="L35">        OWNER,</span>
+<span class="fc" id="L29">        OWNER,</span>
 
         /** Public repositories that current user has access or collaborates to. */
-<span class="fc" id="L38">        PUBLIC,</span>
+<span class="fc" id="L32">        PUBLIC,</span>
 
         /** Private repositories that current user has access or collaborates to. */
-<span class="fc" id="L41">        PRIVATE,</span>
+<span class="fc" id="L35">        PRIVATE,</span>
 
         /** Public and private repositories that current user is a member. */
-<span class="fc" id="L44">        MEMBER;</span>
+<span class="fc" id="L38">        MEMBER;</span>
     }
 
     /**
@@ -50,11 +44,15 @@ public class GHMyself extends GHUser {
      * @return the emails
      * @throws IOException
      *             the io exception
-     * @deprecated Use {@link #listEmails()}
+     * @deprecated Use {@link #getEmails2()}
      */
-    @Deprecated
     public List&lt;String&gt; getEmails() throws IOException {
-<span class="fc" id="L57">        return getEmails2().stream().map(email -&gt; email.getEmail()).collect(Collectors.toList());</span>
+<span class="nc" id="L50">        List&lt;GHEmail&gt; src = getEmails2();</span>
+<span class="nc" id="L51">        List&lt;String&gt; r = new ArrayList&lt;String&gt;(src.size());</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (GHEmail e : src) {</span>
+<span class="nc" id="L53">            r.add(e.getEmail());</span>
+<span class="nc" id="L54">        }</span>
+<span class="nc" id="L55">        return r;</span>
     }
 
     /**
@@ -66,23 +64,9 @@ public class GHMyself extends GHUser {
      * @return Always non-null.
      * @throws IOException
      *             the io exception
-     * @deprecated Use {@link #listEmails()}
      */
-    @Deprecated
     public List&lt;GHEmail&gt; getEmails2() throws IOException {
-<span class="fc" id="L73">        return listEmails().toList();</span>
-    }
-
-    /**
-     * Returns the read-only list of e-mail addresses configured for you.
-     * &lt;p&gt;
-     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
-     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
-     *
-     * @return Always non-null.
-     */
-    public PagedIterable&lt;GHEmail&gt; listEmails() {
-<span class="fc" id="L85">        return root().createRequest().withUrlPath(&quot;/user/emails&quot;).toIterable(GHEmail[].class, null);</span>
+<span class="nc" id="L69">        return root().createRequest().withUrlPath(&quot;/user/emails&quot;).toIterable(GHEmail[].class, null).toList();</span>
     }
 
     /**
@@ -96,7 +80,7 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List&lt;GHKey&gt; getPublicKeys() throws IOException {
-<span class="nc" id="L99">        return root().createRequest().withUrlPath(&quot;/user/keys&quot;).toIterable(GHKey[].class, null).toList();</span>
+<span class="nc" id="L83">        return root().createRequest().withUrlPath(&quot;/user/keys&quot;).toIterable(GHKey[].class, null).toList();</span>
     }
 
     /**
@@ -113,12 +97,12 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public GHKey addPublicKey(String title, String key) throws IOException {
-<span class="fc" id="L116">        return root().createRequest()</span>
-<span class="fc" id="L117">                .withUrlPath(&quot;/user/keys&quot;)</span>
-<span class="fc" id="L118">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L119">                .with(&quot;title&quot;, title)</span>
-<span class="fc" id="L120">                .with(&quot;key&quot;, key)</span>
-<span class="fc" id="L121">                .fetch(GHKey.class);</span>
+<span class="fc" id="L100">        return root().createRequest()</span>
+<span class="fc" id="L101">                .withUrlPath(&quot;/user/keys&quot;)</span>
+<span class="fc" id="L102">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L103">                .with(&quot;title&quot;, title)</span>
+<span class="fc" id="L104">                .with(&quot;key&quot;, key)</span>
+<span class="fc" id="L105">                .fetch(GHKey.class);</span>
     }
 
     /**
@@ -132,10 +116,10 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List&lt;GHVerifiedKey&gt; getPublicVerifiedKeys() throws IOException {
-<span class="nc" id="L135">        return root().createRequest()</span>
-<span class="nc" id="L136">                .withUrlPath(&quot;/users/&quot; + getLogin() + &quot;/keys&quot;)</span>
-<span class="nc" id="L137">                .toIterable(GHVerifiedKey[].class, null)</span>
-<span class="nc" id="L138">                .toList();</span>
+<span class="nc" id="L119">        return root().createRequest()</span>
+<span class="nc" id="L120">                .withUrlPath(&quot;/users/&quot; + getLogin() + &quot;/keys&quot;)</span>
+<span class="nc" id="L121">                .toIterable(GHVerifiedKey[].class, null)</span>
+<span class="nc" id="L122">                .toList();</span>
     }
 
     /**
@@ -146,16 +130,16 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public GHPersonSet&lt;GHOrganization&gt; getAllOrganizations() throws IOException {
-<span class="nc" id="L149">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
-<span class="nc" id="L150">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
-<span class="nc" id="L151">        for (GHOrganization o : root().createRequest()</span>
-<span class="nc" id="L152">                .withUrlPath(&quot;/user/orgs&quot;)</span>
-<span class="nc" id="L153">                .toIterable(GHOrganization[].class, null)</span>
-<span class="nc bnc" id="L154" title="All 2 branches missed.">                .toArray()) {</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (names.add(o.getLogin())) // in case of rumoured duplicates in the data</span>
-<span class="nc" id="L156">                orgs.add(root().getOrganization(o.getLogin()));</span>
+<span class="nc" id="L133">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
+<span class="nc" id="L134">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
+<span class="nc" id="L135">        for (GHOrganization o : root().createRequest()</span>
+<span class="nc" id="L136">                .withUrlPath(&quot;/user/orgs&quot;)</span>
+<span class="nc" id="L137">                .toIterable(GHOrganization[].class, null)</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">                .toArray()) {</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            if (names.add(o.getLogin())) // in case of rumoured duplicates in the data</span>
+<span class="nc" id="L140">                orgs.add(root().getOrganization(o.getLogin()));</span>
         }
-<span class="nc" id="L158">        return orgs;</span>
+<span class="nc" id="L142">        return orgs;</span>
     }
 
     /**
@@ -166,11 +150,11 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public synchronized Map&lt;String, GHRepository&gt; getAllRepositories() throws IOException {
-<span class="nc" id="L169">        Map&lt;String, GHRepository&gt; repositories = new TreeMap&lt;String, GHRepository&gt;();</span>
-<span class="nc bnc" id="L170" title="All 2 branches missed.">        for (GHRepository r : listRepositories()) {</span>
-<span class="nc" id="L171">            repositories.put(r.getName(), r);</span>
-<span class="nc" id="L172">        }</span>
-<span class="nc" id="L173">        return Collections.unmodifiableMap(repositories);</span>
+<span class="nc" id="L153">        Map&lt;String, GHRepository&gt; repositories = new TreeMap&lt;String, GHRepository&gt;();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        for (GHRepository r : listAllRepositories()) {</span>
+<span class="nc" id="L155">            repositories.put(r.getName(), r);</span>
+<span class="nc" id="L156">        }</span>
+<span class="nc" id="L157">        return Collections.unmodifiableMap(repositories);</span>
     }
 
     /**
@@ -183,7 +167,7 @@ public class GHMyself extends GHUser {
      */
     @Override
     public PagedIterable&lt;GHRepository&gt; listRepositories() {
-<span class="fc" id="L186">        return listRepositories(30);</span>
+<span class="fc" id="L170">        return listRepositories(30);</span>
     }
 
     /**
@@ -201,7 +185,7 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize) {
-<span class="fc" id="L204">        return listRepositories(pageSize, RepositoryListFilter.ALL);</span>
+<span class="fc" id="L188">        return listRepositories(pageSize, RepositoryListFilter.ALL);</span>
     }
 
     /**
@@ -215,11 +199,22 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize, final RepositoryListFilter repoType) {
-<span class="fc" id="L218">        return root().createRequest()</span>
-<span class="fc" id="L219">                .with(&quot;type&quot;, repoType)</span>
-<span class="fc" id="L220">                .withUrlPath(&quot;/user/repos&quot;)</span>
-<span class="fc" id="L221">                .toIterable(GHRepository[].class, null)</span>
-<span class="fc" id="L222">                .withPageSize(pageSize);</span>
+<span class="fc" id="L202">        return root().createRequest()</span>
+<span class="fc" id="L203">                .with(&quot;type&quot;, repoType)</span>
+<span class="fc" id="L204">                .withUrlPath(&quot;/user/repos&quot;)</span>
+<span class="fc" id="L205">                .toIterable(GHRepository[].class, null)</span>
+<span class="fc" id="L206">                .withPageSize(pageSize);</span>
+    }
+
+    /**
+     * List all repositories paged iterable.
+     *
+     * @return the paged iterable
+     * @deprecated Use {@link #listRepositories()}
+     */
+    @Deprecated
+    public PagedIterable&lt;GHRepository&gt; listAllRepositories() {
+<span class="nc" id="L217">        return listRepositories();</span>
     }
 
     /**
@@ -228,7 +223,7 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHMembership&gt; listOrgMemberships() {
-<span class="fc" id="L231">        return listOrgMemberships(null);</span>
+<span class="fc" id="L226">        return listOrgMemberships(null);</span>
     }
 
     /**
@@ -239,10 +234,10 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHMembership&gt; listOrgMemberships(final GHMembership.State state) {
-<span class="fc" id="L242">        return root().createRequest()</span>
-<span class="fc" id="L243">                .with(&quot;state&quot;, state)</span>
-<span class="fc" id="L244">                .withUrlPath(&quot;/user/memberships/orgs&quot;)</span>
-<span class="fc" id="L245">                .toIterable(GHMembership[].class, item -&gt; item.wrap(root()));</span>
+<span class="fc" id="L237">        return root().createRequest()</span>
+<span class="fc" id="L238">                .with(&quot;state&quot;, state)</span>
+<span class="fc" id="L239">                .withUrlPath(&quot;/user/memberships/orgs&quot;)</span>
+<span class="fc" id="L240">                .toIterable(GHMembership[].class, item -&gt; item.wrap(root()));</span>
     }
 
     /**
@@ -255,10 +250,10 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public GHMembership getMembership(GHOrganization o) throws IOException {
-<span class="nc" id="L258">        return root().createRequest()</span>
-<span class="nc" id="L259">                .withUrlPath(&quot;/user/memberships/orgs/&quot; + o.getLogin())</span>
-<span class="nc" id="L260">                .fetch(GHMembership.class)</span>
-<span class="nc" id="L261">                .wrap(root());</span>
+<span class="nc" id="L253">        return root().createRequest()</span>
+<span class="nc" id="L254">                .withUrlPath(&quot;/user/memberships/orgs/&quot; + o.getLogin())</span>
+<span class="nc" id="L255">                .fetch(GHMembership.class)</span>
+<span class="nc" id="L256">                .wrap(root());</span>
     }
 
     // public void addEmails(Collection&lt;String&gt; emails) throws IOException {
@@ -277,7 +272,7 @@ public class GHMyself extends GHUser {
      *      app installations accessible to the user access token&lt;/a&gt;
      */
     public PagedIterable&lt;GHAppInstallation&gt; getAppInstallations() {
-<span class="fc" id="L280">        return new GHAppInstallationsIterable(root());</span>
+<span class="fc" id="L275">        return new GHAppInstallationsIterable(root());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

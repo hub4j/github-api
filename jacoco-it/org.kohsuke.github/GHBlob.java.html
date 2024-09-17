@@ -15,14 +15,7 @@ import java.util.Base64;
  * @see GHRepository#getBlob(String) GHRepository#getBlob(String)
  * @see &lt;a href=&quot;https://developer.github.com/v3/git/blobs/#get-a-blob&quot;&gt;Get a blob&lt;/a&gt;
  */
-public class GHBlob {
-
-    /**
-     * Create default GHBlob instance
-     */
-<span class="fc" id="L23">    public GHBlob() {</span>
-<span class="fc" id="L24">    }</span>
-
+<span class="fc" id="L18">public class GHBlob {</span>
     private String content, encoding, url, sha;
     private long size;
 
@@ -32,7 +25,7 @@ public class GHBlob {
      * @return API URL of this blob.
      */
     public URL getUrl() {
-<span class="fc" id="L35">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L28">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -41,7 +34,7 @@ public class GHBlob {
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L44">        return sha;</span>
+<span class="fc" id="L37">        return sha;</span>
     }
 
     /**
@@ -50,7 +43,7 @@ public class GHBlob {
      * @return Number of bytes in this blob.
      */
     public long getSize() {
-<span class="fc" id="L53">        return size;</span>
+<span class="fc" id="L46">        return size;</span>
     }
 
     /**
@@ -59,7 +52,7 @@ public class GHBlob {
      * @return the encoding
      */
     public String getEncoding() {
-<span class="nc" id="L62">        return encoding;</span>
+<span class="nc" id="L55">        return encoding;</span>
     }
 
     /**
@@ -68,7 +61,7 @@ public class GHBlob {
      * @return Encoded content. You probably want {@link #read()}
      */
     public String getContent() {
-<span class="nc" id="L71">        return content;</span>
+<span class="nc" id="L64">        return content;</span>
     }
 
     /**
@@ -77,16 +70,16 @@ public class GHBlob {
      * @return the actual bytes of the blob.
      */
     public InputStream read() {
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
             try {
-<span class="fc" id="L82">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
-<span class="fc" id="L83">                return new ByteArrayInputStream(decoder.decode(content));</span>
-<span class="nc" id="L84">            } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L85">                throw new AssertionError(e); // US-ASCII is mandatory</span>
+<span class="fc" id="L75">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
+<span class="fc" id="L76">                return new ByteArrayInputStream(decoder.decode(content));</span>
+<span class="nc" id="L77">            } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L78">                throw new AssertionError(e); // US-ASCII is mandatory</span>
             }
         }
 
-<span class="nc" id="L89">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
+<span class="nc" id="L82">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

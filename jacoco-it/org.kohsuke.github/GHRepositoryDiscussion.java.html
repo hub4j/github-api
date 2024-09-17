@@ -20,13 +20,7 @@ import java.util.Date;
  * @see &lt;a href=&quot;https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussion&quot;&gt;The GraphQL
  *      API for Discussions&lt;/a&gt;
  */
-public class GHRepositoryDiscussion extends GHObject {
-
-    /**
-     * Create default GHRepositoryDiscussion instance
-     */
-<span class="fc" id="L28">    public GHRepositoryDiscussion() {</span>
-<span class="fc" id="L29">    }</span>
+<span class="fc" id="L23">public class GHRepositoryDiscussion extends GHObject {</span>
 
     private Category category;
 
@@ -53,7 +47,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the category
      */
     public Category getCategory() {
-<span class="fc" id="L56">        return category;</span>
+<span class="fc" id="L50">        return category;</span>
     }
 
     /**
@@ -62,7 +56,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the answer html url
      */
     public URL getAnswerHtmlUrl() {
-<span class="fc" id="L65">        return GitHubClient.parseURL(answerHtmlUrl);</span>
+<span class="fc" id="L59">        return GitHubClient.parseURL(answerHtmlUrl);</span>
     }
 
     /**
@@ -71,7 +65,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the answer chosen at
      */
     public Date getAnswerChosenAt() {
-<span class="fc" id="L74">        return GitHubClient.parseDate(answerChosenAt);</span>
+<span class="fc" id="L68">        return GitHubClient.parseDate(answerChosenAt);</span>
     }
 
     /**
@@ -82,7 +76,7 @@ public class GHRepositoryDiscussion extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     public GHUser getAnswerChosenBy() throws IOException {
-<span class="fc" id="L85">        return root().intern(answerChosenBy);</span>
+<span class="fc" id="L79">        return root().intern(answerChosenBy);</span>
     }
 
     /**
@@ -91,7 +85,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L94">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L88">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -100,7 +94,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the number
      */
     public int getNumber() {
-<span class="fc" id="L103">        return number;</span>
+<span class="fc" id="L97">        return number;</span>
     }
 
     /**
@@ -109,7 +103,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the title
      */
     public String getTitle() {
-<span class="fc" id="L112">        return title;</span>
+<span class="fc" id="L106">        return title;</span>
     }
 
     /**
@@ -120,7 +114,7 @@ public class GHRepositoryDiscussion extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     public GHUser getUser() throws IOException {
-<span class="fc" id="L123">        return root().intern(user);</span>
+<span class="fc" id="L117">        return root().intern(user);</span>
     }
 
     /**
@@ -129,7 +123,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the state
      */
     public State getState() {
-<span class="fc" id="L132">        return EnumUtils.getEnumOrDefault(State.class, state, State.UNKNOWN);</span>
+<span class="fc" id="L126">        return EnumUtils.getEnumOrDefault(State.class, state, State.UNKNOWN);</span>
     }
 
     /**
@@ -138,7 +132,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return true, if is locked
      */
     public boolean isLocked() {
-<span class="fc" id="L141">        return locked;</span>
+<span class="fc" id="L135">        return locked;</span>
     }
 
     /**
@@ -147,7 +141,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the comments
      */
     public int getComments() {
-<span class="fc" id="L150">        return comments;</span>
+<span class="fc" id="L144">        return comments;</span>
     }
 
     /**
@@ -156,7 +150,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the author association
      */
     public GHCommentAuthorAssociation getAuthorAssociation() {
-<span class="fc" id="L159">        return authorAssociation;</span>
+<span class="fc" id="L153">        return authorAssociation;</span>
     }
 
     /**
@@ -165,7 +159,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the active lock reason
      */
     public String getActiveLockReason() {
-<span class="fc" id="L168">        return activeLockReason;</span>
+<span class="fc" id="L162">        return activeLockReason;</span>
     }
 
     /**
@@ -174,7 +168,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L177">        return body;</span>
+<span class="fc" id="L171">        return body;</span>
     }
 
     /**
@@ -183,7 +177,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @return the timeline url
      */
     public String getTimelineUrl() {
-<span class="nc" id="L186">        return timelineUrl;</span>
+<span class="nc" id="L180">        return timelineUrl;</span>
     }
 
     /**
@@ -196,13 +190,7 @@ public class GHRepositoryDiscussion extends GHObject {
      *      &quot;https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussioncategory&quot;&gt;The
      *      GraphQL API for Discussions&lt;/a&gt;
      */
-    public static class Category {
-
-        /**
-         * Create default Category instance
-         */
-<span class="fc" id="L204">        public Category() {</span>
-<span class="fc" id="L205">        }</span>
+<span class="fc" id="L193">    public static class Category {</span>
 
         private long id;
         private String nodeId;
@@ -221,7 +209,7 @@ public class GHRepositoryDiscussion extends GHObject {
          * @return the id
          */
         public long getId() {
-<span class="fc" id="L224">            return id;</span>
+<span class="fc" id="L212">            return id;</span>
         }
 
         /**
@@ -230,7 +218,7 @@ public class GHRepositoryDiscussion extends GHObject {
          * @return the node id
          */
         public String getNodeId() {
-<span class="fc" id="L233">            return nodeId;</span>
+<span class="fc" id="L221">            return nodeId;</span>
         }
 
         /**
@@ -239,7 +227,7 @@ public class GHRepositoryDiscussion extends GHObject {
          * @return the repository id
          */
         public long getRepositoryId() {
-<span class="nc" id="L242">            return repositoryId;</span>
+<span class="nc" id="L230">            return repositoryId;</span>
         }
 
         /**
@@ -248,7 +236,7 @@ public class GHRepositoryDiscussion extends GHObject {
          * @return the emoji
          */
         public String getEmoji() {
-<span class="fc" id="L251">            return emoji;</span>
+<span class="fc" id="L239">            return emoji;</span>
         }
 
         /**
@@ -257,7 +245,7 @@ public class GHRepositoryDiscussion extends GHObject {
          * @return the name
          */
         public String getName() {
-<span class="fc" id="L260">            return name;</span>
+<span class="fc" id="L248">            return name;</span>
         }
 
         /**
@@ -266,7 +254,7 @@ public class GHRepositoryDiscussion extends GHObject {
          * @return the description
          */
         public String getDescription() {
-<span class="fc" id="L269">            return description;</span>
+<span class="fc" id="L257">            return description;</span>
         }
 
         /**
@@ -275,7 +263,7 @@ public class GHRepositoryDiscussion extends GHObject {
          * @return the created at
          */
         public Date getCreatedAt() {
-<span class="fc" id="L278">            return GitHubClient.parseDate(createdAt);</span>
+<span class="fc" id="L266">            return GitHubClient.parseDate(createdAt);</span>
         }
 
         /**
@@ -284,7 +272,7 @@ public class GHRepositoryDiscussion extends GHObject {
          * @return the updated at
          */
         public Date getUpdatedAt() {
-<span class="fc" id="L287">            return GitHubClient.parseDate(updatedAt);</span>
+<span class="fc" id="L275">            return GitHubClient.parseDate(updatedAt);</span>
         }
 
         /**
@@ -293,7 +281,7 @@ public class GHRepositoryDiscussion extends GHObject {
          * @return the slug
          */
         public String getSlug() {
-<span class="fc" id="L296">            return slug;</span>
+<span class="fc" id="L284">            return slug;</span>
         }
 
         /**
@@ -302,21 +290,21 @@ public class GHRepositoryDiscussion extends GHObject {
          * @return true, if is answerable
          */
         public boolean isAnswerable() {
-<span class="fc" id="L305">            return isAnswerable;</span>
+<span class="fc" id="L293">            return isAnswerable;</span>
         }
     }
 
     /**
      * The Enum State.
      */
-<span class="fc" id="L312">    public enum State {</span>
+<span class="fc" id="L300">    public enum State {</span>
 
         /** The open. */
-<span class="fc" id="L315">        OPEN,</span>
+<span class="fc" id="L303">        OPEN,</span>
         /** The locked. */
-<span class="fc" id="L317">        LOCKED,</span>
+<span class="fc" id="L305">        LOCKED,</span>
         /** The unknown. */
-<span class="fc" id="L319">        UNKNOWN;</span>
+<span class="fc" id="L307">        UNKNOWN;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

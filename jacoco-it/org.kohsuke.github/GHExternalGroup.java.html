@@ -19,13 +19,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      *
      * @author Miguel Esteban Gutiérrez
      */
-    public static class GHLinkedTeam {
-
-        /**
-         * Create default GHLinkedTeam instance
-         */
-<span class="fc" id="L27">        public GHLinkedTeam() {</span>
-<span class="fc" id="L28">        }</span>
+<span class="fc" id="L22">    public static class GHLinkedTeam {</span>
 
         /**
          * The identifier of the team
@@ -45,7 +39,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the id
          */
         public long getId() {
-<span class="fc" id="L48">            return teamId;</span>
+<span class="fc" id="L42">            return teamId;</span>
         }
 
         /**
@@ -54,7 +48,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the name
          */
         public String getName() {
-<span class="fc" id="L57">            return teamName;</span>
+<span class="fc" id="L51">            return teamName;</span>
         }
 
     }
@@ -62,13 +56,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
     /**
      * A reference of an external member linked to an external group
      */
-    public static class GHLinkedExternalMember {
-
-        /**
-         * Create default GHLinkedExternalMember instance
-         */
-<span class="fc" id="L70">        public GHLinkedExternalMember() {</span>
-<span class="fc" id="L71">        }</span>
+<span class="fc" id="L59">    public static class GHLinkedExternalMember {</span>
 
         /**
          * The internal user ID of the identity
@@ -100,7 +88,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the id
          */
         public long getId() {
-<span class="fc" id="L103">            return memberId;</span>
+<span class="fc" id="L91">            return memberId;</span>
         }
 
         /**
@@ -109,7 +97,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the login
          */
         public String getLogin() {
-<span class="fc" id="L112">            return memberLogin;</span>
+<span class="fc" id="L100">            return memberLogin;</span>
         }
 
         /**
@@ -118,7 +106,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the name
          */
         public String getName() {
-<span class="fc" id="L121">            return memberName;</span>
+<span class="fc" id="L109">            return memberName;</span>
         }
 
         /**
@@ -127,7 +115,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          * @return the email
          */
         public String getEmail() {
-<span class="fc" id="L130">            return memberEmail;</span>
+<span class="fc" id="L118">            return memberEmail;</span>
         }
 
     }
@@ -162,10 +150,10 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
     @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
     private List&lt;GHLinkedExternalMember&gt; members;
 
-<span class="fc" id="L165">    GHExternalGroup() {</span>
-<span class="fc" id="L166">        this.teams = Collections.emptyList();</span>
-<span class="fc" id="L167">        this.members = Collections.emptyList();</span>
-<span class="fc" id="L168">    }</span>
+<span class="fc" id="L153">    GHExternalGroup() {</span>
+<span class="fc" id="L154">        this.teams = Collections.emptyList();</span>
+<span class="fc" id="L155">        this.members = Collections.emptyList();</span>
+<span class="fc" id="L156">    }</span>
 
     private GHOrganization organization;
 
@@ -176,8 +164,8 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      *            the owner
      */
     GHExternalGroup wrapUp(final GHOrganization owner) {
-<span class="fc" id="L179">        this.organization = owner;</span>
-<span class="fc" id="L180">        return this;</span>
+<span class="fc" id="L167">        this.organization = owner;</span>
+<span class="fc" id="L168">        return this;</span>
     }
 
     /**
@@ -187,8 +175,8 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      *            the root
      */
     void wrapUp(final GitHub root) { // auto-wrapUp when organization is known from GET /orgs/{org}/external-groups
-<span class="fc" id="L190">        wrapUp(organization);</span>
-<span class="fc" id="L191">    }</span>
+<span class="fc" id="L178">        wrapUp(organization);</span>
+<span class="fc" id="L179">    }</span>
 
     /**
      * Gets organization.
@@ -199,7 +187,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHOrganization getOrganization() throws IOException {
-<span class="fc" id="L202">        return organization;</span>
+<span class="fc" id="L190">        return organization;</span>
     }
 
     /**
@@ -208,7 +196,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L211">        return groupId;</span>
+<span class="fc" id="L199">        return groupId;</span>
     }
 
     /**
@@ -217,7 +205,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L220">        return groupName;</span>
+<span class="fc" id="L208">        return groupName;</span>
     }
 
     /**
@@ -226,7 +214,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      * @return the date
      */
     public Date getUpdatedAt() {
-<span class="fc" id="L229">        return GitHubClient.parseDate(updatedAt);</span>
+<span class="fc" id="L217">        return GitHubClient.parseDate(updatedAt);</span>
     }
 
     /**
@@ -235,7 +223,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      * @return the teams
      */
     public List&lt;GHLinkedTeam&gt; getTeams() {
-<span class="fc" id="L238">        return Collections.unmodifiableList(teams);</span>
+<span class="fc" id="L226">        return Collections.unmodifiableList(teams);</span>
     }
 
     /**
@@ -244,7 +232,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      * @return the external members
      */
     public List&lt;GHLinkedExternalMember&gt; getMembers() {
-<span class="fc" id="L247">        return Collections.unmodifiableList(members);</span>
+<span class="fc" id="L235">        return Collections.unmodifiableList(members);</span>
     }
 
     /**
@@ -255,11 +243,11 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      */
     @Override
     public void refresh() throws IOException {
-<span class="fc" id="L258">        root().createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root());</span>
-<span class="fc" id="L259">    }</span>
+<span class="fc" id="L246">        root().createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root());</span>
+<span class="fc" id="L247">    }</span>
 
     private String api(final String tail) {
-<span class="fc" id="L262">        return &quot;/orgs/&quot; + organization.getLogin() + &quot;/external-group/&quot; + getId() + tail;</span>
+<span class="fc" id="L250">        return &quot;/orgs/&quot; + organization.getLogin() + &quot;/external-group/&quot; + getId() + tail;</span>
     }
 
 }

@@ -45,13 +45,7 @@ import java.util.Objects;
 @SuppressWarnings({ &quot;UnusedDeclaration&quot; })
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-public class GHLicense extends GHObject {
-
-    /**
-     * Create default GHLicense instance
-     */
-<span class="fc" id="L53">    public GHLicense() {</span>
-<span class="fc" id="L54">    }</span>
+<span class="fc" id="L48">public class GHLicense extends GHObject {</span>
 
     /** The name. */
     // these fields are always present, even in the short form
@@ -65,13 +59,13 @@ public class GHLicense extends GHObject {
     protected String html_url, description, category, implementation, body;
 
     /** The required. */
-<span class="fc" id="L68">    protected List&lt;String&gt; required = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L62">    protected List&lt;String&gt; required = new ArrayList&lt;String&gt;();</span>
 
     /** The permitted. */
-<span class="fc" id="L71">    protected List&lt;String&gt; permitted = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L65">    protected List&lt;String&gt; permitted = new ArrayList&lt;String&gt;();</span>
 
     /** The forbidden. */
-<span class="fc" id="L74">    protected List&lt;String&gt; forbidden = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L68">    protected List&lt;String&gt; forbidden = new ArrayList&lt;String&gt;();</span>
 
     /**
      * Gets key.
@@ -79,7 +73,7 @@ public class GHLicense extends GHObject {
      * @return a mnemonic for the license
      */
     public String getKey() {
-<span class="fc" id="L82">        return key;</span>
+<span class="fc" id="L76">        return key;</span>
     }
 
     /**
@@ -88,7 +82,7 @@ public class GHLicense extends GHObject {
      * @return the license name
      */
     public String getName() {
-<span class="fc" id="L91">        return name;</span>
+<span class="fc" id="L85">        return name;</span>
     }
 
     /**
@@ -97,7 +91,7 @@ public class GHLicense extends GHObject {
      * @return the spdx id
      */
     public String getSpdxId() {
-<span class="fc" id="L100">        return spdxId;</span>
+<span class="fc" id="L94">        return spdxId;</span>
     }
 
     /**
@@ -108,8 +102,8 @@ public class GHLicense extends GHObject {
      *             the io exception
      */
     public Boolean isFeatured() throws IOException {
-<span class="fc" id="L111">        populate();</span>
-<span class="fc" id="L112">        return featured;</span>
+<span class="fc" id="L105">        populate();</span>
+<span class="fc" id="L106">        return featured;</span>
     }
 
     /**
@@ -120,8 +114,8 @@ public class GHLicense extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     public URL getHtmlUrl() throws IOException {
-<span class="fc" id="L123">        populate();</span>
-<span class="fc" id="L124">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L117">        populate();</span>
+<span class="fc" id="L118">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -132,8 +126,8 @@ public class GHLicense extends GHObject {
      *             the io exception
      */
     public String getDescription() throws IOException {
-<span class="fc" id="L135">        populate();</span>
-<span class="fc" id="L136">        return description;</span>
+<span class="fc" id="L129">        populate();</span>
+<span class="fc" id="L130">        return description;</span>
     }
 
     /**
@@ -144,8 +138,8 @@ public class GHLicense extends GHObject {
      *             the io exception
      */
     public String getCategory() throws IOException {
-<span class="fc" id="L147">        populate();</span>
-<span class="fc" id="L148">        return category;</span>
+<span class="fc" id="L141">        populate();</span>
+<span class="fc" id="L142">        return category;</span>
     }
 
     /**
@@ -156,8 +150,8 @@ public class GHLicense extends GHObject {
      *             the io exception
      */
     public String getImplementation() throws IOException {
-<span class="fc" id="L159">        populate();</span>
-<span class="fc" id="L160">        return implementation;</span>
+<span class="fc" id="L153">        populate();</span>
+<span class="fc" id="L154">        return implementation;</span>
     }
 
     /**
@@ -168,8 +162,8 @@ public class GHLicense extends GHObject {
      *             the io exception
      */
     public List&lt;String&gt; getRequired() throws IOException {
-<span class="fc" id="L171">        populate();</span>
-<span class="fc" id="L172">        return Collections.unmodifiableList(required);</span>
+<span class="fc" id="L165">        populate();</span>
+<span class="fc" id="L166">        return Collections.unmodifiableList(required);</span>
     }
 
     /**
@@ -180,8 +174,8 @@ public class GHLicense extends GHObject {
      *             the io exception
      */
     public List&lt;String&gt; getPermitted() throws IOException {
-<span class="fc" id="L183">        populate();</span>
-<span class="fc" id="L184">        return Collections.unmodifiableList(permitted);</span>
+<span class="fc" id="L177">        populate();</span>
+<span class="fc" id="L178">        return Collections.unmodifiableList(permitted);</span>
     }
 
     /**
@@ -192,8 +186,8 @@ public class GHLicense extends GHObject {
      *             the io exception
      */
     public List&lt;String&gt; getForbidden() throws IOException {
-<span class="fc" id="L195">        populate();</span>
-<span class="fc" id="L196">        return Collections.unmodifiableList(forbidden);</span>
+<span class="fc" id="L189">        populate();</span>
+<span class="fc" id="L190">        return Collections.unmodifiableList(forbidden);</span>
     }
 
     /**
@@ -204,8 +198,8 @@ public class GHLicense extends GHObject {
      *             the io exception
      */
     public String getBody() throws IOException {
-<span class="fc" id="L207">        populate();</span>
-<span class="fc" id="L208">        return body;</span>
+<span class="fc" id="L201">        populate();</span>
+<span class="fc" id="L202">        return body;</span>
     }
 
     /**
@@ -217,18 +211,18 @@ public class GHLicense extends GHObject {
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-<span class="fc bfc" id="L220" title="All 2 branches covered.">        if (description != null)</span>
-<span class="fc" id="L221">            return; // already populated</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (description != null)</span>
+<span class="fc" id="L215">            return; // already populated</span>
 
-<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        if (isOffline()) {</span>
-<span class="nc" id="L224">            return; // cannot populate, will have to live with what we have</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (isOffline()) {</span>
+<span class="nc" id="L218">            return; // cannot populate, will have to live with what we have</span>
         }
 
-<span class="fc" id="L227">        URL url = getUrl();</span>
-<span class="fc bfc" id="L228" title="All 2 branches covered.">        if (url != null) {</span>
-<span class="fc" id="L229">            root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);</span>
+<span class="fc" id="L221">        URL url = getUrl();</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        if (url != null) {</span>
+<span class="fc" id="L223">            root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);</span>
         }
-<span class="fc" id="L231">    }</span>
+<span class="fc" id="L225">    }</span>
 
     /**
      * Equals.
@@ -239,13 +233,13 @@ public class GHLicense extends GHObject {
      */
     @Override
     public boolean equals(Object o) {
-<span class="pc bpc" id="L242" title="1 of 2 branches missed.">        if (this == o)</span>
-<span class="nc" id="L243">            return true;</span>
-<span class="fc bfc" id="L244" title="All 2 branches covered.">        if (!(o instanceof GHLicense))</span>
-<span class="fc" id="L245">            return false;</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (this == o)</span>
+<span class="nc" id="L237">            return true;</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (!(o instanceof GHLicense))</span>
+<span class="fc" id="L239">            return false;</span>
 
-<span class="fc" id="L247">        GHLicense that = (GHLicense) o;</span>
-<span class="fc" id="L248">        return Objects.equals(getUrl(), that.getUrl());</span>
+<span class="fc" id="L241">        GHLicense that = (GHLicense) o;</span>
+<span class="fc" id="L242">        return Objects.equals(getUrl(), that.getUrl());</span>
     }
 
     /**
@@ -255,7 +249,7 @@ public class GHLicense extends GHObject {
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L258">        return Objects.hashCode(getUrl());</span>
+<span class="nc" id="L252">        return Objects.hashCode(getUrl());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

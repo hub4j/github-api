@@ -18,14 +18,7 @@ import java.util.Collections;
         value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
                 &quot;URF_UNREAD_FIELD&quot; },
         justification = &quot;JSON API&quot;)
-public class GHBranchProtection extends GitHubInteractiveObject {
-
-    /**
-     * Create default GHBranchProtection instance
-     */
-<span class="fc" id="L26">    public GHBranchProtection() {</span>
-<span class="fc" id="L27">    }</span>
-
+<span class="fc" id="L21">public class GHBranchProtection extends GitHubInteractiveObject {</span>
     private static final String REQUIRE_SIGNATURES_URI = &quot;/required_signatures&quot;;
 
     @JsonProperty
@@ -71,8 +64,8 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      *             the io exception
      */
     public void enabledSignedCommits() throws IOException {
-<span class="fc" id="L74">        requester().method(&quot;POST&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L67">        requester().method(&quot;POST&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);</span>
+<span class="fc" id="L68">    }</span>
 
     /**
      * Disable signed commits.
@@ -81,8 +74,8 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      *             the io exception
      */
     public void disableSignedCommits() throws IOException {
-<span class="fc" id="L84">        requester().method(&quot;DELETE&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).send();</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L77">        requester().method(&quot;DELETE&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).send();</span>
+<span class="fc" id="L78">    }</span>
 
     /**
      * Gets allow deletions.
@@ -90,7 +83,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public AllowDeletions getAllowDeletions() {
-<span class="fc" id="L93">        return allowDeletions;</span>
+<span class="fc" id="L86">        return allowDeletions;</span>
     }
 
     /**
@@ -99,7 +92,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public AllowForcePushes getAllowForcePushes() {
-<span class="fc" id="L102">        return allowForcePushes;</span>
+<span class="fc" id="L95">        return allowForcePushes;</span>
     }
 
     /**
@@ -108,7 +101,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public AllowForkSyncing getAllowForkSyncing() {
-<span class="fc" id="L111">        return allowForkSyncing;</span>
+<span class="fc" id="L104">        return allowForkSyncing;</span>
     }
 
     /**
@@ -117,7 +110,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public BlockCreations getBlockCreations() {
-<span class="fc" id="L120">        return blockCreations;</span>
+<span class="fc" id="L113">        return blockCreations;</span>
     }
 
     /**
@@ -126,7 +119,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public EnforceAdmins getEnforceAdmins() {
-<span class="fc" id="L129">        return enforceAdmins;</span>
+<span class="fc" id="L122">        return enforceAdmins;</span>
     }
 
     /**
@@ -135,7 +128,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public LockBranch getLockBranch() {
-<span class="fc" id="L138">        return lockBranch;</span>
+<span class="fc" id="L131">        return lockBranch;</span>
     }
 
     /**
@@ -144,7 +137,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public RequiredConversationResolution getRequiredConversationResolution() {
-<span class="fc" id="L147">        return requiredConversationResolution;</span>
+<span class="fc" id="L140">        return requiredConversationResolution;</span>
     }
 
     /**
@@ -153,7 +146,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public RequiredLinearHistory getRequiredLinearHistory() {
-<span class="fc" id="L156">        return requiredLinearHistory;</span>
+<span class="fc" id="L149">        return requiredLinearHistory;</span>
     }
 
     /**
@@ -162,7 +155,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the required reviews
      */
     public RequiredReviews getRequiredReviews() {
-<span class="fc" id="L165">        return requiredReviews;</span>
+<span class="fc" id="L158">        return requiredReviews;</span>
     }
 
     /**
@@ -173,7 +166,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      *             the io exception
      */
     public boolean getRequiredSignatures() throws IOException {
-<span class="fc" id="L176">        return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;</span>
+<span class="fc" id="L169">        return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;</span>
     }
 
     /**
@@ -182,7 +175,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the required status checks
      */
     public RequiredStatusChecks getRequiredStatusChecks() {
-<span class="fc" id="L185">        return requiredStatusChecks;</span>
+<span class="fc" id="L178">        return requiredStatusChecks;</span>
     }
 
     /**
@@ -191,7 +184,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the restrictions
      */
     public Restrictions getRestrictions() {
-<span class="nc" id="L194">        return restrictions;</span>
+<span class="nc" id="L187">        return restrictions;</span>
     }
 
     /**
@@ -200,24 +193,17 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L203">        return url;</span>
+<span class="nc" id="L196">        return url;</span>
     }
 
     private Requester requester() {
-<span class="fc" id="L207">        return root().createRequest();</span>
+<span class="fc" id="L200">        return root().createRequest();</span>
     }
 
     /**
      * The type AllowDeletions.
      */
-    public static class AllowDeletions {
-
-        /**
-         * Create default AllowDeletions instance
-         */
-<span class="fc" id="L218">        public AllowDeletions() {</span>
-<span class="fc" id="L219">        }</span>
-
+<span class="fc" id="L206">    public static class AllowDeletions {</span>
         @JsonProperty
         private boolean enabled;
 
@@ -227,7 +213,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="fc" id="L230">            return enabled;</span>
+<span class="fc" id="L216">            return enabled;</span>
         }
     }
 
@@ -243,8 +229,8 @@ public class GHBranchProtection extends GitHubInteractiveObject {
         /**
          * no-arg constructor for the serializer
          */
-<span class="fc" id="L246">        public Check() {</span>
-<span class="fc" id="L247">        }</span>
+<span class="fc" id="L232">        public Check() {</span>
+<span class="fc" id="L233">        }</span>
 
         /**
          * Regular constructor for use in user business logic
@@ -256,10 +242,10 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          *            set the status. Pass &quot;null&quot; to automatically select the GitHub App that has recently provided this
          *            check.
          */
-<span class="fc" id="L259">        public Check(String context, Integer appId) {</span>
-<span class="fc" id="L260">            this.context = context;</span>
-<span class="fc" id="L261">            this.appId = appId;</span>
-<span class="fc" id="L262">        }</span>
+<span class="fc" id="L245">        public Check(String context, Integer appId) {</span>
+<span class="fc" id="L246">            this.context = context;</span>
+<span class="fc" id="L247">            this.appId = appId;</span>
+<span class="fc" id="L248">        }</span>
 
         /**
          * The context string of the check
@@ -267,7 +253,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the string
          */
         public String getContext() {
-<span class="fc" id="L270">            return context;</span>
+<span class="fc" id="L256">            return context;</span>
         }
 
         /**
@@ -276,21 +262,14 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the integer
          */
         public Integer getAppId() {
-<span class="fc" id="L279">            return appId;</span>
+<span class="fc" id="L265">            return appId;</span>
         }
     }
 
     /**
      * The type AllowForcePushes.
      */
-    public static class AllowForcePushes {
-
-        /**
-         * Create default AllowForcePushes instance
-         */
-<span class="fc" id="L291">        public AllowForcePushes() {</span>
-<span class="fc" id="L292">        }</span>
-
+<span class="fc" id="L272">    public static class AllowForcePushes {</span>
         @JsonProperty
         private boolean enabled;
 
@@ -300,21 +279,14 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="fc" id="L303">            return enabled;</span>
+<span class="fc" id="L282">            return enabled;</span>
         }
     }
 
     /**
      * The type AllowForkSyncing.
      */
-    public static class AllowForkSyncing {
-
-        /**
-         * Create default AllowForkSyncing instance
-         */
-<span class="fc" id="L315">        public AllowForkSyncing() {</span>
-<span class="fc" id="L316">        }</span>
-
+<span class="fc" id="L289">    public static class AllowForkSyncing {</span>
         @JsonProperty
         private boolean enabled;
 
@@ -324,21 +296,14 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="fc" id="L327">            return enabled;</span>
+<span class="fc" id="L299">            return enabled;</span>
         }
     }
 
     /**
      * The type BlockCreations.
      */
-    public static class BlockCreations {
-
-        /**
-         * Create default BlockCreations instance
-         */
-<span class="fc" id="L339">        public BlockCreations() {</span>
-<span class="fc" id="L340">        }</span>
-
+<span class="fc" id="L306">    public static class BlockCreations {</span>
         @JsonProperty
         private boolean enabled;
 
@@ -348,21 +313,14 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="fc" id="L351">            return enabled;</span>
+<span class="fc" id="L316">            return enabled;</span>
         }
     }
 
     /**
      * The type EnforceAdmins.
      */
-    public static class EnforceAdmins {
-
-        /**
-         * Create default EnforceAdmins instance
-         */
-<span class="fc" id="L363">        public EnforceAdmins() {</span>
-<span class="fc" id="L364">        }</span>
-
+<span class="fc" id="L323">    public static class EnforceAdmins {</span>
         @JsonProperty
         private boolean enabled;
 
@@ -375,7 +333,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L378">            return url;</span>
+<span class="nc" id="L336">            return url;</span>
         }
 
         /**
@@ -384,21 +342,14 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="fc" id="L387">            return enabled;</span>
+<span class="fc" id="L345">            return enabled;</span>
         }
     }
 
     /**
      * The type LockBranch.
      */
-    public static class LockBranch {
-
-        /**
-         * Create default LockBranch instance
-         */
-<span class="fc" id="L399">        public LockBranch() {</span>
-<span class="fc" id="L400">        }</span>
-
+<span class="fc" id="L352">    public static class LockBranch {</span>
         @JsonProperty
         private boolean enabled;
 
@@ -408,21 +359,14 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="fc" id="L411">            return enabled;</span>
+<span class="fc" id="L362">            return enabled;</span>
         }
     }
 
     /**
      * The type RequiredConversationResolution.
      */
-    public static class RequiredConversationResolution {
-
-        /**
-         * Create default RequiredConversationResolution instance
-         */
-<span class="fc" id="L423">        public RequiredConversationResolution() {</span>
-<span class="fc" id="L424">        }</span>
-
+<span class="fc" id="L369">    public static class RequiredConversationResolution {</span>
         @JsonProperty
         private boolean enabled;
 
@@ -432,21 +376,14 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="fc" id="L435">            return enabled;</span>
+<span class="fc" id="L379">            return enabled;</span>
         }
     }
 
     /**
      * The type RequiredLinearHistory.
      */
-    public static class RequiredLinearHistory {
-
-        /**
-         * Create default RequiredLinearHistory instance
-         */
-<span class="fc" id="L447">        public RequiredLinearHistory() {</span>
-<span class="fc" id="L448">        }</span>
-
+<span class="fc" id="L386">    public static class RequiredLinearHistory {</span>
         @JsonProperty
         private boolean enabled;
 
@@ -456,21 +393,14 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="fc" id="L459">            return enabled;</span>
+<span class="fc" id="L396">            return enabled;</span>
         }
     }
 
     /**
      * The type RequiredReviews.
      */
-    public static class RequiredReviews {
-
-        /**
-         * Create default RequiredReviews instance
-         */
-<span class="fc" id="L471">        public RequiredReviews() {</span>
-<span class="fc" id="L472">        }</span>
-
+<span class="fc" id="L403">    public static class RequiredReviews {</span>
         @JsonProperty(&quot;dismissal_restrictions&quot;)
         private Restrictions dismissalRestriction;
 
@@ -495,7 +425,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the dismissal restrictions
          */
         public Restrictions getDismissalRestrictions() {
-<span class="nc" id="L498">            return dismissalRestriction;</span>
+<span class="nc" id="L428">            return dismissalRestriction;</span>
         }
 
         /**
@@ -504,7 +434,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L507">            return url;</span>
+<span class="nc" id="L437">            return url;</span>
         }
 
         /**
@@ -513,7 +443,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isDismissStaleReviews() {
-<span class="fc" id="L516">            return dismissStaleReviews;</span>
+<span class="fc" id="L446">            return dismissStaleReviews;</span>
         }
 
         /**
@@ -522,7 +452,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isRequireCodeOwnerReviews() {
-<span class="fc" id="L525">            return requireCodeOwnerReviews;</span>
+<span class="fc" id="L455">            return requireCodeOwnerReviews;</span>
         }
 
         /**
@@ -531,7 +461,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isRequireLastPushApproval() {
-<span class="fc" id="L534">            return requireLastPushApproval;</span>
+<span class="fc" id="L464">            return requireLastPushApproval;</span>
         }
 
         /**
@@ -540,7 +470,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the required reviewers
          */
         public int getRequiredReviewers() {
-<span class="fc" id="L543">            return requiredReviewers;</span>
+<span class="fc" id="L473">            return requiredReviewers;</span>
         }
     }
 
@@ -557,7 +487,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L560">            return url;</span>
+<span class="nc" id="L490">            return url;</span>
         }
 
         /**
@@ -566,21 +496,14 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isEnabled() {
-<span class="nc" id="L569">            return enabled;</span>
+<span class="nc" id="L499">            return enabled;</span>
         }
     }
 
     /**
      * The type RequiredStatusChecks.
      */
-    public static class RequiredStatusChecks {
-
-        /**
-         * Create default RequiredStatusChecks instance
-         */
-<span class="fc" id="L581">        public RequiredStatusChecks() {</span>
-<span class="fc" id="L582">        }</span>
-
+<span class="fc" id="L506">    public static class RequiredStatusChecks {</span>
         @JsonProperty
         private Collection&lt;String&gt; contexts;
 
@@ -599,7 +522,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the contexts
          */
         public Collection&lt;String&gt; getContexts() {
-<span class="fc" id="L602">            return Collections.unmodifiableCollection(contexts);</span>
+<span class="fc" id="L525">            return Collections.unmodifiableCollection(contexts);</span>
         }
 
         /**
@@ -608,7 +531,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the checks
          */
         public Collection&lt;Check&gt; getChecks() {
-<span class="fc" id="L611">            return Collections.unmodifiableCollection(checks);</span>
+<span class="fc" id="L534">            return Collections.unmodifiableCollection(checks);</span>
         }
 
         /**
@@ -617,7 +540,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L620">            return url;</span>
+<span class="nc" id="L543">            return url;</span>
         }
 
         /**
@@ -626,21 +549,14 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the boolean
          */
         public boolean isRequiresBranchUpToDate() {
-<span class="fc" id="L629">            return strict;</span>
+<span class="fc" id="L552">            return strict;</span>
         }
     }
 
     /**
      * The type Restrictions.
      */
-    public static class Restrictions {
-
-        /**
-         * Create default Restrictions instance
-         */
-<span class="nc" id="L641">        public Restrictions() {</span>
-<span class="nc" id="L642">        }</span>
-
+<span class="nc" id="L559">    public static class Restrictions {</span>
         @JsonProperty
         private Collection&lt;GHTeam&gt; teams;
 
@@ -660,7 +576,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the teams
          */
         public Collection&lt;GHTeam&gt; getTeams() {
-<span class="nc" id="L663">            return Collections.unmodifiableCollection(teams);</span>
+<span class="nc" id="L579">            return Collections.unmodifiableCollection(teams);</span>
         }
 
         /**
@@ -669,7 +585,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the teams url
          */
         public String getTeamsUrl() {
-<span class="nc" id="L672">            return teamsUrl;</span>
+<span class="nc" id="L588">            return teamsUrl;</span>
         }
 
         /**
@@ -678,7 +594,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the url
          */
         public String getUrl() {
-<span class="nc" id="L681">            return url;</span>
+<span class="nc" id="L597">            return url;</span>
         }
 
         /**
@@ -687,7 +603,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the users
          */
         public Collection&lt;GHUser&gt; getUsers() {
-<span class="nc" id="L690">            return Collections.unmodifiableCollection(users);</span>
+<span class="nc" id="L606">            return Collections.unmodifiableCollection(users);</span>
         }
 
         /**
@@ -696,7 +612,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          * @return the users url
          */
         public String getUsersUrl() {
-<span class="nc" id="L699">            return usersUrl;</span>
+<span class="nc" id="L615">            return usersUrl;</span>
         }
     }
 }

@@ -9,13 +9,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @see GHEventPayload.Label
  */
 @SuppressFBWarnings(&quot;UWF_UNWRITTEN_FIELD&quot;)
-public class GHLabelChanges {
-
-    /**
-     * Create default GHLabelChanges instance
-     */
-<span class="fc" id="L17">    public GHLabelChanges() {</span>
-<span class="fc" id="L18">    }</span>
+<span class="fc" id="L12">public class GHLabelChanges {</span>
 
     private GHFrom name;
     private GHFrom color;
@@ -26,7 +20,7 @@ public class GHLabelChanges {
      * @return old label name (or null if not changed)
      */
     public GHFrom getName() {
-<span class="fc" id="L29">        return name;</span>
+<span class="fc" id="L23">        return name;</span>
     }
 
     /**
@@ -35,20 +29,13 @@ public class GHLabelChanges {
      * @return old label color (or null if not changed)
      */
     public GHFrom getColor() {
-<span class="fc" id="L38">        return color;</span>
+<span class="fc" id="L32">        return color;</span>
     }
 
     /**
      * Wrapper for changed values.
      */
-    public static class GHFrom {
-
-        /**
-         * Create default GHFrom instance
-         */
-<span class="fc" id="L49">        public GHFrom() {</span>
-<span class="fc" id="L50">        }</span>
-
+<span class="fc" id="L38">    public static class GHFrom {</span>
         private String from;
 
         /**
@@ -57,7 +44,7 @@ public class GHLabelChanges {
          * @return previous value
          */
         public String getFrom() {
-<span class="fc" id="L60">            return from;</span>
+<span class="fc" id="L47">            return from;</span>
         }
     }
 }

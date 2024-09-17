@@ -11,13 +11,7 @@ import java.net.URL;
  * @author Daniel Teixeira - https://github.com/ddtxra
  * @see GHTree
  */
-public class GHTreeEntry {
-
-    /**
-     * Create default GHTreeEntry instance
-     */
-<span class="fc" id="L19">    public GHTreeEntry() {</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L14">public class GHTreeEntry {</span>
 
     /** The tree. */
     /* package almost final */GHTree tree;
@@ -31,7 +25,7 @@ public class GHTreeEntry {
      * @return the path
      */
     public String getPath() {
-<span class="fc" id="L34">        return path;</span>
+<span class="fc" id="L28">        return path;</span>
     }
 
     /**
@@ -40,7 +34,7 @@ public class GHTreeEntry {
      * @return the mode
      */
     public String getMode() {
-<span class="fc" id="L43">        return mode;</span>
+<span class="fc" id="L37">        return mode;</span>
     }
 
     /**
@@ -49,7 +43,7 @@ public class GHTreeEntry {
      * @return The size of the path or 0 if it is a directory
      */
     public long getSize() {
-<span class="fc" id="L52">        return size;</span>
+<span class="fc" id="L46">        return size;</span>
     }
 
     /**
@@ -58,7 +52,7 @@ public class GHTreeEntry {
      * @return The type
      */
     public String getType() {
-<span class="nc" id="L61">        return type;</span>
+<span class="nc" id="L55">        return type;</span>
     }
 
     /**
@@ -67,7 +61,7 @@ public class GHTreeEntry {
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L70">        return sha;</span>
+<span class="fc" id="L64">        return sha;</span>
     }
 
     /**
@@ -77,7 +71,7 @@ public class GHTreeEntry {
      * @return the url
      */
     public URL getUrl() {
-<span class="fc" id="L80">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L74">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -88,10 +82,10 @@ public class GHTreeEntry {
      *             the io exception
      */
     public GHBlob asBlob() throws IOException {
-<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
-<span class="fc" id="L92">            return tree.repo.getBlob(sha);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
+<span class="fc" id="L86">            return tree.repo.getBlob(sha);</span>
         else
-<span class="nc" id="L94">            return null;</span>
+<span class="nc" id="L88">            return null;</span>
     }
 
     /**
@@ -102,10 +96,10 @@ public class GHTreeEntry {
      *             the io exception
      */
     public InputStream readAsBlob() throws IOException {
-<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
-<span class="fc" id="L106">            return tree.repo.readBlob(sha);</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (type.equals(&quot;blob&quot;))</span>
+<span class="fc" id="L100">            return tree.repo.readBlob(sha);</span>
         else
-<span class="nc" id="L108">            return null;</span>
+<span class="nc" id="L102">            return null;</span>
     }
 
     /**
@@ -116,10 +110,10 @@ public class GHTreeEntry {
      *             the io exception
      */
     public GHTree asTree() throws IOException {
-<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (type.equals(&quot;tree&quot;))</span>
-<span class="fc" id="L120">            return tree.repo.getTree(sha);</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (type.equals(&quot;tree&quot;))</span>
+<span class="fc" id="L114">            return tree.repo.getTree(sha);</span>
         else
-<span class="nc" id="L122">            return null;</span>
+<span class="nc" id="L116">            return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

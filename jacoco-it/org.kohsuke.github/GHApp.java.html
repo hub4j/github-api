@@ -18,13 +18,7 @@ import java.util.stream.Collectors;
  * @author Paulo Miguel Almeida
  * @see GitHub#getApp() GitHub#getApp()
  */
-public class GHApp extends GHObject {
-
-    /**
-     * Create default GHApp instance
-     */
-<span class="fc" id="L26">    public GHApp() {</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L21">public class GHApp extends GHObject {</span>
 
     private GHUser owner;
     private String name;
@@ -43,7 +37,19 @@ public class GHApp extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getOwner() {
-<span class="fc" id="L46">        return owner;</span>
+<span class="fc" id="L40">        return owner;</span>
+    }
+
+    /**
+     * Sets owner.
+     *
+     * @param owner
+     *            the owner
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
+     */
+    @Deprecated
+    public void setOwner(GHUser owner) {
+<span class="fc" id="L52">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -52,7 +58,7 @@ public class GHApp extends GHObject {
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L55">        return name;</span>
+<span class="fc" id="L61">        return name;</span>
     }
 
     /**
@@ -61,7 +67,19 @@ public class GHApp extends GHObject {
      * @return the slug name of the GitHub app
      */
     public String getSlug() {
-<span class="fc" id="L64">        return slug;</span>
+<span class="fc" id="L70">        return slug;</span>
+    }
+
+    /**
+     * Sets name.
+     *
+     * @param name
+     *            the name
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
+     */
+    @Deprecated
+    public void setName(String name) {
+<span class="fc" id="L82">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -70,7 +88,19 @@ public class GHApp extends GHObject {
      * @return the description
      */
     public String getDescription() {
-<span class="fc" id="L73">        return description;</span>
+<span class="fc" id="L91">        return description;</span>
+    }
+
+    /**
+     * Sets description.
+     *
+     * @param description
+     *            the description
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
+     */
+    @Deprecated
+    public void setDescription(String description) {
+<span class="fc" id="L103">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -79,7 +109,19 @@ public class GHApp extends GHObject {
      * @return the external url
      */
     public String getExternalUrl() {
-<span class="fc" id="L82">        return externalUrl;</span>
+<span class="fc" id="L112">        return externalUrl;</span>
+    }
+
+    /**
+     * Sets external url.
+     *
+     * @param externalUrl
+     *            the external url
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
+     */
+    @Deprecated
+    public void setExternalUrl(String externalUrl) {
+<span class="fc" id="L124">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -88,9 +130,21 @@ public class GHApp extends GHObject {
      * @return the events
      */
     public List&lt;GHEvent&gt; getEvents() {
-<span class="fc" id="L91">        return events.stream()</span>
-<span class="pc" id="L92">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
-<span class="fc" id="L93">                .collect(Collectors.toList());</span>
+<span class="fc" id="L133">        return events.stream()</span>
+<span class="pc" id="L134">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
+<span class="fc" id="L135">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Sets events.
+     *
+     * @param events
+     *            the events
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
+     */
+    @Deprecated
+    public void setEvents(List&lt;GHEvent&gt; events) {
+<span class="fc" id="L147">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -99,7 +153,19 @@ public class GHApp extends GHObject {
      * @return the installations count
      */
     public long getInstallationsCount() {
-<span class="fc" id="L102">        return installationsCount;</span>
+<span class="fc" id="L156">        return installationsCount;</span>
+    }
+
+    /**
+     * Sets installations count.
+     *
+     * @param installationsCount
+     *            the installations count
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
+     */
+    @Deprecated
+    public void setInstallationsCount(long installationsCount) {
+<span class="fc" id="L168">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -108,7 +174,7 @@ public class GHApp extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L111">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L177">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -117,7 +183,19 @@ public class GHApp extends GHObject {
      * @return the permissions
      */
     public Map&lt;String, String&gt; getPermissions() {
-<span class="fc" id="L120">        return Collections.unmodifiableMap(permissions);</span>
+<span class="fc" id="L186">        return Collections.unmodifiableMap(permissions);</span>
+    }
+
+    /**
+     * Sets permissions.
+     *
+     * @param permissions
+     *            the permissions
+     * @deprecated Do not use this method. It was added due to incomplete understanding of Jackson binding.
+     */
+    @Deprecated
+    public void setPermissions(Map&lt;String, String&gt; permissions) {
+<span class="fc" id="L198">        throw new RuntimeException(&quot;Do not use this method.&quot;);</span>
     }
 
     /**
@@ -129,7 +207,7 @@ public class GHApp extends GHObject {
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#list-installations&quot;&gt;List installations&lt;/a&gt;
      */
     public PagedIterable&lt;GHAppInstallation&gt; listInstallations() {
-<span class="fc" id="L132">        return listInstallations(null);</span>
+<span class="fc" id="L210">        return listInstallations(null);</span>
     }
 
     /**
@@ -143,11 +221,11 @@ public class GHApp extends GHObject {
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#list-installations&quot;&gt;List installations&lt;/a&gt;
      */
     public PagedIterable&lt;GHAppInstallation&gt; listInstallations(final Date since) {
-<span class="fc" id="L146">        Requester requester = root().createRequest().withUrlPath(&quot;/app/installations&quot;);</span>
-<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (since != null) {</span>
-<span class="fc" id="L148">            requester.with(&quot;since&quot;, GitHubClient.printDate(since));</span>
+<span class="fc" id="L224">        Requester requester = root().createRequest().withUrlPath(&quot;/app/installations&quot;);</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (since != null) {</span>
+<span class="fc" id="L226">            requester.with(&quot;since&quot;, GitHubClient.printDate(since));</span>
         }
-<span class="fc" id="L150">        return requester.toIterable(GHAppInstallation[].class, null);</span>
+<span class="fc" id="L228">        return requester.toIterable(GHAppInstallation[].class, null);</span>
     }
 
     /**
@@ -163,9 +241,9 @@ public class GHApp extends GHObject {
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#get-an-installation&quot;&gt;Get an installation&lt;/a&gt;
      */
     public GHAppInstallation getInstallationById(long id) throws IOException {
-<span class="fc" id="L166">        return root().createRequest()</span>
-<span class="fc" id="L167">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, id))</span>
-<span class="fc" id="L168">                .fetch(GHAppInstallation.class);</span>
+<span class="fc" id="L244">        return root().createRequest()</span>
+<span class="fc" id="L245">                .withUrlPath(String.format(&quot;/app/installations/%d&quot;, id))</span>
+<span class="fc" id="L246">                .fetch(GHAppInstallation.class);</span>
     }
 
     /**
@@ -182,9 +260,9 @@ public class GHApp extends GHObject {
      *      installation&lt;/a&gt;
      */
     public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
-<span class="fc" id="L185">        return root().createRequest()</span>
-<span class="fc" id="L186">                .withUrlPath(String.format(&quot;/orgs/%s/installation&quot;, name))</span>
-<span class="fc" id="L187">                .fetch(GHAppInstallation.class);</span>
+<span class="fc" id="L263">        return root().createRequest()</span>
+<span class="fc" id="L264">                .withUrlPath(String.format(&quot;/orgs/%s/installation&quot;, name))</span>
+<span class="fc" id="L265">                .fetch(GHAppInstallation.class);</span>
     }
 
     /**
@@ -203,9 +281,9 @@ public class GHApp extends GHObject {
      *      installation&lt;/a&gt;
      */
     public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
-<span class="fc" id="L206">        return root().createRequest()</span>
-<span class="fc" id="L207">                .withUrlPath(String.format(&quot;/repos/%s/%s/installation&quot;, ownerName, repositoryName))</span>
-<span class="fc" id="L208">                .fetch(GHAppInstallation.class);</span>
+<span class="fc" id="L284">        return root().createRequest()</span>
+<span class="fc" id="L285">                .withUrlPath(String.format(&quot;/repos/%s/%s/installation&quot;, ownerName, repositoryName))</span>
+<span class="fc" id="L286">                .fetch(GHAppInstallation.class);</span>
     }
 
     /**
@@ -221,9 +299,9 @@ public class GHApp extends GHObject {
      * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#get-a-user-installation&quot;&gt;Get a user installation&lt;/a&gt;
      */
     public GHAppInstallation getInstallationByUser(String name) throws IOException {
-<span class="fc" id="L224">        return root().createRequest()</span>
-<span class="fc" id="L225">                .withUrlPath(String.format(&quot;/users/%s/installation&quot;, name))</span>
-<span class="fc" id="L226">                .fetch(GHAppInstallation.class);</span>
+<span class="fc" id="L302">        return root().createRequest()</span>
+<span class="fc" id="L303">                .withUrlPath(String.format(&quot;/users/%s/installation&quot;, name))</span>
+<span class="fc" id="L304">                .fetch(GHAppInstallation.class);</span>
     }
 
 }

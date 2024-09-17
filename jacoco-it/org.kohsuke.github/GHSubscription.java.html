@@ -13,14 +13,7 @@ import java.util.Date;
  * @see GHRepository#getSubscription() GHRepository#getSubscription()
  * @see GHThread#getSubscription() GHThread#getSubscription()
  */
-public class GHSubscription extends GitHubInteractiveObject {
-
-    /**
-     * Create default GHSubscription instance
-     */
-<span class="fc" id="L21">    public GHSubscription() {</span>
-<span class="fc" id="L22">    }</span>
-
+<span class="fc" id="L16">public class GHSubscription extends GitHubInteractiveObject {</span>
     private String created_at, url, repository_url, reason;
     private boolean subscribed, ignored;
 
@@ -32,7 +25,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      * @return the created at
      */
     public Date getCreatedAt() {
-<span class="fc" id="L35">        return GitHubClient.parseDate(created_at);</span>
+<span class="fc" id="L28">        return GitHubClient.parseDate(created_at);</span>
     }
 
     /**
@@ -41,7 +34,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      * @return the url
      */
     public String getUrl() {
-<span class="fc" id="L44">        return url;</span>
+<span class="fc" id="L37">        return url;</span>
     }
 
     /**
@@ -50,7 +43,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      * @return the repository url
      */
     public String getRepositoryUrl() {
-<span class="fc" id="L53">        return repository_url;</span>
+<span class="fc" id="L46">        return repository_url;</span>
     }
 
     /**
@@ -59,7 +52,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      * @return the reason
      */
     public String getReason() {
-<span class="fc" id="L62">        return reason;</span>
+<span class="fc" id="L55">        return reason;</span>
     }
 
     /**
@@ -68,7 +61,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      * @return the boolean
      */
     public boolean isSubscribed() {
-<span class="fc" id="L71">        return subscribed;</span>
+<span class="fc" id="L64">        return subscribed;</span>
     }
 
     /**
@@ -77,7 +70,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      * @return the boolean
      */
     public boolean isIgnored() {
-<span class="fc" id="L80">        return ignored;</span>
+<span class="fc" id="L73">        return ignored;</span>
     }
 
     /**
@@ -87,7 +80,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L90">        return repo;</span>
+<span class="fc" id="L83">        return repo;</span>
     }
 
     /**
@@ -97,8 +90,8 @@ public class GHSubscription extends GitHubInteractiveObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L100">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(repo.getApiTailUrl(&quot;subscription&quot;)).send();</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L93">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(repo.getApiTailUrl(&quot;subscription&quot;)).send();</span>
+<span class="fc" id="L94">    }</span>
 
     /**
      * Wrap up.
@@ -108,8 +101,8 @@ public class GHSubscription extends GitHubInteractiveObject {
      * @return the GH subscription
      */
     GHSubscription wrapUp(GHRepository repo) {
-<span class="fc" id="L111">        this.repo = repo;</span>
-<span class="fc" id="L112">        return this;</span>
+<span class="fc" id="L104">        this.repo = repo;</span>
+<span class="fc" id="L105">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

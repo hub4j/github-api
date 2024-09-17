@@ -62,6 +62,19 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
     /**
      * Fork gh content search builder.
      *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     * @deprecated use {@link #fork(GHFork)}.
+     */
+    @Deprecated
+    public GHContentSearchBuilder fork(String v) {
+<span class="fc" id="L72">        return q(&quot;fork&quot;, v);</span>
+    }
+
+    /**
+     * Fork gh content search builder.
+     *
      * @param fork
      *            search mode for forks
      *
@@ -72,7 +85,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      *      in forks&lt;/a&gt;
      */
     public GHContentSearchBuilder fork(GHFork fork) {
-<span class="fc" id="L75">        return q(&quot;fork&quot;, fork.toString());</span>
+<span class="fc" id="L88">        return q(&quot;fork&quot;, fork.toString());</span>
     }
 
     /**
@@ -83,7 +96,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder size(String v) {
-<span class="nc" id="L86">        return q(&quot;size:&quot; + v);</span>
+<span class="nc" id="L99">        return q(&quot;size:&quot; + v);</span>
     }
 
     /**
@@ -94,7 +107,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder path(String v) {
-<span class="nc" id="L97">        return q(&quot;path:&quot; + v);</span>
+<span class="nc" id="L110">        return q(&quot;path:&quot; + v);</span>
     }
 
     /**
@@ -105,7 +118,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder filename(String v) {
-<span class="nc" id="L108">        return q(&quot;filename:&quot; + v);</span>
+<span class="nc" id="L121">        return q(&quot;filename:&quot; + v);</span>
     }
 
     /**
@@ -116,7 +129,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder extension(String v) {
-<span class="nc" id="L119">        return q(&quot;extension:&quot; + v);</span>
+<span class="nc" id="L132">        return q(&quot;extension:&quot; + v);</span>
     }
 
     /**
@@ -127,7 +140,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder user(String v) {
-<span class="nc" id="L130">        return q(&quot;user:&quot; + v);</span>
+<span class="nc" id="L143">        return q(&quot;user:&quot; + v);</span>
     }
 
     /**
@@ -138,7 +151,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder repo(String v) {
-<span class="fc" id="L141">        return q(&quot;repo:&quot; + v);</span>
+<span class="fc" id="L154">        return q(&quot;repo:&quot; + v);</span>
     }
 
     /**
@@ -149,8 +162,8 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder order(GHDirection v) {
-<span class="fc" id="L152">        req.with(&quot;order&quot;, v);</span>
-<span class="fc" id="L153">        return this;</span>
+<span class="fc" id="L165">        req.with(&quot;order&quot;, v);</span>
+<span class="fc" id="L166">        return this;</span>
     }
 
     /**
@@ -161,23 +174,23 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder sort(GHContentSearchBuilder.Sort sort) {
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (Sort.BEST_MATCH.equals(sort)) {</span>
-<span class="fc" id="L165">            req.remove(&quot;sort&quot;);</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (Sort.BEST_MATCH.equals(sort)) {</span>
+<span class="fc" id="L178">            req.remove(&quot;sort&quot;);</span>
         } else {
-<span class="fc" id="L167">            req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L180">            req.with(&quot;sort&quot;, sort);</span>
         }
-<span class="fc" id="L169">        return this;</span>
+<span class="fc" id="L182">        return this;</span>
     }
 
     /**
      * The enum Sort.
      */
-<span class="fc" id="L175">    public enum Sort {</span>
+<span class="fc" id="L188">    public enum Sort {</span>
 
         /** The best match. */
-<span class="fc" id="L178">        BEST_MATCH,</span>
+<span class="fc" id="L191">        BEST_MATCH,</span>
         /** The indexed. */
-<span class="fc" id="L180">        INDEXED</span>
+<span class="fc" id="L193">        INDEXED</span>
     }
 
     private static class ContentSearchResult extends SearchResult&lt;GHContent&gt; {
@@ -185,7 +198,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
 
         @Override
         GHContent[] getItems(GitHub root) {
-<span class="fc" id="L188">            return items;</span>
+<span class="fc" id="L201">            return items;</span>
         }
     }
 
@@ -196,7 +209,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      */
     @Override
     protected String getApiUrl() {
-<span class="fc" id="L199">        return &quot;/search/code&quot;;</span>
+<span class="fc" id="L212">        return &quot;/search/code&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

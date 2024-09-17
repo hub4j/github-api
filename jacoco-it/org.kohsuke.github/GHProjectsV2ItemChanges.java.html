@@ -12,13 +12,7 @@ import java.util.Date;
  * Note that this is best effort only as nothing is documented in the GitHub documentation.
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
-public class GHProjectsV2ItemChanges {
-
-    /**
-     * Create default GHProjectsV2ItemChanges instance
-     */
-<span class="fc" id="L20">    public GHProjectsV2ItemChanges() {</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L15">public class GHProjectsV2ItemChanges {</span>
 
     private FieldValue fieldValue;
 
@@ -32,7 +26,7 @@ public class GHProjectsV2ItemChanges {
      * @return the field value
      */
     public FieldValue getFieldValue() {
-<span class="fc" id="L35">        return fieldValue;</span>
+<span class="fc" id="L29">        return fieldValue;</span>
     }
 
     /**
@@ -41,7 +35,7 @@ public class GHProjectsV2ItemChanges {
      * @return the archived at
      */
     public FromToDate getArchivedAt() {
-<span class="fc" id="L44">        return archivedAt;</span>
+<span class="fc" id="L38">        return archivedAt;</span>
     }
 
     /**
@@ -50,19 +44,13 @@ public class GHProjectsV2ItemChanges {
      * @return the previous projects V 2 item node id
      */
     public FromTo getPreviousProjectsV2ItemNodeId() {
-<span class="fc" id="L53">        return previousProjectsV2ItemNodeId;</span>
+<span class="fc" id="L47">        return previousProjectsV2ItemNodeId;</span>
     }
 
     /**
      * The Class FieldValue.
      */
-    public static class FieldValue {
-
-        /**
-         * Create default FieldValue instance
-         */
-<span class="fc" id="L64">        public FieldValue() {</span>
-<span class="fc" id="L65">        }</span>
+<span class="fc" id="L53">    public static class FieldValue {</span>
 
         private String fieldNodeId;
         private String fieldType;
@@ -73,7 +61,7 @@ public class GHProjectsV2ItemChanges {
          * @return the field node id
          */
         public String getFieldNodeId() {
-<span class="fc" id="L76">            return fieldNodeId;</span>
+<span class="fc" id="L64">            return fieldNodeId;</span>
         }
 
         /**
@@ -82,20 +70,14 @@ public class GHProjectsV2ItemChanges {
          * @return the field type
          */
         public FieldType getFieldType() {
-<span class="fc" id="L85">            return EnumUtils.getEnumOrDefault(FieldType.class, fieldType, FieldType.UNKNOWN);</span>
+<span class="fc" id="L73">            return EnumUtils.getEnumOrDefault(FieldType.class, fieldType, FieldType.UNKNOWN);</span>
         }
     }
 
     /**
      * The Class FromTo.
      */
-    public static class FromTo {
-
-        /**
-         * Create default FromTo instance
-         */
-<span class="fc" id="L97">        public FromTo() {</span>
-<span class="fc" id="L98">        }</span>
+<span class="fc" id="L80">    public static class FromTo {</span>
 
         private String from;
         private String to;
@@ -106,7 +88,7 @@ public class GHProjectsV2ItemChanges {
          * @return the from
          */
         public String getFrom() {
-<span class="fc" id="L109">            return from;</span>
+<span class="fc" id="L91">            return from;</span>
         }
 
         /**
@@ -115,20 +97,14 @@ public class GHProjectsV2ItemChanges {
          * @return the to
          */
         public String getTo() {
-<span class="fc" id="L118">            return to;</span>
+<span class="fc" id="L100">            return to;</span>
         }
     }
 
     /**
      * The Class FromToDate.
      */
-    public static class FromToDate {
-
-        /**
-         * Create default FromToDate instance
-         */
-<span class="fc" id="L130">        public FromToDate() {</span>
-<span class="fc" id="L131">        }</span>
+<span class="fc" id="L107">    public static class FromToDate {</span>
 
         private String from;
         private String to;
@@ -139,7 +115,7 @@ public class GHProjectsV2ItemChanges {
          * @return the from
          */
         public Date getFrom() {
-<span class="fc" id="L142">            return GitHubClient.parseDate(from);</span>
+<span class="fc" id="L118">            return GitHubClient.parseDate(from);</span>
         }
 
         /**
@@ -148,27 +124,27 @@ public class GHProjectsV2ItemChanges {
          * @return the to
          */
         public Date getTo() {
-<span class="fc" id="L151">            return GitHubClient.parseDate(to);</span>
+<span class="fc" id="L127">            return GitHubClient.parseDate(to);</span>
         }
     }
 
     /**
      * The Enum FieldType.
      */
-<span class="fc" id="L158">    public enum FieldType {</span>
+<span class="fc" id="L134">    public enum FieldType {</span>
 
         /** The text. */
-<span class="fc" id="L161">        TEXT,</span>
+<span class="fc" id="L137">        TEXT,</span>
         /** The number. */
-<span class="fc" id="L163">        NUMBER,</span>
+<span class="fc" id="L139">        NUMBER,</span>
         /** The date. */
-<span class="fc" id="L165">        DATE,</span>
+<span class="fc" id="L141">        DATE,</span>
         /** The single select. */
-<span class="fc" id="L167">        SINGLE_SELECT,</span>
+<span class="fc" id="L143">        SINGLE_SELECT,</span>
         /** The iteration. */
-<span class="fc" id="L169">        ITERATION,</span>
+<span class="fc" id="L145">        ITERATION,</span>
         /** The unknown. */
-<span class="fc" id="L171">        UNKNOWN;</span>
+<span class="fc" id="L147">        UNKNOWN;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

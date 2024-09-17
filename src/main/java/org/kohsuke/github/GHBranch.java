@@ -112,6 +112,13 @@ public class GHBranch extends GitHubInteractiveObject {
                 .fetch(GHBranchProtection.class);
     }
 
+	public PagedIterable<GHRule> getRules() throws IOException {
+		return root().createRequest()
+				.withPreview(Previews.LUKE_CAGE)
+				.setRawUrlPath(owner.getApiTailUrl("rules/branches/" + name))
+				.toIterable(GHRule[].class, GHRule::wrap);
+	}
+
     /**
      * Gets sha 1.
      *

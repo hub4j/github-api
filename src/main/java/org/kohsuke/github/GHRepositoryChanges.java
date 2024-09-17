@@ -7,6 +7,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHRepositoryChanges {
+
+    /**
+     * Create default GHRepositoryChanges instance
+     */
+    public GHRepositoryChanges() {
+    }
+
     private FromRepository repository;
     private Owner owner;
 
@@ -23,6 +30,13 @@ public class GHRepositoryChanges {
      * Outer object of owner from whom this repository was transferred.
      */
     public static class Owner {
+
+        /**
+         * Create default Owner instance
+         */
+        public Owner() {
+        }
+
         private FromOwner from;
 
         /**
@@ -39,6 +53,13 @@ public class GHRepositoryChanges {
      * Owner from whom this repository was transferred.
      */
     public static class FromOwner {
+
+        /**
+         * Create default FromOwner instance
+         */
+        public FromOwner() {
+        }
+
         private GHUser user;
         private GHOrganization organization;
 
@@ -76,6 +97,13 @@ public class GHRepositoryChanges {
      * Repository object from which the name was changed.
      */
     public static class FromRepository {
+
+        /**
+         * Create default FromRepository instance
+         */
+        public FromRepository() {
+        }
+
         private FromName name;
 
         /**
@@ -92,6 +120,13 @@ public class GHRepositoryChanges {
      * Repository name that was changed.
      */
     public static class FromName {
+
+        /**
+         * Create default FromName instance
+         */
+        public FromName() {
+        }
+
         private String from;
 
         /**

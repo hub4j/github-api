@@ -8,6 +8,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHMemberChanges {
 
+    /**
+     * Create default GHMemberChanges instance
+     */
+    public GHMemberChanges() {
+    }
+
     private FromToPermission permission;
 
     private FromRoleName roleName;
@@ -37,6 +43,12 @@ public class GHMemberChanges {
      * Changes to permission.
      */
     public static class FromToPermission {
+
+        /**
+         * Create default FromToPermission instance
+         */
+        public FromToPermission() {
+        }
 
         private String from;
 
@@ -69,6 +81,12 @@ public class GHMemberChanges {
      * Changes to role name.
      */
     public static class FromRoleName {
+
+        /**
+         * Create default FromRoleName instance
+         */
+        public FromRoleName() {
+        }
 
         private String to;
 

@@ -11,6 +11,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class GHReaction extends GHObject {
 
+    /**
+     * Create default GHReaction instance
+     */
+    public GHReaction() {
+    }
+
     private GHUser user;
     private ReactionContent content;
 

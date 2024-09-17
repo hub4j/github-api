@@ -14,6 +14,13 @@ import java.net.URL;
  * @author Gunnar Skjold
  */
 public class GHProjectCard extends GHObject {
+
+    /**
+     * Create default GHProjectCard instance
+     */
+    public GHProjectCard() {
+    }
+
     private GHProject project;
     private GHProjectColumn column;
 

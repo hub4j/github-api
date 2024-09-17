@@ -14,6 +14,12 @@ import org.kohsuke.github.internal.EnumUtils;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHTeamChanges {
 
+    /**
+     * Create default GHTeamChanges instance
+     */
+    public GHTeamChanges() {
+    }
+
     private FromString description;
     private FromString name;
     private FromPrivacy privacy;
@@ -60,6 +66,12 @@ public class GHTeamChanges {
      */
     public static class FromString {
 
+        /**
+         * Create default FromString instance
+         */
+        public FromString() {
+        }
+
         private String from;
 
         /**
@@ -76,6 +88,12 @@ public class GHTeamChanges {
      * Changes made to privacy.
      */
     public static class FromPrivacy {
+
+        /**
+         * Create default FromPrivacy instance
+         */
+        public FromPrivacy() {
+        }
 
         private String from;
 
@@ -94,6 +112,12 @@ public class GHTeamChanges {
      */
     public static class FromRepository {
 
+        /**
+         * Create default FromRepository instance
+         */
+        public FromRepository() {
+        }
+
         private FromRepositoryPermissions permissions;
 
         /**
@@ -110,6 +134,12 @@ public class GHTeamChanges {
      * Changes made to permissions.
      */
     public static class FromRepositoryPermissions {
+
+        /**
+         * Create default FromRepositoryPermissions instance
+         */
+        public FromRepositoryPermissions() {
+        }
 
         private GHRepoPermission from;
 

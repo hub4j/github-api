@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -15,6 +16,12 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public class GHMyself extends GHUser {
+
+    /**
+     * Create default GHMyself instance
+     */
+    public GHMyself() {
+    }
 
     /**
      * Type of repositories returned during listing.
@@ -43,11 +50,11 @@ public class GHMyself extends GHUser {
      * @return the emails
      * @throws IOException
      *             the io exception
-     * @deprecated Use {@link #getEmails2()}
+     * @deprecated Use {@link #listEmails()}
      */
     @Deprecated
     public List<String> getEmails() throws IOException {
-        return listEmails().toList().stream().map(email -> email.getEmail()).toList();
+        return getEmails2().stream().map(email -> email.getEmail()).collect(Collectors.toList());
     }
 
     /**

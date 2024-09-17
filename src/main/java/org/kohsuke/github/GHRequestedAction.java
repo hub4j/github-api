@@ -9,6 +9,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" },
         justification = "JSON API")
 public class GHRequestedAction extends GHObject {
+
+    /**
+     * Create default GHRequestedAction instance
+     */
+    public GHRequestedAction() {
+    }
+
     private GHRepository owner;
     private String identifier;
     private String label;

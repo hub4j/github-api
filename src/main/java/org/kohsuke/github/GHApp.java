@@ -20,6 +20,12 @@ import java.util.stream.Collectors;
  */
 public class GHApp extends GHObject {
 
+    /**
+     * Create default GHApp instance
+     */
+    public GHApp() {
+    }
+
     private GHUser owner;
     private String name;
     private String slug;

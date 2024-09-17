@@ -11,6 +11,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
 public class GHPullRequestChanges {
 
+    /**
+     * Create default GHPullRequestChanges instance
+     */
+    public GHPullRequestChanges() {
+    }
+
     private GHCommitPointer base;
     private GHFrom title;
     private GHFrom body;
@@ -48,6 +54,13 @@ public class GHPullRequestChanges {
      * @see org.kohsuke.github.GHCommitPointer
      */
     public static class GHCommitPointer {
+
+        /**
+         * Create default GHCommitPointer instance
+         */
+        public GHCommitPointer() {
+        }
+
         private GHFrom ref;
         private GHFrom sha;
 
@@ -75,6 +88,13 @@ public class GHPullRequestChanges {
      * Wrapper for changed values.
      */
     public static class GHFrom {
+
+        /**
+         * Create default GHFrom instance
+         */
+        public GHFrom() {
+        }
+
         private String from;
 
         /**

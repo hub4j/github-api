@@ -28,6 +28,12 @@ import static org.hamcrest.Matchers.*;
  */
 public class AppTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default AppTest instance
+     */
+    public AppTest() {
+    }
+
     /** The Constant GITHUB_API_TEST_REPO. */
     static final String GITHUB_API_TEST_REPO = "github-api-test";
 
@@ -1035,6 +1041,19 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
             }
         }
+    }
+
+    /**
+     * Test getEmails.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetEmails() throws IOException {
+        List<String> emails = gitHub.getMyself().getEmails();
+        assertThat(emails.size(), equalTo(2));
+        assertThat(emails, contains("bitwiseman@gmail.com", "bitwiseman@users.noreply.github.com"));
     }
 
     /**

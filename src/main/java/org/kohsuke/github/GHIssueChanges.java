@@ -11,6 +11,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
 public class GHIssueChanges {
 
+    /**
+     * Create default GHIssueChanges instance
+     */
+    public GHIssueChanges() {
+    }
+
     private GHFrom title;
     private GHFrom body;
 
@@ -36,6 +42,13 @@ public class GHIssueChanges {
      * Wrapper for changed values.
      */
     public static class GHFrom {
+
+        /**
+         * Create default GHFrom instance
+         */
+        public GHFrom() {
+        }
+
         private String from;
 
         /**

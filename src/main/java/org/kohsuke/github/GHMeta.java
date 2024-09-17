@@ -16,6 +16,12 @@ import java.util.List;
  */
 public class GHMeta {
 
+    /**
+     * Create default GHMeta instance
+     */
+    public GHMeta() {
+    }
+
     @JsonProperty("verifiable_password_authentication")
     private boolean verifiablePasswordAuthentication;
     private List<String> hooks;

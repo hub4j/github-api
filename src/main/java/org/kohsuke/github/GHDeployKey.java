@@ -11,6 +11,12 @@ import java.util.Date;
  */
 public class GHDeployKey {
 
+    /**
+     * Create default GHDeployKey instance
+     */
+    public GHDeployKey() {
+    }
+
     /** The title. */
     protected String url, key, title;
 

@@ -8,6 +8,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHBranchSync extends GitHubInteractiveObject {
 
     /**
+     * Create default GHBranchSync instance
+     */
+    public GHBranchSync() {
+    }
+
+    /**
      * The Repository that this branch is in.
      */
     private GHRepository owner;

@@ -18,6 +18,12 @@ import java.util.TreeMap;
  */
 public class GHOrganization extends GHPerson {
 
+    /**
+     * Create default GHOrganization instance
+     */
+    public GHOrganization() {
+    }
+
     private boolean has_organization_projects;
 
     /**

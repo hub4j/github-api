@@ -21,6 +21,13 @@ import static org.hamcrest.Matchers.nullValue;
  * Test class for GHRepositoryRule.
  */
 public class GHRepositoryRuleTest {
+
+    /**
+     * Create default GHRepositoryRuleTest instance
+     */
+    public GHRepositoryRuleTest() {
+    }
+
     /**
      * Test to cover the constructor of the Parameters class.
      */

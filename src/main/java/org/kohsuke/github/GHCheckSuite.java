@@ -20,6 +20,12 @@ import java.util.List;
         justification = "JSON API")
 public class GHCheckSuite extends GHObject {
 
+    /**
+     * Create default GHCheckSuite instance
+     */
+    public GHCheckSuite() {
+    }
+
     /** The owner. */
     @JsonProperty("repository")
     GHRepository owner;
@@ -205,6 +211,13 @@ public class GHCheckSuite extends GHObject {
      * The Class HeadCommit.
      */
     public static class HeadCommit {
+
+        /**
+         * Create default HeadCommit instance
+         */
+        public HeadCommit() {
+        }
+
         private String id;
         private String treeId;
         private String message;

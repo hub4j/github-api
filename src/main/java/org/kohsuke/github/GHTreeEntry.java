@@ -13,6 +13,12 @@ import java.net.URL;
  */
 public class GHTreeEntry {
 
+    /**
+     * Create default GHTreeEntry instance
+     */
+    public GHTreeEntry() {
+    }
+
     /** The tree. */
     /* package almost final */GHTree tree;
 

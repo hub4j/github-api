@@ -15,6 +15,13 @@ import static org.hamcrest.Matchers.*;
  * The Class GHTreeBuilderTest.
  */
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
+
+    /**
+     * Create default GHTreeBuilderTest instance
+     */
+    public GHTreeBuilderTest() {
+    }
+
     private static String REPO_NAME = "hub4j-test-org/GHTreeBuilderTest";
 
     private static String PATH_SCRIPT = "app/run.sh";

@@ -34,6 +34,13 @@ import java.io.IOException;
  * @author Kohsuke Kawaguchi
  */
 public class GHCommitPointer {
+
+    /**
+     * Create default GHCommitPointer instance
+     */
+    public GHCommitPointer() {
+    }
+
     private String ref, sha, label;
     private GHUser user;
     private GHRepository repo;

@@ -20,6 +20,12 @@ import static java.util.Objects.requireNonNull;
  */
 public class GHArtifact extends GHObject {
 
+    /**
+     * Create default GHArtifact instance
+     */
+    public GHArtifact() {
+    }
+
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;

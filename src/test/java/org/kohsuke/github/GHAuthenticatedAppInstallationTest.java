@@ -16,6 +16,12 @@ import static org.hamcrest.Matchers.equalTo;
 public class GHAuthenticatedAppInstallationTest extends AbstractGHAppInstallationTest {
 
     /**
+     * Create default GHAuthenticatedAppInstallationTest instance
+     */
+    public GHAuthenticatedAppInstallationTest() {
+    }
+
+    /**
      * Gets the git hub builder.
      *
      * @return the git hub builder

@@ -24,6 +24,12 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler {
 
     /**
+     * Create default GitHubAbuseLimitHandler instance
+     */
+    public GitHubAbuseLimitHandler() {
+    }
+
+    /**
      * Checks if is error.
      *
      * @param connectorResponse

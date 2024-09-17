@@ -24,6 +24,13 @@ import java.util.stream.Collectors;
  * @see GHApp#getInstallationByUser(String) GHApp#getInstallationByUser(String)
  */
 public class GHAppInstallation extends GHObject {
+
+    /**
+     * Create default GHAppInstallation instance
+     */
+    public GHAppInstallation() {
+    }
+
     private GHUser account;
 
     @JsonProperty("access_tokens_url")

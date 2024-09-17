@@ -22,6 +22,13 @@ import static org.hamcrest.Matchers.*;
  * The Class GHBranchProtectionTest.
  */
 public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
+
+    /**
+     * Create default GHBranchProtectionTest instance
+     */
+    public GHBranchProtectionTest() {
+    }
+
     private static final String BRANCH = "main";
     private static final String BRANCH_REF = "heads/" + BRANCH;
 

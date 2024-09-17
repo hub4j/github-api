@@ -21,6 +21,12 @@ import static org.kohsuke.github.GHMarketplaceListAccountBuilder.Sort.UPDATED;
 public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHMarketplacePlanTest instance
+     */
+    public GHMarketplacePlanTest() {
+    }
+
+    /**
      * Gets the git hub builder.
      *
      * @return the git hub builder

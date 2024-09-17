@@ -30,6 +30,7 @@ org.kohsuke.github.GitHubRateLimitChecker
 org.kohsuke.github.GitHubRateLimitHandler
 org.kohsuke.github.GitHubRateLimitHandler$1
 org.kohsuke.github.GitHubRateLimitHandler$2
+org.kohsuke.github.GitHubRequestBuilderDone
 org.kohsuke.github.HttpConnector
 org.kohsuke.github.HttpException
 org.kohsuke.github.PagedIterator

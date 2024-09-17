@@ -21,6 +21,12 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default GHIssueEventAttributeTest instance
+     */
+    public GHIssueEventAttributeTest() {
+    }
+
     private enum Type implements Predicate<GHIssueEvent>, Consumer<GHIssueEvent> {
         milestone(e -> assertThat(e.getMilestone(), notNullValue()), "milestoned", "demilestoned"),
         label(e -> assertThat(e.getLabel(), notNullValue()), "labeled", "unlabeled"),

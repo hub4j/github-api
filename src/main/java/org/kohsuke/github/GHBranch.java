@@ -48,6 +48,12 @@ public class GHBranch extends GitHubInteractiveObject {
      */
     public static class Commit {
 
+        /**
+         * Create default Commit instance
+         */
+        public Commit() {
+        }
+
         /** The sha. */
         String sha;
 

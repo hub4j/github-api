@@ -13,6 +13,12 @@ import java.util.Date;
  */
 public class GHMarketplacePurchase extends GitHubInteractiveObject {
 
+    /**
+     * Create default GHMarketplacePurchase instance
+     */
+    public GHMarketplacePurchase() {
+    }
+
     private String billingCycle;
     private String nextBillingDate;
     private boolean onFreeTrial;

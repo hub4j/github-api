@@ -20,6 +20,12 @@ import static org.junit.Assert.assertThrows;
  */
 public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default GHContentIntegrationTest instance
+     */
+    public GHContentIntegrationTest() {
+    }
+
     private GHRepository repo;
 
     // file name with spaces and other chars

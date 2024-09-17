@@ -8,6 +8,12 @@ package org.kohsuke.github;
  */
 public class GHAppFromManifest extends GHApp {
 
+    /**
+     * Create default GHAppFromManifest instance
+     */
+    public GHAppFromManifest() {
+    }
+
     private String clientId;
     private String clientSecret;
     private String webhookSecret;

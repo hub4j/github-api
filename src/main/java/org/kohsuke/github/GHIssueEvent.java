@@ -12,6 +12,13 @@ import java.util.Date;
  * @see <a href="https://developer.github.com/v3/issues/events/">Github documentation for issue events</a>
  */
 public class GHIssueEvent extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHIssueEvent instance
+     */
+    public GHIssueEvent() {
+    }
+
     private long id;
     private String node_id;
     private String url;

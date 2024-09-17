@@ -52,6 +52,13 @@ import java.util.Objects;
  * @see GHIssueSearchBuilder
  */
 public class GHIssue extends GHObject implements Reactable {
+
+    /**
+     * Create default GHIssue instance
+     */
+    public GHIssue() {
+    }
+
     private static final String ASSIGNEES = "assignees";
 
     /** The owner. */
@@ -801,6 +808,13 @@ public class GHIssue extends GHObject implements Reactable {
      */
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class PullRequest {
+
+        /**
+         * Create default PullRequest instance
+         */
+        public PullRequest() {
+        }
+
         private String diff_url, patch_url, html_url;
 
         /**

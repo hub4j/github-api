@@ -7,6 +7,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * The response that is returned when updating repository content.
  */
 public class GHContentUpdateResponse {
+
+    /**
+     * Create default GHContentUpdateResponse instance
+     */
+    public GHContentUpdateResponse() {
+    }
+
     private GHContent content;
     private GitCommit commit;
 

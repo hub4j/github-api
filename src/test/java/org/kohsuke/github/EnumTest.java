@@ -13,6 +13,12 @@ import static org.hamcrest.CoreMatchers.*;
 public class EnumTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default EnumTest instance
+     */
+    public EnumTest() {
+    }
+
+    /**
      * Touch enums.
      */
     @Test

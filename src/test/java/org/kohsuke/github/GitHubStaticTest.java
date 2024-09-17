@@ -31,6 +31,12 @@ import static org.junit.Assert.fail;
 public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GitHubStaticTest instance
+     */
+    public GitHubStaticTest() {
+    }
+
+    /**
      * Test parse URL.
      *
      * @throws Exception

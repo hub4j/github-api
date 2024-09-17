@@ -17,6 +17,13 @@ import java.util.Base64;
  */
 @SuppressWarnings({ "UnusedDeclaration" })
 public class GHContent extends GitHubInteractiveObject implements Refreshable {
+
+    /**
+     * Create default GHContent instance
+     */
+    public GHContent() {
+    }
+
     /*
      * In normal use of this class, repository field is set via wrap(), but in the code search API, there's a nested
      * 'repository' field that gets populated from JSON.

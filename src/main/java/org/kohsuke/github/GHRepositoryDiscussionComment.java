@@ -18,6 +18,12 @@ import java.net.URL;
  */
 public class GHRepositoryDiscussionComment extends GHObject {
 
+    /**
+     * Create default GHRepositoryDiscussionComment instance
+     */
+    public GHRepositoryDiscussionComment() {
+    }
+
     private String htmlUrl;
 
     private Long parentId;

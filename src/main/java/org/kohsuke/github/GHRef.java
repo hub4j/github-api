@@ -13,6 +13,13 @@ import java.net.URL;
  * @author Michael Clarke
  */
 public class GHRef extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHRef instance
+     */
+    public GHRef() {
+    }
+
     private String ref, url;
     private GHObject object;
 
@@ -161,6 +168,13 @@ public class GHRef extends GitHubInteractiveObject {
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
             justification = "JSON API")
     public static class GHObject {
+
+        /**
+         * Create default GHObject instance
+         */
+        public GHObject() {
+        }
+
         private String type, sha, url;
 
         /**

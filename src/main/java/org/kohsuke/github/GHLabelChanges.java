@@ -11,6 +11,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
 public class GHLabelChanges {
 
+    /**
+     * Create default GHLabelChanges instance
+     */
+    public GHLabelChanges() {
+    }
+
     private GHFrom name;
     private GHFrom color;
 
@@ -36,6 +42,13 @@ public class GHLabelChanges {
      * Wrapper for changed values.
      */
     public static class GHFrom {
+
+        /**
+         * Create default GHFrom instance
+         */
+        public GHFrom() {
+        }
+
         private String from;
 
         /**

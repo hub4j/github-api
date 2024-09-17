@@ -18,6 +18,12 @@ import java.io.StringReader;
 public class HookApp {
 
     /**
+     * Create default HookApp instance
+     */
+    public HookApp() {
+    }
+
+    /**
      * The main method.
      *
      * @param args

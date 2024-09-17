@@ -12,6 +12,13 @@ import java.util.Date;
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
 public class GHMarketplacePendingChange extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHMarketplacePendingChange instance
+     */
+    public GHMarketplacePendingChange() {
+    }
+
     private long id;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private Long unitCount;

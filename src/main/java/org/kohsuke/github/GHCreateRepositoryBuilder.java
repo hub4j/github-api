@@ -94,7 +94,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @return a builder to continue with building
      * @throws IOException
      *             In case of any networking error or error from the server.
-     * @deprecated Use {@link #isTemplate(boolean)} method instead
+     * @deprecated Use {@link GHCreateRepositoryBuilder#isTemplate(boolean)} method instead
      */
     @Deprecated
     public GHCreateRepositoryBuilder templateRepository(boolean enabled) throws IOException {

@@ -33,6 +33,12 @@ import static org.kohsuke.github.GHVerification.Reason.UNKNOWN_SIGNATURE_TYPE;
 public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHRepositoryTest instance
+     */
+    public GHRepositoryTest() {
+    }
+
+    /**
      * Gets the repository.
      *
      * @return the repository

@@ -32,6 +32,12 @@ import javax.annotation.Nonnull;
 public final class ReadOnlyObjects {
 
     /**
+     * Placeholder constructor.
+     */
+    public ReadOnlyObjects() {
+    }
+
+    /**
      * All GHMeta data objects should expose these values.
      *
      * @author Liam Newman
@@ -107,6 +113,12 @@ public final class ReadOnlyObjects {
      * @see org.kohsuke.github.GHMeta
      */
     public static class GHMetaPublic implements GHMetaExample {
+
+        /**
+         * Create default GHMetaPublic instance
+         */
+        public GHMetaPublic() {
+        }
 
         @JsonProperty("verifiable_password_authentication")
         private boolean verifiablePasswordAuthentication;
@@ -251,6 +263,12 @@ public final class ReadOnlyObjects {
      */
     public static class GHMetaPackage implements GHMetaExample {
 
+        /**
+         * Create default GHMetaPackage instance
+         */
+        public GHMetaPackage() {
+        }
+
         private boolean verifiablePasswordAuthentication;
         private List<String> hooks;
         private List<String> git;
@@ -387,6 +405,12 @@ public final class ReadOnlyObjects {
      * @see org.kohsuke.github.GHMeta
      */
     public static class GHMetaGettersUnmodifiable implements GHMetaExample {
+
+        /**
+         * Create default GHMetaGettersUnmodifiable instance
+         */
+        public GHMetaGettersUnmodifiable() {
+        }
 
         @JsonProperty("verifiable_password_authentication")
         private boolean verifiablePasswordAuthentication;

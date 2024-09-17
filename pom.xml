@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kohsuke</groupId>
   <artifactId>github-api</artifactId>
-  <version>1.325</version>
+  <version>1.326</version>
   <name>GitHub API for Java</name>
   <url>https://github-api.kohsuke.org/</url>
   <description>GitHub API for Java</description>
@@ -34,7 +34,7 @@
   <properties>
     <spring.boot.version>3.3.3</spring.boot.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>4.8.6.1</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.8.6.3</spotbugs-maven-plugin.version>
     <spotbugs.version>4.8.6</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>3.0</hamcrest.version>
@@ -94,7 +94,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.2.3</version>
+          <version>3.5.0</version>
           <configuration>
             <!-- SUREFIRE-1226 workaround -->
             <trimStackTrace>false</trimStackTrace>
@@ -108,7 +108,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
-          <version>3.2.4</version>
+          <version>3.2.6</version>
         </plugin>
         <plugin>
           <groupId>org.jacoco</groupId>
@@ -223,7 +223,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.8.0</version>
+          <version>3.10.0</version>
           <configuration>
             <release>8</release>
             <failOnWarnings>true</failOnWarnings>
@@ -247,7 +247,7 @@
       <!--
       This plugin is used to generate AOT metadata during tests so that it can be
       compared against those in META-INF/native-image/org.kohsuke/github-api/*.
-      The tests are located in src/test/java/org.kohsuke.aot
+      The tests are start with the name "Aot..." 
       -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
@@ -290,7 +290,7 @@
           <dependency>
             <groupId>org.apache.bcel</groupId>
             <artifactId>bcel</artifactId>
-            <version>6.9.0</version>
+            <version>6.10.0</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -436,8 +436,16 @@
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.17.2</version>
+        <version>0.23.0</version>
         <configuration>
+          <oldVersion>
+            <dependency>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>${project.artifactId}</artifactId>
+              <version>1.325</version>
+              <type>jar</type>
+            </dependency>
+          </oldVersion>
           <parameter>
             <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
             <onlyModified>true</onlyModified>
@@ -478,7 +486,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.14.0</version>
+      <version>3.17.0</version>
     </dependency>
     <dependency>
       <groupId>com.tngtech.archunit</groupId>

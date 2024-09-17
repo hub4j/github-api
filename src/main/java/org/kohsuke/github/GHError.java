@@ -14,6 +14,12 @@ import java.net.URL;
 public class GHError implements Serializable {
 
     /**
+     * Create default GHError instance
+     */
+    public GHError() {
+    }
+
+    /**
      * The serial version UID of the error
      */
     private static final long serialVersionUID = 2008071901;

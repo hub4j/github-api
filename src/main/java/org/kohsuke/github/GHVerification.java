@@ -16,6 +16,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public class GHVerification {
+
+    /**
+     * Create default GHVerification instance
+     */
+    public GHVerification() {
+    }
+
     private String signature, payload;
     private boolean verified;
     private Reason reason;

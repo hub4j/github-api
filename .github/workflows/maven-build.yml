@@ -57,7 +57,9 @@ jobs:
     - name: Maven Site
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-      run: mvn -B clean site -D enable-ci --file pom.xml
+      # running install site seems to more closely imitate real site deployment,
+      # more likely to prevent failed deployment
+      run: mvn -B clean install site -DskipTests --file pom.xml
   test:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
     # Does not require build output, but orders execution to prevent launching test workflows when simple build fails 
@@ -144,7 +146,7 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v4
       with:
-        java-version: 8
+        java-version: 11
         distribution: 'temurin'
         cache: 'maven'
     - name: Maven Test (no build) Java 11

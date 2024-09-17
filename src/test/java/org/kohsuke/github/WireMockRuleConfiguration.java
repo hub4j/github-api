@@ -1,4 +1,4 @@
-package org.kohsuke.github.junit;
+package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.common.*;
 import com.github.tomakehurst.wiremock.core.MappingsSaver;
@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class WireMockRuleConfiguration.
  */

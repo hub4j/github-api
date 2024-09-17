@@ -25,6 +25,12 @@ import static org.hamcrest.Matchers.*;
 public class BridgeMethodTest extends Assert {
 
     /**
+     * Create default BridgeMethodTest instance
+     */
+    public BridgeMethodTest() {
+    }
+
+    /**
      * Test bridge methods.
      *
      * @throws IOException

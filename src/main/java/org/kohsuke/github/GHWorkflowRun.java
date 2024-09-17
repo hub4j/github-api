@@ -26,6 +26,12 @@ import static java.util.Objects.requireNonNull;
  */
 public class GHWorkflowRun extends GHObject {
 
+    /**
+     * Create default GHWorkflowRun instance
+     */
+    public GHWorkflowRun() {
+    }
+
     @JsonProperty("repository")
     private GHRepository owner;
 
@@ -429,6 +435,13 @@ public class GHWorkflowRun extends GHObject {
      * The Class HeadCommit.
      */
     public static class HeadCommit {
+
+        /**
+         * Create default HeadCommit instance
+         */
+        public HeadCommit() {
+        }
+
         private String id;
         private String treeId;
         private String message;

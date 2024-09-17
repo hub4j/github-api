@@ -19,6 +19,12 @@ import java.util.Objects;
  */
 public class GHWorkflow extends GHObject {
 
+    /**
+     * Create default GHWorkflow instance
+     */
+    public GHWorkflow() {
+    }
+
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;

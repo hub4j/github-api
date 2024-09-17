@@ -24,6 +24,12 @@ import static java.lang.String.*;
  */
 public class GHRelease extends GHObject {
 
+    /**
+     * Create default GHRelease instance
+     */
+    public GHRelease() {
+    }
+
     /** The owner. */
     GHRepository owner;
 

@@ -35,6 +35,12 @@ import static org.hamcrest.Matchers.nullValue;
 public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHPullRequestTest instance
+     */
+    public GHPullRequestTest() {
+    }
+
+    /**
      * Clean up.
      *
      * @throws Exception

@@ -13,6 +13,12 @@ import static org.hamcrest.Matchers.equalTo;
 public class GHTeamBuilderTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHTeamBuilderTest instance
+     */
+    public GHTeamBuilderTest() {
+    }
+
+    /**
      * Test create child team.
      *
      * @throws IOException

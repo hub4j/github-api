@@ -14,6 +14,13 @@ import java.util.List;
  * The Class RepositoryTrafficTest.
  */
 public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
+
+    /**
+     * Create default RepositoryTrafficTest instance
+     */
+    public RepositoryTrafficTest() {
+    }
+
     final private String repositoryName = "github-api";
 
     @SuppressWarnings("unchecked")

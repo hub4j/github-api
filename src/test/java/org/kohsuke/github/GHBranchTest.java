@@ -9,6 +9,13 @@ import static org.hamcrest.Matchers.*;
  * The Class GHBranchTest.
  */
 public class GHBranchTest extends AbstractGitHubWireMockTest {
+
+    /**
+     * Create default GHBranchTest instance
+     */
+    public GHBranchTest() {
+    }
+
     private static final String BRANCH_1 = "testBranch1";
     private static final String BRANCH_2 = "testBranch2";
 

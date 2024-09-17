@@ -14,6 +14,12 @@ import static org.hamcrest.Matchers.is;
  */
 public class GHAppExtendedTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default GHAppExtendedTest instance
+     */
+    public GHAppExtendedTest() {
+    }
+
     private static final String APP_SLUG = "ghapi-test-app-4";
 
     /**

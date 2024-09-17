@@ -145,6 +145,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/checks#check-runs">Check Runs</a>
      */
     public static class CheckRun extends GHEventPayload {
+
+        /**
+         * Create default CheckRun instance
+         */
+        public CheckRun() {
+        }
+
         private int number;
         private GHCheckRun checkRun;
         private GHRequestedAction requestedAction;
@@ -228,6 +235,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/checks#check-suites">Check Suites</a>
      */
     public static class CheckSuite extends GHEventPayload {
+
+        /**
+         * Create default CheckSuite instance
+         */
+        public CheckSuite() {
+        }
+
         private GHCheckSuite checkSuite;
 
         /**
@@ -267,6 +281,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App Installation</a>
      */
     public static class Installation extends GHEventPayload {
+
+        /**
+         * Create default Installation instance
+         */
+        public Installation() {
+        }
 
         private List<Repository> repositories;
         private List<GHRepository> ghRepositories = null;
@@ -327,6 +347,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          * "https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#installation">here</a>
          */
         public static class Repository {
+
+            /**
+             * Create default Repository instance
+             */
+            public Repository() {
+            }
+
             private long id;
             private String fullName;
             private String name;
@@ -390,6 +417,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App installation</a>
      */
     public static class InstallationRepositories extends GHEventPayload {
+
+        /**
+         * Create default InstallationRepositories instance
+         */
+        public InstallationRepositories() {
+        }
+
         private String repositorySelection;
         private List<GHRepository> repositoriesAdded;
         private List<GHRepository> repositoriesRemoved;
@@ -459,6 +493,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class PullRequest extends GHEventPayload {
+
+        /**
+         * Create default PullRequest instance
+         */
+        public PullRequest() {
+        }
+
         private int number;
         private GHPullRequest pullRequest;
         private GHLabel label;
@@ -528,6 +569,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/pulls#reviews">Pull Request Reviews</a>
      */
     public static class PullRequestReview extends GHEventPayload {
+
+        /**
+         * Create default PullRequestReview instance
+         */
+        public PullRequestReview() {
+        }
+
         private GHPullRequestReview review;
         private GHPullRequest pullRequest;
 
@@ -579,6 +627,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JSON API")
     public static class CommentChanges {
 
+        /**
+         * Create default CommentChanges instance
+         */
+        public CommentChanges() {
+        }
+
         private GHFrom body;
 
         /**
@@ -594,6 +648,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          * Wrapper for changed values.
          */
         public static class GHFrom {
+
+            /**
+             * Create default GHFrom instance
+             */
+            public GHFrom() {
+            }
+
             private String from;
 
             /**
@@ -616,6 +677,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/pulls#review-comments">Pull Request Review Comments</a>
      */
     public static class PullRequestReviewComment extends GHEventPayload {
+
+        /**
+         * Create default PullRequestReviewComment instance
+         */
+        public PullRequestReviewComment() {
+        }
+
         private GHPullRequestReviewComment comment;
         private GHPullRequest pullRequest;
         private CommentChanges changes;
@@ -676,6 +744,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/issues#comments">Issues Comments</a>
      */
     public static class Issue extends GHEventPayload {
+
+        /**
+         * Create default Issue instance
+         */
+        public Issue() {
+        }
+
         private GHIssue issue;
 
         private GHLabel label;
@@ -746,6 +821,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/issues#comments">Issue Comments</a>
      */
     public static class IssueComment extends GHEventPayload {
+
+        /**
+         * Create default IssueComment instance
+         */
+        public IssueComment() {
+        }
+
         private GHIssueComment comment;
         private GHIssue issue;
         private CommentChanges changes;
@@ -826,6 +908,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/repos#comments">Comments</a>
      */
     public static class CommitComment extends GHEventPayload {
+
+        /**
+         * Create default CommitComment instance
+         */
+        public CommitComment() {
+        }
+
         private GHCommitComment comment;
 
         /**
@@ -871,6 +960,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/git">Git data</a>
      */
     public static class Create extends GHEventPayload {
+
+        /**
+         * Create default Create instance
+         */
+        public Create() {
+        }
+
         private String ref;
         private String refType;
         private String masterBranch;
@@ -923,6 +1019,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/git">Git data</a>
      */
     public static class Delete extends GHEventPayload {
+
+        /**
+         * Create default Delete instance
+         */
+        public Delete() {
+        }
+
         private String ref;
         private String refType;
 
@@ -953,6 +1056,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/repos#deployments">Deployments</a>
      */
     public static class Deployment extends GHEventPayload {
+
+        /**
+         * Create default Deployment instance
+         */
+        public Deployment() {
+        }
+
         private GHDeployment deployment;
 
         /**
@@ -999,6 +1109,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/repos#deployments">Deployments</a>
      */
     public static class DeploymentStatus extends GHEventPayload {
+
+        /**
+         * Create default DeploymentStatus instance
+         */
+        public DeploymentStatus() {
+        }
+
         private GHDeploymentStatus deploymentStatus;
         private GHDeployment deployment;
 
@@ -1068,6 +1185,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/repos#forks">Forks</a>
      */
     public static class Fork extends GHEventPayload {
+
+        /**
+         * Create default Fork instance
+         */
+        public Fork() {
+        }
+
         private GHRepository forkee;
 
         /**
@@ -1100,6 +1224,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * event</a>
      */
     public static class Ping extends GHEventPayload {
+
+        /**
+         * Create default Ping instance
+         */
+        public Ping() {
+        }
+
     }
 
     /**
@@ -1109,6 +1240,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      *      public event</a>
      */
     public static class Public extends GHEventPayload {
+
+        /**
+         * Create default Public instance
+         */
+        public Public() {
+        }
+
     }
 
     /**
@@ -1118,6 +1256,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      *      event</a>
      */
     public static class Push extends GHEventPayload {
+
+        /**
+         * Create default Push instance
+         */
+        public Push() {
+        }
+
         private String head, before;
         private boolean created, deleted, forced;
         private String ref;
@@ -1250,6 +1395,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          * The type Pusher.
          */
         public static class Pusher {
+
+            /**
+             * Create default Pusher instance
+             */
+            public Pusher() {
+            }
+
             private String name, email;
 
             /**
@@ -1299,6 +1451,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          * Commit in a push. Note: sha is an alias for id.
          */
         public static class PushCommit {
+
+            /**
+             * Create default PushCommit instance
+             */
+            public PushCommit() {
+            }
+
             private GitUser author;
             private GitUser committer;
             private String url, sha, message, timestamp;
@@ -1412,6 +1571,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "NP_UNWRITTEN_FIELD" },
             justification = "Constructed by JSON deserialization")
     public static class Release extends GHEventPayload {
+
+        /**
+         * Create default Release instance
+         */
+        public Release() {
+        }
+
         private GHRelease release;
 
         /**
@@ -1445,6 +1611,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/repos">Repositories</a>
      */
     public static class Repository extends GHEventPayload {
+
+        /**
+         * Create default Repository instance
+         */
+        public Repository() {
+        }
+
         private GHRepositoryChanges changes;
 
         /**
@@ -1466,6 +1639,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/repos#statuses">Repository Statuses</a>
      */
     public static class Status extends GHEventPayload {
+
+        /**
+         * Create default Status instance
+         */
+        public Status() {
+        }
+
         private String context;
         private String description;
         private GHCommitState state;
@@ -1573,6 +1753,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      *      trigger workflows</a>
      */
     public static class WorkflowDispatch extends GHEventPayload {
+
+        /**
+         * Create default WorkflowDispatch instance
+         */
+        public WorkflowDispatch() {
+        }
+
         private Map<String, Object> inputs;
         private String ref;
         private String workflow;
@@ -1614,6 +1801,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/rest/reference/actions#workflow-runs">Actions Workflow Runs</a>
      */
     public static class WorkflowRun extends GHEventPayload {
+
+        /**
+         * Create default WorkflowRun instance
+         */
+        public WorkflowRun() {
+        }
+
         private GHWorkflowRun workflowRun;
         private GHWorkflow workflow;
 
@@ -1666,6 +1860,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class WorkflowJob extends GHEventPayload {
 
+        /**
+         * Create default WorkflowJob instance
+         */
+        public WorkflowJob() {
+        }
+
         private GHWorkflowJob workflowJob;
 
         /**
@@ -1704,6 +1904,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Label extends GHEventPayload {
 
+        /**
+         * Create default Label instance
+         */
+        public Label() {
+        }
+
         private GHLabel label;
 
         private GHLabelChanges changes;
@@ -1737,6 +1943,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      *      discussion event</a>
      */
     public static class Discussion extends GHEventPayload {
+
+        /**
+         * Create default Discussion instance
+         */
+        public Discussion() {
+        }
 
         private GHRepositoryDiscussion discussion;
 
@@ -1772,6 +1984,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class DiscussionComment extends GHEventPayload {
 
+        /**
+         * Create default DiscussionComment instance
+         */
+        public DiscussionComment() {
+        }
+
         private GHRepositoryDiscussion discussion;
 
         private GHRepositoryDiscussionComment comment;
@@ -1806,6 +2024,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Star extends GHEventPayload {
 
+        /**
+         * Create default Star instance
+         */
+        public Star() {
+        }
+
         private String starredAt;
 
         /**
@@ -1826,6 +2050,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      *      event</a>
      */
     public static class ProjectsV2Item extends GHEventPayload {
+
+        /**
+         * Create default ProjectsV2Item instance
+         */
+        public ProjectsV2Item() {
+        }
 
         private GHProjectsV2Item projectsV2Item;
         private GHProjectsV2ItemChanges changes;
@@ -1856,6 +2086,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#team_add">team_add event</a>
      */
     public static class TeamAdd extends GHEventPayload {
+
+        /**
+         * Create default TeamAdd instance
+         */
+        public TeamAdd() {
+        }
 
         private GHTeam team;
 
@@ -1893,6 +2129,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#team">team event</a>
      */
     public static class Team extends GHEventPayload {
+
+        /**
+         * Create default Team instance
+         */
+        public Team() {
+        }
 
         private GHTeam team;
 
@@ -1942,6 +2184,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Member extends GHEventPayload {
 
+        /**
+         * Create default Member instance
+         */
+        public Member() {
+        }
+
         private GHUser member;
 
         private GHMemberChanges changes;
@@ -1972,6 +2220,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#membership">membership event</a>
      */
     public static class Membership extends GHEventPayload {
+
+        /**
+         * Create default Membership instance
+         */
+        public Membership() {
+        }
 
         private GHTeam team;
 

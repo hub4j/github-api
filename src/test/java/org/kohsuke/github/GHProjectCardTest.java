@@ -16,6 +16,13 @@ import static org.hamcrest.Matchers.*;
  * @author Gunnar Skjold
  */
 public class GHProjectCardTest extends AbstractGitHubWireMockTest {
+
+    /**
+     * Create default GHProjectCardTest instance
+     */
+    public GHProjectCardTest() {
+    }
+
     private GHOrganization org;
     private GHProject project;
     private GHProjectColumn column;

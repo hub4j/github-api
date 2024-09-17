@@ -1,1 +1,1 @@
-org.springframework.aot.hint.RuntimeHintsRegistrar=org.kohsuke.aot.AotTestRuntimeHints
+org.springframework.aot.hint.RuntimeHintsRegistrar=org.kohsuke.github.AotTestRuntimeHints

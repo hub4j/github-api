@@ -41,6 +41,12 @@ import static org.hamcrest.Matchers.*;
 public class GHLicenseTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHLicenseTest instance
+     */
+    public GHLicenseTest() {
+    }
+
+    /**
      * Basic test to ensure that the list of licenses from {@link GitHub#listLicenses()} is returned.
      *
      * @throws IOException

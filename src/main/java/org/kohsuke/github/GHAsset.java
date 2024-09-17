@@ -13,6 +13,12 @@ import java.net.URL;
  */
 public class GHAsset extends GHObject {
 
+    /**
+     * Create default GHAsset instance
+     */
+    public GHAsset() {
+    }
+
     /** The owner. */
     GHRepository owner;
     private String name;

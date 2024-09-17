@@ -15,6 +15,12 @@ import java.net.URL;
  */
 public class GHCommitStatus extends GHObject {
 
+    /**
+     * Create default GHCommitStatus instance
+     */
+    public GHCommitStatus() {
+    }
+
     /** The state. */
     String state;
 

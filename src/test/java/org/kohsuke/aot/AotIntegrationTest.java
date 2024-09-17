@@ -34,11 +34,11 @@ public class AotIntegrationTest {
     @Test
     public void testIfAllRequiredClassesAreRegisteredForAot() throws IOException {
         Stream<String> providedReflectionConfigStreamOfNames = readAotConfigToStreamOfClassNames(
-                "./target/classes/META-INF/native-image/org.kohsuke/github-api/reflect-config.json");
+                "./target/classes/META-INF/native-image/org.kohsuke/github-api-unbridged/reflect-config.json");
         Stream<String> providedNoReflectStreamOfNames = Files
                 .lines(Path.of("./target/test-classes/no-reflect-and-serialization-list"));
         Stream<String> providedSerializationStreamOfNames = readAotConfigToStreamOfClassNames(
-                "./target/classes/META-INF/native-image/org.kohsuke/github-api/serialization-config.json");
+                "./target/classes/META-INF/native-image/org.kohsuke/github-api-unbridged/serialization-config.json");
         Stream<String> providedAotConfigClassNamesPart = Stream
                 .concat(providedSerializationStreamOfNames,
                         Stream.concat(providedReflectionConfigStreamOfNames, providedNoReflectStreamOfNames))

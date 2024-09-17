@@ -12,6 +12,13 @@ import java.net.URL;
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
 public class GHMarketplaceAccount extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHMarketplaceAccount instance
+     */
+    public GHMarketplaceAccount() {
+    }
+
     private String url;
     private long id;
     private String login;

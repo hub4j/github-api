@@ -19,6 +19,12 @@ import static org.hamcrest.Matchers.containsString;
 public class GHMilestoneTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHMilestoneTest instance
+     */
+    public GHMilestoneTest() {
+    }
+
+    /**
      * Clean up.
      *
      * @throws Exception

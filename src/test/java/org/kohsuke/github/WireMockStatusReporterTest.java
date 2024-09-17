@@ -20,6 +20,12 @@ import static org.junit.Assume.assumeTrue;
 public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default WireMockStatusReporterTest instance
+     */
+    public WireMockStatusReporterTest() {
+    }
+
+    /**
      * User when proxying auth correctly configured.
      *
      * @throws Exception

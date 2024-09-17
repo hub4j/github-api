@@ -17,6 +17,12 @@ import static org.hamcrest.Matchers.*;
 public class GHDeploymentTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHDeploymentTest instance
+     */
+    public GHDeploymentTest() {
+    }
+
+    /**
      * Test get deployment by id string payload.
      *
      * @throws IOException

@@ -26,6 +26,12 @@ public class AotTestRuntimeHints implements RuntimeHintsRegistrar {
 
     private static final String LOCATION_PATTERN_OF_ORG_KOHSUKE_GITHUB_CLASSES = "classpath*:org/kohsuke/github/**/*.class";
 
+    /**
+     * Default constructor.
+     */
+    public AotTestRuntimeHints() {
+    }
+
     @Override
     public void registerHints(@NotNull RuntimeHints hints, ClassLoader classLoader) {
         try {

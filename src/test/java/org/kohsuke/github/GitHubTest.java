@@ -18,6 +18,12 @@ import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
 public class GitHubTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GitHubTest instance
+     */
+    public GitHubTest() {
+    }
+
+    /**
      * List users.
      *
      * @throws IOException

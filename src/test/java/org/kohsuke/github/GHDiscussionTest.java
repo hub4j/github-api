@@ -17,6 +17,13 @@ import static org.hamcrest.Matchers.*;
  * @author Charles Moulliard
  */
 public class GHDiscussionTest extends AbstractGitHubWireMockTest {
+
+    /**
+     * Create default GHDiscussionTest instance
+     */
+    public GHDiscussionTest() {
+    }
+
     private final String TEAM_SLUG = "dummy-team";
     private GHTeam team;
 

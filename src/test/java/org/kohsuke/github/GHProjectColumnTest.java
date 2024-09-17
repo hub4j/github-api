@@ -17,6 +17,13 @@ import static org.hamcrest.Matchers.nullValue;
  * @author Gunnar Skjold
  */
 public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
+
+    /**
+     * Create default GHProjectColumnTest instance
+     */
+    public GHProjectColumnTest() {
+    }
+
     private GHProject project;
     private GHProjectColumn column;
 

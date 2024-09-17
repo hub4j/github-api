@@ -22,6 +22,12 @@ import java.util.Date;
  */
 public class GHRepositoryDiscussion extends GHObject {
 
+    /**
+     * Create default GHRepositoryDiscussion instance
+     */
+    public GHRepositoryDiscussion() {
+    }
+
     private Category category;
 
     private String answerHtmlUrl;
@@ -191,6 +197,12 @@ public class GHRepositoryDiscussion extends GHObject {
      *      GraphQL API for Discussions</a>
      */
     public static class Category {
+
+        /**
+         * Create default Category instance
+         */
+        public Category() {
+        }
 
         private long id;
         private String nodeId;

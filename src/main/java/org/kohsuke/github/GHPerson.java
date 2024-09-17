@@ -17,6 +17,12 @@ import java.util.TreeMap;
  */
 public abstract class GHPerson extends GHObject {
 
+    /**
+     * Create default GHPerson instance
+     */
+    public GHPerson() {
+    }
+
     /** The avatar url. */
     // core data fields that exist even for "small" user data (such as the user info in pull request)
     protected String login, avatar_url;

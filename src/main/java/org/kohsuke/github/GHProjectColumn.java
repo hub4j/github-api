@@ -14,6 +14,12 @@ import java.net.URL;
  */
 public class GHProjectColumn extends GHObject {
 
+    /**
+     * Create default GHProjectColumn instance
+     */
+    public GHProjectColumn() {
+    }
+
     /** The project. */
     protected GHProject project;
 

@@ -18,6 +18,12 @@ import javax.annotation.Nonnull;
  */
 public class GHCompare {
 
+    /**
+     * Create default GHCompare instance
+     */
+    public GHCompare() {
+    }
+
     private String url, html_url, permalink_url, diff_url, patch_url;
     private Status status;
     private int ahead_by, behind_by, total_commits;
@@ -222,6 +228,12 @@ public class GHCompare {
             justification = "JSON API")
     public static class Commit extends GHCommit {
 
+        /**
+         * Create default Commit instance
+         */
+        public Commit() {
+        }
+
         private InnerCommit commit;
 
         /**
@@ -238,6 +250,13 @@ public class GHCompare {
      * The type InnerCommit.
      */
     public static class InnerCommit {
+
+        /**
+         * Create default InnerCommit instance
+         */
+        public InnerCommit() {
+        }
+
         private String url, sha, message;
         private GitUser author, committer;
         private Tree tree;
@@ -301,6 +320,13 @@ public class GHCompare {
      * The type Tree.
      */
     public static class Tree {
+
+        /**
+         * Create default Tree instance
+         */
+        public Tree() {
+        }
+
         private String url, sha;
 
         /**

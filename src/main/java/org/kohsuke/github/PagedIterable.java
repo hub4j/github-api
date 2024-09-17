@@ -27,6 +27,12 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     private int pageSize = 0;
 
     /**
+     * Instantiate a PagedIterable.
+     */
+    public PagedIterable() {
+    }
+
+    /**
      * Sets the pagination size.
      *
      * <p>

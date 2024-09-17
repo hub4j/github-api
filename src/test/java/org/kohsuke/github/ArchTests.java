@@ -56,6 +56,12 @@ public class ArchTests {
             .importPackages("org.kohsuke.github");
 
     /**
+     * Default constructor.
+     */
+    public ArchTests() {
+    }
+
+    /**
      * Before class.
      */
     @BeforeClass

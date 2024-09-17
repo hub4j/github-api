@@ -15,6 +15,13 @@ import java.util.Map;
  * @see GHRepository#getDeployment(long) GHRepository#getDeployment(long)
  */
 public class GHDeployment extends GHObject {
+
+    /**
+     * Create default GHDeployment instance
+     */
+    public GHDeployment() {
+    }
+
     private GHRepository owner;
 
     /** The sha. */

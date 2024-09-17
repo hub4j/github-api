@@ -250,7 +250,7 @@ public class GHLabel extends GitHubInteractiveObject {
     /**
      * A {@link GHLabelBuilder} that updates a single property per request
      *
-     * {@link #done()} is called automatically after the property is set.
+     * {@link Setter#done()} is called automatically after the property is set.
      */
     @BetaApi
     public static class Setter extends GHLabelBuilder<GHLabel> {
@@ -263,7 +263,7 @@ public class GHLabel extends GitHubInteractiveObject {
     /**
      * A {@link GHLabelBuilder} that allows multiple properties to be updated per request.
      *
-     * Consumer must call {@link #done()} to commit changes.
+     * Consumer must call {@link Updater#done()} to commit changes.
      */
     @BetaApi
     public static class Updater extends GHLabelBuilder<Updater> {
@@ -276,7 +276,7 @@ public class GHLabel extends GitHubInteractiveObject {
     /**
      * A {@link GHLabelBuilder} that creates a new {@link GHLabel}
      *
-     * Consumer must call {@link #done()} to create the new instance.
+     * Consumer must call {@link Creator#done()} to create the new instance.
      */
     @BetaApi
     public static class Creator extends GHLabelBuilder<Creator> {

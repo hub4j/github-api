@@ -20,6 +20,12 @@ import static org.hamcrest.Matchers.*;
 public class CommitTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default CommitTest instance
+     */
+    public CommitTest() {
+    }
+
+    /**
      * Last status.
      *
      * @throws IOException

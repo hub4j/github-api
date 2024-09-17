@@ -23,6 +23,12 @@ import static org.kohsuke.github.ExternalGroupsTestingSupport.Matchers.*;
  */
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default GHOrganizationTest instance
+     */
+    public GHOrganizationTest() {
+    }
+
     /** The Constant GITHUB_API_TEST. */
     public static final String GITHUB_API_TEST = "github-api-test";
 

@@ -15,6 +15,12 @@ import static org.mockito.Mockito.when;
 public class GHPullRequestMockTest {
 
     /**
+     * Create default GHPullRequestMockTest instance
+     */
+    public GHPullRequestMockTest() {
+    }
+
+    /**
      * Should mock GH pull request.
      *
      * @throws IOException

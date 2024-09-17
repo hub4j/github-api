@@ -17,6 +17,12 @@ import static org.kohsuke.github.ExternalGroupsTestingSupport.Matchers.*;
 public class GHExternalGroupTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHExternalGroupTest instance
+     */
+    public GHExternalGroupTest() {
+    }
+
+    /**
      * Test refresh bound external group.
      *
      * @throws IOException

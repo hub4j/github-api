@@ -45,6 +45,12 @@ import java.util.Objects;
 @SuppressWarnings({ "UnusedDeclaration" })
 public class GHPullRequest extends GHIssue implements Refreshable {
 
+    /**
+     * Create default GHPullRequest instance
+     */
+    public GHPullRequest() {
+    }
+
     private static final String COMMENTS_ACTION = "/comments";
     private static final String REQUEST_REVIEWERS = "/requested_reviewers";
 
@@ -631,6 +637,12 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     public static class AutoMerge {
+
+        /**
+         * Create default AutoMerge instance
+         */
+        public AutoMerge() {
+        }
 
         private GHUser enabled_by;
         private MergeMethod merge_method;

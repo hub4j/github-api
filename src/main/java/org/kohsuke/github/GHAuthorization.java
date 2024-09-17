@@ -17,6 +17,12 @@ import java.util.List;
  */
 public class GHAuthorization extends GHObject {
 
+    /**
+     * Create default GHAuthorization instance
+     */
+    public GHAuthorization() {
+    }
+
     /** The Constant USER. */
     public static final String USER = "user";
 

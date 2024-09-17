@@ -21,6 +21,12 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
 public class GHTeam extends GHObject implements Refreshable {
 
     /**
+     * Create default GHTeam instance
+     */
+    public GHTeam() {
+    }
+
+    /**
      * Path for external group-related operations
      */
     private static final String EXTERNAL_GROUPS = "/external-groups";

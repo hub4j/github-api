@@ -17,6 +17,12 @@ import static org.hamcrest.Matchers.*;
 public class GHIssueEventTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHIssueEventTest instance
+     */
+    public GHIssueEventTest() {
+    }
+
+    /**
      * Test events for single issue.
      *
      * @throws Exception

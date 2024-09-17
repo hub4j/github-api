@@ -24,6 +24,12 @@ import static org.hamcrest.Matchers.*;
 public class GHAppTest extends AbstractGHAppInstallationTest {
 
     /**
+     * Create default GHAppTest instance
+     */
+    public GHAppTest() {
+    }
+
+    /**
      * Gets the git hub builder.
      *
      * @return the git hub builder

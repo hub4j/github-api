@@ -83,7 +83,7 @@ public class OkHttpGitHubConnectorTest extends AbstractGitHubWireMockTest {
         return super.getWireMockOptions()
                 // Use the same data files as the 2.x test
                 .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/OkHttpGitHubConnector", "/OkHttpConnector"))
-                .extensions(templating.newResponseTransformer());
+                .extensions(templating.newTestStartDateResponseTransformer());
     }
 
     /**

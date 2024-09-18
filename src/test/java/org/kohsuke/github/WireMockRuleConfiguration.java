@@ -1,26 +1,29 @@
 package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.common.*;
+import com.github.tomakehurst.wiremock.common.filemaker.FilenameMaker;
 import com.github.tomakehurst.wiremock.core.MappingsSaver;
 import com.github.tomakehurst.wiremock.core.Options;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.extension.Extension;
+import com.github.tomakehurst.wiremock.extension.ExtensionDeclarations;
 import com.github.tomakehurst.wiremock.extension.ExtensionLoader;
 import com.github.tomakehurst.wiremock.http.CaseInsensitiveKey;
 import com.github.tomakehurst.wiremock.http.HttpServerFactory;
 import com.github.tomakehurst.wiremock.http.ThreadPoolFactory;
+import com.github.tomakehurst.wiremock.http.client.HttpClientFactory;
 import com.github.tomakehurst.wiremock.http.trafficlistener.WiremockNetworkTrafficListener;
 import com.github.tomakehurst.wiremock.security.Authenticator;
 import com.github.tomakehurst.wiremock.standalone.JsonFileMappingsSource;
 import com.github.tomakehurst.wiremock.standalone.MappingsLoader;
 import com.github.tomakehurst.wiremock.standalone.MappingsSource;
-import com.github.tomakehurst.wiremock.verification.notmatched.NotMatchedRenderer;
-import wiremock.com.google.common.base.Optional;
+import com.github.tomakehurst.wiremock.store.Stores;
 import wiremock.com.google.common.collect.Maps;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The Class WireMockRuleConfiguration.
@@ -52,7 +55,7 @@ public class WireMockRuleConfiguration implements Options {
     WireMockRuleConfiguration(Options parent, String childDirectory, Extension... extensionInstances) {
         this.parent = parent;
         this.childDirectory = childDirectory;
-        this.extensions.putAll(ExtensionLoader.asMap(Arrays.asList(extensionInstances)));
+        // this.extensions.putAll(ExtensionLoader.asMap(Arrays.asList(extensionInstances)));
     }
 
     /**
@@ -86,7 +89,7 @@ public class WireMockRuleConfiguration implements Options {
 
     private MappingsSource getMappingsSource() {
         if (this.mappingsSource == null) {
-            this.mappingsSource = new JsonFileMappingsSource(this.filesRoot().child("mappings"));
+            this.mappingsSource = new JsonFileMappingsSource(this.filesRoot().child("mappings"), new FilenameMaker());
         }
 
         return this.mappingsSource;
@@ -140,12 +143,13 @@ public class WireMockRuleConfiguration implements Options {
      *            the extension type
      * @return the map
      */
-    public <T extends Extension> Map<String, T> extensionsOfType(Class<T> extensionType) {
-        Map<String, T> result = Maps.newLinkedHashMap(this.parent.extensionsOfType(extensionType));
-        result.putAll((Map<String, T>) Maps.filterEntries(this.extensions,
-                ExtensionLoader.valueAssignableFrom(extensionType)));
-        return result;
-    }
+    // public <T extends Extension> Map<String, T> extensionsOfType(Class<T> extensionType) {
+    // parent.getDeclaredExtensions()
+    // Map<String, T> result = Maps.newLinkedHashMap(this.parent.exextensionsOfType(extensionType));
+    // result.putAll((Map<String, T>) Maps.filterEntries(this.extensions,
+    // ExtensionLoader.valueAssignableFrom(extensionType)));
+    // return result;
+    // }
 
     // Simple wrappers
 
@@ -244,7 +248,7 @@ public class WireMockRuleConfiguration implements Options {
      *
      * @return the optional
      */
-    public Optional<Integer> maxRequestJournalEntries() {
+    public java.util.Optional<Integer> maxRequestJournalEntries() {
         return parent.maxRequestJournalEntries();
     }
 
@@ -327,15 +331,6 @@ public class WireMockRuleConfiguration implements Options {
      */
     public boolean getHttpsRequiredForAdminApi() {
         return parent.getHttpsRequiredForAdminApi();
-    }
-
-    /**
-     * Gets the not matched renderer.
-     *
-     * @return the not matched renderer
-     */
-    public NotMatchedRenderer getNotMatchedRenderer() {
-        return parent.getNotMatchedRenderer();
     }
 
     /**
@@ -426,5 +421,98 @@ public class WireMockRuleConfiguration implements Options {
      */
     public NetworkAddressRules getProxyTargetRules() {
         return parent.getProxyTargetRules();
+    }
+
+    @Override
+    public boolean getHttp2PlainDisabled() {
+        return parent.getHttp2PlainDisabled();
+    }
+
+    @Override
+    public boolean getHttp2TlsDisabled() {
+        return parent.getHttp2TlsDisabled();
+    }
+
+    @Override
+    public Stores getStores() {
+        return parent.getStores();
+    }
+
+    @Override
+    public FilenameMaker getFilenameMaker() {
+        return parent.getFilenameMaker();
+    }
+
+    @Override
+    public boolean shouldPreserveUserAgentProxyHeader() {
+        return parent.shouldPreserveUserAgentProxyHeader();
+    }
+
+    @Override
+    public HttpClientFactory httpClientFactory() {
+        return parent.httpClientFactory();
+    }
+
+    @Override
+    public ExtensionDeclarations getDeclaredExtensions() {
+        ExtensionDeclarations declarations = parent.getDeclaredExtensions();
+
+        for (String extentionName : extensions.keySet()) {
+            if (!declarations.getInstances().containsKey(extentionName)) {
+                declarations.add(extensions.get(extentionName));
+            }
+        }
+        return declarations;
+    }
+
+    @Override
+    public boolean isExtensionScanningEnabled() {
+        return parent.isExtensionScanningEnabled();
+    }
+
+    @Override
+    public int proxyTimeout() {
+        return parent.proxyTimeout();
+    }
+
+    @Override
+    public int getMaxHttpClientConnections() {
+        return parent.getMaxHttpClientConnections();
+    }
+
+    @Override
+    public boolean getResponseTemplatingEnabled() {
+        return parent.getResponseTemplatingEnabled();
+    }
+
+    @Override
+    public boolean getResponseTemplatingGlobal() {
+        return parent.getResponseTemplatingGlobal();
+    }
+
+    @Override
+    public Long getMaxTemplateCacheEntries() {
+        return parent.getMaxTemplateCacheEntries();
+    }
+
+    @Override
+    public Set<String> getTemplatePermittedSystemKeys() {
+        return parent.getTemplatePermittedSystemKeys();
+    }
+
+    @Override
+    public boolean getTemplateEscapingDisabled() {
+        return parent.getTemplateEscapingDisabled();
+    }
+
+    @Override
+    public Set<String> getSupportedProxyEncodings() {
+        return parent.getSupportedProxyEncodings();
+    }
+
+    @Override
+    public boolean getDisableConnectionReuse() {
+        return parent.getDisableConnectionReuse();
+
     }
 }

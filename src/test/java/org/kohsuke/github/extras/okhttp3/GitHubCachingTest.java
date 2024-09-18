@@ -49,7 +49,7 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         return super.getWireMockOptions()
                 // Use the same data files as the 2.x test
                 .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
-                .extensions(templating.newResponseTransformer());
+                .extensions(templating.newTestStartDateResponseTransformer());
     }
 
     /**

@@ -37,7 +37,7 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
      */
     @Override
     protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
+        return super.getWireMockOptions().extensions(templating.newTestStartDateResponseTransformer());
     }
 
     /**

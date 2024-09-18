@@ -1,8 +1,11 @@
 package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.extension.TemplateModelDataProviderExtension;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
+import com.github.tomakehurst.wiremock.extension.responsetemplating.TemplateEngine;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.helpers.HandlebarsCurrentDateHelper;
+import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -409,19 +412,27 @@ public abstract class AbstractGitHubWireMockTest {
          *
          * @return the response template transformer
          */
-        public ResponseTemplateTransformer newResponseTransformer() {
+        public ResponseTemplateTransformer newTestStartDateResponseTransformer() {
             testStartDate = new Date();
-            return ResponseTemplateTransformer.builder()
-                    .global(true)
-                    .maxCacheEntries(0L)
-                    .helper("testStartDate", new Helper<Object>() {
+            List<TemplateModelDataProviderExtension> extensions = new ArrayList<>();
+            extensions.add(new TemplateModelDataProviderExtension() {
+                @Override
+                public Map<String, Object> provideTemplateModelData(ServeEvent serveEvent) {
+                    return Map.of("testStartDate", new Helper<Object>() {
                         private HandlebarsCurrentDateHelper helper = new HandlebarsCurrentDateHelper();
                         @Override
-                        public Object apply(final Object context, final Options options) throws IOException {
+                        public Object apply(Object context, Options options) throws IOException {
                             return this.helper.apply(TemplatingHelper.this.testStartDate, options);
                         }
-                    })
-                    .build();
+                    });
+                }
+
+                @Override
+                public String getName() {
+                    return "test-start-date";
+                }
+            });
+            return new ResponseTemplateTransformer(TemplateEngine.defaultTemplateEngine(), true, null, extensions);
         }
     }
 

@@ -9,7 +9,6 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.common.*;
 import com.github.tomakehurst.wiremock.core.*;
 import com.github.tomakehurst.wiremock.global.GlobalSettings;
-import com.github.tomakehurst.wiremock.global.GlobalSettingsHolder;
 import com.github.tomakehurst.wiremock.http.RequestListener;
 import com.github.tomakehurst.wiremock.junit.Stubbing;
 import com.github.tomakehurst.wiremock.matching.RequestPattern;
@@ -198,15 +197,6 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
      */
     public void loadMappingsUsing(MappingsLoader mappingsLoader) {
         wireMockServer.loadMappingsUsing(mappingsLoader);
-    }
-
-    /**
-     * Gets the global settings holder.
-     *
-     * @return the global settings holder
-     */
-    public GlobalSettingsHolder getGlobalSettingsHolder() {
-        return wireMockServer.getGlobalSettingsHolder();
     }
 
     /**
@@ -897,5 +887,10 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
      */
     public GetGlobalSettingsResult getGlobalSettings() {
         return wireMockServer.getGlobalSettings();
+    }
+
+    @Override
+    public void removeStub(UUID id) {
+        wireMockServer.removeStub(id);
     }
 }

@@ -28,7 +28,18 @@ public class GHRule {
 	}
 
 	public enum RuleType {
-		required_status_checks
+		commit_author_email_pattern,
+		creation,
+		deletion,
+		merge_queue,
+		non_fast_forward,
+		pull_request,
+		require_code_scanning,
+		require_deployments,
+		require_linear_history,
+		required_signatures,
+		required_status_checks,
+		update,
 	}
 
 	public static class Parameters {

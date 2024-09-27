@@ -32,7 +32,7 @@
   </distributionManagement>
 
   <properties>
-    <spring.boot.version>3.3.3</spring.boot.version>
+    <spring.boot.version>3.3.4</spring.boot.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spotbugs-maven-plugin.version>4.8.6.3</spotbugs-maven-plugin.version>
     <spotbugs.version>4.8.6</spotbugs.version>

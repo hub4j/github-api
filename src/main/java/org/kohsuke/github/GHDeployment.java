@@ -195,6 +195,16 @@ public class GHDeployment extends GHObject {
     }
 
     /**
+     * Deletes this deployment.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("deployments/" + getId())).send();
+    }
+
+    /**
      * Create status gh deployment status builder.
      *
      * @param state

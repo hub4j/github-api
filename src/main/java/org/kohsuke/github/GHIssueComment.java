@@ -88,7 +88,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    public GHUser getUser() throws IOException {
+    public GHUser getUser() {
         return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());
     }
 
@@ -118,7 +118,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    public void update(String body) throws IOException {
+    public void update(String body) {
         owner.root()
                 .createRequest()
                 .method("PATCH")
@@ -134,7 +134,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
@@ -147,7 +147,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public GHReaction createReaction(ReactionContent content) throws IOException {
+    public GHReaction createReaction(ReactionContent content) {
         return owner.root()
                 .createRequest()
                 .method("POST")
@@ -164,7 +164,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public void deleteReaction(GHReaction reaction) throws IOException {
+    public void deleteReaction(GHReaction reaction) {
         owner.root()
                 .createRequest()
                 .method("DELETE")

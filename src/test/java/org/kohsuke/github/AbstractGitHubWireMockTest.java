@@ -17,6 +17,7 @@ import wiremock.com.github.jknack.handlebars.Options;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.*;
 
 import static org.hamcrest.Matchers.*;
@@ -204,7 +205,7 @@ public abstract class AbstractGitHubWireMockTest {
     protected static GHUser getUser(GitHub gitHub) {
         try {
             return gitHub.getMyself();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
@@ -287,8 +288,12 @@ public abstract class AbstractGitHubWireMockTest {
                 if (repository != null) {
                     repository.delete();
                 }
-            } catch (GHFileNotFoundException e) {
+            } catch (UncheckedIOException e) {
                 // Repo already deleted
+                if (!(e.getCause() instanceof GHFileNotFoundException)) {
+                    throw e;
+                }
+
             }
 
         }

@@ -75,7 +75,7 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    public PagedIterable<GHMarketplaceAccountPlan> createRequest() throws IOException {
+    public PagedIterable<GHMarketplaceAccountPlan> createRequest() {
         return builder.withUrlPath(String.format("/marketplace_listing/plans/%d/accounts", this.planId))
                 .toIterable(GHMarketplaceAccountPlan[].class, null);
     }

@@ -27,6 +27,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Locale;
 
@@ -63,7 +64,7 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
+    public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }
 
@@ -75,7 +76,7 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHObject getOwner() throws IOException {
+    public GHObject getOwner() {
         if (owner == null) {
             try {
                 if (owner_url.contains("/orgs/")) {
@@ -86,8 +87,11 @@ public class GHProject extends GHObject {
                     String[] pathElements = getOwnerUrl().getPath().split("/");
                     owner = GHRepository.read(root(), pathElements[1], pathElements[2]);
                 }
-            } catch (FileNotFoundException e) {
-                return null;
+            } catch (UncheckedIOException e) {
+                if (FileNotFoundException.class.isInstance(e)) {
+                    return null;
+                }
+                throw e;
             }
         }
         return owner;
@@ -160,7 +164,7 @@ public class GHProject extends GHObject {
         return this;
     }
 
-    private void edit(String key, Object value) throws IOException {
+    private void edit(String key, Object value) {
         root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
     }
 
@@ -181,7 +185,7 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setName(String name) throws IOException {
+    public void setName(String name) {
         edit("name", name);
     }
 
@@ -193,7 +197,7 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setBody(String body) throws IOException {
+    public void setBody(String body) {
         edit("body", body);
     }
 
@@ -216,7 +220,7 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setState(ProjectState state) throws IOException {
+    public void setState(ProjectState state) {
         edit("state", state.toString().toLowerCase());
     }
 
@@ -242,7 +246,7 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setOrganizationPermission(GHPermissionType permission) throws IOException {
+    public void setOrganizationPermission(GHPermissionType permission) {
         edit("organization_permission", permission.toString().toLowerCase());
     }
 
@@ -254,7 +258,7 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setPublic(boolean isPublic) throws IOException {
+    public void setPublic(boolean isPublic) {
         edit("public", isPublic);
     }
 
@@ -264,7 +268,7 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
@@ -275,7 +279,7 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHProjectColumn> listColumns() throws IOException {
+    public PagedIterable<GHProjectColumn> listColumns() {
         final GHProject project = this;
         return root().createRequest()
                 .withUrlPath(String.format("/projects/%d/columns", getId()))
@@ -291,7 +295,7 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHProjectColumn createColumn(String name) throws IOException {
+    public GHProjectColumn createColumn(String name) {
         return root().createRequest()
                 .method("POST")
                 .with("name", name)

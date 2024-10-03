@@ -4,8 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
@@ -72,7 +72,7 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
         try {
             column = gitHub.getProjectColumn(column.getId());
             assertThat(column, nullValue());
-        } catch (FileNotFoundException e) {
+        } catch (UncheckedIOException e) {
             column = null;
         }
     }
@@ -91,7 +91,7 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
                 try {
                     column.delete();
                     column = null;
-                } catch (FileNotFoundException e) {
+                } catch (UncheckedIOException e) {
                     column = null;
                 }
             }
@@ -100,7 +100,7 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
                 try {
                     project.delete();
                     project = null;
-                } catch (FileNotFoundException e) {
+                } catch (UncheckedIOException e) {
                     project = null;
                 }
             }

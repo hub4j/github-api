@@ -70,7 +70,7 @@ public class GHWorkflow extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
+    public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }
 
@@ -99,7 +99,7 @@ public class GHWorkflow extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void disable() throws IOException {
+    public void disable() {
         root().createRequest().method("PUT").withUrlPath(getApiRoute(), "disable").send();
     }
 
@@ -109,7 +109,7 @@ public class GHWorkflow extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void enable() throws IOException {
+    public void enable() {
         root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").send();
     }
 
@@ -121,7 +121,7 @@ public class GHWorkflow extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void dispatch(String ref) throws IOException {
+    public void dispatch(String ref) {
         dispatch(ref, Collections.emptyMap());
     }
 
@@ -136,7 +136,7 @@ public class GHWorkflow extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void dispatch(String ref, Map<String, Object> inputs) throws IOException {
+    public void dispatch(String ref, Map<String, Object> inputs) {
         Requester requester = root().createRequest()
                 .method("POST")
                 .withUrlPath(getApiRoute(), "dispatches")

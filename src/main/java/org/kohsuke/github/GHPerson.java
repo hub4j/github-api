@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Date;
@@ -52,7 +53,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    protected synchronized void populate() throws IOException {
+    protected synchronized void populate() {
         if (super.getCreatedAt() != null) {
             return; // already populated
         }
@@ -75,7 +76,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public synchronized Map<String, GHRepository> getRepositories() throws IOException {
+    public synchronized Map<String, GHRepository> getRepositories() {
         Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
         for (GHRepository r : listRepositories().withPageSize(100)) {
             repositories.put(r.getName(), r);
@@ -120,11 +121,14 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHRepository getRepository(String name) throws IOException {
+    public GHRepository getRepository(String name) {
         try {
             return GHRepository.read(root(), login, name);
-        } catch (FileNotFoundException e) {
-            return null;
+        } catch (UncheckedIOException e) {
+            if (FileNotFoundException.class.isInstance(e)) {
+                return null;
+            }
+            throw e;
         }
     }
 
@@ -162,7 +166,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getName() throws IOException {
+    public String getName() {
         populate();
         return name;
     }
@@ -174,7 +178,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getCompany() throws IOException {
+    public String getCompany() {
         populate();
         return company;
     }
@@ -186,7 +190,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getLocation() throws IOException {
+    public String getLocation() {
         populate();
         return location;
     }
@@ -198,7 +202,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getTwitterUsername() throws IOException {
+    public String getTwitterUsername() {
         populate();
         return twitter_username;
     }
@@ -210,7 +214,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public Date getCreatedAt() throws IOException {
+    public Date getCreatedAt() {
         populate();
         return super.getCreatedAt();
     }
@@ -222,7 +226,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public Date getUpdatedAt() throws IOException {
+    public Date getUpdatedAt() {
         populate();
         return super.getUpdatedAt();
     }
@@ -234,7 +238,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getBlog() throws IOException {
+    public String getBlog() {
         populate();
         return blog;
     }
@@ -255,7 +259,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getEmail() throws IOException {
+    public String getEmail() {
         populate();
         return email;
     }
@@ -267,7 +271,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public int getPublicGistCount() throws IOException {
+    public int getPublicGistCount() {
         populate();
         return public_gists;
     }
@@ -279,7 +283,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public int getPublicRepoCount() throws IOException {
+    public int getPublicRepoCount() {
         populate();
         return public_repos;
     }
@@ -291,7 +295,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public int getFollowingCount() throws IOException {
+    public int getFollowingCount() {
         populate();
         return following;
     }
@@ -303,7 +307,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public int getFollowersCount() throws IOException {
+    public int getFollowersCount() {
         populate();
         return followers;
     }
@@ -315,7 +319,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getType() throws IOException {
+    public String getType() {
         populate();
         return type;
     }
@@ -327,7 +331,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public boolean isSiteAdmin() throws IOException {
+    public boolean isSiteAdmin() {
         populate();
         return site_admin;
     }
@@ -339,7 +343,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public Optional<Integer> getTotalPrivateRepoCount() throws IOException {
+    public Optional<Integer> getTotalPrivateRepoCount() {
         populate();
         return Optional.ofNullable(total_private_repos);
     }

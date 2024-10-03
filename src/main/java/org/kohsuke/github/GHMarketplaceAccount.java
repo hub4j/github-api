@@ -97,7 +97,7 @@ public class GHMarketplaceAccount extends GitHubInteractiveObject {
      *      "https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account">Get
      *      a subscription plan for an account</a>
      */
-    public GHMarketplaceAccountPlan getPlan() throws IOException {
+    public GHMarketplaceAccountPlan getPlan() {
         return new GHMarketplacePlanForAccountBuilder(root(), this.id).createRequest();
     }
 

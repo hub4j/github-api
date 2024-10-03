@@ -206,7 +206,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getMergedBy() throws IOException {
+    public GHUser getMergedBy() {
         populate();
         return merged_by;
     }
@@ -218,7 +218,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public int getReviewComments() throws IOException {
+    public int getReviewComments() {
         populate();
         return review_comments;
     }
@@ -230,7 +230,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public int getAdditions() throws IOException {
+    public int getAdditions() {
         populate();
         return additions;
     }
@@ -242,7 +242,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public int getCommits() throws IOException {
+    public int getCommits() {
         populate();
         return commits;
     }
@@ -254,7 +254,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public boolean isMerged() throws IOException {
+    public boolean isMerged() {
         populate();
         return merged;
     }
@@ -266,7 +266,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public boolean canMaintainerModify() throws IOException {
+    public boolean canMaintainerModify() {
         populate();
         return maintainer_can_modify;
     }
@@ -278,7 +278,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public boolean isDraft() throws IOException {
+    public boolean isDraft() {
         populate();
         return draft;
     }
@@ -292,8 +292,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public Boolean getMergeable() throws IOException {
-        refresh(mergeable);
+    public Boolean getMergeable() {
+        refreshWithUnchecked(mergeable);
         return mergeable;
     }
 
@@ -313,7 +313,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public int getDeletions() throws IOException {
+    public int getDeletions() {
         populate();
         return deletions;
     }
@@ -325,7 +325,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public String getMergeableState() throws IOException {
+    public String getMergeableState() {
         populate();
         return mergeable_state;
     }
@@ -337,7 +337,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public int getChangedFiles() throws IOException {
+    public int getChangedFiles() {
         populate();
         return changed_files;
     }
@@ -349,7 +349,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public String getMergeCommitSha() throws IOException {
+    public String getMergeCommitSha() {
         populate();
         return merge_commit_sha;
     }
@@ -361,8 +361,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public List<GHUser> getRequestedReviewers() throws IOException {
-        refresh(requested_reviewers);
+    public List<GHUser> getRequestedReviewers() {
+        refreshWithUnchecked(requested_reviewers);
         return Collections.unmodifiableList(Arrays.asList(requested_reviewers));
     }
 
@@ -373,8 +373,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public List<GHTeam> getRequestedTeams() throws IOException {
-        refresh(requested_teams);
+    public List<GHTeam> getRequestedTeams() {
+        refreshWithUnchecked(requested_teams);
         return Collections.unmodifiableList(Arrays.asList(requested_teams));
     }
 
@@ -384,10 +384,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * <p>
      * Depending on the original API call where this object is created, it may not contain everything.
      */
-    private void populate() throws IOException {
-        if (mergeable_state != null)
-            return; // already populated
-        refresh();
+    private void populate() {
+        refreshWithUnchecked(mergeable_state);
     }
 
     /**
@@ -396,7 +394,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public void refresh() throws IOException {
+    public void refresh() {
         if (isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
@@ -439,7 +437,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
+    public PagedIterable<GHPullRequestReviewComment> listReviewComments() {
         return root().createRequest()
                 .withUrlPath(getApiRoute() + COMMENTS_ACTION)
                 .toIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(this));
@@ -491,8 +489,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @deprecated use {@link #createReviewComment()}
      */
     @Deprecated
-    public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
-            throws IOException {
+    public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position) {
         return createReviewComment().body(body).commitId(sha).path(path).position(position).create();
     }
 
@@ -504,7 +501,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void requestReviewers(List<GHUser> reviewers) throws IOException {
+    public void requestReviewers(List<GHUser> reviewers) {
         root().createRequest()
                 .method("POST")
                 .with("reviewers", getLogins(reviewers))
@@ -520,7 +517,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void requestTeamReviewers(List<GHTeam> teams) throws IOException {
+    public void requestTeamReviewers(List<GHTeam> teams) {
         List<String> teamReviewers = new ArrayList<String>(teams.size());
         for (GHTeam team : teams) {
             teamReviewers.add(team.getSlug());
@@ -541,7 +538,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public GHPullRequest setBaseBranch(String newBaseBranch) throws IOException {
+    public GHPullRequest setBaseBranch(String newBaseBranch) {
         return root().createRequest()
                 .method("PATCH")
                 .with("base", newBaseBranch)
@@ -555,7 +552,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void updateBranch() throws IOException {
+    public void updateBranch() {
         root().createRequest()
                 .method("PUT")
                 .with("expected_head_sha", head.getSha())
@@ -574,7 +571,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void merge(String msg) throws IOException {
+    public void merge(String msg) {
         merge(msg, null);
     }
 
@@ -591,7 +588,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void merge(String msg, String sha) throws IOException {
+    public void merge(String msg, String sha) {
         merge(msg, sha, null);
     }
 
@@ -610,7 +607,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void merge(String msg, String sha, MergeMethod method) throws IOException {
+    public void merge(String msg, String sha, MergeMethod method) {
         root().createRequest()
                 .method("PUT")
                 .with("commit_message", msg)

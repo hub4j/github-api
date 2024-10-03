@@ -196,11 +196,11 @@ public class GHCheckSuite extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public List<GHPullRequest> getPullRequests() throws IOException {
+    public List<GHPullRequest> getPullRequests() {
         if (pullRequests != null && pullRequests.length != 0) {
             for (GHPullRequest singlePull : pullRequests) {
                 // Only refresh if we haven't do so before
-                singlePull.refresh(singlePull.getTitle());
+                singlePull.refreshWithUnchecked(singlePull.getTitle());
             }
             return Collections.unmodifiableList(Arrays.asList(pullRequests));
         }

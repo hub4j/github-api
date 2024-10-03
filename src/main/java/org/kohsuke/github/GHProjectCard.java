@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 
 // TODO: Auto-generated Javadoc
@@ -36,7 +37,7 @@ public class GHProjectCard extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
+    public URL getHtmlUrl() {
         return null;
     }
 
@@ -72,11 +73,15 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHProject getProject() throws IOException {
+    public GHProject getProject() {
         if (project == null) {
             try {
                 project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
-            } catch (FileNotFoundException e) {
+            } catch (UncheckedIOException e) {
+                if (FileNotFoundException.class.isInstance(e)) {
+                    // no-op
+                }
+                throw e;
             }
         }
         return project;
@@ -90,15 +95,20 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHProjectColumn getColumn() throws IOException {
+    public GHProjectColumn getColumn() {
         if (column == null) {
             try {
                 column = root().createRequest()
                         .withUrlPath(getColumnUrl().getPath())
                         .fetch(GHProjectColumn.class)
                         .lateBind(root());
-            } catch (FileNotFoundException e) {
+            } catch (UncheckedIOException e) {
+                if (FileNotFoundException.class.isInstance(e)) {
+                    // no-op
+                }
+                throw e;
             }
+
         }
         return column;
     }
@@ -110,7 +120,7 @@ public class GHProjectCard extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHIssue getContent() throws IOException {
+    public GHIssue getContent() {
         if (StringUtils.isEmpty(content_url))
             return null;
         try {
@@ -119,8 +129,11 @@ public class GHProjectCard extends GHObject {
             } else {
                 return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);
             }
-        } catch (FileNotFoundException e) {
-            return null;
+        } catch (UncheckedIOException e) {
+            if (FileNotFoundException.class.isInstance(e)) {
+                return null;
+            }
+            throw e;
         }
     }
 
@@ -187,7 +200,7 @@ public class GHProjectCard extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setNote(String note) throws IOException {
+    public void setNote(String note) {
         edit("note", note);
     }
 
@@ -199,11 +212,11 @@ public class GHProjectCard extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setArchived(boolean archived) throws IOException {
+    public void setArchived(boolean archived) {
         edit("archived", archived);
     }
 
-    private void edit(String key, Object value) throws IOException {
+    private void edit(String key, Object value) {
         root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
     }
 
@@ -222,7 +235,7 @@ public class GHProjectCard extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 }

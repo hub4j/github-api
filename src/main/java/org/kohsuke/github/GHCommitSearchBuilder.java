@@ -3,8 +3,6 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
-
 // TODO: Auto-generated Javadoc
 /**
  * Search commits.
@@ -260,7 +258,7 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
                 try {
                     GHRepository repo = root.getRepository(repoName);
                     commit.wrapUp(repo);
-                } catch (IOException ioe) {
+                } catch (Exception ioe) {
                 }
             }
             return items;

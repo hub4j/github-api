@@ -117,7 +117,7 @@ public class GHPullRequestReviewCommentBuilder {
      * @throws IOException
      *             the io exception
      */
-    public GHPullRequestReviewComment create() throws IOException {
+    public GHPullRequestReviewComment create() {
         return builder.method("POST")
                 .withUrlPath(pr.getApiRoute() + "/comments")
                 .fetch(GHPullRequestReviewComment.class)

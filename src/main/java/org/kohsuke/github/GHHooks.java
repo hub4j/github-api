@@ -30,7 +30,7 @@ class GHHooks {
          * @throws IOException
          *             the io exception
          */
-        public List<GHHook> getHooks() throws IOException {
+        public List<GHHook> getHooks() {
 
             // jdk/eclipse bug
             GHHook[] hookArray = root().createRequest().withUrlPath(collection()).fetch(collectionClass());
@@ -51,7 +51,7 @@ class GHHooks {
          * @throws IOException
          *             the io exception
          */
-        public GHHook getHook(int id) throws IOException {
+        public GHHook getHook(int id) {
             GHHook hook = root().createRequest().withUrlPath(collection() + "/" + id).fetch(clazz());
             return wrap(hook);
         }
@@ -71,8 +71,7 @@ class GHHooks {
          * @throws IOException
          *             the io exception
          */
-        public GHHook createHook(String name, Map<String, String> config, Collection<GHEvent> events, boolean active)
-                throws IOException {
+        public GHHook createHook(String name, Map<String, String> config, Collection<GHEvent> events, boolean active) {
             List<String> ea = null;
             if (events != null) {
                 ea = new ArrayList<String>();
@@ -100,7 +99,7 @@ class GHHooks {
          * @throws IOException
          *             the io exception
          */
-        public void deleteHook(int id) throws IOException {
+        public void deleteHook(int id) {
             root().createRequest().method("DELETE").withUrlPath(collection() + "/" + id).send();
         }
 

@@ -81,7 +81,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public GHUser getAnswerChosenBy() throws IOException {
+    public GHUser getAnswerChosenBy() {
         return root().intern(answerChosenBy);
     }
 
@@ -119,7 +119,7 @@ public class GHRepositoryDiscussion extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public GHUser getUser() throws IOException {
+    public GHUser getUser() {
         return root().intern(user);
     }
 

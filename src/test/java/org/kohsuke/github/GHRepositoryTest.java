@@ -11,9 +11,9 @@ import org.kohsuke.github.GHOrganization.RepositoryRole;
 import org.kohsuke.github.GHRepository.Visibility;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
@@ -523,9 +523,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         try {
             r.getPermission("jglick");
             fail();
-        } catch (HttpException x) {
+        } catch (UncheckedIOException x) {
             // x.printStackTrace(); // good
-            assertThat(x.getResponseCode(), equalTo(403));
+            assertThat(((HttpException) x.getCause()).getResponseCode(), equalTo(403));
         }
 
         if (false) {
@@ -535,7 +535,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             try {
                 r.getPermission("jglick");
                 fail();
-            } catch (FileNotFoundException x) {
+            } catch (UncheckedIOException x) {
                 x.printStackTrace(); // good
             }
         }
@@ -585,7 +585,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             // add the repository that have latest release
             GHRelease release = gitHub.getRepository("kamontat/CheckIDNumber").getLatestRelease();
             assertThat(release.getTagName(), equalTo("v3.0"));
-        } catch (IOException e) {
+        } catch (UncheckedIOException e) {
             e.printStackTrace();
             fail();
         }
@@ -642,7 +642,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             // add the repository that `NOT` have latest release
             GHRelease release = gitHub.getRepository("kamontat/Java8Example").getLatestRelease();
             assertThat(release, nullValue());
-        } catch (IOException e) {
+        } catch (UncheckedIOException e) {
             e.printStackTrace();
             fail();
         }
@@ -1105,7 +1105,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 try {
                     repo.createWebHook(url);
                     return true;
-                } catch (IOException e) {
+                } catch (UncheckedIOException e) {
                     throw new GHException("Failed to update post-commit hooks", e);
                 }
             }
@@ -1121,7 +1121,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                         }
                     }
                     return false;
-                } catch (IOException e) {
+                } catch (UncheckedIOException e) {
                     throw new GHException("Failed to update post-commit hooks", e);
                 }
             }

@@ -96,7 +96,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(repo.getApiTailUrl("subscription")).send();
     }
 

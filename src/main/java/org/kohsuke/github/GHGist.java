@@ -80,7 +80,7 @@ public class GHGist extends GHObject {
      *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getOwner() throws IOException {
+    public GHUser getOwner() {
         return owner;
     }
 
@@ -206,7 +206,7 @@ public class GHGist extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void star() throws IOException {
+    public void star() {
         root().createRequest().method("PUT").withUrlPath(getApiTailUrl("star")).send();
     }
 
@@ -216,7 +216,7 @@ public class GHGist extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void unstar() throws IOException {
+    public void unstar() {
         root().createRequest().method("DELETE").withUrlPath(getApiTailUrl("star")).send();
     }
 
@@ -227,7 +227,7 @@ public class GHGist extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public boolean isStarred() throws IOException {
+    public boolean isStarred() {
         return root().createRequest().withUrlPath(getApiTailUrl("star")).fetchHttpStatusCode() / 100 == 2;
     }
 
@@ -238,7 +238,7 @@ public class GHGist extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHGist fork() throws IOException {
+    public GHGist fork() {
         return root().createRequest().method("POST").withUrlPath(getApiTailUrl("forks")).fetch(GHGist.class);
     }
 
@@ -257,7 +257,7 @@ public class GHGist extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath("/gists/" + id).send();
     }
 
@@ -268,7 +268,7 @@ public class GHGist extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater update() throws IOException {
+    public GHGistUpdater update() {
         return new GHGistUpdater(this);
     }
 

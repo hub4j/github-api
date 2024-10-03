@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                 if (content != null) {
                     content.delete("Cleanup");
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
             }
         }
     }
@@ -220,8 +221,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         try {
             repo.getFileContent(createdFilename);
             fail("Delete didn't work!");
-        } catch (GHFileNotFoundException e) {
-            assertThat(e.getMessage(),
+        } catch (UncheckedIOException e) {
+            assertThat(e.getCause().getMessage(),
                     endsWith(
                             "/repos/hub4j-test-org/GHContentIntegrationTest/contents/test+directory%20%2350/test%20file-to+create-%231.txt {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/reference/repos#get-repository-content\"}"));
         }

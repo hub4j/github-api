@@ -72,7 +72,7 @@ public class GHGistBuilder {
      * @throws IOException
      *             if Gist cannot be created.
      */
-    public GHGist create() throws IOException {
+    public GHGist create() {
         req.with("files", files);
         return req.withUrlPath("/gists").fetch(GHGist.class);
     }

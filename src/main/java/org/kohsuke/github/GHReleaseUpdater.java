@@ -129,7 +129,7 @@ public class GHReleaseUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHRelease update() throws IOException {
+    public GHRelease update() {
         return builder.method("PATCH")
                 .withUrlPath(base.owner.getApiTailUrl("releases/" + base.getId()))
                 .fetch(GHRelease.class)

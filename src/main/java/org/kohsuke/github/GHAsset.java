@@ -45,7 +45,7 @@ public class GHAsset extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setContentType(String contentType) throws IOException {
+    public void setContentType(String contentType) {
         edit("content_type", contentType);
         this.content_type = contentType;
     }
@@ -76,7 +76,7 @@ public class GHAsset extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setLabel(String label) throws IOException {
+    public void setLabel(String label) {
         edit("label", label);
         this.label = label;
     }
@@ -127,7 +127,7 @@ public class GHAsset extends GHObject {
         return browser_download_url;
     }
 
-    private void edit(String key, Object value) throws IOException {
+    private void edit(String key, Object value) {
         root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
@@ -137,7 +137,7 @@ public class GHAsset extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 

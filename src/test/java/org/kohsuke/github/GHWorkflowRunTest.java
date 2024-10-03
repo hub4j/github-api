@@ -10,6 +10,7 @@ import org.kohsuke.github.GHWorkflowRun.Status;
 import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -202,7 +203,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         try {
             repo.getWorkflowRun(workflowRunToDelete.getId());
             fail("The workflow " + workflowRunToDelete.getId() + " should have been deleted.");
-        } catch (GHFileNotFoundException e) {
+        } catch (UncheckedIOException e) {
             // success
         }
     }
@@ -347,7 +348,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         try {
             workflowRun.downloadLogs((is) -> "");
             fail("Downloading logs should not be possible as they were deleted");
-        } catch (GHFileNotFoundException e) {
+        } catch (UncheckedIOException e) {
             assertThat(e.getMessage(), containsString("Not Found"));
         }
     }
@@ -456,7 +457,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         try {
             repo.getArtifact(artifact1.getId());
             fail("Getting the artifact should fail as it was deleted");
-        } catch (GHFileNotFoundException e) {
+        } catch (UncheckedIOException e) {
             assertThat(e.getMessage(), containsString("Not Found"));
         }
     }
@@ -654,7 +655,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     private static Status getWorkflowRunStatus(GHRepository repository, long workflowRunId) {
         try {
             return repository.getWorkflowRun(workflowRunId).getStatus();
-        } catch (IOException e) {
+        } catch (UncheckedIOException e) {
             throw new IllegalStateException("Unable to get workflow run status", e);
         }
     }

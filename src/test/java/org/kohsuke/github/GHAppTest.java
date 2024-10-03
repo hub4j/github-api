@@ -171,7 +171,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         GHAppInstallation installation = app.getInstallationByUser("bogus");
         try {
             installation.deleteInstallation();
-        } catch (IOException e) {
+        } catch (Exception e) {
             fail("deleteInstallation wasn't suppose to fail in this test");
         }
     }

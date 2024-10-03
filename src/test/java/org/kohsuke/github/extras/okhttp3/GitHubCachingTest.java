@@ -9,7 +9,6 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
-import org.kohsuke.github.GHFileNotFoundException;
 import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRef;
@@ -18,6 +17,7 @@ import org.kohsuke.github.GitHub;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import static org.junit.Assert.fail;
 
@@ -125,7 +125,7 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         try {
             repo.getRef(testRefName);
             fail();
-        } catch (GHFileNotFoundException e) {
+        } catch (UncheckedIOException e) {
             // expected
 
             // FYI: Querying again when the item is actually not present does not produce a 304
@@ -134,7 +134,7 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
             try {
                 repo.getRef(testRefName);
                 fail();
-            } catch (GHFileNotFoundException ex) {
+            } catch (UncheckedIOException ex) {
                 // expected
             }
 
@@ -168,7 +168,7 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
 
         try {
             repo.getRef(testRefName);
-        } catch (GHFileNotFoundException e) {
+        } catch (UncheckedIOException e) {
             // Sanity check: ref exists and can be queried from other client
             getRepository(gitHub2).getRef(testRefName);
 

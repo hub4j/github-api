@@ -107,7 +107,7 @@ public class GHLicense extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public Boolean isFeatured() throws IOException {
+    public Boolean isFeatured() {
         populate();
         return featured;
     }
@@ -119,7 +119,7 @@ public class GHLicense extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
+    public URL getHtmlUrl() {
         populate();
         return GitHubClient.parseURL(html_url);
     }
@@ -131,7 +131,7 @@ public class GHLicense extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getDescription() throws IOException {
+    public String getDescription() {
         populate();
         return description;
     }
@@ -143,7 +143,7 @@ public class GHLicense extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getCategory() throws IOException {
+    public String getCategory() {
         populate();
         return category;
     }
@@ -155,7 +155,7 @@ public class GHLicense extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getImplementation() throws IOException {
+    public String getImplementation() {
         populate();
         return implementation;
     }
@@ -167,7 +167,7 @@ public class GHLicense extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public List<String> getRequired() throws IOException {
+    public List<String> getRequired() {
         populate();
         return Collections.unmodifiableList(required);
     }
@@ -179,7 +179,7 @@ public class GHLicense extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public List<String> getPermitted() throws IOException {
+    public List<String> getPermitted() {
         populate();
         return Collections.unmodifiableList(permitted);
     }
@@ -191,7 +191,7 @@ public class GHLicense extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public List<String> getForbidden() throws IOException {
+    public List<String> getForbidden() {
         populate();
         return Collections.unmodifiableList(forbidden);
     }
@@ -203,7 +203,7 @@ public class GHLicense extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public String getBody() throws IOException {
+    public String getBody() {
         populate();
         return body;
     }
@@ -216,7 +216,7 @@ public class GHLicense extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    protected synchronized void populate() throws IOException {
+    protected synchronized void populate() {
         if (description != null)
             return; // already populated
 

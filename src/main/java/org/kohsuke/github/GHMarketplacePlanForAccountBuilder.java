@@ -37,7 +37,7 @@ public class GHMarketplacePlanForAccountBuilder extends GitHubInteractiveObject 
      * @throws IOException
      *             on error
      */
-    public GHMarketplaceAccountPlan createRequest() throws IOException {
+    public GHMarketplaceAccountPlan createRequest() {
         return builder.withUrlPath(String.format("/marketplace_listing/accounts/%d", this.accountId))
                 .fetch(GHMarketplaceAccountPlan.class);
     }

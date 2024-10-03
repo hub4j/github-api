@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -251,7 +250,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
                         // as to be unusable without populating, so we do it eagerly
                         ghRepositories.add(this.root().getRepositoryById(singleRepo.getId()));
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     throw new GHException("Failed to refresh repositories", e);
                 }
             }
@@ -416,7 +415,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
                     for (GHRepository singleRepo : repositories) { // warp each of the repository
                         singleRepo.populate();
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     throw new GHException("Failed to refresh repositories", e);
                 }
             }

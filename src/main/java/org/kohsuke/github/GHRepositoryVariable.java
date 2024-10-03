@@ -98,7 +98,7 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    static GHRepositoryVariable read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
+    static GHRepositoryVariable read(@Nonnull GHRepository repository, @Nonnull String name) {
         GHRepositoryVariable variable = repository.root()
                 .createRequest()
                 .withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE), name)
@@ -119,7 +119,7 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      *             the io exception
      */
     @BetaApi
-    static GHRepositoryVariable.Creator create(GHRepository repository) throws IOException {
+    static GHRepositoryVariable.Creator create(GHRepository repository) {
         return new GHRepositoryVariable.Creator(repository);
     }
 
@@ -129,7 +129,7 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(getUrl().concat(SLASH).concat(name)).send();
     }
 

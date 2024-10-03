@@ -129,7 +129,7 @@ public class GHPullRequestReviewBuilder {
      * @throws IOException
      *             the io exception
      */
-    public GHPullRequestReview create() throws IOException {
+    public GHPullRequestReview create() {
         return builder.method("POST")
                 .with("comments", comments)
                 .withUrlPath(pr.getApiRoute() + "/reviews")

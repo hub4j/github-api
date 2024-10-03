@@ -49,7 +49,7 @@ public class GHMilestone extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHUser getCreator() throws IOException {
+    public GHUser getCreator() {
         return root().intern(creator);
     }
 
@@ -71,7 +71,7 @@ public class GHMilestone extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public Date getClosedAt() throws IOException {
+    public Date getClosedAt() {
         return GitHubClient.parseDate(closed_at);
     }
 
@@ -144,7 +144,7 @@ public class GHMilestone extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void close() throws IOException {
+    public void close() {
         edit("state", "closed");
     }
 
@@ -154,7 +154,7 @@ public class GHMilestone extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void reopen() throws IOException {
+    public void reopen() {
         edit("state", "open");
     }
 
@@ -164,11 +164,11 @@ public class GHMilestone extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
-    private void edit(String key, Object value) throws IOException {
+    private void edit(String key, Object value) {
         root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
@@ -180,7 +180,7 @@ public class GHMilestone extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setTitle(String title) throws IOException {
+    public void setTitle(String title) {
         edit("title", title);
     }
 
@@ -192,7 +192,7 @@ public class GHMilestone extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setDescription(String description) throws IOException {
+    public void setDescription(String description) {
         edit("description", description);
     }
 
@@ -204,7 +204,7 @@ public class GHMilestone extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setDueOn(Date dueOn) throws IOException {
+    public void setDueOn(Date dueOn) {
         edit("due_on", GitHubClient.printDate(dueOn));
     }
 

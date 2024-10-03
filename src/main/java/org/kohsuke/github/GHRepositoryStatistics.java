@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +46,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * @throws InterruptedException
      *             the interrupted exception
      */
-    public PagedIterable<ContributorStats> getContributorStats() throws IOException, InterruptedException {
+    public PagedIterable<ContributorStats> getContributorStats() {
         return getContributorStats(true);
     }
 
@@ -63,19 +64,22 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
     @BetaApi
     @SuppressWarnings("SleepWhileInLoop")
     @SuppressFBWarnings(value = { "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" }, justification = "JSON API")
-    public PagedIterable<ContributorStats> getContributorStats(boolean waitTillReady)
-            throws IOException, InterruptedException {
+    public PagedIterable<ContributorStats> getContributorStats(boolean waitTillReady) {
         PagedIterable<GHRepositoryStatistics.ContributorStats> stats = getContributorStatsImpl();
 
-        if (stats == null && waitTillReady) {
-            for (int i = 0; i < MAX_WAIT_ITERATIONS; i += 1) {
-                // Wait a few seconds and try again.
-                Thread.sleep(WAIT_SLEEP_INTERVAL);
-                stats = getContributorStatsImpl();
-                if (stats != null) {
-                    break;
+        try {
+            if (stats == null && waitTillReady) {
+                for (int i = 0; i < MAX_WAIT_ITERATIONS; i += 1) {
+                    // Wait a few seconds and try again.
+                    Thread.sleep(WAIT_SLEEP_INTERVAL);
+                    stats = getContributorStatsImpl();
+                    if (stats != null) {
+                        break;
+                    }
                 }
             }
+        } catch (InterruptedException e) {
+            throw new GHException("Interrupted", e);
         }
 
         return stats;
@@ -84,7 +88,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
     /**
      * This gets the actual statistics from the server. Returns null if they are still being cached.
      */
-    private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
+    private PagedIterable<ContributorStats> getContributorStatsImpl() {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("contributors"))
                 .toIterable(ContributorStats[].class, null);
@@ -137,7 +141,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          * @throws NoSuchElementException
          *             the no such element exception
          */
-        public Week getWeek(long timestamp) throws NoSuchElementException {
+        public Week getWeek(long timestamp) {
             // maybe store the weeks in a map to make this more efficient?
             for (Week week : weeks) {
                 if (week.getWeekTimestamp() == timestamp) {
@@ -245,7 +249,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
+    public PagedIterable<CommitActivity> getCommitActivity() {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("commit_activity"))
                 .toIterable(CommitActivity[].class, null);
@@ -305,19 +309,23 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public List<CodeFrequency> getCodeFrequency() throws IOException {
+    public List<CodeFrequency> getCodeFrequency() {
         try {
             CodeFrequency[] list = root().createRequest()
                     .withUrlPath(getApiTailUrl("code_frequency"))
                     .fetch(CodeFrequency[].class);
 
             return Arrays.asList(list);
-        } catch (MismatchedInputException e) {
-            // This sometimes happens when retrieving code frequency statistics
-            // for a repository for the first time. It is probably still being
-            // generated, so return null.
-            return null;
+        } catch (UncheckedIOException e) {
+            if (e.getCause() instanceof MismatchedInputException) {
+                // This sometimes happens when retrieving code frequency statistics
+                // for a repository for the first time. It is probably still being
+                // generated, so return null.
+                return null;
+            }
+            throw e;
         }
+
     }
 
     /**
@@ -385,7 +393,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public Participation getParticipation() throws IOException {
+    public Participation getParticipation() {
         return root().createRequest().withUrlPath(getApiTailUrl("participation")).fetch(Participation.class);
     }
 
@@ -430,7 +438,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public List<PunchCardItem> getPunchCard() throws IOException {
+    public List<PunchCardItem> getPunchCard() {
         PunchCardItem[] list = root().createRequest()
                 .withUrlPath(getApiTailUrl("punch_card"))
                 .fetch(PunchCardItem[].class);

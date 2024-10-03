@@ -53,7 +53,7 @@ public class GHMyself extends GHUser {
      * @deprecated Use {@link #listEmails()}
      */
     @Deprecated
-    public List<String> getEmails() throws IOException {
+    public List<String> getEmails() {
         return getEmails2().stream().map(email -> email.getEmail()).collect(Collectors.toList());
     }
 
@@ -69,7 +69,7 @@ public class GHMyself extends GHUser {
      * @deprecated Use {@link #listEmails()}
      */
     @Deprecated
-    public List<GHEmail> getEmails2() throws IOException {
+    public List<GHEmail> getEmails2() {
         return listEmails().toList();
     }
 
@@ -95,7 +95,7 @@ public class GHMyself extends GHUser {
      * @throws IOException
      *             the io exception
      */
-    public List<GHKey> getPublicKeys() throws IOException {
+    public List<GHKey> getPublicKeys() {
         return root().createRequest().withUrlPath("/user/keys").toIterable(GHKey[].class, null).toList();
     }
 
@@ -112,7 +112,7 @@ public class GHMyself extends GHUser {
      * @throws IOException
      *             the io exception
      */
-    public GHKey addPublicKey(String title, String key) throws IOException {
+    public GHKey addPublicKey(String title, String key) {
         return root().createRequest()
                 .withUrlPath("/user/keys")
                 .method("POST")
@@ -131,7 +131,7 @@ public class GHMyself extends GHUser {
      * @throws IOException
      *             the io exception
      */
-    public List<GHVerifiedKey> getPublicVerifiedKeys() throws IOException {
+    public List<GHVerifiedKey> getPublicVerifiedKeys() {
         return root().createRequest()
                 .withUrlPath("/users/" + getLogin() + "/keys")
                 .toIterable(GHVerifiedKey[].class, null)
@@ -145,7 +145,7 @@ public class GHMyself extends GHUser {
      * @throws IOException
      *             the io exception
      */
-    public GHPersonSet<GHOrganization> getAllOrganizations() throws IOException {
+    public GHPersonSet<GHOrganization> getAllOrganizations() {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
         for (GHOrganization o : root().createRequest()
@@ -165,7 +165,7 @@ public class GHMyself extends GHUser {
      * @throws IOException
      *             the io exception
      */
-    public synchronized Map<String, GHRepository> getAllRepositories() throws IOException {
+    public synchronized Map<String, GHRepository> getAllRepositories() {
         Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
         for (GHRepository r : listRepositories()) {
             repositories.put(r.getName(), r);
@@ -254,14 +254,14 @@ public class GHMyself extends GHUser {
      * @throws IOException
      *             the io exception
      */
-    public GHMembership getMembership(GHOrganization o) throws IOException {
+    public GHMembership getMembership(GHOrganization o) {
         return root().createRequest()
                 .withUrlPath("/user/memberships/orgs/" + o.getLogin())
                 .fetch(GHMembership.class)
                 .wrap(root());
     }
 
-    // public void addEmails(Collection<String> emails) throws IOException {
+    // public void addEmails(Collection<String> emails) {
     //// new Requester(root,ApiVersion.V3).withCredential().to("/user/emails");
     // root.retrieveWithAuth3()
     // }

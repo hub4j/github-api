@@ -130,7 +130,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     @Deprecated
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    public String getContent() throws IOException {
+    public String getContent() {
         return new String(readDecodedContent());
     }
 
@@ -147,8 +147,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @deprecated Use {@link #read()}
      */
     @Deprecated
-    public String getEncodedContent() throws IOException {
-        refresh(content);
+    public String getEncodedContent() {
+        refreshWithUnchecked(content);
         return content;
     }
 
@@ -186,7 +186,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public InputStream read() throws IOException {
+    public InputStream read() {
         return new ByteArrayInputStream(readDecodedContent());
     }
 
@@ -197,7 +197,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    private byte[] readDecodedContent() throws IOException {
+    private byte[] readDecodedContent() {
         String encodedContent = getEncodedContent();
         if (encoding.equals("base64")) {
             try {
@@ -218,8 +218,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public String getDownloadUrl() throws IOException {
-        refresh(download_url);
+    public String getDownloadUrl() {
+        refreshWithUnchecked(download_url);
         return download_url;
     }
 
@@ -249,7 +249,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    protected synchronized void populate() throws IOException {
+    protected synchronized void populate() {
         root().createRequest().withUrlPath(url).fetchInto(this);
     }
 
@@ -260,7 +260,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHContent> listDirectoryContent() throws IOException {
+    public PagedIterable<GHContent> listDirectoryContent() {
         if (!isDirectory())
             throw new IllegalStateException(path + " is not a directory");
 
@@ -279,7 +279,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    public GHContentUpdateResponse update(String newContent, String commitMessage) throws IOException {
+    public GHContentUpdateResponse update(String newContent, String commitMessage) {
         return update(newContent.getBytes(), commitMessage, null);
     }
 
@@ -297,7 +297,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
+    public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) {
         return update(newContent.getBytes(), commitMessage, branch);
     }
 
@@ -312,7 +312,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage) throws IOException {
+    public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage) {
         return update(newContentBytes, commitMessage, null);
     }
 
@@ -329,8 +329,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch)
-            throws IOException {
+    public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch) {
         String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);
 
         Requester requester = root().createRequest()
@@ -363,7 +362,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public GHContentUpdateResponse delete(String message) throws IOException {
+    public GHContentUpdateResponse delete(String message) {
         return delete(message, null);
     }
 
@@ -378,7 +377,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
+    public GHContentUpdateResponse delete(String commitMessage, String branch) {
         Requester requester = root().createRequest()
                 .method("DELETE")
                 .with("path", path)
@@ -430,7 +429,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    public synchronized void refresh() throws IOException {
+    public synchronized void refresh() {
         root().createRequest().setRawUrlPath(url).fetchInto(this);
     }
 }

@@ -100,7 +100,7 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements 
     @Override
     @Nonnull
     @BetaApi
-    public R done() throws IOException {
+    public R done() {
         R result;
         if (updateInPlace && baseInstance != null) {
             result = requester.fetchInto(baseInstance);
@@ -129,7 +129,7 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements 
      */
     @Nonnull
     @BetaApi
-    protected S with(@Nonnull String name, Object value) throws IOException {
+    protected S with(@Nonnull String name, Object value) {
         requester.with(name, value);
         return continueOrDone();
     }
@@ -149,7 +149,7 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements 
      */
     @Nonnull
     @BetaApi
-    protected S continueOrDone() throws IOException {
+    protected S continueOrDone() {
         // This little bit of roughness in this base class means all inheriting builders get to create Updater and
         // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as
         // well.

@@ -95,7 +95,7 @@ public class GHPullRequestReview extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHUser getUser() throws IOException {
+    public GHUser getUser() {
         if (user != null) {
             return owner.root().getUser(user.getLogin());
         }
@@ -146,7 +146,7 @@ public class GHPullRequestReview extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public Date getSubmittedAt() throws IOException {
+    public Date getSubmittedAt() {
         return GitHubClient.parseDate(submitted_at);
     }
 
@@ -158,7 +158,7 @@ public class GHPullRequestReview extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    public Date getCreatedAt() throws IOException {
+    public Date getCreatedAt() {
         return getSubmittedAt();
     }
 
@@ -172,7 +172,7 @@ public class GHPullRequestReview extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
+    public void submit(String body, GHPullRequestReviewEvent event) {
         owner.root()
                 .createRequest()
                 .method("POST")
@@ -190,7 +190,7 @@ public class GHPullRequestReview extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
@@ -202,7 +202,7 @@ public class GHPullRequestReview extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void dismiss(String message) throws IOException {
+    public void dismiss(String message) {
         owner.root()
                 .createRequest()
                 .method("PUT")
@@ -219,7 +219,7 @@ public class GHPullRequestReview extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
+    public PagedIterable<GHPullRequestReviewComment> listReviewComments() {
         return owner.root()
                 .createRequest()
                 .withUrlPath(getApiRoute() + "/comments")

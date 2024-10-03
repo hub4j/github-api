@@ -4,8 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import static org.hamcrest.Matchers.*;
 
@@ -143,7 +143,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         try {
             card = gitHub.getProjectCard(card.getId());
             assertThat(card, nullValue());
-        } catch (FileNotFoundException e) {
+        } catch (UncheckedIOException e) {
             card = null;
         }
     }
@@ -162,7 +162,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
                 try {
                     card.delete();
                     card = null;
-                } catch (FileNotFoundException e) {
+                } catch (UncheckedIOException e) {
                     card = null;
                 }
             }
@@ -171,7 +171,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
                 try {
                     column.delete();
                     column = null;
-                } catch (FileNotFoundException e) {
+                } catch (UncheckedIOException e) {
                     column = null;
                 }
             }
@@ -180,7 +180,7 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
                 try {
                     project.delete();
                     project = null;
-                } catch (FileNotFoundException e) {
+                } catch (UncheckedIOException e) {
                     project = null;
                 }
             }

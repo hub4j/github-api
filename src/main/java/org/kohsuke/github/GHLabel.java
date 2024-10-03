@@ -147,7 +147,7 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     @BetaApi
-    static Creator create(GHRepository repository) throws IOException {
+    static Creator create(GHRepository repository) {
         return new Creator(repository);
     }
 
@@ -162,7 +162,7 @@ public class GHLabel extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    static GHLabel read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
+    static GHLabel read(@Nonnull GHRepository repository, @Nonnull String name) {
         return repository.root()
                 .createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"), name)
@@ -179,7 +179,7 @@ public class GHLabel extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    static PagedIterable<GHLabel> readAll(@Nonnull final GHRepository repository) throws IOException {
+    static PagedIterable<GHLabel> readAll(@Nonnull final GHRepository repository) {
         return repository.root()
                 .createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"))
@@ -215,7 +215,7 @@ public class GHLabel extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").setRawUrlPath(getUrl()).send();
     }
 

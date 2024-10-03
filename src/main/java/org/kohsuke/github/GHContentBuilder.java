@@ -109,7 +109,7 @@ public final class GHContentBuilder {
      * @throws IOException
      *             the io exception
      */
-    public GHContentUpdateResponse commit() throws IOException {
+    public GHContentUpdateResponse commit() {
         GHContentUpdateResponse response = req.withUrlPath(GHContent.getApiRoute(repo, path))
                 .fetch(GHContentUpdateResponse.class);
 

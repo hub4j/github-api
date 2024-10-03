@@ -53,7 +53,7 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
      *             if there is an I/O Exception
      */
     @Nonnull
-    public S title(String value) throws IOException {
+    public S title(String value) {
         return with("title", value);
     }
 
@@ -67,7 +67,7 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
      *             if there is an I/O Exception
      */
     @Nonnull
-    public S body(String value) throws IOException {
+    public S body(String value) {
         return with("body", value);
     }
 
@@ -76,7 +76,7 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
      */
     @Nonnull
     @Override
-    public GHDiscussion done() throws IOException {
+    public GHDiscussion done() {
         return super.done().wrapUp(team);
     }
 }

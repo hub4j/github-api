@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Collections;
@@ -226,12 +227,16 @@ public class GHRelease extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHAsset uploadAsset(File file, String contentType) throws IOException {
-        FileInputStream s = new FileInputStream(file);
+    public GHAsset uploadAsset(File file, String contentType) {
         try {
-            return uploadAsset(file.getName(), s, contentType);
-        } finally {
-            s.close();
+            FileInputStream s = new FileInputStream(file);
+            try {
+                return uploadAsset(file.getName(), s, contentType);
+            } finally {
+                s.close();
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -248,16 +253,20 @@ public class GHRelease extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
-        Requester builder = owner.root().createRequest().method("POST");
-        String url = getUploadUrl();
-        // strip the helpful garbage from the url
-        int endIndex = url.indexOf('{');
-        if (endIndex != -1) {
-            url = url.substring(0, endIndex);
+    public GHAsset uploadAsset(String filename, InputStream stream, String contentType) {
+        try {
+            Requester builder = owner.root().createRequest().method("POST");
+            String url = getUploadUrl();
+            // strip the helpful garbage from the url
+            int endIndex = url.indexOf('{');
+            if (endIndex != -1) {
+                url = url.substring(0, endIndex);
+            }
+            url += "?name=" + URLEncoder.encode(filename, "UTF-8");
+            return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
-        url += "?name=" + URLEncoder.encode(filename, "UTF-8");
-        return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);
     }
 
     /**
@@ -285,7 +294,7 @@ public class GHRelease extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + getId())).send();
     }
 

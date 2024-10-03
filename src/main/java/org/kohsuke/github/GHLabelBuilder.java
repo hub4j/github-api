@@ -51,7 +51,7 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
      */
     @Nonnull
     @BetaApi
-    public S name(String value) throws IOException {
+    public S name(String value) {
         return with("name", value);
     }
 
@@ -66,7 +66,7 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
      */
     @Nonnull
     @BetaApi
-    public S color(String value) throws IOException {
+    public S color(String value) {
         return with("color", value);
     }
 
@@ -81,7 +81,7 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
      */
     @Nonnull
     @BetaApi
-    public S description(String value) throws IOException {
+    public S description(String value) {
         return with("description", value);
     }
 }

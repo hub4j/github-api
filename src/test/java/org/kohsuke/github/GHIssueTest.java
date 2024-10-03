@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Date;
@@ -16,6 +17,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -312,8 +314,9 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         try {
             issue.removeLabel(label3);
             fail("Expected GHFileNotFoundException");
-        } catch (GHFileNotFoundException e) {
-            assertThat(e.getMessage(), containsString("Label does not exist"));
+        } catch (UncheckedIOException e) {
+            assertThat(e.getCause(), instanceOf(GHFileNotFoundException.class));
+            assertThat(e.getCause().getMessage(), containsString("Label does not exist"));
         }
     }
 

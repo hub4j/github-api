@@ -172,7 +172,7 @@ public class GHDeployment extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHUser getCreator() throws IOException {
+    public GHUser getCreator() {
         return root().intern(creator);
     }
 

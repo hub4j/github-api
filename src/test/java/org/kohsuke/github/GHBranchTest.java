@@ -18,6 +18,7 @@ public class GHBranchTest extends AbstractGitHubWireMockTest {
 
     private static final String BRANCH_1 = "testBranch1";
     private static final String BRANCH_2 = "testBranch2";
+    private static final String BRANCH_3 = "testBranch3";
 
     private GHRepository repository;
 
@@ -73,5 +74,32 @@ public class GHBranchTest extends AbstractGitHubWireMockTest {
         mergeCommit = main.merge(mergeCommit.getSHA1(), commitMessage);
         // Should be null since all changes already merged
         assertThat(mergeCommit, nullValue());
+    }
+
+    /**
+     * Test merge rename.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testBranchRename() throws Exception {
+        repository = getTempRepository();
+        String mainHead = repository.getRef("heads/main").getObject().getSha();
+
+        String branchName = "refs/heads/" + BRANCH_3;
+        repository.createRef(branchName, mainHead);
+        repository.createContent()
+                .content(branchName)
+                .message(branchName)
+                .path(branchName)
+                .branch(branchName)
+                .commit();
+
+        GHBranch otherBranch = repository.getBranch(BRANCH_3);
+        otherBranch.rename(BRANCH_3+"_renamed");
+        GHBranch otherBranchRenamed = repository.getBranch(BRANCH_3+"_renamed");
+        assertThat(otherBranchRenamed, notNullValue());
+        assertThat(otherBranchRenamed.getName(), equalTo(BRANCH_3+"_renamed"));
     }
 }

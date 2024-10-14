@@ -494,7 +494,7 @@ public class GHRateLimit {
                 return this;
             } else if (!(other instanceof UnknownLimitRecord)) {
                 // If the above is not the case that means other has a later reset
-                // or the same resent and fewer requests remaining.
+                // or the same reset and fewer requests remaining.
                 // If the other record is not an unknown record, the other is more recent
                 return other;
             } else if (this.isExpired() && !other.isExpired()) {

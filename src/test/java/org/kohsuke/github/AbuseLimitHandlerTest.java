@@ -481,9 +481,46 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                                 "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
 
                         long waitTime = parseWaitTime(connectorResponse);
-                        // The exact value here will depend on when the test is run
                         assertThat(waitTime, Matchers.lessThan(GitHubAbuseLimitHandler.DEFAULT_WAIT_MILLIS));
-                        assertThat(waitTime, Matchers.greaterThan(3 * 1000l));
+                        assertThat(waitTime, equalTo(8 * 1000l));
+
+                        GitHubAbuseLimitHandler.WAIT.onError(connectorResponse);
+                    }
+                })
+                .build();
+
+        gitHub.getMyself();
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        getTempRepository();
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
+    }
+
+    /**
+     * Tests the behavior of the GitHub API client when the abuse limit handler with a date retry, when the response is
+     * missing the main "date" header.
+     *
+     * @throws Exception
+     *             if any error occurs during the test execution.
+     */
+    @Test
+    public void testHandler_Wait_Secondary_Limits_Too_Many_Requests_Date_Retry_After_Missing_Date_Header()
+            throws Exception {
+        // Customized response that templates the date to keep things working
+        snapshotNotAllowed();
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withAbuseLimitHandler(new GitHubAbuseLimitHandler() {
+                    /**
+                     * Overriding method because the actual method will wait for one minute causing slowness in unit
+                     * tests
+                     */
+                    @Override
+                    public void onError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
+                        long waitTime = parseWaitTime(connectorResponse);
+
+                        // This will now use system time, so might not be exactly 8s
+                        assertThat(waitTime, Matchers.greaterThan((8 - 1) * 1000l));
+                        assertThat(waitTime, Matchers.lessThan((8 + 1) * 1000l));
 
                         GitHubAbuseLimitHandler.WAIT.onError(connectorResponse);
                     }

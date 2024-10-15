@@ -199,9 +199,9 @@ public class GHBranch extends GitHubInteractiveObject {
      *            the name
      * @throws IOException
      *             the io exception
+     * @see https://docs.github.com/en/rest/branches/branches?apiVersion=2022-11-28#rename-a-branch
      */
-    @CheckForNull
-    public void rename(String name) throws IOException {
+    public GHBranch rename(String name) throws IOException {
         root().createRequest().method("POST").with("new_name", name).withUrlPath(getApiRoute() + "/rename").send();
     }
 

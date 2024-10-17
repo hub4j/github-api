@@ -1,8 +1,8 @@
 {
   "id": "79fb1092-8bf3-4274-bc8e-ca126c9d9261",
-  "name": "repos_hub4j-test-org_temp-testHandler_Wait",
+  "name": "repos_hub4j-test-org_temp-testHandler_Wait_Missing_Date_Header",
   "request": {
-    "url": "/repos/hub4j-test-org/temp-testHandler_Wait",
+    "url": "/repos/hub4j-test-org/temp-testHandler_Wait_Missing_Date_Header",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -14,7 +14,6 @@
     "status": 403,
     "body": "{\"message\":\"Must have push access to repository\",\"documentation_url\":\"https://developer.github.com/\"}",
     "headers": {
-      "Date": "{{now timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Server": "GitHub.com",
       "Status": "403 Forbidden",

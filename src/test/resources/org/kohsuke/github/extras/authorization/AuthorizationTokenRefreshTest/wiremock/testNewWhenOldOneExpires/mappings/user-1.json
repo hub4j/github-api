@@ -15,7 +15,7 @@
     "bodyFileName": "user-1.json",
     "headers": {
       "Server": "GitHub.com",
-      "Date": "Tue, 04 Jul 2023 09:27:51 GMT",
+      "Date": "{{testStartDate timezone='GMT' format='EEE, dd MMM yyyy HH:mm:ss z'}}",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": [

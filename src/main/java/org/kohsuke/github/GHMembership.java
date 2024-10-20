@@ -92,7 +92,7 @@ public class GHMembership extends GitHubInteractiveObject {
      *             the io exception
      * @see GHMyself#getMembership(GHOrganization) GHMyself#getMembership(GHOrganization)
      */
-    public void activate() throws IOException {
+    public void activate() {
         root().createRequest().method("PATCH").with("state", State.ACTIVE).withUrlPath(url).fetchInto(this);
     }
 

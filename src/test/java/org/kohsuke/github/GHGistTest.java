@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.io.UncheckedIOException;
 
 import static org.hamcrest.Matchers.*;
 
@@ -107,8 +108,8 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
         try {
             gitHub.getGist(id);
             fail("Gist should be deleted.");
-        } catch (FileNotFoundException e) {
-            assertThat(e, notNullValue());
+        } catch (UncheckedIOException e) {
+            assertThat(e.getCause(), instanceOf(FileNotFoundException.class));
         }
     }
 

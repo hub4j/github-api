@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -118,7 +119,7 @@ public class GHThread extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHIssue getBoundIssue() throws IOException {
+    public GHIssue getBoundIssue() {
         if (!"Issue".equals(subject.type) && "PullRequest".equals(subject.type))
             return null;
         return repository.getIssue(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
@@ -131,7 +132,7 @@ public class GHThread extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHPullRequest getBoundPullRequest() throws IOException {
+    public GHPullRequest getBoundPullRequest() {
         if (!"PullRequest".equals(subject.type))
             return null;
         return repository.getPullRequest(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
@@ -144,7 +145,7 @@ public class GHThread extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHCommit getBoundCommit() throws IOException {
+    public GHCommit getBoundCommit() {
         if (!"Commit".equals(subject.type))
             return null;
         return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));
@@ -156,7 +157,7 @@ public class GHThread extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void markAsRead() throws IOException {
+    public void markAsRead() {
         root().createRequest().method("PATCH").withUrlPath(url).send();
     }
 
@@ -171,7 +172,7 @@ public class GHThread extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHSubscription subscribe(boolean subscribed, boolean ignored) throws IOException {
+    public GHSubscription subscribe(boolean subscribed, boolean ignored) {
         return root().createRequest()
                 .method("PUT")
                 .with("subscribed", subscribed)
@@ -187,11 +188,14 @@ public class GHThread extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHSubscription getSubscription() throws IOException {
+    public GHSubscription getSubscription() {
         try {
             return root().createRequest().method("POST").withUrlPath(subscription_url).fetch(GHSubscription.class);
-        } catch (FileNotFoundException e) {
-            return null;
+        } catch (UncheckedIOException e) {
+            if (FileNotFoundException.class.isInstance(e)) {
+                return null;
+            }
+            throw e;
         }
     }
 }

@@ -231,7 +231,7 @@ public class GHWorkflowJob extends GHObject {
      * @throws IOException
      *             The IO exception.
      */
-    public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
+    public <T> T downloadLogs(InputStreamFunction<T> streamFunction) {
         requireNonNull(streamFunction, "Stream function must not be null");
 
         return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);

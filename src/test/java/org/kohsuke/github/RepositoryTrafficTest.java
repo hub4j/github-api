@@ -130,12 +130,12 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
         try {
             repo.getViewTraffic();
             fail(errorMsg);
-        } catch (HttpException ex) {
+        } catch (Exception ex) {
         }
         try {
             repo.getCloneTraffic();
             fail(errorMsg);
-        } catch (HttpException ex) {
+        } catch (Exception ex) {
         }
     }
 }

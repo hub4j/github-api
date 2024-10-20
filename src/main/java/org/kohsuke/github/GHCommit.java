@@ -43,7 +43,7 @@ public class GHCommit {
          * @throws GHException
          *             the GH exception
          */
-        public int getCommentCount() throws GHException {
+        public int getCommentCount() {
             if (comment_count < 0) {
                 throw new GHException("Not available on this endpoint.");
             }
@@ -308,7 +308,7 @@ public class GHCommit {
      * @throws IOException
      *             the io exception
      */
-    public ShortInfo getCommitShortInfo() throws IOException {
+    public ShortInfo getCommitShortInfo() {
         if (commit == null)
             populate();
         return commit;
@@ -331,7 +331,7 @@ public class GHCommit {
      * @throws IOException
      *             if the field was not populated and refresh fails
      */
-    public int getLinesChanged() throws IOException {
+    public int getLinesChanged() {
         populate();
         return stats.total;
     }
@@ -343,7 +343,7 @@ public class GHCommit {
      * @throws IOException
      *             if the field was not populated and refresh fails
      */
-    public int getLinesAdded() throws IOException {
+    public int getLinesAdded() {
         populate();
         return stats.additions;
     }
@@ -355,7 +355,7 @@ public class GHCommit {
      * @throws IOException
      *             if the field was not populated and refresh fails
      */
-    public int getLinesDeleted() throws IOException {
+    public int getLinesDeleted() {
         populate();
         return stats.deletions;
     }
@@ -367,7 +367,7 @@ public class GHCommit {
      * @throws IOException
      *             on error
      */
-    public GHTree getTree() throws IOException {
+    public GHTree getTree() {
         return owner.getTree(getCommitShortInfo().getTreeSHA1());
     }
 
@@ -409,7 +409,7 @@ public class GHCommit {
      * @throws IOException
      *             on error
      */
-    public PagedIterable<File> listFiles() throws IOException {
+    public PagedIterable<File> listFiles() {
 
         populate();
 
@@ -444,7 +444,7 @@ public class GHCommit {
      * @throws IOException
      *             on error
      */
-    public List<GHCommit> getParents() throws IOException {
+    public List<GHCommit> getParents() {
         populate();
         List<GHCommit> r = new ArrayList<GHCommit>();
         for (String sha1 : getParentSHA1s())
@@ -459,7 +459,7 @@ public class GHCommit {
      * @throws IOException
      *             the io exception
      */
-    public GHUser getAuthor() throws IOException {
+    public GHUser getAuthor() {
         populate();
         return resolveUser(author);
     }
@@ -471,7 +471,7 @@ public class GHCommit {
      * @throws IOException
      *             if the information was not already fetched and an attempt at fetching the information failed.
      */
-    public Date getAuthoredDate() throws IOException {
+    public Date getAuthoredDate() {
         return getCommitShortInfo().getAuthoredDate();
     }
 
@@ -482,7 +482,7 @@ public class GHCommit {
      * @throws IOException
      *             the io exception
      */
-    public GHUser getCommitter() throws IOException {
+    public GHUser getCommitter() {
         populate();
         return resolveUser(committer);
     }
@@ -494,11 +494,11 @@ public class GHCommit {
      * @throws IOException
      *             if the information was not already fetched and an attempt at fetching the information failed.
      */
-    public Date getCommitDate() throws IOException {
+    public Date getCommitDate() {
         return getCommitShortInfo().getCommitDate();
     }
 
-    private GHUser resolveUser(User author) throws IOException {
+    private GHUser resolveUser(User author) {
         if (author == null || author.login == null)
             return null;
         return owner.root().getUser(author.login);
@@ -523,7 +523,7 @@ public class GHCommit {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHBranch> listBranchesWhereHead() throws IOException {
+    public PagedIterable<GHBranch> listBranchesWhereHead() {
         return owner.root()
                 .createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/branches-where-head",
@@ -559,7 +559,7 @@ public class GHCommit {
      * @throws IOException
      *             if comment is not created
      */
-    public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
+    public GHCommitComment createComment(String body, String path, Integer line, Integer position) {
         GHCommitComment r = owner.root()
                 .createRequest()
                 .method("POST")
@@ -582,7 +582,7 @@ public class GHCommit {
      * @throws IOException
      *             the io exception
      */
-    public GHCommitComment createComment(String body) throws IOException {
+    public GHCommitComment createComment(String body) {
         return createComment(body, null, null, null);
     }
 
@@ -593,7 +593,7 @@ public class GHCommit {
      * @throws IOException
      *             if statuses cannot be read
      */
-    public PagedIterable<GHCommitStatus> listStatuses() throws IOException {
+    public PagedIterable<GHCommitStatus> listStatuses() {
         return owner.listCommitStatuses(sha);
     }
 
@@ -604,7 +604,7 @@ public class GHCommit {
      * @throws IOException
      *             on error
      */
-    public GHCommitStatus getLastStatus() throws IOException {
+    public GHCommitStatus getLastStatus() {
         return owner.getLastCommitStatus(sha);
     }
 
@@ -615,7 +615,7 @@ public class GHCommit {
      * @throws IOException
      *             on error
      */
-    public PagedIterable<GHCheckRun> getCheckRuns() throws IOException {
+    public PagedIterable<GHCheckRun> getCheckRuns() {
         return owner.getCheckRuns(sha);
     }
 
@@ -625,7 +625,7 @@ public class GHCommit {
      * @throws IOException
      *             on error
      */
-    void populate() throws IOException {
+    void populate() {
         if (files == null && stats == null)
             owner.root().createRequest().withUrlPath(owner.getApiTailUrl("commits/" + sha)).fetchInto(this);
     }

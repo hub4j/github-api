@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +77,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      * @throws IOException
      *             if an I/O exception occurs.
      */
-    protected T[] toArray(final PagedIterator<T> iterator) throws IOException {
+    protected T[] toArray(final PagedIterator<T> iterator) {
         try {
             ArrayList<T[]> pages = new ArrayList<>();
             int totalSize = 0;
@@ -94,7 +95,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
             // if there was an exception inside the iterator it is wrapped as a GHException
             // if the wrapped exception is an IOException, throw that
             if (e.getCause() instanceof IOException) {
-                throw (IOException) e.getCause();
+                throw new UncheckedIOException((IOException) e.getCause());
             } else {
                 throw e;
             }
@@ -109,7 +110,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      *             if an I/O exception occurs.
      */
     @Nonnull
-    public T[] toArray() throws IOException {
+    public T[] toArray() {
         return toArray(iterator());
     }
 
@@ -121,7 +122,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      *             if an I/O Exception occurs
      */
     @Nonnull
-    public List<T> toList() throws IOException {
+    public List<T> toList() {
         return Collections.unmodifiableList(Arrays.asList(this.toArray()));
     }
 
@@ -133,7 +134,7 @@ public abstract class PagedIterable<T> implements Iterable<T> {
      *             if an I/O Exception occurs
      */
     @Nonnull
-    public Set<T> toSet() throws IOException {
+    public Set<T> toSet() {
         return Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(this.toArray())));
     }
 

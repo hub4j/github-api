@@ -231,7 +231,7 @@ public final class GHCheckRunBuilder {
      * @throws IOException
      *             for the usual reasons
      */
-    public @NonNull GHCheckRun create() throws IOException {
+    public @NonNull GHCheckRun create() {
         List<Annotation> extraAnnotations;
         if (output != null && output.annotations != null && output.annotations.size() > MAX_ANNOTATIONS) {
             extraAnnotations = output.annotations.subList(MAX_ANNOTATIONS, output.annotations.size());

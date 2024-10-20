@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Iterator;
@@ -154,8 +154,8 @@ public class GHCompare {
     public Commit[] getCommits() {
         try {
             return listCommits().withPageSize(100).toArray();
-        } catch (IOException e) {
-            throw new GHException(e.getMessage(), e);
+        } catch (UncheckedIOException e) {
+            throw new GHException(e.getMessage(), e.getCause());
         }
     }
 

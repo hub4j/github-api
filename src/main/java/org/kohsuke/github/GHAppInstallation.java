@@ -212,7 +212,7 @@ public class GHAppInstallation extends GHObject {
      *             on error
      * @see <a href="https://developer.github.com/v3/apps/#delete-an-installation">Delete an installation</a>
      */
-    public void deleteInstallation() throws IOException {
+    public void deleteInstallation() {
         root().createRequest().method("DELETE").withUrlPath(String.format("/app/installations/%d", getId())).send();
     }
 
@@ -263,7 +263,7 @@ public class GHAppInstallation extends GHObject {
      *      "https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account">Get
      *      a subscription plan for an account</a>
      */
-    public GHMarketplaceAccountPlan getMarketplaceAccount() throws IOException {
+    public GHMarketplaceAccountPlan getMarketplaceAccount() {
         return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();
     }
 }

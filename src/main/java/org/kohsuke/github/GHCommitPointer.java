@@ -53,7 +53,7 @@ public class GHCommitPointer {
      *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getUser() throws IOException {
+    public GHUser getUser() {
         if (user != null)
             return user.root().intern(user);
         return user;
@@ -103,7 +103,7 @@ public class GHCommitPointer {
      * @throws IOException
      *             the io exception
      */
-    public GHCommit getCommit() throws IOException {
+    public GHCommit getCommit() {
         return getRepository().getCommit(getSha());
     }
 

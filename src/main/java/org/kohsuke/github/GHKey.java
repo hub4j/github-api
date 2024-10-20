@@ -89,7 +89,7 @@ public class GHKey extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(String.format("/user/keys/%d", id)).send();
     }
 }

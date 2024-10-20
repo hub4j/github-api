@@ -44,7 +44,7 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater addFile(@Nonnull String fileName, @Nonnull String content) throws IOException {
+    public GHGistUpdater addFile(@Nonnull String fileName, @Nonnull String content) {
         updateFile(fileName, content);
         return this;
     }
@@ -58,7 +58,7 @@ public class GHGistUpdater {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public GHGistUpdater deleteFile(@Nonnull String fileName) throws IOException {
+    public GHGistUpdater deleteFile(@Nonnull String fileName) {
         files.put(fileName, null);
         return this;
     }
@@ -74,7 +74,7 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater renameFile(@Nonnull String fileName, @Nonnull String newFileName) throws IOException {
+    public GHGistUpdater renameFile(@Nonnull String fileName, @Nonnull String newFileName) {
         Map<String, String> file = files.computeIfAbsent(fileName, d -> new HashMap<>());
         file.put("filename", newFileName);
         return this;
@@ -91,7 +91,7 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String content) throws IOException {
+    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String content) {
         Map<String, String> file = files.computeIfAbsent(fileName, d -> new HashMap<>());
         file.put("content", content);
         return this;
@@ -110,8 +110,7 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String newFileName, @Nonnull String content)
-            throws IOException {
+    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String newFileName, @Nonnull String content) {
         Map<String, String> file = files.computeIfAbsent(fileName, d -> new HashMap<>());
         file.put("content", content);
         file.put("filename", newFileName);
@@ -138,7 +137,7 @@ public class GHGistUpdater {
      * @throws IOException
      *             the io exception
      */
-    public GHGist update() throws IOException {
+    public GHGist update() {
         builder.with("files", files);
         return builder.method("PATCH").withUrlPath(base.getApiTailUrl("")).fetch(GHGist.class);
     }

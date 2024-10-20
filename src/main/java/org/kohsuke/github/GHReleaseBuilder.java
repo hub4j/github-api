@@ -159,7 +159,7 @@ public class GHReleaseBuilder {
      * @throws IOException
      *             the io exception
      */
-    public GHRelease create() throws IOException {
+    public GHRelease create() {
         return builder.withUrlPath(repo.getApiTailUrl("releases")).fetch(GHRelease.class).wrap(repo);
     }
 }

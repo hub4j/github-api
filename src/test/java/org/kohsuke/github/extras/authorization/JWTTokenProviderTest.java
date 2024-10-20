@@ -5,6 +5,7 @@ import org.kohsuke.github.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.security.GeneralSecurityException;
 import java.time.Duration;
 import java.time.Instant;
@@ -114,7 +115,8 @@ public class JWTTokenProviderTest extends AbstractGHAppInstallationTest {
             // for the authorization is present and has a the format of a valid JWT token
             gh.getApp();
             fail();
-        } catch (HttpException e) {
+        } catch (UncheckedIOException ex) {
+            HttpException e = (HttpException) ex.getCause();
             assertThat(e.getResponseCode(), equalTo(401));
             assertThat(e.getMessage(),
                     containsString(

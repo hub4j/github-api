@@ -97,7 +97,7 @@ public class GHArtifact extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
@@ -112,7 +112,7 @@ public class GHArtifact extends GHObject {
      * @throws IOException
      *             The IO exception.
      */
-    public <T> T download(InputStreamFunction<T> streamFunction) throws IOException {
+    public <T> T download(InputStreamFunction<T> streamFunction) {
         requireNonNull(streamFunction, "Stream function must not be null");
 
         return root().createRequest().method("GET").withUrlPath(getApiRoute(), "zip").fetchStream(streamFunction);

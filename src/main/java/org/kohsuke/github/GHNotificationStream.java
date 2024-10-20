@@ -226,7 +226,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      * @throws IOException
      *             the io exception
      */
-    public void markAsRead() throws IOException {
+    public void markAsRead() {
         markAsRead(-1);
     }
 
@@ -238,7 +238,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      * @throws IOException
      *             the io exception
      */
-    public void markAsRead(long timestamp) throws IOException {
+    public void markAsRead(long timestamp) {
         final Requester req = root().createRequest();
         if (timestamp >= 0)
             req.with("last_read_at", GitHubClient.printDate(new Date(timestamp)));

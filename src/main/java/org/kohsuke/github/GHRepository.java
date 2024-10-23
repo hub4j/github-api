@@ -2815,6 +2815,21 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Gets a environment variable.
+     *
+     * @param environment
+     *            the environment name (e.g. production)
+     * @param name
+     *            the variable name (e.g. test-variable)
+     * @return the variable
+     * @throws IOException
+     *             the io exception
+     */
+    public GHEnvironmentVariable getEnvironmentVariable(String environment, String name) throws IOException {
+        return GHEnvironmentVariable.read(this, environment, name);
+    }
+
+    /**
      * Creates a new content, or update an existing content.
      *
      * @return the gh content builder

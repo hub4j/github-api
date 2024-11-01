@@ -594,6 +594,42 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
+     * Remove requested reviewers.
+     *
+     * @param reviewers
+     *            the reviewers
+     * @throws IOException
+     *             the io exception
+     */
+    public void removeRequestedReviewers(List<GHUser> reviewers) throws IOException {
+        root().createRequest()
+                .method("DELETE")
+                .with("reviewers", getLogins(reviewers))
+                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)
+                .send();
+    }
+
+    /**
+     * Remove requested team reviewers.
+     *
+     * @param teams
+     *            the teams
+     * @throws IOException
+     *             the io exception
+     */
+    public void removeRequestedTeamReviewers(List<GHTeam> teams) throws IOException {
+        List<String> teamReviewers = new ArrayList<String>(teams.size());
+        for (GHTeam team : teams) {
+            teamReviewers.add(team.getSlug());
+        }
+        root().createRequest()
+                .method("DELETE")
+                .with("team_reviewers", teamReviewers)
+                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)
+                .send();
+    }
+
+    /**
      * Set the base branch on the pull request.
      *
      * @param newBaseBranch

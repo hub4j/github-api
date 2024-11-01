@@ -107,7 +107,7 @@ jobs:
         name: maven-test-target-directory
         path: target
     - name: Codecov Report
-      uses: codecov/codecov-action@v4.5.0
+      uses: codecov/codecov-action@v4.6.0
       with:
         # Codecov token from https://app.codecov.io/gh/hub4j/github-api/settings
         token: ${{ secrets.CODECOV_TOKEN }}

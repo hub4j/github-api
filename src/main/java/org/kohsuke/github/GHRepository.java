@@ -2723,7 +2723,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public PagedIterable<Contributor> listContributors() throws IOException {
-        return root().createRequest().withUrlPath(getApiTailUrl("contributors")).toIterable(Contributor[].class, null);
+        return listContributors(null);
     }
 
     /**

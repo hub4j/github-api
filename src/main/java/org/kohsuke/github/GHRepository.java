@@ -2734,7 +2734,8 @@ public class GHRepository extends GHObject {
      * @return the paged iterable
      * @throws IOException
      *             the io exception
-     * @link https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repository-contributors
+     * @see <a href="https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repository-contributors">
+     *      GitHub API - List Repository Contributors</a>
      */
     public PagedIterable<Contributor> listContributors(Boolean includeAnonymous) throws IOException {
         return root().createRequest()

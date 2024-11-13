@@ -20,6 +20,12 @@ import static java.util.Objects.requireNonNull;
  */
 public class GHArtifact extends GHObject {
 
+    /**
+     * Create default GHArtifact instance
+     */
+    public GHArtifact() {
+    }
+
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
@@ -83,19 +89,6 @@ public class GHArtifact extends GHObject {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
         return owner;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() throws IOException {
-        return null;
     }
 
     /**

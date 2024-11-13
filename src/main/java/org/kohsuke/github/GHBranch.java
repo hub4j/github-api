@@ -6,7 +6,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Objects;
 
 import javax.annotation.CheckForNull;
@@ -48,6 +47,12 @@ public class GHBranch extends GitHubInteractiveObject {
      * The type Commit.
      */
     public static class Commit {
+
+        /**
+         * Create default Commit instance
+         */
+        public Commit() {
+        }
 
         /** The sha. */
         String sha;
@@ -132,32 +137,6 @@ public class GHBranch extends GitHubInteractiveObject {
      */
     public GHBranchProtectionBuilder enableProtection() {
         return new GHBranchProtectionBuilder(this);
-    }
-
-    /**
-     * Enable protection.
-     *
-     * @param level
-     *            the level
-     * @param contexts
-     *            the contexts
-     * @throws IOException
-     *             the io exception
-     */
-    // backward compatibility with previous signature
-    @Deprecated
-    public void enableProtection(EnforcementLevel level, Collection<String> contexts) throws IOException {
-        switch (level) {
-            case OFF :
-                disableProtection();
-                break;
-            case NON_ADMINS :
-            case EVERYONE :
-                enableProtection().addRequiredChecks(contexts)
-                        .includeAdmins(level == EnforcementLevel.EVERYONE)
-                        .enable();
-                break;
-        }
     }
 
     /**

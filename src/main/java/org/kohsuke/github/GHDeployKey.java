@@ -11,6 +11,12 @@ import java.util.Date;
  */
 public class GHDeployKey {
 
+    /**
+     * Create default GHDeployKey instance
+     */
+    public GHDeployKey() {
+    }
+
     /** The title. */
     protected String url, key, title;
 
@@ -112,18 +118,6 @@ public class GHDeployKey {
      */
     public boolean isRead_only() {
         return read_only;
-    }
-
-    /**
-     * Wrap gh deploy key.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh deploy key
-     */
-    @Deprecated
-    public GHDeployKey wrap(GHRepository repo) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

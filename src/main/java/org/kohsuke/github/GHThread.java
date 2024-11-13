@@ -4,7 +4,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -53,17 +52,6 @@ public class GHThread extends GHObject {
      */
     public Date getLastReadAt() {
         return GitHubClient.parseDate(last_read_at);
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() {
-        return null;
     }
 
     /**

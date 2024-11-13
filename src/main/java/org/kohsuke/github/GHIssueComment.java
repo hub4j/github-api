@@ -38,6 +38,12 @@ import java.net.URL;
  */
 public class GHIssueComment extends GHObject implements Reactable {
 
+    /**
+     * Create default GHIssueComment instance
+     */
+    public GHIssueComment() {
+    }
+
     /** The owner. */
     GHIssue owner;
 
@@ -76,16 +82,6 @@ public class GHIssueComment extends GHObject implements Reactable {
     }
 
     /**
-     * Gets the ID of the user who posted this comment.
-     *
-     * @return the user name
-     */
-    @Deprecated
-    public String getUserName() {
-        return user.getLogin();
-    }
-
-    /**
      * Gets the user who posted this comment.
      *
      * @return the user
@@ -101,7 +97,6 @@ public class GHIssueComment extends GHObject implements Reactable {
      *
      * @return the html url
      */
-    @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }

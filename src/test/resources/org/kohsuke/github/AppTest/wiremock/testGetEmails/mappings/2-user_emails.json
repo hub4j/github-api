@@ -1,0 +1,47 @@
+{
+  "id": "f17d4d94-f19c-425e-8133-f9f3ad2bafea",
+  "name": "user_emails",
+  "request": {
+    "url": "/user/emails",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-user_emails.json",
+    "headers": {
+      "Date": "Tue, 17 Sep 2024 18:41:52 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"6e974566422ee9f8351add9d3450581b14045944d67d5b0d45d93816f7526d77\"",
+      "X-OAuth-Scopes": "read:user, repo, user:email",
+      "X-Accepted-OAuth-Scopes": "user, user:email",
+      "github-authentication-token-expiration": "2024-10-17 18:38:10 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4989",
+      "X-RateLimit-Reset": "1726601960",
+      "X-RateLimit-Used": "11",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-GitHub-Request-Id": "9EA1:32201C:118116E:119A333:66E9CD70"
+    }
+  },
+  "uuid": "f17d4d94-f19c-425e-8133-f9f3ad2bafea",
+  "persistent": true,
+  "insertionIndex": 2
+}

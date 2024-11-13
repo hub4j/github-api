@@ -19,6 +19,12 @@ import javax.annotation.Nonnull;
  */
 public class GHDiscussion extends GHObject {
 
+    /**
+     * Create default GHDiscussion instance
+     */
+    public GHDiscussion() {
+    }
+
     private GHTeam team;
     private long number;
     private String body, title, htmlUrl;
@@ -33,7 +39,6 @@ public class GHDiscussion extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Override
     public URL getHtmlUrl() throws IOException {
         return GitHubClient.parseURL(htmlUrl);
     }
@@ -196,7 +201,7 @@ public class GHDiscussion extends GHObject {
     /**
      * A {@link GHLabelBuilder} that updates a single property per request
      *
-     * {@link #done()} is called automatically after the property is set.
+     * {@link GitHubRequestBuilderDone#done()} is called automatically after the property is set.
      */
     public static class Setter extends GHDiscussionBuilder<GHDiscussion> {
         private Setter(@Nonnull GHDiscussion base) {
@@ -208,7 +213,7 @@ public class GHDiscussion extends GHObject {
     /**
      * A {@link GHLabelBuilder} that allows multiple properties to be updated per request.
      *
-     * Consumer must call {@link #done()} to commit changes.
+     * Consumer must call {@link Updater#done()} to commit changes.
      */
     public static class Updater extends GHDiscussionBuilder<Updater> {
         private Updater(@Nonnull GHDiscussion base) {
@@ -220,7 +225,7 @@ public class GHDiscussion extends GHObject {
     /**
      * A {@link GHLabelBuilder} that creates a new {@link GHLabel}
      *
-     * Consumer must call {@link #done()} to create the new instance.
+     * Consumer must call {@link Creator#done()} to create the new instance.
      */
     public static class Creator extends GHDiscussionBuilder<Creator> {
 

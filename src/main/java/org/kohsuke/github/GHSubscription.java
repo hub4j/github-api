@@ -14,6 +14,13 @@ import java.util.Date;
  * @see GHThread#getSubscription() GHThread#getSubscription()
  */
 public class GHSubscription extends GitHubInteractiveObject {
+
+    /**
+     * Create default GHSubscription instance
+     */
+    public GHSubscription() {
+    }
+
     private String created_at, url, repository_url, reason;
     private boolean subscribed, ignored;
 

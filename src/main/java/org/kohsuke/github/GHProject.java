@@ -39,6 +39,12 @@ import java.util.Locale;
  */
 public class GHProject extends GHObject {
 
+    /**
+     * Create default GHProject instance
+     */
+    public GHProject() {
+    }
+
     /** The owner. */
     protected GHObject owner;
 
@@ -57,7 +63,6 @@ public class GHProject extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Override
     public URL getHtmlUrl() throws IOException {
         return GitHubClient.parseURL(html_url);
     }
@@ -95,17 +100,6 @@ public class GHProject extends GHObject {
      */
     public URL getOwnerUrl() {
         return GitHubClient.parseURL(owner_url);
-    }
-
-    /**
-     * Gets node id.
-     *
-     * @return the node id
-     * @deprecated Use {@link GHObject#getNodeId()}
-     */
-    @Deprecated
-    public String getNode_id() {
-        return getNodeId();
     }
 
     /**
@@ -152,30 +146,6 @@ public class GHProject extends GHObject {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getCreator() {
         return creator;
-    }
-
-    /**
-     * Wrap gh project.
-     *
-     * @param root
-     *            the root
-     * @return the gh project
-     */
-    @Deprecated
-    public GHProject wrap(GitHub root) {
-        throw new RuntimeException("Do not use this method.");
-    }
-
-    /**
-     * Wrap gh project.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh project
-     */
-    @Deprecated
-    public GHProject wrap(GHRepository repo) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

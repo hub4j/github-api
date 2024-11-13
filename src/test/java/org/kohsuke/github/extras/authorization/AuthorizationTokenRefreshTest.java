@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
 import org.kohsuke.github.GHUser;
-import org.kohsuke.github.RateLimitHandler;
+import org.kohsuke.github.GitHubRateLimitHandler;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
         gitHub = getGitHubBuilder().withAuthorizationProvider(new RefreshingAuthorizationProvider())
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(RateLimitHandler.WAIT)
+                .withRateLimitHandler(GitHubRateLimitHandler.WAIT)
                 .build();
         final GHUser kohsuke = gitHub.getUser("kohsuke");
         assertThat("Usernames match", "kohsuke".equals(kohsuke.getLogin()));
@@ -58,7 +58,7 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
     public void testNotNewWhenOldOneIsStillValid() throws IOException {
         gitHub = getGitHubBuilder().withAuthorizationProvider(() -> "original token")
                 .withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(RateLimitHandler.WAIT)
+                .withRateLimitHandler(GitHubRateLimitHandler.WAIT)
                 .build();
         final GHUser kohsuke = gitHub.getUser("kohsuke");
         assertThat("Usernames match", "kohsuke".equals(kohsuke.getLogin()));

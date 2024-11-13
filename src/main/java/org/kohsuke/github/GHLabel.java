@@ -121,34 +121,6 @@ public class GHLabel extends GitHubInteractiveObject {
     }
 
     /**
-     * Sets color.
-     *
-     * @param newColor
-     *            6-letter hex color code, like "f29513"
-     * @throws IOException
-     *             the io exception
-     * @deprecated use {@link #set()} or {@link #update()} instead
-     */
-    @Deprecated
-    public void setColor(String newColor) throws IOException {
-        set().color(newColor);
-    }
-
-    /**
-     * Sets description.
-     *
-     * @param newDescription
-     *            Description of label
-     * @throws IOException
-     *             the io exception
-     * @deprecated use {@link #set()} or {@link #update()} instead
-     */
-    @Deprecated
-    public void setDescription(String newDescription) throws IOException {
-        set().description(newDescription);
-    }
-
-    /**
      * To names.
      *
      * @param labels
@@ -278,7 +250,7 @@ public class GHLabel extends GitHubInteractiveObject {
     /**
      * A {@link GHLabelBuilder} that updates a single property per request
      *
-     * {@link #done()} is called automatically after the property is set.
+     * {@link Setter#done()} is called automatically after the property is set.
      */
     @BetaApi
     public static class Setter extends GHLabelBuilder<GHLabel> {
@@ -291,7 +263,7 @@ public class GHLabel extends GitHubInteractiveObject {
     /**
      * A {@link GHLabelBuilder} that allows multiple properties to be updated per request.
      *
-     * Consumer must call {@link #done()} to commit changes.
+     * Consumer must call {@link Updater#done()} to commit changes.
      */
     @BetaApi
     public static class Updater extends GHLabelBuilder<Updater> {
@@ -304,7 +276,7 @@ public class GHLabel extends GitHubInteractiveObject {
     /**
      * A {@link GHLabelBuilder} that creates a new {@link GHLabel}
      *
-     * Consumer must call {@link #done()} to create the new instance.
+     * Consumer must call {@link Creator#done()} to create the new instance.
      */
     @BetaApi
     public static class Creator extends GHLabelBuilder<Creator> {

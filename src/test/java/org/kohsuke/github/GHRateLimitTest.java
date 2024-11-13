@@ -245,11 +245,6 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit.getCore().getRemaining(), equalTo(rateLimit.getRemaining()));
         assertThat(rateLimit.getCore().getResetEpochSeconds(), equalTo(rateLimit.getResetEpochSeconds()));
         assertThat(rateLimit.getCore().getResetDate(), equalTo(rateLimit.getResetDate()));
-
-        // Additional checks for deprecated values
-        assertThat(rateLimit.limit, equalTo(rateLimit.getLimit()));
-        assertThat(rateLimit.remaining, equalTo(rateLimit.getRemaining()));
-        assertThat(rateLimit.reset.getTime(), equalTo(rateLimit.getResetEpochSeconds()));
     }
 
     /**
@@ -274,7 +269,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
         // -------------------------------------------------------------
         // Before any queries, rate limit starts as default but may be requested
-        gitHub = GitHub.connectToEnterprise(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
+        gitHub = GitHub.connectToEnterpriseWithOAuth(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
         assertThat(mockGitHub.getRequestCount(), equalTo(0));
 
         assertThat(gitHub.lastRateLimit(), sameInstance(GHRateLimit.DEFAULT));
@@ -300,7 +295,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // -------------------------------------------------------------
         // Some versions of GHE include header rate limit information, some do not
         // This response mocks the behavior without header rate limit information
-        gitHub = GitHub.connectToEnterprise(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
+        gitHub = GitHub.connectToEnterpriseWithOAuth(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
         gitHub.getMyself();
         assertThat(mockGitHub.getRequestCount(), equalTo(2));
 
@@ -344,7 +339,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // -------------------------------------------------------------
         // Some versions of GHE include header rate limit information, some do not
         // This response mocks the behavior with header rate limit information
-        gitHub = GitHub.connectToEnterprise(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
+        gitHub = GitHub.connectToEnterpriseWithOAuth(mockGitHub.apiServer().baseUrl(), "bogus", "bogus");
         gitHub.getMyself();
         assertThat(mockGitHub.getRequestCount(), equalTo(5));
 

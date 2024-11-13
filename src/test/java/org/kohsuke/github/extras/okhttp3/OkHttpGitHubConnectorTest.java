@@ -261,12 +261,12 @@ public class OkHttpGitHubConnectorTest extends AbstractGitHubWireMockTest {
     }
 
     private void checkRequestAndLimit(int networkRequestCount, int rateLimitUsed) throws IOException {
-        GHRateLimit rateLimitAfter = gitHub.rateLimit();
+        GHRateLimit rateLimitAfter = gitHub.lastRateLimit();
         assertThat("Request Count", getRequestCount(), is(networkRequestCount + userRequestCount));
 
         // Rate limit must be under this value, but if it wiggles we don't care
         assertThat("Rate Limit Change",
-                rateLimitBefore.remaining - rateLimitAfter.remaining,
+                rateLimitBefore.getRemaining() - rateLimitAfter.getRemaining(),
                 is(lessThanOrEqualTo(rateLimitUsed + userRequestCount)));
 
     }

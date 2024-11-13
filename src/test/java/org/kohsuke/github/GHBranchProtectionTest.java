@@ -22,6 +22,13 @@ import static org.hamcrest.Matchers.*;
  * The Class GHBranchProtectionTest.
  */
 public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
+
+    /**
+     * Create default GHBranchProtectionTest instance
+     */
+    public GHBranchProtectionTest() {
+    }
+
     private static final String BRANCH = "main";
     private static final String BRANCH_REF = "heads/" + BRANCH;
 
@@ -51,7 +58,7 @@ public class GHBranchProtectionTest extends AbstractGitHubWireMockTest {
     public void testEnableBranchProtections() throws Exception {
         // team/user restrictions require an organization repo to test against
         GHBranchProtection protection = branch.enableProtection()
-                .addRequiredChecks("test-status-check")
+                .addRequiredChecks(new GHBranchProtection.Check("test-status-check", null))
                 .requireBranchIsUpToDate()
                 .requireCodeOwnReviews()
                 .requireLastPushApproval()

@@ -30,6 +30,12 @@ import static org.hamcrest.Matchers.nullValue;
 public class GHIssueTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHIssueTest instance
+     */
+    public GHIssueTest() {
+    }
+
+    /**
      * Clean up.
      *
      * @throws Exception
@@ -339,7 +345,7 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         GHIssue issueSingle = getRepository().getIssue(issue.getNumber());
         assertThat(issueSingle.getUser().root(), notNullValue());
 
-        PagedIterable<GHIssue> ghIssues = getRepository().listIssues(GHIssueState.OPEN);
+        PagedIterable<GHIssue> ghIssues = getRepository().queryIssues().state(GHIssueState.OPEN).list();
         for (GHIssue otherIssue : ghIssues) {
             assertThat(otherIssue.getUser().root(), notNullValue());
         }

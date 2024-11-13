@@ -19,6 +19,12 @@ import java.util.Objects;
  */
 public class GHWorkflow extends GHObject {
 
+    /**
+     * Create default GHWorkflow instance
+     */
+    public GHWorkflow() {
+    }
+
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
@@ -64,7 +70,6 @@ public class GHWorkflow extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Override
     public URL getHtmlUrl() throws IOException {
         return GitHubClient.parseURL(htmlUrl);
     }

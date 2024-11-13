@@ -21,6 +21,12 @@ import static org.kohsuke.github.GHMarketplaceListAccountBuilder.Sort.UPDATED;
 public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHMarketplacePlanTest instance
+     */
+    public GHMarketplacePlanTest() {
+    }
+
+    /**
      * Gets the git hub builder.
      *
      * @return the git hub builder
@@ -28,7 +34,7 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
     protected GitHubBuilder getGitHubBuilder() {
         return super.getGitHubBuilder()
                 // ensure that only JWT will be used against the tests below
-                .withPassword(null, null)
+                .withOAuthToken(null, null)
                 .withJwtToken("bogus");
     }
 

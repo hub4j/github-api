@@ -23,7 +23,6 @@
  */
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.net.URL;
@@ -40,6 +39,13 @@ import java.net.URL;
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
 public class GHPullRequestCommitDetail {
+
+    /**
+     * Create default GHPullRequestCommitDetail instance
+     */
+    public GHPullRequestCommitDetail() {
+    }
+
     private GHPullRequest owner;
 
     /**
@@ -53,17 +59,15 @@ public class GHPullRequestCommitDetail {
     }
 
     /**
-     * The type Authorship.
-     *
-     * @deprecated Use {@link GitUser}
-     */
-    public static class Authorship extends GitUser {
-    }
-
-    /**
      * The type Tree.
      */
     public static class Tree {
+
+        /**
+         * Create default Tree instance
+         */
+        public Tree() {
+        }
 
         /** The sha. */
         String sha;
@@ -95,11 +99,17 @@ public class GHPullRequestCommitDetail {
      */
     public static class Commit {
 
+        /**
+         * Create default Commit instance
+         */
+        public Commit() {
+        }
+
         /** The author. */
-        Authorship author;
+        GitUser author;
 
         /** The committer. */
-        Authorship committer;
+        GitUser committer;
 
         /** The message. */
         String message;
@@ -118,7 +128,6 @@ public class GHPullRequestCommitDetail {
          *
          * @return the author
          */
-        @WithBridgeMethods(value = Authorship.class, castRequired = true)
         public GitUser getAuthor() {
             return author;
         }
@@ -128,7 +137,6 @@ public class GHPullRequestCommitDetail {
          *
          * @return the committer
          */
-        @WithBridgeMethods(value = Authorship.class, castRequired = true)
         public GitUser getCommitter() {
             return committer;
         }
@@ -174,6 +182,12 @@ public class GHPullRequestCommitDetail {
      * The type CommitPointer.
      */
     public static class CommitPointer {
+
+        /**
+         * Create default CommitPointer instance
+         */
+        public CommitPointer() {
+        }
 
         /** The sha. */
         String sha;

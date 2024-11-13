@@ -17,6 +17,12 @@ import static org.hamcrest.Matchers.*;
 public class Github2faTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Create default Github2faTest instance
+     */
+    public Github2faTest() {
+    }
+
+    /**
      * Test 2 fa token.
      *
      * @throws IOException
@@ -49,7 +55,6 @@ public class Github2faTest extends AbstractGitHubWireMockTest {
         assertThat(token.getNoteUrl().toString(), equalTo("https://localhost/this/is/a/test/token"));
         assertThat(token.getAppUrl().toString(), equalTo("https://localhost/this/is/a/test/app/token"));
         assertThat(token.getFingerprint(), nullValue());
-        assertThat(token.getHtmlUrl(), nullValue());
 
     }
 }

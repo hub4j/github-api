@@ -57,7 +57,9 @@ jobs:
     - name: Maven Site
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-      run: mvn -B clean site -D enable-ci --file pom.xml
+      # running install site seems to more closely imitate real site deployment,
+      # more likely to prevent failed deployment
+      run: mvn -B clean install site -DskipTests --file pom.xml
   test:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
     # Does not require build output, but orders execution to prevent launching test workflows when simple build fails 
@@ -105,31 +107,12 @@ jobs:
         name: maven-test-target-directory
         path: target
     - name: Codecov Report
-      uses: codecov/codecov-action@v4.5.0
+      uses: codecov/codecov-action@v4.6.0
       with:
         # Codecov token from https://app.codecov.io/gh/hub4j/github-api/settings
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
         verbose: true
-
-  test-java-8:
-    name: test Java 8 (no-build)
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v4
-      with:
-        name: maven-target-directory
-        path: target
-    - name: Set up JDK
-      uses: actions/setup-java@v4
-      with:
-        java-version: 8
-        distribution: 'temurin'
-        cache: 'maven'
-    - name: Maven Test (no build) Java 8
-      run: mvn -B surefire:test -DfailIfNoTests -Dsurefire.excludesFile=src/test/resources/slow-or-flaky-tests.txt
 
   test-java-11:
     name: test Java 11 (no-build)
@@ -144,7 +127,7 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v4
       with:
-        java-version: 8
+        java-version: 11
         distribution: 'temurin'
         cache: 'maven'
     - name: Maven Test (no build) Java 11

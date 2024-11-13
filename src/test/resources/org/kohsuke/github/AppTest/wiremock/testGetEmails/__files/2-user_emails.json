@@ -1,0 +1,14 @@
+[
+  {
+    "email": "bitwiseman@gmail.com",
+    "primary": true,
+    "verified": true,
+    "visibility": "public"
+  },
+  {
+    "email": "bitwiseman@users.noreply.github.com",
+    "primary": false,
+    "verified": true,
+    "visibility": null
+  }
+]

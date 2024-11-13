@@ -17,6 +17,13 @@ import java.util.Base64;
  */
 @SuppressWarnings({ "UnusedDeclaration" })
 public class GHContent extends GitHubInteractiveObject implements Refreshable {
+
+    /**
+     * Create default GHContent instance
+     */
+    public GHContent() {
+    }
+
     /*
      * In normal use of this class, repository field is set via wrap(), but in the code search API, there's a nested
      * 'repository' field that gets populated from JSON.
@@ -121,9 +128,10 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      * @deprecated Use {@link #read()}
      */
+    @Deprecated
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public String getContent() throws IOException {
-        return new String(Base64.getMimeDecoder().decode(getEncodedContent()));
+        return new String(readDecodedContent());
     }
 
     /**
@@ -138,6 +146,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      * @deprecated Use {@link #read()}
      */
+    @Deprecated
     public String getEncodedContent() throws IOException {
         refresh(content);
         return content;
@@ -171,13 +180,6 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     }
 
     /**
-     * Retrieves the actual content stored here.
-     *
-     * @return the input stream
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    /**
      * Retrieves the actual bytes of the blob.
      *
      * @return the input stream
@@ -185,11 +187,22 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public InputStream read() throws IOException {
-        refresh(content);
+        return new ByteArrayInputStream(readDecodedContent());
+    }
+
+    /**
+     * Retrieves the decoded bytes of the blob.
+     *
+     * @return the input stream
+     * @throws IOException
+     *             the io exception
+     */
+    private byte[] readDecodedContent() throws IOException {
+        String encodedContent = getEncodedContent();
         if (encoding.equals("base64")) {
             try {
                 Base64.Decoder decoder = Base64.getMimeDecoder();
-                return new ByteArrayInputStream(decoder.decode(content.getBytes(StandardCharsets.US_ASCII)));
+                return decoder.decode(encodedContent.getBytes(StandardCharsets.US_ASCII));
             } catch (IllegalArgumentException e) {
                 throw new AssertionError(e); // US-ASCII is mandatory
             }

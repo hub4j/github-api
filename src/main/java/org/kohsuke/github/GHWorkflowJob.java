@@ -25,6 +25,12 @@ import static java.util.Objects.requireNonNull;
  */
 public class GHWorkflowJob extends GHObject {
 
+    /**
+     * Create default GHWorkflowJob instance
+     */
+    public GHWorkflowJob() {
+    }
+
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
@@ -135,7 +141,6 @@ public class GHWorkflowJob extends GHObject {
      *
      * @return the html url
      */
-    @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }
@@ -258,6 +263,12 @@ public class GHWorkflowJob extends GHObject {
      * The Class Step.
      */
     public static class Step {
+
+        /**
+         * Create default Step instance
+         */
+        public Step() {
+        }
 
         private String name;
         private int number;

@@ -2,9 +2,6 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.io.IOException;
-import java.net.URL;
-
 // TODO: Auto-generated Javadoc
 /**
  * A public key for the given repository.
@@ -12,24 +9,19 @@ import java.net.URL;
  * @author Aditya Bansal
  */
 public class GHRepositoryPublicKey extends GHObject {
+
+    /**
+     * Create default GHRepositoryPublicKey instance
+     */
+    public GHRepositoryPublicKey() {
+    }
+
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
 
     private String keyId;
     private String key;
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    public URL getHtmlUrl() throws IOException {
-        return null;
-    }
 
     /**
      * Gets the key id.

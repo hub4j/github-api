@@ -22,6 +22,12 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
     public static class GHLinkedTeam {
 
         /**
+         * Create default GHLinkedTeam instance
+         */
+        public GHLinkedTeam() {
+        }
+
+        /**
          * The identifier of the team
          */
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
@@ -57,6 +63,12 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      * A reference of an external member linked to an external group
      */
     public static class GHLinkedExternalMember {
+
+        /**
+         * Create default GHLinkedExternalMember instance
+         */
+        public GHLinkedExternalMember() {
+        }
 
         /**
          * The internal user ID of the identity

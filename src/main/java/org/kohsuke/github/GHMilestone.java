@@ -15,6 +15,12 @@ import java.util.Locale;
  */
 public class GHMilestone extends GHObject {
 
+    /**
+     * Create default GHMilestone instance
+     */
+    public GHMilestone() {
+    }
+
     /** The owner. */
     GHRepository owner;
 
@@ -209,18 +215,6 @@ public class GHMilestone extends GHObject {
      */
     protected String getApiRoute() {
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/milestones/" + number;
-    }
-
-    /**
-     * Wrap gh milestone.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh milestone
-     */
-    @Deprecated
-    public GHMilestone wrap(GHRepository repo) {
-        throw new RuntimeException("Do not use this method.");
     }
 
     /**

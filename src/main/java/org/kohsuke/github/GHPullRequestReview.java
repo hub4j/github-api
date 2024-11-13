@@ -41,6 +41,12 @@ import javax.annotation.CheckForNull;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHPullRequestReview extends GHObject {
 
+    /**
+     * Create default GHPullRequestReview instance
+     */
+    public GHPullRequestReview() {
+    }
+
     /** The owner. */
     GHPullRequest owner;
 
@@ -120,7 +126,6 @@ public class GHPullRequestReview extends GHObject {
      *
      * @return the html url
      */
-    @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }
@@ -155,23 +160,6 @@ public class GHPullRequestReview extends GHObject {
     @Override
     public Date getCreatedAt() throws IOException {
         return getSubmittedAt();
-    }
-
-    /**
-     * Submit.
-     *
-     * @param body
-     *            the body
-     * @param state
-     *            the state
-     * @throws IOException
-     *             the io exception
-     * @deprecated Former preview method that changed when it got public. Left here for backward compatibility. Use
-     *             {@link #submit(String, GHPullRequestReviewEvent)}
-     */
-    @Deprecated
-    public void submit(String body, GHPullRequestReviewState state) throws IOException {
-        submit(body, state.toEvent());
     }
 
     /**

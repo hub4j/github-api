@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.Sets;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,6 +32,12 @@ import static org.kohsuke.github.GHVerification.Reason.UNKNOWN_SIGNATURE_TYPE;
  * @author Liam Newman
  */
 public class GHRepositoryTest extends AbstractGitHubWireMockTest {
+
+    /**
+     * Create default GHRepositoryTest instance
+     */
+    public GHRepositoryTest() {
+    }
 
     /**
      * Gets the repository.
@@ -129,7 +136,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         String httpTransport = "https://github.com/hub4j-test-org/temp-testGetters.git";
         assertThat(r.getHttpTransportUrl(), equalTo(httpTransport));
-        assertThat(r.gitHttpTransportUrl(), equalTo(httpTransport));
 
         assertThat(r.getName(), equalTo("temp-testGetters"));
         assertThat(r.getFullName(), equalTo("hub4j-test-org/temp-testGetters"));
@@ -251,7 +257,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void listStargazers() throws IOException {
         GHRepository repository = getRepository();
-        assertThat(repository.listStargazers2().toList(), is(empty()));
+        assertThat(repository.listStargazers().toList(), is(empty()));
 
         repository = gitHub.getOrganization("hub4j").getRepository("github-api");
         Iterable<GHStargazer> stargazers = repository.listStargazers2();
@@ -623,7 +629,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         users.add(user);
         users.add(gitHub.getUser("jimmysombrero2"));
-        repo.addCollaborators(users, GHOrganization.Permission.PUSH);
+        repo.addCollaborators(users, RepositoryRole.from(GHOrganization.Permission.PUSH));
 
         GHPersonSet<GHUser> collabs = repo.getCollaborators();
         GHUser colabUser = collabs.byLogin("jimmysombrero");
@@ -838,42 +844,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
 
         ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHFork.PARENT_ONLY);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
-    }
-
-    /**
-     * Gh repository search builder fork deprecated enum.
-     */
-    @Test
-    public void ghRepositorySearchBuilderForkDeprecatedEnum() {
-        GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_AND_FORKS);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.FORKS_ONLY);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:only")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.fork(GHRepositorySearchBuilder.Fork.PARENT_ONLY);
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
-    }
-
-    /**
-     * Gh repository search builder fork deprecated string.
-     */
-    @Test
-    public void ghRepositorySearchBuilderForkDeprecatedString() {
-        GHRepositorySearchBuilder ghRepositorySearchBuilder = new GHRepositorySearchBuilder(gitHub);
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(GHFork.PARENT_AND_FORKS.toString());
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:true")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(1L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(GHFork.FORKS_ONLY.toString());
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:only")).count(), is(1L));
-        assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(2L));
-
-        ghRepositorySearchBuilder = ghRepositorySearchBuilder.forks(null);
         assertThat(ghRepositorySearchBuilder.terms.stream().filter(item -> item.contains("fork:")).count(), is(0L));
     }
 
@@ -1122,8 +1092,64 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void getPostCommitHooks() throws Exception {
         GHRepository repo = getRepository(gitHub);
-        Set<URL> postcommitHooks = repo.getPostCommitHooks();
+        Set<URL> postcommitHooks = setupPostCommitHooks(repo);
         assertThat(postcommitHooks, is(empty()));
+    }
+
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
+            justification = "It causes a performance degradation, but we have already exposed it to the API")
+    private Set<URL> setupPostCommitHooks(final GHRepository repo) {
+        return new AbstractSet<URL>() {
+            private List<URL> getPostCommitHooks() {
+                try {
+                    List<URL> r = new ArrayList<>();
+                    for (GHHook h : repo.getHooks()) {
+                        if (h.getName().equals("web")) {
+                            r.add(new URL(h.getConfig().get("url")));
+                        }
+                    }
+                    return r;
+                } catch (IOException e) {
+                    throw new GHException("Failed to retrieve post-commit hooks", e);
+                }
+            }
+
+            @Override
+            public Iterator<URL> iterator() {
+                return getPostCommitHooks().iterator();
+            }
+
+            @Override
+            public int size() {
+                return getPostCommitHooks().size();
+            }
+
+            @Override
+            public boolean add(URL url) {
+                try {
+                    repo.createWebHook(url);
+                    return true;
+                } catch (IOException e) {
+                    throw new GHException("Failed to update post-commit hooks", e);
+                }
+            }
+
+            @Override
+            public boolean remove(Object url) {
+                try {
+                    String _url = ((URL) url).toExternalForm();
+                    for (GHHook h : repo.getHooks()) {
+                        if (h.getName().equals("web") && h.getConfig().get("url").equals(_url)) {
+                            h.delete();
+                            return true;
+                        }
+                    }
+                    return false;
+                } catch (IOException e) {
+                    throw new GHException("Failed to update post-commit hooks", e);
+                }
+            }
+        };
     }
 
     /**
@@ -1686,22 +1712,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(repository.getOwner().getLogin(), equalTo(owner));
         assertThat(repository.getStargazersCount(), is(1));
         repository.star();
-        assertThat(repository.listStargazers2().toList().size(), is(2));
+        assertThat(repository.listStargazers().toList().size(), is(2));
         repository.unstar();
         assertThat(repository.listStargazers().toList().size(), is(1));
-    }
-
-    /**
-     * Test to check getRepoVariable method.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testRepoActionVariable() throws Exception {
-        GHRepository repository = getRepository();
-        GHRepositoryVariable variable = repository.getRepoVariable("myvar");
-        assertThat(variable.getValue(), is("this is my var value"));
     }
 
     /**

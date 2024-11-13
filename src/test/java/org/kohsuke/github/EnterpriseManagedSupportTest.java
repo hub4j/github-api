@@ -14,6 +14,12 @@ import static org.hamcrest.Matchers.*;
  */
 public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
 
+    /**
+     * Create default EnterpriseManagedSupportTest instance
+     */
+    public EnterpriseManagedSupportTest() {
+    }
+
     private static final String NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR = "{\"message\":\"This organization is not part of externally managed enterprise.\","
             + "\"documentation_url\": \"https://docs.github.com/rest/teams/external-groups#list-external-groups-in-an-organization\"}";
 

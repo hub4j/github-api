@@ -12,6 +12,12 @@ import static org.hamcrest.Matchers.*;
 public class EnumUtilsTest {
 
     /**
+     * Create default EnumUtilsTest instance
+     */
+    public EnumUtilsTest() {
+    }
+
+    /**
      * Test get enum.
      */
     @Test

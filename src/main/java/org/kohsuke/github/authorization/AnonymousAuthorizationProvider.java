@@ -8,6 +8,13 @@ import java.io.IOException;
  * This will result in the "Authorization" header not being added to a request.
  */
 public class AnonymousAuthorizationProvider implements AuthorizationProvider {
+
+    /**
+     * Create default AnonymousAuthorizationProvider instance
+     */
+    public AnonymousAuthorizationProvider() {
+    }
+
     @Override
     public String getEncodedAuthorization() throws IOException {
         return null;

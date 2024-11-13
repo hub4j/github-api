@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -99,21 +98,16 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
                     "URF_UNREAD_FIELD" },
             justification = "JSON API")
     public static class ContributorStats extends GHObject {
+
+        /**
+         * Create default ContributorStats instance
+         */
+        public ContributorStats() {
+        }
+
         private GHUser author;
         private int total;
         private List<Week> weeks;
-
-        /**
-         * Gets the html url.
-         *
-         * @return the html url
-         * @throws IOException
-         *             Signals that an I/O exception has occurred.
-         */
-        @Override
-        public URL getHtmlUrl() throws IOException {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
 
         /**
          * Gets author.
@@ -183,6 +177,12 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
                         "URF_UNREAD_FIELD" },
                 justification = "JSON API")
         public static class Week {
+
+            /**
+             * Create default Week instance
+             */
+            public Week() {
+            }
 
             private long w;
             private int a;
@@ -258,6 +258,13 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
             justification = "JSON API")
     public static class CommitActivity extends GHObject {
+
+        /**
+         * Create default CommitActivity instance
+         */
+        public CommitActivity() {
+        }
+
         private List<Integer> days;
         private int total;
         private long week;
@@ -287,18 +294,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
          */
         public long getWeek() {
             return week;
-        }
-
-        /**
-         * Gets the html url.
-         *
-         * @return the html url
-         * @throws IOException
-         *             Signals that an I/O exception has occurred.
-         */
-        @Override
-        public URL getHtmlUrl() throws IOException {
-            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 
@@ -398,20 +393,15 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * The type Participation.
      */
     public static class Participation extends GHObject {
-        private List<Integer> all;
-        private List<Integer> owner;
 
         /**
-         * Gets the html url.
-         *
-         * @return the html url
-         * @throws IOException
-         *             Signals that an I/O exception has occurred.
+         * Create default Participation instance
          */
-        @Override
-        public URL getHtmlUrl() throws IOException {
-            throw new UnsupportedOperationException("Not supported yet.");
+        public Participation() {
         }
+
+        private List<Integer> all;
+        private List<Integer> owner;
 
         /**
          * Gets all commits.

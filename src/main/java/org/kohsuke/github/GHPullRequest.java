@@ -35,8 +35,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.CheckForNull;
-
 // TODO: Auto-generated Javadoc
 /**
  * A pull request.
@@ -46,6 +44,12 @@ import javax.annotation.CheckForNull;
  */
 @SuppressWarnings({ "UnusedDeclaration" })
 public class GHPullRequest extends GHIssue implements Refreshable {
+
+    /**
+     * Create default GHPullRequest instance
+     */
+    public GHPullRequest() {
+    }
 
     private static final String COMMENTS_ACTION = "/comments";
     private static final String REQUEST_REVIEWERS = "/requested_reviewers";
@@ -150,18 +154,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public GHCommitPointer getHead() {
         return head;
-    }
-
-    /**
-     * Gets issue updated at.
-     *
-     * @return the issue updated at
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public Date getIssueUpdatedAt() throws IOException {
-        return super.getUpdatedAt();
     }
 
     /**
@@ -309,11 +301,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * for test purposes only.
      *
      * @return the mergeable no refresh
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    @Deprecated
-    Boolean getMergeableNoRefresh() throws IOException {
+    Boolean getMergeableNoRefresh() {
         return mergeable;
     }
 
@@ -465,52 +454,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         return root().createRequest()
                 .withUrlPath(String.format("%s/commits", getApiRoute()))
                 .toIterable(GHPullRequestCommitDetail[].class, item -> item.wrapUp(this));
-    }
-
-    /**
-     * Create review gh pull request review.
-     *
-     * @param body
-     *            the body
-     * @param event
-     *            the event
-     * @param comments
-     *            the comments
-     * @return the gh pull request review
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #createReview()}
-     */
-    @Deprecated
-    public GHPullRequestReview createReview(String body,
-            @CheckForNull GHPullRequestReviewState event,
-            GHPullRequestReviewComment... comments) throws IOException {
-        return createReview(body, event, Arrays.asList(comments));
-    }
-
-    /**
-     * Create review gh pull request review.
-     *
-     * @param body
-     *            the body
-     * @param event
-     *            the event
-     * @param comments
-     *            the comments
-     * @return the gh pull request review
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #createReview()}
-     */
-    @Deprecated
-    public GHPullRequestReview createReview(String body,
-            @CheckForNull GHPullRequestReviewState event,
-            List<GHPullRequestReviewComment> comments) throws IOException {
-        GHPullRequestReviewBuilder b = createReview().body(body);
-        for (GHPullRequestReviewComment c : comments) {
-            b.comment(c.getBody(), c.getPath(), c.getPosition());
-        }
-        return b.create();
     }
 
     /**
@@ -694,6 +637,12 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     public static class AutoMerge {
+
+        /**
+         * Create default AutoMerge instance
+         */
+        public AutoMerge() {
+        }
 
         private GHUser enabled_by;
         private MergeMethod merge_method;

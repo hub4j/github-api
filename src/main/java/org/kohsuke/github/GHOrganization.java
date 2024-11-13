@@ -2,7 +2,12 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 // TODO: Auto-generated Javadoc
 
@@ -13,70 +18,13 @@ import java.util.*;
  */
 public class GHOrganization extends GHPerson {
 
+    /**
+     * Create default GHOrganization instance
+     */
+    public GHOrganization() {
+    }
+
     private boolean has_organization_projects;
-
-    /**
-     * Creates a new repository.
-     *
-     * @param name
-     *            the name
-     * @param description
-     *            the description
-     * @param homepage
-     *            the homepage
-     * @param team
-     *            the team
-     * @param isPublic
-     *            the is public
-     * @return Newly created repository.
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
-     */
-    @Deprecated
-    public GHRepository createRepository(String name,
-            String description,
-            String homepage,
-            String team,
-            boolean isPublic) throws IOException {
-        GHTeam t = getTeams().get(team);
-        if (t == null)
-            throw new IllegalArgumentException("No such team: " + team);
-        return createRepository(name, description, homepage, t, isPublic);
-    }
-
-    /**
-     * Create repository gh repository.
-     *
-     * @param name
-     *            the name
-     * @param description
-     *            the description
-     * @param homepage
-     *            the homepage
-     * @param team
-     *            the team
-     * @param isPublic
-     *            the is public
-     * @return the gh repository
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #createRepository(String)} that uses a builder pattern to let you control every aspect.
-     */
-    @Deprecated
-    public GHRepository createRepository(String name,
-            String description,
-            String homepage,
-            GHTeam team,
-            boolean isPublic) throws IOException {
-        if (team == null)
-            throw new IllegalArgumentException("Invalid team");
-        return createRepository(name).description(description)
-                .homepage(homepage)
-                .private_(!isPublic)
-                .team(team)
-                .create();
-    }
 
     /**
      * Starts a builder that creates a new repository.
@@ -118,21 +66,6 @@ public class GHOrganization extends GHPerson {
         return root().createRequest()
                 .withUrlPath(String.format("/orgs/%s/teams", login))
                 .toIterable(GHTeam[].class, item -> item.wrapUp(this));
-    }
-
-    /**
-     * Gets a single team by ID.
-     *
-     * @param teamId
-     *            id of the team that we want to query for
-     * @return the team
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link GHOrganization#getTeam(long)}
-     */
-    @Deprecated
-    public GHTeam getTeam(int teamId) throws IOException {
-        return getTeam((long) teamId);
     }
 
     /**
@@ -349,18 +282,6 @@ public class GHOrganization extends GHPerson {
      */
     public void publicize(GHUser u) throws IOException {
         root().createRequest().method("PUT").withUrlPath("/orgs/" + login + "/public_members/" + u.getLogin()).send();
-    }
-
-    /**
-     * Gets members.
-     *
-     * @return the members
-     * @throws IOException
-     *             the io exception
-     * @deprecated use {@link #listMembers()}
-     */
-    public List<GHUser> getMembers() throws IOException {
-        return listMembers().toList();
     }
 
     /**
@@ -617,92 +538,6 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Creates a new team and assigns the repositories.
-     *
-     * @param name
-     *            the name
-     * @param p
-     *            the p
-     * @param repositories
-     *            the repositories
-     * @return the gh team
-     * @throws IOException
-     *             the io exception
-     * @deprecated https://developer.github.com/v3/teams/#create-team deprecates permission field use
-     *             {@link #createTeam(String)}
-     */
-    @Deprecated
-    public GHTeam createTeam(String name, Permission p, Collection<GHRepository> repositories) throws IOException {
-        Requester post = root().createRequest().method("POST").with("name", name).with("permission", p);
-        List<String> repo_names = new ArrayList<String>();
-        for (GHRepository r : repositories) {
-            repo_names.add(login + "/" + r.getName());
-        }
-        post.with("repo_names", repo_names);
-        return post.withUrlPath("/orgs/" + login + "/teams").fetch(GHTeam.class).wrapUp(this);
-    }
-
-    /**
-     * Create team gh team.
-     *
-     * @param name
-     *            the name
-     * @param p
-     *            the p
-     * @param repositories
-     *            the repositories
-     * @return the gh team
-     * @throws IOException
-     *             the io exception
-     * @deprecated https://developer.github.com/v3/teams/#create-team deprecates permission field use
-     *             {@link #createTeam(String)}
-     */
-    @Deprecated
-    public GHTeam createTeam(String name, Permission p, GHRepository... repositories) throws IOException {
-        return createTeam(name, p, Arrays.asList(repositories));
-    }
-
-    /**
-     * Creates a new team and assigns the repositories.
-     *
-     * @param name
-     *            the name
-     * @param repositories
-     *            the repositories
-     * @return the gh team
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #createTeam(String)} that uses a builder pattern to let you control every aspect.
-     */
-    @Deprecated
-    public GHTeam createTeam(String name, Collection<GHRepository> repositories) throws IOException {
-        Requester post = root().createRequest().method("POST").with("name", name);
-        List<String> repo_names = new ArrayList<String>();
-        for (GHRepository r : repositories) {
-            repo_names.add(login + "/" + r.getName());
-        }
-        post.with("repo_names", repo_names);
-        return post.withUrlPath("/orgs/" + login + "/teams").fetch(GHTeam.class).wrapUp(this);
-    }
-
-    /**
-     * Create team gh team.
-     *
-     * @param name
-     *            the name
-     * @param repositories
-     *            the repositories
-     * @return the gh team
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #createTeam(String)} that uses a builder pattern to let you control every aspect.
-     */
-    @Deprecated
-    public GHTeam createTeam(String name, GHRepository... repositories) throws IOException {
-        return createTeam(name, Arrays.asList(repositories));
-    }
-
-    /**
      * Starts a builder that creates a new team.
      * <p>
      * You use the returned builder to set various properties, then call {@link GHTeamBuilder#create()} to finally
@@ -717,7 +552,7 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * List up repositories that has some open pull requests.
+     * List repositories that has some open pull requests.
      * <p>
      * This used to be an efficient method that didn't involve traversing every repository, but now it doesn't do any
      * optimization.
@@ -728,8 +563,8 @@ public class GHOrganization extends GHPerson {
      */
     public List<GHRepository> getRepositoriesWithOpenPullRequests() throws IOException {
         List<GHRepository> r = new ArrayList<GHRepository>();
-        for (GHRepository repository : listRepositories(100)) {
-            List<GHPullRequest> pullRequests = repository.getPullRequests(GHIssueState.OPEN);
+        for (GHRepository repository : listRepositories().withPageSize(100)) {
+            List<GHPullRequest> pullRequests = repository.queryPullRequests().state(GHIssueState.OPEN).list().toList();
             if (pullRequests.size() > 0) {
                 r.add(repository);
             }
@@ -747,7 +582,7 @@ public class GHOrganization extends GHPerson {
     public List<GHPullRequest> getPullRequests() throws IOException {
         List<GHPullRequest> all = new ArrayList<GHPullRequest>();
         for (GHRepository r : getRepositoriesWithOpenPullRequests()) {
-            all.addAll(r.getPullRequests(GHIssueState.OPEN));
+            all.addAll(r.queryPullRequests().state(GHIssueState.OPEN).list().toList());
         }
         return all;
     }
@@ -766,19 +601,16 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Lists up all the repositories using the specified page size.
+     * List all the repositories using a default of 30 items page size.
      *
-     * @param pageSize
-     *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
-     *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
      * @return the paged iterable
      */
     @Override
-    public PagedIterable<GHRepository> listRepositories(final int pageSize) {
+    public PagedIterable<GHRepository> listRepositories() {
         return root().createRequest()
                 .withUrlPath("/orgs/" + login + "/repos")
                 .toIterable(GHRepository[].class, null)
-                .withPageSize(pageSize);
+                .withPageSize(30);
     }
 
     /**

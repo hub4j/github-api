@@ -20,6 +20,12 @@ import java.util.List;
         justification = "JSON API")
 public class GHTree {
 
+    /**
+     * Create default GHTree instance
+     */
+    public GHTree() {
+    }
+
     /** The repo. */
     /* package almost final */GHRepository repo;
 

@@ -15,6 +15,13 @@ import java.util.Map;
  * @see GHRepository#getDeployment(long) GHRepository#getDeployment(long)
  */
 public class GHDeployment extends GHObject {
+
+    /**
+     * Create default GHDeployment instance
+     */
+    public GHDeployment() {
+    }
+
     private GHRepository owner;
 
     /** The sha. */
@@ -125,7 +132,6 @@ public class GHDeployment extends GHObject {
      * The environment defined when the deployment was first created.
      *
      * @return the original deployment environment
-     * @deprecated until preview feature has graduated to stable
      */
     public String getOriginalEnvironment() {
         return original_environment;
@@ -145,7 +151,6 @@ public class GHDeployment extends GHObject {
      * future.
      *
      * @return the environment is transient
-     * @deprecated until preview feature has graduated to stable
      */
     public boolean isTransientEnvironment() {
         return transient_environment;
@@ -155,7 +160,6 @@ public class GHDeployment extends GHObject {
      * Specifies if the given environment is one that end-users directly interact with.
      *
      * @return the environment is used by end-users directly
-     * @deprecated until preview feature has graduated to stable
      */
     public boolean isProductionEnvironment() {
         return production_environment;
@@ -188,17 +192,6 @@ public class GHDeployment extends GHObject {
      */
     public String getSha() {
         return sha;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @deprecated This object has no HTML URL.
-     */
-    @Override
-    public URL getHtmlUrl() {
-        return null;
     }
 
     /**

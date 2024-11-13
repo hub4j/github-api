@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.AbstractList;
@@ -77,7 +76,7 @@ public class GitCommit {
      */
     GitCommit(GitCommit commit) {
         // copy constructor used to cast to GitCommit.ShortInfo and from there
-        // to GHCommit, for GHContentUpdateResponse bridge method to GHCommit
+        // to GHCommit, for testing purposes
         this.owner = commit.getOwner();
         this.sha = commit.getSha();
         this.node_id = commit.getNodeId();
@@ -151,15 +150,8 @@ public class GitCommit {
      *
      * @return the author
      */
-    @WithBridgeMethods(value = GHCommit.GHAuthor.class, adapterMethod = "gitUserToGHAuthor")
     public GitUser getAuthor() {
         return author;
-    }
-
-    @SuppressFBWarnings(value = "UPM_UNCALLED_PRIVATE_METHOD",
-            justification = "bridge method of getAuthor & getCommitter")
-    private Object gitUserToGHAuthor(GitUser author, Class targetType) {
-        return new GHCommit.GHAuthor(author);
     }
 
     /**
@@ -176,7 +168,6 @@ public class GitCommit {
      *
      * @return the committer
      */
-    @WithBridgeMethods(value = GHCommit.GHAuthor.class, adapterMethod = "gitUserToGHAuthor")
     public GitUser getCommitter() {
         return committer;
     }
@@ -276,6 +267,15 @@ public class GitCommit {
     GitCommit wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;
+    }
+
+    /**
+     * For test purposes only.
+     *
+     * @return Equivalent GHCommit
+     */
+    GHCommit toGHCommit() {
+        return new GHCommit(new GHCommit.ShortInfo(this));
     }
 
 }

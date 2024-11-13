@@ -24,7 +24,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -39,15 +38,12 @@ import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.net.URL;
-import java.util.AbstractSet;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -72,6 +68,12 @@ import static java.util.Objects.requireNonNull;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public class GHRepository extends GHObject {
+
+    /**
+     * Create default GHRepository instance
+     */
+    public GHRepository() {
+    }
 
     private String nodeId, description, homepage, name, full_name;
 
@@ -154,21 +156,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets deployment statuses.
-     *
-     * @param id
-     *            the id
-     * @return the deployment statuses
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@code getDeployment(id).listStatuses()}
-     */
-    @Deprecated
-    public PagedIterable<GHDeploymentStatus> getDeploymentStatuses(final int id) throws IOException {
-        return getDeployment(id).listStatuses();
-    }
-
-    /**
      * List deployments paged iterable.
      *
      * @param sha
@@ -205,24 +192,6 @@ public class GHRepository extends GHObject {
                 .withUrlPath(getApiTailUrl("deployments/" + id))
                 .fetch(GHDeployment.class)
                 .wrap(this);
-    }
-
-    /**
-     * Gets deploy status.
-     *
-     * @param deploymentId
-     *            the deployment id
-     * @param ghDeploymentState
-     *            the gh deployment state
-     * @return the deploy status
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@code getDeployment(deploymentId).createStatus(ghDeploymentState)}
-     */
-    @Deprecated
-    public GHDeploymentStatusBuilder createDeployStatus(int deploymentId, GHDeploymentState ghDeploymentState)
-            throws IOException {
-        return getDeployment(deploymentId).createStatus(ghDeploymentState);
     }
 
     static class GHRepoPermission {
@@ -271,17 +240,6 @@ public class GHRepository extends GHObject {
      * @return the http transport url
      */
     public String getHttpTransportUrl() {
-        return clone_url;
-    }
-
-    /**
-     * Git http transport url string.
-     *
-     * @return the string
-     * @deprecated Typo of {@link #getHttpTransportUrl()}
-     */
-    @Deprecated
-    public String gitHttpTransportUrl() {
         return clone_url;
     }
 
@@ -445,19 +403,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Lists up all the issues in this repository.
-     *
-     * @param state
-     *            the state
-     * @return the paged iterable
-     * @deprecated Use {@link #queryIssues()}
-     */
-    @Deprecated
-    public PagedIterable<GHIssue> listIssues(final GHIssueState state) {
-        return queryIssues().state(state).list();
-    }
-
-    /**
      * Retrieves issues.
      *
      * @return the gh issue query builder
@@ -496,18 +441,6 @@ public class GHRepository extends GHObject {
                 .with("sha", sha)
                 .withUrlPath(getApiTailUrl("git/refs"))
                 .fetch(GHRef.class);
-    }
-
-    /**
-     * Gets releases.
-     *
-     * @return the releases
-     * @throws IOException
-     *             the io exception
-     * @deprecated use {@link #listReleases()}
-     */
-    public List<GHRelease> getReleases() throws IOException {
-        return listReleases().toList();
     }
 
     /**
@@ -731,18 +664,6 @@ public class GHRepository extends GHObject {
      * and so on.
      *
      * @return the forks
-     * @deprecated use {@link #getForksCount()} instead
-     */
-    @Deprecated
-    public int getForks() {
-        return getForksCount();
-    }
-
-    /**
-     * Returns the number of all forks of this repository. This not only counts direct forks, but also forks of forks,
-     * and so on.
-     *
-     * @return the forks
      */
     public int getForksCount() {
         return forks_count;
@@ -836,7 +757,6 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean isTemplate() {
-        // isTemplate is still in preview, we do not want to retrieve it unless needed.
         if (isTemplate == null) {
             try {
                 populate();
@@ -866,17 +786,6 @@ public class GHRepository extends GHObject {
      */
     public boolean hasPages() {
         return has_pages;
-    }
-
-    /**
-     * Gets watchers.
-     *
-     * @return the watchers
-     * @deprecated use {@link #getWatchersCount()} instead
-     */
-    @Deprecated
-    public int getWatchers() {
-        return getWatchersCount();
     }
 
     /**
@@ -925,19 +834,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets default branch.
-     *
-     * Name is an artifact of when "master" was the most common default.
-     *
-     * @return the default branch
-     * @deprecated Renamed to {@link #getDefaultBranch()}
-     */
-    @Deprecated
-    public String getMasterBranch() {
-        return default_branch;
-    }
-
-    /**
      * Get Repository template was the repository created from.
      *
      * @return the repository template
@@ -976,7 +872,6 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    @WithBridgeMethods(Set.class)
     public GHPersonSet<GHUser> getCollaborators() throws IOException {
         return new GHPersonSet<GHUser>(listCollaborators().toList());
     }
@@ -1171,22 +1066,6 @@ public class GHRepository extends GHObject {
      *            the permission level
      * @param users
      *            the users
-     * @throws IOException
-     *             the io exception
-     * @deprecated #addCollaborators(GHOrganization.RolePermission, GHUser)
-     */
-    @Deprecated
-    public void addCollaborators(GHOrganization.Permission permission, GHUser... users) throws IOException {
-        addCollaborators(asList(users), permission);
-    }
-
-    /**
-     * Add collaborators.
-     *
-     * @param permission
-     *            the permission level
-     * @param users
-     *            the users
      *
      * @throws IOException
      *             the io exception
@@ -1217,22 +1096,6 @@ public class GHRepository extends GHObject {
      */
     public void addCollaborators(Collection<GHUser> users) throws IOException {
         modifyCollaborators(users, "PUT", null);
-    }
-
-    /**
-     * Add collaborators.
-     *
-     * @param users
-     *            the users
-     * @param permission
-     *            the permission level
-     * @throws IOException
-     *             the io exception
-     * @deprecated #addCollaborators(Collection, GHOrganization.RolePermission)
-     */
-    @Deprecated
-    public void addCollaborators(Collection<GHUser> users, GHOrganization.Permission permission) throws IOException {
-        modifyCollaborators(users, "PUT", GHOrganization.RepositoryRole.from(permission));
     }
 
     /**
@@ -1674,33 +1537,6 @@ public class GHRepository extends GHObject {
      */
     public GHPullRequest getPullRequest(int i) throws IOException {
         return root().createRequest().withUrlPath(getApiTailUrl("pulls/" + i)).fetch(GHPullRequest.class).wrapUp(this);
-    }
-
-    /**
-     * Retrieves all the pull requests of a particular state.
-     *
-     * @param state
-     *            the state
-     * @return the pull requests
-     * @throws IOException
-     *             the io exception
-     * @see #listPullRequests(GHIssueState) #listPullRequests(GHIssueState)
-     */
-    public List<GHPullRequest> getPullRequests(GHIssueState state) throws IOException {
-        return queryPullRequests().state(state).list().toList();
-    }
-
-    /**
-     * Retrieves all the pull requests of a particular state.
-     *
-     * @param state
-     *            the state
-     * @return the paged iterable
-     * @deprecated Use {@link #queryPullRequests()}
-     */
-    @Deprecated
-    public PagedIterable<GHPullRequest> listPullRequests(GHIssueState state) {
-        return queryPullRequests().state(state).list();
     }
 
     /**
@@ -2443,22 +2279,24 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Lists all the users who have starred this repo based on the old version of the API. For additional information,
-     * like date when the repository was starred, see {@link #listStargazers2()}
+     * Lists all the users who have starred this repo based on new version of the API, having extended information like
+     * the time when the repository was starred.
      *
      * @return the paged iterable
+     * @deprecated Use {@link #listStargazers()}
      */
-    public PagedIterable<GHUser> listStargazers() {
-        return listUsers("stargazers");
+    @Deprecated
+    public PagedIterable<GHStargazer> listStargazers2() {
+        return listStargazers();
     }
 
     /**
      * Lists all the users who have starred this repo based on new version of the API, having extended information like
-     * the time when the repository was starred. For compatibility with the old API see {@link #listStargazers()}
+     * the time when the repository was starred.
      *
      * @return the paged iterable
      */
-    public PagedIterable<GHStargazer> listStargazers2() {
+    public PagedIterable<GHStargazer> listStargazers() {
         return root().createRequest()
                 .withAccept("application/vnd.github.star+json")
                 .withUrlPath(getApiTailUrl("stargazers"))
@@ -2523,89 +2361,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Returns a set that represents the post-commit hook URLs. The returned set is live, and changes made to them are
-     * reflected to GitHub.
-     *
-     * @return the post commit hooks
-     * @deprecated Use {@link #getHooks()} and {@link #createHook(String, Map, Collection, boolean)}
-     */
-    @SuppressFBWarnings(value = { "DMI_COLLECTION_OF_URLS", "EI_EXPOSE_REP" },
-            justification = "It causes a performance degradation, but we have already exposed it to the API")
-    @Deprecated
-    public Set<URL> getPostCommitHooks() {
-        synchronized (this) {
-            if (postCommitHooks == null) {
-                postCommitHooks = setupPostCommitHooks();
-            }
-            return postCommitHooks;
-        }
-    }
-
-    /**
-     * Live set view of the post-commit hook.
-     */
-    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
-            justification = "It causes a performance degradation, but we have already exposed it to the API")
-    @SkipFromToString
-    private /* final */ transient Set<URL> postCommitHooks;
-
-    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
-            justification = "It causes a performance degradation, but we have already exposed it to the API")
-    private Set<URL> setupPostCommitHooks() {
-        return new AbstractSet<URL>() {
-            private List<URL> getPostCommitHooks() {
-                try {
-                    List<URL> r = new ArrayList<>();
-                    for (GHHook h : getHooks()) {
-                        if (h.getName().equals("web")) {
-                            r.add(new URL(h.getConfig().get("url")));
-                        }
-                    }
-                    return r;
-                } catch (IOException e) {
-                    throw new GHException("Failed to retrieve post-commit hooks", e);
-                }
-            }
-
-            @Override
-            public Iterator<URL> iterator() {
-                return getPostCommitHooks().iterator();
-            }
-
-            @Override
-            public int size() {
-                return getPostCommitHooks().size();
-            }
-
-            @Override
-            public boolean add(URL url) {
-                try {
-                    createWebHook(url);
-                    return true;
-                } catch (IOException e) {
-                    throw new GHException("Failed to update post-commit hooks", e);
-                }
-            }
-
-            @Override
-            public boolean remove(Object url) {
-                try {
-                    String _url = ((URL) url).toExternalForm();
-                    for (GHHook h : getHooks()) {
-                        if (h.getName().equals("web") && h.getConfig().get("url").equals(_url)) {
-                            h.delete();
-                            return true;
-                        }
-                    }
-                    return false;
-                } catch (IOException e) {
-                    throw new GHException("Failed to update post-commit hooks", e);
-                }
-            }
-        };
-    }
-
-    /**
      * Gets branches by {@linkplain GHBranch#getName() their names}.
      *
      * @return the branches
@@ -2634,22 +2389,6 @@ public class GHRepository extends GHObject {
      */
     public GHBranch getBranch(String name) throws IOException {
         return root().createRequest().withUrlPath(getApiTailUrl("branches/" + name)).fetch(GHBranch.class).wrap(this);
-    }
-
-    /**
-     * Gets milestones.
-     *
-     * @return the milestones
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #listMilestones(GHIssueState)}
-     */
-    public Map<Integer, GHMilestone> getMilestones() throws IOException {
-        Map<Integer, GHMilestone> milestones = new TreeMap<Integer, GHMilestone>();
-        for (GHMilestone m : listMilestones(GHIssueState.OPEN)) {
-            milestones.put(m.getNumber(), m);
-        }
-        return milestones;
     }
 
     /**
@@ -2780,20 +2519,6 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets a variable by name
-     *
-     * @param name
-     *            the variable name (e.g. test-variable)
-     * @return the variable
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public GHRepositoryVariable getRepoVariable(String name) throws IOException {
-        return getVariable(name);
-    }
-
-    /**
      * Gets a repository variable.
      *
      * @param name
@@ -2813,85 +2538,6 @@ public class GHRepository extends GHObject {
      */
     public GHContentBuilder createContent() {
         return new GHContentBuilder(this);
-    }
-
-    /**
-     * Use {@link #createContent()}.
-     *
-     * @param content
-     *            the content
-     * @param commitMessage
-     *            the commit message
-     * @param path
-     *            the path
-     * @return the gh content update response
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public GHContentUpdateResponse createContent(String content, String commitMessage, String path) throws IOException {
-        return createContent().content(content).message(commitMessage).path(path).commit();
-    }
-
-    /**
-     * Use {@link #createContent()}.
-     *
-     * @param content
-     *            the content
-     * @param commitMessage
-     *            the commit message
-     * @param path
-     *            the path
-     * @param branch
-     *            the branch
-     * @return the gh content update response
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public GHContentUpdateResponse createContent(String content, String commitMessage, String path, String branch)
-            throws IOException {
-        return createContent().content(content).message(commitMessage).path(path).branch(branch).commit();
-    }
-
-    /**
-     * Use {@link #createContent()}.
-     *
-     * @param contentBytes
-     *            the content bytes
-     * @param commitMessage
-     *            the commit message
-     * @param path
-     *            the path
-     * @return the gh content update response
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path)
-            throws IOException {
-        return createContent().content(contentBytes).message(commitMessage).path(path).commit();
-    }
-
-    /**
-     * Use {@link #createContent()}.
-     *
-     * @param contentBytes
-     *            the content bytes
-     * @param commitMessage
-     *            the commit message
-     * @param path
-     *            the path
-     * @param branch
-     *            the branch
-     * @return the gh content update response
-     * @throws IOException
-     *             the io exception
-     */
-    @Deprecated
-    public GHContentUpdateResponse createContent(byte[] contentBytes, String commitMessage, String path, String branch)
-            throws IOException {
-        return createContent().content(contentBytes).message(commitMessage).path(path).branch(branch).commit();
     }
 
     /**
@@ -3104,6 +2750,13 @@ public class GHRepository extends GHObject {
      * The type Contributor.
      */
     public static class Contributor extends GHUser {
+
+        /**
+         * Create default Contributor instance
+         */
+        public Contributor() {
+        }
+
         private int contributions;
 
         /**
@@ -3610,7 +3263,6 @@ public class GHRepository extends GHObject {
         // "https://github.com/{fullName}".
         // All other occurrences of "url" take the form "https://api.github.com/...".
         // 2. For Installation event payloads, the URL is not provided at all.
-
         root().createRequest().withUrlPath(getApiTailUrl("")).fetchInto(this);
     }
 

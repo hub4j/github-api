@@ -11,6 +11,12 @@ import static org.hamcrest.Matchers.*;
 public class GHObjectTest extends org.kohsuke.github.AbstractGitHubWireMockTest {
 
     /**
+     * Create default GHObjectTest instance
+     */
+    public GHObjectTest() {
+    }
+
+    /**
      * Test to string.
      *
      * @throws Exception

@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -18,6 +16,12 @@ import java.util.TreeMap;
  * @author Kohsuke Kawaguchi
  */
 public abstract class GHPerson extends GHObject {
+
+    /**
+     * Create default GHPerson instance
+     */
+    public GHPerson() {
+    }
 
     /** The avatar url. */
     // core data fields that exist even for "small" user data (such as the user info in pull request)
@@ -73,21 +77,24 @@ public abstract class GHPerson extends GHObject {
      */
     public synchronized Map<String, GHRepository> getRepositories() throws IOException {
         Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
-        for (GHRepository r : listRepositories(100)) {
+        for (GHRepository r : listRepositories().withPageSize(100)) {
             repositories.put(r.getName(), r);
         }
         return Collections.unmodifiableMap(repositories);
     }
 
     /**
-     * Lists up all the repositories using a 30 items page size.
+     * List all the repositories using a default of 30 items page size.
      * <p>
      * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      *
      * @return the paged iterable
      */
     public PagedIterable<GHRepository> listRepositories() {
-        return listRepositories(30);
+        return root().createRequest()
+                .withUrlPath("/users/" + login + "/repos")
+                .toIterable(GHRepository[].class, null)
+                .withPageSize(30);
     }
 
     /**
@@ -97,49 +104,11 @@ public abstract class GHPerson extends GHObject {
      *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
      *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
      * @return the paged iterable
-     */
-    public PagedIterable<GHRepository> listRepositories(final int pageSize) {
-        return root().createRequest()
-                .withUrlPath("/users/" + login + "/repos")
-                .toIterable(GHRepository[].class, null)
-                .withPageSize(pageSize);
-    }
-
-    /**
-     * Loads repository list in a paginated fashion.
-     *
-     * <p>
-     * For a person with a lot of repositories, GitHub returns the list of repositories in a paginated fashion. Unlike
-     * {@link #getRepositories()}, this method allows the caller to start processing data as it arrives.
-     * <p>
-     * Every {@link Iterator#next()} call results in I/O. Exceptions that occur during the processing is wrapped into
-     * {@link Error}.
-     *
-     * @param pageSize
-     *            the page size
-     * @return the iterable
-     * @deprecated Use {@link #listRepositories()}
+     * @deprecated Use #listRepositories().withPageSize() instead.
      */
     @Deprecated
-    public synchronized Iterable<List<GHRepository>> iterateRepositories(final int pageSize) {
-        return () -> {
-            final PagedIterator<GHRepository> pager;
-            GitHubPageIterator<GHRepository[]> iterator = GitHubPageIterator.create(root().getClient(),
-                    GHRepository[].class,
-                    root().createRequest().withUrlPath("users", login, "repos").build(),
-                    pageSize);
-            pager = new PagedIterator<>(iterator, null);
-
-            return new Iterator<List<GHRepository>>() {
-                public boolean hasNext() {
-                    return pager.hasNext();
-                }
-
-                public List<GHRepository> next() {
-                    return pager.nextPage();
-                }
-            };
-        };
+    public PagedIterable<GHRepository> listRepositories(final int pageSize) {
+        return listRepositories().withPageSize(pageSize);
     }
 
     /**
@@ -167,17 +136,6 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public abstract PagedIterable<GHEventInfo> listEvents() throws IOException;
-
-    /**
-     * Gravatar ID of this user, like 0cb9832a01c22c083390f3c5dcb64105.
-     *
-     * @return the gravatar id
-     * @deprecated No longer available in the v3 API.
-     */
-    @Deprecated
-    public String getGravatarId() {
-        return "";
-    }
 
     /**
      * Returns a string of the avatar image URL.
@@ -286,7 +244,6 @@ public abstract class GHPerson extends GHObject {
      *
      * @return the html url
      */
-    @Override
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }

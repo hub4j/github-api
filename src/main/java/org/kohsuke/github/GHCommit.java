@@ -86,35 +86,15 @@ public class GHCommit {
     }
 
     /**
-     * The type GHAuthor.
-     *
-     * @deprecated Use {@link GitUser} instead.
-     */
-    @Deprecated
-    public static class GHAuthor extends GitUser {
-
-        /**
-         * Instantiates a new GH author.
-         */
-        public GHAuthor() {
-            super();
-        }
-
-        /**
-         * Instantiates a new GH author.
-         *
-         * @param user
-         *            the user
-         */
-        public GHAuthor(GitUser user) {
-            super(user);
-        }
-    }
-
-    /**
      * The type Stats.
      */
     public static class Stats {
+
+        /**
+         * Create default Stats instance
+         */
+        public Stats() {
+        }
 
         /** The deletions. */
         int total, additions, deletions;
@@ -125,6 +105,12 @@ public class GHCommit {
      */
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "It's being initialized by JSON deserialization")
     public static class File {
+
+        /**
+         * Create default File instance
+         */
+        public File() {
+        }
 
         /** The status. */
         String status;
@@ -239,6 +225,12 @@ public class GHCommit {
      * The type Parent.
      */
     public static class Parent {
+
+        /**
+         * Create default Parent instance
+         */
+        public Parent() {
+        }
 
         /** The url. */
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
@@ -405,19 +397,6 @@ public class GHCommit {
      */
     public URL getUrl() {
         return GitHubClient.parseURL(url);
-    }
-
-    /**
-     * List of files changed/added/removed in this commit.
-     *
-     * @return Can be empty but never null.
-     * @throws IOException
-     *             on error
-     * @deprecated Use {@link #listFiles()} instead.
-     */
-    @Deprecated
-    public List<File> getFiles() throws IOException {
-        return listFiles().toList();
     }
 
     /**

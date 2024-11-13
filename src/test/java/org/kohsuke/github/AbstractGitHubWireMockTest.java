@@ -11,7 +11,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
-import org.kohsuke.github.junit.GitHubWireMockRule;
 import wiremock.com.github.jknack.handlebars.Helper;
 import wiremock.com.github.jknack.handlebars.Options;
 
@@ -112,7 +111,7 @@ public abstract class AbstractGitHubWireMockTest {
         } catch (IOException e) {
         }
 
-        return builder.withRateLimitHandler(RateLimitHandler.FAIL);
+        return builder.withRateLimitHandler(GitHubRateLimitHandler.FAIL);
     }
 
     /**
@@ -127,7 +126,7 @@ public abstract class AbstractGitHubWireMockTest {
             // This sets the user and password to a placeholder for wiremock testing
             // This makes the tests believe they are running with permissions
             // The recorded stubs will behave like they running with permissions
-            builder.withPassword(STUBBED_USER_LOGIN, STUBBED_USER_PASSWORD);
+            builder.withOAuthToken(STUBBED_USER_PASSWORD, STUBBED_USER_LOGIN);
         }
 
         return builder;
@@ -398,6 +397,12 @@ public abstract class AbstractGitHubWireMockTest {
 
         /** The test start date. */
         public Date testStartDate = new Date();
+
+        /**
+         * Instantiate TemplatingHelper
+         */
+        public TemplatingHelper() {
+        }
 
         /**
          * New response transformer.

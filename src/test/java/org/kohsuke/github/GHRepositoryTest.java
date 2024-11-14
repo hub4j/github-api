@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.GHVerification.Reason.GPGVERIFY_ERROR;
 import static org.kohsuke.github.GHVerification.Reason.UNKNOWN_SIGNATURE_TYPE;
@@ -520,17 +521,18 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         boolean kohsuke = false;
 
         for (GHRepository.Contributor c : r.listContributors(true)) {
-            if (c.getLogin().equals("kohsuke")) {
-                assertThat(c.getContributions(), greaterThan(0));
+            if (c.getType().equals("Anonymous")) {
+                assertEquals(c.getContributions(), 3);
                 kohsuke = true;
             }
-            if (i++ > 5) {
+            if (++i > 1) {
                 break;
             }
         }
 
         assertThat(kohsuke, is(true));
     }
+
     /**
      * Gets the permission.
      *

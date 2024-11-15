@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.GHVerification.Reason.GPGVERIFY_ERROR;
 import static org.kohsuke.github.GHVerification.Reason.UNKNOWN_SIGNATURE_TYPE;
@@ -522,7 +521,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         for (GHRepository.Contributor c : r.listContributors(true)) {
             if (c.getType().equals("Anonymous")) {
-                assertEquals(c.getContributions(), 3);
+                assertThat(c.getContributions(), is(3));
                 kohsuke = true;
             }
             if (++i > 1) {

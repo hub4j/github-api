@@ -1709,6 +1709,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
         assertThat(found, is(true));
         gitHub.listNotifications().markAsRead();
+        gitHub.listNotifications().iterator().next();
     }
 
     /**

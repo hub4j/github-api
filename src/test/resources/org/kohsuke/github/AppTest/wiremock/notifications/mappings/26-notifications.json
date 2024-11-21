@@ -40,8 +40,7 @@
       "X-XSS-Protection": "1; mode=block",
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
-      "X-GitHub-Request-Id": "CB13:833E:A1F759:BFE352:5DB3A151",
-      "Link": "<https://api.github.com/notifications?page=2>; rel=\"next\", <https://api.github.com/notifications?page=5>; rel=\"last\""
+      "X-GitHub-Request-Id": "CB13:833E:A1F759:BFE352:5DB3A151"
     }
   },
   "uuid": "ac22e3e2-f0d3-4ff1-af23-23e9c79c725c",

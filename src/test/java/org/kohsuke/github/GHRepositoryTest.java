@@ -1948,6 +1948,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test getCustomProperties. This test may or may not work, you will need to point to an org and repo that have
      * custom properties setup
+     *
      * @throws Exception
      *             the exception
      */

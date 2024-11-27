@@ -2898,13 +2898,12 @@ public class GHRepository extends GHObject {
 
     /**
      * Gets all custom property values that are set for a repository. Users with read access to the repository can use
-     * this endpoint.
-     * <a href="https://docs.github.com/en/rest/repos/custom-properties?apiVersion=2022-11-28#get-all-custom-property-values-for-a-repository">
-     *     docs</a>
+     * this endpoint. <a href="https://docs.github.com/en/rest/repos/custom-properties?apiVersion=2022-11-28#get-all-custom-property-values-for-a-repository">
+     * docs</a>
      *
      * @return the custom properties and values on the repository
      * @throws IOException
-     *              the io exception
+     *             the io exception
      */
     public Set<GHRepositoryCustomProperty> getCustomProperties() throws IOException {
         return root().createRequest()

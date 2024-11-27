@@ -1945,12 +1945,11 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(repository.isVulnerabilityAlertsEnabled(), is(true));
     }
 
-
     /**
-     * Test getCustomProperties
-     * This test may or may not work, you will need to point to an org and repo that have custom properties setup
+     * Test getCustomProperties. This test may or may not work, you will need to point to an org and repo that have
+     * custom properties setup
      * @throws Exception
-     *              the exception
+     *             the exception
      */
     @Test
     public void testGetCustomProperties() throws Exception {

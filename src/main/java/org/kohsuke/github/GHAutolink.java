@@ -4,21 +4,27 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 
-// TODO: Auto-generated Javadoc
 /**
- * The type Gh autolink.
+ * Represents a GitHub repository autolink reference.
  *
  * @author Alaurant
  * @see GHAutolinkBuilder
- * @see GHRepository#getAutolinks()
+ * @see GHRepository#getAutolinks() GHRepository#getAutolinks()
  * @see <a href="https://docs.github.com/en/rest/repos/autolinks">Repository autolinks API</a>
  */
 public class GHAutolink {
+
     private Integer id;
     private String key_prefix;
     private String url_template;
     private boolean is_alphanumeric;
     private GHRepository owner;
+
+    /**
+     * Instantiates a new Gh autolink.
+     */
+    public GHAutolink() {
+    }
 
     /**
      * Gets the autolink ID
@@ -81,7 +87,7 @@ public class GHAutolink {
     }
 
     /**
-     * Wraps this autolink with its owner repository
+     * Wraps this autolink with its owner repository.
      *
      * @param owner
      *            the repository that owns this autolink

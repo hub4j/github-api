@@ -82,3 +82,4 @@ org.kohsuke.github.internal.DefaultGitHubConnector
 org.kohsuke.github.internal.EnumUtils
 org.kohsuke.github.internal.Previews
 org.kohsuke.github.EnterpriseManagedSupport
+org.kohsuke.github.GHAutolink

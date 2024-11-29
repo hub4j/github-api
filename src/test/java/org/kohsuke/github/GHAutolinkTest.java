@@ -1,0 +1,194 @@
+package org.kohsuke.github;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The type Gh autolink test.
+ */
+public class GHAutolinkTest extends AbstractGitHubWireMockTest {
+
+    private GHRepository repo;
+
+    /**
+     * Instantiates a new Gh autolink test.
+     */
+    public GHAutolinkTest() {
+    }
+
+    /**
+     * Sets up.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Before
+    public void setUp() throws Exception {
+        repo = gitHub.getRepository("Alaurant/github-api-test");
+    }
+
+    /**
+     * Test create autolink.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testCreateAutolink() throws Exception {
+        String keyPrefix = "EXAMPLE-";
+        String urlTemplate = "https://example.com/TICKET?q=<num>";
+        boolean isAlphanumeric = true;
+
+        GHAutolink autolink = repo.createAutolink()
+                .withKeyPrefix(keyPrefix)
+                .withUrlTemplate(urlTemplate)
+                .withIsAlphanumeric(isAlphanumeric)
+                .create();
+
+        assertThat(autolink.getId(), notNullValue());
+        assertThat(autolink.getKeyPrefix(), equalTo(keyPrefix));
+        assertThat(autolink.getUrlTemplate(), equalTo(urlTemplate));
+        assertThat(autolink.isAlphanumeric(), equalTo(isAlphanumeric));
+        assertThat(autolink.getOwner(), equalTo(repo));
+
+    }
+
+    /**
+     * Test get autolink.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGetAutolink() throws Exception {
+        GHAutolink autolink = repo.createAutolink()
+                .withKeyPrefix("JIRA-")
+                .withUrlTemplate("https://example.com/test/<num>")
+                .withIsAlphanumeric(false)
+                .create();
+
+        GHAutolink fetched = repo.getAutolink(autolink.getId());
+
+        assertThat(fetched.getId(), equalTo(autolink.getId()));
+        assertThat(fetched.getKeyPrefix(), equalTo(autolink.getKeyPrefix()));
+        assertThat(fetched.getUrlTemplate(), equalTo(autolink.getUrlTemplate()));
+        assertThat(fetched.isAlphanumeric(), equalTo(autolink.isAlphanumeric()));
+        assertThat(fetched.getOwner(), equalTo(repo));
+
+    }
+
+    /**
+     * Test get autolinks.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGetAllAutolinks() throws Exception {
+        GHAutolink autolink1 = repo.createAutolink()
+                .withKeyPrefix("LIST-")
+                .withUrlTemplate("https://example.com/list1/<num>")
+                .withIsAlphanumeric(true)
+                .create();
+
+        GHAutolink autolink2 = repo.createAutolink()
+                .withKeyPrefix("LISTED-")
+                .withUrlTemplate("https://example.com/list2/<num>")
+                .withIsAlphanumeric(false)
+                .create();
+        Thread.sleep(1000);
+
+        boolean found1 = false;
+        boolean found2 = false;
+
+        PagedIterable<GHAutolink> autolinks = repo.getAutolinks();
+
+        for (GHAutolink autolink : autolinks) {
+
+            if (autolink.getId().equals(autolink1.getId())) {
+                found1 = true;
+                assertThat(autolink.getKeyPrefix(), equalTo(autolink1.getKeyPrefix()));
+                assertThat(autolink.getUrlTemplate(), equalTo(autolink1.getUrlTemplate()));
+                assertThat(autolink.isAlphanumeric(), equalTo(autolink1.isAlphanumeric()));
+            }
+            if (autolink.getId().equals(autolink2.getId())) {
+                found2 = true;
+                assertThat(autolink.getKeyPrefix(), equalTo(autolink2.getKeyPrefix()));
+                assertThat(autolink.getUrlTemplate(), equalTo(autolink2.getUrlTemplate()));
+                assertThat(autolink.isAlphanumeric(), equalTo(autolink2.isAlphanumeric()));
+            }
+        }
+
+        assertThat("First autolink", found1, is(true));
+        assertThat("Second autolink", found2, is(true));
+
+    }
+
+    /**
+     * Test delete autolink.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testDeleteAutolink() throws Exception {
+        // Delete autolink using the instance method
+        GHAutolink autolink = repo.createAutolink()
+                .withKeyPrefix("DELETE-")
+                .withUrlTemplate("https://example.com/delete/<num>")
+                .withIsAlphanumeric(true)
+                .create();
+
+        autolink.delete();
+
+        try {
+            repo.getAutolink(autolink.getId());
+            fail("Expected GHFileNotFoundException");
+        } catch (GHFileNotFoundException e) {
+            // Expected
+        }
+
+        // Delete autolink using repository delete method
+        autolink = repo.createAutolink()
+                .withKeyPrefix("DELETED-")
+                .withUrlTemplate("https://example.com/delete2/<num>")
+                .withIsAlphanumeric(true)
+                .create();
+
+        repo.deleteAutolink(autolink.getId());
+
+        try {
+            repo.getAutolink(autolink.getId());
+            fail("Expected GHFileNotFoundException");
+        } catch (GHFileNotFoundException e) {
+            // Expected
+        }
+    }
+
+    /**
+     * Cleanup.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @After
+    public void cleanup() throws Exception {
+        try {
+            for (GHAutolink autolink : repo.getAutolinks()) {
+                try {
+                    autolink.delete();
+                } catch (GHFileNotFoundException e) {
+                    // Ignore 404 errors during cleanup
+                }
+            }
+        } catch (GHFileNotFoundException e) {
+            // Ignore if no autolinks exist
+        }
+    }
+}

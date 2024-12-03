@@ -1,9 +1,9 @@
 {
-  "id": "514e7c83-08c5-4ebb-b29c-18d729fd2e26",
-  "name": "repos_alaurant_github-api-test_autolinks_6208098",
+  "id": "322df042-2623-4516-ba69-da9fad6594ac",
+  "name": "repos_alaurant_github-api-test_autolinks_6208153",
   "request": {
-    "url": "/repos/Alaurant/github-api-test/autolinks/6208098",
-    "method": "DELETE",
+    "url": "/repos/Alaurant/github-api-test/autolinks/6208153",
+    "method": "GET",
     "headers": {
       "Accept": {
         "equalTo": "application/vnd.github+json"
@@ -11,18 +11,20 @@
     }
   },
   "response": {
-    "status": 204,
+    "status": 404,
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/repos/autolinks#get-an-autolink-reference-of-a-repository\",\"status\":\"404\"}",
     "headers": {
-      "Date": "Tue, 03 Dec 2024 06:54:42 GMT",
+      "Date": "Tue, 03 Dec 2024 07:38:39 GMT",
+      "Content-Type": "application/json; charset=utf-8",
       "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, project, read:packages, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "github-authentication-token-expiration": "2025-02-25 04:28:56 UTC",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4973",
-      "X-RateLimit-Reset": "1733209471",
-      "X-RateLimit-Used": "27",
+      "X-RateLimit-Remaining": "4991",
+      "X-RateLimit-Reset": "1733215115",
+      "X-RateLimit-Used": "9",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -34,10 +36,10 @@
       "Content-Security-Policy": "default-src 'none'",
       "Vary": "Accept-Encoding, Accept, X-Requested-With",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "AB93:260E1D:6514BC:760CC5:674EAB32"
+      "X-GitHub-Request-Id": "AA0E:275BE1:5DAA7A:6CD6EB:674EB57F"
     }
   },
-  "uuid": "514e7c83-08c5-4ebb-b29c-18d729fd2e26",
+  "uuid": "322df042-2623-4516-ba69-da9fad6594ac",
   "persistent": true,
-  "insertionIndex": 7
+  "insertionIndex": 8
 }

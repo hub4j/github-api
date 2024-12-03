@@ -7,8 +7,6 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -100,47 +98,47 @@ public class GHAutolinkTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testListAllAutolinks() throws Exception {
-        assertThat("Initial autolinks should be empty", repo.listAutolinks().toList(), is(empty()));
+        assertThat("Initial autolinks list", repo.listAutolinks().toList(), is(empty()));
 
-        try {
-            GHAutolink autolink1 = repo.createAutolink()
-                    .withKeyPrefix("LIST-")
-                    .withUrlTemplate("https://example.com/list1/<num>")
-                    .withIsAlphanumeric(true)
-                    .create();
+        GHAutolink autolink1 = repo.createAutolink()
+                .withKeyPrefix("LIST-")
+                .withUrlTemplate("https://example.com/list1/<num>")
+                .withIsAlphanumeric(true)
+                .create();
 
-            GHAutolink autolink2 = repo.createAutolink()
-                    .withKeyPrefix("LISTED-")
-                    .withUrlTemplate("https://example.com/list2/<num>")
-                    .withIsAlphanumeric(false)
-                    .create();
+        GHAutolink autolink2 = repo.createAutolink()
+                .withKeyPrefix("LISTED-")
+                .withUrlTemplate("https://example.com/list2/<num>")
+                .withIsAlphanumeric(false)
+                .create();
 
-            List<GHAutolink> autolinks = repo.listAutolinks().toList();
-            assertThat("Should have exactly 2 autolinks", ((List<?>) autolinks).size(), is(2));
+        boolean found1 = false;
+        boolean found2 = false;
 
-            GHAutolink foundAutolink1 = autolinks.stream()
-                    .filter(a -> a.getId().equals(autolink1.getId()))
-                    .findFirst()
-                    .orElseThrow(() -> new AssertionError("Autolink 1 not found"));
+        PagedIterable<GHAutolink> autolinks = repo.listAutolinks();
 
-            GHAutolink foundAutolink2 = autolinks.stream()
-                    .filter(a -> a.getId().equals(autolink2.getId()))
-                    .findFirst()
-                    .orElseThrow(() -> new AssertionError("Autolink 2 not found"));
+        List<GHAutolink> autolinkList = autolinks.toList();
+        assertThat("Number of autolinks", autolinkList.size(), is(2));
 
-            assertAutolinksEqual(autolink1, foundAutolink1);
-            assertAutolinksEqual(autolink2, foundAutolink2);
+        for (GHAutolink autolink : autolinkList) {
 
-        } catch (Exception e) {
-            System.err.println("Failed to list autolinks: " + e.getMessage());
+            if (autolink.getId().equals(autolink1.getId())) {
+                found1 = true;
+                assertThat(autolink.getKeyPrefix(), equalTo(autolink1.getKeyPrefix()));
+                assertThat(autolink.getUrlTemplate(), equalTo(autolink1.getUrlTemplate()));
+                assertThat(autolink.isAlphanumeric(), equalTo(autolink1.isAlphanumeric()));
+            }
+            if (autolink.getId().equals(autolink2.getId())) {
+                found2 = true;
+                assertThat(autolink.getKeyPrefix(), equalTo(autolink2.getKeyPrefix()));
+                assertThat(autolink.getUrlTemplate(), equalTo(autolink2.getUrlTemplate()));
+                assertThat(autolink.isAlphanumeric(), equalTo(autolink2.isAlphanumeric()));
+            }
         }
-    }
 
-    private void assertAutolinksEqual(GHAutolink expected, GHAutolink actual) {
-        assertThat(actual.getKeyPrefix(), equalTo(expected.getKeyPrefix()));
-        assertThat(actual.getUrlTemplate(), equalTo(expected.getUrlTemplate()));
-        assertThat(actual.isAlphanumeric(), equalTo(expected.isAlphanumeric()));
-        assertThat(actual.getOwner(), equalTo(expected.getOwner()));
+        assertThat("First autolink", found1, is(true));
+        assertThat("Second autolink", found2, is(true));
+
     }
 
     /**

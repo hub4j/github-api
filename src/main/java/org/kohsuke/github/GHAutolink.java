@@ -9,7 +9,7 @@ import java.io.IOException;
  *
  * @author Alaurant
  * @see GHAutolinkBuilder
- * @see GHRepository#getAutolinks() GHRepository#getAutolinks()
+ * @see GHRepository#listAutolinks() GHRepository#listAutolinks()
  * @see <a href="https://docs.github.com/en/rest/repos/autolinks">Repository autolinks API</a>
  */
 public class GHAutolink {

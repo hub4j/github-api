@@ -1,5 +1,5 @@
 {
-  "id": "cc1427a5-e6ee-40de-ab73-dadb2e2f7204",
+  "id": "1aa929ba-72a4-4713-b608-a1ed2f9d9de8",
   "name": "repos_alaurant_github-api-test_autolinks",
   "request": {
     "url": "/repos/Alaurant/github-api-test/autolinks",
@@ -14,7 +14,7 @@
     "status": 200,
     "body": "[]",
     "headers": {
-      "Date": "Fri, 29 Nov 2024 12:08:32 GMT",
+      "Date": "Tue, 03 Dec 2024 06:54:43 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
@@ -25,9 +25,9 @@
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4890",
-      "X-RateLimit-Reset": "1732885041",
-      "X-RateLimit-Used": "110",
+      "X-RateLimit-Remaining": "4971",
+      "X-RateLimit-Reset": "1733209471",
+      "X-RateLimit-Used": "29",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -38,10 +38,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "AA57:BD623:19252C:1DAF47:6749AEC0"
+      "X-GitHub-Request-Id": "AB98:25E009:637F4C:747775:674EAB33"
     }
   },
-  "uuid": "cc1427a5-e6ee-40de-ab73-dadb2e2f7204",
+  "uuid": "1aa929ba-72a4-4713-b608-a1ed2f9d9de8",
   "persistent": true,
   "insertionIndex": 9
 }

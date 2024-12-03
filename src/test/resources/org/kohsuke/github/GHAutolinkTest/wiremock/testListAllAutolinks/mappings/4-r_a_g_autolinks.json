@@ -1,34 +1,40 @@
 {
-  "id": "ab00ffa1-3b5a-4230-b0c2-6cac85becc40",
-  "name": "repos_alaurant_github-api-test",
+  "id": "7e65d78b-6c47-4bda-b792-8bee46940dfa",
+  "name": "repos_alaurant_github-api-test_autolinks",
   "request": {
-    "url": "/repos/Alaurant/github-api-test",
-    "method": "GET",
+    "url": "/repos/Alaurant/github-api-test/autolinks",
+    "method": "POST",
     "headers": {
       "Accept": {
         "equalTo": "application/vnd.github+json"
       }
-    }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"key_prefix\":\"LIST-\",\"url_template\":\"https://example.com/list1/<num>\",\"is_alphanumeric\":true}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
   },
   "response": {
-    "status": 200,
-    "bodyFileName": "2-r_a_github-api-test.json",
+    "status": 201,
+    "body": "{\"id\":6208099,\"key_prefix\":\"LIST-\",\"url_template\":\"https://example.com/list1/<num>\",\"is_alphanumeric\":true}",
     "headers": {
-      "Date": "Fri, 29 Nov 2024 12:08:34 GMT",
+      "Date": "Tue, 03 Dec 2024 06:54:46 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
-      "ETag": "W/\"7e65dfd17dae8b0f5999ecf48b16504e24747c234146f1413401d052558f8f01\"",
-      "Last-Modified": "Thu, 28 Nov 2024 23:44:55 GMT",
+      "ETag": "\"2314ffdb64a38ba1fbc4122d2766f10c7448210410700da49af8b39f4e97997c\"",
       "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, project, read:packages, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "github-authentication-token-expiration": "2025-02-25 04:28:56 UTC",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4887",
-      "X-RateLimit-Reset": "1732885041",
-      "X-RateLimit-Used": "113",
+      "X-RateLimit-Remaining": "4966",
+      "X-RateLimit-Reset": "1733209471",
+      "X-RateLimit-Used": "34",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -39,10 +45,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "AA66:BD623:1925B4:1DAFEE:6749AEC2"
+      "X-GitHub-Request-Id": "ABA9:261CA8:640F26:750764:674EAB36"
     }
   },
-  "uuid": "ab00ffa1-3b5a-4230-b0c2-6cac85becc40",
+  "uuid": "7e65d78b-6c47-4bda-b792-8bee46940dfa",
   "persistent": true,
-  "insertionIndex": 2
+  "insertionIndex": 4
 }

@@ -3386,14 +3386,14 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets all autolinks of a repo (admin only).
+     * List all autolinks of a repo (admin only).
      * (https://docs.github.com/en/rest/repos/autolinks?apiVersion=2022-11-28#get-all-autolinks-of-a-repository)
      *
      * @return the autolinks
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHAutolink> getAutolinks() throws IOException {
+    public PagedIterable<GHAutolink> listAutolinks() throws IOException {
         return root().createRequest()
                 .withHeader("Accept", "application/vnd.github+json")
                 .withUrlPath(String.format("/repos/%s/%s/autolinks", getOwnerName(), getName()))
@@ -3401,7 +3401,7 @@ public class GHRepository extends GHObject {
     }
 
     /**
-     * Gets an autolink by ID.
+     * Read an autolink by ID.
      * (https://docs.github.com/en/rest/repos/autolinks?apiVersion=2022-11-28#get-an-autolink-reference-of-a-repository)
      *
      * @param autolinkId
@@ -3410,7 +3410,7 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHAutolink getAutolink(Integer autolinkId) throws IOException {
+    public GHAutolink readAutolink(Integer autolinkId) throws IOException {
         return root().createRequest()
                 .withHeader("Accept", "application/vnd.github+json")
                 .withUrlPath(String.format("/repos/%s/%s/autolinks/%d", getOwnerName(), getName(), autolinkId))

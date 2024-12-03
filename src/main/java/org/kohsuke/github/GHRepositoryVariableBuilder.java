@@ -45,7 +45,7 @@ public class GHRepositoryVariableBuilder<S> extends AbstractBuilder<GHRepository
      */
     @Nonnull
     @BetaApi
-    public S name(String value) throws IOException {
+    public S name(String value) {
         return with("name", value);
     }
 
@@ -60,7 +60,7 @@ public class GHRepositoryVariableBuilder<S> extends AbstractBuilder<GHRepository
      */
     @Nonnull
     @BetaApi
-    public S value(String value) throws IOException {
+    public S value(String value) {
         return with("value", value);
     }
 }

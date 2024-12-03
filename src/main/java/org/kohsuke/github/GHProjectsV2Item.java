@@ -70,7 +70,7 @@ public class GHProjectsV2Item extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public GHUser getCreator() throws IOException {
+    public GHUser getCreator() {
         return root().intern(creator);
     }
 

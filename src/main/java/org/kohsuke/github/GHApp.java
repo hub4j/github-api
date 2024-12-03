@@ -162,7 +162,7 @@ public class GHApp extends GHObject {
      *             on error
      * @see <a href="https://developer.github.com/v3/apps/#get-an-installation">Get an installation</a>
      */
-    public GHAppInstallation getInstallationById(long id) throws IOException {
+    public GHAppInstallation getInstallationById(long id) {
         return root().createRequest()
                 .withUrlPath(String.format("/app/installations/%d", id))
                 .fetch(GHAppInstallation.class);
@@ -181,7 +181,7 @@ public class GHApp extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#get-an-organization-installation">Get an organization
      *      installation</a>
      */
-    public GHAppInstallation getInstallationByOrganization(String name) throws IOException {
+    public GHAppInstallation getInstallationByOrganization(String name) {
         return root().createRequest()
                 .withUrlPath(String.format("/orgs/%s/installation", name))
                 .fetch(GHAppInstallation.class);
@@ -202,7 +202,7 @@ public class GHApp extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#get-a-repository-installation">Get a repository
      *      installation</a>
      */
-    public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) throws IOException {
+    public GHAppInstallation getInstallationByRepository(String ownerName, String repositoryName) {
         return root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/installation", ownerName, repositoryName))
                 .fetch(GHAppInstallation.class);
@@ -220,7 +220,7 @@ public class GHApp extends GHObject {
      *             on error
      * @see <a href="https://developer.github.com/v3/apps/#get-a-user-installation">Get a user installation</a>
      */
-    public GHAppInstallation getInstallationByUser(String name) throws IOException {
+    public GHAppInstallation getInstallationByUser(String name) {
         return root().createRequest()
                 .withUrlPath(String.format("/users/%s/installation", name))
                 .fetch(GHAppInstallation.class);

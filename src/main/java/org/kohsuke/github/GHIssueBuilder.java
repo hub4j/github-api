@@ -101,7 +101,7 @@ public class GHIssueBuilder {
      * @throws IOException
      *             the io exception
      */
-    public GHIssue create() throws IOException {
+    public GHIssue create() {
         return builder.with("labels", labels)
                 .with("assignees", assignees)
                 .withUrlPath(repo.getApiTailUrl("issues"))

@@ -53,7 +53,7 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             the io exception
      */
-    public List<GHKey> getKeys() throws IOException {
+    public List<GHKey> getKeys() {
         return root().createRequest().withUrlPath(getApiTailUrl("keys")).toIterable(GHKey[].class, null).toList();
     }
 
@@ -63,7 +63,7 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             the io exception
      */
-    public void follow() throws IOException {
+    public void follow() {
         root().createRequest().method("PUT").withUrlPath("/user/following/" + login).send();
     }
 
@@ -73,7 +73,7 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             the io exception
      */
-    public void unfollow() throws IOException {
+    public void unfollow() {
         root().createRequest().method("DELETE").withUrlPath("/user/following/" + login).send();
     }
 
@@ -84,7 +84,7 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             the io exception
      */
-    public GHPersonSet<GHUser> getFollows() throws IOException {
+    public GHPersonSet<GHUser> getFollows() {
         return new GHPersonSet<GHUser>(listFollows().toList());
     }
 
@@ -104,7 +104,7 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             the io exception
      */
-    public GHPersonSet<GHUser> getFollowers() throws IOException {
+    public GHPersonSet<GHUser> getFollowers() {
         return new GHPersonSet<GHUser>(listFollowers().toList());
     }
 
@@ -214,7 +214,7 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             the io exception
      */
-    public GHPersonSet<GHOrganization> getOrganizations() throws IOException {
+    public GHPersonSet<GHOrganization> getOrganizations() {
         GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
         Set<String> names = new HashSet<String>();
         for (GHOrganization o : root().createRequest()
@@ -234,7 +234,7 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public PagedIterable<GHEventInfo> listEvents() throws IOException {
+    public PagedIterable<GHEventInfo> listEvents() {
         return root().createRequest()
                 .withUrlPath(String.format("/users/%s/events", login))
                 .toIterable(GHEventInfo[].class, null);
@@ -247,7 +247,7 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHGist> listGists() throws IOException {
+    public PagedIterable<GHGist> listGists() {
         return root().createRequest()
                 .withUrlPath(String.format("/users/%s/gists", login))
                 .toIterable(GHGist[].class, null);
@@ -263,7 +263,7 @@ public class GHUser extends GHPerson {
      *      href=https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap>Github
      *      LDAP</a>
      */
-    public Optional<String> getLdapDn() throws IOException {
+    public Optional<String> getLdapDn() {
         super.populate();
         return Optional.ofNullable(ldap_dn);
     }
@@ -275,7 +275,7 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             on error
      */
-    public Date getSuspendedAt() throws IOException {
+    public Date getSuspendedAt() {
         super.populate();
         return GitHubClient.parseDate(suspendedAt);
     }

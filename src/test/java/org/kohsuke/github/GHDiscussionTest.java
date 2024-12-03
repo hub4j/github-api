@@ -4,8 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
@@ -94,9 +94,9 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
         try {
             team.createDiscussion("Some Discussion").done();
             fail("Body is required.");
-        } catch (HttpException e) {
-            assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getMessage(),
+        } catch (UncheckedIOException e) {
+            assertThat(e.getCause(), instanceOf(HttpException.class));
+            assertThat(e.getCause().getMessage(),
                     containsString("https://developer.github.com/v3/teams/discussions/#create-a-discussion"));
         }
     }
@@ -182,8 +182,8 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
         try {
             gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(TEAM_SLUG).getDiscussion(discussion.getNumber());
             fail();
-        } catch (FileNotFoundException e) {
-            assertThat(e.getMessage(),
+        } catch (UncheckedIOException e) {
+            assertThat(e.getCause().getMessage(),
                     containsString("https://developer.github.com/v3/teams/discussions/#get-a-single-discussion"));
         }
     }

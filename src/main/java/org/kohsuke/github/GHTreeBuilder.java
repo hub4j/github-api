@@ -131,7 +131,7 @@ public class GHTreeBuilder {
         try {
             String dataSha = repo.createBlob().binaryContent(content).create().getSha();
             return shaEntry(path, dataSha, executable);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new GHException("Cannot create binary content of '" + path + "'", e);
         }
     }
@@ -175,7 +175,7 @@ public class GHTreeBuilder {
      * @throws IOException
      *             the io exception
      */
-    public GHTree create() throws IOException {
+    public GHTree create() {
         req.with("tree", treeEntries);
         return req.method("POST").withUrlPath(getApiTail()).fetch(GHTree.class).wrap(repo);
     }

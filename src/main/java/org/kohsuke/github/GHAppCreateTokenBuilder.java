@@ -89,7 +89,7 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    public GHAppInstallationToken create() throws IOException {
+    public GHAppInstallationToken create() {
         return builder.method("POST").withUrlPath(apiUrlTail).fetch(GHAppInstallationToken.class);
     }
 

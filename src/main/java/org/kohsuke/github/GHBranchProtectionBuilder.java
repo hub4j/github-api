@@ -182,7 +182,7 @@ public class GHBranchProtectionBuilder {
      * @throws IOException
      *             the io exception
      */
-    public GHBranchProtection enable() throws IOException {
+    public GHBranchProtection enable() {
         return requester().method("PUT")
                 .with(fields)
                 .withNullable("required_status_checks", statusChecks)

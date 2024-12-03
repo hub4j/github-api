@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.kohsuke.github.example.dataobject.ReadOnlyObjects;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.*;
 
 import static org.hamcrest.Matchers.*;
@@ -415,7 +416,7 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             GHRepository repo = gitHub.getRepository("hub4j-test-org/github-api");
             repo.getFileContent("ghcontent-ro/service-down");
             fail("Exception was expected");
-        } catch (IOException e) {
+        } catch (UncheckedIOException e) {
             assertThat(e.getClass().getName(), equalToIgnoringCase(ServiceDownException.class.getName()));
         }
     }

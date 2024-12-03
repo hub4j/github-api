@@ -69,7 +69,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    public Date getExpiresAt() throws IOException {
+    public Date getExpiresAt() {
         return GitHubClient.parseDate(expires_at);
     }
 }

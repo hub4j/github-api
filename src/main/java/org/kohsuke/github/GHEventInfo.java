@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.*;
 
 // TODO: Auto-generated Javadoc
@@ -141,7 +142,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
-    public GHRepository getRepository() throws IOException {
+    public GHRepository getRepository() {
         return root().getRepository(repo.name);
     }
 
@@ -154,7 +155,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
-    public GHUser getActor() throws IOException {
+    public GHUser getActor() {
         return root().getUser(actor.getLogin());
     }
 
@@ -165,7 +166,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    public String getActorLogin() throws IOException {
+    public String getActorLogin() {
         return actor.getLogin();
     }
 
@@ -178,7 +179,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
             justification = "The field comes from JSON deserialization")
-    public GHOrganization getOrganization() throws IOException {
+    public GHOrganization getOrganization() {
         return (org == null || org.getLogin() == null) ? null : root().getOrganization(org.getLogin());
     }
 
@@ -194,9 +195,13 @@ public class GHEventInfo extends GitHubInteractiveObject {
      * @throws IOException
      *             if payload cannot be parsed
      */
-    public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);
-        v.lateBind();
-        return v;
+    public <T extends GHEventPayload> T getPayload(Class<T> type) {
+        try {
+            T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);
+            v.lateBind();
+            return v;
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

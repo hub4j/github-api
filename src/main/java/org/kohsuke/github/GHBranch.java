@@ -38,7 +38,7 @@ public class GHBranch extends GitHubInteractiveObject {
      *             the exception
      */
     @JsonCreator
-    GHBranch(@JsonProperty(value = "name", required = true) String name) throws Exception {
+    GHBranch(@JsonProperty(value = "name", required = true) String name) {
         Objects.requireNonNull(name);
         this.name = name;
     }
@@ -106,7 +106,7 @@ public class GHBranch extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public GHBranchProtection getProtection() throws IOException {
+    public GHBranchProtection getProtection() {
         return root().createRequest().setRawUrlPath(protection_url).fetch(GHBranchProtection.class);
     }
 
@@ -125,7 +125,7 @@ public class GHBranch extends GitHubInteractiveObject {
      * @throws IOException
      *             if disabling protection fails
      */
-    public void disableProtection() throws IOException {
+    public void disableProtection() {
         root().createRequest().method("DELETE").setRawUrlPath(protection_url).send();
     }
 
@@ -155,7 +155,7 @@ public class GHBranch extends GitHubInteractiveObject {
      *             if merging fails
      */
     @CheckForNull
-    public GHCommit merge(GHBranch headBranch, String commitMessage) throws IOException {
+    public GHCommit merge(GHBranch headBranch, String commitMessage) {
         return merge(headBranch.getName(), commitMessage);
     }
 
@@ -176,7 +176,7 @@ public class GHBranch extends GitHubInteractiveObject {
      *             if merging fails
      */
     @CheckForNull
-    public GHCommit merge(String head, String commitMessage) throws IOException {
+    public GHCommit merge(String head, String commitMessage) {
         GHCommit result = root().createRequest()
                 .withUrlPath(owner.getApiTailUrl("merges"))
                 .method("POST")

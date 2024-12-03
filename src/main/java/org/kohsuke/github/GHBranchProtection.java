@@ -70,7 +70,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public void enabledSignedCommits() throws IOException {
+    public void enabledSignedCommits() {
         requester().method("POST").withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);
     }
 
@@ -80,7 +80,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public void disableSignedCommits() throws IOException {
+    public void disableSignedCommits() {
         requester().method("DELETE").withUrlPath(url + REQUIRE_SIGNATURES_URI).send();
     }
 
@@ -172,7 +172,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public boolean getRequiredSignatures() throws IOException {
+    public boolean getRequiredSignatures() {
         return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;
     }
 

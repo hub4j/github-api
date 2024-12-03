@@ -27,7 +27,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
 
         try {
             name(name);
-        } catch (IOException e) {
+        } catch (Exception e) {
             // not going to happen here
         }
     }
@@ -41,7 +41,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public GHCreateRepositoryBuilder gitignoreTemplate(String language) throws IOException {
+    public GHCreateRepositoryBuilder gitignoreTemplate(String language) {
         return with("gitignore_template", language);
     }
 
@@ -54,7 +54,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public GHCreateRepositoryBuilder licenseTemplate(String license) throws IOException {
+    public GHCreateRepositoryBuilder licenseTemplate(String license) {
         return with("license_template", license);
     }
 
@@ -67,7 +67,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public GHCreateRepositoryBuilder autoInit(boolean enabled) throws IOException {
+    public GHCreateRepositoryBuilder autoInit(boolean enabled) {
         return with("auto_init", enabled);
     }
 
@@ -80,7 +80,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public GHCreateRepositoryBuilder team(GHTeam team) throws IOException {
+    public GHCreateRepositoryBuilder team(GHTeam team) {
         if (team != null)
             return with("team_id", team.getId());
         return this;
@@ -95,7 +95,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public GHCreateRepositoryBuilder owner(String owner) throws IOException {
+    public GHCreateRepositoryBuilder owner(String owner) {
         return with("owner", owner);
     }
 
@@ -135,7 +135,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
      * @throws IOException
      *             if repository cannot be created
      */
-    public GHRepository create() throws IOException {
+    public GHRepository create() {
         return done();
     }
 }

@@ -178,7 +178,7 @@ public class GitHub {
                         if (u != null) {
                             login = u.getLogin();
                         }
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                     }
                 }
                 return login;
@@ -464,12 +464,12 @@ public class GitHub {
      *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-    public GHMyself getMyself() throws IOException {
+    public GHMyself getMyself() {
         client.requireCredential();
         return setMyself();
     }
 
-    private GHMyself setMyself() throws IOException {
+    private GHMyself setMyself() {
         synchronized (this) {
             if (this.myself == null) {
                 this.myself = createRequest().withUrlPath("/user").fetch(GHMyself.class);
@@ -487,7 +487,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public GHUser getUser(String login) throws IOException {
+    public GHUser getUser(String login) {
         GHUser u = users.get(login);
         if (u == null) {
             u = createRequest().withUrlPath("/users/" + login).fetch(GHUser.class);
@@ -529,7 +529,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public GHOrganization getOrganization(String name) throws IOException {
+    public GHOrganization getOrganization(String name) {
         GHOrganization o = orgs.get(name);
         if (o == null) {
             o = createRequest().withUrlPath("/orgs/" + name).fetch(GHOrganization.class);
@@ -571,7 +571,7 @@ public class GitHub {
      *             the io exception
      * @see GHRepository#getName() GHRepository#getName()
      */
-    public GHRepository getRepository(String name) throws IOException {
+    public GHRepository getRepository(String name) {
         String[] tokens = name.split("/");
         if (tokens.length != 2) {
             throw new IllegalArgumentException("Repository name must be in format owner/repo");
@@ -588,7 +588,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public GHRepository getRepositoryById(long id) throws IOException {
+    public GHRepository getRepositoryById(long id) {
         return createRequest().withUrlPath("/repositories/" + id).fetch(GHRepository.class);
     }
 
@@ -600,7 +600,7 @@ public class GitHub {
      *             the io exception
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      */
-    public PagedIterable<GHLicense> listLicenses() throws IOException {
+    public PagedIterable<GHLicense> listLicenses() {
         return createRequest().withUrlPath("/licenses").toIterable(GHLicense[].class, null);
     }
 
@@ -611,7 +611,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHUser> listUsers() throws IOException {
+    public PagedIterable<GHUser> listUsers() {
         return createRequest().withUrlPath("/users").toIterable(GHUser[].class, null);
     }
 
@@ -625,7 +625,7 @@ public class GitHub {
      *             the io exception
      * @see GHLicense#getKey() GHLicense#getKey()
      */
-    public GHLicense getLicense(String key) throws IOException {
+    public GHLicense getLicense(String key) {
         return createRequest().withUrlPath("/licenses/" + key).fetch(GHLicense.class);
     }
 
@@ -642,7 +642,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/apps/marketplace/#list-all-plans-for-your-marketplace-listing">List
      *      Plans</a>
      */
-    public PagedIterable<GHMarketplacePlan> listMarketplacePlans() throws IOException {
+    public PagedIterable<GHMarketplacePlan> listMarketplacePlans() {
         return createRequest().withUrlPath("/marketplace_listing/plans").toIterable(GHMarketplacePlan[].class, null);
     }
 
@@ -653,7 +653,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public List<GHInvitation> getMyInvitations() throws IOException {
+    public List<GHInvitation> getMyInvitations() {
         return createRequest().withUrlPath("/user/repository_invitations")
                 .toIterable(GHInvitation[].class, null)
                 .toList();
@@ -669,7 +669,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public Map<String, GHOrganization> getMyOrganizations() throws IOException {
+    public Map<String, GHOrganization> getMyOrganizations() {
         GHOrganization[] orgs = createRequest().withUrlPath("/user/orgs")
                 .toIterable(GHOrganization[].class, null)
                 .toArray();
@@ -695,7 +695,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/apps/marketplace/#get-a-users-marketplace-purchases">Get a user's
      *      Marketplace purchases</a>
      */
-    public PagedIterable<GHMarketplaceUserPurchase> getMyMarketplacePurchases() throws IOException {
+    public PagedIterable<GHMarketplaceUserPurchase> getMyMarketplacePurchases() {
         return createRequest().withUrlPath("/user/marketplace_purchases")
                 .toIterable(GHMarketplaceUserPurchase[].class, null);
     }
@@ -709,7 +709,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public Map<String, GHOrganization> getUserPublicOrganizations(GHUser user) throws IOException {
+    public Map<String, GHOrganization> getUserPublicOrganizations(GHUser user) {
         return getUserPublicOrganizations(user.getLogin());
     }
 
@@ -724,7 +724,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public Map<String, GHOrganization> getUserPublicOrganizations(String login) throws IOException {
+    public Map<String, GHOrganization> getUserPublicOrganizations(String login) {
         GHOrganization[] orgs = createRequest().withUrlPath("/users/" + login + "/orgs")
                 .toIterable(GHOrganization[].class, null)
                 .toArray();
@@ -746,7 +746,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public Map<String, Set<GHTeam>> getMyTeams() throws IOException {
+    public Map<String, Set<GHTeam>> getMyTeams() {
         Map<String, Set<GHTeam>> allMyTeams = new HashMap<>();
         for (GHTeam team : createRequest().withUrlPath("/user/teams")
                 .toIterable(GHTeam[].class, item -> item.wrapUp(this))
@@ -769,7 +769,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public List<GHEventInfo> getEvents() throws IOException {
+    public List<GHEventInfo> getEvents() {
         return createRequest().withUrlPath("/events").toIterable(GHEventInfo[].class, null).toList();
     }
 
@@ -784,7 +784,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public List<GHEventInfo> getUserPublicEvents(String login) throws IOException {
+    public List<GHEventInfo> getUserPublicEvents(String login) {
         return createRequest().withUrlPath("/users/" + login + "/events/public")
                 .toIterable(GHEventInfo[].class, null)
                 .toList();
@@ -799,7 +799,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public GHGist getGist(String id) throws IOException {
+    public GHGist getGist(String id) {
         return createRequest().withUrlPath("/gists/" + id).fetch(GHGist.class);
     }
 
@@ -929,7 +929,7 @@ public class GitHub {
             String clientSecret,
             List<String> scopes,
             String note,
-            String note_url) throws IOException {
+            String note_url) {
         Requester requester = createRequest().with("client_secret", clientSecret)
                 .with("scopes", scopes)
                 .with("note", note)
@@ -948,7 +948,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#delete-an-authorization">Delete an
      *      authorization</a>
      */
-    public void deleteAuth(long id) throws IOException {
+    public void deleteAuth(long id) {
         createRequest().method("DELETE").withUrlPath("/authorizations/" + id).send();
     }
 
@@ -965,7 +965,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#check-an-authorization">Check an
      *      authorization</a>
      */
-    public GHAuthorization checkAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
+    public GHAuthorization checkAuth(@Nonnull String clientId, @Nonnull String accessToken) {
         return createRequest().withUrlPath("/applications/" + clientId + "/tokens/" + accessToken)
                 .fetch(GHAuthorization.class);
     }
@@ -983,7 +983,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#reset-an-authorization">Reset an
      *      authorization</a>
      */
-    public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) throws IOException {
+    public GHAuthorization resetAuth(@Nonnull String clientId, @Nonnull String accessToken) {
         return createRequest().method("POST")
                 .withUrlPath("/applications/" + clientId + "/tokens/" + accessToken)
                 .fetch(GHAuthorization.class);
@@ -998,7 +998,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations">List your
      *      authorizations</a>
      */
-    public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
+    public PagedIterable<GHAuthorization> listMyAuthorizations() {
         return createRequest().withUrlPath("/authorizations").toIterable(GHAuthorization[].class, null);
     }
 
@@ -1013,7 +1013,7 @@ public class GitHub {
      * @see <a href="https://developer.github.com/v3/apps/#get-the-authenticated-github-app">Get the authenticated
      *      GitHub App</a>
      */
-    public GHApp getApp() throws IOException {
+    public GHApp getApp() {
         return createRequest().withUrlPath("/app").fetch(GHApp.class);
     }
 
@@ -1027,7 +1027,7 @@ public class GitHub {
      *             the IO exception
      * @see <a href="https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#get-an-app">Get an app</a>
      */
-    public GHApp getApp(@Nonnull String slug) throws IOException {
+    public GHApp getApp(@Nonnull String slug) {
         return createRequest().withUrlPath("/apps/" + slug).fetch(GHApp.class);
     }
 
@@ -1043,7 +1043,7 @@ public class GitHub {
      *      "https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#create-a-github-app-from-a-manifest">Get an
      *      app</a>
      */
-    public GHAppFromManifest createAppFromManifest(@Nonnull String code) throws IOException {
+    public GHAppFromManifest createAppFromManifest(@Nonnull String code) {
         return createRequest().method("POST")
                 .withUrlPath("/app-manifests/" + code + "/conversions")
                 .fetch(GHAppFromManifest.class);
@@ -1060,7 +1060,7 @@ public class GitHub {
      *             the io exception
      * @see <a href="https://docs.github.com/en/rest/apps/installations">GitHub App installations</a>
      */
-    public GHAuthenticatedAppInstallation getInstallation() throws IOException {
+    public GHAuthenticatedAppInstallation getInstallation() {
         return new GHAuthenticatedAppInstallation(this);
     }
 
@@ -1082,7 +1082,7 @@ public class GitHub {
      *             authentication
      * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
      */
-    public GHMeta getMeta() throws IOException {
+    public GHMeta getMeta() {
         return this.sanityCachedMeta.get(() -> createRequest().withUrlPath("/meta").fetch(GHMeta.class));
     }
 
@@ -1095,7 +1095,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public GHProject getProject(long id) throws IOException {
+    public GHProject getProject(long id) {
         return createRequest().withUrlPath("/projects/" + id).fetch(GHProject.class);
     }
 
@@ -1108,7 +1108,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public GHProjectColumn getProjectColumn(long id) throws IOException {
+    public GHProjectColumn getProjectColumn(long id) {
         return createRequest().withUrlPath("/projects/columns/" + id).fetch(GHProjectColumn.class).lateBind(this);
     }
 
@@ -1121,7 +1121,7 @@ public class GitHub {
      * @throws IOException
      *             the io exception
      */
-    public GHProjectCard getProjectCard(long id) throws IOException {
+    public GHProjectCard getProjectCard(long id) {
         return createRequest().withUrlPath("/projects/columns/cards/" + id).fetch(GHProjectCard.class).lateBind(this);
     }
 
@@ -1320,7 +1320,7 @@ public class GitHub {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    GHUser intern(GHUser user) throws IOException {
+    GHUser intern(GHUser user) {
         if (user != null) {
             // if we already have this user in our map, get it
             // if not, remember this new user

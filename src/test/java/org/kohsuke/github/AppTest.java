@@ -14,6 +14,7 @@ import org.kohsuke.github.GHOrganization.Permission;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -1608,8 +1609,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
             try {
                 t = r.getLabel("test");
                 fail("Test label should be deleted.");
-            } catch (IOException ex) {
-                assertThat(ex, instanceOf(FileNotFoundException.class));
+            } catch (UncheckedIOException ex) {
+                assertThat(ex.getCause(), instanceOf(FileNotFoundException.class));
             }
 
             t = r.createLabel("test2", "123457", "this is a different test");
@@ -1645,7 +1646,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             try {
                 GHLabel t = getNonRecordingGitHub().getRepository("hub4j-test-org/test-labels").getLabel(name);
                 t.delete();
-            } catch (IOException e) {
+            } catch (UncheckedIOException e) {
 
             }
         }

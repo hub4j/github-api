@@ -116,7 +116,7 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
      * @throws IOException
      *             if team cannot be created
      */
-    public GHTeam create() throws IOException {
+    public GHTeam create() {
         return builder.method("POST").withUrlPath("/orgs/" + orgName + "/teams").fetch(GHTeam.class).wrapUp(root());
     }
 }

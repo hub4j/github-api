@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class GHAutolink {
 
-    private Integer id;
+    private int id;
     private String key_prefix;
     private String url_template;
     private boolean is_alphanumeric;
@@ -31,7 +31,7 @@ public class GHAutolink {
      *
      * @return the id
      */
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -93,7 +93,7 @@ public class GHAutolink {
      *            the repository that owns this autolink
      * @return this instance
      */
-    GHAutolink wrap(GHRepository owner) {
+    GHAutolink lateBind(GHRepository owner) {
         this.owner = owner;
         return this;
     }

@@ -1,8 +1,8 @@
 {
-  "id": "021b08d9-0275-467e-bb5f-1e8b3dc4d44e",
-  "name": "repos_alaurant_github-api-test_autolinks_6208156",
+  "id": "3ed2b3a2-3cc1-4382-86a8-251d4791104b",
+  "name": "repos_alaurant_github-api-test_autolinks_6214212",
   "request": {
-    "url": "/repos/Alaurant/github-api-test/autolinks/6208156",
+    "url": "/repos/Alaurant/github-api-test/autolinks/6214212",
     "method": "DELETE",
     "headers": {
       "Accept": {
@@ -13,16 +13,16 @@
   "response": {
     "status": 204,
     "headers": {
-      "Date": "Tue, 03 Dec 2024 07:38:47 GMT",
+      "Date": "Wed, 04 Dec 2024 00:04:57 GMT",
       "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, project, read:packages, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "github-authentication-token-expiration": "2025-02-25 04:28:56 UTC",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4974",
-      "X-RateLimit-Reset": "1733215115",
-      "X-RateLimit-Used": "26",
+      "X-RateLimit-Remaining": "4966",
+      "X-RateLimit-Reset": "1733273750",
+      "X-RateLimit-Used": "34",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -34,10 +34,10 @@
       "Content-Security-Policy": "default-src 'none'",
       "Vary": "Accept-Encoding, Accept, X-Requested-With",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "AA3D:253D9C:69D586:7B6998:674EB587"
+      "X-GitHub-Request-Id": "AB42:25DAE6:BD2DEF:DC679E:674F9CA9"
     }
   },
-  "uuid": "021b08d9-0275-467e-bb5f-1e8b3dc4d44e",
+  "uuid": "3ed2b3a2-3cc1-4382-86a8-251d4791104b",
   "persistent": true,
   "insertionIndex": 5
 }

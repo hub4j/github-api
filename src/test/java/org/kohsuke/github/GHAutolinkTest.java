@@ -122,13 +122,13 @@ public class GHAutolinkTest extends AbstractGitHubWireMockTest {
 
         for (GHAutolink autolink : autolinkList) {
 
-            if (autolink.getId().equals(autolink1.getId())) {
+            if (autolink.getId() == autolink1.getId()) {
                 found1 = true;
                 assertThat(autolink.getKeyPrefix(), equalTo(autolink1.getKeyPrefix()));
                 assertThat(autolink.getUrlTemplate(), equalTo(autolink1.getUrlTemplate()));
                 assertThat(autolink.isAlphanumeric(), equalTo(autolink1.isAlphanumeric()));
             }
-            if (autolink.getId().equals(autolink2.getId())) {
+            if (autolink.getId() == autolink2.getId()) {
                 found2 = true;
                 assertThat(autolink.getKeyPrefix(), equalTo(autolink2.getKeyPrefix()));
                 assertThat(autolink.getUrlTemplate(), equalTo(autolink2.getUrlTemplate()));

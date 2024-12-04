@@ -3389,7 +3389,7 @@ public class GHRepository extends GHObject {
      * List all autolinks of a repo (admin only).
      * (https://docs.github.com/en/rest/repos/autolinks?apiVersion=2022-11-28#get-all-autolinks-of-a-repository)
      *
-     * @return the autolinks
+     * @return all autolinks in the repo
      * @throws IOException
      *             the io exception
      */
@@ -3397,7 +3397,7 @@ public class GHRepository extends GHObject {
         return root().createRequest()
                 .withHeader("Accept", "application/vnd.github+json")
                 .withUrlPath(String.format("/repos/%s/%s/autolinks", getOwnerName(), getName()))
-                .toIterable(GHAutolink[].class, item -> item.wrap(this));
+                .toIterable(GHAutolink[].class, item -> item.lateBind(this));
     }
 
     /**
@@ -3410,12 +3410,12 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public GHAutolink readAutolink(Integer autolinkId) throws IOException {
+    public GHAutolink readAutolink(int autolinkId) throws IOException {
         return root().createRequest()
                 .withHeader("Accept", "application/vnd.github+json")
                 .withUrlPath(String.format("/repos/%s/%s/autolinks/%d", getOwnerName(), getName(), autolinkId))
                 .fetch(GHAutolink.class)
-                .wrap(this);
+                .lateBind(this);
     }
 
     /**
@@ -3427,7 +3427,7 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void deleteAutolink(Integer autolinkId) throws IOException {
+    public void deleteAutolink(int autolinkId) throws IOException {
         root().createRequest()
                 .method("DELETE")
                 .withHeader("Accept", "application/vnd.github+json")

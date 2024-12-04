@@ -1,5 +1,5 @@
 {
-  "id": "c00247ee-05d0-4136-8c83-2c42f0e9db88",
+  "id": "9a5172dd-9af1-4543-9140-8ca5aeaa4aaa",
   "name": "repos_alaurant_github-api-test_autolinks",
   "request": {
     "url": "/repos/Alaurant/github-api-test/autolinks",
@@ -19,22 +19,22 @@
   },
   "response": {
     "status": 201,
-    "body": "{\"id\":6208152,\"key_prefix\":\"DELETE-\",\"url_template\":\"https://example.com/delete/<num>\",\"is_alphanumeric\":true}",
+    "body": "{\"id\":6214199,\"key_prefix\":\"DELETE-\",\"url_template\":\"https://example.com/delete/<num>\",\"is_alphanumeric\":true}",
     "headers": {
-      "Date": "Tue, 03 Dec 2024 07:38:37 GMT",
+      "Date": "Wed, 04 Dec 2024 00:04:45 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
-      "ETag": "\"6bebc860eff6db9585b7a6749c2e0d12e326bebe505dc3b52b416cd9640bdee3\"",
+      "ETag": "\"a956fdb6994525df51a1d05464cca2bbfcfddd6b16580a60ebed7bee5c481b1c\"",
       "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, project, read:packages, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
       "github-authentication-token-expiration": "2025-02-25 04:28:56 UTC",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4996",
-      "X-RateLimit-Reset": "1733215115",
-      "X-RateLimit-Used": "4",
+      "X-RateLimit-Remaining": "4988",
+      "X-RateLimit-Reset": "1733273750",
+      "X-RateLimit-Used": "12",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -45,10 +45,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "AA00:25E009:674BDB:78DF65:674EB57C"
+      "X-GitHub-Request-Id": "AB05:25FB34:AFA666:CEDF6C:674F9C9D"
     }
   },
-  "uuid": "c00247ee-05d0-4136-8c83-2c42f0e9db88",
+  "uuid": "9a5172dd-9af1-4543-9140-8ca5aeaa4aaa",
   "persistent": true,
   "insertionIndex": 3
 }

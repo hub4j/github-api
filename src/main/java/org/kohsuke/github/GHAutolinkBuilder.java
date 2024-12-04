@@ -84,7 +84,7 @@ public class GHAutolinkBuilder {
                 .withUrlPath(getApiTail())
                 .fetch(GHAutolink.class);
 
-        return autolink.wrap(repo);
+        return autolink.lateBind(repo);
     }
 
 }

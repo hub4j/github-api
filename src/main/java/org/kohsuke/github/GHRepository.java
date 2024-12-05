@@ -3375,4 +3375,64 @@ public class GHRepository extends GHObject {
             requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
         }
     }
+
+    /**
+     * Create an autolink gh autolink builder.
+     *
+     * @return the gh autolink builder
+     */
+    public GHAutolinkBuilder createAutolink() {
+        return new GHAutolinkBuilder(this);
+    }
+
+    /**
+     * List all autolinks of a repo (admin only).
+     * (https://docs.github.com/en/rest/repos/autolinks?apiVersion=2022-11-28#get-all-autolinks-of-a-repository)
+     *
+     * @return all autolinks in the repo
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHAutolink> listAutolinks() throws IOException {
+        return root().createRequest()
+                .withHeader("Accept", "application/vnd.github+json")
+                .withUrlPath(String.format("/repos/%s/%s/autolinks", getOwnerName(), getName()))
+                .toIterable(GHAutolink[].class, item -> item.lateBind(this));
+    }
+
+    /**
+     * Read an autolink by ID.
+     * (https://docs.github.com/en/rest/repos/autolinks?apiVersion=2022-11-28#get-an-autolink-reference-of-a-repository)
+     *
+     * @param autolinkId
+     *            the autolink id
+     * @return the autolink
+     * @throws IOException
+     *             the io exception
+     */
+    public GHAutolink readAutolink(int autolinkId) throws IOException {
+        return root().createRequest()
+                .withHeader("Accept", "application/vnd.github+json")
+                .withUrlPath(String.format("/repos/%s/%s/autolinks/%d", getOwnerName(), getName(), autolinkId))
+                .fetch(GHAutolink.class)
+                .lateBind(this);
+    }
+
+    /**
+     * Delete autolink.
+     * (https://docs.github.com/en/rest/repos/autolinks?apiVersion=2022-11-28#delete-an-autolink-reference-from-a-repository)
+     *
+     * @param autolinkId
+     *            the autolink id
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteAutolink(int autolinkId) throws IOException {
+        root().createRequest()
+                .method("DELETE")
+                .withHeader("Accept", "application/vnd.github+json")
+                .withUrlPath(String.format("/repos/%s/%s/autolinks/%d", getOwnerName(), getName(), autolinkId))
+                .send();
+    }
+
 }

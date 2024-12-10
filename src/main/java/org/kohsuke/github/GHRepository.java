@@ -1501,13 +1501,18 @@ public class GHRepository extends GHObject {
     /**
      * Creates a fork of this repository with optional parameters.
      *
-     * @param organization      the organization to fork to, or null to fork to the authenticated user's account
-     * @param name              the name of the new repository, or null to use the same name as the original repository
-     * @param defaultBranchOnly whether to fork only the default branch
+     * @param organization
+     *            the organization to fork to, or null to fork to the authenticated user's account
+     * @param name
+     *            the name of the new repository, or null to use the same name as the original repository
+     * @param defaultBranchOnly
+     *            whether to fork only the default branch
      * @return the newly forked repository
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
-    public GHRepository createFork(@Nullable String organization, @Nullable String name, boolean defaultBranchOnly) throws IOException {
+    public GHRepository createFork(@Nullable String organization, @Nullable String name, boolean defaultBranchOnly)
+            throws IOException {
 
         if (organization != null && organization.isEmpty()) {
             throw new IllegalArgumentException("Organization cannot be empty");

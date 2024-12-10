@@ -1455,7 +1455,7 @@ public class GHRepository extends GHObject {
     /**
      * Forks this repository as your repository.
      *
-     * @return Newly forked repository that belong to you.
+     * @return Newly forked repository that belongs to you.
      * @throws IOException
      *             the io exception
      * @deprecated Use {@link #createFork(String, String, boolean)} instead
@@ -1488,7 +1488,7 @@ public class GHRepository extends GHObject {
      *
      * @param org
      *            the org
-     * @return Newly forked repository that belong to you.
+     * @return Newly forked repository that belongs to you.
      * @throws IOException
      *             the io exception
      * @deprecated Use {@link #createFork(String, String, boolean)} instead

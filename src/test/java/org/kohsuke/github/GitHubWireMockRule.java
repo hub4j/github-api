@@ -241,6 +241,16 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                     .stubFor(any(anyUrl()).willReturn(aResponse().withTransformers(ProxyToOriginalHostTransformer.NAME))
                             .atPriority(100));
         }
+
+        this.apiServer()
+                .stubFor(post(urlMatching("/repos/.*/forks")).willReturn(aResponse().withStatus(202)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("fork.json")));
+
+        this.apiServer()
+                .stubFor(get(urlMatching("/repos/hub4j-test-org/github-api")).willReturn(aResponse().withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBodyFile("repository.json")));
     }
 
     /**

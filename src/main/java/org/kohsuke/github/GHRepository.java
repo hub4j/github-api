@@ -1458,7 +1458,7 @@ public class GHRepository extends GHObject {
      * @return Newly forked repository that belong to you.
      * @throws IOException
      *             the io exception
-     *  @deprecated
+     * @deprecated
      */
     @Deprecated
     public GHRepository fork() throws IOException {
@@ -1491,7 +1491,7 @@ public class GHRepository extends GHObject {
      * @return Newly forked repository that belong to you.
      * @throws IOException
      *             the io exception
-     *  @deprecated
+     * @deprecated
      */
     @Deprecated
     public GHRepository forkTo(GHOrganization org) throws IOException {
@@ -1535,7 +1535,8 @@ public class GHRepository extends GHObject {
 
         // this API is asynchronous. we need to wait for a bit
         for (int i = 0; i < 10; i++) {
-            GHRepository r = organization != null ? root().getOrganization(organization).getRepository(name != null ? name : this.name)
+            GHRepository r = organization != null
+                    ? root().getOrganization(organization).getRepository(name != null ? name : this.name)
                     : root().getMyself().getRepository(name != null ? name : this.name);
             if (r != null) {
                 return r;

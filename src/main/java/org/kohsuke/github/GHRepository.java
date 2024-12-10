@@ -1458,9 +1458,9 @@ public class GHRepository extends GHObject {
      * @return Newly forked repository that belong to you.
      * @throws IOException
      *             the io exception
-     * @deprecated
+     * @deprecated Use {@link #createFork(String, String, boolean)} instead
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public GHRepository fork() throws IOException {
         return createFork(null, null, false);
     }
@@ -1491,9 +1491,9 @@ public class GHRepository extends GHObject {
      * @return Newly forked repository that belong to you.
      * @throws IOException
      *             the io exception
-     * @deprecated
+     * @deprecated Use {@link #createFork(String, String, boolean)} instead
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public GHRepository forkTo(GHOrganization org) throws IOException {
         return createFork(org.getLogin(), null, false);
     }

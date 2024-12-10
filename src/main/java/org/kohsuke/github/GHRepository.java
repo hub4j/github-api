@@ -1459,22 +1459,9 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @Deprecated
     public GHRepository fork() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiTailUrl("forks")).send();
-
-        // this API is asynchronous. we need to wait for a bit
-        for (int i = 0; i < 10; i++) {
-            GHRepository r = root().getMyself().getRepository(name);
-            if (r != null) {
-                return r;
-            }
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw (IOException) new InterruptedIOException().initCause(e);
-            }
-        }
-        throw new IOException(this + " was forked but can't find the new repository");
+        return createFork(null, null, false);
     }
 
     /**
@@ -1504,16 +1491,50 @@ public class GHRepository extends GHObject {
      * @throws IOException
      *             the io exception
      */
+    @Deprecated
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        root().createRequest()
-                .method("POST")
-                .with("organization", org.getLogin())
-                .withUrlPath(getApiTailUrl("forks"))
-                .send();
+        return createFork(org.getLogin(), null, false);
+    }
+
+    /**
+     * Creates a fork of this repository with optional parameters.
+     *
+     * @param organization
+     *            the organization to fork to, or null to fork to the authenticated user's account
+     * @param name
+     *            the name of the new repository, or null to use the same name as the original repository
+     * @param defaultBranchOnly
+     *            whether to fork only the default branch
+     * @return the newly forked repository
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    public GHRepository createFork(String organization, String name, boolean defaultBranchOnly) throws IOException {
+        if (organization != null && organization.isEmpty()) {
+            throw new IllegalArgumentException("Organization cannot be empty");
+        }
+        if (name != null && name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
+
+        Requester requester = root().createRequest().method("POST").withUrlPath(getApiTailUrl("forks"));
+
+        if (organization != null) {
+            requester.with("organization", organization);
+        }
+        if (name != null) {
+            requester.with("name", name);
+        }
+        if (defaultBranchOnly) {
+            requester.with("default_branch_only", true);
+        }
+
+        requester.send();
 
         // this API is asynchronous. we need to wait for a bit
         for (int i = 0; i < 10; i++) {
-            GHRepository r = org.getRepository(name);
+            GHRepository r = organization != null ? root().getOrganization(organization).getRepository(name != null ? name : this.name)
+                    : root().getMyself().getRepository(name != null ? name : this.name);
             if (r != null) {
                 return r;
             }
@@ -1523,7 +1544,7 @@ public class GHRepository extends GHObject {
                 throw (IOException) new InterruptedIOException().initCause(e);
             }
         }
-        throw new IOException(this + " was forked into " + org.getLogin() + " but can't find the new repository");
+        throw new IOException(this + " was forked but can't find the new repository");
     }
 
     /**

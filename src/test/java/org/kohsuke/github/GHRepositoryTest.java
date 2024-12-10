@@ -824,6 +824,33 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test createFork method with valid parameters.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testCreateForkWithValidParameters() throws IOException {
+        GHRepository repository = getRepository();
+        GHRepository forkedRepository = repository.createFork("new-owner", "new-repo", true);
+        assertThat(forkedRepository, notNullValue());
+        assertThat(forkedRepository.getOwnerName(), equalTo("new-owner"));
+        assertThat(forkedRepository.getName(), equalTo("new-repo"));
+    }
+
+    /**
+     * Test createFork method with invalid parameters.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateForkWithInvalidParameters() throws IOException {
+        GHRepository repository = getRepository();
+        repository.createFork(null, "", true);
+    }
+
+    /**
      * List commit comments some comments.
      *
      * @throws IOException

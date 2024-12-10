@@ -1458,6 +1458,7 @@ public class GHRepository extends GHObject {
      * @return Newly forked repository that belong to you.
      * @throws IOException
      *             the io exception
+     *  @deprecated
      */
     @Deprecated
     public GHRepository fork() throws IOException {
@@ -1490,6 +1491,7 @@ public class GHRepository extends GHObject {
      * @return Newly forked repository that belong to you.
      * @throws IOException
      *             the io exception
+     *  @deprecated
      */
     @Deprecated
     public GHRepository forkTo(GHOrganization org) throws IOException {

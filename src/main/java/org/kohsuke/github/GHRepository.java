@@ -1515,22 +1515,18 @@ public class GHRepository extends GHObject {
             throws IOException {
 
         if (organization != null && organization.isEmpty()) {
-            throw new IllegalArgumentException("Organization cannot be empty");
+            throw new IllegalArgumentException("Organization cannot be empty. Pass null for default value.");
         }
         if (name != null && name.isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty");
+            throw new IllegalArgumentException("Name cannot be empty. Pass null for default value.");
         }
         if (name != null && !name.matches("^[a-zA-Z0-9._-]+$")) {
             throw new IllegalArgumentException("Repository name contains invalid characters");
         }
         Requester requester = root().createRequest().method("POST").withUrlPath(getApiTailUrl("forks"));
 
-        if (organization != null) {
-            requester.with("organization", organization);
-        }
-        if (name != null) {
-            requester.with("name", name);
-        }
+        requester.with("organization", organization);
+        requester.with("name", name);
         if (defaultBranchOnly) {
             requester.with("default_branch_only", true);
         }
@@ -1539,9 +1535,14 @@ public class GHRepository extends GHObject {
 
         // this API is asynchronous. we need to wait for a bit
         for (int i = 0; i < 10; i++) {
-            GHRepository r = organization != null
-                    ? root().getOrganization(organization).getRepository(name != null ? name : this.name)
-                    : root().getMyself().getRepository(name != null ? name : this.name);
+            organization = organization != null ? organization : root().getMyself().getLogin();
+            name = name != null ? name : this.name;
+            GHRepository r;
+            try {
+                r =  GHRepository.read(root(), login, name);
+            } catch (FileNotFoundException e) {
+                r = null;
+            }
             if (r != null) {
                 return r;
             }

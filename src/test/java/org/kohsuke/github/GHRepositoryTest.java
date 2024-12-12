@@ -831,8 +831,10 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testCreateForkWithValidParameters() throws IOException {
-        GHRepository repository = getRepository();
-        GHRepository forkedRepository = repository.createFork("new-owner", "new-repo", true);
+        String repositoryName = "rubywm";
+        String upstreamRepositoryOrganization = "kohsuke";
+        cleanupRepository(GITHUB_API_TEST_ORG + "/" + repositoryName);
+        GHRepository forkedRepository = gitHub.getRepository(upstreamRepositoryOrganization + "/" + repositoryName).createFork(gitHub.getOrganization(GITHUB_API_TEST_ORG).name, repositoryName, true);
         assertThat(forkedRepository, notNullValue());
         assertThat(forkedRepository.getOwnerName(), equalTo("new-owner"));
         assertThat(forkedRepository.getName(), equalTo("new-repo"));

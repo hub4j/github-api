@@ -1539,7 +1539,7 @@ public class GHRepository extends GHObject {
             name = name != null ? name : this.name;
             GHRepository r;
             try {
-                r =  GHRepository.read(root(), login, name);
+                r =  GHRepository.read(root(), root().getMyself().getLogin(), name);
             } catch (FileNotFoundException e) {
                 r = null;
             }
@@ -1553,6 +1553,27 @@ public class GHRepository extends GHObject {
             }
         }
         throw new IOException(this + " was forked but can't find the new repository");
+    }
+
+    /**
+     * Creates a fork of this repository.
+     *
+     * @param defaultBranchOnly if true, only the default branch will be forked
+     * @return the newly forked repository
+     * @throws IOException if an I/O error occurs
+     */
+    public GHRepository createFork(boolean defaultBranchOnly) throws IOException {
+        return createFork(null, null, defaultBranchOnly);
+    }
+
+    /**
+     * Creates a fork of this repository with the default branch only.
+     *
+     * @return the newly forked repository
+     * @throws IOException if an I/O error occurs
+     */
+    public GHRepository createFork() throws IOException {
+        return createFork(true);
     }
 
     /**

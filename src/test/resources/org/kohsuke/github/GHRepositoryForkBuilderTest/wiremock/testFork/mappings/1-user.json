@@ -1,5 +1,5 @@
 {
-  "id": "27ba4f4c-a668-42eb-8ec3-94887ac71aa7",
+  "id": "06589360-6c74-44c7-ac3c-14a96d4ae30b",
   "name": "user",
   "request": {
     "url": "/user",
@@ -14,7 +14,7 @@
     "status": 200,
     "bodyFileName": "1-user.json",
     "headers": {
-      "Date": "Fri, 13 Dec 2024 10:18:14 GMT",
+      "Date": "Fri, 13 Dec 2024 11:56:04 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
@@ -26,9 +26,9 @@
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4916",
-      "X-RateLimit-Reset": "1734087596",
-      "X-RateLimit-Used": "84",
+      "X-RateLimit-Remaining": "4984",
+      "X-RateLimit-Reset": "1734094496",
+      "X-RateLimit-Used": "16",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -39,10 +39,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "18E1:3E0BF5:4D7C4A:5945A8:675C09E5"
+      "X-GitHub-Request-Id": "195C:3E0BF5:5570DC:6294A2:675C20D4"
     }
   },
-  "uuid": "27ba4f4c-a668-42eb-8ec3-94887ac71aa7",
+  "uuid": "06589360-6c74-44c7-ac3c-14a96d4ae30b",
   "persistent": true,
   "insertionIndex": 1
 }

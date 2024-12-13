@@ -1,8 +1,8 @@
 {
-  "id": "6afd3d5c-9918-4614-9c1a-52cd07c1aa87",
-  "name": "repos_alaurant_new-fork",
+  "id": "836deba8-dfee-47c2-beaa-aeb1d6ca1bf3",
+  "name": "repos_alaurant_test-repo",
   "request": {
-    "url": "/repos/Alaurant/new-fork",
+    "url": "/repos/Alaurant/test-repo",
     "method": "DELETE",
     "headers": {
       "Accept": {
@@ -13,16 +13,16 @@
   "response": {
     "status": 204,
     "headers": {
-      "Date": "Fri, 13 Dec 2024 10:19:23 GMT",
+      "Date": "Fri, 13 Dec 2024 11:56:38 GMT",
       "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, project, read:packages, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "delete_repo",
       "github-authentication-token-expiration": "2025-02-25 04:28:56 UTC",
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4901",
-      "X-RateLimit-Reset": "1734087596",
-      "X-RateLimit-Used": "99",
+      "X-RateLimit-Remaining": "4978",
+      "X-RateLimit-Reset": "1734094496",
+      "X-RateLimit-Used": "22",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -34,10 +34,10 @@
       "Content-Security-Policy": "default-src 'none'",
       "Vary": "Accept-Encoding, Accept, X-Requested-With",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "19A9:3DCBFA:4B0725:56D50B:675C0A2A"
+      "X-GitHub-Request-Id": "19B7:D973:263672:2CE53D:675C20F5"
     }
   },
-  "uuid": "6afd3d5c-9918-4614-9c1a-52cd07c1aa87",
+  "uuid": "836deba8-dfee-47c2-beaa-aeb1d6ca1bf3",
   "persistent": true,
-  "insertionIndex": 7
+  "insertionIndex": 6
 }

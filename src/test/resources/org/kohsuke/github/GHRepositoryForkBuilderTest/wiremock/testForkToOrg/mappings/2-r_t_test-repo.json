@@ -1,5 +1,5 @@
 {
-  "id": "af5442ed-050b-445e-85b2-ea78a392e347",
+  "id": "62a9f166-4224-4da2-9c67-02f8ea63f78d",
   "name": "repos_testditto_test-repo",
   "request": {
     "url": "/repos/TestDitto/test-repo",
@@ -14,7 +14,7 @@
     "status": 200,
     "bodyFileName": "2-r_t_test-repo.json",
     "headers": {
-      "Date": "Fri, 13 Dec 2024 10:17:40 GMT",
+      "Date": "Fri, 13 Dec 2024 11:55:31 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
@@ -26,9 +26,9 @@
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4923",
-      "X-RateLimit-Reset": "1734087596",
-      "X-RateLimit-Used": "77",
+      "X-RateLimit-Remaining": "4990",
+      "X-RateLimit-Reset": "1734094496",
+      "X-RateLimit-Used": "10",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -39,10 +39,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "187D:3DD5DB:4DE83F:59AFD5:675C09C4"
+      "X-GitHub-Request-Id": "18F8:3DF01B:4DFDAE:5B1EDB:675C20B3"
     }
   },
-  "uuid": "af5442ed-050b-445e-85b2-ea78a392e347",
+  "uuid": "62a9f166-4224-4da2-9c67-02f8ea63f78d",
   "persistent": true,
   "insertionIndex": 2
 }

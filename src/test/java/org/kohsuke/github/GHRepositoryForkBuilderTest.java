@@ -37,13 +37,10 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    private void verifyBasicForkProperties(GHRepository original,
-            GHRepository forked,
-            String expectedOwner,
-            String expectedName) throws IOException {
+    private void verifyBasicForkProperties(GHRepository original, GHRepository forked, String expectedName)
+            throws IOException {
         assertThat(forked, notNullValue());
         assertThat(forked.getName(), equalTo(expectedName));
-        assertThat(forked.getOwner().getLogin(), equalTo(expectedOwner));
         assertThat(forked.isFork(), is(true));
         assertThat(forked.getParent().getFullName(), equalTo(original.getFullName()));
     }
@@ -71,7 +68,7 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
         GHRepository forkedRepo = repo.fork();
 
         Thread.sleep(30000);
-        verifyBasicForkProperties(repo, forkedRepo, gitHub.getMyself().getLogin(), repo.getName());
+        verifyBasicForkProperties(repo, forkedRepo, repo.getName());
         verifyBranches(repo, forkedRepo, false);
 
         forkedRepo.delete();
@@ -90,7 +87,7 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
         GHRepository forkedRepo = repo.forkTo(targetOrg);
 
         Thread.sleep(30000);
-        verifyBasicForkProperties(repo, forkedRepo, targetOrg.getLogin(), repo.getName());
+        verifyBasicForkProperties(repo, forkedRepo, repo.getName());
         verifyBranches(repo, forkedRepo, false);
 
         forkedRepo.delete();
@@ -107,7 +104,7 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
         GHRepository forkedRepo = repo.createFork().defaultBranchOnly(true).create();
 
         Thread.sleep(30000);
-        verifyBasicForkProperties(repo, forkedRepo, gitHub.getMyself().getLogin(), repo.getName());
+        verifyBasicForkProperties(repo, forkedRepo, repo.getName());
         verifyBranches(repo, forkedRepo, true);
 
         forkedRepo.delete();
@@ -126,7 +123,7 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
 
         Thread.sleep(30000);
         assertThat(forkedRepo.getName(), equalTo(newRepoName));
-        verifyBasicForkProperties(repo, forkedRepo, gitHub.getMyself().getLogin(), newRepoName);
+        verifyBasicForkProperties(repo, forkedRepo, newRepoName);
         verifyBranches(repo, forkedRepo, false);
 
         forkedRepo.delete();

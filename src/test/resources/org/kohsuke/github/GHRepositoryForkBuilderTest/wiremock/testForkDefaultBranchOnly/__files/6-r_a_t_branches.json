@@ -1,0 +1,19 @@
+[
+  {
+    "name": "main",
+    "commit": {
+      "sha": "3cfccd878c690719da67aad02e475bd1bf2d6c52",
+      "url": "https://api.github.com/repos/Alaurant/test-repo/commits/3cfccd878c690719da67aad02e475bd1bf2d6c52"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/Alaurant/test-repo/branches/main/protection"
+  }
+]

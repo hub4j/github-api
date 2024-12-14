@@ -31,22 +31,36 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
      */
     @Before
     public void setUp() throws Exception {
-        repo = gitHub.getRepository("TestDitto/test-repo");
-        if (repo == null) {
-            throw new IllegalStateException("Failed to initialize repository");
+        repo = getTempRepository();
+
+        String defaultBranch = repo.getDefaultBranch();
+        GHRef mainRef = repo.getRef("heads/" + defaultBranch);
+        String mainSha = mainRef.getObject().getSha();
+
+        String[] branchNames = { "test-branch1", "test-branch2", "test-branch3" };
+        for (String branchName : branchNames) {
+            repo.createRef("refs/heads/" + branchName, mainSha);
         }
     }
 
     private void verifyBasicForkProperties(GHRepository original, GHRepository forked, String expectedName)
-            throws IOException {
+            throws IOException, InterruptedException {
         assertThat(forked, notNullValue());
         assertThat(forked.getName(), equalTo(expectedName));
         assertThat(forked.isFork(), is(true));
         assertThat(forked.getParent().getFullName(), equalTo(original.getFullName()));
+
+        GHRepository updatedFork = forked;
+        for (int i = 0; i < 10; i++) {
+            Thread.sleep(3000);
+            updatedFork = gitHub.getRepository(forked.getFullName());
+            if (updatedFork.isFork()) {
+                break;
+            }
+        }
     }
 
-    private void verifyBranches(GHRepository original, GHRepository forked, boolean defaultBranchOnly)
-            throws IOException {
+    private void verifyBranches(GHRepository forked, boolean defaultBranchOnly) throws IOException {
         Map<String, GHBranch> branches = forked.getBranches();
         if (defaultBranchOnly) {
             assertThat(branches.size(), equalTo(1));
@@ -67,9 +81,9 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
         // GHRepository forkedRepo = repo.createFork().create();
         GHRepository forkedRepo = repo.fork();
 
-        Thread.sleep(30000);
+        Thread.sleep(3000);
         verifyBasicForkProperties(repo, forkedRepo, repo.getName());
-        verifyBranches(repo, forkedRepo, false);
+        verifyBranches(forkedRepo, false);
 
         forkedRepo.delete();
     }
@@ -86,9 +100,9 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
         // GHRepository forkedRepo = repo.createFork().organization(targetOrg).create();
         GHRepository forkedRepo = repo.forkTo(targetOrg);
 
-        Thread.sleep(30000);
+        Thread.sleep(3000);
         verifyBasicForkProperties(repo, forkedRepo, repo.getName());
-        verifyBranches(repo, forkedRepo, false);
+        verifyBranches(forkedRepo, false);
 
         forkedRepo.delete();
     }
@@ -103,9 +117,9 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     public void testForkDefaultBranchOnly() throws Exception {
         GHRepository forkedRepo = repo.createFork().defaultBranchOnly(true).create();
 
-        Thread.sleep(30000);
+        Thread.sleep(3000);
         verifyBasicForkProperties(repo, forkedRepo, repo.getName());
-        verifyBranches(repo, forkedRepo, true);
+        verifyBranches(forkedRepo, true);
 
         forkedRepo.delete();
     }
@@ -118,13 +132,13 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testForkChangedName() throws Exception {
-        String newRepoName = "new-fork";
+        String newRepoName = "test-fork-with-new-name";
         GHRepository forkedRepo = repo.createFork().name(newRepoName).create();
 
-        Thread.sleep(30000);
+        Thread.sleep(3000);
         assertThat(forkedRepo.getName(), equalTo(newRepoName));
         verifyBasicForkProperties(repo, forkedRepo, newRepoName);
-        verifyBranches(repo, forkedRepo, false);
+        verifyBranches(forkedRepo, false);
 
         forkedRepo.delete();
     }

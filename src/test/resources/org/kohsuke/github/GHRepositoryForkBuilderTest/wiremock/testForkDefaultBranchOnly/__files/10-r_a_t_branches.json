@@ -1,0 +1,19 @@
+[
+  {
+    "name": "main",
+    "commit": {
+      "sha": "76bdc7517cec45d6925b7bcd8f41ae981cab72e2",
+      "url": "https://api.github.com/repos/Alaurant/temp-testForkDefaultBranchOnly/commits/76bdc7517cec45d6925b7bcd8f41ae981cab72e2"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/Alaurant/temp-testForkDefaultBranchOnly/branches/main/protection"
+  }
+]

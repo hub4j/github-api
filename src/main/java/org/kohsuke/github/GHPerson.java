@@ -55,18 +55,7 @@ public abstract class GHPerson extends GHObject {
         if (isOffline()) {
             return; // cannot populate, will have to live with what we have
         }
-        String path = getUrlPath();
-        if (path != null) {
-            root().createRequest().withUrlPath(path).fetchInto(this);
-        }
-    }
-
-    private String getUrlPath() {
-        URL url = getUrl(); // Get the full URL
-        if (url != null) {
-            return url.getPath(); // Extract only the relative path
-        }
-        return null;
+        root().createRequest().withUrlPath("/users/" + login).fetchInto(this);
     }
 
     /**

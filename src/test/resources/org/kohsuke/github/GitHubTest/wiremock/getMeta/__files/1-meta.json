@@ -1,5 +1,16 @@
 {
   "verifiable_password_authentication": true,
+  "ssh_key_fingerprints": {
+    "SHA256_RSA": 1234567890,
+    "SHA256_DSA": 1234567890,
+    "SHA256_ECDSA": 1234567890,
+    "SHA256_ED25519": 1234567890
+  },
+  "ssh_keys": [
+    "ssh-ed25519 ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "ecdsa-sha2-nistp256 ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "ssh-rsa ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  ],
   "hooks": [
     "192.30.252.0/22",
     "185.199.108.0/22",

@@ -1,0 +1,70 @@
+[
+  {
+    "name": "main",
+    "commit": {
+      "sha": "139dc502225e0e4225408692edd98d8ea537d258",
+      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/139dc502225e0e4225408692edd98d8ea537d258"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/branches/main/protection"
+  },
+  {
+    "name": "test-branch1",
+    "commit": {
+      "sha": "139dc502225e0e4225408692edd98d8ea537d258",
+      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/139dc502225e0e4225408692edd98d8ea537d258"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/branches/test-branch1/protection"
+  },
+  {
+    "name": "test-branch2",
+    "commit": {
+      "sha": "139dc502225e0e4225408692edd98d8ea537d258",
+      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/139dc502225e0e4225408692edd98d8ea537d258"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/branches/test-branch2/protection"
+  },
+  {
+    "name": "test-branch3",
+    "commit": {
+      "sha": "139dc502225e0e4225408692edd98d8ea537d258",
+      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/139dc502225e0e4225408692edd98d8ea537d258"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/branches/test-branch3/protection"
+  }
+]

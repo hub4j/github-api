@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/test-branch1",
+  "node_id": "REF_kwDONdbW6LdyZWZzL2hlYWRzL3Rlc3QtYnJhbmNoMQ",
+  "url": "https://api.github.com/repos/hub4j-test-org/temp-testForkChangedName/git/refs/heads/test-branch1",
+  "object": {
+    "sha": "139dc502225e0e4225408692edd98d8ea537d258",
+    "type": "commit",
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testForkChangedName/git/commits/139dc502225e0e4225408692edd98d8ea537d258"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "8a807593-dadd-4e95-98a0-d456eee1305e",
+  "name": "repos_hub4j-test-org_temp-testtimeout_git_refs",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testTimeout/git/refs",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"ref\":\"refs/heads/test-branch3\",\"sha\":\"3740509d3ea543866e46c5cbe09022cd3ead89af\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "6-r_h_t_git_refs.json",
+    "headers": {
+      "Date": "Thu, 19 Dec 2024 09:06:56 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "\"7e64912906f259a1d27d50b40cd48e3e2cdda634d50c45804813c9fc892b7d4e\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, project, read:packages, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2025-02-25 04:28:56 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4819",
+      "X-RateLimit-Reset": "1734601009",
+      "X-RateLimit-Used": "181",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-GitHub-Request-Id": "19DA:1E9DA:E2CF40:1097A31:6763E22F",
+      "Location": "https://api.github.com/repos/hub4j-test-org/temp-testTimeout/git/refs/heads/test-branch3"
+    }
+  },
+  "uuid": "8a807593-dadd-4e95-98a0-d456eee1305e",
+  "persistent": true,
+  "insertionIndex": 6
+}

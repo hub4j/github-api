@@ -16,6 +16,8 @@ public class GHRepositoryForkBuilder {
     private String name;
     private Boolean defaultBranchOnly;
 
+    static int FORK_RETRY_INTERVAL = 3000;
+
     /**
      * Instantiates a new Gh repository fork builder.
      *
@@ -89,7 +91,7 @@ public class GHRepositoryForkBuilder {
             if (r != null) {
                 return r;
             }
-            sleep(3000);
+            sleep(FORK_RETRY_INTERVAL);
         }
         throw new IOException(createTimeoutMessage());
     }
@@ -103,7 +105,15 @@ public class GHRepositoryForkBuilder {
         return repo.root().getMyself().getRepository(repoName);
     }
 
-    private void sleep(int millis) throws IOException {
+    /**
+     * Sleep.
+     *
+     * @param millis
+     *            the millis
+     * @throws IOException
+     *             the io exception
+     */
+    protected void sleep(int millis) throws IOException {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
@@ -111,7 +121,12 @@ public class GHRepositoryForkBuilder {
         }
     }
 
-    private String createTimeoutMessage() {
+    /**
+     * Create timeout message string.
+     *
+     * @return the string
+     */
+    String createTimeoutMessage() {
         StringBuilder message = new StringBuilder(repo.getFullName());
         message.append(" was forked");
 

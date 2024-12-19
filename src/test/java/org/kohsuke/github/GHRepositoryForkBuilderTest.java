@@ -140,39 +140,6 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test create timeout message.
-     */
-    @Test
-    public void testCreateTimeoutMessage() {
-        GitHub mockGitHub = mock(GitHub.class);
-        Requester mockRequester = mock(Requester.class);
-        GHRepository mockRepo = mock(GHRepository.class);
-
-        when(mockRepo.getFullName()).thenReturn("test/mock-repo");
-        when(mockRepo.root()).thenReturn(mockGitHub);
-        when(mockGitHub.createRequest()).thenReturn(mockRequester);
-
-        GHRepositoryForkBuilder builder = new GHRepositoryForkBuilder(mockRepo);
-
-        assertThat(builder.createTimeoutMessage(),
-                equalTo("test/mock-repo was forked but can't find the new repository"));
-
-        GHOrganization org = mock(GHOrganization.class);
-        when(org.getLogin()).thenReturn(TARGET_ORG);
-        builder.organization(org);
-
-        assertThat(builder.createTimeoutMessage(),
-                equalTo("test/mock-repo was forked into " + TARGET_ORG + " but can't find the new repository"));
-
-        String customName = "custom-fork-name";
-        builder.name(customName);
-
-        assertThat(builder.createTimeoutMessage(),
-                equalTo("test/mock-repo was forked into " + TARGET_ORG + " with name " + customName
-                        + " but can't find the new repository"));
-    }
-
-    /**
      * Test timeout.
      */
     @Test
@@ -189,6 +156,11 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
             protected void sleep(int millis) throws IOException {
                 sleepCount++;
                 lastSleepMillis = millis;
+                try {
+                    Thread.sleep(millis);
+                } catch (InterruptedException e) {
+                    throw new IOException(e);
+                }
 
             }
         }

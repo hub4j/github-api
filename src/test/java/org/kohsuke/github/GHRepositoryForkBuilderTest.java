@@ -28,7 +28,8 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Sets up.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -73,7 +74,8 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test fork.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testFork() throws Exception {
@@ -89,7 +91,8 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test fork to org.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testForkToOrg() throws Exception {
@@ -106,7 +109,8 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test fork default branch only.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testForkDefaultBranchOnly() throws Exception {
@@ -121,7 +125,8 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test fork changed name.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testForkChangedName() throws Exception {
@@ -138,7 +143,8 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test timeout message and sleep count.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testTimeoutMessage() throws Exception {
@@ -188,7 +194,8 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test timeout org message.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testTimeoutOrgMessage() throws Exception {
@@ -208,7 +215,8 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test sleep.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testSleep() throws Exception {

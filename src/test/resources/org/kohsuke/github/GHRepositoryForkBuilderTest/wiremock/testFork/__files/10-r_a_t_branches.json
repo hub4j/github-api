@@ -1,0 +1,70 @@
+[
+  {
+    "name": "main",
+    "commit": {
+      "sha": "cc56732e2af71c7c250e5e0e61ac977b52aecd1c",
+      "url": "https://api.github.com/repos/Alaurant/temp-testFork/commits/cc56732e2af71c7c250e5e0e61ac977b52aecd1c"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/Alaurant/temp-testFork/branches/main/protection"
+  },
+  {
+    "name": "test-branch1",
+    "commit": {
+      "sha": "cc56732e2af71c7c250e5e0e61ac977b52aecd1c",
+      "url": "https://api.github.com/repos/Alaurant/temp-testFork/commits/cc56732e2af71c7c250e5e0e61ac977b52aecd1c"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/Alaurant/temp-testFork/branches/test-branch1/protection"
+  },
+  {
+    "name": "test-branch2",
+    "commit": {
+      "sha": "cc56732e2af71c7c250e5e0e61ac977b52aecd1c",
+      "url": "https://api.github.com/repos/Alaurant/temp-testFork/commits/cc56732e2af71c7c250e5e0e61ac977b52aecd1c"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/Alaurant/temp-testFork/branches/test-branch2/protection"
+  },
+  {
+    "name": "test-branch3",
+    "commit": {
+      "sha": "cc56732e2af71c7c250e5e0e61ac977b52aecd1c",
+      "url": "https://api.github.com/repos/Alaurant/temp-testFork/commits/cc56732e2af71c7c250e5e0e61ac977b52aecd1c"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/Alaurant/temp-testFork/branches/test-branch3/protection"
+  }
+]

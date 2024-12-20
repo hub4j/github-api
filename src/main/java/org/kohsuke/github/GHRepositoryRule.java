@@ -6,6 +6,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -76,7 +77,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      * @throws IOException
      *             if an I/O error occurs
      */
-    public <T> Optional<T> getParameter(Parameter<T> parameter) throws IOException {
+    public <T> Optional<T> getParameter(Parameter<T> parameter) {
         if (this.parameters == null) {
             return Optional.empty();
         }
@@ -338,11 +339,15 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
             return this.key;
         }
 
-        T apply(JsonNode jsonNode, GitHub root) throws IOException {
-            if (jsonNode == null) {
-                return null;
+        T apply(JsonNode jsonNode, GitHub root) {
+            try {
+                if (jsonNode == null) {
+                    return null;
+                }
+                return GitHubClient.getMappingObjectReader(root).forType(this.getType()).readValue(jsonNode);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
             }
-            return GitHubClient.getMappingObjectReader(root).forType(this.getType()).readValue(jsonNode);
         }
     }
 

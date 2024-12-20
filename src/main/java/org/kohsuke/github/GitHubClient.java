@@ -270,14 +270,17 @@ class GitHubClient {
                                         (connectorResponse) -> GitHubResponse.parseBody(connectorResponse,
                                                 JsonRateLimit.class))
                                 .body().resources;
-                    } catch (FileNotFoundException e) {
-                        // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
-                        LOGGER.log(FINE, "(%s) /rate_limit returned 404 Not Found.", sendRequestTraceId.get());
+                    } catch (UncheckedIOException e) {
+                        if (FileNotFoundException.class.isInstance(e)) {
+                            // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
+                            LOGGER.log(FINE, "(%s) /rate_limit returned 404 Not Found.", sendRequestTraceId.get());
 
-                        // However some newer versions of GHE include rate limit header information
-                        // If the header info is missing and the endpoint returns 404, fill the rate limit
-                        // with unknown
-                        result = GHRateLimit.fromRecord(GHRateLimit.UnknownLimitRecord.current(), rateLimitTarget);
+                            // However some newer versions of GHE include rate limit header information
+                            // If the header info is missing and the endpoint returns 404, fill the rate limit
+                            // with unknown
+                            result = GHRateLimit.fromRecord(GHRateLimit.UnknownLimitRecord.current(), rateLimitTarget);
+                        }
+                        throw e;
                     }
                     return result;
                 });

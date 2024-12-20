@@ -67,7 +67,7 @@ public class GHRepositoryDiscussionComment extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public GHUser getUser() throws IOException {
+    public GHUser getUser() {
         return root().intern(user);
     }
 

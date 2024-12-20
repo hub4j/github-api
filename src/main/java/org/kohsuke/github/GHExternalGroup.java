@@ -198,7 +198,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHOrganization getOrganization() throws IOException {
+    public GHOrganization getOrganization() {
         return organization;
     }
 
@@ -254,7 +254,7 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    public void refresh() throws IOException {
+    public void refresh() {
         root().createRequest().withUrlPath(api("")).fetchInto(this).wrapUp(root());
     }
 

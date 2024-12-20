@@ -112,7 +112,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    public GHUser getUser() throws IOException {
+    public GHUser getUser() {
         return owner.root().getUser(user.getLogin());
     }
 
@@ -353,7 +353,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    public void update(String body) throws IOException {
+    public void update(String body) {
         owner.root().createRequest().method("PATCH").with("body", body).withUrlPath(getApiRoute()).fetchInto(this);
         this.body = body;
     }
@@ -364,7 +364,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
@@ -377,7 +377,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
-    public GHPullRequestReviewComment reply(String body) throws IOException {
+    public GHPullRequestReviewComment reply(String body) {
         return owner.root()
                 .createRequest()
                 .method("POST")
@@ -396,7 +396,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public GHReaction createReaction(ReactionContent content) throws IOException {
+    public GHReaction createReaction(ReactionContent content) {
         return owner.root()
                 .createRequest()
                 .method("POST")
@@ -413,7 +413,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public void deleteReaction(GHReaction reaction) throws IOException {
+    public void deleteReaction(GHReaction reaction) {
         owner.root()
                 .createRequest()
                 .method("DELETE")

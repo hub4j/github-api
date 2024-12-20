@@ -218,10 +218,10 @@ public class GHCheckRun extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public List<GHPullRequest> getPullRequests() throws IOException {
+    public List<GHPullRequest> getPullRequests() {
         for (GHPullRequest singlePull : pullRequests) {
             // Only refresh if we haven't do so before
-            singlePull.refresh(singlePull.getTitle());
+            singlePull.refreshWithUnchecked(singlePull.getTitle());
         }
         return Collections.unmodifiableList(Arrays.asList(pullRequests));
     }

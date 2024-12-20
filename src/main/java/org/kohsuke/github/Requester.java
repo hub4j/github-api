@@ -31,6 +31,7 @@ import org.kohsuke.github.function.InputStreamFunction;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
@@ -64,10 +65,14 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * @throws IOException
      *             the io exception
      */
-    public void send() throws IOException {
+    public void send() {
         // Send expects there to be some body response, but doesn't care what it is.
         // If there isn't a body, this will throw.
-        client.sendRequest(this, (connectorResponse) -> GitHubResponse.getBodyAsString(connectorResponse));
+        try {
+            client.sendRequest(this, (connectorResponse) -> GitHubResponse.getBodyAsString(connectorResponse));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -81,9 +86,14 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
-    public <T> T fetch(@Nonnull Class<T> type) throws IOException {
-        return client.sendRequest(this, (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, type))
-                .body();
+    public <T> T fetch(@Nonnull Class<T> type) {
+        try {
+            return client.sendRequest(this, (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, type))
+                    .body();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
     }
 
     /**
@@ -97,10 +107,16 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * @throws IOException
      *             the io exception
      */
-    public <T> T fetchInto(@Nonnull T existingInstance) throws IOException {
-        return client
-                .sendRequest(this, (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, existingInstance))
-                .body();
+    public <T> T fetchInto(@Nonnull T existingInstance) {
+        try {
+            return client
+                    .sendRequest(this,
+                            (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, existingInstance))
+                    .body();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
     }
 
     /**
@@ -111,8 +127,13 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * @throws IOException
      *             the io exception
      */
-    public int fetchHttpStatusCode() throws IOException {
-        return client.sendRequest(build(), null).statusCode();
+    public int fetchHttpStatusCode() {
+        try {
+            return client.sendRequest(build(), null).statusCode();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
     }
 
     /**
@@ -127,8 +148,14 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * @throws IOException
      *             the io exception
      */
-    public <T> T fetchStream(@Nonnull InputStreamFunction<T> handler) throws IOException {
-        return client.sendRequest(this, (connectorResponse) -> handler.apply(connectorResponse.bodyStream())).body();
+    public <T> T fetchStream(@Nonnull InputStreamFunction<T> handler) {
+        try {
+            return client.sendRequest(this, (connectorResponse) -> handler.apply(connectorResponse.bodyStream()))
+                    .body();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
     }
 
     /**
@@ -147,8 +174,13 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *             if an error occurs while copying the stream
      */
     @NonNull
-    public static InputStream copyInputStream(InputStream inputStream) throws IOException {
-        return new ByteArrayInputStream(IOUtils.toByteArray(inputStream));
+    public static InputStream copyInputStream(InputStream inputStream) {
+        try {
+            return new ByteArrayInputStream(IOUtils.toByteArray(inputStream));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
     }
 
     /**
@@ -168,6 +200,5 @@ class Requester extends GitHubRequest.Builder<Requester> {
      */
     public <R> PagedIterable<R> toIterable(Class<R[]> type, Consumer<R> itemInitializer) {
         return new GitHubPageContentsIterable<>(client, build(), type, itemInitializer);
-
     }
 }

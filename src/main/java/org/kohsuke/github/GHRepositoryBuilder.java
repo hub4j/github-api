@@ -39,7 +39,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S allowSquashMerge(boolean enabled) throws IOException {
+    public S allowSquashMerge(boolean enabled) {
         return with("allow_squash_merge", enabled);
     }
 
@@ -54,7 +54,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S allowMergeCommit(boolean enabled) throws IOException {
+    public S allowMergeCommit(boolean enabled) {
         return with("allow_merge_commit", enabled);
     }
 
@@ -69,7 +69,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S allowRebaseMerge(boolean enabled) throws IOException {
+    public S allowRebaseMerge(boolean enabled) {
         return with("allow_rebase_merge", enabled);
     }
 
@@ -82,7 +82,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S allowForking(boolean enabled) throws IOException {
+    public S allowForking(boolean enabled) {
         return with("allow_forking", enabled);
     }
 
@@ -97,7 +97,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S deleteBranchOnMerge(boolean enabled) throws IOException {
+    public S deleteBranchOnMerge(boolean enabled) {
         return with("delete_branch_on_merge", enabled);
     }
 
@@ -110,7 +110,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S defaultBranch(String branch) throws IOException {
+    public S defaultBranch(String branch) {
         return with("default_branch", branch);
     }
 
@@ -123,7 +123,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S description(String description) throws IOException {
+    public S description(String description) {
         return with("description", description);
     }
 
@@ -136,7 +136,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S homepage(URL homepage) throws IOException {
+    public S homepage(URL homepage) {
         return homepage(homepage.toExternalForm());
     }
 
@@ -149,7 +149,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S homepage(String homepage) throws IOException {
+    public S homepage(String homepage) {
         return with("homepage", homepage);
     }
 
@@ -162,7 +162,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S private_(boolean enabled) throws IOException {
+    public S private_(boolean enabled) {
         return with("private", enabled);
     }
 
@@ -175,7 +175,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S visibility(final Visibility visibility) throws IOException {
+    public S visibility(final Visibility visibility) {
         return with("visibility", visibility.toString());
     }
 
@@ -188,7 +188,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S issues(boolean enabled) throws IOException {
+    public S issues(boolean enabled) {
         return with("has_issues", enabled);
     }
 
@@ -201,7 +201,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S projects(boolean enabled) throws IOException {
+    public S projects(boolean enabled) {
         return with("has_projects", enabled);
     }
 
@@ -214,7 +214,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S wiki(boolean enabled) throws IOException {
+    public S wiki(boolean enabled) {
         return with("has_wiki", enabled);
     }
 
@@ -227,7 +227,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S downloads(boolean enabled) throws IOException {
+    public S downloads(boolean enabled) {
         return with("has_downloads", enabled);
     }
 
@@ -240,7 +240,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S isTemplate(boolean enabled) throws IOException {
+    public S isTemplate(boolean enabled) {
         return with("is_template", enabled);
     }
 
@@ -252,7 +252,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    public GHRepository done() throws IOException {
+    public GHRepository done() {
         return super.done();
     }
 
@@ -263,7 +263,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    S archive() throws IOException {
+    S archive() {
         return with("archived", true);
     }
 
@@ -276,7 +276,7 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    S name(String name) throws IOException {
+    S name(String name) {
         return with("name", name);
     }
 }

@@ -115,7 +115,7 @@ public class GHWorkflowRun extends GHObject {
      * @throws IOException
      *             on error
      */
-    public Date getRunStartedAt() throws IOException {
+    public Date getRunStartedAt() {
         return GitHubClient.parseDate(runStartedAt);
     }
 
@@ -126,7 +126,7 @@ public class GHWorkflowRun extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
+    public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }
 
@@ -281,11 +281,11 @@ public class GHWorkflowRun extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public List<GHPullRequest> getPullRequests() throws IOException {
+    public List<GHPullRequest> getPullRequests() {
         if (pullRequests != null && pullRequests.length != 0) {
             for (GHPullRequest pullRequest : pullRequests) {
                 // Only refresh if we haven't do so before
-                pullRequest.refresh(pullRequest.getTitle());
+                pullRequest.refreshWithUnchecked(pullRequest.getTitle());
             }
             return Collections.unmodifiableList(Arrays.asList(pullRequests));
         }
@@ -298,7 +298,7 @@ public class GHWorkflowRun extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void cancel() throws IOException {
+    public void cancel() {
         root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").send();
     }
 
@@ -308,7 +308,7 @@ public class GHWorkflowRun extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
@@ -318,7 +318,7 @@ public class GHWorkflowRun extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void rerun() throws IOException {
+    public void rerun() {
         root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").send();
     }
 
@@ -328,7 +328,7 @@ public class GHWorkflowRun extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void approve() throws IOException {
+    public void approve() {
         root().createRequest().method("POST").withUrlPath(getApiRoute(), "approve").send();
     }
 
@@ -356,7 +356,7 @@ public class GHWorkflowRun extends GHObject {
      * @throws IOException
      *             The IO exception.
      */
-    public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
+    public <T> T downloadLogs(InputStreamFunction<T> streamFunction) {
         requireNonNull(streamFunction, "Stream function must not be null");
 
         return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
@@ -368,7 +368,7 @@ public class GHWorkflowRun extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void deleteLogs() throws IOException {
+    public void deleteLogs() {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").send();
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 
 // TODO: Auto-generated Javadoc
@@ -58,7 +59,7 @@ public class GHRef extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public void updateTo(String sha) throws IOException {
+    public void updateTo(String sha) {
         updateTo(sha, false);
     }
 
@@ -72,7 +73,7 @@ public class GHRef extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public void updateTo(String sha, Boolean force) throws IOException {
+    public void updateTo(String sha, Boolean force) {
         root().createRequest()
                 .method("PATCH")
                 .with("sha", sha)
@@ -87,7 +88,7 @@ public class GHRef extends GitHubInteractiveObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(url).send();
     }
 
@@ -102,7 +103,7 @@ public class GHRef extends GitHubInteractiveObject {
      * @throws IOException
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
-    static GHRef read(GHRepository repository, String refName) throws IOException {
+    static GHRef read(GHRepository repository, String refName) {
         // Also accept e.g. "refs/heads/branch" for consistency with createRef().
         if (refName.startsWith("refs/")) {
             refName = refName.replaceFirst("refs/", "");
@@ -116,11 +117,11 @@ public class GHRef extends GitHubInteractiveObject {
                     .createRequest()
                     .withUrlPath(repository.getApiTailUrl(String.format("git/refs/%s", refName)))
                     .fetch(GHRef.class);
-        } catch (IOException e) {
+        } catch (UncheckedIOException e) {
             // If the parse exception is due to the above returning an array instead of a single ref
             // that means the individual ref did not exist. Handled by result check below.
             // Otherwise, rethrow.
-            if (!(e.getCause() instanceof JsonMappingException)) {
+            if (!(e.getCause().getCause() instanceof JsonMappingException)) {
                 throw e;
             }
         }
@@ -131,8 +132,8 @@ public class GHRef extends GitHubInteractiveObject {
         // the same for this scenario - the server refs matching is prefix-based, so
         // a ref that ends with the correct string will always be the correct one.
         if (result == null || !result.getRef().endsWith(refName)) {
-            throw new GHFileNotFoundException(String.format("git/refs/%s", refName)
-                    + " {\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}");
+            throw new UncheckedIOException(new GHFileNotFoundException(String.format("git/refs/%s", refName)
+                    + " {\"message\":\"Not Found\",\"documentation_url\":\"https://developer.github.com/v3/git/refs/#get-a-reference\"}"));
         }
         return result;
     }
@@ -148,7 +149,7 @@ public class GHRef extends GitHubInteractiveObject {
      * @throws IOException
      *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
-    static PagedIterable<GHRef> readMatching(GHRepository repository, String refType) throws IOException {
+    static PagedIterable<GHRef> readMatching(GHRepository repository, String refType) {
         if (refType.startsWith("refs/")) {
             refType = refType.replaceFirst("refs/", "");
         }

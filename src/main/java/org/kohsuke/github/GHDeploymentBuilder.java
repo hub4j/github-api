@@ -163,7 +163,7 @@ public class GHDeploymentBuilder {
      * @throws IOException
      *             the io exception
      */
-    public GHDeployment create() throws IOException {
+    public GHDeployment create() {
         return builder.withUrlPath(repo.getApiTailUrl("deployments")).fetch(GHDeployment.class).wrap(repo);
     }
 }

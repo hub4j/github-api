@@ -39,7 +39,7 @@ public class GHDiscussion extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
+    public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }
 
@@ -125,7 +125,7 @@ public class GHDiscussion extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    static GHDiscussion.Creator create(GHTeam team) throws IOException {
+    static GHDiscussion.Creator create(GHTeam team) {
         return new GHDiscussion.Creator(team);
     }
 
@@ -140,7 +140,7 @@ public class GHDiscussion extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    static GHDiscussion read(GHTeam team, long discussionNumber) throws IOException {
+    static GHDiscussion read(GHTeam team, long discussionNumber) {
         return team.root()
                 .createRequest()
                 .setRawUrlPath(getRawUrlPath(team, discussionNumber))
@@ -157,7 +157,7 @@ public class GHDiscussion extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    static PagedIterable<GHDiscussion> readAll(GHTeam team) throws IOException {
+    static PagedIterable<GHDiscussion> readAll(GHTeam team) {
         return team.root()
                 .createRequest()
                 .setRawUrlPath(getRawUrlPath(team, null))
@@ -190,7 +190,7 @@ public class GHDiscussion extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         team.root().createRequest().method("DELETE").setRawUrlPath(getRawUrlPath(team, number)).send();
     }
 
@@ -244,7 +244,7 @@ public class GHDiscussion extends GHObject {
          *             if there is an I/O Exception
          */
         @Nonnull
-        public Creator private_(boolean value) throws IOException {
+        public Creator private_(boolean value) {
             return with("private", value);
         }
     }

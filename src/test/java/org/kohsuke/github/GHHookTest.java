@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +75,8 @@ public class GHHookTest {
             // fails because application isn't approved in organisation and you can find it only after doing real call
             final GHHook hook = repository
                     .createHook("my-hook", singletonMap("url", "http://localhost"), singletonList(GHEvent.PUSH), true);
-        } catch (IOException ex) {
+        } catch (UncheckedIOException e) {
+            IOException ex = e.getCause();
             assertThat(ex, instanceOf(GHFileNotFoundException.class));
             final GHFileNotFoundException ghFileNotFoundException = (GHFileNotFoundException) ex;
             final Map<String, List<String>> responseHeaderFields = ghFileNotFoundException.getResponseHeaderFields();

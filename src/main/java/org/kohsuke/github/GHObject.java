@@ -78,7 +78,7 @@ public abstract class GHObject extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    public Date getCreatedAt() throws IOException {
+    public Date getCreatedAt() {
         return GitHubClient.parseDate(createdAt);
     }
 
@@ -98,7 +98,7 @@ public abstract class GHObject extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    public Date getUpdatedAt() throws IOException {
+    public Date getUpdatedAt() {
         return GitHubClient.parseDate(updatedAt);
     }
 

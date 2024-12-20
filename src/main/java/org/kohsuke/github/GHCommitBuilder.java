@@ -136,7 +136,7 @@ public class GHCommitBuilder {
      * @throws IOException
      *             the io exception
      */
-    public GHCommit create() throws IOException {
+    public GHCommit create() {
         req.with("parents", parents);
         return req.method("POST").withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);
     }

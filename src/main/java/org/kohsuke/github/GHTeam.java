@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.*;
 
@@ -144,7 +145,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void setDescription(String description) throws IOException {
+    public void setDescription(String description) {
         root().createRequest().method("PATCH").with("description", description).withUrlPath(api("")).send();
     }
 
@@ -156,7 +157,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void setPrivacy(Privacy privacy) throws IOException {
+    public void setPrivacy(Privacy privacy) {
         root().createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
     }
 
@@ -168,7 +169,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     @Nonnull
-    public PagedIterable<GHDiscussion> listDiscussions() throws IOException {
+    public PagedIterable<GHDiscussion> listDiscussions() {
         return GHDiscussion.readAll(this);
     }
 
@@ -181,7 +182,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHUser> listMembers(String role) throws IOException {
+    public PagedIterable<GHUser> listMembers(String role) {
         return root().createRequest().withUrlPath(api("/members")).with("role", role).toIterable(GHUser[].class, null);
     }
 
@@ -194,7 +195,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHUser> listMembers(Role role) throws IOException {
+    public PagedIterable<GHUser> listMembers(Role role) {
         return listMembers(transformEnum(role));
     }
 
@@ -209,7 +210,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @see <a href= "https://developer.github.com/v3/teams/discussions/#get-a-discussion">documentation</a>
      */
     @Nonnull
-    public GHDiscussion getDiscussion(long discussionNumber) throws IOException {
+    public GHDiscussion getDiscussion(long discussionNumber) {
         return GHDiscussion.read(this, discussionNumber);
     }
 
@@ -220,7 +221,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHUser> listMembers() throws IOException {
+    public PagedIterable<GHUser> listMembers() {
         return listMembers("all");
     }
 
@@ -231,7 +232,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public PagedIterable<GHTeam> listChildTeams() throws IOException {
+    public PagedIterable<GHTeam> listChildTeams() {
         return root().createRequest()
                 .withUrlPath(api("/teams"))
                 .toIterable(GHTeam[].class, item -> item.wrapUp(this.organization));
@@ -244,7 +245,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public Set<GHUser> getMembers() throws IOException {
+    public Set<GHUser> getMembers() {
         return listMembers().toSet();
     }
 
@@ -259,7 +260,7 @@ public class GHTeam extends GHObject implements Refreshable {
         try {
             root().createRequest().withUrlPath(api("/memberships/" + user.getLogin())).send();
             return true;
-        } catch (@SuppressWarnings("unused") IOException ignore) {
+        } catch (@SuppressWarnings("unused") UncheckedIOException ignore) {
             return false;
         }
     }
@@ -271,7 +272,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public Map<String, GHRepository> getRepositories() throws IOException {
+    public Map<String, GHRepository> getRepositories() {
         Map<String, GHRepository> m = new TreeMap<>();
         for (GHRepository r : listRepositories()) {
             m.put(r.getName(), r);
@@ -299,7 +300,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      * @since 1.59
      */
-    public void add(GHUser u) throws IOException {
+    public void add(GHUser u) {
         root().createRequest().method("PUT").withUrlPath(api("/memberships/" + u.getLogin())).send();
     }
 
@@ -315,7 +316,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void add(GHUser user, Role role) throws IOException {
+    public void add(GHUser user, Role role) {
         root().createRequest()
                 .method("PUT")
                 .with("role", role)
@@ -331,7 +332,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void remove(GHUser u) throws IOException {
+    public void remove(GHUser u) {
         root().createRequest().method("DELETE").withUrlPath(api("/memberships/" + u.getLogin())).send();
     }
 
@@ -343,7 +344,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void add(GHRepository r) throws IOException {
+    public void add(GHRepository r) {
         add(r, (GHOrganization.RepositoryRole) null);
     }
 
@@ -357,7 +358,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void add(GHRepository r, GHOrganization.RepositoryRole permission) throws IOException {
+    public void add(GHRepository r, GHOrganization.RepositoryRole permission) {
         root().createRequest()
                 .method("PUT")
                 .with("permission",
@@ -374,7 +375,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void remove(GHRepository r) throws IOException {
+    public void remove(GHRepository r) {
         root().createRequest()
                 .method("DELETE")
                 .withUrlPath(api("/repos/" + r.getOwnerName() + '/' + r.getName()))
@@ -387,7 +388,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         root().createRequest().method("DELETE").withUrlPath(api("")).send();
     }
 
@@ -401,7 +402,7 @@ public class GHTeam extends GHObject implements Refreshable {
         return "/organizations/" + organization.getId() + "/team/" + getId() + tail;
     }
 
-    private String publicApi(String tail) throws IOException {
+    private String publicApi(String tail) {
         return "/orgs/" + getOrganization().login + "/teams/" + getSlug() + tail;
     }
 
@@ -416,7 +417,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public GHDiscussion.Creator createDiscussion(String title) throws IOException {
+    public GHDiscussion.Creator createDiscussion(String title) {
         return GHDiscussion.create(this).title(title);
     }
 
@@ -429,17 +430,22 @@ public class GHTeam extends GHObject implements Refreshable {
      * @see <a href=
      *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-a-connection-between-an-external-group-and-a-team">documentation</a>
      */
-    public List<GHExternalGroup> getExternalGroups() throws IOException {
+    public List<GHExternalGroup> getExternalGroups() {
         try {
             return Collections.unmodifiableList(Arrays.asList(root().createRequest()
                     .method("GET")
                     .withUrlPath(publicApi(EXTERNAL_GROUPS))
                     .fetch(GHExternalGroupPage.class)
                     .getGroups()));
-        } catch (final HttpException e) {
-            throw EnterpriseManagedSupport.forOrganization(getOrganization())
-                    .filterException(e, "Could not retrieve team external groups")
-                    .orElse(e);
+        } catch (final UncheckedIOException ue) {
+            if (HttpException.class.isInstance(ue.getCause())) {
+                HttpException e = (HttpException) ue.getCause();
+                throw new UncheckedIOException(EnterpriseManagedSupport.forOrganization(getOrganization())
+                        .filterException(e, "Could not retrieve team external group")
+                        .orElse(e));
+            } else {
+                throw ue;
+            }
         }
     }
 
@@ -454,7 +460,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @see <a href=
      *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#update-the-connection-between-an-external-group-and-a-team">documentation</a>
      */
-    public GHExternalGroup connectToExternalGroup(final GHExternalGroup group) throws IOException {
+    public GHExternalGroup connectToExternalGroup(final GHExternalGroup group) {
         return connectToExternalGroup(group.getId());
     }
 
@@ -469,7 +475,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @see <a href=
      *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#update-the-connection-between-an-external-group-and-a-team">documentation</a>
      */
-    public GHExternalGroup connectToExternalGroup(final long group_id) throws IOException {
+    public GHExternalGroup connectToExternalGroup(final long group_id) {
         try {
             return root().createRequest()
                     .method("PATCH")
@@ -477,10 +483,15 @@ public class GHTeam extends GHObject implements Refreshable {
                     .withUrlPath(publicApi(EXTERNAL_GROUPS))
                     .fetch(GHExternalGroup.class)
                     .wrapUp(getOrganization());
-        } catch (final HttpException e) {
-            throw EnterpriseManagedSupport.forOrganization(getOrganization())
-                    .filterException(e, "Could not connect team to external group")
-                    .orElse(e);
+        } catch (final UncheckedIOException ue) {
+            if (HttpException.class.isInstance(ue.getCause())) {
+                HttpException e = (HttpException) ue.getCause();
+                throw new UncheckedIOException(EnterpriseManagedSupport.forOrganization(getOrganization())
+                        .filterException(e, "Could not retrieve team external group")
+                        .orElse(e));
+            } else {
+                throw ue;
+            }
         }
     }
 
@@ -492,7 +503,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @see <a href=
      *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#remove-the-connection-between-an-external-group-and-a-team">documentation</a>
      */
-    public void deleteExternalGroupConnection() throws IOException {
+    public void deleteExternalGroupConnection() {
         root().createRequest().method("DELETE").withUrlPath(publicApi(EXTERNAL_GROUPS)).send();
     }
 
@@ -504,8 +515,8 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHOrganization getOrganization() throws IOException {
-        refresh(organization);
+    public GHOrganization getOrganization() {
+        refreshWithUnchecked(organization);
         return organization;
     }
 

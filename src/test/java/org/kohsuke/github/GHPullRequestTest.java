@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.kohsuke.github.GHPullRequest.AutoMerge;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
@@ -217,8 +218,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         try {
             String val = firstPR.get().listCommits().toArray()[0].getApiUrl().toString();
             assertThat(val, notNullValue());
-        } catch (GHFileNotFoundException e) {
-            if (e.getMessage().contains("/issues/")) {
+        } catch (UncheckedIOException e) {
+            if (e.getCause().getMessage().contains("/issues/")) {
                 fail("Issued a request against the wrong path");
             }
         }
@@ -580,9 +581,9 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
         try {
             pullRequest.setBaseBranch(newBaseBranch);
-        } catch (HttpException e) {
-            assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.toString(), containsString("Proposed base branch 'non-existing' was not found"));
+        } catch (UncheckedIOException e) {
+            assertThat(e.getCause(), instanceOf(HttpException.class));
+            assertThat(e.getCause().toString(), containsString("Proposed base branch 'non-existing' was not found"));
         }
 
         pullRequest.close();
@@ -618,9 +619,9 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
         try {
             outdatedPullRequest.updateBranch();
-        } catch (HttpException e) {
-            assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.toString(), containsString("expected head sha didn’t match current head ref."));
+        } catch (UncheckedIOException e) {
+            assertThat(e.getCause(), instanceOf(HttpException.class));
+            assertThat(e.getCause().toString(), containsString("expected head sha didn’t match current head ref."));
         }
 
         outdatedPullRequest.close();
@@ -883,8 +884,9 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         try {
             p.removeLabel(label3);
             fail("Expected GHFileNotFoundException");
-        } catch (GHFileNotFoundException e) {
-            assertThat(e.getMessage(), containsString("Label does not exist"));
+        } catch (UncheckedIOException e) {
+            assertThat(e.getCause(), instanceOf(GHFileNotFoundException.class));
+            assertThat(e.getCause().getMessage(), containsString("Label does not exist"));
         }
     }
 

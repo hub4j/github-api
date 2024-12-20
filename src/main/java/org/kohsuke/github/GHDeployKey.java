@@ -154,7 +154,7 @@ public class GHDeployKey {
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
+    public void delete() {
         owner.root()
                 .createRequest()
                 .method("DELETE")

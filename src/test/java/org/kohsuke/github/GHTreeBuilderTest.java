@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -57,7 +58,7 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
                     if (content != null) {
                         content.delete("Cleanup");
                     }
-                } catch (IOException e) {
+                } catch (UncheckedIOException e) {
                 }
             });
         }

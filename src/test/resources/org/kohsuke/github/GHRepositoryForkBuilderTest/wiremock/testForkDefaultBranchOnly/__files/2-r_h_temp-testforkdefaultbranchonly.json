@@ -1,6 +1,6 @@
 {
-  "id": 903271940,
-  "node_id": "R_kgDONdbWBA",
+  "id": 906237492,
+  "node_id": "R_kgDONgQWNA",
   "name": "temp-testForkDefaultBranchOnly",
   "full_name": "hub4j-test-org/temp-testForkDefaultBranchOnly",
   "private": false,
@@ -65,9 +65,9 @@
   "labels_url": "https://api.github.com/repos/hub4j-test-org/temp-testForkDefaultBranchOnly/labels{/name}",
   "releases_url": "https://api.github.com/repos/hub4j-test-org/temp-testForkDefaultBranchOnly/releases{/id}",
   "deployments_url": "https://api.github.com/repos/hub4j-test-org/temp-testForkDefaultBranchOnly/deployments",
-  "created_at": "2024-12-14T06:50:54Z",
-  "updated_at": "2024-12-14T06:50:58Z",
-  "pushed_at": "2024-12-14T06:50:54Z",
+  "created_at": "2024-12-20T13:02:20Z",
+  "updated_at": "2024-12-20T13:02:21Z",
+  "pushed_at": "2024-12-20T13:02:21Z",
   "git_url": "git://github.com/hub4j-test-org/temp-testForkDefaultBranchOnly.git",
   "ssh_url": "git@github.com:hub4j-test-org/temp-testForkDefaultBranchOnly.git",
   "clone_url": "https://github.com/hub4j-test-org/temp-testForkDefaultBranchOnly.git",
@@ -157,5 +157,5 @@
     }
   },
   "network_count": 0,
-  "subscribers_count": 21
+  "subscribers_count": 18
 }

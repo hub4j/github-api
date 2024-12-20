@@ -1,10 +1,10 @@
 {
   "ref": "refs/heads/test-branch3",
-  "node_id": "REF_kwDONdbWBLdyZWZzL2hlYWRzL3Rlc3QtYnJhbmNoMw",
+  "node_id": "REF_kwDONgQWNLdyZWZzL2hlYWRzL3Rlc3QtYnJhbmNoMw",
   "url": "https://api.github.com/repos/hub4j-test-org/temp-testForkDefaultBranchOnly/git/refs/heads/test-branch3",
   "object": {
-    "sha": "76bdc7517cec45d6925b7bcd8f41ae981cab72e2",
+    "sha": "b565d5b9adbaf54f1b35d879f0d98c135ad3d7d8",
     "type": "commit",
-    "url": "https://api.github.com/repos/hub4j-test-org/temp-testForkDefaultBranchOnly/git/commits/76bdc7517cec45d6925b7bcd8f41ae981cab72e2"
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testForkDefaultBranchOnly/git/commits/b565d5b9adbaf54f1b35d879f0d98c135ad3d7d8"
   }
 }

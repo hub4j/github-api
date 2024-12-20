@@ -1,5 +1,5 @@
 {
-  "id": "f358d2dc-5b93-43b0-87cf-43bb237be70b",
+  "id": "03a5031b-64e1-4946-bfb1-8a61f6b7b9c1",
   "name": "repos_hub4j-test-org_temp-testforktoorg_git_refs_heads_main",
   "request": {
     "url": "/repos/hub4j-test-org/temp-testForkToOrg/git/refs/heads/main",
@@ -14,12 +14,12 @@
     "status": 200,
     "bodyFileName": "3-r_h_t_git_refs_heads_main.json",
     "headers": {
-      "Date": "Sat, 14 Dec 2024 06:51:16 GMT",
+      "Date": "Fri, 20 Dec 2024 13:02:42 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
-      "ETag": "W/\"a8a183042635d873de4588fe328fac70206e4b631b75123ff98a082163d48886\"",
-      "Last-Modified": "Sat, 14 Dec 2024 06:51:16 GMT",
+      "ETag": "W/\"aa6b46f7fbcdea37418ffe101df4c671388ad6d8959d85cbe1b1489d0d5b0a55\"",
+      "Last-Modified": "Fri, 20 Dec 2024 13:02:42 GMT",
       "X-Poll-Interval": "300",
       "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, project, read:packages, repo, user, workflow, write:discussion",
       "X-Accepted-OAuth-Scopes": "repo",
@@ -27,9 +27,9 @@
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4523",
-      "X-RateLimit-Reset": "1734160419",
-      "X-RateLimit-Used": "477",
+      "X-RateLimit-Remaining": "4560",
+      "X-RateLimit-Reset": "1734700582",
+      "X-RateLimit-Used": "440",
       "X-RateLimit-Resource": "core",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -40,10 +40,10 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "1961:3DD5DB:9C5E4E:B937ED:675D2AE4"
+      "X-GitHub-Request-Id": "197B:3BD1EB:26F8B5:2E940D:67656AF2"
     }
   },
-  "uuid": "f358d2dc-5b93-43b0-87cf-43bb237be70b",
+  "uuid": "03a5031b-64e1-4946-bfb1-8a61f6b7b9c1",
   "persistent": true,
   "insertionIndex": 3
 }

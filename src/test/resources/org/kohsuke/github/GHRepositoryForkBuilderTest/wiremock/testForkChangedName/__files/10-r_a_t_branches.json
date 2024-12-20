@@ -2,8 +2,8 @@
   {
     "name": "main",
     "commit": {
-      "sha": "139dc502225e0e4225408692edd98d8ea537d258",
-      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/139dc502225e0e4225408692edd98d8ea537d258"
+      "sha": "0bd7d09dfde84e453a2c1d0cdb62adfd7b1adfd6",
+      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/0bd7d09dfde84e453a2c1d0cdb62adfd7b1adfd6"
     },
     "protected": false,
     "protection": {
@@ -19,8 +19,8 @@
   {
     "name": "test-branch1",
     "commit": {
-      "sha": "139dc502225e0e4225408692edd98d8ea537d258",
-      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/139dc502225e0e4225408692edd98d8ea537d258"
+      "sha": "0bd7d09dfde84e453a2c1d0cdb62adfd7b1adfd6",
+      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/0bd7d09dfde84e453a2c1d0cdb62adfd7b1adfd6"
     },
     "protected": false,
     "protection": {
@@ -36,8 +36,8 @@
   {
     "name": "test-branch2",
     "commit": {
-      "sha": "139dc502225e0e4225408692edd98d8ea537d258",
-      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/139dc502225e0e4225408692edd98d8ea537d258"
+      "sha": "0bd7d09dfde84e453a2c1d0cdb62adfd7b1adfd6",
+      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/0bd7d09dfde84e453a2c1d0cdb62adfd7b1adfd6"
     },
     "protected": false,
     "protection": {
@@ -53,8 +53,8 @@
   {
     "name": "test-branch3",
     "commit": {
-      "sha": "139dc502225e0e4225408692edd98d8ea537d258",
-      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/139dc502225e0e4225408692edd98d8ea537d258"
+      "sha": "0bd7d09dfde84e453a2c1d0cdb62adfd7b1adfd6",
+      "url": "https://api.github.com/repos/Alaurant/test-fork-with-new-name/commits/0bd7d09dfde84e453a2c1d0cdb62adfd7b1adfd6"
     },
     "protected": false,
     "protection": {

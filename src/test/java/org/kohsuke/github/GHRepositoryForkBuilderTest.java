@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
@@ -27,8 +28,7 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Sets up.
      *
-     * @throws Exception
-     *             the exception
+     * @throws Exception the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -73,8 +73,7 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test fork.
      *
-     * @throws Exception
-     *             the exception
+     * @throws Exception the exception
      */
     @Test
     public void testFork() throws Exception {
@@ -90,8 +89,7 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test fork to org.
      *
-     * @throws Exception
-     *             the exception
+     * @throws Exception the exception
      */
     @Test
     public void testForkToOrg() throws Exception {
@@ -108,8 +106,7 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test fork default branch only.
      *
-     * @throws Exception
-     *             the exception
+     * @throws Exception the exception
      */
     @Test
     public void testForkDefaultBranchOnly() throws Exception {
@@ -124,8 +121,7 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     /**
      * Test fork changed name.
      *
-     * @throws Exception
-     *             the exception
+     * @throws Exception the exception
      */
     @Test
     public void testForkChangedName() throws Exception {
@@ -140,10 +136,13 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test timeout.
+     * Test timeout message and sleep count.
+     *
+     * @throws Exception the exception
      */
     @Test
-    public void testTimeout() {
+    public void testTimeoutMessage() throws Exception {
+        // repo.createFork().name("test-message").create();
         class TrackingSleepBuilder extends GHRepositoryForkBuilder {
             int sleepCount = 0;
             int lastSleepMillis = 0;
@@ -164,23 +163,64 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
 
             }
         }
-
+        String newRepoName = "test-message";
         int originalInterval = GHRepositoryForkBuilder.FORK_RETRY_INTERVAL;
         try {
             GHRepositoryForkBuilder.FORK_RETRY_INTERVAL = 100;
 
             TrackingSleepBuilder builder = new TrackingSleepBuilder(repo);
             try {
-                builder.create();
+                builder.name(newRepoName).create();
                 fail("Expected IOException for timeout");
             } catch (IOException e) {
-                System.out.println("Exception message: " + e.getMessage());
                 assertThat(builder.sleepCount, equalTo(10));
                 assertThat(builder.lastSleepMillis, equalTo(100));
-                assertThat(e.getMessage(), containsString("but can't find the new repository"));
+                assertThat(e.getMessage(),
+                        allOf(containsString("was forked"),
+                                containsString("with name " + newRepoName),
+                                containsString("but can't find the new repository")));
             }
         } finally {
             GHRepositoryForkBuilder.FORK_RETRY_INTERVAL = originalInterval;
+        }
+    }
+
+    /**
+     * Test timeout org message.
+     *
+     * @throws Exception the exception
+     */
+    @Test
+    public void testTimeoutOrgMessage() throws Exception {
+        GHOrganization targetOrg = gitHub.getOrganization(TARGET_ORG);
+        // repo.createFork().organization(targetOrg).create();
+        try {
+            repo.createFork().organization(targetOrg).create();
+            fail("Expected IOException for timeout");
+        } catch (IOException e) {
+            assertThat(e.getMessage(),
+                    allOf(containsString("was forked"),
+                            containsString("into " + TARGET_ORG),
+                            containsString("but can't find the new repository")));
+        }
+    }
+
+    /**
+     * Test sleep.
+     *
+     * @throws Exception the exception
+     */
+    @Test
+    public void testSleep() throws Exception {
+        GHRepositoryForkBuilder builder = new GHRepositoryForkBuilder(repo);
+        Thread.currentThread().interrupt();
+
+        try {
+            builder.sleep(100);
+            fail("Expected InterruptedIOException");
+        } catch (InterruptedIOException e) {
+            assertThat(e, instanceOf(InterruptedIOException.class));
+            assertThat(e.getCause(), instanceOf(InterruptedException.class));
         }
     }
 

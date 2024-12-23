@@ -113,7 +113,7 @@ public class GHRepositoryForkBuilder {
      * @throws IOException
      *             the io exception
      */
-    protected void sleep(int millis) throws IOException {
+    void sleep(int millis) throws IOException {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {

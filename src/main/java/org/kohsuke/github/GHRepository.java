@@ -2723,7 +2723,25 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public PagedIterable<Contributor> listContributors() throws IOException {
-        return root().createRequest().withUrlPath(getApiTailUrl("contributors")).toIterable(Contributor[].class, null);
+        return listContributors(null);
+    }
+
+    /**
+     * List contributors paged iterable.
+     *
+     * @param includeAnonymous
+     *            whether to include anonymous contributors
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repository-contributors">
+     *      GitHub API - List Repository Contributors</a>
+     */
+    public PagedIterable<Contributor> listContributors(Boolean includeAnonymous) throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("contributors"))
+                .with("anon", includeAnonymous)
+                .toIterable(Contributor[].class, null);
     }
 
     /**

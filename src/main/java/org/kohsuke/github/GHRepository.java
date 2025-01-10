@@ -35,7 +35,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
 import java.io.Reader;
 import java.net.URL;
 import java.util.Arrays;
@@ -1458,23 +1457,11 @@ public class GHRepository extends GHObject {
      * @return Newly forked repository that belong to you.
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #createFork()}
      */
+    @Deprecated
     public GHRepository fork() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiTailUrl("forks")).send();
-
-        // this API is asynchronous. we need to wait for a bit
-        for (int i = 0; i < 10; i++) {
-            GHRepository r = root().getMyself().getRepository(name);
-            if (r != null) {
-                return r;
-            }
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw (IOException) new InterruptedIOException().initCause(e);
-            }
-        }
-        throw new IOException(this + " was forked but can't find the new repository");
+        return this.createFork().create();
     }
 
     /**
@@ -1503,27 +1490,11 @@ public class GHRepository extends GHObject {
      * @return Newly forked repository that belong to you.
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #createFork()}
      */
+    @Deprecated
     public GHRepository forkTo(GHOrganization org) throws IOException {
-        root().createRequest()
-                .method("POST")
-                .with("organization", org.getLogin())
-                .withUrlPath(getApiTailUrl("forks"))
-                .send();
-
-        // this API is asynchronous. we need to wait for a bit
-        for (int i = 0; i < 10; i++) {
-            GHRepository r = org.getRepository(name);
-            if (r != null) {
-                return r;
-            }
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw (IOException) new InterruptedIOException().initCause(e);
-            }
-        }
-        throw new IOException(this + " was forked into " + org.getLogin() + " but can't find the new repository");
+        return this.createFork().organization(org).create();
     }
 
     /**
@@ -3451,6 +3422,16 @@ public class GHRepository extends GHObject {
                 .withHeader("Accept", "application/vnd.github+json")
                 .withUrlPath(String.format("/repos/%s/%s/autolinks/%d", getOwnerName(), getName(), autolinkId))
                 .send();
+    }
+
+    /**
+     * Create fork gh repository fork builder.
+     * (https://docs.github.com/en/rest/repos/forks?apiVersion=2022-11-28#create-a-fork)
+     *
+     * @return the gh repository fork builder
+     */
+    public GHRepositoryForkBuilder createFork() {
+        return new GHRepositoryForkBuilder(this);
     }
 
 }

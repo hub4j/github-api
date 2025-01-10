@@ -19,6 +19,16 @@ public final class GHContentBuilder {
     private final Requester req;
     private String path;
 
+    private static final class UserInfo {
+        private final String name;
+        private final String email;
+
+        private UserInfo(String name, String email) {
+            this.name = name;
+            this.email = email;
+        }
+    }
+
     /**
      * Instantiates a new GH content builder.
      *
@@ -99,6 +109,34 @@ public final class GHContentBuilder {
      */
     public GHContentBuilder message(String commitMessage) {
         req.with("message", commitMessage);
+        return this;
+    }
+
+    /**
+     * Configures the author of this content.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @return the gh commit builder
+     */
+    public GHContentBuilder author(String name, String email) {
+        req.with("author", new UserInfo(name, email));
+        return this;
+    }
+
+    /**
+     * Configures the committer of this content.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @return the gh commit builder
+     */
+    public GHContentBuilder committer(String name, String email) {
+        req.with("committer", new UserInfo(name, email));
         return this;
     }
 

@@ -241,7 +241,7 @@ public class GitCommit {
      * @return the parents
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
-    List<GHCommit.Parent> getParents() {
+    public List<GHCommit.Parent> getParents() {
         return parents;
     }
 

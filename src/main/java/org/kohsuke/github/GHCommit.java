@@ -243,11 +243,11 @@ public class GHCommit {
     public static class Parent {
 
         /** The url. */
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        String url;
+        @SuppressFBWarnings(value = "UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD", justification = "used in backend code")
+        public String url;
 
         /** The sha. */
-        String sha;
+        public String sha;
     }
 
     /**

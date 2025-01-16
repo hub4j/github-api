@@ -41,6 +41,8 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
         originalInterval = GHRepositoryForkBuilder.FORK_RETRY_INTERVAL;
         GHRepositoryForkBuilder.FORK_RETRY_INTERVAL = 100;
 
+        GitHub github = getNonRecordingGitHub();
+        GHRepository repo = github.getRepository(this.repo.getFullName());
         String defaultBranch = repo.getDefaultBranch();
         GHRef mainRef = repo.getRef("heads/" + defaultBranch);
         String mainSha = mainRef.getObject().getSha();

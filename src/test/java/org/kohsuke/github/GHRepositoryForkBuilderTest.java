@@ -136,9 +136,8 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testFork() throws Exception {
-        // equivalent to the deprecated fork() method
-        TestForkBuilder builder = createBuilder();
-        GHRepository forkedRepo = builder.create();
+        // cover the deprecated fork() method
+        GHRepository forkedRepo = repo.fork();
 
         verifyBasicForkProperties(repo, forkedRepo, repo.getName());
         verifyBranches(forkedRepo, false);

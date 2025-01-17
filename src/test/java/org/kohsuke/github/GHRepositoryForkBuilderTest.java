@@ -41,15 +41,17 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
         originalInterval = GHRepositoryForkBuilder.FORK_RETRY_INTERVAL;
         GHRepositoryForkBuilder.FORK_RETRY_INTERVAL = 100;
 
-        GitHub github = getNonRecordingGitHub();
-        GHRepository repo = github.getRepository(this.repo.getFullName());
-        String defaultBranch = repo.getDefaultBranch();
-        GHRef mainRef = repo.getRef("heads/" + defaultBranch);
-        String mainSha = mainRef.getObject().getSha();
-
-        String[] branchNames = { "test-branch1", "test-branch2", "test-branch3" };
-        for (String branchName : branchNames) {
-            repo.createRef("refs/heads/" + branchName, mainSha);
+        if (mockGitHub.isUseProxy()) {
+          GitHub github = getNonRecordingGitHub();
+          GHRepository repo = github.getRepository(this.repo.getFullName());
+          String defaultBranch = repo.getDefaultBranch();
+          GHRef mainRef = repo.getRef("heads/" + defaultBranch);
+          String mainSha = mainRef.getObject().getSha();
+  
+          String[] branchNames = { "test-branch1", "test-branch2", "test-branch3" };
+          for (String branchName : branchNames) {
+              repo.createRef("refs/heads/" + branchName, mainSha);
+          }
         }
     }
 

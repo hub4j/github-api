@@ -121,6 +121,22 @@ public class GHApp extends GHObject {
     }
 
     /**
+     * Obtains all the installation requests associated with this app.
+     * <p>
+     * You must use a JWT to access this endpoint.
+     *
+     * @return a list of App installation requests
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/apps/apps?apiVersion=2022-11-28#list-installation-requests-for-the-authenticated-app">List
+     *      installation requests</a>
+     */
+    public PagedIterable<GHAppInstallationRequest> listInstallationRequests() {
+        return root().createRequest()
+                .withUrlPath("/app/installation-requests")
+                .toIterable(GHAppInstallationRequest[].class, null);
+    }
+
+    /**
      * Obtains all the installations associated with this app.
      * <p>
      * You must use a JWT to access this endpoint.

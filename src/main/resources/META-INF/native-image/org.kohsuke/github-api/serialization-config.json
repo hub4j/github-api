@@ -120,6 +120,9 @@
     "name": "org.kohsuke.github.GHAppInstallationsPage"
   },
   {
+    "name": "org.kohsuke.github.GHAppInstallationRequest"
+  },
+  {
     "name": "org.kohsuke.github.GHAppInstallationToken"
   },
   {

@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>GitHub API for Java &#x2013; </title>
+    <title>GitHub API for Java</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -150,21 +150,21 @@
     </div>
     <div id="content">
       <div id="contentBox">
-        <section>
-<h2><a name="GitHub_App_Auth_Flow"></a>GitHub App Auth Flow</h2>
+        <section><a id="GitHub_App_Auth_Flow"></a>
+<h1>GitHub App Auth Flow</h1>
 <p>GitHub Apps are commonly mistaken for OAuth Apps due to their similarities but understanding the differences between them will help you decide which kind of app you want to create.</p>
 <p>In a nutshell, an OAuth App acts as a GitHub user, whereas a GitHub App uses its own identity when installed on an organization or on repositories within an organization. For a comprehensive comparision please refer to the official GitHub <a class="externalLink" href="https://developer.github.com/apps/differences-between-apps/">documentation</a>.</p>
-<p>For this guide, we are going assume that you are using a GitHub App.</p></section><section>
-<h2><a name="Overview"></a>Overview</h2>
-<p>Assuming that your GitHub app has already been installed on either a user or an organization, the programmatic flow the developer must follow in order to be able to authenticate on their behalf is:</p><figure><img src="images/GitHub_App_Auth_Flow.jpg" alt="" /><figcaption>GitHub_App_Auth_Flow</figcaption></figure>
-<p>Multiple <code>GitHub</code> instances will have to be created and each of them will be using a different authentication mechanism. Some actions are only accessible if you are authenticated as a GitHub App while others will only be possible if you are authenticated on behalf of a user or org.</p></section><section>
-<h2><a name="Prerequisites"></a>Prerequisites</h2>
+<p>For this guide, we are going assume that you are using a GitHub App.</p></section><section><a id="Overview"></a>
+<h1>Overview</h1>
+<p>Assuming that your GitHub app has already been installed on either a user or an organization, the programmatic flow the developer must follow in order to be able to authenticate on their behalf is:</p><figure><img src="images/GitHub_App_Auth_Flow.jpg" /><figcaption>GitHub_App_Auth_Flow</figcaption></figure>
+<p>Multiple <code>GitHub</code> instances will have to be created and each of them will be using a different authentication mechanism. Some actions are only accessible if you are authenticated as a GitHub App while others will only be possible if you are authenticated on behalf of a user or org.</p></section><section><a id="Prerequisites"></a>
+<h1>Prerequisites</h1>
 <p>In order to follow this guide, you must have:</p>
 <ul>
 <li>A GitHub App created as described <a class="externalLink" href="https://developer.github.com/apps/building-github-apps/creating-a-github-app/">here</a></li>
 <li>A Private Key must be configured in your GitHub App as described <a class="externalLink" href="https://developer.github.com/apps/building-github-apps/authenticating-with-github-apps/#generating-a-private-key">here</a></li>
-<li>A User or an organisation that has already installed your GitHub App as described <a class="externalLink" href="https://developer.github.com/apps/installing-github-apps/">here</a></li></ul></section><section>
-<h2><a name="What_next.3F"></a>What next?</h2>
+<li>A User or an organisation that has already installed your GitHub App as described <a class="externalLink" href="https://developer.github.com/apps/installing-github-apps/">here</a></li></ul></section><section><a id="What_next.3F"></a>
+<h1>What next?</h1>
 <ul>
 <li>Authenticating as a GitHub App via the <a href="/githubappjwtauth.html">JWT Authentication</a></li>
 <li>Authenticating as an installation via the <a href="/githubappappinsttokenauth.html">App Installation Token</a></li></ul></section>
@@ -172,16 +172,16 @@
     </div>
     <div id="footer">
       <div class="xright">&#169;  
-          2024
+          ${currentYear}
     
           <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
-  
+  $dateFormat.applyPattern( $format )
 
   
   
-  &nbsp;| Last Published: 2024-09-17
-  &nbsp;| Version: 2.0.0-alpha-2
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.lastpublished" ): $dateToday
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.version" ): 2.0-alpha-3
 </div>
       <div class="clear">
         <hr/>

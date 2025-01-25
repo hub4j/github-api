@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>GitHub API for Java &#x2013; Maven Coordinates</title>
+    <title>Maven Coordinates – GitHub API for Java</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -200,23 +200,42 @@
     </div>
     <div id="content">
       <div id="contentBox">
-        <section><a name="Maven_Coordinates"></a>
-<h2><a name="Maven_Coordinates"></a>Maven Coordinates</h2><section><a name="Apache_Maven"></a>
-<h3><a name="Apache_Maven"></a>Apache Maven</h3>
+        <section><a id="Maven_Coordinates"></a>
+<h1>Maven Coordinates</h1><section><a id="Apache_Maven"></a>
+<h2>Apache Maven</h2>
+<pre>&lt;dependency&gt;
+  &lt;groupId&gt;org.kohsuke&lt;/groupId&gt;
+  &lt;artifactId&gt;github-api&lt;/artifactId&gt;
+  &lt;version&gt;2.0-alpha-3&lt;/version&gt;
+&lt;/dependency&gt;</pre></section><section><a id="Apache_Ivy"></a>
+<h2>Apache Ivy</h2>
+<pre>&lt;dependency org=&quot;org.kohsuke&quot; name=&quot;github-api&quot; rev=&quot;2.0-alpha-3&quot;&gt;
+  &lt;artifact name=&quot;github-api&quot; type=&quot;jar&quot; /&gt;
+&lt;/dependency&gt;</pre></section><section><a id="Groovy_Grape"></a>
+<h2>Groovy Grape</h2>
+<pre>@Grapes(
+@Grab(group='org.kohsuke', module='github-api', version='2.0-alpha-3')
+)</pre></section><section><a id="Gradle.2FGrails"></a>
+<h2>Gradle/Grails</h2>
+<pre>implementation 'org.kohsuke:github-api:2.0-alpha-3'</pre></section><section><a id="Scala_SBT"></a>
+<h2>Scala SBT</h2>
+<pre>libraryDependencies += &quot;org.kohsuke&quot; % &quot;github-api&quot; % &quot;2.0-alpha-3&quot;</pre></section><section><a id="Leiningen"></a>
+<h2>Leiningen</h2>
+<pre>[org.kohsuke/github-api &quot;2.0-alpha-3&quot;]</pre></section></section>
       </div>
     </div>
     <div id="footer">
       <div class="xright">&#169;  
-          2024
+          ${currentYear}
     
           <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
-  
+  $dateFormat.applyPattern( $format )
 
   
   
-  &nbsp;| Last Published: 2024-09-17
-  &nbsp;| Version: 2.0.0-alpha-2
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.lastpublished" ): $dateToday
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.version" ): 2.0-alpha-3
 </div>
       <div class="clear">
         <hr/>

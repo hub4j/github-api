@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHAutolink.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHAutolink.java</span></div><h1>GHAutolink.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
+
+/**
+ * Represents a GitHub repository autolink reference.
+ *
+ * @author Alaurant
+ * @see GHAutolinkBuilder
+ * @see GHRepository#listAutolinks() GHRepository#listAutolinks()
+ * @see &lt;a href=&quot;https://docs.github.com/en/rest/repos/autolinks&quot;&gt;Repository autolinks API&lt;/a&gt;
+ */
+public class GHAutolink {
+
+    private int id;
+    private String key_prefix;
+    private String url_template;
+    private boolean is_alphanumeric;
+    private GHRepository owner;
+
+    /**
+     * Instantiates a new Gh autolink.
+     */
+<span class="fc" id="L26">    public GHAutolink() {</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Gets the autolink ID
+     *
+     * @return the id
+     */
+    public int getId() {
+<span class="fc" id="L35">        return id;</span>
+    }
+
+    /**
+     * Gets the key prefix used to identify issues/PR references
+     *
+     * @return the key prefix string
+     */
+    public String getKeyPrefix() {
+<span class="fc" id="L44">        return key_prefix;</span>
+    }
+
+    /**
+     * Gets the URL template that will be used for matching
+     *
+     * @return the URL template string
+     */
+    public String getUrlTemplate() {
+<span class="fc" id="L53">        return url_template;</span>
+    }
+
+    /**
+     * Checks if the autolink uses alphanumeric values
+     *
+     * @return true if alphanumeric, false otherwise
+     */
+    public boolean isAlphanumeric() {
+<span class="fc" id="L62">        return is_alphanumeric;</span>
+    }
+
+    /**
+     * Gets the repository that owns this autolink
+     *
+     * @return the repository instance
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getOwner() {
+<span class="fc" id="L72">        return owner;</span>
+    }
+
+    /**
+     * Deletes this autolink
+     *
+     * @throws IOException
+     *             if the deletion fails
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L82">        owner.root()</span>
+<span class="fc" id="L83">                .createRequest()</span>
+<span class="fc" id="L84">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L85">                .withUrlPath(String.format(&quot;/repos/%s/%s/autolinks/%d&quot;, owner.getOwnerName(), owner.getName(), getId()))</span>
+<span class="fc" id="L86">                .send();</span>
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * Wraps this autolink with its owner repository.
+     *
+     * @param owner
+     *            the repository that owns this autolink
+     * @return this instance
+     */
+    GHAutolink lateBind(GHRepository owner) {
+<span class="fc" id="L97">        this.owner = owner;</span>
+<span class="fc" id="L98">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

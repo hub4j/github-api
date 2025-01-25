@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>GitHub API for Java &#x2013; Source Code Management</title>
+    <title>Source Code Management – GitHub API for Java</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -200,25 +200,34 @@
     </div>
     <div id="content">
       <div id="contentBox">
-        <section><a name="Overview"></a>
-<h2><a name="Overview"></a>Overview</h2>
-<p>This project uses <a class="externalLink" href="https://git-scm.com/">Git</a> to manage its source code. Instructions on Git use can be found at <a class="externalLink" href="https://git-scm.com/documentation">https://git-scm.com/documentation</a>.</p></section><section><a name="Web_Browser_Access"></a>
-<h2><a name="Web_Browser_Access"></a>Web Browser Access</h2>
+        <section><a id="Overview"></a>
+<h1>Overview</h1>
+<p>This project uses <a class="externalLink" href="https://git-scm.com/">Git</a> to manage its source code. Instructions on Git use can be found at <a class="externalLink" href="https://git-scm.com/doc">https://git-scm.com/doc</a>.</p></section><section><a id="Web_Browser_Access"></a>
+<h1>Web Browser Access</h1>
 <p>The following is a link to a browsable version of the source repository:</p>
+<pre><a class="externalLink" href="https://github.com/hub4j/github-api/">https://github.com/hub4j/github-api/</a></pre></section><section><a id="Anonymous_Access"></a>
+<h1>Anonymous Access</h1>
+<p>The source can be checked out anonymously from Git with this command (See <a class="externalLink" href="https://git-scm.com/docs/git-clone">https://git-scm.com/docs/git-clone</a>):</p>
+<pre>$ git clone git@github.com/hub4j/github-api.git</pre></section><section><a id="Developer_Access"></a>
+<h1>Developer Access</h1>
+<p>Only project developers can access the Git tree via this method (See <a class="externalLink" href="https://git-scm.com/docs/git-clone">https://git-scm.com/docs/git-clone</a>).</p>
+<pre>$ git clone ssh://git@github.com/hub4j/github-api.git</pre></section><section><a id="Access_from_Behind_a_Firewall"></a>
+<h1>Access from Behind a Firewall</h1>
+<p>Refer to the documentation of the SCM used for more information about access behind a firewall.</p></section>
       </div>
     </div>
     <div id="footer">
       <div class="xright">&#169;  
-          2024
+          ${currentYear}
     
           <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
-  
+  $dateFormat.applyPattern( $format )
 
   
   
-  &nbsp;| Last Published: 2024-09-17
-  &nbsp;| Version: 2.0.0-alpha-2
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.lastpublished" ): $dateToday
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.version" ): 2.0-alpha-3
 </div>
       <div class="clear">
         <hr/>

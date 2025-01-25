@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>GitHub API for Java &#x2013; Project Mailing Lists</title>
+    <title>Project Mailing Lists – GitHub API for Java</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -200,10 +200,10 @@
     </div>
     <div id="content">
       <div id="contentBox">
-        <section><a name="Project_Mailing_Lists"></a>
-<h2><a name="Project_Mailing_Lists"></a>Project Mailing Lists</h2>
+        <section><a id="Project_Mailing_Lists"></a>
+<h1>Project Mailing Lists</h1>
 <p>These are the mailing lists that have been established for this project. For each list, there is a subscribe, unsubscribe, and an archive link.</p>
-<table border="0" class="bodyTable">
+<table class="bodyTable">
 <tr class="a">
 <th>Name</th>
 <th>Subscribe</th>
@@ -220,16 +220,16 @@
     </div>
     <div id="footer">
       <div class="xright">&#169;  
-          2024
+          ${currentYear}
     
           <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
-  
+  $dateFormat.applyPattern( $format )
 
   
   
-  &nbsp;| Last Published: 2024-09-17
-  &nbsp;| Version: 2.0.0-alpha-2
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.lastpublished" ): $dateToday
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.version" ): 2.0-alpha-3
 </div>
       <div class="clear">
         <hr/>

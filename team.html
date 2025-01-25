@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>GitHub API for Java &#x2013; Project Team</title>
+    <title>Project Team – GitHub API for Java</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -200,39 +200,39 @@
     </div>
     <div id="content">
       <div id="contentBox">
-        <section><a name="Project_Team"></a>
-<h2><a name="Project_Team"></a>Project Team</h2>
+        <section><a id="Project_Team"></a>
+<h1>Project Team</h1>
 <p>A successful project requires many people to play many roles. Some members write code or documentation, while others are valuable as testers, submitting patches and suggestions.</p>
-<p>The project team is comprised of Members and Contributors. Members have direct access to the source of a project and actively evolve the code-base. Contributors improve the project through submission of patches and suggestions to the Members. The number of Contributors to the project is unbounded. Get involved today. All contributions to the project are greatly appreciated.</p><section><a name="Members"></a>
-<h3><a name="Members"></a>Members</h3>
+<p>The project team is comprised of Members and Contributors. Members have direct access to the source of a project and actively evolve the code-base. Contributors improve the project through submission of patches and suggestions to the Members. The number of Contributors to the project is unbounded. Get involved today. All contributions to the project are greatly appreciated.</p><section><a id="Members"></a>
+<h2>Members</h2>
 <p>The following is a list of developers with commit privileges that have directly contributed to the project in one way or another.</p>
-<table border="0" class="bodyTable">
+<table class="bodyTable">
 <tr class="a">
 <th>Image</th>
 <th>Id</th>
 <th>Name</th>
 <th>Email</th></tr>
 <tr class="b">
-<td><figure><img src="https://www.gravatar.com/avatar/0cb9832a01c22c083390f3c5dcb64105?d=mm&amp;s=60" alt="" /></figure></td>
+<td><figure><img src="https://www.gravatar.com/avatar/0cb9832a01c22c083390f3c5dcb64105?d=mm&amp;s=60" /></figure></td>
 <td><a id="kohsuke"></a>kohsuke</td>
 <td>Kohsuke Kawaguchi</td>
-<td><a class="externalLink" href="mailto:kk@kohsuke.org">kk@kohsuke.org</a></td></tr></table></section><section><a name="Contributors"></a>
-<h3><a name="Contributors"></a>Contributors</h3>
+<td><a class="externalLink" href="mailto:kk@kohsuke.org">kk@kohsuke.org</a></td></tr></table></section><section><a id="Contributors"></a>
+<h2>Contributors</h2>
 <p>There are no contributors listed for this project. Please check back again later.</p></section></section>
       </div>
     </div>
     <div id="footer">
       <div class="xright">&#169;  
-          2024
+          ${currentYear}
     
           <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
-  
+  $dateFormat.applyPattern( $format )
 
   
   
-  &nbsp;| Last Published: 2024-09-17
-  &nbsp;| Version: 2.0.0-alpha-2
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.lastpublished" ): $dateToday
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.version" ): 2.0-alpha-3
 </div>
       <div class="clear">
         <hr/>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHAutolinkBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHAutolinkBuilder.java</span></div><h1>GHAutolinkBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import java.io.IOException;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The type Gh autolink builder.
+ *
+ * @see GHRepository#createAutolink()
+ * @see GHAutolink
+ */
+public class GHAutolinkBuilder {
+
+    private final GHRepository repo;
+    private final Requester req;
+    private String keyPrefix;
+    private String urlTemplate;
+    private Boolean isAlphanumeric;
+
+    /**
+     * Instantiates a new Gh autolink builder.
+     *
+     * @param repo
+     *            the repo
+     */
+<span class="fc" id="L26">    GHAutolinkBuilder(GHRepository repo) {</span>
+<span class="fc" id="L27">        this.repo = repo;</span>
+<span class="fc" id="L28">        req = repo.root().createRequest();</span>
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * With key prefix gh autolink builder.
+     *
+     * @param keyPrefix
+     *            the key prefix
+     * @return the gh autolink builder
+     */
+    public GHAutolinkBuilder withKeyPrefix(String keyPrefix) {
+<span class="fc" id="L39">        this.keyPrefix = keyPrefix;</span>
+<span class="fc" id="L40">        return this;</span>
+    }
+
+    /**
+     * With url template gh autolink builder.
+     *
+     * @param urlTemplate
+     *            the url template
+     * @return the gh autolink builder
+     */
+    public GHAutolinkBuilder withUrlTemplate(String urlTemplate) {
+<span class="fc" id="L51">        this.urlTemplate = urlTemplate;</span>
+<span class="fc" id="L52">        return this;</span>
+    }
+
+    /**
+     * With is alphanumeric gh autolink builder.
+     *
+     * @param isAlphanumeric
+     *            the is alphanumeric
+     * @return the gh autolink builder
+     */
+    public GHAutolinkBuilder withIsAlphanumeric(boolean isAlphanumeric) {
+<span class="fc" id="L63">        this.isAlphanumeric = isAlphanumeric;</span>
+<span class="fc" id="L64">        return this;</span>
+    }
+
+    private String getApiTail() {
+<span class="fc" id="L68">        return String.format(&quot;/repos/%s/%s/autolinks&quot;, repo.getOwnerName(), repo.getName());</span>
+    }
+
+    /**
+     * Create gh autolink.
+     *
+     * @return the gh autolink
+     * @throws IOException
+     *             the io exception
+     */
+    public GHAutolink create() throws IOException {
+<span class="fc" id="L79">        GHAutolink autolink = req.method(&quot;POST&quot;)</span>
+<span class="fc" id="L80">                .with(&quot;key_prefix&quot;, keyPrefix)</span>
+<span class="fc" id="L81">                .with(&quot;url_template&quot;, urlTemplate)</span>
+<span class="fc" id="L82">                .with(&quot;is_alphanumeric&quot;, isAlphanumeric)</span>
+<span class="fc" id="L83">                .withHeader(&quot;Accept&quot;, &quot;application/vnd.github+json&quot;)</span>
+<span class="fc" id="L84">                .withUrlPath(getApiTail())</span>
+<span class="fc" id="L85">                .fetch(GHAutolink.class);</span>
+
+<span class="fc" id="L87">        return autolink.lateBind(repo);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

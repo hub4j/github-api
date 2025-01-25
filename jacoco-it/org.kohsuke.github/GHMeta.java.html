@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMeta.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMeta.java</span></div><h1>GHMeta.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMeta.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMeta.java</span></div><h1>GHMeta.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -12,24 +13,29 @@ import java.util.List;
  *
  * @author Paulo Miguel Almeida
  * @see GitHub#getMeta() GitHub#getMeta()
- * @see &lt;a href=&quot;https://developer.github.com/v3/meta/#meta&quot;&gt;Get Meta&lt;/a&gt;
+ * @see &lt;a href=&quot;https://docs.github.com/en/rest/meta/meta?apiVersion=2022-11-28#get-github-meta-information&quot;&gt;Get
+ *      Meta&lt;/a&gt;
  */
 public class GHMeta {
 
     /**
      * Create default GHMeta instance
      */
-<span class="fc" id="L22">    public GHMeta() {</span>
-<span class="fc" id="L23">    }</span>
+<span class="fc" id="L24">    public GHMeta() {</span>
+<span class="fc" id="L25">    }</span>
 
     @JsonProperty(&quot;verifiable_password_authentication&quot;)
     private boolean verifiablePasswordAuthentication;
+    @JsonProperty(&quot;ssh_key_fingerprints&quot;)
+    private Map&lt;String, String&gt; sshKeyFingerprints;
+    @JsonProperty(&quot;ssh_keys&quot;)
+    private List&lt;String&gt; sshKeys;
     private List&lt;String&gt; hooks;
     private List&lt;String&gt; git;
     private List&lt;String&gt; web;
     private List&lt;String&gt; api;
     private List&lt;String&gt; pages;
-<span class="fc" id="L32">    private List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L38">    private List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
     private List&lt;String&gt; packages;
     private List&lt;String&gt; actions;
     private List&lt;String&gt; dependabot;
@@ -40,7 +46,25 @@ public class GHMeta {
      * @return the boolean
      */
     public boolean isVerifiablePasswordAuthentication() {
-<span class="fc" id="L43">        return verifiablePasswordAuthentication;</span>
+<span class="fc" id="L49">        return verifiablePasswordAuthentication;</span>
+    }
+
+    /**
+     * Gets ssh key fingerprints.
+     *
+     * @return the ssh key fingerprints
+     */
+    public Map&lt;String, String&gt; getSshKeyFingerprints() {
+<span class="fc" id="L58">        return Collections.unmodifiableMap(sshKeyFingerprints);</span>
+    }
+
+    /**
+     * Gets ssh keys.
+     *
+     * @return the ssh keys
+     */
+    public List&lt;String&gt; getSshKeys() {
+<span class="fc" id="L67">        return Collections.unmodifiableList(sshKeys);</span>
     }
 
     /**
@@ -49,7 +73,7 @@ public class GHMeta {
      * @return the hooks
      */
     public List&lt;String&gt; getHooks() {
-<span class="fc" id="L52">        return Collections.unmodifiableList(hooks);</span>
+<span class="fc" id="L76">        return Collections.unmodifiableList(hooks);</span>
     }
 
     /**
@@ -58,7 +82,7 @@ public class GHMeta {
      * @return the git
      */
     public List&lt;String&gt; getGit() {
-<span class="fc" id="L61">        return Collections.unmodifiableList(git);</span>
+<span class="fc" id="L85">        return Collections.unmodifiableList(git);</span>
     }
 
     /**
@@ -67,7 +91,7 @@ public class GHMeta {
      * @return the web
      */
     public List&lt;String&gt; getWeb() {
-<span class="fc" id="L70">        return Collections.unmodifiableList(web);</span>
+<span class="fc" id="L94">        return Collections.unmodifiableList(web);</span>
     }
 
     /**
@@ -76,7 +100,7 @@ public class GHMeta {
      * @return the api
      */
     public List&lt;String&gt; getApi() {
-<span class="fc" id="L79">        return Collections.unmodifiableList(api);</span>
+<span class="fc" id="L103">        return Collections.unmodifiableList(api);</span>
     }
 
     /**
@@ -85,7 +109,7 @@ public class GHMeta {
      * @return the pages
      */
     public List&lt;String&gt; getPages() {
-<span class="fc" id="L88">        return Collections.unmodifiableList(pages);</span>
+<span class="fc" id="L112">        return Collections.unmodifiableList(pages);</span>
     }
 
     /**
@@ -94,7 +118,7 @@ public class GHMeta {
      * @return the importer
      */
     public List&lt;String&gt; getImporter() {
-<span class="fc" id="L97">        return Collections.unmodifiableList(importer);</span>
+<span class="fc" id="L121">        return Collections.unmodifiableList(importer);</span>
     }
 
     /**
@@ -103,7 +127,7 @@ public class GHMeta {
      * @return the package
      */
     public List&lt;String&gt; getPackages() {
-<span class="fc" id="L106">        return Collections.unmodifiableList(packages);</span>
+<span class="fc" id="L130">        return Collections.unmodifiableList(packages);</span>
     }
 
     /**
@@ -112,7 +136,7 @@ public class GHMeta {
      * @return the actions
      */
     public List&lt;String&gt; getActions() {
-<span class="fc" id="L115">        return Collections.unmodifiableList(actions);</span>
+<span class="fc" id="L139">        return Collections.unmodifiableList(actions);</span>
     }
 
     /**
@@ -121,7 +145,7 @@ public class GHMeta {
      * @return the dependabot
      */
     public List&lt;String&gt; getDependabot() {
-<span class="fc" id="L124">        return Collections.unmodifiableList(dependabot);</span>
+<span class="fc" id="L148">        return Collections.unmodifiableList(dependabot);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

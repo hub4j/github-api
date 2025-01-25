@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHNotificationStream.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHNotificationStream.java</span></div><h1>GHNotificationStream.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHNotificationStream.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHNotificationStream.java</span></div><h1>GHNotificationStream.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import java.io.IOException;
 import java.util.Date;
@@ -144,9 +144,9 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
             private GHThread next;
 
             public GHThread next() {
-<span class="pc bpc" id="L147" title="1 of 2 branches missed.">                if (next == null) {</span>
-<span class="nc" id="L148">                    next = fetch();</span>
-<span class="nc bnc" id="L149" title="All 2 branches missed.">                    if (next == null)</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">                if (next == null) {</span>
+<span class="fc" id="L148">                    next = fetch();</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">                    if (next == null)</span>
 <span class="nc" id="L150">                        throw new NoSuchElementException();</span>
                 }
 
@@ -175,7 +175,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                             }
 <span class="fc" id="L176">                        }</span>
 
-<span class="pc bpc" id="L178" title="1 of 4 branches missed.">                        if (nonBlocking &amp;&amp; nextCheckTime &gt;= 0)</span>
+<span class="fc bfc" id="L178" title="All 4 branches covered.">                        if (nonBlocking &amp;&amp; nextCheckTime &gt;= 0)</span>
 <span class="fc" id="L179">                            return null; // nothing more to report, and we aren't blocking</span>
 
                         // observe the polling interval before making the call
@@ -187,35 +187,37 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
 <span class="nc" id="L187">                            Thread.sleep(waitTime);</span>
 <span class="nc" id="L188">                        }</span>
 
-<span class="fc" id="L190">                        req.setHeader(&quot;If-Modified-Since&quot;, lastModified);</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">                        if (lastModified != null) {</span>
+<span class="nc" id="L191">                            req.setHeader(&quot;If-Modified-Since&quot;, lastModified);</span>
+                        }
 
-<span class="fc" id="L192">                        Requester requester = req.withUrlPath(apiUrl);</span>
-<span class="fc" id="L193">                        GitHubResponse&lt;GHThread[]&gt; response = ((GitHubPageContentsIterable&lt;GHThread&gt;) requester</span>
-<span class="fc" id="L194">                                .toIterable(GHThread[].class, null)).toResponse();</span>
-<span class="fc" id="L195">                        threads = response.body();</span>
+<span class="fc" id="L194">                        Requester requester = req.withUrlPath(apiUrl);</span>
+<span class="fc" id="L195">                        GitHubResponse&lt;GHThread[]&gt; response = ((GitHubPageContentsIterable&lt;GHThread&gt;) requester</span>
+<span class="fc" id="L196">                                .toIterable(GHThread[].class, null)).toResponse();</span>
+<span class="fc" id="L197">                        threads = response.body();</span>
 
-<span class="pc bpc" id="L197" title="1 of 2 branches missed.">                        if (threads == null) {</span>
-<span class="nc" id="L198">                            threads = EMPTY_ARRAY; // if unmodified, we get empty array</span>
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">                        if (threads == null) {</span>
+<span class="nc" id="L200">                            threads = EMPTY_ARRAY; // if unmodified, we get empty array</span>
                         } else {
                             // we get a new batch, but we want to ignore the ones that we've seen
-<span class="fc" id="L201">                            lastUpdated++;</span>
+<span class="fc" id="L203">                            lastUpdated++;</span>
                         }
-<span class="fc" id="L203">                        idx = threads.length - 1;</span>
+<span class="fc" id="L205">                        idx = threads.length - 1;</span>
 
-<span class="fc" id="L205">                        nextCheckTime = calcNextCheckTime(response);</span>
-<span class="fc" id="L206">                        lastModified = response.header(&quot;Last-Modified&quot;);</span>
-<span class="fc" id="L207">                    }</span>
-<span class="nc" id="L208">                } catch (IOException | InterruptedException e) {</span>
-<span class="nc" id="L209">                    throw new RuntimeException(e);</span>
+<span class="fc" id="L207">                        nextCheckTime = calcNextCheckTime(response);</span>
+<span class="fc" id="L208">                        lastModified = response.header(&quot;Last-Modified&quot;);</span>
+<span class="fc" id="L209">                    }</span>
+<span class="nc" id="L210">                } catch (IOException | InterruptedException e) {</span>
+<span class="nc" id="L211">                    throw new RuntimeException(e);</span>
                 }
             }
 
             private long calcNextCheckTime(GitHubResponse&lt;GHThread[]&gt; response) {
-<span class="fc" id="L214">                String v = response.header(&quot;X-Poll-Interval&quot;);</span>
-<span class="pc bpc" id="L215" title="1 of 2 branches missed.">                if (v == null)</span>
-<span class="nc" id="L216">                    v = &quot;60&quot;;</span>
-<span class="fc" id="L217">                long seconds = Integer.parseInt(v);</span>
-<span class="fc" id="L218">                return System.currentTimeMillis() + seconds * 1000;</span>
+<span class="fc" id="L216">                String v = response.header(&quot;X-Poll-Interval&quot;);</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">                if (v == null)</span>
+<span class="nc" id="L218">                    v = &quot;60&quot;;</span>
+<span class="fc" id="L219">                long seconds = Integer.parseInt(v);</span>
+<span class="fc" id="L220">                return System.currentTimeMillis() + seconds * 1000;</span>
             }
         };
     }
@@ -227,8 +229,8 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      *             the io exception
      */
     public void markAsRead() throws IOException {
-<span class="fc" id="L230">        markAsRead(-1);</span>
-<span class="fc" id="L231">    }</span>
+<span class="fc" id="L232">        markAsRead(-1);</span>
+<span class="fc" id="L233">    }</span>
 
     /**
      * Marks all the notifications as read.
@@ -239,12 +241,12 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      *             the io exception
      */
     public void markAsRead(long timestamp) throws IOException {
-<span class="fc" id="L242">        final Requester req = root().createRequest();</span>
-<span class="pc bpc" id="L243" title="1 of 2 branches missed.">        if (timestamp &gt;= 0)</span>
-<span class="nc" id="L244">            req.with(&quot;last_read_at&quot;, GitHubClient.printDate(new Date(timestamp)));</span>
-<span class="fc" id="L245">        req.withUrlPath(apiUrl).fetchHttpStatusCode();</span>
-<span class="fc" id="L246">    }</span>
+<span class="fc" id="L244">        final Requester req = root().createRequest();</span>
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (timestamp &gt;= 0)</span>
+<span class="nc" id="L246">            req.with(&quot;last_read_at&quot;, GitHubClient.printDate(new Date(timestamp)));</span>
+<span class="fc" id="L247">        req.withUrlPath(apiUrl).fetchHttpStatusCode();</span>
+<span class="fc" id="L248">    }</span>
 
-<span class="fc" id="L248">    private static final GHThread[] EMPTY_ARRAY = new GHThread[0];</span>
+<span class="fc" id="L250">    private static final GHThread[] EMPTY_ARRAY = new GHThread[0];</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

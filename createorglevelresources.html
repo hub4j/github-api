@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>GitHub API for Java &#x2013; </title>
+    <title>GitHub API for Java</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -150,17 +150,15 @@
     </div>
     <div id="content">
       <div id="contentBox">
-        <section>
-<h2><a name="Creating_resources_at_the_organization_level"></a>Creating resources at the organization level</h2>
+        <section><a id="Creating_resources_at_the_organization_level"></a>
+<h1>Creating resources at the organization level</h1>
 <p>In order to create resources in GitHub for a given organization, you must first create an object of type <code>GHOrganization</code>. As an example:</p>
-<div class="source">
-<pre>GHOrganization organizationClient(GitHub gitHub, String organizationName) throws IOException {
+<pre><code>GHOrganization organizationClient(GitHub gitHub, String organizationName) throws IOException {
         return gitHub.getOrganization(organizationName);
-    }</pre></div>
+    }</code></pre>
 <p>Now you can easily work with the GHOrganization, and all methods that will create resources will create them in the given organization.</p>
 <p>One of the most common use cases is to create a repository in a given organization:</p>
-<div class="source">
-<pre>  void createRepository(GHOrganization organization) {
+<pre><code>  void createRepository(GHOrganization organization) {
   organization.createRepository(&quot;repository-name&quot;)
               .private_(true)
               .wiki(false)
@@ -170,21 +168,21 @@
               .allowSquashMerge(false)
               .allowRebaseMerge(false)
               .create()
-  }</pre></div></section>
+  }</code></pre></section>
       </div>
     </div>
     <div id="footer">
       <div class="xright">&#169;  
-          2024
+          ${currentYear}
     
           <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
-  
+  $dateFormat.applyPattern( $format )
 
   
   
-  &nbsp;| Last Published: 2024-09-17
-  &nbsp;| Version: 2.0.0-alpha-2
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.lastpublished" ): $dateToday
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.version" ): 2.0-alpha-3
 </div>
       <div class="clear">
         <hr/>

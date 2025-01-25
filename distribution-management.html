@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>GitHub API for Java &#x2013; Project Distribution Management</title>
+    <title>Project Distribution Management – GitHub API for Java</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -200,27 +200,27 @@
     </div>
     <div id="content">
       <div id="contentBox">
-        <section><a name="Overview"></a>
-<h2><a name="Overview"></a>Overview</h2>
-<p>The following is the distribution management information used by this project.</p><section><a name="Repository_-_sonatype-nexus-staging"></a>
-<h3><a name="Repository_-_sonatype-nexus-staging"></a>Repository - sonatype-nexus-staging</h3><a class="externalLink" href="https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/">https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</a></section><section><a name="Snapshot_Repository_-_sonatype-nexus-snapshots"></a>
-<h3><a name="Snapshot_Repository_-_sonatype-nexus-snapshots"></a>Snapshot Repository - sonatype-nexus-snapshots</h3><a class="externalLink" href="https://s01.oss.sonatype.org/content/repositories/snapshots/">https://s01.oss.sonatype.org/content/repositories/snapshots/</a></section><section><a name="Site_-_github-pages"></a>
-<h3><a name="Site_-_github-pages"></a>Site - github-pages</h3>
+        <section><a id="Overview"></a>
+<h1>Overview</h1>
+<p>The following is the distribution management information used by this project.</p><section><a id="Repository_-_sonatype-nexus-staging"></a>
+<h2>Repository - sonatype-nexus-staging</h2><a class="externalLink" href="https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/">https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</a></section><section><a id="Snapshot_Repository_-_sonatype-nexus-snapshots"></a>
+<h2>Snapshot Repository - sonatype-nexus-snapshots</h2><a class="externalLink" href="https://s01.oss.sonatype.org/content/repositories/snapshots/">https://s01.oss.sonatype.org/content/repositories/snapshots/</a></section><section><a id="Site_-_github-pages"></a>
+<h2>Site - github-pages</h2>
 <p>gitsite:git@github.com/hub4j/github-api.git</p></section></section>
       </div>
     </div>
     <div id="footer">
       <div class="xright">&#169;  
-          2024
+          ${currentYear}
     
           <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
-  
+  $dateFormat.applyPattern( $format )
 
   
   
-  &nbsp;| Last Published: 2024-09-17
-  &nbsp;| Version: 2.0.0-alpha-2
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.lastpublished" ): $dateToday
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.version" ): 2.0-alpha-3
 </div>
       <div class="clear">
         <hr/>

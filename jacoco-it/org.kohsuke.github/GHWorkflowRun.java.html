@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHWorkflowRun.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHWorkflowRun.java</span></div><h1>GHWorkflowRun.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHWorkflowRun.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHWorkflowRun.java</span></div><h1>GHWorkflowRun.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -42,6 +42,7 @@ public class GHWorkflowRun extends GHObject {
 
     private long runAttempt;
     private String runStartedAt;
+    private GHUser triggeringActor;
 
     private String htmlUrl;
     private String jobsUrl;
@@ -69,7 +70,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L72">        return name;</span>
+<span class="fc" id="L73">        return name;</span>
     }
 
     /**
@@ -78,7 +79,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the displayTitle
      */
     public String getDisplayTitle() {
-<span class="fc" id="L81">        return displayTitle;</span>
+<span class="fc" id="L82">        return displayTitle;</span>
     }
 
     /**
@@ -87,7 +88,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the run number
      */
     public long getRunNumber() {
-<span class="fc" id="L90">        return runNumber;</span>
+<span class="fc" id="L91">        return runNumber;</span>
     }
 
     /**
@@ -96,7 +97,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the workflow id
      */
     public long getWorkflowId() {
-<span class="fc" id="L99">        return workflowId;</span>
+<span class="fc" id="L100">        return workflowId;</span>
     }
 
     /**
@@ -105,7 +106,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the run attempt
      */
     public long getRunAttempt() {
-<span class="fc" id="L108">        return runAttempt;</span>
+<span class="fc" id="L109">        return runAttempt;</span>
     }
 
     /**
@@ -116,7 +117,17 @@ public class GHWorkflowRun extends GHObject {
      *             on error
      */
     public Date getRunStartedAt() throws IOException {
-<span class="fc" id="L119">        return GitHubClient.parseDate(runStartedAt);</span>
+<span class="fc" id="L120">        return GitHubClient.parseDate(runStartedAt);</span>
+    }
+
+    /**
+     * The actor which triggered the run.
+     *
+     * @return the triggering actor
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHUser getTriggeringActor() {
+<span class="fc" id="L130">        return triggeringActor;</span>
     }
 
     /**
@@ -127,7 +138,7 @@ public class GHWorkflowRun extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     public URL getHtmlUrl() throws IOException {
-<span class="fc" id="L130">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L141">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -136,7 +147,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the jobs url
      */
     public URL getJobsUrl() {
-<span class="fc" id="L139">        return GitHubClient.parseURL(jobsUrl);</span>
+<span class="fc" id="L150">        return GitHubClient.parseURL(jobsUrl);</span>
     }
 
     /**
@@ -145,7 +156,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the logs url
      */
     public URL getLogsUrl() {
-<span class="fc" id="L148">        return GitHubClient.parseURL(logsUrl);</span>
+<span class="fc" id="L159">        return GitHubClient.parseURL(logsUrl);</span>
     }
 
     /**
@@ -154,7 +165,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the check suite url
      */
     public URL getCheckSuiteUrl() {
-<span class="fc" id="L157">        return GitHubClient.parseURL(checkSuiteUrl);</span>
+<span class="fc" id="L168">        return GitHubClient.parseURL(checkSuiteUrl);</span>
     }
 
     /**
@@ -163,7 +174,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the artifacts url
      */
     public URL getArtifactsUrl() {
-<span class="fc" id="L166">        return GitHubClient.parseURL(artifactsUrl);</span>
+<span class="fc" id="L177">        return GitHubClient.parseURL(artifactsUrl);</span>
     }
 
     /**
@@ -172,7 +183,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the cancel url
      */
     public URL getCancelUrl() {
-<span class="fc" id="L175">        return GitHubClient.parseURL(cancelUrl);</span>
+<span class="fc" id="L186">        return GitHubClient.parseURL(cancelUrl);</span>
     }
 
     /**
@@ -181,7 +192,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the rerun url
      */
     public URL getRerunUrl() {
-<span class="fc" id="L184">        return GitHubClient.parseURL(rerunUrl);</span>
+<span class="fc" id="L195">        return GitHubClient.parseURL(rerunUrl);</span>
     }
 
     /**
@@ -190,7 +201,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the workflow url
      */
     public URL getWorkflowUrl() {
-<span class="fc" id="L193">        return GitHubClient.parseURL(workflowUrl);</span>
+<span class="fc" id="L204">        return GitHubClient.parseURL(workflowUrl);</span>
     }
 
     /**
@@ -199,7 +210,7 @@ public class GHWorkflowRun extends GHObject {
      * @return head branch name
      */
     public String getHeadBranch() {
-<span class="fc" id="L202">        return headBranch;</span>
+<span class="fc" id="L213">        return headBranch;</span>
     }
 
     /**
@@ -208,7 +219,7 @@ public class GHWorkflowRun extends GHObject {
      * @return sha for the HEAD commit
      */
     public String getHeadSha() {
-<span class="fc" id="L211">        return headSha;</span>
+<span class="fc" id="L222">        return headSha;</span>
     }
 
     /**
@@ -217,7 +228,7 @@ public class GHWorkflowRun extends GHObject {
      * @return head commit
      */
     public HeadCommit getHeadCommit() {
-<span class="fc" id="L220">        return headCommit;</span>
+<span class="fc" id="L231">        return headCommit;</span>
     }
 
     /**
@@ -227,7 +238,7 @@ public class GHWorkflowRun extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getHeadRepository() {
-<span class="fc" id="L230">        return headRepository;</span>
+<span class="fc" id="L241">        return headRepository;</span>
     }
 
     /**
@@ -236,7 +247,7 @@ public class GHWorkflowRun extends GHObject {
      * @return type of event
      */
     public GHEvent getEvent() {
-<span class="fc" id="L239">        return EnumUtils.getNullableEnumOrDefault(GHEvent.class, event, GHEvent.UNKNOWN);</span>
+<span class="fc" id="L250">        return EnumUtils.getNullableEnumOrDefault(GHEvent.class, event, GHEvent.UNKNOWN);</span>
     }
 
     /**
@@ -247,7 +258,7 @@ public class GHWorkflowRun extends GHObject {
      * @return status of the workflow run
      */
     public Status getStatus() {
-<span class="fc" id="L250">        return Status.from(status);</span>
+<span class="fc" id="L261">        return Status.from(status);</span>
     }
 
     /**
@@ -258,7 +269,7 @@ public class GHWorkflowRun extends GHObject {
      * @return conclusion of the workflow run
      */
     public Conclusion getConclusion() {
-<span class="fc" id="L261">        return Conclusion.from(conclusion);</span>
+<span class="fc" id="L272">        return Conclusion.from(conclusion);</span>
     }
 
     /**
@@ -268,7 +279,7 @@ public class GHWorkflowRun extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L271">        return owner;</span>
+<span class="fc" id="L282">        return owner;</span>
     }
 
     /**
@@ -282,14 +293,14 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
-<span class="pc bpc" id="L285" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="fc bfc" id="L286" title="All 2 branches covered.">            for (GHPullRequest pullRequest : pullRequests) {</span>
+<span class="pc bpc" id="L296" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">            for (GHPullRequest pullRequest : pullRequests) {</span>
                 // Only refresh if we haven't do so before
-<span class="fc" id="L288">                pullRequest.refresh(pullRequest.getTitle());</span>
+<span class="fc" id="L299">                pullRequest.refresh(pullRequest.getTitle());</span>
             }
-<span class="fc" id="L290">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
+<span class="fc" id="L301">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
         }
-<span class="nc" id="L292">        return Collections.emptyList();</span>
+<span class="nc" id="L303">        return Collections.emptyList();</span>
     }
 
     /**
@@ -299,8 +310,8 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void cancel() throws IOException {
-<span class="fc" id="L302">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;cancel&quot;).send();</span>
-<span class="fc" id="L303">    }</span>
+<span class="fc" id="L313">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;cancel&quot;).send();</span>
+<span class="fc" id="L314">    }</span>
 
     /**
      * Delete the workflow run.
@@ -309,8 +320,8 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L312">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L313">    }</span>
+<span class="fc" id="L323">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L324">    }</span>
 
     /**
      * Rerun the workflow run.
@@ -319,8 +330,8 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void rerun() throws IOException {
-<span class="fc" id="L322">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;rerun&quot;).send();</span>
-<span class="fc" id="L323">    }</span>
+<span class="fc" id="L333">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;rerun&quot;).send();</span>
+<span class="fc" id="L334">    }</span>
 
     /**
      * Approve the workflow run.
@@ -329,8 +340,8 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void approve() throws IOException {
-<span class="fc" id="L332">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;approve&quot;).send();</span>
-<span class="fc" id="L333">    }</span>
+<span class="fc" id="L343">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute(), &quot;approve&quot;).send();</span>
+<span class="fc" id="L344">    }</span>
 
     /**
      * Lists the artifacts attached to this workflow run.
@@ -338,7 +349,7 @@ public class GHWorkflowRun extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHArtifact&gt; listArtifacts() {
-<span class="fc" id="L341">        return new GHArtifactsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), &quot;artifacts&quot;));</span>
+<span class="fc" id="L352">        return new GHArtifactsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), &quot;artifacts&quot;));</span>
     }
 
     /**
@@ -357,9 +368,9 @@ public class GHWorkflowRun extends GHObject {
      *             The IO exception.
      */
     public &lt;T&gt; T downloadLogs(InputStreamFunction&lt;T&gt; streamFunction) throws IOException {
-<span class="fc" id="L360">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
+<span class="fc" id="L371">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
 
-<span class="fc" id="L362">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchStream(streamFunction);</span>
+<span class="fc" id="L373">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchStream(streamFunction);</span>
     }
 
     /**
@@ -369,8 +380,8 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void deleteLogs() throws IOException {
-<span class="fc" id="L372">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).send();</span>
-<span class="fc" id="L373">    }</span>
+<span class="fc" id="L383">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).send();</span>
+<span class="fc" id="L384">    }</span>
 
     /**
      * Returns the list of jobs of this workflow run for the last execution.
@@ -378,7 +389,7 @@ public class GHWorkflowRun extends GHObject {
      * @return list of jobs from the last execution
      */
     public PagedIterable&lt;GHWorkflowJob&gt; listJobs() {
-<span class="fc" id="L381">        return new GHWorkflowJobQueryBuilder(this).latest().list();</span>
+<span class="fc" id="L392">        return new GHWorkflowJobQueryBuilder(this).latest().list();</span>
     }
 
     /**
@@ -387,17 +398,17 @@ public class GHWorkflowRun extends GHObject {
      * @return list of jobs from all the executions
      */
     public PagedIterable&lt;GHWorkflowJob&gt; listAllJobs() {
-<span class="fc" id="L390">        return new GHWorkflowJobQueryBuilder(this).all().list();</span>
+<span class="fc" id="L401">        return new GHWorkflowJobQueryBuilder(this).all().list();</span>
     }
 
     private String getApiRoute() {
-<span class="pc bpc" id="L394" title="1 of 2 branches missed.">        if (owner == null) {</span>
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">        if (owner == null) {</span>
             // Workflow runs returned from search to do not have an owner. Attempt to use url.
-<span class="nc" id="L396">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="nc" id="L397">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="nc" id="L407">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L408">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
 
         }
-<span class="fc" id="L400">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/runs/&quot; + getId();</span>
+<span class="fc" id="L411">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/runs/&quot; + getId();</span>
     }
 
     /**
@@ -408,8 +419,8 @@ public class GHWorkflowRun extends GHObject {
      * @return the GH workflow run
      */
     GHWorkflowRun wrapUp(GHRepository owner) {
-<span class="fc" id="L411">        this.owner = owner;</span>
-<span class="fc" id="L412">        return wrapUp(owner.root());</span>
+<span class="fc" id="L422">        this.owner = owner;</span>
+<span class="fc" id="L423">        return wrapUp(owner.root());</span>
     }
 
     /**
@@ -420,14 +431,14 @@ public class GHWorkflowRun extends GHObject {
      * @return the GH workflow run
      */
     GHWorkflowRun wrapUp(GitHub root) {
-<span class="pc bpc" id="L423" title="1 of 2 branches missed.">        if (owner != null) {</span>
-<span class="pc bpc" id="L424" title="1 of 2 branches missed.">            if (pullRequests != null) {</span>
-<span class="fc bfc" id="L425" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
-<span class="fc" id="L426">                    singlePull.wrap(owner);</span>
+<span class="pc bpc" id="L434" title="1 of 2 branches missed.">        if (owner != null) {</span>
+<span class="pc bpc" id="L435" title="1 of 2 branches missed.">            if (pullRequests != null) {</span>
+<span class="fc bfc" id="L436" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="fc" id="L437">                    singlePull.wrap(owner);</span>
                 }
             }
         }
-<span class="fc" id="L430">        return this;</span>
+<span class="fc" id="L441">        return this;</span>
     }
 
     /**
@@ -438,8 +449,8 @@ public class GHWorkflowRun extends GHObject {
         /**
          * Create default HeadCommit instance
          */
-<span class="fc" id="L441">        public HeadCommit() {</span>
-<span class="fc" id="L442">        }</span>
+<span class="fc" id="L452">        public HeadCommit() {</span>
+<span class="fc" id="L453">        }</span>
 
         private String id;
         private String treeId;
@@ -454,7 +465,7 @@ public class GHWorkflowRun extends GHObject {
          * @return id of the commit
          */
         public String getId() {
-<span class="fc" id="L457">            return id;</span>
+<span class="fc" id="L468">            return id;</span>
         }
 
         /**
@@ -463,7 +474,7 @@ public class GHWorkflowRun extends GHObject {
          * @return id of the tree
          */
         public String getTreeId() {
-<span class="fc" id="L466">            return treeId;</span>
+<span class="fc" id="L477">            return treeId;</span>
         }
 
         /**
@@ -472,7 +483,7 @@ public class GHWorkflowRun extends GHObject {
          * @return commit message.
          */
         public String getMessage() {
-<span class="fc" id="L475">            return message;</span>
+<span class="fc" id="L486">            return message;</span>
         }
 
         /**
@@ -481,7 +492,7 @@ public class GHWorkflowRun extends GHObject {
          * @return timestamp of the commit
          */
         public Date getTimestamp() {
-<span class="fc" id="L484">            return GitHubClient.parseDate(timestamp);</span>
+<span class="fc" id="L495">            return GitHubClient.parseDate(timestamp);</span>
         }
 
         /**
@@ -490,7 +501,7 @@ public class GHWorkflowRun extends GHObject {
          * @return the author
          */
         public GitUser getAuthor() {
-<span class="fc" id="L493">            return author;</span>
+<span class="fc" id="L504">            return author;</span>
         }
 
         /**
@@ -499,45 +510,45 @@ public class GHWorkflowRun extends GHObject {
          * @return the committer
          */
         public GitUser getCommitter() {
-<span class="fc" id="L502">            return committer;</span>
+<span class="fc" id="L513">            return committer;</span>
         }
     }
 
     /**
      * The Enum Status.
      */
-<span class="fc" id="L509">    public static enum Status {</span>
+<span class="fc" id="L520">    public static enum Status {</span>
 
         /** The queued. */
-<span class="fc" id="L512">        QUEUED,</span>
+<span class="fc" id="L523">        QUEUED,</span>
         /** The in progress. */
-<span class="fc" id="L514">        IN_PROGRESS,</span>
+<span class="fc" id="L525">        IN_PROGRESS,</span>
         /** The completed. */
-<span class="fc" id="L516">        COMPLETED,</span>
+<span class="fc" id="L527">        COMPLETED,</span>
         /** The action required. */
-<span class="fc" id="L518">        ACTION_REQUIRED,</span>
+<span class="fc" id="L529">        ACTION_REQUIRED,</span>
         /** The cancelled. */
-<span class="fc" id="L520">        CANCELLED,</span>
+<span class="fc" id="L531">        CANCELLED,</span>
         /** The failure. */
-<span class="fc" id="L522">        FAILURE,</span>
+<span class="fc" id="L533">        FAILURE,</span>
         /** The neutral. */
-<span class="fc" id="L524">        NEUTRAL,</span>
+<span class="fc" id="L535">        NEUTRAL,</span>
         /** The skipped. */
-<span class="fc" id="L526">        SKIPPED,</span>
+<span class="fc" id="L537">        SKIPPED,</span>
         /** The stale. */
-<span class="fc" id="L528">        STALE,</span>
+<span class="fc" id="L539">        STALE,</span>
         /** The success. */
-<span class="fc" id="L530">        SUCCESS,</span>
+<span class="fc" id="L541">        SUCCESS,</span>
         /** The timed out. */
-<span class="fc" id="L532">        TIMED_OUT,</span>
+<span class="fc" id="L543">        TIMED_OUT,</span>
         /** The requested. */
-<span class="fc" id="L534">        REQUESTED,</span>
+<span class="fc" id="L545">        REQUESTED,</span>
         /** The waiting. */
-<span class="fc" id="L536">        WAITING,</span>
+<span class="fc" id="L547">        WAITING,</span>
         /** The pending. */
-<span class="fc" id="L538">        PENDING,</span>
+<span class="fc" id="L549">        PENDING,</span>
         /** The unknown. */
-<span class="fc" id="L540">        UNKNOWN;</span>
+<span class="fc" id="L551">        UNKNOWN;</span>
 
         /**
          * From.
@@ -547,7 +558,7 @@ public class GHWorkflowRun extends GHObject {
          * @return the status
          */
         public static Status from(String value) {
-<span class="fc" id="L550">            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);</span>
+<span class="fc" id="L561">            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);</span>
         }
 
         /**
@@ -557,35 +568,35 @@ public class GHWorkflowRun extends GHObject {
          */
         @Override
         public String toString() {
-<span class="fc" id="L560">            return name().toLowerCase(Locale.ROOT);</span>
+<span class="fc" id="L571">            return name().toLowerCase(Locale.ROOT);</span>
         }
     }
 
     /**
      * The Enum Conclusion.
      */
-<span class="fc" id="L567">    public static enum Conclusion {</span>
+<span class="fc" id="L578">    public static enum Conclusion {</span>
 
         /** The action required. */
-<span class="fc" id="L570">        ACTION_REQUIRED,</span>
+<span class="fc" id="L581">        ACTION_REQUIRED,</span>
         /** The cancelled. */
-<span class="fc" id="L572">        CANCELLED,</span>
+<span class="fc" id="L583">        CANCELLED,</span>
         /** The failure. */
-<span class="fc" id="L574">        FAILURE,</span>
+<span class="fc" id="L585">        FAILURE,</span>
         /** The neutral. */
-<span class="fc" id="L576">        NEUTRAL,</span>
+<span class="fc" id="L587">        NEUTRAL,</span>
         /** The success. */
-<span class="fc" id="L578">        SUCCESS,</span>
+<span class="fc" id="L589">        SUCCESS,</span>
         /** The skipped. */
-<span class="fc" id="L580">        SKIPPED,</span>
+<span class="fc" id="L591">        SKIPPED,</span>
         /** The stale. */
-<span class="fc" id="L582">        STALE,</span>
+<span class="fc" id="L593">        STALE,</span>
         /** The timed out. */
-<span class="fc" id="L584">        TIMED_OUT,</span>
+<span class="fc" id="L595">        TIMED_OUT,</span>
         /** Start up fail */
-<span class="fc" id="L586">        STARTUP_FAILURE,</span>
+<span class="fc" id="L597">        STARTUP_FAILURE,</span>
         /** The unknown. */
-<span class="fc" id="L588">        UNKNOWN;</span>
+<span class="fc" id="L599">        UNKNOWN;</span>
 
         /**
          * From.
@@ -595,7 +606,7 @@ public class GHWorkflowRun extends GHObject {
          * @return the conclusion
          */
         public static Conclusion from(String value) {
-<span class="fc" id="L598">            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);</span>
+<span class="fc" id="L609">            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);</span>
         }
 
         /**
@@ -605,7 +616,7 @@ public class GHWorkflowRun extends GHObject {
          */
         @Override
         public String toString() {
-<span class="fc" id="L608">            return name().toLowerCase(Locale.ROOT);</span>
+<span class="fc" id="L619">            return name().toLowerCase(Locale.ROOT);</span>
         }
     }
 }

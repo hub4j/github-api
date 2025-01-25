@@ -1,10 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubRateLimitHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GitHubRateLimitHandler.java</span></div><h1>GitHubRateLimitHandler.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubRateLimitHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GitHubRateLimitHandler.java</span></div><h1>GitHubRateLimitHandler.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import org.jetbrains.annotations.NotNull;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.annotation.Nonnull;
 
@@ -22,10 +25,15 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {
 
     /**
+     * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
+     */
+    private static final int MINIMUM_RATE_LIMIT_RETRY_MILLIS = 1000;
+
+    /**
      * Create default GitHubRateLimitHandler instance
      */
-<span class="fc" id="L27">    public GitHubRateLimitHandler() {</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L35">    public GitHubRateLimitHandler() {</span>
+<span class="fc" id="L36">    }</span>
 
     /**
      * Checks if is error.
@@ -38,8 +46,8 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
      */
     @Override
     boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L41" title="All 2 branches covered.">        return connectorResponse.statusCode() == HTTP_FORBIDDEN</span>
-<span class="fc bfc" id="L42" title="All 2 branches covered.">                &amp;&amp; &quot;0&quot;.equals(connectorResponse.header(&quot;X-RateLimit-Remaining&quot;));</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        return connectorResponse.statusCode() == HTTP_FORBIDDEN</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">                &amp;&amp; &quot;0&quot;.equals(connectorResponse.header(&quot;X-RateLimit-Remaining&quot;));</span>
     }
 
     /**
@@ -62,36 +70,50 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
     /**
      * Wait until the API abuse &quot;wait time&quot; is passed.
      */
-<span class="fc" id="L65">    public static final GitHubRateLimitHandler WAIT = new GitHubRateLimitHandler() {</span>
+<span class="fc" id="L73">    public static final GitHubRateLimitHandler WAIT = new GitHubRateLimitHandler() {</span>
         @Override
         public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
             try {
-<span class="fc" id="L69">                Thread.sleep(parseWaitTime(connectorResponse));</span>
-<span class="nc" id="L70">            } catch (InterruptedException ex) {</span>
-<span class="nc" id="L71">                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);</span>
-<span class="fc" id="L72">            }</span>
-<span class="fc" id="L73">        }</span>
-
-        private long parseWaitTime(GitHubConnectorResponse connectorResponse) {
-<span class="fc" id="L76">            String v = connectorResponse.header(&quot;X-RateLimit-Reset&quot;);</span>
-<span class="pc bpc" id="L77" title="1 of 2 branches missed.">            if (v == null)</span>
-<span class="nc" id="L78">                return 60 * 1000; // can't tell, return 1 min</span>
-
-<span class="fc" id="L80">            return Math.max(1000, Long.parseLong(v) * 1000 - System.currentTimeMillis());</span>
-        }
+<span class="fc" id="L77">                Thread.sleep(parseWaitTime(connectorResponse));</span>
+<span class="nc" id="L78">            } catch (InterruptedException ex) {</span>
+<span class="nc" id="L79">                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);</span>
+<span class="fc" id="L80">            }</span>
+<span class="fc" id="L81">        }</span>
     };
+
+    /*
+     * Exposed for testability. Given an http response, find the rate limit reset header field and parse it. If no
+     * header is found, wait for a reasonably amount of time.
+     */
+    long parseWaitTime(GitHubConnectorResponse connectorResponse) {
+<span class="fc" id="L89">        String v = connectorResponse.header(&quot;X-RateLimit-Reset&quot;);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (v == null)</span>
+<span class="nc" id="L91">            return Duration.ofMinutes(1).toMillis(); // can't tell, return 1 min</span>
+
+        // Don't use ZonedDateTime.now(), because the local and remote server times may not be in sync
+        // Instead, we can take advantage of the Date field in the response to see what time the remote server
+        // thinks it is
+<span class="fc" id="L96">        String dateField = connectorResponse.header(&quot;Date&quot;);</span>
+        ZonedDateTime now;
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (dateField != null) {</span>
+<span class="fc" id="L99">            now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
+        } else {
+<span class="fc" id="L101">            now = ZonedDateTime.now();</span>
+        }
+<span class="fc" id="L103">        return Math.max(MINIMUM_RATE_LIMIT_RETRY_MILLIS, (Long.parseLong(v) - now.toInstant().getEpochSecond()) * 1000);</span>
+    }
 
     /**
      * Fail immediately.
      */
-<span class="fc" id="L87">    public static final GitHubRateLimitHandler FAIL = new GitHubRateLimitHandler() {</span>
+<span class="fc" id="L109">    public static final GitHubRateLimitHandler FAIL = new GitHubRateLimitHandler() {</span>
         @Override
         public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc" id="L90">            throw new HttpException(&quot;API rate limit reached&quot;,</span>
-<span class="fc" id="L91">                    connectorResponse.statusCode(),</span>
-<span class="fc" id="L92">                    connectorResponse.header(&quot;Status&quot;),</span>
-<span class="fc" id="L93">                    connectorResponse.request().url().toString())</span>
-<span class="fc" id="L94">                    .withResponseHeaderFields(connectorResponse.allHeaders());</span>
+<span class="fc" id="L112">            throw new HttpException(&quot;API rate limit reached&quot;,</span>
+<span class="fc" id="L113">                    connectorResponse.statusCode(),</span>
+<span class="fc" id="L114">                    connectorResponse.header(&quot;Status&quot;),</span>
+<span class="fc" id="L115">                    connectorResponse.request().url().toString())</span>
+<span class="fc" id="L116">                    .withResponseHeaderFields(connectorResponse.allHeaders());</span>
 
         }
     };

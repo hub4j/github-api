@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>GitHub API for Java &#x2013; </title>
+    <title>GitHub API for Java</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -150,17 +150,15 @@
     </div>
     <div id="content">
       <div id="contentBox">
-        <section>
-<h2><a name="Authenticating_as_an_installation"></a>Authenticating as an installation</h2>
+        <section><a id="Authenticating_as_an_installation"></a>
+<h1>Authenticating as an installation</h1>
 <p>In order to authenticate to GitHub as an installation of your GitHub App, you must use the App Installation Token authentication mechanism. This can be achieved with by creating a <code>GitHub</code> instance like this:</p>
-<div class="source">
-<pre>GitHub githubAuthAsInst = new GitHubBuilder()
+<pre><code>GitHub githubAuthAsInst = new GitHubBuilder()
                     .withAppInstallationToken(appInstallationToken.getToken())
-                    .build();</pre></div></section><section>
-<h2><a name="How_do_I_create_an_App_Installation_Token.3F"></a>How do I create an App Installation Token?</h2>
+                    .build();</code></pre></section><section><a id="How_do_I_create_an_App_Installation_Token.3F"></a>
+<h1>How do I create an App Installation Token?</h1>
 <p>Assuming that you followed the <a href="/githubappjwtauth.html"> GitHub App Authentication via JWT token guide</a> then you can create the App Installation Token like this:</p>
-<div class="source">
-<pre>String jwtToken = createJWT(&quot;44435&quot;, 600000); //sdk-github-api-app-test
+<pre><code>String jwtToken = createJWT(&quot;44435&quot;, 600000); //sdk-github-api-app-test
 GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
 GHAppInstallation appInstallation = gitHubApp.getApp().getInstallationById(111111); // Installation Id
 
@@ -173,21 +171,21 @@ GHAppInstallationToken appInstallationToken = appInstallation
 // Or
 
 GHAppInstallationToken appInstallationToken = appInstallation.createToken().create();
-</pre></div></section>
+</code></pre></section>
       </div>
     </div>
     <div id="footer">
       <div class="xright">&#169;  
-          2024
+          ${currentYear}
     
           <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
           
-  
+  $dateFormat.applyPattern( $format )
 
   
   
-  &nbsp;| Last Published: 2024-09-17
-  &nbsp;| Version: 2.0.0-alpha-2
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.lastpublished" ): $dateToday
+  &nbsp;| $i18n.getString( "site-renderer", $locale, "template.version" ): 2.0-alpha-3
 </div>
       <div class="clear">
         <hr/>

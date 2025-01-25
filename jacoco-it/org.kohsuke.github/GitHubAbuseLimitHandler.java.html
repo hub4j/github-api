@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubAbuseLimitHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GitHubAbuseLimitHandler.java</span></div><h1>GitHubAbuseLimitHandler.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitHubAbuseLimitHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GitHubAbuseLimitHandler.java</span></div><h1>GitHubAbuseLimitHandler.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -24,10 +25,15 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler {
 
     /**
+     * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
+     */
+    private static final int MINIMUM_ABUSE_RETRY_MILLIS = 1000;
+
+    /**
      * Create default GitHubAbuseLimitHandler instance
      */
-<span class="fc" id="L29">    public GitHubAbuseLimitHandler() {</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L35">    public GitHubAbuseLimitHandler() {</span>
+<span class="fc" id="L36">    }</span>
 
     /**
      * Checks if is error.
@@ -40,8 +46,8 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      */
     @Override
     boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        return isTooManyRequests(connectorResponse)</span>
-<span class="fc bfc" id="L44" title="All 4 branches covered.">                || (isForbidden(connectorResponse) &amp;&amp; hasRetryOrLimitHeader(connectorResponse));</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        return isTooManyRequests(connectorResponse)</span>
+<span class="fc bfc" id="L50" title="All 4 branches covered.">                || (isForbidden(connectorResponse) &amp;&amp; hasRetryOrLimitHeader(connectorResponse));</span>
     }
 
     /**
@@ -52,7 +58,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      * @return true if the status code is TOO_MANY_REQUESTS
      */
     private boolean isTooManyRequests(GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        return connectorResponse.statusCode() == TOO_MANY_REQUESTS;</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        return connectorResponse.statusCode() == TOO_MANY_REQUESTS;</span>
     }
 
     /**
@@ -63,7 +69,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      * @return true if the status code is HTTP_FORBIDDEN
      */
     private boolean isForbidden(GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        return connectorResponse.statusCode() == HTTP_FORBIDDEN;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        return connectorResponse.statusCode() == HTTP_FORBIDDEN;</span>
     }
 
     /**
@@ -78,7 +84,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      *      &quot;https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#handle-rate-limit-errors-appropriately&lt;/a&gt;
      */
     private boolean hasRetryOrLimitHeader(GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L81" title="All 4 branches covered.">        return hasHeader(connectorResponse, &quot;Retry-After&quot;) || hasHeader(connectorResponse, &quot;gh-limited-by&quot;);</span>
+<span class="fc bfc" id="L87" title="All 4 branches covered.">        return hasHeader(connectorResponse, &quot;Retry-After&quot;) || hasHeader(connectorResponse, &quot;gh-limited-by&quot;);</span>
     }
 
     /**
@@ -91,7 +97,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      * @return true if the specified header is present
      */
     private boolean hasHeader(GitHubConnectorResponse connectorResponse, String headerName) {
-<span class="fc bfc" id="L94" title="All 2 branches covered.">        return connectorResponse.header(headerName) != null;</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        return connectorResponse.header(headerName) != null;</span>
     }
 
     /**
@@ -117,50 +123,62 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
     /**
      * Wait until the API abuse &quot;wait time&quot; is passed.
      */
-<span class="fc" id="L120">    public static final GitHubAbuseLimitHandler WAIT = new GitHubAbuseLimitHandler() {</span>
+<span class="fc" id="L126">    public static final GitHubAbuseLimitHandler WAIT = new GitHubAbuseLimitHandler() {</span>
         @Override
         public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
             try {
-<span class="fc" id="L124">                Thread.sleep(parseWaitTime(connectorResponse));</span>
-<span class="nc" id="L125">            } catch (InterruptedException ex) {</span>
-<span class="nc" id="L126">                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);</span>
-<span class="fc" id="L127">            }</span>
-<span class="fc" id="L128">        }</span>
+<span class="fc" id="L130">                Thread.sleep(parseWaitTime(connectorResponse));</span>
+<span class="nc" id="L131">            } catch (InterruptedException ex) {</span>
+<span class="nc" id="L132">                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);</span>
+<span class="fc" id="L133">            }</span>
+<span class="fc" id="L134">        }</span>
     };
 
     /**
      * Fail immediately.
      */
-<span class="fc" id="L134">    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {</span>
+<span class="fc" id="L140">    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {</span>
         @Override
         public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc" id="L137">            throw new HttpException(&quot;Abuse limit reached&quot;,</span>
-<span class="fc" id="L138">                    connectorResponse.statusCode(),</span>
-<span class="fc" id="L139">                    connectorResponse.header(&quot;Status&quot;),</span>
-<span class="fc" id="L140">                    connectorResponse.request().url().toString())</span>
-<span class="fc" id="L141">                    .withResponseHeaderFields(connectorResponse.allHeaders());</span>
+<span class="fc" id="L143">            throw new HttpException(&quot;Abuse limit reached&quot;,</span>
+<span class="fc" id="L144">                    connectorResponse.statusCode(),</span>
+<span class="fc" id="L145">                    connectorResponse.header(&quot;Status&quot;),</span>
+<span class="fc" id="L146">                    connectorResponse.request().url().toString())</span>
+<span class="fc" id="L147">                    .withResponseHeaderFields(connectorResponse.allHeaders());</span>
         }
     };
 
     // If &quot;Retry-After&quot; missing, wait for unambiguously over one minute per GitHub guidance
-<span class="fc" id="L146">    static long DEFAULT_WAIT_MILLIS = 61 * 1000;</span>
+<span class="fc" id="L152">    static long DEFAULT_WAIT_MILLIS = Duration.ofSeconds(61).toMillis();</span>
 
     /*
      * Exposed for testability. Given an http response, find the retry-after header field and parse it as either a
      * number or a date (the spec allows both). If no header is found, wait for a reasonably amount of time.
      */
     static long parseWaitTime(GitHubConnectorResponse connectorResponse) {
-<span class="fc" id="L153">        String v = connectorResponse.header(&quot;Retry-After&quot;);</span>
-<span class="fc bfc" id="L154" title="All 2 branches covered.">        if (v == null) {</span>
-<span class="fc" id="L155">            return DEFAULT_WAIT_MILLIS;</span>
+<span class="fc" id="L159">        String v = connectorResponse.header(&quot;Retry-After&quot;);</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (v == null) {</span>
+<span class="fc" id="L161">            return DEFAULT_WAIT_MILLIS;</span>
         }
 
         try {
-<span class="fc" id="L159">            return Math.max(1000, Long.parseLong(v) * 1000);</span>
-<span class="fc" id="L160">        } catch (NumberFormatException nfe) {</span>
+<span class="fc" id="L165">            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, Duration.ofSeconds(Long.parseLong(v)).toMillis());</span>
+<span class="fc" id="L166">        } catch (NumberFormatException nfe) {</span>
             // The retry-after header could be a number in seconds, or an http-date
-<span class="fc" id="L162">            ZonedDateTime zdt = ZonedDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
-<span class="fc" id="L163">            return ChronoUnit.MILLIS.between(ZonedDateTime.now(), zdt);</span>
+            // We know it was a date if we got a number format exception :)
+
+            // Don't use ZonedDateTime.now(), because the local and remote server times may not be in sync
+            // Instead, we can take advantage of the Date field in the response to see what time the remote server
+            // thinks it is
+<span class="fc" id="L173">            String dateField = connectorResponse.header(&quot;Date&quot;);</span>
+            ZonedDateTime now;
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            if (dateField != null) {</span>
+<span class="fc" id="L176">                now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
+            } else {
+<span class="fc" id="L178">                now = ZonedDateTime.now();</span>
+            }
+<span class="fc" id="L180">            ZonedDateTime zdt = ZonedDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
+<span class="fc" id="L181">            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, ChronoUnit.MILLIS.between(now, zdt));</span>
         }
     }
 

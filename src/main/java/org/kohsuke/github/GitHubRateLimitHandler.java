@@ -5,6 +5,9 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.annotation.Nonnull;
 
@@ -20,6 +23,11 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
  * @see GitHubAbuseLimitHandler
  */
 public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {
+
+    /**
+     * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
+     */
+    private static final int MINIMUM_RATE_LIMIT_RETRY_MILLIS = 1000;
 
     /**
      * Create default GitHubRateLimitHandler instance
@@ -71,15 +79,29 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
                 throw (InterruptedIOException) new InterruptedIOException().initCause(ex);
             }
         }
-
-        private long parseWaitTime(GitHubConnectorResponse connectorResponse) {
-            String v = connectorResponse.header("X-RateLimit-Reset");
-            if (v == null)
-                return 60 * 1000; // can't tell, return 1 min
-
-            return Math.max(1000, Long.parseLong(v) * 1000 - System.currentTimeMillis());
-        }
     };
+
+    /*
+     * Exposed for testability. Given an http response, find the rate limit reset header field and parse it. If no
+     * header is found, wait for a reasonably amount of time.
+     */
+    long parseWaitTime(GitHubConnectorResponse connectorResponse) {
+        String v = connectorResponse.header("X-RateLimit-Reset");
+        if (v == null)
+            return Duration.ofMinutes(1).toMillis(); // can't tell, return 1 min
+
+        // Don't use ZonedDateTime.now(), because the local and remote server times may not be in sync
+        // Instead, we can take advantage of the Date field in the response to see what time the remote server
+        // thinks it is
+        String dateField = connectorResponse.header("Date");
+        ZonedDateTime now;
+        if (dateField != null) {
+            now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);
+        } else {
+            now = ZonedDateTime.now();
+        }
+        return Math.max(MINIMUM_RATE_LIMIT_RETRY_MILLIS, (Long.parseLong(v) - now.toInstant().getEpochSecond()) * 1000);
+    }
 
     /**
      * Fail immediately.

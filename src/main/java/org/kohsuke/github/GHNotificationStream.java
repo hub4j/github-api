@@ -187,7 +187,9 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                             Thread.sleep(waitTime);
                         }
 
-                        req.setHeader("If-Modified-Since", lastModified);
+                        if (lastModified != null) {
+                            req.setHeader("If-Modified-Since", lastModified);
+                        }
 
                         Requester requester = req.withUrlPath(apiUrl);
                         GitHubResponse<GHThread[]> response = ((GitHubPageContentsIterable<GHThread>) requester

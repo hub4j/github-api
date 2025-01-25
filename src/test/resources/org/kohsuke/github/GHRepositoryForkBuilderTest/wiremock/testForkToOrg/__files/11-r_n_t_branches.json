@@ -1,0 +1,70 @@
+[
+  {
+    "name": "main",
+    "commit": {
+      "sha": "41bcbfbf3d7ea68ab3488346ee9b323ac9d2f5ee",
+      "url": "https://api.github.com/repos/nts-api-test-org/temp-testForkToOrg/commits/41bcbfbf3d7ea68ab3488346ee9b323ac9d2f5ee"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/nts-api-test-org/temp-testForkToOrg/branches/main/protection"
+  },
+  {
+    "name": "test-branch1",
+    "commit": {
+      "sha": "41bcbfbf3d7ea68ab3488346ee9b323ac9d2f5ee",
+      "url": "https://api.github.com/repos/nts-api-test-org/temp-testForkToOrg/commits/41bcbfbf3d7ea68ab3488346ee9b323ac9d2f5ee"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/nts-api-test-org/temp-testForkToOrg/branches/test-branch1/protection"
+  },
+  {
+    "name": "test-branch2",
+    "commit": {
+      "sha": "41bcbfbf3d7ea68ab3488346ee9b323ac9d2f5ee",
+      "url": "https://api.github.com/repos/nts-api-test-org/temp-testForkToOrg/commits/41bcbfbf3d7ea68ab3488346ee9b323ac9d2f5ee"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/nts-api-test-org/temp-testForkToOrg/branches/test-branch2/protection"
+  },
+  {
+    "name": "test-branch3",
+    "commit": {
+      "sha": "41bcbfbf3d7ea68ab3488346ee9b323ac9d2f5ee",
+      "url": "https://api.github.com/repos/nts-api-test-org/temp-testForkToOrg/commits/41bcbfbf3d7ea68ab3488346ee9b323ac9d2f5ee"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/nts-api-test-org/temp-testForkToOrg/branches/test-branch3/protection"
+  }
+]

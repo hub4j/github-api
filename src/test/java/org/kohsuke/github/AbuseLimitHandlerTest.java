@@ -447,7 +447,7 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                 long waitTime = parseWaitTime(uc);
                 // The exact value here will depend on when the test is run
                 assertThat(waitTime, Matchers.lessThan(AbuseLimitHandler.DEFAULT_WAIT_MILLIS));
-                assertThat(waitTime, Matchers.greaterThan(3 * 1000l));
+                assertThat(waitTime, equalTo(8 * 1000l));
 
                 AbuseLimitHandler.WAIT.onError(e, uc);
             }

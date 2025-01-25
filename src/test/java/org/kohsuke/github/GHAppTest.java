@@ -80,6 +80,28 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     }
 
     /**
+     * List installation requests.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void listInstallationRequests() throws IOException {
+        GHApp app = gitHub.getApp();
+        List<GHAppInstallationRequest> installations = app.listInstallationRequests().toList();
+        assertThat(installations.size(), is(1));
+
+        GHAppInstallationRequest appInstallation = installations.get(0);
+        assertThat(appInstallation.getId(), is((long) 1037204));
+        assertThat(appInstallation.getAccount().getId(), is((long) 195438329));
+        assertThat(appInstallation.getAccount().getLogin(), is("approval-test"));
+        assertThat(appInstallation.getRequester().getId(), is((long) 195437694));
+        assertThat(appInstallation.getRequester().getLogin(), is("kaladinstormblessed2"));
+        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseDate("2025-01-17T15:50:51Z")));
+        assertThat(appInstallation.getNodeId(), is("MDMwOkludGVncmF0aW9uSW5zdGFsbGF0aW9uUmVxdWVzdDEwMzcyMDQ="));
+    }
+
+    /**
      * List installations.
      *
      * @throws IOException

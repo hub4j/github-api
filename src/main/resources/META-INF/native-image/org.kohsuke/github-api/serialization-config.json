@@ -1260,6 +1260,12 @@
     "name": "org.kohsuke.github.GitHub$AuthorizationRefreshGitHubWrapper"
   },
   {
+    "name": "org.kohsuke.github.GitHubAbuseLimitHandler$1"
+  },
+  {
+    "name": "org.kohsuke.github.GitHubAbuseLimitHandler$2"
+  },
+  {
     "name": "org.kohsuke.github.GitHubBuilder"
   },
   {

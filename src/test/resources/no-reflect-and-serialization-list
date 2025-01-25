@@ -18,6 +18,8 @@ org.kohsuke.github.GitHub
 org.kohsuke.github.GitHub$DependentAuthorizationProvider
 org.kohsuke.github.GitHub$LoginLoadingUserAuthorizationProvider
 org.kohsuke.github.GitHubAbuseLimitHandler
+org.kohsuke.github.GitHubAbuseLimitHandler$1
+org.kohsuke.github.GitHubAbuseLimitHandler$2
 org.kohsuke.github.GitHubClient
 org.kohsuke.github.GitHubClient$BodyHandler
 org.kohsuke.github.GitHubClient$GHApiInfo

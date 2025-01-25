@@ -6285,6 +6285,36 @@
     "allDeclaredClasses": true
   },
   {
+    "name": "org.kohsuke.github.GitHubAbuseLimitHandler$1",
+    "allPublicFields": true,
+    "allDeclaredFields": true,
+    "queryAllPublicConstructors": true,
+    "queryAllDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredClasses": true
+  },
+  {
+    "name": "org.kohsuke.github.GitHubAbuseLimitHandler$2",
+    "allPublicFields": true,
+    "allDeclaredFields": true,
+    "queryAllPublicConstructors": true,
+    "queryAllDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredClasses": true
+  },
+  {
     "name": "org.kohsuke.github.GitHubBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,

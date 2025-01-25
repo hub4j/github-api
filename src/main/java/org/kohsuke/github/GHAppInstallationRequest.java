@@ -2,6 +2,9 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.io.IOException;
+import java.net.URL;
+
 /**
  * A Github App Installation Request.
  *
@@ -18,6 +21,8 @@ public class GHAppInstallationRequest extends GHObject {
     private GHOrganization account;
 
     private GHUser requester;
+
+    private String htmlUrl;
 
     /**
      * Gets the organization where the app was requested to be installed.
@@ -37,6 +42,11 @@ public class GHAppInstallationRequest extends GHObject {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP", "UWF_UNWRITTEN_FIELD" }, justification = "Expected behavior")
     public GHUser getRequester() {
         return requester;
+    }
+
+    @Override
+    public URL getHtmlUrl() throws IOException {
+        return GitHubClient.parseURL(htmlUrl);
     }
 
 }

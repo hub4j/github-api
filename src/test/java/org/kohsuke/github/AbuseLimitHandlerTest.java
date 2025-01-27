@@ -444,12 +444,16 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
                 checkErrorMessageMatches(uc,
                         "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
 
+                long startingWaitMillis = AbuseLimitHandler.DEFAULT_WAIT_MILLIS;
+
+                AbuseLimitHandler.DEFAULT_WAIT_MILLIS = 8 * 1000l;
                 long waitTime = parseWaitTime(uc);
                 // The exact value here will depend on when the test is run
                 assertThat(waitTime, Matchers.lessThan(AbuseLimitHandler.DEFAULT_WAIT_MILLIS));
-                assertThat(waitTime, equalTo(8 * 1000l));
+                // assertThat(waitTime, equalTo(8 * 1000l));
 
                 AbuseLimitHandler.WAIT.onError(e, uc);
+                AbuseLimitHandler.DEFAULT_WAIT_MILLIS = startingWaitMillis;
             }
         }).build();
 

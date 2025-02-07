@@ -4,7 +4,7 @@
   <artifactId>github-api</artifactId>
   <version>2.0-alpha-4-SNAPSHOT</version>
   <name>GitHub API for Java</name>
-  <url>https://github-api.kohsuke.org/</url>
+  <url>https://hub4j.github.io/github-api/</url>
   <description>GitHub API for Java</description>
 
   <scm>
@@ -872,6 +872,11 @@
       <name>Kohsuke Kawaguchi</name>
       <id>kohsuke</id>
       <email>kk@kohsuke.org</email>
+    </developer>
+    <developer>
+      <name>Liam Newman</name>
+      <id>bitwiseman</id>
+      <email>bitwiseman@gmail.com</email>
     </developer>
   </developers>
 

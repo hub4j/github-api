@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -72,11 +71,7 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
     public static final GitHubRateLimitHandler WAIT = new GitHubRateLimitHandler() {
         @Override
         public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-            try {
-                Thread.sleep(parseWaitTime(connectorResponse));
-            } catch (InterruptedException ex) {
-                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);
-            }
+            sleep(parseWaitTime(connectorResponse));
         }
     };
 
@@ -100,6 +95,10 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
             now = ZonedDateTime.now();
         }
         return Math.max(MINIMUM_RATE_LIMIT_RETRY_MILLIS, (Long.parseLong(v) - now.toInstant().getEpochSecond()) * 1000);
+        // return parseWaitTime(connectorResponse.header("X-RateLimit-Reset"),
+        // connectorResponse.header("Date"),
+        // Duration.ofMinutes(1).toMillis(),
+        // MINIMUM_RATE_LIMIT_RETRY_MILLIS);
     }
 
     /**

@@ -3,12 +3,8 @@ package org.kohsuke.github;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.net.HttpURLConnection;
 import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 import javax.annotation.Nonnull;
 
@@ -125,11 +121,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
     public static final GitHubAbuseLimitHandler WAIT = new GitHubAbuseLimitHandler() {
         @Override
         public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-            try {
-                Thread.sleep(parseWaitTime(connectorResponse));
-            } catch (InterruptedException ex) {
-                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);
-            }
+            sleep(parseWaitTime(connectorResponse));
         }
     };
 
@@ -155,30 +147,10 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      * number or a date (the spec allows both). If no header is found, wait for a reasonably amount of time.
      */
     static long parseWaitTime(GitHubConnectorResponse connectorResponse) {
-        String v = connectorResponse.header("Retry-After");
-        if (v == null) {
-            return DEFAULT_WAIT_MILLIS;
-        }
-
-        try {
-            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, Duration.ofSeconds(Long.parseLong(v)).toMillis());
-        } catch (NumberFormatException nfe) {
-            // The retry-after header could be a number in seconds, or an http-date
-            // We know it was a date if we got a number format exception :)
-
-            // Don't use ZonedDateTime.now(), because the local and remote server times may not be in sync
-            // Instead, we can take advantage of the Date field in the response to see what time the remote server
-            // thinks it is
-            String dateField = connectorResponse.header("Date");
-            ZonedDateTime now;
-            if (dateField != null) {
-                now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);
-            } else {
-                now = ZonedDateTime.now();
-            }
-            ZonedDateTime zdt = ZonedDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);
-            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, ChronoUnit.MILLIS.between(now, zdt));
-        }
+        return parseWaitTime(connectorResponse.header("Retry-After"),
+                connectorResponse.header("Date"),
+                DEFAULT_WAIT_MILLIS,
+                MINIMUM_ABUSE_RETRY_MILLIS);
     }
 
 }

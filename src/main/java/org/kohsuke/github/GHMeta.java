@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -12,7 +13,8 @@ import java.util.List;
  *
  * @author Paulo Miguel Almeida
  * @see GitHub#getMeta() GitHub#getMeta()
- * @see <a href="https://developer.github.com/v3/meta/#meta">Get Meta</a>
+ * @see <a href="https://docs.github.com/en/rest/meta/meta?apiVersion=2022-11-28#get-github-meta-information">Get
+ *      Meta</a>
  */
 public class GHMeta {
 
@@ -24,6 +26,10 @@ public class GHMeta {
 
     @JsonProperty("verifiable_password_authentication")
     private boolean verifiablePasswordAuthentication;
+    @JsonProperty("ssh_key_fingerprints")
+    private Map<String, String> sshKeyFingerprints;
+    @JsonProperty("ssh_keys")
+    private List<String> sshKeys;
     private List<String> hooks;
     private List<String> git;
     private List<String> web;
@@ -41,6 +47,24 @@ public class GHMeta {
      */
     public boolean isVerifiablePasswordAuthentication() {
         return verifiablePasswordAuthentication;
+    }
+
+    /**
+     * Gets ssh key fingerprints.
+     *
+     * @return the ssh key fingerprints
+     */
+    public Map<String, String> getSshKeyFingerprints() {
+        return Collections.unmodifiableMap(sshKeyFingerprints);
+    }
+
+    /**
+     * Gets ssh keys.
+     *
+     * @return the ssh keys
+     */
+    public List<String> getSshKeys() {
+        return Collections.unmodifiableList(sshKeys);
     }
 
     /**

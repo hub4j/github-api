@@ -42,6 +42,7 @@ public class GHWorkflowRun extends GHObject {
 
     private long runAttempt;
     private String runStartedAt;
+    private GHUser triggeringActor;
 
     private String htmlUrl;
     private String jobsUrl;
@@ -117,6 +118,16 @@ public class GHWorkflowRun extends GHObject {
      */
     public Date getRunStartedAt() throws IOException {
         return GitHubClient.parseDate(runStartedAt);
+    }
+
+    /**
+     * The actor which triggered the run.
+     *
+     * @return the triggering actor
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getTriggeringActor() {
+        return triggeringActor;
     }
 
     /**

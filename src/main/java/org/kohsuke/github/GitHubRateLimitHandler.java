@@ -5,6 +5,9 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.annotation.Nonnull;
 
@@ -18,6 +21,11 @@ import javax.annotation.Nonnull;
  * @see GitHubAbuseLimitHandler
  */
 public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {
+
+    /**
+     * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
+     */
+    private static final int MINIMUM_RATE_LIMIT_RETRY_MILLIS = 1000;
 
     /**
      * Create default GitHubRateLimitHandler instance
@@ -56,4 +64,56 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
      * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+
+    /**
+     * Wait until the API abuse "wait time" is passed.
+     */
+    public static final GitHubRateLimitHandler WAIT = new GitHubRateLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            sleep(parseWaitTime(connectorResponse));
+        }
+    };
+
+    /*
+     * Exposed for testability. Given an http response, find the rate limit reset header field and parse it. If no
+     * header is found, wait for a reasonably amount of time.
+     */
+    long parseWaitTime(GitHubConnectorResponse connectorResponse) {
+        String v = connectorResponse.header("X-RateLimit-Reset");
+        if (v == null)
+            return Duration.ofMinutes(1).toMillis(); // can't tell, return 1 min
+
+        // Don't use ZonedDateTime.now(), because the local and remote server times may not be in sync
+        // Instead, we can take advantage of the Date field in the response to see what time the remote server
+        // thinks it is
+        String dateField = connectorResponse.header("Date");
+        ZonedDateTime now;
+        if (dateField != null) {
+            now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);
+        } else {
+            now = ZonedDateTime.now();
+        }
+        return Math.max(MINIMUM_RATE_LIMIT_RETRY_MILLIS, (Long.parseLong(v) - now.toInstant().getEpochSecond()) * 1000);
+        // return parseWaitTime(connectorResponse.header("X-RateLimit-Reset"),
+        // connectorResponse.header("Date"),
+        // Duration.ofMinutes(1).toMillis(),
+        // MINIMUM_RATE_LIMIT_RETRY_MILLIS);
+    }
+
+    /**
+     * Fail immediately.
+     */
+    public static final GitHubRateLimitHandler FAIL = new GitHubRateLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            throw new HttpException("API rate limit reached",
+                    connectorResponse.statusCode(),
+                    connectorResponse.header("Status"),
+                    connectorResponse.request().url().toString())
+                    .withResponseHeaderFields(connectorResponse.allHeaders());
+
+        }
+    };
+
 }

@@ -4,6 +4,7 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.time.Duration;
 
 import javax.annotation.Nonnull;
 
@@ -17,6 +18,11 @@ import javax.annotation.Nonnull;
  * @see GitHubRateLimitHandler
  */
 public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler {
+
+    /**
+     * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
+     */
+    private static final int MINIMUM_ABUSE_RETRY_MILLIS = 1000;
 
     /**
      * Create default GitHubAbuseLimitHandler instance
@@ -108,4 +114,43 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      *
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+
+    /**
+     * Wait until the API abuse "wait time" is passed.
+     */
+    public static final GitHubAbuseLimitHandler WAIT = new GitHubAbuseLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            sleep(parseWaitTime(connectorResponse));
+        }
+    };
+
+    /**
+     * Fail immediately.
+     */
+    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            throw new HttpException("Abuse limit reached",
+                    connectorResponse.statusCode(),
+                    connectorResponse.header("Status"),
+                    connectorResponse.request().url().toString())
+                    .withResponseHeaderFields(connectorResponse.allHeaders());
+        }
+    };
+
+    // If "Retry-After" missing, wait for unambiguously over one minute per GitHub guidance
+    static long DEFAULT_WAIT_MILLIS = Duration.ofSeconds(61).toMillis();
+
+    /*
+     * Exposed for testability. Given an http response, find the retry-after header field and parse it as either a
+     * number or a date (the spec allows both). If no header is found, wait for a reasonably amount of time.
+     */
+    static long parseWaitTime(GitHubConnectorResponse connectorResponse) {
+        return parseWaitTime(connectorResponse.header("Retry-After"),
+                connectorResponse.header("Date"),
+                DEFAULT_WAIT_MILLIS,
+                MINIMUM_ABUSE_RETRY_MILLIS);
+    }
+
 }

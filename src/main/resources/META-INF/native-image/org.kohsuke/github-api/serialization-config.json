@@ -120,6 +120,9 @@
     "name": "org.kohsuke.github.GHAppInstallationsPage"
   },
   {
+    "name": "org.kohsuke.github.GHAppInstallationRequest"
+  },
+  {
     "name": "org.kohsuke.github.GHAppInstallationToken"
   },
   {
@@ -1255,6 +1258,12 @@
   },
   {
     "name": "org.kohsuke.github.GitHub$AuthorizationRefreshGitHubWrapper"
+  },
+  {
+    "name": "org.kohsuke.github.GitHubAbuseLimitHandler$1"
+  },
+  {
+    "name": "org.kohsuke.github.GitHubAbuseLimitHandler$2"
   },
   {
     "name": "org.kohsuke.github.GitHubBuilder"

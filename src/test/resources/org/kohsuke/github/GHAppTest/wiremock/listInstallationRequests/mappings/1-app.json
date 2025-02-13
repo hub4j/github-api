@@ -1,0 +1,39 @@
+{
+  "id": "7dd11376-7827-4472-9b35-d129d432687e",
+  "name": "app",
+  "request": {
+    "url": "/app",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "1-app.json",
+    "headers": {
+      "Date": "Fri, 17 Jan 2025 17:53:40 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "public, max-age=60, s-maxage=60",
+      "Vary": "Accept,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"2ae03ff428b2f6f2651437f7bbb52bcc5aa4fd43ec20540006591c05a6c4de48\"",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-GitHub-Request-Id": "C286:10C02C:61556D:734A43:678A9923"
+    }
+  },
+  "uuid": "7dd11376-7827-4472-9b35-d129d432687e",
+  "persistent": true,
+  "insertionIndex": 1
+}

@@ -24,13 +24,10 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
 
     /**
      * Clean up tags.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Before
     @After
-    public void cleanUpTags() throws Exception {
+    public void cleanUpTags() {
         // Cleanup is only needed when proxying
         if (!mockGitHub.isUseProxy()) {
             return;

@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import org.kohsuke.github.internal.EnumUtils;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
@@ -67,10 +66,8 @@ public class GHProjectsV2Item extends GHObject {
      * Gets the creator.
      *
      * @return the creator
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public GHUser getCreator() throws IOException {
+    public GHUser getCreator() {
         return root().intern(creator);
     }
 

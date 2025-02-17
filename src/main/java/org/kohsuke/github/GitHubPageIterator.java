@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -161,8 +160,7 @@ class GitHubPageIterator<T> implements Iterator<T> {
     /**
      * Locate the next page from the pagination "Link" tag.
      */
-    private GitHubRequest findNextURL(GitHubRequest nextRequest, GitHubResponse<T> nextResponse)
-            throws MalformedURLException {
+    private GitHubRequest findNextURL(GitHubRequest nextRequest, GitHubResponse<T> nextResponse) {
         GitHubRequest result = null;
         String link = nextResponse.header("Link");
         if (link != null) {

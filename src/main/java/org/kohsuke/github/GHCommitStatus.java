@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
-
 // TODO: Auto-generated Javadoc
 /**
  * Represents a status of a commit.
@@ -69,10 +67,8 @@ public class GHCommitStatus extends GHObject {
      * Gets creator.
      *
      * @return the creator
-     * @throws IOException
-     *             the io exception
      */
-    public GHUser getCreator() throws IOException {
+    public GHUser getCreator() {
         return root().intern(creator);
     }
 

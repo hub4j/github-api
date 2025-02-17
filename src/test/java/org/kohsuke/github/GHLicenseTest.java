@@ -48,12 +48,9 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
 
     /**
      * Basic test to ensure that the list of licenses from {@link GitHub#listLicenses()} is returned.
-     *
-     * @throws IOException
-     *             if test fails
      */
     @Test
-    public void listLicenses() throws IOException {
+    public void listLicenses() {
         Iterable<GHLicense> licenses = gitHub.listLicenses();
         assertThat(licenses, is(not(emptyIterable())));
     }

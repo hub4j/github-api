@@ -113,10 +113,8 @@ public class GHWorkflowRun extends GHObject {
      * When was this run triggered?.
      *
      * @return run triggered
-     * @throws IOException
-     *             on error
      */
-    public Date getRunStartedAt() throws IOException {
+    public Date getRunStartedAt() {
         return GitHubClient.parseDate(runStartedAt);
     }
 
@@ -134,10 +132,8 @@ public class GHWorkflowRun extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
+    public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }
 

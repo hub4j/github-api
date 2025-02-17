@@ -271,10 +271,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
      * @param resp
      *            the resp
      * @return the GH commit
-     * @throws Exception
-     *             the exception
      */
-    GHCommit getGHCommit(GHContentUpdateResponse resp) throws Exception {
+    GHCommit getGHCommit(GHContentUpdateResponse resp) {
         return resp.getCommit().toGHCommit();
     }
 
@@ -325,10 +323,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
      * @param expectedRequestCount
      *            the expected request count
      * @return the int
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    int checkBasicCommitInfo(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
+    int checkBasicCommitInfo(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) {
         assertThat(gitCommit, notNullValue());
         assertThat(gitCommit.getSHA1(), notNullValue());
         assertThat(gitCommit.getUrl().toString(),
@@ -417,10 +413,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
      * @param expectedRequestCount
      *            the expected request count
      * @return the int
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    int checkCommitParents(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
+    int checkCommitParents(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) {
         assertThat(gitCommit.getParentSHA1s().size(), is(greaterThan(0)));
         assertThat(gitCommit.getParentSHA1s().get(0), notNullValue());
         assertThat(ghCommit.getParentSHA1s().size(), is(greaterThan(0)));

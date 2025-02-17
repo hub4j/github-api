@@ -436,10 +436,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Obtains all the review comments associated with this pull request.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
+    public PagedIterable<GHPullRequestReviewComment> listReviewComments() {
         return root().createRequest()
                 .withUrlPath(getApiRoute() + COMMENTS_ACTION)
                 .toIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(this));

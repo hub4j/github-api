@@ -349,14 +349,14 @@ public class GHRepository extends GHObject {
     /**
      * Gets issue.
      *
-     * @param id
-     *            the id
+     * @param number
+     *            the number of the issue
      * @return the issue
      * @throws IOException
      *             the io exception
      */
-    public GHIssue getIssue(int id) throws IOException {
-        return root().createRequest().withUrlPath(getApiTailUrl("issues/" + id)).fetch(GHIssue.class).wrap(this);
+    public GHIssue getIssue(int number) throws IOException {
+        return root().createRequest().withUrlPath(getApiTailUrl("issues/" + number)).fetch(GHIssue.class).wrap(this);
     }
 
     /**
@@ -1500,14 +1500,17 @@ public class GHRepository extends GHObject {
     /**
      * Retrieves a specified pull request.
      *
-     * @param i
-     *            the
+     * @param number
+     *            the number of the pull request
      * @return the pull request
      * @throws IOException
      *             the io exception
      */
-    public GHPullRequest getPullRequest(int i) throws IOException {
-        return root().createRequest().withUrlPath(getApiTailUrl("pulls/" + i)).fetch(GHPullRequest.class).wrapUp(this);
+    public GHPullRequest getPullRequest(int number) throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("pulls/" + number))
+                .fetch(GHPullRequest.class)
+                .wrapUp(this);
     }
 
     /**

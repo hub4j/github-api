@@ -1,0 +1,47 @@
+{
+  "id": "87f5d76b-1169-4caf-ab76-04ac6b1e78b9",
+  "name": "organizations",
+  "request": {
+    "url": "/organizations?per_page=1",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-organizations.json",
+    "headers": {
+      "Date": "Sun, 16 Feb 2025 09:01:25 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"575d7c16fc728d88180cb71aecfb2c215cdf28f0259a6eac1d93c607816f3722\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4960",
+      "X-RateLimit-Reset": "1739697044",
+      "X-RateLimit-Used": "40",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-GitHub-Request-Id": "58BE:2FA953:5F36F5:9301D2:67B1A965",
+      "Link": "<https://api.github.com/organizations?per_page=1&since=44>; rel=\"next\", <https://api.github.com/organizations{?since}>; rel=\"first\""
+    }
+  },
+  "uuid": "87f5d76b-1169-4caf-ab76-04ac6b1e78b9",
+  "persistent": true,
+  "insertionIndex": 2
+}

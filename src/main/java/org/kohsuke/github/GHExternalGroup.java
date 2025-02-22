@@ -194,11 +194,9 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      * Gets organization.
      *
      * @return the organization
-     * @throws IOException
-     *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHOrganization getOrganization() throws IOException {
+    public GHOrganization getOrganization() {
         return organization;
     }
 

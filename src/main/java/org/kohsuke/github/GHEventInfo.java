@@ -162,10 +162,8 @@ public class GHEventInfo extends GitHubInteractiveObject {
      * Gets actor login.
      *
      * @return the login of the actor.
-     * @throws IOException
-     *             on error
      */
-    public String getActorLogin() throws IOException {
+    public String getActorLogin() {
         return actor.getLogin();
     }
 

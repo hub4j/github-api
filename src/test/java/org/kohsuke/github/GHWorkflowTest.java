@@ -173,7 +173,7 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
         checkWorkflowRunProperties(workflowRuns.get(1), workflow.getId());
     }
 
-    private static void checkWorkflowRunProperties(GHWorkflowRun workflowRun, long workflowId) throws IOException {
+    private static void checkWorkflowRunProperties(GHWorkflowRun workflowRun, long workflowId) {
         assertThat(workflowRun.getWorkflowId(), equalTo(workflowId));
         assertThat(workflowRun.getId(), notNullValue());
         assertThat(workflowRun.getNodeId(), notNullValue());

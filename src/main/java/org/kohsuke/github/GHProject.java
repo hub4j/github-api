@@ -60,10 +60,8 @@ public class GHProject extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
+    public URL getHtmlUrl() {
         return GitHubClient.parseURL(html_url);
     }
 
@@ -272,10 +270,8 @@ public class GHProject extends GHObject {
      * List columns paged iterable.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHProjectColumn> listColumns() throws IOException {
+    public PagedIterable<GHProjectColumn> listColumns() {
         final GHProject project = this;
         return root().createRequest()
                 .withUrlPath(String.format("/projects/%d/columns", getId()))

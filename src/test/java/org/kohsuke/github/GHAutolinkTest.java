@@ -184,12 +184,9 @@ public class GHAutolinkTest extends AbstractGitHubWireMockTest {
 
     /**
      * Cleanup.
-     *
-     * @throws Exception
-     *             the exception
      */
     @After
-    public void cleanup() throws Exception {
+    public void cleanup() {
         if (repo != null) {
             try {
                 PagedIterable<GHAutolink> autolinks = repo.listAutolinks();

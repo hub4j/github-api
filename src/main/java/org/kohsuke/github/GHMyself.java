@@ -162,10 +162,8 @@ public class GHMyself extends GHUser {
      * Gets the all repositories this user owns (public and private).
      *
      * @return the all repositories
-     * @throws IOException
-     *             the io exception
      */
-    public synchronized Map<String, GHRepository> getAllRepositories() throws IOException {
+    public synchronized Map<String, GHRepository> getAllRepositories() {
         Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
         for (GHRepository r : listRepositories()) {
             repositories.put(r.getName(), r);

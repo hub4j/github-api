@@ -158,12 +158,9 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
     /**
      * When snapshot ensure proxy.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void whenSnapshot_EnsureProxy() throws Exception {
+    public void whenSnapshot_EnsureProxy() {
         assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)",
                 mockGitHub.isTakeSnapshot());
 
@@ -172,13 +169,10 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
     /**
      * When snapshot ensure record to expected location.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Ignore("Not implemented yet")
     @Test
-    public void whenSnapshot_EnsureRecordToExpectedLocation() throws Exception {
+    public void whenSnapshot_EnsureRecordToExpectedLocation() {
         assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)",
                 mockGitHub.isTakeSnapshot());
 

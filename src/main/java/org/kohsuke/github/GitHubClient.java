@@ -111,15 +111,13 @@ class GitHubClient {
      *            the rate limit checker
      * @param authorizationProvider
      *            the authorization provider
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
     GitHubClient(String apiUrl,
             GitHubConnector connector,
             GitHubRateLimitHandler rateLimitHandler,
             GitHubAbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            AuthorizationProvider authorizationProvider) throws IOException {
+            AuthorizationProvider authorizationProvider) {
 
         if (apiUrl.endsWith("/")) {
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
@@ -679,7 +677,7 @@ class GitHubClient {
      */
     private static IOException interpretApiError(IOException e,
             @Nonnull GitHubConnectorRequest connectorRequest,
-            @CheckForNull GitHubConnectorResponse connectorResponse) throws IOException {
+            @CheckForNull GitHubConnectorResponse connectorResponse) {
         // If we're already throwing a GHIOException, pass through
         if (e instanceof GHIOException) {
             return e;

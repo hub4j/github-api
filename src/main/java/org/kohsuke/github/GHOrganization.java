@@ -44,10 +44,8 @@ public class GHOrganization extends GHPerson {
      * Teams by their names.
      *
      * @return the teams
-     * @throws IOException
-     *             the io exception
      */
-    public Map<String, GHTeam> getTeams() throws IOException {
+    public Map<String, GHTeam> getTeams() {
         Map<String, GHTeam> r = new TreeMap<String, GHTeam>();
         for (GHTeam t : listTeams()) {
             r.put(t.getName(), t);
@@ -59,10 +57,8 @@ public class GHOrganization extends GHPerson {
      * List up all the teams.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHTeam> listTeams() throws IOException {
+    public PagedIterable<GHTeam> listTeams() {
         return root().createRequest()
                 .withUrlPath(String.format("/orgs/%s/teams", login))
                 .toIterable(GHTeam[].class, item -> item.wrapUp(this));
@@ -91,10 +87,8 @@ public class GHOrganization extends GHPerson {
      * @param name
      *            the name
      * @return the team by name
-     * @throws IOException
-     *             the io exception
      */
-    public GHTeam getTeamByName(String name) throws IOException {
+    public GHTeam getTeamByName(String name) {
         for (GHTeam t : listTeams()) {
             if (t.getName().equals(name))
                 return t;
@@ -123,12 +117,10 @@ public class GHOrganization extends GHPerson {
      * List up all the external groups.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      * @see <a href=
      *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization">documentation</a>
      */
-    public PagedIterable<GHExternalGroup> listExternalGroups() throws IOException {
+    public PagedIterable<GHExternalGroup> listExternalGroups() {
         return listExternalGroups(null);
     }
 
@@ -138,12 +130,10 @@ public class GHOrganization extends GHPerson {
      * @param displayName
      *            the text that must be part of the returned groups name
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      * @see <a href=
      *      "https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization">documentation</a>
      */
-    public PagedIterable<GHExternalGroup> listExternalGroups(final String displayName) throws IOException {
+    public PagedIterable<GHExternalGroup> listExternalGroups(final String displayName) {
         final Requester requester = root().createRequest()
                 .withUrlPath(String.format("/orgs/%s/external-groups", login));
         if (displayName != null) {
@@ -288,10 +278,8 @@ public class GHOrganization extends GHPerson {
      * All the members of this organization.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listMembers() throws IOException {
+    public PagedIterable<GHUser> listMembers() {
         return listMembers("members");
     }
 
@@ -299,10 +287,8 @@ public class GHOrganization extends GHPerson {
      * All the public members of this organization.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listPublicMembers() throws IOException {
+    public PagedIterable<GHUser> listPublicMembers() {
         return listMembers("public_members");
     }
 
@@ -310,14 +296,12 @@ public class GHOrganization extends GHPerson {
      * All the outside collaborators of this organization.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listOutsideCollaborators() throws IOException {
+    public PagedIterable<GHUser> listOutsideCollaborators() {
         return listMembers("outside_collaborators");
     }
 
-    private PagedIterable<GHUser> listMembers(String suffix) throws IOException {
+    private PagedIterable<GHUser> listMembers(String suffix) {
         return listMembers(suffix, null, null);
     }
 
@@ -327,10 +311,8 @@ public class GHOrganization extends GHPerson {
      * @param filter
      *            the filter
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listMembersWithFilter(String filter) throws IOException {
+    public PagedIterable<GHUser> listMembersWithFilter(String filter) {
         return listMembers("members", filter, null);
     }
 
@@ -340,10 +322,8 @@ public class GHOrganization extends GHPerson {
      * @param filter
      *            the filter
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listOutsideCollaboratorsWithFilter(String filter) throws IOException {
+    public PagedIterable<GHUser> listOutsideCollaboratorsWithFilter(String filter) {
         return listMembers("outside_collaborators", filter, null);
     }
 
@@ -353,15 +333,12 @@ public class GHOrganization extends GHPerson {
      * @param role
      *            the role
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listMembersWithRole(String role) throws IOException {
+    public PagedIterable<GHUser> listMembersWithRole(String role) {
         return listMembers("members", null, role);
     }
 
-    private PagedIterable<GHUser> listMembers(final String suffix, final String filter, String role)
-            throws IOException {
+    private PagedIterable<GHUser> listMembers(final String suffix, final String filter, String role) {
         return root().createRequest()
                 .withUrlPath(String.format("/orgs/%s/%s", login, suffix))
                 .with("filter", filter)
@@ -373,10 +350,8 @@ public class GHOrganization extends GHPerson {
      * List up all the security managers.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHTeam> listSecurityManagers() throws IOException {
+    public PagedIterable<GHTeam> listSecurityManagers() {
         return root().createRequest()
                 .withUrlPath(String.format("/orgs/%s/security-managers", login))
                 .toIterable(GHTeam[].class, item -> item.wrapUp(this));
@@ -432,10 +407,8 @@ public class GHOrganization extends GHPerson {
      * @param status
      *            The status filter (all, open or closed).
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
+    public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) {
         return root().createRequest()
                 .with("state", status)
                 .withUrlPath(String.format("/orgs/%s/projects", login))
@@ -446,10 +419,8 @@ public class GHOrganization extends GHPerson {
      * Returns all open projects for the organization.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHProject> listProjects() throws IOException {
+    public PagedIterable<GHProject> listProjects() {
         return listProjects(GHProject.ProjectStateFilter.OPEN);
     }
 

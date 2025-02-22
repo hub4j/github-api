@@ -46,10 +46,8 @@ public class GHMilestone extends GHObject {
      * Gets creator.
      *
      * @return the creator
-     * @throws IOException
-     *             the io exception
      */
-    public GHUser getCreator() throws IOException {
+    public GHUser getCreator() {
         return root().intern(creator);
     }
 
@@ -68,10 +66,8 @@ public class GHMilestone extends GHObject {
      * When was this milestone closed?.
      *
      * @return the closed at
-     * @throws IOException
-     *             the io exception
      */
-    public Date getClosedAt() throws IOException {
+    public Date getClosedAt() {
         return GitHubClient.parseDate(closed_at);
     }
 

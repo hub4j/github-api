@@ -257,10 +257,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * List immediate children of this directory.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHContent> listDirectoryContent() throws IOException {
+    public PagedIterable<GHContent> listDirectoryContent() {
         if (!isDirectory())
             throw new IllegalStateException(path + " is not a directory");
 

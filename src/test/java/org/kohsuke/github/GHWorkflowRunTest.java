@@ -709,7 +709,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(artifact.isExpired(), is(false));
     }
 
-    private static void checkJobProperties(long workflowRunId, GHWorkflowJob job, String jobName) throws IOException {
+    private static void checkJobProperties(long workflowRunId, GHWorkflowJob job, String jobName) {
         assertThat(job.getId(), notNullValue());
         assertThat(job.getNodeId(), notNullValue());
         assertThat(job.getRepository().getFullName(), equalTo(REPO_NAME));

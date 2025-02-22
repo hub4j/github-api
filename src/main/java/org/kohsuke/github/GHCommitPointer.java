@@ -49,11 +49,9 @@ public class GHCommitPointer {
      * This points to the user who owns the {@link #getRepository()}.
      *
      * @return the user
-     * @throws IOException
-     *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getUser() throws IOException {
+    public GHUser getUser() {
         if (user != null)
             return user.root().intern(user);
         return user;

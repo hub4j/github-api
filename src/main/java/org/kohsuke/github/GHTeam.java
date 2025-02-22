@@ -164,11 +164,9 @@ public class GHTeam extends GHObject implements Refreshable {
      * Retrieves the discussions.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
     @Nonnull
-    public PagedIterable<GHDiscussion> listDiscussions() throws IOException {
+    public PagedIterable<GHDiscussion> listDiscussions() {
         return GHDiscussion.readAll(this);
     }
 
@@ -178,10 +176,8 @@ public class GHTeam extends GHObject implements Refreshable {
      * @param role
      *            the role
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listMembers(String role) throws IOException {
+    public PagedIterable<GHUser> listMembers(String role) {
         return root().createRequest().withUrlPath(api("/members")).with("role", role).toIterable(GHUser[].class, null);
     }
 
@@ -191,10 +187,8 @@ public class GHTeam extends GHObject implements Refreshable {
      * @param role
      *            the role
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listMembers(Role role) throws IOException {
+    public PagedIterable<GHUser> listMembers(Role role) {
         return listMembers(transformEnum(role));
     }
 
@@ -217,10 +211,8 @@ public class GHTeam extends GHObject implements Refreshable {
      * Retrieves the current members.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listMembers() throws IOException {
+    public PagedIterable<GHUser> listMembers() {
         return listMembers("all");
     }
 
@@ -228,10 +220,8 @@ public class GHTeam extends GHObject implements Refreshable {
      * Retrieves the teams that are children of this team.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHTeam> listChildTeams() throws IOException {
+    public PagedIterable<GHTeam> listChildTeams() {
         return root().createRequest()
                 .withUrlPath(api("/teams"))
                 .toIterable(GHTeam[].class, item -> item.wrapUp(this.organization));
@@ -268,10 +258,8 @@ public class GHTeam extends GHObject implements Refreshable {
      * Gets repositories.
      *
      * @return the repositories
-     * @throws IOException
-     *             the io exception
      */
-    public Map<String, GHRepository> getRepositories() throws IOException {
+    public Map<String, GHRepository> getRepositories() {
         Map<String, GHRepository> m = new TreeMap<>();
         for (GHRepository r : listRepositories()) {
             m.put(r.getName(), r);

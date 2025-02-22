@@ -76,11 +76,9 @@ public class GHGist extends GHObject {
      * Gets owner.
      *
      * @return User that owns this Gist.
-     * @throws IOException
-     *             the io exception
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getOwner() throws IOException {
+    public GHUser getOwner() {
         return owner;
     }
 
@@ -265,10 +263,8 @@ public class GHGist extends GHObject {
      * Updates this gist via a builder.
      *
      * @return the gh gist updater
-     * @throws IOException
-     *             the io exception
      */
-    public GHGistUpdater update() throws IOException {
+    public GHGistUpdater update() {
         return new GHGistUpdater(this);
     }
 

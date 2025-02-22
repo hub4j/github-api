@@ -115,11 +115,9 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      * @param repository
      *            the repository in which the variable will be created.
      * @return a {@link GHRepositoryVariable.Creator}
-     * @throws IOException
-     *             the io exception
      */
     @BetaApi
-    static GHRepositoryVariable.Creator create(GHRepository repository) throws IOException {
+    static GHRepositoryVariable.Creator create(GHRepository repository) {
         return new GHRepositoryVariable.Creator(repository);
     }
 

@@ -41,10 +41,8 @@ public class GHGistUpdater {
      * @param content
      *            the content
      * @return the gh gist updater
-     * @throws IOException
-     *             the io exception
      */
-    public GHGistUpdater addFile(@Nonnull String fileName, @Nonnull String content) throws IOException {
+    public GHGistUpdater addFile(@Nonnull String fileName, @Nonnull String content) {
         updateFile(fileName, content);
         return this;
     }
@@ -55,10 +53,8 @@ public class GHGistUpdater {
      * @param fileName
      *            the file name
      * @return the GH gist updater
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public GHGistUpdater deleteFile(@Nonnull String fileName) throws IOException {
+    public GHGistUpdater deleteFile(@Nonnull String fileName) {
         files.put(fileName, null);
         return this;
     }
@@ -71,10 +67,8 @@ public class GHGistUpdater {
      * @param newFileName
      *            the new file name
      * @return the gh gist updater
-     * @throws IOException
-     *             the io exception
      */
-    public GHGistUpdater renameFile(@Nonnull String fileName, @Nonnull String newFileName) throws IOException {
+    public GHGistUpdater renameFile(@Nonnull String fileName, @Nonnull String newFileName) {
         Map<String, String> file = files.computeIfAbsent(fileName, d -> new HashMap<>());
         file.put("filename", newFileName);
         return this;
@@ -88,10 +82,8 @@ public class GHGistUpdater {
      * @param content
      *            the content
      * @return the gh gist updater
-     * @throws IOException
-     *             the io exception
      */
-    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String content) throws IOException {
+    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String content) {
         Map<String, String> file = files.computeIfAbsent(fileName, d -> new HashMap<>());
         file.put("content", content);
         return this;
@@ -107,11 +99,8 @@ public class GHGistUpdater {
      * @param content
      *            the content
      * @return the gh gist updater
-     * @throws IOException
-     *             the io exception
      */
-    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String newFileName, @Nonnull String content)
-            throws IOException {
+    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String newFileName, @Nonnull String content) {
         Map<String, String> file = files.computeIfAbsent(fileName, d -> new HashMap<>());
         file.put("content", content);
         file.put("filename", newFileName);

@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -64,10 +63,8 @@ public class GHRepositoryDiscussionComment extends GHObject {
      * Gets the user.
      *
      * @return the user
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public GHUser getUser() throws IOException {
+    public GHUser getUser() {
         return root().intern(user);
     }
 

@@ -888,12 +888,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     /**
      * Search repositories.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void searchRepositories() throws Exception {
+    public void searchRepositories() {
         PagedSearchIterable<GHRepository> r = gitHub.searchRepositories()
                 .q("tetris")
                 .language("assembly")
@@ -908,12 +905,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     /**
      * Search org for repositories.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void searchOrgForRepositories() throws Exception {
+    public void searchOrgForRepositories() {
         PagedSearchIterable<GHRepository> r = gitHub.searchRepositories().org("hub4j-test-org").list();
         GHRepository u = r.iterator().next();
         assertThat(u.getOwnerName(), equalTo("hub4j-test-org"));
@@ -1337,12 +1331,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
     /**
      * List refs empty tags.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void listRefsEmptyTags() throws Exception {
+    public void listRefsEmptyTags() {
         try {
             GHRepository repo = getTempRepository();
             repo.listRefs("tags").toList();

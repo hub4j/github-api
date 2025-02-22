@@ -260,7 +260,7 @@ public class OkHttpGitHubConnectorTest extends AbstractGitHubWireMockTest {
         assertThat("getHitCount", cache.hitCount(), is(maxAgeZeroHitCount));
     }
 
-    private void checkRequestAndLimit(int networkRequestCount, int rateLimitUsed) throws IOException {
+    private void checkRequestAndLimit(int networkRequestCount, int rateLimitUsed) {
         GHRateLimit rateLimitAfter = gitHub.lastRateLimit();
         assertThat("Request Count", getRequestCount(), is(networkRequestCount + userRequestCount));
 

@@ -204,12 +204,9 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test timeout message and sleep count.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void testTimeoutMessage() throws Exception {
+    public void testTimeoutMessage() {
         // For re-recording, use line below to create successful fork test copy, then comment it out and modify json
         // response to 404
         // repo.createFork().name("test-message").create();

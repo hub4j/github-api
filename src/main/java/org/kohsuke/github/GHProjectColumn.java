@@ -124,10 +124,8 @@ public class GHProjectColumn extends GHObject {
      * List cards paged iterable.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHProjectCard> listCards() throws IOException {
+    public PagedIterable<GHProjectCard> listCards() {
         final GHProjectColumn column = this;
         return root().createRequest()
                 .withUrlPath(String.format("/projects/columns/%d/cards", getId()))

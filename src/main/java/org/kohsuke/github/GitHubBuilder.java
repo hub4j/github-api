@@ -106,10 +106,8 @@ public class GitHubBuilder implements Cloneable {
      * See class javadoc for the relationship between these coordinates.
      *
      * @return the GitHubBuilder
-     * @throws IOException
-     *             the io exception
      */
-    public static GitHubBuilder fromEnvironment() throws IOException {
+    public static GitHubBuilder fromEnvironment() {
         Properties props = new Properties();
         for (Entry<String, String> e : System.getenv().entrySet()) {
             String name = e.getKey().toLowerCase(Locale.ENGLISH);

@@ -84,21 +84,16 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
      * Gets the test captured log.
      *
      * @return the test captured log
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public String getTestCapturedLog() throws IOException {
+    public String getTestCapturedLog() {
         customLogHandler.flush();
         return logCapturingStream.toString();
     }
 
     /**
      * Reset test captured log.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public void resetTestCapturedLog() throws IOException {
+    public void resetTestCapturedLog() {
         Logger.getLogger(GitHubClient.class.getName()).removeHandler(customLogHandler);
         Logger.getLogger(OkHttpClient.class.getName()).removeHandler(customLogHandler);
         customLogHandler.close();

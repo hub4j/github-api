@@ -97,6 +97,22 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Verifies that the `type` field is correctly fetched when listing organizations.
+     * <p>
+     * Since the `type` field is not included by default in the list of organizations, this test ensures that calling
+     * {@code getType()} retrieves the expected value.
+     * </p>
+     *
+     * @throws IOException
+     *             if an I/O error occurs while fetching the organizations.
+     */
+    @Test
+    public void listOrganizationsFetchesType() throws IOException {
+        String type = gitHub.listOrganizations().withPageSize(1).iterator().next().getType();
+        assertThat(type, equalTo("Organization"));
+    }
+
+    /**
      * Search users.
      */
     @Test

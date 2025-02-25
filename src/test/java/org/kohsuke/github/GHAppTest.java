@@ -57,6 +57,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(app.getId(), is((long) 82994));
         assertThat(app.getOwner().getId(), is((long) 7544739));
         assertThat(app.getOwner().getLogin(), is("hub4j-test-org"));
+        assertThat(app.getOwner().getType(), is("Organization"));
         assertThat(app.getName(), is("GHApi Test app 1"));
         assertThat(app.getSlug(), is("ghapi-test-app-1"));
         assertThat(app.getDescription(), is(""));
@@ -85,8 +86,10 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(appInstallation.getId(), is((long) 1037204));
         assertThat(appInstallation.getAccount().getId(), is((long) 195438329));
         assertThat(appInstallation.getAccount().getLogin(), is("approval-test"));
+        assertThat(appInstallation.getAccount().getType(), is("Organization"));
         assertThat(appInstallation.getRequester().getId(), is((long) 195437694));
         assertThat(appInstallation.getRequester().getLogin(), is("kaladinstormblessed2"));
+        assertThat(appInstallation.getRequester().getType(), is("User"));
         assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseDate("2025-01-17T15:50:51Z")));
         assertThat(appInstallation.getNodeId(), is("MDMwOkludGVncmF0aW9uSW5zdGFsbGF0aW9uUmVxdWVzdDEwMzcyMDQ="));
     }
@@ -275,6 +278,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(appInstallation.getId(), is((long) 11111111));
         assertThat(appAccount.getId(), is((long) 111111111));
         assertThat(appAccount.login, is("bogus"));
+        assertThat(appAccount.getType(), is("Organization"));
         assertThat(appInstallation.getRepositorySelection(), is(GHRepositorySelection.SELECTED));
         assertThat(appInstallation.getAccessTokenUrl(), endsWith("/app/installations/11111111/access_tokens"));
         assertThat(appInstallation.getRepositoriesUrl(), endsWith("/installation/repositories"));

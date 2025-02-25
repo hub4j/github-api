@@ -316,7 +316,9 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public String getType() throws IOException {
-        populate();
+        if (type == null) {
+            populate();
+        }
         return type;
     }
 

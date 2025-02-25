@@ -244,10 +244,8 @@ public class GHUser extends GHPerson {
      * Lists Gists created by this user.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHGist> listGists() throws IOException {
+    public PagedIterable<GHGist> listGists() {
         return root().createRequest()
                 .withUrlPath(String.format("/users/%s/gists", login))
                 .toIterable(GHGist[].class, null);

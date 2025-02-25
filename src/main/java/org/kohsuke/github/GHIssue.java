@@ -539,12 +539,10 @@ public class GHIssue extends GHObject implements Reactable {
      * Obtains all the comments associated with this issue, without any filter.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
      * @see #queryComments() queryComments to apply filters.
      */
-    public PagedIterable<GHIssueComment> listComments() throws IOException {
+    public PagedIterable<GHIssueComment> listComments() {
         return root().createRequest()
                 .withUrlPath(getIssuesApiRoute() + "/comments")
                 .toIterable(GHIssueComment[].class, item -> item.wrapUp(this));
@@ -717,10 +715,8 @@ public class GHIssue extends GHObject implements Reactable {
      * Gets assignee.
      *
      * @return the assignee
-     * @throws IOException
-     *             the io exception
      */
-    public GHUser getAssignee() throws IOException {
+    public GHUser getAssignee() {
         return root().intern(assignee);
     }
 
@@ -737,10 +733,8 @@ public class GHIssue extends GHObject implements Reactable {
      * User who submitted the issue.
      *
      * @return the user
-     * @throws IOException
-     *             the io exception
      */
-    public GHUser getUser() throws IOException {
+    public GHUser getUser() {
         return root().intern(user);
     }
 
@@ -752,10 +746,8 @@ public class GHIssue extends GHObject implements Reactable {
      * https://github.com/kohsuke/github-api/issues/60.
      *
      * @return the closed by
-     * @throws IOException
-     *             the io exception
      */
-    public GHUser getClosedBy() throws IOException {
+    public GHUser getClosedBy() {
         if (!"closed".equals(state))
             return null;
 
@@ -864,10 +856,8 @@ public class GHIssue extends GHObject implements Reactable {
      * Lists events for this issue. See https://developer.github.com/v3/issues/events/
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHIssueEvent> listEvents() throws IOException {
+    public PagedIterable<GHIssueEvent> listEvents() {
         return root().createRequest()
                 .withUrlPath(getRepository().getApiTailUrl(String.format("/issues/%s/events", number)))
                 .toIterable(GHIssueEvent[].class, item -> item.wrapUp(this));

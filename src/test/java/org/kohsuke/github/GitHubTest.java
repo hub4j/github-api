@@ -114,12 +114,9 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
 
     /**
      * Search users.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void searchUsers() throws Exception {
+    public void searchUsers() {
         PagedSearchIterable<GHUser> r = gitHub.searchUsers().q("tom").repos(">42").followers(">1000").list();
         GHUser u = r.iterator().next();
         // System.out.println(u.getName());
@@ -129,12 +126,9 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test list all repositories.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void testListAllRepositories() throws Exception {
+    public void testListAllRepositories() {
         Iterator<GHRepository> itr = gitHub.listAllPublicRepositories().iterator();
         for (int i = 0; i < 115; i++) {
             assertThat(itr.hasNext(), is(true));
@@ -276,12 +270,9 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test list my authorizations.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testListMyAuthorizations() throws IOException {
+    public void testListMyAuthorizations() {
         PagedIterable<GHAuthorization> list = gitHub.listMyAuthorizations();
 
         for (GHAuthorization auth : list) {

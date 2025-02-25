@@ -3,7 +3,6 @@ package org.kohsuke.github;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +27,9 @@ public class BridgeMethodTest extends Assert {
 
     /**
      * Test bridge methods.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testBridgeMethods() throws IOException {
+    public void testBridgeMethods() {
 
         // Some would say this is redundant, given that bridge methods are so thin anyway
         // In the interest of maintaining binary compatibility, we'll do this anyway for a sampling of methods

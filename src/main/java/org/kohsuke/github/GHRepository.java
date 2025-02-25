@@ -504,10 +504,8 @@ public class GHRepository extends GHObject {
      * List releases paged iterable.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHRelease> listReleases() throws IOException {
+    public PagedIterable<GHRelease> listReleases() {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("releases"))
                 .toIterable(GHRelease[].class, item -> item.wrap(this));
@@ -517,10 +515,8 @@ public class GHRepository extends GHObject {
      * List tags paged iterable.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHTag> listTags() throws IOException {
+    public PagedIterable<GHTag> listTags() {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("tags"))
                 .toIterable(GHTag[].class, item -> item.wrap(this));
@@ -879,10 +875,8 @@ public class GHRepository extends GHObject {
      * Lists up the collaborators on this repository.
      *
      * @return Users paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listCollaborators() throws IOException {
+    public PagedIterable<GHUser> listCollaborators() {
         return listUsers("collaborators");
     }
 
@@ -892,10 +886,8 @@ public class GHRepository extends GHObject {
      * @param affiliation
      *            Filter users by affiliation
      * @return Users paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listCollaborators(CollaboratorAffiliation affiliation) throws IOException {
+    public PagedIterable<GHUser> listCollaborators(CollaboratorAffiliation affiliation) {
         return listUsers(root().createRequest().with("affiliation", affiliation), "collaborators");
     }
 
@@ -905,10 +897,8 @@ public class GHRepository extends GHObject {
      * available assignees</a> to which issues may be assigned.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listAssignees() throws IOException {
+    public PagedIterable<GHUser> listAssignees() {
         return listUsers("assignees");
     }
 
@@ -1755,10 +1745,8 @@ public class GHRepository extends GHObject {
      * Retrieves all refs for the github repository.
      *
      * @return paged iterable of all refs
-     * @throws IOException
-     *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
-    public PagedIterable<GHRef> listRefs() throws IOException {
+    public PagedIterable<GHRef> listRefs() {
         return listRefs("");
     }
 
@@ -1781,10 +1769,8 @@ public class GHRepository extends GHObject {
      * @param refType
      *            the type of reg to search for e.g. <code>tags</code> or <code>commits</code>
      * @return paged iterable of all refs of the specified type
-     * @throws IOException
-     *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
-    public PagedIterable<GHRef> listRefs(String refType) throws IOException {
+    public PagedIterable<GHRef> listRefs(String refType) {
         return GHRef.readMatching(this, refType);
     }
 
@@ -2019,10 +2005,8 @@ public class GHRepository extends GHObject {
      * @param sha1
      *            the sha 1
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHCommitStatus> listCommitStatuses(final String sha1) throws IOException {
+    public PagedIterable<GHCommitStatus> listCommitStatuses(final String sha1) {
         return root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/statuses/%s", getOwnerName(), name, sha1))
                 .toIterable(GHCommitStatus[].class, null);
@@ -2048,12 +2032,10 @@ public class GHRepository extends GHObject {
      * @param ref
      *            ref
      * @return check runs for given ref
-     * @throws IOException
-     *             the io exception
      * @see <a href= "https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */
-    public PagedIterable<GHCheckRun> getCheckRuns(String ref) throws IOException {
+    public PagedIterable<GHCheckRun> getCheckRuns(String ref) {
         GitHubRequest request = root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
                 .build();
@@ -2068,12 +2050,10 @@ public class GHRepository extends GHObject {
      * @param params
      *            a map of parameters to filter check runs
      * @return check runs for the given ref
-     * @throws IOException
-     *             the io exception
      * @see <a href= "https://developer.github.com/v3/checks/runs/#list-check-runs-for-a-specific-ref">List check runs
      *      for a specific ref</a>
      */
-    public PagedIterable<GHCheckRun> getCheckRuns(String ref, Map<String, Object> params) throws IOException {
+    public PagedIterable<GHCheckRun> getCheckRuns(String ref, Map<String, Object> params) {
         GitHubRequest request = root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
                 .with(params)
@@ -2163,10 +2143,8 @@ public class GHRepository extends GHObject {
      * Lists repository events.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHEventInfo> listEvents() throws IOException {
+    public PagedIterable<GHEventInfo> listEvents() {
         return root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/events", getOwnerName(), name))
                 .toIterable(GHEventInfo[].class, null);
@@ -2178,10 +2156,8 @@ public class GHRepository extends GHObject {
      * https://developer.github.com/v3/issues/labels/#list-all-labels-for-this-repository
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHLabel> listLabels() throws IOException {
+    public PagedIterable<GHLabel> listLabels() {
         return GHLabel.readAll(this);
     }
 
@@ -2693,10 +2669,8 @@ public class GHRepository extends GHObject {
      * List contributors paged iterable.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<Contributor> listContributors() throws IOException {
+    public PagedIterable<Contributor> listContributors() {
         return listContributors(null);
     }
 
@@ -2706,12 +2680,10 @@ public class GHRepository extends GHObject {
      * @param includeAnonymous
      *            whether to include anonymous contributors
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      * @see <a href="https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repository-contributors">
      *      GitHub API - List Repository Contributors</a>
      */
-    public PagedIterable<Contributor> listContributors(Boolean includeAnonymous) throws IOException {
+    public PagedIterable<Contributor> listContributors(Boolean includeAnonymous) {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("contributors"))
                 .with("anon", includeAnonymous)
@@ -2803,10 +2775,8 @@ public class GHRepository extends GHObject {
      * @param status
      *            The status filter (all, open or closed).
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) throws IOException {
+    public PagedIterable<GHProject> listProjects(final GHProject.ProjectStateFilter status) {
         return root().createRequest()
                 .with("state", status)
                 .withUrlPath(getApiTailUrl("projects"))
@@ -2930,10 +2900,8 @@ public class GHRepository extends GHObject {
      * https://developer.github.com/v3/issues/events/#list-events-for-a-repository
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHIssueEvent> listIssueEvents() throws IOException {
+    public PagedIterable<GHIssueEvent> listIssueEvents() {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("issues/events"))
                 .toIterable(GHIssueEvent[].class, null);
@@ -3319,10 +3287,8 @@ public class GHRepository extends GHObject {
      * @param branch
      *            the branch
      * @return the rules for branch
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHRepositoryRule> listRulesForBranch(String branch) throws IOException {
+    public PagedIterable<GHRepositoryRule> listRulesForBranch(String branch) {
         return root().createRequest()
                 .method("GET")
                 .withUrlPath(getApiTailUrl("/rules/branches/" + branch))
@@ -3382,10 +3348,8 @@ public class GHRepository extends GHObject {
      * (https://docs.github.com/en/rest/repos/autolinks?apiVersion=2022-11-28#get-all-autolinks-of-a-repository)
      *
      * @return all autolinks in the repo
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHAutolink> listAutolinks() throws IOException {
+    public PagedIterable<GHAutolink> listAutolinks() {
         return root().createRequest()
                 .withHeader("Accept", "application/vnd.github+json")
                 .withUrlPath(String.format("/repos/%s/%s/autolinks", getOwnerName(), getName()))

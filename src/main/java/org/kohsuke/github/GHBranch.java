@@ -34,11 +34,9 @@ public class GHBranch extends GitHubInteractiveObject {
      *
      * @param name
      *            the name
-     * @throws Exception
-     *             the exception
      */
     @JsonCreator
-    GHBranch(@JsonProperty(value = "name", required = true) String name) throws Exception {
+    GHBranch(@JsonProperty(value = "name", required = true) String name) {
         Objects.requireNonNull(name);
         this.name = name;
     }

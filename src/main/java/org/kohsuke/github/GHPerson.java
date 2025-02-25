@@ -72,10 +72,8 @@ public abstract class GHPerson extends GHObject {
      * To list your own repositories, including private repositories, use {@link GHMyself#listRepositories()}
      *
      * @return the repositories
-     * @throws IOException
-     *             the io exception
      */
-    public synchronized Map<String, GHRepository> getRepositories() throws IOException {
+    public synchronized Map<String, GHRepository> getRepositories() {
         Map<String, GHRepository> repositories = new TreeMap<String, GHRepository>();
         for (GHRepository r : listRepositories().withPageSize(100)) {
             repositories.put(r.getName(), r);

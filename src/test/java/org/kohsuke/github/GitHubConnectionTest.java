@@ -33,12 +33,9 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test offline.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void testOffline() throws Exception {
+    public void testOffline() {
         GitHub hub = GitHub.offline();
         assertThat(GitHubRequest.getApiURL(hub.getClient().getApiUrl(), "/test").toString(),
                 equalTo("https://api.github.invalid/test"));
@@ -259,12 +256,9 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test anonymous.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testAnonymous() throws IOException {
+    public void testAnonymous() {
         // we disable this test for JDK 16+ as the current hacks in setupEnvironment() don't work with JDK 16+
         Assume.assumeThat(Double.valueOf(System.getProperty("java.specification.version")), lessThan(16.0));
 

@@ -1961,6 +1961,21 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(repository.isVulnerabilityAlertsEnabled(), is(true));
     }
 
+    /**
+     * Test getCustomProperties. This test may or may not work, you will need to point to an org and repo that have
+     * custom properties setup
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGetCustomProperties() throws Exception {
+        GHRepository repository = getTempRepository();
+        Set<GHRepositoryCustomProperty> customProperties = repository.getCustomProperties();
+        GHRepositoryCustomProperty property = customProperties.iterator().next();
+        assertThat(customProperties, notNullValue());
+    }
+
     private void verifyEmptyResult(PagedSearchIterable<GHPullRequest> searchResult) {
         assertThat(searchResult.getTotalCount(), is(0));
     }

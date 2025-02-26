@@ -1,0 +1,82 @@
+[
+  {
+    "number": 111,
+    "created_at": "2021-05-17T14:55:01Z",
+    "url": "https://api.github.com/repos/hub4j-test-org/Pixi/code-scanning/alerts/111",
+    "html_url": "https://github.com/hub4j-test-org/Pixi/security/code-scanning/111",
+    "state": "open",
+    "dismissed_by": null,
+    "dismissed_at": null,
+    "dismissed_reason": null,
+    "rule": {
+      "id": "js/unsafe-jquery-plugin",
+      "severity": "warning",
+      "description": "Unsafe jQuery plugin",
+      "name": "js/unsafe-jquery-plugin"
+    },
+    "tool": {
+      "name": "CodeQL",
+      "guid": null,
+      "version": "2.5.4"
+    },
+    "most_recent_instance": {
+      "ref": "refs/heads/master",
+      "analysis_key": ".github/workflows/codeql-analysis.yml:analyze",
+      "environment": "{\"language\":\"javascript\"}",
+      "state": "open",
+      "commit_sha": "b3cfb0474bb3d5b5cd499a17e448281abbd256d7",
+      "message": {
+        "text": "Potential XSS vulnerability in the '$.fn.tooltip' plugin."
+      },
+      "location": {
+        "path": "app/public/js/bootstrap.js",
+        "start_line": 3090,
+        "end_line": 3090,
+        "start_column": 27,
+        "end_column": 34
+      },
+      "classifications": []
+    },
+    "instances_url": "https://api.github.com/repos/hub4j-test-org/Pixi/code-scanning/alerts/111/instances"
+  },
+  {
+    "number": 110,
+    "created_at": "2021-05-17T14:55:01Z",
+    "url": "https://api.github.com/repos/hub4j-test-org/Pixi/code-scanning/alerts/110",
+    "html_url": "https://github.com/hub4j-test-org/Pixi/security/code-scanning/110",
+    "state": "open",
+    "dismissed_by": null,
+    "dismissed_at": null,
+    "dismissed_reason": null,
+    "rule": {
+      "id": "js/unsafe-jquery-plugin",
+      "severity": "warning",
+      "description": "Unsafe jQuery plugin",
+      "name": "js/unsafe-jquery-plugin"
+    },
+    "tool": {
+      "name": "CodeQL",
+      "guid": null,
+      "version": "2.5.4"
+    },
+    "most_recent_instance": {
+      "ref": "refs/heads/master",
+      "analysis_key": ".github/workflows/codeql-analysis.yml:analyze",
+      "environment": "{\"language\":\"javascript\"}",
+      "state": "open",
+      "commit_sha": "b3cfb0474bb3d5b5cd499a17e448281abbd256d7",
+      "message": {
+        "text": "Potential XSS vulnerability in the '$.fn.tooltip' plugin."
+      },
+      "location": {
+        "path": "app/public/js/bootstrap.js",
+        "start_line": 3086,
+        "end_line": 3086,
+        "start_column": 18,
+        "end_column": 25
+      },
+      "classifications": []
+    },
+    "instances_url": "https://api.github.com/repos/hub4j-test-org/Pixi/code-scanning/alerts/110/instances"
+  }
+]

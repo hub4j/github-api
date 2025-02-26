@@ -257,8 +257,8 @@ public class GHUser extends GHPerson {
      * @return The LDAP information
      * @throws IOException
      *             the io exception
-     * @see <a
-     *      href=https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap>Github
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap">Github
      *      LDAP</a>
      */
     public Optional<String> getLdapDn() throws IOException {

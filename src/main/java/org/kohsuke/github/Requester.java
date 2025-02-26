@@ -77,7 +77,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *            the type parameter
      * @param type
      *            the type
-     * @return an instance of {@link T}
+     * @return an instance of {@code T}
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
@@ -152,7 +152,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
-     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer<R>}.
+     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer}{@code <R>}.
      * <p>
      * This method and the {@link PagedIterable <R>} do not actually begin fetching data until {@link Iterator#next()}
      * or {@link Iterator#hasNext()} are called.

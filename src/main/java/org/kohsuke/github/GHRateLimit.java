@@ -326,8 +326,8 @@ public class GHRateLimit {
          * The number of seconds until a {@link UnknownLimitRecord} will expire.
          *
          * This is set to a somewhat short duration, rather than a long one. This avoids
-         * {@link {@link GitHubClient#rateLimit(RateLimitTarget)}} requesting rate limit updates continuously, but also
-         * avoids holding on to stale unknown records indefinitely.
+         * {@link GitHubClient#rateLimit(RateLimitTarget)} requesting rate limit updates continuously, but also avoids
+         * holding on to stale unknown records indefinitely.
          *
          * When merging {@link GHRateLimit} instances, {@link UnknownLimitRecord}s will be superseded by incoming
          * regular {@link Record}s.

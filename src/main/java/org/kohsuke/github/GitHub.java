@@ -684,8 +684,8 @@ public class GitHub {
      * OAuth Apps must authenticate using an OAuth token.
      *
      * @return the paged iterable of GHMarketplaceUserPurchase
-     * @see <a href="https://developer.github.com/v3/apps/marketplace/#get-a-users-marketplace-purchases">Get a user's
-     *      Marketplace purchases</a>
+     * @see <a href="https://developer.github.com/v3/apps/marketplace/#get-a-users-marketplace-purchases">Get a
+     *      user&apos;s Marketplace purchases</a>
      */
     public PagedIterable<GHMarketplaceUserPurchase> getMyMarketplacePurchases() {
         return createRequest().withUrlPath("/user/marketplace_purchases")

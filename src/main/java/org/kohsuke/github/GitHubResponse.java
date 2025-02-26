@@ -72,7 +72,7 @@ class GitHubResponse<T> {
     }
 
     /**
-     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@link T}.
+     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@code T}.
      *
      * @param <T>
      *            the type
@@ -80,7 +80,7 @@ class GitHubResponse<T> {
      *            response info to parse.
      * @param type
      *            the type to be constructed.
-     * @return a new instance of {@link T}.
+     * @return a new instance of {@code T}.
      * @throws IOException
      *             if there is an I/O Exception.
      */
@@ -111,7 +111,7 @@ class GitHubResponse<T> {
     }
 
     /**
-     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@link T}.
+     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@code T}.
      *
      * @param <T>
      *            the type
@@ -119,7 +119,7 @@ class GitHubResponse<T> {
      *            response info to parse.
      * @param instance
      *            the object to fill with data parsed from body
-     * @return a new instance of {@link T}.
+     * @return a new instance of {@code T}.
      * @throws IOException
      *             if there is an I/O Exception.
      */
@@ -207,7 +207,7 @@ class GitHubResponse<T> {
     }
 
     /**
-     * The body of the response parsed as a {@link T}.
+     * The body of the response parsed as a {@code T}.
      *
      * @return body of the response
      */

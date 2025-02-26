@@ -19,7 +19,7 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
  *
  * @author Kohsuke Kawaguchi
  * @author Liam Newman
- * @see GitHubBuilder#withAbuseLimitHandler(AbuseLimitHandler) GitHubBuilder#withRateLimitHandler(AbuseLimitHandler)
+ * @see GitHubBuilder#withAbuseLimitHandler(GitHubAbuseLimitHandler)
  * @see GitHubRateLimitHandler
  */
 public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler {
@@ -81,7 +81,8 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      *            the response from the GitHub connector
      * @return true if either "Retry-After" or "gh-limited-by" headers are present
      * @see <a href=
-     *      "https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#handle-rate-limit-errors-appropriately</a>
+     *      "https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#handle-rate-limit-errors-appropriately">GitHub
+     *      API Rate Limiting Documentation</a>
      */
     private boolean hasRetryOrLimitHeader(GitHubConnectorResponse connectorResponse) {
         return hasHeader(connectorResponse, "Retry-After") || hasHeader(connectorResponse, "gh-limited-by");

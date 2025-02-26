@@ -1774,7 +1774,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     /**
      * Test searching for pull requests.
      *
-     * @throws IOException
+     * @throws Exception
      *             the exception
      */
     @Test

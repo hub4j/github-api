@@ -19,7 +19,7 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
  *
  * @author Kohsuke Kawaguchi
  * @author Liam Newman
- * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler) GitHubBuilder#withRateLimitHandler(RateLimitHandler)
+ * @see GitHubBuilder#withRateLimitHandler(GitHubRateLimitHandler)
  * @see GitHubAbuseLimitHandler
  */
 public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {

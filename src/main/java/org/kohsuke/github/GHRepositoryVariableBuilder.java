@@ -17,7 +17,7 @@ public class GHRepositoryVariableBuilder<S> extends AbstractBuilder<GHRepository
      *
      * @param intermediateReturnType
      *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
-     *            {@link S} the same as {@link GHRepositoryVariable}, this builder will commit changes after each call
+     *            {@code S} the same as {@link GHRepositoryVariable}, this builder will commit changes after each call
      *            to {@link #with(String, Object)}.
      * @param root
      *            the GitHub instance to which updates will be sent

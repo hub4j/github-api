@@ -9,9 +9,9 @@ import javax.annotation.Nonnull;
 
 // TODO: Auto-generated Javadoc
 /**
- * May be used for any item that has pagination information. Iterates over paginated {@link T} objects (not the items
- * inside the page). Also exposes {@link #finalResponse()} to allow getting a full {@link GitHubResponse<T>} after
- * iterating completes.
+ * May be used for any item that has pagination information. Iterates over paginated {@code T} objects (not the items
+ * inside the page). Also exposes {@link #finalResponse()} to allow getting a full {@link GitHubResponse}{@code <T>}
+ * after iterating completes.
  *
  * Works for array responses, also works for search results which are single instances with an array of items inside.
  *

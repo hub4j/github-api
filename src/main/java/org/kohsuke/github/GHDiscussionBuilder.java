@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
  * Base class for creating or updating a discussion.
  *
  * @param <S>
- *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
+ *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@code S}
  *            the same as {@link GHLabel}, this builder will commit changes after each call to
  *            {@link #with(String, Object)}.
  */
@@ -23,7 +23,7 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
      *
      * @param intermediateReturnType
      *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
-     *            {@link S} the same as {@link GHDiscussion}, this builder will commit changes after each call to
+     *            {@code S} the same as {@link GHDiscussion}, this builder will commit changes after each call to
      *            {@link #with(String, Object)}.
      * @param team
      *            the GitHub team. Updates will be sent to the root of this team.

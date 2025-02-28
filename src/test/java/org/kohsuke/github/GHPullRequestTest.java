@@ -918,9 +918,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         prSingle.getMergeable();
         assertThat(prSingle.getUser().root(), notNullValue());
 
-        PagedIterable<GHPullRequest> ghPullRequests = getRepository().queryPullRequests()
-                .state(GHIssueState.OPEN)
-                .list();
+        List<GHPullRequest> ghPullRequests = getRepository().getPullRequests(GHIssueState.OPEN);
         for (GHPullRequest pr : ghPullRequests) {
             assertThat(pr.getUser().root(), notNullValue());
             pr.getMergeable();

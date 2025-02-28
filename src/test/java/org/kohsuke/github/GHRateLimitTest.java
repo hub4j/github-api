@@ -188,7 +188,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // Verify the requesting a search url updates the search rate limit
         assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(30));
 
-        HashMap<String, Object> searchResult = (HashMap<String, Object>) gitHub.createRequest()
+        HashMap<String, Object> searchResult = gitHub.createRequest()
                 .rateLimit(RateLimitTarget.SEARCH)
                 .setRawUrlPath(mockGitHub.apiServer().baseUrl()
                         + "/search/repositories?q=tetris+language%3Aassembly&sort=stars&order=desc")

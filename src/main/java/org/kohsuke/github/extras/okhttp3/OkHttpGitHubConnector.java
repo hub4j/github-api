@@ -2,7 +2,6 @@ package org.kohsuke.github.extras.okhttp3;
 
 import okhttp3.*;
 import org.apache.commons.io.IOUtils;
-import org.kohsuke.github.*;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;

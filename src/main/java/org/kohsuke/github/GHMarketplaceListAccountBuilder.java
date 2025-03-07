@@ -1,7 +1,5 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
-
 // TODO: Auto-generated Javadoc
 /**
  * Returns any accounts associated with a plan, including free plans.
@@ -72,10 +70,8 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
      * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
      *
      * @return a paged iterable instance of GHMarketplaceAccountPlan
-     * @throws IOException
-     *             on error
      */
-    public PagedIterable<GHMarketplaceAccountPlan> createRequest() throws IOException {
+    public PagedIterable<GHMarketplaceAccountPlan> createRequest() {
         return builder.withUrlPath(String.format("/marketplace_listing/plans/%d/accounts", this.planId))
                 .toIterable(GHMarketplaceAccountPlan[].class, null);
     }

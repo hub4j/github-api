@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import org.kohsuke.github.internal.EnumUtils;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
@@ -78,10 +77,8 @@ public class GHRepositoryDiscussion extends GHObject {
      * Gets the answer chosen by.
      *
      * @return the answer chosen by
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public GHUser getAnswerChosenBy() throws IOException {
+    public GHUser getAnswerChosenBy() {
         return root().intern(answerChosenBy);
     }
 
@@ -116,10 +113,8 @@ public class GHRepositoryDiscussion extends GHObject {
      * Gets the user.
      *
      * @return the user
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public GHUser getUser() throws IOException {
+    public GHUser getUser() {
         return root().intern(user);
     }
 

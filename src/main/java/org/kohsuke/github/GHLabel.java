@@ -143,11 +143,9 @@ public class GHLabel extends GitHubInteractiveObject {
      * @param repository
      *            the repository in which the label will be created.
      * @return a {@link Creator}
-     * @throws IOException
-     *             the io exception
      */
     @BetaApi
-    static Creator create(GHRepository repository) throws IOException {
+    static Creator create(GHRepository repository) {
         return new Creator(repository);
     }
 
@@ -176,10 +174,8 @@ public class GHLabel extends GitHubInteractiveObject {
      * @param repository
      *            the repository to read from
      * @return iterable of all labels
-     * @throws IOException
-     *             the io exception
      */
-    static PagedIterable<GHLabel> readAll(@Nonnull final GHRepository repository) throws IOException {
+    static PagedIterable<GHLabel> readAll(@Nonnull final GHRepository repository) {
         return repository.root()
                 .createRequest()
                 .withUrlPath(repository.getApiTailUrl("labels"))

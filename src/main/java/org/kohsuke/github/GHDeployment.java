@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
@@ -169,10 +168,8 @@ public class GHDeployment extends GHObject {
      * Gets creator.
      *
      * @return the creator
-     * @throws IOException
-     *             the io exception
      */
-    public GHUser getCreator() throws IOException {
+    public GHUser getCreator() {
         return root().intern(creator);
     }
 

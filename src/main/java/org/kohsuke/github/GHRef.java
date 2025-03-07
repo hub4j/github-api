@@ -145,10 +145,8 @@ public class GHRef extends GitHubInteractiveObject {
      * @param refType
      *            the type of reg to search for e.g. <code>tags</code> or <code>commits</code>
      * @return paged iterable of all refs of the specified type
-     * @throws IOException
-     *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
-    static PagedIterable<GHRef> readMatching(GHRepository repository, String refType) throws IOException {
+    static PagedIterable<GHRef> readMatching(GHRepository repository, String refType) {
         if (refType.startsWith("refs/")) {
             refType = refType.replaceFirst("refs/", "");
         }

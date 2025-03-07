@@ -34,7 +34,7 @@
   <properties>
     <spring.boot.version>3.3.5</spring.boot.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotbugs-maven-plugin.version>4.8.6.4</spotbugs-maven-plugin.version>
+    <spotbugs-maven-plugin.version>4.9.1.0</spotbugs-maven-plugin.version>
     <spotbugs.version>4.8.6</spotbugs.version>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <hamcrest.version>3.0</hamcrest.version>
@@ -383,16 +383,8 @@
         <artifactId>japicmp-maven-plugin</artifactId>
         <version>0.23.0</version>
         <configuration>
-          <oldVersion>
-            <dependency>
-              <groupId>${project.groupId}</groupId>
-              <artifactId>${project.artifactId}</artifactId>
-              <version>2.0.0-alpha-1</version>
-              <type>jar</type>
-            </dependency>
-          </oldVersion>
           <parameter>
-            <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications> -->
+            <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
             <!-- <breakBuildBasedOnSemanticVersioning>true</breakBuildBasedOnSemanticVersioning> -->
             <onlyModified>true</onlyModified>
             <includeSynthetic>true</includeSynthetic>
@@ -419,7 +411,7 @@
       <dependency>
         <groupId>com.fasterxml.jackson</groupId>
         <artifactId>jackson-bom</artifactId>
-        <version>2.18.2</version>
+        <version>2.18.3</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>   
@@ -482,7 +474,7 @@
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
-      <version>4.2.2</version>
+      <version>4.3.0</version>
       <scope>test</scope>
     </dependency>
     <!-- junit vintage engine is used because junit4 and junit5 tests are required -->
@@ -570,13 +562,13 @@
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>2.11.0</version>
+      <version>2.12.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>2.0.16</version>
+      <version>2.0.17</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

@@ -520,10 +520,8 @@ public class GHCommit {
      * Retrieves a list of branches where this commit is the head commit.
      *
      * @return {@link PagedIterable} with the branches where the commit is the head commit
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHBranch> listBranchesWhereHead() throws IOException {
+    public PagedIterable<GHBranch> listBranchesWhereHead() {
         return owner.root()
                 .createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/branches-where-head",

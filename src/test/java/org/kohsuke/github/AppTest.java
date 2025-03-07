@@ -1058,13 +1058,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test app.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
     @Ignore("Needs mocking check")
     @Test
-    public void testApp() throws IOException {
+    public void testApp() {
         // System.out.println(gitHub.getMyself().getEmails());
 
         // GHRepository r = gitHub.getOrganization("jenkinsci").createRepository("kktest4", "Kohsuke's test",
@@ -1395,12 +1392,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test issue search.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testIssueSearch() throws IOException {
+    public void testIssueSearch() {
         PagedSearchIterable<GHIssue> r = gitHub.searchIssues()
                 .mentions("kohsuke")
                 .isOpen()
@@ -1419,7 +1413,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     /**
      * Test searching for pull requests.
      *
-     * @throws IOException
+     * @throws Exception
      *             the exception
      */
     @Test

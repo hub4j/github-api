@@ -38,12 +38,9 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test created project.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testCreatedProject() throws IOException {
+    public void testCreatedProject() {
         assertThat(project, notNullValue());
         assertThat(project.getName(), equalTo("test-project"));
         assertThat(project.getBody(), equalTo("This is a test project"));

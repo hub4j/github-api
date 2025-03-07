@@ -54,7 +54,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
 
         assertThat(GHIssueState.values().length, equalTo(3));
 
-        assertThat(GHIssueStateReason.values().length, equalTo(3));
+        assertThat(GHIssueStateReason.values().length, equalTo(4));
 
         assertThat(GHMarketplaceAccountType.values().length, equalTo(2));
 

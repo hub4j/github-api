@@ -161,6 +161,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
         private boolean inputStreamRead = false;
         private byte[] inputBytes = null;
         private boolean isClosed = false;
+        private boolean avoidBufferedResponseStream;
 
         /**
          * Constructor for ByteArray Response
@@ -176,6 +177,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
                 int statusCode,
                 @Nonnull Map<String, List<String>> headers) {
             super(request, statusCode, headers);
+            avoidBufferedResponseStream = request.avoidBufferedResponseStream();
         }
 
         /**
@@ -187,6 +189,17 @@ public abstract class GitHubConnectorResponse implements Closeable {
             if (isClosed) {
                 throw new IOException("Response is closed");
             }
+
+            if (avoidBufferedResponseStream) {
+                synchronized (this) {
+                    if (inputStreamRead) {
+                        throw new IOException("Response is already consumed");
+                    }
+                    inputStreamRead = true;
+                    return wrapStream(rawBodyStream());
+                }
+            }
+
             synchronized (this) {
                 if (!inputStreamRead) {
                     InputStream rawStream = rawBodyStream();

@@ -115,7 +115,11 @@ public class GHArtifact extends GHObject {
     public <T> T download(InputStreamFunction<T> streamFunction) throws IOException {
         requireNonNull(streamFunction, "Stream function must not be null");
 
-        return root().createRequest().method("GET").withUrlPath(getApiRoute(), "zip").fetchStream(streamFunction);
+        return root().createRequest()
+                .method("GET")
+                .withUrlPath(getApiRoute(), "zip")
+                .avoidBufferedResponseStream()
+                .fetchStream(streamFunction);
     }
 
     private String getApiRoute() {

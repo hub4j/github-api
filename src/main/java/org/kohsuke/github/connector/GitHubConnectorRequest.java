@@ -81,4 +81,13 @@ public interface GitHubConnectorRequest {
      * @return true, if the body is not null. Otherwise, false.
      */
     boolean hasBody();
+
+    /**
+     * Whether the response stream to this request is not buffered. It is used to avoid huge response caching.
+     *
+     * @return true, if the response stream is not buffered.
+     */
+    default boolean avoidBufferedResponseStream() {
+        return false;
+    }
 }

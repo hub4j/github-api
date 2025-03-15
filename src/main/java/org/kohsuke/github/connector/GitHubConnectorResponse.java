@@ -87,9 +87,9 @@ public abstract class GitHubConnectorResponse implements Closeable {
     public abstract InputStream bodyStream() throws IOException;
 
     /**
-     * Gets the {@link GitHubConnectorRequest} for this response.
+     * Gets the {@link GitHubConnector} for this response.
      *
-     * @return the {@link GitHubConnectorRequest} for this response.
+     * @return the {@link GitHubConnector} for this response.
      */
     @Nonnull
     public GitHubConnectorRequest request() {
@@ -161,7 +161,6 @@ public abstract class GitHubConnectorResponse implements Closeable {
         private boolean inputStreamRead = false;
         private byte[] inputBytes = null;
         private boolean isClosed = false;
-        private boolean avoidBufferedResponseStream;
 
         /**
          * Constructor for ByteArray Response
@@ -177,7 +176,6 @@ public abstract class GitHubConnectorResponse implements Closeable {
                 int statusCode,
                 @Nonnull Map<String, List<String>> headers) {
             super(request, statusCode, headers);
-            avoidBufferedResponseStream = request.avoidBufferedResponseStream();
         }
 
         /**
@@ -190,29 +188,27 @@ public abstract class GitHubConnectorResponse implements Closeable {
                 throw new IOException("Response is closed");
             }
 
-            if (avoidBufferedResponseStream) {
-                synchronized (this) {
-                    if (inputStreamRead) {
-                        throw new IOException("Response is already consumed");
-                    }
-                    inputStreamRead = true;
-                    return wrapStream(rawBodyStream());
-                }
-            }
-
             synchronized (this) {
+                InputStream body;
                 if (!inputStreamRead) {
-                    InputStream rawStream = rawBodyStream();
-                    try (InputStream stream = wrapStream(rawStream)) {
-                        if (stream != null) {
-                            inputBytes = IOUtils.toByteArray(stream);
+                    body = wrapStream(rawBodyStream());
+                    if (!request().avoidBufferedResponseStream()) {
+                        try (InputStream stream = body) {
+                            if (stream != null) {
+                                inputBytes = IOUtils.toByteArray(stream);
+                            }
                         }
                     }
                     inputStreamRead = true;
+                    if (request().avoidBufferedResponseStream()) {
+                        return body;
+                    }
                 }
             }
 
-            if (inputBytes == null) {
+            if (request().avoidBufferedResponseStream()) {
+                throw new IOException("Response is already consumed");
+            } else if (inputBytes == null) {
                 throw new IOException("Response body missing, stream null");
             }
 

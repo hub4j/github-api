@@ -169,9 +169,6 @@
                       <!-- Unbridged test changes -->
                       <exclude>org.kohsuke.github.GHCommit.GHAuthor</exclude>
 
-                      <!-- Ignore default interface method coverage -->
-                      <exclude>org.kohsuke.github.connector.GitHubConnectorRequest</exclude>
-                      
                       <!-- TODO: Some coverage, but more needed -->
                       <exclude>org.kohsuke.github.GHIssue.PullRequest</exclude>
                       <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>

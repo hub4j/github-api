@@ -128,7 +128,10 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *             the io exception
      */
     public <T> T fetchStream(@Nonnull InputStreamFunction<T> handler) throws IOException {
-        return client.sendRequest(this, (connectorResponse) -> handler.apply(connectorResponse.bodyStream())).body();
+        return client
+                .sendRequest(this.avoidBufferedResponseStream(),
+                        (connectorResponse) -> handler.apply(connectorResponse.bodyStream()))
+                .body();
     }
 
     /**

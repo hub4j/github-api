@@ -13,6 +13,8 @@ import java.util.zip.GZIPInputStream;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+import static java.net.HttpURLConnection.HTTP_OK;
+
 /**
  * Response information supplied when a response is received and before the body is processed.
  * <p>
@@ -117,6 +119,15 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
+     * Use unbufferred body stream.
+     *
+     * @return true when unbuffered body stream can should be used.
+     */
+    boolean useUnbufferedBodyStream() {
+        return statusCode() == HTTP_OK && request().avoidBufferedResponseStream();
+    }
+
+    /**
      * Handles wrapping the body stream if indicated by the "Content-Encoding" header.
      *
      * @param stream
@@ -192,7 +203,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
                 InputStream body;
                 if (!inputStreamRead) {
                     body = wrapStream(rawBodyStream());
-                    if (!request().avoidBufferedResponseStream()) {
+                    if (!useUnbufferedBodyStream()) {
                         try (InputStream stream = body) {
                             if (stream != null) {
                                 inputBytes = IOUtils.toByteArray(stream);
@@ -200,13 +211,13 @@ public abstract class GitHubConnectorResponse implements Closeable {
                         }
                     }
                     inputStreamRead = true;
-                    if (request().avoidBufferedResponseStream()) {
+                    if (useUnbufferedBodyStream()) {
                         return body;
                     }
                 }
             }
 
-            if (request().avoidBufferedResponseStream()) {
+            if (useUnbufferedBodyStream()) {
                 throw new IOException("Response is already consumed");
             } else if (inputBytes == null) {
                 throw new IOException("Response body missing, stream null");

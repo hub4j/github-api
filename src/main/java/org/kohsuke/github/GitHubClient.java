@@ -629,7 +629,11 @@ class GitHubClient {
         LOGGER.log(FINEST, () -> {
             String body;
             try {
-                body = GitHubResponse.getBodyAsString(response);
+                if (response.request().avoidBufferedResponseStream()) {
+                    body = "Stream-once body not logged.";
+                } else {
+                    body = GitHubResponse.getBodyAsString(response);
+                }
             } catch (Throwable e) {
                 body = "Error reading response body";
             }

@@ -9,6 +9,7 @@ import org.kohsuke.github.GHWorkflowRun.Conclusion;
 import org.kohsuke.github.GHWorkflowRun.Status;
 import org.kohsuke.github.function.InputStreamFunction;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
@@ -395,6 +396,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
         // Test download from upload-artifact@v3 infrastructure
         String artifactContent = artifacts.get(0).download((is) -> {
+            assertThat(is, not(isA(ByteArrayInputStream.class)));
+
             try (ZipInputStream zis = new ZipInputStream(is)) {
                 StringBuilder sb = new StringBuilder();
 

@@ -295,7 +295,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
                 method,
                 rateLimitTarget,
                 body,
-                forceBody);
+                forceBody,
+                avoidBufferedResponseStream);
     }
 
     private String buildTailApiUrl() {
@@ -379,6 +380,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
                     "GET",
                     RateLimitTarget.CORE,
                     null,
+                    false,
                     false);
         }
 
@@ -390,7 +392,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
                 @Nonnull String method,
                 @Nonnull RateLimitTarget rateLimitTarget,
                 @CheckForNull byte[] body,
-                boolean forceBody) {
+                boolean forceBody,
+                boolean avoidBufferedResponseStream) {
             this.args = new ArrayList<>(args);
             TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
             for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
@@ -404,6 +407,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
             this.rateLimitTarget = rateLimitTarget;
             this.body = body;
             this.forceBody = forceBody;
+            this.avoidBufferedResponseStream = avoidBufferedResponseStream;
         }
 
         /**

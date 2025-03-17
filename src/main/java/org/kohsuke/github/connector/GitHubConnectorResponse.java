@@ -23,6 +23,9 @@ import static java.net.HttpURLConnection.HTTP_OK;
 /**
  * Response information supplied when a response is received and before the body is processed.
  * <p>
+ * During a request to GitHub, {@link GitHubConnector#send(GitHubConnectorRequest)} returns a
+ * {@link GitHubConnectorResponse}. This is processed to create a GitHubResponse.
+ * <p>
  * Instances of this class are closed once the response is done being processed. This means that {@link #bodyStream()}
  * will not be readable after a call is completed.
  *
@@ -43,11 +46,10 @@ public abstract class GitHubConnectorResponse implements Closeable {
     @Nonnull
     private final Map<String, List<String>> headers;
     private boolean bodyStreamCalled = false;
-    private boolean bodyBytesLoaded = false;
     private InputStream bodyStream = null;
     private byte[] bodyBytes = null;
     private boolean isClosed = false;
-    private boolean forceBufferedBodyStream;
+    private boolean isBodyStreamRereadable;
 
     /**
      * GitHubConnectorResponse constructor
@@ -71,6 +73,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
             caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList<>(entry.getValue())));
         }
         this.headers = Collections.unmodifiableMap(caseInsensitiveMap);
+        this.isBodyStreamRereadable = false;
     }
 
     /**
@@ -92,53 +95,60 @@ public abstract class GitHubConnectorResponse implements Closeable {
     /**
      * The response body as an {@link InputStream}.
      *
+     * When {@link #isBodyStreamRereadable} is false, {@link #bodyStream()} can only be called once and the returned
+     * stream should be assumed to be read-once and not resetable. This is the default behavior for HTTP_OK responses
+     * and significantly reduces memory usage.
+     *
+     * When {@link #isBodyStreamRereadable} is true, {@link #bodyStream()} can be called be called multiple times. The
+     * full stream data is read into a byte array during the first call. Each call returns a new stream backed by the
+     * same byte array. This uses more memory, but is required to enable rereading the body stream during trace logging,
+     * debugging, and error responses.
+     *
      * @return the response body
      * @throws IOException
      *             if response stream is null or an I/O Exception occurs.
      */
     @Nonnull
     public InputStream bodyStream() throws IOException {
-        InputStream body = null;
         synchronized (this) {
             if (isClosed) {
                 throw new IOException("Response is closed");
             }
 
             if (bodyStreamCalled) {
-                if (!bodyBytesLoaded) {
-                    throw new IOException("Response is already consumed");
+                if (!isBodyStreamRereadable()) {
+                    throw new IOException("Response body not rereadable");
                 }
             } else {
-                body = wrapStream(rawBodyStream());
+                bodyStream = wrapStream(rawBodyStream());
                 bodyStreamCalled = true;
-                bodyStream = body;
-                if (useBufferedBodyStream()) {
-                    bodyBytesLoaded = true;
-                    try (InputStream stream = body) {
-                        if (stream != null) {
-                            bodyBytes = IOUtils.toByteArray(stream);
-                        }
-                    }
-                    bodyStream = null;
-                }
             }
 
-            if (bodyBytesLoaded) {
-                body = bodyBytes == null ? null : new ByteArrayInputStream(bodyBytes);
+            if (bodyStream == null) {
+                throw new IOException("Response body missing, stream null");
+            } else if (!isBodyStreamRereadable()) {
+                return bodyStream;
             }
-        }
 
-        if (body == null) {
-            throw new IOException("Response body missing, stream null");
-        }
+            // Load rereadable byte array
+            if (bodyBytes == null) {
+                bodyBytes = IOUtils.toByteArray(bodyStream);
+                // Close the raw body stream after successfully reading
+                IOUtils.closeQuietly(bodyStream);
+            }
 
-        return body;
+            return new ByteArrayInputStream(bodyBytes);
+        }
     }
 
     /**
      * Get the raw implementation specific body stream for this response.
      *
-     * This method will only be called once to completion. If an exception is thrown, it may be called multiple times.
+     * This method will only be called once to completion. If an exception is thrown by this method, it may be called
+     * multiple times.
+     *
+     * The stream returned from this method will be closed when the response is closed or sooner. Inheriting classes do
+     * not need to close it.
      *
      * @return the stream for the raw response
      * @throws IOException
@@ -178,24 +188,40 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
-     * Use unbufferred body stream.
+     * The body stream rereadable state.
      *
-     * @return true when unbuffered body stream can should be used.
+     * Body stream defaults to read once for HTTP_OK responses (to reduce memory usage). For non-HTTP_OK responses, body
+     * stream is switched to rereadable (in-memory byte array) for error processing.
+     *
+     * Calling {@link #setBodyStreamRereadable()} will force {@link #isBodyStreamRereadable} to be true for this
+     * response regardless of {@link #statusCode} value.
+     *
+     * @return true when body stream is rereadable.
      */
-    boolean useBufferedBodyStream() {
+    public boolean isBodyStreamRereadable() {
         synchronized (this) {
-            return forceBufferedBodyStream || statusCode() != HTTP_OK;
+            return isBodyStreamRereadable || statusCode != HTTP_OK;
         }
     }
 
     /**
-     * Use unbufferred body stream.
+     * Force body stream to rereadable regardless of status code.
      *
-     * @return true when unbuffered body stream can should be used.
+     * Calling {@link #setBodyStreamRereadable()} will force {@link #isBodyStreamRereadable} to be true for this
+     * response regardless of {@link #statusCode} value.
+     *
+     * This is required to support body value logging during low-level tracing but should be avoided in general since it
+     * consumes significantly more memory.
+     *
+     * Will throw runtime exception if a non-rereadable body stream has already been returned from
+     * {@link #bodyStream()}.
      */
-    public void forceBufferedBodyStream() {
+    public void setBodyStreamRereadable() {
         synchronized (this) {
-            this.forceBufferedBodyStream = true;
+            if (bodyStreamCalled && !isBodyStreamRereadable()) {
+                throw new RuntimeException("bodyStream() already called in read-once mode");
+            }
+            isBodyStreamRereadable = true;
         }
     }
 
@@ -250,7 +276,10 @@ public abstract class GitHubConnectorResponse implements Closeable {
 
     /**
      * A ByteArrayResponse class
+     *
+     * @deprecated Inherit directly from {@link GitHubConnectorResponse}.
      */
+    @Deprecated
     public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
 
         /**

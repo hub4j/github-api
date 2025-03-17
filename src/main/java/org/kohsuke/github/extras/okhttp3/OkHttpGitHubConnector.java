@@ -104,7 +104,7 @@ public class OkHttpGitHubConnector implements GitHubConnector {
      *
      * Implementation specific to {@link okhttp3.Response}.
      */
-    private static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse.ByteArrayResponse {
+    private static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse {
 
         @Nonnull
         private final Response response;

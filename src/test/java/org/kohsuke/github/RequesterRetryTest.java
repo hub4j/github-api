@@ -3,18 +3,17 @@ package org.kohsuke.github;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
+import org.kohsuke.github.connector.GitHubConnectorResponseTest;
 import org.kohsuke.github.extras.HttpClientGitHubConnector;
 import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
 
 import java.io.*;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -566,55 +565,12 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    private static final GitHubConnectorRequest IGNORED_EMPTY_REQUEST = new GitHubConnectorRequest() {
-        @NotNull
-        @Override
-        public String method() {
-            return null;
-        }
-
-        @NotNull
-        @Override
-        public Map<String, List<String>> allHeaders() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public String header(String name) {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public String contentType() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public InputStream body() {
-            return null;
-        }
-
-        @NotNull
-        @Override
-        public URL url() {
-            return null;
-        }
-
-        @Override
-        public boolean hasBody() {
-            return false;
-        }
-    };
-
     private static class GitHubConnectorResponseWrapper extends GitHubConnectorResponse {
 
         private final GitHubConnectorResponse wrapped;
 
         GitHubConnectorResponseWrapper(GitHubConnectorResponse response) {
-            super(IGNORED_EMPTY_REQUEST, -1, new HashMap<>());
+            super(GitHubConnectorResponseTest.EMPTY_REQUEST, -1, new HashMap<>());
             wrapped = response;
         }
 

@@ -93,7 +93,7 @@ public class HttpClientGitHubConnector implements GitHubConnector {
      *
      * Implementation specific to {@link HttpResponse}.
      */
-    private static class HttpClientGitHubConnectorResponse extends GitHubConnectorResponse.ByteArrayResponse {
+    private static class HttpClientGitHubConnectorResponse extends GitHubConnectorResponse {
 
         @Nonnull
         private final HttpResponse<InputStream> response;
@@ -113,7 +113,6 @@ public class HttpClientGitHubConnector implements GitHubConnector {
         @Override
         public void close() throws IOException {
             super.close();
-            IOUtils.closeQuietly(response.body());
         }
     }
 }

@@ -1037,6 +1037,65 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     *
+     * Test enabling auto merge for pull request
+     *
+     * @throws IOException
+     *             the Exception
+     */
+    @Test
+    public void enablePullRequestAutoMerge() throws IOException {
+        String authorEmail = "sa20207@naver.com";
+        String clientMutationId = "github-api";
+        String commitBody = "This is commit body.";
+        String commitTitle = "This is commit title.";
+        String expectedCommitHeadOid = "4888b44d7204dd05680e90159af839c8b1194b6d";
+
+        GHPullRequest pullRequest = gitHub.getRepository("seate/for-test").getPullRequest(9);
+
+        pullRequest.requestEnableAutoMerge(authorEmail,
+                clientMutationId,
+                commitBody,
+                commitTitle,
+                expectedCommitHeadOid,
+                GHPullRequest.MergeMethod.MERGE);
+
+        AutoMerge autoMerge = pullRequest.getAutoMerge();
+        assertThat(autoMerge.getEnabledBy().getEmail(), is(authorEmail));
+        assertThat(autoMerge.getCommitMessage(), is(commitBody));
+        assertThat(autoMerge.getCommitTitle(), is(commitTitle));
+        assertThat(autoMerge.getMergeMethod(), is(GHPullRequest.MergeMethod.MERGE));
+    }
+
+    /**
+     * Test enabling auto merge for pull request with no verified email throws GraphQL exception
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    @Test
+    public void enablePullRequestAutoMergeFailure() throws IOException {
+        String authorEmail = "failureEmail@gmail.com";
+        String clientMutationId = "github-api";
+        String commitBody = "This is commit body.";
+        String commitTitle = "This is commit title.";
+        String expectedCommitHeadOid = "4888b44d7204dd05680e90159af839c8b1194b6d";
+
+        GHPullRequest pullRequest = gitHub.getRepository("seate/for-test").getPullRequest(9);
+
+        try {
+            pullRequest.requestEnableAutoMerge(authorEmail,
+                    clientMutationId,
+                    commitBody,
+                    commitTitle,
+                    expectedCommitHeadOid,
+                    GHPullRequest.MergeMethod.MERGE);
+        } catch (IOException e) {
+            assertThat(e.getMessage(), containsString("does not have a verified email"));
+        }
+    }
+
+    /**
      * Gets the repository.
      *
      * @return the repository

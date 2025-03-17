@@ -275,9 +275,6 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testResponseCodeFailureExceptions() throws Exception {
-        // Cover default method in GitHubConnectorRequest
-        assertThat(IGNORED_EMPTY_REQUEST.avoidBufferedResponseStream(), equalTo(false));
-
         // No retry for these Exceptions
         GitHubConnector connector = new SendThrowingGitHubConnector<>(() -> {
             throw new IOException("Custom");
@@ -653,6 +650,12 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
         @Override
         public void close() throws IOException {
             wrapped.close();
+        }
+
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'rawBodyStream'");
         }
     }
 

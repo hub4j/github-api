@@ -611,7 +611,7 @@
                 </configuration>
               </execution>
               <execution>
-                <id>httpclient-test</id>
+                <id>httpclient-test-tracing</id>
                 <phase>integration-test</phase>
                 <goals>
                   <goal>test</goal>

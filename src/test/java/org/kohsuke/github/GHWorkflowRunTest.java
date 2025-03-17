@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -394,10 +396,14 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         checkArtifactProperties(artifacts.get(0), "artifact1");
         checkArtifactProperties(artifacts.get(1), "artifact2");
 
+        Logger clientLogger = Logger.getLogger(GitHubClient.class.getName());
+
         // Test download from upload-artifact@v3 infrastructure
         String artifactContent = artifacts.get(0).download((is) -> {
-            assertThat(is, not(isA(ByteArrayInputStream.class)));
-
+            // At finest log level, all body responses are byte arrays.
+            if (clientLogger.getLevel() != Level.FINEST) {
+                assertThat(is, not(isA(ByteArrayInputStream.class)));
+            }
             try (ZipInputStream zis = new ZipInputStream(is)) {
                 StringBuilder sb = new StringBuilder();
 

@@ -51,7 +51,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
     private final RateLimitTarget rateLimitTarget;
     private final byte[] body;
     private final boolean forceBody;
-    private final boolean avoidBufferedResponseStream;
 
     private final URL url;
 
@@ -64,8 +63,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
             @Nonnull String method,
             @Nonnull RateLimitTarget rateLimitTarget,
             @CheckForNull byte[] body,
-            boolean forceBody,
-            boolean avoidBufferedResponseStream) {
+            boolean forceBody) {
         this.args = Collections.unmodifiableList(new ArrayList<>(args));
         TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
         for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
@@ -79,7 +77,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
         this.rateLimitTarget = rateLimitTarget;
         this.body = body;
         this.forceBody = forceBody;
-        this.avoidBufferedResponseStream = avoidBufferedResponseStream;
         String tailApiUrl = buildTailApiUrl();
         url = getApiURL(apiUrl, tailApiUrl);
     }
@@ -273,14 +270,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
     }
 
     /**
-     * Whether the response to this request should avoid buffered stream or not.
-     */
-    @Override
-    public boolean avoidBufferedResponseStream() {
-        return avoidBufferedResponseStream;
-    }
-
-    /**
      * Create a {@link Builder} from this request. Initial values of the builder will be the same as this
      * {@link GitHubRequest}.
      *
@@ -295,8 +284,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
                 method,
                 rateLimitTarget,
                 body,
-                forceBody,
-                avoidBufferedResponseStream);
+                forceBody);
     }
 
     private String buildTailApiUrl() {
@@ -366,7 +354,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
 
         private byte[] body;
         private boolean forceBody;
-        private boolean avoidBufferedResponseStream;
 
         /**
          * Create a new {@link GitHubRequest.Builder}
@@ -380,7 +367,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
                     "GET",
                     RateLimitTarget.CORE,
                     null,
-                    false,
                     false);
         }
 
@@ -392,8 +378,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
                 @Nonnull String method,
                 @Nonnull RateLimitTarget rateLimitTarget,
                 @CheckForNull byte[] body,
-                boolean forceBody,
-                boolean avoidBufferedResponseStream) {
+                boolean forceBody) {
             this.args = new ArrayList<>(args);
             TreeMap<String, List<String>> caseInsensitiveMap = new TreeMap<>(nullableCaseInsensitiveComparator);
             for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
@@ -407,7 +392,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
             this.rateLimitTarget = rateLimitTarget;
             this.body = body;
             this.forceBody = forceBody;
-            this.avoidBufferedResponseStream = avoidBufferedResponseStream;
         }
 
         /**
@@ -426,8 +410,7 @@ public class GitHubRequest implements GitHubConnectorRequest {
                     method,
                     rateLimitTarget,
                     body,
-                    forceBody,
-                    avoidBufferedResponseStream);
+                    forceBody);
         }
 
         /**
@@ -815,17 +798,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
          */
         public B inBody() {
             forceBody = true;
-            return (B) this;
-        }
-
-        /**
-         * We cache response stream into buffer by default, but some responses can be huge so we should avoid that.
-         * Setting this flag indicates that we should avoid buffered stream response.
-         *
-         * @return the request builder
-         */
-        public B avoidBufferedResponseStream() {
-            avoidBufferedResponseStream = true;
             return (B) this;
         }
     }

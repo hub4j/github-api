@@ -7,7 +7,12 @@ import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 
 import javax.annotation.CheckForNull;
@@ -37,6 +42,12 @@ public abstract class GitHubConnectorResponse implements Closeable {
     private final GitHubConnectorRequest request;
     @Nonnull
     private final Map<String, List<String>> headers;
+    private boolean bodyStreamCalled = false;
+    private boolean bodyBytesLoaded = false;
+    private InputStream bodyStream = null;
+    private byte[] bodyBytes = null;
+    private boolean isClosed = false;
+    private boolean forceBufferedBodyStream;
 
     /**
      * GitHubConnectorResponse constructor
@@ -86,7 +97,55 @@ public abstract class GitHubConnectorResponse implements Closeable {
      *             if response stream is null or an I/O Exception occurs.
      */
     @Nonnull
-    public abstract InputStream bodyStream() throws IOException;
+    public InputStream bodyStream() throws IOException {
+        InputStream body = null;
+        synchronized (this) {
+            if (isClosed) {
+                throw new IOException("Response is closed");
+            }
+
+            if (bodyStreamCalled) {
+                if (!bodyBytesLoaded) {
+                    throw new IOException("Response is already consumed");
+                }
+            } else {
+                body = wrapStream(rawBodyStream());
+                bodyStreamCalled = true;
+                bodyStream = body;
+                if (useBufferedBodyStream()) {
+                    bodyBytesLoaded = true;
+                    try (InputStream stream = body) {
+                        if (stream != null) {
+                            bodyBytes = IOUtils.toByteArray(stream);
+                        }
+                    }
+                    bodyStream = null;
+                }
+            }
+
+            if (bodyBytesLoaded) {
+                body = bodyBytes == null ? null : new ByteArrayInputStream(bodyBytes);
+            }
+        }
+
+        if (body == null) {
+            throw new IOException("Response body missing, stream null");
+        }
+
+        return body;
+    }
+
+    /**
+     * Get the raw implementation specific body stream for this response.
+     *
+     * This method will only be called once to completion. If an exception is thrown, it may be called multiple times.
+     *
+     * @return the stream for the raw response
+     * @throws IOException
+     *             if an I/O Exception occurs.
+     */
+    @CheckForNull
+    protected abstract InputStream rawBodyStream() throws IOException;
 
     /**
      * Gets the {@link GitHubConnector} for this response.
@@ -123,8 +182,33 @@ public abstract class GitHubConnectorResponse implements Closeable {
      *
      * @return true when unbuffered body stream can should be used.
      */
-    boolean useUnbufferedBodyStream() {
-        return statusCode() == HTTP_OK && request().avoidBufferedResponseStream();
+    boolean useBufferedBodyStream() {
+        synchronized (this) {
+            return forceBufferedBodyStream || statusCode() != HTTP_OK;
+        }
+    }
+
+    /**
+     * Use unbufferred body stream.
+     *
+     * @return true when unbuffered body stream can should be used.
+     */
+    public void forceBufferedBodyStream() {
+        synchronized (this) {
+            this.forceBufferedBodyStream = true;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() throws IOException {
+        synchronized (this) {
+            IOUtils.closeQuietly(bodyStream);
+            isClosed = true;
+            this.bodyBytes = null;
+        }
     }
 
     /**
@@ -169,10 +253,6 @@ public abstract class GitHubConnectorResponse implements Closeable {
      */
     public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
 
-        private boolean inputStreamRead = false;
-        private byte[] inputBytes = null;
-        private boolean isClosed = false;
-
         /**
          * Constructor for ByteArray Response
          *
@@ -187,62 +267,6 @@ public abstract class GitHubConnectorResponse implements Closeable {
                 int statusCode,
                 @Nonnull Map<String, List<String>> headers) {
             super(request, statusCode, headers);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        @Nonnull
-        public InputStream bodyStream() throws IOException {
-            if (isClosed) {
-                throw new IOException("Response is closed");
-            }
-
-            synchronized (this) {
-                InputStream body;
-                if (!inputStreamRead) {
-                    body = wrapStream(rawBodyStream());
-                    if (!useUnbufferedBodyStream()) {
-                        try (InputStream stream = body) {
-                            if (stream != null) {
-                                inputBytes = IOUtils.toByteArray(stream);
-                            }
-                        }
-                    }
-                    inputStreamRead = true;
-                    if (useUnbufferedBodyStream()) {
-                        return body;
-                    }
-                }
-            }
-
-            if (useUnbufferedBodyStream()) {
-                throw new IOException("Response is already consumed");
-            } else if (inputBytes == null) {
-                throw new IOException("Response body missing, stream null");
-            }
-
-            return new ByteArrayInputStream(inputBytes);
-        }
-
-        /**
-         * Get the raw implementation specific body stream for this response.
-         *
-         * This method will only be called once to completion. If an exception is thrown, it may be called multiple
-         * times.
-         *
-         * @return the stream for the raw response
-         * @throws IOException
-         *             if an I/O Exception occurs.
-         */
-        @CheckForNull
-        protected abstract InputStream rawBodyStream() throws IOException;
-
-        @Override
-        public void close() throws IOException {
-            isClosed = true;
-            this.inputBytes = null;
         }
     }
 }

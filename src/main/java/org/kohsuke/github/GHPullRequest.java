@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
@@ -627,6 +629,132 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         SQUASH,
         /** The rebase. */
         REBASE
+    }
+
+    /**
+     * Get pull request id for GraphQL
+     *
+     * @return The pull request id for GraphQL
+     * @throws IOException
+     *             the io exception
+     */
+    public String getGraphqlPullRequestId() throws IOException {
+        if (owner == null) {
+            throw new IllegalStateException("Repository owner is required to get the pull request ID");
+        }
+        String repositoryName = owner.getName();
+        String ownerName = owner.getOwnerName();
+
+        String graphqlBody = String.format(
+                "query GetPullRequestID { repository(name: \"%s\", owner: \"%s\") { pullRequest(number: %d) { id } } }",
+                repositoryName,
+                ownerName,
+                number);
+
+        GetGraphqlPullRequestIdResponse response = root().createGraphQLRequest(graphqlBody)
+                .fetchGraphQLResponse(GetGraphqlPullRequestIdResponse.class);
+
+        return response.getId();
+    }
+
+    /**
+     * The response from the GraphQL query to get the pull request ID. Minimum required fields are included.
+     */
+    private static class GetGraphqlPullRequestIdResponse {
+        private final PullRequestOwnerRepository repository;
+
+        @JsonCreator
+        public GetGraphqlPullRequestIdResponse(@JsonProperty("repository") PullRequestOwnerRepository repository) {
+            this.repository = repository;
+        }
+
+        public String getId() {
+            return repository.getId();
+        }
+
+        private static class PullRequestOwnerRepository {
+            private final GraphQLPullRequest pullRequest;
+
+            @JsonCreator
+            public PullRequestOwnerRepository(@JsonProperty("pullRequest") GraphQLPullRequest pullRequest) {
+                this.pullRequest = pullRequest;
+            }
+
+            public String getId() {
+                return pullRequest.getId();
+            }
+
+            private static class GraphQLPullRequest {
+                private final String id;
+
+                @JsonCreator
+                public GraphQLPullRequest(@JsonProperty("id") String id) {
+                    this.id = id;
+                }
+
+                public String getId() {
+                    return id;
+                }
+            }
+        }
+    }
+
+    /**
+     * Request to enable auto merge for a pull request.
+     *
+     * @param authorEmail
+     *            The email address to associate with this merge.
+     * @param clientMutationId
+     *            A unique identifier for the client performing the mutation.
+     * @param commitBody
+     *            Commit body to use for the commit when the PR is mergable; if omitted, a default message will be used.
+     *            NOTE: when merging with a merge queue any input value for commit message is ignored.
+     * @param commitHeadline
+     *            Commit headline to use for the commit when the PR is mergable; if omitted, a default message will be
+     *            used. NOTE: when merging with a merge queue any input value for commit headline is ignored.
+     * @param expectedHeadOid
+     *            The expected head OID of the pull request.
+     * @param mergeMethod
+     *            The merge method to use. If omitted, defaults to `MERGE`. NOTE: when merging with a merge queue any
+     *            input value for merge method is ignored.
+     * @throws IOException
+     *             the io exception
+     */
+    public void requestEnableAutoMerge(String authorEmail,
+            String clientMutationId,
+            String commitBody,
+            String commitHeadline,
+            String expectedHeadOid,
+            MergeMethod mergeMethod) throws IOException {
+
+        StringBuilder inputBuilder = new StringBuilder();
+        inputBuilder.append(" pullRequestId: \"").append(getGraphqlPullRequestId()).append("\"");
+
+        if (authorEmail != null) {
+            inputBuilder.append(" authorEmail: \"").append(authorEmail).append("\"");
+        }
+        if (clientMutationId != null) {
+            inputBuilder.append(" clientMutationId: \"").append(clientMutationId).append("\"");
+        }
+        if (commitBody != null) {
+            inputBuilder.append(" commitBody: \"").append(commitBody).append("\"");
+        }
+        if (commitHeadline != null) {
+            inputBuilder.append(" commitHeadline: \"").append(commitHeadline).append("\"");
+        }
+        if (expectedHeadOid != null) {
+            inputBuilder.append(" expectedHeadOid: \"").append(expectedHeadOid).append("\"");
+        }
+        if (mergeMethod != null) {
+            inputBuilder.append(" mergeMethod: ").append(mergeMethod);
+        }
+
+        String graphqlBody = "mutation EnableAutoMerge { enablePullRequestAutoMerge(input: {" + inputBuilder + "}) { "
+                + "pullRequest { id } } }";
+
+        root().createGraphQLRequest(graphqlBody).sendGraphQL();
+
+        refresh();
     }
 
     /**

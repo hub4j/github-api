@@ -27,6 +27,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.kohsuke.github.function.InputStreamFunction;
+import org.kohsuke.github.graphql.response.GHGraphQLResponse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -101,6 +102,39 @@ class Requester extends GitHubRequest.Builder<Requester> {
         return client
                 .sendRequest(this, (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, existingInstance))
                 .body();
+    }
+
+    /**
+     * Sends a GraphQL request with no response
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void sendGraphQL() throws IOException {
+        fetchGraphQLResponse(Object.class);
+    }
+
+    /**
+     * Sends a request and parses the response into the given type via databinding in GraphQL response.
+     *
+     * @param <T>
+     *            the type parameter
+     * @param type
+     *            the type
+     * @return an instance of {@code GHGraphQLResponse<T>}
+     * @throws IOException
+     *             if the server returns 4xx/5xx responses.
+     */
+    public <T> T fetchGraphQLResponse(@Nonnull Class<T> type) throws IOException {
+        GHGraphQLResponse<T> response = client
+                .sendRequest(this, connectorResponse -> GitHubResponse.parseGraphQLBody(connectorResponse, type))
+                .body();
+
+        if (!response.isSuccessful()) {
+            throw new IOException("GraphQL request failed by:" + response.getErrorMessages());
+        }
+
+        return response.getData();
     }
 
     /**

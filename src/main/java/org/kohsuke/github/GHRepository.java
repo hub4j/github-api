@@ -1511,7 +1511,6 @@ public class GHRepository extends GHObject {
      * @return the pull requests
      * @throws IOException
      *             the io exception
-     * @see #listPullRequests(GHIssueState) #listPullRequests(GHIssueState)
      * @deprecated Use {@link #queryPullRequests()}
      */
     @Deprecated

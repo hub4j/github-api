@@ -629,6 +629,7 @@ class GitHubClient {
         LOGGER.log(FINEST, () -> {
             String body;
             try {
+                response.setBodyStreamRereadable();
                 body = GitHubResponse.getBodyAsString(response);
             } catch (Throwable e) {
                 body = "Error reading response body";

@@ -835,7 +835,7 @@ public class GHRepository extends GHObject {
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHRepository getTemplateRepository() {
-        return (GHRepository) template_repository;
+        return template_repository;
     }
 
     /**

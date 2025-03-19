@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,15 +32,18 @@ public class GHGraphQLResponse<T> {
     @JsonCreator
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
     public GHGraphQLResponse(@JsonProperty("data") T data, @JsonProperty("errors") List<GraphQLError> errors) {
+        if (errors == null) {
+            errors = Collections.emptyList();
+        }
         this.data = data;
-        this.errors = errors;
+        this.errors = Collections.unmodifiableList(errors);
     }
 
     /**
-     * @return request is succeeded
+     * @return request is succeeded. True when error list is empty.
      */
-    public Boolean isSuccessful() {
-        return errors == null || errors.isEmpty();
+    public boolean isSuccessful() {
+        return errors.isEmpty();
     }
 
     /**
@@ -47,40 +51,35 @@ public class GHGraphQLResponse<T> {
      */
     public T getData() {
         if (!isSuccessful()) {
-            throw new RuntimeException("This response is Errors occurred response");
+            throw new RuntimeException("Response not successful, data invalid");
         }
 
         return data;
     }
 
     /**
-     * @return GraphQL error messages from Github Response
+     * @return GraphQL error messages from Github Response. Empty list when no errors occurred.
      */
     public List<String> getErrorMessages() {
-        if (isSuccessful()) {
-            throw new RuntimeException("No errors occurred");
-        }
-
-        return errors.stream().map(GraphQLError::getErrorMessage).collect(Collectors.toList());
+        return errors.stream().map(GraphQLError::getMessage).collect(Collectors.toList());
     }
 
     /**
      * A error of GraphQL response. Minimum implementation for GraphQL error.
      */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
+            justification = "JSON API")
     private static class GraphQLError {
+        private String message;
 
-        private final String errorMessage;
-
-        @JsonCreator
-        public GraphQLError(@JsonProperty("message") String errorMessage) {
-            this.errorMessage = errorMessage;
-        }
-
-        public String getErrorMessage() {
-            return errorMessage;
+        public String getMessage() {
+            return message;
         }
     }
 
+    /**
+     * A GraphQL response with basic Object data type.
+     */
     public static class ObjectResponse extends GHGraphQLResponse<Object> {
         /**
          * {@inheritDoc}

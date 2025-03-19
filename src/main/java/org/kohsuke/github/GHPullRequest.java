@@ -650,7 +650,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @throws IOException
      *             the io exception
      */
-    public void requestEnableAutoMerge(String authorEmail,
+    public void enablePullRequestAutoMerge(String authorEmail,
             String clientMutationId,
             String commitBody,
             String commitHeadline,
@@ -658,26 +658,13 @@ public class GHPullRequest extends GHIssue implements Refreshable {
             MergeMethod mergeMethod) throws IOException {
 
         StringBuilder inputBuilder = new StringBuilder();
-        inputBuilder.append(" pullRequestId: \"").append(this.getNodeId()).append("\"");
-
-        if (authorEmail != null) {
-            inputBuilder.append(" authorEmail: \"").append(authorEmail).append("\"");
-        }
-        if (clientMutationId != null) {
-            inputBuilder.append(" clientMutationId: \"").append(clientMutationId).append("\"");
-        }
-        if (commitBody != null) {
-            inputBuilder.append(" commitBody: \"").append(commitBody).append("\"");
-        }
-        if (commitHeadline != null) {
-            inputBuilder.append(" commitHeadline: \"").append(commitHeadline).append("\"");
-        }
-        if (expectedHeadOid != null) {
-            inputBuilder.append(" expectedHeadOid: \"").append(expectedHeadOid).append("\"");
-        }
-        if (mergeMethod != null) {
-            inputBuilder.append(" mergeMethod: ").append(mergeMethod);
-        }
+        addParameter(inputBuilder, "pullRequestId", this.getNodeId());
+        addOptionalParameter(inputBuilder, "authorEmail", authorEmail);
+        addOptionalParameter(inputBuilder, "clientMutationId", clientMutationId);
+        addOptionalParameter(inputBuilder, "commitBody", commitBody);
+        addOptionalParameter(inputBuilder, "commitHeadline", commitHeadline);
+        addOptionalParameter(inputBuilder, "expectedHeadOid", expectedHeadOid);
+        addOptionalParameter(inputBuilder, "mergeMethod", mergeMethod);
 
         String graphqlBody = "mutation EnableAutoMerge { enablePullRequestAutoMerge(input: {" + inputBuilder + "}) { "
                 + "pullRequest { id } } }";
@@ -687,6 +674,21 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         refresh();
     }
 
+    private void addOptionalParameter(StringBuilder inputBuilder, String name, Object value) {
+        if (value != null) {
+            addParameter(inputBuilder, name, value);
+        }
+    }
+
+    private void addParameter(StringBuilder inputBuilder, String name, Object value) {
+        Objects.requireNonNull(value);
+        String formatString = " %s: \"%s\"";
+        if (value instanceof Enum) {
+            formatString = " %s: %s";
+        }
+
+        inputBuilder.append(String.format(formatString, name, value));
+    }
     /**
      * The status of auto merging a {@linkplain GHPullRequest}.
      *

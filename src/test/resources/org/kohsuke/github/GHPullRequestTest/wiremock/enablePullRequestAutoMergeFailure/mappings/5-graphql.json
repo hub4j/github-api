@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"query\":\"mutation EnableAutoMerge { enablePullRequestAutoMerge(input: { pullRequestId: \\\"PR_kwDON6BPMc6Ox8DC\\\" authorEmail: \\\"failureEmail@gmail.com\\\" clientMutationId: \\\"github-api\\\" commitBody: \\\"This is commit body.\\\" commitHeadline: \\\"This is commit title.\\\" expectedHeadOid: \\\"4888b44d7204dd05680e90159af839c8b1194b6d\\\" mergeMethod: MERGE}) { pullRequest { id } } }\"}",
+        "equalToJson": "{\"query\":\"mutation EnableAutoMerge { enablePullRequestAutoMerge(input: { pullRequestId: \\\"PR_kwDON6BPMc6Ox8DC\\\" authorEmail: \\\"failureEmail@gmail.com\\\" clientMutationId: \\\"github-api\\\" commitBody: \\\"This is commit body.\\\" commitHeadline: \\\"This is commit title.\\\" expectedHeadOid: \\\"4888b44d7204dd05680e90159af839c8b1194b6d\\\"}) { pullRequest { id } } }\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

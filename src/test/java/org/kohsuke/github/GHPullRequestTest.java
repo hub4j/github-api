@@ -1053,7 +1053,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
         GHPullRequest pullRequest = gitHub.getRepository("seate/for-test").getPullRequest(9);
 
-        pullRequest.requestEnableAutoMerge(authorEmail,
+        pullRequest.enablePullRequestAutoMerge(authorEmail,
                 clientMutationId,
                 commitBody,
                 commitTitle,
@@ -1084,12 +1084,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHPullRequest pullRequest = gitHub.getRepository("seate/for-test").getPullRequest(9);
 
         try {
-            pullRequest.requestEnableAutoMerge(authorEmail,
+            pullRequest.enablePullRequestAutoMerge(authorEmail,
                     clientMutationId,
                     commitBody,
                     commitTitle,
                     expectedCommitHeadOid,
-                    GHPullRequest.MergeMethod.MERGE);
+                    null);
         } catch (IOException e) {
             assertThat(e.getMessage(), containsString("does not have a verified email"));
         }

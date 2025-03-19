@@ -1,0 +1,49 @@
+{
+  "id": "0dd48f53-a8fb-4df8-ba9e-946146f68a33",
+  "name": "repos_seate_for-test_pulls_9",
+  "request": {
+    "url": "/repos/seate/for-test/pulls/9",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "6-r_s_f_pulls_9.json",
+    "headers": {
+      "Date": "Sat, 15 Mar 2025 18:13:29 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"4cb91abd4bd5effc3228763b88c5abec155f063e483efaa6ba284bb351e27687\"",
+      "Last-Modified": "Sat, 15 Mar 2025 16:18:20 GMT",
+      "X-OAuth-Scopes": "admin:repo_hook, gist, notifications, read:discussion, read:org, read:project, repo, user:email",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4982",
+      "X-RateLimit-Reset": "1742065904",
+      "X-RateLimit-Used": "18",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-GitHub-Request-Id": "F68E:7ED0E:3A2A32:597D10:67D5C348"
+    }
+  },
+  "uuid": "0dd48f53-a8fb-4df8-ba9e-946146f68a33",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-seate-for-test-pulls-9",
+  "requiredScenarioState": "scenario-1-repos-seate-for-test-pulls-9-2",
+  "insertionIndex": 6
+}

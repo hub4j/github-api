@@ -1300,6 +1300,21 @@ public class GitHub {
     }
 
     /**
+     * Creates a request to GitHub GraphQL API.
+     *
+     * @param query
+     *            the query for the GraphQL
+     * @return the requester
+     */
+    @Nonnull
+    Requester createGraphQLRequest(String query) {
+        return createRequest().method("POST")
+                .rateLimit(RateLimitTarget.GRAPHQL)
+                .with("query", query)
+                .withUrlPath("/graphql");
+    }
+
+    /**
      * Intern.
      *
      * @param user

@@ -1308,8 +1308,7 @@ public class GitHub {
      */
     @Nonnull
     Requester createGraphQLRequest(String query) {
-        return createRequest()
-                .method("POST")
+        return createRequest().method("POST")
                 .rateLimit(RateLimitTarget.GRAPHQL)
                 .with("query", query)
                 .withUrlPath("/graphql");

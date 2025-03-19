@@ -23,8 +23,6 @@
  */
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
@@ -632,74 +630,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
-     * Get pull request id for GraphQL
-     *
-     * @return The pull request id for GraphQL
-     * @throws IOException
-     *             the io exception
-     */
-    public String getGraphqlPullRequestId() throws IOException {
-        if (owner == null) {
-            throw new IllegalStateException("Repository owner is required to get the pull request ID");
-        }
-        String repositoryName = owner.getName();
-        String ownerName = owner.getOwnerName();
-
-        String graphqlBody = String.format(
-                "query GetPullRequestID { repository(name: \"%s\", owner: \"%s\") { pullRequest(number: %d) { id } } }",
-                repositoryName,
-                ownerName,
-                number);
-
-        GetGraphqlPullRequestIdResponse response = root().createGraphQLRequest(graphqlBody)
-                .fetchGraphQLResponse(GetGraphqlPullRequestIdResponse.class);
-
-        return response.getId();
-    }
-
-    /**
-     * The response from the GraphQL query to get the pull request ID. Minimum required fields are included.
-     */
-    private static class GetGraphqlPullRequestIdResponse {
-        private final PullRequestOwnerRepository repository;
-
-        @JsonCreator
-        public GetGraphqlPullRequestIdResponse(@JsonProperty("repository") PullRequestOwnerRepository repository) {
-            this.repository = repository;
-        }
-
-        public String getId() {
-            return repository.getId();
-        }
-
-        private static class PullRequestOwnerRepository {
-            private final GraphQLPullRequest pullRequest;
-
-            @JsonCreator
-            public PullRequestOwnerRepository(@JsonProperty("pullRequest") GraphQLPullRequest pullRequest) {
-                this.pullRequest = pullRequest;
-            }
-
-            public String getId() {
-                return pullRequest.getId();
-            }
-
-            private static class GraphQLPullRequest {
-                private final String id;
-
-                @JsonCreator
-                public GraphQLPullRequest(@JsonProperty("id") String id) {
-                    this.id = id;
-                }
-
-                public String getId() {
-                    return id;
-                }
-            }
-        }
-    }
-
-    /**
      * Request to enable auto merge for a pull request.
      *
      * @param authorEmail
@@ -728,7 +658,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
             MergeMethod mergeMethod) throws IOException {
 
         StringBuilder inputBuilder = new StringBuilder();
-        inputBuilder.append(" pullRequestId: \"").append(getGraphqlPullRequestId()).append("\"");
+        inputBuilder.append(" pullRequestId: \"").append(this.getNodeId()).append("\"");
 
         if (authorEmail != null) {
             inputBuilder.append(" authorEmail: \"").append(authorEmail).append("\"");

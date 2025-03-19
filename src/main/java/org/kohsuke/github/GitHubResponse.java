@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.*;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
-import org.kohsuke.github.graphql.response.GHGraphQLResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -129,45 +128,6 @@ class GitHubResponse<T> {
         String data = getBodyAsString(connectorResponse);
         try {
             return GitHubClient.getMappingObjectReader(connectorResponse).withValueToUpdate(instance).readValue(data);
-        } catch (JsonMappingException | JsonParseException e) {
-            String message = "Failed to deserialize: " + data;
-            LOGGER.log(Level.FINE, message);
-            throw e;
-        }
-    }
-
-    /**
-     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@code GHGraphQLResponse<T>}.
-     *
-     * @param <T>
-     *            the type
-     * @param connectorResponse
-     *            the response info to parse.
-     * @param type
-     *            the type to be constructed in GraphQLResponse.
-     * @return GHGraphQLResponse
-     *
-     * @throws IOException
-     *             if there is an I/O Exception.
-     */
-    @CheckForNull
-    static <T> GHGraphQLResponse<T> parseGraphQLBody(GitHubConnectorResponse connectorResponse, Class<T> type)
-            throws IOException {
-        if (connectorResponse.statusCode() == HTTP_NO_CONTENT) {
-            if (type != null && type.isArray()) {
-                T emptyArray = type.cast(Array.newInstance(type.getComponentType(), 0));
-                return new GHGraphQLResponse<>(emptyArray, null);
-            } else {
-                return new GHGraphQLResponse<>(null, null);
-            }
-        }
-
-        String data = getBodyAsString(connectorResponse);
-        try {
-            ObjectReader objectReader = GitHubClient.getMappingObjectReader(connectorResponse);
-            JavaType targetType = objectReader.getTypeFactory().constructParametricType(GHGraphQLResponse.class, type);
-            ObjectReader targetReader = objectReader.forType(targetType);
-            return targetReader.readValue(data);
         } catch (JsonMappingException | JsonParseException e) {
             String message = "Failed to deserialize: " + data;
             LOGGER.log(Level.FINE, message);

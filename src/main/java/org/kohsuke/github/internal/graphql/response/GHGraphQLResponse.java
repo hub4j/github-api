@@ -1,4 +1,4 @@
-package org.kohsuke.github.graphql.response;
+package org.kohsuke.github.internal.graphql.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,7 +20,7 @@ public class GHGraphQLResponse<T> {
 
     private final T data;
 
-    private final List<GHGraphQLError> errors;
+    private final List<GraphQLError> errors;
 
     /**
      * @param data
@@ -30,7 +30,7 @@ public class GHGraphQLResponse<T> {
      */
     @JsonCreator
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
-    public GHGraphQLResponse(@JsonProperty("data") T data, @JsonProperty("errors") List<GHGraphQLError> errors) {
+    public GHGraphQLResponse(@JsonProperty("data") T data, @JsonProperty("errors") List<GraphQLError> errors) {
         this.data = data;
         this.errors = errors;
     }
@@ -61,23 +61,34 @@ public class GHGraphQLResponse<T> {
             throw new RuntimeException("No errors occurred");
         }
 
-        return errors.stream().map(GHGraphQLError::getErrorMessage).collect(Collectors.toList());
+        return errors.stream().map(GraphQLError::getErrorMessage).collect(Collectors.toList());
     }
 
     /**
      * A error of GraphQL response. Minimum implementation for GraphQL error.
      */
-    private static class GHGraphQLError {
+    private static class GraphQLError {
 
         private final String errorMessage;
 
         @JsonCreator
-        public GHGraphQLError(@JsonProperty("message") String errorMessage) {
+        public GraphQLError(@JsonProperty("message") String errorMessage) {
             this.errorMessage = errorMessage;
         }
 
         public String getErrorMessage() {
             return errorMessage;
+        }
+    }
+
+    public static class ObjectResponse extends GHGraphQLResponse<Object> {
+        /**
+         * {@inheritDoc}
+         */
+        @JsonCreator
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
+        public ObjectResponse(@JsonProperty("data") Object data, @JsonProperty("errors") List<GraphQLError> errors) {
+            super(data, errors);
         }
     }
 }

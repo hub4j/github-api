@@ -6750,7 +6750,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$GetGraphqlPullRequestIdResponse",
+    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6765,7 +6765,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$GetGraphqlPullRequestIdResponse$PullRequestOwnerRepository",
+    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse$GraphQLError",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6780,37 +6780,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$GetGraphqlPullRequestIdResponse$PullRequestOwnerRepository$GraphQLPullRequest",
-    "allPublicFields": true,
-    "allDeclaredFields": true,
-    "queryAllPublicConstructors": true,
-    "queryAllDeclaredConstructors": true,
-    "allPublicConstructors": true,
-    "allDeclaredConstructors": true,
-    "queryAllPublicMethods": true,
-    "queryAllDeclaredMethods": true,
-    "allPublicMethods": true,
-    "allDeclaredMethods": true,
-    "allPublicClasses": true,
-    "allDeclaredClasses": true
-  },
-  {
-    "name": "org.kohsuke.github.graphql.response.GHGraphQLResponse",
-    "allPublicFields": true,
-    "allDeclaredFields": true,
-    "queryAllPublicConstructors": true,
-    "queryAllDeclaredConstructors": true,
-    "allPublicConstructors": true,
-    "allDeclaredConstructors": true,
-    "queryAllPublicMethods": true,
-    "queryAllDeclaredMethods": true,
-    "allPublicMethods": true,
-    "allDeclaredMethods": true,
-    "allPublicClasses": true,
-    "allDeclaredClasses": true
-  },
-  {
-    "name": "org.kohsuke.github.graphql.response.GHGraphQLResponse$GHGraphQLError",
+    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse$ObjectResponse",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,

@@ -1,7 +1,8 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.InjectableValues;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 

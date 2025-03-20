@@ -76,7 +76,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>
     <spotbugs-maven-plugin.version>4.9.1.0</spotbugs-maven-plugin.version>
-    <spotbugs.version>4.8.6</spotbugs.version>
+    <spotbugs.version>4.9.3</spotbugs.version>
     <spring.boot.version>3.3.5</spring.boot.version>
     <surefire.argLine></surefire.argLine>
   </properties>

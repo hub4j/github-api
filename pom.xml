@@ -243,26 +243,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>com.github.ekryd.sortpom</groupId>
-        <artifactId>sortpom-maven-plugin</artifactId>
-        <version>4.0.0</version>
-        <configuration>
-          <createBackupFile>false</createBackupFile>
-          <sortDependencies>scope,groupId,artifactId</sortDependencies>
-          <sortPlugins>groupId,artifactId</sortPlugins>
-          <sortProperties>true</sortProperties>
-          <verifyFail>${sortpom.verifyFail}</verifyFail>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>verify</goal>
-            </goals>
-            <phase>validate</phase>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>3.21.0</version>
@@ -755,7 +735,6 @@
       <properties>
         <!-- Only fail code coverage on non-windows machines -->
         <jacoco.haltOnFailure>true</jacoco.haltOnFailure>
-        <sortpom.verifyFail>fail</sortpom.verifyFail>
       </properties>
     </profile>
     <profile>

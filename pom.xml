@@ -755,7 +755,7 @@
       <properties>
         <!-- Only fail code coverage on non-windows machines -->
         <jacoco.haltOnFailure>true</jacoco.haltOnFailure>
-        <sortpom.verifyFail>fail</sortpom.verifyFail>
+        <sortpom.verifyFail>stop</sortpom.verifyFail>
       </properties>
     </profile>
     <profile>

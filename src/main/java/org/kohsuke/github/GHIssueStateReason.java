@@ -11,6 +11,9 @@ public enum GHIssueStateReason {
     /** Closed as not planned **/
     NOT_PLANNED,
 
+    /** Re-opened **/
+    REOPENED,
+
     /** Uknown **/
     UNKNOWN
 }

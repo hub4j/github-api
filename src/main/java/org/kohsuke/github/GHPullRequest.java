@@ -436,10 +436,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Obtains all the review comments associated with this pull request.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
+    public PagedIterable<GHPullRequestReviewComment> listReviewComments() {
         return root().createRequest()
                 .withUrlPath(getApiRoute() + COMMENTS_ACTION)
                 .toIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(this));
@@ -631,6 +629,66 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         REBASE
     }
 
+    /**
+     * Request to enable auto merge for a pull request.
+     *
+     * @param authorEmail
+     *            The email address to associate with this merge.
+     * @param clientMutationId
+     *            A unique identifier for the client performing the mutation.
+     * @param commitBody
+     *            Commit body to use for the commit when the PR is mergable; if omitted, a default message will be used.
+     *            NOTE: when merging with a merge queue any input value for commit message is ignored.
+     * @param commitHeadline
+     *            Commit headline to use for the commit when the PR is mergable; if omitted, a default message will be
+     *            used. NOTE: when merging with a merge queue any input value for commit headline is ignored.
+     * @param expectedHeadOid
+     *            The expected head OID of the pull request.
+     * @param mergeMethod
+     *            The merge method to use. If omitted, defaults to `MERGE`. NOTE: when merging with a merge queue any
+     *            input value for merge method is ignored.
+     * @throws IOException
+     *             the io exception
+     */
+    public void enablePullRequestAutoMerge(String authorEmail,
+            String clientMutationId,
+            String commitBody,
+            String commitHeadline,
+            String expectedHeadOid,
+            MergeMethod mergeMethod) throws IOException {
+
+        StringBuilder inputBuilder = new StringBuilder();
+        addParameter(inputBuilder, "pullRequestId", this.getNodeId());
+        addOptionalParameter(inputBuilder, "authorEmail", authorEmail);
+        addOptionalParameter(inputBuilder, "clientMutationId", clientMutationId);
+        addOptionalParameter(inputBuilder, "commitBody", commitBody);
+        addOptionalParameter(inputBuilder, "commitHeadline", commitHeadline);
+        addOptionalParameter(inputBuilder, "expectedHeadOid", expectedHeadOid);
+        addOptionalParameter(inputBuilder, "mergeMethod", mergeMethod);
+
+        String graphqlBody = "mutation EnableAutoMerge { enablePullRequestAutoMerge(input: {" + inputBuilder + "}) { "
+                + "pullRequest { id } } }";
+
+        root().createGraphQLRequest(graphqlBody).sendGraphQL();
+
+        refresh();
+    }
+
+    private void addOptionalParameter(StringBuilder inputBuilder, String name, Object value) {
+        if (value != null) {
+            addParameter(inputBuilder, name, value);
+        }
+    }
+
+    private void addParameter(StringBuilder inputBuilder, String name, Object value) {
+        Objects.requireNonNull(value);
+        String formatString = " %s: \"%s\"";
+        if (value instanceof Enum) {
+            formatString = " %s: %s";
+        }
+
+        inputBuilder.append(String.format(formatString, name, value));
+    }
     /**
      * The status of auto merging a {@linkplain GHPullRequest}.
      *

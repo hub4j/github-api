@@ -57,7 +57,7 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
     }
 
     /**
-     * Eagerly walk {@link Iterable} and return the result in a {@link GitHubResponse} containing an array of {@link T}
+     * Eagerly walk {@link Iterable} and return the result in a {@link GitHubResponse} containing an array of {@code T}
      * items.
      *
      * @return the last response with an array containing all the results from all pages.

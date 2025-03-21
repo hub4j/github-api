@@ -27,6 +27,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.kohsuke.github.function.InputStreamFunction;
+import org.kohsuke.github.internal.graphql.response.GHGraphQLResponse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -77,7 +78,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      *            the type parameter
      * @param type
      *            the type
-     * @return an instance of {@link T}
+     * @return an instance of {@code T}
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
@@ -101,6 +102,37 @@ class Requester extends GitHubRequest.Builder<Requester> {
         return client
                 .sendRequest(this, (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, existingInstance))
                 .body();
+    }
+
+    /**
+     * Sends a GraphQL request with no response
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void sendGraphQL() throws IOException {
+        fetchGraphQL(GHGraphQLResponse.ObjectResponse.class);
+    }
+
+    /**
+     * Sends a request and parses the response into the given type via databinding in GraphQL response.
+     *
+     * @param <T>
+     *            the type parameter
+     * @param type
+     *            the type
+     * @return an instance of {@code GHGraphQLResponse<T>}
+     * @throws IOException
+     *             if the server returns 4xx/5xx responses.
+     */
+    public <T extends GHGraphQLResponse<S>, S> S fetchGraphQL(@Nonnull Class<T> type) throws IOException {
+        T response = fetch(type);
+
+        if (!response.isSuccessful()) {
+            throw new IOException("GraphQL request failed by:" + response.getErrorMessages());
+        }
+
+        return response.getData();
     }
 
     /**
@@ -152,7 +184,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
-     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer<R>}.
+     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer}{@code <R>}.
      * <p>
      * This method and the {@link PagedIterable <R>} do not actually begin fetching data until {@link Iterator#next()}
      * or {@link Iterator#hasNext()} are called.

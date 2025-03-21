@@ -244,10 +244,8 @@ public class GHUser extends GHPerson {
      * Lists Gists created by this user.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHGist> listGists() throws IOException {
+    public PagedIterable<GHGist> listGists() {
         return root().createRequest()
                 .withUrlPath(String.format("/users/%s/gists", login))
                 .toIterable(GHGist[].class, null);
@@ -259,8 +257,8 @@ public class GHUser extends GHPerson {
      * @return The LDAP information
      * @throws IOException
      *             the io exception
-     * @see <a
-     *      href=https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap>Github
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap">Github
      *      LDAP</a>
      */
     public Optional<String> getLdapDn() throws IOException {

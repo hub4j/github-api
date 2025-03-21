@@ -111,15 +111,13 @@ class GitHubClient {
      *            the rate limit checker
      * @param authorizationProvider
      *            the authorization provider
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
     GitHubClient(String apiUrl,
             GitHubConnector connector,
             GitHubRateLimitHandler rateLimitHandler,
             GitHubAbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            AuthorizationProvider authorizationProvider) throws IOException {
+            AuthorizationProvider authorizationProvider) {
 
         if (apiUrl.endsWith("/")) {
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
@@ -383,16 +381,16 @@ class GitHubClient {
 
     /**
      * Builds a {@link GitHubRequest}, sends the {@link GitHubRequest} to the server, and uses the {@link BodyHandler}
-     * to parse the response info and response body data into an instance of {@link T}.
+     * to parse the response info and response body data into an instance of {@code T}.
      *
      * @param <T>
      *            the type of the parse body data.
      * @param builder
      *            used to build the request that will be sent to the server.
      * @param handler
-     *            parse the response info and body data into a instance of {@link T}. If null, no parsing occurs and
+     *            parse the response info and body data into a instance of {@code T}. If null, no parsing occurs and
      *            {@link GitHubResponse#body()} will return null.
-     * @return a {@link GitHubResponse} containing the parsed body data as a {@link T}. Parsed instance may be null.
+     * @return a {@link GitHubResponse} containing the parsed body data as a {@code T}. Parsed instance may be null.
      * @throws IOException
      *             if an I/O Exception occurs
      */
@@ -404,16 +402,16 @@ class GitHubClient {
 
     /**
      * Sends the {@link GitHubRequest} to the server, and uses the {@link BodyHandler} to parse the response info and
-     * response body data into an instance of {@link T}.
+     * response body data into an instance of {@code T}.
      *
      * @param <T>
      *            the type of the parse body data.
      * @param request
      *            the request that will be sent to the server.
      * @param handler
-     *            parse the response info and body data into a instance of {@link T}. If null, no parsing occurs and
+     *            parse the response info and body data into a instance of {@code T}. If null, no parsing occurs and
      *            {@link GitHubResponse#body()} will return null.
-     * @return a {@link GitHubResponse} containing the parsed body data as a {@link T}. Parsed instance may be null.
+     * @return a {@link GitHubResponse} containing the parsed body data as a {@code T}. Parsed instance may be null.
      * @throws IOException
      *             if an I/O Exception occurs
      */
@@ -631,6 +629,7 @@ class GitHubClient {
         LOGGER.log(FINEST, () -> {
             String body;
             try {
+                response.setBodyStreamRereadable();
                 body = GitHubResponse.getBodyAsString(response);
             } catch (Throwable e) {
                 body = "Error reading response body";
@@ -679,7 +678,7 @@ class GitHubClient {
      */
     private static IOException interpretApiError(IOException e,
             @Nonnull GitHubConnectorRequest connectorRequest,
-            @CheckForNull GitHubConnectorResponse connectorResponse) throws IOException {
+            @CheckForNull GitHubConnectorResponse connectorResponse) {
         // If we're already throwing a GHIOException, pass through
         if (e instanceof GHIOException) {
             return e;

@@ -2,7 +2,6 @@ package org.kohsuke.github.extras.okhttp3;
 
 import okhttp3.*;
 import org.apache.commons.io.IOUtils;
-import org.kohsuke.github.*;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
@@ -104,7 +103,7 @@ public class OkHttpGitHubConnector implements GitHubConnector {
      *
      * Implementation specific to {@link okhttp3.Response}.
      */
-    private static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse.ByteArrayResponse {
+    private static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse {
 
         @Nonnull
         private final Response response;

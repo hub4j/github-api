@@ -40,12 +40,10 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * https://developer.github.com/v3/repos/statistics/#get-contributors-list-with-additions-deletions-and-commit-counts
      *
      * @return the contributor stats
-     * @throws IOException
-     *             the io exception
      * @throws InterruptedException
      *             the interrupted exception
      */
-    public PagedIterable<ContributorStats> getContributorStats() throws IOException, InterruptedException {
+    public PagedIterable<ContributorStats> getContributorStats() throws InterruptedException {
         return getContributorStats(true);
     }
 
@@ -55,16 +53,13 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * @param waitTillReady
      *            Whether to sleep the thread if necessary until the statistics are ready. This is true by default.
      * @return the contributor stats
-     * @throws IOException
-     *             the io exception
      * @throws InterruptedException
      *             the interrupted exception
      */
     @BetaApi
     @SuppressWarnings("SleepWhileInLoop")
     @SuppressFBWarnings(value = { "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" }, justification = "JSON API")
-    public PagedIterable<ContributorStats> getContributorStats(boolean waitTillReady)
-            throws IOException, InterruptedException {
+    public PagedIterable<ContributorStats> getContributorStats(boolean waitTillReady) throws InterruptedException {
         PagedIterable<GHRepositoryStatistics.ContributorStats> stats = getContributorStatsImpl();
 
         if (stats == null && waitTillReady) {
@@ -84,7 +79,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
     /**
      * This gets the actual statistics from the server. Returns null if they are still being cached.
      */
-    private PagedIterable<ContributorStats> getContributorStatsImpl() throws IOException {
+    private PagedIterable<ContributorStats> getContributorStatsImpl() {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("contributors"))
                 .toIterable(ContributorStats[].class, null);
@@ -242,10 +237,8 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      * https://developer.github.com/v3/repos/statistics/#get-the-last-year-of-commit-activity-data
      *
      * @return the commit activity
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<CommitActivity> getCommitActivity() throws IOException {
+    public PagedIterable<CommitActivity> getCommitActivity() {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("commit_activity"))
                 .toIterable(CommitActivity[].class, null);

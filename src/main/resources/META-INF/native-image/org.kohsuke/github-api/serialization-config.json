@@ -1342,5 +1342,23 @@
   },
   {
     "name": "org.kohsuke.github.SkipFromToString"
+  },
+  {
+    "name": "org.kohsuke.github.GHPullRequest$EnablePullRequestAutoMergeResponse"
+  },
+  {
+    "name": "org.kohsuke.github.GHPullRequest$EnablePullRequestAutoMergeResponse$EnablePullRequestAutoMerge"
+  },
+  {
+    "name": "org.kohsuke.github.GHPullRequest$EnablePullRequestAutoMergeResponse$EnablePullRequestAutoMerge$EnablePullRequestAutoMergePullRequest"
+  },
+  {
+    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse"
+  },
+  {
+    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse$GraphQLError"
+  },
+  {
+    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse$ObjectResponse"
   }
 ]

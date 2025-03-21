@@ -36,10 +36,8 @@ public class GHDiscussion extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
+    public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
     }
 
@@ -122,10 +120,8 @@ public class GHDiscussion extends GHObject {
      * @param team
      *            the team in which the discussion will be created.
      * @return a {@link GHLabel.Creator}
-     * @throws IOException
-     *             the io exception
      */
-    static GHDiscussion.Creator create(GHTeam team) throws IOException {
+    static GHDiscussion.Creator create(GHTeam team) {
         return new GHDiscussion.Creator(team);
     }
 
@@ -154,10 +150,8 @@ public class GHDiscussion extends GHObject {
      * @param team
      *            the team
      * @return the paged iterable
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    static PagedIterable<GHDiscussion> readAll(GHTeam team) throws IOException {
+    static PagedIterable<GHDiscussion> readAll(GHTeam team) {
         return team.root()
                 .createRequest()
                 .setRawUrlPath(getRawUrlPath(team, null))

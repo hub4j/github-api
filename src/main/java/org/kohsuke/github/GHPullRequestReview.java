@@ -143,10 +143,8 @@ public class GHPullRequestReview extends GHObject {
      * When was this resource created?.
      *
      * @return the submitted at
-     * @throws IOException
-     *             the io exception
      */
-    public Date getSubmittedAt() throws IOException {
+    public Date getSubmittedAt() {
         return GitHubClient.parseDate(submitted_at);
     }
 
@@ -216,10 +214,8 @@ public class GHPullRequestReview extends GHObject {
      * Obtains all the review comments associated with this pull request review.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHPullRequestReviewComment> listReviewComments() throws IOException {
+    public PagedIterable<GHPullRequestReviewComment> listReviewComments() {
         return owner.root()
                 .createRequest()
                 .withUrlPath(getApiRoute() + "/comments")

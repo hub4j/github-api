@@ -19,7 +19,6 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.fail;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -56,23 +55,17 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test parse instant.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void testParseInstant() throws Exception {
+    public void testParseInstant() {
         assertThat(GitHubClient.parseInstant(null), nullValue());
     }
 
     /**
      * Test raw url path invalid.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void testRawUrlPathInvalid() throws Exception {
+    public void testRawUrlPathInvalid() {
         try {
             gitHub.createRequest().setRawUrlPath("invalid.path.com");
             fail();
@@ -83,12 +76,9 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     /**
      * Time round trip.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void timeRoundTrip() throws Exception {
+    public void timeRoundTrip() {
         final long stableInstantEpochMilli = 1533721222255L;
         Instant instantNow = Instant.ofEpochMilli(stableInstantEpochMilli);
 
@@ -148,12 +138,9 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test from record.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void testFromRecord() throws Exception {
+    public void testFromRecord() {
         final long stableInstantEpochSeconds = 11610674762L;
 
         GHRateLimit rateLimit_none = GHRateLimit.fromRecord(new GHRateLimit.Record(9876,
@@ -396,12 +383,9 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     /**
      * Test git hub request get api URL.
-     *
-     * @throws Exception
-     *             the exception
      */
     @Test
-    public void testGitHubRequest_getApiURL() throws Exception {
+    public void testGitHubRequest_getApiURL() {
         assertThat(GitHubRequest.getApiURL("github.com", "/endpoint").toString(),
                 equalTo("https://api.github.com/endpoint"));
 

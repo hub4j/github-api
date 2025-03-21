@@ -596,11 +596,9 @@ public class GitHub {
      * Returns a list of popular open source licenses.
      *
      * @return a list of popular open source licenses
-     * @throws IOException
-     *             the io exception
      * @see <a href="https://developer.github.com/v3/licenses/">GitHub API - Licenses</a>
      */
-    public PagedIterable<GHLicense> listLicenses() throws IOException {
+    public PagedIterable<GHLicense> listLicenses() {
         return createRequest().withUrlPath("/licenses").toIterable(GHLicense[].class, null);
     }
 
@@ -608,10 +606,8 @@ public class GitHub {
      * Returns a list of all users.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable<GHUser> listUsers() throws IOException {
+    public PagedIterable<GHUser> listUsers() {
         return createRequest().withUrlPath("/users").toIterable(GHUser[].class, null);
     }
 
@@ -637,12 +633,10 @@ public class GitHub {
      * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      * @see <a href="https://developer.github.com/v3/apps/marketplace/#list-all-plans-for-your-marketplace-listing">List
      *      Plans</a>
      */
-    public PagedIterable<GHMarketplacePlan> listMarketplacePlans() throws IOException {
+    public PagedIterable<GHMarketplacePlan> listMarketplacePlans() {
         return createRequest().withUrlPath("/marketplace_listing/plans").toIterable(GHMarketplacePlan[].class, null);
     }
 
@@ -690,12 +684,10 @@ public class GitHub {
      * OAuth Apps must authenticate using an OAuth token.
      *
      * @return the paged iterable of GHMarketplaceUserPurchase
-     * @throws IOException
-     *             the io exception
-     * @see <a href="https://developer.github.com/v3/apps/marketplace/#get-a-users-marketplace-purchases">Get a user's
-     *      Marketplace purchases</a>
+     * @see <a href="https://developer.github.com/v3/apps/marketplace/#get-a-users-marketplace-purchases">Get a
+     *      user&apos;s Marketplace purchases</a>
      */
-    public PagedIterable<GHMarketplaceUserPurchase> getMyMarketplacePurchases() throws IOException {
+    public PagedIterable<GHMarketplaceUserPurchase> getMyMarketplacePurchases() {
         return createRequest().withUrlPath("/user/marketplace_purchases")
                 .toIterable(GHMarketplaceUserPurchase[].class, null);
     }
@@ -993,12 +985,10 @@ public class GitHub {
      * Returns a list of all authorizations.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      * @see <a href="https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations">List your
      *      authorizations</a>
      */
-    public PagedIterable<GHAuthorization> listMyAuthorizations() throws IOException {
+    public PagedIterable<GHAuthorization> listMyAuthorizations() {
         return createRequest().withUrlPath("/authorizations").toIterable(GHAuthorization[].class, null);
     }
 
@@ -1056,11 +1046,9 @@ public class GitHub {
      * ways of retrieving installations.
      *
      * @return the app
-     * @throws IOException
-     *             the io exception
      * @see <a href="https://docs.github.com/en/rest/apps/installations">GitHub App installations</a>
      */
-    public GHAuthenticatedAppInstallation getInstallation() throws IOException {
+    public GHAuthenticatedAppInstallation getInstallation() {
         return new GHAuthenticatedAppInstallation(this);
     }
 
@@ -1312,15 +1300,28 @@ public class GitHub {
     }
 
     /**
+     * Creates a request to GitHub GraphQL API.
+     *
+     * @param query
+     *            the query for the GraphQL
+     * @return the requester
+     */
+    @Nonnull
+    Requester createGraphQLRequest(String query) {
+        return createRequest().method("POST")
+                .rateLimit(RateLimitTarget.GRAPHQL)
+                .with("query", query)
+                .withUrlPath("/graphql");
+    }
+
+    /**
      * Intern.
      *
      * @param user
      *            the user
      * @return the GH user
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    GHUser intern(GHUser user) throws IOException {
+    GHUser intern(GHUser user) {
         if (user != null) {
             // if we already have this user in our map, get it
             // if not, remember this new user

@@ -48,12 +48,12 @@
     <repository>
       <id>sonatype-nexus-staging</id>
       <name>Nexus Release Repository</name>
-      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <url>${nexus.serverUrl}/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
       <name>Sonatype Nexus Snapshots</name>
-      <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+      <url>${nexus.serverUrl}/content/repositories/snapshots/</url>
     </snapshotRepository>
     <site>
       <id>github-pages</id>
@@ -71,6 +71,8 @@
 
     <jacoco.surefire.argLine></jacoco.surefire.argLine>
     <jjwt.suite.version>0.12.6</jjwt.suite.version>
+    <!-- This project was registered before 2021, so it uses the old server. -->
+    <nexus.serverUrl>https://oss.sonatype.org</nexus.serverUrl>
     <okhttp3.version>4.12.0</okhttp3.version>
     <okio.version>3.10.2</okio.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -443,7 +445,7 @@
           <extensions>true</extensions>
           <configuration>
             <serverId>sonatype-nexus-staging</serverId>
-            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+            <nexusUrl>${nexus.serverUrl}/</nexusUrl>
             <autoReleaseAfterClose>true</autoReleaseAfterClose>
           </configuration>
         </plugin>

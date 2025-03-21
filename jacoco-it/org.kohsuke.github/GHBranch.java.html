@@ -34,14 +34,12 @@ public class GHBranch extends GitHubInteractiveObject {
      *
      * @param name
      *            the name
-     * @throws Exception
-     *             the exception
      */
     @JsonCreator
-<span class="fc" id="L41">    GHBranch(@JsonProperty(value = &quot;name&quot;, required = true) String name) throws Exception {</span>
-<span class="fc" id="L42">        Objects.requireNonNull(name);</span>
-<span class="fc" id="L43">        this.name = name;</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L39">    GHBranch(@JsonProperty(value = &quot;name&quot;, required = true) String name) {</span>
+<span class="fc" id="L40">        Objects.requireNonNull(name);</span>
+<span class="fc" id="L41">        this.name = name;</span>
+<span class="fc" id="L42">    }</span>
 
     /**
      * The type Commit.
@@ -51,8 +49,8 @@ public class GHBranch extends GitHubInteractiveObject {
         /**
          * Create default Commit instance
          */
-<span class="fc" id="L54">        public Commit() {</span>
-<span class="fc" id="L55">        }</span>
+<span class="fc" id="L52">        public Commit() {</span>
+<span class="fc" id="L53">        }</span>
 
         /** The sha. */
         String sha;
@@ -69,7 +67,7 @@ public class GHBranch extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L72">        return owner;</span>
+<span class="fc" id="L70">        return owner;</span>
     }
 
     /**
@@ -78,7 +76,7 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L81">        return name;</span>
+<span class="fc" id="L79">        return name;</span>
     }
 
     /**
@@ -87,7 +85,7 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return true if the push to this branch is restricted via branch protection.
      */
     public boolean isProtected() {
-<span class="fc" id="L90">        return protection;</span>
+<span class="fc" id="L88">        return protection;</span>
     }
 
     /**
@@ -96,7 +94,7 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return API URL that deals with the protection of this branch.
      */
     public URL getProtectionUrl() {
-<span class="fc" id="L99">        return GitHubClient.parseURL(protection_url);</span>
+<span class="fc" id="L97">        return GitHubClient.parseURL(protection_url);</span>
     }
 
     /**
@@ -107,7 +105,7 @@ public class GHBranch extends GitHubInteractiveObject {
      *             the io exception
      */
     public GHBranchProtection getProtection() throws IOException {
-<span class="fc" id="L110">        return root().createRequest().setRawUrlPath(protection_url).fetch(GHBranchProtection.class);</span>
+<span class="fc" id="L108">        return root().createRequest().setRawUrlPath(protection_url).fetch(GHBranchProtection.class);</span>
     }
 
     /**
@@ -116,7 +114,7 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return The SHA1 of the commit that this branch currently points to.
      */
     public String getSHA1() {
-<span class="fc" id="L119">        return commit.sha;</span>
+<span class="fc" id="L117">        return commit.sha;</span>
     }
 
     /**
@@ -126,8 +124,8 @@ public class GHBranch extends GitHubInteractiveObject {
      *             if disabling protection fails
      */
     public void disableProtection() throws IOException {
-<span class="fc" id="L129">        root().createRequest().method(&quot;DELETE&quot;).setRawUrlPath(protection_url).send();</span>
-<span class="fc" id="L130">    }</span>
+<span class="fc" id="L127">        root().createRequest().method(&quot;DELETE&quot;).setRawUrlPath(protection_url).send();</span>
+<span class="fc" id="L128">    }</span>
 
     /**
      * Enables branch protection to control what commit statuses are required to push.
@@ -136,7 +134,7 @@ public class GHBranch extends GitHubInteractiveObject {
      * @see GHCommitStatus#getContext() GHCommitStatus#getContext()
      */
     public GHBranchProtectionBuilder enableProtection() {
-<span class="fc" id="L139">        return new GHBranchProtectionBuilder(this);</span>
+<span class="fc" id="L137">        return new GHBranchProtectionBuilder(this);</span>
     }
 
     /**
@@ -156,7 +154,7 @@ public class GHBranch extends GitHubInteractiveObject {
      */
     @CheckForNull
     public GHCommit merge(GHBranch headBranch, String commitMessage) throws IOException {
-<span class="fc" id="L159">        return merge(headBranch.getName(), commitMessage);</span>
+<span class="fc" id="L157">        return merge(headBranch.getName(), commitMessage);</span>
     }
 
     /**
@@ -177,19 +175,19 @@ public class GHBranch extends GitHubInteractiveObject {
      */
     @CheckForNull
     public GHCommit merge(String head, String commitMessage) throws IOException {
-<span class="fc" id="L180">        GHCommit result = root().createRequest()</span>
-<span class="fc" id="L181">                .withUrlPath(owner.getApiTailUrl(&quot;merges&quot;))</span>
-<span class="fc" id="L182">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L183">                .with(&quot;commit_message&quot;, commitMessage)</span>
-<span class="fc" id="L184">                .with(&quot;base&quot;, this.name)</span>
-<span class="fc" id="L185">                .with(&quot;head&quot;, head)</span>
-<span class="fc" id="L186">                .fetch(GHCommit.class);</span>
+<span class="fc" id="L178">        GHCommit result = root().createRequest()</span>
+<span class="fc" id="L179">                .withUrlPath(owner.getApiTailUrl(&quot;merges&quot;))</span>
+<span class="fc" id="L180">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L181">                .with(&quot;commit_message&quot;, commitMessage)</span>
+<span class="fc" id="L182">                .with(&quot;base&quot;, this.name)</span>
+<span class="fc" id="L183">                .with(&quot;head&quot;, head)</span>
+<span class="fc" id="L184">                .fetch(GHCommit.class);</span>
 
-<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (result != null) {</span>
-<span class="fc" id="L189">            result.wrapUp(owner);</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (result != null) {</span>
+<span class="fc" id="L187">            result.wrapUp(owner);</span>
         }
 
-<span class="fc" id="L192">        return result;</span>
+<span class="fc" id="L190">        return result;</span>
     }
 
     /**
@@ -198,7 +196,7 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return the api route
      */
     String getApiRoute() {
-<span class="nc" id="L201">        return owner.getApiTailUrl(&quot;/branches/&quot; + name);</span>
+<span class="nc" id="L199">        return owner.getApiTailUrl(&quot;/branches/&quot; + name);</span>
     }
 
     /**
@@ -208,8 +206,8 @@ public class GHBranch extends GitHubInteractiveObject {
      */
     @Override
     public String toString() {
-<span class="nc bnc" id="L211" title="All 2 branches missed.">        final String url = owner != null ? owner.getUrl().toString() : &quot;unknown&quot;;</span>
-<span class="nc" id="L212">        return &quot;Branch:&quot; + name + &quot; in &quot; + url;</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        final String url = owner != null ? owner.getUrl().toString() : &quot;unknown&quot;;</span>
+<span class="nc" id="L210">        return &quot;Branch:&quot; + name + &quot; in &quot; + url;</span>
     }
 
     /**
@@ -220,8 +218,8 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return the GH branch
      */
     GHBranch wrap(GHRepository repo) {
-<span class="fc" id="L223">        this.owner = repo;</span>
-<span class="fc" id="L224">        return this;</span>
+<span class="fc" id="L221">        this.owner = repo;</span>
+<span class="fc" id="L222">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

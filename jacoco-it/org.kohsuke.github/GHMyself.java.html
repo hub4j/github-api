@@ -162,15 +162,13 @@ public class GHMyself extends GHUser {
      * Gets the all repositories this user owns (public and private).
      *
      * @return the all repositories
-     * @throws IOException
-     *             the io exception
      */
-    public synchronized Map&lt;String, GHRepository&gt; getAllRepositories() throws IOException {
-<span class="nc" id="L169">        Map&lt;String, GHRepository&gt; repositories = new TreeMap&lt;String, GHRepository&gt;();</span>
-<span class="nc bnc" id="L170" title="All 2 branches missed.">        for (GHRepository r : listRepositories()) {</span>
-<span class="nc" id="L171">            repositories.put(r.getName(), r);</span>
-<span class="nc" id="L172">        }</span>
-<span class="nc" id="L173">        return Collections.unmodifiableMap(repositories);</span>
+    public synchronized Map&lt;String, GHRepository&gt; getAllRepositories() {
+<span class="nc" id="L167">        Map&lt;String, GHRepository&gt; repositories = new TreeMap&lt;String, GHRepository&gt;();</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        for (GHRepository r : listRepositories()) {</span>
+<span class="nc" id="L169">            repositories.put(r.getName(), r);</span>
+<span class="nc" id="L170">        }</span>
+<span class="nc" id="L171">        return Collections.unmodifiableMap(repositories);</span>
     }
 
     /**
@@ -183,7 +181,7 @@ public class GHMyself extends GHUser {
      */
     @Override
     public PagedIterable&lt;GHRepository&gt; listRepositories() {
-<span class="fc" id="L186">        return listRepositories(30);</span>
+<span class="fc" id="L184">        return listRepositories(30);</span>
     }
 
     /**
@@ -201,7 +199,7 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize) {
-<span class="fc" id="L204">        return listRepositories(pageSize, RepositoryListFilter.ALL);</span>
+<span class="fc" id="L202">        return listRepositories(pageSize, RepositoryListFilter.ALL);</span>
     }
 
     /**
@@ -215,11 +213,11 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize, final RepositoryListFilter repoType) {
-<span class="fc" id="L218">        return root().createRequest()</span>
-<span class="fc" id="L219">                .with(&quot;type&quot;, repoType)</span>
-<span class="fc" id="L220">                .withUrlPath(&quot;/user/repos&quot;)</span>
-<span class="fc" id="L221">                .toIterable(GHRepository[].class, null)</span>
-<span class="fc" id="L222">                .withPageSize(pageSize);</span>
+<span class="fc" id="L216">        return root().createRequest()</span>
+<span class="fc" id="L217">                .with(&quot;type&quot;, repoType)</span>
+<span class="fc" id="L218">                .withUrlPath(&quot;/user/repos&quot;)</span>
+<span class="fc" id="L219">                .toIterable(GHRepository[].class, null)</span>
+<span class="fc" id="L220">                .withPageSize(pageSize);</span>
     }
 
     /**
@@ -228,7 +226,7 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHMembership&gt; listOrgMemberships() {
-<span class="fc" id="L231">        return listOrgMemberships(null);</span>
+<span class="fc" id="L229">        return listOrgMemberships(null);</span>
     }
 
     /**
@@ -239,10 +237,10 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHMembership&gt; listOrgMemberships(final GHMembership.State state) {
-<span class="fc" id="L242">        return root().createRequest()</span>
-<span class="fc" id="L243">                .with(&quot;state&quot;, state)</span>
-<span class="fc" id="L244">                .withUrlPath(&quot;/user/memberships/orgs&quot;)</span>
-<span class="fc" id="L245">                .toIterable(GHMembership[].class, item -&gt; item.wrap(root()));</span>
+<span class="fc" id="L240">        return root().createRequest()</span>
+<span class="fc" id="L241">                .with(&quot;state&quot;, state)</span>
+<span class="fc" id="L242">                .withUrlPath(&quot;/user/memberships/orgs&quot;)</span>
+<span class="fc" id="L243">                .toIterable(GHMembership[].class, item -&gt; item.wrap(root()));</span>
     }
 
     /**
@@ -255,10 +253,10 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public GHMembership getMembership(GHOrganization o) throws IOException {
-<span class="nc" id="L258">        return root().createRequest()</span>
-<span class="nc" id="L259">                .withUrlPath(&quot;/user/memberships/orgs/&quot; + o.getLogin())</span>
-<span class="nc" id="L260">                .fetch(GHMembership.class)</span>
-<span class="nc" id="L261">                .wrap(root());</span>
+<span class="nc" id="L256">        return root().createRequest()</span>
+<span class="nc" id="L257">                .withUrlPath(&quot;/user/memberships/orgs/&quot; + o.getLogin())</span>
+<span class="nc" id="L258">                .fetch(GHMembership.class)</span>
+<span class="nc" id="L259">                .wrap(root());</span>
     }
 
     // public void addEmails(Collection&lt;String&gt; emails) throws IOException {
@@ -277,7 +275,7 @@ public class GHMyself extends GHUser {
      *      app installations accessible to the user access token&lt;/a&gt;
      */
     public PagedIterable&lt;GHAppInstallation&gt; getAppInstallations() {
-<span class="fc" id="L280">        return new GHAppInstallationsIterable(root());</span>
+<span class="fc" id="L278">        return new GHAppInstallationsIterable(root());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

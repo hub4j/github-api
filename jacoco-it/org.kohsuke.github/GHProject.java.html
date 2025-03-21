@@ -60,11 +60,9 @@ public class GHProject extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
-<span class="fc" id="L67">        return GitHubClient.parseURL(html_url);</span>
+    public URL getHtmlUrl() {
+<span class="fc" id="L65">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -76,21 +74,21 @@ public class GHProject extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHObject getOwner() throws IOException {
-<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (owner == null) {</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (owner == null) {</span>
             try {
-<span class="nc bnc" id="L81" title="All 2 branches missed.">                if (owner_url.contains(&quot;/orgs/&quot;)) {</span>
-<span class="nc" id="L82">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHOrganization.class);</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/users/&quot;)) {</span>
-<span class="nc" id="L84">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class);</span>
-<span class="nc bnc" id="L85" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/repos/&quot;)) {</span>
-<span class="nc" id="L86">                    String[] pathElements = getOwnerUrl().getPath().split(&quot;/&quot;);</span>
-<span class="nc" id="L87">                    owner = GHRepository.read(root(), pathElements[1], pathElements[2]);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                if (owner_url.contains(&quot;/orgs/&quot;)) {</span>
+<span class="nc" id="L80">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHOrganization.class);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/users/&quot;)) {</span>
+<span class="nc" id="L82">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/repos/&quot;)) {</span>
+<span class="nc" id="L84">                    String[] pathElements = getOwnerUrl().getPath().split(&quot;/&quot;);</span>
+<span class="nc" id="L85">                    owner = GHRepository.read(root(), pathElements[1], pathElements[2]);</span>
                 }
-<span class="nc" id="L89">            } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L90">                return null;</span>
-<span class="nc" id="L91">            }</span>
+<span class="nc" id="L87">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L88">                return null;</span>
+<span class="nc" id="L89">            }</span>
         }
-<span class="nc" id="L93">        return owner;</span>
+<span class="nc" id="L91">        return owner;</span>
     }
 
     /**
@@ -99,7 +97,7 @@ public class GHProject extends GHObject {
      * @return the owner url
      */
     public URL getOwnerUrl() {
-<span class="nc" id="L102">        return GitHubClient.parseURL(owner_url);</span>
+<span class="nc" id="L100">        return GitHubClient.parseURL(owner_url);</span>
     }
 
     /**
@@ -108,7 +106,7 @@ public class GHProject extends GHObject {
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L111">        return name;</span>
+<span class="fc" id="L109">        return name;</span>
     }
 
     /**
@@ -117,7 +115,7 @@ public class GHProject extends GHObject {
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L120">        return body;</span>
+<span class="fc" id="L118">        return body;</span>
     }
 
     /**
@@ -126,7 +124,7 @@ public class GHProject extends GHObject {
      * @return the number
      */
     public int getNumber() {
-<span class="nc" id="L129">        return number;</span>
+<span class="nc" id="L127">        return number;</span>
     }
 
     /**
@@ -135,7 +133,7 @@ public class GHProject extends GHObject {
      * @return the state
      */
     public ProjectState getState() {
-<span class="fc" id="L138">        return Enum.valueOf(ProjectState.class, state.toUpperCase(Locale.ENGLISH));</span>
+<span class="fc" id="L136">        return Enum.valueOf(ProjectState.class, state.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
@@ -145,7 +143,7 @@ public class GHProject extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getCreator() {
-<span class="nc" id="L148">        return creator;</span>
+<span class="nc" id="L146">        return creator;</span>
     }
 
     /**
@@ -156,13 +154,13 @@ public class GHProject extends GHObject {
      * @return the gh project
      */
     GHProject lateBind(GHRepository repo) {
-<span class="nc" id="L159">        this.owner = repo;</span>
-<span class="nc" id="L160">        return this;</span>
+<span class="nc" id="L157">        this.owner = repo;</span>
+<span class="nc" id="L158">        return this;</span>
     }
 
     private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L164">        root().createRequest().method(&quot;PATCH&quot;).with(key, value).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L165">    }</span>
+<span class="fc" id="L162">        root().createRequest().method(&quot;PATCH&quot;).with(key, value).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L163">    }</span>
 
     /**
      * Gets api route.
@@ -170,7 +168,7 @@ public class GHProject extends GHObject {
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L173">        return &quot;/projects/&quot; + getId();</span>
+<span class="fc" id="L171">        return &quot;/projects/&quot; + getId();</span>
     }
 
     /**
@@ -182,8 +180,8 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void setName(String name) throws IOException {
-<span class="fc" id="L185">        edit(&quot;name&quot;, name);</span>
-<span class="fc" id="L186">    }</span>
+<span class="fc" id="L183">        edit(&quot;name&quot;, name);</span>
+<span class="fc" id="L184">    }</span>
 
     /**
      * Sets body.
@@ -194,18 +192,18 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void setBody(String body) throws IOException {
-<span class="fc" id="L197">        edit(&quot;body&quot;, body);</span>
-<span class="fc" id="L198">    }</span>
+<span class="fc" id="L195">        edit(&quot;body&quot;, body);</span>
+<span class="fc" id="L196">    }</span>
 
     /**
      * The enum ProjectState.
      */
-<span class="fc" id="L203">    public enum ProjectState {</span>
+<span class="fc" id="L201">    public enum ProjectState {</span>
 
         /** The open. */
-<span class="fc" id="L206">        OPEN,</span>
+<span class="fc" id="L204">        OPEN,</span>
         /** The closed. */
-<span class="fc" id="L208">        CLOSED</span>
+<span class="fc" id="L206">        CLOSED</span>
     }
 
     /**
@@ -217,20 +215,20 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void setState(ProjectState state) throws IOException {
-<span class="fc" id="L220">        edit(&quot;state&quot;, state.toString().toLowerCase());</span>
-<span class="fc" id="L221">    }</span>
+<span class="fc" id="L218">        edit(&quot;state&quot;, state.toString().toLowerCase());</span>
+<span class="fc" id="L219">    }</span>
 
     /**
      * The enum ProjectStateFilter.
      */
-<span class="fc" id="L226">    public static enum ProjectStateFilter {</span>
+<span class="fc" id="L224">    public static enum ProjectStateFilter {</span>
 
         /** The all. */
-<span class="fc" id="L229">        ALL,</span>
+<span class="fc" id="L227">        ALL,</span>
         /** The open. */
-<span class="fc" id="L231">        OPEN,</span>
+<span class="fc" id="L229">        OPEN,</span>
         /** The closed. */
-<span class="fc" id="L233">        CLOSED</span>
+<span class="fc" id="L231">        CLOSED</span>
     }
 
     /**
@@ -243,8 +241,8 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void setOrganizationPermission(GHPermissionType permission) throws IOException {
-<span class="nc" id="L246">        edit(&quot;organization_permission&quot;, permission.toString().toLowerCase());</span>
-<span class="nc" id="L247">    }</span>
+<span class="nc" id="L244">        edit(&quot;organization_permission&quot;, permission.toString().toLowerCase());</span>
+<span class="nc" id="L245">    }</span>
 
     /**
      * Sets visibility of the project within the organization. Only applicable for organization-owned projects.
@@ -255,8 +253,8 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void setPublic(boolean isPublic) throws IOException {
-<span class="nc" id="L258">        edit(&quot;public&quot;, isPublic);</span>
-<span class="nc" id="L259">    }</span>
+<span class="nc" id="L256">        edit(&quot;public&quot;, isPublic);</span>
+<span class="nc" id="L257">    }</span>
 
     /**
      * Delete.
@@ -265,21 +263,19 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L268">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L269">    }</span>
+<span class="fc" id="L266">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L267">    }</span>
 
     /**
      * List columns paged iterable.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable&lt;GHProjectColumn&gt; listColumns() throws IOException {
-<span class="nc" id="L279">        final GHProject project = this;</span>
-<span class="nc" id="L280">        return root().createRequest()</span>
-<span class="nc" id="L281">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
-<span class="nc" id="L282">                .toIterable(GHProjectColumn[].class, item -&gt; item.lateBind(project));</span>
+    public PagedIterable&lt;GHProjectColumn&gt; listColumns() {
+<span class="nc" id="L275">        final GHProject project = this;</span>
+<span class="nc" id="L276">        return root().createRequest()</span>
+<span class="nc" id="L277">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
+<span class="nc" id="L278">                .toIterable(GHProjectColumn[].class, item -&gt; item.lateBind(project));</span>
     }
 
     /**
@@ -292,12 +288,12 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public GHProjectColumn createColumn(String name) throws IOException {
-<span class="fc" id="L295">        return root().createRequest()</span>
-<span class="fc" id="L296">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L297">                .with(&quot;name&quot;, name)</span>
-<span class="fc" id="L298">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
-<span class="fc" id="L299">                .fetch(GHProjectColumn.class)</span>
-<span class="fc" id="L300">                .lateBind(this);</span>
+<span class="fc" id="L291">        return root().createRequest()</span>
+<span class="fc" id="L292">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L293">                .with(&quot;name&quot;, name)</span>
+<span class="fc" id="L294">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
+<span class="fc" id="L295">                .fetch(GHProjectColumn.class)</span>
+<span class="fc" id="L296">                .lateBind(this);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

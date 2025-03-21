@@ -145,20 +145,18 @@ public class GHRef extends GitHubInteractiveObject {
      * @param refType
      *            the type of reg to search for e.g. &lt;code&gt;tags&lt;/code&gt; or &lt;code&gt;commits&lt;/code&gt;
      * @return paged iterable of all refs of the specified type
-     * @throws IOException
-     *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
-    static PagedIterable&lt;GHRef&gt; readMatching(GHRepository repository, String refType) throws IOException {
-<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (refType.startsWith(&quot;refs/&quot;)) {</span>
-<span class="fc" id="L153">            refType = refType.replaceFirst(&quot;refs/&quot;, &quot;&quot;);</span>
+    static PagedIterable&lt;GHRef&gt; readMatching(GHRepository repository, String refType) {
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (refType.startsWith(&quot;refs/&quot;)) {</span>
+<span class="fc" id="L151">            refType = refType.replaceFirst(&quot;refs/&quot;, &quot;&quot;);</span>
         }
 
-<span class="fc" id="L156">        String url = repository.getApiTailUrl(String.format(&quot;git/refs/%s&quot;, refType));</span>
+<span class="fc" id="L154">        String url = repository.getApiTailUrl(String.format(&quot;git/refs/%s&quot;, refType));</span>
         // if no types, do not end with slash just to be safe.
-<span class="fc bfc" id="L158" title="All 2 branches covered.">        if (refType.equals(&quot;&quot;)) {</span>
-<span class="fc" id="L159">            url = url.substring(0, url.length() - 1);</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (refType.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L157">            url = url.substring(0, url.length() - 1);</span>
         }
-<span class="fc" id="L161">        return repository.root().createRequest().withUrlPath(url).toIterable(GHRef[].class, item -&gt; repository.root());</span>
+<span class="fc" id="L159">        return repository.root().createRequest().withUrlPath(url).toIterable(GHRef[].class, item -&gt; repository.root());</span>
     }
 
     /**
@@ -172,8 +170,8 @@ public class GHRef extends GitHubInteractiveObject {
         /**
          * Create default GHObject instance
          */
-<span class="fc" id="L175">        public GHObject() {</span>
-<span class="fc" id="L176">        }</span>
+<span class="fc" id="L173">        public GHObject() {</span>
+<span class="fc" id="L174">        }</span>
 
         private String type, sha, url;
 
@@ -183,7 +181,7 @@ public class GHRef extends GitHubInteractiveObject {
          * @return the type
          */
         public String getType() {
-<span class="fc" id="L186">            return type;</span>
+<span class="fc" id="L184">            return type;</span>
         }
 
         /**
@@ -192,7 +190,7 @@ public class GHRef extends GitHubInteractiveObject {
          * @return the sha
          */
         public String getSha() {
-<span class="fc" id="L195">            return sha;</span>
+<span class="fc" id="L193">            return sha;</span>
         }
 
         /**
@@ -202,7 +200,7 @@ public class GHRef extends GitHubInteractiveObject {
          * @return the url
          */
         public URL getUrl() {
-<span class="fc" id="L205">            return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L203">            return GitHubClient.parseURL(url);</span>
         }
     }
 }

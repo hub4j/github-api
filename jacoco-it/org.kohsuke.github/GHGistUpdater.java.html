@@ -41,12 +41,10 @@ public class GHGistUpdater {
      * @param content
      *            the content
      * @return the gh gist updater
-     * @throws IOException
-     *             the io exception
      */
-    public GHGistUpdater addFile(@Nonnull String fileName, @Nonnull String content) throws IOException {
-<span class="fc" id="L48">        updateFile(fileName, content);</span>
-<span class="fc" id="L49">        return this;</span>
+    public GHGistUpdater addFile(@Nonnull String fileName, @Nonnull String content) {
+<span class="fc" id="L46">        updateFile(fileName, content);</span>
+<span class="fc" id="L47">        return this;</span>
     }
 
     /**
@@ -55,12 +53,10 @@ public class GHGistUpdater {
      * @param fileName
      *            the file name
      * @return the GH gist updater
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public GHGistUpdater deleteFile(@Nonnull String fileName) throws IOException {
-<span class="fc" id="L62">        files.put(fileName, null);</span>
-<span class="fc" id="L63">        return this;</span>
+    public GHGistUpdater deleteFile(@Nonnull String fileName) {
+<span class="fc" id="L58">        files.put(fileName, null);</span>
+<span class="fc" id="L59">        return this;</span>
     }
 
     /**
@@ -71,13 +67,11 @@ public class GHGistUpdater {
      * @param newFileName
      *            the new file name
      * @return the gh gist updater
-     * @throws IOException
-     *             the io exception
      */
-    public GHGistUpdater renameFile(@Nonnull String fileName, @Nonnull String newFileName) throws IOException {
-<span class="fc" id="L78">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
-<span class="fc" id="L79">        file.put(&quot;filename&quot;, newFileName);</span>
-<span class="fc" id="L80">        return this;</span>
+    public GHGistUpdater renameFile(@Nonnull String fileName, @Nonnull String newFileName) {
+<span class="fc" id="L72">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
+<span class="fc" id="L73">        file.put(&quot;filename&quot;, newFileName);</span>
+<span class="fc" id="L74">        return this;</span>
     }
 
     /**
@@ -88,13 +82,11 @@ public class GHGistUpdater {
      * @param content
      *            the content
      * @return the gh gist updater
-     * @throws IOException
-     *             the io exception
      */
-    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String content) throws IOException {
-<span class="fc" id="L95">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
-<span class="fc" id="L96">        file.put(&quot;content&quot;, content);</span>
-<span class="fc" id="L97">        return this;</span>
+    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String content) {
+<span class="fc" id="L87">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
+<span class="fc" id="L88">        file.put(&quot;content&quot;, content);</span>
+<span class="fc" id="L89">        return this;</span>
     }
 
     /**
@@ -107,16 +99,13 @@ public class GHGistUpdater {
      * @param content
      *            the content
      * @return the gh gist updater
-     * @throws IOException
-     *             the io exception
      */
-    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String newFileName, @Nonnull String content)
-            throws IOException {
-<span class="fc" id="L115">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
-<span class="fc" id="L116">        file.put(&quot;content&quot;, content);</span>
-<span class="fc" id="L117">        file.put(&quot;filename&quot;, newFileName);</span>
-<span class="fc" id="L118">        files.put(fileName, file);</span>
-<span class="fc" id="L119">        return this;</span>
+    public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String newFileName, @Nonnull String content) {
+<span class="fc" id="L104">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
+<span class="fc" id="L105">        file.put(&quot;content&quot;, content);</span>
+<span class="fc" id="L106">        file.put(&quot;filename&quot;, newFileName);</span>
+<span class="fc" id="L107">        files.put(fileName, file);</span>
+<span class="fc" id="L108">        return this;</span>
     }
 
     /**
@@ -127,8 +116,8 @@ public class GHGistUpdater {
      * @return the gh gist updater
      */
     public GHGistUpdater description(String desc) {
-<span class="fc" id="L130">        builder.with(&quot;description&quot;, desc);</span>
-<span class="fc" id="L131">        return this;</span>
+<span class="fc" id="L119">        builder.with(&quot;description&quot;, desc);</span>
+<span class="fc" id="L120">        return this;</span>
     }
 
     /**
@@ -139,8 +128,8 @@ public class GHGistUpdater {
      *             the io exception
      */
     public GHGist update() throws IOException {
-<span class="fc" id="L142">        builder.with(&quot;files&quot;, files);</span>
-<span class="fc" id="L143">        return builder.method(&quot;PATCH&quot;).withUrlPath(base.getApiTailUrl(&quot;&quot;)).fetch(GHGist.class);</span>
+<span class="fc" id="L131">        builder.with(&quot;files&quot;, files);</span>
+<span class="fc" id="L132">        return builder.method(&quot;PATCH&quot;).withUrlPath(base.getApiTailUrl(&quot;&quot;)).fetch(GHGist.class);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

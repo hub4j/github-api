@@ -67,11 +67,9 @@ public class GHWorkflow extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
-<span class="fc" id="L74">        return GitHubClient.parseURL(htmlUrl);</span>
+    public URL getHtmlUrl() {
+<span class="fc" id="L72">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -81,7 +79,7 @@ public class GHWorkflow extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L84">        return owner;</span>
+<span class="fc" id="L82">        return owner;</span>
     }
 
     /**
@@ -90,7 +88,7 @@ public class GHWorkflow extends GHObject {
      * @return the badge url
      */
     public URL getBadgeUrl() {
-<span class="fc" id="L93">        return GitHubClient.parseURL(badgeUrl);</span>
+<span class="fc" id="L91">        return GitHubClient.parseURL(badgeUrl);</span>
     }
 
     /**
@@ -100,8 +98,8 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void disable() throws IOException {
-<span class="fc" id="L103">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;disable&quot;).send();</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L101">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;disable&quot;).send();</span>
+<span class="fc" id="L102">    }</span>
 
     /**
      * Enable the workflow.
@@ -110,8 +108,8 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void enable() throws IOException {
-<span class="fc" id="L113">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;enable&quot;).send();</span>
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L111">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;enable&quot;).send();</span>
+<span class="fc" id="L112">    }</span>
 
     /**
      * Create a workflow dispatch event which triggers a manual workflow run.
@@ -122,8 +120,8 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void dispatch(String ref) throws IOException {
-<span class="fc" id="L125">        dispatch(ref, Collections.emptyMap());</span>
-<span class="fc" id="L126">    }</span>
+<span class="fc" id="L123">        dispatch(ref, Collections.emptyMap());</span>
+<span class="fc" id="L124">    }</span>
 
     /**
      * Create a workflow dispatch event which triggers a manual workflow run.
@@ -137,17 +135,17 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void dispatch(String ref, Map&lt;String, Object&gt; inputs) throws IOException {
-<span class="fc" id="L140">        Requester requester = root().createRequest()</span>
-<span class="fc" id="L141">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L142">                .withUrlPath(getApiRoute(), &quot;dispatches&quot;)</span>
-<span class="fc" id="L143">                .with(&quot;ref&quot;, ref);</span>
+<span class="fc" id="L138">        Requester requester = root().createRequest()</span>
+<span class="fc" id="L139">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L140">                .withUrlPath(getApiRoute(), &quot;dispatches&quot;)</span>
+<span class="fc" id="L141">                .with(&quot;ref&quot;, ref);</span>
 
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (!inputs.isEmpty()) {</span>
-<span class="fc" id="L146">            requester.with(&quot;inputs&quot;, inputs);</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (!inputs.isEmpty()) {</span>
+<span class="fc" id="L144">            requester.with(&quot;inputs&quot;, inputs);</span>
         }
 
-<span class="fc" id="L149">        requester.send();</span>
-<span class="fc" id="L150">    }</span>
+<span class="fc" id="L147">        requester.send();</span>
+<span class="fc" id="L148">    }</span>
 
     /**
      * Lists the workflow runs belong to this workflow.
@@ -155,17 +153,17 @@ public class GHWorkflow extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHWorkflowRun&gt; listRuns() {
-<span class="fc" id="L158">        return new GHWorkflowRunsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), &quot;runs&quot;));</span>
+<span class="fc" id="L156">        return new GHWorkflowRunsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), &quot;runs&quot;));</span>
     }
 
     private String getApiRoute() {
-<span class="pc bpc" id="L162" title="1 of 2 branches missed.">        if (owner == null) {</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        if (owner == null) {</span>
             // Workflow runs returned from search to do not have an owner. Attempt to use url.
-<span class="nc" id="L164">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="nc" id="L165">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="nc" id="L162">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L163">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
 
         }
-<span class="fc" id="L168">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/workflows/&quot; + getId();</span>
+<span class="fc" id="L166">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/workflows/&quot; + getId();</span>
     }
 
     /**
@@ -176,8 +174,8 @@ public class GHWorkflow extends GHObject {
      * @return the GH workflow
      */
     GHWorkflow wrapUp(GHRepository owner) {
-<span class="fc" id="L179">        this.owner = owner;</span>
-<span class="fc" id="L180">        return this;</span>
+<span class="fc" id="L177">        this.owner = owner;</span>
+<span class="fc" id="L178">        return this;</span>
     }
 
 }

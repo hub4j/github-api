@@ -19,7 +19,7 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
  *
  * @author Kohsuke Kawaguchi
  * @author Liam Newman
- * @see GitHubBuilder#withAbuseLimitHandler(AbuseLimitHandler) GitHubBuilder#withRateLimitHandler(AbuseLimitHandler)
+ * @see GitHubBuilder#withAbuseLimitHandler(GitHubAbuseLimitHandler)
  * @see GitHubRateLimitHandler
  */
 public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler {
@@ -81,10 +81,11 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      *            the response from the GitHub connector
      * @return true if either &quot;Retry-After&quot; or &quot;gh-limited-by&quot; headers are present
      * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#handle-rate-limit-errors-appropriately&lt;/a&gt;
+     *      &quot;https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#handle-rate-limit-errors-appropriately&quot;&gt;GitHub
+     *      API Rate Limiting Documentation&lt;/a&gt;
      */
     private boolean hasRetryOrLimitHeader(GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L87" title="All 4 branches covered.">        return hasHeader(connectorResponse, &quot;Retry-After&quot;) || hasHeader(connectorResponse, &quot;gh-limited-by&quot;);</span>
+<span class="fc bfc" id="L88" title="All 4 branches covered.">        return hasHeader(connectorResponse, &quot;Retry-After&quot;) || hasHeader(connectorResponse, &quot;gh-limited-by&quot;);</span>
     }
 
     /**
@@ -97,7 +98,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      * @return true if the specified header is present
      */
     private boolean hasHeader(GitHubConnectorResponse connectorResponse, String headerName) {
-<span class="fc bfc" id="L100" title="All 2 branches covered.">        return connectorResponse.header(headerName) != null;</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        return connectorResponse.header(headerName) != null;</span>
     }
 
     /**
@@ -123,62 +124,62 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
     /**
      * Wait until the API abuse &quot;wait time&quot; is passed.
      */
-<span class="fc" id="L126">    public static final GitHubAbuseLimitHandler WAIT = new GitHubAbuseLimitHandler() {</span>
+<span class="fc" id="L127">    public static final GitHubAbuseLimitHandler WAIT = new GitHubAbuseLimitHandler() {</span>
         @Override
         public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
             try {
-<span class="fc" id="L130">                Thread.sleep(parseWaitTime(connectorResponse));</span>
-<span class="nc" id="L131">            } catch (InterruptedException ex) {</span>
-<span class="nc" id="L132">                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);</span>
-<span class="fc" id="L133">            }</span>
-<span class="fc" id="L134">        }</span>
+<span class="fc" id="L131">                Thread.sleep(parseWaitTime(connectorResponse));</span>
+<span class="nc" id="L132">            } catch (InterruptedException ex) {</span>
+<span class="nc" id="L133">                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);</span>
+<span class="fc" id="L134">            }</span>
+<span class="fc" id="L135">        }</span>
     };
 
     /**
      * Fail immediately.
      */
-<span class="fc" id="L140">    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {</span>
+<span class="fc" id="L141">    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {</span>
         @Override
         public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc" id="L143">            throw new HttpException(&quot;Abuse limit reached&quot;,</span>
-<span class="fc" id="L144">                    connectorResponse.statusCode(),</span>
-<span class="fc" id="L145">                    connectorResponse.header(&quot;Status&quot;),</span>
-<span class="fc" id="L146">                    connectorResponse.request().url().toString())</span>
-<span class="fc" id="L147">                    .withResponseHeaderFields(connectorResponse.allHeaders());</span>
+<span class="fc" id="L144">            throw new HttpException(&quot;Abuse limit reached&quot;,</span>
+<span class="fc" id="L145">                    connectorResponse.statusCode(),</span>
+<span class="fc" id="L146">                    connectorResponse.header(&quot;Status&quot;),</span>
+<span class="fc" id="L147">                    connectorResponse.request().url().toString())</span>
+<span class="fc" id="L148">                    .withResponseHeaderFields(connectorResponse.allHeaders());</span>
         }
     };
 
     // If &quot;Retry-After&quot; missing, wait for unambiguously over one minute per GitHub guidance
-<span class="fc" id="L152">    static long DEFAULT_WAIT_MILLIS = Duration.ofSeconds(61).toMillis();</span>
+<span class="fc" id="L153">    static long DEFAULT_WAIT_MILLIS = Duration.ofSeconds(61).toMillis();</span>
 
     /*
      * Exposed for testability. Given an http response, find the retry-after header field and parse it as either a
      * number or a date (the spec allows both). If no header is found, wait for a reasonably amount of time.
      */
     static long parseWaitTime(GitHubConnectorResponse connectorResponse) {
-<span class="fc" id="L159">        String v = connectorResponse.header(&quot;Retry-After&quot;);</span>
-<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (v == null) {</span>
-<span class="fc" id="L161">            return DEFAULT_WAIT_MILLIS;</span>
+<span class="fc" id="L160">        String v = connectorResponse.header(&quot;Retry-After&quot;);</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (v == null) {</span>
+<span class="fc" id="L162">            return DEFAULT_WAIT_MILLIS;</span>
         }
 
         try {
-<span class="fc" id="L165">            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, Duration.ofSeconds(Long.parseLong(v)).toMillis());</span>
-<span class="fc" id="L166">        } catch (NumberFormatException nfe) {</span>
+<span class="fc" id="L166">            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, Duration.ofSeconds(Long.parseLong(v)).toMillis());</span>
+<span class="fc" id="L167">        } catch (NumberFormatException nfe) {</span>
             // The retry-after header could be a number in seconds, or an http-date
             // We know it was a date if we got a number format exception :)
 
             // Don't use ZonedDateTime.now(), because the local and remote server times may not be in sync
             // Instead, we can take advantage of the Date field in the response to see what time the remote server
             // thinks it is
-<span class="fc" id="L173">            String dateField = connectorResponse.header(&quot;Date&quot;);</span>
+<span class="fc" id="L174">            String dateField = connectorResponse.header(&quot;Date&quot;);</span>
             ZonedDateTime now;
-<span class="fc bfc" id="L175" title="All 2 branches covered.">            if (dateField != null) {</span>
-<span class="fc" id="L176">                now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">            if (dateField != null) {</span>
+<span class="fc" id="L177">                now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
             } else {
-<span class="fc" id="L178">                now = ZonedDateTime.now();</span>
+<span class="fc" id="L179">                now = ZonedDateTime.now();</span>
             }
-<span class="fc" id="L180">            ZonedDateTime zdt = ZonedDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
-<span class="fc" id="L181">            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, ChronoUnit.MILLIS.between(now, zdt));</span>
+<span class="fc" id="L181">            ZonedDateTime zdt = ZonedDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
+<span class="fc" id="L182">            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, ChronoUnit.MILLIS.between(now, zdt));</span>
         }
     }
 

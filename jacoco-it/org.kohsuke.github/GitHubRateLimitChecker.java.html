@@ -174,10 +174,10 @@ class GitHubRateLimitChecker {
 <span class="fc" id="L174">            return RateLimitChecker.NONE;</span>
 <span class="fc bfc" id="L175" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.CORE) {</span>
 <span class="fc" id="L176">            return core;</span>
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {</span>
 <span class="fc" id="L178">            return search;</span>
-<span class="nc bnc" id="L179" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
-<span class="nc" id="L180">            return graphql;</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {</span>
+<span class="fc" id="L180">            return graphql;</span>
 <span class="nc bnc" id="L181" title="All 2 branches missed.">        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {</span>
 <span class="nc" id="L182">            return integrationManifest;</span>
         } else {

@@ -2,7 +2,6 @@
 
 import org.kohsuke.github.internal.EnumUtils;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
@@ -26,8 +25,8 @@ public class GHProjectsV2Item extends GHObject {
     /**
      * Create default GHProjectsV2Item instance
      */
-<span class="fc" id="L29">    public GHProjectsV2Item() {</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L28">    public GHProjectsV2Item() {</span>
+<span class="fc" id="L29">    }</span>
 
     private String projectNodeId;
     private String contentNodeId;
@@ -42,7 +41,7 @@ public class GHProjectsV2Item extends GHObject {
      * @return the project node id
      */
     public String getProjectNodeId() {
-<span class="fc" id="L45">        return projectNodeId;</span>
+<span class="fc" id="L44">        return projectNodeId;</span>
     }
 
     /**
@@ -51,7 +50,7 @@ public class GHProjectsV2Item extends GHObject {
      * @return the content node id
      */
     public String getContentNodeId() {
-<span class="fc" id="L54">        return contentNodeId;</span>
+<span class="fc" id="L53">        return contentNodeId;</span>
     }
 
     /**
@@ -60,18 +59,16 @@ public class GHProjectsV2Item extends GHObject {
      * @return the content type
      */
     public ContentType getContentType() {
-<span class="fc" id="L63">        return EnumUtils.getEnumOrDefault(ContentType.class, contentType, ContentType.UNKNOWN);</span>
+<span class="fc" id="L62">        return EnumUtils.getEnumOrDefault(ContentType.class, contentType, ContentType.UNKNOWN);</span>
     }
 
     /**
      * Gets the creator.
      *
      * @return the creator
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public GHUser getCreator() throws IOException {
-<span class="fc" id="L74">        return root().intern(creator);</span>
+    public GHUser getCreator() {
+<span class="fc" id="L71">        return root().intern(creator);</span>
     }
 
     /**
@@ -80,7 +77,7 @@ public class GHProjectsV2Item extends GHObject {
      * @return the archived at
      */
     public Date getArchivedAt() {
-<span class="fc" id="L83">        return GitHubClient.parseDate(archivedAt);</span>
+<span class="fc" id="L80">        return GitHubClient.parseDate(archivedAt);</span>
     }
 
     /**
@@ -89,22 +86,22 @@ public class GHProjectsV2Item extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="nc" id="L92">        throw new IllegalStateException(getClass().getName() + &quot; does not offer a HTML URL.&quot;);</span>
+<span class="nc" id="L89">        throw new IllegalStateException(getClass().getName() + &quot; does not offer a HTML URL.&quot;);</span>
     }
 
     /**
      * The Enum ContentType.
      */
-<span class="fc" id="L98">    public enum ContentType {</span>
+<span class="fc" id="L95">    public enum ContentType {</span>
 
         /** The issue. */
-<span class="fc" id="L101">        ISSUE,</span>
+<span class="fc" id="L98">        ISSUE,</span>
         /** The draftissue. */
-<span class="fc" id="L103">        DRAFTISSUE,</span>
+<span class="fc" id="L100">        DRAFTISSUE,</span>
         /** The pullrequest. */
-<span class="fc" id="L105">        PULLREQUEST,</span>
+<span class="fc" id="L102">        PULLREQUEST,</span>
         /** The unknown. */
-<span class="fc" id="L107">        UNKNOWN;</span>
+<span class="fc" id="L104">        UNKNOWN;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

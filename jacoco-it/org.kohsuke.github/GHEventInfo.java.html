@@ -162,11 +162,9 @@ public class GHEventInfo extends GitHubInteractiveObject {
      * Gets actor login.
      *
      * @return the login of the actor.
-     * @throws IOException
-     *             on error
      */
-    public String getActorLogin() throws IOException {
-<span class="fc" id="L169">        return actor.getLogin();</span>
+    public String getActorLogin() {
+<span class="fc" id="L167">        return actor.getLogin();</span>
     }
 
     /**
@@ -179,7 +177,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHOrganization getOrganization() throws IOException {
-<span class="pc bpc" id="L182" title="1 of 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root().getOrganization(org.getLogin());</span>
+<span class="pc bpc" id="L180" title="1 of 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root().getOrganization(org.getLogin());</span>
     }
 
     /**
@@ -195,9 +193,9 @@ public class GHEventInfo extends GitHubInteractiveObject {
      *             if payload cannot be parsed
      */
     public &lt;T extends GHEventPayload&gt; T getPayload(Class&lt;T&gt; type) throws IOException {
-<span class="fc" id="L198">        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);</span>
-<span class="fc" id="L199">        v.lateBind();</span>
-<span class="fc" id="L200">        return v;</span>
+<span class="fc" id="L196">        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);</span>
+<span class="fc" id="L197">        v.lateBind();</span>
+<span class="fc" id="L198">        return v;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

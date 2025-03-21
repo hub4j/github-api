@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMarketplaceListAccountBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMarketplaceListAccountBuilder.java</span></div><h1>GHMarketplaceListAccountBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
-import java.io.IOException;
-
 // TODO: Auto-generated Javadoc
 /**
  * Returns any accounts associated with a plan, including free plans.
@@ -22,10 +20,10 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
      *            the plan id
      */
     GHMarketplaceListAccountBuilder(GitHub root, long planId) {
-<span class="fc" id="L25">        super(root);</span>
-<span class="fc" id="L26">        this.builder = root.createRequest();</span>
-<span class="fc" id="L27">        this.planId = planId;</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L23">        super(root);</span>
+<span class="fc" id="L24">        this.builder = root.createRequest();</span>
+<span class="fc" id="L25">        this.planId = planId;</span>
+<span class="fc" id="L26">    }</span>
 
     /**
      * Sorts the GitHub accounts by the date they were created or last updated. Can be one of created or updated.
@@ -37,8 +35,8 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
      * @return a GHMarketplaceListAccountBuilder
      */
     public GHMarketplaceListAccountBuilder sort(Sort sort) {
-<span class="fc" id="L40">        this.builder.with(&quot;sort&quot;, sort);</span>
-<span class="fc" id="L41">        return this;</span>
+<span class="fc" id="L38">        this.builder.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L39">        return this;</span>
     }
 
     /**
@@ -49,19 +47,19 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
      * @return a GHMarketplaceListAccountBuilder
      */
     public GHMarketplaceListAccountBuilder direction(GHDirection direction) {
-<span class="fc" id="L52">        this.builder.with(&quot;direction&quot;, direction);</span>
-<span class="fc" id="L53">        return this;</span>
+<span class="fc" id="L50">        this.builder.with(&quot;direction&quot;, direction);</span>
+<span class="fc" id="L51">        return this;</span>
     }
 
     /**
      * The enum Sort.
      */
-<span class="fc" id="L59">    public enum Sort {</span>
+<span class="fc" id="L57">    public enum Sort {</span>
 
         /** The created. */
-<span class="fc" id="L62">        CREATED,</span>
+<span class="fc" id="L60">        CREATED,</span>
         /** The updated. */
-<span class="fc" id="L64">        UPDATED</span>
+<span class="fc" id="L62">        UPDATED</span>
     }
 
     /**
@@ -72,12 +70,10 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
      * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
      *
      * @return a paged iterable instance of GHMarketplaceAccountPlan
-     * @throws IOException
-     *             on error
      */
-    public PagedIterable&lt;GHMarketplaceAccountPlan&gt; createRequest() throws IOException {
-<span class="fc" id="L79">        return builder.withUrlPath(String.format(&quot;/marketplace_listing/plans/%d/accounts&quot;, this.planId))</span>
-<span class="fc" id="L80">                .toIterable(GHMarketplaceAccountPlan[].class, null);</span>
+    public PagedIterable&lt;GHMarketplaceAccountPlan&gt; createRequest() {
+<span class="fc" id="L75">        return builder.withUrlPath(String.format(&quot;/marketplace_listing/plans/%d/accounts&quot;, this.planId))</span>
+<span class="fc" id="L76">                .toIterable(GHMarketplaceAccountPlan[].class, null);</span>
     }
 
 }

@@ -1,5 +1,7 @@
 module:org.kohsuke.github.api
 org.kohsuke.github
+org.kohsuke.github.connector
 org.kohsuke.github.extras.authorization
 org.kohsuke.github.extras.okhttp3
 org.kohsuke.github.internal
+org.kohsuke.github.internal.graphql.response

@@ -93,7 +93,7 @@ public class HttpClientGitHubConnector implements GitHubConnector {
      *
      * Implementation specific to {@link HttpResponse}.
      */
-    private static class HttpClientGitHubConnectorResponse extends GitHubConnectorResponse.ByteArrayResponse {
+    private static class HttpClientGitHubConnectorResponse extends GitHubConnectorResponse {
 
         @Nonnull
         private final HttpResponse&lt;InputStream&gt; response;
@@ -113,8 +113,7 @@ public class HttpClientGitHubConnector implements GitHubConnector {
         @Override
         public void close() throws IOException {
 <span class="fc" id="L115">            super.close();</span>
-<span class="fc" id="L116">            IOUtils.closeQuietly(response.body());</span>
-<span class="fc" id="L117">        }</span>
+<span class="fc" id="L116">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -164,12 +164,10 @@ public class GHTeam extends GHObject implements Refreshable {
      * Retrieves the discussions.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
     @Nonnull
-    public PagedIterable&lt;GHDiscussion&gt; listDiscussions() throws IOException {
-<span class="fc" id="L172">        return GHDiscussion.readAll(this);</span>
+    public PagedIterable&lt;GHDiscussion&gt; listDiscussions() {
+<span class="fc" id="L170">        return GHDiscussion.readAll(this);</span>
     }
 
     /**
@@ -178,11 +176,9 @@ public class GHTeam extends GHObject implements Refreshable {
      * @param role
      *            the role
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable&lt;GHUser&gt; listMembers(String role) throws IOException {
-<span class="fc" id="L185">        return root().createRequest().withUrlPath(api(&quot;/members&quot;)).with(&quot;role&quot;, role).toIterable(GHUser[].class, null);</span>
+    public PagedIterable&lt;GHUser&gt; listMembers(String role) {
+<span class="fc" id="L181">        return root().createRequest().withUrlPath(api(&quot;/members&quot;)).with(&quot;role&quot;, role).toIterable(GHUser[].class, null);</span>
     }
 
     /**
@@ -191,11 +187,9 @@ public class GHTeam extends GHObject implements Refreshable {
      * @param role
      *            the role
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable&lt;GHUser&gt; listMembers(Role role) throws IOException {
-<span class="fc" id="L198">        return listMembers(transformEnum(role));</span>
+    public PagedIterable&lt;GHUser&gt; listMembers(Role role) {
+<span class="fc" id="L192">        return listMembers(transformEnum(role));</span>
     }
 
     /**
@@ -210,31 +204,27 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     @Nonnull
     public GHDiscussion getDiscussion(long discussionNumber) throws IOException {
-<span class="fc" id="L213">        return GHDiscussion.read(this, discussionNumber);</span>
+<span class="fc" id="L207">        return GHDiscussion.read(this, discussionNumber);</span>
     }
 
     /**
      * Retrieves the current members.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable&lt;GHUser&gt; listMembers() throws IOException {
-<span class="fc" id="L224">        return listMembers(&quot;all&quot;);</span>
+    public PagedIterable&lt;GHUser&gt; listMembers() {
+<span class="fc" id="L216">        return listMembers(&quot;all&quot;);</span>
     }
 
     /**
      * Retrieves the teams that are children of this team.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable&lt;GHTeam&gt; listChildTeams() throws IOException {
-<span class="fc" id="L235">        return root().createRequest()</span>
-<span class="fc" id="L236">                .withUrlPath(api(&quot;/teams&quot;))</span>
-<span class="fc" id="L237">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this.organization));</span>
+    public PagedIterable&lt;GHTeam&gt; listChildTeams() {
+<span class="fc" id="L225">        return root().createRequest()</span>
+<span class="fc" id="L226">                .withUrlPath(api(&quot;/teams&quot;))</span>
+<span class="fc" id="L227">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this.organization));</span>
     }
 
     /**
@@ -245,7 +235,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public Set&lt;GHUser&gt; getMembers() throws IOException {
-<span class="fc" id="L248">        return listMembers().toSet();</span>
+<span class="fc" id="L238">        return listMembers().toSet();</span>
     }
 
     /**
@@ -257,10 +247,10 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public boolean hasMember(GHUser user) {
         try {
-<span class="fc" id="L260">            root().createRequest().withUrlPath(api(&quot;/memberships/&quot; + user.getLogin())).send();</span>
-<span class="fc" id="L261">            return true;</span>
-<span class="fc" id="L262">        } catch (@SuppressWarnings(&quot;unused&quot;) IOException ignore) {</span>
-<span class="fc" id="L263">            return false;</span>
+<span class="fc" id="L250">            root().createRequest().withUrlPath(api(&quot;/memberships/&quot; + user.getLogin())).send();</span>
+<span class="fc" id="L251">            return true;</span>
+<span class="fc" id="L252">        } catch (@SuppressWarnings(&quot;unused&quot;) IOException ignore) {</span>
+<span class="fc" id="L253">            return false;</span>
         }
     }
 
@@ -268,15 +258,13 @@ public class GHTeam extends GHObject implements Refreshable {
      * Gets repositories.
      *
      * @return the repositories
-     * @throws IOException
-     *             the io exception
      */
-    public Map&lt;String, GHRepository&gt; getRepositories() throws IOException {
-<span class="fc" id="L275">        Map&lt;String, GHRepository&gt; m = new TreeMap&lt;&gt;();</span>
-<span class="fc bfc" id="L276" title="All 2 branches covered.">        for (GHRepository r : listRepositories()) {</span>
-<span class="fc" id="L277">            m.put(r.getName(), r);</span>
-<span class="fc" id="L278">        }</span>
-<span class="fc" id="L279">        return m;</span>
+    public Map&lt;String, GHRepository&gt; getRepositories() {
+<span class="fc" id="L263">        Map&lt;String, GHRepository&gt; m = new TreeMap&lt;&gt;();</span>
+<span class="fc bfc" id="L264" title="All 2 branches covered.">        for (GHRepository r : listRepositories()) {</span>
+<span class="fc" id="L265">            m.put(r.getName(), r);</span>
+<span class="fc" id="L266">        }</span>
+<span class="fc" id="L267">        return m;</span>
     }
 
     /**
@@ -285,7 +273,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories() {
-<span class="fc" id="L288">        return root().createRequest().withUrlPath(api(&quot;/repos&quot;)).toIterable(GHRepository[].class, null);</span>
+<span class="fc" id="L276">        return root().createRequest().withUrlPath(api(&quot;/repos&quot;)).toIterable(GHRepository[].class, null);</span>
     }
 
     /**
@@ -300,8 +288,8 @@ public class GHTeam extends GHObject implements Refreshable {
      * @since 1.59
      */
     public void add(GHUser u) throws IOException {
-<span class="nc" id="L303">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
-<span class="nc" id="L304">    }</span>
+<span class="nc" id="L291">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
+<span class="nc" id="L292">    }</span>
 
     /**
      * Adds a member to the team
@@ -316,12 +304,12 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void add(GHUser user, Role role) throws IOException {
-<span class="fc" id="L319">        root().createRequest()</span>
-<span class="fc" id="L320">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L321">                .with(&quot;role&quot;, role)</span>
-<span class="fc" id="L322">                .withUrlPath(api(&quot;/memberships/&quot; + user.getLogin()))</span>
-<span class="fc" id="L323">                .send();</span>
-<span class="fc" id="L324">    }</span>
+<span class="fc" id="L307">        root().createRequest()</span>
+<span class="fc" id="L308">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L309">                .with(&quot;role&quot;, role)</span>
+<span class="fc" id="L310">                .withUrlPath(api(&quot;/memberships/&quot; + user.getLogin()))</span>
+<span class="fc" id="L311">                .send();</span>
+<span class="fc" id="L312">    }</span>
 
     /**
      * Removes a member to the team.
@@ -332,8 +320,8 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void remove(GHUser u) throws IOException {
-<span class="fc" id="L335">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
-<span class="fc" id="L336">    }</span>
+<span class="fc" id="L323">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;/memberships/&quot; + u.getLogin())).send();</span>
+<span class="fc" id="L324">    }</span>
 
     /**
      * Add.
@@ -344,8 +332,8 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void add(GHRepository r) throws IOException {
-<span class="fc" id="L347">        add(r, (GHOrganization.RepositoryRole) null);</span>
-<span class="fc" id="L348">    }</span>
+<span class="fc" id="L335">        add(r, (GHOrganization.RepositoryRole) null);</span>
+<span class="fc" id="L336">    }</span>
 
     /**
      * Add.
@@ -358,13 +346,13 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void add(GHRepository r, GHOrganization.RepositoryRole permission) throws IOException {
-<span class="fc" id="L361">        root().createRequest()</span>
-<span class="fc" id="L362">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L363">                .with(&quot;permission&quot;,</span>
-<span class="fc" id="L364">                        Optional.ofNullable(permission).map(GHOrganization.RepositoryRole::toString).orElse(null))</span>
-<span class="fc" id="L365">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
-<span class="fc" id="L366">                .send();</span>
-<span class="fc" id="L367">    }</span>
+<span class="fc" id="L349">        root().createRequest()</span>
+<span class="fc" id="L350">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L351">                .with(&quot;permission&quot;,</span>
+<span class="fc" id="L352">                        Optional.ofNullable(permission).map(GHOrganization.RepositoryRole::toString).orElse(null))</span>
+<span class="fc" id="L353">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
+<span class="fc" id="L354">                .send();</span>
+<span class="fc" id="L355">    }</span>
 
     /**
      * Remove.
@@ -375,11 +363,11 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void remove(GHRepository r) throws IOException {
-<span class="nc" id="L378">        root().createRequest()</span>
-<span class="nc" id="L379">                .method(&quot;DELETE&quot;)</span>
-<span class="nc" id="L380">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
-<span class="nc" id="L381">                .send();</span>
-<span class="nc" id="L382">    }</span>
+<span class="nc" id="L366">        root().createRequest()</span>
+<span class="nc" id="L367">                .method(&quot;DELETE&quot;)</span>
+<span class="nc" id="L368">                .withUrlPath(api(&quot;/repos/&quot; + r.getOwnerName() + '/' + r.getName()))</span>
+<span class="nc" id="L369">                .send();</span>
+<span class="nc" id="L370">    }</span>
 
     /**
      * Deletes this team.
@@ -388,21 +376,21 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="nc" id="L391">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;&quot;)).send();</span>
-<span class="nc" id="L392">    }</span>
+<span class="nc" id="L379">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(api(&quot;&quot;)).send();</span>
+<span class="nc" id="L380">    }</span>
 
     private String api(String tail) {
-<span class="fc bfc" id="L395" title="All 2 branches covered.">        if (organization == null) {</span>
+<span class="fc bfc" id="L383" title="All 2 branches covered.">        if (organization == null) {</span>
             // Teams returned from pull requests to do not have an organization. Attempt to use url.
-<span class="fc" id="L397">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="fc" id="L398">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;) + tail;</span>
+<span class="fc" id="L385">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="fc" id="L386">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;) + tail;</span>
         }
 
-<span class="fc" id="L401">        return &quot;/organizations/&quot; + organization.getId() + &quot;/team/&quot; + getId() + tail;</span>
+<span class="fc" id="L389">        return &quot;/organizations/&quot; + organization.getId() + &quot;/team/&quot; + getId() + tail;</span>
     }
 
     private String publicApi(String tail) throws IOException {
-<span class="fc" id="L405">        return &quot;/orgs/&quot; + getOrganization().login + &quot;/teams/&quot; + getSlug() + tail;</span>
+<span class="fc" id="L393">        return &quot;/orgs/&quot; + getOrganization().login + &quot;/teams/&quot; + getSlug() + tail;</span>
     }
 
     /**
@@ -417,7 +405,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *             the io exception
      */
     public GHDiscussion.Creator createDiscussion(String title) throws IOException {
-<span class="fc" id="L420">        return GHDiscussion.create(this).title(title);</span>
+<span class="fc" id="L408">        return GHDiscussion.create(this).title(title);</span>
     }
 
     /**
@@ -431,15 +419,15 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public List&lt;GHExternalGroup&gt; getExternalGroups() throws IOException {
         try {
-<span class="fc" id="L434">            return Collections.unmodifiableList(Arrays.asList(root().createRequest()</span>
-<span class="fc" id="L435">                    .method(&quot;GET&quot;)</span>
-<span class="fc" id="L436">                    .withUrlPath(publicApi(EXTERNAL_GROUPS))</span>
-<span class="fc" id="L437">                    .fetch(GHExternalGroupPage.class)</span>
-<span class="fc" id="L438">                    .getGroups()));</span>
-<span class="fc" id="L439">        } catch (final HttpException e) {</span>
-<span class="fc" id="L440">            throw EnterpriseManagedSupport.forOrganization(getOrganization())</span>
-<span class="fc" id="L441">                    .filterException(e, &quot;Could not retrieve team external groups&quot;)</span>
-<span class="fc" id="L442">                    .orElse(e);</span>
+<span class="fc" id="L422">            return Collections.unmodifiableList(Arrays.asList(root().createRequest()</span>
+<span class="fc" id="L423">                    .method(&quot;GET&quot;)</span>
+<span class="fc" id="L424">                    .withUrlPath(publicApi(EXTERNAL_GROUPS))</span>
+<span class="fc" id="L425">                    .fetch(GHExternalGroupPage.class)</span>
+<span class="fc" id="L426">                    .getGroups()));</span>
+<span class="fc" id="L427">        } catch (final HttpException e) {</span>
+<span class="fc" id="L428">            throw EnterpriseManagedSupport.forOrganization(getOrganization())</span>
+<span class="fc" id="L429">                    .filterException(e, &quot;Could not retrieve team external groups&quot;)</span>
+<span class="fc" id="L430">                    .orElse(e);</span>
         }
     }
 
@@ -455,7 +443,7 @@ public class GHTeam extends GHObject implements Refreshable {
      *      &quot;https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#update-the-connection-between-an-external-group-and-a-team&quot;&gt;documentation&lt;/a&gt;
      */
     public GHExternalGroup connectToExternalGroup(final GHExternalGroup group) throws IOException {
-<span class="fc" id="L458">        return connectToExternalGroup(group.getId());</span>
+<span class="fc" id="L446">        return connectToExternalGroup(group.getId());</span>
     }
 
     /**
@@ -471,16 +459,16 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public GHExternalGroup connectToExternalGroup(final long group_id) throws IOException {
         try {
-<span class="fc" id="L474">            return root().createRequest()</span>
-<span class="fc" id="L475">                    .method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L476">                    .with(&quot;group_id&quot;, group_id)</span>
-<span class="fc" id="L477">                    .withUrlPath(publicApi(EXTERNAL_GROUPS))</span>
-<span class="fc" id="L478">                    .fetch(GHExternalGroup.class)</span>
-<span class="fc" id="L479">                    .wrapUp(getOrganization());</span>
-<span class="fc" id="L480">        } catch (final HttpException e) {</span>
-<span class="fc" id="L481">            throw EnterpriseManagedSupport.forOrganization(getOrganization())</span>
-<span class="fc" id="L482">                    .filterException(e, &quot;Could not connect team to external group&quot;)</span>
-<span class="fc" id="L483">                    .orElse(e);</span>
+<span class="fc" id="L462">            return root().createRequest()</span>
+<span class="fc" id="L463">                    .method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L464">                    .with(&quot;group_id&quot;, group_id)</span>
+<span class="fc" id="L465">                    .withUrlPath(publicApi(EXTERNAL_GROUPS))</span>
+<span class="fc" id="L466">                    .fetch(GHExternalGroup.class)</span>
+<span class="fc" id="L467">                    .wrapUp(getOrganization());</span>
+<span class="fc" id="L468">        } catch (final HttpException e) {</span>
+<span class="fc" id="L469">            throw EnterpriseManagedSupport.forOrganization(getOrganization())</span>
+<span class="fc" id="L470">                    .filterException(e, &quot;Could not connect team to external group&quot;)</span>
+<span class="fc" id="L471">                    .orElse(e);</span>
         }
     }
 
@@ -493,8 +481,8 @@ public class GHTeam extends GHObject implements Refreshable {
      *      &quot;https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#remove-the-connection-between-an-external-group-and-a-team&quot;&gt;documentation&lt;/a&gt;
      */
     public void deleteExternalGroupConnection() throws IOException {
-<span class="fc" id="L496">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(publicApi(EXTERNAL_GROUPS)).send();</span>
-<span class="fc" id="L497">    }</span>
+<span class="fc" id="L484">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(publicApi(EXTERNAL_GROUPS)).send();</span>
+<span class="fc" id="L485">    }</span>
 
     /**
      * Gets organization.
@@ -505,8 +493,8 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHOrganization getOrganization() throws IOException {
-<span class="fc" id="L508">        refresh(organization);</span>
-<span class="fc" id="L509">        return organization;</span>
+<span class="fc" id="L496">        refresh(organization);</span>
+<span class="fc" id="L497">        return organization;</span>
     }
 
     /**
@@ -517,8 +505,8 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     @Override
     public void refresh() throws IOException {
-<span class="fc" id="L520">        root().createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root());</span>
-<span class="fc" id="L521">    }</span>
+<span class="fc" id="L508">        root().createRequest().withUrlPath(api(&quot;&quot;)).fetchInto(this).wrapUp(root());</span>
+<span class="fc" id="L509">    }</span>
 
     /**
      * Gets the html url.
@@ -526,7 +514,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L529">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L517">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -538,16 +526,16 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     @Override
     public boolean equals(Object o) {
-<span class="fc bfc" id="L541" title="All 2 branches covered.">        if (this == o) {</span>
-<span class="fc" id="L542">            return true;</span>
+<span class="fc bfc" id="L529" title="All 2 branches covered.">        if (this == o) {</span>
+<span class="fc" id="L530">            return true;</span>
         }
-<span class="pc bpc" id="L544" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
-<span class="nc" id="L545">            return false;</span>
+<span class="pc bpc" id="L532" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L533">            return false;</span>
         }
-<span class="fc" id="L547">        GHTeam ghTeam = (GHTeam) o;</span>
-<span class="pc bpc" id="L548" title="2 of 4 branches missed.">        return Objects.equals(name, ghTeam.name) &amp;&amp; Objects.equals(getUrl(), ghTeam.getUrl())</span>
-<span class="pc bpc" id="L549" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(permission, ghTeam.permission) &amp;&amp; Objects.equals(slug, ghTeam.slug)</span>
-<span class="pc bpc" id="L550" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(description, ghTeam.description) &amp;&amp; Objects.equals(privacy, ghTeam.privacy);</span>
+<span class="fc" id="L535">        GHTeam ghTeam = (GHTeam) o;</span>
+<span class="pc bpc" id="L536" title="2 of 4 branches missed.">        return Objects.equals(name, ghTeam.name) &amp;&amp; Objects.equals(getUrl(), ghTeam.getUrl())</span>
+<span class="pc bpc" id="L537" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(permission, ghTeam.permission) &amp;&amp; Objects.equals(slug, ghTeam.slug)</span>
+<span class="pc bpc" id="L538" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(description, ghTeam.description) &amp;&amp; Objects.equals(privacy, ghTeam.privacy);</span>
     }
 
     /**
@@ -557,7 +545,7 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L560">        return Objects.hash(name, getUrl(), permission, slug, description, privacy);</span>
+<span class="fc" id="L548">        return Objects.hash(name, getUrl(), permission, slug, description, privacy);</span>
     }
 
 }

@@ -56,11 +56,11 @@ public abstract class GHPerson extends GHObject {
 <span class="fc bfc" id="L56" title="All 2 branches covered.">        if (super.getCreatedAt() != null) {</span>
 <span class="fc" id="L57">            return; // already populated</span>
         }
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (isOffline()) {</span>
-<span class="fc" id="L60">            return; // cannot populate, will have to live with what we have</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (isOffline()) {</span>
+<span class="nc" id="L60">            return; // cannot populate, will have to live with what we have</span>
         }
 <span class="fc" id="L62">        URL url = getUrl();</span>
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (url != null) {</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (url != null) {</span>
 <span class="fc" id="L64">            root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);</span>
         }
 <span class="fc" id="L66">    }</span>
@@ -72,15 +72,13 @@ public abstract class GHPerson extends GHObject {
      * To list your own repositories, including private repositories, use {@link GHMyself#listRepositories()}
      *
      * @return the repositories
-     * @throws IOException
-     *             the io exception
      */
-    public synchronized Map&lt;String, GHRepository&gt; getRepositories() throws IOException {
-<span class="fc" id="L79">        Map&lt;String, GHRepository&gt; repositories = new TreeMap&lt;String, GHRepository&gt;();</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">        for (GHRepository r : listRepositories().withPageSize(100)) {</span>
-<span class="fc" id="L81">            repositories.put(r.getName(), r);</span>
-<span class="fc" id="L82">        }</span>
-<span class="fc" id="L83">        return Collections.unmodifiableMap(repositories);</span>
+    public synchronized Map&lt;String, GHRepository&gt; getRepositories() {
+<span class="fc" id="L77">        Map&lt;String, GHRepository&gt; repositories = new TreeMap&lt;String, GHRepository&gt;();</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (GHRepository r : listRepositories().withPageSize(100)) {</span>
+<span class="fc" id="L79">            repositories.put(r.getName(), r);</span>
+<span class="fc" id="L80">        }</span>
+<span class="fc" id="L81">        return Collections.unmodifiableMap(repositories);</span>
     }
 
     /**
@@ -91,10 +89,10 @@ public abstract class GHPerson extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories() {
-<span class="fc" id="L94">        return root().createRequest()</span>
-<span class="fc" id="L95">                .withUrlPath(&quot;/users/&quot; + login + &quot;/repos&quot;)</span>
-<span class="fc" id="L96">                .toIterable(GHRepository[].class, null)</span>
-<span class="fc" id="L97">                .withPageSize(30);</span>
+<span class="fc" id="L92">        return root().createRequest()</span>
+<span class="fc" id="L93">                .withUrlPath(&quot;/users/&quot; + login + &quot;/repos&quot;)</span>
+<span class="fc" id="L94">                .toIterable(GHRepository[].class, null)</span>
+<span class="fc" id="L95">                .withPageSize(30);</span>
     }
 
     /**
@@ -108,7 +106,7 @@ public abstract class GHPerson extends GHObject {
      */
     @Deprecated
     public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize) {
-<span class="fc" id="L111">        return listRepositories().withPageSize(pageSize);</span>
+<span class="fc" id="L109">        return listRepositories().withPageSize(pageSize);</span>
     }
 
     /**
@@ -122,9 +120,9 @@ public abstract class GHPerson extends GHObject {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-<span class="fc" id="L125">            return GHRepository.read(root(), login, name);</span>
-<span class="fc" id="L126">        } catch (FileNotFoundException e) {</span>
-<span class="fc" id="L127">            return null;</span>
+<span class="fc" id="L123">            return GHRepository.read(root(), login, name);</span>
+<span class="fc" id="L124">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L125">            return null;</span>
         }
     }
 
@@ -143,7 +141,7 @@ public abstract class GHPerson extends GHObject {
      * @return the avatar url
      */
     public String getAvatarUrl() {
-<span class="nc" id="L146">        return avatar_url;</span>
+<span class="nc" id="L144">        return avatar_url;</span>
     }
 
     /**
@@ -152,7 +150,7 @@ public abstract class GHPerson extends GHObject {
      * @return the login
      */
     public String getLogin() {
-<span class="fc" id="L155">        return login;</span>
+<span class="fc" id="L153">        return login;</span>
     }
 
     /**
@@ -163,8 +161,8 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public String getName() throws IOException {
-<span class="fc" id="L166">        populate();</span>
-<span class="fc" id="L167">        return name;</span>
+<span class="fc" id="L164">        populate();</span>
+<span class="fc" id="L165">        return name;</span>
     }
 
     /**
@@ -175,8 +173,8 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public String getCompany() throws IOException {
-<span class="fc" id="L178">        populate();</span>
-<span class="fc" id="L179">        return company;</span>
+<span class="fc" id="L176">        populate();</span>
+<span class="fc" id="L177">        return company;</span>
     }
 
     /**
@@ -187,8 +185,8 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public String getLocation() throws IOException {
-<span class="nc" id="L190">        populate();</span>
-<span class="nc" id="L191">        return location;</span>
+<span class="nc" id="L188">        populate();</span>
+<span class="nc" id="L189">        return location;</span>
     }
 
     /**
@@ -199,8 +197,8 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public String getTwitterUsername() throws IOException {
-<span class="fc" id="L202">        populate();</span>
-<span class="fc" id="L203">        return twitter_username;</span>
+<span class="fc" id="L200">        populate();</span>
+<span class="fc" id="L201">        return twitter_username;</span>
     }
 
     /**
@@ -211,8 +209,8 @@ public abstract class GHPerson extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     public Date getCreatedAt() throws IOException {
-<span class="nc" id="L214">        populate();</span>
-<span class="nc" id="L215">        return super.getCreatedAt();</span>
+<span class="nc" id="L212">        populate();</span>
+<span class="nc" id="L213">        return super.getCreatedAt();</span>
     }
 
     /**
@@ -223,8 +221,8 @@ public abstract class GHPerson extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     public Date getUpdatedAt() throws IOException {
-<span class="nc" id="L226">        populate();</span>
-<span class="nc" id="L227">        return super.getUpdatedAt();</span>
+<span class="nc" id="L224">        populate();</span>
+<span class="nc" id="L225">        return super.getUpdatedAt();</span>
     }
 
     /**
@@ -235,8 +233,8 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public String getBlog() throws IOException {
-<span class="fc" id="L238">        populate();</span>
-<span class="fc" id="L239">        return blog;</span>
+<span class="fc" id="L236">        populate();</span>
+<span class="fc" id="L237">        return blog;</span>
     }
 
     /**
@@ -245,7 +243,7 @@ public abstract class GHPerson extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="nc" id="L248">        return GitHubClient.parseURL(html_url);</span>
+<span class="nc" id="L246">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -256,8 +254,8 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public String getEmail() throws IOException {
-<span class="fc" id="L259">        populate();</span>
-<span class="fc" id="L260">        return email;</span>
+<span class="fc" id="L257">        populate();</span>
+<span class="fc" id="L258">        return email;</span>
     }
 
     /**
@@ -268,8 +266,8 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public int getPublicGistCount() throws IOException {
-<span class="fc" id="L271">        populate();</span>
-<span class="fc" id="L272">        return public_gists;</span>
+<span class="fc" id="L269">        populate();</span>
+<span class="fc" id="L270">        return public_gists;</span>
     }
 
     /**
@@ -280,8 +278,8 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public int getPublicRepoCount() throws IOException {
-<span class="fc" id="L283">        populate();</span>
-<span class="fc" id="L284">        return public_repos;</span>
+<span class="fc" id="L281">        populate();</span>
+<span class="fc" id="L282">        return public_repos;</span>
     }
 
     /**
@@ -292,8 +290,8 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public int getFollowingCount() throws IOException {
-<span class="fc" id="L295">        populate();</span>
-<span class="fc" id="L296">        return following;</span>
+<span class="fc" id="L293">        populate();</span>
+<span class="fc" id="L294">        return following;</span>
     }
 
     /**
@@ -304,8 +302,8 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public int getFollowersCount() throws IOException {
-<span class="fc" id="L307">        populate();</span>
-<span class="fc" id="L308">        return followers;</span>
+<span class="fc" id="L305">        populate();</span>
+<span class="fc" id="L306">        return followers;</span>
     }
 
     /**
@@ -316,7 +314,9 @@ public abstract class GHPerson extends GHObject {
      *             the io exception
      */
     public String getType() throws IOException {
-<span class="fc" id="L319">        populate();</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (type == null) {</span>
+<span class="fc" id="L318">            populate();</span>
+        }
 <span class="fc" id="L320">        return type;</span>
     }
 

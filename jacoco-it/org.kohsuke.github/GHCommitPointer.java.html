@@ -49,14 +49,12 @@ public class GHCommitPointer {
      * This points to the user who owns the {@link #getRepository()}.
      *
      * @return the user
-     * @throws IOException
-     *             the io exception
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHUser getUser() throws IOException {
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (user != null)</span>
-<span class="fc" id="L58">            return user.root().intern(user);</span>
-<span class="nc" id="L59">        return user;</span>
+    public GHUser getUser() {
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (user != null)</span>
+<span class="fc" id="L56">            return user.root().intern(user);</span>
+<span class="nc" id="L57">        return user;</span>
     }
 
     /**
@@ -66,7 +64,7 @@ public class GHCommitPointer {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="nc" id="L69">        return repo;</span>
+<span class="nc" id="L67">        return repo;</span>
     }
 
     /**
@@ -75,7 +73,7 @@ public class GHCommitPointer {
      * @return the ref
      */
     public String getRef() {
-<span class="fc" id="L78">        return ref;</span>
+<span class="fc" id="L76">        return ref;</span>
     }
 
     /**
@@ -84,7 +82,7 @@ public class GHCommitPointer {
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L87">        return sha;</span>
+<span class="fc" id="L85">        return sha;</span>
     }
 
     /**
@@ -93,7 +91,7 @@ public class GHCommitPointer {
      * @return the label
      */
     public String getLabel() {
-<span class="fc" id="L96">        return label;</span>
+<span class="fc" id="L94">        return label;</span>
     }
 
     /**
@@ -104,7 +102,7 @@ public class GHCommitPointer {
      *             the io exception
      */
     public GHCommit getCommit() throws IOException {
-<span class="nc" id="L107">        return getRepository().getCommit(getSha());</span>
+<span class="nc" id="L105">        return getRepository().getCommit(getSha());</span>
     }
 
 }

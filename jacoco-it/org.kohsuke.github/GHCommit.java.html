@@ -520,17 +520,15 @@ public class GHCommit {
      * Retrieves a list of branches where this commit is the head commit.
      *
      * @return {@link PagedIterable} with the branches where the commit is the head commit
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable&lt;GHBranch&gt; listBranchesWhereHead() throws IOException {
-<span class="fc" id="L527">        return owner.root()</span>
-<span class="fc" id="L528">                .createRequest()</span>
-<span class="fc" id="L529">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/branches-where-head&quot;,</span>
-<span class="fc" id="L530">                        owner.getOwnerName(),</span>
-<span class="fc" id="L531">                        owner.getName(),</span>
+    public PagedIterable&lt;GHBranch&gt; listBranchesWhereHead() {
+<span class="fc" id="L525">        return owner.root()</span>
+<span class="fc" id="L526">                .createRequest()</span>
+<span class="fc" id="L527">                .withUrlPath(String.format(&quot;/repos/%s/%s/commits/%s/branches-where-head&quot;,</span>
+<span class="fc" id="L528">                        owner.getOwnerName(),</span>
+<span class="fc" id="L529">                        owner.getName(),</span>
                         sha))
-<span class="fc" id="L533">                .toIterable(GHBranch[].class, item -&gt; item.wrap(owner));</span>
+<span class="fc" id="L531">                .toIterable(GHBranch[].class, item -&gt; item.wrap(owner));</span>
     }
 
     /**
@@ -539,7 +537,7 @@ public class GHCommit {
      * @return {@link PagedIterable} with all the commit comments in this repository.
      */
     public PagedIterable&lt;GHCommitComment&gt; listComments() {
-<span class="fc" id="L542">        return owner.listCommitComments(sha);</span>
+<span class="fc" id="L540">        return owner.listCommitComments(sha);</span>
     }
 
     /**
@@ -560,17 +558,17 @@ public class GHCommit {
      *             if comment is not created
      */
     public GHCommitComment createComment(String body, String path, Integer line, Integer position) throws IOException {
-<span class="fc" id="L563">        GHCommitComment r = owner.root()</span>
-<span class="fc" id="L564">                .createRequest()</span>
-<span class="fc" id="L565">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L566">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L567">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L568">                .with(&quot;line&quot;, line)</span>
-<span class="fc" id="L569">                .with(&quot;position&quot;, position)</span>
-<span class="fc" id="L570">                .withUrlPath(</span>
-<span class="fc" id="L571">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
-<span class="fc" id="L572">                .fetch(GHCommitComment.class);</span>
-<span class="fc" id="L573">        return r.wrap(owner);</span>
+<span class="fc" id="L561">        GHCommitComment r = owner.root()</span>
+<span class="fc" id="L562">                .createRequest()</span>
+<span class="fc" id="L563">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L564">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L565">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L566">                .with(&quot;line&quot;, line)</span>
+<span class="fc" id="L567">                .with(&quot;position&quot;, position)</span>
+<span class="fc" id="L568">                .withUrlPath(</span>
+<span class="fc" id="L569">                        String.format(&quot;/repos/%s/%s/commits/%s/comments&quot;, owner.getOwnerName(), owner.getName(), sha))</span>
+<span class="fc" id="L570">                .fetch(GHCommitComment.class);</span>
+<span class="fc" id="L571">        return r.wrap(owner);</span>
     }
 
     /**
@@ -583,7 +581,7 @@ public class GHCommit {
      *             the io exception
      */
     public GHCommitComment createComment(String body) throws IOException {
-<span class="fc" id="L586">        return createComment(body, null, null, null);</span>
+<span class="fc" id="L584">        return createComment(body, null, null, null);</span>
     }
 
     /**
@@ -594,7 +592,7 @@ public class GHCommit {
      *             if statuses cannot be read
      */
     public PagedIterable&lt;GHCommitStatus&gt; listStatuses() throws IOException {
-<span class="nc" id="L597">        return owner.listCommitStatuses(sha);</span>
+<span class="nc" id="L595">        return owner.listCommitStatuses(sha);</span>
     }
 
     /**
@@ -605,7 +603,7 @@ public class GHCommit {
      *             on error
      */
     public GHCommitStatus getLastStatus() throws IOException {
-<span class="fc" id="L608">        return owner.getLastCommitStatus(sha);</span>
+<span class="fc" id="L606">        return owner.getLastCommitStatus(sha);</span>
     }
 
     /**
@@ -616,7 +614,7 @@ public class GHCommit {
      *             on error
      */
     public PagedIterable&lt;GHCheckRun&gt; getCheckRuns() throws IOException {
-<span class="nc" id="L619">        return owner.getCheckRuns(sha);</span>
+<span class="nc" id="L617">        return owner.getCheckRuns(sha);</span>
     }
 
     /**
@@ -626,9 +624,9 @@ public class GHCommit {
      *             on error
      */
     void populate() throws IOException {
-<span class="pc bpc" id="L629" title="1 of 4 branches missed.">        if (files == null &amp;&amp; stats == null)</span>
-<span class="fc" id="L630">            owner.root().createRequest().withUrlPath(owner.getApiTailUrl(&quot;commits/&quot; + sha)).fetchInto(this);</span>
-<span class="fc" id="L631">    }</span>
+<span class="pc bpc" id="L627" title="1 of 4 branches missed.">        if (files == null &amp;&amp; stats == null)</span>
+<span class="fc" id="L628">            owner.root().createRequest().withUrlPath(owner.getApiTailUrl(&quot;commits/&quot; + sha)).fetchInto(this);</span>
+<span class="fc" id="L629">    }</span>
 
     /**
      * Wrap up.
@@ -638,8 +636,8 @@ public class GHCommit {
      * @return the GH commit
      */
     GHCommit wrapUp(GHRepository owner) {
-<span class="fc" id="L641">        this.owner = owner;</span>
-<span class="fc" id="L642">        return this;</span>
+<span class="fc" id="L639">        this.owner = owner;</span>
+<span class="fc" id="L640">        return this;</span>
     }
 
 }

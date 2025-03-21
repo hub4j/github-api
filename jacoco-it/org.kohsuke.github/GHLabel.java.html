@@ -143,12 +143,10 @@ public class GHLabel extends GitHubInteractiveObject {
      * @param repository
      *            the repository in which the label will be created.
      * @return a {@link Creator}
-     * @throws IOException
-     *             the io exception
      */
     @BetaApi
-    static Creator create(GHRepository repository) throws IOException {
-<span class="fc" id="L151">        return new Creator(repository);</span>
+    static Creator create(GHRepository repository) {
+<span class="fc" id="L149">        return new Creator(repository);</span>
     }
 
     /**
@@ -163,10 +161,10 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     static GHLabel read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
-<span class="fc" id="L166">        return repository.root()</span>
-<span class="fc" id="L167">                .createRequest()</span>
-<span class="fc" id="L168">                .withUrlPath(repository.getApiTailUrl(&quot;labels&quot;), name)</span>
-<span class="fc" id="L169">                .fetch(GHLabel.class);</span>
+<span class="fc" id="L164">        return repository.root()</span>
+<span class="fc" id="L165">                .createRequest()</span>
+<span class="fc" id="L166">                .withUrlPath(repository.getApiTailUrl(&quot;labels&quot;), name)</span>
+<span class="fc" id="L167">                .fetch(GHLabel.class);</span>
 
     }
 
@@ -176,14 +174,12 @@ public class GHLabel extends GitHubInteractiveObject {
      * @param repository
      *            the repository to read from
      * @return iterable of all labels
-     * @throws IOException
-     *             the io exception
      */
-    static PagedIterable&lt;GHLabel&gt; readAll(@Nonnull final GHRepository repository) throws IOException {
-<span class="fc" id="L183">        return repository.root()</span>
-<span class="fc" id="L184">                .createRequest()</span>
-<span class="fc" id="L185">                .withUrlPath(repository.getApiTailUrl(&quot;labels&quot;))</span>
-<span class="fc" id="L186">                .toIterable(GHLabel[].class, null);</span>
+    static PagedIterable&lt;GHLabel&gt; readAll(@Nonnull final GHRepository repository) {
+<span class="fc" id="L179">        return repository.root()</span>
+<span class="fc" id="L180">                .createRequest()</span>
+<span class="fc" id="L181">                .withUrlPath(repository.getApiTailUrl(&quot;labels&quot;))</span>
+<span class="fc" id="L182">                .toIterable(GHLabel[].class, null);</span>
 
     }
 
@@ -196,7 +192,7 @@ public class GHLabel extends GitHubInteractiveObject {
      */
     @BetaApi
     public Updater update() {
-<span class="fc" id="L199">        return new Updater(this);</span>
+<span class="fc" id="L195">        return new Updater(this);</span>
     }
 
     /**
@@ -206,7 +202,7 @@ public class GHLabel extends GitHubInteractiveObject {
      */
     @BetaApi
     public Setter set() {
-<span class="fc" id="L209">        return new Setter(this);</span>
+<span class="fc" id="L205">        return new Setter(this);</span>
     }
 
     /**
@@ -216,8 +212,8 @@ public class GHLabel extends GitHubInteractiveObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L219">        root().createRequest().method(&quot;DELETE&quot;).setRawUrlPath(getUrl()).send();</span>
-<span class="fc" id="L220">    }</span>
+<span class="fc" id="L215">        root().createRequest().method(&quot;DELETE&quot;).setRawUrlPath(getUrl()).send();</span>
+<span class="fc" id="L216">    }</span>
 
     /**
      * Equals.
@@ -228,13 +224,13 @@ public class GHLabel extends GitHubInteractiveObject {
      */
     @Override
     public boolean equals(final Object o) {
-<span class="pc bpc" id="L231" title="1 of 2 branches missed.">        if (this == o)</span>
-<span class="nc" id="L232">            return true;</span>
-<span class="pc bpc" id="L233" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass())</span>
-<span class="nc" id="L234">            return false;</span>
-<span class="fc" id="L235">        final GHLabel ghLabel = (GHLabel) o;</span>
-<span class="pc bpc" id="L236" title="2 of 4 branches missed.">        return Objects.equals(url, ghLabel.url) &amp;&amp; Objects.equals(name, ghLabel.name)</span>
-<span class="fc bfc" id="L237" title="All 4 branches covered.">                &amp;&amp; Objects.equals(color, ghLabel.color) &amp;&amp; Objects.equals(description, ghLabel.description);</span>
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (this == o)</span>
+<span class="nc" id="L228">            return true;</span>
+<span class="pc bpc" id="L229" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass())</span>
+<span class="nc" id="L230">            return false;</span>
+<span class="fc" id="L231">        final GHLabel ghLabel = (GHLabel) o;</span>
+<span class="pc bpc" id="L232" title="2 of 4 branches missed.">        return Objects.equals(url, ghLabel.url) &amp;&amp; Objects.equals(name, ghLabel.name)</span>
+<span class="fc bfc" id="L233" title="All 4 branches covered.">                &amp;&amp; Objects.equals(color, ghLabel.color) &amp;&amp; Objects.equals(description, ghLabel.description);</span>
     }
 
     /**
@@ -244,7 +240,7 @@ public class GHLabel extends GitHubInteractiveObject {
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L247">        return Objects.hash(url, name, color, description);</span>
+<span class="nc" id="L243">        return Objects.hash(url, name, color, description);</span>
     }
 
     /**
@@ -255,9 +251,9 @@ public class GHLabel extends GitHubInteractiveObject {
     @BetaApi
     public static class Setter extends GHLabelBuilder&lt;GHLabel&gt; {
         private Setter(@Nonnull GHLabel base) {
-<span class="fc" id="L258">            super(GHLabel.class, base.getApiRoot(), base);</span>
-<span class="fc" id="L259">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl());</span>
-<span class="fc" id="L260">        }</span>
+<span class="fc" id="L254">            super(GHLabel.class, base.getApiRoot(), base);</span>
+<span class="fc" id="L255">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl());</span>
+<span class="fc" id="L256">        }</span>
     }
 
     /**
@@ -268,9 +264,9 @@ public class GHLabel extends GitHubInteractiveObject {
     @BetaApi
     public static class Updater extends GHLabelBuilder&lt;Updater&gt; {
         private Updater(@Nonnull GHLabel base) {
-<span class="fc" id="L271">            super(Updater.class, base.getApiRoot(), base);</span>
-<span class="fc" id="L272">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl());</span>
-<span class="fc" id="L273">        }</span>
+<span class="fc" id="L267">            super(Updater.class, base.getApiRoot(), base);</span>
+<span class="fc" id="L268">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl());</span>
+<span class="fc" id="L269">        }</span>
     }
 
     /**
@@ -281,9 +277,9 @@ public class GHLabel extends GitHubInteractiveObject {
     @BetaApi
     public static class Creator extends GHLabelBuilder&lt;Creator&gt; {
         private Creator(@Nonnull GHRepository repository) {
-<span class="fc" id="L284">            super(Creator.class, repository.root(), null);</span>
-<span class="fc" id="L285">            requester.method(&quot;POST&quot;).withUrlPath(repository.getApiTailUrl(&quot;labels&quot;));</span>
-<span class="fc" id="L286">        }</span>
+<span class="fc" id="L280">            super(Creator.class, repository.root(), null);</span>
+<span class="fc" id="L281">            requester.method(&quot;POST&quot;).withUrlPath(repository.getApiTailUrl(&quot;labels&quot;));</span>
+<span class="fc" id="L282">        }</span>
     }
 
 }

@@ -33,11 +33,9 @@ public class GHProjectCard extends GHObject {
      * Gets the html url.
      *
      * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
-    public URL getHtmlUrl() throws IOException {
-<span class="nc" id="L40">        return null;</span>
+    public URL getHtmlUrl() {
+<span class="nc" id="L38">        return null;</span>
     }
 
     /**
@@ -48,7 +46,7 @@ public class GHProjectCard extends GHObject {
      * @return the gh project card
      */
     GHProjectCard lateBind(GitHub root) {
-<span class="fc" id="L51">        return this;</span>
+<span class="fc" id="L49">        return this;</span>
     }
 
     /**
@@ -59,9 +57,9 @@ public class GHProjectCard extends GHObject {
      * @return the gh project card
      */
     GHProjectCard lateBind(GHProjectColumn column) {
-<span class="fc" id="L62">        this.column = column;</span>
-<span class="fc" id="L63">        this.project = column.project;</span>
-<span class="fc" id="L64">        return lateBind(column.root());</span>
+<span class="fc" id="L60">        this.column = column;</span>
+<span class="fc" id="L61">        this.project = column.project;</span>
+<span class="fc" id="L62">        return lateBind(column.root());</span>
     }
 
     /**
@@ -73,13 +71,13 @@ public class GHProjectCard extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHProject getProject() throws IOException {
-<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (project == null) {</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (project == null) {</span>
             try {
-<span class="nc" id="L78">                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);</span>
-<span class="nc" id="L79">            } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L80">            }</span>
+<span class="nc" id="L76">                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);</span>
+<span class="nc" id="L77">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L78">            }</span>
         }
-<span class="nc" id="L82">        return project;</span>
+<span class="nc" id="L80">        return project;</span>
     }
 
     /**
@@ -91,16 +89,16 @@ public class GHProjectCard extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHProjectColumn getColumn() throws IOException {
-<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (column == null) {</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (column == null) {</span>
             try {
-<span class="nc" id="L96">                column = root().createRequest()</span>
-<span class="nc" id="L97">                        .withUrlPath(getColumnUrl().getPath())</span>
-<span class="nc" id="L98">                        .fetch(GHProjectColumn.class)</span>
-<span class="nc" id="L99">                        .lateBind(root());</span>
-<span class="nc" id="L100">            } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L101">            }</span>
+<span class="nc" id="L94">                column = root().createRequest()</span>
+<span class="nc" id="L95">                        .withUrlPath(getColumnUrl().getPath())</span>
+<span class="nc" id="L96">                        .fetch(GHProjectColumn.class)</span>
+<span class="nc" id="L97">                        .lateBind(root());</span>
+<span class="nc" id="L98">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L99">            }</span>
         }
-<span class="nc" id="L103">        return column;</span>
+<span class="nc" id="L101">        return column;</span>
     }
 
     /**
@@ -111,16 +109,16 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public GHIssue getContent() throws IOException {
-<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (StringUtils.isEmpty(content_url))</span>
-<span class="nc" id="L115">            return null;</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (StringUtils.isEmpty(content_url))</span>
+<span class="nc" id="L113">            return null;</span>
         try {
-<span class="pc bpc" id="L117" title="1 of 2 branches missed.">            if (content_url.contains(&quot;/pulls&quot;)) {</span>
-<span class="nc" id="L118">                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHPullRequest.class);</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">            if (content_url.contains(&quot;/pulls&quot;)) {</span>
+<span class="nc" id="L116">                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHPullRequest.class);</span>
             } else {
-<span class="fc" id="L120">                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);</span>
+<span class="fc" id="L118">                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);</span>
             }
-<span class="nc" id="L122">        } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L123">            return null;</span>
+<span class="nc" id="L120">        } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L121">            return null;</span>
         }
     }
 
@@ -130,7 +128,7 @@ public class GHProjectCard extends GHObject {
      * @return the note
      */
     public String getNote() {
-<span class="fc" id="L133">        return note;</span>
+<span class="fc" id="L131">        return note;</span>
     }
 
     /**
@@ -140,7 +138,7 @@ public class GHProjectCard extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getCreator() {
-<span class="nc" id="L143">        return creator;</span>
+<span class="nc" id="L141">        return creator;</span>
     }
 
     /**
@@ -149,7 +147,7 @@ public class GHProjectCard extends GHObject {
      * @return the content url
      */
     public URL getContentUrl() {
-<span class="fc" id="L152">        return GitHubClient.parseURL(content_url);</span>
+<span class="fc" id="L150">        return GitHubClient.parseURL(content_url);</span>
     }
 
     /**
@@ -158,7 +156,7 @@ public class GHProjectCard extends GHObject {
      * @return the project url
      */
     public URL getProjectUrl() {
-<span class="nc" id="L161">        return GitHubClient.parseURL(project_url);</span>
+<span class="nc" id="L159">        return GitHubClient.parseURL(project_url);</span>
     }
 
     /**
@@ -167,7 +165,7 @@ public class GHProjectCard extends GHObject {
      * @return the column url
      */
     public URL getColumnUrl() {
-<span class="nc" id="L170">        return GitHubClient.parseURL(column_url);</span>
+<span class="nc" id="L168">        return GitHubClient.parseURL(column_url);</span>
     }
 
     /**
@@ -176,7 +174,7 @@ public class GHProjectCard extends GHObject {
      * @return the boolean
      */
     public boolean isArchived() {
-<span class="fc" id="L179">        return archived;</span>
+<span class="fc" id="L177">        return archived;</span>
     }
 
     /**
@@ -188,8 +186,8 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public void setNote(String note) throws IOException {
-<span class="fc" id="L191">        edit(&quot;note&quot;, note);</span>
-<span class="fc" id="L192">    }</span>
+<span class="fc" id="L189">        edit(&quot;note&quot;, note);</span>
+<span class="fc" id="L190">    }</span>
 
     /**
      * Sets archived.
@@ -200,12 +198,12 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public void setArchived(boolean archived) throws IOException {
-<span class="fc" id="L203">        edit(&quot;archived&quot;, archived);</span>
-<span class="fc" id="L204">    }</span>
+<span class="fc" id="L201">        edit(&quot;archived&quot;, archived);</span>
+<span class="fc" id="L202">    }</span>
 
     private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L207">        root().createRequest().method(&quot;PATCH&quot;).with(key, value).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L208">    }</span>
+<span class="fc" id="L205">        root().createRequest().method(&quot;PATCH&quot;).with(key, value).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L206">    }</span>
 
     /**
      * Gets api route.
@@ -213,7 +211,7 @@ public class GHProjectCard extends GHObject {
      * @return the api route
      */
     protected String getApiRoute() {
-<span class="fc" id="L216">        return String.format(&quot;/projects/columns/cards/%d&quot;, getId());</span>
+<span class="fc" id="L214">        return String.format(&quot;/projects/columns/cards/%d&quot;, getId());</span>
     }
 
     /**
@@ -223,7 +221,7 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L226">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L227">    }</span>
+<span class="fc" id="L224">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L225">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

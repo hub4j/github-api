@@ -124,14 +124,12 @@ public class GHProjectColumn extends GHObject {
      * List cards paged iterable.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable&lt;GHProjectCard&gt; listCards() throws IOException {
-<span class="nc" id="L131">        final GHProjectColumn column = this;</span>
-<span class="nc" id="L132">        return root().createRequest()</span>
-<span class="nc" id="L133">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="nc" id="L134">                .toIterable(GHProjectCard[].class, item -&gt; item.lateBind(column));</span>
+    public PagedIterable&lt;GHProjectCard&gt; listCards() {
+<span class="nc" id="L129">        final GHProjectColumn column = this;</span>
+<span class="nc" id="L130">        return root().createRequest()</span>
+<span class="nc" id="L131">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="nc" id="L132">                .toIterable(GHProjectCard[].class, item -&gt; item.lateBind(column));</span>
     }
 
     /**
@@ -144,12 +142,12 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public GHProjectCard createCard(String note) throws IOException {
-<span class="fc" id="L147">        return root().createRequest()</span>
-<span class="fc" id="L148">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L149">                .with(&quot;note&quot;, note)</span>
-<span class="fc" id="L150">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="fc" id="L151">                .fetch(GHProjectCard.class)</span>
-<span class="fc" id="L152">                .lateBind(this);</span>
+<span class="fc" id="L145">        return root().createRequest()</span>
+<span class="fc" id="L146">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L147">                .with(&quot;note&quot;, note)</span>
+<span class="fc" id="L148">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="fc" id="L149">                .fetch(GHProjectCard.class)</span>
+<span class="fc" id="L150">                .lateBind(this);</span>
     }
 
     /**
@@ -162,14 +160,14 @@ public class GHProjectColumn extends GHObject {
      *             the io exception
      */
     public GHProjectCard createCard(GHIssue issue) throws IOException {
-<span class="fc bfc" id="L165" title="All 2 branches covered.">        String contentType = issue instanceof GHPullRequest ? &quot;PullRequest&quot; : &quot;Issue&quot;;</span>
-<span class="fc" id="L166">        return root().createRequest()</span>
-<span class="fc" id="L167">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L168">                .with(&quot;content_type&quot;, contentType)</span>
-<span class="fc" id="L169">                .with(&quot;content_id&quot;, issue.getId())</span>
-<span class="fc" id="L170">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
-<span class="fc" id="L171">                .fetch(GHProjectCard.class)</span>
-<span class="fc" id="L172">                .lateBind(this);</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        String contentType = issue instanceof GHPullRequest ? &quot;PullRequest&quot; : &quot;Issue&quot;;</span>
+<span class="fc" id="L164">        return root().createRequest()</span>
+<span class="fc" id="L165">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L166">                .with(&quot;content_type&quot;, contentType)</span>
+<span class="fc" id="L167">                .with(&quot;content_id&quot;, issue.getId())</span>
+<span class="fc" id="L168">                .withUrlPath(String.format(&quot;/projects/columns/%d/cards&quot;, getId()))</span>
+<span class="fc" id="L169">                .fetch(GHProjectCard.class)</span>
+<span class="fc" id="L170">                .lateBind(this);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

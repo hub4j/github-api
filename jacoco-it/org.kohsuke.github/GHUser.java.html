@@ -244,13 +244,11 @@ public class GHUser extends GHPerson {
      * Lists Gists created by this user.
      *
      * @return the paged iterable
-     * @throws IOException
-     *             the io exception
      */
-    public PagedIterable&lt;GHGist&gt; listGists() throws IOException {
-<span class="nc" id="L251">        return root().createRequest()</span>
-<span class="nc" id="L252">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
-<span class="nc" id="L253">                .toIterable(GHGist[].class, null);</span>
+    public PagedIterable&lt;GHGist&gt; listGists() {
+<span class="nc" id="L249">        return root().createRequest()</span>
+<span class="nc" id="L250">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
+<span class="nc" id="L251">                .toIterable(GHGist[].class, null);</span>
     }
 
     /**
@@ -259,13 +257,13 @@ public class GHUser extends GHPerson {
      * @return The LDAP information
      * @throws IOException
      *             the io exception
-     * @see &lt;a
-     *      href=https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap&gt;Github
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap&quot;&gt;Github
      *      LDAP&lt;/a&gt;
      */
     public Optional&lt;String&gt; getLdapDn() throws IOException {
-<span class="fc" id="L267">        super.populate();</span>
-<span class="fc" id="L268">        return Optional.ofNullable(ldap_dn);</span>
+<span class="fc" id="L265">        super.populate();</span>
+<span class="fc" id="L266">        return Optional.ofNullable(ldap_dn);</span>
     }
 
     /**
@@ -276,8 +274,8 @@ public class GHUser extends GHPerson {
      *             on error
      */
     public Date getSuspendedAt() throws IOException {
-<span class="fc" id="L279">        super.populate();</span>
-<span class="fc" id="L280">        return GitHubClient.parseDate(suspendedAt);</span>
+<span class="fc" id="L277">        super.populate();</span>
+<span class="fc" id="L278">        return GitHubClient.parseDate(suspendedAt);</span>
     }
 
     /**
@@ -287,7 +285,7 @@ public class GHUser extends GHPerson {
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L290">        return login.hashCode();</span>
+<span class="fc" id="L288">        return login.hashCode();</span>
     }
 
     /**
@@ -299,11 +297,11 @@ public class GHUser extends GHPerson {
      */
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
-<span class="fc" id="L303">            GHUser that = (GHUser) obj;</span>
-<span class="fc" id="L304">            return this.login.equals(that.login);</span>
+<span class="pc bpc" id="L300" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
+<span class="fc" id="L301">            GHUser that = (GHUser) obj;</span>
+<span class="fc" id="L302">            return this.login.equals(that.login);</span>
         }
-<span class="nc" id="L306">        return false;</span>
+<span class="nc" id="L304">        return false;</span>
     }
 
     /**
@@ -314,9 +312,9 @@ public class GHUser extends GHPerson {
      * @return the api tail url
      */
     String getApiTailUrl(String tail) {
-<span class="pc bpc" id="L317" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
-<span class="fc" id="L318">            tail = '/' + tail;</span>
-<span class="fc" id="L319">        return &quot;/users/&quot; + login + tail;</span>
+<span class="pc bpc" id="L315" title="2 of 4 branches missed.">        if (tail.length() &gt; 0 &amp;&amp; !tail.startsWith(&quot;/&quot;))</span>
+<span class="fc" id="L316">            tail = '/' + tail;</span>
+<span class="fc" id="L317">        return &quot;/users/&quot; + login + tail;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

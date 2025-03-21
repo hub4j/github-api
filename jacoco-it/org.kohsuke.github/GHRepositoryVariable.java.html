@@ -115,12 +115,10 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      * @param repository
      *            the repository in which the variable will be created.
      * @return a {@link GHRepositoryVariable.Creator}
-     * @throws IOException
-     *             the io exception
      */
     @BetaApi
-    static GHRepositoryVariable.Creator create(GHRepository repository) throws IOException {
-<span class="fc" id="L123">        return new GHRepositoryVariable.Creator(repository);</span>
+    static GHRepositoryVariable.Creator create(GHRepository repository) {
+<span class="fc" id="L121">        return new GHRepositoryVariable.Creator(repository);</span>
     }
 
     /**
@@ -130,8 +128,8 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L133">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getUrl().concat(SLASH).concat(name)).send();</span>
-<span class="fc" id="L134">    }</span>
+<span class="fc" id="L131">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getUrl().concat(SLASH).concat(name)).send();</span>
+<span class="fc" id="L132">    }</span>
 
     /**
      * Begins a single property update.
@@ -140,7 +138,7 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      */
     @BetaApi
     public GHRepositoryVariable.Setter set() {
-<span class="fc" id="L143">        return new GHRepositoryVariable.Setter(this);</span>
+<span class="fc" id="L141">        return new GHRepositoryVariable.Setter(this);</span>
     }
 
     /**
@@ -151,9 +149,9 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
     @BetaApi
     public static class Setter extends GHRepositoryVariableBuilder&lt;GHRepositoryVariable&gt; {
         private Setter(@Nonnull GHRepositoryVariable base) {
-<span class="fc" id="L154">            super(GHRepositoryVariable.class, base.getApiRoot(), base);</span>
-<span class="fc" id="L155">            requester.method(&quot;PATCH&quot;).withUrlPath(base.getUrl().concat(SLASH).concat(base.getName()));</span>
-<span class="fc" id="L156">        }</span>
+<span class="fc" id="L152">            super(GHRepositoryVariable.class, base.getApiRoot(), base);</span>
+<span class="fc" id="L153">            requester.method(&quot;PATCH&quot;).withUrlPath(base.getUrl().concat(SLASH).concat(base.getName()));</span>
+<span class="fc" id="L154">        }</span>
     }
 
     /**
@@ -164,9 +162,9 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
     @BetaApi
     public static class Creator extends GHRepositoryVariableBuilder&lt;Creator&gt; {
         private Creator(@Nonnull GHRepository repository) {
-<span class="fc" id="L167">            super(GHRepositoryVariable.Creator.class, repository.root(), null);</span>
-<span class="fc" id="L168">            requester.method(&quot;POST&quot;).withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE));</span>
-<span class="fc" id="L169">        }</span>
+<span class="fc" id="L165">            super(GHRepositoryVariable.Creator.class, repository.root(), null);</span>
+<span class="fc" id="L166">            requester.method(&quot;POST&quot;).withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE));</span>
+<span class="fc" id="L167">        }</span>
     }
 
 }

@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"path\":\"README.md\",\"line\":2,\"body\":\"A single line review comment\",\"commit_id\":\"07374fe73aff1c2024a8d4114b32406c7a8e89b7\"}",
+        "equalToJson": "{\"path\":\"README.md\",\"side\":\"right\",\"line\":2,\"body\":\"A single line review comment\",\"commit_id\":\"07374fe73aff1c2024a8d4114b32406c7a8e89b7\"}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

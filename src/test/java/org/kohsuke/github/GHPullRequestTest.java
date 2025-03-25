@@ -25,6 +25,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.kohsuke.github.GHPullRequestReviewComment.Side.LEFT;
+import static org.kohsuke.github.GHPullRequestReviewComment.Side.RIGHT;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -337,12 +339,14 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                     .body("A single line review comment")
                     .path("README.md")
                     .line(2)
+                    .side(RIGHT)
                     .create();
             p.createReviewComment()
                     .commitId(p.getHead().getSha())
                     .body("A multiline review comment")
                     .path("README.md")
                     .lines(2, 3)
+                    .sides(RIGHT, RIGHT)
                     .create();
             List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
             assertThat(comments.size(), equalTo(3));
@@ -362,7 +366,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             assertThat(comment.getStartSide(), equalTo(GHPullRequestReviewComment.Side.UNKNOWN));
             assertThat(comment.getLine(), equalTo(1));
             assertThat(comment.getOriginalLine(), equalTo(1));
-            assertThat(comment.getSide(), equalTo(GHPullRequestReviewComment.Side.LEFT));
+            assertThat(comment.getSide(), equalTo(LEFT));
             assertThat(comment.getPullRequestUrl(), notNullValue());
             assertThat(comment.getPullRequestUrl().toString(), containsString("hub4j-test-org/github-api/pulls/"));
             assertThat(comment.getBodyHtml(), nullValue());
@@ -375,11 +379,14 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             comment = comments.get(1);
             assertThat(comment.getBody(), equalTo("A single line review comment"));
             assertThat(comment.getLine(), equalTo(2));
+            assertThat(comment.getSide(), equalTo(RIGHT));
 
             comment = comments.get(2);
             assertThat(comment.getBody(), equalTo("A multiline review comment"));
             assertThat(comment.getStartLine(), equalTo(2));
             assertThat(comment.getLine(), equalTo(3));
+            assertThat(comment.getStartSide(), equalTo(RIGHT));
+            assertThat(comment.getSide(), equalTo(RIGHT));
 
             comment.createReaction(ReactionContent.EYES);
             GHReaction toBeRemoved = comment.createReaction(ReactionContent.CONFUSED);

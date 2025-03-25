@@ -142,8 +142,8 @@ public class GHPullRequestReviewCommentBuilder {
      */
     public GHPullRequestReviewCommentBuilder sides(GHPullRequestReviewComment.Side startSide,
             GHPullRequestReviewComment.Side endSide) {
-        builder.with("start_side", startSide.toString().toLowerCase());
-        builder.with("side", endSide.toString().toLowerCase());
+        builder.with("start_side", startSide);
+        builder.with("side", endSide);
         return this;
     }
 

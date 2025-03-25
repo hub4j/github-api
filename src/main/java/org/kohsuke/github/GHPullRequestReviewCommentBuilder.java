@@ -122,7 +122,7 @@ public class GHPullRequestReviewCommentBuilder {
      * @return the gh pull request review comment builder
      */
     public GHPullRequestReviewCommentBuilder side(GHPullRequestReviewComment.Side side) {
-        builder.with("side", side.toString().toLowerCase());
+        builder.with("side", side);
         builder.remove("start_side");
         return this;
     }

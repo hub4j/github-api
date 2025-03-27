@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -290,26 +289,26 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(mainBranchHeadShaWorkflowRuns, everyItem(hasProperty("headSha", equalTo(mainBranchHeadSha))));
         // Ideally, we would use everyItem() but the bridge method is in the way
         for (GHWorkflowRun workflowRun : mainBranchHeadShaWorkflowRuns) {
-            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(Date.from(before)));
+            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(before));
         }
 
         assertThat(secondBranchHeadShaWorkflowRuns, hasSize(greaterThanOrEqualTo(1)));
         assertThat(secondBranchHeadShaWorkflowRuns, everyItem(hasProperty("headSha", equalTo(secondBranchHeadSha))));
         // Ideally, we would use everyItem() but the bridge method is in the way
         for (GHWorkflowRun workflowRun : secondBranchHeadShaWorkflowRuns) {
-            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(Date.from(before)));
+            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(before));
         }
 
         List<GHWorkflowRun> mainBranchHeadShaWorkflowRunsBefore = repo.queryWorkflowRuns()
                 .headSha(repo.getBranch(MAIN_BRANCH).getSHA1())
-                .created("<" + before.toString())
+                .created("<" + before)
                 .list()
                 .toList();
         // Ideally, we would use that but the bridge method is causing issues
         // assertThat(mainBranchHeadShaWorkflowRunsBefore, everyItem(hasProperty("createdAt",
         // lessThan(Date.from(before)))));
         for (GHWorkflowRun workflowRun : mainBranchHeadShaWorkflowRunsBefore) {
-            assertThat(workflowRun.getCreatedAt(), lessThan(Date.from(before)));
+            assertThat(workflowRun.getCreatedAt(), lessThan(before));
         }
     }
 

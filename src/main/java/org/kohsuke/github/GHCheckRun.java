@@ -7,9 +7,9 @@ import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -269,8 +269,8 @@ public class GHCheckRun extends GHObject {
      *
      * @return Timestamp of the start time
      */
-    public Date getStartedAt() {
-        return GitHubClient.parseDate(startedAt);
+    public Instant getStartedAt() {
+        return GitHubClient.parseInstant(startedAt);
     }
 
     /**
@@ -278,8 +278,8 @@ public class GHCheckRun extends GHObject {
      *
      * @return Timestamp of the completed time
      */
-    public Date getCompletedAt() {
-        return GitHubClient.parseDate(completedAt);
+    public Instant getCompletedAt() {
+        return GitHubClient.parseInstant(completedAt);
     }
 
     /**

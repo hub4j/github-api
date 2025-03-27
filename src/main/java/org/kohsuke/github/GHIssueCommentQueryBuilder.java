@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -41,8 +41,8 @@ public class GHIssueCommentQueryBuilder {
      *            the date
      * @return the query builder
      */
-    public GHIssueCommentQueryBuilder since(Date date) {
-        req.with("since", GitHubClient.printDate(date));
+    public GHIssueCommentQueryBuilder since(Instant date) {
+        req.with("since", GitHubClient.printInstant(date));
         return this;
     }
 
@@ -54,7 +54,7 @@ public class GHIssueCommentQueryBuilder {
      * @return the query builder
      */
     public GHIssueCommentQueryBuilder since(long timestamp) {
-        return since(new Date(timestamp));
+        return since(Instant.ofEpochMilli(timestamp));
     }
 
     /**

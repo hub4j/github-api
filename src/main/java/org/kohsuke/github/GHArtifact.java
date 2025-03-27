@@ -7,7 +7,7 @@ import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
@@ -77,8 +77,8 @@ public class GHArtifact extends GHObject {
      *
      * @return the date of expiration
      */
-    public Date getExpiresAt() {
-        return GitHubClient.parseDate(expiresAt);
+    public Instant getExpiresAt() {
+        return GitHubClient.parseInstant(expiresAt);
     }
 
     /**

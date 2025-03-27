@@ -4,7 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Locale;
 
 // TODO: Auto-generated Javadoc
@@ -56,10 +56,10 @@ public class GHMilestone extends GHObject {
      *
      * @return the due on
      */
-    public Date getDueOn() {
+    public Instant getDueOn() {
         if (due_on == null)
             return null;
-        return GitHubClient.parseDate(due_on);
+        return GitHubClient.parseInstant(due_on);
     }
 
     /**
@@ -67,8 +67,8 @@ public class GHMilestone extends GHObject {
      *
      * @return the closed at
      */
-    public Date getClosedAt() {
-        return GitHubClient.parseDate(closed_at);
+    public Instant getClosedAt() {
+        return GitHubClient.parseInstant(closed_at);
     }
 
     /**
@@ -200,8 +200,8 @@ public class GHMilestone extends GHObject {
      * @throws IOException
      *             the io exception
      */
-    public void setDueOn(Date dueOn) throws IOException {
-        edit("due_on", GitHubClient.printDate(dueOn));
+    public void setDueOn(Instant dueOn) throws IOException {
+        edit("due_on", GitHubClient.printInstant(dueOn));
     }
 
     /**

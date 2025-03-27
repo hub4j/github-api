@@ -5,8 +5,8 @@ import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -158,10 +158,10 @@ public class GHApp extends GHObject {
      * @return a list of App installations since a given time.
      * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
      */
-    public PagedIterable<GHAppInstallation> listInstallations(final Date since) {
+    public PagedIterable<GHAppInstallation> listInstallations(final Instant since) {
         Requester requester = root().createRequest().withUrlPath("/app/installations");
         if (since != null) {
-            requester.with("since", GitHubClient.printDate(since));
+            requester.with("since", GitHubClient.printInstant(since));
         }
         return requester.toIterable(GHAppInstallation[].class, null);
     }

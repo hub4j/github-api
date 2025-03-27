@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -231,7 +231,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit.getRemaining(), equalTo(remaining));
 
         // Check that the reset date of the current limit is not older than the previous one
-        long diffMillis = rateLimit.getResetDate().getTime() - previousLimit.getResetDate().getTime();
+        long diffMillis = rateLimit.getResetDate().toEpochMilli() - previousLimit.getResetDate().toEpochMilli();
 
         assertThat(diffMillis, greaterThanOrEqualTo(0L));
         if (changedResetDate) {
@@ -262,7 +262,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(0));
         GHRateLimit rateLimit = null;
 
-        Date lastReset = new Date(System.currentTimeMillis() / 1000L);
+        Instant lastReset = Instant.ofEpochMilli(System.currentTimeMillis() / 1000L);
 
         // Give this a moment
         Thread.sleep(1500);

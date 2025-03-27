@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -59,8 +59,8 @@ public class GHMarketplacePendingChange extends GitHubInteractiveObject {
      *
      * @return the effective date
      */
-    public Date getEffectiveDate() {
-        return GitHubClient.parseDate(effectiveDate);
+    public Instant getEffectiveDate() {
+        return GitHubClient.parseInstant(effectiveDate);
     }
 
 }

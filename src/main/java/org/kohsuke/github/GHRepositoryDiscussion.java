@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.net.URL;
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -69,8 +69,8 @@ public class GHRepositoryDiscussion extends GHObject {
      *
      * @return the answer chosen at
      */
-    public Date getAnswerChosenAt() {
-        return GitHubClient.parseDate(answerChosenAt);
+    public Instant getAnswerChosenAt() {
+        return GitHubClient.parseInstant(answerChosenAt);
     }
 
     /**
@@ -269,8 +269,8 @@ public class GHRepositoryDiscussion extends GHObject {
          *
          * @return the created at
          */
-        public Date getCreatedAt() {
-            return GitHubClient.parseDate(createdAt);
+        public Instant getCreatedAt() {
+            return GitHubClient.parseInstant(createdAt);
         }
 
         /**
@@ -278,8 +278,8 @@ public class GHRepositoryDiscussion extends GHObject {
          *
          * @return the updated at
          */
-        public Date getUpdatedAt() {
-            return GitHubClient.parseDate(updatedAt);
+        public Instant getUpdatedAt() {
+            return GitHubClient.parseInstant(updatedAt);
         }
 
         /**

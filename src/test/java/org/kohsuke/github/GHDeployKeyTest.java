@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,13 +46,13 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
         assertThat("The key exists", ed25519Key, isPresent());
         assertThat("The key was created at the specified date",
                 ed25519Key.get().getCreatedAt(),
-                is(Date.from(Instant.parse("2023-02-08T10:00:15.00Z"))));
+                is(Instant.parse("2023-02-08T10:00:15.00Z")));
         assertThat("The key is created by " + KEY_CREATOR_USERNAME,
                 ed25519Key.get().getAdded_by(),
                 is(KEY_CREATOR_USERNAME));
         assertThat("The key has a last_used value",
                 ed25519Key.get().getLastUsedAt(),
-                is(Date.from(Instant.parse("2023-02-08T10:02:11.00Z"))));
+                is(Instant.parse("2023-02-08T10:02:11.00Z")));
         assertThat("The key only has read access", ed25519Key.get().isRead_only(), is(true));
         assertThat("Object has a toString()", ed25519Key.get().toString(), is(notNullValue()));
 
@@ -63,7 +62,7 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
         assertThat("The key exists", rsa_4096Key, isPresent());
         assertThat("The key was created at the specified date",
                 rsa_4096Key.get().getCreatedAt(),
-                is(Date.from(Instant.parse("2023-01-26T14:12:12.00Z"))));
+                is(Instant.parse("2023-01-26T14:12:12.00Z")));
         assertThat("The key is created by " + KEY_CREATOR_USERNAME,
                 rsa_4096Key.get().getAdded_by(),
                 is(KEY_CREATOR_USERNAME));

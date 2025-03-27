@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -39,8 +39,8 @@ public class GHStargazer {
      *
      * @return the date the stargazer was added
      */
-    public Date getStarredAt() {
-        return GitHubClient.parseDate(starred_at);
+    public Instant getStarredAt() {
+        return GitHubClient.parseInstant(starred_at);
     }
 
     /**

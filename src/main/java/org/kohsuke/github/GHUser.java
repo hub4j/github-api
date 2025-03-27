@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 
 // TODO: Auto-generated Javadoc
@@ -273,9 +274,9 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             on error
      */
-    public Date getSuspendedAt() throws IOException {
+    public Instant getSuspendedAt() throws IOException {
         super.populate();
-        return GitHubClient.parseDate(suspendedAt);
+        return GitHubClient.parseInstant(suspendedAt);
     }
 
     /**

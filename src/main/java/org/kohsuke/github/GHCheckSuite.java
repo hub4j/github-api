@@ -5,9 +5,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 // TODO: Auto-generated Javadoc
@@ -257,8 +257,8 @@ public class GHCheckSuite extends GHObject {
          *
          * @return timestamp of the commit
          */
-        public Date getTimestamp() {
-            return GitHubClient.parseDate(timestamp);
+        public Instant getTimestamp() {
+            return GitHubClient.parseInstant(timestamp);
         }
 
         /**

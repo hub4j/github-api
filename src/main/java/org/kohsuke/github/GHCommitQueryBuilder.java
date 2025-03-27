@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -89,8 +89,8 @@ public class GHCommitQueryBuilder {
      *            the dt
      * @return the gh commit query builder
      */
-    public GHCommitQueryBuilder since(Date dt) {
-        req.with("since", GitHubClient.printDate(dt));
+    public GHCommitQueryBuilder since(Instant dt) {
+        req.with("since", GitHubClient.printInstant(dt));
         return this;
     }
 
@@ -102,7 +102,7 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(long timestamp) {
-        return since(new Date(timestamp));
+        return since(Instant.ofEpochMilli(timestamp));
     }
 
     /**
@@ -112,8 +112,8 @@ public class GHCommitQueryBuilder {
      *            the dt
      * @return the gh commit query builder
      */
-    public GHCommitQueryBuilder until(Date dt) {
-        req.with("until", GitHubClient.printDate(dt));
+    public GHCommitQueryBuilder until(Instant dt) {
+        req.with("until", GitHubClient.printInstant(dt));
         return this;
     }
 
@@ -125,7 +125,7 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(long timestamp) {
-        return until(new Date(timestamp));
+        return until(Instant.ofEpochMilli(timestamp));
     }
 
     /**

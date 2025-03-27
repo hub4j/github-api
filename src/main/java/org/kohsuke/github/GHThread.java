@@ -4,7 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -50,8 +50,8 @@ public class GHThread extends GHObject {
      *
      * @return the last read at
      */
-    public Date getLastReadAt() {
-        return GitHubClient.parseDate(last_read_at);
+    public Instant getLastReadAt() {
+        return GitHubClient.parseInstant(last_read_at);
     }
 
     /**

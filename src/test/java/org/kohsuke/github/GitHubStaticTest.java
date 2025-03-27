@@ -6,13 +6,13 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.Locale;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.containsString;
@@ -82,54 +82,54 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         final long stableInstantEpochMilli = 1533721222255L;
         Instant instantNow = Instant.ofEpochMilli(stableInstantEpochMilli);
 
-        Date instantSeconds = Date.from(instantNow.truncatedTo(ChronoUnit.SECONDS));
-        Date instantMillis = Date.from(instantNow.truncatedTo(ChronoUnit.MILLIS));
+        Instant instantSeconds = instantNow.truncatedTo(ChronoUnit.SECONDS);
+        Instant instantMillis = instantNow.truncatedTo(ChronoUnit.MILLIS);
 
-        String instantFormatSlash = formatZonedDate(instantMillis, "yyyy/MM/dd HH:mm:ss ZZZZ", "PST");
+        String instantFormatSlash = formatZonedInstant(instantMillis, "yyyy/MM/dd HH:mm:ss Z", "PST");
         assertThat(instantFormatSlash, equalTo("2018/08/08 02:40:22 -0700"));
 
-        String instantFormatDash = formatDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+        String instantFormatDash = formatInstant(instantMillis, "yyyy-MM-dd'T'HH:mm:ss'Z'");
         assertThat(instantFormatDash, equalTo("2018-08-08T09:40:22Z"));
 
-        String instantFormatMillis = formatDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        String instantFormatMillis = formatInstant(instantMillis, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         assertThat(instantFormatMillis, equalTo("2018-08-08T09:40:22.255Z"));
 
-        String instantFormatMillisZoned = formatZonedDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss.SXXX", "PST");
+        String instantFormatMillisZoned = formatZonedInstant(instantMillis, "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ", "PST");
         assertThat(instantFormatMillisZoned, equalTo("2018-08-08T02:40:22.255-07:00"));
 
-        String instantSecondsFormatMillis = formatDate(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        String instantSecondsFormatMillis = formatInstant(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
         assertThat(instantSecondsFormatMillis, equalTo("2018-08-08T09:40:22.0Z"));
 
-        String instantSecondsFormatMillisZoned = formatZonedDate(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", "PST");
+        String instantSecondsFormatMillisZoned = formatZonedInstant(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ", "PST");
         assertThat(instantSecondsFormatMillisZoned, equalTo("2018-08-08T02:40:22.000-07:00"));
 
-        String instantBadFormat = formatDate(instantMillis, "yy-MM-dd'T'HH:mm'Z'");
+        String instantBadFormat = formatInstant(instantMillis, "yy-MM-dd'T'HH:mm'Z'");
         assertThat(instantBadFormat, equalTo("18-08-08T09:40Z"));
 
-        assertThat(GitHubClient.parseDate(GitHubClient.printDate(instantSeconds)),
-                equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantMillis))));
-        assertThat(GitHubClient.printDate(instantSeconds), equalTo("2018-08-08T09:40:22Z"));
-        assertThat(GitHubClient.printDate(GitHubClient.parseDate(instantFormatMillisZoned)),
+        assertThat(GitHubClient.parseInstant(GitHubClient.printInstant(instantSeconds)),
+                equalTo(GitHubClient.parseInstant(GitHubClient.printInstant(instantMillis))));
+        assertThat(GitHubClient.printInstant(instantSeconds), equalTo("2018-08-08T09:40:22Z"));
+        assertThat(GitHubClient.printInstant(GitHubClient.parseInstant(instantFormatMillisZoned)),
                 equalTo("2018-08-08T09:40:22Z"));
 
-        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantSeconds))));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseInstant(GitHubClient.printInstant(instantSeconds))));
 
         // printDate will truncate to the nearest second, so it should not be equal
-        assertThat(instantMillis, not(equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantMillis)))));
+        assertThat(instantMillis, not(equalTo(GitHubClient.parseInstant(GitHubClient.printInstant(instantMillis)))));
 
-        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantFormatSlash)));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseInstant(instantFormatSlash)));
 
-        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantFormatDash)));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseInstant(instantFormatDash)));
 
         // This parser does not truncate to the nearest second, so it will be equal
-        assertThat(instantMillis, equalTo(GitHubClient.parseDate(instantFormatMillis)));
-        assertThat(instantMillis, equalTo(GitHubClient.parseDate(instantFormatMillisZoned)));
+        assertThat(instantMillis, equalTo(GitHubClient.parseInstant(instantFormatMillis)));
+        assertThat(instantMillis, equalTo(GitHubClient.parseInstant(instantFormatMillisZoned)));
 
-        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantSecondsFormatMillis)));
-        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantSecondsFormatMillisZoned)));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseInstant(instantSecondsFormatMillis)));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseInstant(instantSecondsFormatMillisZoned)));
 
         try {
-            GitHubClient.parseDate(instantBadFormat);
+            GitHubClient.parseInstant(instantBadFormat);
             fail("Bad time format should throw.");
         } catch (DateTimeParseException e) {
             assertThat(e.getMessage(), equalTo("Text '" + instantBadFormat + "' could not be parsed at index 0"));
@@ -417,33 +417,32 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Format date.
+     * Format instant.
      *
-     * @param dt
-     *            the dt
+     * @param instant
+     *            the instant
      * @param format
      *            the format
      * @return the string
      */
-    static String formatDate(Date dt, String format) {
-        return formatZonedDate(dt, format, "GMT");
+    static String formatInstant(Instant instant, String format) {
+        return formatZonedInstant(instant, format, "GMT");
     }
 
     /**
-     * Format zoned date.
+     * Format zoned instant.
      *
-     * @param dt
-     *            the dt
+     * @param instant
+     *            the instant
      * @param format
      *            the format
      * @param timeZone
      *            the time zone
      * @return the string
      */
-    static String formatZonedDate(Date dt, String format, String timeZone) {
-        SimpleDateFormat df = new SimpleDateFormat(format);
-        df.setTimeZone(TimeZone.getTimeZone(timeZone));
-        return df.format(dt);
+    static String formatZonedInstant(Instant instant, String format, String timeZone) {
+        return DateTimeFormatter.ofPattern(format, Locale.ENGLISH)
+                .format(instant.atZone(ZoneId.of(timeZone, ZoneId.SHORT_IDS)));
     }
 
 }

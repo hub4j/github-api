@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -31,8 +31,8 @@ public class GHSubscription extends GitHubInteractiveObject {
      *
      * @return the created at
      */
-    public Date getCreatedAt() {
-        return GitHubClient.parseDate(created_at);
+    public Instant getCreatedAt() {
+        return GitHubClient.parseInstant(created_at);
     }
 
     /**

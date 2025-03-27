@@ -6,14 +6,13 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
+import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.CheckForNull;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -78,8 +77,8 @@ public abstract class GHObject extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    public Date getCreatedAt() throws IOException {
-        return GitHubClient.parseDate(createdAt);
+    public Instant getCreatedAt() throws IOException {
+        return GitHubClient.parseInstant(createdAt);
     }
 
     /**
@@ -98,8 +97,8 @@ public abstract class GHObject extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
-    public Date getUpdatedAt() throws IOException {
-        return GitHubClient.parseDate(updatedAt);
+    public Instant getUpdatedAt() throws IOException {
+        return GitHubClient.parseInstant(updatedAt);
     }
 
     /**

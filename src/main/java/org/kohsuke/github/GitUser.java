@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Date;
+import java.time.Instant;
 
 import javax.annotation.CheckForNull;
 
@@ -53,8 +53,8 @@ public class GitUser {
      *
      * @return Commit Date.
      */
-    public Date getDate() {
-        return GitHubClient.parseDate(date);
+    public Instant getDate() {
+        return GitHubClient.parseInstant(date);
     }
 
     /**

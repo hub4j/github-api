@@ -25,11 +25,10 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
-
-import javax.annotation.CheckForNull;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -144,8 +143,8 @@ public class GHPullRequestReview extends GHObject {
      *
      * @return the submitted at
      */
-    public Date getSubmittedAt() {
-        return GitHubClient.parseDate(submitted_at);
+    public Instant getSubmittedAt() {
+        return GitHubClient.parseInstant(submitted_at);
     }
 
     /**
@@ -156,7 +155,7 @@ public class GHPullRequestReview extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    public Date getCreatedAt() throws IOException {
+    public Instant getCreatedAt() throws IOException {
         return getSubmittedAt();
     }
 

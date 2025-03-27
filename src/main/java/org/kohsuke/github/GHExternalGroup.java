@@ -3,8 +3,8 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -223,8 +223,8 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      *
      * @return the date
      */
-    public Date getUpdatedAt() {
-        return GitHubClient.parseDate(updatedAt);
+    public Instant getUpdatedAt() {
+        return GitHubClient.parseInstant(updatedAt);
     }
 
     /**

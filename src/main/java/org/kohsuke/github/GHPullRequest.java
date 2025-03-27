@@ -28,10 +28,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -170,8 +170,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *
      * @return the merged at
      */
-    public Date getMergedAt() {
-        return GitHubClient.parseDate(merged_at);
+    public Instant getMergedAt() {
+        return GitHubClient.parseInstant(merged_at);
     }
 
     /**

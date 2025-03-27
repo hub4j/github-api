@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -42,7 +42,7 @@ public class GHRelease extends GHObject {
     private String body;
     private boolean draft;
     private boolean prerelease;
-    private Date published_at;
+    private Instant published_at;
     private String tarball_url;
     private String zipball_url;
     private String discussion_url;
@@ -135,8 +135,8 @@ public class GHRelease extends GHObject {
      *
      * @return the published at
      */
-    public Date getPublished_at() {
-        return new Date(published_at.getTime());
+    public Instant getPublished_at() {
+        return published_at;
     }
 
     /**

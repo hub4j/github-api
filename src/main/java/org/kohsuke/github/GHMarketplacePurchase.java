@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -42,8 +42,8 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      *
      * @return the next billing date
      */
-    public Date getNextBillingDate() {
-        return GitHubClient.parseDate(nextBillingDate);
+    public Instant getNextBillingDate() {
+        return GitHubClient.parseInstant(nextBillingDate);
     }
 
     /**
@@ -60,8 +60,8 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      *
      * @return the free trial ends on
      */
-    public Date getFreeTrialEndsOn() {
-        return GitHubClient.parseDate(freeTrialEndsOn);
+    public Instant getFreeTrialEndsOn() {
+        return GitHubClient.parseInstant(freeTrialEndsOn);
     }
 
     /**
@@ -78,8 +78,8 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      *
      * @return the updated at
      */
-    public Date getUpdatedAt() {
-        return GitHubClient.parseDate(updatedAt);
+    public Instant getUpdatedAt() {
+        return GitHubClient.parseInstant(updatedAt);
     }
 
     /**

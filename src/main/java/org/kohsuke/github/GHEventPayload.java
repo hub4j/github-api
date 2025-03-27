@@ -6,9 +6,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -1363,8 +1363,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
              *
              * @return the timestamp
              */
-            public Date getTimestamp() {
-                return GitHubClient.parseDate(timestamp);
+            public Instant getTimestamp() {
+                return GitHubClient.parseInstant(timestamp);
             }
         }
     }
@@ -1809,8 +1809,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the date when the star is added
          */
-        public Date getStarredAt() {
-            return GitHubClient.parseDate(starredAt);
+        public Instant getStarredAt() {
+            return GitHubClient.parseInstant(starredAt);
         }
     }
 

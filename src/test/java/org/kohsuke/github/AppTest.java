@@ -798,8 +798,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(commit.getLinesChanged(), equalTo(48));
         assertThat(commit.getLinesDeleted(), equalTo(8));
         assertThat(commit.getParentSHA1s().size(), equalTo(1));
-        assertThat(commit.getAuthoredDate(), equalTo(GitHubClient.parseDate("2012-04-24T00:16:52Z")));
-        assertThat(commit.getCommitDate(), equalTo(GitHubClient.parseDate("2012-04-24T00:16:52Z")));
+        assertThat(commit.getAuthoredDate(), equalTo(GitHubClient.parseInstant("2012-04-24T00:16:52Z")));
+        assertThat(commit.getCommitDate(), equalTo(GitHubClient.parseInstant("2012-04-24T00:16:52Z")));
         assertThat(commit.getCommitShortInfo().getCommentCount(), equalTo(0));
         assertThat(commit.getCommitShortInfo().getAuthoredDate(), equalTo(commit.getAuthoredDate()));
         assertThat(commit.getCommitShortInfo().getCommitDate(), equalTo(commit.getCommitDate()));
@@ -1009,7 +1009,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                     assertThat(ev.getActorLogin(), equalTo("pull[bot]"));
                     assertThat(ev.getOrganization(), nullValue());
                     assertThat(ev.getRepository().getFullName(), equalTo("daddyfatstacksBIG/lerna"));
-                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseDate("2019-10-21T21:54:52Z")));
+                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseInstant("2019-10-21T21:54:52Z")));
                     assertThat(ev.getType(), equalTo(GHEvent.PULL_REQUEST));
                 }
 
@@ -1033,7 +1033,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                     assertThat(ev.getActorLogin(), equalTo("PierreBtz"));
                     assertThat(ev.getOrganization().getLogin(), equalTo("hub4j"));
                     assertThat(ev.getRepository().getFullName(), equalTo("hub4j/github-api"));
-                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseDate("2023-03-02T16:37:49Z")));
+                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseInstant("2023-03-02T16:37:49Z")));
                     assertThat(ev.getType(), equalTo(GHEvent.PULL_REQUEST));
                 }
 
@@ -1212,9 +1212,9 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat("doc", equalTo(commit.getCommitShortInfo().getMessage()));
         assertThat(commit.getCommitShortInfo().getVerification().isVerified(), is(false));
         assertThat(GHVerification.Reason.UNSIGNED, equalTo(commit.getCommitShortInfo().getVerification().getReason()));
-        assertThat(commit.getCommitShortInfo().getAuthor().getDate().toInstant().getEpochSecond(),
+        assertThat(commit.getCommitShortInfo().getAuthor().getDate().getEpochSecond(),
                 equalTo(1271650361L));
-        assertThat(commit.getCommitShortInfo().getCommitter().getDate().toInstant().getEpochSecond(),
+        assertThat(commit.getCommitShortInfo().getCommitter().getDate().getEpochSecond(),
                 equalTo(1271650361L));
     }
 

@@ -30,8 +30,8 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -172,9 +172,9 @@ public final class GHCheckRunBuilder {
      *            the started at
      * @return the GH check run builder
      */
-    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
+    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Instant startedAt) {
         if (startedAt != null) {
-            requester.with("started_at", GitHubClient.printDate(startedAt));
+            requester.with("started_at", GitHubClient.printInstant(startedAt));
         }
         return this;
     }
@@ -186,9 +186,9 @@ public final class GHCheckRunBuilder {
      *            the completed at
      * @return the GH check run builder
      */
-    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
+    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Instant completedAt) {
         if (completedAt != null) {
-            requester.with("completed_at", GitHubClient.printDate(completedAt));
+            requester.with("completed_at", GitHubClient.printInstant(completedAt));
         }
         return this;
     }

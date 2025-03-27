@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.net.URL;
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -76,8 +76,8 @@ public class GHProjectsV2Item extends GHObject {
      *
      * @return the archived at
      */
-    public Date getArchivedAt() {
-        return GitHubClient.parseDate(archivedAt);
+    public Instant getArchivedAt() {
+        return GitHubClient.parseInstant(archivedAt);
     }
 
     /**

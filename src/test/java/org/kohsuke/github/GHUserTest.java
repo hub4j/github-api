@@ -247,7 +247,7 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         assertThat(normal.getSuspendedAt(), is(nullValue()));
 
         GHUser suspended = gitHub.getUser("suspended");
-        Date suspendedAt = new Date(Instant.parse("2024-08-08T00:00:00Z").toEpochMilli());
+        Instant suspendedAt = Instant.ofEpochMilli(Instant.parse("2024-08-08T00:00:00Z").toEpochMilli());
         assertThat(suspended.getSuspendedAt(), equalTo(suspendedAt));
     }
 }

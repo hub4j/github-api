@@ -6,10 +6,9 @@ import org.junit.Test;
 import org.kohsuke.github.GHPullRequest.AutoMerge;
 
 import java.io.IOException;
-import java.time.temporal.ChronoUnit;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -135,9 +134,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(comments, hasSize(0));
 
         GHIssueComment firstComment = p.comment("First comment");
-        Date firstCommentCreatedAt = firstComment.getCreatedAt();
-        Date firstCommentCreatedAtPlus1Second = Date
-                .from(firstComment.getCreatedAt().toInstant().plus(1, ChronoUnit.SECONDS));
+        Instant firstCommentCreatedAt = firstComment.getCreatedAt();
+        Instant firstCommentCreatedAtPlus1Second = firstComment.getCreatedAt().plusSeconds(1);
 
         comments = p.listComments().toList();
         assertThat(comments, hasSize(1));
@@ -160,13 +158,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         Thread.sleep(2000);
 
         GHIssueComment secondComment = p.comment("Second comment");
-        Date secondCommentCreatedAt = secondComment.getCreatedAt();
-        Date secondCommentCreatedAtPlus1Second = Date
-                .from(secondComment.getCreatedAt().toInstant().plus(1, ChronoUnit.SECONDS));
+        Instant secondCommentCreatedAt = secondComment.getCreatedAt();
+        Instant secondCommentCreatedAtPlus1Second = secondComment.getCreatedAt().plusSeconds(1);
         assertThat(
                 "There's an error in the setup of this test; please fix it."
                         + " The second comment should be created at least one second after the first one.",
-                firstCommentCreatedAtPlus1Second.getTime() <= secondCommentCreatedAt.getTime());
+                firstCommentCreatedAtPlus1Second.isBefore(secondCommentCreatedAt));
 
         comments = p.listComments().toList();
         assertThat(comments, hasSize(2));
@@ -195,7 +192,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(comments, hasSize(0));
 
         // Test "since" with timestamp instead of Date
-        comments = p.queryComments().since(secondCommentCreatedAt.getTime()).list().toList();
+        comments = p.queryComments().since(secondCommentCreatedAt.toEpochMilli()).list().toList();
         assertThat(comments, hasSize(1));
         assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
     }

@@ -2,9 +2,9 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.time.Instant;
 import java.util.AbstractList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 // TODO: Auto-generated Javadoc
@@ -159,7 +159,7 @@ public class GitCommit {
      *
      * @return the authored date
      */
-    public Date getAuthoredDate() {
+    public Instant getAuthoredDate() {
         return author.getDate();
     }
 
@@ -177,7 +177,7 @@ public class GitCommit {
      *
      * @return the commit date
      */
-    public Date getCommitDate() {
+    public Instant getCommitDate() {
         return committer.getDate();
     }
 

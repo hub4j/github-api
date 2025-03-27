@@ -79,7 +79,7 @@ public abstract class RateLimitChecker {
      */
     protected final boolean sleepUntilReset(GHRateLimit.Record record) throws InterruptedException {
         // Sleep until reset
-        long sleepMilliseconds = record.getResetDate().getTime() - System.currentTimeMillis();
+        long sleepMilliseconds = record.getResetDate().toEpochMilli() - System.currentTimeMillis();
         if (sleepMilliseconds > 0) {
             String message = String.format(
                     "GitHub API - Current quota has %d remaining of %d. Waiting for quota to reset at %tT.",

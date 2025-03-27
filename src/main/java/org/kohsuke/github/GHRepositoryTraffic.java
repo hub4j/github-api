@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 // TODO: Auto-generated Javadoc
@@ -68,8 +68,8 @@ public abstract class GHRepositoryTraffic implements TrafficInfo {
          *
          * @return the timestamp
          */
-        public Date getTimestamp() {
-            return GitHubClient.parseDate(timestamp);
+        public Instant getTimestamp() {
+            return GitHubClient.parseInstant(timestamp);
         }
 
         /**

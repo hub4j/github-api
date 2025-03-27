@@ -8,9 +8,9 @@ import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -114,8 +114,8 @@ public class GHWorkflowRun extends GHObject {
      *
      * @return run triggered
      */
-    public Date getRunStartedAt() {
-        return GitHubClient.parseDate(runStartedAt);
+    public Instant getRunStartedAt() {
+        return GitHubClient.parseInstant(runStartedAt);
     }
 
     /**
@@ -487,8 +487,8 @@ public class GHWorkflowRun extends GHObject {
          *
          * @return timestamp of the commit
          */
-        public Date getTimestamp() {
-            return GitHubClient.parseDate(timestamp);
+        public Instant getTimestamp() {
+            return GitHubClient.parseInstant(timestamp);
         }
 
         /**

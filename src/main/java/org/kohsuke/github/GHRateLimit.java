@@ -8,10 +8,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
@@ -131,7 +131,7 @@ public class GHRateLimit {
      * @return the calculated date at which the rate limit has or will reset.
      */
     @Nonnull
-    public Date getResetDate() {
+    public Instant getResetDate() {
         return getCore().getResetDate();
     }
 
@@ -416,7 +416,7 @@ public class GHRateLimit {
          * @see #getResetDate()
          */
         @Nonnull
-        private final Date resetDate;
+        private final Instant resetDate;
 
         /**
          * Instantiates a new Record.
@@ -535,7 +535,7 @@ public class GHRateLimit {
          * @return reset date based on the passed date
          */
         @Nonnull
-        private Date calculateResetDate(@CheckForNull String updatedAt) {
+        private Instant calculateResetDate(@CheckForNull String updatedAt) {
             long updatedAtEpochSeconds = createdAtEpochSeconds;
             if (!StringUtils.isBlank(updatedAt)) {
                 try {
@@ -552,7 +552,7 @@ public class GHRateLimit {
             // This may seem odd but it results in an accurate or slightly pessimistic reset date
             // based on system time rather than assuming the system time synchronized with the server
             long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;
-            return new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
+            return Instant.ofEpochMilli((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
         }
 
         /**
@@ -595,7 +595,7 @@ public class GHRateLimit {
          * @return true if the rate limit reset date has passed. Otherwise false.
          */
         public boolean isExpired() {
-            return getResetDate().getTime() < System.currentTimeMillis();
+            return getResetDate().toEpochMilli() < System.currentTimeMillis();
         }
 
         /**
@@ -607,8 +607,8 @@ public class GHRateLimit {
          * @return the calculated date at which the rate limit has or will reset.
          */
         @Nonnull
-        public Date getResetDate() {
-            return new Date(resetDate.getTime());
+        public Instant getResetDate() {
+            return resetDate;
         }
 
         /**

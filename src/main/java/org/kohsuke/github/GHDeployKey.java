@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -89,8 +89,8 @@ public class GHDeployKey {
      *
      * @return the created_at
      */
-    public Date getCreatedAt() {
-        return GitHubClient.parseDate(created_at);
+    public Instant getCreatedAt() {
+        return GitHubClient.parseInstant(created_at);
     }
 
     /**
@@ -98,8 +98,8 @@ public class GHDeployKey {
      *
      * @return the last_used
      */
-    public Date getLastUsedAt() {
-        return GitHubClient.parseDate(last_used);
+    public Instant getLastUsedAt() {
+        return GitHubClient.parseInstant(last_used);
     }
 
     /**

@@ -86,7 +86,8 @@ public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
         assertThat(suspendedBy.getLogin(), equalTo("gilday"));
 
         final Instant suspendedAt = appInstallation.getSuspendedAt();
-        final Instant expectedSuspendedAt = LocalDateTime.of(2024, Month.FEBRUARY, 26, 2, 43, 12).toInstant(ZoneOffset.UTC);
+        final Instant expectedSuspendedAt = LocalDateTime.of(2024, Month.FEBRUARY, 26, 2, 43, 12)
+                .toInstant(ZoneOffset.UTC);
         assertThat(suspendedAt, equalTo(expectedSuspendedAt));
     }
 

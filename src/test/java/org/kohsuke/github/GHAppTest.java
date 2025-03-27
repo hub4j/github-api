@@ -119,7 +119,9 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
      */
     @Test
     public void listInstallationsSince() throws IOException {
-        Instant localDate = LocalDate.parse("2023-11-01", DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay().toInstant(ZoneOffset.UTC);
+        Instant localDate = LocalDate.parse("2023-11-01", DateTimeFormatter.ISO_LOCAL_DATE)
+                .atStartOfDay()
+                .toInstant(ZoneOffset.UTC);
         GHApp app = gitHub.getApp();
         List<GHAppInstallation> installations = app.listInstallations(localDate).toList();
         assertThat(installations.size(), is(1));

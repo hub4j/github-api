@@ -100,7 +100,9 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         String instantSecondsFormatMillis = formatInstant(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
         assertThat(instantSecondsFormatMillis, equalTo("2018-08-08T09:40:22.0Z"));
 
-        String instantSecondsFormatMillisZoned = formatZonedInstant(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ", "PST");
+        String instantSecondsFormatMillisZoned = formatZonedInstant(instantSeconds,
+                "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ",
+                "PST");
         assertThat(instantSecondsFormatMillisZoned, equalTo("2018-08-08T02:40:22.000-07:00"));
 
         String instantBadFormat = formatInstant(instantMillis, "yy-MM-dd'T'HH:mm'Z'");

@@ -410,7 +410,7 @@ public abstract class AbstractGitHubWireMockTest {
          * @return the response template transformer
          */
         public ResponseTemplateTransformer newResponseTransformer() {
-            //noinspection UnqualifiedFieldAccess
+            // noinspection UnqualifiedFieldAccess
             testStartDate = new Date();
             return ResponseTemplateTransformer.builder()
                     .global(true)

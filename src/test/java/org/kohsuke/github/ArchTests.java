@@ -1,13 +1,16 @@
 package org.kohsuke.github;
 
 import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.base.HasDescription;
 import com.tngtech.archunit.core.domain.*;
 import com.tngtech.archunit.core.domain.properties.HasName;
 import com.tngtech.archunit.core.domain.properties.HasOwner;
+import com.tngtech.archunit.core.domain.properties.HasSourceCodeLocation;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.lang.conditions.ArchConditions;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -15,26 +18,42 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.kohsuke.github.GHDiscussion.Creator;
+import org.kohsuke.github.GHPullRequestCommitDetail.Commit;
+import org.kohsuke.github.GHPullRequestCommitDetail.CommitPointer;
 
 import java.io.Closeable;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.tngtech.archunit.base.DescribedPredicate.not;
+import static com.tngtech.archunit.base.DescribedPredicate.or;
 import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
+import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
+import static com.tngtech.archunit.core.domain.JavaModifier.FINAL;
+import static com.tngtech.archunit.core.domain.JavaModifier.STATIC;
+import static com.tngtech.archunit.core.domain.properties.HasModifiers.Predicates.modifier;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameContaining;
+import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameMatching;
 import static com.tngtech.archunit.core.domain.properties.HasOwner.Predicates.With.owner;
 import static com.tngtech.archunit.core.domain.properties.HasParameterTypes.Predicates.rawParameterTypes;
+import static com.tngtech.archunit.core.domain.properties.HasReturnType.Predicates.rawReturnType;
 import static com.tngtech.archunit.lang.conditions.ArchConditions.*;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
@@ -42,6 +61,8 @@ import static org.hamcrest.Matchers.greaterThan;
 /**
  * The Class ArchTests.
  */
+@SuppressWarnings({ "LocalVariableNamingConvention", "TestMethodWithoutAssertion", "UnqualifiedStaticUsage",
+        "unchecked", "MethodMayBeStatic", "FieldNamingConvention", "StaticCollection" })
 public class ArchTests {
 
     private static final JavaClasses classFiles = new ClassFileImporter()
@@ -69,6 +90,43 @@ public class ArchTests {
         assertThat(classFiles.size(), greaterThan(0));
     }
 
+    @Test
+    public void testRequireFollowingNamingConvention() {
+        final String reason = "This project follows standard java naming conventions and does not allow the use of underscores in names.";
+
+        final ArchRule fieldsNotFollowingConvention = noFields().that()
+                .arePublic()
+                .and(not(enumConstants()))
+                .and(not(modifier(STATIC).and(modifier(FINAL)).as("static final")))
+                .should(haveNamesContainingUnless("_"))
+                .because(reason);
+
+        @SuppressWarnings("AccessStaticViaInstance")
+        final ArchRule methodsNotFollowingConvention = noMethods().that()
+                .arePublic()
+                .should(haveNamesContainingUnless("_",
+                        nameMatching("[A-Z0-9\\_]+"),
+                        // currently failing cases
+                        // TODO: 2025-03-28 Fix & remove these
+                        declaredIn(PagedIterable.class).and(name("_iterator")).and(rawReturnType(PagedIterator.class)),
+                        declaredIn(GHRepositoryBuilder.class).and(name("private_")).and(rawReturnType(Object.class)),
+                        declaredIn(GHDeployKey.class).and(name("getAdded_by")).and(rawReturnType(String.class)),
+                        declaredIn(GHDeployKey.class).and(name("isRead_only")).and(rawReturnType(boolean.class)),
+                        declaredIn(Creator.class).and(name("private_")).and(rawReturnType(Creator.class)),
+                        declaredIn(GHGistBuilder.class).and(name("public_")).and(rawReturnType(GHGistBuilder.class)),
+                        declaredIn(Commit.class).and(name("getComment_count")).and(rawReturnType(int.class)),
+                        declaredIn(CommitPointer.class).and(name("getHtml_url")).and(rawReturnType(URL.class)),
+                        declaredIn(GHRelease.class).and(name("getPublished_at")).and(rawReturnType(Instant.class))))
+                .because(reason);
+
+        final ArchRule classesNotFollowingConvention = noClasses().should(haveNamesContainingUnless("_"))
+                .because(reason);
+
+        fieldsNotFollowingConvention.check(classFiles);
+        methodsNotFollowingConvention.check(classFiles);
+        classesNotFollowingConvention.check(classFiles);
+    }
+
     /**
      * Test require use of assert that.
      */
@@ -78,10 +136,10 @@ public class ArchTests {
         final String reason = "This project uses `assertThat(...)` or `assertThrows(...)` instead of other `assert*()` methods.";
 
         final DescribedPredicate<HasName> assertMethodOtherThanAssertThat = nameContaining("assert")
-                .and(DescribedPredicate.not(name("assertThat")).and(DescribedPredicate.not(name("assertThrows"))));
+                .and(not(name("assertThat")).and(not(name("assertThrows"))));
 
         final ArchRule onlyAssertThatRule = classes()
-                .should(not(callMethodWhere(target(assertMethodOtherThanAssertThat))))
+                .should(ArchConditions.not(callMethodWhere(target(assertMethodOtherThanAssertThat))))
                 .because(reason);
 
         onlyAssertThatRule.check(testClassFiles);
@@ -136,6 +194,27 @@ public class ArchTests {
     }
 
     /**
+     * Have names containing unless.
+     *
+     * @param infix
+     *            the infix
+     * @param unlessPredicates
+     *            the unless predicates
+     * @return the arch condition
+     */
+    public static <T extends HasDescription & HasSourceCodeLocation & HasName> ArchCondition<T> haveNamesContainingUnless(
+            final String infix,
+            final DescribedPredicate<? super T>... unlessPredicates) {
+        DescribedPredicate<? super T> restrictedNameContaining = nameContaining(infix);
+
+        if (unlessPredicates.length > 0) {
+            final DescribedPredicate<T> allowed = or(unlessPredicates);
+            restrictedNameContaining = unless(nameContaining(infix), allowed);
+        }
+        return have(restrictedNameContaining);
+    }
+
+    /**
      * Not call methods in package unless.
      *
      * @param packageIdentifier
@@ -156,7 +235,7 @@ public class ArchTests {
             }
             restrictedPackageCalls = unless(restrictedPackageCalls, allowed);
         }
-        return not(callMethodWhere(restrictedPackageCalls));
+        return ArchConditions.not(callMethodWhere(restrictedPackageCalls));
     }
 
     /**
@@ -200,6 +279,10 @@ public class ArchTests {
         return new UnlessPredicate(first, second);
     }
 
+    private DescribedPredicate<? super JavaField> enumConstants() {
+        return new EnumConstantFieldPredicate();
+    }
+
     private static class UnlessPredicate<T> extends DescribedPredicate<T> {
         private final DescribedPredicate<T> current;
         private final DescribedPredicate<? super T> other;
@@ -213,6 +296,18 @@ public class ArchTests {
         @Override
         public boolean test(T input) {
             return current.test(input) && !other.test(input);
+        }
+    }
+
+    private static final class EnumConstantFieldPredicate extends DescribedPredicate<JavaField> {
+        private EnumConstantFieldPredicate() {
+            super("are not enum constants");
+        }
+
+        @Override
+        public boolean test(JavaField javaField) {
+            JavaClass owner = javaField.getOwner();
+            return owner.isEnum() && javaField.getRawType().isAssignableTo(owner.reflect());
         }
     }
 }

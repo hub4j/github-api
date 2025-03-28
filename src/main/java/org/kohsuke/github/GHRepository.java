@@ -124,7 +124,10 @@ public class GHRepository extends GHObject {
     private GHRepository source, parent;
 
     private Boolean isTemplate;
+
     private boolean compareUsePaginatedCommits;
+
+    private Set<GHRepositoryCustomProperty> custom_properties;
 
     /**
      * Read.
@@ -2868,6 +2871,24 @@ public class GHRepository extends GHObject {
         return root().createRequest()
                 .withUrlPath(getApiTailUrl("/traffic/clones"))
                 .fetch(GHRepositoryCloneTraffic.class);
+    }
+
+    /**
+     * Gets all custom property values that are set for a repository. Users with read access to the repository can use
+     * this endpoint. <a href=
+     * "https://docs.github.com/en/rest/repos/custom-properties?apiVersion=2022-11-28#get-all-custom-property-values-for-a-repository">
+     * docs</a>
+     *
+     * @return the custom properties and values on the repository
+     * @throws IOException
+     *             the io exception
+     */
+    public Set<GHRepositoryCustomProperty> getCustomProperties() throws IOException {
+        return root().createRequest()
+                .method("GET")
+                .withUrlPath("/properties/values")
+                .toIterable(GHRepositoryCustomProperty[].class, null)
+                .toSet();
     }
 
     /**

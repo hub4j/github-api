@@ -90,6 +90,9 @@ public class ArchTests {
         assertThat(classFiles.size(), greaterThan(0));
     }
 
+    /**
+     * Test naming conventions
+     */
     @Test
     public void testRequireFollowingNamingConvention() {
         final String reason = "This project follows standard java naming conventions and does not allow the use of underscores in names.";
@@ -196,6 +199,8 @@ public class ArchTests {
     /**
      * Have names containing unless.
      *
+     * @param <T>
+     *            the generic type
      * @param infix
      *            the infix
      * @param unlessPredicates
@@ -279,6 +284,11 @@ public class ArchTests {
         return new UnlessPredicate(first, second);
     }
 
+    /**
+     * Enum constants.
+     *
+     * @return the described predicate
+     */
     private DescribedPredicate<? super JavaField> enumConstants() {
         return new EnumConstantFieldPredicate();
     }

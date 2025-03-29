@@ -111,15 +111,14 @@ public class ArchTests {
                         nameMatching("[A-Z0-9\\_]+"),
                         // currently failing cases
                         // TODO: 2025-03-28 Fix & remove these
-                        declaredIn(PagedIterable.class).and(name("_iterator")).and(rawReturnType(PagedIterator.class)),
-                        declaredIn(GHRepositoryBuilder.class).and(name("private_")).and(rawReturnType(Object.class)),
-                        declaredIn(GHDeployKey.class).and(name("getAdded_by")).and(rawReturnType(String.class)),
-                        declaredIn(GHDeployKey.class).and(name("isRead_only")).and(rawReturnType(boolean.class)),
-                        declaredIn(Creator.class).and(name("private_")).and(rawReturnType(Creator.class)),
-                        declaredIn(GHGistBuilder.class).and(name("public_")).and(rawReturnType(GHGistBuilder.class)),
-                        declaredIn(Commit.class).and(name("getComment_count")).and(rawReturnType(int.class)),
-                        declaredIn(CommitPointer.class).and(name("getHtml_url")).and(rawReturnType(URL.class)),
-                        declaredIn(GHRelease.class).and(name("getPublished_at")).and(rawReturnType(Instant.class))))
+                        declaredIn(PagedIterable.class).and(name("_iterator")),
+                        declaredIn(GHDeployKey.class).and(name("getAdded_by")),
+                        declaredIn(GHDeployKey.class).and(name("isRead_only")),
+                        declaredIn(Creator.class).and(name("private_")),
+                        declaredIn(GHGistBuilder.class).and(name("public_")),
+                        declaredIn(Commit.class).and(name("getComment_count")),
+                        declaredIn(CommitPointer.class).and(name("getHtml_url")),
+                        declaredIn(GHRelease.class).and(name("getPublished_at"))
                 .because(reason);
 
         final ArchRule classesNotFollowingConvention = noClasses().should(haveNamesContainingUnless("_"))

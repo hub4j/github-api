@@ -118,7 +118,7 @@ public class ArchTests {
                         declaredIn(GHGistBuilder.class).and(name("public_")),
                         declaredIn(Commit.class).and(name("getComment_count")),
                         declaredIn(CommitPointer.class).and(name("getHtml_url")),
-                        declaredIn(GHRelease.class).and(name("getPublished_at"))
+                        declaredIn(GHRelease.class).and(name("getPublished_at"))))
                 .because(reason);
 
         final ArchRule classesNotFollowingConvention = noClasses().should(haveNamesContainingUnless("_"))

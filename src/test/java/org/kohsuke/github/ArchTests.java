@@ -35,6 +35,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.base.DescribedPredicate.or;
 import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.assignableTo;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
 import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
@@ -43,7 +44,6 @@ import static com.tngtech.archunit.core.domain.JavaModifier.STATIC;
 import static com.tngtech.archunit.core.domain.properties.HasModifiers.Predicates.modifier;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameContaining;
-import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.nameMatching;
 import static com.tngtech.archunit.core.domain.properties.HasOwner.Predicates.With.owner;
 import static com.tngtech.archunit.core.domain.properties.HasParameterTypes.Predicates.rawParameterTypes;
 import static com.tngtech.archunit.lang.conditions.ArchConditions.*;
@@ -105,12 +105,13 @@ public class ArchTests {
         final ArchRule methodsNotFollowingConvention = noMethods().that()
                 .arePublic()
                 .should(haveNamesContainingUnless("_",
-                        nameMatching("[A-Z0-9\\_]+"),
-                        // currently failing cases
+                        // currently failing method names
                         // TODO: 2025-03-28 Fix & remove these
-                        declaredIn(PagedIterable.class).and(name("_iterator")),
+                        declaredIn(assignableTo(PagedIterable.class)).and(name("_iterator")),
+                        declaredIn(GHCompare.class).and(name("getAdded_by")),
                         declaredIn(GHDeployKey.class).and(name("getAdded_by")),
                         declaredIn(GHDeployKey.class).and(name("isRead_only")),
+                        declaredIn(assignableTo(GHRepositoryBuilder.class)).and(name("private_")),
                         declaredIn(Creator.class).and(name("private_")),
                         declaredIn(GHGistBuilder.class).and(name("public_")),
                         declaredIn(Commit.class).and(name("getComment_count")),

@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Arrays;
-import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
 
@@ -146,8 +146,8 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         String treeSha = treeBuilder.create().getSha();
         GHCommit commit = new GHCommitBuilder(repo).message("Add files")
                 .tree(treeSha)
-                .author("author", "author@author.com", new Date(1611433225969L))
-                .committer("committer", "committer@committer.com", new Date(1611433225968L))
+                .author("author", "author@author.com", Instant.ofEpochMilli(1611433225969L))
+                .committer("committer", "committer@committer.com", Instant.ofEpochMilli(1611433225968L))
                 .parent(mainRef.getObject().getSha())
                 .create();
 

@@ -9,9 +9,9 @@ import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -83,8 +83,8 @@ public class GHWorkflowJob extends GHObject {
      *
      * @return start date
      */
-    public Date getStartedAt() {
-        return GitHubClient.parseDate(startedAt);
+    public Instant getStartedAt() {
+        return GitHubClient.parseInstant(startedAt);
     }
 
     /**
@@ -92,8 +92,8 @@ public class GHWorkflowJob extends GHObject {
      *
      * @return completion date
      */
-    public Date getCompletedAt() {
-        return GitHubClient.parseDate(completedAt);
+    public Instant getCompletedAt() {
+        return GitHubClient.parseInstant(completedAt);
     }
 
     /**
@@ -302,8 +302,8 @@ public class GHWorkflowJob extends GHObject {
          *
          * @return start date
          */
-        public Date getStartedAt() {
-            return GitHubClient.parseDate(startedAt);
+        public Instant getStartedAt() {
+            return GitHubClient.parseInstant(startedAt);
         }
 
         /**
@@ -311,8 +311,8 @@ public class GHWorkflowJob extends GHObject {
          *
          * @return completion date
          */
-        public Date getCompletedAt() {
-            return GitHubClient.parseDate(completedAt);
+        public Instant getCompletedAt() {
+            return GitHubClient.parseInstant(completedAt);
         }
 
         /**

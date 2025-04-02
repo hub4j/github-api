@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.time.Instant;
 import java.util.*;
 
 // TODO: Auto-generated Javadoc
@@ -66,7 +67,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      *
      * @return date when this token expires
      */
-    public Date getExpiresAt() {
-        return GitHubClient.parseDate(expires_at);
+    public Instant getExpiresAt() {
+        return GitHubClient.parseInstant(expires_at);
     }
 }

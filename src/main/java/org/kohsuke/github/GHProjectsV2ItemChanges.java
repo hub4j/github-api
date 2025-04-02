@@ -3,7 +3,7 @@ package org.kohsuke.github;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -138,8 +138,8 @@ public class GHProjectsV2ItemChanges {
          *
          * @return the from
          */
-        public Date getFrom() {
-            return GitHubClient.parseDate(from);
+        public Instant getFrom() {
+            return GitHubClient.parseInstant(from);
         }
 
         /**
@@ -147,8 +147,8 @@ public class GHProjectsV2ItemChanges {
          *
          * @return the to
          */
-        public Date getTo() {
-            return GitHubClient.parseDate(to);
+        public Instant getTo() {
+            return GitHubClient.parseInstant(to);
         }
     }
 

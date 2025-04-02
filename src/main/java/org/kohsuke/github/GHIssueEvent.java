@@ -2,7 +2,7 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.Date;
+import java.time.Instant;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -105,8 +105,8 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      *
      * @return the created at
      */
-    public Date getCreatedAt() {
-        return GitHubClient.parseDate(created_at);
+    public Instant getCreatedAt() {
+        return GitHubClient.parseInstant(created_at);
     }
 
     /**

@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -262,7 +263,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         repository = gitHub.getOrganization("hub4j").getRepository("github-api");
         Iterable<GHStargazer> stargazers = repository.listStargazers2();
         GHStargazer stargazer = stargazers.iterator().next();
-        assertThat(stargazer.getStarredAt(), equalTo(new Date(1271650383000L)));
+        assertThat(stargazer.getStarredAt(), equalTo(Instant.ofEpochMilli(1271650383000L)));
         assertThat(stargazer.getUser().getLogin(), equalTo("nielswind"));
         assertThat(stargazer.getRepository(), sameInstance(repository));
     }
@@ -314,7 +315,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(s.getUrl().toString(), containsString("/repos/hub4j-test-org/github-api/subscription"));
 
             assertThat(s.getReason(), nullValue());
-            assertThat(s.getCreatedAt(), equalTo(new Date(1611377286000L)));
+            assertThat(s.getCreatedAt(), equalTo(Instant.ofEpochMilli(1611377286000L)));
         } finally {
             s.delete();
         }

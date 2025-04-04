@@ -1,0 +1,61 @@
+[
+  {
+    "number": 1,
+    "created_at": "2021-05-17T14:55:01Z",
+    "url": "https://api.github.com/repos/hub4j-test-org/Pixi/code-scanning/alerts/1",
+    "html_url": "https://github.com/hub4j-test-org/Pixi/security/code-scanning/1",
+    "state": "dismissed",
+    "dismissed_by": {
+      "login": "akashRindhe",
+      "id": 14114123,
+      "node_id": "MDQ6VXNlcjE0MTE0MTIz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14114123?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/akashRindhe",
+      "html_url": "https://github.com/akashRindhe",
+      "followers_url": "https://api.github.com/users/akashRindhe/followers",
+      "following_url": "https://api.github.com/users/akashRindhe/following{/other_user}",
+      "gists_url": "https://api.github.com/users/akashRindhe/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/akashRindhe/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/akashRindhe/subscriptions",
+      "organizations_url": "https://api.github.com/users/akashRindhe/orgs",
+      "repos_url": "https://api.github.com/users/akashRindhe/repos",
+      "events_url": "https://api.github.com/users/akashRindhe/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/akashRindhe/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "dismissed_at": "2021-05-18T01:45:16Z",
+    "dismissed_reason": "used in tests",
+    "rule": {
+      "id": "js/angular/disabling-sce",
+      "severity": "warning",
+      "description": "Disabling SCE",
+      "name": "js/angular/disabling-sce"
+    },
+    "tool": {
+      "name": "CodeQL",
+      "guid": null,
+      "version": "2.5.4"
+    },
+    "most_recent_instance": {
+      "ref": "refs/heads/master",
+      "analysis_key": ".github/workflows/codeql-analysis.yml:analyze",
+      "environment": "{\"language\":\"javascript\"}",
+      "state": "dismissed",
+      "commit_sha": "b3cfb0474bb3d5b5cd499a17e448281abbd256d7",
+      "message": {
+        "text": "Disabling SCE is strongly discouraged."
+      },
+      "location": {
+        "path": "app/pixi.html",
+        "start_line": 179,
+        "end_line": 179,
+        "start_column": 4,
+        "end_column": 31
+      },
+      "classifications": []
+    },
+    "instances_url": "https://api.github.com/repos/hub4j-test-org/Pixi/code-scanning/alerts/1/instances"
+  }
+]

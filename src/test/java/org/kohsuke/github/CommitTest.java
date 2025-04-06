@@ -4,9 +4,9 @@ import com.google.common.collect.Iterables;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -123,8 +123,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         commits = gitHub.getUser("jenkinsci")
                 .getRepository("jenkins")
                 .queryCommits()
-                .since(Instant.ofEpochMilli(1199174400000L))
-                .until(Instant.ofEpochMilli(1201852800000L))
+                .since(new Date(1199174400000L))
+                .until(new Date(1201852800000L))
                 .path("pom.xml")
                 .pageSize(100)
                 .list()
@@ -137,8 +137,8 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         commits = gitHub.getUser("jenkinsci")
                 .getRepository("jenkins")
                 .queryCommits()
-                .since(Instant.ofEpochMilli(1199174400000L))
-                .until(Instant.ofEpochMilli(1201852800000L))
+                .since(new Date(1199174400000L))
+                .until(new Date(1201852800000L))
                 .path("pom.xml")
                 .from("a5259970acaec9813e2a12a91f37dfc7871a5ef5")
                 .list()
@@ -150,7 +150,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         commits = gitHub.getUser("jenkinsci")
                 .getRepository("jenkins")
                 .queryCommits()
-                .until(Instant.ofEpochMilli(1201852800000L))
+                .until(new Date(1201852800000L))
                 .path("pom.xml")
                 .author("kohsuke")
                 .list()
@@ -161,7 +161,7 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         commits = gitHub.getUser("jenkinsci")
                 .getRepository("jenkins")
                 .queryCommits()
-                .until(Instant.ofEpochMilli(1201852800000L))
+                .until(new Date(1201852800000L))
                 .path("pom.xml")
                 .pageSize(100)
                 .author("kohsuke@71c3de6d-444a-0410-be80-ed276b4c234a")

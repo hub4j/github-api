@@ -3,15 +3,19 @@ package org.kohsuke.github;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.*;
 
@@ -115,11 +119,16 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
+     * @throws ParseException
+     *             Signals that a ParseException has occurred.
      *
      */
     @Test
-    public void listInstallationsSince() throws IOException {
-        Instant localDate = LocalDate.parse("2023-11-01", DateTimeFormatter.ISO_LOCAL_DATE)
+    public void listInstallationsSince() throws IOException, ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date localDate = simpleDateFormat.parse("2023-11-01");
+        Instant localInstant = LocalDate.parse("2023-11-01", DateTimeFormatter.ISO_LOCAL_DATE)
                 .atStartOfDay()
                 .toInstant(ZoneOffset.UTC);
         GHApp app = gitHub.getApp();
@@ -293,7 +302,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
 
         List<GHEvent> events = Arrays.asList(GHEvent.PULL_REQUEST, GHEvent.PUSH);
         assertThat(appInstallation.getEvents(), containsInAnyOrder(events.toArray(new GHEvent[0])));
-        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseInstant("2019-07-04T01:19:36.000Z")));
+        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseDate("2019-07-04T01:19:36.000Z").toInstant()));
         assertThat(appInstallation.getUpdatedAt(), is(GitHubClient.parseInstant("2019-07-30T22:48:09.000Z")));
         assertThat(appInstallation.getSingleFileName(), nullValue());
     }

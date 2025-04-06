@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.containsString;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -59,7 +59,7 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
 
         String NEW_TITLE = "Updated Title";
         String NEW_DESCRIPTION = "Updated Description";
-        Instant NEW_DUE_DATE = GitHubClient.parseInstant("2020-10-05T13:00:00Z");
+        Date NEW_DUE_DATE = GitHubClient.parseDate("2020-10-05T13:00:00Z");
         Instant OUTPUT_DUE_DATE = GitHubClient.parseInstant("2020-10-05T07:00:00Z");
 
         milestone.setTitle(NEW_TITLE);

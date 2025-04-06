@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.contains;
@@ -137,7 +138,7 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         comments = issue.queryComments().since(firstCommentCreatedAtPlus1Second).list().toList();
         assertThat(comments, hasSize(1));
         assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
-        comments = issue.queryComments().since(secondCommentCreatedAt).list().toList();
+        comments = issue.queryComments().since(Date.from(secondCommentCreatedAt)).list().toList();
         assertThat(comments, hasSize(1));
         assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
         comments = issue.queryComments().since(secondCommentCreatedAtPlus1Second).list().toList();

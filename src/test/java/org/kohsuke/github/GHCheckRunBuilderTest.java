@@ -30,6 +30,7 @@ import org.kohsuke.github.GHCheckRun.Status;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
 
@@ -71,8 +72,8 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 .withConclusion(GHCheckRun.Conclusion.SUCCESS)
                 .withDetailsURL("http://nowhere.net/stuff")
                 .withExternalID("whatever")
-                .withStartedAt(Instant.ofEpochMilli(999_999_000))
-                .withCompletedAt(Instant.ofEpochMilli(999_999_999))
+                .withStartedAt(new Date(999_999_000))
+                .withCompletedAt(new Date(999_999_999))
                 .add(new GHCheckRunBuilder.Output("Some Title", "what happened…").withText("Hello Text!")
                         .add(new GHCheckRunBuilder.Annotation("stuff.txt",
                                 1,
@@ -195,7 +196,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         GHCheckRun updated = checkRun.update()
                 .withStatus(GHCheckRun.Status.COMPLETED)
                 .withConclusion(GHCheckRun.Conclusion.SUCCESS)
-                .withCompletedAt(Instant.ofEpochMilli(999_999_999))
+                .withCompletedAt(new Date(999_999_999))
                 .create();
         assertThat(Instant.ofEpochMilli(999_999_000), equalTo(updated.getStartedAt()));
         assertThat("foo", equalTo(updated.getName()));
@@ -254,7 +255,7 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                 () -> checkRun.update()
                         .withStatus(GHCheckRun.Status.COMPLETED)
                         .withConclusion(GHCheckRun.Conclusion.SUCCESS)
-                        .withCompletedAt(Instant.ofEpochMilli(999_999_999))
+                        .withCompletedAt(new Date(999_999_999))
                         .withName("bar", null)
                         .create());
     }

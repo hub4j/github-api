@@ -39,12 +39,14 @@ public class AotIntegrationTest {
      */
     @Test
     public void testIfAllRequiredClassesAreRegisteredForAot() throws IOException {
+        String artifactId = System.getProperty("test.projectArtifactId", "default");
+
         Stream<String> providedReflectionConfigStreamOfNames = readAotConfigToStreamOfClassNames(
-                "./target/classes/META-INF/native-image/org.kohsuke/github-api/reflect-config.json");
+                "./target/classes/META-INF/native-image/org.kohsuke/" + artifactId + "/reflect-config.json");
         Stream<String> providedNoReflectStreamOfNames = Files
                 .lines(Path.of("./target/test-classes/no-reflect-and-serialization-list"));
         Stream<String> providedSerializationStreamOfNames = readAotConfigToStreamOfClassNames(
-                "./target/classes/META-INF/native-image/org.kohsuke/github-api/serialization-config.json");
+                "./target/classes/META-INF/native-image/org.kohsuke/" + artifactId + "/serialization-config.json");
         Stream<String> providedAotConfigClassNamesPart = Stream
                 .concat(providedSerializationStreamOfNames,
                         Stream.concat(providedReflectionConfigStreamOfNames, providedNoReflectStreamOfNames))
@@ -53,9 +55,11 @@ public class AotIntegrationTest {
                 .collect(Collectors.toList());
 
         Stream<String> generatedReflectConfigStreamOfClassNames = readAotConfigToStreamOfClassNames(
-                "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/github-api/reflect-config.json");
+                "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/" + artifactId
+                        + "/reflect-config.json");
         Stream<String> generatedSerializationStreamOfNames = readAotConfigToStreamOfClassNames(
-                "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/github-api/serialization-config.json");
+                "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/" + artifactId
+                        + "/serialization-config.json");
         Stream<String> generatedAotConfigClassNames = Stream.concat(generatedReflectConfigStreamOfClassNames,
                 generatedSerializationStreamOfNames);
 

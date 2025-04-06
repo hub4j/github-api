@@ -40,6 +40,10 @@ public class BridgeMethodTest extends Assert {
         // verifyBridgeMethods(new GHCommit(), "getAuthor", GHCommit.GHAuthor.class, GitUser.class);
         // verifyBridgeMethods(new GHCommit(), "getCommitter", GHCommit.GHAuthor.class, GitUser.class);
 
+        String artifactId = System.getProperty("test.projectArtifactId", "default");
+        // Only run these tests when building the "bridged" artifact
+        org.junit.Assume.assumeThat(artifactId, equalTo("github-api-bridged"));
+
         verifyBridgeMethods(GHAppInstallation.class, "getSuspendedAt", Date.class, Instant.class);
         verifyBridgeMethods(GHAppInstallationToken.class, "getExpiresAt", Date.class, Instant.class);
         verifyBridgeMethods(GHArtifact.class, "getExpiresAt", Date.class, Instant.class);

@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 // TODO: Auto-generated Javadoc
@@ -210,7 +212,7 @@ public class GHCheckSuite extends GHObject {
     /**
      * The Class HeadCommit.
      */
-    public static class HeadCommit {
+    public static class HeadCommit extends GitHubBridgeAdapterObject {
 
         /**
          * Create default HeadCommit instance
@@ -257,6 +259,7 @@ public class GHCheckSuite extends GHObject {
          *
          * @return timestamp of the commit
          */
+        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
         public Instant getTimestamp() {
             return GitHubClient.parseInstant(timestamp);
         }

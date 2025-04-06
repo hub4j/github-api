@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -41,6 +42,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -815,6 +817,7 @@ public class GHRepository extends GHObject {
      *
      * @return null if the repository was never pushed at.
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getPushedAt() {
         return GitHubClient.parseInstant(pushed_at);
     }

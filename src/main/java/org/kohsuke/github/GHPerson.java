@@ -1,10 +1,13 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -208,6 +211,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getCreatedAt() throws IOException {
         populate();
         return super.getCreatedAt();
@@ -220,6 +224,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getUpdatedAt() throws IOException {
         populate();
         return super.getUpdatedAt();

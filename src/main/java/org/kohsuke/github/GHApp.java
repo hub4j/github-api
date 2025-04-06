@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -145,7 +146,23 @@ public class GHApp extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
      */
     public PagedIterable<GHAppInstallation> listInstallations() {
-        return listInstallations(null);
+        return listInstallations(GitHubClient.toInstantOrNull(null));
+    }
+
+    /**
+     * Obtains all the installations associated with this app since a given date.
+     * <p>
+     * You must use a JWT to access this endpoint.
+     *
+     * @param since
+     *            - Allows users to get installations that have been updated since a given date.
+     * @return a list of App installations since a given time.
+     * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
+     * @deprecated use {@link #listInstallations(Instant)}
+     */
+    @Deprecated
+    public PagedIterable<GHAppInstallation> listInstallations(final Date since) {
+        return listInstallations(since.toInstant());
     }
 
     /**

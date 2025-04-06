@@ -23,11 +23,13 @@
  */
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
+import java.util.Date;
 
 import javax.annotation.CheckForNull;
 
@@ -144,6 +146,7 @@ public class GHPullRequestReview extends GHObject {
      *
      * @return the submitted at
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getSubmittedAt() {
         return GitHubClient.parseInstant(submitted_at);
     }
@@ -156,6 +159,7 @@ public class GHPullRequestReview extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     @Override
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getCreatedAt() throws IOException {
         return getSubmittedAt();
     }

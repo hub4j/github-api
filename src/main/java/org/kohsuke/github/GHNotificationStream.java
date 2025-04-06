@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -76,6 +77,19 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      */
     public GHNotificationStream since(long timestamp) {
         return since(Instant.ofEpochMilli(timestamp));
+    }
+
+    /**
+     * Since gh notification stream.
+     *
+     * @param dt
+     *            the dt
+     * @return the gh notification stream
+     * @deprecated {@link #since(Instant)}
+     */
+    @Deprecated
+    public GHNotificationStream since(Date dt) {
+        return since(GitHubClient.toInstantOrNull(dt));
     }
 
     /**

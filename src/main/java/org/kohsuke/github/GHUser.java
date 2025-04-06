@@ -23,6 +23,8 @@
  */
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
@@ -274,6 +276,7 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             on error
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getSuspendedAt() throws IOException {
         super.populate();
         return GitHubClient.parseInstant(suspendedAt);

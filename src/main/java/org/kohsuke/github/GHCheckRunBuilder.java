@@ -32,6 +32,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -172,11 +173,33 @@ public final class GHCheckRunBuilder {
      *            the started at
      * @return the GH check run builder
      */
+    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
+        return withStartedAt(GitHubClient.toInstantOrNull(startedAt));
+    }
+
+    /**
+     * With started at.
+     *
+     * @param startedAt
+     *            the started at
+     * @return the GH check run builder
+     */
     public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Instant startedAt) {
         if (startedAt != null) {
             requester.with("started_at", GitHubClient.printInstant(startedAt));
         }
         return this;
+    }
+
+    /**
+     * With completed at.
+     *
+     * @param completedAt
+     *            the completed at
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
+        return withCompletedAt(GitHubClient.toInstantOrNull(completedAt));
     }
 
     /**

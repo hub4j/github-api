@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.io.Reader;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -1363,9 +1365,11 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
              *
              * @return the timestamp
              */
+            @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
             public Instant getTimestamp() {
                 return GitHubClient.parseInstant(timestamp);
             }
+
         }
     }
 
@@ -1809,6 +1813,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          *
          * @return the date when the star is added
          */
+        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
         public Instant getStarredAt() {
             return GitHubClient.parseInstant(starredAt);
         }

@@ -876,6 +876,34 @@ class GitHubClient {
     }
 
     /**
+     * Parses the date.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the date
+     */
+    static Date parseDate(String timestamp) {
+        if (timestamp == null)
+            return null;
+
+        return Date.from(parseInstant(timestamp));
+    }
+
+    /**
+     * Parses the date.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the date
+     */
+    static Instant toInstantOrNull(Date date) {
+        if (date == null)
+            return null;
+
+        return date.toInstant();
+    }
+
+    /**
      * Parses the instant.
      *
      * @param timestamp

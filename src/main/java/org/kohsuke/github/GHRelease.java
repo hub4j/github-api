@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -42,7 +43,7 @@ public class GHRelease extends GHObject {
     private String body;
     private boolean draft;
     private boolean prerelease;
-    private Instant published_at;
+    private String published_at;
     private String tarball_url;
     private String zipball_url;
     private String discussion_url;
@@ -135,8 +136,17 @@ public class GHRelease extends GHObject {
      *
      * @return the published at
      */
-    public Instant getPublished_at() {
-        return published_at;
+    public Date getPublished_at() {
+        return Date.from(getPublishedAt());
+    }
+
+    /**
+     * Gets published at.
+     *
+     * @return the published at
+     */
+    public Instant getPublishedAt() {
+        return GitHubClient.parseInstant(published_at);
     }
 
     /**

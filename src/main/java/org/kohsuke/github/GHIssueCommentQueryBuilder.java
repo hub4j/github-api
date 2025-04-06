@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.time.Instant;
+import java.util.Date;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -32,6 +33,17 @@ public class GHIssueCommentQueryBuilder {
     GHIssueCommentQueryBuilder(GHIssue issue) {
         this.issue = issue;
         this.req = issue.root().createRequest().withUrlPath(issue.getIssuesApiRoute() + "/comments");
+    }
+
+    /**
+     * Only comments created/updated after this date will be returned.
+     *
+     * @param date
+     *            the date
+     * @return the query builder
+     */
+    public GHIssueCommentQueryBuilder since(Date date) {
+        return since(GitHubClient.toInstantOrNull(date));
     }
 
     /**

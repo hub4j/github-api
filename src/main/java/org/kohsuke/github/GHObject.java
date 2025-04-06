@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +80,7 @@ public abstract class GHObject extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getCreatedAt() throws IOException {
         return GitHubClient.parseInstant(createdAt);
     }
@@ -98,6 +101,7 @@ public abstract class GHObject extends GitHubInteractiveObject {
      * @throws IOException
      *             on error
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getUpdatedAt() throws IOException {
         return GitHubClient.parseInstant(updatedAt);
     }

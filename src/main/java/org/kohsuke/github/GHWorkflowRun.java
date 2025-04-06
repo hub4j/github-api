@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.function.InputStreamFunction;
@@ -11,6 +12,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -114,6 +116,7 @@ public class GHWorkflowRun extends GHObject {
      *
      * @return run triggered
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getRunStartedAt() {
         return GitHubClient.parseInstant(runStartedAt);
     }
@@ -440,7 +443,7 @@ public class GHWorkflowRun extends GHObject {
     /**
      * The Class HeadCommit.
      */
-    public static class HeadCommit {
+    public static class HeadCommit extends GitHubBridgeAdapterObject {
 
         /**
          * Create default HeadCommit instance
@@ -487,6 +490,7 @@ public class GHWorkflowRun extends GHObject {
          *
          * @return timestamp of the commit
          */
+        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
         public Instant getTimestamp() {
             return GitHubClient.parseInstant(timestamp);
         }

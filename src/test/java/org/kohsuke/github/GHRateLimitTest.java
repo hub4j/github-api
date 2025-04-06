@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -231,7 +232,8 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit.getRemaining(), equalTo(remaining));
 
         // Check that the reset date of the current limit is not older than the previous one
-        long diffMillis = rateLimit.getResetDate().toEpochMilli() - previousLimit.getResetDate().toEpochMilli();
+        long diffMillis = rateLimit.getCore().getResetInstant().toEpochMilli()
+                - previousLimit.getCore().getResetInstant().toEpochMilli();
 
         assertThat(diffMillis, greaterThanOrEqualTo(0L));
         if (changedResetDate) {
@@ -279,8 +281,8 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit.getCore(), instanceOf(GHRateLimit.UnknownLimitRecord.class));
         assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
         assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
-        lastReset = rateLimit.getResetDate();
+        assertThat(rateLimit.getResetDate().compareTo(Date.from(lastReset)), equalTo(1));
+        lastReset = rateLimit.getCore().getResetInstant();
 
         assertThat(mockGitHub.getRequestCount(), equalTo(1));
 
@@ -306,8 +308,8 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
         assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         // Same unknown instance is reused for a while
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(0));
-        lastReset = rateLimit.getResetDate();
+        assertThat(rateLimit.getResetDate().compareTo(Date.from(lastReset)), equalTo(0));
+        lastReset = rateLimit.getCore().getResetInstant();
 
         assertThat(mockGitHub.getRequestCount(), equalTo(3));
 
@@ -326,7 +328,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit.getLimit(), equalTo(GHRateLimit.UnknownLimitRecord.unknownLimit));
         assertThat(rateLimit.getRemaining(), equalTo(GHRateLimit.UnknownLimitRecord.unknownRemaining));
         // When not expired, unknowns do not replace each other so last reset remains unchanged
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(0));
+        assertThat(rateLimit.getResetDate().compareTo(Date.from(lastReset)), equalTo(0));
 
         // Give this a moment
         Thread.sleep(1500);
@@ -348,8 +350,8 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(rateLimit, notNullValue());
         assertThat(rateLimit.getLimit(), equalTo(5000));
         assertThat(rateLimit.getRemaining(), equalTo(4978));
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(1));
-        lastReset = rateLimit.getResetDate();
+        assertThat(rateLimit.getResetDate().compareTo(Date.from(lastReset)), equalTo(1));
+        lastReset = rateLimit.getCore().getResetInstant();
 
         // When getting only header updates, the unknowns are also expired
         assertThat(rateLimit.getSearch().isExpired(), is(true));
@@ -383,7 +385,7 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         // 11 requests since previous api call
         // This verifies that header rate limit info is recorded even for /rate_limit endpoint and 404 response
         assertThat(rateLimit.getRemaining(), equalTo(4967));
-        assertThat(rateLimit.getResetDate().compareTo(lastReset), equalTo(0));
+        assertThat(rateLimit.getResetDate().compareTo(Date.from(lastReset)), equalTo(0));
 
         // getRateLimit() uses headerRateLimit if /rate_limit returns a 404
         // and headerRateLimit is available and not expired

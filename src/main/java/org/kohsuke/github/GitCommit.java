@@ -1,10 +1,12 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.time.Instant;
 import java.util.AbstractList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 // TODO: Auto-generated Javadoc
@@ -16,7 +18,7 @@ import java.util.List;
  */
 
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GitCommit {
+public class GitCommit extends GitHubBridgeAdapterObject {
     private GHRepository owner;
     private String sha, node_id, url, html_url;
     private GitUser author;
@@ -159,6 +161,7 @@ public class GitCommit {
      *
      * @return the authored date
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getAuthoredDate() {
         return author.getDate();
     }
@@ -177,6 +180,7 @@ public class GitCommit {
      *
      * @return the commit date
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getCommitDate() {
         return committer.getDate();
     }

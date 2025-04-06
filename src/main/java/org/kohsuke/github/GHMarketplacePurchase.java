@@ -1,8 +1,10 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.time.Instant;
+import java.util.Date;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -42,6 +44,7 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      *
      * @return the next billing date
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getNextBillingDate() {
         return GitHubClient.parseInstant(nextBillingDate);
     }
@@ -60,6 +63,7 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      *
      * @return the free trial ends on
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getFreeTrialEndsOn() {
         return GitHubClient.parseInstant(freeTrialEndsOn);
     }
@@ -78,6 +82,7 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      *
      * @return the updated at
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getUpdatedAt() {
         return GitHubClient.parseInstant(updatedAt);
     }

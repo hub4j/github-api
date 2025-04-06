@@ -1,10 +1,12 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Locale;
 
 // TODO: Auto-generated Javadoc
@@ -56,6 +58,7 @@ public class GHMilestone extends GHObject {
      *
      * @return the due on
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getDueOn() {
         if (due_on == null)
             return null;
@@ -67,6 +70,7 @@ public class GHMilestone extends GHObject {
      *
      * @return the closed at
      */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getClosedAt() {
         return GitHubClient.parseInstant(closed_at);
     }
@@ -190,6 +194,18 @@ public class GHMilestone extends GHObject {
      */
     public void setDescription(String description) throws IOException {
         edit("description", description);
+    }
+
+    /**
+     * Sets due on.
+     *
+     * @param dueOn
+     *            the due on
+     * @throws IOException
+     *             the io exception
+     */
+    public void setDueOn(Date dueOn) throws IOException {
+        setDueOn(GitHubClient.toInstantOrNull(dueOn));
     }
 
     /**

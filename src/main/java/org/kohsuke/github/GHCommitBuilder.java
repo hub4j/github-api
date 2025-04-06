@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 // TODO: Auto-generated Javadoc
@@ -84,6 +85,23 @@ public class GHCommitBuilder {
      * @param date
      *            the date
      * @return the gh commit builder
+     * @deprecated use {@link #author(String, String, Instant)} instead
+     */
+    @Deprecated
+    public GHCommitBuilder author(String name, String email, Date date) {
+        return author(name, email, GitHubClient.toInstantOrNull(date));
+    }
+
+    /**
+     * Configures the author of this commit.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @param date
+     *            the date
+     * @return the gh commit builder
      */
     public GHCommitBuilder author(String name, String email, Instant date) {
         req.with("author", new UserInfo(name, email, date));
@@ -101,6 +119,23 @@ public class GHCommitBuilder {
     public GHCommitBuilder withSignature(String signature) {
         req.with("signature", signature);
         return this;
+    }
+
+    /**
+     * Configures the committer of this commit.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @param date
+     *            the date
+     * @return the gh commit builder
+     * @deprecated use {@link #committer(String, String, Instant)} instead
+     */
+    @Deprecated
+    public GHCommitBuilder committer(String name, String email, Date date) {
+        return committer(name, email, GitHubClient.toInstantOrNull(date));
     }
 
     /**

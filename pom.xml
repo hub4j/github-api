@@ -515,7 +515,7 @@
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.23.0</version>
+        <version>0.23.1</version>
         <configuration>
           <parameter>
             <breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
@@ -564,6 +564,18 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>com.infradna.tool</groupId>
+        <artifactId>bridge-method-injector</artifactId>
+        <version>1.30</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>process</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>      
+      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.13.0</version>
         <configuration>
@@ -574,7 +586,7 @@
             <annotationProcessorPath>
               <groupId>org.jenkins-ci</groupId>
               <artifactId>annotation-indexer</artifactId>
-              <version>1.17</version>
+              <version>1.18</version>
             </annotationProcessorPath>
           </annotationProcessorPaths>
         </configuration>

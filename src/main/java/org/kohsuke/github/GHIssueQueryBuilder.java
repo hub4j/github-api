@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 // TODO: Auto-generated Javadoc
@@ -70,6 +71,17 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
     public GHIssueQueryBuilder direction(GHDirection direction) {
         req.with("direction", direction);
         return this;
+    }
+
+    /**
+     * Only issues after this date will be returned.
+     *
+     * @param date
+     *            the date
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder since(Date date) {
+        return since(GitHubClient.toInstantOrNull(date));
     }
 
     /**

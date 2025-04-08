@@ -75,6 +75,7 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         // The time is truncated when sent to the server, but still part of the returned value
         // 07:00 midnight PDT
         assertThat(milestone.getDueOn(), equalTo(OUTPUT_DUE_DATE));
+        assertThat(milestone.getClosedAt(), nullValue());
         assertThat(milestone.getHtmlUrl().toString(), containsString("/hub4j-test-org/github-api/milestone/"));
         assertThat(milestone.getUrl().toString(), containsString("/repos/hub4j-test-org/github-api/milestones/"));
         assertThat(milestone.getClosedIssues(), equalTo(0));

@@ -60,8 +60,6 @@ public class GHMilestone extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getDueOn() {
-        if (due_on == null)
-            return null;
         return GitHubClient.parseInstant(due_on);
     }
 

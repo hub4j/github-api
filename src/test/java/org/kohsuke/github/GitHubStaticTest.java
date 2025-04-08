@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Locale;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -136,6 +137,12 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
         } catch (DateTimeParseException e) {
             assertThat(e.getMessage(), equalTo("Text '" + instantBadFormat + "' could not be parsed at index 0"));
         }
+
+        final GitHubBridgeAdapterObject bridge = new GitHubBridgeAdapterObject() {
+        };
+        assertThat(bridge.instantToDate(null, null), nullValue());
+        assertThat(bridge.instantToDate(Instant.ofEpochMilli(stableInstantEpochMilli), null),
+                equalTo(Date.from(instantNow)));
     }
 
     /**

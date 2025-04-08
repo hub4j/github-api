@@ -104,7 +104,7 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
      * @return the gh issue query builder
      */
     public GHIssueQueryBuilder since(long timestamp) {
-        return since(Instant.ofEpochMilli(timestamp));
+        return since(new Date(timestamp));
     }
 
     /**

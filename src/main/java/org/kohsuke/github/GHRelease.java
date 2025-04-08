@@ -43,7 +43,7 @@ public class GHRelease extends GHObject {
     private String body;
     private boolean draft;
     private boolean prerelease;
-    private String published_at;
+    private String publishedAt;
     private String tarball_url;
     private String zipball_url;
     private String discussion_url;
@@ -103,16 +103,6 @@ public class GHRelease extends GHObject {
     }
 
     /**
-     * Sets name.
-     *
-     * @param name
-     *            the name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Gets owner.
      *
      * @return the owner
@@ -135,7 +125,9 @@ public class GHRelease extends GHObject {
      * Gets published at.
      *
      * @return the published at
+     * @deprecated Use #getPublishedAt()
      */
+    @Deprecated
     public Date getPublished_at() {
         return Date.from(getPublishedAt());
     }
@@ -146,7 +138,7 @@ public class GHRelease extends GHObject {
      * @return the published at
      */
     public Instant getPublishedAt() {
-        return GitHubClient.parseInstant(published_at);
+        return GitHubClient.parseInstant(publishedAt);
     }
 
     /**

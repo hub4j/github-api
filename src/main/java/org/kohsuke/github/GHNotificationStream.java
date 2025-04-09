@@ -76,7 +76,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      * @return the gh notification stream
      */
     public GHNotificationStream since(long timestamp) {
-        return since(Instant.ofEpochMilli(timestamp));
+        return since(new Date(timestamp));
     }
 
     /**

@@ -302,7 +302,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
 
         List<GHEvent> events = Arrays.asList(GHEvent.PULL_REQUEST, GHEvent.PUSH);
         assertThat(appInstallation.getEvents(), containsInAnyOrder(events.toArray(new GHEvent[0])));
-        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseDate("2019-07-04T01:19:36.000Z").toInstant()));
+        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseInstant("2019-07-04T01:19:36.000Z")));
         assertThat(appInstallation.getUpdatedAt(), is(GitHubClient.parseInstant("2019-07-30T22:48:09.000Z")));
         assertThat(appInstallation.getSingleFileName(), nullValue());
     }

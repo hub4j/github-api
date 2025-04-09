@@ -41,7 +41,9 @@ public class GHIssueCommentQueryBuilder {
      * @param date
      *            the date
      * @return the query builder
+     * @deprecated Use {@link #since(Instant)}
      */
+    @Deprecated
     public GHIssueCommentQueryBuilder since(Date date) {
         return since(GitHubClient.toInstantOrNull(date));
     }

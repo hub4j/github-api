@@ -876,24 +876,10 @@ class GitHubClient {
     }
 
     /**
-     * Parses the date.
+     * Convert Date to Instant or null.
      *
-     * @param timestamp
-     *            the timestamp
-     * @return the date
-     */
-    static Date parseDate(String timestamp) {
-        if (timestamp == null)
-            return null;
-
-        return Date.from(parseInstant(timestamp));
-    }
-
-    /**
-     * Parses the date.
-     *
-     * @param timestamp
-     *            the timestamp
+     * @param date
+     *            the date
      * @return the date
      */
     static Instant toInstantOrNull(Date date) {

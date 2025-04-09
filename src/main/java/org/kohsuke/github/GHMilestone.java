@@ -201,7 +201,9 @@ public class GHMilestone extends GHObject {
      *            the due on
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #setDueOn(Instant)}
      */
+    @Deprecated
     public void setDueOn(Date dueOn) throws IOException {
         setDueOn(GitHubClient.toInstantOrNull(dueOn));
     }

@@ -172,7 +172,9 @@ public final class GHCheckRunBuilder {
      * @param startedAt
      *            the started at
      * @return the GH check run builder
+     * @deprecated Use {@link #withStartedAt(Instant)}
      */
+    @Deprecated
     public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
         return withStartedAt(GitHubClient.toInstantOrNull(startedAt));
     }
@@ -197,7 +199,9 @@ public final class GHCheckRunBuilder {
      * @param completedAt
      *            the completed at
      * @return the GH check run builder
+     * @deprecated Use {@link #withCompletedAt(Instant)}
      */
+    @Deprecated
     public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
         return withCompletedAt(GitHubClient.toInstantOrNull(completedAt));
     }

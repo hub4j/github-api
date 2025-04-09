@@ -3,6 +3,8 @@ package org.kohsuke.github;
 import org.junit.Test;
 import org.kohsuke.github.GHReleaseBuilder.MakeLatest;
 
+import java.util.Date;
+
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
 
@@ -40,6 +42,8 @@ public class GHReleaseTest extends AbstractGitHubWireMockTest {
             assertThat(releaseCheck.getAssetsUrl(), endsWith("/assets"));
             assertThat(releaseCheck.getDiscussionUrl(), notNullValue());
             assertThat(releaseCheck.getCreatedAt(), equalTo(GitHubClient.parseInstant("2021-06-02T21:59:14Z")));
+            assertThat(releaseCheck.getPublished_at(),
+                    equalTo(Date.from(GitHubClient.parseInstant("2021-06-11T06:56:52Z"))));
             assertThat(releaseCheck.getPublishedAt(), equalTo(GitHubClient.parseInstant("2021-06-11T06:56:52Z")));
 
         } finally {

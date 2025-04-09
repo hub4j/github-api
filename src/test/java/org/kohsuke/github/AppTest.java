@@ -1731,6 +1731,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void reactions() throws Exception {
         GHIssue i = gitHub.getRepository("hub4j/github-api").getIssue(311);
 
+        // cover issue methods
+        assertThat(i.getClosedAt(), equalTo(GitHubClient.parseInstant("2016-11-17T02:40:11Z")));
+        assertThat(i.getHtmlUrl().toString(), endsWith("github-api/issues/311"));
+
         List<GHReaction> l;
         // retrieval
         l = i.listReactions().toList();

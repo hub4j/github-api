@@ -79,7 +79,9 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
      * @param date
      *            the date
      * @return the gh issue query builder
+     * @deprecated Use {@link #since(Instant)}
      */
+    @Deprecated
     public GHIssueQueryBuilder since(Date date) {
         return since(GitHubClient.toInstantOrNull(date));
     }

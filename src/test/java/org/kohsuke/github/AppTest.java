@@ -1005,16 +1005,23 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testEventApi() throws Exception {
         for (GHEventInfo ev : gitHub.getEvents()) {
             if (ev.getType() == GHEvent.PULL_REQUEST) {
+                GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
+                assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
+
+                assertThat(pr.getPullRequest().getClosedBy(), nullValue());
+                assertThat(pr.getPullRequest().getPullRequest(), nullValue());
+
                 if (ev.getId() == 10680625394L) {
                     assertThat(ev.getActorLogin(), equalTo("pull[bot]"));
                     assertThat(ev.getOrganization(), nullValue());
                     assertThat(ev.getRepository().getFullName(), equalTo("daddyfatstacksBIG/lerna"));
                     assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseInstant("2019-10-21T21:54:52Z")));
                     assertThat(ev.getType(), equalTo(GHEvent.PULL_REQUEST));
+                    assertThat(pr.getPullRequest().getMergedAt(),
+                            equalTo(GitHubClient.parseInstant("2019-10-21T21:54:52Z")));
+                    assertThat(pr.getPullRequest().getPatchUrl().toString(), endsWith("lerna/pull/20.patch"));
+                    assertThat(pr.getPullRequest().getDiffUrl().toString(), endsWith("lerna/pull/20.diff"));
                 }
-
-                GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
-                assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
             }
         }
     }
@@ -1039,6 +1046,14 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
                 GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
                 assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
+            }
+            if (ev.getType() == GHEvent.PULL_REQUEST_REVIEW) {
+                if (ev.getId() == 27468578706L) {
+                    GHEventPayload.PullRequestReview prr = ev.getPayload(GHEventPayload.PullRequestReview.class);
+                    assertThat(prr.getReview().getSubmittedAt(),
+                            equalTo(GitHubClient.parseInstant("2023-03-03T10:51:48Z")));
+                    assertThat(prr.getReview().getCreatedAt(), equalTo(prr.getReview().getSubmittedAt()));
+                }
             }
         }
     }
@@ -1674,7 +1689,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void notifications() throws Exception {
         boolean found = false;
-        for (GHThread t : gitHub.listNotifications().nonBlocking(true).read(true)) {
+        for (GHThread t : gitHub.listNotifications().since(0).nonBlocking(true).read(true)) {
             if (!found) {
                 found = true;
                 // both read and unread are included

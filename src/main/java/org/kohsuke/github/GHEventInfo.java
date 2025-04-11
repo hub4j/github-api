@@ -1,9 +1,11 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 
 // TODO: Auto-generated Javadoc
@@ -128,8 +130,9 @@ public class GHEventInfo extends GitHubInteractiveObject {
      *
      * @return the created at
      */
-    public Date getCreatedAt() {
-        return GitHubClient.parseDate(created_at);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getCreatedAt() {
+        return GitHubClient.parseInstant(created_at);
     }
 
     /**

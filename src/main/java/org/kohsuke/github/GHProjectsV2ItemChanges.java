@@ -1,8 +1,10 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -12,7 +14,7 @@ import java.util.Date;
  * Note that this is best effort only as nothing is documented in the GitHub documentation.
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GHProjectsV2ItemChanges {
+public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
 
     /**
      * Create default GHProjectsV2ItemChanges instance
@@ -138,8 +140,9 @@ public class GHProjectsV2ItemChanges {
          *
          * @return the from
          */
-        public Date getFrom() {
-            return GitHubClient.parseDate(from);
+        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+        public Instant getFrom() {
+            return GitHubClient.parseInstant(from);
         }
 
         /**
@@ -147,8 +150,9 @@ public class GHProjectsV2ItemChanges {
          *
          * @return the to
          */
-        public Date getTo() {
-            return GitHubClient.parseDate(to);
+        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+        public Instant getTo() {
+            return GitHubClient.parseInstant(to);
         }
     }
 

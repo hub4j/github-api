@@ -1,9 +1,11 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 
@@ -56,10 +58,9 @@ public class GHMilestone extends GHObject {
      *
      * @return the due on
      */
-    public Date getDueOn() {
-        if (due_on == null)
-            return null;
-        return GitHubClient.parseDate(due_on);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getDueOn() {
+        return GitHubClient.parseInstant(due_on);
     }
 
     /**
@@ -67,8 +68,9 @@ public class GHMilestone extends GHObject {
      *
      * @return the closed at
      */
-    public Date getClosedAt() {
-        return GitHubClient.parseDate(closed_at);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getClosedAt() {
+        return GitHubClient.parseInstant(closed_at);
     }
 
     /**
@@ -199,9 +201,23 @@ public class GHMilestone extends GHObject {
      *            the due on
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #setDueOn(Instant)}
      */
+    @Deprecated
     public void setDueOn(Date dueOn) throws IOException {
-        edit("due_on", GitHubClient.printDate(dueOn));
+        setDueOn(GitHubClient.toInstantOrNull(dueOn));
+    }
+
+    /**
+     * Sets due on.
+     *
+     * @param dueOn
+     *            the due on
+     * @throws IOException
+     *             the io exception
+     */
+    public void setDueOn(Instant dueOn) throws IOException {
+        edit("due_on", GitHubClient.printInstant(dueOn));
     }
 
     /**

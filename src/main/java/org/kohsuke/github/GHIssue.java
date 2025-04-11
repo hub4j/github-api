@@ -24,12 +24,14 @@
 
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -234,8 +236,9 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * @return the closed at
      */
-    public Date getClosedAt() {
-        return GitHubClient.parseDate(closed_at);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getClosedAt() {
+        return GitHubClient.parseInstant(closed_at);
     }
 
     /**

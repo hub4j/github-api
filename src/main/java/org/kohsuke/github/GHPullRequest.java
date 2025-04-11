@@ -23,11 +23,13 @@
  */
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -170,8 +172,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *
      * @return the merged at
      */
-    public Date getMergedAt() {
-        return GitHubClient.parseDate(merged_at);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getMergedAt() {
+        return GitHubClient.parseInstant(merged_at);
     }
 
     /**

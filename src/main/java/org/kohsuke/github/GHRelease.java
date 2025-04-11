@@ -8,11 +8,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -42,7 +43,7 @@ public class GHRelease extends GHObject {
     private String body;
     private boolean draft;
     private boolean prerelease;
-    private Date published_at;
+    private String publishedAt;
     private String tarball_url;
     private String zipball_url;
     private String discussion_url;
@@ -102,16 +103,6 @@ public class GHRelease extends GHObject {
     }
 
     /**
-     * Sets name.
-     *
-     * @param name
-     *            the name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Gets owner.
      *
      * @return the owner
@@ -134,9 +125,20 @@ public class GHRelease extends GHObject {
      * Gets published at.
      *
      * @return the published at
+     * @deprecated Use #getPublishedAt()
      */
+    @Deprecated
     public Date getPublished_at() {
-        return new Date(published_at.getTime());
+        return Date.from(getPublishedAt());
+    }
+
+    /**
+     * Gets published at.
+     *
+     * @return the published at
+     */
+    public Instant getPublishedAt() {
+        return GitHubClient.parseInstant(publishedAt);
     }
 
     /**

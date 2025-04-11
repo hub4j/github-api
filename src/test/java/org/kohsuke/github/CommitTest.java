@@ -330,10 +330,10 @@ public class CommitTest extends AbstractGitHubWireMockTest {
         GHRepository repo = gitHub.getRepository("hub4j/github-api");
         GHCommit commit = repo.getCommit("865a49d2e86c24c5777985f0f103e975c4b765b9");
 
-        assertThat(commit.getCommitShortInfo().getAuthoredDate().toInstant().getEpochSecond(), equalTo(1609207093L));
+        assertThat(commit.getCommitShortInfo().getAuthoredDate().getEpochSecond(), equalTo(1609207093L));
         assertThat(commit.getCommitShortInfo().getAuthoredDate(),
                 equalTo(commit.getCommitShortInfo().getAuthor().getDate()));
-        assertThat(commit.getCommitShortInfo().getCommitDate().toInstant().getEpochSecond(), equalTo(1609207652L));
+        assertThat(commit.getCommitShortInfo().getCommitDate().getEpochSecond(), equalTo(1609207652L));
         assertThat(commit.getCommitShortInfo().getCommitDate(),
                 equalTo(commit.getCommitShortInfo().getCommitter().getDate()));
     }

@@ -1,7 +1,9 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -11,7 +13,7 @@ import java.util.Date;
  * @author noctarius
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GHStargazer {
+public class GHStargazer extends GitHubBridgeAdapterObject {
 
     /**
      * Create default GHStargazer instance
@@ -39,8 +41,9 @@ public class GHStargazer {
      *
      * @return the date the stargazer was added
      */
-    public Date getStarredAt() {
-        return GitHubClient.parseDate(starred_at);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getStarredAt() {
+        return GitHubClient.parseInstant(starred_at);
     }
 
     /**

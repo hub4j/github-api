@@ -1,8 +1,10 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.net.URL;
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -76,8 +78,9 @@ public class GHProjectsV2Item extends GHObject {
      *
      * @return the archived at
      */
-    public Date getArchivedAt() {
-        return GitHubClient.parseDate(archivedAt);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getArchivedAt() {
+        return GitHubClient.parseInstant(archivedAt);
     }
 
     /**

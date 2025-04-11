@@ -1,7 +1,9 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -59,8 +61,9 @@ public class GHMarketplacePendingChange extends GitHubInteractiveObject {
      *
      * @return the effective date
      */
-    public Date getEffectiveDate() {
-        return GitHubClient.parseDate(effectiveDate);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getEffectiveDate() {
+        return GitHubClient.parseInstant(effectiveDate);
     }
 
 }

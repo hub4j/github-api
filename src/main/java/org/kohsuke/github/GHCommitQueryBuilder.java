@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -88,9 +89,22 @@ public class GHCommitQueryBuilder {
      * @param dt
      *            the dt
      * @return the gh commit query builder
+     * @deprecated use {@link #since(Instant)}
      */
+    @Deprecated
     public GHCommitQueryBuilder since(Date dt) {
-        req.with("since", GitHubClient.printDate(dt));
+        return since(GitHubClient.toInstantOrNull(dt));
+    }
+
+    /**
+     * Only commits after this date will be returned.
+     *
+     * @param dt
+     *            the dt
+     * @return the gh commit query builder
+     */
+    public GHCommitQueryBuilder since(Instant dt) {
+        req.with("since", GitHubClient.printInstant(dt));
         return this;
     }
 
@@ -102,7 +116,20 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(long timestamp) {
-        return since(new Date(timestamp));
+        return since(Instant.ofEpochMilli(timestamp));
+    }
+
+    /**
+     * Only commits before this date will be returned.
+     *
+     * @param dt
+     *            the dt
+     * @return the gh commit query builder
+     * @deprecated use {@link #until(Instant)}
+     */
+    @Deprecated
+    public GHCommitQueryBuilder until(Date dt) {
+        return until(GitHubClient.toInstantOrNull(dt));
     }
 
     /**
@@ -112,8 +139,8 @@ public class GHCommitQueryBuilder {
      *            the dt
      * @return the gh commit query builder
      */
-    public GHCommitQueryBuilder until(Date dt) {
-        req.with("until", GitHubClient.printDate(dt));
+    public GHCommitQueryBuilder until(Instant dt) {
+        req.with("until", GitHubClient.printInstant(dt));
         return this;
     }
 
@@ -125,7 +152,7 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(long timestamp) {
-        return until(new Date(timestamp));
+        return until(Instant.ofEpochMilli(timestamp));
     }
 
     /**

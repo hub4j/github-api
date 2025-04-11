@@ -2,7 +2,7 @@
   "id": "a8e9449d-b78c-4e46-801e-59fc459920d3",
   "name": "notifications",
   "request": {
-    "url": "/notifications?all=true&page=4",
+    "url": "/notifications?all=true&since=1970-01-01T00%3A00%3A00Z&page=4",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -41,7 +41,7 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "X-GitHub-Request-Id": "CB13:833E:A1F5E4:BFE1A3:5DB3A14C",
-      "Link": "<https://api.github.com/notifications?all=true&page=3>; rel=\"prev\", <https://api.github.com/notifications?all=true&page=5>; rel=\"next\", <https://api.github.com/notifications?all=true&page=23>; rel=\"last\", <https://api.github.com/notifications?all=true&page=1>; rel=\"first\""
+      "Link": "<https://api.github.com/notifications?all=true&since=1970-01-01T00%3A00%3A00Z&page=3>; rel=\"prev\", <https://api.github.com/notifications?all=true&since=1970-01-01T00%3A00%3A00Z&page=5>; rel=\"next\", <https://api.github.com/notifications?all=true&since=1970-01-01T00%3A00%3A00Z&page=23>; rel=\"last\", <https://api.github.com/notifications?all=true&since=1970-01-01T00%3A00%3A00Z&page=1>; rel=\"first\""
     }
   },
   "uuid": "a8e9449d-b78c-4e46-801e-59fc459920d3",

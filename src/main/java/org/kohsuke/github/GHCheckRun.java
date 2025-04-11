@@ -1,12 +1,14 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -269,8 +271,9 @@ public class GHCheckRun extends GHObject {
      *
      * @return Timestamp of the start time
      */
-    public Date getStartedAt() {
-        return GitHubClient.parseDate(startedAt);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getStartedAt() {
+        return GitHubClient.parseInstant(startedAt);
     }
 
     /**
@@ -278,8 +281,9 @@ public class GHCheckRun extends GHObject {
      *
      * @return Timestamp of the completed time
      */
-    public Date getCompletedAt() {
-        return GitHubClient.parseDate(completedAt);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getCompletedAt() {
+        return GitHubClient.parseInstant(completedAt);
     }
 
     /**

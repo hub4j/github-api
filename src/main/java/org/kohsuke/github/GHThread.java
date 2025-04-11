@@ -1,9 +1,11 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -27,7 +29,7 @@ public class GHThread extends GHObject {
     /**
      * The Class Subject.
      */
-    static class Subject {
+    static class Subject extends GitHubBridgeAdapterObject {
 
         /** The title. */
         String title;
@@ -50,8 +52,9 @@ public class GHThread extends GHObject {
      *
      * @return the last read at
      */
-    public Date getLastReadAt() {
-        return GitHubClient.parseDate(last_read_at);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getLastReadAt() {
+        return GitHubClient.parseInstant(last_read_at);
     }
 
     /**

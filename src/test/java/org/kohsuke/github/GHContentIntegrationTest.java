@@ -245,8 +245,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
         assertThat(gitCommit.getMessage(), equalTo("Creating a file for integration tests."));
-        assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:49Z")));
-        assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:49Z")));
+        assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:49Z")));
+        assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:49Z")));
 
         assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Creating a file for integration tests."));
         assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
@@ -296,8 +296,8 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
 
         assertThat(gitCommit.getMessage(), equalTo("Updated file for integration tests."));
-        assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:51Z")));
-        assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseDate("2021-06-28T20:37:51Z")));
+        assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:51Z")));
+        assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:51Z")));
 
         assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Updated file for integration tests."));
         assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));

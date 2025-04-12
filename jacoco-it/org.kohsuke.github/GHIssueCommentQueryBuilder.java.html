@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHIssueCommentQueryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHIssueCommentQueryBuilder.java</span></div><h1>GHIssueCommentQueryBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -29,10 +30,23 @@ public class GHIssueCommentQueryBuilder {
      * @param issue
      *            the issue
      */
-<span class="fc" id="L32">    GHIssueCommentQueryBuilder(GHIssue issue) {</span>
-<span class="fc" id="L33">        this.issue = issue;</span>
-<span class="fc" id="L34">        this.req = issue.root().createRequest().withUrlPath(issue.getIssuesApiRoute() + &quot;/comments&quot;);</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L33">    GHIssueCommentQueryBuilder(GHIssue issue) {</span>
+<span class="fc" id="L34">        this.issue = issue;</span>
+<span class="fc" id="L35">        this.req = issue.root().createRequest().withUrlPath(issue.getIssuesApiRoute() + &quot;/comments&quot;);</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Only comments created/updated after this date will be returned.
+     *
+     * @param date
+     *            the date
+     * @return the query builder
+     * @deprecated Use {@link #since(Instant)}
+     */
+    @Deprecated
+    public GHIssueCommentQueryBuilder since(Date date) {
+<span class="fc" id="L48">        return since(GitHubClient.toInstantOrNull(date));</span>
+    }
 
     /**
      * Only comments created/updated after this date will be returned.
@@ -41,9 +55,9 @@ public class GHIssueCommentQueryBuilder {
      *            the date
      * @return the query builder
      */
-    public GHIssueCommentQueryBuilder since(Date date) {
-<span class="fc" id="L45">        req.with(&quot;since&quot;, GitHubClient.printDate(date));</span>
-<span class="fc" id="L46">        return this;</span>
+    public GHIssueCommentQueryBuilder since(Instant date) {
+<span class="fc" id="L59">        req.with(&quot;since&quot;, GitHubClient.printInstant(date));</span>
+<span class="fc" id="L60">        return this;</span>
     }
 
     /**
@@ -54,7 +68,7 @@ public class GHIssueCommentQueryBuilder {
      * @return the query builder
      */
     public GHIssueCommentQueryBuilder since(long timestamp) {
-<span class="fc" id="L57">        return since(new Date(timestamp));</span>
+<span class="fc" id="L71">        return since(Instant.ofEpochMilli(timestamp));</span>
     }
 
     /**
@@ -63,7 +77,7 @@ public class GHIssueCommentQueryBuilder {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHIssueComment&gt; list() {
-<span class="fc" id="L66">        return req.toIterable(GHIssueComment[].class, item -&gt; item.wrapUp(issue));</span>
+<span class="fc" id="L80">        return req.toIterable(GHIssueComment[].class, item -&gt; item.wrapUp(issue));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

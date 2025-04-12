@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMarketplacePurchase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMarketplacePurchase.java</span></div><h1>GHMarketplacePurchase.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -16,8 +18,8 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
     /**
      * Create default GHMarketplacePurchase instance
      */
-<span class="fc" id="L19">    public GHMarketplacePurchase() {</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L21">    public GHMarketplacePurchase() {</span>
+<span class="fc" id="L22">    }</span>
 
     private String billingCycle;
     private String nextBillingDate;
@@ -34,7 +36,7 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      * @return the billing cycle
      */
     public String getBillingCycle() {
-<span class="fc" id="L37">        return billingCycle;</span>
+<span class="fc" id="L39">        return billingCycle;</span>
     }
 
     /**
@@ -42,8 +44,9 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      *
      * @return the next billing date
      */
-    public Date getNextBillingDate() {
-<span class="fc" id="L46">        return GitHubClient.parseDate(nextBillingDate);</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getNextBillingDate() {
+<span class="fc" id="L49">        return GitHubClient.parseInstant(nextBillingDate);</span>
     }
 
     /**
@@ -52,7 +55,7 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      * @return the boolean
      */
     public boolean isOnFreeTrial() {
-<span class="fc" id="L55">        return onFreeTrial;</span>
+<span class="fc" id="L58">        return onFreeTrial;</span>
     }
 
     /**
@@ -60,8 +63,9 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      *
      * @return the free trial ends on
      */
-    public Date getFreeTrialEndsOn() {
-<span class="fc" id="L64">        return GitHubClient.parseDate(freeTrialEndsOn);</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getFreeTrialEndsOn() {
+<span class="fc" id="L68">        return GitHubClient.parseInstant(freeTrialEndsOn);</span>
     }
 
     /**
@@ -70,7 +74,7 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      * @return the unit count
      */
     public Long getUnitCount() {
-<span class="fc" id="L73">        return unitCount;</span>
+<span class="fc" id="L77">        return unitCount;</span>
     }
 
     /**
@@ -78,8 +82,9 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      *
      * @return the updated at
      */
-    public Date getUpdatedAt() {
-<span class="fc" id="L82">        return GitHubClient.parseDate(updatedAt);</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getUpdatedAt() {
+<span class="fc" id="L87">        return GitHubClient.parseInstant(updatedAt);</span>
     }
 
     /**
@@ -88,7 +93,7 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      * @return the plan
      */
     public GHMarketplacePlan getPlan() {
-<span class="fc" id="L91">        return plan;</span>
+<span class="fc" id="L96">        return plan;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

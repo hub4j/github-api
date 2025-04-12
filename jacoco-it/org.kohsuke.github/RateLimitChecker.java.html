@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RateLimitChecker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">RateLimitChecker.java</span></div><h1>RateLimitChecker.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,13 +26,13 @@ public abstract class RateLimitChecker {
     /**
      * Create default RateLimitChecker instance
      */
-<span class="fc" id="L28">    public RateLimitChecker() {</span>
-<span class="fc" id="L29">    }</span>
+<span class="fc" id="L29">    public RateLimitChecker() {</span>
+<span class="fc" id="L30">    }</span>
 
-<span class="fc" id="L31">    private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());</span>
+<span class="fc" id="L32">    private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());</span>
 
     /** The Constant NONE. */
-<span class="fc" id="L34">    public static final RateLimitChecker NONE = new RateLimitChecker() {</span>
+<span class="fc" id="L35">    public static final RateLimitChecker NONE = new RateLimitChecker() {</span>
     };
 
     /**
@@ -65,7 +66,7 @@ public abstract class RateLimitChecker {
      *             if the thread is interrupted while sleeping
      */
     protected boolean checkRateLimit(GHRateLimit.Record rateLimitRecord, long count) throws InterruptedException {
-<span class="nc" id="L68">        return false;</span>
+<span class="nc" id="L69">        return false;</span>
     }
 
     /**
@@ -79,20 +80,20 @@ public abstract class RateLimitChecker {
      */
     protected final boolean sleepUntilReset(GHRateLimit.Record record) throws InterruptedException {
         // Sleep until reset
-<span class="fc" id="L82">        long sleepMilliseconds = record.getResetDate().getTime() - System.currentTimeMillis();</span>
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (sleepMilliseconds &gt; 0) {</span>
-<span class="fc" id="L84">            String message = String.format(</span>
+<span class="fc" id="L83">        long sleepMilliseconds = record.getResetInstant().toEpochMilli() - System.currentTimeMillis();</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (sleepMilliseconds &gt; 0) {</span>
+<span class="fc" id="L85">            String message = String.format(</span>
                     &quot;GitHub API - Current quota has %d remaining of %d. Waiting for quota to reset at %tT.&quot;,
-<span class="fc" id="L86">                    record.getRemaining(),</span>
-<span class="fc" id="L87">                    record.getLimit(),</span>
-<span class="fc" id="L88">                    record.getResetDate());</span>
+<span class="fc" id="L87">                    record.getRemaining(),</span>
+<span class="fc" id="L88">                    record.getLimit(),</span>
+<span class="fc" id="L89">                    Date.from(record.getResetInstant()));</span>
 
-<span class="fc" id="L90">            LOGGER.log(Level.INFO, message);</span>
+<span class="fc" id="L91">            LOGGER.log(Level.INFO, message);</span>
 
-<span class="fc" id="L92">            Thread.sleep(sleepMilliseconds);</span>
-<span class="fc" id="L93">            return true;</span>
+<span class="fc" id="L93">            Thread.sleep(sleepMilliseconds);</span>
+<span class="fc" id="L94">            return true;</span>
         }
-<span class="nc" id="L95">        return false;</span>
+<span class="nc" id="L96">        return false;</span>
     }
 
     /**
@@ -107,13 +108,13 @@ public abstract class RateLimitChecker {
          * @param sleepAtOrBelow
          *            the sleep at or below
          */
-<span class="fc" id="L110">        public LiteralValue(int sleepAtOrBelow) {</span>
-<span class="pc bpc" id="L111" title="1 of 2 branches missed.">            if (sleepAtOrBelow &lt; 0) {</span>
+<span class="fc" id="L111">        public LiteralValue(int sleepAtOrBelow) {</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">            if (sleepAtOrBelow &lt; 0) {</span>
                 // ignore negative numbers
-<span class="nc" id="L113">                sleepAtOrBelow = 0;</span>
+<span class="nc" id="L114">                sleepAtOrBelow = 0;</span>
             }
-<span class="fc" id="L115">            this.sleepAtOrBelow = sleepAtOrBelow;</span>
-<span class="fc" id="L116">        }</span>
+<span class="fc" id="L116">            this.sleepAtOrBelow = sleepAtOrBelow;</span>
+<span class="fc" id="L117">        }</span>
 
         /**
          * Check rate limit.
@@ -128,10 +129,10 @@ public abstract class RateLimitChecker {
          */
         @Override
         protected boolean checkRateLimit(GHRateLimit.Record record, long count) throws InterruptedException {
-<span class="fc bfc" id="L131" title="All 2 branches covered.">            if (record.getRemaining() &lt;= sleepAtOrBelow) {</span>
-<span class="fc" id="L132">                return sleepUntilReset(record);</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">            if (record.getRemaining() &lt;= sleepAtOrBelow) {</span>
+<span class="fc" id="L133">                return sleepUntilReset(record);</span>
             }
-<span class="fc" id="L134">            return false;</span>
+<span class="fc" id="L135">            return false;</span>
         }
 
     }

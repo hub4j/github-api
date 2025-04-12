@@ -23,11 +23,13 @@
  */
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,8 +50,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     /**
      * Create default GHPullRequest instance
      */
-<span class="fc" id="L51">    public GHPullRequest() {</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L53">    public GHPullRequest() {</span>
+<span class="fc" id="L54">    }</span>
 
     private static final String COMMENTS_ACTION = &quot;/comments&quot;;
     private static final String REQUEST_REVIEWERS = &quot;/requested_reviewers&quot;;
@@ -87,8 +89,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the GH pull request
      */
     GHPullRequest wrapUp(GHRepository owner) {
-<span class="fc" id="L90">        this.wrap(owner);</span>
-<span class="fc" id="L91">        return this;</span>
+<span class="fc" id="L92">        this.wrap(owner);</span>
+<span class="fc" id="L93">        return this;</span>
     }
 
     /**
@@ -98,17 +100,17 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     @Override
     protected String getApiRoute() {
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (owner == null) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (owner == null) {</span>
             // Issues returned from search to do not have an owner. Attempt to use url.
-<span class="fc" id="L103">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="fc" id="L105">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
             // The url sourced above is of the form '/repos/&lt;owner&gt;/&lt;reponame&gt;/issues/', which
             // subsequently issues requests against the `/issues/` handler, causing a 404 when
             // asking for, say, a list of commits associated with a PR. Replace the `/issues/`
             // with `/pulls/` to avoid that.
-<span class="fc" id="L108">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;)</span>
-<span class="fc" id="L109">                    .replace(&quot;/issues/&quot;, &quot;/pulls/&quot;);</span>
+<span class="fc" id="L110">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;)</span>
+<span class="fc" id="L111">                    .replace(&quot;/issues/&quot;, &quot;/pulls/&quot;);</span>
         }
-<span class="fc" id="L111">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/pulls/&quot; + number;</span>
+<span class="fc" id="L113">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/pulls/&quot; + number;</span>
     }
 
     /**
@@ -117,7 +119,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the {@linkplain AutoMerge} or {@code null} if no auto merge is set.
      */
     public AutoMerge getAutoMerge() {
-<span class="fc" id="L120">        return auto_merge;</span>
+<span class="fc" id="L122">        return auto_merge;</span>
     }
 
     /**
@@ -126,7 +128,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the patch url
      */
     public URL getPatchUrl() {
-<span class="nc" id="L129">        return GitHubClient.parseURL(patch_url);</span>
+<span class="fc" id="L131">        return GitHubClient.parseURL(patch_url);</span>
     }
 
     /**
@@ -135,7 +137,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the issue url
      */
     public URL getIssueUrl() {
-<span class="nc" id="L138">        return GitHubClient.parseURL(issue_url);</span>
+<span class="nc" id="L140">        return GitHubClient.parseURL(issue_url);</span>
     }
 
     /**
@@ -144,7 +146,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the base
      */
     public GHCommitPointer getBase() {
-<span class="fc" id="L147">        return base;</span>
+<span class="fc" id="L149">        return base;</span>
     }
 
     /**
@@ -153,7 +155,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the head
      */
     public GHCommitPointer getHead() {
-<span class="fc" id="L156">        return head;</span>
+<span class="fc" id="L158">        return head;</span>
     }
 
     /**
@@ -162,7 +164,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the diff url
      */
     public URL getDiffUrl() {
-<span class="nc" id="L165">        return GitHubClient.parseURL(diff_url);</span>
+<span class="fc" id="L167">        return GitHubClient.parseURL(diff_url);</span>
     }
 
     /**
@@ -170,8 +172,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *
      * @return the merged at
      */
-    public Date getMergedAt() {
-<span class="nc" id="L174">        return GitHubClient.parseDate(merged_at);</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getMergedAt() {
+<span class="fc" id="L177">        return GitHubClient.parseInstant(merged_at);</span>
     }
 
     /**
@@ -181,7 +184,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     @Override
     public GHUser getClosedBy() {
-<span class="nc" id="L184">        return null;</span>
+<span class="fc" id="L187">        return null;</span>
     }
 
     /**
@@ -191,7 +194,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     @Override
     public PullRequest getPullRequest() {
-<span class="nc" id="L194">        return null;</span>
+<span class="fc" id="L197">        return null;</span>
     }
 
     //
@@ -207,8 +210,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getMergedBy() throws IOException {
-<span class="fc" id="L210">        populate();</span>
-<span class="fc" id="L211">        return merged_by;</span>
+<span class="fc" id="L213">        populate();</span>
+<span class="fc" id="L214">        return merged_by;</span>
     }
 
     /**
@@ -219,8 +222,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public int getReviewComments() throws IOException {
-<span class="fc" id="L222">        populate();</span>
-<span class="fc" id="L223">        return review_comments;</span>
+<span class="fc" id="L225">        populate();</span>
+<span class="fc" id="L226">        return review_comments;</span>
     }
 
     /**
@@ -231,8 +234,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public int getAdditions() throws IOException {
-<span class="fc" id="L234">        populate();</span>
-<span class="fc" id="L235">        return additions;</span>
+<span class="fc" id="L237">        populate();</span>
+<span class="fc" id="L238">        return additions;</span>
     }
 
     /**
@@ -243,8 +246,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public int getCommits() throws IOException {
-<span class="nc" id="L246">        populate();</span>
-<span class="nc" id="L247">        return commits;</span>
+<span class="nc" id="L249">        populate();</span>
+<span class="nc" id="L250">        return commits;</span>
     }
 
     /**
@@ -255,8 +258,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public boolean isMerged() throws IOException {
-<span class="fc" id="L258">        populate();</span>
-<span class="fc" id="L259">        return merged;</span>
+<span class="fc" id="L261">        populate();</span>
+<span class="fc" id="L262">        return merged;</span>
     }
 
     /**
@@ -267,8 +270,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public boolean canMaintainerModify() throws IOException {
-<span class="fc" id="L270">        populate();</span>
-<span class="fc" id="L271">        return maintainer_can_modify;</span>
+<span class="fc" id="L273">        populate();</span>
+<span class="fc" id="L274">        return maintainer_can_modify;</span>
     }
 
     /**
@@ -279,8 +282,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public boolean isDraft() throws IOException {
-<span class="fc" id="L282">        populate();</span>
-<span class="fc" id="L283">        return draft;</span>
+<span class="fc" id="L285">        populate();</span>
+<span class="fc" id="L286">        return draft;</span>
     }
 
     /**
@@ -293,8 +296,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public Boolean getMergeable() throws IOException {
-<span class="fc" id="L296">        refresh(mergeable);</span>
-<span class="fc" id="L297">        return mergeable;</span>
+<span class="fc" id="L299">        refresh(mergeable);</span>
+<span class="fc" id="L300">        return mergeable;</span>
     }
 
     /**
@@ -303,7 +306,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the mergeable no refresh
      */
     Boolean getMergeableNoRefresh() {
-<span class="fc" id="L306">        return mergeable;</span>
+<span class="fc" id="L309">        return mergeable;</span>
     }
 
     /**
@@ -314,8 +317,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public int getDeletions() throws IOException {
-<span class="fc" id="L317">        populate();</span>
-<span class="fc" id="L318">        return deletions;</span>
+<span class="fc" id="L320">        populate();</span>
+<span class="fc" id="L321">        return deletions;</span>
     }
 
     /**
@@ -326,8 +329,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public String getMergeableState() throws IOException {
-<span class="fc" id="L329">        populate();</span>
-<span class="fc" id="L330">        return mergeable_state;</span>
+<span class="fc" id="L332">        populate();</span>
+<span class="fc" id="L333">        return mergeable_state;</span>
     }
 
     /**
@@ -338,8 +341,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public int getChangedFiles() throws IOException {
-<span class="fc" id="L341">        populate();</span>
-<span class="fc" id="L342">        return changed_files;</span>
+<span class="fc" id="L344">        populate();</span>
+<span class="fc" id="L345">        return changed_files;</span>
     }
 
     /**
@@ -350,8 +353,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public String getMergeCommitSha() throws IOException {
-<span class="fc" id="L353">        populate();</span>
-<span class="fc" id="L354">        return merge_commit_sha;</span>
+<span class="fc" id="L356">        populate();</span>
+<span class="fc" id="L357">        return merge_commit_sha;</span>
     }
 
     /**
@@ -362,8 +365,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public List&lt;GHUser&gt; getRequestedReviewers() throws IOException {
-<span class="fc" id="L365">        refresh(requested_reviewers);</span>
-<span class="fc" id="L366">        return Collections.unmodifiableList(Arrays.asList(requested_reviewers));</span>
+<span class="fc" id="L368">        refresh(requested_reviewers);</span>
+<span class="fc" id="L369">        return Collections.unmodifiableList(Arrays.asList(requested_reviewers));</span>
     }
 
     /**
@@ -374,8 +377,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public List&lt;GHTeam&gt; getRequestedTeams() throws IOException {
-<span class="fc" id="L377">        refresh(requested_teams);</span>
-<span class="fc" id="L378">        return Collections.unmodifiableList(Arrays.asList(requested_teams));</span>
+<span class="fc" id="L380">        refresh(requested_teams);</span>
+<span class="fc" id="L381">        return Collections.unmodifiableList(Arrays.asList(requested_teams));</span>
     }
 
     /**
@@ -385,10 +388,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     private void populate() throws IOException {
-<span class="fc bfc" id="L388" title="All 2 branches covered.">        if (mergeable_state != null)</span>
-<span class="fc" id="L389">            return; // already populated</span>
-<span class="fc" id="L390">        refresh();</span>
-<span class="fc" id="L391">    }</span>
+<span class="fc bfc" id="L391" title="All 2 branches covered.">        if (mergeable_state != null)</span>
+<span class="fc" id="L392">            return; // already populated</span>
+<span class="fc" id="L393">        refresh();</span>
+<span class="fc" id="L394">    }</span>
 
     /**
      * Repopulates this object.
@@ -397,15 +400,15 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             Signals that an I/O exception has occurred.
      */
     public void refresh() throws IOException {
-<span class="fc bfc" id="L400" title="All 2 branches covered.">        if (isOffline()) {</span>
-<span class="fc" id="L401">            return; // cannot populate, will have to live with what we have</span>
+<span class="fc bfc" id="L403" title="All 2 branches covered.">        if (isOffline()) {</span>
+<span class="fc" id="L404">            return; // cannot populate, will have to live with what we have</span>
         }
 
         // we do not want to use getUrl() here as it points to the issues API
         // and not the pull request one
-<span class="fc" id="L406">        URL absoluteUrl = GitHubRequest.getApiURL(root().getApiUrl(), getApiRoute());</span>
-<span class="fc" id="L407">        root().createRequest().setRawUrlPath(absoluteUrl.toString()).fetchInto(this).wrapUp(owner);</span>
-<span class="fc" id="L408">    }</span>
+<span class="fc" id="L409">        URL absoluteUrl = GitHubRequest.getApiURL(root().getApiUrl(), getApiRoute());</span>
+<span class="fc" id="L410">        root().createRequest().setRawUrlPath(absoluteUrl.toString()).fetchInto(this).wrapUp(owner);</span>
+<span class="fc" id="L411">    }</span>
 
     /**
      * Retrieves all the files associated to this pull request. The paginated response returns 30 files per page by
@@ -416,9 +419,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *      files&lt;/a&gt;
      */
     public PagedIterable&lt;GHPullRequestFileDetail&gt; listFiles() {
-<span class="nc" id="L419">        return root().createRequest()</span>
-<span class="nc" id="L420">                .withUrlPath(String.format(&quot;%s/files&quot;, getApiRoute()))</span>
-<span class="nc" id="L421">                .toIterable(GHPullRequestFileDetail[].class, null);</span>
+<span class="nc" id="L422">        return root().createRequest()</span>
+<span class="nc" id="L423">                .withUrlPath(String.format(&quot;%s/files&quot;, getApiRoute()))</span>
+<span class="nc" id="L424">                .toIterable(GHPullRequestFileDetail[].class, null);</span>
     }
 
     /**
@@ -427,9 +430,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHPullRequestReview&gt; listReviews() {
-<span class="fc" id="L430">        return root().createRequest()</span>
-<span class="fc" id="L431">                .withUrlPath(String.format(&quot;%s/reviews&quot;, getApiRoute()))</span>
-<span class="fc" id="L432">                .toIterable(GHPullRequestReview[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L433">        return root().createRequest()</span>
+<span class="fc" id="L434">                .withUrlPath(String.format(&quot;%s/reviews&quot;, getApiRoute()))</span>
+<span class="fc" id="L435">                .toIterable(GHPullRequestReview[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -438,9 +441,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHPullRequestReviewComment&gt; listReviewComments() {
-<span class="fc" id="L441">        return root().createRequest()</span>
-<span class="fc" id="L442">                .withUrlPath(getApiRoute() + COMMENTS_ACTION)</span>
-<span class="fc" id="L443">                .toIterable(GHPullRequestReviewComment[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L444">        return root().createRequest()</span>
+<span class="fc" id="L445">                .withUrlPath(getApiRoute() + COMMENTS_ACTION)</span>
+<span class="fc" id="L446">                .toIterable(GHPullRequestReviewComment[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -449,9 +452,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHPullRequestCommitDetail&gt; listCommits() {
-<span class="fc" id="L452">        return root().createRequest()</span>
-<span class="fc" id="L453">                .withUrlPath(String.format(&quot;%s/commits&quot;, getApiRoute()))</span>
-<span class="fc" id="L454">                .toIterable(GHPullRequestCommitDetail[].class, item -&gt; item.wrapUp(this));</span>
+<span class="fc" id="L455">        return root().createRequest()</span>
+<span class="fc" id="L456">                .withUrlPath(String.format(&quot;%s/commits&quot;, getApiRoute()))</span>
+<span class="fc" id="L457">                .toIterable(GHPullRequestCommitDetail[].class, item -&gt; item.wrapUp(this));</span>
     }
 
     /**
@@ -460,7 +463,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the gh pull request review builder
      */
     public GHPullRequestReviewBuilder createReview() {
-<span class="fc" id="L463">        return new GHPullRequestReviewBuilder(this);</span>
+<span class="fc" id="L466">        return new GHPullRequestReviewBuilder(this);</span>
     }
 
     /**
@@ -469,7 +472,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the gh pull request review comment builder.
      */
     public GHPullRequestReviewCommentBuilder createReviewComment() {
-<span class="fc" id="L472">        return new GHPullRequestReviewCommentBuilder(this);</span>
+<span class="fc" id="L475">        return new GHPullRequestReviewCommentBuilder(this);</span>
     }
 
     /**
@@ -491,7 +494,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     @Deprecated
     public GHPullRequestReviewComment createReviewComment(String body, String sha, String path, int position)
             throws IOException {
-<span class="fc" id="L494">        return createReviewComment().body(body).commitId(sha).path(path).position(position).create();</span>
+<span class="fc" id="L497">        return createReviewComment().body(body).commitId(sha).path(path).position(position).create();</span>
     }
 
     /**
@@ -503,12 +506,12 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public void requestReviewers(List&lt;GHUser&gt; reviewers) throws IOException {
-<span class="fc" id="L506">        root().createRequest()</span>
-<span class="fc" id="L507">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L508">                .with(&quot;reviewers&quot;, getLogins(reviewers))</span>
-<span class="fc" id="L509">                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)</span>
-<span class="fc" id="L510">                .send();</span>
-<span class="fc" id="L511">    }</span>
+<span class="fc" id="L509">        root().createRequest()</span>
+<span class="fc" id="L510">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L511">                .with(&quot;reviewers&quot;, getLogins(reviewers))</span>
+<span class="fc" id="L512">                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)</span>
+<span class="fc" id="L513">                .send();</span>
+<span class="fc" id="L514">    }</span>
 
     /**
      * Request team reviewers.
@@ -519,16 +522,16 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public void requestTeamReviewers(List&lt;GHTeam&gt; teams) throws IOException {
-<span class="fc" id="L522">        List&lt;String&gt; teamReviewers = new ArrayList&lt;String&gt;(teams.size());</span>
-<span class="fc bfc" id="L523" title="All 2 branches covered.">        for (GHTeam team : teams) {</span>
-<span class="fc" id="L524">            teamReviewers.add(team.getSlug());</span>
-<span class="fc" id="L525">        }</span>
-<span class="fc" id="L526">        root().createRequest()</span>
-<span class="fc" id="L527">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L528">                .with(&quot;team_reviewers&quot;, teamReviewers)</span>
-<span class="fc" id="L529">                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)</span>
-<span class="fc" id="L530">                .send();</span>
-<span class="fc" id="L531">    }</span>
+<span class="fc" id="L525">        List&lt;String&gt; teamReviewers = new ArrayList&lt;String&gt;(teams.size());</span>
+<span class="fc bfc" id="L526" title="All 2 branches covered.">        for (GHTeam team : teams) {</span>
+<span class="fc" id="L527">            teamReviewers.add(team.getSlug());</span>
+<span class="fc" id="L528">        }</span>
+<span class="fc" id="L529">        root().createRequest()</span>
+<span class="fc" id="L530">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L531">                .with(&quot;team_reviewers&quot;, teamReviewers)</span>
+<span class="fc" id="L532">                .withUrlPath(getApiRoute() + REQUEST_REVIEWERS)</span>
+<span class="fc" id="L533">                .send();</span>
+<span class="fc" id="L534">    }</span>
 
     /**
      * Set the base branch on the pull request.
@@ -540,11 +543,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public GHPullRequest setBaseBranch(String newBaseBranch) throws IOException {
-<span class="fc" id="L543">        return root().createRequest()</span>
-<span class="fc" id="L544">                .method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L545">                .with(&quot;base&quot;, newBaseBranch)</span>
-<span class="fc" id="L546">                .withUrlPath(getApiRoute())</span>
-<span class="fc" id="L547">                .fetch(GHPullRequest.class);</span>
+<span class="fc" id="L546">        return root().createRequest()</span>
+<span class="fc" id="L547">                .method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L548">                .with(&quot;base&quot;, newBaseBranch)</span>
+<span class="fc" id="L549">                .withUrlPath(getApiRoute())</span>
+<span class="fc" id="L550">                .fetch(GHPullRequest.class);</span>
     }
 
     /**
@@ -554,12 +557,12 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public void updateBranch() throws IOException {
-<span class="fc" id="L557">        root().createRequest()</span>
-<span class="fc" id="L558">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L559">                .with(&quot;expected_head_sha&quot;, head.getSha())</span>
-<span class="fc" id="L560">                .withUrlPath(getApiRoute() + &quot;/update-branch&quot;)</span>
-<span class="fc" id="L561">                .send();</span>
-<span class="fc" id="L562">    }</span>
+<span class="fc" id="L560">        root().createRequest()</span>
+<span class="fc" id="L561">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L562">                .with(&quot;expected_head_sha&quot;, head.getSha())</span>
+<span class="fc" id="L563">                .withUrlPath(getApiRoute() + &quot;/update-branch&quot;)</span>
+<span class="fc" id="L564">                .send();</span>
+<span class="fc" id="L565">    }</span>
 
     /**
      * Merge this pull request.
@@ -573,8 +576,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public void merge(String msg) throws IOException {
-<span class="fc" id="L576">        merge(msg, null);</span>
-<span class="fc" id="L577">    }</span>
+<span class="fc" id="L579">        merge(msg, null);</span>
+<span class="fc" id="L580">    }</span>
 
     /**
      * Merge this pull request.
@@ -590,8 +593,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public void merge(String msg, String sha) throws IOException {
-<span class="fc" id="L593">        merge(msg, sha, null);</span>
-<span class="fc" id="L594">    }</span>
+<span class="fc" id="L596">        merge(msg, sha, null);</span>
+<span class="fc" id="L597">    }</span>
 
     /**
      * Merge this pull request, using the specified merge method.
@@ -609,24 +612,24 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public void merge(String msg, String sha, MergeMethod method) throws IOException {
-<span class="fc" id="L612">        root().createRequest()</span>
-<span class="fc" id="L613">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L614">                .with(&quot;commit_message&quot;, msg)</span>
-<span class="fc" id="L615">                .with(&quot;sha&quot;, sha)</span>
-<span class="fc" id="L616">                .with(&quot;merge_method&quot;, method)</span>
-<span class="fc" id="L617">                .withUrlPath(getApiRoute() + &quot;/merge&quot;)</span>
-<span class="fc" id="L618">                .send();</span>
-<span class="fc" id="L619">    }</span>
+<span class="fc" id="L615">        root().createRequest()</span>
+<span class="fc" id="L616">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L617">                .with(&quot;commit_message&quot;, msg)</span>
+<span class="fc" id="L618">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L619">                .with(&quot;merge_method&quot;, method)</span>
+<span class="fc" id="L620">                .withUrlPath(getApiRoute() + &quot;/merge&quot;)</span>
+<span class="fc" id="L621">                .send();</span>
+<span class="fc" id="L622">    }</span>
 
     /** The enum MergeMethod. */
-<span class="fc" id="L622">    public enum MergeMethod {</span>
+<span class="fc" id="L625">    public enum MergeMethod {</span>
 
         /** The merge. */
-<span class="fc" id="L625">        MERGE,</span>
+<span class="fc" id="L628">        MERGE,</span>
         /** The squash. */
-<span class="fc" id="L627">        SQUASH,</span>
+<span class="fc" id="L630">        SQUASH,</span>
         /** The rebase. */
-<span class="fc" id="L629">        REBASE</span>
+<span class="fc" id="L632">        REBASE</span>
     }
 
     /**
@@ -657,38 +660,38 @@ public class GHPullRequest extends GHIssue implements Refreshable {
             String expectedHeadOid,
             MergeMethod mergeMethod) throws IOException {
 
-<span class="fc" id="L660">        StringBuilder inputBuilder = new StringBuilder();</span>
-<span class="fc" id="L661">        addParameter(inputBuilder, &quot;pullRequestId&quot;, this.getNodeId());</span>
-<span class="fc" id="L662">        addOptionalParameter(inputBuilder, &quot;authorEmail&quot;, authorEmail);</span>
-<span class="fc" id="L663">        addOptionalParameter(inputBuilder, &quot;clientMutationId&quot;, clientMutationId);</span>
-<span class="fc" id="L664">        addOptionalParameter(inputBuilder, &quot;commitBody&quot;, commitBody);</span>
-<span class="fc" id="L665">        addOptionalParameter(inputBuilder, &quot;commitHeadline&quot;, commitHeadline);</span>
-<span class="fc" id="L666">        addOptionalParameter(inputBuilder, &quot;expectedHeadOid&quot;, expectedHeadOid);</span>
-<span class="fc" id="L667">        addOptionalParameter(inputBuilder, &quot;mergeMethod&quot;, mergeMethod);</span>
+<span class="fc" id="L663">        StringBuilder inputBuilder = new StringBuilder();</span>
+<span class="fc" id="L664">        addParameter(inputBuilder, &quot;pullRequestId&quot;, this.getNodeId());</span>
+<span class="fc" id="L665">        addOptionalParameter(inputBuilder, &quot;authorEmail&quot;, authorEmail);</span>
+<span class="fc" id="L666">        addOptionalParameter(inputBuilder, &quot;clientMutationId&quot;, clientMutationId);</span>
+<span class="fc" id="L667">        addOptionalParameter(inputBuilder, &quot;commitBody&quot;, commitBody);</span>
+<span class="fc" id="L668">        addOptionalParameter(inputBuilder, &quot;commitHeadline&quot;, commitHeadline);</span>
+<span class="fc" id="L669">        addOptionalParameter(inputBuilder, &quot;expectedHeadOid&quot;, expectedHeadOid);</span>
+<span class="fc" id="L670">        addOptionalParameter(inputBuilder, &quot;mergeMethod&quot;, mergeMethod);</span>
 
-<span class="fc" id="L669">        String graphqlBody = &quot;mutation EnableAutoMerge { enablePullRequestAutoMerge(input: {&quot; + inputBuilder + &quot;}) { &quot;</span>
+<span class="fc" id="L672">        String graphqlBody = &quot;mutation EnableAutoMerge { enablePullRequestAutoMerge(input: {&quot; + inputBuilder + &quot;}) { &quot;</span>
                 + &quot;pullRequest { id } } }&quot;;
 
-<span class="fc" id="L672">        root().createGraphQLRequest(graphqlBody).sendGraphQL();</span>
+<span class="fc" id="L675">        root().createGraphQLRequest(graphqlBody).sendGraphQL();</span>
 
-<span class="fc" id="L674">        refresh();</span>
-<span class="fc" id="L675">    }</span>
+<span class="fc" id="L677">        refresh();</span>
+<span class="fc" id="L678">    }</span>
 
     private void addOptionalParameter(StringBuilder inputBuilder, String name, Object value) {
-<span class="fc bfc" id="L678" title="All 2 branches covered.">        if (value != null) {</span>
-<span class="fc" id="L679">            addParameter(inputBuilder, name, value);</span>
+<span class="fc bfc" id="L681" title="All 2 branches covered.">        if (value != null) {</span>
+<span class="fc" id="L682">            addParameter(inputBuilder, name, value);</span>
         }
-<span class="fc" id="L681">    }</span>
+<span class="fc" id="L684">    }</span>
 
     private void addParameter(StringBuilder inputBuilder, String name, Object value) {
-<span class="fc" id="L684">        Objects.requireNonNull(value);</span>
-<span class="fc" id="L685">        String formatString = &quot; %s: \&quot;%s\&quot;&quot;;</span>
-<span class="fc bfc" id="L686" title="All 2 branches covered.">        if (value instanceof Enum) {</span>
-<span class="fc" id="L687">            formatString = &quot; %s: %s&quot;;</span>
+<span class="fc" id="L687">        Objects.requireNonNull(value);</span>
+<span class="fc" id="L688">        String formatString = &quot; %s: \&quot;%s\&quot;&quot;;</span>
+<span class="fc bfc" id="L689" title="All 2 branches covered.">        if (value instanceof Enum) {</span>
+<span class="fc" id="L690">            formatString = &quot; %s: %s&quot;;</span>
         }
 
-<span class="fc" id="L690">        inputBuilder.append(String.format(formatString, name, value));</span>
-<span class="fc" id="L691">    }</span>
+<span class="fc" id="L693">        inputBuilder.append(String.format(formatString, name, value));</span>
+<span class="fc" id="L694">    }</span>
     /**
      * The status of auto merging a {@linkplain GHPullRequest}.
      *
@@ -699,8 +702,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         /**
          * Create default AutoMerge instance
          */
-<span class="fc" id="L702">        public AutoMerge() {</span>
-<span class="fc" id="L703">        }</span>
+<span class="fc" id="L705">        public AutoMerge() {</span>
+<span class="fc" id="L706">        }</span>
 
         private GHUser enabled_by;
         private MergeMethod merge_method;
@@ -714,7 +717,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          */
         @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
         public GHUser getEnabledBy() {
-<span class="fc" id="L717">            return enabled_by;</span>
+<span class="fc" id="L720">            return enabled_by;</span>
         }
 
         /**
@@ -723,7 +726,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          * @return the {@linkplain MergeMethod}
          */
         public MergeMethod getMergeMethod() {
-<span class="fc" id="L726">            return merge_method;</span>
+<span class="fc" id="L729">            return merge_method;</span>
         }
 
         /**
@@ -732,7 +735,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          * @return the title of the commit
          */
         public String getCommitTitle() {
-<span class="fc" id="L735">            return commit_title;</span>
+<span class="fc" id="L738">            return commit_title;</span>
         }
 
         /**
@@ -741,7 +744,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          * @return the message of the commit
          */
         public String getCommitMessage() {
-<span class="fc" id="L744">            return commit_message;</span>
+<span class="fc" id="L747">            return commit_message;</span>
         }
     }
 }

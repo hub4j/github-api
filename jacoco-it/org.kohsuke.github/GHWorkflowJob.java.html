@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHWorkflowJob.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHWorkflowJob.java</span></div><h1>GHWorkflowJob.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.GHWorkflowRun.Conclusion;
@@ -9,6 +10,7 @@ import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -28,8 +30,8 @@ public class GHWorkflowJob extends GHObject {
     /**
      * Create default GHWorkflowJob instance
      */
-<span class="fc" id="L31">    public GHWorkflowJob() {</span>
-<span class="fc" id="L32">    }</span>
+<span class="fc" id="L33">    public GHWorkflowJob() {</span>
+<span class="fc" id="L34">    }</span>
 
     // Not provided by the API.
     @JsonIgnore
@@ -56,9 +58,9 @@ public class GHWorkflowJob extends GHObject {
     private int runnerGroupId;
     private String runnerGroupName;
 
-<span class="fc" id="L59">    private List&lt;Step&gt; steps = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L61">    private List&lt;Step&gt; steps = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L61">    private List&lt;String&gt; labels = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L63">    private List&lt;String&gt; labels = new ArrayList&lt;&gt;();</span>
 
     /**
      * The name of the job.
@@ -66,7 +68,7 @@ public class GHWorkflowJob extends GHObject {
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L69">        return name;</span>
+<span class="fc" id="L71">        return name;</span>
     }
 
     /**
@@ -75,7 +77,7 @@ public class GHWorkflowJob extends GHObject {
      * @return sha for the HEAD commit
      */
     public String getHeadSha() {
-<span class="fc" id="L78">        return headSha;</span>
+<span class="fc" id="L80">        return headSha;</span>
     }
 
     /**
@@ -83,8 +85,9 @@ public class GHWorkflowJob extends GHObject {
      *
      * @return start date
      */
-    public Date getStartedAt() {
-<span class="fc" id="L87">        return GitHubClient.parseDate(startedAt);</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getStartedAt() {
+<span class="fc" id="L90">        return GitHubClient.parseInstant(startedAt);</span>
     }
 
     /**
@@ -92,8 +95,9 @@ public class GHWorkflowJob extends GHObject {
      *
      * @return completion date
      */
-    public Date getCompletedAt() {
-<span class="fc" id="L96">        return GitHubClient.parseDate(completedAt);</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getCompletedAt() {
+<span class="fc" id="L100">        return GitHubClient.parseInstant(completedAt);</span>
     }
 
     /**
@@ -104,7 +108,7 @@ public class GHWorkflowJob extends GHObject {
      * @return status of the job
      */
     public Status getStatus() {
-<span class="fc" id="L107">        return Status.from(status);</span>
+<span class="fc" id="L111">        return Status.from(status);</span>
     }
 
     /**
@@ -115,7 +119,7 @@ public class GHWorkflowJob extends GHObject {
      * @return conclusion of the job
      */
     public Conclusion getConclusion() {
-<span class="fc" id="L118">        return Conclusion.from(conclusion);</span>
+<span class="fc" id="L122">        return Conclusion.from(conclusion);</span>
     }
 
     /**
@@ -124,7 +128,7 @@ public class GHWorkflowJob extends GHObject {
      * @return the run id
      */
     public long getRunId() {
-<span class="fc" id="L127">        return runId;</span>
+<span class="fc" id="L131">        return runId;</span>
     }
 
     /**
@@ -133,7 +137,7 @@ public class GHWorkflowJob extends GHObject {
      * @return attempt number
      */
     public int getRunAttempt() {
-<span class="fc" id="L136">        return runAttempt;</span>
+<span class="fc" id="L140">        return runAttempt;</span>
     }
 
     /**
@@ -142,7 +146,7 @@ public class GHWorkflowJob extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L145">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L149">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -151,7 +155,7 @@ public class GHWorkflowJob extends GHObject {
      * @return the check run url
      */
     public URL getCheckRunUrl() {
-<span class="fc" id="L154">        return GitHubClient.parseURL(checkRunUrl);</span>
+<span class="fc" id="L158">        return GitHubClient.parseURL(checkRunUrl);</span>
     }
 
     /**
@@ -160,7 +164,7 @@ public class GHWorkflowJob extends GHObject {
      * @return the execution steps
      */
     public List&lt;Step&gt; getSteps() {
-<span class="fc" id="L163">        return Collections.unmodifiableList(steps);</span>
+<span class="fc" id="L167">        return Collections.unmodifiableList(steps);</span>
     }
 
     /**
@@ -169,7 +173,7 @@ public class GHWorkflowJob extends GHObject {
      * @return the labels
      */
     public List&lt;String&gt; getLabels() {
-<span class="fc" id="L172">        return Collections.unmodifiableList(labels);</span>
+<span class="fc" id="L176">        return Collections.unmodifiableList(labels);</span>
     }
 
     /**
@@ -178,7 +182,7 @@ public class GHWorkflowJob extends GHObject {
      * @return runnerId
      */
     public int getRunnerId() {
-<span class="fc" id="L181">        return runnerId;</span>
+<span class="fc" id="L185">        return runnerId;</span>
     }
 
     /**
@@ -187,7 +191,7 @@ public class GHWorkflowJob extends GHObject {
      * @return runnerName
      */
     public String getRunnerName() {
-<span class="fc" id="L190">        return runnerName;</span>
+<span class="fc" id="L194">        return runnerName;</span>
     }
 
     /**
@@ -196,7 +200,7 @@ public class GHWorkflowJob extends GHObject {
      * @return runnerGroupId
      */
     public int getRunnerGroupId() {
-<span class="fc" id="L199">        return runnerGroupId;</span>
+<span class="fc" id="L203">        return runnerGroupId;</span>
     }
 
     /**
@@ -205,7 +209,7 @@ public class GHWorkflowJob extends GHObject {
      * @return runnerGroupName
      */
     public String getRunnerGroupName() {
-<span class="fc" id="L208">        return runnerGroupName;</span>
+<span class="fc" id="L212">        return runnerGroupName;</span>
     }
 
     /**
@@ -215,7 +219,7 @@ public class GHWorkflowJob extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L218">        return owner;</span>
+<span class="fc" id="L222">        return owner;</span>
     }
 
     /**
@@ -232,19 +236,19 @@ public class GHWorkflowJob extends GHObject {
      *             The IO exception.
      */
     public &lt;T&gt; T downloadLogs(InputStreamFunction&lt;T&gt; streamFunction) throws IOException {
-<span class="fc" id="L235">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
+<span class="fc" id="L239">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
 
-<span class="fc" id="L237">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchStream(streamFunction);</span>
+<span class="fc" id="L241">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchStream(streamFunction);</span>
     }
 
     private String getApiRoute() {
-<span class="pc bpc" id="L241" title="1 of 2 branches missed.">        if (owner == null) {</span>
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (owner == null) {</span>
             // Workflow runs returned from search to do not have an owner. Attempt to use url.
-<span class="nc" id="L243">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="nc" id="L244">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="nc" id="L247">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L248">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
 
         }
-<span class="fc" id="L247">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/jobs/&quot; + getId();</span>
+<span class="fc" id="L251">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/jobs/&quot; + getId();</span>
     }
 
     /**
@@ -255,20 +259,20 @@ public class GHWorkflowJob extends GHObject {
      * @return the GH workflow job
      */
     GHWorkflowJob wrapUp(GHRepository owner) {
-<span class="fc" id="L258">        this.owner = owner;</span>
-<span class="fc" id="L259">        return this;</span>
+<span class="fc" id="L262">        this.owner = owner;</span>
+<span class="fc" id="L263">        return this;</span>
     }
 
     /**
      * The Class Step.
      */
-    public static class Step {
+    public static class Step extends GitHubBridgeAdapterObject {
 
         /**
          * Create default Step instance
          */
-<span class="fc" id="L270">        public Step() {</span>
-<span class="fc" id="L271">        }</span>
+<span class="fc" id="L274">        public Step() {</span>
+<span class="fc" id="L275">        }</span>
 
         private String name;
         private int number;
@@ -285,7 +289,7 @@ public class GHWorkflowJob extends GHObject {
          * @return name
          */
         public String getName() {
-<span class="fc" id="L288">            return name;</span>
+<span class="fc" id="L292">            return name;</span>
         }
 
         /**
@@ -294,7 +298,7 @@ public class GHWorkflowJob extends GHObject {
          * @return number
          */
         public int getNumber() {
-<span class="fc" id="L297">            return number;</span>
+<span class="fc" id="L301">            return number;</span>
         }
 
         /**
@@ -302,8 +306,9 @@ public class GHWorkflowJob extends GHObject {
          *
          * @return start date
          */
-        public Date getStartedAt() {
-<span class="fc" id="L306">            return GitHubClient.parseDate(startedAt);</span>
+        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+        public Instant getStartedAt() {
+<span class="fc" id="L311">            return GitHubClient.parseInstant(startedAt);</span>
         }
 
         /**
@@ -311,8 +316,9 @@ public class GHWorkflowJob extends GHObject {
          *
          * @return completion date
          */
-        public Date getCompletedAt() {
-<span class="fc" id="L315">            return GitHubClient.parseDate(completedAt);</span>
+        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+        public Instant getCompletedAt() {
+<span class="fc" id="L321">            return GitHubClient.parseInstant(completedAt);</span>
         }
 
         /**
@@ -323,7 +329,7 @@ public class GHWorkflowJob extends GHObject {
          * @return status of the step
          */
         public Status getStatus() {
-<span class="fc" id="L326">            return Status.from(status);</span>
+<span class="fc" id="L332">            return Status.from(status);</span>
         }
 
         /**
@@ -334,7 +340,7 @@ public class GHWorkflowJob extends GHObject {
          * @return conclusion of the step
          */
         public Conclusion getConclusion() {
-<span class="fc" id="L337">            return Conclusion.from(conclusion);</span>
+<span class="fc" id="L343">            return Conclusion.from(conclusion);</span>
         }
     }
 }

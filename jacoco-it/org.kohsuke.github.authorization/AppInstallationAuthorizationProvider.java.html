@@ -7,8 +7,8 @@ import org.kohsuke.github.GHAppInstallationToken;
 import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -57,7 +57,7 @@ public class AppInstallationAuthorizationProvider extends GitHub.DependentAuthor
 <span class="fc" id="L57">        GitHub gitHub = this.gitHub();</span>
 <span class="fc" id="L58">        GHAppInstallation installationByOrganization = appInstallationProvider.getAppInstallation(gitHub.getApp());</span>
 <span class="fc" id="L59">        GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();</span>
-<span class="fc" id="L60">        this.validUntil = ghAppInstallationToken.getExpiresAt().toInstant().minus(Duration.ofMinutes(5));</span>
+<span class="fc" id="L60">        this.validUntil = ghAppInstallationToken.getExpiresAt().minus(5, ChronoUnit.MINUTES);</span>
 <span class="fc" id="L61">        return Objects.requireNonNull(ghAppInstallationToken.getToken());</span>
     }
 

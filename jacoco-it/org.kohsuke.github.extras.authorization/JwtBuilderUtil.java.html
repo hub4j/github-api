@@ -123,12 +123,14 @@ import java.util.logging.Logger;
 <span class="fc" id="L123">            SignatureAlgorithm rs256 = Jwts.SIG.RS256;</span>
 
 <span class="fc" id="L125">            JwtBuilder jwtBuilder = Jwts.builder();</span>
-<span class="fc" id="L126">            jwtBuilder = jwtBuilder.issuedAt(Date.from(issuedAt))</span>
-<span class="fc" id="L127">                    .expiration(Date.from(expiration))</span>
-<span class="fc" id="L128">                    .issuer(applicationId)</span>
-<span class="fc" id="L129">                    .signWith(privateKey, rs256)</span>
-<span class="fc" id="L130">                    .json(new JacksonSerializer&lt;&gt;());</span>
-<span class="fc" id="L131">            return jwtBuilder.compact();</span>
+            // jjwt uses the legacy java date-time api
+            // see https://github.com/jwtk/jjwt/issues/235 for future support for java 8 date-time api
+<span class="fc" id="L128">            jwtBuilder = jwtBuilder.issuedAt(Date.from(issuedAt))</span>
+<span class="fc" id="L129">                    .expiration(Date.from(expiration))</span>
+<span class="fc" id="L130">                    .issuer(applicationId)</span>
+<span class="fc" id="L131">                    .signWith(privateKey, rs256)</span>
+<span class="fc" id="L132">                    .json(new JacksonSerializer&lt;&gt;());</span>
+<span class="fc" id="L133">            return jwtBuilder.compact();</span>
         }
     }
 
@@ -144,18 +146,22 @@ import java.util.logging.Logger;
         private Method signWithMethod;
         private Method serializeToJsonMethod;
 
-<span class="fc" id="L147">        ReflectionBuilderImpl() throws ReflectiveOperationException {</span>
-<span class="fc" id="L148">            JwtBuilder jwtBuilder = Jwts.builder();</span>
-<span class="fc" id="L149">            Class&lt;?&gt; jwtReflectionClass = jwtBuilder.getClass();</span>
+<span class="fc" id="L149">        ReflectionBuilderImpl() throws ReflectiveOperationException {</span>
+<span class="fc" id="L150">            JwtBuilder jwtBuilder = Jwts.builder();</span>
+<span class="fc" id="L151">            Class&lt;?&gt; jwtReflectionClass = jwtBuilder.getClass();</span>
 
-<span class="fc" id="L151">            setIssuedAtMethod = jwtReflectionClass.getMethod(&quot;setIssuedAt&quot;, Date.class);</span>
-<span class="fc" id="L152">            setIssuerMethod = jwtReflectionClass.getMethod(&quot;setIssuer&quot;, String.class);</span>
-<span class="fc" id="L153">            setExpirationMethod = jwtReflectionClass.getMethod(&quot;setExpiration&quot;, Date.class);</span>
-<span class="fc" id="L154">            Class&lt;?&gt; signatureAlgorithmClass = Class.forName(&quot;io.jsonwebtoken.SignatureAlgorithm&quot;);</span>
-<span class="fc" id="L155">            rs256SignatureAlgorithm = createEnumInstance(signatureAlgorithmClass, &quot;RS256&quot;);</span>
-<span class="fc" id="L156">            signWithMethod = jwtReflectionClass.getMethod(&quot;signWith&quot;, Key.class, signatureAlgorithmClass);</span>
-<span class="fc" id="L157">            serializeToJsonMethod = jwtReflectionClass.getMethod(&quot;serializeToJsonWith&quot;, Serializer.class);</span>
-<span class="fc" id="L158">        }</span>
+            // jjwt uses the legacy java date-time api
+            // see https://github.com/jwtk/jjwt/issues/235 for future support for java 8 date-time api
+            // noinspection UseOfObsoleteDateTimeApi
+<span class="fc" id="L156">            setIssuedAtMethod = jwtReflectionClass.getMethod(&quot;setIssuedAt&quot;, Date.class);</span>
+<span class="fc" id="L157">            setIssuerMethod = jwtReflectionClass.getMethod(&quot;setIssuer&quot;, String.class);</span>
+            // noinspection UseOfObsoleteDateTimeApi
+<span class="fc" id="L159">            setExpirationMethod = jwtReflectionClass.getMethod(&quot;setExpiration&quot;, Date.class);</span>
+<span class="fc" id="L160">            Class&lt;?&gt; signatureAlgorithmClass = Class.forName(&quot;io.jsonwebtoken.SignatureAlgorithm&quot;);</span>
+<span class="fc" id="L161">            rs256SignatureAlgorithm = createEnumInstance(signatureAlgorithmClass, &quot;RS256&quot;);</span>
+<span class="fc" id="L162">            signWithMethod = jwtReflectionClass.getMethod(&quot;signWith&quot;, Key.class, signatureAlgorithmClass);</span>
+<span class="fc" id="L163">            serializeToJsonMethod = jwtReflectionClass.getMethod(&quot;serializeToJsonWith&quot;, Serializer.class);</span>
+<span class="fc" id="L164">        }</span>
 
         /**
          * This method builds a JWT using older (pre 0.12.x) versions of jjwt library by leveraging reflection.
@@ -173,10 +179,10 @@ import java.util.logging.Logger;
         public String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey) {
 
             try {
-<span class="fc" id="L176">                return buildJwtWithReflection(issuedAt, expiration, applicationId, privateKey);</span>
-<span class="nc" id="L177">            } catch (ReflectiveOperationException e) {</span>
+<span class="fc" id="L182">                return buildJwtWithReflection(issuedAt, expiration, applicationId, privateKey);</span>
+<span class="nc" id="L183">            } catch (ReflectiveOperationException e) {</span>
                 // This should never happen. Reflection errors should have been caught during initialization.
-<span class="nc" id="L179">                throw new GHException(&quot;Reflection errors during JWT creation should have been checked already.&quot;, e);</span>
+<span class="nc" id="L185">                throw new GHException(&quot;Reflection errors during JWT creation should have been checked already.&quot;, e);</span>
             }
         }
 
@@ -184,19 +190,21 @@ import java.util.logging.Logger;
                 Instant expiration,
                 String applicationId,
                 PrivateKey privateKey) throws IllegalAccessException, InvocationTargetException {
-<span class="fc" id="L187">            JwtBuilder jwtBuilder = Jwts.builder();</span>
-<span class="fc" id="L188">            Object builderObj = jwtBuilder;</span>
-<span class="fc" id="L189">            builderObj = setIssuedAtMethod.invoke(builderObj, Date.from(issuedAt));</span>
-<span class="fc" id="L190">            builderObj = setExpirationMethod.invoke(builderObj, Date.from(expiration));</span>
-<span class="fc" id="L191">            builderObj = setIssuerMethod.invoke(builderObj, applicationId);</span>
-<span class="fc" id="L192">            builderObj = signWithMethod.invoke(builderObj, privateKey, rs256SignatureAlgorithm);</span>
-<span class="fc" id="L193">            builderObj = serializeToJsonMethod.invoke(builderObj, new JacksonSerializer&lt;&gt;());</span>
-<span class="fc" id="L194">            return ((JwtBuilder) builderObj).compact();</span>
+<span class="fc" id="L193">            JwtBuilder jwtBuilder = Jwts.builder();</span>
+<span class="fc" id="L194">            Object builderObj = jwtBuilder;</span>
+            // jjwt uses the legacy java date-time api
+            // see https://github.com/jwtk/jjwt/issues/235 for future support for java 8 date-time api
+<span class="fc" id="L197">            builderObj = setIssuedAtMethod.invoke(builderObj, Date.from(issuedAt));</span>
+<span class="fc" id="L198">            builderObj = setExpirationMethod.invoke(builderObj, Date.from(expiration));</span>
+<span class="fc" id="L199">            builderObj = setIssuerMethod.invoke(builderObj, applicationId);</span>
+<span class="fc" id="L200">            builderObj = signWithMethod.invoke(builderObj, privateKey, rs256SignatureAlgorithm);</span>
+<span class="fc" id="L201">            builderObj = serializeToJsonMethod.invoke(builderObj, new JacksonSerializer&lt;&gt;());</span>
+<span class="fc" id="L202">            return ((JwtBuilder) builderObj).compact();</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
         private static &lt;T extends Enum&lt;T&gt;&gt; T createEnumInstance(Class&lt;?&gt; type, String name) {
-<span class="fc" id="L199">            return Enum.valueOf((Class&lt;T&gt;) type, name);</span>
+<span class="fc" id="L207">            return Enum.valueOf((Class&lt;T&gt;) type, name);</span>
         }
     }
 }

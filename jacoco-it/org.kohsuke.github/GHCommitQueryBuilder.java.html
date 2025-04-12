@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCommitQueryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCommitQueryBuilder.java</span></div><h1>GHCommitQueryBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -29,10 +30,10 @@ public class GHCommitQueryBuilder {
      * @param repo
      *            the repo
      */
-<span class="fc" id="L32">    GHCommitQueryBuilder(GHRepository repo) {</span>
-<span class="fc" id="L33">        this.repo = repo;</span>
-<span class="fc" id="L34">        this.req = repo.root().createRequest(); // requester to build up</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L33">    GHCommitQueryBuilder(GHRepository repo) {</span>
+<span class="fc" id="L34">        this.repo = repo;</span>
+<span class="fc" id="L35">        this.req = repo.root().createRequest(); // requester to build up</span>
+<span class="fc" id="L36">    }</span>
 
     /**
      * GItHub login or email address by which to filter by commit author.
@@ -42,8 +43,8 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder author(String author) {
-<span class="fc" id="L45">        req.with(&quot;author&quot;, author);</span>
-<span class="fc" id="L46">        return this;</span>
+<span class="fc" id="L46">        req.with(&quot;author&quot;, author);</span>
+<span class="fc" id="L47">        return this;</span>
     }
 
     /**
@@ -54,8 +55,8 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder path(String path) {
-<span class="fc" id="L57">        req.with(&quot;path&quot;, path);</span>
-<span class="fc" id="L58">        return this;</span>
+<span class="fc" id="L58">        req.with(&quot;path&quot;, path);</span>
+<span class="fc" id="L59">        return this;</span>
     }
 
     /**
@@ -66,8 +67,8 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder from(String ref) {
-<span class="fc" id="L69">        req.with(&quot;sha&quot;, ref);</span>
-<span class="fc" id="L70">        return this;</span>
+<span class="fc" id="L70">        req.with(&quot;sha&quot;, ref);</span>
+<span class="fc" id="L71">        return this;</span>
     }
 
     /**
@@ -78,8 +79,21 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder pageSize(int pageSize) {
-<span class="fc" id="L81">        req.with(&quot;per_page&quot;, pageSize);</span>
-<span class="fc" id="L82">        return this;</span>
+<span class="fc" id="L82">        req.with(&quot;per_page&quot;, pageSize);</span>
+<span class="fc" id="L83">        return this;</span>
+    }
+
+    /**
+     * Only commits after this date will be returned.
+     *
+     * @param dt
+     *            the dt
+     * @return the gh commit query builder
+     * @deprecated use {@link #since(Instant)}
+     */
+    @Deprecated
+    public GHCommitQueryBuilder since(Date dt) {
+<span class="fc" id="L96">        return since(GitHubClient.toInstantOrNull(dt));</span>
     }
 
     /**
@@ -89,9 +103,9 @@ public class GHCommitQueryBuilder {
      *            the dt
      * @return the gh commit query builder
      */
-    public GHCommitQueryBuilder since(Date dt) {
-<span class="fc" id="L93">        req.with(&quot;since&quot;, GitHubClient.printDate(dt));</span>
-<span class="fc" id="L94">        return this;</span>
+    public GHCommitQueryBuilder since(Instant dt) {
+<span class="fc" id="L107">        req.with(&quot;since&quot;, GitHubClient.printInstant(dt));</span>
+<span class="fc" id="L108">        return this;</span>
     }
 
     /**
@@ -102,7 +116,20 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(long timestamp) {
-<span class="fc" id="L105">        return since(new Date(timestamp));</span>
+<span class="fc" id="L119">        return since(Instant.ofEpochMilli(timestamp));</span>
+    }
+
+    /**
+     * Only commits before this date will be returned.
+     *
+     * @param dt
+     *            the dt
+     * @return the gh commit query builder
+     * @deprecated use {@link #until(Instant)}
+     */
+    @Deprecated
+    public GHCommitQueryBuilder until(Date dt) {
+<span class="fc" id="L132">        return until(GitHubClient.toInstantOrNull(dt));</span>
     }
 
     /**
@@ -112,9 +139,9 @@ public class GHCommitQueryBuilder {
      *            the dt
      * @return the gh commit query builder
      */
-    public GHCommitQueryBuilder until(Date dt) {
-<span class="fc" id="L116">        req.with(&quot;until&quot;, GitHubClient.printDate(dt));</span>
-<span class="fc" id="L117">        return this;</span>
+    public GHCommitQueryBuilder until(Instant dt) {
+<span class="fc" id="L143">        req.with(&quot;until&quot;, GitHubClient.printInstant(dt));</span>
+<span class="fc" id="L144">        return this;</span>
     }
 
     /**
@@ -125,7 +152,7 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(long timestamp) {
-<span class="fc" id="L128">        return until(new Date(timestamp));</span>
+<span class="fc" id="L155">        return until(Instant.ofEpochMilli(timestamp));</span>
     }
 
     /**
@@ -134,7 +161,7 @@ public class GHCommitQueryBuilder {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHCommit&gt; list() {
-<span class="fc" id="L137">        return req.withUrlPath(repo.getApiTailUrl(&quot;commits&quot;)).toIterable(GHCommit[].class, item -&gt; item.wrapUp(repo));</span>
+<span class="fc" id="L164">        return req.withUrlPath(repo.getApiTailUrl(&quot;commits&quot;)).toIterable(GHCommit[].class, item -&gt; item.wrapUp(repo));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

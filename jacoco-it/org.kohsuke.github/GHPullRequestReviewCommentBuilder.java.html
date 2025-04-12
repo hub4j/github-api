@@ -111,6 +111,43 @@ public class GHPullRequestReviewCommentBuilder {
     }
 
     /**
+     * The side of the diff in the pull request that the comment applies to.
+     * &lt;p&gt;
+     * {@link #side(GHPullRequestReviewComment.Side)} and
+     * {@link #sides(GHPullRequestReviewComment.Side, GHPullRequestReviewComment.Side)} will overwrite each other's
+     * values.
+     *
+     * @param side
+     *            side of the diff to which the comment applies
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder side(GHPullRequestReviewComment.Side side) {
+<span class="fc" id="L125">        builder.with(&quot;side&quot;, side);</span>
+<span class="fc" id="L126">        builder.remove(&quot;start_side&quot;);</span>
+<span class="fc" id="L127">        return this;</span>
+    }
+
+    /**
+     * The sides of the diff in the pull request that the comment applies to.
+     * &lt;p&gt;
+     * {@link #side(GHPullRequestReviewComment.Side)} and
+     * {@link #sides(GHPullRequestReviewComment.Side, GHPullRequestReviewComment.Side)} will overwrite each other's
+     * values.
+     *
+     * @param startSide
+     *            side of the diff to which the start of the comment applies
+     * @param endSide
+     *            side of the diff to which the end of the comment applies
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder sides(GHPullRequestReviewComment.Side startSide,
+            GHPullRequestReviewComment.Side endSide) {
+<span class="fc" id="L145">        builder.with(&quot;start_side&quot;, startSide);</span>
+<span class="fc" id="L146">        builder.with(&quot;side&quot;, endSide);</span>
+<span class="fc" id="L147">        return this;</span>
+    }
+
+    /**
      * Create gh pull request review comment.
      *
      * @return the gh pull request review comment builder
@@ -118,10 +155,10 @@ public class GHPullRequestReviewCommentBuilder {
      *             the io exception
      */
     public GHPullRequestReviewComment create() throws IOException {
-<span class="fc" id="L121">        return builder.method(&quot;POST&quot;)</span>
-<span class="fc" id="L122">                .withUrlPath(pr.getApiRoute() + &quot;/comments&quot;)</span>
-<span class="fc" id="L123">                .fetch(GHPullRequestReviewComment.class)</span>
-<span class="fc" id="L124">                .wrapUp(pr);</span>
+<span class="fc" id="L158">        return builder.method(&quot;POST&quot;)</span>
+<span class="fc" id="L159">                .withUrlPath(pr.getApiRoute() + &quot;/comments&quot;)</span>
+<span class="fc" id="L160">                .fetch(GHPullRequestReviewComment.class)</span>
+<span class="fc" id="L161">                .wrapUp(pr);</span>
     }
 
 }

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHCheckSuite.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHCheckSuite.java</span></div><h1>GHCheckSuite.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -23,8 +25,8 @@ public class GHCheckSuite extends GHObject {
     /**
      * Create default GHCheckSuite instance
      */
-<span class="fc" id="L26">    public GHCheckSuite() {</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L28">    public GHCheckSuite() {</span>
+<span class="fc" id="L29">    }</span>
 
     /** The owner. */
     @JsonProperty(&quot;repository&quot;)
@@ -51,9 +53,9 @@ public class GHCheckSuite extends GHObject {
      * @return the GH check suite
      */
     GHCheckSuite wrap(GHRepository owner) {
-<span class="fc" id="L54">        this.owner = owner;</span>
-<span class="fc" id="L55">        this.wrap(owner.root());</span>
-<span class="fc" id="L56">        return this;</span>
+<span class="fc" id="L56">        this.owner = owner;</span>
+<span class="fc" id="L57">        this.wrap(owner.root());</span>
+<span class="fc" id="L58">        return this;</span>
     }
 
     /**
@@ -64,14 +66,14 @@ public class GHCheckSuite extends GHObject {
      * @return the GH check suite
      */
     GHCheckSuite wrap(GitHub root) {
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (owner != null) {</span>
-<span class="pc bpc" id="L68" title="1 of 4 branches missed.">            if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
-<span class="fc" id="L70">                    singlePull.wrap(owner);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (owner != null) {</span>
+<span class="pc bpc" id="L70" title="1 of 4 branches missed.">            if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="fc" id="L72">                    singlePull.wrap(owner);</span>
                 }
             }
         }
-<span class="fc" id="L74">        return this;</span>
+<span class="fc" id="L76">        return this;</span>
     }
 
     /**
@@ -80,7 +82,7 @@ public class GHCheckSuite extends GHObject {
      * @return the GH pull request[]
      */
     GHPullRequest[] wrap() {
-<span class="nc" id="L83">        return pullRequests;</span>
+<span class="nc" id="L85">        return pullRequests;</span>
     }
 
     /**
@@ -90,7 +92,7 @@ public class GHCheckSuite extends GHObject {
      * @see &lt;a href=&quot;https://developer.github.com/v4/guides/using-global-node-ids/&quot;&gt;documentation&lt;/a&gt;
      */
     public String getNodeId() {
-<span class="fc" id="L93">        return nodeId;</span>
+<span class="fc" id="L95">        return nodeId;</span>
     }
 
     /**
@@ -99,7 +101,7 @@ public class GHCheckSuite extends GHObject {
      * @return head branch name
      */
     public String getHeadBranch() {
-<span class="fc" id="L102">        return headBranch;</span>
+<span class="fc" id="L104">        return headBranch;</span>
     }
 
     /**
@@ -108,7 +110,7 @@ public class GHCheckSuite extends GHObject {
      * @return sha for the HEAD commit
      */
     public String getHeadSha() {
-<span class="fc" id="L111">        return headSha;</span>
+<span class="fc" id="L113">        return headSha;</span>
     }
 
     /**
@@ -117,7 +119,7 @@ public class GHCheckSuite extends GHObject {
      * @return status of the check suite
      */
     public String getStatus() {
-<span class="fc" id="L120">        return status;</span>
+<span class="fc" id="L122">        return status;</span>
     }
 
     /**
@@ -128,7 +130,7 @@ public class GHCheckSuite extends GHObject {
      * @return conclusion of the check suite
      */
     public String getConclusion() {
-<span class="fc" id="L131">        return conclusion;</span>
+<span class="fc" id="L133">        return conclusion;</span>
     }
 
     /**
@@ -137,7 +139,7 @@ public class GHCheckSuite extends GHObject {
      * @return sha of a commit
      */
     public String getBefore() {
-<span class="fc" id="L140">        return before;</span>
+<span class="fc" id="L142">        return before;</span>
     }
 
     /**
@@ -146,7 +148,7 @@ public class GHCheckSuite extends GHObject {
      * @return sha of a commit
      */
     public String getAfter() {
-<span class="fc" id="L149">        return after;</span>
+<span class="fc" id="L151">        return after;</span>
     }
 
     /**
@@ -155,7 +157,7 @@ public class GHCheckSuite extends GHObject {
      * @return sha of the most recent commit
      */
     public int getLatestCheckRunsCount() {
-<span class="fc" id="L158">        return latestCheckRunsCount;</span>
+<span class="fc" id="L160">        return latestCheckRunsCount;</span>
     }
 
     /**
@@ -164,7 +166,7 @@ public class GHCheckSuite extends GHObject {
      * @return url containing all check runs
      */
     public URL getCheckRunsUrl() {
-<span class="fc" id="L167">        return GitHubClient.parseURL(checkRunsUrl);</span>
+<span class="fc" id="L169">        return GitHubClient.parseURL(checkRunsUrl);</span>
     }
 
     /**
@@ -173,7 +175,7 @@ public class GHCheckSuite extends GHObject {
      * @return head commit
      */
     public HeadCommit getHeadCommit() {
-<span class="fc" id="L176">        return headCommit;</span>
+<span class="fc" id="L178">        return headCommit;</span>
     }
 
     /**
@@ -183,7 +185,7 @@ public class GHCheckSuite extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHApp getApp() {
-<span class="fc" id="L186">        return app;</span>
+<span class="fc" id="L188">        return app;</span>
     }
 
     /**
@@ -197,26 +199,26 @@ public class GHCheckSuite extends GHObject {
      *             the io exception
      */
     public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
-<span class="pc bpc" id="L200" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="fc bfc" id="L201" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="pc bpc" id="L202" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
                 // Only refresh if we haven't do so before
-<span class="fc" id="L203">                singlePull.refresh(singlePull.getTitle());</span>
+<span class="fc" id="L205">                singlePull.refresh(singlePull.getTitle());</span>
             }
-<span class="fc" id="L205">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
+<span class="fc" id="L207">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
         }
-<span class="nc" id="L207">        return Collections.emptyList();</span>
+<span class="nc" id="L209">        return Collections.emptyList();</span>
     }
 
     /**
      * The Class HeadCommit.
      */
-    public static class HeadCommit {
+    public static class HeadCommit extends GitHubBridgeAdapterObject {
 
         /**
          * Create default HeadCommit instance
          */
-<span class="fc" id="L218">        public HeadCommit() {</span>
-<span class="fc" id="L219">        }</span>
+<span class="fc" id="L220">        public HeadCommit() {</span>
+<span class="fc" id="L221">        }</span>
 
         private String id;
         private String treeId;
@@ -231,7 +233,7 @@ public class GHCheckSuite extends GHObject {
          * @return id of the commit
          */
         public String getId() {
-<span class="fc" id="L234">            return id;</span>
+<span class="fc" id="L236">            return id;</span>
         }
 
         /**
@@ -240,7 +242,7 @@ public class GHCheckSuite extends GHObject {
          * @return id of the tree
          */
         public String getTreeId() {
-<span class="fc" id="L243">            return treeId;</span>
+<span class="fc" id="L245">            return treeId;</span>
         }
 
         /**
@@ -249,7 +251,7 @@ public class GHCheckSuite extends GHObject {
          * @return commit message.
          */
         public String getMessage() {
-<span class="fc" id="L252">            return message;</span>
+<span class="fc" id="L254">            return message;</span>
         }
 
         /**
@@ -257,8 +259,9 @@ public class GHCheckSuite extends GHObject {
          *
          * @return timestamp of the commit
          */
-        public Date getTimestamp() {
-<span class="fc" id="L261">            return GitHubClient.parseDate(timestamp);</span>
+        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+        public Instant getTimestamp() {
+<span class="fc" id="L264">            return GitHubClient.parseInstant(timestamp);</span>
         }
 
         /**
@@ -267,7 +270,7 @@ public class GHCheckSuite extends GHObject {
          * @return the author
          */
         public GitUser getAuthor() {
-<span class="fc" id="L270">            return author;</span>
+<span class="fc" id="L273">            return author;</span>
         }
 
         /**
@@ -276,7 +279,7 @@ public class GHCheckSuite extends GHObject {
          * @return the committer
          */
         public GitUser getCommitter() {
-<span class="fc" id="L279">            return committer;</span>
+<span class="fc" id="L282">            return committer;</span>
         }
     }
 }

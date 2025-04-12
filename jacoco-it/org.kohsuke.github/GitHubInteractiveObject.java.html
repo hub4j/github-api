@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  * @author Liam Newman
  */
-abstract class GitHubInteractiveObject {
+abstract class GitHubInteractiveObject extends GitHubBridgeAdapterObject {
     @JacksonInject
     @CheckForNull
     private transient final GitHub root;

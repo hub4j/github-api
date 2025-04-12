@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHArtifact.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHArtifact.java</span></div><h1>GHArtifact.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
 
@@ -23,8 +25,8 @@ public class GHArtifact extends GHObject {
     /**
      * Create default GHArtifact instance
      */
-<span class="fc" id="L26">    public GHArtifact() {</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L28">    public GHArtifact() {</span>
+<span class="fc" id="L29">    }</span>
 
     // Not provided by the API.
     @JsonIgnore
@@ -42,7 +44,7 @@ public class GHArtifact extends GHObject {
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L45">        return name;</span>
+<span class="fc" id="L47">        return name;</span>
     }
 
     /**
@@ -51,7 +53,7 @@ public class GHArtifact extends GHObject {
      * @return the size
      */
     public long getSizeInBytes() {
-<span class="fc" id="L54">        return sizeInBytes;</span>
+<span class="fc" id="L56">        return sizeInBytes;</span>
     }
 
     /**
@@ -60,7 +62,7 @@ public class GHArtifact extends GHObject {
      * @return the archive download URL
      */
     public URL getArchiveDownloadUrl() {
-<span class="fc" id="L63">        return GitHubClient.parseURL(archiveDownloadUrl);</span>
+<span class="fc" id="L65">        return GitHubClient.parseURL(archiveDownloadUrl);</span>
     }
 
     /**
@@ -69,7 +71,7 @@ public class GHArtifact extends GHObject {
      * @return if the artifact has expired
      */
     public boolean isExpired() {
-<span class="fc" id="L72">        return expired;</span>
+<span class="fc" id="L74">        return expired;</span>
     }
 
     /**
@@ -77,8 +79,9 @@ public class GHArtifact extends GHObject {
      *
      * @return the date of expiration
      */
-    public Date getExpiresAt() {
-<span class="fc" id="L81">        return GitHubClient.parseDate(expiresAt);</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getExpiresAt() {
+<span class="fc" id="L84">        return GitHubClient.parseInstant(expiresAt);</span>
     }
 
     /**
@@ -88,7 +91,7 @@ public class GHArtifact extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getRepository() {
-<span class="fc" id="L91">        return owner;</span>
+<span class="fc" id="L94">        return owner;</span>
     }
 
     /**
@@ -98,8 +101,8 @@ public class GHArtifact extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L101">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L104">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L105">    }</span>
 
     /**
      * Downloads the artifact.
@@ -113,18 +116,18 @@ public class GHArtifact extends GHObject {
      *             The IO exception.
      */
     public &lt;T&gt; T download(InputStreamFunction&lt;T&gt; streamFunction) throws IOException {
-<span class="fc" id="L116">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
+<span class="fc" id="L119">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
 
-<span class="fc" id="L118">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;zip&quot;).fetchStream(streamFunction);</span>
+<span class="fc" id="L121">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;zip&quot;).fetchStream(streamFunction);</span>
     }
 
     private String getApiRoute() {
-<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        if (owner == null) {</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">        if (owner == null) {</span>
             // Workflow runs returned from search to do not have an owner. Attempt to use url.
-<span class="nc" id="L124">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="nc" id="L125">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="nc" id="L127">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L128">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
         }
-<span class="fc" id="L127">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/artifacts/&quot; + getId();</span>
+<span class="fc" id="L130">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/artifacts/&quot; + getId();</span>
     }
 
     /**
@@ -135,8 +138,8 @@ public class GHArtifact extends GHObject {
      * @return the GH artifact
      */
     GHArtifact wrapUp(GHRepository owner) {
-<span class="fc" id="L138">        this.owner = owner;</span>
-<span class="fc" id="L139">        return this;</span>
+<span class="fc" id="L141">        this.owner = owner;</span>
+<span class="fc" id="L142">        return this;</span>
     }
 
 }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHIssueEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHIssueEvent.java</span></div><h1>GHIssueEvent.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -16,8 +18,8 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     /**
      * Create default GHIssueEvent instance
      */
-<span class="fc" id="L19">    public GHIssueEvent() {</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L21">    public GHIssueEvent() {</span>
+<span class="fc" id="L22">    }</span>
 
     private long id;
     private String node_id;
@@ -42,7 +44,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L45">        return id;</span>
+<span class="fc" id="L47">        return id;</span>
     }
 
     /**
@@ -51,7 +53,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the node id
      */
     public String getNodeId() {
-<span class="nc" id="L54">        return node_id;</span>
+<span class="fc" id="L56">        return node_id;</span>
     }
 
     /**
@@ -60,7 +62,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L63">        return url;</span>
+<span class="nc" id="L65">        return url;</span>
     }
 
     /**
@@ -70,7 +72,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getActor() {
-<span class="nc" id="L73">        return actor;</span>
+<span class="fc" id="L75">        return actor;</span>
     }
 
     /**
@@ -79,7 +81,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the event
      */
     public String getEvent() {
-<span class="fc" id="L82">        return event;</span>
+<span class="fc" id="L84">        return event;</span>
     }
 
     /**
@@ -88,7 +90,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the commit id
      */
     public String getCommitId() {
-<span class="nc" id="L91">        return commit_id;</span>
+<span class="fc" id="L93">        return commit_id;</span>
     }
 
     /**
@@ -97,7 +99,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the commit url
      */
     public String getCommitUrl() {
-<span class="nc" id="L100">        return commit_url;</span>
+<span class="fc" id="L102">        return commit_url;</span>
     }
 
     /**
@@ -105,8 +107,9 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      *
      * @return the created at
      */
-    public Date getCreatedAt() {
-<span class="fc" id="L109">        return GitHubClient.parseDate(created_at);</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getCreatedAt() {
+<span class="fc" id="L112">        return GitHubClient.parseInstant(created_at);</span>
     }
 
     /**
@@ -116,7 +119,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHIssue getIssue() {
-<span class="fc" id="L119">        return issue;</span>
+<span class="fc" id="L122">        return issue;</span>
     }
 
     /**
@@ -127,7 +130,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHMilestone getMilestone() {
-<span class="fc" id="L130">        return milestone;</span>
+<span class="fc" id="L133">        return milestone;</span>
     }
 
     /**
@@ -138,7 +141,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHLabel getLabel() {
-<span class="fc" id="L141">        return label;</span>
+<span class="fc" id="L144">        return label;</span>
     }
 
     /**
@@ -149,7 +152,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getAssignee() {
-<span class="fc" id="L152">        return assignee;</span>
+<span class="fc" id="L155">        return assignee;</span>
     }
 
     /**
@@ -159,7 +162,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the GHIssueRename
      */
     public GHIssueRename getRename() {
-<span class="fc" id="L162">        return this.rename;</span>
+<span class="fc" id="L165">        return this.rename;</span>
     }
 
     /**
@@ -176,7 +179,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getReviewRequester() {
-<span class="fc" id="L179">        return this.reviewRequester;</span>
+<span class="fc" id="L182">        return this.reviewRequester;</span>
     }
 
     /**
@@ -193,7 +196,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getRequestedReviewer() {
-<span class="fc" id="L196">        return this.requestedReviewer;</span>
+<span class="fc" id="L199">        return this.requestedReviewer;</span>
     }
 
     /**
@@ -204,8 +207,8 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the GH issue event
      */
     GHIssueEvent wrapUp(GHIssue parent) {
-<span class="fc" id="L207">        this.issue = parent;</span>
-<span class="fc" id="L208">        return this;</span>
+<span class="fc" id="L210">        this.issue = parent;</span>
+<span class="fc" id="L211">        return this;</span>
     }
 
     /**
@@ -215,11 +218,11 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @Override
     public String toString() {
-<span class="nc" id="L218">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
-<span class="nc" id="L219">                getIssue().getNumber(),</span>
-<span class="nc" id="L220">                getEvent(),</span>
-<span class="nc" id="L221">                getActor().getLogin(),</span>
-<span class="nc" id="L222">                getCreatedAt().toString());</span>
+<span class="fc" id="L221">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
+<span class="fc" id="L222">                getIssue().getNumber(),</span>
+<span class="fc" id="L223">                getEvent(),</span>
+<span class="fc" id="L224">                getActor().getLogin(),</span>
+<span class="fc" id="L225">                getCreatedAt().toString());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

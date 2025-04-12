@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHProjectsV2ItemChanges.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHProjectsV2ItemChanges.java</span></div><h1>GHProjectsV2ItemChanges.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
+import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -12,13 +14,13 @@ import java.util.Date;
  * Note that this is best effort only as nothing is documented in the GitHub documentation.
  */
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
-public class GHProjectsV2ItemChanges {
+public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
 
     /**
      * Create default GHProjectsV2ItemChanges instance
      */
-<span class="fc" id="L20">    public GHProjectsV2ItemChanges() {</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L22">    public GHProjectsV2ItemChanges() {</span>
+<span class="fc" id="L23">    }</span>
 
     private FieldValue fieldValue;
 
@@ -32,7 +34,7 @@ public class GHProjectsV2ItemChanges {
      * @return the field value
      */
     public FieldValue getFieldValue() {
-<span class="fc" id="L35">        return fieldValue;</span>
+<span class="fc" id="L37">        return fieldValue;</span>
     }
 
     /**
@@ -41,7 +43,7 @@ public class GHProjectsV2ItemChanges {
      * @return the archived at
      */
     public FromToDate getArchivedAt() {
-<span class="fc" id="L44">        return archivedAt;</span>
+<span class="fc" id="L46">        return archivedAt;</span>
     }
 
     /**
@@ -50,7 +52,7 @@ public class GHProjectsV2ItemChanges {
      * @return the previous projects V 2 item node id
      */
     public FromTo getPreviousProjectsV2ItemNodeId() {
-<span class="fc" id="L53">        return previousProjectsV2ItemNodeId;</span>
+<span class="fc" id="L55">        return previousProjectsV2ItemNodeId;</span>
     }
 
     /**
@@ -61,8 +63,8 @@ public class GHProjectsV2ItemChanges {
         /**
          * Create default FieldValue instance
          */
-<span class="fc" id="L64">        public FieldValue() {</span>
-<span class="fc" id="L65">        }</span>
+<span class="fc" id="L66">        public FieldValue() {</span>
+<span class="fc" id="L67">        }</span>
 
         private String fieldNodeId;
         private String fieldType;
@@ -73,7 +75,7 @@ public class GHProjectsV2ItemChanges {
          * @return the field node id
          */
         public String getFieldNodeId() {
-<span class="fc" id="L76">            return fieldNodeId;</span>
+<span class="fc" id="L78">            return fieldNodeId;</span>
         }
 
         /**
@@ -82,7 +84,7 @@ public class GHProjectsV2ItemChanges {
          * @return the field type
          */
         public FieldType getFieldType() {
-<span class="fc" id="L85">            return EnumUtils.getEnumOrDefault(FieldType.class, fieldType, FieldType.UNKNOWN);</span>
+<span class="fc" id="L87">            return EnumUtils.getEnumOrDefault(FieldType.class, fieldType, FieldType.UNKNOWN);</span>
         }
     }
 
@@ -94,8 +96,8 @@ public class GHProjectsV2ItemChanges {
         /**
          * Create default FromTo instance
          */
-<span class="fc" id="L97">        public FromTo() {</span>
-<span class="fc" id="L98">        }</span>
+<span class="fc" id="L99">        public FromTo() {</span>
+<span class="fc" id="L100">        }</span>
 
         private String from;
         private String to;
@@ -106,7 +108,7 @@ public class GHProjectsV2ItemChanges {
          * @return the from
          */
         public String getFrom() {
-<span class="fc" id="L109">            return from;</span>
+<span class="fc" id="L111">            return from;</span>
         }
 
         /**
@@ -115,7 +117,7 @@ public class GHProjectsV2ItemChanges {
          * @return the to
          */
         public String getTo() {
-<span class="fc" id="L118">            return to;</span>
+<span class="fc" id="L120">            return to;</span>
         }
     }
 
@@ -127,8 +129,8 @@ public class GHProjectsV2ItemChanges {
         /**
          * Create default FromToDate instance
          */
-<span class="fc" id="L130">        public FromToDate() {</span>
-<span class="fc" id="L131">        }</span>
+<span class="fc" id="L132">        public FromToDate() {</span>
+<span class="fc" id="L133">        }</span>
 
         private String from;
         private String to;
@@ -138,8 +140,9 @@ public class GHProjectsV2ItemChanges {
          *
          * @return the from
          */
-        public Date getFrom() {
-<span class="fc" id="L142">            return GitHubClient.parseDate(from);</span>
+        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+        public Instant getFrom() {
+<span class="fc" id="L145">            return GitHubClient.parseInstant(from);</span>
         }
 
         /**
@@ -147,28 +150,29 @@ public class GHProjectsV2ItemChanges {
          *
          * @return the to
          */
-        public Date getTo() {
-<span class="fc" id="L151">            return GitHubClient.parseDate(to);</span>
+        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+        public Instant getTo() {
+<span class="fc" id="L155">            return GitHubClient.parseInstant(to);</span>
         }
     }
 
     /**
      * The Enum FieldType.
      */
-<span class="fc" id="L158">    public enum FieldType {</span>
+<span class="fc" id="L162">    public enum FieldType {</span>
 
         /** The text. */
-<span class="fc" id="L161">        TEXT,</span>
+<span class="fc" id="L165">        TEXT,</span>
         /** The number. */
-<span class="fc" id="L163">        NUMBER,</span>
+<span class="fc" id="L167">        NUMBER,</span>
         /** The date. */
-<span class="fc" id="L165">        DATE,</span>
+<span class="fc" id="L169">        DATE,</span>
         /** The single select. */
-<span class="fc" id="L167">        SINGLE_SELECT,</span>
+<span class="fc" id="L171">        SINGLE_SELECT,</span>
         /** The iteration. */
-<span class="fc" id="L169">        ITERATION,</span>
+<span class="fc" id="L173">        ITERATION,</span>
         /** The unknown. */
-<span class="fc" id="L171">        UNKNOWN;</span>
+<span class="fc" id="L175">        UNKNOWN;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

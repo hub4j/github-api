@@ -8,11 +8,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -26,8 +27,8 @@ public class GHRelease extends GHObject {
     /**
      * Create default GHRelease instance
      */
-<span class="fc" id="L29">    public GHRelease() {</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L30">    public GHRelease() {</span>
+<span class="fc" id="L31">    }</span>
 
     /** The owner. */
     GHRepository owner;
@@ -42,7 +43,7 @@ public class GHRelease extends GHObject {
     private String body;
     private boolean draft;
     private boolean prerelease;
-    private Date published_at;
+    private String publishedAt;
     private String tarball_url;
     private String zipball_url;
     private String discussion_url;
@@ -53,7 +54,7 @@ public class GHRelease extends GHObject {
      * @return the discussion url
      */
     public String getDiscussionUrl() {
-<span class="fc" id="L56">        return discussion_url;</span>
+<span class="fc" id="L57">        return discussion_url;</span>
     }
 
     /**
@@ -62,7 +63,7 @@ public class GHRelease extends GHObject {
      * @return the assets url
      */
     public String getAssetsUrl() {
-<span class="nc" id="L65">        return assets_url;</span>
+<span class="fc" id="L66">        return assets_url;</span>
     }
 
     /**
@@ -71,7 +72,7 @@ public class GHRelease extends GHObject {
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L74">        return body;</span>
+<span class="fc" id="L75">        return body;</span>
     }
 
     /**
@@ -80,7 +81,7 @@ public class GHRelease extends GHObject {
      * @return the boolean
      */
     public boolean isDraft() {
-<span class="nc" id="L83">        return draft;</span>
+<span class="fc" id="L84">        return draft;</span>
     }
 
     /**
@@ -89,7 +90,7 @@ public class GHRelease extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L92">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L93">        return GitHubClient.parseURL(html_url);</span>
     }
 
     /**
@@ -98,18 +99,8 @@ public class GHRelease extends GHObject {
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L101">        return name;</span>
+<span class="fc" id="L102">        return name;</span>
     }
-
-    /**
-     * Sets name.
-     *
-     * @param name
-     *            the name
-     */
-    public void setName(String name) {
-<span class="nc" id="L111">        this.name = name;</span>
-<span class="nc" id="L112">    }</span>
 
     /**
      * Gets owner.
@@ -118,7 +109,7 @@ public class GHRelease extends GHObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L121">        return owner;</span>
+<span class="fc" id="L112">        return owner;</span>
     }
 
     /**
@@ -127,7 +118,18 @@ public class GHRelease extends GHObject {
      * @return the boolean
      */
     public boolean isPrerelease() {
-<span class="fc" id="L130">        return prerelease;</span>
+<span class="fc" id="L121">        return prerelease;</span>
+    }
+
+    /**
+     * Gets published at.
+     *
+     * @return the published at
+     * @deprecated Use #getPublishedAt()
+     */
+    @Deprecated
+    public Date getPublished_at() {
+<span class="fc" id="L132">        return Date.from(getPublishedAt());</span>
     }
 
     /**
@@ -135,8 +137,8 @@ public class GHRelease extends GHObject {
      *
      * @return the published at
      */
-    public Date getPublished_at() {
-<span class="nc" id="L139">        return new Date(published_at.getTime());</span>
+    public Instant getPublishedAt() {
+<span class="fc" id="L141">        return GitHubClient.parseInstant(publishedAt);</span>
     }
 
     /**
@@ -145,7 +147,7 @@ public class GHRelease extends GHObject {
      * @return the tag name
      */
     public String getTagName() {
-<span class="fc" id="L148">        return tag_name;</span>
+<span class="fc" id="L150">        return tag_name;</span>
     }
 
     /**
@@ -154,7 +156,7 @@ public class GHRelease extends GHObject {
      * @return the target commitish
      */
     public String getTargetCommitish() {
-<span class="fc" id="L157">        return target_commitish;</span>
+<span class="fc" id="L159">        return target_commitish;</span>
     }
 
     /**
@@ -163,7 +165,7 @@ public class GHRelease extends GHObject {
      * @return the upload url
      */
     public String getUploadUrl() {
-<span class="fc" id="L166">        return upload_url;</span>
+<span class="fc" id="L168">        return upload_url;</span>
     }
 
     /**
@@ -172,7 +174,7 @@ public class GHRelease extends GHObject {
      * @return the zipball url
      */
     public String getZipballUrl() {
-<span class="fc" id="L175">        return zipball_url;</span>
+<span class="fc" id="L177">        return zipball_url;</span>
     }
 
     /**
@@ -181,7 +183,7 @@ public class GHRelease extends GHObject {
      * @return the tarball url
      */
     public String getTarballUrl() {
-<span class="fc" id="L184">        return tarball_url;</span>
+<span class="fc" id="L186">        return tarball_url;</span>
     }
 
     /**
@@ -192,8 +194,8 @@ public class GHRelease extends GHObject {
      * @return the GH release
      */
     GHRelease wrap(GHRepository owner) {
-<span class="fc" id="L195">        this.owner = owner;</span>
-<span class="fc" id="L196">        return this;</span>
+<span class="fc" id="L197">        this.owner = owner;</span>
+<span class="fc" id="L198">        return this;</span>
     }
 
     /**
@@ -206,10 +208,10 @@ public class GHRelease extends GHObject {
      * @return the GH release[]
      */
     static GHRelease[] wrap(GHRelease[] releases, GHRepository owner) {
-<span class="nc bnc" id="L209" title="All 2 branches missed.">        for (GHRelease release : releases) {</span>
-<span class="nc" id="L210">            release.wrap(owner);</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        for (GHRelease release : releases) {</span>
+<span class="nc" id="L212">            release.wrap(owner);</span>
         }
-<span class="nc" id="L212">        return releases;</span>
+<span class="nc" id="L214">        return releases;</span>
     }
 
     /**
@@ -227,11 +229,11 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public GHAsset uploadAsset(File file, String contentType) throws IOException {
-<span class="fc" id="L230">        FileInputStream s = new FileInputStream(file);</span>
+<span class="fc" id="L232">        FileInputStream s = new FileInputStream(file);</span>
         try {
-<span class="fc" id="L232">            return uploadAsset(file.getName(), s, contentType);</span>
+<span class="fc" id="L234">            return uploadAsset(file.getName(), s, contentType);</span>
         } finally {
-<span class="fc" id="L234">            s.close();</span>
+<span class="fc" id="L236">            s.close();</span>
         }
     }
 
@@ -249,15 +251,15 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {
-<span class="fc" id="L252">        Requester builder = owner.root().createRequest().method(&quot;POST&quot;);</span>
-<span class="fc" id="L253">        String url = getUploadUrl();</span>
+<span class="fc" id="L254">        Requester builder = owner.root().createRequest().method(&quot;POST&quot;);</span>
+<span class="fc" id="L255">        String url = getUploadUrl();</span>
         // strip the helpful garbage from the url
-<span class="fc" id="L255">        int endIndex = url.indexOf('{');</span>
-<span class="pc bpc" id="L256" title="1 of 2 branches missed.">        if (endIndex != -1) {</span>
-<span class="fc" id="L257">            url = url.substring(0, endIndex);</span>
+<span class="fc" id="L257">        int endIndex = url.indexOf('{');</span>
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">        if (endIndex != -1) {</span>
+<span class="fc" id="L259">            url = url.substring(0, endIndex);</span>
         }
-<span class="fc" id="L259">        url += &quot;?name=&quot; + URLEncoder.encode(filename, &quot;UTF-8&quot;);</span>
-<span class="fc" id="L260">        return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);</span>
+<span class="fc" id="L261">        url += &quot;?name=&quot; + URLEncoder.encode(filename, &quot;UTF-8&quot;);</span>
+<span class="fc" id="L262">        return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);</span>
     }
 
     /**
@@ -266,7 +268,7 @@ public class GHRelease extends GHObject {
      * @return the assets
      */
     public List&lt;GHAsset&gt; getAssets() {
-<span class="fc" id="L269">        return Collections.unmodifiableList(assets);</span>
+<span class="fc" id="L271">        return Collections.unmodifiableList(assets);</span>
     }
 
     /**
@@ -275,8 +277,8 @@ public class GHRelease extends GHObject {
      * @return the assets iterable
      */
     public PagedIterable&lt;GHAsset&gt; listAssets() {
-<span class="fc" id="L278">        Requester builder = owner.root().createRequest();</span>
-<span class="fc" id="L279">        return builder.withUrlPath(getApiTailUrl(&quot;assets&quot;)).toIterable(GHAsset[].class, item -&gt; item.wrap(this));</span>
+<span class="fc" id="L280">        Requester builder = owner.root().createRequest();</span>
+<span class="fc" id="L281">        return builder.withUrlPath(getApiTailUrl(&quot;assets&quot;)).toIterable(GHAsset[].class, item -&gt; item.wrap(this));</span>
     }
 
     /**
@@ -286,8 +288,8 @@ public class GHRelease extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L289">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(owner.getApiTailUrl(&quot;releases/&quot; + getId())).send();</span>
-<span class="fc" id="L290">    }</span>
+<span class="fc" id="L291">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(owner.getApiTailUrl(&quot;releases/&quot; + getId())).send();</span>
+<span class="fc" id="L292">    }</span>
 
     /**
      * Updates this release via a builder.
@@ -295,11 +297,11 @@ public class GHRelease extends GHObject {
      * @return the gh release updater
      */
     public GHReleaseUpdater update() {
-<span class="fc" id="L298">        return new GHReleaseUpdater(this);</span>
+<span class="fc" id="L300">        return new GHReleaseUpdater(this);</span>
     }
 
     private String getApiTailUrl(String end) {
-<span class="fc" id="L302">        return owner.getApiTailUrl(format(&quot;releases/%s/%s&quot;, getId(), end));</span>
+<span class="fc" id="L304">        return owner.getApiTailUrl(format(&quot;releases/%s/%s&quot;, getId(), end));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

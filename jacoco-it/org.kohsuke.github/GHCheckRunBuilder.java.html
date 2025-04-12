@@ -30,6 +30,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
@@ -57,10 +58,10 @@ public final class GHCheckRunBuilder {
     private Output output;
     private List&lt;Action&gt; actions;
 
-<span class="fc" id="L60">    private GHCheckRunBuilder(GHRepository repo, Requester requester) {</span>
-<span class="fc" id="L61">        this.repo = repo;</span>
-<span class="fc" id="L62">        this.requester = requester;</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L61">    private GHCheckRunBuilder(GHRepository repo, Requester requester) {</span>
+<span class="fc" id="L62">        this.repo = repo;</span>
+<span class="fc" id="L63">        this.requester = requester;</span>
+<span class="fc" id="L64">    }</span>
 
     /**
      * Instantiates a new GH check run builder.
@@ -73,14 +74,14 @@ public final class GHCheckRunBuilder {
      *            the head SHA
      */
     GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
-<span class="fc" id="L76">        this(repo,</span>
-<span class="fc" id="L77">                repo.root()</span>
-<span class="fc" id="L78">                        .createRequest()</span>
-<span class="fc" id="L79">                        .method(&quot;POST&quot;)</span>
-<span class="fc" id="L80">                        .with(&quot;name&quot;, name)</span>
-<span class="fc" id="L81">                        .with(&quot;head_sha&quot;, headSHA)</span>
-<span class="fc" id="L82">                        .withUrlPath(repo.getApiTailUrl(&quot;check-runs&quot;)));</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L77">        this(repo,</span>
+<span class="fc" id="L78">                repo.root()</span>
+<span class="fc" id="L79">                        .createRequest()</span>
+<span class="fc" id="L80">                        .method(&quot;POST&quot;)</span>
+<span class="fc" id="L81">                        .with(&quot;name&quot;, name)</span>
+<span class="fc" id="L82">                        .with(&quot;head_sha&quot;, headSHA)</span>
+<span class="fc" id="L83">                        .withUrlPath(repo.getApiTailUrl(&quot;check-runs&quot;)));</span>
+<span class="fc" id="L84">    }</span>
 
     /**
      * Instantiates a new GH check run builder.
@@ -91,9 +92,9 @@ public final class GHCheckRunBuilder {
      *            the check id
      */
     GHCheckRunBuilder(GHRepository repo, long checkId) {
-<span class="fc" id="L94">        this(repo,</span>
-<span class="fc" id="L95">                repo.root().createRequest().method(&quot;PATCH&quot;).withUrlPath(repo.getApiTailUrl(&quot;check-runs/&quot; + checkId)));</span>
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L95">        this(repo,</span>
+<span class="fc" id="L96">                repo.root().createRequest().method(&quot;PATCH&quot;).withUrlPath(repo.getApiTailUrl(&quot;check-runs/&quot; + checkId)));</span>
+<span class="fc" id="L97">    }</span>
 
     /**
      * With name.
@@ -105,11 +106,11 @@ public final class GHCheckRunBuilder {
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withName(@CheckForNull String name, String oldName) {
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (oldName == null) {</span>
-<span class="fc" id="L109">            throw new GHException(&quot;Can not update uncreated check run&quot;);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (oldName == null) {</span>
+<span class="fc" id="L110">            throw new GHException(&quot;Can not update uncreated check run&quot;);</span>
         }
-<span class="fc" id="L111">        requester.with(&quot;name&quot;, name);</span>
-<span class="fc" id="L112">        return this;</span>
+<span class="fc" id="L112">        requester.with(&quot;name&quot;, name);</span>
+<span class="fc" id="L113">        return this;</span>
     }
 
     /**
@@ -120,8 +121,8 @@ public final class GHCheckRunBuilder {
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withDetailsURL(@CheckForNull String detailsURL) {
-<span class="fc" id="L123">        requester.with(&quot;details_url&quot;, detailsURL);</span>
-<span class="fc" id="L124">        return this;</span>
+<span class="fc" id="L124">        requester.with(&quot;details_url&quot;, detailsURL);</span>
+<span class="fc" id="L125">        return this;</span>
     }
 
     /**
@@ -132,8 +133,8 @@ public final class GHCheckRunBuilder {
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withExternalID(@CheckForNull String externalID) {
-<span class="fc" id="L135">        requester.with(&quot;external_id&quot;, externalID);</span>
-<span class="fc" id="L136">        return this;</span>
+<span class="fc" id="L136">        requester.with(&quot;external_id&quot;, externalID);</span>
+<span class="fc" id="L137">        return this;</span>
     }
 
     /**
@@ -144,11 +145,11 @@ public final class GHCheckRunBuilder {
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withStatus(@CheckForNull GHCheckRun.Status status) {
-<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (status != null) {</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (status != null) {</span>
             // Do *not* use the overload taking Enum, as that s/_/-/g which would be wrong here.
-<span class="fc" id="L149">            requester.with(&quot;status&quot;, status.toString().toLowerCase(Locale.ROOT));</span>
+<span class="fc" id="L150">            requester.with(&quot;status&quot;, status.toString().toLowerCase(Locale.ROOT));</span>
         }
-<span class="fc" id="L151">        return this;</span>
+<span class="fc" id="L152">        return this;</span>
     }
 
     /**
@@ -159,10 +160,23 @@ public final class GHCheckRunBuilder {
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder withConclusion(@CheckForNull GHCheckRun.Conclusion conclusion) {
-<span class="pc bpc" id="L162" title="1 of 2 branches missed.">        if (conclusion != null) {</span>
-<span class="fc" id="L163">            requester.with(&quot;conclusion&quot;, conclusion.toString().toLowerCase(Locale.ROOT));</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">        if (conclusion != null) {</span>
+<span class="fc" id="L164">            requester.with(&quot;conclusion&quot;, conclusion.toString().toLowerCase(Locale.ROOT));</span>
         }
-<span class="fc" id="L165">        return this;</span>
+<span class="fc" id="L166">        return this;</span>
+    }
+
+    /**
+     * With started at.
+     *
+     * @param startedAt
+     *            the started at
+     * @return the GH check run builder
+     * @deprecated Use {@link #withStartedAt(Instant)}
+     */
+    @Deprecated
+    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
+<span class="fc" id="L179">        return withStartedAt(GitHubClient.toInstantOrNull(startedAt));</span>
     }
 
     /**
@@ -172,11 +186,24 @@ public final class GHCheckRunBuilder {
      *            the started at
      * @return the GH check run builder
      */
-    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
-<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (startedAt != null) {</span>
-<span class="fc" id="L177">            requester.with(&quot;started_at&quot;, GitHubClient.printDate(startedAt));</span>
+    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Instant startedAt) {
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">        if (startedAt != null) {</span>
+<span class="fc" id="L191">            requester.with(&quot;started_at&quot;, GitHubClient.printInstant(startedAt));</span>
         }
-<span class="fc" id="L179">        return this;</span>
+<span class="fc" id="L193">        return this;</span>
+    }
+
+    /**
+     * With completed at.
+     *
+     * @param completedAt
+     *            the completed at
+     * @return the GH check run builder
+     * @deprecated Use {@link #withCompletedAt(Instant)}
+     */
+    @Deprecated
+    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
+<span class="fc" id="L206">        return withCompletedAt(GitHubClient.toInstantOrNull(completedAt));</span>
     }
 
     /**
@@ -186,11 +213,11 @@ public final class GHCheckRunBuilder {
      *            the completed at
      * @return the GH check run builder
      */
-    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
-<span class="pc bpc" id="L190" title="1 of 2 branches missed.">        if (completedAt != null) {</span>
-<span class="fc" id="L191">            requester.with(&quot;completed_at&quot;, GitHubClient.printDate(completedAt));</span>
+    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Instant completedAt) {
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (completedAt != null) {</span>
+<span class="fc" id="L218">            requester.with(&quot;completed_at&quot;, GitHubClient.printInstant(completedAt));</span>
         }
-<span class="fc" id="L193">        return this;</span>
+<span class="fc" id="L220">        return this;</span>
     }
 
     /**
@@ -201,11 +228,11 @@ public final class GHCheckRunBuilder {
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder add(@NonNull Output output) {
-<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if (this.output != null) {</span>
-<span class="nc" id="L205">            throw new IllegalStateException(&quot;cannot add Output twice&quot;);</span>
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">        if (this.output != null) {</span>
+<span class="nc" id="L232">            throw new IllegalStateException(&quot;cannot add Output twice&quot;);</span>
         }
-<span class="fc" id="L207">        this.output = output;</span>
-<span class="fc" id="L208">        return this;</span>
+<span class="fc" id="L234">        this.output = output;</span>
+<span class="fc" id="L235">        return this;</span>
     }
 
     /**
@@ -216,11 +243,11 @@ public final class GHCheckRunBuilder {
      * @return the GH check run builder
      */
     public @NonNull GHCheckRunBuilder add(@NonNull Action action) {
-<span class="pc bpc" id="L219" title="1 of 2 branches missed.">        if (actions == null) {</span>
-<span class="fc" id="L220">            actions = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L246" title="1 of 2 branches missed.">        if (actions == null) {</span>
+<span class="fc" id="L247">            actions = new LinkedList&lt;&gt;();</span>
         }
-<span class="fc" id="L222">        actions.add(action);</span>
-<span class="fc" id="L223">        return this;</span>
+<span class="fc" id="L249">        actions.add(action);</span>
+<span class="fc" id="L250">        return this;</span>
     }
 
     private static final int MAX_ANNOTATIONS = 50;
@@ -233,27 +260,27 @@ public final class GHCheckRunBuilder {
      */
     public @NonNull GHCheckRun create() throws IOException {
         List&lt;Annotation&gt; extraAnnotations;
-<span class="fc bfc" id="L236" title="All 6 branches covered.">        if (output != null &amp;&amp; output.annotations != null &amp;&amp; output.annotations.size() &gt; MAX_ANNOTATIONS) {</span>
-<span class="fc" id="L237">            extraAnnotations = output.annotations.subList(MAX_ANNOTATIONS, output.annotations.size());</span>
-<span class="fc" id="L238">            output.annotations = output.annotations.subList(0, MAX_ANNOTATIONS);</span>
+<span class="fc bfc" id="L263" title="All 6 branches covered.">        if (output != null &amp;&amp; output.annotations != null &amp;&amp; output.annotations.size() &gt; MAX_ANNOTATIONS) {</span>
+<span class="fc" id="L264">            extraAnnotations = output.annotations.subList(MAX_ANNOTATIONS, output.annotations.size());</span>
+<span class="fc" id="L265">            output.annotations = output.annotations.subList(0, MAX_ANNOTATIONS);</span>
         } else {
-<span class="fc" id="L240">            extraAnnotations = Collections.emptyList();</span>
+<span class="fc" id="L267">            extraAnnotations = Collections.emptyList();</span>
         }
-<span class="fc" id="L242">        GHCheckRun run = requester.with(&quot;output&quot;, output).with(&quot;actions&quot;, actions).fetch(GHCheckRun.class).wrap(repo);</span>
-<span class="fc bfc" id="L243" title="All 2 branches covered.">        while (!extraAnnotations.isEmpty()) {</span>
-<span class="fc" id="L244">            Output output2 = new Output(output.title, output.summary).withText(output.text);</span>
-<span class="fc" id="L245">            int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);</span>
-<span class="fc" id="L246">            output2.annotations = extraAnnotations.subList(0, i);</span>
-<span class="fc" id="L247">            extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());</span>
-<span class="fc" id="L248">            run = repo.root()</span>
-<span class="fc" id="L249">                    .createRequest()</span>
-<span class="fc" id="L250">                    .method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L251">                    .with(&quot;output&quot;, output2)</span>
-<span class="fc" id="L252">                    .withUrlPath(repo.getApiTailUrl(&quot;check-runs/&quot; + run.getId()))</span>
-<span class="fc" id="L253">                    .fetch(GHCheckRun.class)</span>
-<span class="fc" id="L254">                    .wrap(repo);</span>
-<span class="fc" id="L255">        }</span>
-<span class="fc" id="L256">        return run;</span>
+<span class="fc" id="L269">        GHCheckRun run = requester.with(&quot;output&quot;, output).with(&quot;actions&quot;, actions).fetch(GHCheckRun.class).wrap(repo);</span>
+<span class="fc bfc" id="L270" title="All 2 branches covered.">        while (!extraAnnotations.isEmpty()) {</span>
+<span class="fc" id="L271">            Output output2 = new Output(output.title, output.summary).withText(output.text);</span>
+<span class="fc" id="L272">            int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);</span>
+<span class="fc" id="L273">            output2.annotations = extraAnnotations.subList(0, i);</span>
+<span class="fc" id="L274">            extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());</span>
+<span class="fc" id="L275">            run = repo.root()</span>
+<span class="fc" id="L276">                    .createRequest()</span>
+<span class="fc" id="L277">                    .method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L278">                    .with(&quot;output&quot;, output2)</span>
+<span class="fc" id="L279">                    .withUrlPath(repo.getApiTailUrl(&quot;check-runs/&quot; + run.getId()))</span>
+<span class="fc" id="L280">                    .fetch(GHCheckRun.class)</span>
+<span class="fc" id="L281">                    .wrap(repo);</span>
+<span class="fc" id="L282">        }</span>
+<span class="fc" id="L283">        return run;</span>
     }
 
     /**
@@ -278,10 +305,10 @@ public final class GHCheckRunBuilder {
          * @param summary
          *            the summary
          */
-<span class="fc" id="L281">        public Output(@NonNull String title, @NonNull String summary) {</span>
-<span class="fc" id="L282">            this.title = title;</span>
-<span class="fc" id="L283">            this.summary = summary;</span>
-<span class="fc" id="L284">        }</span>
+<span class="fc" id="L308">        public Output(@NonNull String title, @NonNull String summary) {</span>
+<span class="fc" id="L309">            this.title = title;</span>
+<span class="fc" id="L310">            this.summary = summary;</span>
+<span class="fc" id="L311">        }</span>
 
         /**
          * With text.
@@ -291,8 +318,8 @@ public final class GHCheckRunBuilder {
          * @return the output
          */
         public @NonNull Output withText(@CheckForNull String text) {
-<span class="fc" id="L294">            this.text = text;</span>
-<span class="fc" id="L295">            return this;</span>
+<span class="fc" id="L321">            this.text = text;</span>
+<span class="fc" id="L322">            return this;</span>
         }
 
         /**
@@ -303,11 +330,11 @@ public final class GHCheckRunBuilder {
          * @return the output
          */
         public @NonNull Output add(@NonNull Annotation annotation) {
-<span class="fc bfc" id="L306" title="All 2 branches covered.">            if (annotations == null) {</span>
-<span class="fc" id="L307">                annotations = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">            if (annotations == null) {</span>
+<span class="fc" id="L334">                annotations = new LinkedList&lt;&gt;();</span>
             }
-<span class="fc" id="L309">            annotations.add(annotation);</span>
-<span class="fc" id="L310">            return this;</span>
+<span class="fc" id="L336">            annotations.add(annotation);</span>
+<span class="fc" id="L337">            return this;</span>
         }
 
         /**
@@ -318,11 +345,11 @@ public final class GHCheckRunBuilder {
          * @return the output
          */
         public @NonNull Output add(@NonNull Image image) {
-<span class="pc bpc" id="L321" title="1 of 2 branches missed.">            if (images == null) {</span>
-<span class="fc" id="L322">                images = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L348" title="1 of 2 branches missed.">            if (images == null) {</span>
+<span class="fc" id="L349">                images = new LinkedList&lt;&gt;();</span>
             }
-<span class="fc" id="L324">            images.add(image);</span>
-<span class="fc" id="L325">            return this;</span>
+<span class="fc" id="L351">            images.add(image);</span>
+<span class="fc" id="L352">            return this;</span>
         }
 
     }
@@ -361,8 +388,8 @@ public final class GHCheckRunBuilder {
                 int line,
                 @NonNull GHCheckRun.AnnotationLevel annotationLevel,
                 @NonNull String message) {
-<span class="fc" id="L364">            this(path, line, line, annotationLevel, message);</span>
-<span class="fc" id="L365">        }</span>
+<span class="fc" id="L391">            this(path, line, line, annotationLevel, message);</span>
+<span class="fc" id="L392">        }</span>
 
         /**
          * Instantiates a new annotation.
@@ -382,13 +409,13 @@ public final class GHCheckRunBuilder {
                 int startLine,
                 int endLine,
                 @NonNull GHCheckRun.AnnotationLevel annotationLevel,
-<span class="fc" id="L385">                @NonNull String message) {</span>
-<span class="fc" id="L386">            this.path = path;</span>
-<span class="fc" id="L387">            start_line = startLine;</span>
-<span class="fc" id="L388">            end_line = endLine;</span>
-<span class="fc" id="L389">            annotation_level = annotationLevel.toString().toLowerCase(Locale.ROOT);</span>
-<span class="fc" id="L390">            this.message = message;</span>
-<span class="fc" id="L391">        }</span>
+<span class="fc" id="L412">                @NonNull String message) {</span>
+<span class="fc" id="L413">            this.path = path;</span>
+<span class="fc" id="L414">            start_line = startLine;</span>
+<span class="fc" id="L415">            end_line = endLine;</span>
+<span class="fc" id="L416">            annotation_level = annotationLevel.toString().toLowerCase(Locale.ROOT);</span>
+<span class="fc" id="L417">            this.message = message;</span>
+<span class="fc" id="L418">        }</span>
 
         /**
          * With start column.
@@ -398,8 +425,8 @@ public final class GHCheckRunBuilder {
          * @return the annotation
          */
         public @NonNull Annotation withStartColumn(@CheckForNull Integer startColumn) {
-<span class="nc" id="L401">            start_column = startColumn;</span>
-<span class="nc" id="L402">            return this;</span>
+<span class="nc" id="L428">            start_column = startColumn;</span>
+<span class="nc" id="L429">            return this;</span>
         }
 
         /**
@@ -410,8 +437,8 @@ public final class GHCheckRunBuilder {
          * @return the annotation
          */
         public @NonNull Annotation withEndColumn(@CheckForNull Integer endColumn) {
-<span class="nc" id="L413">            end_column = endColumn;</span>
-<span class="nc" id="L414">            return this;</span>
+<span class="nc" id="L440">            end_column = endColumn;</span>
+<span class="nc" id="L441">            return this;</span>
         }
 
         /**
@@ -422,8 +449,8 @@ public final class GHCheckRunBuilder {
          * @return the annotation
          */
         public @NonNull Annotation withTitle(@CheckForNull String title) {
-<span class="fc" id="L425">            this.title = title;</span>
-<span class="fc" id="L426">            return this;</span>
+<span class="fc" id="L452">            this.title = title;</span>
+<span class="fc" id="L453">            return this;</span>
         }
 
         /**
@@ -434,8 +461,8 @@ public final class GHCheckRunBuilder {
          * @return the annotation
          */
         public @NonNull Annotation withRawDetails(@CheckForNull String rawDetails) {
-<span class="nc" id="L437">            raw_details = rawDetails;</span>
-<span class="nc" id="L438">            return this;</span>
+<span class="nc" id="L464">            raw_details = rawDetails;</span>
+<span class="nc" id="L465">            return this;</span>
         }
 
     }
@@ -460,10 +487,10 @@ public final class GHCheckRunBuilder {
          * @param imageURL
          *            the image URL
          */
-<span class="fc" id="L463">        public Image(@NonNull String alt, @NonNull String imageURL) {</span>
-<span class="fc" id="L464">            this.alt = alt;</span>
-<span class="fc" id="L465">            image_url = imageURL;</span>
-<span class="fc" id="L466">        }</span>
+<span class="fc" id="L490">        public Image(@NonNull String alt, @NonNull String imageURL) {</span>
+<span class="fc" id="L491">            this.alt = alt;</span>
+<span class="fc" id="L492">            image_url = imageURL;</span>
+<span class="fc" id="L493">        }</span>
 
         /**
          * With caption.
@@ -473,8 +500,8 @@ public final class GHCheckRunBuilder {
          * @return the image
          */
         public @NonNull Image withCaption(@CheckForNull String caption) {
-<span class="fc" id="L476">            this.caption = caption;</span>
-<span class="fc" id="L477">            return this;</span>
+<span class="fc" id="L503">            this.caption = caption;</span>
+<span class="fc" id="L504">            return this;</span>
         }
 
     }
@@ -501,11 +528,11 @@ public final class GHCheckRunBuilder {
          * @param identifier
          *            the identifier
          */
-<span class="fc" id="L504">        public Action(@NonNull String label, @NonNull String description, @NonNull String identifier) {</span>
-<span class="fc" id="L505">            this.label = label;</span>
-<span class="fc" id="L506">            this.description = description;</span>
-<span class="fc" id="L507">            this.identifier = identifier;</span>
-<span class="fc" id="L508">        }</span>
+<span class="fc" id="L531">        public Action(@NonNull String label, @NonNull String description, @NonNull String identifier) {</span>
+<span class="fc" id="L532">            this.label = label;</span>
+<span class="fc" id="L533">            this.description = description;</span>
+<span class="fc" id="L534">            this.identifier = identifier;</span>
+<span class="fc" id="L535">        }</span>
 
     }
 

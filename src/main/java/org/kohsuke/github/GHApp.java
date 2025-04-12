@@ -5,6 +5,7 @@ import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -145,7 +146,23 @@ public class GHApp extends GHObject {
      * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
      */
     public PagedIterable<GHAppInstallation> listInstallations() {
-        return listInstallations(null);
+        return listInstallations(GitHubClient.toInstantOrNull(null));
+    }
+
+    /**
+     * Obtains all the installations associated with this app since a given date.
+     * <p>
+     * You must use a JWT to access this endpoint.
+     *
+     * @param since
+     *            - Allows users to get installations that have been updated since a given date.
+     * @return a list of App installations since a given time.
+     * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
+     * @deprecated use {@link #listInstallations(Instant)}
+     */
+    @Deprecated
+    public PagedIterable<GHAppInstallation> listInstallations(final Date since) {
+        return listInstallations(since.toInstant());
     }
 
     /**
@@ -158,10 +175,10 @@ public class GHApp extends GHObject {
      * @return a list of App installations since a given time.
      * @see <a href="https://developer.github.com/v3/apps/#list-installations">List installations</a>
      */
-    public PagedIterable<GHAppInstallation> listInstallations(final Date since) {
+    public PagedIterable<GHAppInstallation> listInstallations(final Instant since) {
         Requester requester = root().createRequest().withUrlPath("/app/installations");
         if (since != null) {
-            requester.with("since", GitHubClient.printDate(since));
+            requester.with("since", GitHubClient.printInstant(since));
         }
         return requester.toIterable(GHAppInstallation[].class, null);
     }

@@ -6,10 +6,9 @@ import org.junit.Test;
 import org.kohsuke.github.GHPullRequest.AutoMerge;
 
 import java.io.IOException;
-import java.time.temporal.ChronoUnit;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +24,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.kohsuke.github.GHPullRequestReviewComment.Side.LEFT;
+import static org.kohsuke.github.GHPullRequestReviewComment.Side.RIGHT;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -133,9 +134,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(comments, hasSize(0));
 
         GHIssueComment firstComment = p.comment("First comment");
-        Date firstCommentCreatedAt = firstComment.getCreatedAt();
-        Date firstCommentCreatedAtPlus1Second = Date
-                .from(firstComment.getCreatedAt().toInstant().plus(1, ChronoUnit.SECONDS));
+        Instant firstCommentCreatedAt = firstComment.getCreatedAt();
+        Instant firstCommentCreatedAtPlus1Second = firstComment.getCreatedAt().plusSeconds(1);
 
         comments = p.listComments().toList();
         assertThat(comments, hasSize(1));
@@ -158,13 +158,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         Thread.sleep(2000);
 
         GHIssueComment secondComment = p.comment("Second comment");
-        Date secondCommentCreatedAt = secondComment.getCreatedAt();
-        Date secondCommentCreatedAtPlus1Second = Date
-                .from(secondComment.getCreatedAt().toInstant().plus(1, ChronoUnit.SECONDS));
+        Instant secondCommentCreatedAt = secondComment.getCreatedAt();
+        Instant secondCommentCreatedAtPlus1Second = secondComment.getCreatedAt().plusSeconds(1);
         assertThat(
                 "There's an error in the setup of this test; please fix it."
                         + " The second comment should be created at least one second after the first one.",
-                firstCommentCreatedAtPlus1Second.getTime() <= secondCommentCreatedAt.getTime());
+                firstCommentCreatedAtPlus1Second.isBefore(secondCommentCreatedAt));
 
         comments = p.listComments().toList();
         assertThat(comments, hasSize(2));
@@ -193,7 +192,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(comments, hasSize(0));
 
         // Test "since" with timestamp instead of Date
-        comments = p.queryComments().since(secondCommentCreatedAt.getTime()).list().toList();
+        comments = p.queryComments().since(secondCommentCreatedAt.toEpochMilli()).list().toList();
         assertThat(comments, hasSize(1));
         assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
     }
@@ -337,12 +336,14 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                     .body("A single line review comment")
                     .path("README.md")
                     .line(2)
+                    .side(RIGHT)
                     .create();
             p.createReviewComment()
                     .commitId(p.getHead().getSha())
                     .body("A multiline review comment")
                     .path("README.md")
                     .lines(2, 3)
+                    .sides(RIGHT, RIGHT)
                     .create();
             List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
             assertThat(comments.size(), equalTo(3));
@@ -362,7 +363,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             assertThat(comment.getStartSide(), equalTo(GHPullRequestReviewComment.Side.UNKNOWN));
             assertThat(comment.getLine(), equalTo(1));
             assertThat(comment.getOriginalLine(), equalTo(1));
-            assertThat(comment.getSide(), equalTo(GHPullRequestReviewComment.Side.LEFT));
+            assertThat(comment.getSide(), equalTo(LEFT));
             assertThat(comment.getPullRequestUrl(), notNullValue());
             assertThat(comment.getPullRequestUrl().toString(), containsString("hub4j-test-org/github-api/pulls/"));
             assertThat(comment.getBodyHtml(), nullValue());
@@ -375,11 +376,14 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             comment = comments.get(1);
             assertThat(comment.getBody(), equalTo("A single line review comment"));
             assertThat(comment.getLine(), equalTo(2));
+            assertThat(comment.getSide(), equalTo(RIGHT));
 
             comment = comments.get(2);
             assertThat(comment.getBody(), equalTo("A multiline review comment"));
             assertThat(comment.getStartLine(), equalTo(2));
             assertThat(comment.getLine(), equalTo(3));
+            assertThat(comment.getStartSide(), equalTo(RIGHT));
+            assertThat(comment.getSide(), equalTo(RIGHT));
 
             comment.createReaction(ReactionContent.EYES);
             GHReaction toBeRemoved = comment.createReaction(ReactionContent.CONFUSED);

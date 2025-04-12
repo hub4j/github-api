@@ -57,6 +57,7 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
         // Give this a moment
         Thread.sleep(1000);
 
+        // noinspection UseOfObsoleteDateTimeApi
         templating.testStartDate = new Date();
         // -------------------------------------------------------------
         // /user gets response with rate limit information

@@ -214,13 +214,15 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         GHUser u = gitHub.getUser("Chew");
         assertThat(u.getBio(), equalTo("I like to program things and I hope to program something cool one day :D"));
         assertThat(u.isHireable(), is(true));
-        assertThat(u.getTwitterUsername(), notNullValue());
+        assertThat(u.getTwitterUsername(), equalTo("ChewCraft"));
         assertThat(u.getBlog(), equalTo("https://chew.pw"));
         assertThat(u.getCompany(), equalTo("@Memerator"));
         assertThat(u.getFollowersCount(), equalTo(29));
         assertThat(u.getFollowingCount(), equalTo(3));
         assertThat(u.getPublicGistCount(), equalTo(4));
         assertThat(u.getPublicRepoCount(), equalTo(96));
+        assertThat(u.getCreatedAt(), equalTo(GitHubClient.parseInstant("2014-07-26T23:41:36Z")));
+        assertThat(u.getUpdatedAt(), equalTo(GitHubClient.parseInstant("2020-06-06T20:16:06Z")));
     }
 
     /**
@@ -247,7 +249,7 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         assertThat(normal.getSuspendedAt(), is(nullValue()));
 
         GHUser suspended = gitHub.getUser("suspended");
-        Date suspendedAt = new Date(Instant.parse("2024-08-08T00:00:00Z").toEpochMilli());
+        Instant suspendedAt = Instant.ofEpochMilli(Instant.parse("2024-08-08T00:00:00Z").toEpochMilli());
         assertThat(suspended.getSuspendedAt(), equalTo(suspendedAt));
     }
 }

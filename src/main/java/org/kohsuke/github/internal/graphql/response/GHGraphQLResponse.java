@@ -24,6 +24,8 @@ public class GHGraphQLResponse<T> {
     private final List<GraphQLError> errors;
 
     /**
+     * GHGraphQLResponse constructor
+     *
      * @param data
      *            GraphQL success response
      * @param errors
@@ -40,6 +42,8 @@ public class GHGraphQLResponse<T> {
     }
 
     /**
+     * Is response succesful.
+     *
      * @return request is succeeded. True when error list is empty.
      */
     public boolean isSuccessful() {
@@ -47,6 +51,8 @@ public class GHGraphQLResponse<T> {
     }
 
     /**
+     * Get response data.
+     *
      * @return GraphQL success response
      */
     public T getData() {
@@ -58,6 +64,8 @@ public class GHGraphQLResponse<T> {
     }
 
     /**
+     * Get response error message.
+     *
      * @return GraphQL error messages from Github Response. Empty list when no errors occurred.
      */
     public List<String> getErrorMessages() {
@@ -82,7 +90,12 @@ public class GHGraphQLResponse<T> {
      */
     public static class ObjectResponse extends GHGraphQLResponse<Object> {
         /**
-         * {@inheritDoc}
+         * ObjectResponse constructor.
+         *
+         * @param data
+         *            GraphQL success response
+         * @param errors
+         *            GraphQL failure response, This will be empty if not fail
          */
         @JsonCreator
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")

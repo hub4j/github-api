@@ -1,5 +1,8 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+
+import java.time.Instant;
 import java.util.*;
 
 // TODO: Auto-generated Javadoc
@@ -66,7 +69,8 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      *
      * @return date when this token expires
      */
-    public Date getExpiresAt() {
-        return GitHubClient.parseDate(expires_at);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getExpiresAt() {
+        return GitHubClient.parseInstant(expires_at);
     }
 }

@@ -798,8 +798,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(commit.getLinesChanged(), equalTo(48));
         assertThat(commit.getLinesDeleted(), equalTo(8));
         assertThat(commit.getParentSHA1s().size(), equalTo(1));
-        assertThat(commit.getAuthoredDate(), equalTo(GitHubClient.parseDate("2012-04-24T00:16:52Z")));
-        assertThat(commit.getCommitDate(), equalTo(GitHubClient.parseDate("2012-04-24T00:16:52Z")));
+        assertThat(commit.getAuthoredDate(), equalTo(GitHubClient.parseInstant("2012-04-24T00:16:52Z")));
+        assertThat(commit.getCommitDate(), equalTo(GitHubClient.parseInstant("2012-04-24T00:16:52Z")));
         assertThat(commit.getCommitShortInfo().getCommentCount(), equalTo(0));
         assertThat(commit.getCommitShortInfo().getAuthoredDate(), equalTo(commit.getAuthoredDate()));
         assertThat(commit.getCommitShortInfo().getCommitDate(), equalTo(commit.getCommitDate()));
@@ -1005,16 +1005,23 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testEventApi() throws Exception {
         for (GHEventInfo ev : gitHub.getEvents()) {
             if (ev.getType() == GHEvent.PULL_REQUEST) {
+                GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
+                assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
+
+                assertThat(pr.getPullRequest().getClosedBy(), nullValue());
+                assertThat(pr.getPullRequest().getPullRequest(), nullValue());
+
                 if (ev.getId() == 10680625394L) {
                     assertThat(ev.getActorLogin(), equalTo("pull[bot]"));
                     assertThat(ev.getOrganization(), nullValue());
                     assertThat(ev.getRepository().getFullName(), equalTo("daddyfatstacksBIG/lerna"));
-                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseDate("2019-10-21T21:54:52Z")));
+                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseInstant("2019-10-21T21:54:52Z")));
                     assertThat(ev.getType(), equalTo(GHEvent.PULL_REQUEST));
+                    assertThat(pr.getPullRequest().getMergedAt(),
+                            equalTo(GitHubClient.parseInstant("2019-10-21T21:54:52Z")));
+                    assertThat(pr.getPullRequest().getPatchUrl().toString(), endsWith("lerna/pull/20.patch"));
+                    assertThat(pr.getPullRequest().getDiffUrl().toString(), endsWith("lerna/pull/20.diff"));
                 }
-
-                GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
-                assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
             }
         }
     }
@@ -1033,12 +1040,20 @@ public class AppTest extends AbstractGitHubWireMockTest {
                     assertThat(ev.getActorLogin(), equalTo("PierreBtz"));
                     assertThat(ev.getOrganization().getLogin(), equalTo("hub4j"));
                     assertThat(ev.getRepository().getFullName(), equalTo("hub4j/github-api"));
-                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseDate("2023-03-02T16:37:49Z")));
+                    assertThat(ev.getCreatedAt(), equalTo(GitHubClient.parseInstant("2023-03-02T16:37:49Z")));
                     assertThat(ev.getType(), equalTo(GHEvent.PULL_REQUEST));
                 }
 
                 GHEventPayload.PullRequest pr = ev.getPayload(GHEventPayload.PullRequest.class);
                 assertThat(pr.getNumber(), is(pr.getPullRequest().getNumber()));
+            }
+            if (ev.getType() == GHEvent.PULL_REQUEST_REVIEW) {
+                if (ev.getId() == 27468578706L) {
+                    GHEventPayload.PullRequestReview prr = ev.getPayload(GHEventPayload.PullRequestReview.class);
+                    assertThat(prr.getReview().getSubmittedAt(),
+                            equalTo(GitHubClient.parseInstant("2023-03-03T10:51:48Z")));
+                    assertThat(prr.getReview().getCreatedAt(), equalTo(prr.getReview().getSubmittedAt()));
+                }
             }
         }
     }
@@ -1212,10 +1227,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat("doc", equalTo(commit.getCommitShortInfo().getMessage()));
         assertThat(commit.getCommitShortInfo().getVerification().isVerified(), is(false));
         assertThat(GHVerification.Reason.UNSIGNED, equalTo(commit.getCommitShortInfo().getVerification().getReason()));
-        assertThat(commit.getCommitShortInfo().getAuthor().getDate().toInstant().getEpochSecond(),
-                equalTo(1271650361L));
-        assertThat(commit.getCommitShortInfo().getCommitter().getDate().toInstant().getEpochSecond(),
-                equalTo(1271650361L));
+        assertThat(commit.getCommitShortInfo().getAuthor().getDate().getEpochSecond(), equalTo(1271650361L));
+        assertThat(commit.getCommitShortInfo().getCommitter().getDate().getEpochSecond(), equalTo(1271650361L));
     }
 
     /**
@@ -1676,7 +1689,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void notifications() throws Exception {
         boolean found = false;
-        for (GHThread t : gitHub.listNotifications().nonBlocking(true).read(true)) {
+        for (GHThread t : gitHub.listNotifications().since(0).nonBlocking(true).read(true)) {
             if (!found) {
                 found = true;
                 // both read and unread are included
@@ -1732,6 +1745,10 @@ public class AppTest extends AbstractGitHubWireMockTest {
     @Test
     public void reactions() throws Exception {
         GHIssue i = gitHub.getRepository("hub4j/github-api").getIssue(311);
+
+        // cover issue methods
+        assertThat(i.getClosedAt(), equalTo(GitHubClient.parseInstant("2016-11-17T02:40:11Z")));
+        assertThat(i.getHtmlUrl().toString(), endsWith("github-api/issues/311"));
 
         List<GHReaction> l;
         // retrieval

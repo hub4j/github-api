@@ -1,8 +1,10 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -223,8 +225,9 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      *
      * @return the date
      */
-    public Date getUpdatedAt() {
-        return GitHubClient.parseDate(updatedAt);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getUpdatedAt() {
+        return GitHubClient.parseInstant(updatedAt);
     }
 
     /**

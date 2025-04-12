@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -84,9 +85,22 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      * @param dt
      *            the dt
      * @return the gh notification stream
+     * @deprecated {@link #since(Instant)}
      */
+    @Deprecated
     public GHNotificationStream since(Date dt) {
-        since = GitHubClient.printDate(dt);
+        return since(GitHubClient.toInstantOrNull(dt));
+    }
+
+    /**
+     * Since gh notification stream.
+     *
+     * @param dt
+     *            the dt
+     * @return the gh notification stream
+     */
+    public GHNotificationStream since(Instant dt) {
+        since = GitHubClient.printInstant(dt);
         return this;
     }
 
@@ -168,7 +182,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                         // if we have fetched un-returned threads, use them first
                         while (idx >= 0) {
                             GHThread n = threads[idx--];
-                            long nt = n.getUpdatedAt().getTime();
+                            long nt = n.getUpdatedAt().toEpochMilli();
                             if (nt >= lastUpdated) {
                                 lastUpdated = nt;
                                 return n;
@@ -243,7 +257,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
     public void markAsRead(long timestamp) throws IOException {
         final Requester req = root().createRequest();
         if (timestamp >= 0)
-            req.with("last_read_at", GitHubClient.printDate(new Date(timestamp)));
+            req.with("last_read_at", GitHubClient.printInstant(Instant.ofEpochMilli(timestamp)));
         req.withUrlPath(apiUrl).fetchHttpStatusCode();
     }
 

@@ -1360,5 +1360,11 @@
   },
   {
     "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse$ObjectResponse"
+  },
+  {
+    "name": "org.kohsuke.github.GHAutolink"
+  },
+  {
+    "name": "org.kohsuke.github.GitHubBridgeAdapterObject"
   }
 ]

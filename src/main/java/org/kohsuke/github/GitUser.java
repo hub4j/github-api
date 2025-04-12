@@ -1,7 +1,9 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.time.Instant;
 import java.util.Date;
 
 import javax.annotation.CheckForNull;
@@ -17,7 +19,7 @@ import javax.annotation.CheckForNull;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GitUser {
+public class GitUser extends GitHubBridgeAdapterObject {
     private String name, email, date, username;
 
     /**
@@ -53,8 +55,9 @@ public class GitUser {
      *
      * @return Commit Date.
      */
-    public Date getDate() {
-        return GitHubClient.parseDate(date);
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getDate() {
+        return GitHubClient.parseInstant(date);
     }
 
     /**

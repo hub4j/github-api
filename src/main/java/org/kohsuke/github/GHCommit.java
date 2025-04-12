@@ -1,9 +1,11 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -471,7 +473,8 @@ public class GHCommit {
      * @throws IOException
      *             if the information was not already fetched and an attempt at fetching the information failed.
      */
-    public Date getAuthoredDate() throws IOException {
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getAuthoredDate() throws IOException {
         return getCommitShortInfo().getAuthoredDate();
     }
 
@@ -494,7 +497,8 @@ public class GHCommit {
      * @throws IOException
      *             if the information was not already fetched and an attempt at fetching the information failed.
      */
-    public Date getCommitDate() throws IOException {
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getCommitDate() throws IOException {
         return getCommitShortInfo().getCommitDate();
     }
 

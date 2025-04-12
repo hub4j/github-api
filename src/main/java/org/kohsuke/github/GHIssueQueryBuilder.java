@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,9 +79,22 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
      * @param date
      *            the date
      * @return the gh issue query builder
+     * @deprecated Use {@link #since(Instant)}
      */
+    @Deprecated
     public GHIssueQueryBuilder since(Date date) {
-        req.with("since", GitHubClient.printDate(date));
+        return since(GitHubClient.toInstantOrNull(date));
+    }
+
+    /**
+     * Only issues after this date will be returned.
+     *
+     * @param date
+     *            the date
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder since(Instant date) {
+        req.with("since", GitHubClient.printInstant(date));
         return this;
     }
 

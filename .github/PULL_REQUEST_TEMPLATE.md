@@ -8,7 +8,7 @@
 - [ ] Add JavaDocs and other comments explaining the behavior. 
 - [ ] When adding or updating methods that fetch entities, add `@link` JavaDoc entries to the relevant documentation on https://docs.github.com/en/rest . 
 - [ ] Add tests that cover any added or changed code. This generally requires capturing snapshot test data. See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
-- [ ] Run `mvn -D enable-ci clean install site` locally. If this command doesn't succeed, your change will not pass CI.
+- [ ] Run `mvn -D enable-ci clean install site "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"` locally. If this command doesn't succeed, your change will not pass CI.
 - [ ] Push your changes to a branch other than `main`. You will create your PR from that branch.
 
 # When creating a PR: 

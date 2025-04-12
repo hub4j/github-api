@@ -111,6 +111,43 @@ public class GHPullRequestReviewCommentBuilder {
     }
 
     /**
+     * The side of the diff in the pull request that the comment applies to.
+     * <p>
+     * {@link #side(GHPullRequestReviewComment.Side)} and
+     * {@link #sides(GHPullRequestReviewComment.Side, GHPullRequestReviewComment.Side)} will overwrite each other's
+     * values.
+     *
+     * @param side
+     *            side of the diff to which the comment applies
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder side(GHPullRequestReviewComment.Side side) {
+        builder.with("side", side);
+        builder.remove("start_side");
+        return this;
+    }
+
+    /**
+     * The sides of the diff in the pull request that the comment applies to.
+     * <p>
+     * {@link #side(GHPullRequestReviewComment.Side)} and
+     * {@link #sides(GHPullRequestReviewComment.Side, GHPullRequestReviewComment.Side)} will overwrite each other's
+     * values.
+     *
+     * @param startSide
+     *            side of the diff to which the start of the comment applies
+     * @param endSide
+     *            side of the diff to which the end of the comment applies
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder sides(GHPullRequestReviewComment.Side startSide,
+            GHPullRequestReviewComment.Side endSide) {
+        builder.with("start_side", startSide);
+        builder.with("side", endSide);
+        return this;
+    }
+
+    /**
      * Create gh pull request review comment.
      *
      * @return the gh pull request review comment builder

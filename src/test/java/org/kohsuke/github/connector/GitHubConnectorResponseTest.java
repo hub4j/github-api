@@ -28,6 +28,12 @@ import static org.hamcrest.Matchers.isA;
 public class GitHubConnectorResponseTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Instantiates a new GitHubConnectorResponseTest.
+     */
+    public GitHubConnectorResponseTest() {
+    }
+
+    /**
      * Test basic body stream.
      *
      * @throws Exception

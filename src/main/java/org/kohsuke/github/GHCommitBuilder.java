@@ -1,12 +1,10 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -23,13 +21,10 @@ public class GHCommitBuilder {
         private final String email;
         private final String date;
 
-        private UserInfo(String name, String email, Date date) {
+        private UserInfo(String name, String email, Instant date) {
             this.name = name;
             this.email = email;
-            TimeZone tz = TimeZone.getTimeZone("UTC");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            df.setTimeZone(tz);
-            this.date = df.format((date != null) ? date : new Date());
+            this.date = GitHubClient.printInstant(date);
         }
     }
 
@@ -90,8 +85,25 @@ public class GHCommitBuilder {
      * @param date
      *            the date
      * @return the gh commit builder
+     * @deprecated use {@link #author(String, String, Instant)} instead
      */
+    @Deprecated
     public GHCommitBuilder author(String name, String email, Date date) {
+        return author(name, email, GitHubClient.toInstantOrNull(date));
+    }
+
+    /**
+     * Configures the author of this commit.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @param date
+     *            the date
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder author(String name, String email, Instant date) {
         req.with("author", new UserInfo(name, email, date));
         return this;
     }
@@ -119,8 +131,25 @@ public class GHCommitBuilder {
      * @param date
      *            the date
      * @return the gh commit builder
+     * @deprecated use {@link #committer(String, String, Instant)} instead
      */
+    @Deprecated
     public GHCommitBuilder committer(String name, String email, Date date) {
+        return committer(name, email, GitHubClient.toInstantOrNull(date));
+    }
+
+    /**
+     * Configures the committer of this commit.
+     *
+     * @param name
+     *            the name
+     * @param email
+     *            the email
+     * @param date
+     *            the date
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder committer(String name, String email, Instant date) {
         req.with("committer", new UserInfo(name, email, date));
         return this;
     }

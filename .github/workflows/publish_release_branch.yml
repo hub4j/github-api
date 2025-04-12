@@ -23,7 +23,7 @@ jobs:
       - name: Maven Install and Site with Code Coverage
         env:
           MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-        run: mvn -B clean install site -Djapicmp.skip=true -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
+        run: mvn -B clean install site -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -49,7 +49,7 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Publish package
-        run: mvn -B clean deploy -Djapicmp.skip=true -DskipTests -Prelease
+        run: mvn -B clean deploy -DskipTests -Prelease
         env:
           MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
           MAVEN_USERNAME: ${{ secrets.OSSRH_TOKEN_USERNAME }}
@@ -57,7 +57,7 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSPHRASE }}
 
       - name: Publish package with bridge methods 
-        run: mvn -B clean deploy -Djapicmp.skip=true -DskipTests -Prelease -Pbridged
+        run: mvn -B clean deploy -DskipTests -Prelease -Pbridged
         env:
           MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
           MAVEN_USERNAME: ${{ secrets.OSSRH_TOKEN_USERNAME }}

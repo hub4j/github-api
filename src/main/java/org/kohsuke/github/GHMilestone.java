@@ -28,11 +28,11 @@ public class GHMilestone extends GHObject {
 
     /** The creator. */
     GHUser creator;
-    private String state, due_on, title, description, html_url;
-    private int closed_issues, open_issues, number;
+    private String state, dueOn, title, description, htmlUrl;
+    private int closedIssues, openIssues, number;
 
     /** The closed at. */
-    protected String closed_at;
+    protected String closedAt;
 
     /**
      * Gets owner.
@@ -60,7 +60,7 @@ public class GHMilestone extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getDueOn() {
-        return GitHubClient.parseInstant(due_on);
+        return GitHubClient.parseInstant(dueOn);
     }
 
     /**
@@ -70,7 +70,7 @@ public class GHMilestone extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getClosedAt() {
-        return GitHubClient.parseInstant(closed_at);
+        return GitHubClient.parseInstant(closedAt);
     }
 
     /**
@@ -97,7 +97,7 @@ public class GHMilestone extends GHObject {
      * @return the closed issues
      */
     public int getClosedIssues() {
-        return closed_issues;
+        return closedIssues;
     }
 
     /**
@@ -106,7 +106,7 @@ public class GHMilestone extends GHObject {
      * @return the open issues
      */
     public int getOpenIssues() {
-        return open_issues;
+        return openIssues;
     }
 
     /**
@@ -124,7 +124,7 @@ public class GHMilestone extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**

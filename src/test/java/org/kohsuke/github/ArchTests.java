@@ -39,7 +39,6 @@ import static com.tngtech.archunit.core.domain.JavaClass.Predicates.assignableTo
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
 import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
-import static com.tngtech.archunit.core.domain.JavaModifier.FINAL;
 import static com.tngtech.archunit.core.domain.JavaModifier.STATIC;
 import static com.tngtech.archunit.core.domain.properties.HasModifiers.Predicates.modifier;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
@@ -48,6 +47,7 @@ import static com.tngtech.archunit.core.domain.properties.HasOwner.Predicates.Wi
 import static com.tngtech.archunit.core.domain.properties.HasParameterTypes.Predicates.rawParameterTypes;
 import static com.tngtech.archunit.lang.conditions.ArchConditions.*;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noFields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
@@ -73,6 +73,8 @@ public class ArchTests {
             .withImportOption(new ImportOption.DoNotIncludeJars())
             .importPackages("org.kohsuke.github");
 
+    private DescribedPredicate<JavaField> and;
+
     /**
      * Default constructor.
      */
@@ -94,12 +96,28 @@ public class ArchTests {
     public void testRequireFollowingNamingConvention() {
         final String reason = "This project follows standard java naming conventions and does not allow the use of underscores in names.";
 
-        final ArchRule fieldsNotFollowingConvention = noFields().that()
-                .arePublic()
-                .and(not(enumConstants()))
-                .and(not(modifier(STATIC).and(modifier(FINAL)).as("static final")))
-                .should(haveNamesContainingUnless("_"))
+        final ArchRule constantFieldsShouldFollowConvention = fields().that()
+                .areStatic()
+                .and()
+                .areFinal()
+                .should(haveNameMatching("[a-zA-Z$][a-zA-Z0-9$_]*"))
                 .because(reason);
+
+        final ArchRule enumsShouldFollowConvention = fields().that(enumConstants())
+                .and(not(declaredIn(GHCompare.Status.class)))
+                .should(haveNameMatching("[A-Z][A-Z0-9_]*"))
+                .because("This project follows standard java naming conventions for enums.");
+
+        var notStaticFinalFields = DescribedPredicate.<JavaField>not(modifier(STATIC).and(modifier(STATIC)));
+        var notEnumOrStaticFinalFields = DescribedPredicate.<JavaField>and(not(enumConstants()), notStaticFinalFields);
+
+        final ArchRule instanceFieldsShouldNotBePublic = fields().that(notEnumOrStaticFinalFields)
+                .should(notHaveModifier(JavaModifier.PUBLIC))
+                .because("This project does not allow public instance fields.");
+
+        final ArchRule instanceFieldsShouldFollowConvention = noFields().that(notEnumOrStaticFinalFields)
+                .should(haveNamesContainingUnless("_"))
+                .because("This project follows standard java naming conventions for fields.");
 
         @SuppressWarnings("AccessStaticViaInstance")
         final ArchRule methodsNotFollowingConvention = noMethods().that()
@@ -122,7 +140,10 @@ public class ArchTests {
         final ArchRule classesNotFollowingConvention = noClasses().should(haveNamesContainingUnless("_"))
                 .because(reason);
 
-        fieldsNotFollowingConvention.check(classFiles);
+        enumsShouldFollowConvention.check(classFiles);
+        constantFieldsShouldFollowConvention.check(classFiles);
+        instanceFieldsShouldNotBePublic.check(classFiles);
+        instanceFieldsShouldFollowConvention.check(classFiles);
         methodsNotFollowingConvention.check(classFiles);
         classesNotFollowingConvention.check(classFiles);
     }

@@ -24,7 +24,7 @@ public class GHProjectColumn extends GHObject {
     protected GHProject project;
 
     private String name;
-    private String project_url;
+    private String projectUrl;
 
     /**
      * Wrap gh project column.
@@ -82,7 +82,7 @@ public class GHProjectColumn extends GHObject {
      * @return the project url
      */
     public URL getProjectUrl() {
-        return GitHubClient.parseURL(project_url);
+        return GitHubClient.parseURL(projectUrl);
     }
 
     /**

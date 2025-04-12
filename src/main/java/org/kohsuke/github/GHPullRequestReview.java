@@ -54,10 +54,10 @@ public class GHPullRequestReview extends GHObject {
 
     private String body;
     private GHUser user;
-    private String commit_id;
+    private String commitId;
     private GHPullRequestReviewState state;
-    private String submitted_at;
-    private String html_url;
+    private String submittedAt;
+    private String htmlUrl;
 
     /**
      * Wrap up.
@@ -110,7 +110,7 @@ public class GHPullRequestReview extends GHObject {
      * @return the commit id
      */
     public String getCommitId() {
-        return commit_id;
+        return commitId;
     }
 
     /**
@@ -129,7 +129,7 @@ public class GHPullRequestReview extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -148,7 +148,7 @@ public class GHPullRequestReview extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getSubmittedAt() {
-        return GitHubClient.parseInstant(submitted_at);
+        return GitHubClient.parseInstant(submittedAt);
     }
 
     /**

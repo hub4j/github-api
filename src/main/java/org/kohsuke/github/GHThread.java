@@ -23,8 +23,8 @@ public class GHThread extends GHObject {
     private Subject subject;
     private String reason;
     private boolean unread;
-    private String last_read_at;
-    private String url, subscription_url;
+    private String lastReadAt;
+    private String url, subscriptionUrl;
 
     /**
      * The Class Subject.
@@ -38,7 +38,7 @@ public class GHThread extends GHObject {
         String url;
 
         /** The latest comment url. */
-        String latest_comment_url;
+        String latestCommentUrl;
 
         /** The type. */
         String type;
@@ -54,7 +54,7 @@ public class GHThread extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getLastReadAt() {
-        return GitHubClient.parseInstant(last_read_at);
+        return GitHubClient.parseInstant(lastReadAt);
     }
 
     /**
@@ -111,7 +111,7 @@ public class GHThread extends GHObject {
      * @return the last comment url
      */
     public String getLastCommentUrl() {
-        return subject.latest_comment_url;
+        return subject.latestCommentUrl;
     }
 
     /**
@@ -179,7 +179,7 @@ public class GHThread extends GHObject {
                 .method("PUT")
                 .with("subscribed", subscribed)
                 .with("ignored", ignored)
-                .withUrlPath(subscription_url)
+                .withUrlPath(subscriptionUrl)
                 .fetch(GHSubscription.class);
     }
 
@@ -192,7 +192,7 @@ public class GHThread extends GHObject {
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-            return root().createRequest().method("POST").withUrlPath(subscription_url).fetch(GHSubscription.class);
+            return root().createRequest().method("POST").withUrlPath(subscriptionUrl).fetch(GHSubscription.class);
         } catch (FileNotFoundException e) {
             return null;
         }

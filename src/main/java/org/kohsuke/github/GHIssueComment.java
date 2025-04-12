@@ -47,7 +47,7 @@ public class GHIssueComment extends GHObject implements Reactable {
     /** The owner. */
     GHIssue owner;
 
-    private String body, gravatar_id, html_url, author_association;
+    private String body, gravatarId, htmlUrl, authorAssociation;
     private GHUser user; // not fully populated. beware.
 
     /**
@@ -98,7 +98,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -107,7 +107,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the author association
      */
     public GHCommentAuthorAssociation getAuthorAssociation() {
-        return GHCommentAuthorAssociation.valueOf(author_association);
+        return GHCommentAuthorAssociation.valueOf(authorAssociation);
     }
 
     /**

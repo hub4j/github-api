@@ -20,7 +20,7 @@ public class GHGistFile {
     /* package almost final */ String fileName;
 
     private int size;
-    private String raw_url, type, language, content;
+    private String rawUrl, type, language, content;
     private boolean truncated;
 
     /**
@@ -47,7 +47,7 @@ public class GHGistFile {
      * @return the raw url
      */
     public String getRawUrl() {
-        return raw_url;
+        return rawUrl;
     }
 
     /**

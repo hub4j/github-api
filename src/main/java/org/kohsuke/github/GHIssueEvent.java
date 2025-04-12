@@ -22,13 +22,13 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     }
 
     private long id;
-    private String node_id;
+    private String nodeId;
     private String url;
     private GHUser actor;
     private String event;
-    private String commit_id;
-    private String commit_url;
-    private String created_at;
+    private String commitId;
+    private String commitUrl;
+    private String createdAt;
     private GHMilestone milestone;
     private GHLabel label;
     private GHUser assignee;
@@ -53,7 +53,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the node id
      */
     public String getNodeId() {
-        return node_id;
+        return nodeId;
     }
 
     /**
@@ -90,7 +90,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the commit id
      */
     public String getCommitId() {
-        return commit_id;
+        return commitId;
     }
 
     /**
@@ -99,7 +99,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the commit url
      */
     public String getCommitUrl() {
-        return commit_url;
+        return commitUrl;
     }
 
     /**
@@ -109,7 +109,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getCreatedAt() {
-        return GitHubClient.parseInstant(created_at);
+        return GitHubClient.parseInstant(createdAt);
     }
 
     /**

@@ -26,16 +26,16 @@ public class GHGist extends GHObject {
     /** The owner. */
     final GHUser owner;
 
-    private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
+    private String forksUrl, commitsUrl, id, gitPullUrl, gitPushUrl, htmlUrl;
 
     @JsonProperty("public")
-    private boolean _public;
+    private boolean isPublic;
 
     private String description;
 
     private int comments;
 
-    private String comments_url;
+    private String commentsUrl;
 
     private final Map<String, GHGistFile> files;
 
@@ -88,7 +88,7 @@ public class GHGist extends GHObject {
      * @return the forks url
      */
     public String getForksUrl() {
-        return forks_url;
+        return forksUrl;
     }
 
     /**
@@ -97,7 +97,7 @@ public class GHGist extends GHObject {
      * @return the commits url
      */
     public String getCommitsUrl() {
-        return commits_url;
+        return commitsUrl;
     }
 
     /**
@@ -106,7 +106,7 @@ public class GHGist extends GHObject {
      * @return URL like https://gist.github.com/gists/12345.git
      */
     public String getGitPullUrl() {
-        return git_pull_url;
+        return gitPullUrl;
     }
 
     /**
@@ -115,7 +115,7 @@ public class GHGist extends GHObject {
      * @return the git push url
      */
     public String getGitPushUrl() {
-        return git_push_url;
+        return gitPushUrl;
     }
 
     /**
@@ -124,7 +124,7 @@ public class GHGist extends GHObject {
      * @return the github html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -133,7 +133,7 @@ public class GHGist extends GHObject {
      * @return the boolean
      */
     public boolean isPublic() {
-        return _public;
+        return isPublic;
     }
 
     /**
@@ -160,7 +160,7 @@ public class GHGist extends GHObject {
      * @return API URL of listing comments.
      */
     public String getCommentsUrl() {
-        return comments_url;
+        return commentsUrl;
     }
 
     /**

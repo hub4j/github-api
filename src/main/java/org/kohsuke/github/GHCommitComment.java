@@ -28,7 +28,7 @@ public class GHCommitComment extends GHObject implements Reactable {
     private GHRepository owner;
 
     /** The commit id. */
-    String body, html_url, commit_id;
+    String body, htmlUrl, commitId;
 
     /** The line. */
     Integer line;
@@ -57,7 +57,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -66,7 +66,7 @@ public class GHCommitComment extends GHObject implements Reactable {
      * @return the sha 1
      */
     public String getSHA1() {
-        return commit_id;
+        return commitId;
     }
 
     /**

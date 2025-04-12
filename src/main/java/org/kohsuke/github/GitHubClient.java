@@ -812,14 +812,14 @@ class GitHubClient {
     }
 
     private static class GHApiInfo {
-        private String rate_limit_url;
+        private String rateLimitUrl;
 
         void check(String apiUrl) throws IOException {
-            if (rate_limit_url == null)
+            if (rateLimitUrl == null)
                 throw new IOException(apiUrl + " doesn't look like GitHub API URL");
 
             // make sure that the URL is legitimate
-            new URL(rate_limit_url);
+            new URL(rateLimitUrl);
         }
     }
 

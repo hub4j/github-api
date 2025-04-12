@@ -121,7 +121,7 @@ public class GHPullRequestCommitDetail {
         String url;
 
         /** The comment count. */
-        int comment_count;
+        int commentCount;
 
         /**
          * Gets author.
@@ -163,9 +163,20 @@ public class GHPullRequestCommitDetail {
          * Gets comment count.
          *
          * @return the comment count
+         * @deprecated Use {@link #getCommentCount()}
          */
+        @Deprecated
         public int getComment_count() {
-            return comment_count;
+            return getCommentCount();
+        }
+
+        /**
+         * Gets comment count.
+         *
+         * @return the comment count
+         */
+        public int getCommentCount() {
+            return commentCount;
         }
 
         /**
@@ -196,7 +207,7 @@ public class GHPullRequestCommitDetail {
         String url;
 
         /** The html url. */
-        String html_url;
+        String htmlUrl;
 
         /**
          * Gets url.
@@ -212,8 +223,19 @@ public class GHPullRequestCommitDetail {
          *
          * @return the html url
          */
+        public URL getHtmlUrl() {
+            return GitHubClient.parseURL(htmlUrl);
+        }
+
+        /**
+         * Gets html url.
+         *
+         * @return the html url
+         * @deprecated Use {@link #getHtmlUrl()}
+         */
+        @Deprecated
         public URL getHtml_url() {
-            return GitHubClient.parseURL(html_url);
+            return getHtmlUrl();
         }
 
         /**
@@ -236,10 +258,10 @@ public class GHPullRequestCommitDetail {
     String url;
 
     /** The html url. */
-    String html_url;
+    String htmlUrl;
 
     /** The comments url. */
-    String comments_url;
+    String commentsUrl;
 
     /** The parents. */
     CommitPointer[] parents;
@@ -277,7 +299,7 @@ public class GHPullRequestCommitDetail {
      * @return the url
      */
     public URL getUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -286,7 +308,7 @@ public class GHPullRequestCommitDetail {
      * @return the comments url
      */
     public URL getCommentsUrl() {
-        return GitHubClient.parseURL(comments_url);
+        return GitHubClient.parseURL(commentsUrl);
     }
 
     /**

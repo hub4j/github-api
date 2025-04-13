@@ -64,6 +64,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void sync() throws IOException {
         GHRepository r = getRepository();
+        assertThat(r.getForksCount(), equalTo(0));
         GHBranchSync sync = r.sync("main");
         assertThat(sync.getOwner().getFullName(), equalTo("hub4j-test-org/github-api"));
         assertThat(sync.getMessage(), equalTo("Successfully fetched and fast-forwarded from upstream github-api:main"));
@@ -137,6 +138,13 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         String httpTransport = "https://github.com/hub4j-test-org/temp-testGetters.git";
         assertThat(r.getHttpTransportUrl(), equalTo(httpTransport));
+        assertThat(r.getGitTransportUrl(), equalTo("git://github.com/hub4j-test-org/temp-testGetters.git"));
+        assertThat(r.getSvnUrl(), equalTo("https://github.com/hub4j-test-org/temp-testGetters"));
+        assertThat(r.getMirrorUrl(), nullValue());
+        assertThat(r.getSshUrl(), equalTo("git@github.com:hub4j-test-org/temp-testGetters.git"));
+        assertThat(r.getHtmlUrl().toString(), equalTo("https://github.com/hub4j-test-org/temp-testGetters"));
+        assertThat(r.getOpenIssueCount(), equalTo(0));
+        assertThat(r.getSubscribersCount(), equalTo(7));
 
         assertThat(r.getName(), equalTo("temp-testGetters"));
         assertThat(r.getFullName(), equalTo("hub4j-test-org/temp-testGetters"));

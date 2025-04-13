@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
@@ -214,8 +215,30 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         Optional<GHPullRequest> firstPR = builder.list().toList().stream().findFirst();
 
         try {
-            String val = firstPR.get().listCommits().toArray()[0].getApiUrl().toString();
-            assertThat(val, notNullValue());
+            GHPullRequestCommitDetail detail = firstPR.get().listCommits().toArray()[0];
+            assertThat(detail.getApiUrl().toString(), notNullValue());
+            assertThat(detail.getSha(), equalTo("2d29c787b46ce61b98a1c13e05e21ebc21f49dbf"));
+            assertThat(detail.getCommentsUrl().toString(),
+                    endsWith(
+                            "/repos/hub4j-test-org/github-api/commits/2d29c787b46ce61b98a1c13e05e21ebc21f49dbf/comments"));
+            assertThat(detail.getUrl().toString(),
+                    equalTo("https://github.com/hub4j-test-org/github-api/commit/2d29c787b46ce61b98a1c13e05e21ebc21f49dbf"));
+
+            GHPullRequestCommitDetail.Commit commit = detail.getCommit();
+            assertThat(commit, notNullValue());
+
+            GHPullRequestCommitDetail.Tree tree = commit.getTree();
+            assertThat(tree, notNullValue());
+
+            GHPullRequestCommitDetail.CommitPointer[] parents = detail.getParents();
+            assertThat(parents, notNullValue());
+            assertThat(parents.length, equalTo(1));
+            assertThat(parents[0].getSha(), equalTo("3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353"));
+            assertThat(parents[0].getHtml_url().toString(),
+                    equalTo("https://github.com/hub4j-test-org/github-api/commit/3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353"));
+            assertThat(parents[0].getUrl().toString(),
+                    endsWith("/repos/hub4j-test-org/github-api/commits/3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353"));
+
         } catch (GHFileNotFoundException e) {
             if (e.getMessage().contains("/issues/")) {
                 fail("Issued a request against the wrong path");

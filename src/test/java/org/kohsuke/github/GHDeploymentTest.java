@@ -43,6 +43,9 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
         assertThat(deployment.getOriginalEnvironment(), equalTo("production"));
         assertThat(deployment.isProductionEnvironment(), equalTo(false));
         assertThat(deployment.isTransientEnvironment(), equalTo(true));
+        assertThat(deployment.getStatusesUrl().toString(),
+                endsWith("/repos/hub4j-test-org/github-api/deployments/178653229/statuses"));
+        assertThat(deployment.getRepositoryUrl().toString(), endsWith("/repos/hub4j-test-org/github-api"));
     }
 
     /**

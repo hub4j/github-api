@@ -1419,6 +1419,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
             PagedIterable<GHIssueComment> comments = issue.listComments();
             for (GHIssueComment comment : comments) {
                 assertThat(comment, notNullValue());
+
             }
         }
     }

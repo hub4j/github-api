@@ -643,6 +643,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         GHPersonSet<GHUser> collabs = repo.getCollaborators();
         GHUser colabUser = collabs.byLogin("jimmysombrero");
+        assertThat(colabUser.getAvatarUrl(), equalTo("https://avatars3.githubusercontent.com/u/12157727?v=4"));
+        assertThat(colabUser.getHtmlUrl().toString(), equalTo("https://github.com/jimmysombrero"));
+        assertThat(colabUser.getLocation(), nullValue());
 
         assertThat(user.getName(), equalTo(colabUser.getName()));
     }

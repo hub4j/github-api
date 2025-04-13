@@ -121,7 +121,7 @@ public class GHPullRequestCommitDetail {
         String url;
 
         /** The comment count. */
-        int commentCount;
+        Integer commentCount;
 
         /**
          * Gets author.
@@ -175,7 +175,7 @@ public class GHPullRequestCommitDetail {
          *
          * @return the comment count
          */
-        public int getCommentCount() {
+        public Integer getCommentCount() {
             return commentCount;
         }
 

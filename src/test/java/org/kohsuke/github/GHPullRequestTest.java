@@ -127,6 +127,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void pullRequestComment() throws Exception {
         String name = "createPullRequestComment";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
+        assertThat(p.getIssueUrl().toString(), endsWith("/repos/hub4j-test-org/github-api/issues/461"));
 
         List<GHIssueComment> comments;
         comments = p.listComments().toList();
@@ -226,9 +227,18 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
 
             GHPullRequestCommitDetail.Commit commit = detail.getCommit();
             assertThat(commit, notNullValue());
+            assertThat(commit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
+            assertThat(commit.getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
+            assertThat(commit.getMessage(), equalTo("Update README"));
+            assertThat(commit.getUrl().toString(),
+                    endsWith("/repos/hub4j-test-org/github-api/git/commits/2d29c787b46ce61b98a1c13e05e21ebc21f49dbf"));
+            assertThat(commit.getComment_count(), equalTo(0));
 
             GHPullRequestCommitDetail.Tree tree = commit.getTree();
             assertThat(tree, notNullValue());
+            assertThat(tree.getSha(), equalTo("ce7a1ba95aba901cf08d9f8365410d290d6c23aa"));
+            assertThat(tree.getUrl().toString(),
+                    endsWith("/repos/hub4j-test-org/github-api/git/trees/ce7a1ba95aba901cf08d9f8365410d290d6c23aa"));
 
             GHPullRequestCommitDetail.CommitPointer[] parents = detail.getParents();
             assertThat(parents, notNullValue());

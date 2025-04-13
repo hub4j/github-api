@@ -24,10 +24,10 @@ public class GHCompare {
     public GHCompare() {
     }
 
-    private String url, html_url, permalink_url, diff_url, patch_url;
+    private String url, htmlUrl, permalinkUrl, diffUrl, patchUrl;
     private Status status;
-    private int ahead_by, behind_by, total_commits;
-    private Commit base_commit, merge_base_commit;
+    private int aheadBy, behindBy, totalCommits;
+    private Commit baseCommit, mergeBaseCommit;
     private Commit[] commits;
     private GHCommit.File[] files;
 
@@ -51,7 +51,7 @@ public class GHCompare {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -60,7 +60,7 @@ public class GHCompare {
      * @return the permalink url
      */
     public URL getPermalinkUrl() {
-        return GitHubClient.parseURL(permalink_url);
+        return GitHubClient.parseURL(permalinkUrl);
     }
 
     /**
@@ -69,7 +69,7 @@ public class GHCompare {
      * @return the diff url
      */
     public URL getDiffUrl() {
-        return GitHubClient.parseURL(diff_url);
+        return GitHubClient.parseURL(diffUrl);
     }
 
     /**
@@ -78,7 +78,7 @@ public class GHCompare {
      * @return the patch url
      */
     public URL getPatchUrl() {
-        return GitHubClient.parseURL(patch_url);
+        return GitHubClient.parseURL(patchUrl);
     }
 
     /**
@@ -96,7 +96,7 @@ public class GHCompare {
      * @return the ahead by
      */
     public int getAheadBy() {
-        return ahead_by;
+        return aheadBy;
     }
 
     /**
@@ -105,7 +105,7 @@ public class GHCompare {
      * @return the behind by
      */
     public int getBehindBy() {
-        return behind_by;
+        return behindBy;
     }
 
     /**
@@ -114,7 +114,7 @@ public class GHCompare {
      * @return the total commits
      */
     public int getTotalCommits() {
-        return total_commits;
+        return totalCommits;
     }
 
     /**
@@ -124,7 +124,7 @@ public class GHCompare {
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public Commit getBaseCommit() {
-        return base_commit;
+        return baseCommit;
     }
 
     /**
@@ -134,7 +134,7 @@ public class GHCompare {
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public Commit getMergeBaseCommit() {
-        return merge_base_commit;
+        return mergeBaseCommit;
     }
 
     /**
@@ -215,8 +215,8 @@ public class GHCompare {
         for (Commit commit : commits) {
             commit.wrapUp(owner);
         }
-        merge_base_commit.wrapUp(owner);
-        base_commit.wrapUp(owner);
+        mergeBaseCommit.wrapUp(owner);
+        baseCommit.wrapUp(owner);
         return this;
     }
 

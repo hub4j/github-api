@@ -27,7 +27,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     private ObjectNode payload;
 
     private long id;
-    private String created_at;
+    private String createdAt;
 
     /**
      * Representation of GitHub Event API Event Type.
@@ -132,7 +132,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getCreatedAt() {
-        return GitHubClient.parseInstant(created_at);
+        return GitHubClient.parseInstant(createdAt);
     }
 
     /**

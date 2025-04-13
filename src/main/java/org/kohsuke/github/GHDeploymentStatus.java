@@ -27,19 +27,19 @@ public class GHDeploymentStatus extends GHObject {
     protected String description;
 
     /** The target url. */
-    protected String target_url;
+    protected String targetUrl;
 
     /** The log url. */
-    protected String log_url;
+    protected String logUrl;
 
     /** The deployment url. */
-    protected String deployment_url;
+    protected String deploymentUrl;
 
     /** The repository url. */
-    protected String repository_url;
+    protected String repositoryUrl;
 
     /** The environment url. */
-    protected String environment_url;
+    protected String environmentUrl;
 
     /**
      * Wrap gh deployment status.
@@ -60,7 +60,7 @@ public class GHDeploymentStatus extends GHObject {
      * @return the target url
      */
     public URL getLogUrl() {
-        return GitHubClient.parseURL(log_url);
+        return GitHubClient.parseURL(logUrl);
     }
 
     /**
@@ -69,7 +69,7 @@ public class GHDeploymentStatus extends GHObject {
      * @return the deployment url
      */
     public URL getDeploymentUrl() {
-        return GitHubClient.parseURL(deployment_url);
+        return GitHubClient.parseURL(deploymentUrl);
     }
 
     /**
@@ -78,7 +78,7 @@ public class GHDeploymentStatus extends GHObject {
      * @return the deployment environment url
      */
     public URL getEnvironmentUrl() {
-        return GitHubClient.parseURL(environment_url);
+        return GitHubClient.parseURL(environmentUrl);
     }
 
     /**
@@ -87,7 +87,7 @@ public class GHDeploymentStatus extends GHObject {
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-        return GitHubClient.parseURL(repository_url);
+        return GitHubClient.parseURL(repositoryUrl);
     }
 
     /**

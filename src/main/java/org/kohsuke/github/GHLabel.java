@@ -27,7 +27,7 @@ public class GHLabel extends GitHubInteractiveObject {
     private long id;
     private String nodeId;
     @JsonProperty("default")
-    private boolean default_;
+    private boolean isDefault;
 
     @Nonnull
     private String url, name, color;
@@ -117,7 +117,7 @@ public class GHLabel extends GitHubInteractiveObject {
      * @return true if the label is a default one
      */
     public boolean isDefault() {
-        return default_;
+        return isDefault;
     }
 
     /**

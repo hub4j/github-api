@@ -36,7 +36,7 @@ public class GHCommit {
             justification = "JSON API")
     public static class ShortInfo extends GitCommit {
 
-        private int comment_count = -1;
+        private int commentCount = -1;
 
         /**
          * Gets comment count.
@@ -46,10 +46,10 @@ public class GHCommit {
          *             the GH exception
          */
         public int getCommentCount() throws GHException {
-            if (comment_count < 0) {
+            if (commentCount < 0) {
                 throw new GHException("Not available on this endpoint.");
             }
-            return comment_count;
+            return commentCount;
         }
 
         /**
@@ -121,10 +121,10 @@ public class GHCommit {
         int changes, additions, deletions;
 
         /** The patch. */
-        String raw_url, blob_url, sha, patch;
+        String rawUrl, blobUrl, sha, patch;
 
         /** The previous filename. */
-        String filename, previous_filename;
+        String filename, previousFilename;
 
         /**
          * Gets lines changed.
@@ -179,7 +179,7 @@ public class GHCommit {
          * @return Previous path, in case file has moved.
          */
         public String getPreviousFilename() {
-            return previous_filename;
+            return previousFilename;
         }
 
         /**
@@ -199,7 +199,7 @@ public class GHCommit {
          *         resolves to the actual content of the file.
          */
         public URL getRawUrl() {
-            return GitHubClient.parseURL(raw_url);
+            return GitHubClient.parseURL(rawUrl);
         }
 
         /**
@@ -210,7 +210,7 @@ public class GHCommit {
          *         that resolves to the HTML page that describes this file.
          */
         public URL getBlobUrl() {
-            return GitHubClient.parseURL(blob_url);
+            return GitHubClient.parseURL(blobUrl);
         }
 
         /**
@@ -250,7 +250,7 @@ public class GHCommit {
         /** The gravatar id. */
         // TODO: what if someone who doesn't have an account on GitHub makes a commit?
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        String url, avatar_url, gravatar_id;
+        String url, avatarUrl, gravatarId;
 
         /** The id. */
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
@@ -261,7 +261,7 @@ public class GHCommit {
     }
 
     /** The sha. */
-    String url, html_url, sha, message;
+    String url, htmlUrl, sha, message;
 
     /** The files. */
     List<File> files;
@@ -296,7 +296,7 @@ public class GHCommit {
         commit = shortInfo;
 
         owner = commit.getOwner();
-        html_url = commit.getHtmlUrl();
+        htmlUrl = commit.getHtmlUrl();
         sha = commit.getSha();
         url = commit.getUrl();
         parents = commit.getParents();
@@ -380,7 +380,7 @@ public class GHCommit {
      *         "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000"
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**

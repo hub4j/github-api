@@ -28,7 +28,7 @@ public class GHInvitation extends GHObject {
     private GHRepository repository;
     private GHUser invitee, inviter;
     private String permissions;
-    private String html_url;
+    private String htmlUrl;
 
     /**
      * Accept a repository invitation.
@@ -56,6 +56,6 @@ public class GHInvitation extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 }

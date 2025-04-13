@@ -909,7 +909,7 @@ public class GitHub {
      *            the scopes
      * @param note
      *            the note
-     * @param note_url
+     * @param noteUrl
      *            the note url
      * @return the gh authorization
      * @throws IOException
@@ -921,11 +921,11 @@ public class GitHub {
             String clientSecret,
             List<String> scopes,
             String note,
-            String note_url) throws IOException {
+            String noteUrl) throws IOException {
         Requester requester = createRequest().with("client_secret", clientSecret)
                 .with("scopes", scopes)
                 .with("note", note)
-                .with("note_url", note_url);
+                .with("note_url", noteUrl);
 
         return requester.method("PUT").withUrlPath("/authorizations/clients/" + clientId).fetch(GHAuthorization.class);
     }

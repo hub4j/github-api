@@ -92,6 +92,7 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         comments = issue.listComments().toList();
         assertThat(comments, hasSize(1));
         assertThat(comments, contains(hasProperty("body", equalTo("First comment"))));
+        assertThat(comments.get(0).getAuthorAssociation(), equalTo(GHCommentAuthorAssociation.NONE));
 
         comments = issue.queryComments().list().toList();
         assertThat(comments, hasSize(1));

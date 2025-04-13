@@ -44,9 +44,9 @@ public class GHUser extends GHPerson {
     }
 
     /** The ldap dn. */
-    protected String ldap_dn;
+    protected String ldapDn;
 
-    /** The suspended_at */
+    /** The suspendedAt */
     private String suspendedAt;
 
     /**
@@ -266,7 +266,7 @@ public class GHUser extends GHPerson {
      */
     public Optional<String> getLdapDn() throws IOException {
         super.populate();
-        return Optional.ofNullable(ldap_dn);
+        return Optional.ofNullable(ldapDn);
     }
 
     /**

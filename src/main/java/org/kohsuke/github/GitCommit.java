@@ -20,7 +20,7 @@ import java.util.List;
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GitCommit extends GitHubBridgeAdapterObject {
     private GHRepository owner;
-    private String sha, node_id, url, html_url;
+    private String sha, nodeId, url, htmlUrl;
     private GitUser author;
     private GitUser committer;
 
@@ -81,9 +81,9 @@ public class GitCommit extends GitHubBridgeAdapterObject {
         // to GHCommit, for testing purposes
         this.owner = commit.getOwner();
         this.sha = commit.getSha();
-        this.node_id = commit.getNodeId();
+        this.nodeId = commit.getNodeId();
         this.url = commit.getUrl();
-        this.html_url = commit.getHtmlUrl();
+        this.htmlUrl = commit.getHtmlUrl();
         this.author = commit.getAuthor();
         this.committer = commit.getCommitter();
         this.message = commit.getMessage();
@@ -126,7 +126,7 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      * @return The node id of this commit
      */
     public String getNodeId() {
-        return node_id;
+        return nodeId;
     }
 
     /**
@@ -144,7 +144,7 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      * @return The HTML URL of this commit
      */
     public String getHtmlUrl() {
-        return html_url;
+        return htmlUrl;
     }
 
     /**

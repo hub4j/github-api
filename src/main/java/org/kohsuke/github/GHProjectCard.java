@@ -26,7 +26,7 @@ public class GHProjectCard extends GHObject {
 
     private String note;
     private GHUser creator;
-    private String content_url, project_url, column_url;
+    private String contentUrl, projectUrl, columnUrl;
     private boolean archived;
 
     /**
@@ -109,10 +109,10 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public GHIssue getContent() throws IOException {
-        if (StringUtils.isEmpty(content_url))
+        if (StringUtils.isEmpty(contentUrl))
             return null;
         try {
-            if (content_url.contains("/pulls")) {
+            if (contentUrl.contains("/pulls")) {
                 return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHPullRequest.class);
             } else {
                 return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);
@@ -147,7 +147,7 @@ public class GHProjectCard extends GHObject {
      * @return the content url
      */
     public URL getContentUrl() {
-        return GitHubClient.parseURL(content_url);
+        return GitHubClient.parseURL(contentUrl);
     }
 
     /**
@@ -156,7 +156,7 @@ public class GHProjectCard extends GHObject {
      * @return the project url
      */
     public URL getProjectUrl() {
-        return GitHubClient.parseURL(project_url);
+        return GitHubClient.parseURL(projectUrl);
     }
 
     /**
@@ -165,7 +165,7 @@ public class GHProjectCard extends GHObject {
      * @return the column url
      */
     public URL getColumnUrl() {
-        return GitHubClient.parseURL(column_url);
+        return GitHubClient.parseURL(columnUrl);
     }
 
     /**

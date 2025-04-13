@@ -48,8 +48,8 @@ public class GHProject extends GHObject {
     /** The owner. */
     protected GHObject owner;
 
-    private String owner_url;
-    private String html_url;
+    private String ownerUrl;
+    private String htmlUrl;
     private String name;
     private String body;
     private int number;
@@ -62,7 +62,7 @@ public class GHProject extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -76,11 +76,11 @@ public class GHProject extends GHObject {
     public GHObject getOwner() throws IOException {
         if (owner == null) {
             try {
-                if (owner_url.contains("/orgs/")) {
+                if (ownerUrl.contains("/orgs/")) {
                     owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHOrganization.class);
-                } else if (owner_url.contains("/users/")) {
+                } else if (ownerUrl.contains("/users/")) {
                     owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class);
-                } else if (owner_url.contains("/repos/")) {
+                } else if (ownerUrl.contains("/repos/")) {
                     String[] pathElements = getOwnerUrl().getPath().split("/");
                     owner = GHRepository.read(root(), pathElements[1], pathElements[2]);
                 }
@@ -97,7 +97,7 @@ public class GHProject extends GHObject {
      * @return the owner url
      */
     public URL getOwnerUrl() {
-        return GitHubClient.parseURL(owner_url);
+        return GitHubClient.parseURL(ownerUrl);
     }
 
     /**

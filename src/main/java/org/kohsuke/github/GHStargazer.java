@@ -22,7 +22,7 @@ public class GHStargazer extends GitHubBridgeAdapterObject {
     }
 
     private GHRepository repository;
-    private String starred_at;
+    private String starredAt;
     private GHUser user;
 
     /**
@@ -37,13 +37,13 @@ public class GHStargazer extends GitHubBridgeAdapterObject {
 
     /**
      * Gets the date when the repository was starred, however old stars before August 2012, will all show the date the
-     * API was changed to support starred_at.
+     * API was changed to support starredAt.
      *
      * @return the date the stargazer was added
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getStarredAt() {
-        return GitHubClient.parseInstant(starred_at);
+        return GitHubClient.parseInstant(starredAt);
     }
 
     /**

@@ -30,16 +30,16 @@ public class GHDeployKey {
     private GHRepository owner;
 
     /** Creation date of the deploy key */
-    private String created_at;
+    private String createdAt;
 
     /** Last used date of the deploy key */
-    private String last_used;
+    private String lastUsed;
 
     /** Name of user that added the deploy key */
-    private String added_by;
+    private String addedBy;
 
     /** Whether the deploykey has readonly permission or full access */
-    private boolean read_only;
+    private boolean readOnly;
 
     /**
      * Gets id.
@@ -87,13 +87,13 @@ public class GHDeployKey {
     }
 
     /**
-     * Gets created_at.
+     * Gets createdAt.
      *
-     * @return the created_at
+     * @return the createdAt
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getCreatedAt() {
-        return GitHubClient.parseInstant(created_at);
+        return GitHubClient.parseInstant(createdAt);
     }
 
     /**
@@ -103,7 +103,18 @@ public class GHDeployKey {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getLastUsedAt() {
-        return GitHubClient.parseInstant(last_used);
+        return GitHubClient.parseInstant(lastUsed);
+    }
+
+    /**
+     * Gets added_by
+     *
+     * @return the added_by
+     * @deprecated Use {@link #getAddedBy()}
+     */
+    @Deprecated
+    public String getAdded_by() {
+        return getAddedBy();
     }
 
     /**
@@ -111,8 +122,19 @@ public class GHDeployKey {
      *
      * @return the added_by
      */
-    public String getAdded_by() {
-        return added_by;
+    public String getAddedBy() {
+        return addedBy;
+    }
+
+    /**
+     * Is read_only
+     *
+     * @return true if the key can only read. False if the key has write permission as well.
+     * @deprecated {@link #isReadOnly()}
+     */
+    @Deprecated
+    public boolean isRead_only() {
+        return isReadOnly();
     }
 
     /**
@@ -120,8 +142,8 @@ public class GHDeployKey {
      *
      * @return true if the key can only read. False if the key has write permission as well.
      */
-    public boolean isRead_only() {
-        return read_only;
+    public boolean isReadOnly() {
+        return readOnly;
     }
 
     /**
@@ -145,10 +167,10 @@ public class GHDeployKey {
         return new ToStringBuilder(this).append("title", title)
                 .append("id", id)
                 .append("key", key)
-                .append("created_at", created_at)
-                .append("last_used", last_used)
-                .append("added_by", added_by)
-                .append("read_only", read_only)
+                .append("created_at", createdAt)
+                .append("last_used", lastUsed)
+                .append("added_by", addedBy)
+                .append("read_only", readOnly)
                 .toString();
     }
 

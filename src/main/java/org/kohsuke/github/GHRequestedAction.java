@@ -10,27 +10,24 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 public class GHRequestedAction extends GHObject {
 
+    private GHRepository owner;
+
+    private String identifier;
+    private String label;
+    private String description;
     /**
      * Create default GHRequestedAction instance
      */
     public GHRequestedAction() {
     }
 
-    private GHRepository owner;
-    private String identifier;
-    private String label;
-    private String description;
-
     /**
-     * Wrap.
+     * Gets the description.
      *
-     * @param owner
-     *            the owner
-     * @return the GH requested action
+     * @return the description
      */
-    GHRequestedAction wrap(GHRepository owner) {
-        this.owner = owner;
-        return this;
+    String getDescription() {
+        return description;
     }
 
     /**
@@ -52,12 +49,15 @@ public class GHRequestedAction extends GHObject {
     }
 
     /**
-     * Gets the description.
+     * Wrap.
      *
-     * @return the description
+     * @param owner
+     *            the owner
+     * @return the GH requested action
      */
-    String getDescription() {
-        return description;
+    GHRequestedAction wrap(GHRepository owner) {
+        this.owner = owner;
+        return this;
     }
 
 }

@@ -31,16 +31,14 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
     private boolean failOnUnmatchedRequests;
     private final Options options;
 
-    /**
-     * Gets the method name.
-     *
-     * @return the method name
-     */
-    public String getMethodName() {
-        return methodName;
-    }
-
     private String methodName = null;
+
+    /**
+     * Instantiates a new wire mock multi server rule.
+     */
+    public WireMockMultiServerRule() {
+        this(WireMockRuleConfiguration.wireMockConfig());
+    }
 
     /**
      * Instantiates a new wire mock multi server rule.
@@ -66,10 +64,9 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
     }
 
     /**
-     * Instantiates a new wire mock multi server rule.
+     * After.
      */
-    public WireMockMultiServerRule() {
-        this(WireMockRuleConfiguration.wireMockConfig());
+    protected void after() {
     }
 
     /**
@@ -123,51 +120,9 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
     }
 
     /**
-     * Initialize servers.
-     */
-    protected void initializeServers() {
-    }
-
-    /**
-     * Initialize server.
-     *
-     * @param serverId
-     *            the server id
-     * @param extensions
-     *            the extensions
-     */
-    protected final void initializeServer(String serverId, Extension... extensions) {
-        String directoryName = methodName;
-        if (!serverId.equals("default")) {
-            directoryName += "_" + serverId;
-        }
-
-        final Options localOptions = new WireMockRuleConfiguration(WireMockMultiServerRule.this.options,
-                directoryName,
-                extensions);
-
-        new File(localOptions.filesRoot().getPath(), "mappings").mkdirs();
-        new File(localOptions.filesRoot().getPath(), "__files").mkdirs();
-
-        WireMockServer server = new WireMockServer(localOptions);
-        this.servers.put(serverId, server);
-        server.start();
-
-        if (!serverId.equals("default")) {
-            WireMock.configureFor("localhost", server.port());
-        }
-    }
-
-    /**
      * Before.
      */
     protected void before() {
-    }
-
-    /**
-     * After.
-     */
-    protected void after() {
     }
 
     private void checkForUnmatchedRequests() {
@@ -206,6 +161,51 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
         }
         return deleteable;
 
+    }
+
+    /**
+     * Gets the method name.
+     *
+     * @return the method name
+     */
+    public String getMethodName() {
+        return methodName;
+    }
+
+    /**
+     * Initialize server.
+     *
+     * @param serverId
+     *            the server id
+     * @param extensions
+     *            the extensions
+     */
+    protected final void initializeServer(String serverId, Extension... extensions) {
+        String directoryName = methodName;
+        if (!serverId.equals("default")) {
+            directoryName += "_" + serverId;
+        }
+
+        final Options localOptions = new WireMockRuleConfiguration(WireMockMultiServerRule.this.options,
+                directoryName,
+                extensions);
+
+        new File(localOptions.filesRoot().getPath(), "mappings").mkdirs();
+        new File(localOptions.filesRoot().getPath(), "__files").mkdirs();
+
+        WireMockServer server = new WireMockServer(localOptions);
+        this.servers.put(serverId, server);
+        server.start();
+
+        if (!serverId.equals("default")) {
+            WireMock.configureFor("localhost", server.port());
+        }
+    }
+
+    /**
+     * Initialize servers.
+     */
+    protected void initializeServers() {
     }
 
     private void stop() {

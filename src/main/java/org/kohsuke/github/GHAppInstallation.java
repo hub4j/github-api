@@ -27,10 +27,13 @@ import java.util.stream.Collectors;
  */
 public class GHAppInstallation extends GHObject {
 
-    /**
-     * Create default GHAppInstallation instance
-     */
-    public GHAppInstallation() {
+    private static class GHAppInstallationRepositoryResult extends SearchResult<GHRepository> {
+        private GHRepository[] repositories;
+
+        @Override
+        GHRepository[] getItems(GitHub root) {
+            return repositories;
+        }
     }
 
     private GHUser account;
@@ -56,12 +59,61 @@ public class GHAppInstallation extends GHObject {
     private GHUser suspendedBy;
 
     /**
-     * Gets the html url.
-     *
-     * @return the html url
+     * Create default GHAppInstallation instance
      */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+    public GHAppInstallation() {
+    }
+
+    /**
+     * Starts a builder that creates a new App Installation Token.
+     *
+     * <p>
+     * You use the returned builder to set various properties, then call {@link GHAppCreateTokenBuilder#create()} to
+     * finally create an access token.
+     *
+     * @return a GHAppCreateTokenBuilder instance
+     */
+    public GHAppCreateTokenBuilder createToken() {
+        return new GHAppCreateTokenBuilder(root(), String.format("/app/installations/%d/access_tokens", getId()));
+    }
+
+    /**
+     * Starts a builder that creates a new App Installation Token.
+     *
+     * <p>
+     * You use the returned builder to set various properties, then call {@link GHAppCreateTokenBuilder#create()} to
+     * finally create an access token.
+     *
+     * @param permissions
+     *            map of permissions for the created token
+     * @return a GHAppCreateTokenBuilder instance
+     * @deprecated Use {@link GHAppInstallation#createToken()} instead.
+     */
+    @Deprecated
+    public GHAppCreateTokenBuilder createToken(Map<String, GHPermissionType> permissions) {
+        return createToken().permissions(permissions);
+    }
+
+    /**
+     * Delete a Github App installation
+     * <p>
+     * You must use a JWT to access this endpoint.
+     *
+     * @throws IOException
+     *             on error
+     * @see <a href="https://developer.github.com/v3/apps/#delete-an-installation">Delete an installation</a>
+     */
+    public void deleteInstallation() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(String.format("/app/installations/%d", getId())).send();
+    }
+
+    /**
+     * Gets access token url.
+     *
+     * @return the access token url
+     */
+    public String getAccessTokenUrl() {
+        return accessTokenUrl;
     }
 
     /**
@@ -75,86 +127,12 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Gets access token url.
-     *
-     * @return the access token url
-     */
-    public String getAccessTokenUrl() {
-        return accessTokenUrl;
-    }
-
-    /**
-     * Gets repositories url.
-     *
-     * @return the repositories url
-     */
-    public String getRepositoriesUrl() {
-        return repositoriesUrl;
-    }
-
-    /**
-     * List repositories that this app installation can access.
-     *
-     * @return the paged iterable
-     * @deprecated This method cannot work on a {@link GHAppInstallation} retrieved from
-     *             {@link GHApp#listInstallations()} (for example), except when resorting to unsupported hacks involving
-     *             setRoot(GitHub) to switch from an application client to an installation client. This method will be
-     *             removed. You should instead use an installation client (with an installation token, not a JWT),
-     *             retrieve a {@link GHAuthenticatedAppInstallation} from {@link GitHub#getInstallation()}, then call
-     *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
-     */
-    @Deprecated
-    public PagedSearchIterable<GHRepository> listRepositories() {
-        GitHubRequest request;
-
-        request = root().createRequest().withUrlPath("/installation/repositories").build();
-
-        return new PagedSearchIterable<>(root(), request, GHAppInstallationRepositoryResult.class);
-    }
-
-    private static class GHAppInstallationRepositoryResult extends SearchResult<GHRepository> {
-        private GHRepository[] repositories;
-
-        @Override
-        GHRepository[] getItems(GitHub root) {
-            return repositories;
-        }
-    }
-
-    /**
      * Gets app id.
      *
      * @return the app id
      */
     public long getAppId() {
         return appId;
-    }
-
-    /**
-     * Gets target id.
-     *
-     * @return the target id
-     */
-    public long getTargetId() {
-        return targetId;
-    }
-
-    /**
-     * Gets target type.
-     *
-     * @return the target type
-     */
-    public GHTargetType getTargetType() {
-        return targetType;
-    }
-
-    /**
-     * Gets permissions.
-     *
-     * @return the permissions
-     */
-    public Map<String, GHPermissionType> getPermissions() {
-        return Collections.unmodifiableMap(permissions);
     }
 
     /**
@@ -169,12 +147,51 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Gets single file name.
+     * Gets the html url.
      *
-     * @return the single file name
+     * @return the html url
      */
-    public String getSingleFileName() {
-        return singleFileName;
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(htmlUrl);
+    }
+
+    /**
+     * Shows whether the user or organization account actively subscribes to a plan listed by the authenticated GitHub
+     * App. When someone submits a plan change that won't be processed until the end of their billing cycle, you will
+     * also see the upcoming pending change.
+     *
+     * <p>
+     * GitHub Apps must use a JWT to access this endpoint.
+     * <p>
+     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
+     *
+     * @return a GHMarketplaceAccountPlan instance
+     * @throws IOException
+     *             it may throw an {@link IOException}
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account">Get
+     *      a subscription plan for an account</a>
+     */
+    public GHMarketplaceAccountPlan getMarketplaceAccount() throws IOException {
+        return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();
+    }
+
+    /**
+     * Gets permissions.
+     *
+     * @return the permissions
+     */
+    public Map<String, GHPermissionType> getPermissions() {
+        return Collections.unmodifiableMap(permissions);
+    }
+
+    /**
+     * Gets repositories url.
+     *
+     * @return the repositories url
+     */
+    public String getRepositoriesUrl() {
+        return repositoriesUrl;
     }
 
     /**
@@ -184,6 +201,15 @@ public class GHAppInstallation extends GHObject {
      */
     public GHRepositorySelection getRepositorySelection() {
         return repositorySelection;
+    }
+
+    /**
+     * Gets single file name.
+     *
+     * @return the single file name
+     */
+    public String getSingleFileName() {
+        return singleFileName;
     }
 
     /**
@@ -207,66 +233,40 @@ public class GHAppInstallation extends GHObject {
     }
 
     /**
-     * Delete a Github App installation
-     * <p>
-     * You must use a JWT to access this endpoint.
+     * Gets target id.
      *
-     * @throws IOException
-     *             on error
-     * @see <a href="https://developer.github.com/v3/apps/#delete-an-installation">Delete an installation</a>
+     * @return the target id
      */
-    public void deleteInstallation() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(String.format("/app/installations/%d", getId())).send();
+    public long getTargetId() {
+        return targetId;
     }
 
     /**
-     * Starts a builder that creates a new App Installation Token.
+     * Gets target type.
      *
-     * <p>
-     * You use the returned builder to set various properties, then call {@link GHAppCreateTokenBuilder#create()} to
-     * finally create an access token.
+     * @return the target type
+     */
+    public GHTargetType getTargetType() {
+        return targetType;
+    }
+
+    /**
+     * List repositories that this app installation can access.
      *
-     * @param permissions
-     *            map of permissions for the created token
-     * @return a GHAppCreateTokenBuilder instance
-     * @deprecated Use {@link GHAppInstallation#createToken()} instead.
+     * @return the paged iterable
+     * @deprecated This method cannot work on a {@link GHAppInstallation} retrieved from
+     *             {@link GHApp#listInstallations()} (for example), except when resorting to unsupported hacks involving
+     *             setRoot(GitHub) to switch from an application client to an installation client. This method will be
+     *             removed. You should instead use an installation client (with an installation token, not a JWT),
+     *             retrieve a {@link GHAuthenticatedAppInstallation} from {@link GitHub#getInstallation()}, then call
+     *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
      */
     @Deprecated
-    public GHAppCreateTokenBuilder createToken(Map<String, GHPermissionType> permissions) {
-        return createToken().permissions(permissions);
-    }
+    public PagedSearchIterable<GHRepository> listRepositories() {
+        GitHubRequest request;
 
-    /**
-     * Starts a builder that creates a new App Installation Token.
-     *
-     * <p>
-     * You use the returned builder to set various properties, then call {@link GHAppCreateTokenBuilder#create()} to
-     * finally create an access token.
-     *
-     * @return a GHAppCreateTokenBuilder instance
-     */
-    public GHAppCreateTokenBuilder createToken() {
-        return new GHAppCreateTokenBuilder(root(), String.format("/app/installations/%d/access_tokens", getId()));
-    }
+        request = root().createRequest().withUrlPath("/installation/repositories").build();
 
-    /**
-     * Shows whether the user or organization account actively subscribes to a plan listed by the authenticated GitHub
-     * App. When someone submits a plan change that won't be processed until the end of their billing cycle, you will
-     * also see the upcoming pending change.
-     *
-     * <p>
-     * GitHub Apps must use a JWT to access this endpoint.
-     * <p>
-     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
-     *
-     * @return a GHMarketplaceAccountPlan instance
-     * @throws IOException
-     *             it may throw an {@link IOException}
-     * @see <a href=
-     *      "https://docs.github.com/en/rest/apps/marketplace?apiVersion=2022-11-28#get-a-subscription-plan-for-an-account">Get
-     *      a subscription plan for an account</a>
-     */
-    public GHMarketplaceAccountPlan getMarketplaceAccount() throws IOException {
-        return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();
+        return new PagedSearchIterable<>(root(), request, GHAppInstallationRepositoryResult.class);
     }
 }

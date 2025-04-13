@@ -10,6 +10,15 @@ import javax.annotation.Nonnull;
  */
 public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
 
+    private static class GHAuthenticatedAppInstallationRepositoryResult extends SearchResult<GHRepository> {
+        private GHRepository[] repositories;
+
+        @Override
+        GHRepository[] getItems(GitHub root) {
+            return repositories;
+        }
+    }
+
     /**
      * Instantiates a new GH authenticated app installation.
      *
@@ -31,15 +40,6 @@ public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
         request = root().createRequest().withUrlPath("/installation/repositories").build();
 
         return new PagedSearchIterable<>(root(), request, GHAuthenticatedAppInstallationRepositoryResult.class);
-    }
-
-    private static class GHAuthenticatedAppInstallationRepositoryResult extends SearchResult<GHRepository> {
-        private GHRepository[] repositories;
-
-        @Override
-        GHRepository[] getItems(GitHub root) {
-            return repositories;
-        }
     }
 
 }

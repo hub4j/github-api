@@ -19,15 +19,6 @@ import java.util.List;
 
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GitCommit extends GitHubBridgeAdapterObject {
-    private GHRepository owner;
-    private String sha, nodeId, url, htmlUrl;
-    private GitUser author;
-    private GitUser committer;
-
-    private String message;
-
-    private GHVerification verification;
-
     /**
      * The Class Tree.
      */
@@ -40,15 +31,6 @@ public class GitCommit extends GitHubBridgeAdapterObject {
         String sha;
 
         /**
-         * Gets the url.
-         *
-         * @return the url
-         */
-        public String getUrl() {
-            return url;
-        }
-
-        /**
          * Gets the sha.
          *
          * @return the sha
@@ -57,7 +39,25 @@ public class GitCommit extends GitHubBridgeAdapterObject {
             return sha;
         }
 
+        /**
+         * Gets the url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+            return url;
+        }
+
     }
+    private GHRepository owner;
+    private String sha, nodeId, url, htmlUrl;
+    private GitUser author;
+
+    private GitUser committer;
+
+    private String message;
+
+    private GHVerification verification;
 
     private Tree tree;
 
@@ -93,61 +93,6 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     }
 
     /**
-     * Gets owner.
-     *
-     * @return the repository that contains the commit.
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
-    }
-
-    /**
-     * Gets SHA1.
-     *
-     * @return The SHA1 of this commit
-     */
-    public String getSHA1() {
-        return sha;
-    }
-
-    /**
-     * Gets SHA.
-     *
-     * @return The SHA of this commit
-     */
-    public String getSha() {
-        return sha;
-    }
-
-    /**
-     * Gets node id.
-     *
-     * @return The node id of this commit
-     */
-    public String getNodeId() {
-        return nodeId;
-    }
-
-    /**
-     * Gets URL.
-     *
-     * @return The URL of this commit
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Gets HTML URL.
-     *
-     * @return The HTML URL of this commit
-     */
-    public String getHtmlUrl() {
-        return htmlUrl;
-    }
-
-    /**
      * Gets author.
      *
      * @return the author
@@ -167,6 +112,16 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     }
 
     /**
+     * Gets commit date.
+     *
+     * @return the commit date
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getCommitDate() {
+        return committer.getDate();
+    }
+
+    /**
      * Gets committer.
      *
      * @return the committer
@@ -176,13 +131,12 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     }
 
     /**
-     * Gets commit date.
+     * Gets HTML URL.
      *
-     * @return the commit date
+     * @return The HTML URL of this commit
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCommitDate() {
-        return committer.getDate();
+    public String getHtmlUrl() {
+        return htmlUrl;
     }
 
     /**
@@ -195,12 +149,71 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     }
 
     /**
-     * Gets Verification Status.
+     * Gets node id.
      *
-     * @return the Verification status
+     * @return The node id of this commit
      */
-    public GHVerification getVerification() {
-        return verification;
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the repository that contains the commit.
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
+    }
+
+    /**
+     * Gets the parent SHA 1 s.
+     *
+     * @return the parent SHA 1 s
+     */
+    public List<String> getParentSHA1s() {
+        if (parents == null || parents.size() == 0)
+            return Collections.emptyList();
+        return new AbstractList<String>() {
+            @Override
+            public String get(int index) {
+                return parents.get(index).sha;
+            }
+
+            @Override
+            public int size() {
+                return parents.size();
+            }
+        };
+    }
+
+    /**
+     * Gets the parents.
+     *
+     * @return the parents
+     */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
+    List<GHCommit.Parent> getParents() {
+        return parents;
+    }
+
+    /**
+     * Gets SHA1.
+     *
+     * @return The SHA1 of this commit
+     */
+    public String getSHA1() {
+        return sha;
+    }
+
+    /**
+     * Gets SHA.
+     *
+     * @return The SHA of this commit
+     */
+    public String getSha() {
+        return sha;
     }
 
     /**
@@ -231,34 +244,30 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     }
 
     /**
-     * Gets the parents.
+     * Gets URL.
      *
-     * @return the parents
+     * @return The URL of this commit
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
-    List<GHCommit.Parent> getParents() {
-        return parents;
+    public String getUrl() {
+        return url;
     }
 
     /**
-     * Gets the parent SHA 1 s.
+     * Gets Verification Status.
      *
-     * @return the parent SHA 1 s
+     * @return the Verification status
      */
-    public List<String> getParentSHA1s() {
-        if (parents == null || parents.size() == 0)
-            return Collections.emptyList();
-        return new AbstractList<String>() {
-            @Override
-            public String get(int index) {
-                return parents.get(index).sha;
-            }
+    public GHVerification getVerification() {
+        return verification;
+    }
 
-            @Override
-            public int size() {
-                return parents.size();
-            }
-        };
+    /**
+     * For test purposes only.
+     *
+     * @return Equivalent GHCommit
+     */
+    GHCommit toGHCommit() {
+        return new GHCommit(new GHCommit.ShortInfo(this));
     }
 
     /**
@@ -271,15 +280,6 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     GitCommit wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;
-    }
-
-    /**
-     * For test purposes only.
-     *
-     * @return Equivalent GHCommit
-     */
-    GHCommit toGHCommit() {
-        return new GHCommit(new GHCommit.ShortInfo(this));
     }
 
 }

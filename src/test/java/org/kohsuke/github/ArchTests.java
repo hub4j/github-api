@@ -62,6 +62,34 @@ import static org.hamcrest.Matchers.greaterThan;
         "unchecked", "MethodMayBeStatic", "FieldNamingConvention", "StaticCollection" })
 public class ArchTests {
 
+    private static final class EnumConstantFieldPredicate extends DescribedPredicate<JavaField> {
+        private EnumConstantFieldPredicate() {
+            super("are not enum constants");
+        }
+
+        @Override
+        public boolean test(JavaField javaField) {
+            JavaClass owner = javaField.getOwner();
+            return owner.isEnum() && javaField.getRawType().isAssignableTo(owner.reflect());
+        }
+    }
+
+    private static class UnlessPredicate<T> extends DescribedPredicate<T> {
+        private final DescribedPredicate<T> current;
+        private final DescribedPredicate<? super T> other;
+
+        UnlessPredicate(DescribedPredicate<T> current, DescribedPredicate<? super T> other) {
+            super(current.getDescription() + " unless " + other.getDescription());
+            this.current = checkNotNull(current);
+            this.other = checkNotNull(other);
+        }
+
+        @Override
+        public boolean test(T input) {
+            return current.test(input) && !other.test(input);
+        }
+    }
+
     private static final JavaClasses classFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.DoNotIncludeTests())
             .importPackages("org.kohsuke.github");
@@ -73,6 +101,102 @@ public class ArchTests {
             .withImportOption(new ImportOption.DoNotIncludeJars())
             .importPackages("org.kohsuke.github");
 
+    /**
+     * Before class.
+     */
+    @BeforeClass
+    public static void beforeClass() {
+        assertThat(classFiles.size(), greaterThan(0));
+    }
+
+    /**
+     * Have names containing unless.
+     *
+     * @param <T>
+     *            the generic type
+     * @param infix
+     *            the infix
+     * @param unlessPredicates
+     *            the unless predicates
+     * @return the arch condition
+     */
+    public static <T extends HasDescription & HasSourceCodeLocation & HasName> ArchCondition<T> haveNamesContainingUnless(
+            final String infix,
+            final DescribedPredicate<? super T>... unlessPredicates) {
+        DescribedPredicate<? super T> restrictedNameContaining = nameContaining(infix);
+
+        if (unlessPredicates.length > 0) {
+            final DescribedPredicate<T> allowed = or(unlessPredicates);
+            restrictedNameContaining = unless(nameContaining(infix), allowed);
+        }
+        return have(restrictedNameContaining);
+    }
+
+    /**
+     * Not call methods in package unless.
+     *
+     * @param packageIdentifier
+     *            the package identifier
+     * @param unlessPredicates
+     *            the unless predicates
+     * @return the arch condition
+     */
+    public static ArchCondition<JavaClass> notCallMethodsInPackageUnless(final String packageIdentifier,
+            final DescribedPredicate<JavaCall<?>>... unlessPredicates) {
+        DescribedPredicate<JavaCall<?>> restrictedPackageCalls = target(
+                HasOwner.Predicates.With.<JavaClass>owner(resideInAPackage(packageIdentifier)));
+
+        if (unlessPredicates.length > 0) {
+            DescribedPredicate<JavaCall<?>> allowed = unlessPredicates[0];
+            for (int x = 1; x < unlessPredicates.length; x++) {
+                allowed = allowed.or(unlessPredicates[x]);
+            }
+            restrictedPackageCalls = unless(restrictedPackageCalls, allowed);
+        }
+        return ArchConditions.not(callMethodWhere(restrictedPackageCalls));
+    }
+
+    /**
+     * Target method is.
+     *
+     * @param owner
+     *            the owner
+     * @param methodName
+     *            the method name
+     * @param parameterTypes
+     *            the parameter types
+     * @return the described predicate
+     */
+    public static DescribedPredicate<JavaCall<?>> targetMethodIs(Class<?> owner,
+            String methodName,
+            Class<?>... parameterTypes) {
+        return JavaCall.Predicates.target(owner(type(owner)))
+                .and(JavaCall.Predicates.target(name(methodName)))
+                .and(JavaCall.Predicates.target(rawParameterTypes(parameterTypes)))
+                .as("method is %s",
+                        Formatters.formatMethodSimple(owner.getSimpleName(),
+                                methodName,
+                                Arrays.stream(parameterTypes)
+                                        .map(item -> item.getName())
+                                        .collect(Collectors.toList())));
+    }
+
+    /**
+     * Unless.
+     *
+     * @param <T>
+     *            the generic type
+     * @param first
+     *            the first
+     * @param second
+     *            the second
+     * @return the described predicate
+     */
+    public static <T> DescribedPredicate<T> unless(DescribedPredicate<? super T> first,
+            DescribedPredicate<? super T> second) {
+        return new UnlessPredicate(first, second);
+    }
+
     private DescribedPredicate<JavaField> and;
 
     /**
@@ -82,11 +206,12 @@ public class ArchTests {
     }
 
     /**
-     * Before class.
+     * Enum constants.
+     *
+     * @return the described predicate
      */
-    @BeforeClass
-    public static void beforeClass() {
-        assertThat(classFiles.size(), greaterThan(0));
+    private DescribedPredicate<? super JavaField> enumConstants() {
+        return new EnumConstantFieldPredicate();
     }
 
     /**
@@ -212,130 +337,5 @@ public class ArchTests {
                         "Commons methods must be manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier.");
 
         onlyApprovedApacheCommonsMethods.check(classFiles);
-    }
-
-    /**
-     * Have names containing unless.
-     *
-     * @param <T>
-     *            the generic type
-     * @param infix
-     *            the infix
-     * @param unlessPredicates
-     *            the unless predicates
-     * @return the arch condition
-     */
-    public static <T extends HasDescription & HasSourceCodeLocation & HasName> ArchCondition<T> haveNamesContainingUnless(
-            final String infix,
-            final DescribedPredicate<? super T>... unlessPredicates) {
-        DescribedPredicate<? super T> restrictedNameContaining = nameContaining(infix);
-
-        if (unlessPredicates.length > 0) {
-            final DescribedPredicate<T> allowed = or(unlessPredicates);
-            restrictedNameContaining = unless(nameContaining(infix), allowed);
-        }
-        return have(restrictedNameContaining);
-    }
-
-    /**
-     * Not call methods in package unless.
-     *
-     * @param packageIdentifier
-     *            the package identifier
-     * @param unlessPredicates
-     *            the unless predicates
-     * @return the arch condition
-     */
-    public static ArchCondition<JavaClass> notCallMethodsInPackageUnless(final String packageIdentifier,
-            final DescribedPredicate<JavaCall<?>>... unlessPredicates) {
-        DescribedPredicate<JavaCall<?>> restrictedPackageCalls = target(
-                HasOwner.Predicates.With.<JavaClass>owner(resideInAPackage(packageIdentifier)));
-
-        if (unlessPredicates.length > 0) {
-            DescribedPredicate<JavaCall<?>> allowed = unlessPredicates[0];
-            for (int x = 1; x < unlessPredicates.length; x++) {
-                allowed = allowed.or(unlessPredicates[x]);
-            }
-            restrictedPackageCalls = unless(restrictedPackageCalls, allowed);
-        }
-        return ArchConditions.not(callMethodWhere(restrictedPackageCalls));
-    }
-
-    /**
-     * Target method is.
-     *
-     * @param owner
-     *            the owner
-     * @param methodName
-     *            the method name
-     * @param parameterTypes
-     *            the parameter types
-     * @return the described predicate
-     */
-    public static DescribedPredicate<JavaCall<?>> targetMethodIs(Class<?> owner,
-            String methodName,
-            Class<?>... parameterTypes) {
-        return JavaCall.Predicates.target(owner(type(owner)))
-                .and(JavaCall.Predicates.target(name(methodName)))
-                .and(JavaCall.Predicates.target(rawParameterTypes(parameterTypes)))
-                .as("method is %s",
-                        Formatters.formatMethodSimple(owner.getSimpleName(),
-                                methodName,
-                                Arrays.stream(parameterTypes)
-                                        .map(item -> item.getName())
-                                        .collect(Collectors.toList())));
-    }
-
-    /**
-     * Unless.
-     *
-     * @param <T>
-     *            the generic type
-     * @param first
-     *            the first
-     * @param second
-     *            the second
-     * @return the described predicate
-     */
-    public static <T> DescribedPredicate<T> unless(DescribedPredicate<? super T> first,
-            DescribedPredicate<? super T> second) {
-        return new UnlessPredicate(first, second);
-    }
-
-    /**
-     * Enum constants.
-     *
-     * @return the described predicate
-     */
-    private DescribedPredicate<? super JavaField> enumConstants() {
-        return new EnumConstantFieldPredicate();
-    }
-
-    private static class UnlessPredicate<T> extends DescribedPredicate<T> {
-        private final DescribedPredicate<T> current;
-        private final DescribedPredicate<? super T> other;
-
-        UnlessPredicate(DescribedPredicate<T> current, DescribedPredicate<? super T> other) {
-            super(current.getDescription() + " unless " + other.getDescription());
-            this.current = checkNotNull(current);
-            this.other = checkNotNull(other);
-        }
-
-        @Override
-        public boolean test(T input) {
-            return current.test(input) && !other.test(input);
-        }
-    }
-
-    private static final class EnumConstantFieldPredicate extends DescribedPredicate<JavaField> {
-        private EnumConstantFieldPredicate() {
-            super("are not enum constants");
-        }
-
-        @Override
-        public boolean test(JavaField javaField) {
-            JavaClass owner = javaField.getOwner();
-            return owner.isEnum() && javaField.getRawType().isAssignableTo(owner.reflect());
-        }
     }
 }

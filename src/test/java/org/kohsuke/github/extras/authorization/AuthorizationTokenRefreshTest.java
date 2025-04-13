@@ -14,6 +14,19 @@ import java.io.IOException;
  */
 public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
 
+    static class RefreshingAuthorizationProvider implements AuthorizationProvider {
+        private boolean used = false;
+
+        @Override
+        public String getEncodedAuthorization() {
+            if (used) {
+                return "refreshed token";
+            }
+            used = true;
+            return "original token";
+        }
+    }
+
     /**
      * Instantiates a new test.
      */
@@ -62,18 +75,5 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
                 .build();
         final GHUser kohsuke = gitHub.getUser("kohsuke");
         assertThat("Usernames match", "kohsuke".equals(kohsuke.getLogin()));
-    }
-
-    static class RefreshingAuthorizationProvider implements AuthorizationProvider {
-        private boolean used = false;
-
-        @Override
-        public String getEncodedAuthorization() {
-            if (used) {
-                return "refreshed token";
-            }
-            used = true;
-            return "original token";
-        }
     }
 }

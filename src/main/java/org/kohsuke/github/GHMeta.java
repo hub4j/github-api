@@ -18,14 +18,9 @@ import java.util.Map;
  */
 public class GHMeta {
 
-    /**
-     * Create default GHMeta instance
-     */
-    public GHMeta() {
-    }
-
     @JsonProperty("verifiable_password_authentication")
     private boolean verifiablePasswordAuthentication;
+
     @JsonProperty("ssh_key_fingerprints")
     private Map<String, String> sshKeyFingerprints;
     @JsonProperty("ssh_keys")
@@ -39,59 +34,19 @@ public class GHMeta {
     private List<String> packages;
     private List<String> actions;
     private List<String> dependabot;
-
     /**
-     * Is verifiable password authentication boolean.
-     *
-     * @return the boolean
+     * Create default GHMeta instance
      */
-    public boolean isVerifiablePasswordAuthentication() {
-        return verifiablePasswordAuthentication;
+    public GHMeta() {
     }
 
     /**
-     * Gets ssh key fingerprints.
+     * Gets actions.
      *
-     * @return the ssh key fingerprints
+     * @return the actions
      */
-    public Map<String, String> getSshKeyFingerprints() {
-        return Collections.unmodifiableMap(sshKeyFingerprints);
-    }
-
-    /**
-     * Gets ssh keys.
-     *
-     * @return the ssh keys
-     */
-    public List<String> getSshKeys() {
-        return Collections.unmodifiableList(sshKeys);
-    }
-
-    /**
-     * Gets hooks.
-     *
-     * @return the hooks
-     */
-    public List<String> getHooks() {
-        return Collections.unmodifiableList(hooks);
-    }
-
-    /**
-     * Gets git.
-     *
-     * @return the git
-     */
-    public List<String> getGit() {
-        return Collections.unmodifiableList(git);
-    }
-
-    /**
-     * Gets web.
-     *
-     * @return the web
-     */
-    public List<String> getWeb() {
-        return Collections.unmodifiableList(web);
+    public List<String> getActions() {
+        return Collections.unmodifiableList(actions);
     }
 
     /**
@@ -104,12 +59,30 @@ public class GHMeta {
     }
 
     /**
-     * Gets pages.
+     * Gets dependabot.
      *
-     * @return the pages
+     * @return the dependabot
      */
-    public List<String> getPages() {
-        return Collections.unmodifiableList(pages);
+    public List<String> getDependabot() {
+        return Collections.unmodifiableList(dependabot);
+    }
+
+    /**
+     * Gets git.
+     *
+     * @return the git
+     */
+    public List<String> getGit() {
+        return Collections.unmodifiableList(git);
+    }
+
+    /**
+     * Gets hooks.
+     *
+     * @return the hooks
+     */
+    public List<String> getHooks() {
+        return Collections.unmodifiableList(hooks);
     }
 
     /**
@@ -131,20 +104,47 @@ public class GHMeta {
     }
 
     /**
-     * Gets actions.
+     * Gets pages.
      *
-     * @return the actions
+     * @return the pages
      */
-    public List<String> getActions() {
-        return Collections.unmodifiableList(actions);
+    public List<String> getPages() {
+        return Collections.unmodifiableList(pages);
     }
 
     /**
-     * Gets dependabot.
+     * Gets ssh key fingerprints.
      *
-     * @return the dependabot
+     * @return the ssh key fingerprints
      */
-    public List<String> getDependabot() {
-        return Collections.unmodifiableList(dependabot);
+    public Map<String, String> getSshKeyFingerprints() {
+        return Collections.unmodifiableMap(sshKeyFingerprints);
+    }
+
+    /**
+     * Gets ssh keys.
+     *
+     * @return the ssh keys
+     */
+    public List<String> getSshKeys() {
+        return Collections.unmodifiableList(sshKeys);
+    }
+
+    /**
+     * Gets web.
+     *
+     * @return the web
+     */
+    public List<String> getWeb() {
+        return Collections.unmodifiableList(web);
+    }
+
+    /**
+     * Is verifiable password authentication boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isVerifiablePasswordAuthentication() {
+        return verifiablePasswordAuthentication;
     }
 }

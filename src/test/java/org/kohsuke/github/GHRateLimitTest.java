@@ -39,6 +39,10 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
  */
 public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
+    private static GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
     /** The rate limit. */
     GHRateLimit rateLimit = null;
 
@@ -52,36 +56,17 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         useDefaultGitHub = false;
     }
 
-    /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
-    }
-
-    /**
-     * Test git hub rate limit.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testGitHubRateLimit() throws Exception {
+    private void executeExpirationTest() throws Exception {
         // Customized response that templates the date to keep things working
         snapshotNotAllowed();
         GHRateLimit.UnknownLimitRecord.reset();
 
         assertThat(mockGitHub.getRequestCount(), equalTo(0));
+        GHRateLimit rateLimit = null;
+        GHRateLimit headerRateLimit = null;
 
-        // 4897 is just the what the limit was when the snapshot was taken
-        previousLimit = GHRateLimit.fromRecord(
-                new GHRateLimit.Record(5000,
-                        4897,
-                        (templating.testStartDate.getTime() + Duration.ofHours(1).toMillis()) / 1000L),
-                RateLimitTarget.CORE);
+        // Give this a moment
+        Thread.sleep(1500);
 
         // -------------------------------------------------------------
         // /user gets response with rate limit information
@@ -91,162 +76,91 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         assertThat(mockGitHub.getRequestCount(), equalTo(1));
 
         // Since we already had rate limit info these don't request again
-        rateLimit = gitHub.lastRateLimit();
-        verifyRateLimitValues(previousLimit, previousLimit.getRemaining());
-        previousLimit = rateLimit;
+        headerRateLimit = gitHub.lastRateLimit();
+        rateLimit = gitHub.rateLimit();
 
-        GHRateLimit headerRateLimit = rateLimit;
+        assertThat(rateLimit, notNullValue());
+        assertThat("rateLimit() selects header instance when not expired, does not ask server",
+                rateLimit,
+                sameInstance(headerRateLimit));
 
-        // Give this a moment
+        // Nothing changes still valid
         Thread.sleep(1500);
 
-        // ratelimit() uses cached rate limit if available and not expired
-        assertThat(gitHub.rateLimit(), sameInstance(headerRateLimit));
+        assertThat("rateLimit() selects header instance when not expired, does not ask server",
+                gitHub.rateLimit(),
+                sameInstance(headerRateLimit));
 
         assertThat(mockGitHub.getRequestCount(), equalTo(1));
 
-        // Give this a moment
-        Thread.sleep(1500);
+        // This time, rateLimit() should find an expired record and get a new one.
+        Thread.sleep(2500);
 
-        // Always requests new info
-        rateLimit = gitHub.getRateLimit();
+        assertThat("Header instance has expired", gitHub.lastRateLimit().isExpired());
+
+        assertThat("rateLimit() will ask server when cached instance has expired",
+                gitHub.rateLimit(),
+                not(sameInstance(rateLimit)));
+
+        assertThat("lastRateLimit() is populated as part of internal call to getRateLimit()",
+                gitHub.lastRateLimit(),
+                not(sameInstance(rateLimit)));
+
+        assertThat("After request, rateLimit() selects cached since it has been refreshed",
+                gitHub.rateLimit(),
+                sameInstance(gitHub.lastRateLimit()));
+
+        headerRateLimit = gitHub.lastRateLimit();
+
         assertThat(mockGitHub.getRequestCount(), equalTo(2));
 
-        // Because remaining and reset date are unchanged in core, the header should be unchanged as well
-        // But the overall instance has changed because of filling in of unknown data.
-        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
-        // Identical Records should be preserved even when GHRateLimit is merged
-        assertThat(gitHub.lastRateLimit().getCore(), sameInstance(headerRateLimit.getCore()));
-        assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
-        headerRateLimit = gitHub.lastRateLimit();
+        // During the previous call we returned expired header info but valid returned record
+        // Merging means this has already been merged into a valid cached instance
+        Thread.sleep(4000);
 
-        // rate limit request is free, remaining is unchanged
-        verifyRateLimitValues(previousLimit, previousLimit.getRemaining());
-        previousLimit = rateLimit;
+        rateLimit = gitHub.rateLimit();
 
-        // Give this a moment
-        Thread.sleep(1500);
+        // Using custom data to have a header instance that expires before the queried instance
+        assertThat("if valid ratelimit() uses it without asking server",
+                gitHub.rateLimit(),
+                sameInstance(gitHub.lastRateLimit()));
 
-        // Always requests new info
-        rateLimit = gitHub.getRateLimit();
-        assertThat(mockGitHub.getRequestCount(), equalTo(3));
+        assertThat("ratelimit() should almost never return a return a GHRateLimit that is already expired",
+                gitHub.rateLimit().isExpired(),
+                is(false));
 
-        // Because remaining and reset date are unchanged, the header should be unchanged as well
-        assertThat(gitHub.lastRateLimit(), sameInstance(headerRateLimit));
+        assertThat("Cached instance hasn't been reloaded", gitHub.lastRateLimit(), sameInstance(headerRateLimit));
+        assertThat("Cached  instance has not expired", gitHub.lastRateLimit().isExpired(), is(false));
 
-        // rate limit request is free, remaining is unchanged
-        verifyRateLimitValues(previousLimit, previousLimit.getRemaining());
-        previousLimit = rateLimit;
+        assertThat(mockGitHub.getRequestCount(), equalTo(2));
 
-        gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        assertThat(mockGitHub.getRequestCount(), equalTo(4));
-
-        // Because remaining has changed the header should be different
-        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
-        assertThat(gitHub.lastRateLimit(), not(equalTo(headerRateLimit)));
-        rateLimit = gitHub.lastRateLimit();
-
-        // Org costs limit to query
-        verifyRateLimitValues(previousLimit, previousLimit.getRemaining() - 1);
-
-        previousLimit = rateLimit;
-        headerRateLimit = rateLimit;
-
-        // ratelimit() should prefer headerRateLimit when it is most recent and not expired
-        assertThat(gitHub.rateLimit(), sameInstance(headerRateLimit));
-
-        assertThat(mockGitHub.getRequestCount(), equalTo(4));
-
-        // AT THIS POINT WE SIMULATE A RATE LIMIT RESET
-
-        // Give this a moment
+        // Finally the cached instance expires and rateLimit() should get a new record
         Thread.sleep(2000);
 
-        // Always requests new info
-        rateLimit = gitHub.getRateLimit();
-        assertThat(mockGitHub.getRequestCount(), equalTo(5));
+        headerRateLimit = gitHub.rateLimit();
 
-        // rate limit request is free, remaining is unchanged date is later
-        verifyRateLimitValues(previousLimit, previousLimit.getRemaining(), true);
-        previousLimit = rateLimit;
+        assertThat("rateLimit() has asked server for new information",
+                gitHub.rateLimit(),
+                not(sameInstance(rateLimit)));
+        assertThat("rateLimit() has asked server for new information",
+                gitHub.lastRateLimit(),
+                not(sameInstance(rateLimit)));
 
-        // When getRateLimit() succeeds, cached rate limit updates as usual as well (if needed)
-        assertThat(gitHub.rateLimit(), sameInstance(rateLimit));
+        assertThat("rateLimit() selects header instance when not expired, does not ask server",
+                gitHub.rateLimit(),
+                sameInstance((gitHub.lastRateLimit())));
 
-        // Verify different record instances can be compared
-        assertThat(gitHub.rateLimit().getCore(), equalTo(rateLimit.getCore()));
-
-        // Verify different instances can be compared
-        // TODO: This is not work currently because the header rate limit has unknowns for records other than core.
-        // assertThat(gitHub.rateLimit(), equalTo(rateLimit));
-
-        assertThat(gitHub.rateLimit(), not(sameInstance(headerRateLimit)));
-        assertThat(gitHub.rateLimit(), sameInstance(gitHub.lastRateLimit()));
-        headerRateLimit = gitHub.lastRateLimit();
-
-        assertThat(mockGitHub.getRequestCount(), equalTo(5));
-
-        // Verify the requesting a search url updates the search rate limit
-        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(30));
-
-        HashMap<String, Object> searchResult = gitHub.createRequest()
-                .rateLimit(RateLimitTarget.SEARCH)
-                .setRawUrlPath(mockGitHub.apiServer().baseUrl()
-                        + "/search/repositories?q=tetris+language%3Aassembly&sort=stars&order=desc")
-                .fetch(HashMap.class);
-
-        assertThat(searchResult.get("total_count"), equalTo(1918));
-
-        assertThat(mockGitHub.getRequestCount(), equalTo(6));
-
-        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
-        assertThat(gitHub.lastRateLimit().getCore(), sameInstance(headerRateLimit.getCore()));
-        assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
-        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(29));
-
-        PagedSearchIterable<GHRepository> searchResult2 = gitHub.searchRepositories()
-                .q("tetris")
-                .language("assembly")
-                .sort(GHRepositorySearchBuilder.Sort.STARS)
-                .order(GHDirection.DESC)
-                .list();
-
-        assertThat(searchResult2.getTotalCount(), equalTo(1918));
-
-        assertThat(mockGitHub.getRequestCount(), equalTo(7));
-
-        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
-        assertThat(gitHub.lastRateLimit().getCore(), sameInstance(headerRateLimit.getCore()));
-        assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
-        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(28));
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
     }
 
-    private void verifyRateLimitValues(GHRateLimit previousLimit, int remaining) {
-        verifyRateLimitValues(previousLimit, remaining, false);
-    }
-
-    private void verifyRateLimitValues(GHRateLimit previousLimit, int remaining, boolean changedResetDate) {
-        // Basic checks of values
-        assertThat(rateLimit, notNullValue());
-        assertThat(rateLimit.getLimit(), equalTo(previousLimit.getLimit()));
-        assertThat(rateLimit.getRemaining(), equalTo(remaining));
-
-        // Check that the reset date of the current limit is not older than the previous one
-        long diffMillis = rateLimit.getCore().getResetInstant().toEpochMilli()
-                - previousLimit.getCore().getResetInstant().toEpochMilli();
-
-        assertThat(diffMillis, greaterThanOrEqualTo(0L));
-        if (changedResetDate) {
-            assertThat(diffMillis, greaterThan(1000L));
-        } else {
-            assertThat(diffMillis, lessThanOrEqualTo(1000L));
-        }
-
-        // Additional checks for record values
-        assertThat(rateLimit.getCore().getLimit(), equalTo(rateLimit.getLimit()));
-        assertThat(rateLimit.getCore().getRemaining(), equalTo(rateLimit.getRemaining()));
-        assertThat(rateLimit.getCore().getResetEpochSeconds(), equalTo(rateLimit.getResetEpochSeconds()));
-        assertThat(rateLimit.getCore().getResetDate(), equalTo(rateLimit.getResetDate()));
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
     /**
@@ -436,6 +350,188 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test git hub rate limit.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGitHubRateLimit() throws Exception {
+        // Customized response that templates the date to keep things working
+        snapshotNotAllowed();
+        GHRateLimit.UnknownLimitRecord.reset();
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(0));
+
+        // 4897 is just the what the limit was when the snapshot was taken
+        previousLimit = GHRateLimit.fromRecord(
+                new GHRateLimit.Record(5000,
+                        4897,
+                        (templating.testStartDate.getTime() + Duration.ofHours(1).toMillis()) / 1000L),
+                RateLimitTarget.CORE);
+
+        // -------------------------------------------------------------
+        // /user gets response with rate limit information
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+        gitHub.getMyself();
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        // Since we already had rate limit info these don't request again
+        rateLimit = gitHub.lastRateLimit();
+        verifyRateLimitValues(previousLimit, previousLimit.getRemaining());
+        previousLimit = rateLimit;
+
+        GHRateLimit headerRateLimit = rateLimit;
+
+        // Give this a moment
+        Thread.sleep(1500);
+
+        // ratelimit() uses cached rate limit if available and not expired
+        assertThat(gitHub.rateLimit(), sameInstance(headerRateLimit));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        // Give this a moment
+        Thread.sleep(1500);
+
+        // Always requests new info
+        rateLimit = gitHub.getRateLimit();
+        assertThat(mockGitHub.getRequestCount(), equalTo(2));
+
+        // Because remaining and reset date are unchanged in core, the header should be unchanged as well
+        // But the overall instance has changed because of filling in of unknown data.
+        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
+        // Identical Records should be preserved even when GHRateLimit is merged
+        assertThat(gitHub.lastRateLimit().getCore(), sameInstance(headerRateLimit.getCore()));
+        assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
+        headerRateLimit = gitHub.lastRateLimit();
+
+        // rate limit request is free, remaining is unchanged
+        verifyRateLimitValues(previousLimit, previousLimit.getRemaining());
+        previousLimit = rateLimit;
+
+        // Give this a moment
+        Thread.sleep(1500);
+
+        // Always requests new info
+        rateLimit = gitHub.getRateLimit();
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
+
+        // Because remaining and reset date are unchanged, the header should be unchanged as well
+        assertThat(gitHub.lastRateLimit(), sameInstance(headerRateLimit));
+
+        // rate limit request is free, remaining is unchanged
+        verifyRateLimitValues(previousLimit, previousLimit.getRemaining());
+        previousLimit = rateLimit;
+
+        gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        assertThat(mockGitHub.getRequestCount(), equalTo(4));
+
+        // Because remaining has changed the header should be different
+        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
+        assertThat(gitHub.lastRateLimit(), not(equalTo(headerRateLimit)));
+        rateLimit = gitHub.lastRateLimit();
+
+        // Org costs limit to query
+        verifyRateLimitValues(previousLimit, previousLimit.getRemaining() - 1);
+
+        previousLimit = rateLimit;
+        headerRateLimit = rateLimit;
+
+        // ratelimit() should prefer headerRateLimit when it is most recent and not expired
+        assertThat(gitHub.rateLimit(), sameInstance(headerRateLimit));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(4));
+
+        // AT THIS POINT WE SIMULATE A RATE LIMIT RESET
+
+        // Give this a moment
+        Thread.sleep(2000);
+
+        // Always requests new info
+        rateLimit = gitHub.getRateLimit();
+        assertThat(mockGitHub.getRequestCount(), equalTo(5));
+
+        // rate limit request is free, remaining is unchanged date is later
+        verifyRateLimitValues(previousLimit, previousLimit.getRemaining(), true);
+        previousLimit = rateLimit;
+
+        // When getRateLimit() succeeds, cached rate limit updates as usual as well (if needed)
+        assertThat(gitHub.rateLimit(), sameInstance(rateLimit));
+
+        // Verify different record instances can be compared
+        assertThat(gitHub.rateLimit().getCore(), equalTo(rateLimit.getCore()));
+
+        // Verify different instances can be compared
+        // TODO: This is not work currently because the header rate limit has unknowns for records other than core.
+        // assertThat(gitHub.rateLimit(), equalTo(rateLimit));
+
+        assertThat(gitHub.rateLimit(), not(sameInstance(headerRateLimit)));
+        assertThat(gitHub.rateLimit(), sameInstance(gitHub.lastRateLimit()));
+        headerRateLimit = gitHub.lastRateLimit();
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(5));
+
+        // Verify the requesting a search url updates the search rate limit
+        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(30));
+
+        HashMap<String, Object> searchResult = gitHub.createRequest()
+                .rateLimit(RateLimitTarget.SEARCH)
+                .setRawUrlPath(mockGitHub.apiServer().baseUrl()
+                        + "/search/repositories?q=tetris+language%3Aassembly&sort=stars&order=desc")
+                .fetch(HashMap.class);
+
+        assertThat(searchResult.get("total_count"), equalTo(1918));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(6));
+
+        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
+        assertThat(gitHub.lastRateLimit().getCore(), sameInstance(headerRateLimit.getCore()));
+        assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
+        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(29));
+
+        PagedSearchIterable<GHRepository> searchResult2 = gitHub.searchRepositories()
+                .q("tetris")
+                .language("assembly")
+                .sort(GHRepositorySearchBuilder.Sort.STARS)
+                .order(GHDirection.DESC)
+                .list();
+
+        assertThat(searchResult2.getTotalCount(), equalTo(1918));
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(7));
+
+        assertThat(gitHub.lastRateLimit(), not(sameInstance(headerRateLimit)));
+        assertThat(gitHub.lastRateLimit().getCore(), sameInstance(headerRateLimit.getCore()));
+        assertThat(gitHub.lastRateLimit().getSearch(), not(sameInstance(headerRateLimit.getSearch())));
+        assertThat(gitHub.lastRateLimit().getSearch().getRemaining(), equalTo(28));
+    }
+
+    /**
+     * Test git hub rate limit expiration server five minutes ahead.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    // These tests should behave the same, showing server time adjustment working
+    @Test
+    public void testGitHubRateLimitExpirationServerFiveMinutesAhead() throws Exception {
+        executeExpirationTest();
+    }
+
+    /**
+     * Test git hub rate limit expiration server five minutes behind.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGitHubRateLimitExpirationServerFiveMinutesBehind() throws Exception {
+        executeExpirationTest();
+    }
+
+    /**
      * Test git hub rate limit with bad data.
      *
      * @throws Exception
@@ -469,128 +565,32 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
 
     }
 
-    /**
-     * Test git hub rate limit expiration server five minutes ahead.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    // These tests should behave the same, showing server time adjustment working
-    @Test
-    public void testGitHubRateLimitExpirationServerFiveMinutesAhead() throws Exception {
-        executeExpirationTest();
+    private void verifyRateLimitValues(GHRateLimit previousLimit, int remaining) {
+        verifyRateLimitValues(previousLimit, remaining, false);
     }
 
-    /**
-     * Test git hub rate limit expiration server five minutes behind.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testGitHubRateLimitExpirationServerFiveMinutesBehind() throws Exception {
-        executeExpirationTest();
-    }
-
-    private void executeExpirationTest() throws Exception {
-        // Customized response that templates the date to keep things working
-        snapshotNotAllowed();
-        GHRateLimit.UnknownLimitRecord.reset();
-
-        assertThat(mockGitHub.getRequestCount(), equalTo(0));
-        GHRateLimit rateLimit = null;
-        GHRateLimit headerRateLimit = null;
-
-        // Give this a moment
-        Thread.sleep(1500);
-
-        // -------------------------------------------------------------
-        // /user gets response with rate limit information
-        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
-        gitHub.getMyself();
-
-        assertThat(mockGitHub.getRequestCount(), equalTo(1));
-
-        // Since we already had rate limit info these don't request again
-        headerRateLimit = gitHub.lastRateLimit();
-        rateLimit = gitHub.rateLimit();
-
+    private void verifyRateLimitValues(GHRateLimit previousLimit, int remaining, boolean changedResetDate) {
+        // Basic checks of values
         assertThat(rateLimit, notNullValue());
-        assertThat("rateLimit() selects header instance when not expired, does not ask server",
-                rateLimit,
-                sameInstance(headerRateLimit));
+        assertThat(rateLimit.getLimit(), equalTo(previousLimit.getLimit()));
+        assertThat(rateLimit.getRemaining(), equalTo(remaining));
 
-        // Nothing changes still valid
-        Thread.sleep(1500);
+        // Check that the reset date of the current limit is not older than the previous one
+        long diffMillis = rateLimit.getCore().getResetInstant().toEpochMilli()
+                - previousLimit.getCore().getResetInstant().toEpochMilli();
 
-        assertThat("rateLimit() selects header instance when not expired, does not ask server",
-                gitHub.rateLimit(),
-                sameInstance(headerRateLimit));
+        assertThat(diffMillis, greaterThanOrEqualTo(0L));
+        if (changedResetDate) {
+            assertThat(diffMillis, greaterThan(1000L));
+        } else {
+            assertThat(diffMillis, lessThanOrEqualTo(1000L));
+        }
 
-        assertThat(mockGitHub.getRequestCount(), equalTo(1));
-
-        // This time, rateLimit() should find an expired record and get a new one.
-        Thread.sleep(2500);
-
-        assertThat("Header instance has expired", gitHub.lastRateLimit().isExpired());
-
-        assertThat("rateLimit() will ask server when cached instance has expired",
-                gitHub.rateLimit(),
-                not(sameInstance(rateLimit)));
-
-        assertThat("lastRateLimit() is populated as part of internal call to getRateLimit()",
-                gitHub.lastRateLimit(),
-                not(sameInstance(rateLimit)));
-
-        assertThat("After request, rateLimit() selects cached since it has been refreshed",
-                gitHub.rateLimit(),
-                sameInstance(gitHub.lastRateLimit()));
-
-        headerRateLimit = gitHub.lastRateLimit();
-
-        assertThat(mockGitHub.getRequestCount(), equalTo(2));
-
-        // During the previous call we returned expired header info but valid returned record
-        // Merging means this has already been merged into a valid cached instance
-        Thread.sleep(4000);
-
-        rateLimit = gitHub.rateLimit();
-
-        // Using custom data to have a header instance that expires before the queried instance
-        assertThat("if valid ratelimit() uses it without asking server",
-                gitHub.rateLimit(),
-                sameInstance(gitHub.lastRateLimit()));
-
-        assertThat("ratelimit() should almost never return a return a GHRateLimit that is already expired",
-                gitHub.rateLimit().isExpired(),
-                is(false));
-
-        assertThat("Cached instance hasn't been reloaded", gitHub.lastRateLimit(), sameInstance(headerRateLimit));
-        assertThat("Cached  instance has not expired", gitHub.lastRateLimit().isExpired(), is(false));
-
-        assertThat(mockGitHub.getRequestCount(), equalTo(2));
-
-        // Finally the cached instance expires and rateLimit() should get a new record
-        Thread.sleep(2000);
-
-        headerRateLimit = gitHub.rateLimit();
-
-        assertThat("rateLimit() has asked server for new information",
-                gitHub.rateLimit(),
-                not(sameInstance(rateLimit)));
-        assertThat("rateLimit() has asked server for new information",
-                gitHub.lastRateLimit(),
-                not(sameInstance(rateLimit)));
-
-        assertThat("rateLimit() selects header instance when not expired, does not ask server",
-                gitHub.rateLimit(),
-                sameInstance((gitHub.lastRateLimit())));
-
-        assertThat(mockGitHub.getRequestCount(), equalTo(3));
-    }
-
-    private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+        // Additional checks for record values
+        assertThat(rateLimit.getCore().getLimit(), equalTo(rateLimit.getLimit()));
+        assertThat(rateLimit.getCore().getRemaining(), equalTo(rateLimit.getRemaining()));
+        assertThat(rateLimit.getCore().getResetEpochSeconds(), equalTo(rateLimit.getResetEpochSeconds()));
+        assertThat(rateLimit.getCore().getResetDate(), equalTo(rateLimit.getResetDate()));
     }
 
 }

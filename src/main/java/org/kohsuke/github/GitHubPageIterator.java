@@ -23,7 +23,36 @@ import javax.annotation.Nonnull;
  */
 class GitHubPageIterator<T> implements Iterator<T> {
 
+    /**
+     * Loads paginated resources.
+     *
+     * @param <T>
+     *            type of each page (not the items in the page).
+     * @param client
+     *            the {@link GitHubClient} from which to request responses
+     * @param type
+     *            type of each page (not the items in the page).
+     * @param request
+     *            the request
+     * @param pageSize
+     *            the page size
+     * @return iterator
+     */
+    static <T> GitHubPageIterator<T> create(GitHubClient client, Class<T> type, GitHubRequest request, int pageSize) {
+
+        if (pageSize > 0) {
+            GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
+            request = builder.build();
+        }
+
+        if (!"GET".equals(request.method())) {
+            throw new IllegalArgumentException("Request method \"GET\" is required for page iterator.");
+        }
+
+        return new GitHubPageIterator<>(client, type, request);
+    }
     private final GitHubClient client;
+
     private final Class<T> type;
 
     /**
@@ -54,71 +83,6 @@ class GitHubPageIterator<T> implements Iterator<T> {
         this.client = client;
         this.type = type;
         this.nextRequest = request;
-    }
-
-    /**
-     * Loads paginated resources.
-     *
-     * @param <T>
-     *            type of each page (not the items in the page).
-     * @param client
-     *            the {@link GitHubClient} from which to request responses
-     * @param type
-     *            type of each page (not the items in the page).
-     * @param request
-     *            the request
-     * @param pageSize
-     *            the page size
-     * @return iterator
-     */
-    static <T> GitHubPageIterator<T> create(GitHubClient client, Class<T> type, GitHubRequest request, int pageSize) {
-
-        if (pageSize > 0) {
-            GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
-            request = builder.build();
-        }
-
-        if (!"GET".equals(request.method())) {
-            throw new IllegalArgumentException("Request method \"GET\" is required for page iterator.");
-        }
-
-        return new GitHubPageIterator<>(client, type, request);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean hasNext() {
-        fetch();
-        return next != null;
-    }
-
-    /**
-     * Gets the next page.
-     *
-     * @return the next page.
-     */
-    @Nonnull
-    public T next() {
-        fetch();
-        T result = next;
-        if (result == null)
-            throw new NoSuchElementException();
-        // If this is the last page, keep the response
-        next = null;
-        return result;
-    }
-
-    /**
-     * On rare occasions the final response from iterating is needed.
-     *
-     * @return the final response of the iterator.
-     */
-    public GitHubResponse<T> finalResponse() {
-        if (hasNext()) {
-            throw new GHException("Final response is not available until after iterator is done.");
-        }
-        return finalResponse;
     }
 
     /**
@@ -158,6 +122,18 @@ class GitHubPageIterator<T> implements Iterator<T> {
     }
 
     /**
+     * On rare occasions the final response from iterating is needed.
+     *
+     * @return the final response of the iterator.
+     */
+    public GitHubResponse<T> finalResponse() {
+        if (hasNext()) {
+            throw new GHException("Final response is not available until after iterator is done.");
+        }
+        return finalResponse;
+    }
+
+    /**
      * Locate the next page from the pagination "Link" tag.
      */
     private GitHubRequest findNextURL(GitHubRequest nextRequest, GitHubResponse<T> nextResponse) {
@@ -174,6 +150,30 @@ class GitHubPageIterator<T> implements Iterator<T> {
                 }
             }
         }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasNext() {
+        fetch();
+        return next != null;
+    }
+
+    /**
+     * Gets the next page.
+     *
+     * @return the next page.
+     */
+    @Nonnull
+    public T next() {
+        fetch();
+        T result = next;
+        if (result == null)
+            throw new NoSuchElementException();
+        // If this is the last page, keep the response
+        next = null;
         return result;
     }
 

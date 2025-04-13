@@ -95,6 +95,34 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements 
     }
 
     /**
+     * Chooses whether to return a continuing builder or an updated data record
+     *
+     * If {@code S} is the same as {@code R}, this method will commit changes after the first value change and return a
+     * {@code R} from {@link #done()}.
+     *
+     * If {@code S} is not the same as {@code R}, this method will return an {@code S} and letting the caller batch
+     * together multiple changes and call {@link #done()} when they are ready.
+     *
+     * @return either a continuing builder or an updated data record
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    @Nonnull
+    @BetaApi
+    protected S continueOrDone() throws IOException {
+        // This little bit of roughness in this base class means all inheriting builders get to create Updater and
+        // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as
+        // well.
+        if (commitChangesImmediately) {
+            // These casts look strange and risky, but they they're actually guaranteed safe due to the return path
+            // being based on the previous comparison of class instances passed to the constructor.
+            return (S) done();
+        } else {
+            return (S) this;
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -132,33 +160,5 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements 
     protected S with(@Nonnull String name, Object value) throws IOException {
         requester.with(name, value);
         return continueOrDone();
-    }
-
-    /**
-     * Chooses whether to return a continuing builder or an updated data record
-     *
-     * If {@code S} is the same as {@code R}, this method will commit changes after the first value change and return a
-     * {@code R} from {@link #done()}.
-     *
-     * If {@code S} is not the same as {@code R}, this method will return an {@code S} and letting the caller batch
-     * together multiple changes and call {@link #done()} when they are ready.
-     *
-     * @return either a continuing builder or an updated data record
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    @Nonnull
-    @BetaApi
-    protected S continueOrDone() throws IOException {
-        // This little bit of roughness in this base class means all inheriting builders get to create Updater and
-        // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as
-        // well.
-        if (commitChangesImmediately) {
-            // These casts look strange and risky, but they they're actually guaranteed safe due to the return path
-            // being based on the previous comparison of class instances passed to the constructor.
-            return (S) done();
-        } else {
-            return (S) this;
-        }
     }
 }

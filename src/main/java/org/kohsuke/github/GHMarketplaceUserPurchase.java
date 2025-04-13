@@ -15,13 +15,8 @@ import java.util.Date;
  */
 public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
 
-    /**
-     * Create default GHMarketplaceUserPurchase instance
-     */
-    public GHMarketplaceUserPurchase() {
-    }
-
     private String billingCycle;
+
     private String nextBillingDate;
     private boolean onFreeTrial;
     private String freeTrialEndsOn;
@@ -31,6 +26,20 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
     private GHMarketplaceAccount account;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplacePlan plan;
+    /**
+     * Create default GHMarketplaceUserPurchase instance
+     */
+    public GHMarketplaceUserPurchase() {
+    }
+
+    /**
+     * Gets account.
+     *
+     * @return the account
+     */
+    public GHMarketplaceAccount getAccount() {
+        return account;
+    }
 
     /**
      * Gets billing cycle.
@@ -39,6 +48,16 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
      */
     public String getBillingCycle() {
         return billingCycle;
+    }
+
+    /**
+     * Gets free trial ends on.
+     *
+     * @return the free trial ends on
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getFreeTrialEndsOn() {
+        return GitHubClient.parseInstant(freeTrialEndsOn);
     }
 
     /**
@@ -52,22 +71,12 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
     }
 
     /**
-     * Is on free trial boolean.
+     * Gets plan.
      *
-     * @return the boolean
+     * @return the plan
      */
-    public boolean isOnFreeTrial() {
-        return onFreeTrial;
-    }
-
-    /**
-     * Gets free trial ends on.
-     *
-     * @return the free trial ends on
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getFreeTrialEndsOn() {
-        return GitHubClient.parseInstant(freeTrialEndsOn);
+    public GHMarketplacePlan getPlan() {
+        return plan;
     }
 
     /**
@@ -90,20 +99,11 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets account.
+     * Is on free trial boolean.
      *
-     * @return the account
+     * @return the boolean
      */
-    public GHMarketplaceAccount getAccount() {
-        return account;
-    }
-
-    /**
-     * Gets plan.
-     *
-     * @return the plan
-     */
-    public GHMarketplacePlan getPlan() {
-        return plan;
+    public boolean isOnFreeTrial() {
+        return onFreeTrial;
     }
 }

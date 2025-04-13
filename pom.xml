@@ -484,14 +484,18 @@
             </includes>
 
             <eclipse>
+              <version>4.35</version>
               <file>${basedir}/src/build/eclipse/formatter.xml</file>
+              <sortMembersEnabled>true</sortMembersEnabled>
             </eclipse>
 
             <importOrder>
               <file>${basedir}/src/build/eclipse/eclipse.importorder</file>
             </importOrder>
+            
             <removeUnusedImports></removeUnusedImports>
-
+            <formatAnnotations />
+            
             <trimTrailingWhitespace></trimTrailingWhitespace>
             <endWithNewline></endWithNewline>
 

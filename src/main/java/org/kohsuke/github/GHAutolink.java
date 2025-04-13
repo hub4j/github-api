@@ -27,6 +27,20 @@ public class GHAutolink {
     }
 
     /**
+     * Deletes this autolink
+     *
+     * @throws IOException
+     *             if the deletion fails
+     */
+    public void delete() throws IOException {
+        owner.root()
+                .createRequest()
+                .method("DELETE")
+                .withUrlPath(String.format("/repos/%s/%s/autolinks/%d", owner.getOwnerName(), owner.getName(), getId()))
+                .send();
+    }
+
+    /**
      * Gets the autolink ID
      *
      * @return the id
@@ -45,6 +59,16 @@ public class GHAutolink {
     }
 
     /**
+     * Gets the repository that owns this autolink
+     *
+     * @return the repository instance
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
+    }
+
+    /**
      * Gets the URL template that will be used for matching
      *
      * @return the URL template string
@@ -60,30 +84,6 @@ public class GHAutolink {
      */
     public boolean isAlphanumeric() {
         return isAlphanumeric;
-    }
-
-    /**
-     * Gets the repository that owns this autolink
-     *
-     * @return the repository instance
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
-    }
-
-    /**
-     * Deletes this autolink
-     *
-     * @throws IOException
-     *             if the deletion fails
-     */
-    public void delete() throws IOException {
-        owner.root()
-                .createRequest()
-                .method("DELETE")
-                .withUrlPath(String.format("/repos/%s/%s/autolinks/%d", owner.getOwnerName(), owner.getName(), getId()))
-                .send();
     }
 
     /**

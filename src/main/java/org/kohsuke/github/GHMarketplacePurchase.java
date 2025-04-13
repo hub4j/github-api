@@ -15,13 +15,8 @@ import java.util.Date;
  */
 public class GHMarketplacePurchase extends GitHubInteractiveObject {
 
-    /**
-     * Create default GHMarketplacePurchase instance
-     */
-    public GHMarketplacePurchase() {
-    }
-
     private String billingCycle;
+
     private String nextBillingDate;
     private boolean onFreeTrial;
     private String freeTrialEndsOn;
@@ -29,6 +24,11 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
     private String updatedAt;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplacePlan plan;
+    /**
+     * Create default GHMarketplacePurchase instance
+     */
+    public GHMarketplacePurchase() {
+    }
 
     /**
      * Gets billing cycle.
@@ -37,6 +37,16 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
      */
     public String getBillingCycle() {
         return billingCycle;
+    }
+
+    /**
+     * Gets free trial ends on.
+     *
+     * @return the free trial ends on
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getFreeTrialEndsOn() {
+        return GitHubClient.parseInstant(freeTrialEndsOn);
     }
 
     /**
@@ -50,22 +60,12 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
     }
 
     /**
-     * Is on free trial boolean.
+     * Gets plan.
      *
-     * @return the boolean
+     * @return the plan
      */
-    public boolean isOnFreeTrial() {
-        return onFreeTrial;
-    }
-
-    /**
-     * Gets free trial ends on.
-     *
-     * @return the free trial ends on
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getFreeTrialEndsOn() {
-        return GitHubClient.parseInstant(freeTrialEndsOn);
+    public GHMarketplacePlan getPlan() {
+        return plan;
     }
 
     /**
@@ -88,11 +88,11 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets plan.
+     * Is on free trial boolean.
      *
-     * @return the plan
+     * @return the boolean
      */
-    public GHMarketplacePlan getPlan() {
-        return plan;
+    public boolean isOnFreeTrial() {
+        return onFreeTrial;
     }
 }

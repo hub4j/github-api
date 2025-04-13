@@ -22,76 +22,20 @@ import static java.util.Objects.requireNonNull;
  */
 public class GHArtifact extends GHObject {
 
-    /**
-     * Create default GHArtifact instance
-     */
-    public GHArtifact() {
-    }
-
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
 
     private String name;
+
     private long sizeInBytes;
     private String archiveDownloadUrl;
     private boolean expired;
     private String expiresAt;
-
     /**
-     * Gets the name.
-     *
-     * @return the name
+     * Create default GHArtifact instance
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets the size of the artifact in bytes.
-     *
-     * @return the size
-     */
-    public long getSizeInBytes() {
-        return sizeInBytes;
-    }
-
-    /**
-     * Gets the archive download URL.
-     *
-     * @return the archive download URL
-     */
-    public URL getArchiveDownloadUrl() {
-        return GitHubClient.parseURL(archiveDownloadUrl);
-    }
-
-    /**
-     * If this artifact has expired.
-     *
-     * @return if the artifact has expired
-     */
-    public boolean isExpired() {
-        return expired;
-    }
-
-    /**
-     * Gets the date at which this artifact will expire.
-     *
-     * @return the date of expiration
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getExpiresAt() {
-        return GitHubClient.parseInstant(expiresAt);
-    }
-
-    /**
-     * Repository to which the artifact belongs.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getRepository() {
-        return owner;
+    public GHArtifact() {
     }
 
     /**
@@ -128,6 +72,62 @@ public class GHArtifact extends GHObject {
             return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
         }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/artifacts/" + getId();
+    }
+
+    /**
+     * Gets the archive download URL.
+     *
+     * @return the archive download URL
+     */
+    public URL getArchiveDownloadUrl() {
+        return GitHubClient.parseURL(archiveDownloadUrl);
+    }
+
+    /**
+     * Gets the date at which this artifact will expire.
+     *
+     * @return the date of expiration
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getExpiresAt() {
+        return GitHubClient.parseInstant(expiresAt);
+    }
+
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Repository to which the artifact belongs.
+     *
+     * @return the repository
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getRepository() {
+        return owner;
+    }
+
+    /**
+     * Gets the size of the artifact in bytes.
+     *
+     * @return the size
+     */
+    public long getSizeInBytes() {
+        return sizeInBytes;
+    }
+
+    /**
+     * If this artifact has expired.
+     *
+     * @return if the artifact has expired
+     */
+    public boolean isExpired() {
+        return expired;
     }
 
     /**

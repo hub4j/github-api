@@ -24,6 +24,53 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
     public LifecycleTest() {
     }
 
+    private File createDummyFile(File repoDir) throws IOException {
+        File file = new File(repoDir, "testFile-" + System.currentTimeMillis());
+        PrintWriter writer = new PrintWriter(new FileWriter(file));
+        try {
+            writer.println("test file");
+        } finally {
+            writer.close();
+        }
+        return file;
+    }
+
+    private GHRelease createRelease(GHRepository repository) throws IOException {
+        GHRelease builder = repository.createRelease("release_tag")
+                .name("Test Release")
+                .body("How exciting!  To be able to programmatically create releases is a dream come true!")
+                .create();
+        List<GHRelease> releases = repository.listReleases().toList();
+        assertThat(releases.size(), equalTo(1));
+        GHRelease release = releases.get(0);
+        assertThat(release.getName(), equalTo("Test Release"));
+        assertThat(release.getBody(), startsWith("How exciting!"));
+        assertThat(release.getOwner(), sameInstance(repository));
+        assertThat(release.getZipballUrl(),
+                endsWith("/repos/hub4j-test-org/temp-testCreateRepository/zipball/release_tag"));
+        assertThat(release.getTarballUrl(),
+                endsWith("/repos/hub4j-test-org/temp-testCreateRepository/tarball/release_tag"));
+        assertThat(release.getTargetCommitish(), equalTo("main"));
+        assertThat(release.getHtmlUrl().toString(),
+                endsWith("/hub4j-test-org/temp-testCreateRepository/releases/tag/release_tag"));
+
+        return release;
+    }
+
+    private void delete(File toDelete) {
+        if (toDelete.isDirectory()) {
+            for (File file : toDelete.listFiles()) {
+                delete(file);
+            }
+        }
+        toDelete.delete();
+    }
+
+    private void deleteAsset(GHRelease release, GHAsset asset) throws IOException {
+        asset.delete();
+        assertThat(release.listAssets().toList(), is(empty()));
+    }
+
     /**
      * Test create repository.
      *
@@ -64,11 +111,6 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
         assertThat(release.listAssets().toList().get(0).getLabel(), equalTo("test label"));
     }
 
-    private void deleteAsset(GHRelease release, GHAsset asset) throws IOException {
-        asset.delete();
-        assertThat(release.listAssets().toList(), is(empty()));
-    }
-
     private GHAsset uploadAsset(GHRelease release) throws IOException {
         GHAsset asset = release.uploadAsset(new File("LICENSE.txt"), "application/text");
         assertThat(asset, notNullValue());
@@ -86,47 +128,5 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
                 containsString("/temp-testCreateRepository/releases/download/release_tag/LICENSE.txt"));
 
         return asset;
-    }
-
-    private GHRelease createRelease(GHRepository repository) throws IOException {
-        GHRelease builder = repository.createRelease("release_tag")
-                .name("Test Release")
-                .body("How exciting!  To be able to programmatically create releases is a dream come true!")
-                .create();
-        List<GHRelease> releases = repository.listReleases().toList();
-        assertThat(releases.size(), equalTo(1));
-        GHRelease release = releases.get(0);
-        assertThat(release.getName(), equalTo("Test Release"));
-        assertThat(release.getBody(), startsWith("How exciting!"));
-        assertThat(release.getOwner(), sameInstance(repository));
-        assertThat(release.getZipballUrl(),
-                endsWith("/repos/hub4j-test-org/temp-testCreateRepository/zipball/release_tag"));
-        assertThat(release.getTarballUrl(),
-                endsWith("/repos/hub4j-test-org/temp-testCreateRepository/tarball/release_tag"));
-        assertThat(release.getTargetCommitish(), equalTo("main"));
-        assertThat(release.getHtmlUrl().toString(),
-                endsWith("/hub4j-test-org/temp-testCreateRepository/releases/tag/release_tag"));
-
-        return release;
-    }
-
-    private void delete(File toDelete) {
-        if (toDelete.isDirectory()) {
-            for (File file : toDelete.listFiles()) {
-                delete(file);
-            }
-        }
-        toDelete.delete();
-    }
-
-    private File createDummyFile(File repoDir) throws IOException {
-        File file = new File(repoDir, "testFile-" + System.currentTimeMillis());
-        PrintWriter writer = new PrintWriter(new FileWriter(file));
-        try {
-            writer.println("test file");
-        } finally {
-            writer.close();
-        }
-        return file;
     }
 }

@@ -10,6 +10,32 @@ import java.util.List;
  * @see GHRepository#getCloneTraffic() GHRepository#getCloneTraffic()
  */
 public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
+    /**
+     * The type DailyInfo.
+     */
+    public static class DailyInfo extends GHRepositoryTraffic.DailyInfo {
+
+        /**
+         * Instantiates a new daily info.
+         */
+        DailyInfo() {
+        }
+
+        /**
+         * Instantiates a new daily info.
+         *
+         * @param timestamp
+         *            the timestamp
+         * @param count
+         *            the count
+         * @param uniques
+         *            the uniques
+         */
+        DailyInfo(String timestamp, int count, int uniques) {
+            super(timestamp, count, uniques);
+        }
+    }
+
     private List<DailyInfo> clones;
 
     /**
@@ -49,31 +75,5 @@ public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
      */
     public List<DailyInfo> getDailyInfo() {
         return getClones();
-    }
-
-    /**
-     * The type DailyInfo.
-     */
-    public static class DailyInfo extends GHRepositoryTraffic.DailyInfo {
-
-        /**
-         * Instantiates a new daily info.
-         */
-        DailyInfo() {
-        }
-
-        /**
-         * Instantiates a new daily info.
-         *
-         * @param timestamp
-         *            the timestamp
-         * @param count
-         *            the count
-         * @param uniques
-         *            the uniques
-         */
-        DailyInfo(String timestamp, int count, int uniques) {
-            super(timestamp, count, uniques);
-        }
     }
 }

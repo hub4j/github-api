@@ -12,21 +12,35 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHIssueChanges {
 
     /**
-     * Create default GHIssueChanges instance
+     * Wrapper for changed values.
      */
-    public GHIssueChanges() {
+    public static class GHFrom {
+
+        private String from;
+
+        /**
+         * Create default GHFrom instance
+         */
+        public GHFrom() {
+        }
+
+        /**
+         * Previous value that was changed.
+         *
+         * @return previous value
+         */
+        public String getFrom() {
+            return from;
+        }
     }
 
     private GHFrom title;
     private GHFrom body;
 
     /**
-     * Old issue title.
-     *
-     * @return old issue title (or null if not changed)
+     * Create default GHIssueChanges instance
      */
-    public GHFrom getTitle() {
-        return title;
+    public GHIssueChanges() {
     }
 
     /**
@@ -39,25 +53,11 @@ public class GHIssueChanges {
     }
 
     /**
-     * Wrapper for changed values.
+     * Old issue title.
+     *
+     * @return old issue title (or null if not changed)
      */
-    public static class GHFrom {
-
-        /**
-         * Create default GHFrom instance
-         */
-        public GHFrom() {
-        }
-
-        private String from;
-
-        /**
-         * Previous value that was changed.
-         *
-         * @return previous value
-         */
-        public String getFrom() {
-            return from;
-        }
+    public GHFrom getTitle() {
+        return title;
     }
 }

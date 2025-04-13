@@ -35,13 +35,162 @@ import static org.hamcrest.Matchers.*;
  */
 public class RequesterRetryTest extends AbstractGitHubWireMockTest {
 
-    private static Logger log = Logger.getLogger(GitHubClient.class.getName()); // matches the logger in the affected
-                                                                                // class
-    private static OutputStream logCapturingStream;
-    private static StreamHandler customLogHandler;
+    /**
+     * The Class InputStreamThrowingHttpConnector.
+     *
+     * @param <E>
+     *            the element type
+     */
+    static class BodyStreamThrowingGitHubConnector<E extends IOException> extends HttpClientGitHubConnector {
+
+        final int[] count = { 0 };
+
+        private final Thrower<E> thrower;
+
+        /**
+         * Instantiates a new input stream throwing http connector.
+         *
+         * @param thrower
+         *            the thrower
+         */
+        BodyStreamThrowingGitHubConnector(final Thrower<E> thrower) {
+            super();
+            this.thrower = thrower;
+        }
+
+        @Override
+        public GitHubConnectorResponse send(GitHubConnectorRequest connectorRequest) throws IOException {
+            if (connectorRequest.url().toString().contains(GITHUB_API_TEST_ORG)) {
+                count[0]++;
+            }
+            GitHubConnectorResponse response = super.send(connectorRequest);
+            return new GitHubConnectorResponseWrapper(response) {
+                @NotNull @Override
+                public InputStream bodyStream() throws IOException {
+                    if (response.request().url().toString().contains(GITHUB_API_TEST_ORG)) {
+                        if (count[0] % 3 != 0) {
+                            thrower.throwError();
+                        }
+                    }
+                    return super.bodyStream();
+                }
+            };
+        }
+    }
+    private static class GitHubConnectorResponseWrapper extends GitHubConnectorResponse {
+
+        private final GitHubConnectorResponse wrapped;
+
+        GitHubConnectorResponseWrapper(GitHubConnectorResponse response) {
+            super(GitHubConnectorResponseTest.EMPTY_REQUEST, -1, new HashMap<>());
+            wrapped = response;
+        }
+
+        @Nonnull
+        @Override
+        public Map<String, List<String>> allHeaders() {
+            return wrapped.allHeaders();
+        }
+
+        @NotNull @Override
+        public InputStream bodyStream() throws IOException {
+            return wrapped.bodyStream();
+        }
+
+        @Override
+        public void close() throws IOException {
+            wrapped.close();
+        }
+
+        @CheckForNull
+        @Override
+        public String header(String name) {
+            return wrapped.header(name);
+        }
+
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'rawBodyStream'");
+        }
+
+        @Nonnull
+        @Override
+        public GitHubConnectorRequest request() {
+            return wrapped.request();
+        }
+
+        @Override
+        public int statusCode() {
+            return wrapped.statusCode();
+        }
+    }
+    /**
+     * The Class ResponseCodeThrowingGitHubConnector.
+     *
+     * @param <E>
+     *            the element type
+     */
+    static class SendThrowingGitHubConnector<E extends IOException> extends HttpClientGitHubConnector {
+
+        final int[] count = { 0 };
+
+        private final Thrower<E> thrower;
+
+        /**
+         * Instantiates a new response code throwing http connector.
+         *
+         * @param thrower
+         *            the thrower
+         */
+        SendThrowingGitHubConnector(final Thrower<E> thrower) {
+            super();
+            this.thrower = thrower;
+        }
+
+        @Override
+        public GitHubConnectorResponse send(GitHubConnectorRequest connectorRequest) throws IOException {
+            if (connectorRequest.url().toString().contains(GITHUB_API_TEST_ORG)) {
+                count[0]++;
+                // throwing before we call super.send() simulates error
+                if (count[0] % 3 != 0) {
+                    thrower.throwError();
+                }
+            }
+
+            GitHubConnectorResponse response = super.send(connectorRequest);
+            return new GitHubConnectorResponseWrapper(response);
+        }
+
+    }
 
     /** The connection. */
     // HttpURLConnection connection;
+
+    /**
+     * The Interface Thrower.
+     *
+     * @param <E>
+     *            the element type
+     */
+    @FunctionalInterface
+    public interface Thrower<E extends Throwable> {
+
+        /**
+         * Throw error.
+         *
+         * @throws E
+         *             the e
+         */
+        void throwError() throws E;
+    }
+
+    private static Logger log = Logger.getLogger(GitHubClient.class.getName()); // matches the logger in the affected
+
+    // class
+    private static OutputStream logCapturingStream;
+
+    private static StreamHandler customLogHandler;
 
     /** The base request count. */
     int baseRequestCount;
@@ -51,21 +200,6 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
      */
     public RequesterRetryTest() {
         useDefaultGitHub = false;
-    }
-
-    /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
     /**
@@ -80,57 +214,14 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the test captured log.
+     * Gets the repository.
      *
-     * @return the test captured log
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
-    public String getTestCapturedLog() {
-        customLogHandler.flush();
-        return logCapturingStream.toString();
-    }
-
-    /**
-     * Reset test captured log.
-     */
-    public void resetTestCapturedLog() {
-        Logger.getLogger(GitHubClient.class.getName()).removeHandler(customLogHandler);
-        Logger.getLogger(OkHttpClient.class.getName()).removeHandler(customLogHandler);
-        customLogHandler.close();
-        attachLogCapturer();
-    }
-
-    /**
-     * Test git hub is api url valid.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Ignore("Used okhttp3 and this to verify connection closing. Too flaky for CI system.")
-    @Test
-    public void testGitHubIsApiUrlValid() throws Exception {
-
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .connectionPool(new ConnectionPool(2, 100, TimeUnit.MILLISECONDS))
-                .build();
-
-        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client);
-
-        for (int x = 0; x < 100; x++) {
-
-            this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                    .withConnector(connector)
-                    .build();
-
-            try {
-                gitHub.checkApiUrlValidity();
-            } catch (IOException ioe) {
-                assertThat(ioe.getMessage(), containsString("private mode enabled"));
-            }
-            Thread.sleep(100);
-        }
-
-        String capturedLog = getTestCapturedLog();
-        assertThat(capturedLog, not(containsString("leaked")));
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 
     // /**
@@ -266,55 +357,165 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     // assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 6));
     // }
 
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
     /**
-     * Test response code failure exceptions.
+     * Gets the test captured log.
+     *
+     * @return the test captured log
+     */
+    public String getTestCapturedLog() {
+        customLogHandler.flush();
+        return logCapturingStream.toString();
+    }
+
+    /**
+     * Test response code connection exceptions.
      *
      * @throws Exception
      *             the exception
      */
+    // @Test
+    // public void testResponseCodeConnectionExceptions() throws Exception {
+    // // Because the test throws at the very start of send(), there is only one connection for 3 retries
+    // GitHubConnector connector = new SendThrowingGitHubConnector<>(() -> {
+    // throw new SocketException();
+    // });
+    // runConnectionExceptionTest(connector, 1);
+    // runConnectionExceptionStatusCodeTest(connector, 1);
+
+    // connector = new SendThrowingGitHubConnector<>(() -> {
+    // throw new SocketTimeoutException();
+    // });
+    // runConnectionExceptionTest(connector, 1);
+    // runConnectionExceptionStatusCodeTest(connector, 1);
+
+    // connector = new SendThrowingGitHubConnector<>(() -> {
+    // throw new SSLHandshakeException("TestFailure");
+    // });
+    // runConnectionExceptionTest(connector, 1);
+    // runConnectionExceptionStatusCodeTest(connector, 1);
+    // }
+
+    /**
+     * Reset test captured log.
+     */
+    public void resetTestCapturedLog() {
+        Logger.getLogger(GitHubClient.class.getName()).removeHandler(customLogHandler);
+        Logger.getLogger(OkHttpClient.class.getName()).removeHandler(customLogHandler);
+        customLogHandler.close();
+        attachLogCapturer();
+    }
+
+    private void runConnectionExceptionStatusCodeTest(GitHubConnector connector, int expectedRequestCount)
+            throws IOException {
+        // now wire in the connector
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withConnector(connector)
+                .build();
+
+        resetTestCapturedLog();
+        baseRequestCount = this.mockGitHub.getRequestCount();
+        assertThat(this.gitHub.createRequest().withUrlPath("/orgs/" + GITHUB_API_TEST_ORG).fetchHttpStatusCode(),
+                equalTo(200));
+        String capturedLog = getTestCapturedLog();
+        if (expectedRequestCount > 0) {
+            assertThat(capturedLog, containsString("(2 retries remaining)"));
+            assertThat(capturedLog, containsString("(1 retries remaining)"));
+            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + expectedRequestCount));
+        } else {
+            // Success without retries
+            assertThat(capturedLog, not(containsString("retries remaining")));
+            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 1));
+        }
+    }
+
+    /**
+     * Test input stream connection exceptions.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    // @Test
+    // public void testInputStreamConnectionExceptions() throws Exception {
+    // // InputStream is where most exceptions get thrown whether connection or simple FNF
+    // // Because the test throws after send(), there is one connection for each retry
+    // // However, getStatusCode never calls that and so it does succeed
+    // GitHubConnector connector = new BodyStreamThrowingGitHubConnector<>(() -> {
+    // throw new SocketException();
+    // });
+    // runConnectionExceptionTest(connector, 3);
+    // runConnectionExceptionStatusCodeTest(connector, 0);
+
+    // connector = new BodyStreamThrowingGitHubConnector<>(() -> {
+    // throw new SocketTimeoutException();
+    // });
+    // runConnectionExceptionTest(connector, 3);
+    // runConnectionExceptionStatusCodeTest(connector, 0);
+
+    // connector = new BodyStreamThrowingGitHubConnector<>(() -> {
+    // throw new SSLHandshakeException("TestFailure");
+    // });
+    // runConnectionExceptionTest(connector, 3);
+    // runConnectionExceptionStatusCodeTest(connector, 0);
+    // }
+
+    private void runConnectionExceptionTest(GitHubConnector connector, int expectedRequestCount) throws IOException {
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withConnector(connector)
+                .build();
+
+        resetTestCapturedLog();
+        baseRequestCount = this.mockGitHub.getRequestCount();
+        assertThat(this.gitHub.getOrganization(GITHUB_API_TEST_ORG), is(notNullValue()));
+        String capturedLog = getTestCapturedLog();
+        assertThat(capturedLog, containsString("(2 retries remaining)"));
+        assertThat(capturedLog, containsString("(1 retries remaining)"));
+        assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + expectedRequestCount));
+
+        resetTestCapturedLog();
+        baseRequestCount = this.mockGitHub.getRequestCount();
+        this.gitHub.createRequest().withUrlPath("/orgs/" + GITHUB_API_TEST_ORG).send();
+        capturedLog = getTestCapturedLog();
+        assertThat(capturedLog, containsString("(2 retries remaining)"));
+        assertThat(capturedLog, containsString("(1 retries remaining)"));
+        assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + expectedRequestCount));
+    }
+
+    /**
+     * Test git hub is api url valid.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Ignore("Used okhttp3 and this to verify connection closing. Too flaky for CI system.")
     @Test
-    public void testResponseCodeFailureExceptions() throws Exception {
-        // No retry for these Exceptions
-        GitHubConnector connector = new SendThrowingGitHubConnector<>(() -> {
-            throw new IOException("Custom");
-        });
-        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withConnector(connector)
+    public void testGitHubIsApiUrlValid() throws Exception {
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectionPool(new ConnectionPool(2, 100, TimeUnit.MILLISECONDS))
                 .build();
 
-        resetTestCapturedLog();
-        baseRequestCount = this.mockGitHub.getRequestCount();
-        try {
-            this.gitHub.getOrganization(GITHUB_API_TEST_ORG);
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getCause(), instanceOf(IOException.class));
-            assertThat(e.getCause().getMessage(), is("Custom"));
-            String capturedLog = getTestCapturedLog();
-            assertThat(capturedLog, not(containsString("retries remaining")));
-            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount));
+        OkHttpGitHubConnector connector = new OkHttpGitHubConnector(client);
+
+        for (int x = 0; x < 100; x++) {
+
+            this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                    .withConnector(connector)
+                    .build();
+
+            try {
+                gitHub.checkApiUrlValidity();
+            } catch (IOException ioe) {
+                assertThat(ioe.getMessage(), containsString("private mode enabled"));
+            }
+            Thread.sleep(100);
         }
 
-        connector = new SendThrowingGitHubConnector<>(() -> {
-            throw new FileNotFoundException("Custom");
-        });
-        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withConnector(connector)
-                .build();
-
-        resetTestCapturedLog();
-        baseRequestCount = this.mockGitHub.getRequestCount();
-        try {
-            this.gitHub.getOrganization(GITHUB_API_TEST_ORG);
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(FileNotFoundException.class));
-            assertThat(e.getMessage(), is("Custom"));
-            String capturedLog = getTestCapturedLog();
-            assertThat(capturedLog, not(containsString("retries remaining")));
-            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount));
-        }
+        String capturedLog = getTestCapturedLog();
+        assertThat(capturedLog, not(containsString("leaked")));
     }
 
     /**
@@ -380,256 +581,53 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test response code connection exceptions.
+     * Test response code failure exceptions.
      *
      * @throws Exception
      *             the exception
      */
-    // @Test
-    // public void testResponseCodeConnectionExceptions() throws Exception {
-    // // Because the test throws at the very start of send(), there is only one connection for 3 retries
-    // GitHubConnector connector = new SendThrowingGitHubConnector<>(() -> {
-    // throw new SocketException();
-    // });
-    // runConnectionExceptionTest(connector, 1);
-    // runConnectionExceptionStatusCodeTest(connector, 1);
-
-    // connector = new SendThrowingGitHubConnector<>(() -> {
-    // throw new SocketTimeoutException();
-    // });
-    // runConnectionExceptionTest(connector, 1);
-    // runConnectionExceptionStatusCodeTest(connector, 1);
-
-    // connector = new SendThrowingGitHubConnector<>(() -> {
-    // throw new SSLHandshakeException("TestFailure");
-    // });
-    // runConnectionExceptionTest(connector, 1);
-    // runConnectionExceptionStatusCodeTest(connector, 1);
-    // }
-
-    /**
-     * Test input stream connection exceptions.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    // @Test
-    // public void testInputStreamConnectionExceptions() throws Exception {
-    // // InputStream is where most exceptions get thrown whether connection or simple FNF
-    // // Because the test throws after send(), there is one connection for each retry
-    // // However, getStatusCode never calls that and so it does succeed
-    // GitHubConnector connector = new BodyStreamThrowingGitHubConnector<>(() -> {
-    // throw new SocketException();
-    // });
-    // runConnectionExceptionTest(connector, 3);
-    // runConnectionExceptionStatusCodeTest(connector, 0);
-
-    // connector = new BodyStreamThrowingGitHubConnector<>(() -> {
-    // throw new SocketTimeoutException();
-    // });
-    // runConnectionExceptionTest(connector, 3);
-    // runConnectionExceptionStatusCodeTest(connector, 0);
-
-    // connector = new BodyStreamThrowingGitHubConnector<>(() -> {
-    // throw new SSLHandshakeException("TestFailure");
-    // });
-    // runConnectionExceptionTest(connector, 3);
-    // runConnectionExceptionStatusCodeTest(connector, 0);
-    // }
-
-    private void runConnectionExceptionTest(GitHubConnector connector, int expectedRequestCount) throws IOException {
+    @Test
+    public void testResponseCodeFailureExceptions() throws Exception {
+        // No retry for these Exceptions
+        GitHubConnector connector = new SendThrowingGitHubConnector<>(() -> {
+            throw new IOException("Custom");
+        });
         this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
                 .withConnector(connector)
                 .build();
 
         resetTestCapturedLog();
         baseRequestCount = this.mockGitHub.getRequestCount();
-        assertThat(this.gitHub.getOrganization(GITHUB_API_TEST_ORG), is(notNullValue()));
-        String capturedLog = getTestCapturedLog();
-        assertThat(capturedLog, containsString("(2 retries remaining)"));
-        assertThat(capturedLog, containsString("(1 retries remaining)"));
-        assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + expectedRequestCount));
-
-        resetTestCapturedLog();
-        baseRequestCount = this.mockGitHub.getRequestCount();
-        this.gitHub.createRequest().withUrlPath("/orgs/" + GITHUB_API_TEST_ORG).send();
-        capturedLog = getTestCapturedLog();
-        assertThat(capturedLog, containsString("(2 retries remaining)"));
-        assertThat(capturedLog, containsString("(1 retries remaining)"));
-        assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + expectedRequestCount));
-    }
-
-    private void runConnectionExceptionStatusCodeTest(GitHubConnector connector, int expectedRequestCount)
-            throws IOException {
-        // now wire in the connector
-        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withConnector(connector)
-                .build();
-
-        resetTestCapturedLog();
-        baseRequestCount = this.mockGitHub.getRequestCount();
-        assertThat(this.gitHub.createRequest().withUrlPath("/orgs/" + GITHUB_API_TEST_ORG).fetchHttpStatusCode(),
-                equalTo(200));
-        String capturedLog = getTestCapturedLog();
-        if (expectedRequestCount > 0) {
-            assertThat(capturedLog, containsString("(2 retries remaining)"));
-            assertThat(capturedLog, containsString("(1 retries remaining)"));
-            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + expectedRequestCount));
-        } else {
-            // Success without retries
+        try {
+            this.gitHub.getOrganization(GITHUB_API_TEST_ORG);
+            fail();
+        } catch (Exception e) {
+            assertThat(e, instanceOf(HttpException.class));
+            assertThat(e.getCause(), instanceOf(IOException.class));
+            assertThat(e.getCause().getMessage(), is("Custom"));
+            String capturedLog = getTestCapturedLog();
             assertThat(capturedLog, not(containsString("retries remaining")));
-            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 1));
-        }
-    }
-
-    /**
-     * The Class ResponseCodeThrowingGitHubConnector.
-     *
-     * @param <E>
-     *            the element type
-     */
-    static class SendThrowingGitHubConnector<E extends IOException> extends HttpClientGitHubConnector {
-
-        final int[] count = { 0 };
-
-        private final Thrower<E> thrower;
-
-        /**
-         * Instantiates a new response code throwing http connector.
-         *
-         * @param thrower
-         *            the thrower
-         */
-        SendThrowingGitHubConnector(final Thrower<E> thrower) {
-            super();
-            this.thrower = thrower;
+            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount));
         }
 
-        @Override
-        public GitHubConnectorResponse send(GitHubConnectorRequest connectorRequest) throws IOException {
-            if (connectorRequest.url().toString().contains(GITHUB_API_TEST_ORG)) {
-                count[0]++;
-                // throwing before we call super.send() simulates error
-                if (count[0] % 3 != 0) {
-                    thrower.throwError();
-                }
-            }
+        connector = new SendThrowingGitHubConnector<>(() -> {
+            throw new FileNotFoundException("Custom");
+        });
+        this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withConnector(connector)
+                .build();
 
-            GitHubConnectorResponse response = super.send(connectorRequest);
-            return new GitHubConnectorResponseWrapper(response);
+        resetTestCapturedLog();
+        baseRequestCount = this.mockGitHub.getRequestCount();
+        try {
+            this.gitHub.getOrganization(GITHUB_API_TEST_ORG);
+            fail();
+        } catch (Exception e) {
+            assertThat(e, instanceOf(FileNotFoundException.class));
+            assertThat(e.getMessage(), is("Custom"));
+            String capturedLog = getTestCapturedLog();
+            assertThat(capturedLog, not(containsString("retries remaining")));
+            assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount));
         }
-
-    }
-
-    /**
-     * The Class InputStreamThrowingHttpConnector.
-     *
-     * @param <E>
-     *            the element type
-     */
-    static class BodyStreamThrowingGitHubConnector<E extends IOException> extends HttpClientGitHubConnector {
-
-        final int[] count = { 0 };
-
-        private final Thrower<E> thrower;
-
-        /**
-         * Instantiates a new input stream throwing http connector.
-         *
-         * @param thrower
-         *            the thrower
-         */
-        BodyStreamThrowingGitHubConnector(final Thrower<E> thrower) {
-            super();
-            this.thrower = thrower;
-        }
-
-        @Override
-        public GitHubConnectorResponse send(GitHubConnectorRequest connectorRequest) throws IOException {
-            if (connectorRequest.url().toString().contains(GITHUB_API_TEST_ORG)) {
-                count[0]++;
-            }
-            GitHubConnectorResponse response = super.send(connectorRequest);
-            return new GitHubConnectorResponseWrapper(response) {
-                @NotNull
-                @Override
-                public InputStream bodyStream() throws IOException {
-                    if (response.request().url().toString().contains(GITHUB_API_TEST_ORG)) {
-                        if (count[0] % 3 != 0) {
-                            thrower.throwError();
-                        }
-                    }
-                    return super.bodyStream();
-                }
-            };
-        }
-    }
-
-    private static class GitHubConnectorResponseWrapper extends GitHubConnectorResponse {
-
-        private final GitHubConnectorResponse wrapped;
-
-        GitHubConnectorResponseWrapper(GitHubConnectorResponse response) {
-            super(GitHubConnectorResponseTest.EMPTY_REQUEST, -1, new HashMap<>());
-            wrapped = response;
-        }
-
-        @CheckForNull
-        @Override
-        public String header(String name) {
-            return wrapped.header(name);
-        }
-
-        @NotNull
-        @Override
-        public InputStream bodyStream() throws IOException {
-            return wrapped.bodyStream();
-        }
-
-        @Nonnull
-        @Override
-        public GitHubConnectorRequest request() {
-            return wrapped.request();
-        }
-
-        @Override
-        public int statusCode() {
-            return wrapped.statusCode();
-        }
-
-        @Nonnull
-        @Override
-        public Map<String, List<String>> allHeaders() {
-            return wrapped.allHeaders();
-        }
-
-        @Override
-        public void close() throws IOException {
-            wrapped.close();
-        }
-
-        @Override
-        protected InputStream rawBodyStream() throws IOException {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'rawBodyStream'");
-        }
-    }
-
-    /**
-     * The Interface Thrower.
-     *
-     * @param <E>
-     *            the element type
-     */
-    @FunctionalInterface
-    public interface Thrower<E extends Throwable> {
-
-        /**
-         * Throw error.
-         *
-         * @throws E
-         *             the e
-         */
-        void throwError() throws E;
     }
 }

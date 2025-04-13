@@ -26,7 +26,40 @@ import javax.annotation.Nonnull;
  * @author Liam Newman
  */
 public class OkHttpGitHubConnector implements GitHubConnector {
+    /**
+     * Initial response information when a response is initially received and before the body is processed.
+     *
+     * Implementation specific to {@link okhttp3.Response}.
+     */
+    private static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse {
+
+        @Nonnull
+        private final Response response;
+
+        OkHttpGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request, @Nonnull Response response) {
+            super(request, response.code(), response.headers().toMultimap());
+            this.response = response;
+        }
+
+        @Override
+        public void close() throws IOException {
+            super.close();
+            response.close();
+        }
+
+        @CheckForNull
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+            ResponseBody body = response.body();
+            if (body != null) {
+                return body.byteStream();
+            } else {
+                return null;
+            }
+        }
+    }
     private static final String HEADER_NAME = "Cache-Control";
+
     private final String maxAgeHeaderValue;
 
     private final OkHttpClient client;
@@ -62,6 +95,11 @@ public class OkHttpGitHubConnector implements GitHubConnector {
         }
     }
 
+    /** Returns connection spec with TLS v1.2 in it */
+    private List<ConnectionSpec> TlsConnectionSpecs() {
+        return Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT);
+    }
+
     @Override
     public GitHubConnectorResponse send(GitHubConnectorRequest request) throws IOException {
         Request.Builder builder = new Request.Builder().url(request.url());
@@ -91,43 +129,5 @@ public class OkHttpGitHubConnector implements GitHubConnector {
         Response okhttpResponse = client.newCall(okhttpRequest).execute();
 
         return new OkHttpGitHubConnectorResponse(request, okhttpResponse);
-    }
-
-    /** Returns connection spec with TLS v1.2 in it */
-    private List<ConnectionSpec> TlsConnectionSpecs() {
-        return Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT);
-    }
-
-    /**
-     * Initial response information when a response is initially received and before the body is processed.
-     *
-     * Implementation specific to {@link okhttp3.Response}.
-     */
-    private static class OkHttpGitHubConnectorResponse extends GitHubConnectorResponse {
-
-        @Nonnull
-        private final Response response;
-
-        OkHttpGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request, @Nonnull Response response) {
-            super(request, response.code(), response.headers().toMultimap());
-            this.response = response;
-        }
-
-        @CheckForNull
-        @Override
-        protected InputStream rawBodyStream() throws IOException {
-            ResponseBody body = response.body();
-            if (body != null) {
-                return body.byteStream();
-            } else {
-                return null;
-            }
-        }
-
-        @Override
-        public void close() throws IOException {
-            super.close();
-            response.close();
-        }
     }
 }

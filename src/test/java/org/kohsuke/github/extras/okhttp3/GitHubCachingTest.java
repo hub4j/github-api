@@ -27,6 +27,15 @@ import java.io.IOException;
  */
 public class GitHubCachingTest extends AbstractGitHubWireMockTest {
 
+    private static int clientCount = 0;
+
+    private static GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
+    /** The test ref name. */
+    String testRefName = "heads/test/content_ref_cache";
+
     /**
      * Instantiates a new git hub caching test.
      */
@@ -34,8 +43,21 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         useDefaultGitHub = false;
     }
 
-    /** The test ref name. */
-    String testRefName = "heads/test/content_ref_cache";
+    private OkHttpClient createClient(boolean useCache) throws IOException {
+        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+
+        if (useCache) {
+            File cacheDir = new File(
+                    "target/cache/" + baseFilesClassPath + "/" + mockGitHub.getMethodName() + clientCount++);
+            cacheDir.mkdirs();
+            FileUtils.cleanDirectory(cacheDir);
+            Cache cache = new Cache(cacheDir, 100 * 1024L * 1024L);
+
+            builder.cache(cache);
+        }
+
+        return builder.build();
+    }
 
     /**
      * Gets the wire mock options.
@@ -183,28 +205,6 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         // OMG, the workaround succeeded!
         // This correct response should be generated from a 304.
         repo.getRef(testRefName);
-    }
-
-    private static int clientCount = 0;
-
-    private OkHttpClient createClient(boolean useCache) throws IOException {
-        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-
-        if (useCache) {
-            File cacheDir = new File(
-                    "target/cache/" + baseFilesClassPath + "/" + mockGitHub.getMethodName() + clientCount++);
-            cacheDir.mkdirs();
-            FileUtils.cleanDirectory(cacheDir);
-            Cache cache = new Cache(cacheDir, 100 * 1024L * 1024L);
-
-            builder.cache(cache);
-        }
-
-        return builder.build();
-    }
-
-    private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
 }

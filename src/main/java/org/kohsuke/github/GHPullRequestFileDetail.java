@@ -35,12 +35,6 @@ import java.net.URL;
  */
 public class GHPullRequestFileDetail {
 
-    /**
-     * Create default GHPullRequestFileDetail instance
-     */
-    public GHPullRequestFileDetail() {
-    }
-
     /** The sha. */
     String sha;
 
@@ -75,32 +69,9 @@ public class GHPullRequestFileDetail {
     String previousFilename;
 
     /**
-     * Gets sha of the file (not commit sha).
-     *
-     * @return the sha
-     * @see <a href="https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files">List pull requests
-     *      files</a>
+     * Create default GHPullRequestFileDetail instance
      */
-    public String getSha() {
-        return sha;
-    }
-
-    /**
-     * Gets filename.
-     *
-     * @return the filename
-     */
-    public String getFilename() {
-        return filename;
-    }
-
-    /**
-     * Gets status (added/modified/deleted).
-     *
-     * @return the status
-     */
-    public String getStatus() {
-        return status;
+    public GHPullRequestFileDetail() {
     }
 
     /**
@@ -113,12 +84,12 @@ public class GHPullRequestFileDetail {
     }
 
     /**
-     * Gets deletions.
+     * Gets blob url.
      *
-     * @return the deletions
+     * @return the blob url
      */
-    public int getDeletions() {
-        return deletions;
+    public URL getBlobUrl() {
+        return GitHubClient.parseURL(blobUrl);
     }
 
     /**
@@ -131,30 +102,30 @@ public class GHPullRequestFileDetail {
     }
 
     /**
-     * Gets blob url.
-     *
-     * @return the blob url
-     */
-    public URL getBlobUrl() {
-        return GitHubClient.parseURL(blobUrl);
-    }
-
-    /**
-     * Gets raw url.
-     *
-     * @return the raw url
-     */
-    public URL getRawUrl() {
-        return GitHubClient.parseURL(rawUrl);
-    }
-
-    /**
      * Gets contents url.
      *
      * @return the contents url
      */
     public URL getContentsUrl() {
         return GitHubClient.parseURL(contentsUrl);
+    }
+
+    /**
+     * Gets deletions.
+     *
+     * @return the deletions
+     */
+    public int getDeletions() {
+        return deletions;
+    }
+
+    /**
+     * Gets filename.
+     *
+     * @return the filename
+     */
+    public String getFilename() {
+        return filename;
     }
 
     /**
@@ -173,5 +144,34 @@ public class GHPullRequestFileDetail {
      */
     public String getPreviousFilename() {
         return previousFilename;
+    }
+
+    /**
+     * Gets raw url.
+     *
+     * @return the raw url
+     */
+    public URL getRawUrl() {
+        return GitHubClient.parseURL(rawUrl);
+    }
+
+    /**
+     * Gets sha of the file (not commit sha).
+     *
+     * @return the sha
+     * @see <a href="https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files">List pull requests
+     *      files</a>
+     */
+    public String getSha() {
+        return sha;
+    }
+
+    /**
+     * Gets status (added/modified/deleted).
+     *
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
     }
 }

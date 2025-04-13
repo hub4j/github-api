@@ -13,9 +13,19 @@ import java.io.IOException;
 public class GHAsset extends GHObject {
 
     /**
-     * Create default GHAsset instance
+     * Wrap gh asset [ ].
+     *
+     * @param assets
+     *            the assets
+     * @param release
+     *            the release
+     * @return the gh asset [ ]
      */
-    public GHAsset() {
+    public static GHAsset[] wrap(GHAsset[] assets, GHRelease release) {
+        for (GHAsset aTo : assets) {
+            aTo.wrap(release);
+        }
+        return assets;
     }
 
     /** The owner. */
@@ -29,25 +39,45 @@ public class GHAsset extends GHObject {
     private String browserDownloadUrl;
 
     /**
+     * Create default GHAsset instance
+     */
+    public GHAsset() {
+    }
+
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+    }
+
+    private String getApiRoute() {
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/releases/assets/" + getId();
+    }
+
+    /**
+     * Gets browser download url.
+     *
+     * @return the browser download url
+     */
+    public String getBrowserDownloadUrl() {
+        return browserDownloadUrl;
+    }
+
+    /**
      * Gets content type.
      *
      * @return the content type
      */
     public String getContentType() {
         return contentType;
-    }
-
-    /**
-     * Sets content type.
-     *
-     * @param contentType
-     *            the content type
-     * @throws IOException
-     *             the io exception
-     */
-    public void setContentType(String contentType) throws IOException {
-        edit("content_type", contentType);
-        this.contentType = contentType;
     }
 
     /**
@@ -66,19 +96,6 @@ public class GHAsset extends GHObject {
      */
     public String getLabel() {
         return label;
-    }
-
-    /**
-     * Sets label.
-     *
-     * @param label
-     *            the label
-     * @throws IOException
-     *             the io exception
-     */
-    public void setLabel(String label) throws IOException {
-        edit("label", label);
-        this.label = label;
     }
 
     /**
@@ -119,30 +136,29 @@ public class GHAsset extends GHObject {
     }
 
     /**
-     * Gets browser download url.
+     * Sets content type.
      *
-     * @return the browser download url
-     */
-    public String getBrowserDownloadUrl() {
-        return browserDownloadUrl;
-    }
-
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * Delete.
-     *
+     * @param contentType
+     *            the content type
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    public void setContentType(String contentType) throws IOException {
+        edit("content_type", contentType);
+        this.contentType = contentType;
     }
 
-    private String getApiRoute() {
-        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/releases/assets/" + getId();
+    /**
+     * Sets label.
+     *
+     * @param label
+     *            the label
+     * @throws IOException
+     *             the io exception
+     */
+    public void setLabel(String label) throws IOException {
+        edit("label", label);
+        this.label = label;
     }
 
     /**
@@ -155,21 +171,5 @@ public class GHAsset extends GHObject {
     GHAsset wrap(GHRelease release) {
         this.owner = release.getOwner();
         return this;
-    }
-
-    /**
-     * Wrap gh asset [ ].
-     *
-     * @param assets
-     *            the assets
-     * @param release
-     *            the release
-     * @return the gh asset [ ]
-     */
-    public static GHAsset[] wrap(GHAsset[] assets, GHRelease release) {
-        for (GHAsset aTo : assets) {
-            aTo.wrap(release);
-        }
-        return assets;
     }
 }

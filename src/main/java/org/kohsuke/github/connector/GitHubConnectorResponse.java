@@ -36,11 +36,35 @@ import static java.net.HttpURLConnection.HTTP_OK;
  */
 public abstract class GitHubConnectorResponse implements Closeable {
 
+    /**
+     * A ByteArrayResponse class
+     *
+     * @deprecated Inherit directly from {@link GitHubConnectorResponse}.
+     */
+    @Deprecated
+    public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
+
+        /**
+         * Constructor for ByteArray Response
+         *
+         * @param request
+         *            the request
+         * @param statusCode
+         *            the status code
+         * @param headers
+         *            the headers
+         */
+        protected ByteArrayResponse(@Nonnull GitHubConnectorRequest request,
+                int statusCode,
+                @Nonnull Map<String, List<String>> headers) {
+            super(request, statusCode, headers);
+        }
+    }
+
     private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
             .nullsFirst(String.CASE_INSENSITIVE_ORDER);
 
     private final int statusCode;
-
     @Nonnull
     private final GitHubConnectorRequest request;
     @Nonnull
@@ -49,6 +73,7 @@ public abstract class GitHubConnectorResponse implements Closeable {
     private InputStream bodyStream = null;
     private byte[] bodyBytes = null;
     private boolean isClosed = false;
+
     private boolean isBodyStreamRereadable;
 
     /**
@@ -77,19 +102,14 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
-     * Gets the value of a header field for this response.
+     * The headers for this response.
      *
-     * @param name
-     *            the name of the header field.
-     * @return the value of the header field, or {@code null} if the header isn't set.
+     * @return the headers for this response.
      */
-    @CheckForNull
-    public String header(String name) {
-        String result = null;
-        if (headers.containsKey(name)) {
-            result = headers.get(name).get(0);
-        }
-        return result;
+    @Nonnull
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable map of unmodifiable lists")
+    public Map<String, List<String>> allHeaders() {
+        return headers;
     }
 
     /**
@@ -142,6 +162,69 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() throws IOException {
+        synchronized (this) {
+            IOUtils.closeQuietly(bodyStream);
+            isClosed = true;
+            this.bodyBytes = null;
+        }
+    }
+
+    /**
+     * Gets the value of a header field for this response.
+     *
+     * @param name
+     *            the name of the header field.
+     * @return the value of the header field, or {@code null} if the header isn't set.
+     */
+    @CheckForNull
+    public String header(String name) {
+        String result = null;
+        if (headers.containsKey(name)) {
+            result = headers.get(name).get(0);
+        }
+        return result;
+    }
+
+    /**
+     * The body stream rereadable state.
+     *
+     * Body stream defaults to read once for HTTP_OK responses (to reduce memory usage). For non-HTTP_OK responses, body
+     * stream is switched to rereadable (in-memory byte array) for error processing.
+     *
+     * Calling {@link #setBodyStreamRereadable()} will force {@link #isBodyStreamRereadable} to be true for this
+     * response regardless of {@link #statusCode} value.
+     *
+     * @return true when body stream is rereadable.
+     */
+    public boolean isBodyStreamRereadable() {
+        synchronized (this) {
+            return isBodyStreamRereadable || statusCode != HTTP_OK;
+        }
+    }
+
+    /**
+     * Parse a header value as a signed decimal integer.
+     *
+     * @param name
+     *            the header field to parse
+     * @return integer value of the header field
+     * @throws NumberFormatException
+     *             if the header is missing or does not contain a parsable integer.
+     */
+    public final int parseInt(String name) throws NumberFormatException {
+        try {
+            String headerValue = header(name);
+            return Integer.parseInt(headerValue);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException(name + ": " + e.getMessage());
+        }
+    }
+
+    /**
      * Get the raw implementation specific body stream for this response.
      *
      * This method will only be called once to completion. If an exception is thrown by this method, it may be called
@@ -168,43 +251,6 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
-     * The status code for this response.
-     *
-     * @return the status code for this response.
-     */
-    public int statusCode() {
-        return statusCode;
-    }
-
-    /**
-     * The headers for this response.
-     *
-     * @return the headers for this response.
-     */
-    @Nonnull
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable map of unmodifiable lists")
-    public Map<String, List<String>> allHeaders() {
-        return headers;
-    }
-
-    /**
-     * The body stream rereadable state.
-     *
-     * Body stream defaults to read once for HTTP_OK responses (to reduce memory usage). For non-HTTP_OK responses, body
-     * stream is switched to rereadable (in-memory byte array) for error processing.
-     *
-     * Calling {@link #setBodyStreamRereadable()} will force {@link #isBodyStreamRereadable} to be true for this
-     * response regardless of {@link #statusCode} value.
-     *
-     * @return true when body stream is rereadable.
-     */
-    public boolean isBodyStreamRereadable() {
-        synchronized (this) {
-            return isBodyStreamRereadable || statusCode != HTTP_OK;
-        }
-    }
-
-    /**
      * Force body stream to rereadable regardless of status code.
      *
      * Calling {@link #setBodyStreamRereadable()} will force {@link #isBodyStreamRereadable} to be true for this
@@ -226,15 +272,12 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
-     * {@inheritDoc}
+     * The status code for this response.
+     *
+     * @return the status code for this response.
      */
-    @Override
-    public void close() throws IOException {
-        synchronized (this) {
-            IOUtils.closeQuietly(bodyStream);
-            isClosed = true;
-            this.bodyBytes = null;
-        }
+    public int statusCode() {
+        return statusCode;
     }
 
     /**
@@ -254,48 +297,5 @@ public abstract class GitHubConnectorResponse implements Closeable {
             return new GZIPInputStream(stream);
 
         throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
-    }
-
-    /**
-     * Parse a header value as a signed decimal integer.
-     *
-     * @param name
-     *            the header field to parse
-     * @return integer value of the header field
-     * @throws NumberFormatException
-     *             if the header is missing or does not contain a parsable integer.
-     */
-    public final int parseInt(String name) throws NumberFormatException {
-        try {
-            String headerValue = header(name);
-            return Integer.parseInt(headerValue);
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException(name + ": " + e.getMessage());
-        }
-    }
-
-    /**
-     * A ByteArrayResponse class
-     *
-     * @deprecated Inherit directly from {@link GitHubConnectorResponse}.
-     */
-    @Deprecated
-    public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
-
-        /**
-         * Constructor for ByteArray Response
-         *
-         * @param request
-         *            the request
-         * @param statusCode
-         *            the status code
-         * @param headers
-         *            the headers
-         */
-        protected ByteArrayResponse(@Nonnull GitHubConnectorRequest request,
-                int statusCode,
-                @Nonnull Map<String, List<String>> headers) {
-            super(request, statusCode, headers);
-        }
     }
 }

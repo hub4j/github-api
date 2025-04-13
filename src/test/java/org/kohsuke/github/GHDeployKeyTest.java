@@ -17,16 +17,31 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
 
+    private static final String DEPLOY_KEY_TEST_REPO_NAME = "hub4j-test-org/GHDeployKeyTest";
+
+    private static final String ED_25519_READONLY = "DeployKey - ed25519 - readonly";
+    private static final String RSA_4096_READWRITE = "Deploykey - rsa4096 - readwrite";
+    private static final String KEY_CREATOR_USERNAME = "van-vliet";
     /**
      * Create default GHDeployKeyTest instance
      */
     public GHDeployKeyTest() {
     }
 
-    private static final String DEPLOY_KEY_TEST_REPO_NAME = "hub4j-test-org/GHDeployKeyTest";
-    private static final String ED_25519_READONLY = "DeployKey - ed25519 - readonly";
-    private static final String RSA_4096_READWRITE = "Deploykey - rsa4096 - readwrite";
-    private static final String KEY_CREATOR_USERNAME = "van-vliet";
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
+    }
+
+    private GHRepository getRepository(final GitHub gitHub) throws IOException {
+        return gitHub.getRepository(DEPLOY_KEY_TEST_REPO_NAME);
+    }
 
     /**
      * Test get deploymentkeys.
@@ -68,20 +83,5 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
                 is(KEY_CREATOR_USERNAME));
         assertThat("The key has never been used", rsa_4096Key.get().getLastUsedAt(), is(nullValue()));
         assertThat("The key only has read/write access", rsa_4096Key.get().isRead_only(), is(false));
-    }
-
-    /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(final GitHub gitHub) throws IOException {
-        return gitHub.getRepository(DEPLOY_KEY_TEST_REPO_NAME);
     }
 }

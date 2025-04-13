@@ -23,6 +23,26 @@ public class GHExternalGroupTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test get organization.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testGetOrganization() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        List<GHExternalGroup> groups = org.listExternalGroups().toList();
+        final GHExternalGroup sut = findExternalGroup(groups, hasName("acme-developers"));
+
+        assertThat(sut, isExternalGroupSummary());
+
+        final GHOrganization other = sut.getOrganization();
+
+        assertThat(other, is(org));
+    }
+
+    /**
      * Test refresh bound external group.
      *
      * @throws IOException
@@ -50,26 +70,6 @@ public class GHExternalGroupTest extends AbstractGitHubWireMockTest {
 
         assertThat(sut.getTeams(), notNullValue());
         assertThat(teamSummary(sut), hasItems("9891173:ACME-DEVELOPERS"));
-    }
-
-    /**
-     * Test get organization.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testGetOrganization() throws IOException {
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-
-        List<GHExternalGroup> groups = org.listExternalGroups().toList();
-        final GHExternalGroup sut = findExternalGroup(groups, hasName("acme-developers"));
-
-        assertThat(sut, isExternalGroupSummary());
-
-        final GHOrganization other = sut.getOrganization();
-
-        assertThat(other, is(org));
     }
 
 }

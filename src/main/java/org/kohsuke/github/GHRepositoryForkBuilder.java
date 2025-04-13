@@ -10,13 +10,13 @@ import java.io.InterruptedIOException;
  * @see <a href="https://docs.github.com/en/rest/repos/forks#create-a-fork">Repository fork API</a>
  */
 public class GHRepositoryForkBuilder {
+    static int FORK_RETRY_INTERVAL = 3000;
     private final GHRepository repo;
     private final Requester req;
     private String organization;
     private String name;
-    private Boolean defaultBranchOnly;
 
-    static int FORK_RETRY_INTERVAL = 3000;
+    private Boolean defaultBranchOnly;
 
     /**
      * Instantiates a new Gh repository fork builder.
@@ -27,42 +27,6 @@ public class GHRepositoryForkBuilder {
     GHRepositoryForkBuilder(GHRepository repo) {
         this.repo = repo;
         this.req = repo.root().createRequest();
-    }
-
-    /**
-     * Sets whether to fork only the default branch.
-     *
-     * @param defaultBranchOnly
-     *            the default branch only
-     * @return the gh repository fork builder
-     */
-    public GHRepositoryForkBuilder defaultBranchOnly(boolean defaultBranchOnly) {
-        this.defaultBranchOnly = defaultBranchOnly;
-        return this;
-    }
-
-    /**
-     * Specifies the target organization for the fork.
-     *
-     * @param organization
-     *            the organization
-     * @return the gh repository fork builder
-     */
-    public GHRepositoryForkBuilder organization(GHOrganization organization) {
-        this.organization = organization.getLogin();
-        return this;
-    }
-
-    /**
-     * Sets a custom name for the forked repository.
-     *
-     * @param name
-     *            the desired repository name
-     * @return the builder
-     */
-    public GHRepositoryForkBuilder name(String name) {
-        this.name = name;
-        return this;
     }
 
     /**
@@ -96,31 +60,6 @@ public class GHRepositoryForkBuilder {
         throw new IOException(createTimeoutMessage());
     }
 
-    private GHRepository lookupForkedRepository() throws IOException {
-        String repoName = name != null ? name : repo.getName();
-
-        if (organization != null) {
-            return repo.root().getOrganization(organization).getRepository(repoName);
-        }
-        return repo.root().getMyself().getRepository(repoName);
-    }
-
-    /**
-     * Sleep.
-     *
-     * @param millis
-     *            the millis
-     * @throws IOException
-     *             the io exception
-     */
-    void sleep(int millis) throws IOException {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            throw (IOException) new InterruptedIOException().initCause(e);
-        }
-    }
-
     /**
      * Create timeout message string.
      *
@@ -140,5 +79,66 @@ public class GHRepositoryForkBuilder {
 
         message.append(" but can't find the new repository");
         return message.toString();
+    }
+
+    /**
+     * Sets whether to fork only the default branch.
+     *
+     * @param defaultBranchOnly
+     *            the default branch only
+     * @return the gh repository fork builder
+     */
+    public GHRepositoryForkBuilder defaultBranchOnly(boolean defaultBranchOnly) {
+        this.defaultBranchOnly = defaultBranchOnly;
+        return this;
+    }
+
+    private GHRepository lookupForkedRepository() throws IOException {
+        String repoName = name != null ? name : repo.getName();
+
+        if (organization != null) {
+            return repo.root().getOrganization(organization).getRepository(repoName);
+        }
+        return repo.root().getMyself().getRepository(repoName);
+    }
+
+    /**
+     * Sets a custom name for the forked repository.
+     *
+     * @param name
+     *            the desired repository name
+     * @return the builder
+     */
+    public GHRepositoryForkBuilder name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Specifies the target organization for the fork.
+     *
+     * @param organization
+     *            the organization
+     * @return the gh repository fork builder
+     */
+    public GHRepositoryForkBuilder organization(GHOrganization organization) {
+        this.organization = organization.getLogin();
+        return this;
+    }
+
+    /**
+     * Sleep.
+     *
+     * @param millis
+     *            the millis
+     * @throws IOException
+     *             the io exception
+     */
+    void sleep(int millis) throws IOException {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw (IOException) new InterruptedIOException().initCause(e);
+        }
     }
 }

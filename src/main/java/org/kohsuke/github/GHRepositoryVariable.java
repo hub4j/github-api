@@ -13,78 +13,46 @@ import javax.annotation.Nonnull;
 public class GHRepositoryVariable extends GitHubInteractiveObject {
 
     /**
-     * Create default GHRepositoryVariable instance
+     * A {@link GHRepositoryVariableBuilder} that creates a new {@link GHRepositoryVariable}
+     * <p>
+     * Consumer must call {@link #done()} to create the new instance.
      */
-    public GHRepositoryVariable() {
+    @BetaApi
+    public static class Creator extends GHRepositoryVariableBuilder<Creator> {
+        private Creator(@Nonnull GHRepository repository) {
+            super(GHRepositoryVariable.Creator.class, repository.root(), null);
+            requester.method("POST").withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE));
+        }
+    }
+
+    /**
+     * A {@link GHRepositoryVariableBuilder} that updates a single property per request
+     * <p>
+     * {@link #done()} is called automatically after the property is set.
+     */
+    @BetaApi
+    public static class Setter extends GHRepositoryVariableBuilder<GHRepositoryVariable> {
+        private Setter(@Nonnull GHRepositoryVariable base) {
+            super(GHRepositoryVariable.class, base.getApiRoot(), base);
+            requester.method("PATCH").withUrlPath(base.getUrl().concat(SLASH).concat(base.getName()));
+        }
     }
 
     private static final String SLASH = "/";
 
     private static final String VARIABLE_NAMESPACE = "actions/variables";
-
-    private String name;
-    private String value;
-
-    private String url;
-    private String createdAt;
-    private String updatedAt;
-
     /**
-     * Gets url.
+     * Begins the creation of a new instance.
+     * <p>
+     * Consumer must call {@link GHRepositoryVariable.Creator#done()} to commit changes.
      *
-     * @return the url
+     * @param repository
+     *            the repository in which the variable will be created.
+     * @return a {@link GHRepositoryVariable.Creator}
      */
-    @Nonnull
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets name.
-     *
-     * @param name
-     *            the name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Gets value.
-     *
-     * @return the value
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * Sets value.
-     *
-     * @param value
-     *            the value
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    /**
-     * Gets the api root.
-     *
-     * @return the api root
-     */
-    @Nonnull
-    GitHub getApiRoot() {
-        return Objects.requireNonNull(root());
+    @BetaApi
+    static GHRepositoryVariable.Creator create(GHRepository repository) {
+        return new GHRepositoryVariable.Creator(repository);
     }
 
     /**
@@ -106,19 +74,19 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
         variable.url = repository.getApiTailUrl("actions/variables");
         return variable;
     }
+    private String name;
+    private String value;
+
+    private String url;
+
+    private String createdAt;
+
+    private String updatedAt;
 
     /**
-     * Begins the creation of a new instance.
-     * <p>
-     * Consumer must call {@link GHRepositoryVariable.Creator#done()} to commit changes.
-     *
-     * @param repository
-     *            the repository in which the variable will be created.
-     * @return a {@link GHRepositoryVariable.Creator}
+     * Create default GHRepositoryVariable instance
      */
-    @BetaApi
-    static GHRepositoryVariable.Creator create(GHRepository repository) {
-        return new GHRepositoryVariable.Creator(repository);
+    public GHRepositoryVariable() {
     }
 
     /**
@@ -132,6 +100,44 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
     }
 
     /**
+     * Gets the api root.
+     *
+     * @return the api root
+     */
+    @Nonnull
+    GitHub getApiRoot() {
+        return Objects.requireNonNull(root());
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    @Nonnull
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Gets value.
+     *
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
      * Begins a single property update.
      *
      * @return a {@link GHRepositoryVariable.Setter}
@@ -142,29 +148,23 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
     }
 
     /**
-     * A {@link GHRepositoryVariableBuilder} that updates a single property per request
-     * <p>
-     * {@link #done()} is called automatically after the property is set.
+     * Sets name.
+     *
+     * @param name
+     *            the name
      */
-    @BetaApi
-    public static class Setter extends GHRepositoryVariableBuilder<GHRepositoryVariable> {
-        private Setter(@Nonnull GHRepositoryVariable base) {
-            super(GHRepositoryVariable.class, base.getApiRoot(), base);
-            requester.method("PATCH").withUrlPath(base.getUrl().concat(SLASH).concat(base.getName()));
-        }
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
-     * A {@link GHRepositoryVariableBuilder} that creates a new {@link GHRepositoryVariable}
-     * <p>
-     * Consumer must call {@link #done()} to create the new instance.
+     * Sets value.
+     *
+     * @param value
+     *            the value
      */
-    @BetaApi
-    public static class Creator extends GHRepositoryVariableBuilder<Creator> {
-        private Creator(@Nonnull GHRepository repository) {
-            super(GHRepositoryVariable.Creator.class, repository.root(), null);
-            requester.method("POST").withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE));
-        }
+    public void setValue(String value) {
+        this.value = value;
     }
 
 }

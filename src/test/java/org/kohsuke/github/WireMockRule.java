@@ -45,16 +45,14 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     private boolean failOnUnmatchedRequests;
     private final Options options;
 
-    /**
-     * Gets the method name.
-     *
-     * @return the method name
-     */
-    public String getMethodName() {
-        return methodName;
-    }
-
     private String methodName = null;
+
+    /**
+     * Instantiates a new wire mock rule.
+     */
+    public WireMockRule() {
+        this(WireMockRuleConfiguration.wireMockConfig());
+    }
 
     /**
      * Instantiates a new wire mock rule.
@@ -102,10 +100,29 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
-     * Instantiates a new wire mock rule.
+     * Adds the mock service request listener.
+     *
+     * @param listener
+     *            the listener
      */
-    public WireMockRule() {
-        this(WireMockRuleConfiguration.wireMockConfig());
+    public void addMockServiceRequestListener(RequestListener listener) {
+        wireMockServer.addMockServiceRequestListener(listener);
+    }
+
+    /**
+     * Adds the stub mapping.
+     *
+     * @param stubMapping
+     *            the stub mapping
+     */
+    public void addStubMapping(StubMapping stubMapping) {
+        wireMockServer.addStubMapping(stubMapping);
+    }
+
+    /**
+     * After.
+     */
+    protected void after() {
     }
 
     /**
@@ -163,6 +180,21 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
         };
     }
 
+    /**
+     * Base url.
+     *
+     * @return the string
+     */
+    public String baseUrl() {
+        return wireMockServer.baseUrl();
+    }
+
+    /**
+     * Before.
+     */
+    protected void before() {
+    }
+
     private void checkForUnmatchedRequests() {
         if (this.failOnUnmatchedRequests) {
             List<LoggedRequest> unmatchedRequests = this.findAllUnmatchedRequests();
@@ -179,44 +211,34 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
-     * Before.
-     */
-    protected void before() {
-    }
-
-    /**
-     * After.
-     */
-    protected void after() {
-    }
-
-    /**
-     * Load mappings using.
+     * Count requests matching.
      *
-     * @param mappingsLoader
-     *            the mappings loader
+     * @param requestPattern
+     *            the request pattern
+     * @return the verification result
      */
-    public void loadMappingsUsing(MappingsLoader mappingsLoader) {
-        wireMockServer.loadMappingsUsing(mappingsLoader);
+    public VerificationResult countRequestsMatching(RequestPattern requestPattern) {
+        return wireMockServer.countRequestsMatching(requestPattern);
     }
 
     /**
-     * Gets the global settings holder.
+     * Edits the stub.
      *
-     * @return the global settings holder
+     * @param mappingBuilder
+     *            the mapping builder
      */
-    public GlobalSettingsHolder getGlobalSettingsHolder() {
-        return wireMockServer.getGlobalSettingsHolder();
+    public void editStub(MappingBuilder mappingBuilder) {
+        wireMockServer.editStub(mappingBuilder);
     }
 
     /**
-     * Adds the mock service request listener.
+     * Edits the stub mapping.
      *
-     * @param listener
-     *            the listener
+     * @param stubMapping
+     *            the stub mapping
      */
-    public void addMockServiceRequestListener(RequestListener listener) {
-        wireMockServer.addMockServiceRequestListener(listener);
+    public void editStubMapping(StubMapping stubMapping) {
+        wireMockServer.editStubMapping(stubMapping);
     }
 
     /**
@@ -232,211 +254,6 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
-     * Stop.
-     */
-    public void stop() {
-        wireMockServer.stop();
-    }
-
-    /**
-     * Start.
-     */
-    public void start() {
-        wireMockServer.start();
-    }
-
-    /**
-     * Shutdown.
-     */
-    public void shutdown() {
-        wireMockServer.shutdown();
-    }
-
-    /**
-     * Port.
-     *
-     * @return the int
-     */
-    public int port() {
-        return wireMockServer.port();
-    }
-
-    /**
-     * Https port.
-     *
-     * @return the int
-     */
-    public int httpsPort() {
-        return wireMockServer.httpsPort();
-    }
-
-    /**
-     * Url.
-     *
-     * @param path
-     *            the path
-     * @return the string
-     */
-    public String url(String path) {
-        return wireMockServer.url(path);
-    }
-
-    /**
-     * Base url.
-     *
-     * @return the string
-     */
-    public String baseUrl() {
-        return wireMockServer.baseUrl();
-    }
-
-    /**
-     * Checks if is running.
-     *
-     * @return true, if is running
-     */
-    public boolean isRunning() {
-        return wireMockServer.isRunning();
-    }
-
-    /**
-     * Given that.
-     *
-     * @param mappingBuilder
-     *            the mapping builder
-     * @return the stub mapping
-     */
-    public StubMapping givenThat(MappingBuilder mappingBuilder) {
-        return wireMockServer.givenThat(mappingBuilder);
-    }
-
-    /**
-     * Stub for.
-     *
-     * @param mappingBuilder
-     *            the mapping builder
-     * @return the stub mapping
-     */
-    public StubMapping stubFor(MappingBuilder mappingBuilder) {
-        return wireMockServer.stubFor(mappingBuilder);
-    }
-
-    /**
-     * Edits the stub.
-     *
-     * @param mappingBuilder
-     *            the mapping builder
-     */
-    public void editStub(MappingBuilder mappingBuilder) {
-        wireMockServer.editStub(mappingBuilder);
-    }
-
-    /**
-     * Removes the stub.
-     *
-     * @param mappingBuilder
-     *            the mapping builder
-     */
-    public void removeStub(MappingBuilder mappingBuilder) {
-        wireMockServer.removeStub(mappingBuilder);
-    }
-
-    /**
-     * Removes the stub.
-     *
-     * @param stubMapping
-     *            the stub mapping
-     */
-    public void removeStub(StubMapping stubMapping) {
-        wireMockServer.removeStub(stubMapping);
-    }
-
-    /**
-     * Gets the stub mappings.
-     *
-     * @return the stub mappings
-     */
-    public List<StubMapping> getStubMappings() {
-        return wireMockServer.getStubMappings();
-    }
-
-    /**
-     * Gets the single stub mapping.
-     *
-     * @param id
-     *            the id
-     * @return the single stub mapping
-     */
-    public StubMapping getSingleStubMapping(UUID id) {
-        return wireMockServer.getSingleStubMapping(id);
-    }
-
-    /**
-     * Find stub mappings by metadata.
-     *
-     * @param pattern
-     *            the pattern
-     * @return the list
-     */
-    public List<StubMapping> findStubMappingsByMetadata(StringValuePattern pattern) {
-        return wireMockServer.findStubMappingsByMetadata(pattern);
-    }
-
-    /**
-     * Removes the stub mappings by metadata.
-     *
-     * @param pattern
-     *            the pattern
-     */
-    public void removeStubMappingsByMetadata(StringValuePattern pattern) {
-        wireMockServer.removeStubMappingsByMetadata(pattern);
-    }
-
-    /**
-     * Removes the stub mapping.
-     *
-     * @param stubMapping
-     *            the stub mapping
-     */
-    public void removeStubMapping(StubMapping stubMapping) {
-        wireMockServer.removeStubMapping(stubMapping);
-    }
-
-    /**
-     * Verify.
-     *
-     * @param requestPatternBuilder
-     *            the request pattern builder
-     */
-    public void verify(RequestPatternBuilder requestPatternBuilder) {
-        wireMockServer.verify(requestPatternBuilder);
-    }
-
-    /**
-     * Verify.
-     *
-     * @param count
-     *            the count
-     * @param requestPatternBuilder
-     *            the request pattern builder
-     */
-    public void verify(int count, RequestPatternBuilder requestPatternBuilder) {
-        wireMockServer.verify(count, requestPatternBuilder);
-    }
-
-    /**
-     * Verify.
-     *
-     * @param countMatchingStrategy
-     *            the count matching strategy
-     * @param requestPatternBuilder
-     *            the request pattern builder
-     */
-    public void verify(CountMatchingStrategy countMatchingStrategy, RequestPatternBuilder requestPatternBuilder) {
-        wireMockServer.verify(countMatchingStrategy, requestPatternBuilder);
-    }
-
-    /**
      * Find all.
      *
      * @param requestPatternBuilder
@@ -445,43 +262,6 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
      */
     public List<LoggedRequest> findAll(RequestPatternBuilder requestPatternBuilder) {
         return wireMockServer.findAll(requestPatternBuilder);
-    }
-
-    /**
-     * Gets the all serve events.
-     *
-     * @return the all serve events
-     */
-    public List<ServeEvent> getAllServeEvents() {
-        return wireMockServer.getAllServeEvents();
-    }
-
-    /**
-     * Sets the global fixed delay.
-     *
-     * @param milliseconds
-     *            the new global fixed delay
-     */
-    public void setGlobalFixedDelay(int milliseconds) {
-        wireMockServer.setGlobalFixedDelay(milliseconds);
-    }
-
-    /**
-     * Find all unmatched requests.
-     *
-     * @return the list
-     */
-    public List<LoggedRequest> findAllUnmatchedRequests() {
-        return wireMockServer.findAllUnmatchedRequests();
-    }
-
-    /**
-     * Find near misses for all unmatched requests.
-     *
-     * @return the list
-     */
-    public List<NearMiss> findNearMissesForAllUnmatchedRequests() {
-        return wireMockServer.findNearMissesForAllUnmatchedRequests();
     }
 
     /**
@@ -496,6 +276,26 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
+     * Find all stubs by metadata.
+     *
+     * @param pattern
+     *            the pattern
+     * @return the list stub mappings result
+     */
+    public ListStubMappingsResult findAllStubsByMetadata(StringValuePattern pattern) {
+        return wireMockServer.findAllStubsByMetadata(pattern);
+    }
+
+    /**
+     * Find all unmatched requests.
+     *
+     * @return the list
+     */
+    public List<LoggedRequest> findAllUnmatchedRequests() {
+        return wireMockServer.findAllUnmatchedRequests();
+    }
+
+    /**
      * Find near misses for.
      *
      * @param loggedRequest
@@ -507,81 +307,137 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
-     * Adds the stub mapping.
+     * Find near misses for all unmatched requests.
      *
-     * @param stubMapping
-     *            the stub mapping
+     * @return the list
      */
-    public void addStubMapping(StubMapping stubMapping) {
-        wireMockServer.addStubMapping(stubMapping);
+    public List<NearMiss> findNearMissesForAllUnmatchedRequests() {
+        return wireMockServer.findNearMissesForAllUnmatchedRequests();
     }
 
     /**
-     * Edits the stub mapping.
+     * Find near misses for unmatched requests.
      *
-     * @param stubMapping
-     *            the stub mapping
+     * @return the find near misses result
      */
-    public void editStubMapping(StubMapping stubMapping) {
-        wireMockServer.editStubMapping(stubMapping);
+    public FindNearMissesResult findNearMissesForUnmatchedRequests() {
+        return wireMockServer.findNearMissesForUnmatchedRequests();
     }
 
     /**
-     * Removes the stub mapping.
+     * Find requests matching.
      *
-     * @param id
-     *            the id
+     * @param requestPattern
+     *            the request pattern
+     * @return the find requests result
      */
-    public void removeStubMapping(UUID id) {
-        wireMockServer.removeStubMapping(id);
+    public FindRequestsResult findRequestsMatching(RequestPattern requestPattern) {
+        return wireMockServer.findRequestsMatching(requestPattern);
     }
 
     /**
-     * List all stub mappings.
+     * Find stub mappings by metadata.
      *
-     * @return the list stub mappings result
+     * @param pattern
+     *            the pattern
+     * @return the list
      */
-    public ListStubMappingsResult listAllStubMappings() {
-        return wireMockServer.listAllStubMappings();
+    public List<StubMapping> findStubMappingsByMetadata(StringValuePattern pattern) {
+        return wireMockServer.findStubMappingsByMetadata(pattern);
     }
 
     /**
-     * Gets the stub mapping.
+     * Find top near misses for.
      *
-     * @param id
-     *            the id
-     * @return the stub mapping
+     * @param loggedRequest
+     *            the logged request
+     * @return the find near misses result
      */
-    public SingleStubMappingResult getStubMapping(UUID id) {
-        return wireMockServer.getStubMapping(id);
+    public FindNearMissesResult findTopNearMissesFor(LoggedRequest loggedRequest) {
+        return wireMockServer.findTopNearMissesFor(loggedRequest);
     }
 
     /**
-     * Save mappings.
+     * Find top near misses for.
+     *
+     * @param requestPattern
+     *            the request pattern
+     * @return the find near misses result
      */
-    public void saveMappings() {
-        wireMockServer.saveMappings();
+    public FindNearMissesResult findTopNearMissesFor(RequestPattern requestPattern) {
+        return wireMockServer.findTopNearMissesFor(requestPattern);
     }
 
     /**
-     * Reset all.
+     * Find unmatched requests.
+     *
+     * @return the find requests result
      */
-    public void resetAll() {
-        wireMockServer.resetAll();
+    public FindRequestsResult findUnmatchedRequests() {
+        return wireMockServer.findUnmatchedRequests();
     }
 
     /**
-     * Reset requests.
+     * Gets the all scenarios.
+     *
+     * @return the all scenarios
      */
-    public void resetRequests() {
-        wireMockServer.resetRequests();
+    public GetScenariosResult getAllScenarios() {
+        return wireMockServer.getAllScenarios();
     }
 
     /**
-     * Reset to default mappings.
+     * Gets the all serve events.
+     *
+     * @return the all serve events
      */
-    public void resetToDefaultMappings() {
-        wireMockServer.resetToDefaultMappings();
+    public List<ServeEvent> getAllServeEvents() {
+        return wireMockServer.getAllServeEvents();
+    }
+
+    /**
+     * Gets the global settings.
+     *
+     * @return the global settings
+     */
+    public GetGlobalSettingsResult getGlobalSettings() {
+        return wireMockServer.getGlobalSettings();
+    }
+
+    /**
+     * Gets the global settings holder.
+     *
+     * @return the global settings holder
+     */
+    public GlobalSettingsHolder getGlobalSettingsHolder() {
+        return wireMockServer.getGlobalSettingsHolder();
+    }
+
+    /**
+     * Gets the method name.
+     *
+     * @return the method name
+     */
+    public String getMethodName() {
+        return methodName;
+    }
+
+    /**
+     * Gets the options.
+     *
+     * @return the options
+     */
+    public Options getOptions() {
+        return wireMockServer.getOptions();
+    }
+
+    /**
+     * Gets the recording status.
+     *
+     * @return the recording status
+     */
+    public RecordingStatusResult getRecordingStatus() {
+        return wireMockServer.getRecordingStatus();
     }
 
     /**
@@ -616,48 +472,101 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
-     * Reset scenarios.
-     */
-    public void resetScenarios() {
-        wireMockServer.resetScenarios();
-    }
-
-    /**
-     * Reset mappings.
-     */
-    public void resetMappings() {
-        wireMockServer.resetMappings();
-    }
-
-    /**
-     * Count requests matching.
+     * Gets the single stub mapping.
      *
-     * @param requestPattern
-     *            the request pattern
-     * @return the verification result
+     * @param id
+     *            the id
+     * @return the single stub mapping
      */
-    public VerificationResult countRequestsMatching(RequestPattern requestPattern) {
-        return wireMockServer.countRequestsMatching(requestPattern);
+    public StubMapping getSingleStubMapping(UUID id) {
+        return wireMockServer.getSingleStubMapping(id);
     }
 
     /**
-     * Find requests matching.
+     * Gets the stub mapping.
      *
-     * @param requestPattern
-     *            the request pattern
-     * @return the find requests result
+     * @param id
+     *            the id
+     * @return the stub mapping
      */
-    public FindRequestsResult findRequestsMatching(RequestPattern requestPattern) {
-        return wireMockServer.findRequestsMatching(requestPattern);
+    public SingleStubMappingResult getStubMapping(UUID id) {
+        return wireMockServer.getStubMapping(id);
     }
 
     /**
-     * Find unmatched requests.
+     * Gets the stub mappings.
      *
-     * @return the find requests result
+     * @return the stub mappings
      */
-    public FindRequestsResult findUnmatchedRequests() {
-        return wireMockServer.findUnmatchedRequests();
+    public List<StubMapping> getStubMappings() {
+        return wireMockServer.getStubMappings();
+    }
+
+    /**
+     * Given that.
+     *
+     * @param mappingBuilder
+     *            the mapping builder
+     * @return the stub mapping
+     */
+    public StubMapping givenThat(MappingBuilder mappingBuilder) {
+        return wireMockServer.givenThat(mappingBuilder);
+    }
+
+    /**
+     * Https port.
+     *
+     * @return the int
+     */
+    public int httpsPort() {
+        return wireMockServer.httpsPort();
+    }
+
+    /**
+     * Import stubs.
+     *
+     * @param stubImport
+     *            the stub import
+     */
+    public void importStubs(StubImport stubImport) {
+        wireMockServer.importStubs(stubImport);
+    }
+
+    /**
+     * Checks if is running.
+     *
+     * @return true, if is running
+     */
+    public boolean isRunning() {
+        return wireMockServer.isRunning();
+    }
+
+    /**
+     * List all stub mappings.
+     *
+     * @return the list stub mappings result
+     */
+    public ListStubMappingsResult listAllStubMappings() {
+        return wireMockServer.listAllStubMappings();
+    }
+
+    /**
+     * Load mappings using.
+     *
+     * @param mappingsLoader
+     *            the mappings loader
+     */
+    public void loadMappingsUsing(MappingsLoader mappingsLoader) {
+        wireMockServer.loadMappingsUsing(mappingsLoader);
+    }
+
+    /**
+     * Port.
+     *
+     * @return the int
+     */
+    public int port() {
+        return wireMockServer.port();
     }
 
     /**
@@ -668,17 +577,6 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
      */
     public void removeServeEvent(UUID uuid) {
         wireMockServer.removeServeEvent(uuid);
-    }
-
-    /**
-     * Removes the serve events matching.
-     *
-     * @param requestPattern
-     *            the request pattern
-     * @return the find serve events result
-     */
-    public FindServeEventsResult removeServeEventsMatching(RequestPattern requestPattern) {
-        return wireMockServer.removeServeEventsMatching(requestPattern);
     }
 
     /**
@@ -693,31 +591,95 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
-     * Update global settings.
+     * Removes the serve events matching.
      *
-     * @param newSettings
-     *            the new settings
+     * @param requestPattern
+     *            the request pattern
+     * @return the find serve events result
      */
-    public void updateGlobalSettings(GlobalSettings newSettings) {
-        wireMockServer.updateGlobalSettings(newSettings);
+    public FindServeEventsResult removeServeEventsMatching(RequestPattern requestPattern) {
+        return wireMockServer.removeServeEventsMatching(requestPattern);
     }
 
     /**
-     * Find near misses for unmatched requests.
+     * Removes the stub.
      *
-     * @return the find near misses result
+     * @param mappingBuilder
+     *            the mapping builder
      */
-    public FindNearMissesResult findNearMissesForUnmatchedRequests() {
-        return wireMockServer.findNearMissesForUnmatchedRequests();
+    public void removeStub(MappingBuilder mappingBuilder) {
+        wireMockServer.removeStub(mappingBuilder);
     }
 
     /**
-     * Gets the all scenarios.
+     * Removes the stub.
      *
-     * @return the all scenarios
+     * @param stubMapping
+     *            the stub mapping
      */
-    public GetScenariosResult getAllScenarios() {
-        return wireMockServer.getAllScenarios();
+    public void removeStub(StubMapping stubMapping) {
+        wireMockServer.removeStub(stubMapping);
+    }
+
+    /**
+     * Removes the stub mapping.
+     *
+     * @param stubMapping
+     *            the stub mapping
+     */
+    public void removeStubMapping(StubMapping stubMapping) {
+        wireMockServer.removeStubMapping(stubMapping);
+    }
+
+    /**
+     * Removes the stub mapping.
+     *
+     * @param id
+     *            the id
+     */
+    public void removeStubMapping(UUID id) {
+        wireMockServer.removeStubMapping(id);
+    }
+
+    /**
+     * Removes the stub mappings by metadata.
+     *
+     * @param pattern
+     *            the pattern
+     */
+    public void removeStubMappingsByMetadata(StringValuePattern pattern) {
+        wireMockServer.removeStubMappingsByMetadata(pattern);
+    }
+
+    /**
+     * Removes the stubs by metadata.
+     *
+     * @param pattern
+     *            the pattern
+     */
+    public void removeStubsByMetadata(StringValuePattern pattern) {
+        wireMockServer.removeStubsByMetadata(pattern);
+    }
+
+    /**
+     * Reset all.
+     */
+    public void resetAll() {
+        wireMockServer.resetAll();
+    }
+
+    /**
+     * Reset mappings.
+     */
+    public void resetMappings() {
+        wireMockServer.resetMappings();
+    }
+
+    /**
+     * Reset requests.
+     */
+    public void resetRequests() {
+        wireMockServer.resetRequests();
     }
 
     /**
@@ -728,6 +690,37 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
      */
     public void resetScenario(String name) {
         wireMockServer.resetScenario(name);
+    }
+
+    /**
+     * Reset scenarios.
+     */
+    public void resetScenarios() {
+        wireMockServer.resetScenarios();
+    }
+
+    /**
+     * Reset to default mappings.
+     */
+    public void resetToDefaultMappings() {
+        wireMockServer.resetToDefaultMappings();
+    }
+
+    /**
+     * Save mappings.
+     */
+    public void saveMappings() {
+        wireMockServer.saveMappings();
+    }
+
+    /**
+     * Sets the global fixed delay.
+     *
+     * @param milliseconds
+     *            the new global fixed delay
+     */
+    public void setGlobalFixedDelay(int milliseconds) {
+        wireMockServer.setGlobalFixedDelay(milliseconds);
     }
 
     /**
@@ -743,35 +736,55 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
-     * Find top near misses for.
-     *
-     * @param loggedRequest
-     *            the logged request
-     * @return the find near misses result
+     * Shutdown.
      */
-    public FindNearMissesResult findTopNearMissesFor(LoggedRequest loggedRequest) {
-        return wireMockServer.findTopNearMissesFor(loggedRequest);
+    public void shutdown() {
+        wireMockServer.shutdown();
     }
 
     /**
-     * Find top near misses for.
-     *
-     * @param requestPattern
-     *            the request pattern
-     * @return the find near misses result
+     * Shutdown server.
      */
-    public FindNearMissesResult findTopNearMissesFor(RequestPattern requestPattern) {
-        return wireMockServer.findTopNearMissesFor(requestPattern);
+    public void shutdownServer() {
+        wireMockServer.shutdownServer();
     }
 
     /**
-     * Start recording.
+     * Snapshot record.
      *
-     * @param targetBaseUrl
-     *            the target base url
+     * @return the snapshot record result
      */
-    public void startRecording(String targetBaseUrl) {
-        wireMockServer.startRecording(targetBaseUrl);
+    public SnapshotRecordResult snapshotRecord() {
+        return wireMockServer.snapshotRecord();
+    }
+
+    /**
+     * Snapshot record.
+     *
+     * @param spec
+     *            the spec
+     * @return the snapshot record result
+     */
+    public SnapshotRecordResult snapshotRecord(RecordSpec spec) {
+        return wireMockServer.snapshotRecord(spec);
+    }
+
+    /**
+     * Snapshot record.
+     *
+     * @param spec
+     *            the spec
+     * @return the snapshot record result
+     */
+    public SnapshotRecordResult snapshotRecord(RecordSpecBuilder spec) {
+        return wireMockServer.snapshotRecord(spec);
+    }
+
+    /**
+     * Start.
+     */
+    public void start() {
+        wireMockServer.start();
     }
 
     /**
@@ -795,6 +808,23 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
+     * Start recording.
+     *
+     * @param targetBaseUrl
+     *            the target base url
+     */
+    public void startRecording(String targetBaseUrl) {
+        wireMockServer.startRecording(targetBaseUrl);
+    }
+
+    /**
+     * Stop.
+     */
+    public void stop() {
+        wireMockServer.stop();
+    }
+
+    /**
      * Stop recording.
      *
      * @return the snapshot record result
@@ -804,98 +834,68 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
-     * Gets the recording status.
+     * Stub for.
      *
-     * @return the recording status
+     * @param mappingBuilder
+     *            the mapping builder
+     * @return the stub mapping
      */
-    public RecordingStatusResult getRecordingStatus() {
-        return wireMockServer.getRecordingStatus();
+    public StubMapping stubFor(MappingBuilder mappingBuilder) {
+        return wireMockServer.stubFor(mappingBuilder);
     }
 
     /**
-     * Snapshot record.
+     * Update global settings.
      *
-     * @return the snapshot record result
+     * @param newSettings
+     *            the new settings
      */
-    public SnapshotRecordResult snapshotRecord() {
-        return wireMockServer.snapshotRecord();
+    public void updateGlobalSettings(GlobalSettings newSettings) {
+        wireMockServer.updateGlobalSettings(newSettings);
     }
 
     /**
-     * Snapshot record.
+     * Url.
      *
-     * @param spec
-     *            the spec
-     * @return the snapshot record result
+     * @param path
+     *            the path
+     * @return the string
      */
-    public SnapshotRecordResult snapshotRecord(RecordSpecBuilder spec) {
-        return wireMockServer.snapshotRecord(spec);
+    public String url(String path) {
+        return wireMockServer.url(path);
     }
 
     /**
-     * Snapshot record.
+     * Verify.
      *
-     * @param spec
-     *            the spec
-     * @return the snapshot record result
+     * @param countMatchingStrategy
+     *            the count matching strategy
+     * @param requestPatternBuilder
+     *            the request pattern builder
      */
-    public SnapshotRecordResult snapshotRecord(RecordSpec spec) {
-        return wireMockServer.snapshotRecord(spec);
+    public void verify(CountMatchingStrategy countMatchingStrategy, RequestPatternBuilder requestPatternBuilder) {
+        wireMockServer.verify(countMatchingStrategy, requestPatternBuilder);
     }
 
     /**
-     * Gets the options.
+     * Verify.
      *
-     * @return the options
+     * @param requestPatternBuilder
+     *            the request pattern builder
      */
-    public Options getOptions() {
-        return wireMockServer.getOptions();
+    public void verify(RequestPatternBuilder requestPatternBuilder) {
+        wireMockServer.verify(requestPatternBuilder);
     }
 
     /**
-     * Shutdown server.
-     */
-    public void shutdownServer() {
-        wireMockServer.shutdownServer();
-    }
-
-    /**
-     * Find all stubs by metadata.
+     * Verify.
      *
-     * @param pattern
-     *            the pattern
-     * @return the list stub mappings result
+     * @param count
+     *            the count
+     * @param requestPatternBuilder
+     *            the request pattern builder
      */
-    public ListStubMappingsResult findAllStubsByMetadata(StringValuePattern pattern) {
-        return wireMockServer.findAllStubsByMetadata(pattern);
-    }
-
-    /**
-     * Removes the stubs by metadata.
-     *
-     * @param pattern
-     *            the pattern
-     */
-    public void removeStubsByMetadata(StringValuePattern pattern) {
-        wireMockServer.removeStubsByMetadata(pattern);
-    }
-
-    /**
-     * Import stubs.
-     *
-     * @param stubImport
-     *            the stub import
-     */
-    public void importStubs(StubImport stubImport) {
-        wireMockServer.importStubs(stubImport);
-    }
-
-    /**
-     * Gets the global settings.
-     *
-     * @return the global settings
-     */
-    public GetGlobalSettingsResult getGlobalSettings() {
-        return wireMockServer.getGlobalSettings();
+    public void verify(int count, RequestPatternBuilder requestPatternBuilder) {
+        wireMockServer.verify(count, requestPatternBuilder);
     }
 }

@@ -22,6 +22,21 @@ public class GHPersonTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
+    /**
      * Test fields for organization.
      *
      * @throws Exception
@@ -46,20 +61,5 @@ public class GHPersonTest extends AbstractGitHubWireMockTest {
         GHUser user = gitHub.getUser("kohsuke2");
         assertThat(user.getType(), equalTo("User"));
         assertThat(user.isSiteAdmin(), notNullValue());
-    }
-
-    /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 }

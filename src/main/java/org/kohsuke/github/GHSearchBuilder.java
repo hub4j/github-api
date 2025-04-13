@@ -42,6 +42,25 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     }
 
     /**
+     * Gets api url.
+     *
+     * @return the api url
+     */
+    protected abstract String getApiUrl();
+
+    /**
+     * Performs the search.
+     *
+     * @return the paged search iterable
+     */
+    @Override
+    public PagedSearchIterable<T> list() {
+
+        req.set("q", StringUtils.join(terms, " "));
+        return new PagedSearchIterable<>(root(), req.build(), receiverType);
+    }
+
+    /**
      * Search terms.
      *
      * @param term
@@ -76,23 +95,4 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
         }
         return this;
     }
-
-    /**
-     * Performs the search.
-     *
-     * @return the paged search iterable
-     */
-    @Override
-    public PagedSearchIterable<T> list() {
-
-        req.set("q", StringUtils.join(terms, " "));
-        return new PagedSearchIterable<>(root(), req.build(), receiverType);
-    }
-
-    /**
-     * Gets api url.
-     *
-     * @return the api url
-     */
-    protected abstract String getApiUrl();
 }

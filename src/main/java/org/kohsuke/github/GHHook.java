@@ -19,12 +19,6 @@ import java.util.Map;
         justification = "JSON API")
 public abstract class GHHook extends GHObject {
 
-    /**
-     * Create default GHHook instance
-     */
-    public GHHook() {
-    }
-
     /** The name. */
     String name;
 
@@ -38,12 +32,35 @@ public abstract class GHHook extends GHObject {
     Map<String, String> config;
 
     /**
-     * Gets name.
-     *
-     * @return the name
+     * Create default GHHook instance
      */
-    public String getName() {
-        return name;
+    public GHHook() {
+    }
+
+    /**
+     * Deletes this hook.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
+    abstract String getApiRoute();
+
+    /**
+     * Gets config.
+     *
+     * @return the config
+     */
+    public Map<String, String> getConfig() {
+        return Collections.unmodifiableMap(config);
     }
 
     /**
@@ -60,21 +77,21 @@ public abstract class GHHook extends GHObject {
     }
 
     /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Is active boolean.
      *
      * @return the boolean
      */
     public boolean isActive() {
         return active;
-    }
-
-    /**
-     * Gets config.
-     *
-     * @return the config
-     */
-    public Map<String, String> getConfig() {
-        return Collections.unmodifiableMap(config);
     }
 
     /**
@@ -89,26 +106,9 @@ public abstract class GHHook extends GHObject {
     }
 
     /**
-     * Deletes this hook.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
-    }
-
-    /**
      * Root.
      *
      * @return the git hub
      */
     abstract GitHub root();
-
-    /**
-     * Gets the api route.
-     *
-     * @return the api route
-     */
-    abstract String getApiRoute();
 }

@@ -28,25 +28,6 @@ public class GitHubBuilder implements Cloneable {
     // for testing
     static File HOME_DIRECTORY = null;
 
-    // default scoped so unit tests can read them.
-    /** The endpoint. */
-    /* private */ String endpoint = GitHubClient.GITHUB_URL;
-
-    private GitHubConnector connector;
-
-    private GitHubRateLimitHandler rateLimitHandler = GitHubRateLimitHandler.WAIT;
-    private GitHubAbuseLimitHandler abuseLimitHandler = GitHubAbuseLimitHandler.WAIT;
-    private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
-
-    /** The authorization provider. */
-    /* private */ AuthorizationProvider authorizationProvider = AuthorizationProvider.ANONYMOUS;
-
-    /**
-     * Instantiates a new Git hub builder.
-     */
-    public GitHubBuilder() {
-    }
-
     /**
      * First check if the credentials are configured in the environment. We use environment first because users are not
      * likely to give required (full) permissions to their default key.
@@ -83,12 +64,6 @@ public class GitHubBuilder implements Cloneable {
                 .initCause(cause);
     }
 
-    private static void loadIfSet(String envName, Properties p, String propName) {
-        String v = System.getenv(envName);
-        if (v != null)
-            p.put(propName, v);
-    }
-
     /**
      * Creates {@link GitHubBuilder} by picking up coordinates from environment variables.
      *
@@ -119,6 +94,28 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
+     * From properties GitHubBuilder.
+     *
+     * @param props
+     *            the props
+     * @return the GitHubBuilder
+     */
+    public static GitHubBuilder fromProperties(Properties props) {
+        GitHubBuilder self = new GitHubBuilder();
+        String oauth = props.getProperty("oauth");
+        String jwt = props.getProperty("jwt");
+        String login = props.getProperty("login");
+
+        if (oauth != null) {
+            self.withOAuthToken(oauth, login);
+        }
+        if (jwt != null) {
+            self.withJwtToken(jwt);
+        }
+        self.withEndpoint(props.getProperty("endpoint", GitHubClient.GITHUB_URL));
+        return self;
+    }
+    /**
      * From property file GitHubBuilder.
      *
      * @return the GitHubBuilder
@@ -130,7 +127,6 @@ public class GitHubBuilder implements Cloneable {
         File propertyFile = new File(homeDir, ".github");
         return fromPropertyFile(propertyFile.getPath());
     }
-
     /**
      * From property file GitHubBuilder.
      *
@@ -153,27 +149,117 @@ public class GitHubBuilder implements Cloneable {
         return fromProperties(props);
     }
 
+    private static void loadIfSet(String envName, Properties p, String propName) {
+        String v = System.getenv(envName);
+        if (v != null)
+            p.put(propName, v);
+    }
+
+    // default scoped so unit tests can read them.
+    /** The endpoint. */
+    /* private */ String endpoint = GitHubClient.GITHUB_URL;
+
+    private GitHubConnector connector;
+
+    private GitHubRateLimitHandler rateLimitHandler = GitHubRateLimitHandler.WAIT;
+
+    private GitHubAbuseLimitHandler abuseLimitHandler = GitHubAbuseLimitHandler.WAIT;
+
+    private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
+
+    /** The authorization provider. */
+    /* private */ AuthorizationProvider authorizationProvider = AuthorizationProvider.ANONYMOUS;
+
     /**
-     * From properties GitHubBuilder.
+     * Instantiates a new Git hub builder.
+     */
+    public GitHubBuilder() {
+    }
+
+    /**
+     * Builds a {@link GitHub} instance.
      *
-     * @param props
-     *            the props
+     * @return the github
+     * @throws IOException
+     *             the io exception
+     */
+    public GitHub build() throws IOException {
+        return new GitHub(endpoint,
+                connector,
+                rateLimitHandler,
+                abuseLimitHandler,
+                rateLimitChecker,
+                authorizationProvider);
+    }
+
+    /**
+     * Clone.
+     *
      * @return the GitHubBuilder
      */
-    public static GitHubBuilder fromProperties(Properties props) {
-        GitHubBuilder self = new GitHubBuilder();
-        String oauth = props.getProperty("oauth");
-        String jwt = props.getProperty("jwt");
-        String login = props.getProperty("login");
+    @Override
+    public GitHubBuilder clone() {
+        try {
+            return (GitHubBuilder) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Clone should be supported", e);
+        }
+    }
 
-        if (oauth != null) {
-            self.withOAuthToken(oauth, login);
-        }
-        if (jwt != null) {
-            self.withJwtToken(jwt);
-        }
-        self.withEndpoint(props.getProperty("endpoint", GitHubClient.GITHUB_URL));
-        return self;
+    /**
+     * Adds a {@link GitHubAbuseLimitHandler} to this {@link GitHubBuilder}.
+     * <p>
+     * When a client sends too many requests in a short time span, GitHub may return an error and set a header telling
+     * the client to not make any more request for some period of time. If this happens,
+     * {@link GitHubAbuseLimitHandler#onError(GitHubConnectorResponse)} will be called.
+     * </p>
+     *
+     * @param handler
+     *            the handler
+     * @return the GitHubBuilder
+     */
+    public GitHubBuilder withAbuseLimitHandler(GitHubAbuseLimitHandler handler) {
+        this.abuseLimitHandler = handler;
+        return this;
+    }
+
+    /**
+     * Configures {@link GitHubBuilder} with Installation Token generated by the GitHub Application.
+     *
+     * @param appInstallationToken
+     *            A string containing the GitHub App installation token
+     * @return the configured Builder from given GitHub App installation token.
+     * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
+     */
+    public GitHubBuilder withAppInstallationToken(String appInstallationToken) {
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromAppInstallationToken(appInstallationToken));
+    }
+
+    /**
+     * Configures a {@link AuthorizationProvider} for this builder
+     *
+     * There can be only one authorization provider per client instance.
+     *
+     * @param authorizationProvider
+     *            the authorization provider
+     * @return the GitHubBuilder
+     *
+     */
+    public GitHubBuilder withAuthorizationProvider(final AuthorizationProvider authorizationProvider) {
+        this.authorizationProvider = authorizationProvider;
+        return this;
+    }
+
+    /**
+     * With connector GitHubBuilder.
+     *
+     * @param connector
+     *            the connector
+     * @return the GitHubBuilder
+     */
+    public GitHubBuilder withConnector(GitHubConnector connector) {
+        this.connector = connector;
+        return this;
     }
 
     /**
@@ -189,6 +275,17 @@ public class GitHubBuilder implements Cloneable {
     public GitHubBuilder withEndpoint(String endpoint) {
         this.endpoint = endpoint;
         return this;
+    }
+
+    /**
+     * With jwt token GitHubBuilder.
+     *
+     * @param jwtToken
+     *            the jwt token
+     * @return the GitHubBuilder
+     */
+    public GitHubBuilder withJwtToken(String jwtToken) {
+        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromJwtToken(jwtToken));
     }
 
     /**
@@ -213,100 +310,6 @@ public class GitHubBuilder implements Cloneable {
      */
     public GitHubBuilder withOAuthToken(String oauthToken, String user) {
         return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken, user));
-    }
-
-    /**
-     * Configures a {@link AuthorizationProvider} for this builder
-     *
-     * There can be only one authorization provider per client instance.
-     *
-     * @param authorizationProvider
-     *            the authorization provider
-     * @return the GitHubBuilder
-     *
-     */
-    public GitHubBuilder withAuthorizationProvider(final AuthorizationProvider authorizationProvider) {
-        this.authorizationProvider = authorizationProvider;
-        return this;
-    }
-
-    /**
-     * Configures {@link GitHubBuilder} with Installation Token generated by the GitHub Application.
-     *
-     * @param appInstallationToken
-     *            A string containing the GitHub App installation token
-     * @return the configured Builder from given GitHub App installation token.
-     * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
-     */
-    public GitHubBuilder withAppInstallationToken(String appInstallationToken) {
-        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromAppInstallationToken(appInstallationToken));
-    }
-
-    /**
-     * With jwt token GitHubBuilder.
-     *
-     * @param jwtToken
-     *            the jwt token
-     * @return the GitHubBuilder
-     */
-    public GitHubBuilder withJwtToken(String jwtToken) {
-        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromJwtToken(jwtToken));
-    }
-
-    /**
-     * With connector GitHubBuilder.
-     *
-     * @param connector
-     *            the connector
-     * @return the GitHubBuilder
-     */
-    public GitHubBuilder withConnector(GitHubConnector connector) {
-        this.connector = connector;
-        return this;
-    }
-
-    /**
-     * Adds a {@link GitHubRateLimitHandler} to this {@link GitHubBuilder}.
-     * <p>
-     * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
-     * number of requests remaining is returned in the response header and can also be requested using
-     * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the "rate limit".
-     * </p>
-     * <p>
-     * When the remaining number of requests reaches zero, the next request will return an error. If this happens,
-     * {@link GitHubRateLimitHandler#onError(GitHubConnectorResponse)} will be called.
-     * </p>
-     * <p>
-     * NOTE: GitHub treats clients that exceed their rate limit very harshly. If possible, clients should avoid
-     * exceeding their rate limit. Consider adding a {@link RateLimitChecker} to automatically check the rate limit for
-     * each request and wait if needed.
-     * </p>
-     *
-     * @param handler
-     *            the handler
-     * @return the GitHubBuilder
-     * @see #withRateLimitChecker(RateLimitChecker)
-     */
-    public GitHubBuilder withRateLimitHandler(GitHubRateLimitHandler handler) {
-        this.rateLimitHandler = handler;
-        return this;
-    }
-
-    /**
-     * Adds a {@link GitHubAbuseLimitHandler} to this {@link GitHubBuilder}.
-     * <p>
-     * When a client sends too many requests in a short time span, GitHub may return an error and set a header telling
-     * the client to not make any more request for some period of time. If this happens,
-     * {@link GitHubAbuseLimitHandler#onError(GitHubConnectorResponse)} will be called.
-     * </p>
-     *
-     * @param handler
-     *            the handler
-     * @return the GitHubBuilder
-     */
-    public GitHubBuilder withAbuseLimitHandler(GitHubAbuseLimitHandler handler) {
-        this.abuseLimitHandler = handler;
-        return this;
     }
 
     /**
@@ -352,32 +355,29 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * Builds a {@link GitHub} instance.
+     * Adds a {@link GitHubRateLimitHandler} to this {@link GitHubBuilder}.
+     * <p>
+     * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
+     * number of requests remaining is returned in the response header and can also be requested using
+     * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the "rate limit".
+     * </p>
+     * <p>
+     * When the remaining number of requests reaches zero, the next request will return an error. If this happens,
+     * {@link GitHubRateLimitHandler#onError(GitHubConnectorResponse)} will be called.
+     * </p>
+     * <p>
+     * NOTE: GitHub treats clients that exceed their rate limit very harshly. If possible, clients should avoid
+     * exceeding their rate limit. Consider adding a {@link RateLimitChecker} to automatically check the rate limit for
+     * each request and wait if needed.
+     * </p>
      *
-     * @return the github
-     * @throws IOException
-     *             the io exception
-     */
-    public GitHub build() throws IOException {
-        return new GitHub(endpoint,
-                connector,
-                rateLimitHandler,
-                abuseLimitHandler,
-                rateLimitChecker,
-                authorizationProvider);
-    }
-
-    /**
-     * Clone.
-     *
+     * @param handler
+     *            the handler
      * @return the GitHubBuilder
+     * @see #withRateLimitChecker(RateLimitChecker)
      */
-    @Override
-    public GitHubBuilder clone() {
-        try {
-            return (GitHubBuilder) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException("Clone should be supported", e);
-        }
+    public GitHubBuilder withRateLimitHandler(GitHubRateLimitHandler handler) {
+        this.rateLimitHandler = handler;
+        return this;
     }
 }

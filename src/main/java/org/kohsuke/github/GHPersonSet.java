@@ -46,11 +46,9 @@ public class GHPersonSet<T extends GHPerson> extends HashSet<T> {
      *
      * @param initialCapacity
      *            the initial capacity
-     * @param loadFactor
-     *            the load factor
      */
-    public GHPersonSet(int initialCapacity, float loadFactor) {
-        super(initialCapacity, loadFactor);
+    public GHPersonSet(int initialCapacity) {
+        super(initialCapacity);
     }
 
     /**
@@ -58,9 +56,11 @@ public class GHPersonSet<T extends GHPerson> extends HashSet<T> {
      *
      * @param initialCapacity
      *            the initial capacity
+     * @param loadFactor
+     *            the load factor
      */
-    public GHPersonSet(int initialCapacity) {
-        super(initialCapacity);
+    public GHPersonSet(int initialCapacity, float loadFactor) {
+        super(initialCapacity, loadFactor);
     }
 
     /**

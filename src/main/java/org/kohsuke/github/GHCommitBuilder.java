@@ -11,11 +11,6 @@ import java.util.List;
  * Builder pattern for creating a new commit. Based on https://developer.github.com/v3/git/commits/#create-a-commit
  */
 public class GHCommitBuilder {
-    private final GHRepository repo;
-    private final Requester req;
-
-    private final List<String> parents = new ArrayList<String>();
-
     private static final class UserInfo {
         private final String name;
         private final String email;
@@ -27,6 +22,11 @@ public class GHCommitBuilder {
             this.date = GitHubClient.printInstant(date);
         }
     }
+    private final GHRepository repo;
+
+    private final Requester req;
+
+    private final List<String> parents = new ArrayList<String>();
 
     /**
      * Instantiates a new GH commit builder.
@@ -37,42 +37,6 @@ public class GHCommitBuilder {
     GHCommitBuilder(GHRepository repo) {
         this.repo = repo;
         req = repo.root().createRequest().method("POST");
-    }
-
-    /**
-     * Message gh commit builder.
-     *
-     * @param message
-     *            the commit message
-     * @return the gh commit builder
-     */
-    public GHCommitBuilder message(String message) {
-        req.with("message", message);
-        return this;
-    }
-
-    /**
-     * Tree gh commit builder.
-     *
-     * @param tree
-     *            the SHA of the tree object this commit points to
-     * @return the gh commit builder
-     */
-    public GHCommitBuilder tree(String tree) {
-        req.with("tree", tree);
-        return this;
-    }
-
-    /**
-     * Parent gh commit builder.
-     *
-     * @param parent
-     *            the SHA of a parent commit.
-     * @return the gh commit builder
-     */
-    public GHCommitBuilder parent(String parent) {
-        parents.add(parent);
-        return this;
     }
 
     /**
@@ -109,19 +73,6 @@ public class GHCommitBuilder {
     }
 
     /**
-     * Configures the PGP signature of this commit.
-     *
-     * @param signature
-     *            the signature calculated from the commit
-     *
-     * @return the gh commit builder
-     */
-    public GHCommitBuilder withSignature(String signature) {
-        req.with("signature", signature);
-        return this;
-    }
-
-    /**
      * Configures the committer of this commit.
      *
      * @param name
@@ -154,10 +105,6 @@ public class GHCommitBuilder {
         return this;
     }
 
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/git/commits", repo.getOwnerName(), repo.getName());
-    }
-
     /**
      * Creates a blob based on the parameters specified thus far.
      *
@@ -168,5 +115,58 @@ public class GHCommitBuilder {
     public GHCommit create() throws IOException {
         req.with("parents", parents);
         return req.method("POST").withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);
+    }
+
+    private String getApiTail() {
+        return String.format("/repos/%s/%s/git/commits", repo.getOwnerName(), repo.getName());
+    }
+
+    /**
+     * Message gh commit builder.
+     *
+     * @param message
+     *            the commit message
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder message(String message) {
+        req.with("message", message);
+        return this;
+    }
+
+    /**
+     * Parent gh commit builder.
+     *
+     * @param parent
+     *            the SHA of a parent commit.
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder parent(String parent) {
+        parents.add(parent);
+        return this;
+    }
+
+    /**
+     * Tree gh commit builder.
+     *
+     * @param tree
+     *            the SHA of the tree object this commit points to
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder tree(String tree) {
+        req.with("tree", tree);
+        return this;
+    }
+
+    /**
+     * Configures the PGP signature of this commit.
+     *
+     * @param signature
+     *            the signature calculated from the commit
+     *
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder withSignature(String signature) {
+        req.with("signature", signature);
+        return this;
     }
 }

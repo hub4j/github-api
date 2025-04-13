@@ -40,6 +40,19 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
 
     /**
+     * This is making an assertion about the behaviour of the mock, so it's useful for making sure we're on the right
+     * mock, but should not be used to validate assumptions about the behaviour of the actual GitHub API.
+     */
+    private static void checkErrorMessageMatches(GitHubConnectorResponse connectorResponse, String substring)
+            throws IOException {
+        try (InputStream errorStream = connectorResponse.bodyStream()) {
+            assertThat(errorStream, notNullValue());
+            String errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
+            assertThat(errorString, containsString(substring));
+        }
+    }
+
+    /**
      * Instantiates a new abuse limit handler test.
      */
     public AbuseLimitHandlerTest() {
@@ -384,19 +397,6 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
 
         getTempRepository();
         assertThat(mockGitHub.getRequestCount(), equalTo(3));
-    }
-
-    /**
-     * This is making an assertion about the behaviour of the mock, so it's useful for making sure we're on the right
-     * mock, but should not be used to validate assumptions about the behaviour of the actual GitHub API.
-     */
-    private static void checkErrorMessageMatches(GitHubConnectorResponse connectorResponse, String substring)
-            throws IOException {
-        try (InputStream errorStream = connectorResponse.bodyStream()) {
-            assertThat(errorStream, notNullValue());
-            String errorString = IOUtils.toString(errorStream, StandardCharsets.UTF_8);
-            assertThat(errorString, containsString(substring));
-        }
     }
 
     /**

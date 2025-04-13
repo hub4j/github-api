@@ -18,53 +18,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHVerification {
 
     /**
-     * Create default GHVerification instance
-     */
-    public GHVerification() {
-    }
-
-    private String signature, payload;
-    private boolean verified;
-    private Reason reason;
-
-    /**
-     * Indicates whether GitHub considers the signature in this commit to be verified.
-     *
-     * @return true if the signature is valid else returns false.
-     */
-    public boolean isVerified() {
-        return verified;
-    }
-
-    /**
-     * Gets reason for verification value.
-     *
-     * @return reason of type {@link Reason}, such as "valid" or "unsigned". The possible values can be found in
-     *         {@link Reason}}
-     */
-    public Reason getReason() {
-        return reason;
-    }
-
-    /**
-     * Gets signature used for the verification.
-     *
-     * @return null if not signed else encoded signature.
-     */
-    public String getSignature() {
-        return signature;
-    }
-
-    /**
-     * Gets the payload that was signed.
-     *
-     * @return null if not signed else encoded signature.
-     */
-    public String getPayload() {
-        return payload;
-    }
-
-    /**
      * The possible values for reason in verification object from github.
      *
      * @author Sourabh Sarvotham Parkala
@@ -126,5 +79,52 @@ public class GHVerification {
 
         /** One or more certificates in chain has been revoked. */
         OCSP_REVOKED
+    }
+
+    private String signature, payload;
+    private boolean verified;
+    private Reason reason;
+
+    /**
+     * Create default GHVerification instance
+     */
+    public GHVerification() {
+    }
+
+    /**
+     * Gets the payload that was signed.
+     *
+     * @return null if not signed else encoded signature.
+     */
+    public String getPayload() {
+        return payload;
+    }
+
+    /**
+     * Gets reason for verification value.
+     *
+     * @return reason of type {@link Reason}, such as "valid" or "unsigned". The possible values can be found in
+     *         {@link Reason}}
+     */
+    public Reason getReason() {
+        return reason;
+    }
+
+    /**
+     * Gets signature used for the verification.
+     *
+     * @return null if not signed else encoded signature.
+     */
+    public String getSignature() {
+        return signature;
+    }
+
+    /**
+     * Indicates whether GitHub considers the signature in this commit to be verified.
+     *
+     * @return true if the signature is valid else returns false.
+     */
+    public boolean isVerified() {
+        return verified;
     }
 }

@@ -27,6 +27,34 @@ import javax.annotation.Nonnull;
 @SuppressFBWarnings(value = { "CT_CONSTRUCTOR_THROW" }, justification = "Basic validation")
 public class HttpClientGitHubConnector implements GitHubConnector {
 
+    /**
+     * Initial response information when a response is initially received and before the body is processed.
+     *
+     * Implementation specific to {@link HttpResponse}.
+     */
+    private static class HttpClientGitHubConnectorResponse extends GitHubConnectorResponse {
+
+        @Nonnull
+        private final HttpResponse<InputStream> response;
+
+        protected HttpClientGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
+                @Nonnull HttpResponse<InputStream> response) {
+            super(request, response.statusCode(), response.headers().map());
+            this.response = response;
+        }
+
+        @Override
+        public void close() throws IOException {
+            super.close();
+        }
+
+        @CheckForNull
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+            return response.body();
+        }
+    }
+
     private final HttpClient client;
 
     /**
@@ -85,34 +113,6 @@ public class HttpClientGitHubConnector implements GitHubConnector {
             return new HttpClientGitHubConnectorResponse(connectorRequest, httpResponse);
         } catch (InterruptedException e) {
             throw (InterruptedIOException) new InterruptedIOException(e.getMessage()).initCause(e);
-        }
-    }
-
-    /**
-     * Initial response information when a response is initially received and before the body is processed.
-     *
-     * Implementation specific to {@link HttpResponse}.
-     */
-    private static class HttpClientGitHubConnectorResponse extends GitHubConnectorResponse {
-
-        @Nonnull
-        private final HttpResponse<InputStream> response;
-
-        protected HttpClientGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
-                @Nonnull HttpResponse<InputStream> response) {
-            super(request, response.statusCode(), response.headers().map());
-            this.response = response;
-        }
-
-        @CheckForNull
-        @Override
-        protected InputStream rawBodyStream() throws IOException {
-            return response.body();
-        }
-
-        @Override
-        public void close() throws IOException {
-            super.close();
         }
     }
 }

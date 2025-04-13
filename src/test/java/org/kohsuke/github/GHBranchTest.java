@@ -10,16 +10,16 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHBranchTest extends AbstractGitHubWireMockTest {
 
+    private static final String BRANCH_1 = "testBranch1";
+
+    private static final String BRANCH_2 = "testBranch2";
+    private GHRepository repository;
+
     /**
      * Create default GHBranchTest instance
      */
     public GHBranchTest() {
     }
-
-    private static final String BRANCH_1 = "testBranch1";
-    private static final String BRANCH_2 = "testBranch2";
-
-    private GHRepository repository;
 
     /**
      * Test merge branch.

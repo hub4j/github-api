@@ -17,19 +17,6 @@ class GitHubSanityCachedValue<T> {
     /**
      * Gets the value from the cache or calls the supplier if the cache is empty or out of date.
      *
-     * @param query
-     *            a supplier the returns an updated value. Only called if the cache is empty or out of date.
-     * @return the value from the cache or the value returned from the supplier.
-     * @throws E
-     *             the exception thrown by the supplier if it fails.
-     */
-    <E extends Throwable> T get(SupplierThrows<T, E> query) throws E {
-        return get((value) -> Boolean.FALSE, query);
-    }
-
-    /**
-     * Gets the value from the cache or calls the supplier if the cache is empty or out of date.
-     *
      * @param isExpired
      *            a supplier that returns true if the cached value is no longer valid.
      * @param query
@@ -46,5 +33,18 @@ class GitHubSanityCachedValue<T> {
             }
         }
         return lastResult;
+    }
+
+    /**
+     * Gets the value from the cache or calls the supplier if the cache is empty or out of date.
+     *
+     * @param query
+     *            a supplier the returns an updated value. Only called if the cache is empty or out of date.
+     * @return the value from the cache or the value returned from the supplier.
+     * @throws E
+     *             the exception thrown by the supplier if it fails.
+     */
+    <E extends Throwable> T get(SupplierThrows<T, E> query) throws E {
+        return get((value) -> Boolean.FALSE, query);
     }
 }

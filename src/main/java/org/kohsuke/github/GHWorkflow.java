@@ -19,76 +19,21 @@ import java.util.Objects;
  */
 public class GHWorkflow extends GHObject {
 
-    /**
-     * Create default GHWorkflow instance
-     */
-    public GHWorkflow() {
-    }
-
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
 
     private String name;
+
     private String path;
     private String state;
-
     private String htmlUrl;
+
     private String badgeUrl;
-
     /**
-     * The name of the workflow.
-     *
-     * @return the name
+     * Create default GHWorkflow instance
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * The path of the workflow e.g. .github/workflows/blank.yaml
-     *
-     * @return the path
-     */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     * The state of the workflow.
-     *
-     * @return the state
-     */
-    public String getState() {
-        return state;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
-     * Repository to which the workflow belongs.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getRepository() {
-        return owner;
-    }
-
-    /**
-     * The badge URL, like https://github.com/octo-org/octo-repo/workflows/CI/badge.svg
-     *
-     * @return the badge url
-     */
-    public URL getBadgeUrl() {
-        return GitHubClient.parseURL(badgeUrl);
+    public GHWorkflow() {
     }
 
     /**
@@ -99,16 +44,6 @@ public class GHWorkflow extends GHObject {
      */
     public void disable() throws IOException {
         root().createRequest().method("PUT").withUrlPath(getApiRoute(), "disable").send();
-    }
-
-    /**
-     * Enable the workflow.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void enable() throws IOException {
-        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").send();
     }
 
     /**
@@ -148,12 +83,13 @@ public class GHWorkflow extends GHObject {
     }
 
     /**
-     * Lists the workflow runs belong to this workflow.
+     * Enable the workflow.
      *
-     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
-    public PagedIterable<GHWorkflowRun> listRuns() {
-        return new GHWorkflowRunsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), "runs"));
+    public void enable() throws IOException {
+        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").send();
     }
 
     private String getApiRoute() {
@@ -164,6 +100,70 @@ public class GHWorkflow extends GHObject {
 
         }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/workflows/" + getId();
+    }
+
+    /**
+     * The badge URL, like https://github.com/octo-org/octo-repo/workflows/CI/badge.svg
+     *
+     * @return the badge url
+     */
+    public URL getBadgeUrl() {
+        return GitHubClient.parseURL(badgeUrl);
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(htmlUrl);
+    }
+
+    /**
+     * The name of the workflow.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * The path of the workflow e.g. .github/workflows/blank.yaml
+     *
+     * @return the path
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
+     * Repository to which the workflow belongs.
+     *
+     * @return the repository
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getRepository() {
+        return owner;
+    }
+
+    /**
+     * The state of the workflow.
+     *
+     * @return the state
+     */
+    public String getState() {
+        return state;
+    }
+
+    /**
+     * Lists the workflow runs belong to this workflow.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHWorkflowRun> listRuns() {
+        return new GHWorkflowRunsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), "runs"));
     }
 
     /**

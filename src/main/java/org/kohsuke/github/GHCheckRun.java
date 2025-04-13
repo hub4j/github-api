@@ -26,121 +26,16 @@ import java.util.Locale;
 public class GHCheckRun extends GHObject {
 
     /**
-     * Create default GHCheckRun instance
+     * The Enum AnnotationLevel.
      */
-    public GHCheckRun() {
-    }
+    public static enum AnnotationLevel {
 
-    /** The owner. */
-    @JsonProperty("repository")
-    GHRepository owner;
-
-    private String status;
-    private String conclusion;
-    private String name;
-    private String headSha;
-    private String nodeId;
-    private String externalId;
-    private String startedAt;
-    private String completedAt;
-    private String htmlUrl;
-    private String detailsUrl;
-    private Output output;
-    private GHApp app;
-    private GHPullRequest[] pullRequests = new GHPullRequest[0];
-    private GHCheckSuite checkSuite;
-
-    /**
-     * Wrap.
-     *
-     * @param owner
-     *            the owner
-     * @return the GH check run
-     */
-    GHCheckRun wrap(GHRepository owner) {
-        this.owner = owner;
-        wrap(owner.root());
-        return this;
-    }
-
-    /**
-     * Wrap.
-     *
-     * @param root
-     *            the root
-     * @return the GH check run
-     */
-    GHCheckRun wrap(GitHub root) {
-        if (owner != null) {
-            for (GHPullRequest singlePull : pullRequests) {
-                singlePull.wrap(owner);
-            }
-        }
-        if (checkSuite != null) {
-            if (owner != null) {
-                checkSuite.wrap(owner);
-            } else {
-                checkSuite.wrap(root);
-            }
-        }
-
-        return this;
-    }
-
-    /**
-     * Gets status of the check run.
-     *
-     * @return Status of the check run
-     * @see Status
-     */
-    public Status getStatus() {
-        return Status.from(status);
-    }
-
-    /**
-     * The Enum Status.
-     */
-    public static enum Status {
-
-        /** The queued. */
-        QUEUED,
-        /** The in progress. */
-        IN_PROGRESS,
-        /** The completed. */
-        COMPLETED,
-        /** The unknown. */
-        UNKNOWN;
-
-        /**
-         * From.
-         *
-         * @param value
-         *            the value
-         * @return the status
-         */
-        public static Status from(String value) {
-            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);
-        }
-
-        /**
-         * To string.
-         *
-         * @return the string
-         */
-        @Override
-        public String toString() {
-            return name().toLowerCase(Locale.ROOT);
-        }
-    }
-
-    /**
-     * Gets conclusion of a completed check run.
-     *
-     * @return Status of the check run
-     * @see Conclusion
-     */
-    public Conclusion getConclusion() {
-        return Conclusion.from(conclusion);
+        /** The notice. */
+        NOTICE,
+        /** The warning. */
+        WARNING,
+        /** The failure. */
+        FAILURE
     }
 
     /**
@@ -193,97 +88,129 @@ public class GHCheckRun extends GHObject {
     }
 
     /**
-     * Gets the custom name of this check run.
+     * Represents an output in a check run to include summary and other results.
      *
-     * @return Name of the check run
+     * @see <a href="https://developer.github.com/v3/checks/runs/#output-object">documentation</a>
      */
-    public String getName() {
-        return name;
-    }
+    public static class Output {
 
-    /**
-     * Gets the HEAD SHA.
-     *
-     * @return sha for the HEAD commit
-     */
-    public String getHeadSha() {
-        return headSha;
-    }
+        private String title;
 
-    /**
-     * Gets the pull requests participated in this check run.
-     *
-     * Note this field is only populated for events. When getting a {@link GHCheckRun} outside of an event, this is
-     * always empty.
-     *
-     * @return the list of {@link GHPullRequest}s for this check run. Only populated for events.
-     * @throws IOException
-     *             the io exception
-     */
-    public List<GHPullRequest> getPullRequests() throws IOException {
-        for (GHPullRequest singlePull : pullRequests) {
-            // Only refresh if we haven't do so before
-            singlePull.refresh(singlePull.getTitle());
+        private String summary;
+        private String text;
+        private int annotationsCount;
+        private String annotationsUrl;
+        /**
+         * Create default Output instance
+         */
+        public Output() {
         }
-        return Collections.unmodifiableList(Arrays.asList(pullRequests));
+
+        /**
+         * Gets the annotation count of a check run.
+         *
+         * @return annotation count of a check run
+         */
+        public int getAnnotationsCount() {
+            return annotationsCount;
+        }
+
+        /**
+         * Gets the URL of annotations.
+         *
+         * @return URL of annotations
+         */
+        public URL getAnnotationsUrl() {
+            return GitHubClient.parseURL(annotationsUrl);
+        }
+
+        /**
+         * Gets the summary of the check run, note that it supports Markdown.
+         *
+         * @return summary of check run
+         */
+        public String getSummary() {
+            return summary;
+        }
+
+        /**
+         * Gets the details of the check run, note that it supports Markdown.
+         *
+         * @return Details of the check run
+         */
+        public String getText() {
+            return text;
+        }
+
+        /**
+         * Gets the title of check run.
+         *
+         * @return title of check run
+         */
+        public String getTitle() {
+            return title;
+        }
     }
+    /**
+     * The Enum Status.
+     */
+    public static enum Status {
+
+        /** The queued. */
+        QUEUED,
+        /** The in progress. */
+        IN_PROGRESS,
+        /** The completed. */
+        COMPLETED,
+        /** The unknown. */
+        UNKNOWN;
+
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the status
+         */
+        public static Status from(String value) {
+            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);
+        }
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+    }
+    /** The owner. */
+    @JsonProperty("repository")
+    GHRepository owner;
+    private String status;
+    private String conclusion;
+    private String name;
+    private String headSha;
+    private String nodeId;
+    private String externalId;
+    private String startedAt;
+    private String completedAt;
+    private String htmlUrl;
+    private String detailsUrl;
+    private Output output;
+
+    private GHApp app;
+
+    private GHPullRequest[] pullRequests = new GHPullRequest[0];
+
+    private GHCheckSuite checkSuite;
 
     /**
-     * Gets the HTML URL: https://github.com/[owner]/[repo-name]/runs/[check-run-id], usually an GitHub Action page of
-     * the check run.
-     *
-     * @return HTML URL
+     * Create default GHCheckRun instance
      */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
-     * Gets the global node id to access most objects in GitHub.
-     *
-     * @return Global node id
-     * @see <a href="https://developer.github.com/v4/guides/using-global-node-ids/">documentation</a>
-     */
-    public String getNodeId() {
-        return nodeId;
-    }
-
-    /**
-     * Gets a reference for the check run on the integrator's system.
-     *
-     * @return Reference id
-     */
-    public String getExternalId() {
-        return externalId;
-    }
-
-    /**
-     * Gets the details URL from which to find full details of the check run on the integrator's site.
-     *
-     * @return Details URL
-     */
-    public URL getDetailsUrl() {
-        return GitHubClient.parseURL(detailsUrl);
-    }
-
-    /**
-     * Gets the start time of the check run in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
-     *
-     * @return Timestamp of the start time
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getStartedAt() {
-        return GitHubClient.parseInstant(startedAt);
-    }
-
-    /**
-     * Gets the completed time of the check run in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
-     *
-     * @return Timestamp of the completed time
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCompletedAt() {
-        return GitHubClient.parseInstant(completedAt);
+    public GHCheckRun() {
     }
 
     /**
@@ -307,6 +234,82 @@ public class GHCheckRun extends GHObject {
     }
 
     /**
+     * Gets the completed time of the check run in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+     *
+     * @return Timestamp of the completed time
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getCompletedAt() {
+        return GitHubClient.parseInstant(completedAt);
+    }
+
+    /**
+     * Gets conclusion of a completed check run.
+     *
+     * @return Status of the check run
+     * @see Conclusion
+     */
+    public Conclusion getConclusion() {
+        return Conclusion.from(conclusion);
+    }
+
+    /**
+     * Gets the details URL from which to find full details of the check run on the integrator's site.
+     *
+     * @return Details URL
+     */
+    public URL getDetailsUrl() {
+        return GitHubClient.parseURL(detailsUrl);
+    }
+
+    /**
+     * Gets a reference for the check run on the integrator's system.
+     *
+     * @return Reference id
+     */
+    public String getExternalId() {
+        return externalId;
+    }
+
+    /**
+     * Gets the HEAD SHA.
+     *
+     * @return sha for the HEAD commit
+     */
+    public String getHeadSha() {
+        return headSha;
+    }
+
+    /**
+     * Gets the HTML URL: https://github.com/[owner]/[repo-name]/runs/[check-run-id], usually an GitHub Action page of
+     * the check run.
+     *
+     * @return HTML URL
+     */
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(htmlUrl);
+    }
+
+    /**
+     * Gets the custom name of this check run.
+     *
+     * @return Name of the check run
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets the global node id to access most objects in GitHub.
+     *
+     * @return Global node id
+     * @see <a href="https://developer.github.com/v4/guides/using-global-node-ids/">documentation</a>
+     */
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    /**
      * Gets an output for a check run.
      *
      * @return Output of a check run
@@ -317,81 +320,41 @@ public class GHCheckRun extends GHObject {
     }
 
     /**
-     * Represents an output in a check run to include summary and other results.
+     * Gets the pull requests participated in this check run.
      *
-     * @see <a href="https://developer.github.com/v3/checks/runs/#output-object">documentation</a>
+     * Note this field is only populated for events. When getting a {@link GHCheckRun} outside of an event, this is
+     * always empty.
+     *
+     * @return the list of {@link GHPullRequest}s for this check run. Only populated for events.
+     * @throws IOException
+     *             the io exception
      */
-    public static class Output {
-
-        /**
-         * Create default Output instance
-         */
-        public Output() {
+    public List<GHPullRequest> getPullRequests() throws IOException {
+        for (GHPullRequest singlePull : pullRequests) {
+            // Only refresh if we haven't do so before
+            singlePull.refresh(singlePull.getTitle());
         }
-
-        private String title;
-        private String summary;
-        private String text;
-        private int annotationsCount;
-        private String annotationsUrl;
-
-        /**
-         * Gets the title of check run.
-         *
-         * @return title of check run
-         */
-        public String getTitle() {
-            return title;
-        }
-
-        /**
-         * Gets the summary of the check run, note that it supports Markdown.
-         *
-         * @return summary of check run
-         */
-        public String getSummary() {
-            return summary;
-        }
-
-        /**
-         * Gets the details of the check run, note that it supports Markdown.
-         *
-         * @return Details of the check run
-         */
-        public String getText() {
-            return text;
-        }
-
-        /**
-         * Gets the annotation count of a check run.
-         *
-         * @return annotation count of a check run
-         */
-        public int getAnnotationsCount() {
-            return annotationsCount;
-        }
-
-        /**
-         * Gets the URL of annotations.
-         *
-         * @return URL of annotations
-         */
-        public URL getAnnotationsUrl() {
-            return GitHubClient.parseURL(annotationsUrl);
-        }
+        return Collections.unmodifiableList(Arrays.asList(pullRequests));
     }
 
     /**
-     * The Enum AnnotationLevel.
+     * Gets the start time of the check run in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+     *
+     * @return Timestamp of the start time
      */
-    public static enum AnnotationLevel {
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getStartedAt() {
+        return GitHubClient.parseInstant(startedAt);
+    }
 
-        /** The notice. */
-        NOTICE,
-        /** The warning. */
-        WARNING,
-        /** The failure. */
-        FAILURE
+    /**
+     * Gets status of the check run.
+     *
+     * @return Status of the check run
+     * @see Status
+     */
+    public Status getStatus() {
+        return Status.from(status);
     }
 
     /**
@@ -401,6 +364,43 @@ public class GHCheckRun extends GHObject {
      */
     public @NonNull GHCheckRunBuilder update() {
         return new GHCheckRunBuilder(owner, getId());
+    }
+
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH check run
+     */
+    GHCheckRun wrap(GHRepository owner) {
+        this.owner = owner;
+        wrap(owner.root());
+        return this;
+    }
+
+    /**
+     * Wrap.
+     *
+     * @param root
+     *            the root
+     * @return the GH check run
+     */
+    GHCheckRun wrap(GitHub root) {
+        if (owner != null) {
+            for (GHPullRequest singlePull : pullRequests) {
+                singlePull.wrap(owner);
+            }
+        }
+        if (checkSuite != null) {
+            if (owner != null) {
+                checkSuite.wrap(owner);
+            } else {
+                checkSuite.wrap(root);
+            }
+        }
+
+        return this;
     }
 
 }

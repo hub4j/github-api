@@ -34,181 +34,6 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     }
 
     /**
-     * Gets the git hub builder.
-     *
-     * @return the git hub builder
-     */
-    protected GitHubBuilder getGitHubBuilder() {
-        return super.getGitHubBuilder()
-                // ensure that only JWT will be used against the tests below
-                .withOAuthToken(null, null)
-                // Note that we used to provide a bogus token here and to rely on (apparently) manually crafted/edited
-                // Wiremock recordings, so most of the tests cannot actually be executed against GitHub without
-                // relying on the Wiremock recordings.
-                // Some tests have been updated, though (getGitHubApp in particular).
-                .withAuthorizationProvider(jwtProvider1);
-    }
-
-    /**
-     * Gets the git hub app.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void getGitHubApp() throws IOException {
-        GHApp app = gitHub.getApp();
-        assertThat(app.getId(), is((long) 82994));
-        assertThat(app.getOwner().getId(), is((long) 7544739));
-        assertThat(app.getOwner().getLogin(), is("hub4j-test-org"));
-        assertThat(app.getOwner().getType(), is("Organization"));
-        assertThat(app.getName(), is("GHApi Test app 1"));
-        assertThat(app.getSlug(), is("ghapi-test-app-1"));
-        assertThat(app.getDescription(), is(""));
-        assertThat(app.getExternalUrl(), is("http://localhost"));
-        assertThat(app.getHtmlUrl().toString(), is("https://github.com/apps/ghapi-test-app-1"));
-        assertThat(app.getCreatedAt(), is(GitHubClient.parseInstant("2020-09-30T13:40:56Z")));
-        assertThat(app.getUpdatedAt(), is(GitHubClient.parseInstant("2020-09-30T13:40:56Z")));
-        assertThat(app.getPermissions().size(), is(2));
-        assertThat(app.getEvents().size(), is(0));
-        assertThat(app.getInstallationsCount(), is((long) 1));
-    }
-
-    /**
-     * List installation requests.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void listInstallationRequests() throws IOException {
-        GHApp app = gitHub.getApp();
-        List<GHAppInstallationRequest> installations = app.listInstallationRequests().toList();
-        assertThat(installations.size(), is(1));
-
-        GHAppInstallationRequest appInstallation = installations.get(0);
-        assertThat(appInstallation.getId(), is((long) 1037204));
-        assertThat(appInstallation.getAccount().getId(), is((long) 195438329));
-        assertThat(appInstallation.getAccount().getLogin(), is("approval-test"));
-        assertThat(appInstallation.getAccount().getType(), is("Organization"));
-        assertThat(appInstallation.getRequester().getId(), is((long) 195437694));
-        assertThat(appInstallation.getRequester().getLogin(), is("kaladinstormblessed2"));
-        assertThat(appInstallation.getRequester().getType(), is("User"));
-        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseInstant("2025-01-17T15:50:51Z")));
-        assertThat(appInstallation.getNodeId(), is("MDMwOkludGVncmF0aW9uSW5zdGFsbGF0aW9uUmVxdWVzdDEwMzcyMDQ="));
-    }
-
-    /**
-     * List installations.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void listInstallations() throws IOException {
-        GHApp app = gitHub.getApp();
-        List<GHAppInstallation> installations = app.listInstallations().toList();
-        assertThat(installations.size(), is(1));
-
-        GHAppInstallation appInstallation = installations.get(0);
-        testAppInstallation(appInstallation);
-    }
-
-    /**
-     * List installations that have been updated since a given date.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     * @throws ParseException
-     *             Signals that a ParseException has occurred.
-     *
-     */
-    @Test
-    public void listInstallationsSince() throws IOException, ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date localDate = simpleDateFormat.parse("2023-11-01");
-        Instant localInstant = LocalDate.parse("2023-11-01", DateTimeFormatter.ISO_LOCAL_DATE)
-                .atStartOfDay()
-                .toInstant(ZoneOffset.UTC);
-        GHApp app = gitHub.getApp();
-        List<GHAppInstallation> installations = app.listInstallations(localDate).toList();
-        assertThat(installations.size(), is(1));
-
-        GHAppInstallation appInstallation = installations.get(0);
-        testAppInstallation(appInstallation);
-    }
-
-    /**
-     * Gets the installation by id.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void getInstallationById() throws IOException {
-        GHApp app = gitHub.getApp();
-        GHAppInstallation installation = app.getInstallationById(1111111);
-        testAppInstallation(installation);
-    }
-
-    /**
-     * Gets the installation by organization.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void getInstallationByOrganization() throws IOException {
-        GHApp app = gitHub.getApp();
-        GHAppInstallation installation = app.getInstallationByOrganization("bogus");
-        testAppInstallation(installation);
-    }
-
-    /**
-     * Gets the installation by repository.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void getInstallationByRepository() throws IOException {
-        GHApp app = gitHub.getApp();
-        GHAppInstallation installation = app.getInstallationByRepository("bogus", "bogus");
-        testAppInstallation(installation);
-    }
-
-    /**
-     * Gets the installation by user.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void getInstallationByUser() throws IOException {
-        GHApp app = gitHub.getApp();
-        GHAppInstallation installation = app.getInstallationByUser("bogus");
-        testAppInstallation(installation);
-    }
-
-    /**
-     * Delete installation.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void deleteInstallation() throws IOException {
-        GHApp app = gitHub.getApp();
-        GHAppInstallation installation = app.getInstallationByUser("bogus");
-        try {
-            installation.deleteInstallation();
-        } catch (IOException e) {
-            fail("deleteInstallation wasn't suppose to fail in this test");
-        }
-    }
-
-    /**
      * Creates the token.
      *
      * @throws IOException
@@ -276,6 +101,181 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(installationToken.getRepositories().size(), is(1));
         assertThat(repository.getId(), is((long) 11111111));
         assertThat(repository.getName(), is("bogus"));
+    }
+
+    /**
+     * Delete installation.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void deleteInstallation() throws IOException {
+        GHApp app = gitHub.getApp();
+        GHAppInstallation installation = app.getInstallationByUser("bogus");
+        try {
+            installation.deleteInstallation();
+        } catch (IOException e) {
+            fail("deleteInstallation wasn't suppose to fail in this test");
+        }
+    }
+
+    /**
+     * Gets the git hub app.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void getGitHubApp() throws IOException {
+        GHApp app = gitHub.getApp();
+        assertThat(app.getId(), is((long) 82994));
+        assertThat(app.getOwner().getId(), is((long) 7544739));
+        assertThat(app.getOwner().getLogin(), is("hub4j-test-org"));
+        assertThat(app.getOwner().getType(), is("Organization"));
+        assertThat(app.getName(), is("GHApi Test app 1"));
+        assertThat(app.getSlug(), is("ghapi-test-app-1"));
+        assertThat(app.getDescription(), is(""));
+        assertThat(app.getExternalUrl(), is("http://localhost"));
+        assertThat(app.getHtmlUrl().toString(), is("https://github.com/apps/ghapi-test-app-1"));
+        assertThat(app.getCreatedAt(), is(GitHubClient.parseInstant("2020-09-30T13:40:56Z")));
+        assertThat(app.getUpdatedAt(), is(GitHubClient.parseInstant("2020-09-30T13:40:56Z")));
+        assertThat(app.getPermissions().size(), is(2));
+        assertThat(app.getEvents().size(), is(0));
+        assertThat(app.getInstallationsCount(), is((long) 1));
+    }
+
+    /**
+     * Gets the git hub builder.
+     *
+     * @return the git hub builder
+     */
+    protected GitHubBuilder getGitHubBuilder() {
+        return super.getGitHubBuilder()
+                // ensure that only JWT will be used against the tests below
+                .withOAuthToken(null, null)
+                // Note that we used to provide a bogus token here and to rely on (apparently) manually crafted/edited
+                // Wiremock recordings, so most of the tests cannot actually be executed against GitHub without
+                // relying on the Wiremock recordings.
+                // Some tests have been updated, though (getGitHubApp in particular).
+                .withAuthorizationProvider(jwtProvider1);
+    }
+
+    /**
+     * Gets the installation by id.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void getInstallationById() throws IOException {
+        GHApp app = gitHub.getApp();
+        GHAppInstallation installation = app.getInstallationById(1111111);
+        testAppInstallation(installation);
+    }
+
+    /**
+     * Gets the installation by organization.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void getInstallationByOrganization() throws IOException {
+        GHApp app = gitHub.getApp();
+        GHAppInstallation installation = app.getInstallationByOrganization("bogus");
+        testAppInstallation(installation);
+    }
+
+    /**
+     * Gets the installation by repository.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void getInstallationByRepository() throws IOException {
+        GHApp app = gitHub.getApp();
+        GHAppInstallation installation = app.getInstallationByRepository("bogus", "bogus");
+        testAppInstallation(installation);
+    }
+
+    /**
+     * Gets the installation by user.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void getInstallationByUser() throws IOException {
+        GHApp app = gitHub.getApp();
+        GHAppInstallation installation = app.getInstallationByUser("bogus");
+        testAppInstallation(installation);
+    }
+
+    /**
+     * List installation requests.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void listInstallationRequests() throws IOException {
+        GHApp app = gitHub.getApp();
+        List<GHAppInstallationRequest> installations = app.listInstallationRequests().toList();
+        assertThat(installations.size(), is(1));
+
+        GHAppInstallationRequest appInstallation = installations.get(0);
+        assertThat(appInstallation.getId(), is((long) 1037204));
+        assertThat(appInstallation.getAccount().getId(), is((long) 195438329));
+        assertThat(appInstallation.getAccount().getLogin(), is("approval-test"));
+        assertThat(appInstallation.getAccount().getType(), is("Organization"));
+        assertThat(appInstallation.getRequester().getId(), is((long) 195437694));
+        assertThat(appInstallation.getRequester().getLogin(), is("kaladinstormblessed2"));
+        assertThat(appInstallation.getRequester().getType(), is("User"));
+        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseInstant("2025-01-17T15:50:51Z")));
+        assertThat(appInstallation.getNodeId(), is("MDMwOkludGVncmF0aW9uSW5zdGFsbGF0aW9uUmVxdWVzdDEwMzcyMDQ="));
+    }
+
+    /**
+     * List installations.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void listInstallations() throws IOException {
+        GHApp app = gitHub.getApp();
+        List<GHAppInstallation> installations = app.listInstallations().toList();
+        assertThat(installations.size(), is(1));
+
+        GHAppInstallation appInstallation = installations.get(0);
+        testAppInstallation(appInstallation);
+    }
+
+    /**
+     * List installations that have been updated since a given date.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ParseException
+     *             Signals that a ParseException has occurred.
+     *
+     */
+    @Test
+    public void listInstallationsSince() throws IOException, ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date localDate = simpleDateFormat.parse("2023-11-01");
+        Instant localInstant = LocalDate.parse("2023-11-01", DateTimeFormatter.ISO_LOCAL_DATE)
+                .atStartOfDay()
+                .toInstant(ZoneOffset.UTC);
+        GHApp app = gitHub.getApp();
+        List<GHAppInstallation> installations = app.listInstallations(localDate).toList();
+        assertThat(installations.size(), is(1));
+
+        GHAppInstallation appInstallation = installations.get(0);
+        testAppInstallation(appInstallation);
     }
 
     private void testAppInstallation(GHAppInstallation appInstallation) throws IOException {

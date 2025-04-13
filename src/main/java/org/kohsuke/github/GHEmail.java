@@ -37,12 +37,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 public class GHEmail {
 
-    /**
-     * Create default GHEmail instance
-     */
-    public GHEmail() {
-    }
-
     /** The email. */
     protected String email;
 
@@ -53,12 +47,44 @@ public class GHEmail {
     protected boolean verified;
 
     /**
+     * Create default GHEmail instance
+     */
+    public GHEmail() {
+    }
+
+    /**
+     * Equals.
+     *
+     * @param obj
+     *            the obj
+     * @return true, if successful
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GHEmail) {
+            GHEmail that = (GHEmail) obj;
+            return this.email.equals(that.email);
+        }
+        return false;
+    }
+
+    /**
      * Gets email.
      *
      * @return the email
      */
     public String getEmail() {
         return email;
+    }
+
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        return email.hashCode();
     }
 
     /**
@@ -87,31 +113,5 @@ public class GHEmail {
     @Override
     public String toString() {
         return "Email:" + email;
-    }
-
-    /**
-     * Hash code.
-     *
-     * @return the int
-     */
-    @Override
-    public int hashCode() {
-        return email.hashCode();
-    }
-
-    /**
-     * Equals.
-     *
-     * @param obj
-     *            the obj
-     * @return true, if successful
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof GHEmail) {
-            GHEmail that = (GHEmail) obj;
-            return this.email.equals(that.email);
-        }
-        return false;
     }
 }

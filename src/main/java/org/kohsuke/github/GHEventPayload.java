@@ -25,84 +25,6 @@ import java.util.Map;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
 public abstract class GHEventPayload extends GitHubInteractiveObject {
-    // https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#webhook-payload-object-common-properties
-    // Webhook payload object common properties: action, sender, repository, organization, installation
-    private String action;
-    private GHUser sender;
-    private GHRepository repository;
-    private GHOrganization organization;
-    private GHAppInstallation installation;
-
-    /**
-     * Instantiates a new GH event payload.
-     */
-    GHEventPayload() {
-    }
-
-    /**
-     * Gets the action for the triggered event. Most but not all webhook payloads contain an action property that
-     * contains the specific activity that triggered the event.
-     *
-     * @return event action
-     */
-    public String getAction() {
-        return action;
-    }
-
-    /**
-     * Gets the sender or {@code null} if accessed via the events API.
-     *
-     * @return the sender or {@code null} if accessed via the events API.
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-    public GHUser getSender() {
-        return sender;
-    }
-
-    /**
-     * Gets repository.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-    public GHRepository getRepository() {
-        return repository;
-    }
-
-    /**
-     * Gets organization.
-     *
-     * @return the organization
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-    public GHOrganization getOrganization() {
-        return organization;
-    }
-
-    /**
-     * Gets installation.
-     *
-     * @return the installation
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-    public GHAppInstallation getInstallation() {
-        return installation;
-    }
-
-    // List of events that still need to be added:
-    // ContentReferenceEvent
-    // DeployKeyEvent DownloadEvent FollowEvent ForkApplyEvent GitHubAppAuthorizationEvent GistEvent GollumEvent
-    // InstallationEvent InstallationRepositoriesEvent IssuesEvent LabelEvent MarketplacePurchaseEvent MemberEvent
-    // MembershipEvent MetaEvent MilestoneEvent OrganizationEvent OrgBlockEvent PackageEvent PageBuildEvent
-    // ProjectCardEvent ProjectColumnEvent ProjectEvent RepositoryDispatchEvent RepositoryImportEvent
-    // RepositoryVulnerabilityAlertEvent SecurityAdvisoryEvent StarEvent StatusEvent TeamEvent TeamAddEvent WatchEvent
-
-    /**
-     * Late bind.
-     */
-    void lateBind() {
-    }
-
     /**
      * A check run event has been created, rerequested, completed, or has a requested_action.
      *
@@ -112,23 +34,14 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class CheckRun extends GHEventPayload {
 
+        private int number;
+
+        private GHCheckRun checkRun;
+        private GHRequestedAction requestedAction;
         /**
          * Create default CheckRun instance
          */
         public CheckRun() {
-        }
-
-        private int number;
-        private GHCheckRun checkRun;
-        private GHRequestedAction requestedAction;
-
-        /**
-         * Gets number.
-         *
-         * @return the number
-         */
-        public int getNumber() {
-            return number;
         }
 
         /**
@@ -139,6 +52,15 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHCheckRun getCheckRun() {
             return checkRun;
+        }
+
+        /**
+         * Gets number.
+         *
+         * @return the number
+         */
+        public int getNumber() {
+            return number;
         }
 
         /**
@@ -168,7 +90,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             }
         }
     }
-
     /**
      * A check suite event has been requested, rerequested or completed.
      *
@@ -178,13 +99,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class CheckSuite extends GHEventPayload {
 
+        private GHCheckSuite checkSuite;
+
         /**
          * Create default CheckSuite instance
          */
         public CheckSuite() {
         }
-
-        private GHCheckSuite checkSuite;
 
         /**
          * Gets the Check Suite object.
@@ -213,353 +134,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             }
         }
     }
-
-    /**
-     * An installation has been installed, uninstalled, or its permissions have been changed.
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#installation">
-     *      installation event</a>
-     * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App Installation</a>
-     */
-    public static class Installation extends GHEventPayload {
-
-        /**
-         * Create default Installation instance
-         */
-        public Installation() {
-        }
-
-        private List<Repository> repositories;
-        private List<GHRepository> ghRepositories = null;
-
-        /**
-         * Gets repositories. For the "deleted" action please rather call {@link #getRawRepositories()}
-         *
-         * @return the repositories
-         */
-        public List<GHRepository> getRepositories() {
-            if ("deleted".equalsIgnoreCase(getAction())) {
-                throw new IllegalStateException("Can't call #getRepositories() on Installation event "
-                        + "with 'deleted' action. Call #getRawRepositories() instead.");
-            }
-
-            if (ghRepositories == null) {
-                ghRepositories = new ArrayList<>(repositories.size());
-                try {
-                    for (Repository singleRepo : repositories) {
-                        // populate each repository
-                        // the repository information provided here is so limited
-                        // as to be unusable without populating, so we do it eagerly
-                        ghRepositories.add(this.root().getRepositoryById(singleRepo.getId()));
-                    }
-                } catch (IOException e) {
-                    throw new GHException("Failed to refresh repositories", e);
-                }
-            }
-
-            return Collections.unmodifiableList(ghRepositories);
-        }
-
-        /**
-         * Returns a list of raw, unpopulated repositories. Useful when calling from within Installation event with
-         * action "deleted". You can't fetch the info for repositories of an already deleted installation.
-         *
-         * @return the list of raw Repository records
-         */
-        public List<Repository> getRawRepositories() {
-            return Collections.unmodifiableList(repositories);
-        }
-
-        /**
-         * Late bind.
-         */
-        @Override
-        void lateBind() {
-            if (getInstallation() == null) {
-                throw new IllegalStateException(
-                        "Expected installation payload, but got something else. Maybe we've got another type of event?");
-            }
-            super.lateBind();
-        }
-
-        /**
-         * A special minimal implementation of a {@link GHRepository} which contains only fields from "Properties of
-         * repositories" from <a href=
-         * "https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#installation">here</a>
-         */
-        public static class Repository {
-
-            /**
-             * Create default Repository instance
-             */
-            public Repository() {
-            }
-
-            private long id;
-            private String fullName;
-            private String name;
-            private String nodeId;
-            @JsonProperty(value = "private")
-            private boolean isPrivate;
-
-            /**
-             * Get the id.
-             *
-             * @return the id
-             */
-            public long getId() {
-                return id;
-            }
-
-            /**
-             * Gets the full name.
-             *
-             * @return the full name
-             */
-            public String getFullName() {
-                return fullName;
-            }
-
-            /**
-             * Gets the name.
-             *
-             * @return the name
-             */
-            public String getName() {
-                return name;
-            }
-
-            /**
-             * Gets the node id.
-             *
-             * @return the node id
-             */
-            public String getNodeId() {
-                return nodeId;
-            }
-
-            /**
-             * Gets the repository private flag.
-             *
-             * @return whether the repository is private
-             */
-            public boolean isPrivate() {
-                return isPrivate;
-            }
-        }
-    }
-
-    /**
-     * A repository has been added or removed from an installation.
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#installation_repositories">
-     *      installation_repositories event</a>
-     * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App installation</a>
-     */
-    public static class InstallationRepositories extends GHEventPayload {
-
-        /**
-         * Create default InstallationRepositories instance
-         */
-        public InstallationRepositories() {
-        }
-
-        private String repositorySelection;
-        private List<GHRepository> repositoriesAdded;
-        private List<GHRepository> repositoriesRemoved;
-
-        /**
-         * Gets installation selection.
-         *
-         * @return the installation selection
-         */
-        public String getRepositorySelection() {
-            return repositorySelection;
-        }
-
-        /**
-         * Gets repositories added.
-         *
-         * @return the repositories
-         */
-        public List<GHRepository> getRepositoriesAdded() {
-            return Collections.unmodifiableList(repositoriesAdded);
-        }
-
-        /**
-         * Gets repositories removed.
-         *
-         * @return the repositories
-         */
-        public List<GHRepository> getRepositoriesRemoved() {
-            return Collections.unmodifiableList(repositoriesRemoved);
-        }
-
-        /**
-         * Late bind.
-         */
-        @Override
-        void lateBind() {
-            if (getInstallation() == null) {
-                throw new IllegalStateException(
-                        "Expected installation_repositories payload, but got something else. Maybe we've got another type of event?");
-            }
-            super.lateBind();
-            List<GHRepository> repositories;
-            if ("added".equals(getAction()))
-                repositories = repositoriesAdded;
-            else // action == "removed"
-                repositories = repositoriesRemoved;
-
-            if (repositories != null && !repositories.isEmpty()) {
-                try {
-                    for (GHRepository singleRepo : repositories) { // warp each of the repository
-                        singleRepo.populate();
-                    }
-                } catch (IOException e) {
-                    throw new GHException("Failed to refresh repositories", e);
-                }
-            }
-        }
-    }
-
-    /**
-     * A pull request status has changed.
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#pull_request">
-     *      pull_request event</a>
-     * @see <a href="https://docs.github.com/en/rest/reference/pulls">Pull Requests</a>
-     */
-    @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
-    public static class PullRequest extends GHEventPayload {
-
-        /**
-         * Create default PullRequest instance
-         */
-        public PullRequest() {
-        }
-
-        private int number;
-        private GHPullRequest pullRequest;
-        private GHLabel label;
-        private GHPullRequestChanges changes;
-
-        /**
-         * Gets number.
-         *
-         * @return the number
-         */
-        public int getNumber() {
-            return number;
-        }
-
-        /**
-         * Gets pull request.
-         *
-         * @return the pull request
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHPullRequest getPullRequest() {
-            return pullRequest;
-        }
-
-        /**
-         * Gets the added or removed label for labeled/unlabeled events.
-         *
-         * @return label the added or removed label
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHLabel getLabel() {
-            return label;
-        }
-
-        /**
-         * Get changes (for action="edited").
-         *
-         * @return changes
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHPullRequestChanges getChanges() {
-            return changes;
-        }
-
-        /**
-         * Late bind.
-         */
-        @Override
-        void lateBind() {
-            if (pullRequest == null)
-                throw new IllegalStateException(
-                        "Expected pull_request payload, but got something else. Maybe we've got another type of event?");
-            super.lateBind();
-            GHRepository repository = getRepository();
-            if (repository != null) {
-                pullRequest.wrapUp(repository);
-            }
-        }
-    }
-
-    /**
-     * A review was added to a pull request.
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#pull_request_review">
-     *      pull_request_review event</a>
-     * @see <a href="https://docs.github.com/en/rest/reference/pulls#reviews">Pull Request Reviews</a>
-     */
-    public static class PullRequestReview extends GHEventPayload {
-
-        /**
-         * Create default PullRequestReview instance
-         */
-        public PullRequestReview() {
-        }
-
-        private GHPullRequestReview review;
-        private GHPullRequest pullRequest;
-
-        /**
-         * Gets review.
-         *
-         * @return the review
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHPullRequestReview getReview() {
-            return review;
-        }
-
-        /**
-         * Gets pull request.
-         *
-         * @return the pull request
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHPullRequest getPullRequest() {
-            return pullRequest;
-        }
-
-        /**
-         * Late bind.
-         */
-        @Override
-        void lateBind() {
-            if (review == null)
-                throw new IllegalStateException(
-                        "Expected pull_request_review payload, but got something else. Maybe we've got another type of event?");
-            super.lateBind();
-
-            review.wrapUp(pullRequest);
-
-            GHRepository repository = getRepository();
-            if (repository != null) {
-                pullRequest.wrapUp(repository);
-            }
-        }
-    }
-
     /**
      * Wrapper for changes on issue and pull request review comments action="edited".
      *
@@ -570,34 +144,17 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     public static class CommentChanges {
 
         /**
-         * Create default CommentChanges instance
-         */
-        public CommentChanges() {
-        }
-
-        private GHFrom body;
-
-        /**
-         * Gets the previous comment body.
-         *
-         * @return previous comment body (or null if not changed)
-         */
-        public GHFrom getBody() {
-            return body;
-        }
-
-        /**
          * Wrapper for changed values.
          */
         public static class GHFrom {
+
+            private String from;
 
             /**
              * Create default GHFrom instance
              */
             public GHFrom() {
             }
-
-            private String from;
 
             /**
              * Previous comment value that was changed.
@@ -608,203 +165,24 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
                 return from;
             }
         }
-    }
 
-    /**
-     * A review comment was added to a pull request.
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#pull_request_review_comment">
-     *      pull_request_review_comment event</a>
-     * @see <a href="https://docs.github.com/en/rest/reference/pulls#review-comments">Pull Request Review Comments</a>
-     */
-    public static class PullRequestReviewComment extends GHEventPayload {
+        private GHFrom body;
 
         /**
-         * Create default PullRequestReviewComment instance
+         * Create default CommentChanges instance
          */
-        public PullRequestReviewComment() {
+        public CommentChanges() {
         }
 
-        private GHPullRequestReviewComment comment;
-        private GHPullRequest pullRequest;
-        private CommentChanges changes;
-
         /**
-         * Gets comment.
+         * Gets the previous comment body.
          *
-         * @return the comment
+         * @return previous comment body (or null if not changed)
          */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHPullRequestReviewComment getComment() {
-            return comment;
-        }
-
-        /**
-         * Get changes (for action="edited").
-         *
-         * @return changes
-         */
-        public CommentChanges getChanges() {
-            return changes;
-        }
-
-        /**
-         * Gets pull request.
-         *
-         * @return the pull request
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHPullRequest getPullRequest() {
-            return pullRequest;
-        }
-
-        /**
-         * Late bind.
-         */
-        @Override
-        void lateBind() {
-            if (comment == null)
-                throw new IllegalStateException(
-                        "Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?");
-            super.lateBind();
-            comment.wrapUp(pullRequest);
-
-            GHRepository repository = getRepository();
-            if (repository != null) {
-                pullRequest.wrapUp(repository);
-            }
+        public GHFrom getBody() {
+            return body;
         }
     }
-
-    /**
-     * A Issue has been assigned, unassigned, labeled, unlabeled, opened, edited, milestoned, demilestoned, closed, or
-     * reopened.
-     *
-     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#issues">
-     *      issues events</a>
-     * @see <a href="https://docs.github.com/en/rest/reference/issues#comments">Issues Comments</a>
-     */
-    public static class Issue extends GHEventPayload {
-
-        /**
-         * Create default Issue instance
-         */
-        public Issue() {
-        }
-
-        private GHIssue issue;
-
-        private GHLabel label;
-
-        private GHIssueChanges changes;
-
-        /**
-         * Gets issue.
-         *
-         * @return the issue
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHIssue getIssue() {
-            return issue;
-        }
-
-        /**
-         * Gets the added or removed label for labeled/unlabeled events.
-         *
-         * @return label the added or removed label
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHLabel getLabel() {
-            return label;
-        }
-
-        /**
-         * Get changes (for action="edited").
-         *
-         * @return changes
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHIssueChanges getChanges() {
-            return changes;
-        }
-
-        /**
-         * Late bind.
-         */
-        @Override
-        void lateBind() {
-            super.lateBind();
-            GHRepository repository = getRepository();
-            if (repository != null) {
-                issue.wrap(repository);
-            }
-        }
-    }
-
-    /**
-     * A comment was added to an issue.
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#issue_comment">
-     *      issue_comment event</a>
-     * @see <a href="https://docs.github.com/en/rest/reference/issues#comments">Issue Comments</a>
-     */
-    public static class IssueComment extends GHEventPayload {
-
-        /**
-         * Create default IssueComment instance
-         */
-        public IssueComment() {
-        }
-
-        private GHIssueComment comment;
-        private GHIssue issue;
-        private CommentChanges changes;
-
-        /**
-         * Gets comment.
-         *
-         * @return the comment
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHIssueComment getComment() {
-            return comment;
-        }
-
-        /**
-         * Get changes (for action="edited").
-         *
-         * @return changes
-         */
-        public CommentChanges getChanges() {
-            return changes;
-        }
-
-        /**
-         * Gets issue.
-         *
-         * @return the issue
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHIssue getIssue() {
-            return issue;
-        }
-
-        /**
-         * Late bind.
-         */
-        @Override
-        void lateBind() {
-            super.lateBind();
-            GHRepository repository = getRepository();
-            if (repository != null) {
-                issue.wrap(repository);
-            }
-            comment.wrapUp(issue);
-        }
-    }
-
     /**
      * A comment was added to a commit.
      *
@@ -815,13 +193,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class CommitComment extends GHEventPayload {
 
+        private GHCommitComment comment;
+
         /**
          * Create default CommitComment instance
          */
         public CommitComment() {
         }
-
-        private GHCommitComment comment;
 
         /**
          * Gets comment.
@@ -845,7 +223,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             }
         }
     }
-
     /**
      * A repository, branch, or tag was created.
      *
@@ -855,16 +232,36 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Create extends GHEventPayload {
 
+        private String ref;
+
+        private String refType;
+        private String masterBranch;
+        private String description;
         /**
          * Create default Create instance
          */
         public Create() {
         }
 
-        private String ref;
-        private String refType;
-        private String masterBranch;
-        private String description;
+        /**
+         * Gets description.
+         *
+         * @return the description
+         */
+        public String getDescription() {
+            return description;
+        }
+
+        /**
+         * Gets default branch.
+         *
+         * Name is an artifact of when "master" was the most common default.
+         *
+         * @return the default branch
+         */
+        public String getMasterBranch() {
+            return masterBranch;
+        }
 
         /**
          * Gets ref.
@@ -883,26 +280,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         public String getRefType() {
             return refType;
         }
-
-        /**
-         * Gets default branch.
-         *
-         * Name is an artifact of when "master" was the most common default.
-         *
-         * @return the default branch
-         */
-        public String getMasterBranch() {
-            return masterBranch;
-        }
-
-        /**
-         * Gets description.
-         *
-         * @return the description
-         */
-        public String getDescription() {
-            return description;
-        }
     }
 
     /**
@@ -914,14 +291,14 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Delete extends GHEventPayload {
 
+        private String ref;
+
+        private String refType;
         /**
          * Create default Delete instance
          */
         public Delete() {
         }
-
-        private String ref;
-        private String refType;
 
         /**
          * Gets ref.
@@ -951,13 +328,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Deployment extends GHEventPayload {
 
+        private GHDeployment deployment;
+
         /**
          * Create default Deployment instance
          */
         public Deployment() {
         }
-
-        private GHDeployment deployment;
 
         /**
          * Gets deployment.
@@ -992,23 +369,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class DeploymentStatus extends GHEventPayload {
 
+        private GHDeploymentStatus deploymentStatus;
+
+        private GHDeployment deployment;
         /**
          * Create default DeploymentStatus instance
          */
         public DeploymentStatus() {
-        }
-
-        private GHDeploymentStatus deploymentStatus;
-        private GHDeployment deployment;
-
-        /**
-         * Gets deployment status.
-         *
-         * @return the deployment status
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHDeploymentStatus getDeploymentStatus() {
-            return deploymentStatus;
         }
 
         /**
@@ -1019,6 +386,16 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHDeployment getDeployment() {
             return deployment;
+        }
+
+        /**
+         * Gets deployment status.
+         *
+         * @return the deployment status
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHDeploymentStatus getDeploymentStatus() {
+            return deploymentStatus;
         }
 
         /**
@@ -1036,6 +413,87 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
+     * A discussion was closed, reopened, created, edited, deleted, pinned, unpinned, locked, unlocked, transferred,
+     * category_changed, answered, or unanswered.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion">
+     *      discussion event</a>
+     */
+    public static class Discussion extends GHEventPayload {
+
+        private GHRepositoryDiscussion discussion;
+
+        private GHLabel label;
+
+        /**
+         * Create default Discussion instance
+         */
+        public Discussion() {
+        }
+
+        /**
+         * Gets discussion.
+         *
+         * @return the discussion
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHRepositoryDiscussion getDiscussion() {
+            return discussion;
+        }
+
+        /**
+         * Gets the added or removed label for labeled/unlabeled events.
+         *
+         * @return label the added or removed label
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHLabel getLabel() {
+            return label;
+        }
+    }
+
+    /**
+     * A discussion comment was created, deleted, or edited.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion_comment">
+     *      discussion event</a>
+     */
+    public static class DiscussionComment extends GHEventPayload {
+
+        private GHRepositoryDiscussion discussion;
+
+        private GHRepositoryDiscussionComment comment;
+
+        /**
+         * Create default DiscussionComment instance
+         */
+        public DiscussionComment() {
+        }
+
+        /**
+         * Gets discussion comment.
+         *
+         * @return the discussion
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHRepositoryDiscussionComment getComment() {
+            return comment;
+        }
+
+        /**
+         * Gets discussion.
+         *
+         * @return the discussion
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHRepositoryDiscussion getDiscussion() {
+            return discussion;
+        }
+    }
+
+    /**
      * A user forked a repository.
      *
      * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#fork"> fork
@@ -1044,13 +502,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Fork extends GHEventPayload {
 
+        private GHRepository forkee;
+
         /**
          * Create default Fork instance
          */
         public Fork() {
         }
-
-        private GHRepository forkee;
 
         /**
          * Gets forkee.
@@ -1060,6 +518,483 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHRepository getForkee() {
             return forkee;
+        }
+    }
+
+    // List of events that still need to be added:
+    // ContentReferenceEvent
+    // DeployKeyEvent DownloadEvent FollowEvent ForkApplyEvent GitHubAppAuthorizationEvent GistEvent GollumEvent
+    // InstallationEvent InstallationRepositoriesEvent IssuesEvent LabelEvent MarketplacePurchaseEvent MemberEvent
+    // MembershipEvent MetaEvent MilestoneEvent OrganizationEvent OrgBlockEvent PackageEvent PageBuildEvent
+    // ProjectCardEvent ProjectColumnEvent ProjectEvent RepositoryDispatchEvent RepositoryImportEvent
+    // RepositoryVulnerabilityAlertEvent SecurityAdvisoryEvent StarEvent StatusEvent TeamEvent TeamAddEvent WatchEvent
+
+    /**
+     * An installation has been installed, uninstalled, or its permissions have been changed.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#installation">
+     *      installation event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App Installation</a>
+     */
+    public static class Installation extends GHEventPayload {
+
+        /**
+         * A special minimal implementation of a {@link GHRepository} which contains only fields from "Properties of
+         * repositories" from <a href=
+         * "https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#installation">here</a>
+         */
+        public static class Repository {
+
+            private long id;
+
+            private String fullName;
+            private String name;
+            private String nodeId;
+            @JsonProperty(value = "private")
+            private boolean isPrivate;
+            /**
+             * Create default Repository instance
+             */
+            public Repository() {
+            }
+
+            /**
+             * Gets the full name.
+             *
+             * @return the full name
+             */
+            public String getFullName() {
+                return fullName;
+            }
+
+            /**
+             * Get the id.
+             *
+             * @return the id
+             */
+            public long getId() {
+                return id;
+            }
+
+            /**
+             * Gets the name.
+             *
+             * @return the name
+             */
+            public String getName() {
+                return name;
+            }
+
+            /**
+             * Gets the node id.
+             *
+             * @return the node id
+             */
+            public String getNodeId() {
+                return nodeId;
+            }
+
+            /**
+             * Gets the repository private flag.
+             *
+             * @return whether the repository is private
+             */
+            public boolean isPrivate() {
+                return isPrivate;
+            }
+        }
+
+        private List<Repository> repositories;
+        private List<GHRepository> ghRepositories = null;
+
+        /**
+         * Create default Installation instance
+         */
+        public Installation() {
+        }
+
+        /**
+         * Returns a list of raw, unpopulated repositories. Useful when calling from within Installation event with
+         * action "deleted". You can't fetch the info for repositories of an already deleted installation.
+         *
+         * @return the list of raw Repository records
+         */
+        public List<Repository> getRawRepositories() {
+            return Collections.unmodifiableList(repositories);
+        }
+
+        /**
+         * Gets repositories. For the "deleted" action please rather call {@link #getRawRepositories()}
+         *
+         * @return the repositories
+         */
+        public List<GHRepository> getRepositories() {
+            if ("deleted".equalsIgnoreCase(getAction())) {
+                throw new IllegalStateException("Can't call #getRepositories() on Installation event "
+                        + "with 'deleted' action. Call #getRawRepositories() instead.");
+            }
+
+            if (ghRepositories == null) {
+                ghRepositories = new ArrayList<>(repositories.size());
+                try {
+                    for (Repository singleRepo : repositories) {
+                        // populate each repository
+                        // the repository information provided here is so limited
+                        // as to be unusable without populating, so we do it eagerly
+                        ghRepositories.add(this.root().getRepositoryById(singleRepo.getId()));
+                    }
+                } catch (IOException e) {
+                    throw new GHException("Failed to refresh repositories", e);
+                }
+            }
+
+            return Collections.unmodifiableList(ghRepositories);
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (getInstallation() == null) {
+                throw new IllegalStateException(
+                        "Expected installation payload, but got something else. Maybe we've got another type of event?");
+            }
+            super.lateBind();
+        }
+    }
+
+    /**
+     * A repository has been added or removed from an installation.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#installation_repositories">
+     *      installation_repositories event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/apps#installations">GitHub App installation</a>
+     */
+    public static class InstallationRepositories extends GHEventPayload {
+
+        private String repositorySelection;
+
+        private List<GHRepository> repositoriesAdded;
+        private List<GHRepository> repositoriesRemoved;
+        /**
+         * Create default InstallationRepositories instance
+         */
+        public InstallationRepositories() {
+        }
+
+        /**
+         * Gets repositories added.
+         *
+         * @return the repositories
+         */
+        public List<GHRepository> getRepositoriesAdded() {
+            return Collections.unmodifiableList(repositoriesAdded);
+        }
+
+        /**
+         * Gets repositories removed.
+         *
+         * @return the repositories
+         */
+        public List<GHRepository> getRepositoriesRemoved() {
+            return Collections.unmodifiableList(repositoriesRemoved);
+        }
+
+        /**
+         * Gets installation selection.
+         *
+         * @return the installation selection
+         */
+        public String getRepositorySelection() {
+            return repositorySelection;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (getInstallation() == null) {
+                throw new IllegalStateException(
+                        "Expected installation_repositories payload, but got something else. Maybe we've got another type of event?");
+            }
+            super.lateBind();
+            List<GHRepository> repositories;
+            if ("added".equals(getAction()))
+                repositories = repositoriesAdded;
+            else // action == "removed"
+                repositories = repositoriesRemoved;
+
+            if (repositories != null && !repositories.isEmpty()) {
+                try {
+                    for (GHRepository singleRepo : repositories) { // warp each of the repository
+                        singleRepo.populate();
+                    }
+                } catch (IOException e) {
+                    throw new GHException("Failed to refresh repositories", e);
+                }
+            }
+        }
+    }
+
+    /**
+     * A Issue has been assigned, unassigned, labeled, unlabeled, opened, edited, milestoned, demilestoned, closed, or
+     * reopened.
+     *
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#issues">
+     *      issues events</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/issues#comments">Issues Comments</a>
+     */
+    public static class Issue extends GHEventPayload {
+
+        private GHIssue issue;
+
+        private GHLabel label;
+
+        private GHIssueChanges changes;
+
+        /**
+         * Create default Issue instance
+         */
+        public Issue() {
+        }
+
+        /**
+         * Get changes (for action="edited").
+         *
+         * @return changes
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHIssueChanges getChanges() {
+            return changes;
+        }
+
+        /**
+         * Gets issue.
+         *
+         * @return the issue
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHIssue getIssue() {
+            return issue;
+        }
+
+        /**
+         * Gets the added or removed label for labeled/unlabeled events.
+         *
+         * @return label the added or removed label
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHLabel getLabel() {
+            return label;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            super.lateBind();
+            GHRepository repository = getRepository();
+            if (repository != null) {
+                issue.wrap(repository);
+            }
+        }
+    }
+
+    /**
+     * A comment was added to an issue.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#issue_comment">
+     *      issue_comment event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/issues#comments">Issue Comments</a>
+     */
+    public static class IssueComment extends GHEventPayload {
+
+        private GHIssueComment comment;
+
+        private GHIssue issue;
+        private CommentChanges changes;
+        /**
+         * Create default IssueComment instance
+         */
+        public IssueComment() {
+        }
+
+        /**
+         * Get changes (for action="edited").
+         *
+         * @return changes
+         */
+        public CommentChanges getChanges() {
+            return changes;
+        }
+
+        /**
+         * Gets comment.
+         *
+         * @return the comment
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHIssueComment getComment() {
+            return comment;
+        }
+
+        /**
+         * Gets issue.
+         *
+         * @return the issue
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHIssue getIssue() {
+            return issue;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            super.lateBind();
+            GHRepository repository = getRepository();
+            if (repository != null) {
+                issue.wrap(repository);
+            }
+            comment.wrapUp(issue);
+        }
+    }
+
+    /**
+     * A label was created, edited or deleted.
+     *
+     * @see <a href= "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#label">
+     *      label event</a>
+     */
+    public static class Label extends GHEventPayload {
+
+        private GHLabel label;
+
+        private GHLabelChanges changes;
+
+        /**
+         * Create default Label instance
+         */
+        public Label() {
+        }
+
+        /**
+         * Gets changes (for action="edited").
+         *
+         * @return changes
+         */
+        public GHLabelChanges getChanges() {
+            return changes;
+        }
+
+        /**
+         * Gets the label.
+         *
+         * @return the label
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+        public GHLabel getLabel() {
+            return label;
+        }
+    }
+
+    /**
+     * A member event was triggered.
+     *
+     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#member">member event</a>
+     */
+    public static class Member extends GHEventPayload {
+
+        private GHUser member;
+
+        private GHMemberChanges changes;
+
+        /**
+         * Create default Member instance
+         */
+        public Member() {
+        }
+
+        /**
+         * Gets the changes made to the member.
+         *
+         * @return the changes made to the member
+         */
+        public GHMemberChanges getChanges() {
+            return changes;
+        }
+
+        /**
+         * Gets the member.
+         *
+         * @return the member
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHUser getMember() {
+            return member;
+        }
+    }
+
+    /**
+     * A membership event was triggered.
+     *
+     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#membership">membership event</a>
+     */
+    public static class Membership extends GHEventPayload {
+
+        private GHTeam team;
+
+        private GHUser member;
+
+        /**
+         * Create default Membership instance
+         */
+        public Membership() {
+        }
+
+        /**
+         * Gets the member.
+         *
+         * @return the member
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHUser getMember() {
+            return member;
+        }
+
+        /**
+         * Gets the team.
+         *
+         * @return the team
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHTeam getTeam() {
+            return team;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (team == null) {
+                throw new IllegalStateException(
+                        "Expected membership payload, but got something else. Maybe we've got another type of event?");
+            }
+            super.lateBind();
+            GHOrganization organization = getOrganization();
+            if (organization == null) {
+                throw new IllegalStateException("Organization must not be null");
+            }
+            team.wrapUp(organization);
         }
     }
 
@@ -1080,6 +1015,44 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
+     * A project v2 item was archived, converted, created, edited, restored, deleted, or reordered.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#projects_v2_item">projects_v2_item
+     *      event</a>
+     */
+    public static class ProjectsV2Item extends GHEventPayload {
+
+        private GHProjectsV2Item projectsV2Item;
+
+        private GHProjectsV2ItemChanges changes;
+        /**
+         * Create default ProjectsV2Item instance
+         */
+        public ProjectsV2Item() {
+        }
+
+        /**
+         * Gets the changes.
+         *
+         * @return the changes
+         */
+        public GHProjectsV2ItemChanges getChanges() {
+            return changes;
+        }
+
+        /**
+         * Gets the projects V 2 item.
+         *
+         * @return the projects V 2 item
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHProjectsV2Item getProjectsV2Item() {
+            return projectsV2Item;
+        }
+    }
+
+    /**
      * A repository was made public.
      *
      * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#public">
@@ -1096,6 +1069,208 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
+     * A pull request status has changed.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#pull_request">
+     *      pull_request event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/pulls">Pull Requests</a>
+     */
+    @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
+    public static class PullRequest extends GHEventPayload {
+
+        private int number;
+
+        private GHPullRequest pullRequest;
+        private GHLabel label;
+        private GHPullRequestChanges changes;
+        /**
+         * Create default PullRequest instance
+         */
+        public PullRequest() {
+        }
+
+        /**
+         * Get changes (for action="edited").
+         *
+         * @return changes
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHPullRequestChanges getChanges() {
+            return changes;
+        }
+
+        /**
+         * Gets the added or removed label for labeled/unlabeled events.
+         *
+         * @return label the added or removed label
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHLabel getLabel() {
+            return label;
+        }
+
+        /**
+         * Gets number.
+         *
+         * @return the number
+         */
+        public int getNumber() {
+            return number;
+        }
+
+        /**
+         * Gets pull request.
+         *
+         * @return the pull request
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHPullRequest getPullRequest() {
+            return pullRequest;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (pullRequest == null)
+                throw new IllegalStateException(
+                        "Expected pull_request payload, but got something else. Maybe we've got another type of event?");
+            super.lateBind();
+            GHRepository repository = getRepository();
+            if (repository != null) {
+                pullRequest.wrapUp(repository);
+            }
+        }
+    }
+
+    /**
+     * A review was added to a pull request.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#pull_request_review">
+     *      pull_request_review event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/pulls#reviews">Pull Request Reviews</a>
+     */
+    public static class PullRequestReview extends GHEventPayload {
+
+        private GHPullRequestReview review;
+
+        private GHPullRequest pullRequest;
+        /**
+         * Create default PullRequestReview instance
+         */
+        public PullRequestReview() {
+        }
+
+        /**
+         * Gets pull request.
+         *
+         * @return the pull request
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHPullRequest getPullRequest() {
+            return pullRequest;
+        }
+
+        /**
+         * Gets review.
+         *
+         * @return the review
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHPullRequestReview getReview() {
+            return review;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (review == null)
+                throw new IllegalStateException(
+                        "Expected pull_request_review payload, but got something else. Maybe we've got another type of event?");
+            super.lateBind();
+
+            review.wrapUp(pullRequest);
+
+            GHRepository repository = getRepository();
+            if (repository != null) {
+                pullRequest.wrapUp(repository);
+            }
+        }
+    }
+
+    /**
+     * A review comment was added to a pull request.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#pull_request_review_comment">
+     *      pull_request_review_comment event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/pulls#review-comments">Pull Request Review Comments</a>
+     */
+    public static class PullRequestReviewComment extends GHEventPayload {
+
+        private GHPullRequestReviewComment comment;
+
+        private GHPullRequest pullRequest;
+        private CommentChanges changes;
+        /**
+         * Create default PullRequestReviewComment instance
+         */
+        public PullRequestReviewComment() {
+        }
+
+        /**
+         * Get changes (for action="edited").
+         *
+         * @return changes
+         */
+        public CommentChanges getChanges() {
+            return changes;
+        }
+
+        /**
+         * Gets comment.
+         *
+         * @return the comment
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHPullRequestReviewComment getComment() {
+            return comment;
+        }
+
+        /**
+         * Gets pull request.
+         *
+         * @return the pull request
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHPullRequest getPullRequest() {
+            return pullRequest;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (comment == null)
+                throw new IllegalStateException(
+                        "Expected pull_request_review_comment payload, but got something else. Maybe we've got another type of event?");
+            super.lateBind();
+            comment.wrapUp(pullRequest);
+
+            GHRepository repository = getRepository();
+            if (repository != null) {
+                pullRequest.wrapUp(repository);
+            }
+        }
+    }
+
+    /**
      * A commit was pushed.
      *
      * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#push"> push
@@ -1104,11 +1279,151 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     public static class Push extends GHEventPayload {
 
         /**
-         * Create default Push instance
+         * Commit in a push. Note: sha is an alias for id.
          */
-        public Push() {
+        public static class PushCommit {
+
+            private GitUser author;
+
+            private GitUser committer;
+            private String url, sha, message, timestamp;
+            private boolean distinct;
+            private List<String> added, removed, modified;
+            /**
+             * Create default PushCommit instance
+             */
+            public PushCommit() {
+            }
+
+            /**
+             * Gets added.
+             *
+             * @return the added
+             */
+            public List<String> getAdded() {
+                return Collections.unmodifiableList(added);
+            }
+
+            /**
+             * Gets author.
+             *
+             * @return the author
+             */
+            public GitUser getAuthor() {
+                return author;
+            }
+
+            /**
+             * Gets committer.
+             *
+             * @return the committer
+             */
+            public GitUser getCommitter() {
+                return committer;
+            }
+
+            /**
+             * Gets message.
+             *
+             * @return the message
+             */
+            public String getMessage() {
+                return message;
+            }
+
+            /**
+             * Gets modified.
+             *
+             * @return the modified
+             */
+            public List<String> getModified() {
+                return Collections.unmodifiableList(modified);
+            }
+
+            /**
+             * Gets removed.
+             *
+             * @return the removed
+             */
+            public List<String> getRemoved() {
+                return Collections.unmodifiableList(removed);
+            }
+
+            /**
+             * Gets sha (id).
+             *
+             * @return the sha
+             */
+            public String getSha() {
+                return sha;
+            }
+
+            /**
+             * Obtains the timestamp of the commit.
+             *
+             * @return the timestamp
+             */
+            @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+            public Instant getTimestamp() {
+                return GitHubClient.parseInstant(timestamp);
+            }
+
+            /**
+             * Points to the commit API resource.
+             *
+             * @return the url
+             */
+            public String getUrl() {
+                return url;
+            }
+
+            /**
+             * Whether this commit is distinct from any that have been pushed before.
+             *
+             * @return the boolean
+             */
+            public boolean isDistinct() {
+                return distinct;
+            }
+
+            @JsonSetter
+            private void setId(String id) {
+                sha = id;
+            }
+
         }
 
+        /**
+         * The type Pusher.
+         */
+        public static class Pusher {
+
+            private String name, email;
+
+            /**
+             * Create default Pusher instance
+             */
+            public Pusher() {
+            }
+
+            /**
+             * Gets email.
+             *
+             * @return the email
+             */
+            public String getEmail() {
+                return email;
+            }
+
+            /**
+             * Gets name.
+             *
+             * @return the name
+             */
+            public String getName() {
+                return name;
+            }
+        }
         private String head, before;
         private boolean created, deleted, forced;
         private String ref;
@@ -1116,15 +1431,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         private List<PushCommit> commits;
         private PushCommit headCommit;
         private Pusher pusher;
+
         private String compare;
 
         /**
-         * The SHA of the HEAD commit on the repository.
-         *
-         * @return the head
+         * Create default Push instance
          */
-        public String getHead() {
-            return head;
+        public Push() {
         }
 
         /**
@@ -1137,9 +1450,51 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             return before;
         }
 
-        @JsonSetter // alias
-        private void setAfter(String after) {
-            head = after;
+        /**
+         * The list of pushed commits.
+         *
+         * @return the commits
+         */
+        public List<PushCommit> getCommits() {
+            return Collections.unmodifiableList(commits);
+        }
+
+        /**
+         * Gets compare.
+         *
+         * @return compare
+         */
+        public String getCompare() {
+            return compare;
+        }
+
+        /**
+         * The SHA of the HEAD commit on the repository.
+         *
+         * @return the head
+         */
+        public String getHead() {
+            return head;
+        }
+
+        /**
+         * The head commit of the push.
+         *
+         * @return the commit
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public PushCommit getHeadCommit() {
+            return headCommit;
+        }
+
+        /**
+         * Gets pusher.
+         *
+         * @return the pusher
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public Pusher getPusher() {
+            return pusher;
         }
 
         /**
@@ -1187,189 +1542,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             return forced;
         }
 
-        /**
-         * The list of pushed commits.
-         *
-         * @return the commits
-         */
-        public List<PushCommit> getCommits() {
-            return Collections.unmodifiableList(commits);
-        }
-
-        /**
-         * The head commit of the push.
-         *
-         * @return the commit
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public PushCommit getHeadCommit() {
-            return headCommit;
-        }
-
-        /**
-         * Gets pusher.
-         *
-         * @return the pusher
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public Pusher getPusher() {
-            return pusher;
-        }
-
-        /**
-         * Gets compare.
-         *
-         * @return compare
-         */
-        public String getCompare() {
-            return compare;
-        }
-
-        /**
-         * The type Pusher.
-         */
-        public static class Pusher {
-
-            /**
-             * Create default Pusher instance
-             */
-            public Pusher() {
-            }
-
-            private String name, email;
-
-            /**
-             * Gets name.
-             *
-             * @return the name
-             */
-            public String getName() {
-                return name;
-            }
-
-            /**
-             * Gets email.
-             *
-             * @return the email
-             */
-            public String getEmail() {
-                return email;
-            }
-        }
-
-        /**
-         * Commit in a push. Note: sha is an alias for id.
-         */
-        public static class PushCommit {
-
-            /**
-             * Create default PushCommit instance
-             */
-            public PushCommit() {
-            }
-
-            private GitUser author;
-            private GitUser committer;
-            private String url, sha, message, timestamp;
-            private boolean distinct;
-            private List<String> added, removed, modified;
-
-            /**
-             * Gets author.
-             *
-             * @return the author
-             */
-            public GitUser getAuthor() {
-                return author;
-            }
-
-            /**
-             * Gets committer.
-             *
-             * @return the committer
-             */
-            public GitUser getCommitter() {
-                return committer;
-            }
-
-            /**
-             * Points to the commit API resource.
-             *
-             * @return the url
-             */
-            public String getUrl() {
-                return url;
-            }
-
-            /**
-             * Gets sha (id).
-             *
-             * @return the sha
-             */
-            public String getSha() {
-                return sha;
-            }
-
-            @JsonSetter
-            private void setId(String id) {
-                sha = id;
-            }
-
-            /**
-             * Gets message.
-             *
-             * @return the message
-             */
-            public String getMessage() {
-                return message;
-            }
-
-            /**
-             * Whether this commit is distinct from any that have been pushed before.
-             *
-             * @return the boolean
-             */
-            public boolean isDistinct() {
-                return distinct;
-            }
-
-            /**
-             * Gets added.
-             *
-             * @return the added
-             */
-            public List<String> getAdded() {
-                return Collections.unmodifiableList(added);
-            }
-
-            /**
-             * Gets removed.
-             *
-             * @return the removed
-             */
-            public List<String> getRemoved() {
-                return Collections.unmodifiableList(removed);
-            }
-
-            /**
-             * Gets modified.
-             *
-             * @return the modified
-             */
-            public List<String> getModified() {
-                return Collections.unmodifiableList(modified);
-            }
-
-            /**
-             * Obtains the timestamp of the commit.
-             *
-             * @return the timestamp
-             */
-            @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-            public Instant getTimestamp() {
-                return GitHubClient.parseInstant(timestamp);
-            }
-
+        @JsonSetter // alias
+        private void setAfter(String after) {
+            head = after;
         }
     }
 
@@ -1384,13 +1559,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             justification = "Constructed by JSON deserialization")
     public static class Release extends GHEventPayload {
 
+        private GHRelease release;
+
         /**
          * Create default Release instance
          */
         public Release() {
         }
-
-        private GHRelease release;
 
         /**
          * Gets release.
@@ -1412,13 +1587,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Repository extends GHEventPayload {
 
+        private GHRepositoryChanges changes;
+
         /**
          * Create default Repository instance
          */
         public Repository() {
         }
-
-        private GHRepositoryChanges changes;
 
         /**
          * Get changes.
@@ -1432,6 +1607,34 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
+     * A star was created or deleted on a repository.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star">star
+     *      event</a>
+     */
+    public static class Star extends GHEventPayload {
+
+        private String starredAt;
+
+        /**
+         * Create default Star instance
+         */
+        public Star() {
+        }
+
+        /**
+         * Gets the date when the star is added. Is null when the star is deleted.
+         *
+         * @return the date when the star is added
+         */
+        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+        public Instant getStarredAt() {
+            return GitHubClient.parseInstant(starredAt);
+        }
+    }
+
+    /**
      * A git commit status was changed.
      *
      * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#status">
@@ -1440,17 +1643,27 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Status extends GHEventPayload {
 
+        private String context;
+
+        private String description;
+        private GHCommitState state;
+        private GHCommit commit;
+        private String targetUrl;
         /**
          * Create default Status instance
          */
         public Status() {
         }
 
-        private String context;
-        private String description;
-        private GHCommitState state;
-        private GHCommit commit;
-        private String targetUrl;
+        /**
+         * Gets the commit associated with the status event.
+         *
+         * @return commit
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHCommit getCommit() {
+            return commit;
+        }
 
         /**
          * Gets the status content.
@@ -1459,15 +1672,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         public String getContext() {
             return context;
-        }
-
-        /**
-         * The optional link added to the status.
-         *
-         * @return a url
-         */
-        public String getTargetUrl() {
-            return targetUrl;
         }
 
         /**
@@ -1489,13 +1693,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         }
 
         /**
-         * Gets the commit associated with the status event.
+         * The optional link added to the status.
          *
-         * @return commit
+         * @return a url
          */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHCommit getCommit() {
-            return commit;
+        public String getTargetUrl() {
+            return targetUrl;
         }
 
         /**
@@ -1518,6 +1721,103 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
+     * A team event was triggered.
+     *
+     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#team">team event</a>
+     */
+    public static class Team extends GHEventPayload {
+
+        private GHTeam team;
+
+        private GHTeamChanges changes;
+
+        /**
+         * Create default Team instance
+         */
+        public Team() {
+        }
+
+        /**
+         * Gets the changes made to the team.
+         *
+         * @return the changes made to the team, null unless action is "edited".
+         */
+        public GHTeamChanges getChanges() {
+            return changes;
+        }
+
+        /**
+         * Gets the team.
+         *
+         * @return the team
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHTeam getTeam() {
+            return team;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (team == null) {
+                throw new IllegalStateException(
+                        "Expected team payload, but got something else. Maybe we've got another type of event?");
+            }
+            super.lateBind();
+            GHOrganization organization = getOrganization();
+            if (organization == null) {
+                throw new IllegalStateException("Organization must not be null");
+            }
+            team.wrapUp(organization);
+        }
+    }
+
+    /**
+     * A team_add event was triggered.
+     *
+     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#team_add">team_add event</a>
+     */
+    public static class TeamAdd extends GHEventPayload {
+
+        private GHTeam team;
+
+        /**
+         * Create default TeamAdd instance
+         */
+        public TeamAdd() {
+        }
+
+        /**
+         * Gets the team.
+         *
+         * @return the team
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHTeam getTeam() {
+            return team;
+        }
+
+        /**
+         * Late bind.
+         */
+        @Override
+        void lateBind() {
+            if (team == null) {
+                throw new IllegalStateException(
+                        "Expected team payload, but got something else. Maybe we've got another type of event?");
+            }
+            super.lateBind();
+            GHOrganization organization = getOrganization();
+            if (organization == null) {
+                throw new IllegalStateException("Organization must not be null");
+            }
+            team.wrapUp(organization);
+        }
+    }
+
+    /**
      * Occurs when someone triggered a workflow run or sends a POST request to the "Create a workflow dispatch event"
      * endpoint.
      *
@@ -1530,15 +1830,15 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class WorkflowDispatch extends GHEventPayload {
 
+        private Map<String, Object> inputs;
+
+        private String ref;
+        private String workflow;
         /**
          * Create default WorkflowDispatch instance
          */
         public WorkflowDispatch() {
         }
-
-        private Map<String, Object> inputs;
-        private String ref;
-        private String workflow;
 
         /**
          * Gets the map of input parameters passed to the workflow.
@@ -1569,64 +1869,6 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
-     * A workflow run was requested or completed.
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#workflow_run">
-     *      workflow run event</a>
-     * @see <a href="https://docs.github.com/en/rest/reference/actions#workflow-runs">Actions Workflow Runs</a>
-     */
-    public static class WorkflowRun extends GHEventPayload {
-
-        /**
-         * Create default WorkflowRun instance
-         */
-        public WorkflowRun() {
-        }
-
-        private GHWorkflowRun workflowRun;
-        private GHWorkflow workflow;
-
-        /**
-         * Gets the workflow run.
-         *
-         * @return the workflow run
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHWorkflowRun getWorkflowRun() {
-            return workflowRun;
-        }
-
-        /**
-         * Gets the associated workflow.
-         *
-         * @return the associated workflow
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHWorkflow getWorkflow() {
-            return workflow;
-        }
-
-        /**
-         * Late bind.
-         */
-        @Override
-        void lateBind() {
-            if (workflowRun == null || workflow == null) {
-                throw new IllegalStateException(
-                        "Expected workflow and workflow_run payload, but got something else. Maybe we've got another type of event?");
-            }
-            super.lateBind();
-            GHRepository repository = getRepository();
-            if (repository == null) {
-                throw new IllegalStateException("Repository must not be null");
-            }
-            workflowRun.wrapUp(repository);
-            workflow.wrapUp(repository);
-        }
-    }
-
-    /**
      * A workflow job has been queued, is in progress, or has been completed.
      *
      * @see <a href=
@@ -1636,13 +1878,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class WorkflowJob extends GHEventPayload {
 
+        private GHWorkflowJob workflowJob;
+
         /**
          * Create default WorkflowJob instance
          */
         public WorkflowJob() {
         }
-
-        private GHWorkflowJob workflowJob;
 
         /**
          * Gets the workflow job.
@@ -1673,213 +1915,42 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
-     * A label was created, edited or deleted.
-     *
-     * @see <a href= "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#label">
-     *      label event</a>
-     */
-    public static class Label extends GHEventPayload {
-
-        /**
-         * Create default Label instance
-         */
-        public Label() {
-        }
-
-        private GHLabel label;
-
-        private GHLabelChanges changes;
-
-        /**
-         * Gets the label.
-         *
-         * @return the label
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-        public GHLabel getLabel() {
-            return label;
-        }
-
-        /**
-         * Gets changes (for action="edited").
-         *
-         * @return changes
-         */
-        public GHLabelChanges getChanges() {
-            return changes;
-        }
-    }
-
-    /**
-     * A discussion was closed, reopened, created, edited, deleted, pinned, unpinned, locked, unlocked, transferred,
-     * category_changed, answered, or unanswered.
+     * A workflow run was requested or completed.
      *
      * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion">
-     *      discussion event</a>
+     *      "https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#workflow_run">
+     *      workflow run event</a>
+     * @see <a href="https://docs.github.com/en/rest/reference/actions#workflow-runs">Actions Workflow Runs</a>
      */
-    public static class Discussion extends GHEventPayload {
+    public static class WorkflowRun extends GHEventPayload {
 
+        private GHWorkflowRun workflowRun;
+
+        private GHWorkflow workflow;
         /**
-         * Create default Discussion instance
+         * Create default WorkflowRun instance
          */
-        public Discussion() {
+        public WorkflowRun() {
         }
 
-        private GHRepositoryDiscussion discussion;
-
-        private GHLabel label;
-
         /**
-         * Gets discussion.
+         * Gets the associated workflow.
          *
-         * @return the discussion
+         * @return the associated workflow
          */
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHRepositoryDiscussion getDiscussion() {
-            return discussion;
+        public GHWorkflow getWorkflow() {
+            return workflow;
         }
 
         /**
-         * Gets the added or removed label for labeled/unlabeled events.
+         * Gets the workflow run.
          *
-         * @return label the added or removed label
+         * @return the workflow run
          */
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHLabel getLabel() {
-            return label;
-        }
-    }
-
-    /**
-     * A discussion comment was created, deleted, or edited.
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#discussion_comment">
-     *      discussion event</a>
-     */
-    public static class DiscussionComment extends GHEventPayload {
-
-        /**
-         * Create default DiscussionComment instance
-         */
-        public DiscussionComment() {
-        }
-
-        private GHRepositoryDiscussion discussion;
-
-        private GHRepositoryDiscussionComment comment;
-
-        /**
-         * Gets discussion.
-         *
-         * @return the discussion
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHRepositoryDiscussion getDiscussion() {
-            return discussion;
-        }
-
-        /**
-         * Gets discussion comment.
-         *
-         * @return the discussion
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHRepositoryDiscussionComment getComment() {
-            return comment;
-        }
-    }
-
-    /**
-     * A star was created or deleted on a repository.
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#star">star
-     *      event</a>
-     */
-    public static class Star extends GHEventPayload {
-
-        /**
-         * Create default Star instance
-         */
-        public Star() {
-        }
-
-        private String starredAt;
-
-        /**
-         * Gets the date when the star is added. Is null when the star is deleted.
-         *
-         * @return the date when the star is added
-         */
-        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-        public Instant getStarredAt() {
-            return GitHubClient.parseInstant(starredAt);
-        }
-    }
-
-    /**
-     * A project v2 item was archived, converted, created, edited, restored, deleted, or reordered.
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#projects_v2_item">projects_v2_item
-     *      event</a>
-     */
-    public static class ProjectsV2Item extends GHEventPayload {
-
-        /**
-         * Create default ProjectsV2Item instance
-         */
-        public ProjectsV2Item() {
-        }
-
-        private GHProjectsV2Item projectsV2Item;
-        private GHProjectsV2ItemChanges changes;
-
-        /**
-         * Gets the projects V 2 item.
-         *
-         * @return the projects V 2 item
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHProjectsV2Item getProjectsV2Item() {
-            return projectsV2Item;
-        }
-
-        /**
-         * Gets the changes.
-         *
-         * @return the changes
-         */
-        public GHProjectsV2ItemChanges getChanges() {
-            return changes;
-        }
-    }
-
-    /**
-     * A team_add event was triggered.
-     *
-     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#team_add">team_add event</a>
-     */
-    public static class TeamAdd extends GHEventPayload {
-
-        /**
-         * Create default TeamAdd instance
-         */
-        public TeamAdd() {
-        }
-
-        private GHTeam team;
-
-        /**
-         * Gets the team.
-         *
-         * @return the team
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHTeam getTeam() {
-            return team;
+        public GHWorkflowRun getWorkflowRun() {
+            return workflowRun;
         }
 
         /**
@@ -1887,162 +1958,91 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         @Override
         void lateBind() {
-            if (team == null) {
+            if (workflowRun == null || workflow == null) {
                 throw new IllegalStateException(
-                        "Expected team payload, but got something else. Maybe we've got another type of event?");
+                        "Expected workflow and workflow_run payload, but got something else. Maybe we've got another type of event?");
             }
             super.lateBind();
-            GHOrganization organization = getOrganization();
-            if (organization == null) {
-                throw new IllegalStateException("Organization must not be null");
+            GHRepository repository = getRepository();
+            if (repository == null) {
+                throw new IllegalStateException("Repository must not be null");
             }
-            team.wrapUp(organization);
+            workflowRun.wrapUp(repository);
+            workflow.wrapUp(repository);
         }
     }
 
+    // https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#webhook-payload-object-common-properties
+    // Webhook payload object common properties: action, sender, repository, organization, installation
+    private String action;
+
+    private GHUser sender;
+
+    private GHRepository repository;
+
+    private GHOrganization organization;
+
+    private GHAppInstallation installation;
+
     /**
-     * A team event was triggered.
-     *
-     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#team">team event</a>
+     * Instantiates a new GH event payload.
      */
-    public static class Team extends GHEventPayload {
-
-        /**
-         * Create default Team instance
-         */
-        public Team() {
-        }
-
-        private GHTeam team;
-
-        private GHTeamChanges changes;
-
-        /**
-         * Gets the team.
-         *
-         * @return the team
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHTeam getTeam() {
-            return team;
-        }
-
-        /**
-         * Gets the changes made to the team.
-         *
-         * @return the changes made to the team, null unless action is "edited".
-         */
-        public GHTeamChanges getChanges() {
-            return changes;
-        }
-
-        /**
-         * Late bind.
-         */
-        @Override
-        void lateBind() {
-            if (team == null) {
-                throw new IllegalStateException(
-                        "Expected team payload, but got something else. Maybe we've got another type of event?");
-            }
-            super.lateBind();
-            GHOrganization organization = getOrganization();
-            if (organization == null) {
-                throw new IllegalStateException("Organization must not be null");
-            }
-            team.wrapUp(organization);
-        }
+    GHEventPayload() {
     }
 
     /**
-     * A member event was triggered.
+     * Gets the action for the triggered event. Most but not all webhook payloads contain an action property that
+     * contains the specific activity that triggered the event.
      *
-     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#member">member event</a>
+     * @return event action
      */
-    public static class Member extends GHEventPayload {
-
-        /**
-         * Create default Member instance
-         */
-        public Member() {
-        }
-
-        private GHUser member;
-
-        private GHMemberChanges changes;
-
-        /**
-         * Gets the member.
-         *
-         * @return the member
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHUser getMember() {
-            return member;
-        }
-
-        /**
-         * Gets the changes made to the member.
-         *
-         * @return the changes made to the member
-         */
-        public GHMemberChanges getChanges() {
-            return changes;
-        }
+    public String getAction() {
+        return action;
     }
 
     /**
-     * A membership event was triggered.
+     * Gets installation.
      *
-     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#membership">membership event</a>
+     * @return the installation
      */
-    public static class Membership extends GHEventPayload {
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+    public GHAppInstallation getInstallation() {
+        return installation;
+    }
 
-        /**
-         * Create default Membership instance
-         */
-        public Membership() {
-        }
+    /**
+     * Gets organization.
+     *
+     * @return the organization
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+    public GHOrganization getOrganization() {
+        return organization;
+    }
 
-        private GHTeam team;
+    /**
+     * Gets repository.
+     *
+     * @return the repository
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+    public GHRepository getRepository() {
+        return repository;
+    }
 
-        private GHUser member;
+    /**
+     * Gets the sender or {@code null} if accessed via the events API.
+     *
+     * @return the sender or {@code null} if accessed via the events API.
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+    public GHUser getSender() {
+        return sender;
+    }
 
-        /**
-         * Gets the team.
-         *
-         * @return the team
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHTeam getTeam() {
-            return team;
-        }
-
-        /**
-         * Gets the member.
-         *
-         * @return the member
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHUser getMember() {
-            return member;
-        }
-
-        /**
-         * Late bind.
-         */
-        @Override
-        void lateBind() {
-            if (team == null) {
-                throw new IllegalStateException(
-                        "Expected membership payload, but got something else. Maybe we've got another type of event?");
-            }
-            super.lateBind();
-            GHOrganization organization = getOrganization();
-            if (organization == null) {
-                throw new IllegalStateException("Organization must not be null");
-            }
-            team.wrapUp(organization);
-        }
+    /**
+     * Late bind.
+     */
+    void lateBind() {
     }
 }

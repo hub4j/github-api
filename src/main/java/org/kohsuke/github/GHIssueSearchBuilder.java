@@ -11,6 +11,33 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
 
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
+    private static class IssueSearchResult extends SearchResult<GHIssue> {
+        private GHIssue[] items;
+
+        @Override
+        GHIssue[] getItems(GitHub root) {
+            for (GHIssue i : items) {
+            }
+            return items;
+        }
+    }
+
+    /**
+     * The enum Sort.
+     */
+    public enum Sort {
+
+        /** The comments. */
+        COMMENTS,
+        /** The created. */
+        CREATED,
+        /** The updated. */
+        UPDATED
+    }
+
     /**
      * Instantiates a new GH issue search builder.
      *
@@ -22,15 +49,40 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     }
 
     /**
-     * Search terms.
+     * Gets the api url.
      *
-     * @param term
-     *            the term
-     * @return the GH issue search builder
+     * @return the api url
      */
-    public GHIssueSearchBuilder q(String term) {
-        super.q(term);
-        return this;
+    @Override
+    protected String getApiUrl() {
+        return "/search/issues";
+    }
+
+    /**
+     * Is closed gh issue search builder.
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isClosed() {
+        return q("is:closed");
+    }
+
+    /**
+     * Is merged gh issue search builder.
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isMerged() {
+        return q("is:merged");
+    }
+
+    /**
+     * Is open gh issue search builder.
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isOpen() {
+        return q("is:open");
     }
 
     /**
@@ -56,33 +108,6 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     }
 
     /**
-     * Is open gh issue search builder.
-     *
-     * @return the gh issue search builder
-     */
-    public GHIssueSearchBuilder isOpen() {
-        return q("is:open");
-    }
-
-    /**
-     * Is closed gh issue search builder.
-     *
-     * @return the gh issue search builder
-     */
-    public GHIssueSearchBuilder isClosed() {
-        return q("is:closed");
-    }
-
-    /**
-     * Is merged gh issue search builder.
-     *
-     * @return the gh issue search builder
-     */
-    public GHIssueSearchBuilder isMerged() {
-        return q("is:merged");
-    }
-
-    /**
      * Order gh issue search builder.
      *
      * @param v
@@ -91,6 +116,18 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
      */
     public GHIssueSearchBuilder order(GHDirection v) {
         req.with("order", v);
+        return this;
+    }
+
+    /**
+     * Search terms.
+     *
+     * @param term
+     *            the term
+     * @return the GH issue search builder
+     */
+    public GHIssueSearchBuilder q(String term) {
+        super.q(term);
         return this;
     }
 
@@ -104,42 +141,5 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     public GHIssueSearchBuilder sort(Sort sort) {
         req.with("sort", sort);
         return this;
-    }
-
-    /**
-     * The enum Sort.
-     */
-    public enum Sort {
-
-        /** The comments. */
-        COMMENTS,
-        /** The created. */
-        CREATED,
-        /** The updated. */
-        UPDATED
-    }
-
-    @SuppressFBWarnings(
-            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
-            justification = "JSON API")
-    private static class IssueSearchResult extends SearchResult<GHIssue> {
-        private GHIssue[] items;
-
-        @Override
-        GHIssue[] getItems(GitHub root) {
-            for (GHIssue i : items) {
-            }
-            return items;
-        }
-    }
-
-    /**
-     * Gets the api url.
-     *
-     * @return the api url
-     */
-    @Override
-    protected String getApiUrl() {
-        return "/search/issues";
     }
 }

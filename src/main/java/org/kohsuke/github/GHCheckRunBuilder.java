@@ -50,306 +50,32 @@ import java.util.Locale;
 @SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Jackson serializes these even without a getter")
 public final class GHCheckRunBuilder {
 
-    /** The repo. */
-    protected final GHRepository repo;
-
-    /** The requester. */
-    protected final Requester requester;
-    private Output output;
-    private List<Action> actions;
-
-    private GHCheckRunBuilder(GHRepository repo, Requester requester) {
-        this.repo = repo;
-        this.requester = requester;
-    }
-
     /**
-     * Instantiates a new GH check run builder.
+     * The Class Action.
      *
-     * @param repo
-     *            the repo
-     * @param name
-     *            the name
-     * @param headSHA
-     *            the head SHA
-     */
-    GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
-        this(repo,
-                repo.root()
-                        .createRequest()
-                        .method("POST")
-                        .with("name", name)
-                        .with("head_sha", headSHA)
-                        .withUrlPath(repo.getApiTailUrl("check-runs")));
-    }
-
-    /**
-     * Instantiates a new GH check run builder.
-     *
-     * @param repo
-     *            the repo
-     * @param checkId
-     *            the check id
-     */
-    GHCheckRunBuilder(GHRepository repo, long checkId) {
-        this(repo,
-                repo.root().createRequest().method("PATCH").withUrlPath(repo.getApiTailUrl("check-runs/" + checkId)));
-    }
-
-    /**
-     * With name.
-     *
-     * @param name
-     *            the name
-     * @param oldName
-     *            the old name
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withName(@CheckForNull String name, String oldName) {
-        if (oldName == null) {
-            throw new GHException("Can not update uncreated check run");
-        }
-        requester.with("name", name);
-        return this;
-    }
-
-    /**
-     * With details URL.
-     *
-     * @param detailsURL
-     *            the details URL
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withDetailsURL(@CheckForNull String detailsURL) {
-        requester.with("details_url", detailsURL);
-        return this;
-    }
-
-    /**
-     * With external ID.
-     *
-     * @param externalID
-     *            the external ID
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withExternalID(@CheckForNull String externalID) {
-        requester.with("external_id", externalID);
-        return this;
-    }
-
-    /**
-     * With status.
-     *
-     * @param status
-     *            the status
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withStatus(@CheckForNull GHCheckRun.Status status) {
-        if (status != null) {
-            // Do *not* use the overload taking Enum, as that s/_/-/g which would be wrong here.
-            requester.with("status", status.toString().toLowerCase(Locale.ROOT));
-        }
-        return this;
-    }
-
-    /**
-     * With conclusion.
-     *
-     * @param conclusion
-     *            the conclusion
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withConclusion(@CheckForNull GHCheckRun.Conclusion conclusion) {
-        if (conclusion != null) {
-            requester.with("conclusion", conclusion.toString().toLowerCase(Locale.ROOT));
-        }
-        return this;
-    }
-
-    /**
-     * With started at.
-     *
-     * @param startedAt
-     *            the started at
-     * @return the GH check run builder
-     * @deprecated Use {@link #withStartedAt(Instant)}
-     */
-    @Deprecated
-    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
-        return withStartedAt(GitHubClient.toInstantOrNull(startedAt));
-    }
-
-    /**
-     * With started at.
-     *
-     * @param startedAt
-     *            the started at
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Instant startedAt) {
-        if (startedAt != null) {
-            requester.with("started_at", GitHubClient.printInstant(startedAt));
-        }
-        return this;
-    }
-
-    /**
-     * With completed at.
-     *
-     * @param completedAt
-     *            the completed at
-     * @return the GH check run builder
-     * @deprecated Use {@link #withCompletedAt(Instant)}
-     */
-    @Deprecated
-    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
-        return withCompletedAt(GitHubClient.toInstantOrNull(completedAt));
-    }
-
-    /**
-     * With completed at.
-     *
-     * @param completedAt
-     *            the completed at
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Instant completedAt) {
-        if (completedAt != null) {
-            requester.with("completed_at", GitHubClient.printInstant(completedAt));
-        }
-        return this;
-    }
-
-    /**
-     * Adds the.
-     *
-     * @param output
-     *            the output
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder add(@NonNull Output output) {
-        if (this.output != null) {
-            throw new IllegalStateException("cannot add Output twice");
-        }
-        this.output = output;
-        return this;
-    }
-
-    /**
-     * Adds the.
-     *
-     * @param action
-     *            the action
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder add(@NonNull Action action) {
-        if (actions == null) {
-            actions = new LinkedList<>();
-        }
-        actions.add(action);
-        return this;
-    }
-
-    private static final int MAX_ANNOTATIONS = 50;
-    /**
-     * Actually creates the check run. (If more than fifty annotations were requested, this is done in batches.)
-     *
-     * @return the resulting run
-     * @throws IOException
-     *             for the usual reasons
-     */
-    public @NonNull GHCheckRun create() throws IOException {
-        List<Annotation> extraAnnotations;
-        if (output != null && output.annotations != null && output.annotations.size() > MAX_ANNOTATIONS) {
-            extraAnnotations = output.annotations.subList(MAX_ANNOTATIONS, output.annotations.size());
-            output.annotations = output.annotations.subList(0, MAX_ANNOTATIONS);
-        } else {
-            extraAnnotations = Collections.emptyList();
-        }
-        GHCheckRun run = requester.with("output", output).with("actions", actions).fetch(GHCheckRun.class).wrap(repo);
-        while (!extraAnnotations.isEmpty()) {
-            Output output2 = new Output(output.title, output.summary).withText(output.text);
-            int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);
-            output2.annotations = extraAnnotations.subList(0, i);
-            extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());
-            run = repo.root()
-                    .createRequest()
-                    .method("PATCH")
-                    .with("output", output2)
-                    .withUrlPath(repo.getApiTailUrl("check-runs/" + run.getId()))
-                    .fetch(GHCheckRun.class)
-                    .wrap(repo);
-        }
-        return run;
-    }
-
-    /**
-     * The Class Output.
-     *
-     * @see <a href="https://developer.github.com/v3/checks/runs/#output-object">documentation</a>
+     * @see <a href="https://developer.github.com/v3/checks/runs/#actions-object">documentation</a>
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static final class Output {
+    public static final class Action {
 
-        private final String title;
-        private final String summary;
-        private String text;
-        private List<Annotation> annotations;
-        private List<Image> images;
+        private final String label;
+        private final String description;
+        private final String identifier;
 
         /**
-         * Instantiates a new output.
+         * Instantiates a new action.
          *
-         * @param title
-         *            the title
-         * @param summary
-         *            the summary
+         * @param label
+         *            the label
+         * @param description
+         *            the description
+         * @param identifier
+         *            the identifier
          */
-        public Output(@NonNull String title, @NonNull String summary) {
-            this.title = title;
-            this.summary = summary;
-        }
-
-        /**
-         * With text.
-         *
-         * @param text
-         *            the text
-         * @return the output
-         */
-        public @NonNull Output withText(@CheckForNull String text) {
-            this.text = text;
-            return this;
-        }
-
-        /**
-         * Adds the.
-         *
-         * @param annotation
-         *            the annotation
-         * @return the output
-         */
-        public @NonNull Output add(@NonNull Annotation annotation) {
-            if (annotations == null) {
-                annotations = new LinkedList<>();
-            }
-            annotations.add(annotation);
-            return this;
-        }
-
-        /**
-         * Adds the.
-         *
-         * @param image
-         *            the image
-         * @return the output
-         */
-        public @NonNull Output add(@NonNull Image image) {
-            if (images == null) {
-                images = new LinkedList<>();
-            }
-            images.add(image);
-            return this;
+        public Action(@NonNull String label, @NonNull String description, @NonNull String identifier) {
+            this.label = label;
+            this.description = description;
+            this.identifier = identifier;
         }
 
     }
@@ -418,18 +144,6 @@ public final class GHCheckRunBuilder {
         }
 
         /**
-         * With start column.
-         *
-         * @param startColumn
-         *            the start column
-         * @return the annotation
-         */
-        public @NonNull Annotation withStartColumn(@CheckForNull Integer startColumn) {
-            this.startColumn = startColumn;
-            return this;
-        }
-
-        /**
          * With end column.
          *
          * @param endColumn
@@ -438,18 +152,6 @@ public final class GHCheckRunBuilder {
          */
         public @NonNull Annotation withEndColumn(@CheckForNull Integer endColumn) {
             this.endColumn = endColumn;
-            return this;
-        }
-
-        /**
-         * With title.
-         *
-         * @param title
-         *            the title
-         * @return the annotation
-         */
-        public @NonNull Annotation withTitle(@CheckForNull String title) {
-            this.title = title;
             return this;
         }
 
@@ -465,8 +167,31 @@ public final class GHCheckRunBuilder {
             return this;
         }
 
-    }
+        /**
+         * With start column.
+         *
+         * @param startColumn
+         *            the start column
+         * @return the annotation
+         */
+        public @NonNull Annotation withStartColumn(@CheckForNull Integer startColumn) {
+            this.startColumn = startColumn;
+            return this;
+        }
 
+        /**
+         * With title.
+         *
+         * @param title
+         *            the title
+         * @return the annotation
+         */
+        public @NonNull Annotation withTitle(@CheckForNull String title) {
+            this.title = title;
+            return this;
+        }
+
+    }
     /**
      * The Class Image.
      *
@@ -505,35 +230,310 @@ public final class GHCheckRunBuilder {
         }
 
     }
-
     /**
-     * The Class Action.
+     * The Class Output.
      *
-     * @see <a href="https://developer.github.com/v3/checks/runs/#actions-object">documentation</a>
+     * @see <a href="https://developer.github.com/v3/checks/runs/#output-object">documentation</a>
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static final class Action {
+    public static final class Output {
 
-        private final String label;
-        private final String description;
-        private final String identifier;
+        private final String title;
+        private final String summary;
+        private String text;
+        private List<Annotation> annotations;
+        private List<Image> images;
 
         /**
-         * Instantiates a new action.
+         * Instantiates a new output.
          *
-         * @param label
-         *            the label
-         * @param description
-         *            the description
-         * @param identifier
-         *            the identifier
+         * @param title
+         *            the title
+         * @param summary
+         *            the summary
          */
-        public Action(@NonNull String label, @NonNull String description, @NonNull String identifier) {
-            this.label = label;
-            this.description = description;
-            this.identifier = identifier;
+        public Output(@NonNull String title, @NonNull String summary) {
+            this.title = title;
+            this.summary = summary;
         }
 
+        /**
+         * Adds the.
+         *
+         * @param annotation
+         *            the annotation
+         * @return the output
+         */
+        public @NonNull Output add(@NonNull Annotation annotation) {
+            if (annotations == null) {
+                annotations = new LinkedList<>();
+            }
+            annotations.add(annotation);
+            return this;
+        }
+
+        /**
+         * Adds the.
+         *
+         * @param image
+         *            the image
+         * @return the output
+         */
+        public @NonNull Output add(@NonNull Image image) {
+            if (images == null) {
+                images = new LinkedList<>();
+            }
+            images.add(image);
+            return this;
+        }
+
+        /**
+         * With text.
+         *
+         * @param text
+         *            the text
+         * @return the output
+         */
+        public @NonNull Output withText(@CheckForNull String text) {
+            this.text = text;
+            return this;
+        }
+
+    }
+
+    private static final int MAX_ANNOTATIONS = 50;
+
+    /** The repo. */
+    protected final GHRepository repo;
+
+    /** The requester. */
+    protected final Requester requester;
+
+    private Output output;
+
+    private List<Action> actions;
+
+    private GHCheckRunBuilder(GHRepository repo, Requester requester) {
+        this.repo = repo;
+        this.requester = requester;
+    }
+
+    /**
+     * Instantiates a new GH check run builder.
+     *
+     * @param repo
+     *            the repo
+     * @param name
+     *            the name
+     * @param headSHA
+     *            the head SHA
+     */
+    GHCheckRunBuilder(GHRepository repo, String name, String headSHA) {
+        this(repo,
+                repo.root()
+                        .createRequest()
+                        .method("POST")
+                        .with("name", name)
+                        .with("head_sha", headSHA)
+                        .withUrlPath(repo.getApiTailUrl("check-runs")));
+    }
+
+    /**
+     * Instantiates a new GH check run builder.
+     *
+     * @param repo
+     *            the repo
+     * @param checkId
+     *            the check id
+     */
+    GHCheckRunBuilder(GHRepository repo, long checkId) {
+        this(repo,
+                repo.root().createRequest().method("PATCH").withUrlPath(repo.getApiTailUrl("check-runs/" + checkId)));
+    }
+
+    /**
+     * Adds the.
+     *
+     * @param action
+     *            the action
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder add(@NonNull Action action) {
+        if (actions == null) {
+            actions = new LinkedList<>();
+        }
+        actions.add(action);
+        return this;
+    }
+
+    /**
+     * Adds the.
+     *
+     * @param output
+     *            the output
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder add(@NonNull Output output) {
+        if (this.output != null) {
+            throw new IllegalStateException("cannot add Output twice");
+        }
+        this.output = output;
+        return this;
+    }
+
+    /**
+     * Actually creates the check run. (If more than fifty annotations were requested, this is done in batches.)
+     *
+     * @return the resulting run
+     * @throws IOException
+     *             for the usual reasons
+     */
+    public @NonNull GHCheckRun create() throws IOException {
+        List<Annotation> extraAnnotations;
+        if (output != null && output.annotations != null && output.annotations.size() > MAX_ANNOTATIONS) {
+            extraAnnotations = output.annotations.subList(MAX_ANNOTATIONS, output.annotations.size());
+            output.annotations = output.annotations.subList(0, MAX_ANNOTATIONS);
+        } else {
+            extraAnnotations = Collections.emptyList();
+        }
+        GHCheckRun run = requester.with("output", output).with("actions", actions).fetch(GHCheckRun.class).wrap(repo);
+        while (!extraAnnotations.isEmpty()) {
+            Output output2 = new Output(output.title, output.summary).withText(output.text);
+            int i = Math.min(extraAnnotations.size(), MAX_ANNOTATIONS);
+            output2.annotations = extraAnnotations.subList(0, i);
+            extraAnnotations = extraAnnotations.subList(i, extraAnnotations.size());
+            run = repo.root()
+                    .createRequest()
+                    .method("PATCH")
+                    .with("output", output2)
+                    .withUrlPath(repo.getApiTailUrl("check-runs/" + run.getId()))
+                    .fetch(GHCheckRun.class)
+                    .wrap(repo);
+        }
+        return run;
+    }
+
+    /**
+     * With completed at.
+     *
+     * @param completedAt
+     *            the completed at
+     * @return the GH check run builder
+     * @deprecated Use {@link #withCompletedAt(Instant)}
+     */
+    @Deprecated
+    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
+        return withCompletedAt(GitHubClient.toInstantOrNull(completedAt));
+    }
+
+    /**
+     * With completed at.
+     *
+     * @param completedAt
+     *            the completed at
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Instant completedAt) {
+        if (completedAt != null) {
+            requester.with("completed_at", GitHubClient.printInstant(completedAt));
+        }
+        return this;
+    }
+
+    /**
+     * With conclusion.
+     *
+     * @param conclusion
+     *            the conclusion
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withConclusion(@CheckForNull GHCheckRun.Conclusion conclusion) {
+        if (conclusion != null) {
+            requester.with("conclusion", conclusion.toString().toLowerCase(Locale.ROOT));
+        }
+        return this;
+    }
+
+    /**
+     * With details URL.
+     *
+     * @param detailsURL
+     *            the details URL
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withDetailsURL(@CheckForNull String detailsURL) {
+        requester.with("details_url", detailsURL);
+        return this;
+    }
+    /**
+     * With external ID.
+     *
+     * @param externalID
+     *            the external ID
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withExternalID(@CheckForNull String externalID) {
+        requester.with("external_id", externalID);
+        return this;
+    }
+
+    /**
+     * With name.
+     *
+     * @param name
+     *            the name
+     * @param oldName
+     *            the old name
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withName(@CheckForNull String name, String oldName) {
+        if (oldName == null) {
+            throw new GHException("Can not update uncreated check run");
+        }
+        requester.with("name", name);
+        return this;
+    }
+
+    /**
+     * With started at.
+     *
+     * @param startedAt
+     *            the started at
+     * @return the GH check run builder
+     * @deprecated Use {@link #withStartedAt(Instant)}
+     */
+    @Deprecated
+    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
+        return withStartedAt(GitHubClient.toInstantOrNull(startedAt));
+    }
+
+    /**
+     * With started at.
+     *
+     * @param startedAt
+     *            the started at
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Instant startedAt) {
+        if (startedAt != null) {
+            requester.with("started_at", GitHubClient.printInstant(startedAt));
+        }
+        return this;
+    }
+
+    /**
+     * With status.
+     *
+     * @param status
+     *            the status
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withStatus(@CheckForNull GHCheckRun.Status status) {
+        if (status != null) {
+            // Do *not* use the overload taking Enum, as that s/_/-/g which would be wrong here.
+            requester.with("status", status.toString().toLowerCase(Locale.ROOT));
+        }
+        return this;
     }
 
 }

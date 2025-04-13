@@ -23,11 +23,21 @@ import java.util.Set;
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
 public class GHBranchProtectionBuilder {
-    private final GHBranch branch;
+    private static class Restrictions {
+        private Set<String> teams = new HashSet<String>();
+        private Set<String> users = new HashSet<String>();
+    }
 
+    private static class StatusChecks {
+        final List<GHBranchProtection.Check> checks = new ArrayList<>();
+        boolean strict;
+    }
+    private final GHBranch branch;
     private Map<String, Object> fields = new HashMap<String, Object>();
     private Map<String, Object> prReviews;
+
     private Restrictions restrictions;
+
     private StatusChecks statusChecks;
 
     /**
@@ -48,8 +58,8 @@ public class GHBranchProtectionBuilder {
      *            the checks
      * @return the gh branch protection builder
      */
-    public GHBranchProtectionBuilder addRequiredStatusChecks(Collection<GHBranchProtection.Check> checks) {
-        getStatusChecks().checks.addAll(checks);
+    public GHBranchProtectionBuilder addRequiredChecks(GHBranchProtection.Check... checks) {
+        addRequiredStatusChecks(Arrays.asList(checks));
         return this;
     }
 
@@ -60,9 +70,20 @@ public class GHBranchProtectionBuilder {
      *            the checks
      * @return the gh branch protection builder
      */
-    public GHBranchProtectionBuilder addRequiredChecks(GHBranchProtection.Check... checks) {
-        addRequiredStatusChecks(Arrays.asList(checks));
+    public GHBranchProtectionBuilder addRequiredStatusChecks(Collection<GHBranchProtection.Check> checks) {
+        getStatusChecks().checks.addAll(checks);
         return this;
+    }
+
+    private void addReviewRestriction(String restriction, boolean isTeam) {
+        restrictReviewDismissals();
+        Restrictions restrictions = (Restrictions) prReviews.get("dismissal_restrictions");
+
+        if (isTeam) {
+            restrictions.teams.add(restriction);
+        } else {
+            restrictions.users.add(restriction);
+        }
     }
 
     /**
@@ -192,6 +213,27 @@ public class GHBranchProtectionBuilder {
                 .fetch(GHBranchProtection.class);
     }
 
+    private Map<String, Object> getPrReviews() {
+        if (prReviews == null) {
+            prReviews = new HashMap<String, Object>();
+        }
+        return prReviews;
+    }
+
+    private Restrictions getRestrictions() {
+        if (restrictions == null) {
+            restrictions = new Restrictions();
+        }
+        return restrictions;
+    }
+
+    private StatusChecks getStatusChecks() {
+        if (statusChecks == null) {
+            statusChecks = new StatusChecks();
+        }
+        return statusChecks;
+    }
+
     /**
      * Include admins gh branch protection builder.
      *
@@ -235,16 +277,8 @@ public class GHBranchProtectionBuilder {
         return this;
     }
 
-    /**
-     * Required reviewers gh branch protection builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh branch protection builder
-     */
-    public GHBranchProtectionBuilder requiredReviewers(int v) {
-        getPrReviews().put("required_approving_review_count", v);
-        return this;
+    private Requester requester() {
+        return branch.root().createRequest();
     }
 
     /**
@@ -311,6 +345,16 @@ public class GHBranchProtectionBuilder {
     }
 
     /**
+     * Require reviews gh branch protection builder.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder requireReviews() {
+        getPrReviews();
+        return this;
+    }
+
+    /**
      * Require all conversations on code to be resolved before a pull request can be merged into a branch that matches
      * this rule.
      *
@@ -357,12 +401,24 @@ public class GHBranchProtectionBuilder {
     }
 
     /**
-     * Require reviews gh branch protection builder.
+     * Required reviewers gh branch protection builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder requiredReviewers(int v) {
+        getPrReviews().put("required_approving_review_count", v);
+        return this;
+    }
+
+    /**
+     * Restrict push access gh branch protection builder.
      *
      * @return the gh branch protection builder
      */
-    public GHBranchProtectionBuilder requireReviews() {
-        getPrReviews();
+    public GHBranchProtectionBuilder restrictPushAccess() {
+        getRestrictions();
         return this;
     }
 
@@ -378,16 +434,6 @@ public class GHBranchProtectionBuilder {
             prReviews.put("dismissal_restrictions", new Restrictions());
         }
 
-        return this;
-    }
-
-    /**
-     * Restrict push access gh branch protection builder.
-     *
-     * @return the gh branch protection builder
-     */
-    public GHBranchProtectionBuilder restrictPushAccess() {
-        getRestrictions();
         return this;
     }
 
@@ -501,51 +547,5 @@ public class GHBranchProtectionBuilder {
             addReviewRestriction(user.getLogin(), false);
         }
         return this;
-    }
-
-    private void addReviewRestriction(String restriction, boolean isTeam) {
-        restrictReviewDismissals();
-        Restrictions restrictions = (Restrictions) prReviews.get("dismissal_restrictions");
-
-        if (isTeam) {
-            restrictions.teams.add(restriction);
-        } else {
-            restrictions.users.add(restriction);
-        }
-    }
-
-    private Map<String, Object> getPrReviews() {
-        if (prReviews == null) {
-            prReviews = new HashMap<String, Object>();
-        }
-        return prReviews;
-    }
-
-    private Restrictions getRestrictions() {
-        if (restrictions == null) {
-            restrictions = new Restrictions();
-        }
-        return restrictions;
-    }
-
-    private StatusChecks getStatusChecks() {
-        if (statusChecks == null) {
-            statusChecks = new StatusChecks();
-        }
-        return statusChecks;
-    }
-
-    private Requester requester() {
-        return branch.root().createRequest();
-    }
-
-    private static class Restrictions {
-        private Set<String> teams = new HashSet<String>();
-        private Set<String> users = new HashSet<String>();
-    }
-
-    private static class StatusChecks {
-        final List<GHBranchProtection.Check> checks = new ArrayList<>();
-        boolean strict;
     }
 }

@@ -37,6 +37,22 @@ public enum ReactionContent {
     /** The eyes. */
     EYES("eyes");
 
+    /**
+     * For content reaction content.
+     *
+     * @param content
+     *            the content
+     * @return the reaction content
+     */
+    @JsonCreator
+    public static ReactionContent forContent(String content) {
+        for (ReactionContent c : ReactionContent.values()) {
+            if (c.getContent().equals(content))
+                return c;
+        }
+        return null;
+    }
+
     private final String content;
 
     /**
@@ -57,21 +73,5 @@ public enum ReactionContent {
     @JsonValue
     public String getContent() {
         return content;
-    }
-
-    /**
-     * For content reaction content.
-     *
-     * @param content
-     *            the content
-     * @return the reaction content
-     */
-    @JsonCreator
-    public static ReactionContent forContent(String content) {
-        for (ReactionContent c : ReactionContent.values()) {
-            if (c.getContent().equals(content))
-                return c;
-        }
-        return null;
     }
 }

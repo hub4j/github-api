@@ -47,43 +47,6 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
     }
 
     /**
-     * With page size.
-     *
-     * @param size
-     *            the size
-     * @return the paged search iterable
-     */
-    @Override
-    public PagedSearchIterable<T> withPageSize(int size) {
-        return (PagedSearchIterable<T>) super.withPageSize(size);
-    }
-
-    /**
-     * Returns the total number of hit, including the results that's not yet fetched.
-     *
-     * @return the total count
-     */
-    public int getTotalCount() {
-        populate();
-        return result.totalCount;
-    }
-
-    /**
-     * Is incomplete boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isIncomplete() {
-        populate();
-        return result.incompleteResults;
-    }
-
-    private void populate() {
-        if (result == null)
-            iterator().hasNext();
-    }
-
-    /**
      * Iterator.
      *
      * @param pageSize
@@ -118,5 +81,42 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
                 return v.getItems(root);
             }
         };
+    }
+
+    /**
+     * Returns the total number of hit, including the results that's not yet fetched.
+     *
+     * @return the total count
+     */
+    public int getTotalCount() {
+        populate();
+        return result.totalCount;
+    }
+
+    /**
+     * Is incomplete boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isIncomplete() {
+        populate();
+        return result.incompleteResults;
+    }
+
+    private void populate() {
+        if (result == null)
+            iterator().hasNext();
+    }
+
+    /**
+     * With page size.
+     *
+     * @param size
+     *            the size
+     * @return the paged search iterable
+     */
+    @Override
+    public PagedSearchIterable<T> withPageSize(int size) {
+        return (PagedSearchIterable<T>) super.withPageSize(size);
     }
 }

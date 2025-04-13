@@ -12,12 +12,6 @@ package org.kohsuke.github;
  */
 public class GHCommitStatus extends GHObject {
 
-    /**
-     * Create default GHCommitStatus instance
-     */
-    public GHCommitStatus() {
-    }
-
     /** The state. */
     String state;
 
@@ -29,6 +23,39 @@ public class GHCommitStatus extends GHObject {
 
     /** The creator. */
     GHUser creator;
+
+    /**
+     * Create default GHCommitStatus instance
+     */
+    public GHCommitStatus() {
+    }
+
+    /**
+     * Gets context.
+     *
+     * @return the context
+     */
+    public String getContext() {
+        return context;
+    }
+
+    /**
+     * Gets creator.
+     *
+     * @return the creator
+     */
+    public GHUser getCreator() {
+        return root().intern(creator);
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
 
     /**
      * Gets state.
@@ -52,33 +79,6 @@ public class GHCommitStatus extends GHObject {
      */
     public String getTargetUrl() {
         return targetUrl;
-    }
-
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Gets creator.
-     *
-     * @return the creator
-     */
-    public GHUser getCreator() {
-        return root().intern(creator);
-    }
-
-    /**
-     * Gets context.
-     *
-     * @return the context
-     */
-    public String getContext() {
-        return context;
     }
 
 }

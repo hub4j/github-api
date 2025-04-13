@@ -32,6 +32,8 @@ import javax.annotation.Nonnull;
  */
 class GitHubRateLimitChecker {
 
+    private static final Logger LOGGER = Logger.getLogger(GitHubRateLimitChecker.class.getName());
+
     @Nonnull
     private final RateLimitChecker core;
 
@@ -43,8 +45,6 @@ class GitHubRateLimitChecker {
 
     @Nonnull
     private final RateLimitChecker integrationManifest;
-
-    private static final Logger LOGGER = Logger.getLogger(GitHubRateLimitChecker.class.getName());
 
     /**
      * Instantiates a new git hub rate limit checker.
@@ -73,25 +73,6 @@ class GitHubRateLimitChecker {
         this.search = Objects.requireNonNull(search);
         this.graphql = Objects.requireNonNull(graphql);
         this.integrationManifest = Objects.requireNonNull(integrationManifest);
-    }
-
-    /**
-     * Constructs a new {@link GitHubRateLimitChecker} with a new checker for a particular target.
-     *
-     * Only one {@link RateLimitChecker} is allowed per target.
-     *
-     * @param checker
-     *            the {@link RateLimitChecker} to apply.
-     * @param rateLimitTarget
-     *            the {@link RateLimitTarget} for this checker. If {@link RateLimitTarget#NONE}, checker will be ignored
-     *            and no change will be made.
-     * @return a new {@link GitHubRateLimitChecker}
-     */
-    GitHubRateLimitChecker with(@Nonnull RateLimitChecker checker, @Nonnull RateLimitTarget rateLimitTarget) {
-        return new GitHubRateLimitChecker(rateLimitTarget == RateLimitTarget.CORE ? checker : core,
-                rateLimitTarget == RateLimitTarget.SEARCH ? checker : search,
-                rateLimitTarget == RateLimitTarget.GRAPHQL ? checker : graphql,
-                rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST ? checker : integrationManifest);
     }
 
     /**
@@ -183,5 +164,24 @@ class GitHubRateLimitChecker {
         } else {
             throw new IllegalArgumentException("Unknown rate limit target: " + rateLimitTarget.toString());
         }
+    }
+
+    /**
+     * Constructs a new {@link GitHubRateLimitChecker} with a new checker for a particular target.
+     *
+     * Only one {@link RateLimitChecker} is allowed per target.
+     *
+     * @param checker
+     *            the {@link RateLimitChecker} to apply.
+     * @param rateLimitTarget
+     *            the {@link RateLimitTarget} for this checker. If {@link RateLimitTarget#NONE}, checker will be ignored
+     *            and no change will be made.
+     * @return a new {@link GitHubRateLimitChecker}
+     */
+    GitHubRateLimitChecker with(@Nonnull RateLimitChecker checker, @Nonnull RateLimitTarget rateLimitTarget) {
+        return new GitHubRateLimitChecker(rateLimitTarget == RateLimitTarget.CORE ? checker : core,
+                rateLimitTarget == RateLimitTarget.SEARCH ? checker : search,
+                rateLimitTarget == RateLimitTarget.GRAPHQL ? checker : graphql,
+                rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST ? checker : integrationManifest);
     }
 }

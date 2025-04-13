@@ -17,10 +17,12 @@ import java.util.List;
  */
 public class GHAuthorization extends GHObject {
 
-    /**
-     * Create default GHAuthorization instance
-     */
-    public GHAuthorization() {
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },
+            justification = "JSON API")
+    private static class App {
+        private String url;
+        private String name;
+        // private String client_id; not yet used
     }
 
     /** The Constant USER. */
@@ -89,6 +91,66 @@ public class GHAuthorization extends GHObject {
     // private GHUser user;
 
     /**
+     * Create default GHAuthorization instance
+     */
+    public GHAuthorization() {
+    }
+
+    /**
+     * Gets app name.
+     *
+     * @return the app name
+     */
+    public String getAppName() {
+        return app.name;
+    }
+
+    /**
+     * Gets app url.
+     *
+     * @return the app url
+     */
+    public URL getAppUrl() {
+        return GitHubClient.parseURL(app.url);
+    }
+
+    /**
+     * Gets fingerprint.
+     *
+     * @return the fingerprint
+     */
+    public String getFingerprint() {
+        return fingerprint;
+    }
+
+    /**
+     * Gets hashed token.
+     *
+     * @return the hashed token
+     */
+    public String getHashedToken() {
+        return hashedToken;
+    }
+
+    /**
+     * Gets note.
+     *
+     * @return the note
+     */
+    public String getNote() {
+        return note;
+    }
+
+    /**
+     * Gets note url.
+     *
+     * @return the note url
+     */
+    public URL getNoteUrl() {
+        return GitHubClient.parseURL(noteUrl);
+    }
+
+    /**
      * Gets scopes.
      *
      * @return the scopes
@@ -113,67 +175,5 @@ public class GHAuthorization extends GHObject {
      */
     public String getTokenLastEight() {
         return tokenLastEight;
-    }
-
-    /**
-     * Gets hashed token.
-     *
-     * @return the hashed token
-     */
-    public String getHashedToken() {
-        return hashedToken;
-    }
-
-    /**
-     * Gets app url.
-     *
-     * @return the app url
-     */
-    public URL getAppUrl() {
-        return GitHubClient.parseURL(app.url);
-    }
-
-    /**
-     * Gets app name.
-     *
-     * @return the app name
-     */
-    public String getAppName() {
-        return app.name;
-    }
-
-    /**
-     * Gets note.
-     *
-     * @return the note
-     */
-    public String getNote() {
-        return note;
-    }
-
-    /**
-     * Gets note url.
-     *
-     * @return the note url
-     */
-    public URL getNoteUrl() {
-        return GitHubClient.parseURL(noteUrl);
-    }
-
-    /**
-     * Gets fingerprint.
-     *
-     * @return the fingerprint
-     */
-    public String getFingerprint() {
-        return fingerprint;
-    }
-
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },
-            justification = "JSON API")
-    private static class App {
-        private String url;
-        private String name;
-        // private String client_id; not yet used
     }
 }

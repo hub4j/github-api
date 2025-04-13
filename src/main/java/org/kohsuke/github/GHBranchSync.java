@@ -8,12 +8,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHBranchSync extends GitHubInteractiveObject {
 
     /**
-     * Create default GHBranchSync instance
-     */
-    public GHBranchSync() {
-    }
-
-    /**
      * The Repository that this branch is in.
      */
     private GHRepository owner;
@@ -34,22 +28,18 @@ public class GHBranchSync extends GitHubInteractiveObject {
     private String baseBranch;
 
     /**
-     * Gets owner.
-     *
-     * @return the repository that this branch is in.
+     * Create default GHBranchSync instance
      */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
+    public GHBranchSync() {
     }
 
     /**
-     * Gets message.
+     * Gets base branch.
      *
-     * @return the message
+     * @return the base branch
      */
-    public String getMessage() {
-        return message;
+    public String getBaseBranch() {
+        return baseBranch;
     }
 
     /**
@@ -62,12 +52,22 @@ public class GHBranchSync extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets base branch.
+     * Gets message.
      *
-     * @return the base branch
+     * @return the message
      */
-    public String getBaseBranch() {
-        return baseBranch;
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the repository that this branch is in.
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
     }
 
     /**

@@ -36,6 +36,15 @@ public class GHIssueCommentQueryBuilder {
     }
 
     /**
+     * Lists up the comments with the criteria added so far.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHIssueComment> list() {
+        return req.toIterable(GHIssueComment[].class, item -> item.wrapUp(issue));
+    }
+
+    /**
      * Only comments created/updated after this date will be returned.
      *
      * @param date
@@ -69,14 +78,5 @@ public class GHIssueCommentQueryBuilder {
      */
     public GHIssueCommentQueryBuilder since(long timestamp) {
         return since(Instant.ofEpochMilli(timestamp));
-    }
-
-    /**
-     * Lists up the comments with the criteria added so far.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHIssueComment> list() {
-        return req.toIterable(GHIssueComment[].class, item -> item.wrapUp(issue));
     }
 }

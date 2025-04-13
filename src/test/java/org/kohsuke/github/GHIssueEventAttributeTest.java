@@ -21,12 +21,6 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
 
-    /**
-     * Create default GHIssueEventAttributeTest instance
-     */
-    public GHIssueEventAttributeTest() {
-    }
-
     private enum Type implements Predicate<GHIssueEvent>, Consumer<GHIssueEvent> {
         milestone(e -> assertThat(e.getMilestone(), notNullValue()), "milestoned", "demilestoned"),
         label(e -> assertThat(e.getLabel(), notNullValue()), "labeled", "unlabeled"),
@@ -41,14 +35,20 @@ public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
         }
 
         @Override
-        public boolean test(final GHIssueEvent event) {
-            return this.subtypes.contains(event.getEvent());
-        }
-
-        @Override
         public void accept(final GHIssueEvent event) {
             this.assertion.accept(event);
         }
+
+        @Override
+        public boolean test(final GHIssueEvent event) {
+            return this.subtypes.contains(event.getEvent());
+        }
+    }
+
+    /**
+     * Create default GHIssueEventAttributeTest instance
+     */
+    public GHIssueEventAttributeTest() {
     }
 
     private List<GHIssueEvent> listEvents(final Type type) throws IOException {

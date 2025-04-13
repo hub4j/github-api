@@ -33,18 +33,38 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     }
 
     /**
-     * Sets the pagination size.
+     * Iterator over page items.
      *
-     * <p>
-     * When set to non-zero, each API call will retrieve this many entries.
-     *
-     * @param size
-     *            the size
-     * @return the paged iterable
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
      */
-    public PagedIterable<T> withPageSize(int size) {
-        this.pageSize = size;
-        return this;
+    @Nonnull
+    public abstract PagedIterator<T> _iterator(int pageSize);
+
+    /**
+     * Concatenates a list of arrays into a single array.
+     *
+     * @param type
+     *            the type of array to be returned.
+     * @param pages
+     *            the list of arrays to be concatenated.
+     * @param totalLength
+     *            the total length of the returned array.
+     * @return an array containing all elements from all pages.
+     */
+    @Nonnull
+    private T[] concatenatePages(Class<T[]> type, List<T[]> pages, int totalLength) {
+
+        T[] result = type.cast(Array.newInstance(type.getComponentType(), totalLength));
+
+        int position = 0;
+        for (T[] page : pages) {
+            final int pageLength = Array.getLength(page);
+            System.arraycopy(page, 0, result, position, pageLength);
+            position += pageLength;
+        }
+        return result;
     }
 
     /**
@@ -58,14 +78,16 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     }
 
     /**
-     * Iterator over page items.
+     * Eagerly walk {@link Iterable} and return the result in an array.
      *
-     * @param pageSize
-     *            the page size
-     * @return the paged iterator
+     * @return the list
+     * @throws IOException
+     *             if an I/O exception occurs.
      */
     @Nonnull
-    public abstract PagedIterator<T> _iterator(int pageSize);
+    public T[] toArray() throws IOException {
+        return toArray(iterator());
+    }
 
     /**
      * Eagerly walk {@link PagedIterator} and return the result in an array.
@@ -102,18 +124,6 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     }
 
     /**
-     * Eagerly walk {@link Iterable} and return the result in an array.
-     *
-     * @return the list
-     * @throws IOException
-     *             if an I/O exception occurs.
-     */
-    @Nonnull
-    public T[] toArray() throws IOException {
-        return toArray(iterator());
-    }
-
-    /**
      * Eagerly walk {@link Iterable} and return the result in a list.
      *
      * @return the list
@@ -138,28 +148,18 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     }
 
     /**
-     * Concatenates a list of arrays into a single array.
+     * Sets the pagination size.
      *
-     * @param type
-     *            the type of array to be returned.
-     * @param pages
-     *            the list of arrays to be concatenated.
-     * @param totalLength
-     *            the total length of the returned array.
-     * @return an array containing all elements from all pages.
+     * <p>
+     * When set to non-zero, each API call will retrieve this many entries.
+     *
+     * @param size
+     *            the size
+     * @return the paged iterable
      */
-    @Nonnull
-    private T[] concatenatePages(Class<T[]> type, List<T[]> pages, int totalLength) {
-
-        T[] result = type.cast(Array.newInstance(type.getComponentType(), totalLength));
-
-        int position = 0;
-        for (T[] page : pages) {
-            final int pageLength = Array.getLength(page);
-            System.arraycopy(page, 0, result, position, pageLength);
-            position += pageLength;
-        }
-        return result;
+    public PagedIterable<T> withPageSize(int size) {
+        this.pageSize = size;
+        return this;
     }
 
 }

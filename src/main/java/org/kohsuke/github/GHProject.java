@@ -40,21 +40,105 @@ import java.util.Locale;
 public class GHProject extends GHObject {
 
     /**
-     * Create default GHProject instance
+     * The enum ProjectState.
      */
-    public GHProject() {
+    public enum ProjectState {
+
+        /** The open. */
+        OPEN,
+        /** The closed. */
+        CLOSED
+    }
+
+    /**
+     * The enum ProjectStateFilter.
+     */
+    public static enum ProjectStateFilter {
+
+        /** The all. */
+        ALL,
+        /** The open. */
+        OPEN,
+        /** The closed. */
+        CLOSED
     }
 
     /** The owner. */
     protected GHObject owner;
-
     private String ownerUrl;
     private String htmlUrl;
     private String name;
     private String body;
     private int number;
     private String state;
+
     private GHUser creator;
+
+    /**
+     * Create default GHProject instance
+     */
+    public GHProject() {
+    }
+
+    /**
+     * Create column gh project column.
+     *
+     * @param name
+     *            the name
+     * @return the gh project column
+     * @throws IOException
+     *             the io exception
+     */
+    public GHProjectColumn createColumn(String name) throws IOException {
+        return root().createRequest()
+                .method("POST")
+                .with("name", name)
+                .withUrlPath(String.format("/projects/%d/columns", getId()))
+                .fetch(GHProjectColumn.class)
+                .lateBind(this);
+    }
+
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+        return "/projects/" + getId();
+    }
+
+    /**
+     * Gets body.
+     *
+     * @return the body
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * Gets creator.
+     *
+     * @return the creator
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getCreator() {
+        return creator;
+    }
 
     /**
      * Gets the html url.
@@ -63,6 +147,24 @@ public class GHProject extends GHObject {
      */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets number.
+     *
+     * @return the number
+     */
+    public int getNumber() {
+        return number;
     }
 
     /**
@@ -101,49 +203,12 @@ public class GHProject extends GHObject {
     }
 
     /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets body.
-     *
-     * @return the body
-     */
-    public String getBody() {
-        return body;
-    }
-
-    /**
-     * Gets number.
-     *
-     * @return the number
-     */
-    public int getNumber() {
-        return number;
-    }
-
-    /**
      * Gets state.
      *
      * @return the state
      */
     public ProjectState getState() {
         return Enum.valueOf(ProjectState.class, state.toUpperCase(Locale.ENGLISH));
-    }
-
-    /**
-     * Gets creator.
-     *
-     * @return the creator
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getCreator() {
-        return creator;
     }
 
     /**
@@ -158,29 +223,16 @@ public class GHProject extends GHObject {
         return this;
     }
 
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
-    }
-
     /**
-     * Gets api route.
+     * List columns paged iterable.
      *
-     * @return the api route
+     * @return the paged iterable
      */
-    protected String getApiRoute() {
-        return "/projects/" + getId();
-    }
-
-    /**
-     * Sets name.
-     *
-     * @param name
-     *            the name
-     * @throws IOException
-     *             the io exception
-     */
-    public void setName(String name) throws IOException {
-        edit("name", name);
+    public PagedIterable<GHProjectColumn> listColumns() {
+        final GHProject project = this;
+        return root().createRequest()
+                .withUrlPath(String.format("/projects/%d/columns", getId()))
+                .toIterable(GHProjectColumn[].class, item -> item.lateBind(project));
     }
 
     /**
@@ -196,39 +248,15 @@ public class GHProject extends GHObject {
     }
 
     /**
-     * The enum ProjectState.
-     */
-    public enum ProjectState {
-
-        /** The open. */
-        OPEN,
-        /** The closed. */
-        CLOSED
-    }
-
-    /**
-     * Sets state.
+     * Sets name.
      *
-     * @param state
-     *            the state
+     * @param name
+     *            the name
      * @throws IOException
      *             the io exception
      */
-    public void setState(ProjectState state) throws IOException {
-        edit("state", state.toString().toLowerCase());
-    }
-
-    /**
-     * The enum ProjectStateFilter.
-     */
-    public static enum ProjectStateFilter {
-
-        /** The all. */
-        ALL,
-        /** The open. */
-        OPEN,
-        /** The closed. */
-        CLOSED
+    public void setName(String name) throws IOException {
+        edit("name", name);
     }
 
     /**
@@ -257,42 +285,14 @@ public class GHProject extends GHObject {
     }
 
     /**
-     * Delete.
+     * Sets state.
      *
+     * @param state
+     *            the state
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * List columns paged iterable.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHProjectColumn> listColumns() {
-        final GHProject project = this;
-        return root().createRequest()
-                .withUrlPath(String.format("/projects/%d/columns", getId()))
-                .toIterable(GHProjectColumn[].class, item -> item.lateBind(project));
-    }
-
-    /**
-     * Create column gh project column.
-     *
-     * @param name
-     *            the name
-     * @return the gh project column
-     * @throws IOException
-     *             the io exception
-     */
-    public GHProjectColumn createColumn(String name) throws IOException {
-        return root().createRequest()
-                .method("POST")
-                .with("name", name)
-                .withUrlPath(String.format("/projects/%d/columns", getId()))
-                .fetch(GHProjectColumn.class)
-                .lateBind(this);
+    public void setState(ProjectState state) throws IOException {
+        edit("state", state.toString().toLowerCase());
     }
 }

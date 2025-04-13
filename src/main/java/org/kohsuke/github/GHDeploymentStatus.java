@@ -9,12 +9,6 @@ import java.util.Locale;
  */
 public class GHDeploymentStatus extends GHObject {
 
-    /**
-     * Create default GHDeploymentStatus instance
-     */
-    public GHDeploymentStatus() {
-    }
-
     private GHRepository owner;
 
     /** The creator. */
@@ -42,25 +36,9 @@ public class GHDeploymentStatus extends GHObject {
     protected String environmentUrl;
 
     /**
-     * Wrap gh deployment status.
-     *
-     * @param owner
-     *            the owner
-     *
-     * @return the gh deployment status
+     * Create default GHDeploymentStatus instance
      */
-    GHDeploymentStatus lateBind(GHRepository owner) {
-        this.owner = owner;
-        return this;
-    }
-
-    /**
-     * Gets target url.
-     *
-     * @return the target url
-     */
-    public URL getLogUrl() {
-        return GitHubClient.parseURL(logUrl);
+    public GHDeploymentStatus() {
     }
 
     /**
@@ -82,6 +60,25 @@ public class GHDeploymentStatus extends GHObject {
     }
 
     /**
+     * Gets target url.
+     *
+     * @return the target url
+     */
+    public URL getLogUrl() {
+        return GitHubClient.parseURL(logUrl);
+    }
+
+    /**
+     * Gets the owner.
+     *
+     * @return the owner
+     */
+    // test only
+    GHRepository getOwner() {
+        return owner;
+    }
+
+    /**
      * Gets repository url.
      *
      * @return the repository url
@@ -100,12 +97,15 @@ public class GHDeploymentStatus extends GHObject {
     }
 
     /**
-     * Gets the owner.
+     * Wrap gh deployment status.
      *
-     * @return the owner
+     * @param owner
+     *            the owner
+     *
+     * @return the gh deployment status
      */
-    // test only
-    GHRepository getOwner() {
-        return owner;
+    GHDeploymentStatus lateBind(GHRepository owner) {
+        this.owner = owner;
+        return this;
     }
 }

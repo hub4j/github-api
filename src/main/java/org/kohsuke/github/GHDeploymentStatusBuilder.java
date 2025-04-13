@@ -45,6 +45,20 @@ public class GHDeploymentStatusBuilder {
     }
 
     /**
+     * Create gh deployment status.
+     *
+     * @return the gh deployment status
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeploymentStatus create() throws IOException {
+        return builder.withUrlPath(repo.getApiTailUrl("deployments/" + deploymentId + "/statuses"))
+                .fetch(GHDeploymentStatus.class)
+                .lateBind(repo);
+    }
+
+    /**
      * Description gh deployment status builder.
      *
      * @param description
@@ -91,19 +105,5 @@ public class GHDeploymentStatusBuilder {
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
         this.builder.with("log_url", logUrl);
         return this;
-    }
-
-    /**
-     * Create gh deployment status.
-     *
-     * @return the gh deployment status
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public GHDeploymentStatus create() throws IOException {
-        return builder.withUrlPath(repo.getApiTailUrl("deployments/" + deploymentId + "/statuses"))
-                .fetch(GHDeploymentStatus.class)
-                .lateBind(repo);
     }
 }

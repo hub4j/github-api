@@ -19,9 +19,16 @@ import java.util.Base64;
 public class GHContent extends GitHubInteractiveObject implements Refreshable {
 
     /**
-     * Create default GHContent instance
+     * Gets the api route.
+     *
+     * @param repository
+     *            the repository
+     * @param path
+     *            the path
+     * @return the api route
      */
-    public GHContent() {
+    static String getApiRoute(GHRepository repository, String path) {
+        return repository.getApiTailUrl("contents/" + path);
     }
 
     /*
@@ -44,76 +51,51 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     private String downloadUrl;
 
     /**
-     * Gets owner.
-     *
-     * @return the owner
+     * Create default GHContent instance
      */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return repository;
+    public GHContent() {
     }
 
     /**
-     * Gets type.
+     * Delete gh content update response.
      *
-     * @return the type
+     * @param message
+     *            the message
+     * @return the gh content update response
+     * @throws IOException
+     *             the io exception
      */
-    public String getType() {
-        return type;
+    public GHContentUpdateResponse delete(String message) throws IOException {
+        return delete(message, null);
     }
 
     /**
-     * Gets encoding.
+     * Delete gh content update response.
      *
-     * @return the encoding
+     * @param commitMessage
+     *            the commit message
+     * @param branch
+     *            the branch
+     * @return the gh content update response
+     * @throws IOException
+     *             the io exception
      */
-    public String getEncoding() {
-        return encoding;
-    }
+    public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
+        Requester requester = root().createRequest()
+                .method("DELETE")
+                .with("path", path)
+                .with("message", commitMessage)
+                .with("sha", sha);
 
-    /**
-     * Gets size.
-     *
-     * @return the size
-     */
-    public long getSize() {
-        return size;
-    }
+        if (branch != null) {
+            requester.with("branch", branch);
+        }
 
-    /**
-     * Gets sha.
-     *
-     * @return the sha
-     */
-    public String getSha() {
-        return sha;
-    }
+        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))
+                .fetch(GHContentUpdateResponse.class);
 
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets path.
-     *
-     * @return the path
-     */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     * Gets target of a symlink. This will only be set if {@code "symlink".equals(getType())}
-     *
-     * @return the target
-     */
-    public String getTarget() {
-        return target;
+        response.getCommit().wrapUp(repository);
+        return response;
     }
 
     /**
@@ -135,6 +117,18 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     }
 
     /**
+     * URL to retrieve the raw content of the file. Null if this is a directory.
+     *
+     * @return the download url
+     * @throws IOException
+     *             the io exception
+     */
+    public String getDownloadUrl() throws IOException {
+        refresh(downloadUrl);
+        return downloadUrl;
+    }
+
+    /**
      * Retrieve the base64-encoded content that is stored at this location.
      *
      * <p>
@@ -153,12 +147,12 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     }
 
     /**
-     * Gets url.
+     * Gets encoding.
      *
-     * @return the url
+     * @return the encoding
      */
-    public String getUrl() {
-        return url;
+    public String getEncoding() {
+        return encoding;
     }
 
     /**
@@ -177,6 +171,121 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     public String getHtmlUrl() {
         return htmlUrl;
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return repository;
+    }
+
+    /**
+     * Gets path.
+     *
+     * @return the path
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
+     * Gets sha.
+     *
+     * @return the sha
+     */
+    public String getSha() {
+        return sha;
+    }
+
+    /**
+     * Gets size.
+     *
+     * @return the size
+     */
+    public long getSize() {
+        return size;
+    }
+
+    /**
+     * Gets target of a symlink. This will only be set if {@code "symlink".equals(getType())}
+     *
+     * @return the target
+     */
+    public String getTarget() {
+        return target;
+    }
+
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Is directory boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isDirectory() {
+        return "dir".equals(type);
+    }
+
+    /**
+     * Is file boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isFile() {
+        return "file".equals(type);
+    }
+
+    /**
+     * List immediate children of this directory.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHContent> listDirectoryContent() {
+        if (!isDirectory())
+            throw new IllegalStateException(path + " is not a directory");
+
+        return root().createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -> item.wrap(repository));
+    }
+
+    /**
+     * Fully populate the data by retrieving missing data.
+     * <p>
+     * Depending on the original API call where this object is created, it may not contain everything.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    protected synchronized void populate() throws IOException {
+        root().createRequest().withUrlPath(url).fetchInto(this);
     }
 
     /**
@@ -212,57 +321,16 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     }
 
     /**
-     * URL to retrieve the raw content of the file. Null if this is a directory.
-     *
-     * @return the download url
-     * @throws IOException
-     *             the io exception
-     */
-    public String getDownloadUrl() throws IOException {
-        refresh(downloadUrl);
-        return downloadUrl;
-    }
-
-    /**
-     * Is file boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isFile() {
-        return "file".equals(type);
-    }
-
-    /**
-     * Is directory boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isDirectory() {
-        return "dir".equals(type);
-    }
-
-    /**
      * Fully populate the data by retrieving missing data.
-     * <p>
+     *
      * Depending on the original API call where this object is created, it may not contain everything.
      *
      * @throws IOException
-     *             the io exception
+     *             Signals that an I/O exception has occurred.
      */
-    protected synchronized void populate() throws IOException {
-        root().createRequest().withUrlPath(url).fetchInto(this);
-    }
-
-    /**
-     * List immediate children of this directory.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHContent> listDirectoryContent() {
-        if (!isDirectory())
-            throw new IllegalStateException(path + " is not a directory");
-
-        return root().createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -> item.wrap(repository));
+    @Override
+    public synchronized void refresh() throws IOException {
+        root().createRequest().setRawUrlPath(url).fetchInto(this);
     }
 
     /**
@@ -353,61 +421,6 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     }
 
     /**
-     * Delete gh content update response.
-     *
-     * @param message
-     *            the message
-     * @return the gh content update response
-     * @throws IOException
-     *             the io exception
-     */
-    public GHContentUpdateResponse delete(String message) throws IOException {
-        return delete(message, null);
-    }
-
-    /**
-     * Delete gh content update response.
-     *
-     * @param commitMessage
-     *            the commit message
-     * @param branch
-     *            the branch
-     * @return the gh content update response
-     * @throws IOException
-     *             the io exception
-     */
-    public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-        Requester requester = root().createRequest()
-                .method("DELETE")
-                .with("path", path)
-                .with("message", commitMessage)
-                .with("sha", sha);
-
-        if (branch != null) {
-            requester.with("branch", branch);
-        }
-
-        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))
-                .fetch(GHContentUpdateResponse.class);
-
-        response.getCommit().wrapUp(repository);
-        return response;
-    }
-
-    /**
-     * Gets the api route.
-     *
-     * @param repository
-     *            the repository
-     * @param path
-     *            the path
-     * @return the api route
-     */
-    static String getApiRoute(GHRepository repository, String path) {
-        return repository.getApiTailUrl("contents/" + path);
-    }
-
-    /**
      * Wrap.
      *
      * @param owner
@@ -417,18 +430,5 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     GHContent wrap(GHRepository owner) {
         this.repository = owner;
         return this;
-    }
-
-    /**
-     * Fully populate the data by retrieving missing data.
-     *
-     * Depending on the original API call where this object is created, it may not contain everything.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    public synchronized void refresh() throws IOException {
-        root().createRequest().setRawUrlPath(url).fetchInto(this);
     }
 }

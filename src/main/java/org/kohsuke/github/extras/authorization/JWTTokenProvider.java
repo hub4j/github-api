@@ -27,6 +27,38 @@ import javax.annotation.Nonnull;
 @SuppressFBWarnings(value = { "CT_CONSTRUCTOR_THROW" }, justification = "TODO")
 public class JWTTokenProvider implements AuthorizationProvider {
 
+    /**
+     * Convert a PKCS#8 formatted private key in string format into a java PrivateKey
+     *
+     * @param key
+     *            PCKS#8 string
+     * @return private key
+     * @throws GeneralSecurityException
+     *             if we couldn't parse the string
+     */
+    private static PrivateKey getPrivateKeyFromString(final String key) throws GeneralSecurityException {
+        if (key.contains(" RSA ")) {
+            throw new InvalidKeySpecException(
+                    "Private key must be a PKCS#8 formatted string, to convert it from PKCS#1 use: "
+                            + "openssl pkcs8 -topk8 -inform PEM -outform PEM -in current-key.pem -out new-key.pem -nocrypt");
+        }
+
+        // Remove all comments and whitespace from PEM
+        // such as "-----BEGIN PRIVATE KEY-----" and newlines
+        String privateKeyContent = key.replaceAll("(?m)^--.*", "").replaceAll("\\s", "");
+
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+
+        try {
+            byte[] decode = Base64.getDecoder().decode(privateKeyContent);
+            PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(decode);
+
+            return kf.generatePrivate(keySpecPKCS8);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidKeySpecException("Failed to decode private key: " + e.getMessage(), e);
+        }
+    }
+
     private final PrivateKey privateKey;
 
     @Nonnull
@@ -76,13 +108,12 @@ public class JWTTokenProvider implements AuthorizationProvider {
      *
      * @param applicationId
      *            the application id
-     * @param keyString
-     *            the key string
-     * @throws GeneralSecurityException
-     *             when an error occurs
+     * @param privateKey
+     *            the private key
      */
-    public JWTTokenProvider(String applicationId, String keyString) throws GeneralSecurityException {
-        this(applicationId, getPrivateKeyFromString(keyString));
+    public JWTTokenProvider(String applicationId, PrivateKey privateKey) {
+        this.privateKey = privateKey;
+        this.applicationId = applicationId;
     }
 
     /**
@@ -90,12 +121,13 @@ public class JWTTokenProvider implements AuthorizationProvider {
      *
      * @param applicationId
      *            the application id
-     * @param privateKey
-     *            the private key
+     * @param keyString
+     *            the key string
+     * @throws GeneralSecurityException
+     *             when an error occurs
      */
-    public JWTTokenProvider(String applicationId, PrivateKey privateKey) {
-        this.privateKey = privateKey;
-        this.applicationId = applicationId;
+    public JWTTokenProvider(String applicationId, String keyString) throws GeneralSecurityException {
+        this(applicationId, getPrivateKeyFromString(keyString));
     }
 
     /** {@inheritDoc} */
@@ -108,6 +140,10 @@ public class JWTTokenProvider implements AuthorizationProvider {
             }
             return authorization;
         }
+    }
+
+    Instant getIssuedAt(Instant now) {
+        return now.minus(Duration.ofMinutes(2));
     }
 
     /**
@@ -126,38 +162,6 @@ public class JWTTokenProvider implements AuthorizationProvider {
         return Instant.now().isAfter(validUntil);
     }
 
-    /**
-     * Convert a PKCS#8 formatted private key in string format into a java PrivateKey
-     *
-     * @param key
-     *            PCKS#8 string
-     * @return private key
-     * @throws GeneralSecurityException
-     *             if we couldn't parse the string
-     */
-    private static PrivateKey getPrivateKeyFromString(final String key) throws GeneralSecurityException {
-        if (key.contains(" RSA ")) {
-            throw new InvalidKeySpecException(
-                    "Private key must be a PKCS#8 formatted string, to convert it from PKCS#1 use: "
-                            + "openssl pkcs8 -topk8 -inform PEM -outform PEM -in current-key.pem -out new-key.pem -nocrypt");
-        }
-
-        // Remove all comments and whitespace from PEM
-        // such as "-----BEGIN PRIVATE KEY-----" and newlines
-        String privateKeyContent = key.replaceAll("(?m)^--.*", "").replaceAll("\\s", "");
-
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-
-        try {
-            byte[] decode = Base64.getDecoder().decode(privateKeyContent);
-            PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(decode);
-
-            return kf.generatePrivate(keySpecPKCS8);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidKeySpecException("Failed to decode private key: " + e.getMessage(), e);
-        }
-    }
-
     private String refreshJWT() {
         Instant now = Instant.now();
 
@@ -172,9 +176,5 @@ public class JWTTokenProvider implements AuthorizationProvider {
         validUntil = expiration.minus(Duration.ofMinutes(2));
 
         return JwtBuilderUtil.buildJwt(issuedAt, expiration, applicationId, privateKey);
-    }
-
-    Instant getIssuedAt(Instant now) {
-        return now.minus(Duration.ofMinutes(2));
     }
 }

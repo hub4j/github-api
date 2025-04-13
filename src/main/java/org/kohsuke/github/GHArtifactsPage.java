@@ -13,15 +13,6 @@ class GHArtifactsPage {
     private GHArtifact[] artifacts;
 
     /**
-     * Gets the total count.
-     *
-     * @return the total count
-     */
-    public int getTotalCount() {
-        return totalCount;
-    }
-
-    /**
      * Gets the artifacts.
      *
      * @param owner
@@ -33,5 +24,14 @@ class GHArtifactsPage {
             artifact.wrapUp(owner);
         }
         return artifacts;
+    }
+
+    /**
+     * Gets the total count.
+     *
+     * @return the total count
+     */
+    public int getTotalCount() {
+        return totalCount;
     }
 }

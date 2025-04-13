@@ -14,12 +14,6 @@ import java.net.URL;
 public class GHError implements Serializable {
 
     /**
-     * Create default GHError instance
-     */
-    public GHError() {
-    }
-
-    /**
      * The serial version UID of the error
      */
     private static final long serialVersionUID = 2008071901;
@@ -38,12 +32,9 @@ public class GHError implements Serializable {
     private String documentation;
 
     /**
-     * Get the error message.
-     *
-     * @return the message
+     * Create default GHError instance
      */
-    public String getMessage() {
-        return message;
+    public GHError() {
     }
 
     /**
@@ -53,6 +44,15 @@ public class GHError implements Serializable {
      */
     public URL getDocumentationUrl() {
         return GitHubClient.parseURL(documentation);
+    }
+
+    /**
+     * Get the error message.
+     *
+     * @return the message
+     */
+    public String getMessage() {
+        return message;
     }
 
 }

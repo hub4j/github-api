@@ -15,13 +15,8 @@ import java.util.List;
  */
 public class GHMarketplacePlan extends GitHubInteractiveObject {
 
-    /**
-     * Create default GHMarketplacePlan instance
-     */
-    public GHMarketplacePlan() {
-    }
-
     private String url;
+
     private String accountsUrl;
     private long id;
     private long number;
@@ -35,14 +30,10 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     private String unitName;
     private String state;
     private List<String> bullets;
-
     /**
-     * Gets url.
-     *
-     * @return the url
+     * Create default GHMarketplacePlan instance
      */
-    public URL getUrl() {
-        return GitHubClient.parseURL(url);
+    public GHMarketplacePlan() {
     }
 
     /**
@@ -55,30 +46,12 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets id.
+     * Gets bullets.
      *
-     * @return the id
+     * @return the bullets
      */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Gets number.
-     *
-     * @return the number
-     */
-    public long getNumber() {
-        return number;
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
+    public List<String> getBullets() {
+        return Collections.unmodifiableList(bullets);
     }
 
     /**
@@ -91,6 +64,15 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     }
 
     /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
      * Gets monthly price in cents.
      *
      * @return the monthly price in cents
@@ -100,12 +82,21 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets yearly price in cents.
+     * Gets name.
      *
-     * @return the yearly price in cents
+     * @return the name
      */
-    public long getYearlyPriceInCents() {
-        return yearlyPriceInCents;
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets number.
+     *
+     * @return the number
+     */
+    public long getNumber() {
+        return number;
     }
 
     /**
@@ -118,12 +109,12 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     }
 
     /**
-     * Is free trial boolean.
+     * Gets state.
      *
-     * @return the boolean
+     * @return the state
      */
-    public boolean isFreeTrial() {
-        return freeTrial;
+    public String getState() {
+        return state;
     }
 
     /**
@@ -136,21 +127,30 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets state.
+     * Gets url.
      *
-     * @return the state
+     * @return the url
      */
-    public String getState() {
-        return state;
+    public URL getUrl() {
+        return GitHubClient.parseURL(url);
     }
 
     /**
-     * Gets bullets.
+     * Gets yearly price in cents.
      *
-     * @return the bullets
+     * @return the yearly price in cents
      */
-    public List<String> getBullets() {
-        return Collections.unmodifiableList(bullets);
+    public long getYearlyPriceInCents() {
+        return yearlyPriceInCents;
+    }
+
+    /**
+     * Is free trial boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isFreeTrial() {
+        return freeTrial;
     }
 
     /**

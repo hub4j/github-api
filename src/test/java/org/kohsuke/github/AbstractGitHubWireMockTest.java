@@ -30,7 +30,42 @@ import static org.junit.Assume.assumeTrue;
  */
 public abstract class AbstractGitHubWireMockTest {
 
-    private final GitHubBuilder githubBuilder = createGitHubBuilder();
+    /**
+     * The Class TemplatingHelper.
+     */
+    protected static class TemplatingHelper {
+
+        /** The test start date. */
+        @SuppressWarnings("UseOfObsoleteDateTimeApi")
+        public Date testStartDate = new Date();
+
+        /**
+         * Instantiate TemplatingHelper
+         */
+        public TemplatingHelper() {
+        }
+
+        /**
+         * New response transformer.
+         *
+         * @return the response template transformer
+         */
+        public ResponseTemplateTransformer newResponseTransformer() {
+            // noinspection UnqualifiedFieldAccess
+            testStartDate = new Date();
+            return ResponseTemplateTransformer.builder()
+                    .global(true)
+                    .maxCacheEntries(0L)
+                    .helper("testStartDate", new Helper<>() {
+                        private HandlebarsCurrentDateHelper helper = new HandlebarsCurrentDateHelper();
+                        @Override
+                        public Object apply(final Object context, final Options options) throws IOException {
+                            return this.helper.apply(TemplatingHelper.this.testStartDate, options);
+                        }
+                    })
+                    .build();
+        }
+    }
 
     /** The Constant GITHUB_API_TEST_ORG. */
     final static String GITHUB_API_TEST_ORG = "hub4j-test-org";
@@ -40,6 +75,112 @@ public abstract class AbstractGitHubWireMockTest {
 
     /** The Constant STUBBED_USER_PASSWORD. */
     final static String STUBBED_USER_PASSWORD = "placeholder-password";
+
+    /**
+     * Assert that.
+     *
+     * @param <T>
+     *            the generic type
+     * @param reason
+     *            the reason
+     * @param actual
+     *            the actual
+     * @param matcher
+     *            the matcher
+     */
+    public static <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {
+        MatcherAssert.assertThat(reason, actual, matcher);
+    }
+
+    /**
+     * Assert that.
+     *
+     * @param reason
+     *            the reason
+     * @param assertion
+     *            the assertion
+     */
+    public static void assertThat(String reason, boolean assertion) {
+        MatcherAssert.assertThat(reason, assertion);
+    }
+
+    /**
+     * Assert that.
+     *
+     * @param <T>
+     *            the generic type
+     * @param actual
+     *            the actual
+     * @param matcher
+     *            the matcher
+     */
+    public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
+        MatcherAssert.assertThat("", actual, matcher);
+    }
+
+    private static GitHubBuilder createGitHubBuilder() {
+
+        GitHubBuilder builder = new GitHubBuilder();
+
+        try {
+            File f = new File(System.getProperty("user.home"), ".github.kohsuke2");
+            if (f.exists()) {
+                Properties props = new Properties();
+                FileInputStream in = null;
+                try {
+                    in = new FileInputStream(f);
+                    props.load(in);
+                } finally {
+                    IOUtils.closeQuietly(in);
+                }
+                // use the non-standard credential preferentially, so that developers of this library do not have
+                // to clutter their event stream.
+                builder = GitHubBuilder.fromProperties(props);
+            } else {
+
+                builder = GitHubBuilder.fromEnvironment();
+
+                builder = GitHubBuilder.fromCredentials();
+            }
+        } catch (IOException e) {
+        }
+
+        return builder.withRateLimitHandler(GitHubRateLimitHandler.FAIL);
+    }
+
+    /**
+     * Fail.
+     */
+    public static void fail() {
+        Assert.fail();
+    }
+
+    /**
+     * Fail.
+     *
+     * @param reason
+     *            the reason
+     */
+    public static void fail(String reason) {
+        Assert.fail(reason);
+    }
+
+    /**
+     * Gets the user.
+     *
+     * @param gitHub
+     *            the git hub
+     * @return the user
+     */
+    protected static GHUser getUser(GitHub gitHub) {
+        try {
+            return gitHub.getMyself();
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    private final GitHubBuilder githubBuilder = createGitHubBuilder();
 
     /** The use default git hub. */
     protected boolean useDefaultGitHub = true;
@@ -75,42 +216,52 @@ public abstract class AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the wire mock options.
+     * Cleanup repository.
      *
-     * @return the wire mock options
+     * @param fullName
+     *            the full name
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
-    protected WireMockConfiguration getWireMockOptions() {
-        return WireMockConfiguration.options().dynamicPort().usingFilesUnderDirectory(baseRecordPath);
+    protected void cleanupRepository(String fullName) throws IOException {
+        if (mockGitHub.isUseProxy()) {
+            tempGitHubRepositories.add(fullName);
+            try {
+                GHRepository repository = getNonRecordingGitHub().getRepository(fullName);
+                if (repository != null) {
+                    repository.delete();
+                }
+            } catch (GHFileNotFoundException e) {
+                // Repo already deleted
+            }
+
+        }
     }
 
-    private static GitHubBuilder createGitHubBuilder() {
-
-        GitHubBuilder builder = new GitHubBuilder();
-
-        try {
-            File f = new File(System.getProperty("user.home"), ".github.kohsuke2");
-            if (f.exists()) {
-                Properties props = new Properties();
-                FileInputStream in = null;
-                try {
-                    in = new FileInputStream(f);
-                    props.load(in);
-                } finally {
-                    IOUtils.closeQuietly(in);
-                }
-                // use the non-standard credential preferentially, so that developers of this library do not have
-                // to clutter their event stream.
-                builder = GitHubBuilder.fromProperties(props);
-            } else {
-
-                builder = GitHubBuilder.fromEnvironment();
-
-                builder = GitHubBuilder.fromCredentials();
+    /**
+     * Cleanup temp repositories.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Before
+    @After
+    public void cleanupTempRepositories() throws IOException {
+        if (mockGitHub.isUseProxy()) {
+            for (String fullName : tempGitHubRepositories) {
+                cleanupRepository(fullName);
             }
-        } catch (IOException e) {
+        }
+    }
+
+    private GHCreateRepositoryBuilder getCreateBuilder(String name) throws IOException {
+        GitHub github = getNonRecordingGitHub();
+
+        if (mockGitHub.isTestWithOrg()) {
+            return github.getOrganization(GITHUB_API_TEST_ORG).createRepository(name);
         }
 
-        return builder.withRateLimitHandler(GitHubRateLimitHandler.FAIL);
+        return github.createRepository(name);
     }
 
     /**
@@ -132,80 +283,18 @@ public abstract class AbstractGitHubWireMockTest {
     }
 
     /**
-     * Wire mock setup.
+     * {@link GitHub} instance for use before/after test. Traffic will not be part of snapshot when taken. Should only
+     * be used when isUseProxy() or isTakeSnapShot().
      *
-     * @throws Exception
-     *             the exception
+     * @return a github instance after checking Authentication
      */
-    @Before
-    public void wireMockSetup() throws Exception {
-        GitHubBuilder builder = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl());
-
-        if (useDefaultGitHub) {
-            gitHub = builder.build();
-        }
-
-        if (mockGitHub.isUseProxy()) {
-            nonRecordingGitHub = getGitHubBuilder().withEndpoint("https://api.github.com/").build();
-        } else {
-            nonRecordingGitHub = null;
-        }
+    public GitHub getNonRecordingGitHub() {
+        verifyAuthenticated(nonRecordingGitHub);
+        return nonRecordingGitHub;
     }
 
-    /**
-     * Snapshot not allowed.
-     */
-    protected void snapshotNotAllowed() {
-        assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.",
-                mockGitHub.isTakeSnapshot());
-    }
-
-    /**
-     * Require proxy.
-     *
-     * @param reason
-     *            the reason
-     */
-    protected void requireProxy(String reason) {
-        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable): " + reason,
-                mockGitHub.isUseProxy());
-    }
-
-    /**
-     * Verify authenticated.
-     *
-     * @param instance
-     *            the instance
-     */
-    protected void verifyAuthenticated(GitHub instance) {
-        assertThat(
-                "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_LOGIN and GITHUB_PASSWORD environment variables",
-                instance.isAnonymous(),
-                Matchers.is(false));
-    }
-
-    /**
-     * Gets the user.
-     *
-     * @return the user
-     */
-    protected GHUser getUser() {
-        return getUser(gitHub);
-    }
-
-    /**
-     * Gets the user.
-     *
-     * @param gitHub
-     *            the git hub
-     * @return the user
-     */
-    protected static GHUser getUser(GitHub gitHub) {
-        try {
-            return gitHub.getMyself();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
+    private String getOrganization() throws IOException {
+        return mockGitHub.isTestWithOrg() ? GITHUB_API_TEST_ORG : gitHub.getMyself().getLogin();
     }
 
     /**
@@ -255,53 +344,21 @@ public abstract class AbstractGitHubWireMockTest {
     }
 
     /**
-     * Cleanup temp repositories.
+     * Gets the user.
      *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
+     * @return the user
      */
-    @Before
-    @After
-    public void cleanupTempRepositories() throws IOException {
-        if (mockGitHub.isUseProxy()) {
-            for (String fullName : tempGitHubRepositories) {
-                cleanupRepository(fullName);
-            }
-        }
+    protected GHUser getUser() {
+        return getUser(gitHub);
     }
 
     /**
-     * Cleanup repository.
+     * Gets the wire mock options.
      *
-     * @param fullName
-     *            the full name
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
+     * @return the wire mock options
      */
-    protected void cleanupRepository(String fullName) throws IOException {
-        if (mockGitHub.isUseProxy()) {
-            tempGitHubRepositories.add(fullName);
-            try {
-                GHRepository repository = getNonRecordingGitHub().getRepository(fullName);
-                if (repository != null) {
-                    repository.delete();
-                }
-            } catch (GHFileNotFoundException e) {
-                // Repo already deleted
-            }
-
-        }
-    }
-
-    /**
-     * {@link GitHub} instance for use before/after test. Traffic will not be part of snapshot when taken. Should only
-     * be used when isUseProxy() or isTakeSnapShot().
-     *
-     * @return a github instance after checking Authentication
-     */
-    public GitHub getNonRecordingGitHub() {
-        verifyAuthenticated(nonRecordingGitHub);
-        return nonRecordingGitHub;
+    protected WireMockConfiguration getWireMockOptions() {
+        return WireMockConfiguration.options().dynamicPort().usingFilesUnderDirectory(baseRecordPath);
     }
 
     /**
@@ -316,113 +373,56 @@ public abstract class AbstractGitHubWireMockTest {
         // assumeTrue(login.equals("kohsuke") || login.equals("kohsuke2"));
     }
 
-    private GHCreateRepositoryBuilder getCreateBuilder(String name) throws IOException {
-        GitHub github = getNonRecordingGitHub();
+    /**
+     * Require proxy.
+     *
+     * @param reason
+     *            the reason
+     */
+    protected void requireProxy(String reason) {
+        assumeTrue("Test only valid when proxying (-Dtest.github.useProxy to enable): " + reason,
+                mockGitHub.isUseProxy());
+    }
 
-        if (mockGitHub.isTestWithOrg()) {
-            return github.getOrganization(GITHUB_API_TEST_ORG).createRepository(name);
+    /**
+     * Snapshot not allowed.
+     */
+    protected void snapshotNotAllowed() {
+        assumeFalse("Test contains hand written mappings. Only valid when not taking a snapshot.",
+                mockGitHub.isTakeSnapshot());
+    }
+
+    /**
+     * Verify authenticated.
+     *
+     * @param instance
+     *            the instance
+     */
+    protected void verifyAuthenticated(GitHub instance) {
+        assertThat(
+                "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_LOGIN and GITHUB_PASSWORD environment variables",
+                instance.isAnonymous(),
+                Matchers.is(false));
+    }
+
+    /**
+     * Wire mock setup.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Before
+    public void wireMockSetup() throws Exception {
+        GitHubBuilder builder = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl());
+
+        if (useDefaultGitHub) {
+            gitHub = builder.build();
         }
 
-        return github.createRepository(name);
-    }
-
-    private String getOrganization() throws IOException {
-        return mockGitHub.isTestWithOrg() ? GITHUB_API_TEST_ORG : gitHub.getMyself().getLogin();
-    }
-
-    /**
-     * Fail.
-     */
-    public static void fail() {
-        Assert.fail();
-    }
-
-    /**
-     * Fail.
-     *
-     * @param reason
-     *            the reason
-     */
-    public static void fail(String reason) {
-        Assert.fail(reason);
-    }
-
-    /**
-     * Assert that.
-     *
-     * @param <T>
-     *            the generic type
-     * @param actual
-     *            the actual
-     * @param matcher
-     *            the matcher
-     */
-    public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
-        MatcherAssert.assertThat("", actual, matcher);
-    }
-
-    /**
-     * Assert that.
-     *
-     * @param <T>
-     *            the generic type
-     * @param reason
-     *            the reason
-     * @param actual
-     *            the actual
-     * @param matcher
-     *            the matcher
-     */
-    public static <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {
-        MatcherAssert.assertThat(reason, actual, matcher);
-    }
-
-    /**
-     * Assert that.
-     *
-     * @param reason
-     *            the reason
-     * @param assertion
-     *            the assertion
-     */
-    public static void assertThat(String reason, boolean assertion) {
-        MatcherAssert.assertThat(reason, assertion);
-    }
-
-    /**
-     * The Class TemplatingHelper.
-     */
-    protected static class TemplatingHelper {
-
-        /** The test start date. */
-        @SuppressWarnings("UseOfObsoleteDateTimeApi")
-        public Date testStartDate = new Date();
-
-        /**
-         * Instantiate TemplatingHelper
-         */
-        public TemplatingHelper() {
-        }
-
-        /**
-         * New response transformer.
-         *
-         * @return the response template transformer
-         */
-        public ResponseTemplateTransformer newResponseTransformer() {
-            // noinspection UnqualifiedFieldAccess
-            testStartDate = new Date();
-            return ResponseTemplateTransformer.builder()
-                    .global(true)
-                    .maxCacheEntries(0L)
-                    .helper("testStartDate", new Helper<>() {
-                        private HandlebarsCurrentDateHelper helper = new HandlebarsCurrentDateHelper();
-                        @Override
-                        public Object apply(final Object context, final Options options) throws IOException {
-                            return this.helper.apply(TemplatingHelper.this.testStartDate, options);
-                        }
-                    })
-                    .build();
+        if (mockGitHub.isUseProxy()) {
+            nonRecordingGitHub = getGitHubBuilder().withEndpoint("https://api.github.com/").build();
+        } else {
+            nonRecordingGitHub = null;
         }
     }
 

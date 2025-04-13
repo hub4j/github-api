@@ -13,12 +13,6 @@ import java.util.Date;
  */
 public class GHDeployKey {
 
-    /**
-     * Create default GHDeployKey instance
-     */
-    public GHDeployKey() {
-    }
-
     /** The title. */
     protected String url, key, title;
 
@@ -27,8 +21,8 @@ public class GHDeployKey {
 
     /** The id. */
     protected long id;
-    private GHRepository owner;
 
+    private GHRepository owner;
     /** Creation date of the deploy key */
     private String createdAt;
 
@@ -40,6 +34,56 @@ public class GHDeployKey {
 
     /** Whether the deploykey has readonly permission or full access */
     private boolean readOnly;
+
+    /**
+     * Create default GHDeployKey instance
+     */
+    public GHDeployKey() {
+    }
+
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        owner.root()
+                .createRequest()
+                .method("DELETE")
+                .withUrlPath(String.format("/repos/%s/%s/keys/%d", owner.getOwnerName(), owner.getName(), id))
+                .send();
+    }
+
+    /**
+     * Gets added_by
+     *
+     * @return the added_by
+     */
+    public String getAddedBy() {
+        return addedBy;
+    }
+
+    /**
+     * Gets added_by
+     *
+     * @return the added_by
+     * @deprecated Use {@link #getAddedBy()}
+     */
+    @Deprecated
+    public String getAdded_by() {
+        return getAddedBy();
+    }
+
+    /**
+     * Gets createdAt.
+     *
+     * @return the createdAt
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getCreatedAt() {
+        return GitHubClient.parseInstant(createdAt);
+    }
 
     /**
      * Gets id.
@@ -57,6 +101,16 @@ public class GHDeployKey {
      */
     public String getKey() {
         return key;
+    }
+
+    /**
+     * Gets last_used.
+     *
+     * @return the last_used
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getLastUsedAt() {
+        return GitHubClient.parseInstant(lastUsed);
     }
 
     /**
@@ -78,52 +132,12 @@ public class GHDeployKey {
     }
 
     /**
-     * Is verified boolean.
+     * Is read_only
      *
-     * @return the boolean
+     * @return true if the key can only read. False if the key has write permission as well.
      */
-    public boolean isVerified() {
-        return verified;
-    }
-
-    /**
-     * Gets createdAt.
-     *
-     * @return the createdAt
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCreatedAt() {
-        return GitHubClient.parseInstant(createdAt);
-    }
-
-    /**
-     * Gets last_used.
-     *
-     * @return the last_used
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getLastUsedAt() {
-        return GitHubClient.parseInstant(lastUsed);
-    }
-
-    /**
-     * Gets added_by
-     *
-     * @return the added_by
-     * @deprecated Use {@link #getAddedBy()}
-     */
-    @Deprecated
-    public String getAdded_by() {
-        return getAddedBy();
-    }
-
-    /**
-     * Gets added_by
-     *
-     * @return the added_by
-     */
-    public String getAddedBy() {
-        return addedBy;
+    public boolean isReadOnly() {
+        return readOnly;
     }
 
     /**
@@ -138,12 +152,12 @@ public class GHDeployKey {
     }
 
     /**
-     * Is read_only
+     * Is verified boolean.
      *
-     * @return true if the key can only read. False if the key has write permission as well.
+     * @return the boolean
      */
-    public boolean isReadOnly() {
-        return readOnly;
+    public boolean isVerified() {
+        return verified;
     }
 
     /**
@@ -172,19 +186,5 @@ public class GHDeployKey {
                 .append("added_by", addedBy)
                 .append("read_only", readOnly)
                 .toString();
-    }
-
-    /**
-     * Delete.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-        owner.root()
-                .createRequest()
-                .method("DELETE")
-                .withUrlPath(String.format("/repos/%s/%s/keys/%d", owner.getOwnerName(), owner.getName(), id))
-                .send();
     }
 }

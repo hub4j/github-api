@@ -147,37 +147,6 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test the wait logic in the case where the "Date" header field is missing from the response.
-     *
-     * @throws IOException
-     *             if the code under test throws that exception
-     */
-    @Test
-    public void testHandler_Wait_Missing_Date_Header() throws IOException {
-        // Customized response that templates the date to keep things working
-        snapshotNotAllowed();
-
-        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(new GitHubRateLimitHandler() {
-
-                    @Override
-                    public void onError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-                        long waitTime = GitHubRateLimitHandler.WAIT.parseWaitTime(connectorResponse);
-                        assertThat(waitTime, equalTo(3 * 1000l));
-
-                        GitHubAbuseLimitHandler.WAIT.onError(connectorResponse);
-                    }
-                })
-                .build();
-
-        gitHub.getMyself();
-        assertThat(mockGitHub.getRequestCount(), equalTo(1));
-
-        getTempRepository();
-        assertThat(mockGitHub.getRequestCount(), equalTo(3));
-    }
-
-    /**
      * Test handler wait stuck.
      *
      * @throws Exception
@@ -207,6 +176,37 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
         }
 
         assertThat(mockGitHub.getRequestCount(), equalTo(4));
+    }
+
+    /**
+     * Test the wait logic in the case where the "Date" header field is missing from the response.
+     *
+     * @throws IOException
+     *             if the code under test throws that exception
+     */
+    @Test
+    public void testHandler_Wait_Missing_Date_Header() throws IOException {
+        // Customized response that templates the date to keep things working
+        snapshotNotAllowed();
+
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withRateLimitHandler(new GitHubRateLimitHandler() {
+
+                    @Override
+                    public void onError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
+                        long waitTime = GitHubRateLimitHandler.WAIT.parseWaitTime(connectorResponse);
+                        assertThat(waitTime, equalTo(3 * 1000l));
+
+                        GitHubAbuseLimitHandler.WAIT.onError(connectorResponse);
+                    }
+                })
+                .build();
+
+        gitHub.getMyself();
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        getTempRepository();
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
     }
 
 }

@@ -17,6 +17,10 @@ import static org.hamcrest.CoreMatchers.*;
  */
 public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
 
+    private static GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
     /** The rate limit. */
     GHRateLimit rateLimit = null;
 
@@ -109,10 +113,6 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
     protected void updateTestRateLimit() {
         previousLimit = rateLimit;
         rateLimit = gitHub.lastRateLimit();
-    }
-
-    private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
 }

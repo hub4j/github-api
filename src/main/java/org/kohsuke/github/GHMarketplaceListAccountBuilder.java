@@ -8,7 +8,18 @@ package org.kohsuke.github;
  * @see GHMarketplacePlan#listAccounts()
  */
 public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
+    /**
+     * The enum Sort.
+     */
+    public enum Sort {
+
+        /** The created. */
+        CREATED,
+        /** The updated. */
+        UPDATED
+    }
     private final Requester builder;
+
     private final long planId;
 
     /**
@@ -26,17 +37,17 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * Sorts the GitHub accounts by the date they were created or last updated. Can be one of created or updated.
+     * List any accounts associated with the plan specified on construction with all the order/sort parameters set.
      * <p>
-     * If omitted, the default sorting strategy will be "CREATED"
+     * GitHub Apps must use a JWT to access this endpoint.
+     * <p>
+     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
      *
-     * @param sort
-     *            the sort strategy
-     * @return a GHMarketplaceListAccountBuilder
+     * @return a paged iterable instance of GHMarketplaceAccountPlan
      */
-    public GHMarketplaceListAccountBuilder sort(Sort sort) {
-        this.builder.with("sort", sort);
-        return this;
+    public PagedIterable<GHMarketplaceAccountPlan> createRequest() {
+        return builder.withUrlPath(String.format("/marketplace_listing/plans/%d/accounts", this.planId))
+                .toIterable(GHMarketplaceAccountPlan[].class, null);
     }
 
     /**
@@ -52,28 +63,17 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * The enum Sort.
-     */
-    public enum Sort {
-
-        /** The created. */
-        CREATED,
-        /** The updated. */
-        UPDATED
-    }
-
-    /**
-     * List any accounts associated with the plan specified on construction with all the order/sort parameters set.
+     * Sorts the GitHub accounts by the date they were created or last updated. Can be one of created or updated.
      * <p>
-     * GitHub Apps must use a JWT to access this endpoint.
-     * <p>
-     * OAuth Apps must use basic authentication with their client ID and client secret to access this endpoint.
+     * If omitted, the default sorting strategy will be "CREATED"
      *
-     * @return a paged iterable instance of GHMarketplaceAccountPlan
+     * @param sort
+     *            the sort strategy
+     * @return a GHMarketplaceListAccountBuilder
      */
-    public PagedIterable<GHMarketplaceAccountPlan> createRequest() {
-        return builder.withUrlPath(String.format("/marketplace_listing/plans/%d/accounts", this.planId))
-                .toIterable(GHMarketplaceAccountPlan[].class, null);
+    public GHMarketplaceListAccountBuilder sort(Sort sort) {
+        this.builder.with("sort", sort);
+        return this;
     }
 
 }

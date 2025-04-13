@@ -47,39 +47,18 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test update milestone.
+     * Gets the repository.
      *
-     * @throws Exception
-     *             the exception
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
-    @Test
-    public void testUpdateMilestone() throws Exception {
-        GHRepository repo = getRepository();
-        GHMilestone milestone = repo.createMilestone("Original Title", "To test the update methods");
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
+    }
 
-        String NEW_TITLE = "Updated Title";
-        String NEW_DESCRIPTION = "Updated Description";
-        Date NEW_DUE_DATE = Date.from(GitHubClient.parseInstant("2020-10-05T13:00:00Z"));
-        Instant OUTPUT_DUE_DATE = GitHubClient.parseInstant("2020-10-05T07:00:00Z");
-
-        milestone.setTitle(NEW_TITLE);
-        milestone.setDescription(NEW_DESCRIPTION);
-        milestone.setDueOn(NEW_DUE_DATE);
-
-        // Force reload.
-        milestone = repo.getMilestone(milestone.getNumber());
-
-        assertThat(milestone.getTitle(), equalTo(NEW_TITLE));
-        assertThat(milestone.getDescription(), equalTo(NEW_DESCRIPTION));
-
-        // The time is truncated when sent to the server, but still part of the returned value
-        // 07:00 midnight PDT
-        assertThat(milestone.getDueOn(), equalTo(OUTPUT_DUE_DATE));
-        assertThat(milestone.getClosedAt(), nullValue());
-        assertThat(milestone.getHtmlUrl().toString(), containsString("/hub4j-test-org/github-api/milestone/"));
-        assertThat(milestone.getUrl().toString(), containsString("/repos/hub4j-test-org/github-api/milestones/"));
-        assertThat(milestone.getClosedIssues(), equalTo(0));
-        assertThat(milestone.getOpenIssues(), equalTo(0));
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
     /**
@@ -130,17 +109,38 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the repository.
+     * Test update milestone.
      *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
+     * @throws Exception
+     *             the exception
      */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
+    @Test
+    public void testUpdateMilestone() throws Exception {
+        GHRepository repo = getRepository();
+        GHMilestone milestone = repo.createMilestone("Original Title", "To test the update methods");
 
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+        String NEW_TITLE = "Updated Title";
+        String NEW_DESCRIPTION = "Updated Description";
+        Date NEW_DUE_DATE = Date.from(GitHubClient.parseInstant("2020-10-05T13:00:00Z"));
+        Instant OUTPUT_DUE_DATE = GitHubClient.parseInstant("2020-10-05T07:00:00Z");
+
+        milestone.setTitle(NEW_TITLE);
+        milestone.setDescription(NEW_DESCRIPTION);
+        milestone.setDueOn(NEW_DUE_DATE);
+
+        // Force reload.
+        milestone = repo.getMilestone(milestone.getNumber());
+
+        assertThat(milestone.getTitle(), equalTo(NEW_TITLE));
+        assertThat(milestone.getDescription(), equalTo(NEW_DESCRIPTION));
+
+        // The time is truncated when sent to the server, but still part of the returned value
+        // 07:00 midnight PDT
+        assertThat(milestone.getDueOn(), equalTo(OUTPUT_DUE_DATE));
+        assertThat(milestone.getClosedAt(), nullValue());
+        assertThat(milestone.getHtmlUrl().toString(), containsString("/hub4j-test-org/github-api/milestone/"));
+        assertThat(milestone.getUrl().toString(), containsString("/repos/hub4j-test-org/github-api/milestones/"));
+        assertThat(milestone.getClosedIssues(), equalTo(0));
+        assertThat(milestone.getOpenIssues(), equalTo(0));
     }
 }

@@ -15,69 +15,41 @@ import java.net.URL;
  */
 public class GHProjectCard extends GHObject {
 
+    private GHProject project;
+
+    private GHProjectColumn column;
+    private String note;
+
+    private GHUser creator;
+    private String contentUrl, projectUrl, columnUrl;
+    private boolean archived;
     /**
      * Create default GHProjectCard instance
      */
     public GHProjectCard() {
     }
 
-    private GHProject project;
-    private GHProjectColumn column;
-
-    private String note;
-    private GHUser creator;
-    private String contentUrl, projectUrl, columnUrl;
-    private boolean archived;
-
     /**
-     * Gets the html url.
+     * Delete.
      *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return null;
-    }
-
-    /**
-     * Wrap gh project card.
-     *
-     * @param root
-     *            the root
-     * @return the gh project card
-     */
-    GHProjectCard lateBind(GitHub root) {
-        return this;
-    }
-
-    /**
-     * Wrap gh project card.
-     *
-     * @param column
-     *            the column
-     * @return the gh project card
-     */
-    GHProjectCard lateBind(GHProjectColumn column) {
-        this.column = column;
-        this.project = column.project;
-        return lateBind(column.root());
-    }
-
-    /**
-     * Gets project.
-     *
-     * @return the project
      * @throws IOException
      *             the io exception
      */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHProject getProject() throws IOException {
-        if (project == null) {
-            try {
-                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
-            } catch (FileNotFoundException e) {
-            }
-        }
-        return project;
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+        return String.format("/projects/columns/cards/%d", getId());
     }
 
     /**
@@ -102,6 +74,15 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
+     * Gets column url.
+     *
+     * @return the column url
+     */
+    public URL getColumnUrl() {
+        return GitHubClient.parseURL(columnUrl);
+    }
+
+    /**
      * Gets content if present. Might be a {@link GHPullRequest} or a {@link GHIssue}.
      *
      * @return the content
@@ -123,12 +104,12 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets note.
+     * Gets content url.
      *
-     * @return the note
+     * @return the content url
      */
-    public String getNote() {
-        return note;
+    public URL getContentUrl() {
+        return GitHubClient.parseURL(contentUrl);
     }
 
     /**
@@ -142,12 +123,39 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets content url.
+     * Gets the html url.
      *
-     * @return the content url
+     * @return the html url
      */
-    public URL getContentUrl() {
-        return GitHubClient.parseURL(contentUrl);
+    public URL getHtmlUrl() {
+        return null;
+    }
+
+    /**
+     * Gets note.
+     *
+     * @return the note
+     */
+    public String getNote() {
+        return note;
+    }
+
+    /**
+     * Gets project.
+     *
+     * @return the project
+     * @throws IOException
+     *             the io exception
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHProject getProject() throws IOException {
+        if (project == null) {
+            try {
+                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
+            } catch (FileNotFoundException e) {
+            }
+        }
+        return project;
     }
 
     /**
@@ -160,15 +168,6 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets column url.
-     *
-     * @return the column url
-     */
-    public URL getColumnUrl() {
-        return GitHubClient.parseURL(columnUrl);
-    }
-
-    /**
      * Is archived boolean.
      *
      * @return the boolean
@@ -178,15 +177,27 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Sets note.
+     * Wrap gh project card.
      *
-     * @param note
-     *            the note
-     * @throws IOException
-     *             the io exception
+     * @param column
+     *            the column
+     * @return the gh project card
      */
-    public void setNote(String note) throws IOException {
-        edit("note", note);
+    GHProjectCard lateBind(GHProjectColumn column) {
+        this.column = column;
+        this.project = column.project;
+        return lateBind(column.root());
+    }
+
+    /**
+     * Wrap gh project card.
+     *
+     * @param root
+     *            the root
+     * @return the gh project card
+     */
+    GHProjectCard lateBind(GitHub root) {
+        return this;
     }
 
     /**
@@ -201,26 +212,15 @@ public class GHProjectCard extends GHObject {
         edit("archived", archived);
     }
 
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
-    }
-
     /**
-     * Gets api route.
+     * Sets note.
      *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-        return String.format("/projects/columns/cards/%d", getId());
-    }
-
-    /**
-     * Delete.
-     *
+     * @param note
+     *            the note
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    public void setNote(String note) throws IOException {
+        edit("note", note);
     }
 }

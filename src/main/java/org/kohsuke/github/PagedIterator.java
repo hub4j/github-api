@@ -63,38 +63,6 @@ public class PagedIterator<T> implements Iterator<T> {
     }
 
     /**
-     * This poorly named method, initializes items with local data after they are fetched. It is up to the implementer
-     * to decide what local data to apply.
-     *
-     * @param page
-     *            the page of items to be initialized
-     */
-    protected void wrapUp(T[] page) {
-        if (itemInitializer != null) {
-            for (T item : page) {
-                itemInitializer.accept(item);
-            }
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean hasNext() {
-        fetch();
-        return (currentPage != null && currentPage.length > nextItemIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public T next() {
-        if (!hasNext())
-            throw new NoSuchElementException();
-        return currentPage[nextItemIndex++];
-    }
-
-    /**
      * Fetch is called at the start of {@link #next()} or {@link #hasNext()} to fetch another page of data if it is
      * needed and available.
      * <p>
@@ -120,6 +88,23 @@ public class PagedIterator<T> implements Iterator<T> {
             currentPage = result;
             nextItemIndex = 0;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasNext() {
+        fetch();
+        return (currentPage != null && currentPage.length > nextItemIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public T next() {
+        if (!hasNext())
+            throw new NoSuchElementException();
+        return currentPage[nextItemIndex++];
     }
 
     /**
@@ -154,5 +139,20 @@ public class PagedIterator<T> implements Iterator<T> {
         }
         nextItemIndex = currentPage.length;
         return r;
+    }
+
+    /**
+     * This poorly named method, initializes items with local data after they are fetched. It is up to the implementer
+     * to decide what local data to apply.
+     *
+     * @param page
+     *            the page of items to be initialized
+     */
+    protected void wrapUp(T[] page) {
+        if (itemInitializer != null) {
+            for (T item : page) {
+                itemInitializer.accept(item);
+            }
+        }
     }
 }

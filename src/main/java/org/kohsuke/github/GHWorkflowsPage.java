@@ -9,7 +9,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 class GHWorkflowsPage {
-    private int total_count;
+    private int totalCount;
     private GHWorkflow[] workflows;
 
     /**
@@ -18,7 +18,7 @@ class GHWorkflowsPage {
      * @return the total count
      */
     public int getTotalCount() {
-        return total_count;
+        return totalCount;
     }
 
     /**

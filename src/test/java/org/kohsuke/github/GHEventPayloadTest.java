@@ -195,6 +195,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getIssue().getLabels().iterator().next().getName(), is("bug"));
         assertThat(event.getComment().getUser().getLogin(), is("baxterthehacker"));
         assertThat(event.getComment().getBody(), is("You are totally right! I'll get this fixed right away."));
+        assertThat(event.getComment().getAuthorAssociation(), equalTo(GHCommentAuthorAssociation.UNKNOWN));
+        assertThat(event.getComment().getBody(), is("You are totally right! I'll get this fixed right away."));
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
         assertThat(event.getSender().getLogin(), is("baxterthehacker"));

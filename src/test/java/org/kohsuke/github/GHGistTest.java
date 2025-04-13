@@ -168,5 +168,10 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
         assertThat(f.getType(), equalTo("text/markdown"));
         assertThat(f.getLanguage(), equalTo("Markdown"));
         assertThat(f.getContent(), containsString("### Keybase proof"));
+        assertThat(f.getRawUrl().toString(),
+                equalTo("https://gist.githubusercontent.com/rtyler/9903708/raw/2b68396d836af8c5b6ba905f27c4baf94ceb0ed3/keybase.md"));
+        assertThat(f.getFileName(), equalTo("keybase.md"));
+        assertThat(f.getSize(), equalTo(2131));
+        assertThat(f.isTruncated(), equalTo(false));
     }
 }

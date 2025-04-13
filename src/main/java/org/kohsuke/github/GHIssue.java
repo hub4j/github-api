@@ -77,13 +77,13 @@ public class GHIssue extends GHObject implements Reactable {
     protected String state;
 
     /** The state reason. */
-    protected String state_reason;
+    protected String stateReason;
 
     /** The number. */
     protected int number;
 
     /** The closed at. */
-    protected String closed_at;
+    protected String closedAt;
 
     /** The comments. */
     protected int comments;
@@ -99,16 +99,16 @@ public class GHIssue extends GHObject implements Reactable {
     protected GHUser user;
 
     /** The html url. */
-    protected String title, html_url;
+    protected String title, htmlUrl;
 
     /** The pull request. */
-    protected GHIssue.PullRequest pull_request;
+    protected GHIssue.PullRequest pullRequest;
 
     /** The milestone. */
     protected GHMilestone milestone;
 
     /** The closed by. */
-    protected GHUser closed_by;
+    protected GHUser closedBy;
 
     /** The locked. */
     protected boolean locked;
@@ -180,7 +180,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -216,7 +216,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the state reason
      */
     public GHIssueStateReason getStateReason() {
-        return EnumUtils.getNullableEnumOrDefault(GHIssueStateReason.class, state_reason, GHIssueStateReason.UNKNOWN);
+        return EnumUtils.getNullableEnumOrDefault(GHIssueStateReason.class, stateReason, GHIssueStateReason.UNKNOWN);
     }
 
     /**
@@ -238,7 +238,7 @@ public class GHIssue extends GHObject implements Reactable {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getClosedAt() {
-        return GitHubClient.parseInstant(closed_at);
+        return GitHubClient.parseInstant(closedAt);
     }
 
     /**
@@ -758,7 +758,7 @@ public class GHIssue extends GHObject implements Reactable {
         /*
          * if (closed_by==null) { closed_by = owner.getIssue(number).getClosed_by(); }
          */
-        return root().intern(closed_by);
+        return root().intern(closedBy);
     }
 
     /**
@@ -776,7 +776,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the pull request
      */
     public PullRequest getPullRequest() {
-        return pull_request;
+        return pullRequest;
     }
 
     /**
@@ -785,7 +785,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the boolean
      */
     public boolean isPullRequest() {
-        return pull_request != null;
+        return pullRequest != null;
     }
 
     /**
@@ -810,7 +810,7 @@ public class GHIssue extends GHObject implements Reactable {
         public PullRequest() {
         }
 
-        private String diff_url, patch_url, html_url;
+        private String diffUrl, patchUrl, htmlUrl;
 
         /**
          * Gets diff url.
@@ -818,7 +818,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the diff url
          */
         public URL getDiffUrl() {
-            return GitHubClient.parseURL(diff_url);
+            return GitHubClient.parseURL(diffUrl);
         }
 
         /**
@@ -827,7 +827,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the patch url
          */
         public URL getPatchUrl() {
-            return GitHubClient.parseURL(patch_url);
+            return GitHubClient.parseURL(patchUrl);
         }
 
         /**
@@ -836,7 +836,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the url
          */
         public URL getUrl() {
-            return GitHubClient.parseURL(html_url);
+            return GitHubClient.parseURL(htmlUrl);
         }
     }
 

@@ -28,24 +28,24 @@ public abstract class GHPerson extends GHObject {
 
     /** The avatar url. */
     // core data fields that exist even for "small" user data (such as the user info in pull request)
-    protected String login, avatar_url;
+    protected String login, avatarUrl;
 
     /** The twitter username. */
     // other fields (that only show up in full data)
-    protected String location, blog, email, bio, name, company, type, twitter_username;
+    protected String location, blog, email, bio, name, company, type, twitterUsername;
 
     /** The html url. */
-    protected String html_url;
+    protected String htmlUrl;
 
     /** The public gists. */
-    protected int followers, following, public_repos, public_gists;
+    protected int followers, following, publicRepos, publicGists;
 
     /** The hireable. */
-    protected boolean site_admin, hireable;
+    protected boolean siteAdmin, hireable;
 
     /** The total private repos. */
     // other fields (that only show up in full data) that require privileged scope
-    protected Integer total_private_repos;
+    protected Integer totalPrivateRepos;
 
     /**
      * Fully populate the data by retrieving missing data.
@@ -144,7 +144,7 @@ public abstract class GHPerson extends GHObject {
      * @return the avatar url
      */
     public String getAvatarUrl() {
-        return avatar_url;
+        return avatarUrl;
     }
 
     /**
@@ -201,7 +201,7 @@ public abstract class GHPerson extends GHObject {
      */
     public String getTwitterUsername() throws IOException {
         populate();
-        return twitter_username;
+        return twitterUsername;
     }
 
     /**
@@ -248,7 +248,7 @@ public abstract class GHPerson extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -272,7 +272,7 @@ public abstract class GHPerson extends GHObject {
      */
     public int getPublicGistCount() throws IOException {
         populate();
-        return public_gists;
+        return publicGists;
     }
 
     /**
@@ -284,7 +284,7 @@ public abstract class GHPerson extends GHObject {
      */
     public int getPublicRepoCount() throws IOException {
         populate();
-        return public_repos;
+        return publicRepos;
     }
 
     /**
@@ -326,15 +326,15 @@ public abstract class GHPerson extends GHObject {
     }
 
     /**
-     * Gets the site_admin field.
+     * Gets the siteAdmin field.
      *
-     * @return the site_admin field
+     * @return the siteAdmin field
      * @throws IOException
      *             the io exception
      */
     public boolean isSiteAdmin() throws IOException {
         populate();
-        return site_admin;
+        return siteAdmin;
     }
 
     /**
@@ -346,6 +346,6 @@ public abstract class GHPerson extends GHObject {
      */
     public Optional<Integer> getTotalPrivateRepoCount() throws IOException {
         populate();
-        return Optional.ofNullable(total_private_repos);
+        return Optional.ofNullable(totalPrivateRepos);
     }
 }

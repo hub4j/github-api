@@ -336,6 +336,8 @@ public class AppTest extends AbstractGitHubWireMockTest {
             assertThat(actualStatus.getLogUrl(), equalTo(ghDeploymentStatus.getLogUrl()));
             assertThat(ghDeploymentStatus.getDeploymentUrl(), equalTo(deployment.getUrl()));
             assertThat(ghDeploymentStatus.getRepositoryUrl(), equalTo(repository.getUrl()));
+            assertThat(ghDeploymentStatus.getEnvironmentUrl().toString(), equalTo("http://www.github.com/envurl"));
+
         } finally {
             // deployment.delete();
             assert true;

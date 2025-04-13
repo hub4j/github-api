@@ -91,9 +91,14 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         try {
             GHIssue issue = repo.createIssue("new-issue").body("With body").create();
             GHProjectCard card = column.createCard(issue);
+            assertThat(column.getProjectUrl(), equalTo(card.getProjectUrl()));
+
             assertThat(card.getContentUrl(), equalTo(issue.getUrl()));
             assertThat(card.getContent().getUrl(), equalTo(issue.getUrl()));
             assertThat(card.getContent().getRepository().getUrl(), equalTo(repo.getUrl()));
+            assertThat(card.getProjectUrl().toString(), endsWith("/projects/13495086"));
+            assertThat(card.getColumnUrl().toString(), endsWith("/projects/columns/16361848"));
+
         } finally {
             repo.delete();
         }

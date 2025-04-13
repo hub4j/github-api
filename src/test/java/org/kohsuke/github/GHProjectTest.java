@@ -47,6 +47,8 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
         assertThat(project.getState(), equalTo(GHProject.ProjectState.OPEN));
         assertThat(project.getHtmlUrl().toString(), containsString("/orgs/hub4j-test-org/projects/"));
         assertThat(project.getUrl().toString(), containsString("/projects/"));
+        assertThat(project.getOwnerUrl().toString(), endsWith("/orgs/hub4j-test-org"));
+
     }
 
     /**

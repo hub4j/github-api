@@ -23,7 +23,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
     private String token;
 
     /** The expires at. */
-    protected String expires_at;
+    protected String expiresAt;
     private Map<String, String> permissions;
     private List<GHRepository> repositories;
     private GHRepositorySelection repositorySelection;
@@ -71,6 +71,6 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getExpiresAt() {
-        return GitHubClient.parseInstant(expires_at);
+        return GitHubClient.parseInstant(expiresAt);
     }
 }

@@ -24,7 +24,7 @@ public class GHOrganization extends GHPerson {
     public GHOrganization() {
     }
 
-    private boolean has_organization_projects;
+    private boolean hasOrganizationProjects;
 
     /**
      * Starts a builder that creates a new repository.
@@ -378,7 +378,7 @@ public class GHOrganization extends GHPerson {
      * @return the boolean
      */
     public boolean areOrganizationProjectsEnabled() {
-        return has_organization_projects;
+        return hasOrganizationProjects;
     }
 
     /**

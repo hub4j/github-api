@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
@@ -126,6 +127,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void pullRequestComment() throws Exception {
         String name = "createPullRequestComment";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
+        assertThat(p.getIssueUrl().toString(), endsWith("/repos/hub4j-test-org/github-api/issues/461"));
 
         List<GHIssueComment> comments;
         comments = p.listComments().toList();
@@ -214,8 +216,39 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         Optional<GHPullRequest> firstPR = builder.list().toList().stream().findFirst();
 
         try {
-            String val = firstPR.get().listCommits().toArray()[0].getApiUrl().toString();
-            assertThat(val, notNullValue());
+            GHPullRequestCommitDetail detail = firstPR.get().listCommits().toArray()[0];
+            assertThat(detail.getApiUrl().toString(), notNullValue());
+            assertThat(detail.getSha(), equalTo("2d29c787b46ce61b98a1c13e05e21ebc21f49dbf"));
+            assertThat(detail.getCommentsUrl().toString(),
+                    endsWith(
+                            "/repos/hub4j-test-org/github-api/commits/2d29c787b46ce61b98a1c13e05e21ebc21f49dbf/comments"));
+            assertThat(detail.getUrl().toString(),
+                    equalTo("https://github.com/hub4j-test-org/github-api/commit/2d29c787b46ce61b98a1c13e05e21ebc21f49dbf"));
+
+            GHPullRequestCommitDetail.Commit commit = detail.getCommit();
+            assertThat(commit, notNullValue());
+            assertThat(commit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
+            assertThat(commit.getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
+            assertThat(commit.getMessage(), equalTo("Update README"));
+            assertThat(commit.getUrl().toString(),
+                    endsWith("/repos/hub4j-test-org/github-api/git/commits/2d29c787b46ce61b98a1c13e05e21ebc21f49dbf"));
+            assertThat(commit.getComment_count(), equalTo(0));
+
+            GHPullRequestCommitDetail.Tree tree = commit.getTree();
+            assertThat(tree, notNullValue());
+            assertThat(tree.getSha(), equalTo("ce7a1ba95aba901cf08d9f8365410d290d6c23aa"));
+            assertThat(tree.getUrl().toString(),
+                    endsWith("/repos/hub4j-test-org/github-api/git/trees/ce7a1ba95aba901cf08d9f8365410d290d6c23aa"));
+
+            GHPullRequestCommitDetail.CommitPointer[] parents = detail.getParents();
+            assertThat(parents, notNullValue());
+            assertThat(parents.length, equalTo(1));
+            assertThat(parents[0].getSha(), equalTo("3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353"));
+            assertThat(parents[0].getHtml_url().toString(),
+                    equalTo("https://github.com/hub4j-test-org/github-api/commit/3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353"));
+            assertThat(parents[0].getUrl().toString(),
+                    endsWith("/repos/hub4j-test-org/github-api/commits/3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353"));
+
         } catch (GHFileNotFoundException e) {
             if (e.getMessage().contains("/issues/")) {
                 fail("Issued a request against the wrong path");

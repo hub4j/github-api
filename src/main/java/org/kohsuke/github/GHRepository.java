@@ -76,9 +76,9 @@ public class GHRepository extends GHObject {
     public GHRepository() {
     }
 
-    private String nodeId, description, homepage, name, full_name;
+    private String nodeId, description, homepage, name, fullName;
 
-    private String html_url; // this is the UI
+    private String htmlUrl; // this is the UI
 
     /*
      * The license information makes use of the preview API.
@@ -87,36 +87,36 @@ public class GHRepository extends GHObject {
      */
     private GHLicense license;
 
-    private String git_url, ssh_url, clone_url, svn_url, mirror_url;
+    private String gitUrl, sshUrl, cloneUrl, svnUrl, mirrorUrl;
 
     private GHUser owner; // not fully populated. beware.
 
-    private boolean has_issues, has_wiki, fork, has_downloads, has_pages, archived, disabled, has_projects;
+    private boolean hasIssues, hasWiki, fork, hasDownloads, hasPages, archived, disabled, hasProjects;
 
-    private boolean allow_squash_merge;
+    private boolean allowSquashMerge;
 
-    private boolean allow_merge_commit;
+    private boolean allowMergeCommit;
 
-    private boolean allow_rebase_merge;
+    private boolean allowRebaseMerge;
 
-    private boolean allow_forking;
+    private boolean allowForking;
 
-    private boolean delete_branch_on_merge;
+    private boolean deleteBranchOnMerge;
 
     @JsonProperty("private")
-    private boolean _private;
+    private boolean isPrivate;
 
     private String visibility;
 
-    private int forks_count, stargazers_count, watchers_count, size, open_issues_count, subscribers_count;
+    private int forksCount, stargazersCount, watchersCount, size, openIssuesCount, subscribersCount;
 
-    private String pushed_at;
+    private String pushedAt;
 
     private Map<Integer, GHMilestone> milestones = Collections.synchronizedMap(new WeakHashMap<>());
 
-    private String default_branch, language;
+    private String defaultBranch, language;
 
-    private GHRepository template_repository;
+    private GHRepository templateRepository;
 
     private Map<String, GHCommit> commits = Collections.synchronizedMap(new WeakHashMap<>());
 
@@ -232,7 +232,7 @@ public class GHRepository extends GHObject {
      * @return the git transport url
      */
     public String getGitTransportUrl() {
-        return git_url;
+        return gitUrl;
     }
 
     /**
@@ -241,7 +241,7 @@ public class GHRepository extends GHObject {
      * @return the http transport url
      */
     public String getHttpTransportUrl() {
-        return clone_url;
+        return cloneUrl;
     }
 
     /**
@@ -250,7 +250,7 @@ public class GHRepository extends GHObject {
      * @return the svn url
      */
     public String getSvnUrl() {
-        return svn_url;
+        return svnUrl;
     }
 
     /**
@@ -260,7 +260,7 @@ public class GHRepository extends GHObject {
      * @return the mirror url
      */
     public String getMirrorUrl() {
-        return mirror_url;
+        return mirrorUrl;
     }
 
     /**
@@ -269,7 +269,7 @@ public class GHRepository extends GHObject {
      * @return the ssh url
      */
     public String getSshUrl() {
-        return ssh_url;
+        return sshUrl;
     }
 
     /**
@@ -278,7 +278,7 @@ public class GHRepository extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+        return GitHubClient.parseURL(htmlUrl);
     }
 
     /**
@@ -297,7 +297,7 @@ public class GHRepository extends GHObject {
      * @return the full name
      */
     public String getFullName() {
-        return full_name;
+        return fullName;
     }
 
     /**
@@ -563,7 +563,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean hasIssues() {
-        return has_issues;
+        return hasIssues;
     }
 
     /**
@@ -572,7 +572,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean hasProjects() {
-        return has_projects;
+        return hasProjects;
     }
 
     /**
@@ -581,7 +581,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean hasWiki() {
-        return has_wiki;
+        return hasWiki;
     }
 
     /**
@@ -617,7 +617,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean isAllowSquashMerge() {
-        return allow_squash_merge;
+        return allowSquashMerge;
     }
 
     /**
@@ -626,7 +626,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean isAllowMergeCommit() {
-        return allow_merge_commit;
+        return allowMergeCommit;
     }
 
     /**
@@ -635,7 +635,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean isAllowRebaseMerge() {
-        return allow_rebase_merge;
+        return allowRebaseMerge;
     }
 
     /**
@@ -644,7 +644,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean isAllowForking() {
-        return allow_forking;
+        return allowForking;
     }
 
     /**
@@ -653,7 +653,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean isDeleteBranchOnMerge() {
-        return delete_branch_on_merge;
+        return deleteBranchOnMerge;
     }
 
     /**
@@ -663,7 +663,7 @@ public class GHRepository extends GHObject {
      * @return the forks
      */
     public int getForksCount() {
-        return forks_count;
+        return forksCount;
     }
 
     /**
@@ -672,7 +672,7 @@ public class GHRepository extends GHObject {
      * @return the stargazers count
      */
     public int getStargazersCount() {
-        return stargazers_count;
+        return stargazersCount;
     }
 
     /**
@@ -681,7 +681,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean isPrivate() {
-        return _private;
+        return isPrivate;
     }
 
     /**
@@ -773,7 +773,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean hasDownloads() {
-        return has_downloads;
+        return hasDownloads;
     }
 
     /**
@@ -782,7 +782,7 @@ public class GHRepository extends GHObject {
      * @return the boolean
      */
     public boolean hasPages() {
-        return has_pages;
+        return hasPages;
     }
 
     /**
@@ -791,7 +791,7 @@ public class GHRepository extends GHObject {
      * @return the watchers
      */
     public int getWatchersCount() {
-        return watchers_count;
+        return watchersCount;
     }
 
     /**
@@ -800,7 +800,7 @@ public class GHRepository extends GHObject {
      * @return the open issue count
      */
     public int getOpenIssueCount() {
-        return open_issues_count;
+        return openIssuesCount;
     }
 
     /**
@@ -809,7 +809,7 @@ public class GHRepository extends GHObject {
      * @return the subscribers count
      */
     public int getSubscribersCount() {
-        return subscribers_count;
+        return subscribersCount;
     }
 
     /**
@@ -819,7 +819,7 @@ public class GHRepository extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
     public Instant getPushedAt() {
-        return GitHubClient.parseInstant(pushed_at);
+        return GitHubClient.parseInstant(pushedAt);
     }
 
     /**
@@ -828,7 +828,7 @@ public class GHRepository extends GHObject {
      * @return This field is null until the user explicitly configures the default branch.
      */
     public String getDefaultBranch() {
-        return default_branch;
+        return defaultBranch;
     }
 
     /**
@@ -838,7 +838,7 @@ public class GHRepository extends GHObject {
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
     public GHRepository getTemplateRepository() {
-        return template_repository;
+        return templateRepository;
     }
 
     /**
@@ -2666,7 +2666,7 @@ public class GHRepository extends GHObject {
 
     // Only used within listCodeownersErrors().
     private static class GHCodeownersErrors {
-        public List<GHCodeownersError> errors;
+        List<GHCodeownersError> errors;
     }
 
     /**
@@ -2910,7 +2910,7 @@ public class GHRepository extends GHObject {
         if (tail.length() > 0 && !tail.startsWith("/")) {
             tail = '/' + tail;
         }
-        return "/repos/" + full_name + tail;
+        return "/repos/" + fullName + tail;
     }
 
     /**
@@ -3058,7 +3058,7 @@ public class GHRepository extends GHObject {
 
     // Only used within listTopics().
     private static class Topics {
-        public List<String> names;
+        List<String> names;
     }
 
     /**
@@ -3255,7 +3255,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void star() throws IOException {
-        root().createRequest().method("PUT").withUrlPath(String.format("/user/starred/%s", full_name)).send();
+        root().createRequest().method("PUT").withUrlPath(String.format("/user/starred/%s", fullName)).send();
     }
 
     /**
@@ -3265,7 +3265,7 @@ public class GHRepository extends GHObject {
      *             the io exception
      */
     public void unstar() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(String.format("/user/starred/%s", full_name)).send();
+        root().createRequest().method("DELETE").withUrlPath(String.format("/user/starred/%s", fullName)).send();
     }
 
     /**

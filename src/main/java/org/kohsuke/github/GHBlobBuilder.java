@@ -47,10 +47,6 @@ public class GHBlobBuilder {
         return req.method("POST").withUrlPath(getApiTail()).fetch(GHBlob.class);
     }
 
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/git/blobs", repo.getOwnerName(), repo.getName());
-    }
-
     /**
      * Configures a blob with the specified text {@code content}.
      *
@@ -62,5 +58,9 @@ public class GHBlobBuilder {
         req.with("content", content);
         req.with("encoding", "utf-8");
         return this;
+    }
+
+    private String getApiTail() {
+        return String.format("/repos/%s/%s/git/blobs", repo.getOwnerName(), repo.getName());
     }
 }

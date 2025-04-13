@@ -50,6 +50,33 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
             this.rule = rule;
         }
 
+        @Override
+        public String getName() {
+            return "github-api-url-rewrite";
+        }
+
+        @Override
+        public Response transform(Request request, Response response, FileSource files, Parameters parameters) {
+            Response.Builder builder = Response.Builder.like(response);
+            Collection<HttpHeader> headers = response.getHeaders().all();
+
+            fixListTraversalHeader(response, headers);
+            fixLocationHeader(response, headers);
+
+            if ("application/json".equals(response.getHeaders().getContentTypeHeader().mimeTypePart())) {
+
+                String body;
+                body = getBodyAsString(response, headers);
+                body = rule.mapToMockGitHub(body);
+
+                builder.body(body);
+
+            }
+            builder.headers(new HttpHeaders(headers));
+
+            return builder.build();
+        }
+
         private void fixListTraversalHeader(Response response, Collection<HttpHeader> headers) {
             // Lists are broken up into pages. The Link header contains urls for previous and next pages.
             HttpHeader linkHeader = response.getHeaders().getHeader("Link");
@@ -91,33 +118,6 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
                 body = response.getBodyAsString();
             }
             return body;
-        }
-
-        @Override
-        public String getName() {
-            return "github-api-url-rewrite";
-        }
-
-        @Override
-        public Response transform(Request request, Response response, FileSource files, Parameters parameters) {
-            Response.Builder builder = Response.Builder.like(response);
-            Collection<HttpHeader> headers = response.getHeaders().all();
-
-            fixListTraversalHeader(response, headers);
-            fixLocationHeader(response, headers);
-
-            if ("application/json".equals(response.getHeaders().getContentTypeHeader().mimeTypePart())) {
-
-                String body;
-                body = getBodyAsString(response, headers);
-                body = rule.mapToMockGitHub(body);
-
-                builder.body(body);
-
-            }
-            builder.headers(new HttpHeaders(headers));
-
-            return builder.build();
         }
     }
     private static class MappingFileDetails {
@@ -289,72 +289,12 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     }
 
     /**
-     * After.
-     */
-    @Override
-    protected void after() {
-        super.after();
-        if (!isTakeSnapshot()) {
-            return;
-        }
-
-        recordSnapshot(this.apiServer(), "https://api.github.com", false);
-
-        // For raw server, only fix up mapping files
-        recordSnapshot(this.rawServer(), "https://raw.githubusercontent.com", true);
-
-        recordSnapshot(this.uploadsServer(), "https://uploads.github.com", false);
-
-        recordSnapshot(this.codeloadServer(), "https://codeload.github.com", true);
-
-        recordSnapshot(this.actionsUserContentServer(), "https://pipelines.actions.githubusercontent.com", true);
-
-        recordSnapshot(this.blobCoreWindowsNetServer(), "https://productionresults.blob.core.windows.net", true);
-    }
-
-    /**
      * Api server.
      *
      * @return the wire mock server
      */
     public WireMockServer apiServer() {
         return servers.get("default");
-    }
-
-    /**
-     * Before.
-     */
-    @Override
-    protected void before() {
-        super.before();
-        if (!isUseProxy()) {
-            return;
-        }
-
-        this.apiServer().stubFor(proxyAllTo("https://api.github.com").atPriority(100));
-
-        if (this.rawServer() != null) {
-            this.rawServer().stubFor(proxyAllTo("https://raw.githubusercontent.com").atPriority(100));
-        }
-
-        if (this.uploadsServer() != null) {
-            this.uploadsServer().stubFor(proxyAllTo("https://uploads.github.com").atPriority(100));
-        }
-
-        if (this.codeloadServer() != null) {
-            this.codeloadServer().stubFor(proxyAllTo("https://codeload.github.com").atPriority(100));
-        }
-
-        if (this.actionsUserContentServer() != null) {
-            this.actionsUserContentServer()
-                    .stubFor(proxyAllTo("https://pipelines.actions.githubusercontent.com").atPriority(100));
-        }
-
-        if (this.blobCoreWindowsNetServer() != null) {
-            this.blobCoreWindowsNetServer()
-                    .stubFor(any(anyUrl()).willReturn(aResponse().withTransformers(ProxyToOriginalHostTransformer.NAME))
-                            .atPriority(100));
-        }
     }
 
     /**
@@ -383,6 +323,90 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
      */
     public void customizeRecordSpec(Consumer<RecordSpecBuilder> customizeRecordSpec) {
         this.customizeRecordSpec = customizeRecordSpec;
+    }
+
+    /**
+     * Gets the request count.
+     *
+     * @return the request count
+     */
+    public int getRequestCount() {
+        return getRequestCount(apiServer());
+    }
+
+    /**
+     * Checks if is take snapshot.
+     *
+     * @return true, if is take snapshot
+     */
+    public boolean isTakeSnapshot() {
+        return GitHubWireMockRule.takeSnapshot;
+    }
+
+    /**
+     * Checks if is test with org.
+     *
+     * @return true, if is test with org
+     */
+    public boolean isTestWithOrg() {
+        return GitHubWireMockRule.testWithOrg;
+    }
+
+    /**
+     * Checks if is use proxy.
+     *
+     * @return true, if is use proxy
+     */
+    public boolean isUseProxy() {
+        return GitHubWireMockRule.useProxy;
+    }
+
+    /**
+     * Map to mock git hub.
+     *
+     * @param body
+     *            the body
+     * @return the string
+     */
+    @Nonnull
+    public String mapToMockGitHub(String body) {
+        body = body.replace("https://api.github.com", this.apiServer().baseUrl());
+
+        body = replaceTargetServerUrl(body, this.rawServer(), "https://raw.githubusercontent.com", "/raw");
+
+        body = replaceTargetServerUrl(body, this.uploadsServer(), "https://uploads.github.com", "/uploads");
+
+        body = replaceTargetServerUrl(body, this.codeloadServer(), "https://codeload.github.com", "/codeload");
+
+        body = replaceTargetServerUrl(body,
+                this.actionsUserContentServer(),
+                ACTIONS_USER_CONTENT_PATTERN,
+                "/actions-user-content");
+
+        body = replaceTargetServerUrl(body,
+                this.blobCoreWindowsNetServer(),
+                BLOB_CORE_WINDOWS_PATTERN,
+                "/blob-core-windows-net");
+
+        return body;
+    }
+
+    /**
+     * Raw server.
+     *
+     * @return the wire mock server
+     */
+    public WireMockServer rawServer() {
+        return servers.get("raw");
+    }
+
+    /**
+     * Uploads server.
+     *
+     * @return the wire mock server
+     */
+    public WireMockServer uploadsServer() {
+        return servers.get("uploads");
     }
 
     private void fixJsonContents(Gson g, Path filePath, Path bodyPath, Path renamedBodyPath) throws IOException {
@@ -503,112 +527,6 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         }
     }
 
-    /**
-     * Gets the request count.
-     *
-     * @return the request count
-     */
-    public int getRequestCount() {
-        return getRequestCount(apiServer());
-    }
-
-    /**
-     * Initialize servers.
-     */
-    @Override
-    protected void initializeServers() {
-        super.initializeServers();
-        initializeServer("default", new GitHubApiResponseTransformer(this));
-
-        // only start non-api servers if we might need them
-        if (new File(apiServer().getOptions().filesRoot().getPath() + "_raw").exists() || isUseProxy()) {
-            initializeServer("raw");
-        }
-        if (new File(apiServer().getOptions().filesRoot().getPath() + "_uploads").exists() || isUseProxy()) {
-            initializeServer("uploads");
-        }
-
-        if (new File(apiServer().getOptions().filesRoot().getPath() + "_codeload").exists() || isUseProxy()) {
-            initializeServer("codeload");
-        }
-
-        if (new File(apiServer().getOptions().filesRoot().getPath() + "_actions-user-content").exists()
-                || isUseProxy()) {
-            initializeServer("actions-user-content");
-        }
-
-        if (new File(apiServer().getOptions().filesRoot().getPath() + "_blob-core-windows-net").exists()
-                || isUseProxy()) {
-            initializeServer("blob-core-windows-net", new ProxyToOriginalHostTransformer(this));
-        }
-    }
-
-    /**
-     * Checks if is take snapshot.
-     *
-     * @return true, if is take snapshot
-     */
-    public boolean isTakeSnapshot() {
-        return GitHubWireMockRule.takeSnapshot;
-    }
-
-    /**
-     * Checks if is test with org.
-     *
-     * @return true, if is test with org
-     */
-    public boolean isTestWithOrg() {
-        return GitHubWireMockRule.testWithOrg;
-    }
-
-    /**
-     * Checks if is use proxy.
-     *
-     * @return true, if is use proxy
-     */
-    public boolean isUseProxy() {
-        return GitHubWireMockRule.useProxy;
-    }
-
-    /**
-     * Map to mock git hub.
-     *
-     * @param body
-     *            the body
-     * @return the string
-     */
-    @Nonnull
-    public String mapToMockGitHub(String body) {
-        body = body.replace("https://api.github.com", this.apiServer().baseUrl());
-
-        body = replaceTargetServerUrl(body, this.rawServer(), "https://raw.githubusercontent.com", "/raw");
-
-        body = replaceTargetServerUrl(body, this.uploadsServer(), "https://uploads.github.com", "/uploads");
-
-        body = replaceTargetServerUrl(body, this.codeloadServer(), "https://codeload.github.com", "/codeload");
-
-        body = replaceTargetServerUrl(body,
-                this.actionsUserContentServer(),
-                ACTIONS_USER_CONTENT_PATTERN,
-                "/actions-user-content");
-
-        body = replaceTargetServerUrl(body,
-                this.blobCoreWindowsNetServer(),
-                BLOB_CORE_WINDOWS_PATTERN,
-                "/blob-core-windows-net");
-
-        return body;
-    }
-
-    /**
-     * Raw server.
-     *
-     * @return the wire mock server
-     */
-    public WireMockServer rawServer() {
-        return servers.get("raw");
-    }
-
     private void recordSnapshot(WireMockServer server, String target, boolean isRawServer) {
         if (server != null) {
 
@@ -662,11 +580,93 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
     }
 
     /**
-     * Uploads server.
-     *
-     * @return the wire mock server
+     * After.
      */
-    public WireMockServer uploadsServer() {
-        return servers.get("uploads");
+    @Override
+    protected void after() {
+        super.after();
+        if (!isTakeSnapshot()) {
+            return;
+        }
+
+        recordSnapshot(this.apiServer(), "https://api.github.com", false);
+
+        // For raw server, only fix up mapping files
+        recordSnapshot(this.rawServer(), "https://raw.githubusercontent.com", true);
+
+        recordSnapshot(this.uploadsServer(), "https://uploads.github.com", false);
+
+        recordSnapshot(this.codeloadServer(), "https://codeload.github.com", true);
+
+        recordSnapshot(this.actionsUserContentServer(), "https://pipelines.actions.githubusercontent.com", true);
+
+        recordSnapshot(this.blobCoreWindowsNetServer(), "https://productionresults.blob.core.windows.net", true);
+    }
+
+    /**
+     * Before.
+     */
+    @Override
+    protected void before() {
+        super.before();
+        if (!isUseProxy()) {
+            return;
+        }
+
+        this.apiServer().stubFor(proxyAllTo("https://api.github.com").atPriority(100));
+
+        if (this.rawServer() != null) {
+            this.rawServer().stubFor(proxyAllTo("https://raw.githubusercontent.com").atPriority(100));
+        }
+
+        if (this.uploadsServer() != null) {
+            this.uploadsServer().stubFor(proxyAllTo("https://uploads.github.com").atPriority(100));
+        }
+
+        if (this.codeloadServer() != null) {
+            this.codeloadServer().stubFor(proxyAllTo("https://codeload.github.com").atPriority(100));
+        }
+
+        if (this.actionsUserContentServer() != null) {
+            this.actionsUserContentServer()
+                    .stubFor(proxyAllTo("https://pipelines.actions.githubusercontent.com").atPriority(100));
+        }
+
+        if (this.blobCoreWindowsNetServer() != null) {
+            this.blobCoreWindowsNetServer()
+                    .stubFor(any(anyUrl()).willReturn(aResponse().withTransformers(ProxyToOriginalHostTransformer.NAME))
+                            .atPriority(100));
+        }
+    }
+
+    /**
+     * Initialize servers.
+     */
+    @Override
+    protected void initializeServers() {
+        super.initializeServers();
+        initializeServer("default", new GitHubApiResponseTransformer(this));
+
+        // only start non-api servers if we might need them
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_raw").exists() || isUseProxy()) {
+            initializeServer("raw");
+        }
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_uploads").exists() || isUseProxy()) {
+            initializeServer("uploads");
+        }
+
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_codeload").exists() || isUseProxy()) {
+            initializeServer("codeload");
+        }
+
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_actions-user-content").exists()
+                || isUseProxy()) {
+            initializeServer("actions-user-content");
+        }
+
+        if (new File(apiServer().getOptions().filesRoot().getPath() + "_blob-core-windows-net").exists()
+                || isUseProxy()) {
+            initializeServer("blob-core-windows-net", new ProxyToOriginalHostTransformer(this));
+        }
     }
 }

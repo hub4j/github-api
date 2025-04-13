@@ -22,21 +22,21 @@ public class GHRequestedAction extends GHObject {
     }
 
     /**
-     * Gets the description.
-     *
-     * @return the description
-     */
-    String getDescription() {
-        return description;
-    }
-
-    /**
      * Gets the identifier.
      *
      * @return the identifier
      */
     public String getIdentifier() {
         return identifier;
+    }
+
+    /**
+     * Gets the description.
+     *
+     * @return the description
+     */
+    String getDescription() {
+        return description;
     }
 
     /**

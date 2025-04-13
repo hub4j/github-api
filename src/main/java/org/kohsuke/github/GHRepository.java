@@ -143,15 +143,6 @@ public class GHRepository extends GHObject {
         STARGAZERS
     }
 
-    // Only used within listCodeownersErrors().
-    private static class GHCodeownersErrors {
-        List<GHCodeownersError> errors;
-    }
-
-    static class GHRepoPermission {
-        boolean pull, push, admin;
-    }
-
     /**
      * A {@link GHRepositoryBuilder} that allows multiple properties to be updated per request.
      *
@@ -174,11 +165,6 @@ public class GHRepository extends GHObject {
 
             requester.method("PATCH").withUrlPath(repository.getApiTailUrl(""));
         }
-    }
-
-    // Only used within listTopics().
-    private static class Topics {
-        List<String> names;
     }
 
     /**
@@ -250,6 +236,20 @@ public class GHRepository extends GHObject {
         public String toString() {
             return name().toLowerCase(Locale.ROOT);
         }
+    }
+
+    // Only used within listCodeownersErrors().
+    private static class GHCodeownersErrors {
+        List<GHCodeownersError> errors;
+    }
+
+    // Only used within listTopics().
+    private static class Topics {
+        List<String> names;
+    }
+
+    static class GHRepoPermission {
+        boolean pull, push, admin;
     }
 
     /**
@@ -1021,18 +1021,6 @@ public class GHRepository extends GHObject {
                 .send();
     }
 
-    private <T> T downloadArchive(@Nonnull String type,
-            @CheckForNull String ref,
-            @Nonnull InputStreamFunction<T> streamFunction) throws IOException {
-        requireNonNull(streamFunction, "Sink must not be null");
-        String tailUrl = getApiTailUrl(type + "ball");
-        if (ref != null) {
-            tailUrl += "/" + ref;
-        }
-        final Requester builder = root().createRequest().method("GET").withUrlPath(tailUrl);
-        return builder.fetchStream(streamFunction);
-    }
-
     /**
      * Enable downloads.
      *
@@ -1123,20 +1111,6 @@ public class GHRepository extends GHObject {
     @Deprecated
     public GHRepository forkTo(GHOrganization org) throws IOException {
         return this.createFork().organization(org).create();
-    }
-
-    /**
-     * Gets the api tail url.
-     *
-     * @param tail
-     *            the tail
-     * @return the api tail url
-     */
-    String getApiTailUrl(String tail) {
-        if (tail.length() > 0 && !tail.startsWith("/")) {
-            tail = '/' + tail;
-        }
-        return "/repos/" + fullName + tail;
     }
 
     /**
@@ -1727,17 +1701,6 @@ public class GHRepository extends GHObject {
      */
     public GHContent getLicenseContent() throws IOException {
         return getLicenseContent_();
-    }
-
-    private GHContentWithLicense getLicenseContent_() throws IOException {
-        try {
-            return root().createRequest()
-                    .withUrlPath(getApiTailUrl("license"))
-                    .fetch(GHContentWithLicense.class)
-                    .wrap(this);
-        } catch (FileNotFoundException e) {
-            return null;
-        }
     }
 
     /**
@@ -2987,14 +2950,6 @@ public class GHRepository extends GHObject {
         return topics.names;
     }
 
-    private PagedIterable<GHUser> listUsers(Requester requester, final String suffix) {
-        return requester.withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);
-    }
-
-    private PagedIterable<GHUser> listUsers(final String suffix) {
-        return listUsers(root().createRequest(), suffix);
-    }
-
     /**
      * Lists all the workflows of this repository.
      *
@@ -3002,40 +2957,6 @@ public class GHRepository extends GHObject {
      */
     public PagedIterable<GHWorkflow> listWorkflows() {
         return new GHWorkflowsIterable(this);
-    }
-
-    private void modifyCollaborators(@NonNull Collection<GHUser> users,
-            @NonNull String method,
-            @CheckForNull GHOrganization.RepositoryRole permission) throws IOException {
-        Requester requester = root().createRequest().method(method);
-        if (permission != null) {
-            requester = requester.with("permission", permission.toString()).inBody();
-        }
-
-        // Make sure that the users collection doesn't have any duplicates
-        for (GHUser user : new LinkedHashSet<>(users)) {
-            requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
-        }
-    }
-
-    /**
-     * Populate this object.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    void populate() throws IOException {
-        if (isOffline()) {
-            return; // can't populate if the root is offline
-        }
-
-        // We don't use the URL provided in the JSON because it is not reliable:
-        // 1. There is bug in Push event payloads that returns the wrong url.
-        // For Push event repository records, they take the form
-        // "https://github.com/{fullName}".
-        // All other occurrences of "url" take the form "https://api.github.com/...".
-        // 2. For Installation event payloads, the URL is not provided at all.
-        root().createRequest().withUrlPath(getApiTailUrl("")).fetchInto(this);
     }
 
     /**
@@ -3417,6 +3338,85 @@ public class GHRepository extends GHObject {
      */
     public @NonNull GHCheckRunBuilder updateCheckRun(long checkId) {
         return new GHCheckRunBuilder(this, checkId);
+    }
+
+    private <T> T downloadArchive(@Nonnull String type,
+            @CheckForNull String ref,
+            @Nonnull InputStreamFunction<T> streamFunction) throws IOException {
+        requireNonNull(streamFunction, "Sink must not be null");
+        String tailUrl = getApiTailUrl(type + "ball");
+        if (ref != null) {
+            tailUrl += "/" + ref;
+        }
+        final Requester builder = root().createRequest().method("GET").withUrlPath(tailUrl);
+        return builder.fetchStream(streamFunction);
+    }
+
+    private GHContentWithLicense getLicenseContent_() throws IOException {
+        try {
+            return root().createRequest()
+                    .withUrlPath(getApiTailUrl("license"))
+                    .fetch(GHContentWithLicense.class)
+                    .wrap(this);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+    }
+
+    private PagedIterable<GHUser> listUsers(Requester requester, final String suffix) {
+        return requester.withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);
+    }
+
+    private PagedIterable<GHUser> listUsers(final String suffix) {
+        return listUsers(root().createRequest(), suffix);
+    }
+
+    private void modifyCollaborators(@NonNull Collection<GHUser> users,
+            @NonNull String method,
+            @CheckForNull GHOrganization.RepositoryRole permission) throws IOException {
+        Requester requester = root().createRequest().method(method);
+        if (permission != null) {
+            requester = requester.with("permission", permission.toString()).inBody();
+        }
+
+        // Make sure that the users collection doesn't have any duplicates
+        for (GHUser user : new LinkedHashSet<>(users)) {
+            requester.withUrlPath(getApiTailUrl("collaborators/" + user.getLogin())).send();
+        }
+    }
+
+    /**
+     * Gets the api tail url.
+     *
+     * @param tail
+     *            the tail
+     * @return the api tail url
+     */
+    String getApiTailUrl(String tail) {
+        if (tail.length() > 0 && !tail.startsWith("/")) {
+            tail = '/' + tail;
+        }
+        return "/repos/" + fullName + tail;
+    }
+
+    /**
+     * Populate this object.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    void populate() throws IOException {
+        if (isOffline()) {
+            return; // can't populate if the root is offline
+        }
+
+        // We don't use the URL provided in the JSON because it is not reliable:
+        // 1. There is bug in Push event payloads that returns the wrong url.
+        // For Push event repository records, they take the form
+        // "https://github.com/{fullName}".
+        // All other occurrences of "url" take the form "https://api.github.com/...".
+        // 2. For Installation event payloads, the URL is not provided at all.
+        root().createRequest().withUrlPath(getApiTailUrl("")).fetchInto(this);
     }
 
 }

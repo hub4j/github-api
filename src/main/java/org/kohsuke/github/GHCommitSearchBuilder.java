@@ -14,6 +14,17 @@ import java.io.IOException;
  */
 public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
 
+    /**
+     * The enum Sort.
+     */
+    public enum Sort {
+
+        /** The author date. */
+        AUTHOR_DATE,
+        /** The committer date. */
+        COMMITTER_DATE
+    }
+
     @SuppressFBWarnings(
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
             justification = "JSON API")
@@ -32,17 +43,6 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
             }
             return items;
         }
-    }
-
-    /**
-     * The enum Sort.
-     */
-    public enum Sort {
-
-        /** The author date. */
-        AUTHOR_DATE,
-        /** The committer date. */
-        COMMITTER_DATE
     }
 
     /**
@@ -155,16 +155,6 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
      */
     public GHCommitSearchBuilder committerName(String v) {
         return q("committer-name:" + v);
-    }
-
-    /**
-     * Gets the api url.
-     *
-     * @return the api url
-     */
-    @Override
-    protected String getApiUrl() {
-        return "/search/commits";
     }
 
     /**
@@ -289,5 +279,15 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
      */
     public GHCommitSearchBuilder user(String v) {
         return q("user:" + v);
+    }
+
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
+    @Override
+    protected String getApiUrl() {
+        return "/search/commits";
     }
 }

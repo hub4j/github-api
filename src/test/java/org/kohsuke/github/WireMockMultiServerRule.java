@@ -64,12 +64,6 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
     }
 
     /**
-     * After.
-     */
-    protected void after() {
-    }
-
-    /**
      * Apply.
      *
      * @param base
@@ -97,6 +91,15 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
         return this.apply(base, method.getName());
     }
 
+    /**
+     * Gets the method name.
+     *
+     * @return the method name
+     */
+    public String getMethodName() {
+        return methodName;
+    }
+
     private Statement apply(final Statement base, final String methodName) {
         return new Statement() {
             public void evaluate() throws Throwable {
@@ -117,12 +120,6 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
 
             }
         };
-    }
-
-    /**
-     * Before.
-     */
-    protected void before() {
     }
 
     private void checkForUnmatchedRequests() {
@@ -163,13 +160,24 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
 
     }
 
+    private void stop() {
+        servers.values().forEach(server -> {
+            server.stop();
+            // server left behinds empty folders delete them
+            deleteEmptyFolders(new File(server.getOptions().filesRoot().getPath()));
+        });
+    }
+
     /**
-     * Gets the method name.
-     *
-     * @return the method name
+     * After.
      */
-    public String getMethodName() {
-        return methodName;
+    protected void after() {
+    }
+
+    /**
+     * Before.
+     */
+    protected void before() {
     }
 
     /**
@@ -206,14 +214,6 @@ public class WireMockMultiServerRule implements MethodRule, TestRule {
      * Initialize servers.
      */
     protected void initializeServers() {
-    }
-
-    private void stop() {
-        servers.values().forEach(server -> {
-            server.stop();
-            // server left behinds empty folders delete them
-            deleteEmptyFolders(new File(server.getOptions().filesRoot().getPath()));
-        });
     }
 
 }

@@ -54,19 +54,6 @@ public class GHMilestone extends GHObject {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * Gets api route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/milestones/" + number;
-    }
-
     /**
      * When was this milestone closed?.
      *
@@ -170,18 +157,6 @@ public class GHMilestone extends GHObject {
     }
 
     /**
-     * Wrap gh milestone.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh milestone
-     */
-    GHMilestone lateBind(GHRepository repo) {
-        this.owner = repo;
-        return this;
-    }
-
-    /**
      * Reopens this milestone.
      *
      * @throws IOException
@@ -239,6 +214,31 @@ public class GHMilestone extends GHObject {
      */
     public void setTitle(String title) throws IOException {
         edit("title", title);
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/milestones/" + number;
+    }
+
+    /**
+     * Wrap gh milestone.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh milestone
+     */
+    GHMilestone lateBind(GHRepository repo) {
+        this.owner = repo;
+        return this;
     }
 
 }

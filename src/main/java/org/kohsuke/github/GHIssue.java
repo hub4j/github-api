@@ -170,26 +170,6 @@ public class GHIssue extends GHObject implements Reactable {
     public GHIssue() {
     }
 
-    private List<GHLabel> _addLabels(Collection<String> names) throws IOException {
-        return Arrays.asList(root().createRequest()
-                .with("labels", names)
-                .method("POST")
-                .withUrlPath(getIssuesApiRoute() + "/labels")
-                .fetch(GHLabel[].class));
-    }
-
-    private List<GHLabel> _removeLabels(Collection<String> names) throws IOException {
-        List<GHLabel> remainingLabels = Collections.emptyList();
-        for (String name : names) {
-            try {
-                remainingLabels = removeLabel(name);
-            } catch (GHFileNotFoundException e) {
-                // when trying to remove multiple labels, we ignore already removed
-            }
-        }
-        return remainingLabels;
-    }
-
     /**
      * Add assignees.
      *
@@ -351,34 +331,6 @@ public class GHIssue extends GHObject implements Reactable {
                 .send();
     }
 
-    private void edit(Map<String, Object> map) throws IOException {
-        root().createRequest().with(map).method("PATCH").withUrlPath(getApiRoute()).send();
-    }
-
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
-    }
-
-    private void editIssue(String key, Object value) throws IOException {
-        root().createRequest().withNullable(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
-    }
-
-    /**
-     * Identical to edit(), but allows null for the value.
-     */
-    private void editNullable(String key, Object value) throws IOException {
-        root().createRequest().withNullable(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * Gets api route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-        return getIssuesApiRoute();
-    }
-
     /**
      * Gets assignee.
      *
@@ -467,21 +419,6 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Gets issues api route.
-     *
-     * @return the issues api route
-     */
-    protected String getIssuesApiRoute() {
-        if (owner == null) {
-            // Issues returned from search to do not have an owner. Attempt to use url.
-            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
-        }
-        GHRepository repo = getRepository();
-        return "/repos/" + repo.getOwnerName() + "/" + repo.getName() + "/issues/" + number;
-    }
-
-    /**
      * Gets labels.
      *
      * @return the labels
@@ -539,15 +476,6 @@ public class GHIssue extends GHObject implements Reactable {
             throw new GHException("Failed to fetch repository", e);
         }
         return owner;
-    }
-
-    private String getRepositoryUrlPath() {
-        String url = getUrl().toString();
-        int index = url.indexOf("/issues");
-        if (index == -1) {
-            index = url.indexOf("/pulls");
-        }
-        return url.substring(0, index);
     }
 
     /**
@@ -850,6 +778,78 @@ public class GHIssue extends GHObject implements Reactable {
      */
     public void unlock() throws IOException {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute() + "/lock").send();
+    }
+
+    private List<GHLabel> _addLabels(Collection<String> names) throws IOException {
+        return Arrays.asList(root().createRequest()
+                .with("labels", names)
+                .method("POST")
+                .withUrlPath(getIssuesApiRoute() + "/labels")
+                .fetch(GHLabel[].class));
+    }
+
+    private List<GHLabel> _removeLabels(Collection<String> names) throws IOException {
+        List<GHLabel> remainingLabels = Collections.emptyList();
+        for (String name : names) {
+            try {
+                remainingLabels = removeLabel(name);
+            } catch (GHFileNotFoundException e) {
+                // when trying to remove multiple labels, we ignore already removed
+            }
+        }
+        return remainingLabels;
+    }
+
+    private void edit(Map<String, Object> map) throws IOException {
+        root().createRequest().with(map).method("PATCH").withUrlPath(getApiRoute()).send();
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+    }
+
+    private void editIssue(String key, Object value) throws IOException {
+        root().createRequest().withNullable(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
+    }
+
+    /**
+     * Identical to edit(), but allows null for the value.
+     */
+    private void editNullable(String key, Object value) throws IOException {
+        root().createRequest().withNullable(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+    }
+
+    private String getRepositoryUrlPath() {
+        String url = getUrl().toString();
+        int index = url.indexOf("/issues");
+        if (index == -1) {
+            index = url.indexOf("/pulls");
+        }
+        return url.substring(0, index);
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+        return getIssuesApiRoute();
+    }
+
+    /**
+     * Gets issues api route.
+     *
+     * @return the issues api route
+     */
+    protected String getIssuesApiRoute() {
+        if (owner == null) {
+            // Issues returned from search to do not have an owner. Attempt to use url.
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
+        }
+        GHRepository repo = getRepository();
+        return "/repos/" + repo.getOwnerName() + "/" + repo.getName() + "/issues/" + number;
     }
 
     /**

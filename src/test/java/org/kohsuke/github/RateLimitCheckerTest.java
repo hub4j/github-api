@@ -35,16 +35,6 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
-    }
-
-    /**
      * Test git hub rate limit.
      *
      * @throws Exception
@@ -105,6 +95,16 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
         updateTestRateLimit();
         assertThat(mockGitHub.getRequestCount(), equalTo(9));
         assertThat(rateLimit.getCore().getRemaining(), equalTo(4601));
+    }
+
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
     /**

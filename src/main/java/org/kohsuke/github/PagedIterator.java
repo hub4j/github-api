@@ -63,6 +63,32 @@ public class PagedIterator<T> implements Iterator<T> {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public boolean hasNext() {
+        fetch();
+        return (currentPage != null && currentPage.length > nextItemIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public T next() {
+        if (!hasNext())
+            throw new NoSuchElementException();
+        return currentPage[nextItemIndex++];
+    }
+
+    /**
+     * Gets the next page worth of data.
+     *
+     * @return the list
+     */
+    public List<T> nextPage() {
+        return Arrays.asList(nextPageArray());
+    }
+
+    /**
      * Fetch is called at the start of {@link #next()} or {@link #hasNext()} to fetch another page of data if it is
      * needed and available.
      * <p>
@@ -91,29 +117,18 @@ public class PagedIterator<T> implements Iterator<T> {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public boolean hasNext() {
-        fetch();
-        return (currentPage != null && currentPage.length > nextItemIndex);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public T next() {
-        if (!hasNext())
-            throw new NoSuchElementException();
-        return currentPage[nextItemIndex++];
-    }
-
-    /**
-     * Gets the next page worth of data.
+     * This poorly named method, initializes items with local data after they are fetched. It is up to the implementer
+     * to decide what local data to apply.
      *
-     * @return the list
+     * @param page
+     *            the page of items to be initialized
      */
-    public List<T> nextPage() {
-        return Arrays.asList(nextPageArray());
+    protected void wrapUp(T[] page) {
+        if (itemInitializer != null) {
+            for (T item : page) {
+                itemInitializer.accept(item);
+            }
+        }
     }
 
     /**
@@ -139,20 +154,5 @@ public class PagedIterator<T> implements Iterator<T> {
         }
         nextItemIndex = currentPage.length;
         return r;
-    }
-
-    /**
-     * This poorly named method, initializes items with local data after they are fetched. It is up to the implementer
-     * to decide what local data to apply.
-     *
-     * @param page
-     *            the page of items to be initialized
-     */
-    protected void wrapUp(T[] page) {
-        if (itemInitializer != null) {
-            for (T item : page) {
-                itemInitializer.accept(item);
-            }
-        }
     }
 }

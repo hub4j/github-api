@@ -23,21 +23,6 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(final GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
-    }
-
-    /**
      * Test get deployment by id object payload.
      *
      * @throws IOException
@@ -88,5 +73,20 @@ public class GHDeploymentTest extends AbstractGitHubWireMockTest {
         assertThat(deployment.getStatusesUrl().toString(),
                 endsWith("/repos/hub4j-test-org/github-api/deployments/178653229/statuses"));
         assertThat(deployment.getRepositoryUrl().toString(), endsWith("/repos/hub4j-test-org/github-api"));
+    }
+
+    private GHRepository getRepository(final GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 }

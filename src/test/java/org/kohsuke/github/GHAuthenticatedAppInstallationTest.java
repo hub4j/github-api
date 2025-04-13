@@ -22,19 +22,6 @@ public class GHAuthenticatedAppInstallationTest extends AbstractGHAppInstallatio
     }
 
     /**
-     * Gets the git hub builder.
-     *
-     * @return the git hub builder
-     */
-    @Override
-    protected GitHubBuilder getGitHubBuilder() {
-        AppInstallationAuthorizationProvider provider = new AppInstallationAuthorizationProvider(
-                app -> app.getInstallationByOrganization("hub4j-test-org"),
-                jwtProvider1);
-        return super.getGitHubBuilder().withAuthorizationProvider(provider);
-    }
-
-    /**
      * Test list repositories two repos.
      *
      * @throws IOException
@@ -49,6 +36,19 @@ public class GHAuthenticatedAppInstallationTest extends AbstractGHAppInstallatio
         assertThat(repositories.size(), equalTo(2));
         assertThat(repositories.stream().map(GHRepository::getName).toArray(),
                 arrayContainingInAnyOrder("empty", "test-readme"));
+    }
+
+    /**
+     * Gets the git hub builder.
+     *
+     * @return the git hub builder
+     */
+    @Override
+    protected GitHubBuilder getGitHubBuilder() {
+        AppInstallationAuthorizationProvider provider = new AppInstallationAuthorizationProvider(
+                app -> app.getInstallationByOrganization("hub4j-test-org"),
+                jwtProvider1);
+        return super.getGitHubBuilder().withAuthorizationProvider(provider);
     }
 
 }

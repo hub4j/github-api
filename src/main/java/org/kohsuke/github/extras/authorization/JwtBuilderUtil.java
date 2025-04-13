@@ -64,26 +64,6 @@ final class JwtBuilderUtil {
     }
 
     /**
-     * IJwtBuilder interface to isolate loading of JWT classes allowing us to catch and handle linkage errors.
-     */
-    interface IJwtBuilder {
-        /**
-         * Build a JWT.
-         *
-         * @param issuedAt
-         *            issued at
-         * @param expiration
-         *            expiration
-         * @param applicationId
-         *            application id
-         * @param privateKey
-         *            private key
-         * @return JWT
-         */
-        String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey);
-    }
-
-    /**
      * A class to encapsulate building a JWT using reflection.
      */
     private static final class ReflectionBuilderImpl implements IJwtBuilder {
@@ -157,29 +137,29 @@ final class JwtBuilderUtil {
         }
     }
 
+    /**
+     * IJwtBuilder interface to isolate loading of JWT classes allowing us to catch and handle linkage errors.
+     */
+    interface IJwtBuilder {
+        /**
+         * Build a JWT.
+         *
+         * @param issuedAt
+         *            issued at
+         * @param expiration
+         *            expiration
+         * @param applicationId
+         *            application id
+         * @param privateKey
+         *            private key
+         * @return JWT
+         */
+        String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey);
+    }
+
     private static final Logger LOGGER = Logger.getLogger(JwtBuilderUtil.class.getName());
 
     private static IJwtBuilder builder;
-
-    /**
-     * Build a JWT.
-     *
-     * @param issuedAt
-     *            issued at
-     * @param expiration
-     *            expiration
-     * @param applicationId
-     *            application id
-     * @param privateKey
-     *            private key
-     * @return JWT
-     */
-    static String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey) {
-        if (builder == null) {
-            createBuilderImpl(issuedAt, expiration, applicationId, privateKey);
-        }
-        return builder.buildJwt(issuedAt, expiration, applicationId, privateKey);
-    }
 
     private static void createBuilderImpl(Instant issuedAt,
             Instant expiration,
@@ -206,5 +186,25 @@ final class JwtBuilderUtil {
                         re);
             }
         }
+    }
+
+    /**
+     * Build a JWT.
+     *
+     * @param issuedAt
+     *            issued at
+     * @param expiration
+     *            expiration
+     * @param applicationId
+     *            application id
+     * @param privateKey
+     *            private key
+     * @return JWT
+     */
+    static String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey) {
+        if (builder == null) {
+            createBuilderImpl(issuedAt, expiration, applicationId, privateKey);
+        }
+        return builder.buildJwt(issuedAt, expiration, applicationId, privateKey);
     }
 }

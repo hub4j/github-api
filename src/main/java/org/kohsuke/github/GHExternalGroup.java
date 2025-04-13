@@ -171,10 +171,6 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
         this.members = Collections.emptyList();
     }
 
-    private String api(final String tail) {
-        return "/orgs/" + organization.getLogin() + "/external-group/" + getId() + tail;
-    }
-
     /**
      * Get the external group id.
      *
@@ -240,6 +236,10 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
     @Override
     public void refresh() throws IOException {
         root().createRequest().withUrlPath(api("")).fetchInto(this).wrapUp(root());
+    }
+
+    private String api(final String tail) {
+        return "/orgs/" + organization.getLogin() + "/external-group/" + getId() + tail;
     }
 
     /**

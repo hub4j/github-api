@@ -174,16 +174,6 @@ public class GHLabel extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets the api root.
-     *
-     * @return the api root
-     */
-    @Nonnull
-    GitHub getApiRoot() {
-        return Objects.requireNonNull(root());
-    }
-
-    /**
      * Color code without leading '#', such as 'f29513'.
      *
      * @return the color
@@ -280,6 +270,16 @@ public class GHLabel extends GitHubInteractiveObject {
     @BetaApi
     public Updater update() {
         return new Updater(this);
+    }
+
+    /**
+     * Gets the api root.
+     *
+     * @return the api root
+     */
+    @Nonnull
+    GitHub getApiRoot() {
+        return Objects.requireNonNull(root());
     }
 
 }

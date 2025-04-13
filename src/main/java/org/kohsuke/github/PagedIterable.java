@@ -43,31 +43,6 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     public abstract PagedIterator<T> _iterator(int pageSize);
 
     /**
-     * Concatenates a list of arrays into a single array.
-     *
-     * @param type
-     *            the type of array to be returned.
-     * @param pages
-     *            the list of arrays to be concatenated.
-     * @param totalLength
-     *            the total length of the returned array.
-     * @return an array containing all elements from all pages.
-     */
-    @Nonnull
-    private T[] concatenatePages(Class<T[]> type, List<T[]> pages, int totalLength) {
-
-        T[] result = type.cast(Array.newInstance(type.getComponentType(), totalLength));
-
-        int position = 0;
-        for (T[] page : pages) {
-            final int pageLength = Array.getLength(page);
-            System.arraycopy(page, 0, result, position, pageLength);
-            position += pageLength;
-        }
-        return result;
-    }
-
-    /**
      * Returns an iterator over elements of type {@code T}.
      *
      * @return an Iterator.
@@ -87,40 +62,6 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     @Nonnull
     public T[] toArray() throws IOException {
         return toArray(iterator());
-    }
-
-    /**
-     * Eagerly walk {@link PagedIterator} and return the result in an array.
-     *
-     * @param iterator
-     *            the {@link PagedIterator} to read
-     * @return an array of all elements from the {@link PagedIterator}
-     * @throws IOException
-     *             if an I/O exception occurs.
-     */
-    protected T[] toArray(final PagedIterator<T> iterator) throws IOException {
-        try {
-            ArrayList<T[]> pages = new ArrayList<>();
-            int totalSize = 0;
-            T[] item;
-            do {
-                item = iterator.nextPageArray();
-                totalSize += Array.getLength(item);
-                pages.add(item);
-            } while (iterator.hasNext());
-
-            Class<T[]> type = (Class<T[]>) item.getClass();
-
-            return concatenatePages(type, pages, totalSize);
-        } catch (GHException e) {
-            // if there was an exception inside the iterator it is wrapped as a GHException
-            // if the wrapped exception is an IOException, throw that
-            if (e.getCause() instanceof IOException) {
-                throw (IOException) e.getCause();
-            } else {
-                throw e;
-            }
-        }
     }
 
     /**
@@ -160,6 +101,65 @@ public abstract class PagedIterable<T> implements Iterable<T> {
     public PagedIterable<T> withPageSize(int size) {
         this.pageSize = size;
         return this;
+    }
+
+    /**
+     * Concatenates a list of arrays into a single array.
+     *
+     * @param type
+     *            the type of array to be returned.
+     * @param pages
+     *            the list of arrays to be concatenated.
+     * @param totalLength
+     *            the total length of the returned array.
+     * @return an array containing all elements from all pages.
+     */
+    @Nonnull
+    private T[] concatenatePages(Class<T[]> type, List<T[]> pages, int totalLength) {
+
+        T[] result = type.cast(Array.newInstance(type.getComponentType(), totalLength));
+
+        int position = 0;
+        for (T[] page : pages) {
+            final int pageLength = Array.getLength(page);
+            System.arraycopy(page, 0, result, position, pageLength);
+            position += pageLength;
+        }
+        return result;
+    }
+
+    /**
+     * Eagerly walk {@link PagedIterator} and return the result in an array.
+     *
+     * @param iterator
+     *            the {@link PagedIterator} to read
+     * @return an array of all elements from the {@link PagedIterator}
+     * @throws IOException
+     *             if an I/O exception occurs.
+     */
+    protected T[] toArray(final PagedIterator<T> iterator) throws IOException {
+        try {
+            ArrayList<T[]> pages = new ArrayList<>();
+            int totalSize = 0;
+            T[] item;
+            do {
+                item = iterator.nextPageArray();
+                totalSize += Array.getLength(item);
+                pages.add(item);
+            } while (iterator.hasNext());
+
+            Class<T[]> type = (Class<T[]>) item.getClass();
+
+            return concatenatePages(type, pages, totalSize);
+        } catch (GHException e) {
+            // if there was an exception inside the iterator it is wrapped as a GHException
+            // if the wrapped exception is an IOException, throw that
+            if (e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            } else {
+                throw e;
+            }
+        }
     }
 
 }

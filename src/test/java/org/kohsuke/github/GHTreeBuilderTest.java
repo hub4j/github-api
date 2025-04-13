@@ -63,13 +63,6 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    private long getFileSize(String path) throws IOException {
-        GHContent content = repo.getFileContent(path);
-        if (content == null)
-            throw new IOException("File not found: " + path);
-        return content.getSize();
-    }
-
     /**
      * Sets the up.
      *
@@ -147,6 +140,13 @@ public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
         } catch (IOException e) {
             assertThat(e.getMessage(), stringContainsInOrder(PATH_DATA1, "Not Found"));
         }
+    }
+
+    private long getFileSize(String path) throws IOException {
+        GHContent content = repo.getFileContent(path);
+        if (content == null)
+            throw new IOException("File not found: " + path);
+        return content.getSize();
     }
 
     private GHCommit updateTree() throws IOException {

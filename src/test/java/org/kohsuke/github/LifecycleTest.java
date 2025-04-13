@@ -24,6 +24,41 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
     public LifecycleTest() {
     }
 
+    /**
+     * Test create repository.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testCreateRepository() throws IOException {
+        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
+
+        GHMyself myself = gitHub.getMyself();
+        // GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        GHRepository repository = getTempRepository();
+        assertThat(repository.listReleases().toList(), is(empty()));
+
+        GHMilestone milestone = repository.createMilestone("Initial Release", "first one");
+        GHIssue issue = repository.createIssue("Test Issue")
+                .body("issue body just for grins")
+                .milestone(milestone)
+                .assignee(myself)
+                .label("bug")
+                .create();
+
+        assertThat(issue, is(notNullValue()));
+
+        GHRelease release = createRelease(repository);
+
+        GHAsset asset = uploadAsset(release);
+
+        updateAsset(release, asset);
+
+        deleteAsset(release, asset);
+    }
+
     private File createDummyFile(File repoDir) throws IOException {
         File file = new File(repoDir, "testFile-" + System.currentTimeMillis());
         PrintWriter writer = new PrintWriter(new FileWriter(file));
@@ -69,41 +104,6 @@ public class LifecycleTest extends AbstractGitHubWireMockTest {
     private void deleteAsset(GHRelease release, GHAsset asset) throws IOException {
         asset.delete();
         assertThat(release.listAssets().toList(), is(empty()));
-    }
-
-    /**
-     * Test create repository.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testCreateRepository() throws IOException {
-        Assume.assumeFalse(SystemUtils.IS_OS_WINDOWS);
-
-        GHMyself myself = gitHub.getMyself();
-        // GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-
-        GHRepository repository = getTempRepository();
-        assertThat(repository.listReleases().toList(), is(empty()));
-
-        GHMilestone milestone = repository.createMilestone("Initial Release", "first one");
-        GHIssue issue = repository.createIssue("Test Issue")
-                .body("issue body just for grins")
-                .milestone(milestone)
-                .assignee(myself)
-                .label("bug")
-                .create();
-
-        assertThat(issue, is(notNullValue()));
-
-        GHRelease release = createRelease(repository);
-
-        GHAsset asset = uploadAsset(release);
-
-        updateAsset(release, asset);
-
-        deleteAsset(release, asset);
     }
 
     private void updateAsset(GHRelease release, GHAsset asset) throws IOException {

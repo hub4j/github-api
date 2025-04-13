@@ -615,6 +615,12 @@ public class GHCommit {
         return owner.listCommitStatuses(sha);
     }
 
+    private GHUser resolveUser(User author) throws IOException {
+        if (author == null || author.login == null)
+            return null;
+        return owner.root().getUser(author.login);
+    }
+
     /**
      * Some of the fields are not always filled in when this object is retrieved as a part of another API call.
      *
@@ -624,12 +630,6 @@ public class GHCommit {
     void populate() throws IOException {
         if (files == null && stats == null)
             owner.root().createRequest().withUrlPath(owner.getApiTailUrl("commits/" + sha)).fetchInto(this);
-    }
-
-    private GHUser resolveUser(User author) throws IOException {
-        if (author == null || author.login == null)
-            return null;
-        return owner.root().getUser(author.login);
     }
 
     /**

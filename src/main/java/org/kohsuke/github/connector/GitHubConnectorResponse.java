@@ -225,22 +225,6 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
-     * Get the raw implementation specific body stream for this response.
-     *
-     * This method will only be called once to completion. If an exception is thrown by this method, it may be called
-     * multiple times.
-     *
-     * The stream returned from this method will be closed when the response is closed or sooner. Inheriting classes do
-     * not need to close it.
-     *
-     * @return the stream for the raw response
-     * @throws IOException
-     *             if an I/O Exception occurs.
-     */
-    @CheckForNull
-    protected abstract InputStream rawBodyStream() throws IOException;
-
-    /**
      * Gets the {@link GitHubConnector} for this response.
      *
      * @return the {@link GitHubConnector} for this response.
@@ -279,6 +263,22 @@ public abstract class GitHubConnectorResponse implements Closeable {
     public int statusCode() {
         return statusCode;
     }
+
+    /**
+     * Get the raw implementation specific body stream for this response.
+     *
+     * This method will only be called once to completion. If an exception is thrown by this method, it may be called
+     * multiple times.
+     *
+     * The stream returned from this method will be closed when the response is closed or sooner. Inheriting classes do
+     * not need to close it.
+     *
+     * @return the stream for the raw response
+     * @throws IOException
+     *             if an I/O Exception occurs.
+     */
+    @CheckForNull
+    protected abstract InputStream rawBodyStream() throws IOException;
 
     /**
      * Handles wrapping the body stream if indicated by the "Content-Encoding" header.

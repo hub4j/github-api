@@ -136,10 +136,6 @@ public class GHTreeBuilder {
         return this;
     }
 
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/git/trees", repo.getOwnerName(), repo.getName());
-    }
-
     /**
      * Specialized version of entry() for adding an existing blob referred by its SHA.
      *
@@ -178,5 +174,9 @@ public class GHTreeBuilder {
         entry.content = content;
         treeEntries.add(entry);
         return this;
+    }
+
+    private String getApiTail() {
+        return String.format("/repos/%s/%s/git/trees", repo.getOwnerName(), repo.getName());
     }
 }

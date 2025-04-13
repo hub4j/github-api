@@ -76,29 +76,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Cleanup label.
-     *
-     * @param name
-     *            the name
-     */
-    void cleanupLabel(String name) {
-        if (mockGitHub.isUseProxy()) {
-            try {
-                GHLabel t = getNonRecordingGitHub().getRepository("hub4j-test-org/test-labels").getLabel(name);
-                t.delete();
-            } catch (IOException e) {
-
-            }
-        }
-    }
-
-    private void cleanupUserRepository(final String name) throws IOException {
-        if (mockGitHub.isUseProxy()) {
-            cleanupRepository(getUser(getNonRecordingGitHub()).getLogin() + "/" + name);
-        }
-    }
-
-    /**
      * Directory listing.
      *
      * @throws IOException
@@ -115,10 +92,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 }
             }
         }
-    }
-
-    private GHRepository getTestRepository() throws IOException {
-        return getTempRepository(GITHUB_API_TEST_REPO);
     }
 
     /**
@@ -244,14 +217,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
         l = i.listReactions().toList();
         assertThat(l.size(), equalTo(1));
-    }
-
-    private boolean shouldBelongToTeam(String organizationName, String teamName) throws IOException {
-        GHOrganization org = gitHub.getOrganization(organizationName);
-        assertThat(org, notNullValue());
-        GHTeam team = org.getTeamByName(teamName);
-        assertThat(team, notNullValue());
-        return team.hasMember(gitHub.getMyself());
     }
 
     /**
@@ -1733,28 +1698,6 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(orgs.size(), greaterThan(0));
     }
 
-    private void tryDisablingIssueTrackers(GitHub gitHub) throws IOException {
-        for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
-            if (r.hasIssues()) {
-                if (r.getOpenIssueCount() == 0) {
-                    // System.out.println("DISABLED " + r.getName());
-                    r.enableIssueTracker(false);
-                } else {
-                    // System.out.println("UNTOUCHED " + r.getName());
-                }
-            }
-        }
-    }
-
-    private void tryDisablingWiki(GitHub gitHub) throws IOException {
-        for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
-            if (r.hasWiki()) {
-                // System.out.println("DISABLED " + r.getName());
-                r.enableWiki(false);
-            }
-        }
-    }
-
     /**
      * Try hook.
      *
@@ -1828,6 +1771,46 @@ public class AppTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    private void cleanupUserRepository(final String name) throws IOException {
+        if (mockGitHub.isUseProxy()) {
+            cleanupRepository(getUser(getNonRecordingGitHub()).getLogin() + "/" + name);
+        }
+    }
+
+    private GHRepository getTestRepository() throws IOException {
+        return getTempRepository(GITHUB_API_TEST_REPO);
+    }
+
+    private boolean shouldBelongToTeam(String organizationName, String teamName) throws IOException {
+        GHOrganization org = gitHub.getOrganization(organizationName);
+        assertThat(org, notNullValue());
+        GHTeam team = org.getTeamByName(teamName);
+        assertThat(team, notNullValue());
+        return team.hasMember(gitHub.getMyself());
+    }
+
+    private void tryDisablingIssueTrackers(GitHub gitHub) throws IOException {
+        for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
+            if (r.hasIssues()) {
+                if (r.getOpenIssueCount() == 0) {
+                    // System.out.println("DISABLED " + r.getName());
+                    r.enableIssueTracker(false);
+                } else {
+                    // System.out.println("UNTOUCHED " + r.getName());
+                }
+            }
+        }
+    }
+
+    private void tryDisablingWiki(GitHub gitHub) throws IOException {
+        for (GHRepository r : gitHub.getOrganization("jenkinsci").getRepositories().values()) {
+            if (r.hasWiki()) {
+                // System.out.println("DISABLED " + r.getName());
+                r.enableWiki(false);
+            }
+        }
+    }
+
     private void tryRenaming(GitHub gitHub) throws IOException {
         gitHub.getUser("kohsuke").getRepository("test").renameTo("test2");
     }
@@ -1850,5 +1833,22 @@ public class AppTest extends AbstractGitHubWireMockTest {
         assertThat(content, containsString("Copyright (c) 2011- Kohsuke Kawaguchi and other contributors"));
         assertThat(content, containsString("FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR"));
         assertThat(content.length(), is(1104));
+    }
+
+    /**
+     * Cleanup label.
+     *
+     * @param name
+     *            the name
+     */
+    void cleanupLabel(String name) {
+        if (mockGitHub.isUseProxy()) {
+            try {
+                GHLabel t = getNonRecordingGitHub().getRepository("hub4j-test-org/test-labels").getLabel(name);
+                t.delete();
+            } catch (IOException e) {
+
+            }
+        }
     }
 }

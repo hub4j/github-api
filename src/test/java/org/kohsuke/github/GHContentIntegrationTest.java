@@ -33,191 +33,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Check basic commit info.
-     *
-     * @param gitCommit
-     *            the git commit
-     * @param ghCommit
-     *            the gh commit
-     * @param expectedRequestCount
-     *            the expected request count
-     * @return the int
-     */
-    int checkBasicCommitInfo(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) {
-        assertThat(gitCommit, notNullValue());
-        assertThat(gitCommit.getSHA1(), notNullValue());
-        assertThat(gitCommit.getUrl().toString(),
-                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + gitCommit.getSHA1()));
-        assertThat(gitCommit.getNodeId(), notNullValue());
-        assertThat(gitCommit.getHtmlUrl().toString(),
-                equalTo("https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/" + gitCommit.getSHA1()));
-        assertThat(gitCommit.getVerification(), notNullValue());
-
-        assertThat(ghCommit.getSHA1(), notNullValue());
-        assertThat(ghCommit.getUrl().toString(),
-                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + ghCommit.getSHA1()));
-
-        return expectedRequestCount;
-    }
-
-    /**
-     * Check commit parents.
-     *
-     * @param gitCommit
-     *            the git commit
-     * @param ghCommit
-     *            the gh commit
-     * @param expectedRequestCount
-     *            the expected request count
-     * @return the int
-     */
-    int checkCommitParents(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) {
-        assertThat(gitCommit.getParentSHA1s().size(), is(greaterThan(0)));
-        assertThat(gitCommit.getParentSHA1s().get(0), notNullValue());
-        assertThat(ghCommit.getParentSHA1s().size(), is(greaterThan(0)));
-        assertThat(ghCommit.getParentSHA1s().get(0), notNullValue());
-
-        return expectedRequestCount;
-    }
-
-    /**
-     * Check commit tree.
-     *
-     * @param gitCommit
-     *            the git commit
-     * @param ghCommit
-     *            the gh commit
-     * @param expectedRequestCount
-     *            the expected request count
-     * @return the int
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    int checkCommitTree(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
-        assertThat(gitCommit.getTreeSHA1(), notNullValue());
-        assertThat(gitCommit.getTreeUrl(),
-                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/" + gitCommit.getTree().getSha()));
-        assertThat("GHTree already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-
-        assertThat(ghCommit.getTree().getSha(), notNullValue());
-        assertThat("GHCommit has to resolve GHTree", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
-        assertThat(ghCommit.getTree().getUrl().toString(),
-                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/" + ghCommit.getTree().getSha()));
-        assertThat("GHCommit resolving GHTree is not cached",
-                mockGitHub.getRequestCount(),
-                equalTo(expectedRequestCount += 2));
-
-        return expectedRequestCount;
-    }
-
-    /**
-     * Check commit user info.
-     *
-     * @param gitCommit
-     *            the git commit
-     * @param ghCommit
-     *            the gh commit
-     * @param expectedRequestCount
-     *            the expected request count
-     * @return the int
-     * @throws Exception
-     *             the exception
-     */
-    int checkCommitUserInfo(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws Exception {
-        assertThat(gitCommit.getAuthor().getName(), equalTo("Liam Newman"));
-        assertThat(gitCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
-
-        assertThat(gitCommit.getAuthor().getName(), equalTo("Liam Newman"));
-        assertThat(gitCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
-        assertThat(gitCommit.getCommitter().getName(), equalTo("Liam Newman"));
-        assertThat(gitCommit.getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
-        assertThat("GHUser already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-
-        assertThat(ghCommit.getAuthor().getName(), equalTo("Liam Newman"));
-        assertThat(ghCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
-
-        assertThat(ghCommit.getCommitter().getName(), equalTo("Liam Newman"));
-        assertThat(ghCommit.getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
-
-        return expectedRequestCount;
-    }
-
-    /**
-     * Check created commits.
-     *
-     * @param gitCommit
-     *            the git commit
-     * @param ghCommit
-     *            the gh commit
-     * @param expectedRequestCount
-     *            the expected request count
-     * @return the int
-     * @throws Exception
-     *             the exception
-     */
-    int checkCreatedCommits(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws Exception {
-        expectedRequestCount = checkBasicCommitInfo(gitCommit, ghCommit, expectedRequestCount);
-        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-
-        assertThat(gitCommit.getMessage(), equalTo("Creating a file for integration tests."));
-        assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:49Z")));
-        assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:49Z")));
-
-        assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Creating a file for integration tests."));
-        assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-        assertThrows(GHException.class, () -> ghCommit.getCommitShortInfo().getCommentCount());
-
-        ghCommit.populate();
-        assertThat("Populate GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
-
-        expectedRequestCount = checkCommitUserInfo(gitCommit, ghCommit, expectedRequestCount);
-        assertThat("Resolved GHUser for GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
-
-        expectedRequestCount = checkCommitTree(gitCommit, ghCommit, expectedRequestCount);
-
-        expectedRequestCount = checkCommitParents(gitCommit, ghCommit, expectedRequestCount);
-
-        return expectedRequestCount;
-    }
-
-    /**
-     * Check updated content response commits.
-     *
-     * @param gitCommit
-     *            the git commit
-     * @param ghCommit
-     *            the gh commit
-     * @param expectedRequestCount
-     *            the expected request count
-     * @return the int
-     * @throws Exception
-     *             the exception
-     */
-    int checkUpdatedContentResponseCommits(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount)
-            throws Exception {
-
-        expectedRequestCount = checkBasicCommitInfo(gitCommit, ghCommit, expectedRequestCount);
-        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-
-        assertThat(gitCommit.getMessage(), equalTo("Updated file for integration tests."));
-        assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:51Z")));
-        assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:51Z")));
-
-        assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Updated file for integration tests."));
-        assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-
-        ghCommit.populate();
-        assertThat("Populate GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
-
-        expectedRequestCount = checkCommitUserInfo(gitCommit, ghCommit, expectedRequestCount);
-        assertThat("GHUser already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
-
-        expectedRequestCount = checkCommitTree(gitCommit, ghCommit, expectedRequestCount);
-
-        return expectedRequestCount;
-    }
-
-    /**
      * Cleanup.
      *
      * @throws Exception
@@ -236,17 +51,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
             } catch (IOException e) {
             }
         }
-    }
-
-    /**
-     * Gets the GH commit.
-     *
-     * @param resp
-     *            the resp
-     * @return the GH commit
-     */
-    GHCommit getGHCommit(GHContentUpdateResponse resp) {
-        return resp.getCommit().toGHCommit();
     }
 
     /**
@@ -439,11 +243,6 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         // assertThat(IOUtils.toString(fileContent.read(), StandardCharsets.UTF_8), is(""));
     }
 
-    // @Test
-    // public void testGitCommit2GHCommitExceptions() {
-
-    // }
-
     /**
      * Test get repository.
      *
@@ -519,6 +318,207 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         ghContentBuilder.path("MIME-Small.md");
         ghContentBuilder.content("123456789012345678901234567890123456789012345678901234567");
         ghContentBuilder.commit();
+    }
+
+    /**
+     * Check basic commit info.
+     *
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
+     * @return the int
+     */
+    int checkBasicCommitInfo(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) {
+        assertThat(gitCommit, notNullValue());
+        assertThat(gitCommit.getSHA1(), notNullValue());
+        assertThat(gitCommit.getUrl().toString(),
+                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + gitCommit.getSHA1()));
+        assertThat(gitCommit.getNodeId(), notNullValue());
+        assertThat(gitCommit.getHtmlUrl().toString(),
+                equalTo("https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/" + gitCommit.getSHA1()));
+        assertThat(gitCommit.getVerification(), notNullValue());
+
+        assertThat(ghCommit.getSHA1(), notNullValue());
+        assertThat(ghCommit.getUrl().toString(),
+                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/" + ghCommit.getSHA1()));
+
+        return expectedRequestCount;
+    }
+
+    /**
+     * Check commit parents.
+     *
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
+     * @return the int
+     */
+    int checkCommitParents(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) {
+        assertThat(gitCommit.getParentSHA1s().size(), is(greaterThan(0)));
+        assertThat(gitCommit.getParentSHA1s().get(0), notNullValue());
+        assertThat(ghCommit.getParentSHA1s().size(), is(greaterThan(0)));
+        assertThat(ghCommit.getParentSHA1s().get(0), notNullValue());
+
+        return expectedRequestCount;
+    }
+
+    // @Test
+    // public void testGitCommit2GHCommitExceptions() {
+
+    // }
+
+    /**
+     * Check commit tree.
+     *
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
+     * @return the int
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    int checkCommitTree(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws IOException {
+        assertThat(gitCommit.getTreeSHA1(), notNullValue());
+        assertThat(gitCommit.getTreeUrl(),
+                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/" + gitCommit.getTree().getSha()));
+        assertThat("GHTree already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+
+        assertThat(ghCommit.getTree().getSha(), notNullValue());
+        assertThat("GHCommit has to resolve GHTree", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+        assertThat(ghCommit.getTree().getUrl().toString(),
+                endsWith("/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/" + ghCommit.getTree().getSha()));
+        assertThat("GHCommit resolving GHTree is not cached",
+                mockGitHub.getRequestCount(),
+                equalTo(expectedRequestCount += 2));
+
+        return expectedRequestCount;
+    }
+
+    /**
+     * Check commit user info.
+     *
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
+     * @return the int
+     * @throws Exception
+     *             the exception
+     */
+    int checkCommitUserInfo(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws Exception {
+        assertThat(gitCommit.getAuthor().getName(), equalTo("Liam Newman"));
+        assertThat(gitCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
+
+        assertThat(gitCommit.getAuthor().getName(), equalTo("Liam Newman"));
+        assertThat(gitCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
+        assertThat(gitCommit.getCommitter().getName(), equalTo("Liam Newman"));
+        assertThat(gitCommit.getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
+        assertThat("GHUser already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+
+        assertThat(ghCommit.getAuthor().getName(), equalTo("Liam Newman"));
+        assertThat(ghCommit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
+
+        assertThat(ghCommit.getCommitter().getName(), equalTo("Liam Newman"));
+        assertThat(ghCommit.getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
+
+        return expectedRequestCount;
+    }
+
+    /**
+     * Check created commits.
+     *
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
+     * @return the int
+     * @throws Exception
+     *             the exception
+     */
+    int checkCreatedCommits(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount) throws Exception {
+        expectedRequestCount = checkBasicCommitInfo(gitCommit, ghCommit, expectedRequestCount);
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+
+        assertThat(gitCommit.getMessage(), equalTo("Creating a file for integration tests."));
+        assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:49Z")));
+        assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:49Z")));
+
+        assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Creating a file for integration tests."));
+        assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+        assertThrows(GHException.class, () -> ghCommit.getCommitShortInfo().getCommentCount());
+
+        ghCommit.populate();
+        assertThat("Populate GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
+        expectedRequestCount = checkCommitUserInfo(gitCommit, ghCommit, expectedRequestCount);
+        assertThat("Resolved GHUser for GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
+        expectedRequestCount = checkCommitTree(gitCommit, ghCommit, expectedRequestCount);
+
+        expectedRequestCount = checkCommitParents(gitCommit, ghCommit, expectedRequestCount);
+
+        return expectedRequestCount;
+    }
+
+    /**
+     * Check updated content response commits.
+     *
+     * @param gitCommit
+     *            the git commit
+     * @param ghCommit
+     *            the gh commit
+     * @param expectedRequestCount
+     *            the expected request count
+     * @return the int
+     * @throws Exception
+     *             the exception
+     */
+    int checkUpdatedContentResponseCommits(GitCommit gitCommit, GHCommit ghCommit, int expectedRequestCount)
+            throws Exception {
+
+        expectedRequestCount = checkBasicCommitInfo(gitCommit, ghCommit, expectedRequestCount);
+        assertThat(mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+
+        assertThat(gitCommit.getMessage(), equalTo("Updated file for integration tests."));
+        assertThat(gitCommit.getAuthoredDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:51Z")));
+        assertThat(gitCommit.getCommitDate(), equalTo(GitHubClient.parseInstant("2021-06-28T20:37:51Z")));
+
+        assertThat(ghCommit.getCommitShortInfo().getMessage(), equalTo("Updated file for integration tests."));
+        assertThat("Message already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+
+        ghCommit.populate();
+        assertThat("Populate GHCommit", mockGitHub.getRequestCount(), equalTo(expectedRequestCount += 1));
+
+        expectedRequestCount = checkCommitUserInfo(gitCommit, ghCommit, expectedRequestCount);
+        assertThat("GHUser already resolved", mockGitHub.getRequestCount(), equalTo(expectedRequestCount));
+
+        expectedRequestCount = checkCommitTree(gitCommit, ghCommit, expectedRequestCount);
+
+        return expectedRequestCount;
+    }
+
+    /**
+     * Gets the GH commit.
+     *
+     * @param resp
+     *            the resp
+     * @return the GH commit
+     */
+    GHCommit getGHCommit(GHContentUpdateResponse resp) {
+        return resp.getCommit().toGHCommit();
     }
 
 }

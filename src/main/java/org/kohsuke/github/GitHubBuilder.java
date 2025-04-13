@@ -29,42 +29,6 @@ public class GitHubBuilder implements Cloneable {
     static File HOME_DIRECTORY = null;
 
     /**
-     * First check if the credentials are configured in the environment. We use environment first because users are not
-     * likely to give required (full) permissions to their default key.
-     *
-     * If no user is specified it means there is no configuration present, so try using the ~/.github properties file.
-     **
-     * If there is still no user it means there are no credentials defined and throw an IOException.
-     *
-     * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns
-     *         null.
-     *
-     * @throws IOException
-     *             If there are no credentials defined in the ~/.github properties file or the process environment.
-     */
-    static GitHubBuilder fromCredentials() throws IOException {
-        Exception cause = null;
-        GitHubBuilder builder = null;
-
-        builder = fromEnvironment();
-
-        if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)
-            return builder;
-
-        try {
-            builder = fromPropertyFile();
-
-            if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)
-                return builder;
-        } catch (FileNotFoundException e) {
-            // fall through
-            cause = e;
-        }
-        throw (IOException) new IOException("Failed to resolve credentials from ~/.github or the environment.")
-                .initCause(cause);
-    }
-
-    /**
      * Creates {@link GitHubBuilder} by picking up coordinates from environment variables.
      *
      * <p>
@@ -115,6 +79,7 @@ public class GitHubBuilder implements Cloneable {
         self.withEndpoint(props.getProperty("endpoint", GitHubClient.GITHUB_URL));
         return self;
     }
+
     /**
      * From property file GitHubBuilder.
      *
@@ -148,11 +113,46 @@ public class GitHubBuilder implements Cloneable {
 
         return fromProperties(props);
     }
-
     private static void loadIfSet(String envName, Properties p, String propName) {
         String v = System.getenv(envName);
         if (v != null)
             p.put(propName, v);
+    }
+
+    /**
+     * First check if the credentials are configured in the environment. We use environment first because users are not
+     * likely to give required (full) permissions to their default key.
+     *
+     * If no user is specified it means there is no configuration present, so try using the ~/.github properties file.
+     **
+     * If there is still no user it means there are no credentials defined and throw an IOException.
+     *
+     * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns
+     *         null.
+     *
+     * @throws IOException
+     *             If there are no credentials defined in the ~/.github properties file or the process environment.
+     */
+    static GitHubBuilder fromCredentials() throws IOException {
+        Exception cause = null;
+        GitHubBuilder builder = null;
+
+        builder = fromEnvironment();
+
+        if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)
+            return builder;
+
+        try {
+            builder = fromPropertyFile();
+
+            if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)
+                return builder;
+        } catch (FileNotFoundException e) {
+            // fall through
+            cause = e;
+        }
+        throw (IOException) new IOException("Failed to resolve credentials from ~/.github or the environment.")
+                .initCause(cause);
     }
 
     // default scoped so unit tests can read them.

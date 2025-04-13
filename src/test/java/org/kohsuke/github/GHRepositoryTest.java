@@ -712,21 +712,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
-    }
-
-    /**
      * Gh repository search builder fork default reset forks search terms.
      */
     @Test
@@ -1306,62 +1291,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(r.isAllowMergeCommit(), is(true));
         assertThat(r.isAllowRebaseMerge(), is(true));
         assertThat(r.isAllowSquashMerge(), is(false));
-    }
-
-    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
-            justification = "It causes a performance degradation, but we have already exposed it to the API")
-    private Set<URL> setupPostCommitHooks(final GHRepository repo) {
-        return new AbstractSet<URL>() {
-            @Override
-            public boolean add(URL url) {
-                try {
-                    repo.createWebHook(url);
-                    return true;
-                } catch (IOException e) {
-                    throw new GHException("Failed to update post-commit hooks", e);
-                }
-            }
-
-            private List<URL> getPostCommitHooks() {
-                try {
-                    List<URL> r = new ArrayList<>();
-                    for (GHHook h : repo.getHooks()) {
-                        if (h.getName().equals("web")) {
-                            r.add(new URL(h.getConfig().get("url")));
-                        }
-                    }
-                    return r;
-                } catch (IOException e) {
-                    throw new GHException("Failed to retrieve post-commit hooks", e);
-                }
-            }
-
-            @Override
-            public Iterator<URL> iterator() {
-                return getPostCommitHooks().iterator();
-            }
-
-            @Override
-            public boolean remove(Object url) {
-                try {
-                    String _url = ((URL) url).toExternalForm();
-                    for (GHHook h : repo.getHooks()) {
-                        if (h.getName().equals("web") && h.getConfig().get("url").equals(_url)) {
-                            h.delete();
-                            return true;
-                        }
-                    }
-                    return false;
-                } catch (IOException e) {
-                    throw new GHException("Failed to update post-commit hooks", e);
-                }
-            }
-
-            @Override
-            public int size() {
-                return getPostCommitHooks().size();
-            }
-        };
     }
 
     /**
@@ -1973,6 +1902,66 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(repo.isCollaborator(collaborator), is(true));
     }
 
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
+    @SuppressFBWarnings(value = "DMI_COLLECTION_OF_URLS",
+            justification = "It causes a performance degradation, but we have already exposed it to the API")
+    private Set<URL> setupPostCommitHooks(final GHRepository repo) {
+        return new AbstractSet<URL>() {
+            @Override
+            public boolean add(URL url) {
+                try {
+                    repo.createWebHook(url);
+                    return true;
+                } catch (IOException e) {
+                    throw new GHException("Failed to update post-commit hooks", e);
+                }
+            }
+
+            @Override
+            public Iterator<URL> iterator() {
+                return getPostCommitHooks().iterator();
+            }
+
+            @Override
+            public boolean remove(Object url) {
+                try {
+                    String _url = ((URL) url).toExternalForm();
+                    for (GHHook h : repo.getHooks()) {
+                        if (h.getName().equals("web") && h.getConfig().get("url").equals(_url)) {
+                            h.delete();
+                            return true;
+                        }
+                    }
+                    return false;
+                } catch (IOException e) {
+                    throw new GHException("Failed to update post-commit hooks", e);
+                }
+            }
+
+            @Override
+            public int size() {
+                return getPostCommitHooks().size();
+            }
+
+            private List<URL> getPostCommitHooks() {
+                try {
+                    List<URL> r = new ArrayList<>();
+                    for (GHHook h : repo.getHooks()) {
+                        if (h.getName().equals("web")) {
+                            r.add(new URL(h.getConfig().get("url")));
+                        }
+                    }
+                    return r;
+                } catch (IOException e) {
+                    throw new GHException("Failed to retrieve post-commit hooks", e);
+                }
+            }
+        };
+    }
+
     private void verifyEmptyResult(PagedSearchIterable<GHPullRequest> searchResult) {
         assertThat(searchResult.getTotalCount(), is(0));
     }
@@ -1989,5 +1978,16 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             throws IOException {
         assertThat(searchResult.getTotalCount(), is(1));
         assertThat(searchResult.toList().get(0).getNumber(), is(expectedPR.getNumber()));
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 }

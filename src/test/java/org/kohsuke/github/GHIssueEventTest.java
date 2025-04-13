@@ -23,21 +23,6 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
-    }
-
-    /**
      * Test events for issue rename.
      *
      * @throws Exception
@@ -174,5 +159,20 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
                 break;
         }
         assertThat("All issue checks must be found and passed", successfulChecks, equalTo(1));
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 }

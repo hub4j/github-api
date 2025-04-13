@@ -27,21 +27,6 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
-    }
-
-    /**
      * Test code frequency.
      *
      * @throws IOException
@@ -276,5 +261,20 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
             }
         }
         assertThat("Hour 10 for Day 2 not found.", hourFound);
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 }

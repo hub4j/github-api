@@ -146,22 +146,6 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
     }
 
     /**
-     * Gets the git hub builder.
-     *
-     * @return the git hub builder
-     */
-    protected GitHubBuilder getGitHubBuilder() {
-        return super.getGitHubBuilder()
-                // ensure that only JWT will be used against the tests below
-                .withOAuthToken(null, null)
-                // Note that we used to provide a bogus token here and to rely on (apparently) manually crafted/edited
-                // Wiremock recordings, so most of the tests cannot actually be executed against GitHub without
-                // relying on the Wiremock recordings.
-                // Some tests have been updated, though (getGitHubApp in particular).
-                .withAuthorizationProvider(jwtProvider1);
-    }
-
-    /**
      * Gets the installation by id.
      *
      * @throws IOException
@@ -305,6 +289,22 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseInstant("2019-07-04T01:19:36.000Z")));
         assertThat(appInstallation.getUpdatedAt(), is(GitHubClient.parseInstant("2019-07-30T22:48:09.000Z")));
         assertThat(appInstallation.getSingleFileName(), nullValue());
+    }
+
+    /**
+     * Gets the git hub builder.
+     *
+     * @return the git hub builder
+     */
+    protected GitHubBuilder getGitHubBuilder() {
+        return super.getGitHubBuilder()
+                // ensure that only JWT will be used against the tests below
+                .withOAuthToken(null, null)
+                // Note that we used to provide a bogus token here and to rely on (apparently) manually crafted/edited
+                // Wiremock recordings, so most of the tests cannot actually be executed against GitHub without
+                // relying on the Wiremock recordings.
+                // Some tests have been updated, though (getGitHubApp in particular).
+                .withAuthorizationProvider(jwtProvider1);
     }
 
 }

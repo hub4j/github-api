@@ -11,6 +11,19 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
 
+    /**
+     * The enum Sort.
+     */
+    public enum Sort {
+
+        /** The stars. */
+        STARS,
+        /** The forks. */
+        FORKS,
+        /** The updated. */
+        UPDATED
+    }
+
     @SuppressFBWarnings(
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
             justification = "JSON API")
@@ -23,19 +36,6 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
             }
             return items;
         }
-    }
-
-    /**
-     * The enum Sort.
-     */
-    public enum Sort {
-
-        /** The stars. */
-        STARS,
-        /** The forks. */
-        FORKS,
-        /** The updated. */
-        UPDATED
     }
 
     /**
@@ -85,16 +85,6 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      */
     public GHRepositorySearchBuilder fork(GHFork fork) {
         return q("fork", fork.toString());
-    }
-
-    /**
-     * Gets the api url.
-     *
-     * @return the api url
-     */
-    @Override
-    protected String getApiUrl() {
-        return "/search/repositories";
     }
 
     /**
@@ -159,15 +149,6 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     @Override
     public GHRepositorySearchBuilder q(String term) {
         super.q(term);
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    GHRepositorySearchBuilder q(String qualifier, String value) {
-        super.q(qualifier, value);
         return this;
     }
 
@@ -258,5 +239,24 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
         }
 
         return q("is:" + visibility);
+    }
+
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
+    @Override
+    protected String getApiUrl() {
+        return "/search/repositories";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    GHRepositorySearchBuilder q(String qualifier, String value) {
+        super.q(qualifier, value);
+        return this;
     }
 }

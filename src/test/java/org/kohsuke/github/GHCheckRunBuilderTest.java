@@ -165,17 +165,6 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
     }
 
     /**
-     * Gets the installation github.
-     *
-     * @return the installation github
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GitHub getInstallationGithub() throws IOException {
-        return getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization()).root();
-    }
-
-    /**
      * Update check run.
      *
      * @throws Exception
@@ -258,5 +247,16 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                         .withCompletedAt(new Date(999_999_999))
                         .withName("bar", null)
                         .create());
+    }
+
+    /**
+     * Gets the installation github.
+     *
+     * @return the installation github
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GitHub getInstallationGithub() throws IOException {
+        return getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization()).root();
     }
 }

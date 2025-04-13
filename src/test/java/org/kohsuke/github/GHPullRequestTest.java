@@ -395,21 +395,6 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
-    }
-
-    /**
      * Gets the user test.
      *
      * @throws IOException
@@ -1143,5 +1128,20 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         }
 
         outdatedPullRequest.close();
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 }

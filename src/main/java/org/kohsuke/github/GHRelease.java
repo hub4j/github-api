@@ -74,10 +74,6 @@ public class GHRelease extends GHObject {
         root().createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + getId())).send();
     }
 
-    private String getApiTailUrl(String end) {
-        return owner.getApiTailUrl(format("releases/%s/%s", getId(), end));
-    }
-
     /**
      * Get the cached assets.
      *
@@ -290,6 +286,10 @@ public class GHRelease extends GHObject {
         }
         url += "?name=" + URLEncoder.encode(filename, "UTF-8");
         return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);
+    }
+
+    private String getApiTailUrl(String end) {
+        return owner.getApiTailUrl(format("releases/%s/%s", getId(), end));
     }
 
     /**

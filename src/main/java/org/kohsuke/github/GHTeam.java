@@ -134,16 +134,6 @@ public class GHTeam extends GHObject implements Refreshable {
                 .send();
     }
 
-    private String api(String tail) {
-        if (organization == null) {
-            // Teams returned from pull requests to do not have an organization. Attempt to use url.
-            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/") + tail;
-        }
-
-        return "/organizations/" + organization.getId() + "/team/" + getId() + tail;
-    }
-
     /**
      * Connect an external group to the team
      *
@@ -459,10 +449,6 @@ public class GHTeam extends GHObject implements Refreshable {
         return root().createRequest().withUrlPath(api("/repos")).toIterable(GHRepository[].class, null);
     }
 
-    private String publicApi(String tail) throws IOException {
-        return "/orgs/" + getOrganization().login + "/teams/" + getSlug() + tail;
-    }
-
     /**
      * Refresh.
      *
@@ -523,6 +509,20 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public void setPrivacy(Privacy privacy) throws IOException {
         root().createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
+    }
+
+    private String api(String tail) {
+        if (organization == null) {
+            // Teams returned from pull requests to do not have an organization. Attempt to use url.
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/") + tail;
+        }
+
+        return "/organizations/" + organization.getId() + "/team/" + getId() + tail;
+    }
+
+    private String publicApi(String tail) throws IOException {
+        return "/orgs/" + getOrganization().login + "/teams/" + getSlug() + tail;
     }
 
     /**

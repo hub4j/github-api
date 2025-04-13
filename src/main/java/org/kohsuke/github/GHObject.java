@@ -134,19 +134,6 @@ public abstract class GHObject extends GitHubInteractiveObject {
     }
 
     /**
-     * Called by Jackson.
-     *
-     * @param connectorResponse
-     *            the {@link GitHubConnectorResponse} to get headers from.
-     */
-    @JacksonInject
-    protected void setResponseHeaderFields(@CheckForNull GitHubConnectorResponse connectorResponse) {
-        if (connectorResponse != null) {
-            responseHeaderFields = connectorResponse.allHeaders();
-        }
-    }
-
-    /**
      * String representation to assist debugging and inspection. The output format of this string is not a committed
      * part of the API and is subject to change.
      *
@@ -160,5 +147,18 @@ public abstract class GHObject extends GitHubInteractiveObject {
                 return super.accept(field) && !field.isAnnotationPresent(SkipFromToString.class);
             }
         }.toString();
+    }
+
+    /**
+     * Called by Jackson.
+     *
+     * @param connectorResponse
+     *            the {@link GitHubConnectorResponse} to get headers from.
+     */
+    @JacksonInject
+    protected void setResponseHeaderFields(@CheckForNull GitHubConnectorResponse connectorResponse) {
+        if (connectorResponse != null) {
+            responseHeaderFields = connectorResponse.allHeaders();
+        }
     }
 }

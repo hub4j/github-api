@@ -60,16 +60,6 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
-    }
-
-    /**
      * Test handler fail.
      *
      * @throws Exception
@@ -581,5 +571,15 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
 
         getTempRepository();
         assertThat(mockGitHub.getRequestCount(), equalTo(3));
+    }
+
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 }

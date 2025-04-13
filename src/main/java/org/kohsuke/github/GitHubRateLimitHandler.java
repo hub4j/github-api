@@ -65,21 +65,6 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
     }
 
     /**
-     * Checks if is error.
-     *
-     * @param connectorResponse
-     *            the connector response
-     * @return true, if is error
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-        return connectorResponse.statusCode() == HTTP_FORBIDDEN
-                && "0".equals(connectorResponse.header("X-RateLimit-Remaining"));
-    }
-
-    /**
      * Called when the library encounters HTTP error indicating that the API rate limit has been exceeded.
      *
      * <p>
@@ -95,6 +80,21 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
      * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+
+    /**
+     * Checks if is error.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @return true, if is error
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Override
+    boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
+        return connectorResponse.statusCode() == HTTP_FORBIDDEN
+                && "0".equals(connectorResponse.header("X-RateLimit-Remaining"));
+    }
 
     /*
      * Exposed for testability. Given an http response, find the rate limit reset header field and parse it. If no

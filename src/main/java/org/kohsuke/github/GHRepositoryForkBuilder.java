@@ -61,27 +61,6 @@ public class GHRepositoryForkBuilder {
     }
 
     /**
-     * Create timeout message string.
-     *
-     * @return the string
-     */
-    String createTimeoutMessage() {
-        StringBuilder message = new StringBuilder(repo.getFullName());
-        message.append(" was forked");
-
-        if (organization != null) {
-            message.append(" into ").append(organization);
-        }
-
-        if (name != null) {
-            message.append(" with name ").append(name);
-        }
-
-        message.append(" but can't find the new repository");
-        return message.toString();
-    }
-
-    /**
      * Sets whether to fork only the default branch.
      *
      * @param defaultBranchOnly
@@ -91,15 +70,6 @@ public class GHRepositoryForkBuilder {
     public GHRepositoryForkBuilder defaultBranchOnly(boolean defaultBranchOnly) {
         this.defaultBranchOnly = defaultBranchOnly;
         return this;
-    }
-
-    private GHRepository lookupForkedRepository() throws IOException {
-        String repoName = name != null ? name : repo.getName();
-
-        if (organization != null) {
-            return repo.root().getOrganization(organization).getRepository(repoName);
-        }
-        return repo.root().getMyself().getRepository(repoName);
     }
 
     /**
@@ -124,6 +94,36 @@ public class GHRepositoryForkBuilder {
     public GHRepositoryForkBuilder organization(GHOrganization organization) {
         this.organization = organization.getLogin();
         return this;
+    }
+
+    private GHRepository lookupForkedRepository() throws IOException {
+        String repoName = name != null ? name : repo.getName();
+
+        if (organization != null) {
+            return repo.root().getOrganization(organization).getRepository(repoName);
+        }
+        return repo.root().getMyself().getRepository(repoName);
+    }
+
+    /**
+     * Create timeout message string.
+     *
+     * @return the string
+     */
+    String createTimeoutMessage() {
+        StringBuilder message = new StringBuilder(repo.getFullName());
+        message.append(" was forked");
+
+        if (organization != null) {
+            message.append(" into ").append(organization);
+        }
+
+        if (name != null) {
+            message.append(" with name ").append(name);
+        }
+
+        message.append(" but can't find the new repository");
+        return message.toString();
     }
 
     /**

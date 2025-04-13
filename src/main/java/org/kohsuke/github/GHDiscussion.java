@@ -68,6 +68,10 @@ public class GHDiscussion extends GHObject {
             requester.method("PATCH").setRawUrlPath(base.getUrl().toString());
         }
     }
+    private static String getRawUrlPath(@Nonnull GHTeam team, @CheckForNull Long discussionNumber) {
+        return team.getUrl().toString() + "/discussions" + (discussionNumber == null ? "" : "/" + discussionNumber);
+    }
+
     /**
      * Begins the creation of a new instance.
      *
@@ -79,10 +83,6 @@ public class GHDiscussion extends GHObject {
      */
     static GHDiscussion.Creator create(GHTeam team) {
         return new GHDiscussion.Creator(team);
-    }
-
-    private static String getRawUrlPath(@Nonnull GHTeam team, @CheckForNull Long discussionNumber) {
-        return team.getUrl().toString() + "/discussions" + (discussionNumber == null ? "" : "/" + discussionNumber);
     }
 
     /**

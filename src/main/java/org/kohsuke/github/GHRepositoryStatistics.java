@@ -372,17 +372,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets the api tail url.
-     *
-     * @param tail
-     *            the tail
-     * @return the api tail url
-     */
-    String getApiTailUrl(String tail) {
-        return repo.getApiTailUrl("stats/" + tail);
-    }
-
-    /**
      * Get the number of additions and deletions per week. See
      * https://developer.github.com/v3/repos/statistics/#get-the-number-of-additions-and-deletions-per-week
      *
@@ -459,15 +448,6 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
     }
 
     /**
-     * This gets the actual statistics from the server. Returns null if they are still being cached.
-     */
-    private PagedIterable<ContributorStats> getContributorStatsImpl() {
-        return root().createRequest()
-                .withUrlPath(getApiTailUrl("contributors"))
-                .toIterable(ContributorStats[].class, null);
-    }
-
-    /**
      * Get the weekly commit count for the repository owner and everyone else. See
      * https://developer.github.com/v3/repos/statistics/#get-the-weekly-commit-count-for-the-repository-owner-and-everyone-else
      *
@@ -492,5 +472,25 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
                 .withUrlPath(getApiTailUrl("punch_card"))
                 .fetch(PunchCardItem[].class);
         return Arrays.asList(list);
+    }
+
+    /**
+     * This gets the actual statistics from the server. Returns null if they are still being cached.
+     */
+    private PagedIterable<ContributorStats> getContributorStatsImpl() {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("contributors"))
+                .toIterable(ContributorStats[].class, null);
+    }
+
+    /**
+     * Gets the api tail url.
+     *
+     * @param tail
+     *            the tail
+     * @return the api tail url
+     */
+    String getApiTailUrl(String tail) {
+        return repo.getApiTailUrl("stats/" + tail);
     }
 }

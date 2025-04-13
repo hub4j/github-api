@@ -69,16 +69,6 @@ public class GHDeploymentStatus extends GHObject {
     }
 
     /**
-     * Gets the owner.
-     *
-     * @return the owner
-     */
-    // test only
-    GHRepository getOwner() {
-        return owner;
-    }
-
-    /**
      * Gets repository url.
      *
      * @return the repository url
@@ -94,6 +84,16 @@ public class GHDeploymentStatus extends GHObject {
      */
     public GHDeploymentState getState() {
         return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));
+    }
+
+    /**
+     * Gets the owner.
+     *
+     * @return the owner
+     */
+    // test only
+    GHRepository getOwner() {
+        return owner;
     }
 
     /**

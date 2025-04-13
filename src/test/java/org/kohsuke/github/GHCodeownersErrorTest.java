@@ -21,21 +21,6 @@ public class GHCodeownersErrorTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
-    }
-
-    /**
      * Gets the {@code CODEOWNERS} errors.
      *
      * @throws IOException
@@ -57,5 +42,20 @@ public class GHCodeownersErrorTest extends AbstractGitHubWireMockTest {
         assertThat(firstError.getMessage(),
                 is("Unknown owner on line 1: make sure @nonexistent-user exists and has write access to the repository\n\n  * @nonexistent-user # Deliberate error to test response to repo.listCodeownersErrors()\n    ^"));
         assertThat(firstError.getPath(), is(".github/CODEOWNERS"));
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 }

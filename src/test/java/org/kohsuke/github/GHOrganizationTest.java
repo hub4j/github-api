@@ -61,16 +61,6 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Enable response templating to allow support validating pagination of external groups
-     *
-     * @return the updated WireMock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
-    }
-
-    /**
      * Test are organization projects enabled.
      *
      * @throws IOException
@@ -372,6 +362,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
                 equalTo(Permission.PUSH.toString().toLowerCase()));
 
     }
+
     /**
      * Test create team with repo role.
      *
@@ -401,7 +392,6 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         // .getPermission(),
         // equalTo(role.toString()));
     }
-
     /**
      * Test create visible team.
      *
@@ -762,6 +752,16 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
         assertThat(securityManagers.size(), greaterThanOrEqualTo(1));
         assertThat(securityManagers.stream().map(GHTeam::getName).collect(Collectors.toList()),
                 hasItems("security team"));
+    }
+
+    /**
+     * Enable response templating to allow support validating pagination of external groups
+     *
+     * @return the updated WireMock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
 }

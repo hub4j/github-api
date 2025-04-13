@@ -143,28 +143,6 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     }
 
     /**
-     * Gets api route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-        return getApiRoute(false);
-    }
-
-    /**
-     * Gets api route.
-     *
-     * @param includePullNumber
-     *            if true, includes the owning pull request's number in the route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute(boolean includePullNumber) {
-        return "/repos/" + owner.getRepository().getFullName() + "/pulls"
-                + (includePullNumber ? "/" + owner.getNumber() : "") + "/comments/" + getId();
-    }
-
-    /**
      * Gets the author association to the project.
      *
      * @return the author association to the project
@@ -419,6 +397,28 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     public void update(String body) throws IOException {
         owner.root().createRequest().method("PATCH").with("body", body).withUrlPath(getApiRoute()).fetchInto(this);
         this.body = body;
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+        return getApiRoute(false);
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @param includePullNumber
+     *            if true, includes the owning pull request's number in the route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute(boolean includePullNumber) {
+        return "/repos/" + owner.getRepository().getFullName() + "/pulls"
+                + (includePullNumber ? "/" + owner.getNumber() : "") + "/comments/" + getId();
     }
 
     /**

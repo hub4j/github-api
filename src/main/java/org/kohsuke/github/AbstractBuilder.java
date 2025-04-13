@@ -95,6 +95,22 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements 
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Nonnull
+    @BetaApi
+    public R done() throws IOException {
+        R result;
+        if (updateInPlace && baseInstance != null) {
+            result = requester.fetchInto(baseInstance);
+        } else {
+            result = requester.fetch(returnType);
+        }
+        return result;
+    }
+
+    /**
      * Chooses whether to return a continuing builder or an updated data record
      *
      * If {@code S} is the same as {@code R}, this method will commit changes after the first value change and return a
@@ -120,22 +136,6 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements 
         } else {
             return (S) this;
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Nonnull
-    @BetaApi
-    public R done() throws IOException {
-        R result;
-        if (updateInPlace && baseInstance != null) {
-            result = requester.fetchInto(baseInstance);
-        } else {
-            result = requester.fetch(returnType);
-        }
-        return result;
     }
 
     /**

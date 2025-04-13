@@ -203,37 +203,6 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     public GHWorkflowRunTest() {
     }
 
-    private void await(Function<GHRepository, Boolean> condition) throws IOException {
-        await(null, condition);
-    }
-
-    private void await(String alias, Function<GHRepository, Boolean> condition) throws IOException {
-        if (!mockGitHub.isUseProxy()) {
-            return;
-        }
-
-        GHRepository nonRecordingRepo = getNonRecordingGitHub().getRepository(REPO_NAME);
-
-        Awaitility.await(alias).pollInterval(Duration.ofSeconds(5)).atMost(Duration.ofSeconds(60)).until(() -> {
-            return condition.apply(nonRecordingRepo);
-        });
-    }
-
-    private long getLatestPreexistingWorkflowRunId() {
-        return repo.queryWorkflowRuns().list().withPageSize(1).iterator().next().getId();
-    }
-
-    private Optional<GHWorkflowRun> getWorkflowRun(String workflowName, String branch, Conclusion conclusion) {
-        return getWorkflowRun(this.repo, workflowName, branch, conclusion);
-    }
-
-    private Optional<GHWorkflowRun> getWorkflowRun(String workflowName,
-            String branch,
-            Status status,
-            long latestPreexistingWorkflowRunId) {
-        return getWorkflowRun(this.repo, workflowName, branch, status, latestPreexistingWorkflowRunId);
-    }
-
     /**
      * Sets the up.
      *
@@ -760,5 +729,36 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 .collect(Collectors.toList());
 
         assertThat(list.get(0).getConclusion(), is(Conclusion.STARTUP_FAILURE));
+    }
+
+    private void await(Function<GHRepository, Boolean> condition) throws IOException {
+        await(null, condition);
+    }
+
+    private void await(String alias, Function<GHRepository, Boolean> condition) throws IOException {
+        if (!mockGitHub.isUseProxy()) {
+            return;
+        }
+
+        GHRepository nonRecordingRepo = getNonRecordingGitHub().getRepository(REPO_NAME);
+
+        Awaitility.await(alias).pollInterval(Duration.ofSeconds(5)).atMost(Duration.ofSeconds(60)).until(() -> {
+            return condition.apply(nonRecordingRepo);
+        });
+    }
+
+    private long getLatestPreexistingWorkflowRunId() {
+        return repo.queryWorkflowRuns().list().withPageSize(1).iterator().next().getId();
+    }
+
+    private Optional<GHWorkflowRun> getWorkflowRun(String workflowName, String branch, Conclusion conclusion) {
+        return getWorkflowRun(this.repo, workflowName, branch, conclusion);
+    }
+
+    private Optional<GHWorkflowRun> getWorkflowRun(String workflowName,
+            String branch,
+            Status status,
+            long latestPreexistingWorkflowRunId) {
+        return getWorkflowRun(this.repo, workflowName, branch, status, latestPreexistingWorkflowRunId);
     }
 }

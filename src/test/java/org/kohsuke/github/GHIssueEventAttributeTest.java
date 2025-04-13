@@ -51,14 +51,6 @@ public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
     public GHIssueEventAttributeTest() {
     }
 
-    private List<GHIssueEvent> listEvents(final Type type) throws IOException {
-        return StreamSupport
-                .stream(gitHub.getRepository("chids/project-milestone-test").getIssue(1).listEvents().spliterator(),
-                        false)
-                .filter(type)
-                .collect(toList());
-    }
-
     /**
      * Test event specific attributes.
      *
@@ -72,5 +64,13 @@ public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
             assertThat(events, hasSize(2));
             events.forEach(type);
         }
+    }
+
+    private List<GHIssueEvent> listEvents(final Type type) throws IOException {
+        return StreamSupport
+                .stream(gitHub.getRepository("chids/project-milestone-test").getIssue(1).listEvents().spliterator(),
+                        false)
+                .filter(type)
+                .collect(toList());
     }
 }

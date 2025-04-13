@@ -29,29 +29,6 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
     public RepositoryTrafficTest() {
     }
 
-    @SuppressWarnings("unchecked")
-    private <T extends GHRepositoryTraffic> void checkResponse(T expected, T actual) {
-        assertThat(actual.getCount(), Matchers.equalTo(expected.getCount()));
-        assertThat(actual.getUniques(), Matchers.equalTo(expected.getUniques()));
-
-        List<? extends DailyInfo> expectedList = expected.getDailyInfo();
-        List<? extends DailyInfo> actualList = actual.getDailyInfo();
-        Iterator<? extends DailyInfo> expectedIt;
-        Iterator<? extends DailyInfo> actualIt;
-
-        assertThat(actualList.size(), Matchers.equalTo(expectedList.size()));
-        expectedIt = expectedList.iterator();
-        actualIt = actualList.iterator();
-
-        while (expectedIt.hasNext() && actualIt.hasNext()) {
-            DailyInfo expectedDailyInfo = expectedIt.next();
-            DailyInfo actualDailyInfo = actualIt.next();
-            assertThat(actualDailyInfo.getCount(), Matchers.equalTo(expectedDailyInfo.getCount()));
-            assertThat(actualDailyInfo.getUniques(), Matchers.equalTo(expectedDailyInfo.getUniques()));
-            assertThat(actualDailyInfo.getTimestamp(), Matchers.equalTo(expectedDailyInfo.getTimestamp()));
-        }
-    }
-
     /**
      * Test get clones.
      *
@@ -141,5 +118,28 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
                         new GHRepositoryViewTraffic.DailyInfo("2020-02-20T00:00:00Z", 259, 55),
                         new GHRepositoryViewTraffic.DailyInfo("2020-02-21T00:00:00Z", 406, 66)));
         checkResponse(expectedResult, views);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends GHRepositoryTraffic> void checkResponse(T expected, T actual) {
+        assertThat(actual.getCount(), Matchers.equalTo(expected.getCount()));
+        assertThat(actual.getUniques(), Matchers.equalTo(expected.getUniques()));
+
+        List<? extends DailyInfo> expectedList = expected.getDailyInfo();
+        List<? extends DailyInfo> actualList = actual.getDailyInfo();
+        Iterator<? extends DailyInfo> expectedIt;
+        Iterator<? extends DailyInfo> actualIt;
+
+        assertThat(actualList.size(), Matchers.equalTo(expectedList.size()));
+        expectedIt = expectedList.iterator();
+        actualIt = actualList.iterator();
+
+        while (expectedIt.hasNext() && actualIt.hasNext()) {
+            DailyInfo expectedDailyInfo = expectedIt.next();
+            DailyInfo actualDailyInfo = actualIt.next();
+            assertThat(actualDailyInfo.getCount(), Matchers.equalTo(expectedDailyInfo.getCount()));
+            assertThat(actualDailyInfo.getUniques(), Matchers.equalTo(expectedDailyInfo.getUniques()));
+            assertThat(actualDailyInfo.getTimestamp(), Matchers.equalTo(expectedDailyInfo.getTimestamp()));
+        }
     }
 }

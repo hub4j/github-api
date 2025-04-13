@@ -206,15 +206,6 @@ public class ArchTests {
     }
 
     /**
-     * Enum constants.
-     *
-     * @return the described predicate
-     */
-    private DescribedPredicate<? super JavaField> enumConstants() {
-        return new EnumConstantFieldPredicate();
-    }
-
-    /**
      * Test naming conventions
      */
     @Test
@@ -337,5 +328,14 @@ public class ArchTests {
                         "Commons methods must be manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier.");
 
         onlyApprovedApacheCommonsMethods.check(classFiles);
+    }
+
+    /**
+     * Enum constants.
+     *
+     * @return the described predicate
+     */
+    private DescribedPredicate<? super JavaField> enumConstants() {
+        return new EnumConstantFieldPredicate();
     }
 }

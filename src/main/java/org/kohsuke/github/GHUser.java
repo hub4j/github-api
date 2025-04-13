@@ -76,19 +76,6 @@ public class GHUser extends GHPerson {
     }
 
     /**
-     * Gets the api tail url.
-     *
-     * @param tail
-     *            the tail
-     * @return the api tail url
-     */
-    String getApiTailUrl(String tail) {
-        if (tail.length() > 0 && !tail.startsWith("/"))
-            tail = '/' + tail;
-        return "/users/" + login + tail;
-    }
-
-    /**
      * Gets the bio.
      *
      * @return the bio
@@ -283,10 +270,6 @@ public class GHUser extends GHPerson {
         return root().createRequest().withUrlPath(getApiTailUrl("projects")).toIterable(GHProject[].class, null);
     }
 
-    private PagedIterable<GHRepository> listRepositories(final String suffix) {
-        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHRepository[].class, null);
-    }
-
     /**
      * Lists all the repositories that this user has starred.
      *
@@ -307,10 +290,6 @@ public class GHUser extends GHPerson {
         return listRepositories("subscriptions");
     }
 
-    private PagedIterable<GHUser> listUser(final String suffix) {
-        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);
-    }
-
     /**
      * Unfollow this user.
      *
@@ -319,5 +298,26 @@ public class GHUser extends GHPerson {
      */
     public void unfollow() throws IOException {
         root().createRequest().method("DELETE").withUrlPath("/user/following/" + login).send();
+    }
+
+    private PagedIterable<GHRepository> listRepositories(final String suffix) {
+        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHRepository[].class, null);
+    }
+
+    private PagedIterable<GHUser> listUser(final String suffix) {
+        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);
+    }
+
+    /**
+     * Gets the api tail url.
+     *
+     * @param tail
+     *            the tail
+     * @return the api tail url
+     */
+    String getApiTailUrl(String tail) {
+        if (tail.length() > 0 && !tail.startsWith("/"))
+            tail = '/' + tail;
+        return "/users/" + login + tail;
     }
 }

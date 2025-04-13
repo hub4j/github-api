@@ -26,16 +26,6 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
     public GHUserTest() {
     }
 
-    private Set<GHUser> count30(PagedIterable<GHUser> l) {
-        Set<GHUser> users = new HashSet<GHUser>();
-        PagedIterator<GHUser> itr = l.iterator();
-        for (int i = 0; i < 30 && itr.hasNext(); i++) {
-            users.add(itr.next());
-        }
-        assertThat(users.size(), equalTo(30));
-        return users;
-    }
-
     /**
      * Creates the and count private repos.
      *
@@ -251,5 +241,15 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
         GHUser suspended = gitHub.getUser("suspended");
         Instant suspendedAt = Instant.ofEpochMilli(Instant.parse("2024-08-08T00:00:00Z").toEpochMilli());
         assertThat(suspended.getSuspendedAt(), equalTo(suspendedAt));
+    }
+
+    private Set<GHUser> count30(PagedIterable<GHUser> l) {
+        Set<GHUser> users = new HashSet<GHUser>();
+        PagedIterator<GHUser> itr = l.iterator();
+        for (int i = 0; i < 30 && itr.hasNext(); i++) {
+            users.add(itr.next());
+        }
+        assertThat(users.size(), equalTo(30));
+        return users;
     }
 }

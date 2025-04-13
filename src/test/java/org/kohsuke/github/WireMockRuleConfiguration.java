@@ -228,14 +228,6 @@ public class WireMockRuleConfiguration implements Options {
         return parent.getHttpsRequiredForAdminApi();
     }
 
-    private MappingsSource getMappingsSource() {
-        if (this.mappingsSource == null) {
-            this.mappingsSource = new JsonFileMappingsSource(this.filesRoot().child("mappings"));
-        }
-
-        return this.mappingsSource;
-    }
-
     /**
      * Gets the not matched renderer.
      *
@@ -426,5 +418,13 @@ public class WireMockRuleConfiguration implements Options {
      */
     public long timeout() {
         return parent.timeout();
+    }
+
+    private MappingsSource getMappingsSource() {
+        if (this.mappingsSource == null) {
+            this.mappingsSource = new JsonFileMappingsSource(this.filesRoot().child("mappings"));
+        }
+
+        return this.mappingsSource;
     }
 }

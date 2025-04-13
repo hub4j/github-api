@@ -148,22 +148,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     public GHPullRequest() {
     }
 
-    private void addOptionalParameter(StringBuilder inputBuilder, String name, Object value) {
-        if (value != null) {
-            addParameter(inputBuilder, name, value);
-        }
-    }
-
-    private void addParameter(StringBuilder inputBuilder, String name, Object value) {
-        Objects.requireNonNull(value);
-        String formatString = " %s: \"%s\"";
-        if (value instanceof Enum) {
-            formatString = " %s: %s";
-        }
-
-        inputBuilder.append(String.format(formatString, name, value));
-    }
-
     /**
      * Can maintainer modify boolean.
      *
@@ -274,30 +258,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
-     * Gets the api route.
-     *
-     * @return the api route
-     */
-    @Override
-    protected String getApiRoute() {
-        if (owner == null) {
-            // Issues returned from search to do not have an owner. Attempt to use url.
-            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            // The url sourced above is of the form '/repos/<owner>/<reponame>/issues/', which
-            // subsequently issues requests against the `/issues/` handler, causing a 404 when
-            // asking for, say, a list of commits associated with a PR. Replace the `/issues/`
-            // with `/pulls/` to avoid that.
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/")
-                    .replace("/issues/", "/pulls/");
-        }
-        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/pulls/" + number;
-    }
-
-    //
-    // details that are only available via get with ID
-    //
-
-    /**
      * The status of auto merging a pull request.
      *
      * @return the {@linkplain AutoMerge} or {@code null} if no auto merge is set.
@@ -326,6 +286,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         populate();
         return changedFiles;
     }
+
+    //
+    // details that are only available via get with ID
+    //
 
     /**
      * Gets the closed by.
@@ -411,15 +375,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public Boolean getMergeable() throws IOException {
         refresh(mergeable);
-        return mergeable;
-    }
-
-    /**
-     * for test purposes only.
-     *
-     * @return the mergeable no refresh
-     */
-    Boolean getMergeableNoRefresh() {
         return mergeable;
     }
 
@@ -642,18 +597,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
-     * Fully populate the data by retrieving missing data.
-     *
-     * <p>
-     * Depending on the original API call where this object is created, it may not contain everything.
-     */
-    private void populate() throws IOException {
-        if (mergeableState != null)
-            return; // already populated
-        refresh();
-    }
-
-    /**
      * Repopulates this object.
      *
      * @throws IOException
@@ -735,6 +678,63 @@ public class GHPullRequest extends GHIssue implements Refreshable {
                 .with("expected_head_sha", head.getSha())
                 .withUrlPath(getApiRoute() + "/update-branch")
                 .send();
+    }
+
+    private void addOptionalParameter(StringBuilder inputBuilder, String name, Object value) {
+        if (value != null) {
+            addParameter(inputBuilder, name, value);
+        }
+    }
+
+    private void addParameter(StringBuilder inputBuilder, String name, Object value) {
+        Objects.requireNonNull(value);
+        String formatString = " %s: \"%s\"";
+        if (value instanceof Enum) {
+            formatString = " %s: %s";
+        }
+
+        inputBuilder.append(String.format(formatString, name, value));
+    }
+
+    /**
+     * Fully populate the data by retrieving missing data.
+     *
+     * <p>
+     * Depending on the original API call where this object is created, it may not contain everything.
+     */
+    private void populate() throws IOException {
+        if (mergeableState != null)
+            return; // already populated
+        refresh();
+    }
+
+    /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
+    @Override
+    protected String getApiRoute() {
+        if (owner == null) {
+            // Issues returned from search to do not have an owner. Attempt to use url.
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            // The url sourced above is of the form '/repos/<owner>/<reponame>/issues/', which
+            // subsequently issues requests against the `/issues/` handler, causing a 404 when
+            // asking for, say, a list of commits associated with a PR. Replace the `/issues/`
+            // with `/pulls/` to avoid that.
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/")
+                    .replace("/issues/", "/pulls/");
+        }
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/pulls/" + number;
+    }
+
+    /**
+     * for test purposes only.
+     *
+     * @return the mergeable no refresh
+     */
+    Boolean getMergeableNoRefresh() {
+        return mergeable;
     }
     /**
      * Wrap up.

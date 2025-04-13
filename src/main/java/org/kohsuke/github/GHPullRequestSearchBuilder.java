@@ -11,16 +11,6 @@ import java.time.format.DateTimeFormatter;
  *      issues and PRs</a>
  */
 public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
-    private static class PullRequestSearchResult extends SearchResult<GHPullRequest> {
-
-        private GHPullRequest[] items;
-
-        @Override
-        GHPullRequest[] getItems(GitHub root) {
-            return items;
-        }
-    }
-
     /**
      * The sort order values.
      */
@@ -35,6 +25,16 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
         /** The relevance. */
         RELEVANCE
 
+    }
+
+    private static class PullRequestSearchResult extends SearchResult<GHPullRequest> {
+
+        private GHPullRequest[] items;
+
+        @Override
+        GHPullRequest[] getItems(GitHub root) {
+            return items;
+        }
     }
 
     /**
@@ -217,11 +217,6 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
     public GHPullRequestSearchBuilder createdByMe() {
         q("author:@me");
         return this;
-    }
-
-    @Override
-    protected String getApiUrl() {
-        return "/search/issues";
     }
 
     /**
@@ -480,5 +475,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
         String comparisonSign = inclusive ? "<=" : "<";
         q("updated:" + comparisonSign + updated.format(DateTimeFormatter.ISO_DATE));
         return this;
+    }
+
+    @Override
+    protected String getApiUrl() {
+        return "/search/issues";
     }
 }

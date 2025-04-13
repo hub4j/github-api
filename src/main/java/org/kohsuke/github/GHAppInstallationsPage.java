@@ -9,20 +9,20 @@ class GHAppInstallationsPage {
     private GHAppInstallation[] installations;
 
     /**
-     * Gets the installations.
-     *
-     * @return the installations
-     */
-    GHAppInstallation[] getInstallations() {
-        return installations;
-    }
-
-    /**
      * Gets the total count.
      *
      * @return the total count
      */
     public int getTotalCount() {
         return totalCount;
+    }
+
+    /**
+     * Gets the installations.
+     *
+     * @return the installations
+     */
+    GHAppInstallation[] getInstallations() {
+        return installations;
     }
 }

@@ -29,21 +29,6 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(final GitHub gitHub) throws IOException {
-        return gitHub.getRepository(DEPLOY_KEY_TEST_REPO_NAME);
-    }
-
-    /**
      * Test get deploymentkeys.
      *
      * @throws IOException
@@ -83,5 +68,20 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
                 is(KEY_CREATOR_USERNAME));
         assertThat("The key has never been used", rsa_4096Key.get().getLastUsedAt(), is(nullValue()));
         assertThat("The key only has read/write access", rsa_4096Key.get().isRead_only(), is(false));
+    }
+
+    private GHRepository getRepository(final GitHub gitHub) throws IOException {
+        return gitHub.getRepository(DEPLOY_KEY_TEST_REPO_NAME);
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 }

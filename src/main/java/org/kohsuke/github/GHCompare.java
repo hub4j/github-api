@@ -45,67 +45,6 @@ public class GHCompare {
     }
 
     /**
-     * Iterable for commit listing.
-     */
-    class GHCompareCommitsIterable extends PagedIterable<Commit> {
-
-        private GHCompare result;
-
-        /**
-         * Instantiates a new GH compare commits iterable.
-         */
-        public GHCompareCommitsIterable() {
-        }
-
-        /**
-         * Iterator.
-         *
-         * @param pageSize
-         *            the page size
-         * @return the paged iterator
-         */
-        @Nonnull
-        @Override
-        public PagedIterator<Commit> _iterator(int pageSize) {
-            GitHubRequest request = owner.root()
-                    .createRequest()
-                    .injectMappingValue("GHCompare_usePaginatedCommits", usePaginatedCommits)
-                    .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf("/compare/"))))
-                    .build();
-
-            // page_size must be set for GHCompare commit pagination
-            if (pageSize == 0) {
-                pageSize = 10;
-            }
-            return new PagedIterator<>(
-                    adapt(GitHubPageIterator.create(owner.root().getClient(), GHCompare.class, request, pageSize)),
-                    item -> item.wrapUp(owner));
-        }
-
-        /**
-         * Adapt.
-         *
-         * @param base
-         *            the base
-         * @return the iterator
-         */
-        protected Iterator<Commit[]> adapt(final Iterator<GHCompare> base) {
-            return new Iterator<Commit[]>() {
-                public boolean hasNext() {
-                    return base.hasNext();
-                }
-
-                public Commit[] next() {
-                    GHCompare v = base.next();
-                    if (result == null) {
-                        result = v;
-                    }
-                    return v.commits;
-                }
-            };
-        }
-    }
-    /**
      * The type InnerCommit.
      */
     public static class InnerCommit {
@@ -217,6 +156,67 @@ public class GHCompare {
          */
         public String getUrl() {
             return url;
+        }
+    }
+    /**
+     * Iterable for commit listing.
+     */
+    class GHCompareCommitsIterable extends PagedIterable<Commit> {
+
+        private GHCompare result;
+
+        /**
+         * Instantiates a new GH compare commits iterable.
+         */
+        public GHCompareCommitsIterable() {
+        }
+
+        /**
+         * Iterator.
+         *
+         * @param pageSize
+         *            the page size
+         * @return the paged iterator
+         */
+        @Nonnull
+        @Override
+        public PagedIterator<Commit> _iterator(int pageSize) {
+            GitHubRequest request = owner.root()
+                    .createRequest()
+                    .injectMappingValue("GHCompare_usePaginatedCommits", usePaginatedCommits)
+                    .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf("/compare/"))))
+                    .build();
+
+            // page_size must be set for GHCompare commit pagination
+            if (pageSize == 0) {
+                pageSize = 10;
+            }
+            return new PagedIterator<>(
+                    adapt(GitHubPageIterator.create(owner.root().getClient(), GHCompare.class, request, pageSize)),
+                    item -> item.wrapUp(owner));
+        }
+
+        /**
+         * Adapt.
+         *
+         * @param base
+         *            the base
+         * @return the iterator
+         */
+        protected Iterator<Commit[]> adapt(final Iterator<GHCompare> base) {
+            return new Iterator<Commit[]>() {
+                public boolean hasNext() {
+                    return base.hasNext();
+                }
+
+                public Commit[] next() {
+                    GHCompare v = base.next();
+                    if (result == null) {
+                        result = v;
+                    }
+                    return v.commits;
+                }
+            };
         }
     }
     private String url, htmlUrl, permalinkUrl, diffUrl, patchUrl;
@@ -380,23 +380,6 @@ public class GHCompare {
     }
 
     /**
-     * Wrap gh compare.
-     *
-     * @param owner
-     *            the owner
-     * @return the gh compare
-     */
-    GHCompare lateBind(GHRepository owner) {
-        this.owner = owner;
-        for (Commit commit : commits) {
-            commit.wrapUp(owner);
-        }
-        mergeBaseCommit.wrapUp(owner);
-        baseCommit.wrapUp(owner);
-        return this;
-    }
-
-    /**
      * Iterable of commits for this comparison.
      *
      * By default, the commit list is limited to 250 results.
@@ -423,5 +406,22 @@ public class GHCompare {
                 }
             };
         }
+    }
+
+    /**
+     * Wrap gh compare.
+     *
+     * @param owner
+     *            the owner
+     * @return the gh compare
+     */
+    GHCompare lateBind(GHRepository owner) {
+        this.owner = owner;
+        for (Commit commit : commits) {
+            commit.wrapUp(owner);
+        }
+        mergeBaseCommit.wrapUp(owner);
+        baseCommit.wrapUp(owner);
+        return this;
     }
 }

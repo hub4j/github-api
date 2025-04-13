@@ -20,15 +20,15 @@ class EnterpriseManagedSupport {
 
     private static final Logger LOGGER = Logger.getLogger(EnterpriseManagedSupport.class.getName());
 
-    static EnterpriseManagedSupport forOrganization(final GHOrganization org) {
-        return new EnterpriseManagedSupport(org);
-    }
-
     private static String logUnexpectedFailure(final JsonProcessingException exception, final String payload) {
         final StringWriter sw = new StringWriter();
         final PrintWriter pw = new PrintWriter(sw);
         exception.printStackTrace(pw);
         return String.format("Could not parse GitHub error response: '%s'. Full stacktrace follows:%n%s", payload, sw);
+    }
+
+    static EnterpriseManagedSupport forOrganization(final GHOrganization org) {
+        return new EnterpriseManagedSupport(org);
     }
 
     private final GHOrganization organization;

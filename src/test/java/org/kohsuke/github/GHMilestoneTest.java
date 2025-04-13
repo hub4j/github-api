@@ -47,21 +47,6 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
-    }
-
-    /**
      * Test unset milestone.
      *
      * @throws IOException
@@ -142,5 +127,20 @@ public class GHMilestoneTest extends AbstractGitHubWireMockTest {
         assertThat(milestone.getUrl().toString(), containsString("/repos/hub4j-test-org/github-api/milestones/"));
         assertThat(milestone.getClosedIssues(), equalTo(0));
         assertThat(milestone.getOpenIssues(), equalTo(0));
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 }

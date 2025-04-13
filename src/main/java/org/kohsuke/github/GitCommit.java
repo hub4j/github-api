@@ -189,16 +189,6 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     }
 
     /**
-     * Gets the parents.
-     *
-     * @return the parents
-     */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
-    List<GHCommit.Parent> getParents() {
-        return parents;
-    }
-
-    /**
      * Gets SHA1.
      *
      * @return The SHA1 of this commit
@@ -214,15 +204,6 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      */
     public String getSha() {
         return sha;
-    }
-
-    /**
-     * Gets the tree.
-     *
-     * @return the tree
-     */
-    Tree getTree() {
-        return tree;
     }
 
     /**
@@ -259,6 +240,25 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      */
     public GHVerification getVerification() {
         return verification;
+    }
+
+    /**
+     * Gets the parents.
+     *
+     * @return the parents
+     */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
+    List<GHCommit.Parent> getParents() {
+        return parents;
+    }
+
+    /**
+     * Gets the tree.
+     *
+     * @return the tree
+     */
+    Tree getTree() {
+        return tree;
     }
 
     /**

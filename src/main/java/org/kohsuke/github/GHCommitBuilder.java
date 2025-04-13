@@ -117,10 +117,6 @@ public class GHCommitBuilder {
         return req.method("POST").withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);
     }
 
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/git/commits", repo.getOwnerName(), repo.getName());
-    }
-
     /**
      * Message gh commit builder.
      *
@@ -168,5 +164,9 @@ public class GHCommitBuilder {
     public GHCommitBuilder withSignature(String signature) {
         req.with("signature", signature);
         return this;
+    }
+
+    private String getApiTail() {
+        return String.format("/repos/%s/%s/git/commits", repo.getOwnerName(), repo.getName());
     }
 }

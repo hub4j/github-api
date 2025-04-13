@@ -118,6 +118,23 @@ public abstract class AbstractGitHubWireMockTest {
         MatcherAssert.assertThat("", actual, matcher);
     }
 
+    /**
+     * Fail.
+     */
+    public static void fail() {
+        Assert.fail();
+    }
+
+    /**
+     * Fail.
+     *
+     * @param reason
+     *            the reason
+     */
+    public static void fail(String reason) {
+        Assert.fail(reason);
+    }
+
     private static GitHubBuilder createGitHubBuilder() {
 
         GitHubBuilder builder = new GitHubBuilder();
@@ -146,23 +163,6 @@ public abstract class AbstractGitHubWireMockTest {
         }
 
         return builder.withRateLimitHandler(GitHubRateLimitHandler.FAIL);
-    }
-
-    /**
-     * Fail.
-     */
-    public static void fail() {
-        Assert.fail();
-    }
-
-    /**
-     * Fail.
-     *
-     * @param reason
-     *            the reason
-     */
-    public static void fail(String reason) {
-        Assert.fail(reason);
     }
 
     /**
@@ -216,6 +216,68 @@ public abstract class AbstractGitHubWireMockTest {
     }
 
     /**
+     * Cleanup temp repositories.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Before
+    @After
+    public void cleanupTempRepositories() throws IOException {
+        if (mockGitHub.isUseProxy()) {
+            for (String fullName : tempGitHubRepositories) {
+                cleanupRepository(fullName);
+            }
+        }
+    }
+
+    /**
+     * {@link GitHub} instance for use before/after test. Traffic will not be part of snapshot when taken. Should only
+     * be used when isUseProxy() or isTakeSnapShot().
+     *
+     * @return a github instance after checking Authentication
+     */
+    public GitHub getNonRecordingGitHub() {
+        verifyAuthenticated(nonRecordingGitHub);
+        return nonRecordingGitHub;
+    }
+
+    /**
+     * Wire mock setup.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Before
+    public void wireMockSetup() throws Exception {
+        GitHubBuilder builder = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl());
+
+        if (useDefaultGitHub) {
+            gitHub = builder.build();
+        }
+
+        if (mockGitHub.isUseProxy()) {
+            nonRecordingGitHub = getGitHubBuilder().withEndpoint("https://api.github.com/").build();
+        } else {
+            nonRecordingGitHub = null;
+        }
+    }
+
+    private GHCreateRepositoryBuilder getCreateBuilder(String name) throws IOException {
+        GitHub github = getNonRecordingGitHub();
+
+        if (mockGitHub.isTestWithOrg()) {
+            return github.getOrganization(GITHUB_API_TEST_ORG).createRepository(name);
+        }
+
+        return github.createRepository(name);
+    }
+
+    private String getOrganization() throws IOException {
+        return mockGitHub.isTestWithOrg() ? GITHUB_API_TEST_ORG : gitHub.getMyself().getLogin();
+    }
+
+    /**
      * Cleanup repository.
      *
      * @param fullName
@@ -239,32 +301,6 @@ public abstract class AbstractGitHubWireMockTest {
     }
 
     /**
-     * Cleanup temp repositories.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Before
-    @After
-    public void cleanupTempRepositories() throws IOException {
-        if (mockGitHub.isUseProxy()) {
-            for (String fullName : tempGitHubRepositories) {
-                cleanupRepository(fullName);
-            }
-        }
-    }
-
-    private GHCreateRepositoryBuilder getCreateBuilder(String name) throws IOException {
-        GitHub github = getNonRecordingGitHub();
-
-        if (mockGitHub.isTestWithOrg()) {
-            return github.getOrganization(GITHUB_API_TEST_ORG).createRepository(name);
-        }
-
-        return github.createRepository(name);
-    }
-
-    /**
      * Gets the git hub builder.
      *
      * @return the git hub builder
@@ -280,21 +316,6 @@ public abstract class AbstractGitHubWireMockTest {
         }
 
         return builder;
-    }
-
-    /**
-     * {@link GitHub} instance for use before/after test. Traffic will not be part of snapshot when taken. Should only
-     * be used when isUseProxy() or isTakeSnapShot().
-     *
-     * @return a github instance after checking Authentication
-     */
-    public GitHub getNonRecordingGitHub() {
-        verifyAuthenticated(nonRecordingGitHub);
-        return nonRecordingGitHub;
-    }
-
-    private String getOrganization() throws IOException {
-        return mockGitHub.isTestWithOrg() ? GITHUB_API_TEST_ORG : gitHub.getMyself().getLogin();
     }
 
     /**
@@ -403,27 +424,6 @@ public abstract class AbstractGitHubWireMockTest {
                 "GitHub connection believes it is anonymous.  Make sure you set GITHUB_OAUTH or both GITHUB_LOGIN and GITHUB_PASSWORD environment variables",
                 instance.isAnonymous(),
                 Matchers.is(false));
-    }
-
-    /**
-     * Wire mock setup.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Before
-    public void wireMockSetup() throws Exception {
-        GitHubBuilder builder = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl());
-
-        if (useDefaultGitHub) {
-            gitHub = builder.build();
-        }
-
-        if (mockGitHub.isUseProxy()) {
-            nonRecordingGitHub = getGitHubBuilder().withEndpoint("https://api.github.com/").build();
-        } else {
-            nonRecordingGitHub = null;
-        }
     }
 
 }

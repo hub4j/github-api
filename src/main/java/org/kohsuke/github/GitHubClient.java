@@ -50,16 +50,6 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  */
 class GitHubClient {
 
-    /**
-     * Represents a supplier of results that can throw.
-     *
-     * @param <T>
-     *            the type of results supplied by this supplier
-     */
-    @FunctionalInterface
-    interface BodyHandler<T> extends FunctionThrows<GitHubConnectorResponse, T, IOException> {
-    }
-
     private static class GHApiInfo {
         private String rateLimitUrl;
 
@@ -70,6 +60,16 @@ class GitHubClient {
             // make sure that the URL is legitimate
             new URL(rateLimitUrl);
         }
+    }
+
+    /**
+     * Represents a supplier of results that can throw.
+     *
+     * @param <T>
+     *            the type of results supplied by this supplier
+     */
+    @FunctionalInterface
+    interface BodyHandler<T> extends FunctionThrows<GitHubConnectorResponse, T, IOException> {
     }
 
     /**
@@ -145,63 +145,6 @@ class GitHubClient {
                 throw new GHOTPRequiredException().withResponseHeaderFields(connectorResponse.allHeaders());
             }
         }
-    }
-
-    /**
-     * Helper for {@link #getMappingObjectReader(GitHubConnectorResponse)}.
-     *
-     * @param root
-     *            the root GitHub object for this reader
-     * @return an {@link ObjectReader} instance that can be further configured.
-     */
-    @Nonnull
-    static ObjectReader getMappingObjectReader(@Nonnull GitHub root) {
-        ObjectReader reader = getMappingObjectReader((GitHubConnectorResponse) null);
-        ((InjectableValues.Std) reader.getInjectableValues()).addValue(GitHub.class, root);
-        return reader;
-    }
-
-    /**
-     * Gets an {@link ObjectReader}.
-     *
-     * Members of {@link InjectableValues} must be present even if {@code null}, otherwise classes expecting those
-     * values will fail to read. This differs from regular JSONProperties which provide defaults instead of failing.
-     *
-     * Having one spot to create readers and having it take all injectable values is not a great long term solution but
-     * it is sufficient for this first cut.
-     *
-     * @param connectorResponse
-     *            the {@link GitHubConnectorResponse} to inject for this reader.
-     *
-     * @return an {@link ObjectReader} instance that can be further configured.
-     */
-    @Nonnull
-    static ObjectReader getMappingObjectReader(@CheckForNull GitHubConnectorResponse connectorResponse) {
-        Map<String, Object> injected = new HashMap<>();
-
-        // Required or many things break
-        injected.put(GitHubConnectorResponse.class.getName(), null);
-        injected.put(GitHub.class.getName(), null);
-
-        if (connectorResponse != null) {
-            injected.put(GitHubConnectorResponse.class.getName(), connectorResponse);
-            GitHubConnectorRequest request = connectorResponse.request();
-            // This is cheating, but it is an acceptable cheat for now.
-            if (request instanceof GitHubRequest) {
-                injected.putAll(((GitHubRequest) connectorResponse.request()).injectedMappingValues());
-            }
-        }
-        return MAPPER.reader(new InjectableValues.Std(injected));
-    }
-
-    /**
-     * Gets an {@link ObjectWriter}.
-     *
-     * @return an {@link ObjectWriter} instance that can be further configured.
-     */
-    @Nonnull
-    static ObjectWriter getMappingObjectWriter() {
-        return MAPPER.writer();
     }
 
     // This implements the exact same rules as the ones applied in jdk.internal.net.http.RedirectFilter
@@ -309,40 +252,6 @@ class GitHubClient {
         }
     }
 
-    /**
-     * Parses the instant.
-     *
-     * @param timestamp
-     *            the timestamp
-     * @return the instant
-     */
-    static Instant parseInstant(String timestamp) {
-        if (timestamp == null)
-            return null;
-
-        if (timestamp.charAt(4) == '/') {
-            // Unsure where this is used, but retained for compatibility.
-            return Instant.from(DATE_TIME_PARSER_SLASHES.parse(timestamp));
-        } else {
-            return Instant.from(DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(timestamp));
-        }
-    }
-
-    /**
-     * Parses the URL.
-     *
-     * @param s
-     *            the s
-     * @return the url
-     */
-    static URL parseURL(String s) {
-        try {
-            return s == null ? null : new URL(s);
-        } catch (MalformedURLException e) {
-            throw new IllegalStateException("Invalid URL: " + s);
-        }
-    }
-
     private static GitHubConnectorRequest prepareConnectorRequest(GitHubRequest request,
             AuthorizationProvider authorizationProvider) throws IOException {
         GitHubRequest.Builder<?> builder = request.toBuilder();
@@ -378,17 +287,6 @@ class GitHubClient {
         return builder.build();
     }
 
-    /**
-     * Prints the instant.
-     *
-     * @param instant
-     *            the instant
-     * @return the string
-     */
-    static String printInstant(Instant instant) {
-        return DateTimeFormatter.ISO_INSTANT.format(instant.truncatedTo(ChronoUnit.SECONDS));
-    }
-
     private static boolean shouldIgnoreBody(@Nonnull GitHubConnectorResponse connectorResponse) {
         if (connectorResponse.statusCode() == HTTP_NOT_MODIFIED) {
             // special case handling for 304 unmodified, as the content will be ""
@@ -409,6 +307,108 @@ class GitHubClient {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Helper for {@link #getMappingObjectReader(GitHubConnectorResponse)}.
+     *
+     * @param root
+     *            the root GitHub object for this reader
+     * @return an {@link ObjectReader} instance that can be further configured.
+     */
+    @Nonnull
+    static ObjectReader getMappingObjectReader(@Nonnull GitHub root) {
+        ObjectReader reader = getMappingObjectReader((GitHubConnectorResponse) null);
+        ((InjectableValues.Std) reader.getInjectableValues()).addValue(GitHub.class, root);
+        return reader;
+    }
+
+    /**
+     * Gets an {@link ObjectReader}.
+     *
+     * Members of {@link InjectableValues} must be present even if {@code null}, otherwise classes expecting those
+     * values will fail to read. This differs from regular JSONProperties which provide defaults instead of failing.
+     *
+     * Having one spot to create readers and having it take all injectable values is not a great long term solution but
+     * it is sufficient for this first cut.
+     *
+     * @param connectorResponse
+     *            the {@link GitHubConnectorResponse} to inject for this reader.
+     *
+     * @return an {@link ObjectReader} instance that can be further configured.
+     */
+    @Nonnull
+    static ObjectReader getMappingObjectReader(@CheckForNull GitHubConnectorResponse connectorResponse) {
+        Map<String, Object> injected = new HashMap<>();
+
+        // Required or many things break
+        injected.put(GitHubConnectorResponse.class.getName(), null);
+        injected.put(GitHub.class.getName(), null);
+
+        if (connectorResponse != null) {
+            injected.put(GitHubConnectorResponse.class.getName(), connectorResponse);
+            GitHubConnectorRequest request = connectorResponse.request();
+            // This is cheating, but it is an acceptable cheat for now.
+            if (request instanceof GitHubRequest) {
+                injected.putAll(((GitHubRequest) connectorResponse.request()).injectedMappingValues());
+            }
+        }
+        return MAPPER.reader(new InjectableValues.Std(injected));
+    }
+
+    /**
+     * Gets an {@link ObjectWriter}.
+     *
+     * @return an {@link ObjectWriter} instance that can be further configured.
+     */
+    @Nonnull
+    static ObjectWriter getMappingObjectWriter() {
+        return MAPPER.writer();
+    }
+
+    /**
+     * Parses the instant.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the instant
+     */
+    static Instant parseInstant(String timestamp) {
+        if (timestamp == null)
+            return null;
+
+        if (timestamp.charAt(4) == '/') {
+            // Unsure where this is used, but retained for compatibility.
+            return Instant.from(DATE_TIME_PARSER_SLASHES.parse(timestamp));
+        } else {
+            return Instant.from(DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(timestamp));
+        }
+    }
+
+    /**
+     * Parses the URL.
+     *
+     * @param s
+     *            the s
+     * @return the url
+     */
+    static URL parseURL(String s) {
+        try {
+            return s == null ? null : new URL(s);
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("Invalid URL: " + s);
+        }
+    }
+
+    /**
+     * Prints the instant.
+     *
+     * @param instant
+     *            the instant
+     * @return the string
+     */
+    static String printInstant(Instant instant) {
+        return DateTimeFormatter.ISO_INSTANT.format(instant.truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**
@@ -541,6 +541,155 @@ class GitHubClient {
         }
     }
 
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
+    public String getApiUrl() {
+        return apiUrl;
+    }
+
+    /**
+     * Gets the current full rate limit information from the server.
+     *
+     * For some versions of GitHub Enterprise, the {@code /rate_limit} endpoint returns a {@code 404 Not Found}. In that
+     * case, the most recent {@link GHRateLimit} information will be returned, including rate limit information returned
+     * in the response header for this request in if was present.
+     *
+     * For most use cases it would be better to implement a {@link RateLimitChecker} and add it via
+     * {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
+     *
+     * @return the rate limit
+     * @throws IOException
+     *             the io exception
+     */
+    @Nonnull
+    public GHRateLimit getRateLimit() throws IOException {
+        return getRateLimit(RateLimitTarget.NONE);
+    }
+
+    /**
+     * Is this an anonymous connection.
+     *
+     * @return {@code true} if operations that require authentication will fail.
+     */
+    public boolean isAnonymous() {
+        try {
+            return getLogin() == null && this.authorizationProvider.getEncodedAuthorization() == null;
+        } catch (IOException e) {
+            // An exception here means that the provider failed to provide authorization parameters,
+            // basically meaning the same as "no auth"
+            return false;
+        }
+    }
+
+    /**
+     * Ensures that the credential for this client is valid.
+     *
+     * @return the boolean
+     */
+    public boolean isCredentialValid() {
+        return sanityCachedIsCredentialValid.get(() -> {
+            try {
+                // If 404, ratelimit returns a default value.
+                // This works as credential test because invalid credentials returns 401, not 404
+                getRateLimit();
+                return Boolean.TRUE;
+            } catch (IOException e) {
+                LOGGER.log(FINE,
+                        e,
+                        () -> String.format("(%s) Exception validating credentials on %s with login '%s'",
+                                sendRequestTraceId.get(),
+                                getApiUrl(),
+                                getLogin()));
+                return Boolean.FALSE;
+            }
+        });
+    }
+
+    /**
+     * Is this an always offline "connection".
+     *
+     * @return {@code true} if this is an always offline "connection".
+     */
+    public boolean isOffline() {
+        return connector == GitHubConnector.OFFLINE;
+    }
+
+    /**
+     * Sends the {@link GitHubRequest} to the server, and uses the {@link BodyHandler} to parse the response info and
+     * response body data into an instance of {@code T}.
+     *
+     * @param <T>
+     *            the type of the parse body data.
+     * @param request
+     *            the request that will be sent to the server.
+     * @param handler
+     *            parse the response info and body data into a instance of {@code T}. If null, no parsing occurs and
+     *            {@link GitHubResponse#body()} will return null.
+     * @return a {@link GitHubResponse} containing the parsed body data as a {@code T}. Parsed instance may be null.
+     * @throws IOException
+     *             if an I/O Exception occurs
+     */
+    @Nonnull
+    public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull BodyHandler<T> handler)
+            throws IOException {
+        // WARNING: This is an unsupported environment variable.
+        // The GitHubClient class is internal and may change at any time.
+        int retryCount = Math.max(DEFAULT_CONNECTION_ERROR_RETRIES,
+                Integer.getInteger(GitHubClient.class.getName() + ".retryCount", DEFAULT_CONNECTION_ERROR_RETRIES));
+
+        int retries = retryCount;
+        sendRequestTraceId.set(Integer.toHexString(request.hashCode()));
+        GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request, authorizationProvider);
+        do {
+            GitHubConnectorResponse connectorResponse = null;
+            try {
+                logRequest(connectorRequest);
+                rateLimitChecker.checkRateLimit(this, request.rateLimitTarget());
+                connectorResponse = connector.send(connectorRequest);
+                logResponse(connectorResponse);
+                noteRateLimit(request.rateLimitTarget(), connectorResponse);
+                detectKnownErrors(connectorResponse, request, handler != null);
+                logResponseBody(connectorResponse);
+                return createResponse(connectorResponse, handler);
+            } catch (RetryRequestException e) {
+                // retry requested by requested by error handler (rate limit handler for example)
+                if (retries > 0 && e.connectorRequest != null) {
+                    connectorRequest = e.connectorRequest;
+                }
+            } catch (IOException e) {
+                throw interpretApiError(e, connectorRequest, connectorResponse);
+            } finally {
+                IOUtils.closeQuietly(connectorResponse);
+            }
+        } while (--retries >= 0);
+
+        throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
+    }
+
+    /**
+     * Builds a {@link GitHubRequest}, sends the {@link GitHubRequest} to the server, and uses the {@link BodyHandler}
+     * to parse the response info and response body data into an instance of {@code T}.
+     *
+     * @param <T>
+     *            the type of the parse body data.
+     * @param builder
+     *            used to build the request that will be sent to the server.
+     * @param handler
+     *            parse the response info and body data into a instance of {@code T}. If null, no parsing occurs and
+     *            {@link GitHubResponse#body()} will return null.
+     * @return a {@link GitHubResponse} containing the parsed body data as a {@code T}. Parsed instance may be null.
+     * @throws IOException
+     *             if an I/O Exception occurs
+     */
+    @Nonnull
+    public <T> GitHubResponse<T> sendRequest(@Nonnull GitHubRequest.Builder<?> builder,
+            @CheckForNull BodyHandler<T> handler) throws IOException {
+        return sendRequest(builder.build(), handler);
+    }
+
     private void detectExpiredToken(GitHubConnectorResponse connectorResponse, GitHubRequest request)
             throws IOException {
         if (connectorResponse.statusCode() != HTTP_UNAUTHORIZED) {
@@ -629,155 +778,6 @@ class GitHubClient {
     }
 
     /**
-     * Gets the api url.
-     *
-     * @return the api url
-     */
-    public String getApiUrl() {
-        return apiUrl;
-    }
-
-    /**
-     * Gets the encoded authorization.
-     *
-     * @return the encoded authorization
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @CheckForNull
-    String getEncodedAuthorization() throws IOException {
-        return authorizationProvider.getEncodedAuthorization();
-    }
-
-    /**
-     * Gets the login.
-     *
-     * @return the login
-     */
-    String getLogin() {
-        try {
-            if (this.authorizationProvider instanceof UserAuthorizationProvider
-                    && this.authorizationProvider.getEncodedAuthorization() != null) {
-
-                UserAuthorizationProvider userAuthorizationProvider = (UserAuthorizationProvider) this.authorizationProvider;
-
-                return userAuthorizationProvider.getLogin();
-            }
-        } catch (IOException e) {
-        }
-        return null;
-    }
-
-    /**
-     * Gets the current full rate limit information from the server.
-     *
-     * For some versions of GitHub Enterprise, the {@code /rate_limit} endpoint returns a {@code 404 Not Found}. In that
-     * case, the most recent {@link GHRateLimit} information will be returned, including rate limit information returned
-     * in the response header for this request in if was present.
-     *
-     * For most use cases it would be better to implement a {@link RateLimitChecker} and add it via
-     * {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
-     *
-     * @return the rate limit
-     * @throws IOException
-     *             the io exception
-     */
-    @Nonnull
-    public GHRateLimit getRateLimit() throws IOException {
-        return getRateLimit(RateLimitTarget.NONE);
-    }
-
-    /**
-     * Gets the rate limit.
-     *
-     * @param rateLimitTarget
-     *            the rate limit target
-     * @return the rate limit
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Nonnull
-    GHRateLimit getRateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
-        // Even when explicitly asking for rate limit, restrict to sane query frequency
-        // return cached value if available
-        GHRateLimit output = sanityCachedRateLimit.get(
-                (currentValue) -> currentValue == null || currentValue.getRecord(rateLimitTarget).isExpired(),
-                () -> {
-                    GHRateLimit result;
-                    try {
-                        final GitHubRequest request = GitHubRequest.newBuilder()
-                                .rateLimit(RateLimitTarget.NONE)
-                                .withApiUrl(getApiUrl())
-                                .withUrlPath("/rate_limit")
-                                .build();
-                        result = this
-                                .sendRequest(request,
-                                        (connectorResponse) -> GitHubResponse.parseBody(connectorResponse,
-                                                JsonRateLimit.class))
-                                .body().resources;
-                    } catch (FileNotFoundException e) {
-                        // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
-                        LOGGER.log(FINE, "(%s) /rate_limit returned 404 Not Found.", sendRequestTraceId.get());
-
-                        // However some newer versions of GHE include rate limit header information
-                        // If the header info is missing and the endpoint returns 404, fill the rate limit
-                        // with unknown
-                        result = GHRateLimit.fromRecord(GHRateLimit.UnknownLimitRecord.current(), rateLimitTarget);
-                    }
-                    return result;
-                });
-        return updateRateLimit(output);
-    }
-
-    /**
-     * Is this an anonymous connection.
-     *
-     * @return {@code true} if operations that require authentication will fail.
-     */
-    public boolean isAnonymous() {
-        try {
-            return getLogin() == null && this.authorizationProvider.getEncodedAuthorization() == null;
-        } catch (IOException e) {
-            // An exception here means that the provider failed to provide authorization parameters,
-            // basically meaning the same as "no auth"
-            return false;
-        }
-    }
-
-    /**
-     * Ensures that the credential for this client is valid.
-     *
-     * @return the boolean
-     */
-    public boolean isCredentialValid() {
-        return sanityCachedIsCredentialValid.get(() -> {
-            try {
-                // If 404, ratelimit returns a default value.
-                // This works as credential test because invalid credentials returns 401, not 404
-                getRateLimit();
-                return Boolean.TRUE;
-            } catch (IOException e) {
-                LOGGER.log(FINE,
-                        e,
-                        () -> String.format("(%s) Exception validating credentials on %s with login '%s'",
-                                sendRequestTraceId.get(),
-                                getApiUrl(),
-                                getLogin()));
-                return Boolean.FALSE;
-            }
-        });
-    }
-
-    /**
-     * Is this an always offline "connection".
-     *
-     * @return {@code true} if this is an always offline "connection".
-     */
-    public boolean isOffline() {
-        return connector == GitHubConnector.OFFLINE;
-    }
-
-    /**
      * Checks if a GitHub Enterprise server is configured in private mode.
      *
      * In private mode response looks like:
@@ -812,22 +812,6 @@ class GitHubClient {
         } catch (IOException e) {
             return false;
         }
-    }
-
-    /**
-     * Returns the most recently observed rate limit data.
-     *
-     * Generally, instead of calling this you should implement a {@link RateLimitChecker} or call
-     *
-     * @return the most recently observed rate limit data. This may include expired or
-     *         {@link GHRateLimit.UnknownLimitRecord} entries.
-     * @deprecated implement a {@link RateLimitChecker} and add it via
-     *             {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
-     */
-    @Nonnull
-    @Deprecated
-    GHRateLimit lastRateLimit() {
-        return rateLimit.get();
     }
 
     private void logRequest(@Nonnull final GitHubConnectorRequest request) {
@@ -912,6 +896,110 @@ class GitHubClient {
     }
 
     /**
+     * Update the Rate Limit with the latest info from response header.
+     *
+     * Due to multi-threading, requests might complete out of order. This method calls
+     * {@link GHRateLimit#getMergedRateLimit(GHRateLimit)} to ensure the most current records are used.
+     *
+     * @param observed
+     *            {@link GHRateLimit.Record} constructed from the response header information
+     */
+    private GHRateLimit updateRateLimit(@Nonnull GHRateLimit observed) {
+        GHRateLimit result = rateLimit.accumulateAndGet(observed, (current, x) -> current.getMergedRateLimit(x));
+        LOGGER.log(FINEST, "Rate limit now: {0}", rateLimit.get());
+        return result;
+    }
+
+    /**
+     * Gets the encoded authorization.
+     *
+     * @return the encoded authorization
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @CheckForNull
+    String getEncodedAuthorization() throws IOException {
+        return authorizationProvider.getEncodedAuthorization();
+    }
+
+    /**
+     * Gets the login.
+     *
+     * @return the login
+     */
+    String getLogin() {
+        try {
+            if (this.authorizationProvider instanceof UserAuthorizationProvider
+                    && this.authorizationProvider.getEncodedAuthorization() != null) {
+
+                UserAuthorizationProvider userAuthorizationProvider = (UserAuthorizationProvider) this.authorizationProvider;
+
+                return userAuthorizationProvider.getLogin();
+            }
+        } catch (IOException e) {
+        }
+        return null;
+    }
+
+    /**
+     * Gets the rate limit.
+     *
+     * @param rateLimitTarget
+     *            the rate limit target
+     * @return the rate limit
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Nonnull
+    GHRateLimit getRateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
+        // Even when explicitly asking for rate limit, restrict to sane query frequency
+        // return cached value if available
+        GHRateLimit output = sanityCachedRateLimit.get(
+                (currentValue) -> currentValue == null || currentValue.getRecord(rateLimitTarget).isExpired(),
+                () -> {
+                    GHRateLimit result;
+                    try {
+                        final GitHubRequest request = GitHubRequest.newBuilder()
+                                .rateLimit(RateLimitTarget.NONE)
+                                .withApiUrl(getApiUrl())
+                                .withUrlPath("/rate_limit")
+                                .build();
+                        result = this
+                                .sendRequest(request,
+                                        (connectorResponse) -> GitHubResponse.parseBody(connectorResponse,
+                                                JsonRateLimit.class))
+                                .body().resources;
+                    } catch (FileNotFoundException e) {
+                        // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
+                        LOGGER.log(FINE, "(%s) /rate_limit returned 404 Not Found.", sendRequestTraceId.get());
+
+                        // However some newer versions of GHE include rate limit header information
+                        // If the header info is missing and the endpoint returns 404, fill the rate limit
+                        // with unknown
+                        result = GHRateLimit.fromRecord(GHRateLimit.UnknownLimitRecord.current(), rateLimitTarget);
+                    }
+                    return result;
+                });
+        return updateRateLimit(output);
+    }
+
+    /**
+     * Returns the most recently observed rate limit data.
+     *
+     * Generally, instead of calling this you should implement a {@link RateLimitChecker} or call
+     *
+     * @return the most recently observed rate limit data. This may include expired or
+     *         {@link GHRateLimit.UnknownLimitRecord} entries.
+     * @deprecated implement a {@link RateLimitChecker} and add it via
+     *             {@link GitHubBuilder#withRateLimitChecker(RateLimitChecker)}.
+     */
+    @Nonnull
+    @Deprecated
+    GHRateLimit lastRateLimit() {
+        return rateLimit.get();
+    }
+
+    /**
      * Gets the current rate limit for an endpoint while trying not to actually make any remote requests unless
      * absolutely necessary.
      *
@@ -950,93 +1038,5 @@ class GitHubClient {
         if (isAnonymous())
             throw new IllegalStateException(
                     "This operation requires a credential but none is given to the GitHub constructor");
-    }
-
-    /**
-     * Sends the {@link GitHubRequest} to the server, and uses the {@link BodyHandler} to parse the response info and
-     * response body data into an instance of {@code T}.
-     *
-     * @param <T>
-     *            the type of the parse body data.
-     * @param request
-     *            the request that will be sent to the server.
-     * @param handler
-     *            parse the response info and body data into a instance of {@code T}. If null, no parsing occurs and
-     *            {@link GitHubResponse#body()} will return null.
-     * @return a {@link GitHubResponse} containing the parsed body data as a {@code T}. Parsed instance may be null.
-     * @throws IOException
-     *             if an I/O Exception occurs
-     */
-    @Nonnull
-    public <T> GitHubResponse<T> sendRequest(GitHubRequest request, @CheckForNull BodyHandler<T> handler)
-            throws IOException {
-        // WARNING: This is an unsupported environment variable.
-        // The GitHubClient class is internal and may change at any time.
-        int retryCount = Math.max(DEFAULT_CONNECTION_ERROR_RETRIES,
-                Integer.getInteger(GitHubClient.class.getName() + ".retryCount", DEFAULT_CONNECTION_ERROR_RETRIES));
-
-        int retries = retryCount;
-        sendRequestTraceId.set(Integer.toHexString(request.hashCode()));
-        GitHubConnectorRequest connectorRequest = prepareConnectorRequest(request, authorizationProvider);
-        do {
-            GitHubConnectorResponse connectorResponse = null;
-            try {
-                logRequest(connectorRequest);
-                rateLimitChecker.checkRateLimit(this, request.rateLimitTarget());
-                connectorResponse = connector.send(connectorRequest);
-                logResponse(connectorResponse);
-                noteRateLimit(request.rateLimitTarget(), connectorResponse);
-                detectKnownErrors(connectorResponse, request, handler != null);
-                logResponseBody(connectorResponse);
-                return createResponse(connectorResponse, handler);
-            } catch (RetryRequestException e) {
-                // retry requested by requested by error handler (rate limit handler for example)
-                if (retries > 0 && e.connectorRequest != null) {
-                    connectorRequest = e.connectorRequest;
-                }
-            } catch (IOException e) {
-                throw interpretApiError(e, connectorRequest, connectorResponse);
-            } finally {
-                IOUtils.closeQuietly(connectorResponse);
-            }
-        } while (--retries >= 0);
-
-        throw new GHIOException("Ran out of retries for URL: " + request.url().toString());
-    }
-
-    /**
-     * Builds a {@link GitHubRequest}, sends the {@link GitHubRequest} to the server, and uses the {@link BodyHandler}
-     * to parse the response info and response body data into an instance of {@code T}.
-     *
-     * @param <T>
-     *            the type of the parse body data.
-     * @param builder
-     *            used to build the request that will be sent to the server.
-     * @param handler
-     *            parse the response info and body data into a instance of {@code T}. If null, no parsing occurs and
-     *            {@link GitHubResponse#body()} will return null.
-     * @return a {@link GitHubResponse} containing the parsed body data as a {@code T}. Parsed instance may be null.
-     * @throws IOException
-     *             if an I/O Exception occurs
-     */
-    @Nonnull
-    public <T> GitHubResponse<T> sendRequest(@Nonnull GitHubRequest.Builder<?> builder,
-            @CheckForNull BodyHandler<T> handler) throws IOException {
-        return sendRequest(builder.build(), handler);
-    }
-
-    /**
-     * Update the Rate Limit with the latest info from response header.
-     *
-     * Due to multi-threading, requests might complete out of order. This method calls
-     * {@link GHRateLimit#getMergedRateLimit(GHRateLimit)} to ensure the most current records are used.
-     *
-     * @param observed
-     *            {@link GHRateLimit.Record} constructed from the response header information
-     */
-    private GHRateLimit updateRateLimit(@Nonnull GHRateLimit observed) {
-        GHRateLimit result = rateLimit.accumulateAndGet(observed, (current, x) -> current.getMergedRateLimit(x));
-        LOGGER.log(FINEST, "Rate limit now: {0}", rateLimit.get());
-        return result;
     }
 }

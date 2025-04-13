@@ -254,14 +254,6 @@ public class GHOrganization extends GHPerson {
         GHHooks.orgContext(this).deleteHook(id);
     }
 
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest()
-                .withUrlPath(String.format("/orgs/%s", login))
-                .method("PATCH")
-                .with(key, value)
-                .fetchInto(this);
-    }
-
     /**
      * Sets organization projects enabled status boolean.
      *
@@ -523,18 +515,6 @@ public class GHOrganization extends GHPerson {
         return listMembers("members");
     }
 
-    private PagedIterable<GHUser> listMembers(String suffix) {
-        return listMembers(suffix, null, null);
-    }
-
-    private PagedIterable<GHUser> listMembers(final String suffix, final String filter, String role) {
-        return root().createRequest()
-                .withUrlPath(String.format("/orgs/%s/%s", login, suffix))
-                .with("filter", filter)
-                .with("role", role)
-                .toIterable(GHUser[].class, null);
-    }
-
     /**
      * List members with filter paged iterable.
      *
@@ -667,5 +647,25 @@ public class GHOrganization extends GHPerson {
      */
     public void remove(GHUser user) throws IOException {
         root().createRequest().method("DELETE").withUrlPath("/orgs/" + login + "/members/" + user.getLogin()).send();
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest()
+                .withUrlPath(String.format("/orgs/%s", login))
+                .method("PATCH")
+                .with(key, value)
+                .fetchInto(this);
+    }
+
+    private PagedIterable<GHUser> listMembers(String suffix) {
+        return listMembers(suffix, null, null);
+    }
+
+    private PagedIterable<GHUser> listMembers(final String suffix, final String filter, String role) {
+        return root().createRequest()
+                .withUrlPath(String.format("/orgs/%s/%s", login, suffix))
+                .with("filter", filter)
+                .with("role", role)
+                .toIterable(GHUser[].class, null);
     }
 }

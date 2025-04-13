@@ -83,10 +83,6 @@ public class GHCommitComment extends GHObject implements Reactable {
                 .send();
     }
 
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/comments/%s", owner.getOwnerName(), owner.getName(), getId());
-    }
-
     /**
      * Commit comment in the GitHub flavored markdown format.
      *
@@ -196,6 +192,10 @@ public class GHCommitComment extends GHObject implements Reactable {
                 .withUrlPath(getApiTail())
                 .fetch(GHCommitComment.class);
         this.body = body;
+    }
+
+    private String getApiTail() {
+        return String.format("/repos/%s/%s/comments/%s", owner.getOwnerName(), owner.getName(), getId());
     }
 
     /**

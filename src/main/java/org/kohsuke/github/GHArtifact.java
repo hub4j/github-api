@@ -65,15 +65,6 @@ public class GHArtifact extends GHObject {
         return root().createRequest().method("GET").withUrlPath(getApiRoute(), "zip").fetchStream(streamFunction);
     }
 
-    private String getApiRoute() {
-        if (owner == null) {
-            // Workflow runs returned from search to do not have an owner. Attempt to use url.
-            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
-        }
-        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/artifacts/" + getId();
-    }
-
     /**
      * Gets the archive download URL.
      *
@@ -128,6 +119,15 @@ public class GHArtifact extends GHObject {
      */
     public boolean isExpired() {
         return expired;
+    }
+
+    private String getApiRoute() {
+        if (owner == null) {
+            // Workflow runs returned from search to do not have an owner. Attempt to use url.
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
+        }
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/artifacts/" + getId();
     }
 
     /**

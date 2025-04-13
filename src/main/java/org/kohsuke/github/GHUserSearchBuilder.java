@@ -64,16 +64,6 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
     }
 
     /**
-     * Gets the api url.
-     *
-     * @return the api url
-     */
-    @Override
-    protected String getApiUrl() {
-        return "/search/users";
-    }
-
-    /**
      * In gh user search builder.
      *
      * @param v
@@ -162,5 +152,15 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
      */
     public GHUserSearchBuilder type(String v) {
         return q("type:" + v);
+    }
+
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
+    @Override
+    protected String getApiUrl() {
+        return "/search/users";
     }
 }

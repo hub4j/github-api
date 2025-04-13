@@ -43,16 +43,6 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
-    }
-
-    /**
      * Test handler fail.
      *
      * @throws Exception
@@ -207,6 +197,16 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
 
         getTempRepository();
         assertThat(mockGitHub.getRequestCount(), equalTo(3));
+    }
+
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
 }

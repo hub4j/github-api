@@ -357,32 +357,6 @@ public class GHBranchProtection extends GitHubInteractiveObject {
         }
     }
 
-    private static class RequiredSignatures {
-        @JsonProperty
-        private boolean enabled;
-
-        @JsonProperty
-        private String url;
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public String getUrl() {
-            return url;
-        }
-
-        /**
-         * Is enabled boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isEnabled() {
-            return enabled;
-        }
-    }
-
     /**
      * The type RequiredStatusChecks.
      */
@@ -510,6 +484,32 @@ public class GHBranchProtection extends GitHubInteractiveObject {
          */
         public String getUsersUrl() {
             return usersUrl;
+        }
+    }
+
+    private static class RequiredSignatures {
+        @JsonProperty
+        private boolean enabled;
+
+        @JsonProperty
+        private String url;
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+            return url;
+        }
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+            return enabled;
         }
     }
 

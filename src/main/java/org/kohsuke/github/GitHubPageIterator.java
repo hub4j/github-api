@@ -86,6 +86,42 @@ class GitHubPageIterator<T> implements Iterator<T> {
     }
 
     /**
+     * On rare occasions the final response from iterating is needed.
+     *
+     * @return the final response of the iterator.
+     */
+    public GitHubResponse<T> finalResponse() {
+        if (hasNext()) {
+            throw new GHException("Final response is not available until after iterator is done.");
+        }
+        return finalResponse;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasNext() {
+        fetch();
+        return next != null;
+    }
+
+    /**
+     * Gets the next page.
+     *
+     * @return the next page.
+     */
+    @Nonnull
+    public T next() {
+        fetch();
+        T result = next;
+        if (result == null)
+            throw new NoSuchElementException();
+        // If this is the last page, keep the response
+        next = null;
+        return result;
+    }
+
+    /**
      * Fetch is called at the start of {@link #hasNext()} or {@link #next()} to fetch another page of data if it is
      * needed.
      * <p>
@@ -122,18 +158,6 @@ class GitHubPageIterator<T> implements Iterator<T> {
     }
 
     /**
-     * On rare occasions the final response from iterating is needed.
-     *
-     * @return the final response of the iterator.
-     */
-    public GitHubResponse<T> finalResponse() {
-        if (hasNext()) {
-            throw new GHException("Final response is not available until after iterator is done.");
-        }
-        return finalResponse;
-    }
-
-    /**
      * Locate the next page from the pagination "Link" tag.
      */
     private GitHubRequest findNextURL(GitHubRequest nextRequest, GitHubResponse<T> nextResponse) {
@@ -150,30 +174,6 @@ class GitHubPageIterator<T> implements Iterator<T> {
                 }
             }
         }
-        return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean hasNext() {
-        fetch();
-        return next != null;
-    }
-
-    /**
-     * Gets the next page.
-     *
-     * @return the next page.
-     */
-    @Nonnull
-    public T next() {
-        fetch();
-        T result = next;
-        if (result == null)
-            throw new NoSuchElementException();
-        // If this is the last page, keep the response
-        next = null;
         return result;
     }
 

@@ -62,28 +62,6 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
     }
 
     /**
-     * Adapts {@link Iterator}.
-     *
-     * @param base
-     *            the base
-     * @return the iterator
-     */
-    protected Iterator<T[]> adapt(final Iterator<? extends SearchResult<T>> base) {
-        return new Iterator<T[]>() {
-            public boolean hasNext() {
-                return base.hasNext();
-            }
-
-            public T[] next() {
-                SearchResult<T> v = base.next();
-                if (result == null)
-                    result = v;
-                return v.getItems(root);
-            }
-        };
-    }
-
-    /**
      * Returns the total number of hit, including the results that's not yet fetched.
      *
      * @return the total count
@@ -103,11 +81,6 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
         return result.incompleteResults;
     }
 
-    private void populate() {
-        if (result == null)
-            iterator().hasNext();
-    }
-
     /**
      * With page size.
      *
@@ -118,5 +91,32 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
     @Override
     public PagedSearchIterable<T> withPageSize(int size) {
         return (PagedSearchIterable<T>) super.withPageSize(size);
+    }
+
+    private void populate() {
+        if (result == null)
+            iterator().hasNext();
+    }
+
+    /**
+     * Adapts {@link Iterator}.
+     *
+     * @param base
+     *            the base
+     * @return the iterator
+     */
+    protected Iterator<T[]> adapt(final Iterator<? extends SearchResult<T>> base) {
+        return new Iterator<T[]>() {
+            public boolean hasNext() {
+                return base.hasNext();
+            }
+
+            public T[] next() {
+                SearchResult<T> v = base.next();
+                if (result == null)
+                    result = v;
+                return v.getItems(root);
+            }
+        };
     }
 }

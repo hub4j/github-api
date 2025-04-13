@@ -74,19 +74,6 @@ public class GHProjectColumn extends GHObject {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * Gets api route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-        return String.format("/projects/columns/%d", getId());
-    }
-
     /**
      * Gets name.
      *
@@ -124,29 +111,6 @@ public class GHProjectColumn extends GHObject {
     }
 
     /**
-     * Wrap gh project column.
-     *
-     * @param project
-     *            the project
-     * @return the gh project column
-     */
-    GHProjectColumn lateBind(GHProject project) {
-        this.project = project;
-        return lateBind(project.root());
-    }
-
-    /**
-     * Wrap gh project column.
-     *
-     * @param root
-     *            the root
-     * @return the gh project column
-     */
-    GHProjectColumn lateBind(GitHub root) {
-        return this;
-    }
-
-    /**
      * List cards paged iterable.
      *
      * @return the paged iterable
@@ -168,5 +132,41 @@ public class GHProjectColumn extends GHObject {
      */
     public void setName(String name) throws IOException {
         edit("name", name);
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+        return String.format("/projects/columns/%d", getId());
+    }
+
+    /**
+     * Wrap gh project column.
+     *
+     * @param project
+     *            the project
+     * @return the gh project column
+     */
+    GHProjectColumn lateBind(GHProject project) {
+        this.project = project;
+        return lateBind(project.root());
+    }
+
+    /**
+     * Wrap gh project column.
+     *
+     * @param root
+     *            the root
+     * @return the gh project column
+     */
+    GHProjectColumn lateBind(GitHub root) {
+        return this;
     }
 }

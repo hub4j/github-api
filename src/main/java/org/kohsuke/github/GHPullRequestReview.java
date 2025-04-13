@@ -88,15 +88,6 @@ public class GHPullRequestReview extends GHObject {
     }
 
     /**
-     * Gets api route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-        return owner.getApiRoute() + "/reviews/" + getId();
-    }
-
-    /**
      * The comment itself.
      *
      * @return the body
@@ -212,6 +203,15 @@ public class GHPullRequestReview extends GHObject {
                 .fetchInto(this);
         this.body = body;
         this.state = event.toState();
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+        return owner.getApiRoute() + "/reviews/" + getId();
     }
 
     /**

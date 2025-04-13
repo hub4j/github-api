@@ -55,6 +55,54 @@ import javax.annotation.Nonnull;
  */
 public class GitHub {
 
+    /**
+     * The Class DependentAuthorizationProvider.
+     */
+    public static abstract class DependentAuthorizationProvider implements AuthorizationProvider {
+
+        private GitHub baseGitHub;
+        private GitHub gitHub;
+        private final AuthorizationProvider authorizationProvider;
+
+        /**
+         * An AuthorizationProvider that requires an authenticated GitHub instance to provide its authorization.
+         *
+         * @param authorizationProvider
+         *            A authorization provider to be used when refreshing this authorization provider.
+         */
+        @BetaApi
+        protected DependentAuthorizationProvider(AuthorizationProvider authorizationProvider) {
+            this.authorizationProvider = authorizationProvider;
+        }
+
+        /**
+         * Git hub.
+         *
+         * @return the git hub
+         */
+        protected synchronized final GitHub gitHub() {
+            if (gitHub == null) {
+                gitHub = new GitHub.AuthorizationRefreshGitHubWrapper(this.baseGitHub, authorizationProvider);
+            }
+            return gitHub;
+        }
+
+        /**
+         * Binds this authorization provider to a github instance.
+         *
+         * Only needs to be implemented by dynamic credentials providers that use a github instance in order to refresh.
+         *
+         * @param github
+         *            The github instance to be used for refreshing dynamic credentials
+         */
+        synchronized void bind(GitHub github) {
+            if (baseGitHub != null) {
+                throw new IllegalStateException("Already bound to another GitHub instance.");
+            }
+            this.baseGitHub = github;
+        }
+    }
+
     private static class AuthorizationRefreshGitHubWrapper extends GitHub {
 
         private final AuthorizationProvider authorizationProvider;
@@ -79,54 +127,6 @@ public class GitHub {
             } catch (IOException e) {
                 throw new GHException("Failed to create requester to refresh credentials", e);
             }
-        }
-    }
-
-    /**
-     * The Class DependentAuthorizationProvider.
-     */
-    public static abstract class DependentAuthorizationProvider implements AuthorizationProvider {
-
-        private GitHub baseGitHub;
-        private GitHub gitHub;
-        private final AuthorizationProvider authorizationProvider;
-
-        /**
-         * An AuthorizationProvider that requires an authenticated GitHub instance to provide its authorization.
-         *
-         * @param authorizationProvider
-         *            A authorization provider to be used when refreshing this authorization provider.
-         */
-        @BetaApi
-        protected DependentAuthorizationProvider(AuthorizationProvider authorizationProvider) {
-            this.authorizationProvider = authorizationProvider;
-        }
-
-        /**
-         * Binds this authorization provider to a github instance.
-         *
-         * Only needs to be implemented by dynamic credentials providers that use a github instance in order to refresh.
-         *
-         * @param github
-         *            The github instance to be used for refreshing dynamic credentials
-         */
-        synchronized void bind(GitHub github) {
-            if (baseGitHub != null) {
-                throw new IllegalStateException("Already bound to another GitHub instance.");
-            }
-            this.baseGitHub = github;
-        }
-
-        /**
-         * Git hub.
-         *
-         * @return the git hub
-         */
-        protected synchronized final GitHub gitHub() {
-            if (gitHub == null) {
-                gitHub = new GitHub.AuthorizationRefreshGitHubWrapper(this.baseGitHub, authorizationProvider);
-            }
-            return gitHub;
         }
     }
 
@@ -480,21 +480,6 @@ public class GitHub {
     }
 
     /**
-     * Creates a request to GitHub GraphQL API.
-     *
-     * @param query
-     *            the query for the GraphQL
-     * @return the requester
-     */
-    @Nonnull
-    Requester createGraphQLRequest(String query) {
-        return createRequest().method("POST")
-                .rateLimit(RateLimitTarget.GRAPHQL)
-                .with("query", query)
-                .withUrlPath("/graphql");
-    }
-
-    /**
      * Create or get auth gh authorization.
      *
      * @param clientId
@@ -539,22 +524,6 @@ public class GitHub {
      */
     public GHCreateRepositoryBuilder createRepository(String name) {
         return new GHCreateRepositoryBuilder(name, this, "/user/repos");
-    }
-
-    /**
-     * Creates the request.
-     *
-     * @return the requester
-     */
-    @Nonnull
-    Requester createRequest() {
-        Requester requester = new Requester(client);
-        requester.injectMappingValue(this);
-        if (!this.getClass().equals(GitHub.class)) {
-            // For classes that extend GitHub, treat them still as a GitHub instance
-            requester.injectMappingValue(GitHub.class.getName(), this);
-        }
-        return requester;
     }
 
     /**
@@ -664,16 +633,6 @@ public class GitHub {
      */
     public GHApp getApp(@Nonnull String slug) throws IOException {
         return createRequest().withUrlPath("/apps/" + slug).fetch(GHApp.class);
-    }
-
-    /**
-     * Gets the client.
-     *
-     * @return the client
-     */
-    @Nonnull
-    GitHubClient getClient() {
-        return client;
     }
 
     /**
@@ -939,22 +898,6 @@ public class GitHub {
     }
 
     /**
-     * Interns the given {@link GHUser}.
-     *
-     * @param orig
-     *            the orig
-     * @return the user
-     */
-    protected GHUser getUser(GHUser orig) {
-        GHUser u = users.get(orig.getLogin());
-        if (u == null) {
-            users.put(orig.getLogin(), orig);
-            return orig;
-        }
-        return u;
-    }
-
-    /**
      * Obtains the object that represents the named user.
      *
      * @param login
@@ -1023,25 +966,6 @@ public class GitHub {
             r.put(o.getLogin(), o);
         }
         return r;
-    }
-
-    /**
-     * Intern.
-     *
-     * @param user
-     *            the user
-     * @return the GH user
-     */
-    GHUser intern(GHUser user) {
-        if (user != null) {
-            // if we already have this user in our map, get it
-            // if not, remember this new user
-            GHUser existingUser = users.putIfAbsent(user.getLogin(), user);
-            if (existingUser != null) {
-                user = existingUser;
-            }
-        }
-        return user;
     }
 
     /**
@@ -1333,5 +1257,81 @@ public class GitHub {
             }
             return myself;
         }
+    }
+
+    /**
+     * Interns the given {@link GHUser}.
+     *
+     * @param orig
+     *            the orig
+     * @return the user
+     */
+    protected GHUser getUser(GHUser orig) {
+        GHUser u = users.get(orig.getLogin());
+        if (u == null) {
+            users.put(orig.getLogin(), orig);
+            return orig;
+        }
+        return u;
+    }
+
+    /**
+     * Creates a request to GitHub GraphQL API.
+     *
+     * @param query
+     *            the query for the GraphQL
+     * @return the requester
+     */
+    @Nonnull
+    Requester createGraphQLRequest(String query) {
+        return createRequest().method("POST")
+                .rateLimit(RateLimitTarget.GRAPHQL)
+                .with("query", query)
+                .withUrlPath("/graphql");
+    }
+
+    /**
+     * Creates the request.
+     *
+     * @return the requester
+     */
+    @Nonnull
+    Requester createRequest() {
+        Requester requester = new Requester(client);
+        requester.injectMappingValue(this);
+        if (!this.getClass().equals(GitHub.class)) {
+            // For classes that extend GitHub, treat them still as a GitHub instance
+            requester.injectMappingValue(GitHub.class.getName(), this);
+        }
+        return requester;
+    }
+
+    /**
+     * Gets the client.
+     *
+     * @return the client
+     */
+    @Nonnull
+    GitHubClient getClient() {
+        return client;
+    }
+
+    /**
+     * Intern.
+     *
+     * @param user
+     *            the user
+     * @return the GH user
+     */
+    GHUser intern(GHUser user) {
+        if (user != null) {
+            // if we already have this user in our map, get it
+            // if not, remember this new user
+            GHUser existingUser = users.putIfAbsent(user.getLogin(), user);
+            if (existingUser != null) {
+                user = existingUser;
+            }
+        }
+        return user;
     }
 }

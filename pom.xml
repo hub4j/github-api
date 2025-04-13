@@ -487,6 +487,7 @@
               <version>4.35</version>
               <file>${basedir}/src/build/eclipse/formatter.xml</file>
               <sortMembersEnabled>true</sortMembersEnabled>
+              <sortMembersVisibilityOrderEnabled>true</sortMembersVisibilityOrderEnabled>
             </eclipse>
 
             <importOrder>

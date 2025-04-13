@@ -67,10 +67,6 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     public GHRepositoryForkBuilderTest() {
     }
 
-    private TestForkBuilder createBuilder() {
-        return new TestForkBuilder(repo);
-    }
-
     /**
      * Sets up.
      *
@@ -248,6 +244,10 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
                             containsString("into " + TARGET_ORG),
                             containsString("but can't find the new repository")));
         }
+    }
+
+    private TestForkBuilder createBuilder() {
+        return new TestForkBuilder(repo);
     }
 
     private void verifyBasicForkProperties(GHRepository original, GHRepository forked, String expectedName)

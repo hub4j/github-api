@@ -48,13 +48,6 @@ public abstract class GHHook extends GHObject {
     }
 
     /**
-     * Gets the api route.
-     *
-     * @return the api route
-     */
-    abstract String getApiRoute();
-
-    /**
      * Gets config.
      *
      * @return the config
@@ -104,6 +97,13 @@ public abstract class GHHook extends GHObject {
     public void ping() throws IOException {
         root().createRequest().method("POST").withUrlPath(getApiRoute() + "/pings").send();
     }
+
+    /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
+    abstract String getApiRoute();
 
     /**
      * Root.

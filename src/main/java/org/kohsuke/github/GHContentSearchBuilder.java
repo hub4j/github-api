@@ -9,15 +9,6 @@ package org.kohsuke.github;
  */
 public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
 
-    private static class ContentSearchResult extends SearchResult<GHContent> {
-        private GHContent[] items;
-
-        @Override
-        GHContent[] getItems(GitHub root) {
-            return items;
-        }
-    }
-
     /**
      * The enum Sort.
      */
@@ -27,6 +18,15 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
         BEST_MATCH,
         /** The indexed. */
         INDEXED
+    }
+
+    private static class ContentSearchResult extends SearchResult<GHContent> {
+        private GHContent[] items;
+
+        @Override
+        GHContent[] getItems(GitHub root) {
+            return items;
+        }
     }
 
     /**
@@ -75,16 +75,6 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
      */
     public GHContentSearchBuilder fork(GHFork fork) {
         return q("fork", fork.toString());
-    }
-
-    /**
-     * Gets the api url.
-     *
-     * @return the api url
-     */
-    @Override
-    protected String getApiUrl() {
-        return "/search/code";
     }
 
     /**
@@ -142,15 +132,6 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    GHContentSearchBuilder q(String qualifier, String value) {
-        super.q(qualifier, value);
-        return this;
-    }
-
-    /**
      * Repo gh content search builder.
      *
      * @param v
@@ -197,5 +178,24 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
      */
     public GHContentSearchBuilder user(String v) {
         return q("user:" + v);
+    }
+
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
+    @Override
+    protected String getApiUrl() {
+        return "/search/code";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    GHContentSearchBuilder q(String qualifier, String value) {
+        super.q(qualifier, value);
+        return this;
     }
 }

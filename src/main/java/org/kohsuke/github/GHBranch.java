@@ -81,15 +81,6 @@ public class GHBranch extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets the api route.
-     *
-     * @return the api route
-     */
-    String getApiRoute() {
-        return owner.getApiTailUrl("/branches/" + name);
-    }
-
-    /**
      * Gets name.
      *
      * @return the name
@@ -208,6 +199,15 @@ public class GHBranch extends GitHubInteractiveObject {
     public String toString() {
         final String url = owner != null ? owner.getUrl().toString() : "unknown";
         return "Branch:" + name + " in " + url;
+    }
+
+    /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
+    String getApiRoute() {
+        return owner.getApiTailUrl("/branches/" + name);
     }
 
     /**

@@ -95,11 +95,6 @@ public class GHIssueComment extends GHObject implements Reactable {
                 .send();
     }
 
-    private String getApiRoute() {
-        return "/repos/" + owner.getRepository().getOwnerName() + "/" + owner.getRepository().getName()
-                + "/issues/comments/" + getId();
-    }
-
     /**
      * Gets author association.
      *
@@ -178,6 +173,11 @@ public class GHIssueComment extends GHObject implements Reactable {
                 .withUrlPath(getApiRoute())
                 .fetch(GHIssueComment.class);
         this.body = body;
+    }
+
+    private String getApiRoute() {
+        return "/repos/" + owner.getRepository().getOwnerName() + "/" + owner.getRepository().getName()
+                + "/issues/comments/" + getId();
     }
 
     /**

@@ -100,16 +100,6 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets the api root.
-     *
-     * @return the api root
-     */
-    @Nonnull
-    GitHub getApiRoot() {
-        return Objects.requireNonNull(root());
-    }
-
-    /**
      * Gets name.
      *
      * @return the name
@@ -165,6 +155,16 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    /**
+     * Gets the api root.
+     *
+     * @return the api root
+     */
+    @Nonnull
+    GitHub getApiRoot() {
+        return Objects.requireNonNull(root());
     }
 
 }

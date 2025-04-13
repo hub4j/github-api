@@ -35,16 +35,6 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
-    }
-
-    /**
      * Retried request should get new token when the old one expires.
      *
      * @throws IOException
@@ -75,5 +65,15 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
                 .build();
         final GHUser kohsuke = gitHub.getUser("kohsuke");
         assertThat("Usernames match", "kohsuke".equals(kohsuke.getLogin()));
+    }
+
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 }

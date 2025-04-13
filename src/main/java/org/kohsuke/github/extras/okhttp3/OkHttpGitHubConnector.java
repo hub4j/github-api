@@ -95,11 +95,6 @@ public class OkHttpGitHubConnector implements GitHubConnector {
         }
     }
 
-    /** Returns connection spec with TLS v1.2 in it */
-    private List<ConnectionSpec> TlsConnectionSpecs() {
-        return Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT);
-    }
-
     @Override
     public GitHubConnectorResponse send(GitHubConnectorRequest request) throws IOException {
         Request.Builder builder = new Request.Builder().url(request.url());
@@ -129,5 +124,10 @@ public class OkHttpGitHubConnector implements GitHubConnector {
         Response okhttpResponse = client.newCall(okhttpRequest).execute();
 
         return new OkHttpGitHubConnectorResponse(request, okhttpResponse);
+    }
+
+    /** Returns connection spec with TLS v1.2 in it */
+    private List<ConnectionSpec> TlsConnectionSpecs() {
+        return Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT);
     }
 }

@@ -75,17 +75,6 @@ public class GHBranchProtectionBuilder {
         return this;
     }
 
-    private void addReviewRestriction(String restriction, boolean isTeam) {
-        restrictReviewDismissals();
-        Restrictions restrictions = (Restrictions) prReviews.get("dismissal_restrictions");
-
-        if (isTeam) {
-            restrictions.teams.add(restriction);
-        } else {
-            restrictions.users.add(restriction);
-        }
-    }
-
     /**
      * Allow deletion of the protected branch.
      *
@@ -213,27 +202,6 @@ public class GHBranchProtectionBuilder {
                 .fetch(GHBranchProtection.class);
     }
 
-    private Map<String, Object> getPrReviews() {
-        if (prReviews == null) {
-            prReviews = new HashMap<String, Object>();
-        }
-        return prReviews;
-    }
-
-    private Restrictions getRestrictions() {
-        if (restrictions == null) {
-            restrictions = new Restrictions();
-        }
-        return restrictions;
-    }
-
-    private StatusChecks getStatusChecks() {
-        if (statusChecks == null) {
-            statusChecks = new StatusChecks();
-        }
-        return statusChecks;
-    }
-
     /**
      * Include admins gh branch protection builder.
      *
@@ -275,10 +243,6 @@ public class GHBranchProtectionBuilder {
     public GHBranchProtectionBuilder lockBranch(boolean v) {
         fields.put("lock_branch", v);
         return this;
-    }
-
-    private Requester requester() {
-        return branch.root().createRequest();
     }
 
     /**
@@ -547,5 +511,41 @@ public class GHBranchProtectionBuilder {
             addReviewRestriction(user.getLogin(), false);
         }
         return this;
+    }
+
+    private void addReviewRestriction(String restriction, boolean isTeam) {
+        restrictReviewDismissals();
+        Restrictions restrictions = (Restrictions) prReviews.get("dismissal_restrictions");
+
+        if (isTeam) {
+            restrictions.teams.add(restriction);
+        } else {
+            restrictions.users.add(restriction);
+        }
+    }
+
+    private Map<String, Object> getPrReviews() {
+        if (prReviews == null) {
+            prReviews = new HashMap<String, Object>();
+        }
+        return prReviews;
+    }
+
+    private Restrictions getRestrictions() {
+        if (restrictions == null) {
+            restrictions = new Restrictions();
+        }
+        return restrictions;
+    }
+
+    private StatusChecks getStatusChecks() {
+        if (statusChecks == null) {
+            statusChecks = new StatusChecks();
+        }
+        return statusChecks;
+    }
+
+    private Requester requester() {
+        return branch.root().createRequest();
     }
 }

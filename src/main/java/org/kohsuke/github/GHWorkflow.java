@@ -92,16 +92,6 @@ public class GHWorkflow extends GHObject {
         root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").send();
     }
 
-    private String getApiRoute() {
-        if (owner == null) {
-            // Workflow runs returned from search to do not have an owner. Attempt to use url.
-            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
-
-        }
-        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/workflows/" + getId();
-    }
-
     /**
      * The badge URL, like https://github.com/octo-org/octo-repo/workflows/CI/badge.svg
      *
@@ -164,6 +154,16 @@ public class GHWorkflow extends GHObject {
      */
     public PagedIterable<GHWorkflowRun> listRuns() {
         return new GHWorkflowRunsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), "runs"));
+    }
+
+    private String getApiRoute() {
+        if (owner == null) {
+            // Workflow runs returned from search to do not have an owner. Attempt to use url.
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
+
+        }
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/workflows/" + getId();
     }
 
     /**

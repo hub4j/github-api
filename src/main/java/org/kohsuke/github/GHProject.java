@@ -108,19 +108,6 @@ public class GHProject extends GHObject {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * Gets api route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-        return "/projects/" + getId();
-    }
-
     /**
      * Gets body.
      *
@@ -212,18 +199,6 @@ public class GHProject extends GHObject {
     }
 
     /**
-     * Wrap gh project.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh project
-     */
-    GHProject lateBind(GHRepository repo) {
-        this.owner = repo;
-        return this;
-    }
-
-    /**
      * List columns paged iterable.
      *
      * @return the paged iterable
@@ -294,5 +269,30 @@ public class GHProject extends GHObject {
      */
     public void setState(ProjectState state) throws IOException {
         edit("state", state.toString().toLowerCase());
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest().method("PATCH").with(key, value).withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+        return "/projects/" + getId();
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh project
+     */
+    GHProject lateBind(GHRepository repo) {
+        this.owner = repo;
+        return this;
     }
 }

@@ -111,20 +111,6 @@ public class GHPullRequestReviewCommentBuilder {
     }
 
     /**
-     * The position in the diff where you want to add a review comment.
-     *
-     * @param position
-     *            the position
-     * @return the gh pull request review comment builder
-     * @implNote As position is deprecated in GitHub API, only keep this for internal usage (for retro-compatibility
-     *           with {@link GHPullRequest#createReviewComment(String, String, String, int)}).
-     */
-    GHPullRequestReviewCommentBuilder position(int position) {
-        builder.with("position", position);
-        return this;
-    }
-
-    /**
      * The side of the diff in the pull request that the comment applies to.
      * <p>
      * {@link #side(GHPullRequestReviewComment.Side)} and
@@ -158,6 +144,20 @@ public class GHPullRequestReviewCommentBuilder {
             GHPullRequestReviewComment.Side endSide) {
         builder.with("start_side", startSide);
         builder.with("side", endSide);
+        return this;
+    }
+
+    /**
+     * The position in the diff where you want to add a review comment.
+     *
+     * @param position
+     *            the position
+     * @return the gh pull request review comment builder
+     * @implNote As position is deprecated in GitHub API, only keep this for internal usage (for retro-compatibility
+     *           with {@link GHPullRequest#createReviewComment(String, String, String, int)}).
+     */
+    GHPullRequestReviewCommentBuilder position(int position) {
+        builder.with("position", position);
         return this;
     }
 

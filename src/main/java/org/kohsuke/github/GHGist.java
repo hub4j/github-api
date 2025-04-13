@@ -88,21 +88,6 @@ public class GHGist extends GHObject {
     }
 
     /**
-     * Gets the api tail url.
-     *
-     * @param tail
-     *            the tail
-     * @return the api tail url
-     */
-    String getApiTailUrl(String tail) {
-        String result = "/gists/" + id;
-        if (!StringUtils.isBlank(tail)) {
-            result += StringUtils.prependIfMissing(tail, "/");
-        }
-        return result;
-    }
-
-    /**
      * Gets comment count.
      *
      * @return the comment count
@@ -294,5 +279,20 @@ public class GHGist extends GHObject {
      */
     public GHGistUpdater update() {
         return new GHGistUpdater(this);
+    }
+
+    /**
+     * Gets the api tail url.
+     *
+     * @param tail
+     *            the tail
+     * @return the api tail url
+     */
+    String getApiTailUrl(String tail) {
+        String result = "/gists/" + id;
+        if (!StringUtils.isBlank(tail)) {
+            result += StringUtils.prependIfMissing(tail, "/");
+        }
+        return result;
     }
 }

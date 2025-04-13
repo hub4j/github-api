@@ -54,14 +54,6 @@ public class GHAsset extends GHObject {
         root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
-    }
-
-    private String getApiRoute() {
-        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/releases/assets/" + getId();
-    }
-
     /**
      * Gets browser download url.
      *
@@ -159,6 +151,14 @@ public class GHAsset extends GHObject {
     public void setLabel(String label) throws IOException {
         edit("label", label);
         this.label = label;
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+    }
+
+    private String getApiRoute() {
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/releases/assets/" + getId();
     }
 
     /**

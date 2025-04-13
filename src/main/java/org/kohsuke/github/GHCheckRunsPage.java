@@ -13,6 +13,15 @@ class GHCheckRunsPage {
     private GHCheckRun[] checkRuns;
 
     /**
+     * Gets the total count.
+     *
+     * @return the total count
+     */
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    /**
      * Gets the check runs.
      *
      * @param owner
@@ -24,14 +33,5 @@ class GHCheckRunsPage {
             checkRun.wrap(owner);
         }
         return checkRuns;
-    }
-
-    /**
-     * Gets the total count.
-     *
-     * @return the total count
-     */
-    public int getTotalCount() {
-        return totalCount;
     }
 }

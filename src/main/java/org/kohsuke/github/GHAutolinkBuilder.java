@@ -47,10 +47,6 @@ public class GHAutolinkBuilder {
         return autolink.lateBind(repo);
     }
 
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/autolinks", repo.getOwnerName(), repo.getName());
-    }
-
     /**
      * With is alphanumeric gh autolink builder.
      *
@@ -85,6 +81,10 @@ public class GHAutolinkBuilder {
     public GHAutolinkBuilder withUrlTemplate(String urlTemplate) {
         this.urlTemplate = urlTemplate;
         return this;
+    }
+
+    private String getApiTail() {
+        return String.format("/repos/%s/%s/autolinks", repo.getOwnerName(), repo.getName());
     }
 
 }

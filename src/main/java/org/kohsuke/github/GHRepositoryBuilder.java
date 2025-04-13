@@ -87,17 +87,6 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Archive.
-     *
-     * @return the s
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    S archive() throws IOException {
-        return with("archived", true);
-    }
-
-    /**
      * Default repository branch.
      *
      * @param branch
@@ -216,19 +205,6 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
     }
 
     /**
-     * Name.
-     *
-     * @param name
-     *            the name
-     * @return the s
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    S name(String name) throws IOException {
-        return with("name", name);
-    }
-
-    /**
      * Sets the repository to private.
      *
      * @param enabled
@@ -278,5 +254,29 @@ abstract class GHRepositoryBuilder<S> extends AbstractBuilder<GHRepository, S> {
      */
     public S wiki(boolean enabled) throws IOException {
         return with("has_wiki", enabled);
+    }
+
+    /**
+     * Archive.
+     *
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    S archive() throws IOException {
+        return with("archived", true);
+    }
+
+    /**
+     * Name.
+     *
+     * @param name
+     *            the name
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    S name(String name) throws IOException {
+        return with("name", name);
     }
 }

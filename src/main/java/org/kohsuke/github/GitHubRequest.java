@@ -39,6 +39,31 @@ import static java.util.Arrays.asList;
 public class GitHubRequest implements GitHubConnectorRequest {
 
     /**
+     * The Class Entry.
+     */
+    protected static class Entry {
+
+        /** The key. */
+        final String key;
+
+        /** The value. */
+        final Object value;
+
+        /**
+         * Instantiates a new entry.
+         *
+         * @param key
+         *            the key
+         * @param value
+         *            the value
+         */
+        protected Entry(String key, Object value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    /**
      * Class {@link Builder} follows the builder pattern for {@link GitHubRequest}.
      *
      * @param <B>
@@ -81,21 +106,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
         private byte[] body;
         private boolean forceBody;
 
-        /**
-         * Create a new {@link GitHubRequest.Builder}
-         */
-        protected Builder() {
-            this(new ArrayList<>(),
-                    new TreeMap<>(nullableCaseInsensitiveComparator),
-                    new LinkedHashMap<>(),
-                    GitHubClient.GITHUB_URL,
-                    "/",
-                    "GET",
-                    RateLimitTarget.CORE,
-                    null,
-                    false);
-        }
-
         private Builder(@Nonnull List<Entry> args,
                 @Nonnull Map<String, List<String>> headers,
                 @Nonnull Map<String, Object> injectedMappingValues,
@@ -118,6 +128,21 @@ public class GitHubRequest implements GitHubConnectorRequest {
             this.rateLimitTarget = rateLimitTarget;
             this.body = body;
             this.forceBody = forceBody;
+        }
+
+        /**
+         * Create a new {@link GitHubRequest.Builder}
+         */
+        protected Builder() {
+            this(new ArrayList<>(),
+                    new TreeMap<>(nullableCaseInsensitiveComparator),
+                    new LinkedHashMap<>(),
+                    GitHubClient.GITHUB_URL,
+                    "/",
+                    "GET",
+                    RateLimitTarget.CORE,
+                    null,
+                    false);
         }
 
         /**
@@ -272,29 +297,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
             List<String> field = new ArrayList<>();
             field.add(value);
             headers.put(name, field);
-            return (B) this;
-        }
-
-        /**
-         * NOT FOR PUBLIC USE. Do not make this method public.
-         * <p>
-         * Sets the path component of api URL without URI encoding.
-         * <p>
-         * Should only be used when passing a literal URL field from a GHObject, such as {@link GHContent#refresh()} or
-         * when needing to set query parameters on requests methods that don't usually have them, such as
-         * {@link GHRelease#uploadAsset(String, InputStream, String)}.
-         *
-         * @param rawUrlPath
-         *            the content type
-         * @return the request builder
-         */
-        B setRawUrlPath(@Nonnull String rawUrlPath) {
-            Objects.requireNonNull(rawUrlPath);
-            // This method should only work for full urls, which must start with "http"
-            if (!rawUrlPath.startsWith("http")) {
-                throw new GHException("Raw URL must start with 'http'");
-            }
-            this.urlPath = rawUrlPath;
             return (B) this;
         }
 
@@ -526,35 +528,47 @@ public class GitHubRequest implements GitHubConnectorRequest {
             this.urlPath = urlPathEncode(tailUrlPath);
             return (B) this;
         }
-    }
-
-    /**
-     * The Class Entry.
-     */
-    protected static class Entry {
-
-        /** The key. */
-        final String key;
-
-        /** The value. */
-        final Object value;
 
         /**
-         * Instantiates a new entry.
+         * NOT FOR PUBLIC USE. Do not make this method public.
+         * <p>
+         * Sets the path component of api URL without URI encoding.
+         * <p>
+         * Should only be used when passing a literal URL field from a GHObject, such as {@link GHContent#refresh()} or
+         * when needing to set query parameters on requests methods that don't usually have them, such as
+         * {@link GHRelease#uploadAsset(String, InputStream, String)}.
          *
-         * @param key
-         *            the key
-         * @param value
-         *            the value
+         * @param rawUrlPath
+         *            the content type
+         * @return the request builder
          */
-        protected Entry(String key, Object value) {
-            this.key = key;
-            this.value = value;
+        B setRawUrlPath(@Nonnull String rawUrlPath) {
+            Objects.requireNonNull(rawUrlPath);
+            // This method should only work for full urls, which must start with "http"
+            if (!rawUrlPath.startsWith("http")) {
+                throw new GHException("Raw URL must start with 'http'");
+            }
+            this.urlPath = rawUrlPath;
+            return (B) this;
         }
     }
     private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
             .nullsFirst(String.CASE_INSENSITIVE_ORDER);
     private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
+    /**
+     * Encode the path to url safe string.
+     *
+     * @param value
+     *            string to be path encoded.
+     * @return The encoded string.
+     */
+    private static String urlPathEncode(String value) {
+        try {
+            return new URI(null, null, value, null, null).toASCIIString();
+        } catch (URISyntaxException ex) {
+            throw new AssertionError(ex);
+        }
+    }
     /**
      * Gets the final GitHub API URL.
      *
@@ -604,20 +618,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
         // lower-case constants. GitHub also uses '-', which in Java we always
         // replace with '_'
         return en.toString().toLowerCase(Locale.ENGLISH).replace('_', '-');
-    }
-    /**
-     * Encode the path to url safe string.
-     *
-     * @param value
-     *            string to be path encoded.
-     * @return The encoded string.
-     */
-    private static String urlPathEncode(String value) {
-        try {
-            return new URI(null, null, value, null, null).toASCIIString();
-        } catch (URISyntaxException ex) {
-            throw new AssertionError(ex);
-        }
     }
     private final List<Entry> args;
     private final Map<String, List<String>> headers;
@@ -709,31 +709,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
         return body != null ? new ByteArrayInputStream(body) : null;
     }
 
-    private String buildTailApiUrl() {
-        String tailApiUrl = urlPath;
-        if (!hasBody() && !args.isEmpty() && tailApiUrl.startsWith("/")) {
-            try {
-                StringBuilder argString = new StringBuilder();
-                boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
-                argString.append(questionMarkFound ? '&' : '?');
-
-                for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
-                    Entry arg = it.next();
-                    argString.append(URLEncoder.encode(arg.key, StandardCharsets.UTF_8.name()));
-                    argString.append('=');
-                    argString.append(URLEncoder.encode(arg.value.toString(), StandardCharsets.UTF_8.name()));
-                    if (it.hasNext()) {
-                        argString.append('&');
-                    }
-                }
-                tailApiUrl += argString;
-            } catch (UnsupportedEncodingException e) {
-                throw new GHException("UTF-8 encoding required", e);
-            }
-        }
-        return tailApiUrl;
-    }
-
     /**
      * The content type to be sent by this request.
      *
@@ -803,24 +778,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
     }
 
     /**
-     * Create a {@link Builder} from this request. Initial values of the builder will be the same as this
-     * {@link GitHubRequest}.
-     *
-     * @return a {@link Builder} based on this request.
-     */
-    Builder<?> toBuilder() {
-        return new Builder<>(args,
-                headers,
-                injectedMappingValues,
-                apiUrl,
-                urlPath,
-                method,
-                rateLimitTarget,
-                body,
-                forceBody);
-    }
-
-    /**
      * The {@link URL} for this request. This is the actual URL the {@link GitHubClient} will send this request to.
      *
      * @return the request {@link URL}
@@ -840,6 +797,49 @@ public class GitHubRequest implements GitHubConnectorRequest {
     @Nonnull
     public String urlPath() {
         return urlPath;
+    }
+
+    private String buildTailApiUrl() {
+        String tailApiUrl = urlPath;
+        if (!hasBody() && !args.isEmpty() && tailApiUrl.startsWith("/")) {
+            try {
+                StringBuilder argString = new StringBuilder();
+                boolean questionMarkFound = tailApiUrl.indexOf('?') != -1;
+                argString.append(questionMarkFound ? '&' : '?');
+
+                for (Iterator<Entry> it = args.listIterator(); it.hasNext();) {
+                    Entry arg = it.next();
+                    argString.append(URLEncoder.encode(arg.key, StandardCharsets.UTF_8.name()));
+                    argString.append('=');
+                    argString.append(URLEncoder.encode(arg.value.toString(), StandardCharsets.UTF_8.name()));
+                    if (it.hasNext()) {
+                        argString.append('&');
+                    }
+                }
+                tailApiUrl += argString;
+            } catch (UnsupportedEncodingException e) {
+                throw new GHException("UTF-8 encoding required", e);
+            }
+        }
+        return tailApiUrl;
+    }
+
+    /**
+     * Create a {@link Builder} from this request. Initial values of the builder will be the same as this
+     * {@link GitHubRequest}.
+     *
+     * @return a {@link Builder} based on this request.
+     */
+    Builder<?> toBuilder() {
+        return new Builder<>(args,
+                headers,
+                injectedMappingValues,
+                apiUrl,
+                urlPath,
+                method,
+                rateLimitTarget,
+                body,
+                forceBody);
     }
 
 }

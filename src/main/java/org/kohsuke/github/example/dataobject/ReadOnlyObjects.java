@@ -414,6 +414,21 @@ public final class ReadOnlyObjects {
             return verifiablePasswordAuthentication;
         }
 
+        /**
+         * Setters can be private (or package local) and will still be called by Jackson. The {@link JsonProperty} can
+         * got on the getter or setter and still work.
+         *
+         * @param hooks
+         *            list of hooks
+         */
+        private void setHooks(List<String> hooks) {
+            this.hooks = hooks;
+        }
+
+        private void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
+            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
+        }
+
         void setApi(List<String> api) {
             this.api = api;
         }
@@ -431,17 +446,6 @@ public final class ReadOnlyObjects {
         }
 
         /**
-         * Setters can be private (or package local) and will still be called by Jackson. The {@link JsonProperty} can
-         * got on the getter or setter and still work.
-         *
-         * @param hooks
-         *            list of hooks
-         */
-        private void setHooks(List<String> hooks) {
-            this.hooks = hooks;
-        }
-
-        /**
          * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
          *
          * @param importer
@@ -453,10 +457,6 @@ public final class ReadOnlyObjects {
 
         void setPages(List<String> pages) {
             this.pages = pages;
-        }
-
-        private void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
-            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
         }
 
         /**

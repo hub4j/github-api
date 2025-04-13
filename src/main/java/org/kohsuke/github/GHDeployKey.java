@@ -161,18 +161,6 @@ public class GHDeployKey {
     }
 
     /**
-     * Wrap gh deploy key.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh deploy key
-     */
-    GHDeployKey lateBind(GHRepository repo) {
-        this.owner = repo;
-        return this;
-    }
-
-    /**
      * To string.
      *
      * @return the string
@@ -186,5 +174,17 @@ public class GHDeployKey {
                 .append("added_by", addedBy)
                 .append("read_only", readOnly)
                 .toString();
+    }
+
+    /**
+     * Wrap gh deploy key.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh deploy key
+     */
+    GHDeployKey lateBind(GHRepository repo) {
+        this.owner = repo;
+        return this;
     }
 }

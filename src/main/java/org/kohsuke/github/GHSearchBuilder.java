@@ -42,13 +42,6 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     }
 
     /**
-     * Gets api url.
-     *
-     * @return the api url
-     */
-    protected abstract String getApiUrl();
-
-    /**
      * Performs the search.
      *
      * @return the paged search iterable
@@ -71,6 +64,13 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
         terms.add(term);
         return this;
     }
+
+    /**
+     * Gets api url.
+     *
+     * @return the api url
+     */
+    protected abstract String getApiUrl();
 
     /**
      * Add a search term with qualifier.

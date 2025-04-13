@@ -13,6 +13,24 @@ import java.util.List;
  */
 public class GHPullRequestReviewBuilder {
     /**
+     * Common properties of the review comments, regardless of how the comment is positioned on the gh pull request.
+     */
+    private interface ReviewComment {
+        /**
+         * Gets body.
+         *
+         * @return the body.
+         */
+        String getBody();
+
+        /**
+         * Gets path.
+         *
+         * @return the path.
+         */
+        String getPath();
+    }
+    /**
      * Single line comment using the relative position in the diff.
      */
     static class DraftReviewComment implements ReviewComment {
@@ -84,24 +102,6 @@ public class GHPullRequestReviewBuilder {
         public int getStartLine() {
             return startLine;
         }
-    }
-    /**
-     * Common properties of the review comments, regardless of how the comment is positioned on the gh pull request.
-     */
-    private interface ReviewComment {
-        /**
-         * Gets body.
-         *
-         * @return the body.
-         */
-        String getBody();
-
-        /**
-         * Gets path.
-         *
-         * @return the path.
-         */
-        String getPath();
     }
 
     /**

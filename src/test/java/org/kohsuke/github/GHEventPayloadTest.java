@@ -1684,80 +1684,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(changes.getRepository(), is(nullValue()));
     }
 
-    private GHCheckRun verifyBasicCheckRunEvent(final GHEventPayload.CheckRun event) throws IOException {
-        assertThat(event.getRepository().getName(), is("Hello-World"));
-        assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
-        assertThat(event.getAction(), is("created"));
-        assertThat(event.getRequestedAction(), nullValue());
-
-        // Checks the deserialization of check_run
-        final GHCheckRun checkRun = event.getCheckRun();
-        assertThat(checkRun.getName(), is("Octocoders-linter"));
-        assertThat(checkRun.getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
-        assertThat(checkRun.getStatus(), is(Status.COMPLETED));
-        assertThat(checkRun.getNodeId(), is("MDg6Q2hlY2tSdW4xMjg2MjAyMjg="));
-        assertThat(checkRun.getExternalId(), is(""));
-
-        assertThat(GitHubClient.printInstant(checkRun.getStartedAt()), is("2019-05-15T15:21:12Z"));
-        assertThat(GitHubClient.printInstant(checkRun.getCompletedAt()), is("2019-05-15T20:22:22Z"));
-
-        assertThat(checkRun.getConclusion(), is(Conclusion.SUCCESS));
-        assertThat(checkRun.getUrl().toString(), endsWith("/repos/Codertocat/Hello-World/check-runs/128620228"));
-        assertThat(checkRun.getHtmlUrl().toString(),
-                endsWith("https://github.com/Codertocat/Hello-World/runs/128620228"));
-        assertThat(checkRun.getDetailsUrl().toString(), is("https://octocoders.io"));
-        assertThat(checkRun.getApp().getId(), is(29310L));
-        assertThat(checkRun.getCheckSuite().getId(), is(118578147L));
-        assertThat(checkRun.getOutput().getTitle(), is("check-run output"));
-        assertThat(checkRun.getOutput().getSummary(), nullValue());
-        assertThat(checkRun.getOutput().getText(), nullValue());
-        assertThat(checkRun.getOutput().getAnnotationsCount(), is(0));
-        assertThat(checkRun.getOutput().getAnnotationsUrl().toString(),
-                endsWith("/repos/Codertocat/Hello-World/check-runs/128620228/annotations"));
-
-        // Checks the deserialization of sender
-        assertThat(event.getSender().getId(), is(21031067L));
-
-        assertThat(checkRun.getPullRequests(), notNullValue());
-        assertThat(checkRun.getPullRequests().size(), equalTo(1));
-        assertThat(checkRun.getPullRequests().get(0).getNumber(), equalTo(2));
-        return checkRun;
-    }
-
-    private GHCheckSuite verifyBasicCheckSuiteEvent(final GHEventPayload.CheckSuite event) throws IOException {
-        assertThat(event.getRepository().getName(), is("Hello-World"));
-        assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
-        assertThat(event.getAction(), is("completed"));
-        assertThat(event.getSender().getId(), is(21031067L));
-
-        // Checks the deserialization of check_suite
-        final GHCheckSuite checkSuite = event.getCheckSuite();
-        assertThat(checkSuite.getNodeId(), is("MDEwOkNoZWNrU3VpdGUxMTg1NzgxNDc="));
-        assertThat(checkSuite.getHeadBranch(), is("changes"));
-        assertThat(checkSuite.getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
-        assertThat(checkSuite.getStatus(), is("completed"));
-        assertThat(checkSuite.getConclusion(), is("success"));
-        assertThat(checkSuite.getBefore(), is("6113728f27ae82c7b1a177c8d03f9e96e0adf246"));
-        assertThat(checkSuite.getAfter(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
-        assertThat(checkSuite.getLatestCheckRunsCount(), is(1));
-        assertThat(checkSuite.getCheckRunsUrl().toString(),
-                endsWith("/repos/Codertocat/Hello-World/check-suites/118578147/check-runs"));
-        assertThat(checkSuite.getHeadCommit().getMessage(), is("Update README.md"));
-        assertThat(checkSuite.getHeadCommit().getId(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
-        assertThat(checkSuite.getHeadCommit().getTreeId(), is("31b122c26a97cf9af023e9ddab94a82c6e77b0ea"));
-        assertThat(checkSuite.getHeadCommit().getAuthor().getName(), is("Codertocat"));
-        assertThat(checkSuite.getHeadCommit().getCommitter().getName(), is("Codertocat"));
-
-        assertThat(GitHubClient.printInstant(checkSuite.getHeadCommit().getTimestamp()), is("2019-05-15T15:20:30Z"));
-
-        assertThat(checkSuite.getApp().getId(), is(29310L));
-
-        assertThat(checkSuite.getPullRequests(), notNullValue());
-        assertThat(checkSuite.getPullRequests().size(), equalTo(1));
-        assertThat(checkSuite.getPullRequests().get(0).getNumber(), equalTo(2));
-        return checkSuite;
-    }
-
     /**
      * Workflow dispatch.
      *
@@ -1927,5 +1853,79 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         GHPullRequest pullRequest = pullRequests.get(0);
         assertThat(pullRequest.getId(), is(599098265L));
         assertThat(pullRequest.getRepository(), sameInstance(workflowRunPayload.getRepository()));
+    }
+
+    private GHCheckRun verifyBasicCheckRunEvent(final GHEventPayload.CheckRun event) throws IOException {
+        assertThat(event.getRepository().getName(), is("Hello-World"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
+        assertThat(event.getAction(), is("created"));
+        assertThat(event.getRequestedAction(), nullValue());
+
+        // Checks the deserialization of check_run
+        final GHCheckRun checkRun = event.getCheckRun();
+        assertThat(checkRun.getName(), is("Octocoders-linter"));
+        assertThat(checkRun.getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
+        assertThat(checkRun.getStatus(), is(Status.COMPLETED));
+        assertThat(checkRun.getNodeId(), is("MDg6Q2hlY2tSdW4xMjg2MjAyMjg="));
+        assertThat(checkRun.getExternalId(), is(""));
+
+        assertThat(GitHubClient.printInstant(checkRun.getStartedAt()), is("2019-05-15T15:21:12Z"));
+        assertThat(GitHubClient.printInstant(checkRun.getCompletedAt()), is("2019-05-15T20:22:22Z"));
+
+        assertThat(checkRun.getConclusion(), is(Conclusion.SUCCESS));
+        assertThat(checkRun.getUrl().toString(), endsWith("/repos/Codertocat/Hello-World/check-runs/128620228"));
+        assertThat(checkRun.getHtmlUrl().toString(),
+                endsWith("https://github.com/Codertocat/Hello-World/runs/128620228"));
+        assertThat(checkRun.getDetailsUrl().toString(), is("https://octocoders.io"));
+        assertThat(checkRun.getApp().getId(), is(29310L));
+        assertThat(checkRun.getCheckSuite().getId(), is(118578147L));
+        assertThat(checkRun.getOutput().getTitle(), is("check-run output"));
+        assertThat(checkRun.getOutput().getSummary(), nullValue());
+        assertThat(checkRun.getOutput().getText(), nullValue());
+        assertThat(checkRun.getOutput().getAnnotationsCount(), is(0));
+        assertThat(checkRun.getOutput().getAnnotationsUrl().toString(),
+                endsWith("/repos/Codertocat/Hello-World/check-runs/128620228/annotations"));
+
+        // Checks the deserialization of sender
+        assertThat(event.getSender().getId(), is(21031067L));
+
+        assertThat(checkRun.getPullRequests(), notNullValue());
+        assertThat(checkRun.getPullRequests().size(), equalTo(1));
+        assertThat(checkRun.getPullRequests().get(0).getNumber(), equalTo(2));
+        return checkRun;
+    }
+
+    private GHCheckSuite verifyBasicCheckSuiteEvent(final GHEventPayload.CheckSuite event) throws IOException {
+        assertThat(event.getRepository().getName(), is("Hello-World"));
+        assertThat(event.getRepository().getOwner().getLogin(), is("Codertocat"));
+        assertThat(event.getAction(), is("completed"));
+        assertThat(event.getSender().getId(), is(21031067L));
+
+        // Checks the deserialization of check_suite
+        final GHCheckSuite checkSuite = event.getCheckSuite();
+        assertThat(checkSuite.getNodeId(), is("MDEwOkNoZWNrU3VpdGUxMTg1NzgxNDc="));
+        assertThat(checkSuite.getHeadBranch(), is("changes"));
+        assertThat(checkSuite.getHeadSha(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
+        assertThat(checkSuite.getStatus(), is("completed"));
+        assertThat(checkSuite.getConclusion(), is("success"));
+        assertThat(checkSuite.getBefore(), is("6113728f27ae82c7b1a177c8d03f9e96e0adf246"));
+        assertThat(checkSuite.getAfter(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
+        assertThat(checkSuite.getLatestCheckRunsCount(), is(1));
+        assertThat(checkSuite.getCheckRunsUrl().toString(),
+                endsWith("/repos/Codertocat/Hello-World/check-suites/118578147/check-runs"));
+        assertThat(checkSuite.getHeadCommit().getMessage(), is("Update README.md"));
+        assertThat(checkSuite.getHeadCommit().getId(), is("ec26c3e57ca3a959ca5aad62de7213c562f8c821"));
+        assertThat(checkSuite.getHeadCommit().getTreeId(), is("31b122c26a97cf9af023e9ddab94a82c6e77b0ea"));
+        assertThat(checkSuite.getHeadCommit().getAuthor().getName(), is("Codertocat"));
+        assertThat(checkSuite.getHeadCommit().getCommitter().getName(), is("Codertocat"));
+
+        assertThat(GitHubClient.printInstant(checkSuite.getHeadCommit().getTimestamp()), is("2019-05-15T15:20:30Z"));
+
+        assertThat(checkSuite.getApp().getId(), is(29310L));
+
+        assertThat(checkSuite.getPullRequests(), notNullValue());
+        assertThat(checkSuite.getPullRequests().size(), equalTo(1));
+        assertThat(checkSuite.getPullRequests().get(0).getNumber(), equalTo(2));
+        return checkSuite;
     }
 }

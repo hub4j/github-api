@@ -307,16 +307,6 @@ public class GHWorkflowRun extends GHObject {
         return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
     }
 
-    private String getApiRoute() {
-        if (owner == null) {
-            // Workflow runs returned from search to do not have an owner. Attempt to use url.
-            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
-
-        }
-        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/runs/" + getId();
-    }
-
     /**
      * The artifacts URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/artifacts
      *
@@ -588,6 +578,16 @@ public class GHWorkflowRun extends GHObject {
      */
     public void rerun() throws IOException {
         root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").send();
+    }
+
+    private String getApiRoute() {
+        if (owner == null) {
+            // Workflow runs returned from search to do not have an owner. Attempt to use url.
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
+
+        }
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/runs/" + getId();
     }
 
     /**

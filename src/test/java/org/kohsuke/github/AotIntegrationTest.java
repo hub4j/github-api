@@ -31,19 +31,6 @@ public class AotIntegrationTest {
     public AotIntegrationTest() {
     }
 
-    private Stream<String> readAotConfigToStreamOfClassNames(String reflectionConfig) throws IOException {
-        byte[] reflectionConfigFileAsBytes = Files.readAllBytes(Path.of(reflectionConfig));
-        ArrayNode reflectConfigJsonArray = (ArrayNode) new ObjectMapper().readTree(reflectionConfigFileAsBytes);
-        return StreamSupport
-                .stream(Spliterators.spliteratorUnknownSize(reflectConfigJsonArray.iterator(), Spliterator.ORDERED),
-                        false)
-                .map(jsonNode -> jsonNode.get("name"))
-                .map(JsonNode::toString)
-                .map(reflectConfigEntryClassName -> reflectConfigEntryClassName.replace("\"", ""))
-                .filter(x -> x.contains("org.kohsuke.github"))
-                .filter(x -> !x.contains("org.kohsuke.github.AotTest"));
-    }
-
     /**
      * Test to check if all required classes are registered for AOT.
      *
@@ -89,5 +76,18 @@ public class AotIntegrationTest {
             }
         });
 
+    }
+
+    private Stream<String> readAotConfigToStreamOfClassNames(String reflectionConfig) throws IOException {
+        byte[] reflectionConfigFileAsBytes = Files.readAllBytes(Path.of(reflectionConfig));
+        ArrayNode reflectConfigJsonArray = (ArrayNode) new ObjectMapper().readTree(reflectionConfigFileAsBytes);
+        return StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(reflectConfigJsonArray.iterator(), Spliterator.ORDERED),
+                        false)
+                .map(jsonNode -> jsonNode.get("name"))
+                .map(JsonNode::toString)
+                .map(reflectConfigEntryClassName -> reflectConfigEntryClassName.replace("\"", ""))
+                .filter(x -> x.contains("org.kohsuke.github"))
+                .filter(x -> !x.contains("org.kohsuke.github.AotTest"));
     }
 }

@@ -76,6 +76,32 @@ class GitHubRateLimitChecker {
     }
 
     /**
+     * Gets the appropriate {@link RateLimitChecker} for a particular target.
+     *
+     * Analogous with {@link GHRateLimit#getRecord(RateLimitTarget)}.
+     *
+     * @param rateLimitTarget
+     *            the rate limit to check
+     * @return the {@link RateLimitChecker} for a particular target
+     */
+    @Nonnull
+    private RateLimitChecker selectChecker(@Nonnull RateLimitTarget rateLimitTarget) {
+        if (rateLimitTarget == RateLimitTarget.NONE) {
+            return RateLimitChecker.NONE;
+        } else if (rateLimitTarget == RateLimitTarget.CORE) {
+            return core;
+        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {
+            return search;
+        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {
+            return graphql;
+        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {
+            return integrationManifest;
+        } else {
+            throw new IllegalArgumentException("Unknown rate limit target: " + rateLimitTarget.toString());
+        }
+    }
+
+    /**
      * Checks whether there is sufficient requests remaining within this client's rate limit quota to make the current
      * request.
      * <p>
@@ -137,32 +163,6 @@ class GitHubRateLimitChecker {
             }
         } catch (InterruptedException e) {
             throw (IOException) new InterruptedIOException(e.getMessage()).initCause(e);
-        }
-    }
-
-    /**
-     * Gets the appropriate {@link RateLimitChecker} for a particular target.
-     *
-     * Analogous with {@link GHRateLimit#getRecord(RateLimitTarget)}.
-     *
-     * @param rateLimitTarget
-     *            the rate limit to check
-     * @return the {@link RateLimitChecker} for a particular target
-     */
-    @Nonnull
-    private RateLimitChecker selectChecker(@Nonnull RateLimitTarget rateLimitTarget) {
-        if (rateLimitTarget == RateLimitTarget.NONE) {
-            return RateLimitChecker.NONE;
-        } else if (rateLimitTarget == RateLimitTarget.CORE) {
-            return core;
-        } else if (rateLimitTarget == RateLimitTarget.SEARCH) {
-            return search;
-        } else if (rateLimitTarget == RateLimitTarget.GRAPHQL) {
-            return graphql;
-        } else if (rateLimitTarget == RateLimitTarget.INTEGRATION_MANIFEST) {
-            return integrationManifest;
-        } else {
-            throw new IllegalArgumentException("Unknown rate limit target: " + rateLimitTarget.toString());
         }
     }
 

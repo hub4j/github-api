@@ -220,6 +220,37 @@ public class OkHttpGitHubConnectorTest extends AbstractGitHubWireMockTest {
         assertThat("Cache", cache, is(nullValue()));
     }
 
+    /**
+     * Delete cache.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @After
+    public void deleteCache() throws IOException {
+        if (cache != null) {
+            cache.delete();
+        }
+    }
+
+    /**
+     * Setup repo.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Before
+    public void setupRepo() throws Exception {
+        if (mockGitHub.isUseProxy()) {
+            GHRepository repo = getRepository(getNonRecordingGitHub());
+            repo.setDescription("Resetting");
+
+            // Let things settle a bit between tests when working against the live site
+            Thread.sleep(5000);
+            userRequestCount = 1;
+        }
+    }
+
     private void checkRequestAndLimit(int networkRequestCount, int rateLimitUsed) {
         GHRateLimit rateLimitAfter = gitHub.lastRateLimit();
         assertThat("Request Count", getRequestCount(), is(networkRequestCount + userRequestCount));
@@ -244,19 +275,6 @@ public class OkHttpGitHubConnectorTest extends AbstractGitHubWireMockTest {
         }
 
         return builder.build();
-    }
-
-    /**
-     * Delete cache.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @After
-    public void deleteCache() throws IOException {
-        if (cache != null) {
-            cache.delete();
-        }
     }
 
     /**
@@ -296,19 +314,6 @@ public class OkHttpGitHubConnectorTest extends AbstractGitHubWireMockTest {
         return mockGitHub.apiServer().countRequestsMatching(RequestPatternBuilder.allRequests().build()).getCount();
     }
 
-    /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions()
-                // Use the same data files as the 2.x test
-                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/OkHttpGitHubConnector", "/OkHttpConnector"))
-                .extensions(templating.newResponseTransformer());
-    }
-
     private void pollForChange(String name) throws IOException, InterruptedException {
         getRepository(gitHub).getDescription();
         Thread.sleep(500);
@@ -327,21 +332,16 @@ public class OkHttpGitHubConnectorTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Setup repo.
+     * Gets the wire mock options.
      *
-     * @throws Exception
-     *             the exception
+     * @return the wire mock options
      */
-    @Before
-    public void setupRepo() throws Exception {
-        if (mockGitHub.isUseProxy()) {
-            GHRepository repo = getRepository(getNonRecordingGitHub());
-            repo.setDescription("Resetting");
-
-            // Let things settle a bit between tests when working against the live site
-            Thread.sleep(5000);
-            userRequestCount = 1;
-        }
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions()
+                // Use the same data files as the 2.x test
+                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/OkHttpGitHubConnector", "/OkHttpConnector"))
+                .extensions(templating.newResponseTransformer());
     }
 
 }

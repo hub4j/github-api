@@ -110,18 +110,6 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the git hub builder.
-     *
-     * @return the git hub builder
-     */
-    protected GitHubBuilder getGitHubBuilder() {
-        return super.getGitHubBuilder()
-                // ensure that only JWT will be used against the tests below
-                .withOAuthToken(null, null)
-                .withJwtToken("bogus");
-    }
-
-    /**
      * List accounts.
      *
      * @throws IOException
@@ -192,6 +180,18 @@ public class GHMarketplacePlanTest extends AbstractGitHubWireMockTest {
         List<GHMarketplacePlan> plans = gitHub.listMarketplacePlans().toList();
         assertThat(plans.size(), equalTo(3));
         plans.forEach(GHMarketplacePlanTest::testMarketplacePlan);
+    }
+
+    /**
+     * Gets the git hub builder.
+     *
+     * @return the git hub builder
+     */
+    protected GitHubBuilder getGitHubBuilder() {
+        return super.getGitHubBuilder()
+                // ensure that only JWT will be used against the tests below
+                .withOAuthToken(null, null)
+                .withJwtToken("bogus");
     }
 
 }

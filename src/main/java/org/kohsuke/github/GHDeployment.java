@@ -98,16 +98,6 @@ public class GHDeployment extends GHObject {
     }
 
     /**
-     * Gets the owner.
-     *
-     * @return the owner
-     */
-    // test only
-    GHRepository getOwner() {
-        return owner;
-    }
-
-    /**
      * Gets payload. <b>NOTE:</b> only use this method if you can guarantee the payload will be a simple string,
      * otherwise use {@link #getPayloadObject()}.
      *
@@ -209,6 +199,16 @@ public class GHDeployment extends GHObject {
         return root().createRequest()
                 .withUrlPath(statusesUrl)
                 .toIterable(GHDeploymentStatus[].class, item -> item.lateBind(owner));
+    }
+
+    /**
+     * Gets the owner.
+     *
+     * @return the owner
+     */
+    // test only
+    GHRepository getOwner() {
+        return owner;
     }
 
     /**

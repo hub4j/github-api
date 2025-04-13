@@ -277,18 +277,6 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     }
 
     /**
-     * Fully populate the data by retrieving missing data.
-     * <p>
-     * Depending on the original API call where this object is created, it may not contain everything.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    protected synchronized void populate() throws IOException {
-        root().createRequest().withUrlPath(url).fetchInto(this);
-    }
-
-    /**
      * Retrieves the actual bytes of the blob.
      *
      * @return the input stream
@@ -297,27 +285,6 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     public InputStream read() throws IOException {
         return new ByteArrayInputStream(readDecodedContent());
-    }
-
-    /**
-     * Retrieves the decoded bytes of the blob.
-     *
-     * @return the input stream
-     * @throws IOException
-     *             the io exception
-     */
-    private byte[] readDecodedContent() throws IOException {
-        String encodedContent = getEncodedContent();
-        if (encoding.equals("base64")) {
-            try {
-                Base64.Decoder decoder = Base64.getMimeDecoder();
-                return decoder.decode(encodedContent.getBytes(StandardCharsets.US_ASCII));
-            } catch (IllegalArgumentException e) {
-                throw new AssertionError(e); // US-ASCII is mandatory
-            }
-        }
-
-        throw new UnsupportedOperationException("Unrecognized encoding: " + encoding);
     }
 
     /**
@@ -418,6 +385,39 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
 
         this.content = encodedContent;
         return response;
+    }
+
+    /**
+     * Retrieves the decoded bytes of the blob.
+     *
+     * @return the input stream
+     * @throws IOException
+     *             the io exception
+     */
+    private byte[] readDecodedContent() throws IOException {
+        String encodedContent = getEncodedContent();
+        if (encoding.equals("base64")) {
+            try {
+                Base64.Decoder decoder = Base64.getMimeDecoder();
+                return decoder.decode(encodedContent.getBytes(StandardCharsets.US_ASCII));
+            } catch (IllegalArgumentException e) {
+                throw new AssertionError(e); // US-ASCII is mandatory
+            }
+        }
+
+        throw new UnsupportedOperationException("Unrecognized encoding: " + encoding);
+    }
+
+    /**
+     * Fully populate the data by retrieving missing data.
+     * <p>
+     * Depending on the original API call where this object is created, it may not contain everything.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    protected synchronized void populate() throws IOException {
+        root().createRequest().withUrlPath(url).fetchInto(this);
     }
 
     /**

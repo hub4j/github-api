@@ -86,6 +86,24 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
 
             private GHThread next;
 
+            public boolean hasNext() {
+                if (next == null)
+                    next = fetch();
+                return next != null;
+            }
+
+            public GHThread next() {
+                if (next == null) {
+                    next = fetch();
+                    if (next == null)
+                        throw new NoSuchElementException();
+                }
+
+                GHThread r = next;
+                next = null;
+                return r;
+            }
+
             private long calcNextCheckTime(GitHubResponse<GHThread[]> response) {
                 String v = response.header("X-Poll-Interval");
                 if (v == null)
@@ -143,24 +161,6 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                 } catch (IOException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-            }
-
-            public boolean hasNext() {
-                if (next == null)
-                    next = fetch();
-                return next != null;
-            }
-
-            public GHThread next() {
-                if (next == null) {
-                    next = fetch();
-                    if (next == null)
-                        throw new NoSuchElementException();
-                }
-
-                GHThread r = next;
-                next = null;
-                return r;
             }
         };
     }

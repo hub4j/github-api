@@ -172,21 +172,6 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the repository.
-     *
-     * @return the repository
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GHRepository getRepository() throws IOException {
-        return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("GHIssueTest");
-    }
-
-    /**
      * Gets the user test.
      *
      * @throws IOException
@@ -363,6 +348,21 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         assertThat(savedLabel.getId(), notNullValue());
         assertThat(savedLabel.getNodeId(), notNullValue());
         assertThat(savedLabel.isDefault(), is(false));
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("GHIssueTest");
+    }
+
+    /**
+     * Gets the repository.
+     *
+     * @return the repository
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GHRepository getRepository() throws IOException {
+        return getRepository(gitHub);
     }
 
 }

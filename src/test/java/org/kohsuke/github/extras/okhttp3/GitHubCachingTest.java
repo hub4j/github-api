@@ -43,35 +43,6 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         useDefaultGitHub = false;
     }
 
-    private OkHttpClient createClient(boolean useCache) throws IOException {
-        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-
-        if (useCache) {
-            File cacheDir = new File(
-                    "target/cache/" + baseFilesClassPath + "/" + mockGitHub.getMethodName() + clientCount++);
-            cacheDir.mkdirs();
-            FileUtils.cleanDirectory(cacheDir);
-            Cache cache = new Cache(cacheDir, 100 * 1024L * 1024L);
-
-            builder.cache(cache);
-        }
-
-        return builder.build();
-    }
-
-    /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions()
-                // Use the same data files as the 2.x test
-                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
-                .extensions(templating.newResponseTransformer());
-    }
-
     /**
      * Setup repo.
      *
@@ -205,6 +176,35 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         // OMG, the workaround succeeded!
         // This correct response should be generated from a 304.
         repo.getRef(testRefName);
+    }
+
+    private OkHttpClient createClient(boolean useCache) throws IOException {
+        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+
+        if (useCache) {
+            File cacheDir = new File(
+                    "target/cache/" + baseFilesClassPath + "/" + mockGitHub.getMethodName() + clientCount++);
+            cacheDir.mkdirs();
+            FileUtils.cleanDirectory(cacheDir);
+            Cache cache = new Cache(cacheDir, 100 * 1024L * 1024L);
+
+            builder.cache(cache);
+        }
+
+        return builder.build();
+    }
+
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions()
+                // Use the same data files as the 2.x test
+                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
+                .extensions(templating.newResponseTransformer());
     }
 
 }

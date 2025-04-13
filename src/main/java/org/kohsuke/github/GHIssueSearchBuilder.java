@@ -11,6 +11,19 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
 
+    /**
+     * The enum Sort.
+     */
+    public enum Sort {
+
+        /** The comments. */
+        COMMENTS,
+        /** The created. */
+        CREATED,
+        /** The updated. */
+        UPDATED
+    }
+
     @SuppressFBWarnings(
             value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
             justification = "JSON API")
@@ -26,19 +39,6 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     }
 
     /**
-     * The enum Sort.
-     */
-    public enum Sort {
-
-        /** The comments. */
-        COMMENTS,
-        /** The created. */
-        CREATED,
-        /** The updated. */
-        UPDATED
-    }
-
-    /**
      * Instantiates a new GH issue search builder.
      *
      * @param root
@@ -46,16 +46,6 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
      */
     GHIssueSearchBuilder(GitHub root) {
         super(root, IssueSearchResult.class);
-    }
-
-    /**
-     * Gets the api url.
-     *
-     * @return the api url
-     */
-    @Override
-    protected String getApiUrl() {
-        return "/search/issues";
     }
 
     /**
@@ -141,5 +131,15 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     public GHIssueSearchBuilder sort(Sort sort) {
         req.with("sort", sort);
         return this;
+    }
+
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
+    @Override
+    protected String getApiUrl() {
+        return "/search/issues";
     }
 }

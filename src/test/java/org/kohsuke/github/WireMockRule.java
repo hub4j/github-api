@@ -120,12 +120,6 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
     }
 
     /**
-     * After.
-     */
-    protected void after() {
-    }
-
-    /**
      * Apply.
      *
      * @param base
@@ -153,33 +147,6 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
         return this.apply(base, method.getName());
     }
 
-    private Statement apply(final Statement base, final String methodName) {
-        return new Statement() {
-            public void evaluate() throws Throwable {
-                WireMockRule.this.methodName = methodName;
-                final Options localOptions = new WireMockRuleConfiguration(WireMockRule.this.options, methodName);
-
-                new File(localOptions.filesRoot().getPath(), "mappings").mkdirs();
-                new File(localOptions.filesRoot().getPath(), "__files").mkdirs();
-
-                WireMockRule.this.wireMockServer = new WireMockServer(localOptions);
-                WireMockRule.this.start();
-                WireMock.configureFor("localhost", WireMockRule.this.port());
-
-                try {
-                    WireMockRule.this.before();
-                    base.evaluate();
-                    WireMockRule.this.checkForUnmatchedRequests();
-                } finally {
-                    WireMockRule.this.after();
-                    WireMockRule.this.stop();
-                    WireMockRule.this.methodName = null;
-                }
-
-            }
-        };
-    }
-
     /**
      * Base url.
      *
@@ -187,27 +154,6 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
      */
     public String baseUrl() {
         return wireMockServer.baseUrl();
-    }
-
-    /**
-     * Before.
-     */
-    protected void before() {
-    }
-
-    private void checkForUnmatchedRequests() {
-        if (this.failOnUnmatchedRequests) {
-            List<LoggedRequest> unmatchedRequests = this.findAllUnmatchedRequests();
-            if (!unmatchedRequests.isEmpty()) {
-                List<NearMiss> nearMisses = this.findNearMissesForAllUnmatchedRequests();
-                if (nearMisses.isEmpty()) {
-                    throw VerificationException.forUnmatchedRequests(unmatchedRequests);
-                }
-
-                throw VerificationException.forUnmatchedNearMisses(nearMisses);
-            }
-        }
-
     }
 
     /**
@@ -897,5 +843,59 @@ public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, 
      */
     public void verify(int count, RequestPatternBuilder requestPatternBuilder) {
         wireMockServer.verify(count, requestPatternBuilder);
+    }
+
+    private Statement apply(final Statement base, final String methodName) {
+        return new Statement() {
+            public void evaluate() throws Throwable {
+                WireMockRule.this.methodName = methodName;
+                final Options localOptions = new WireMockRuleConfiguration(WireMockRule.this.options, methodName);
+
+                new File(localOptions.filesRoot().getPath(), "mappings").mkdirs();
+                new File(localOptions.filesRoot().getPath(), "__files").mkdirs();
+
+                WireMockRule.this.wireMockServer = new WireMockServer(localOptions);
+                WireMockRule.this.start();
+                WireMock.configureFor("localhost", WireMockRule.this.port());
+
+                try {
+                    WireMockRule.this.before();
+                    base.evaluate();
+                    WireMockRule.this.checkForUnmatchedRequests();
+                } finally {
+                    WireMockRule.this.after();
+                    WireMockRule.this.stop();
+                    WireMockRule.this.methodName = null;
+                }
+
+            }
+        };
+    }
+
+    private void checkForUnmatchedRequests() {
+        if (this.failOnUnmatchedRequests) {
+            List<LoggedRequest> unmatchedRequests = this.findAllUnmatchedRequests();
+            if (!unmatchedRequests.isEmpty()) {
+                List<NearMiss> nearMisses = this.findNearMissesForAllUnmatchedRequests();
+                if (nearMisses.isEmpty()) {
+                    throw VerificationException.forUnmatchedRequests(unmatchedRequests);
+                }
+
+                throw VerificationException.forUnmatchedNearMisses(nearMisses);
+            }
+        }
+
+    }
+
+    /**
+     * After.
+     */
+    protected void after() {
+    }
+
+    /**
+     * Before.
+     */
+    protected void before() {
     }
 }

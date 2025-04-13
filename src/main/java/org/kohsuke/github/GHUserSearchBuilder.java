@@ -16,10 +16,10 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
 
         /** The followers. */
         FOLLOWERS,
-        /** The repositories. */
-        REPOSITORIES,
         /** The joined. */
-        JOINED
+        JOINED,
+        /** The repositories. */
+        REPOSITORIES
     }
 
     private static class UserSearchResult extends SearchResult<GHUser> {

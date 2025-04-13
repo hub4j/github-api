@@ -21,16 +21,16 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
      */
     public enum FieldType {
 
-        /** The text. */
-        TEXT,
-        /** The number. */
-        NUMBER,
         /** The date. */
         DATE,
-        /** The single select. */
-        SINGLE_SELECT,
         /** The iteration. */
         ITERATION,
+        /** The number. */
+        NUMBER,
+        /** The single select. */
+        SINGLE_SELECT,
+        /** The text. */
+        TEXT,
         /** The unknown. */
         UNKNOWN;
     }
@@ -136,9 +136,9 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
         }
     }
 
-    private FieldValue fieldValue;
-
     private FromToDate archivedAt;
+
+    private FieldValue fieldValue;
 
     private FromTo previousProjectsV2ItemNodeId;
 

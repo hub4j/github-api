@@ -13,13 +13,13 @@ import java.net.URL;
  */
 public class GHMarketplaceAccount extends GitHubInteractiveObject {
 
-    private String url;
+    private String email;
 
     private long id;
     private String login;
-    private String email;
     private String organizationBillingEmail;
     private GHMarketplaceAccountType type;
+    private String url;
     /**
      * Create default GHMarketplaceAccount instance
      */

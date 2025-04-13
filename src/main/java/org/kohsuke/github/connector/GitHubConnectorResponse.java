@@ -64,17 +64,17 @@ public abstract class GitHubConnectorResponse implements Closeable {
     private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
             .nullsFirst(String.CASE_INSENSITIVE_ORDER);
 
-    private final int statusCode;
-    @Nonnull
-    private final GitHubConnectorRequest request;
+    private byte[] bodyBytes = null;
+    private InputStream bodyStream = null;
+    private boolean bodyStreamCalled = false;
     @Nonnull
     private final Map<String, List<String>> headers;
-    private boolean bodyStreamCalled = false;
-    private InputStream bodyStream = null;
-    private byte[] bodyBytes = null;
-    private boolean isClosed = false;
-
     private boolean isBodyStreamRereadable;
+    private boolean isClosed = false;
+    @Nonnull
+    private final GitHubConnectorRequest request;
+
+    private final int statusCode;
 
     /**
      * GitHubConnectorResponse constructor

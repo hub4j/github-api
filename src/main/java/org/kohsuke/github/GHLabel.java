@@ -124,18 +124,18 @@ public class GHLabel extends GitHubInteractiveObject {
         return r;
     }
 
-    private long id;
+    @CheckForNull
+    private String description;
 
-    private String nodeId;
+    private long id;
 
     @JsonProperty("default")
     private boolean isDefault;
 
+    private String nodeId;
+
     @Nonnull
     private String url, name, color;
-
-    @CheckForNull
-    private String description;
 
     @JsonCreator
     private GHLabel(@JacksonInject @Nonnull GitHub root) {

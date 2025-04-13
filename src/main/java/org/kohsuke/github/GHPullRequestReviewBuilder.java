@@ -66,8 +66,8 @@ public class GHPullRequestReviewBuilder {
      */
     static class MultilineDraftReviewComment implements ReviewComment {
         private final String body;
-        private final String path;
         private final int line;
+        private final String path;
         private final int startLine;
 
         MultilineDraftReviewComment(final String body, final String path, final int startLine, final int line) {
@@ -109,8 +109,8 @@ public class GHPullRequestReviewBuilder {
      */
     static class SingleLineDraftReviewComment implements ReviewComment {
         private final String body;
-        private final String path;
         private final int line;
+        private final String path;
 
         SingleLineDraftReviewComment(final String body, final String path, final int line) {
             this.body = body;
@@ -139,11 +139,11 @@ public class GHPullRequestReviewBuilder {
     // public GHPullRequestReview createReview(@Nullable String commitId, String body, GHPullRequestReviewEvent event,
     // List<GHPullRequestReviewComment> comments) throws IOException
 
-    private final GHPullRequest pr;
-
     private final Requester builder;
 
     private final List<ReviewComment> comments = new ArrayList<>();
+
+    private final GHPullRequest pr;
 
     /**
      * Instantiates a new GH pull request review builder.

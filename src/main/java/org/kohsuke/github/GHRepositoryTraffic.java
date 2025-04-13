@@ -15,8 +15,8 @@ public abstract class GHRepositoryTraffic extends GitHubBridgeAdapterObject impl
      * The type DailyInfo.
      */
     public static abstract class DailyInfo implements TrafficInfo {
-        private String timestamp;
         private int count;
+        private String timestamp;
         private int uniques;
 
         /**

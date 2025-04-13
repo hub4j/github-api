@@ -10,13 +10,13 @@ package org.kohsuke.github;
  */
 public class GHGistFile {
 
-    /** The file name. */
-    /* package almost final */ String fileName;
+    private String rawUrl, type, language, content;
 
     private int size;
 
-    private String rawUrl, type, language, content;
     private boolean truncated;
+    /** The file name. */
+    /* package almost final */ String fileName;
     /**
      * Create default GHGistFile instance
      */

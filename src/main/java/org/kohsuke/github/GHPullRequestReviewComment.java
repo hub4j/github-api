@@ -46,10 +46,10 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * The side of the diff to which the comment applies
      */
     public static enum Side {
-        /** Right side */
-        RIGHT,
         /** Left side */
         LEFT,
+        /** Right side */
+        RIGHT,
         /** Unknown side */
         UNKNOWN;
 
@@ -66,31 +66,31 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     }
 
-    /** The owner. */
-    GHPullRequest owner;
+    private GHCommentAuthorAssociation authorAssociation;
 
-    private Long pullRequestReviewId = -1L;
     private String body;
-    private GHUser user;
-    private String path;
-    private String htmlUrl;
-    private String pullRequestUrl;
-    private int position = -1;
-    private int originalPosition = -1;
-    private long inReplyToId = -1L;
-    private Integer startLine = -1;
-    private Integer originalStartLine = -1;
-    private String startSide;
-    private int line = -1;
-    private int originalLine = -1;
-    private String side;
-    private String diffHunk;
-    private String commitId;
-    private String originalCommitId;
     private String bodyHtml;
     private String bodyText;
+    private String commitId;
+    private String diffHunk;
+    private String htmlUrl;
+    private long inReplyToId = -1L;
+    private int line = -1;
+    private String originalCommitId;
+    private int originalLine = -1;
+    private int originalPosition = -1;
+    private Integer originalStartLine = -1;
+    private String path;
+    private int position = -1;
+    private Long pullRequestReviewId = -1L;
+    private String pullRequestUrl;
     private GHPullRequestReviewCommentReactions reactions;
-    private GHCommentAuthorAssociation authorAssociation;
+    private String side;
+    private Integer startLine = -1;
+    private String startSide;
+    private GHUser user;
+    /** The owner. */
+    GHPullRequest owner;
 
     /**
      * Create default GHPullRequestReviewComment instance

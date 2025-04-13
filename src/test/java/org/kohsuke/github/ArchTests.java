@@ -90,11 +90,11 @@ public class ArchTests {
         }
     }
 
+    private static final JavaClasses apacheCommons = new ClassFileImporter().importPackages("org.apache.commons.lang3");
+
     private static final JavaClasses classFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.DoNotIncludeTests())
             .importPackages("org.kohsuke.github");
-
-    private static final JavaClasses apacheCommons = new ClassFileImporter().importPackages("org.apache.commons.lang3");
 
     private static final JavaClasses testClassFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.OnlyIncludeTests())

@@ -34,8 +34,8 @@ public class GHLabelChanges {
         }
     }
 
-    private GHFrom name;
     private GHFrom color;
+    private GHFrom name;
 
     /**
      * Create default GHLabelChanges instance

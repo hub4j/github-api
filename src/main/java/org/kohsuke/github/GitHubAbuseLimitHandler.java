@@ -25,9 +25,18 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler {
 
     /**
-     * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
+     * Fail immediately.
      */
-    private static final int MINIMUM_ABUSE_RETRY_MILLIS = 1000;
+    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            throw new HttpException("Abuse limit reached",
+                    connectorResponse.statusCode(),
+                    connectorResponse.header("Status"),
+                    connectorResponse.request().url().toString())
+                    .withResponseHeaderFields(connectorResponse.allHeaders());
+        }
+    };
 
     /**
      * Wait until the API abuse "wait time" is passed.
@@ -44,18 +53,9 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
     };
 
     /**
-     * Fail immediately.
+     * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
      */
-    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {
-        @Override
-        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-            throw new HttpException("Abuse limit reached",
-                    connectorResponse.statusCode(),
-                    connectorResponse.header("Status"),
-                    connectorResponse.request().url().toString())
-                    .withResponseHeaderFields(connectorResponse.allHeaders());
-        }
-    };
+    private static final int MINIMUM_ABUSE_RETRY_MILLIS = 1000;
 
     // If "Retry-After" missing, wait for unambiguously over one minute per GitHub guidance
     static long DEFAULT_WAIT_MILLIS = Duration.ofSeconds(61).toMillis();

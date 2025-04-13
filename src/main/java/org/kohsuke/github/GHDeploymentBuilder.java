@@ -11,8 +11,8 @@ import java.util.List;
  */
 // Based on https://developer.github.com/v3/repos/deployments/#create-a-deployment
 public class GHDeploymentBuilder {
-    private final GHRepository repo;
     private final Requester builder;
+    private final GHRepository repo;
 
     /**
      * Instantiates a new Gh deployment builder.

@@ -41,16 +41,16 @@ public class GHWorkflowRun extends GHObject {
         FAILURE,
         /** The neutral. */
         NEUTRAL,
-        /** The success. */
-        SUCCESS,
         /** The skipped. */
         SKIPPED,
         /** The stale. */
         STALE,
-        /** The timed out. */
-        TIMED_OUT,
         /** Start up fail */
         STARTUP_FAILURE,
+        /** The success. */
+        SUCCESS,
+        /** The timed out. */
+        TIMED_OUT,
         /** The unknown. */
         UNKNOWN;
 
@@ -81,13 +81,13 @@ public class GHWorkflowRun extends GHObject {
      */
     public static class HeadCommit extends GitHubBridgeAdapterObject {
 
-        private String id;
+        private GitUser author;
 
-        private String treeId;
+        private GitUser committer;
+        private String id;
         private String message;
         private String timestamp;
-        private GitUser author;
-        private GitUser committer;
+        private String treeId;
         /**
          * Create default HeadCommit instance
          */
@@ -155,20 +155,24 @@ public class GHWorkflowRun extends GHObject {
      */
     public static enum Status {
 
-        /** The queued. */
-        QUEUED,
-        /** The in progress. */
-        IN_PROGRESS,
-        /** The completed. */
-        COMPLETED,
         /** The action required. */
         ACTION_REQUIRED,
         /** The cancelled. */
         CANCELLED,
+        /** The completed. */
+        COMPLETED,
         /** The failure. */
         FAILURE,
+        /** The in progress. */
+        IN_PROGRESS,
         /** The neutral. */
         NEUTRAL,
+        /** The pending. */
+        PENDING,
+        /** The queued. */
+        QUEUED,
+        /** The requested. */
+        REQUESTED,
         /** The skipped. */
         SKIPPED,
         /** The stale. */
@@ -177,14 +181,10 @@ public class GHWorkflowRun extends GHObject {
         SUCCESS,
         /** The timed out. */
         TIMED_OUT,
-        /** The requested. */
-        REQUESTED,
-        /** The waiting. */
-        WAITING,
-        /** The pending. */
-        PENDING,
         /** The unknown. */
-        UNKNOWN;
+        UNKNOWN,
+        /** The waiting. */
+        WAITING;
 
         /**
          * From.
@@ -207,38 +207,38 @@ public class GHWorkflowRun extends GHObject {
             return name().toLowerCase(Locale.ROOT);
         }
     }
-    @JsonProperty("repository")
-    private GHRepository owner;
-    private String name;
+    private String artifactsUrl;
+    private String cancelUrl;
+    private String checkSuiteUrl;
+
+    private String conclusion;
     private String displayTitle;
+    private String event;
 
-    private long runNumber;
-    private long workflowId;
-    private long runAttempt;
-
-    private String runStartedAt;
-    private GHUser triggeringActor;
+    private String headBranch;
+    private HeadCommit headCommit;
+    private GHRepository headRepository;
+    private String headSha;
     private String htmlUrl;
     private String jobsUrl;
     private String logsUrl;
-    private String checkSuiteUrl;
-    private String artifactsUrl;
-    private String cancelUrl;
+    private String name;
 
+    @JsonProperty("repository")
+    private GHRepository owner;
+    private GHPullRequest[] pullRequests;
     private String rerunUrl;
-    private String workflowUrl;
-    private String headBranch;
-    private String headSha;
+    private long runAttempt;
 
-    private GHRepository headRepository;
-    private HeadCommit headCommit;
-    private String event;
-
+    private long runNumber;
+    private String runStartedAt;
     private String status;
 
-    private String conclusion;
+    private GHUser triggeringActor;
 
-    private GHPullRequest[] pullRequests;
+    private long workflowId;
+
+    private String workflowUrl;
 
     /**
      * Create default GHWorkflowRun instance

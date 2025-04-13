@@ -180,18 +180,11 @@ public abstract class AbstractGitHubWireMockTest {
         }
     }
 
+    /** The mock git hub. */
+    @Rule
+    public final GitHubWireMockRule mockGitHub;
+
     private final GitHubBuilder githubBuilder = createGitHubBuilder();
-
-    /** The use default git hub. */
-    protected boolean useDefaultGitHub = true;
-
-    /** The temp git hub repositories. */
-    protected final Set<String> tempGitHubRepositories = new HashSet<>();
-
-    /**
-     * {@link GitHub} instance for use during test. Traffic will be part of snapshot when taken.
-     */
-    protected GitHub gitHub;
 
     private GitHub nonRecordingGitHub;
 
@@ -201,12 +194,19 @@ public abstract class AbstractGitHubWireMockTest {
     /** The base record path. */
     protected final String baseRecordPath = "src/test/resources/" + baseFilesClassPath + "/wiremock";
 
-    /** The mock git hub. */
-    @Rule
-    public final GitHubWireMockRule mockGitHub;
+    /**
+     * {@link GitHub} instance for use during test. Traffic will be part of snapshot when taken.
+     */
+    protected GitHub gitHub;
+
+    /** The temp git hub repositories. */
+    protected final Set<String> tempGitHubRepositories = new HashSet<>();
 
     /** The templating. */
     protected final TemplatingHelper templating = new TemplatingHelper();
+
+    /** The use default git hub. */
+    protected boolean useDefaultGitHub = true;
 
     /**
      * Instantiates a new abstract git hub wire mock test.

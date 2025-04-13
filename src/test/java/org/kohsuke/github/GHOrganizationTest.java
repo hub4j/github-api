@@ -23,11 +23,11 @@ import static org.kohsuke.github.ExternalGroupsTestingSupport.Matchers.*;
  */
 public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
-    /** The Constant GITHUB_API_TEST. */
-    public static final String GITHUB_API_TEST = "github-api-test";
-
     /** The Constant GITHUB_API_TEMPLATE_TEST. */
     public static final String GITHUB_API_TEMPLATE_TEST = "github-api-template-test";
+
+    /** The Constant GITHUB_API_TEST. */
+    public static final String GITHUB_API_TEST = "github-api-test";
 
     /** The Constant TEAM_NAME_CREATE. */
     public static final String TEAM_NAME_CREATE = "create-team-test";

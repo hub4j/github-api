@@ -53,7 +53,11 @@ class GitHubPageIterator<T> implements Iterator<T> {
     }
     private final GitHubClient client;
 
-    private final Class<T> type;
+    /**
+     * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
+     * response that was retrieved.
+     */
+    private GitHubResponse<T> finalResponse = null;
 
     /**
      * The page that will be returned when {@link #next()} is called.
@@ -73,11 +77,7 @@ class GitHubPageIterator<T> implements Iterator<T> {
      */
     private GitHubRequest nextRequest;
 
-    /**
-     * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
-     * response that was retrieved.
-     */
-    private GitHubResponse<T> finalResponse = null;
+    private final Class<T> type;
 
     private GitHubPageIterator(GitHubClient client, Class<T> type, GitHubRequest request) {
         this.client = client;

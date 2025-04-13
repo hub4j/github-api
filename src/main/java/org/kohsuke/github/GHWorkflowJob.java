@@ -32,15 +32,15 @@ public class GHWorkflowJob extends GHObject {
      */
     public static class Step extends GitHubBridgeAdapterObject {
 
+        private String completedAt;
+
+        private String conclusion;
         private String name;
 
         private int number;
         private String startedAt;
 
-        private String completedAt;
         private String status;
-
-        private String conclusion;
         /**
          * Create default Step instance
          */
@@ -108,34 +108,34 @@ public class GHWorkflowJob extends GHObject {
         }
     }
 
+    private String checkRunUrl;
+
+    private String completedAt;
+
+    private String conclusion;
+
+    private String headSha;
+    private String htmlUrl;
+
+    private List<String> labels = new ArrayList<>();
+    private String name;
+
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
-
-    private String name;
-
-    private String headSha;
-
-    private String startedAt;
-    private String completedAt;
-
-    private String status;
-    private String conclusion;
-
-    private long runId;
     private int runAttempt;
 
-    private String htmlUrl;
-    private String checkRunUrl;
+    private long runId;
+    private int runnerGroupId;
 
+    private String runnerGroupName;
     private int runnerId;
     private String runnerName;
-    private int runnerGroupId;
-    private String runnerGroupName;
+    private String startedAt;
+
+    private String status;
 
     private List<Step> steps = new ArrayList<>();
-
-    private List<String> labels = new ArrayList<>();
 
     /**
      * Create default GHWorkflowJob instance

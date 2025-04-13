@@ -36,9 +36,9 @@ public class GHRepositoryChanges {
      */
     public static class FromOwner {
 
-        private GHUser user;
-
         private GHOrganization organization;
+
+        private GHUser user;
         /**
          * Create default FromOwner instance
          */
@@ -111,9 +111,9 @@ public class GHRepositoryChanges {
         }
     }
 
-    private FromRepository repository;
-
     private Owner owner;
+
+    private FromRepository repository;
 
     /**
      * Create default GHRepositoryChanges instance

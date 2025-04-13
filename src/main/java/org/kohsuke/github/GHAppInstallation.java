@@ -36,27 +36,27 @@ public class GHAppInstallation extends GHObject {
         }
     }
 
-    private GHUser account;
-
     @JsonProperty("access_tokens_url")
     private String accessTokenUrl;
-    @JsonProperty("repositories_url")
-    private String repositoriesUrl;
+
+    private GHUser account;
     @JsonProperty("app_id")
     private long appId;
+    private List<String> events;
+    private String htmlUrl;
+    private Map<String, GHPermissionType> permissions;
+    @JsonProperty("repositories_url")
+    private String repositoriesUrl;
+    @JsonProperty("repository_selection")
+    private GHRepositorySelection repositorySelection;
+    @JsonProperty("single_file_name")
+    private String singleFileName;
+    private String suspendedAt;
+    private GHUser suspendedBy;
     @JsonProperty("target_id")
     private long targetId;
     @JsonProperty("target_type")
     private GHTargetType targetType;
-    private Map<String, GHPermissionType> permissions;
-    private List<String> events;
-    @JsonProperty("single_file_name")
-    private String singleFileName;
-    @JsonProperty("repository_selection")
-    private GHRepositorySelection repositorySelection;
-    private String htmlUrl;
-    private String suspendedAt;
-    private GHUser suspendedBy;
 
     /**
      * Create default GHAppInstallation instance

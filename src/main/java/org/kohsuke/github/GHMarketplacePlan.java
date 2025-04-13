@@ -15,21 +15,21 @@ import java.util.List;
  */
 public class GHMarketplacePlan extends GitHubInteractiveObject {
 
-    private String url;
-
     private String accountsUrl;
-    private long id;
-    private long number;
-    private String name;
+
+    private List<String> bullets;
     private String description;
-    private long monthlyPriceInCents;
-    private long yearlyPriceInCents;
-    private GHMarketplacePriceModel priceModel;
     @JsonProperty("has_free_trial")
     private boolean freeTrial; // JavaBeans Spec 1.01 section 8.3.2 forces us to have is<propertyName>
-    private String unitName;
+    private long id;
+    private long monthlyPriceInCents;
+    private String name;
+    private long number;
+    private GHMarketplacePriceModel priceModel;
     private String state;
-    private List<String> bullets;
+    private String unitName;
+    private String url;
+    private long yearlyPriceInCents;
     /**
      * Create default GHMarketplacePlan instance
      */

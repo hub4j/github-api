@@ -27,13 +27,13 @@ public class GHCheckSuite extends GHObject {
      */
     public static class HeadCommit extends GitHubBridgeAdapterObject {
 
-        private String id;
+        private GitUser author;
 
-        private String treeId;
+        private GitUser committer;
+        private String id;
         private String message;
         private String timestamp;
-        private GitUser author;
-        private GitUser committer;
+        private String treeId;
         /**
          * Create default HeadCommit instance
          */
@@ -96,22 +96,22 @@ public class GHCheckSuite extends GHObject {
         }
     }
 
+    private String after;
+
+    private GHApp app;
+    private String before;
+    private String checkRunsUrl;
+    private String conclusion;
+    private String headBranch;
+    private HeadCommit headCommit;
+    private String headSha;
+    private int latestCheckRunsCount;
+    private String nodeId;
+    private GHPullRequest[] pullRequests;
+    private String status;
     /** The owner. */
     @JsonProperty("repository")
     GHRepository owner;
-
-    private String nodeId;
-    private String headBranch;
-    private String headSha;
-    private String status;
-    private String conclusion;
-    private String before;
-    private String after;
-    private int latestCheckRunsCount;
-    private String checkRunsUrl;
-    private HeadCommit headCommit;
-    private GHApp app;
-    private GHPullRequest[] pullRequests;
 
     /**
      * Create default GHCheckSuite instance

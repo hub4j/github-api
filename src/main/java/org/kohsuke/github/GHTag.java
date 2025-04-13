@@ -12,11 +12,11 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 public class GHTag extends GitHubInteractiveObject {
 
-    private GHRepository owner;
+    private GHCommit commit;
 
     private String name;
 
-    private GHCommit commit;
+    private GHRepository owner;
     /**
      * Create default GHTag instance
      */

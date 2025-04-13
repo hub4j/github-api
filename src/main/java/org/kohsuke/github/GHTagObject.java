@@ -12,15 +12,15 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 public class GHTagObject extends GitHubInteractiveObject {
 
-    private GHRepository owner;
-
-    private String tag;
-
-    private String sha;
-    private String url;
     private String message;
-    private GitUser tagger;
+
     private GHRef.GHObject object;
+
+    private GHRepository owner;
+    private String sha;
+    private String tag;
+    private GitUser tagger;
+    private String url;
     private GHVerification verification;
     /**
      * Create default GHTagObject instance

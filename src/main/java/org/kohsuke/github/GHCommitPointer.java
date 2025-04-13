@@ -37,8 +37,8 @@ public class GHCommitPointer {
 
     private String ref, sha, label;
 
-    private GHUser user;
     private GHRepository repo;
+    private GHUser user;
     /**
      * Create default GHCommitPointer instance
      */

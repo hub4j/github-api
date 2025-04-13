@@ -17,11 +17,11 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHProjectCardTest extends AbstractGitHubWireMockTest {
 
-    private GHOrganization org;
-
-    private GHProject project;
-    private GHProjectColumn column;
     private GHProjectCard card;
+
+    private GHProjectColumn column;
+    private GHOrganization org;
+    private GHProject project;
     /**
      * Create default GHProjectCardTest instance
      */

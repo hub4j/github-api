@@ -10,9 +10,9 @@ import java.util.function.Function;
  */
 class GitHubSanityCachedValue<T> {
 
-    private final Object lock = new Object();
     private long lastQueriedAtEpochSeconds = 0;
     private T lastResult = null;
+    private final Object lock = new Object();
 
     /**
      * Gets the value from the cache or calls the supplier if the cache is empty or out of date.

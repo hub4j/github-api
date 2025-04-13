@@ -14,9 +14,9 @@ import java.util.Map;
  */
 public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
 
+    private final String apiUrlTail;
     /** The builder. */
     protected final Requester builder;
-    private final String apiUrlTail;
 
     /**
      * Instantiates a new GH app create token builder.

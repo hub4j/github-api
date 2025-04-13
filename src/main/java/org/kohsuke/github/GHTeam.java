@@ -25,11 +25,11 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public enum Privacy {
 
-        /** The secret. */
-        SECRET,
         /** The closed. */
         // only visible to organization owners and members of this team.
-        CLOSED, // visible to all members of this organization.
+        CLOSED,
+        /** The secret. */
+        SECRET, // visible to all members of this organization.
         /** Unknown privacy value */
         UNKNOWN
     }
@@ -39,28 +39,28 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public enum Role {
 
-        /** A normal member of the team. */
-        MEMBER,
         /**
          * Able to add/remove other team members, promote other team members to team maintainer, and edit the team's
          * name and description.
          */
-        MAINTAINER
+        MAINTAINER,
+        /** A normal member of the team. */
+        MEMBER
     }
 
     /**
      * Path for external group-related operations
      */
     private static final String EXTERNAL_GROUPS = "/external-groups";
+    private String description;
     private String htmlUrl;
     private String name;
+    private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
     private String permission;
-    private String slug;
-    private String description;
 
     private String privacy;
 
-    private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
+    private String slug;
 
     /**
      * Create default GHTeam instance

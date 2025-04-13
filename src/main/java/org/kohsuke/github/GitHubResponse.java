@@ -132,13 +132,13 @@ class GitHubResponse<T> {
         }
     }
 
-    private final int statusCode;
+    @CheckForNull
+    private final T body;
 
     @Nonnull
     private final Map<String, List<String>> headers;
 
-    @CheckForNull
-    private final T body;
+    private final int statusCode;
 
     /**
      * Instantiates a new git hub response.

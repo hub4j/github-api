@@ -17,16 +17,16 @@ import java.util.Locale;
  */
 public class GHMilestone extends GHObject {
 
-    /** The owner. */
-    GHRepository owner;
-
-    /** The creator. */
-    GHUser creator;
+    private int closedIssues, openIssues, number;
 
     private String state, dueOn, title, description, htmlUrl;
-    private int closedIssues, openIssues, number;
+
     /** The closed at. */
     protected String closedAt;
+    /** The creator. */
+    GHUser creator;
+    /** The owner. */
+    GHRepository owner;
 
     /**
      * Create default GHMilestone instance

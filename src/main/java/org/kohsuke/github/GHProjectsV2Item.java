@@ -29,22 +29,22 @@ public class GHProjectsV2Item extends GHObject {
      */
     public enum ContentType {
 
-        /** The issue. */
-        ISSUE,
         /** The draftissue. */
         DRAFTISSUE,
+        /** The issue. */
+        ISSUE,
         /** The pullrequest. */
         PULLREQUEST,
         /** The unknown. */
         UNKNOWN;
     }
 
-    private String projectNodeId;
+    private String archivedAt;
     private String contentNodeId;
     private String contentType;
 
     private GHUser creator;
-    private String archivedAt;
+    private String projectNodeId;
 
     /**
      * Create default GHProjectsV2Item instance

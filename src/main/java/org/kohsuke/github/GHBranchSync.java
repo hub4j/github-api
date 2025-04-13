@@ -8,14 +8,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHBranchSync extends GitHubInteractiveObject {
 
     /**
-     * The Repository that this branch is in.
+     * The base branch.
      */
-    private GHRepository owner;
-
-    /**
-     * The message.
-     */
-    private String message;
+    private String baseBranch;
 
     /**
      * The merge type.
@@ -23,9 +18,14 @@ public class GHBranchSync extends GitHubInteractiveObject {
     private String mergeType;
 
     /**
-     * The base branch.
+     * The message.
      */
-    private String baseBranch;
+    private String message;
+
+    /**
+     * The Repository that this branch is in.
+     */
+    private GHRepository owner;
 
     /**
      * Create default GHBranchSync instance

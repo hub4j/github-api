@@ -14,20 +14,20 @@ import java.net.URL;
  */
 public class GHPullRequestReviewCommentReactions {
 
-    private String url;
-
-    private int totalCount = -1;
-
-    @JsonProperty("+1")
-    private int plusOne = -1;
-    @JsonProperty("-1")
-    private int minusOne = -1;
-    private int laugh = -1;
     private int confused = -1;
+
+    private int eyes = -1;
+
     private int heart = -1;
     private int hooray = -1;
-    private int eyes = -1;
+    private int laugh = -1;
+    @JsonProperty("-1")
+    private int minusOne = -1;
+    @JsonProperty("+1")
+    private int plusOne = -1;
     private int rocket = -1;
+    private int totalCount = -1;
+    private String url;
     /**
      * Create default GHPullRequestReviewCommentReactions instance
      */

@@ -43,11 +43,11 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
         return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
-    /** The rate limit. */
-    GHRateLimit rateLimit = null;
-
     /** The previous limit. */
     GHRateLimit previousLimit = null;
+
+    /** The rate limit. */
+    GHRateLimit rateLimit = null;
 
     /**
      * Instantiates a new GH rate limit test.

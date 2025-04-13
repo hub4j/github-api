@@ -126,9 +126,9 @@ public class GHRef extends GitHubInteractiveObject {
         return repository.root().createRequest().withUrlPath(url).toIterable(GHRef[].class, item -> repository.root());
     }
 
-    private String ref, url;
-
     private GHObject object;
+
+    private String ref, url;
 
     /**
      * Create default GHRef instance

@@ -108,9 +108,9 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
      */
     static class BodyStreamThrowingGitHubConnector<E extends IOException> extends HttpClientGitHubConnector {
 
-        final int[] count = { 0 };
-
         private final Thrower<E> thrower;
+
+        final int[] count = { 0 };
 
         /**
          * Instantiates a new input stream throwing http connector.
@@ -154,9 +154,9 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
      */
     static class SendThrowingGitHubConnector<E extends IOException> extends HttpClientGitHubConnector {
 
-        final int[] count = { 0 };
-
         private final Thrower<E> thrower;
+
+        final int[] count = { 0 };
 
         /**
          * Instantiates a new response code throwing http connector.
@@ -185,12 +185,12 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
 
     }
 
+    private static StreamHandler customLogHandler;
+
     private static Logger log = Logger.getLogger(GitHubClient.class.getName()); // matches the logger in the affected
 
     // class
     private static OutputStream logCapturingStream;
-
-    private static StreamHandler customLogHandler;
 
     /** The base request count. */
     int baseRequestCount;

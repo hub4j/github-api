@@ -12,17 +12,17 @@ package org.kohsuke.github;
  */
 public class GHCommitStatus extends GHObject {
 
-    /** The state. */
-    String state;
-
-    /** The description. */
-    String targetUrl, description;
-
     /** The context. */
     String context;
 
     /** The creator. */
     GHUser creator;
+
+    /** The state. */
+    String state;
+
+    /** The description. */
+    String targetUrl, description;
 
     /**
      * Create default GHCommitStatus instance

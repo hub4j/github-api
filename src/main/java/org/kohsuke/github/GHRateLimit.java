@@ -39,9 +39,9 @@ public class GHRateLimit {
      */
     public static class Record {
         /**
-         * Remaining calls that can be made.
+         * EpochSeconds time (UTC) at which this instance was created.
          */
-        private final int remaining;
+        private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;
 
         /**
          * Allotted API call per time period.
@@ -49,14 +49,14 @@ public class GHRateLimit {
         private final int limit;
 
         /**
+         * Remaining calls that can be made.
+         */
+        private final int remaining;
+
+        /**
          * The time at which the current rate limit window resets in UTC epoch seconds.
          */
         private final long resetEpochSeconds;
-
-        /**
-         * EpochSeconds time (UTC) at which this instance was created.
-         */
-        private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;
 
         /**
          * The date at which the rate limit will reset, adjusted to local machine time if the local machine's clock not
@@ -326,7 +326,16 @@ public class GHRateLimit {
      */
     public static class UnknownLimitRecord extends Record {
 
+        // The default UnknownLimitRecord is an expired record.
+        private static final UnknownLimitRecord DEFAULT = new UnknownLimitRecord(Long.MIN_VALUE);
+
+        // The starting current UnknownLimitRecord is an expired record.
+        private static final AtomicReference<UnknownLimitRecord> current = new AtomicReference<>(DEFAULT);
+
         private static final long defaultUnknownLimitResetSeconds = Duration.ofSeconds(30).getSeconds();
+
+        /** The Constant unknownLimit. */
+        static final int unknownLimit = 1000000;
 
         /**
          * The number of seconds until a {@link UnknownLimitRecord} will expire.
@@ -342,17 +351,8 @@ public class GHRateLimit {
          */
         static long unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
 
-        /** The Constant unknownLimit. */
-        static final int unknownLimit = 1000000;
-
         /** The Constant unknownRemaining. */
         static final int unknownRemaining = 999999;
-
-        // The default UnknownLimitRecord is an expired record.
-        private static final UnknownLimitRecord DEFAULT = new UnknownLimitRecord(Long.MIN_VALUE);
-
-        // The starting current UnknownLimitRecord is an expired record.
-        private static final AtomicReference<UnknownLimitRecord> current = new AtomicReference<>(DEFAULT);
 
         /**
          * Current.
@@ -387,6 +387,8 @@ public class GHRateLimit {
         }
     }
 
+    private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());
+
     /**
      * The default GHRateLimit provided to new {@link GitHubClient}s.
      *
@@ -400,8 +402,6 @@ public class GHRateLimit {
             UnknownLimitRecord.DEFAULT,
             UnknownLimitRecord.DEFAULT,
             UnknownLimitRecord.DEFAULT);
-
-    private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());
 
     /**
      * Creates a new {@link GHRateLimit} from a single record for the specified endpoint with place holders for other
@@ -447,13 +447,13 @@ public class GHRateLimit {
     private final Record core;
 
     @Nonnull
-    private final Record search;
-
-    @Nonnull
     private final Record graphql;
 
     @Nonnull
     private final Record integrationManifest;
+
+    @Nonnull
+    private final Record search;
 
     /**
      * Instantiates a new GH rate limit.

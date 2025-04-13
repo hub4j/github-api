@@ -60,9 +60,9 @@ public class OkHttpGitHubConnector implements GitHubConnector {
     }
     private static final String HEADER_NAME = "Cache-Control";
 
-    private final String maxAgeHeaderValue;
-
     private final OkHttpClient client;
+
+    private final String maxAgeHeaderValue;
 
     /**
      * Instantiates a new Ok http connector.

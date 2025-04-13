@@ -15,10 +15,10 @@ import java.io.IOException;
 public class GHAutolink {
 
     private int id;
-    private String keyPrefix;
-    private String urlTemplate;
     private boolean isAlphanumeric;
+    private String keyPrefix;
     private GHRepository owner;
+    private String urlTemplate;
 
     /**
      * Instantiates a new Gh autolink.

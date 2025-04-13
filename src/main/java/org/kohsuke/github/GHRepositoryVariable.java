@@ -74,14 +74,14 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
         variable.url = repository.getApiTailUrl("actions/variables");
         return variable;
     }
+    private String createdAt;
     private String name;
-    private String value;
+
+    private String updatedAt;
 
     private String url;
 
-    private String createdAt;
-
-    private String updatedAt;
+    private String value;
 
     /**
      * Create default GHRepositoryVariable instance

@@ -11,12 +11,12 @@ import java.io.InterruptedIOException;
  */
 public class GHRepositoryForkBuilder {
     static int FORK_RETRY_INTERVAL = 3000;
-    private final GHRepository repo;
-    private final Requester req;
-    private String organization;
-    private String name;
-
     private Boolean defaultBranchOnly;
+    private String name;
+    private String organization;
+    private final GHRepository repo;
+
+    private final Requester req;
 
     /**
      * Instantiates a new Gh repository fork builder.

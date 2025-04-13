@@ -120,10 +120,10 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * The type Check.
      */
     public static class Check {
-        private String context;
-
         @JsonInclude(JsonInclude.Include.NON_NULL)
         private Integer appId;
+
+        private String context;
 
         /**
          * no-arg constructor for the serializer
@@ -278,11 +278,11 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      */
     public static class RequiredReviews {
 
-        @JsonProperty("dismissal_restrictions")
-        private Restrictions dismissalRestriction;
-
         @JsonProperty
         private boolean dismissStaleReviews;
+
+        @JsonProperty("dismissal_restrictions")
+        private Restrictions dismissalRestriction;
 
         @JsonProperty
         private boolean requireCodeOwnerReviews;
@@ -363,10 +363,10 @@ public class GHBranchProtection extends GitHubInteractiveObject {
     public static class RequiredStatusChecks {
 
         @JsonProperty
-        private Collection<String> contexts;
+        private Collection<Check> checks;
 
         @JsonProperty
-        private Collection<Check> checks;
+        private Collection<String> contexts;
 
         @JsonProperty
         private boolean strict;

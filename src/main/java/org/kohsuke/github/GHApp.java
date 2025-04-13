@@ -21,16 +21,16 @@ import java.util.stream.Collectors;
  */
 public class GHApp extends GHObject {
 
-    private GHUser owner;
-
-    private String name;
-    private String slug;
     private String description;
-    private String externalUrl;
-    private Map<String, String> permissions;
+
     private List<String> events;
-    private long installationsCount;
+    private String externalUrl;
     private String htmlUrl;
+    private long installationsCount;
+    private String name;
+    private GHUser owner;
+    private Map<String, String> permissions;
+    private String slug;
     /**
      * Create default GHApp instance
      */

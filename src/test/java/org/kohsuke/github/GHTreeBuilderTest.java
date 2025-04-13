@@ -16,23 +16,23 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHTreeBuilderTest extends AbstractGitHubWireMockTest {
 
-    private static String REPO_NAME = "hub4j-test-org/GHTreeBuilderTest";
-
-    private static String PATH_SCRIPT = "app/run.sh";
-
-    private static String CONTENT_SCRIPT = "#!/bin/bash\necho Hello\n";
-    private static String PATH_README = "doc/readme.txt";
-
-    private static String CONTENT_README = "Thanks for using our application!\n";
-    private static String PATH_DATA1 = "data/val1.dat";
-
     private static byte[] CONTENT_DATA1 = { 0x01, 0x02, 0x03 };
-    private static String PATH_DATA2 = "data/val2.dat";
 
     private static byte[] CONTENT_DATA2 = { 0x04, 0x05, 0x06, 0x07 };
-    private GHRepository repo;
 
+    private static String CONTENT_README = "Thanks for using our application!\n";
+    private static String CONTENT_SCRIPT = "#!/bin/bash\necho Hello\n";
+
+    private static String PATH_DATA1 = "data/val1.dat";
+    private static String PATH_DATA2 = "data/val2.dat";
+
+    private static String PATH_README = "doc/readme.txt";
+    private static String PATH_SCRIPT = "app/run.sh";
+
+    private static String REPO_NAME = "hub4j-test-org/GHTreeBuilderTest";
     private GHRef mainRef;
+
+    private GHRepository repo;
     private GHTreeBuilder treeBuilder;
     /**
      * Create default GHTreeBuilderTest instance

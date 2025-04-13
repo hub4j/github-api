@@ -17,12 +17,12 @@ public class GHReleaseBuilder {
      */
     public static enum MakeLatest {
 
-        /** Make this the latest release */
-        TRUE,
         /** Do not make this the latest release */
         FALSE,
         /** Latest release is determined by date and higher semantic version */
-        LEGACY;
+        LEGACY,
+        /** Make this the latest release */
+        TRUE;
 
         /**
          * To string.
@@ -34,9 +34,9 @@ public class GHReleaseBuilder {
             return name().toLowerCase(Locale.ROOT);
         }
     }
-    private final GHRepository repo;
-
     private final Requester builder;
+
+    private final GHRepository repo;
 
     /**
      * Instantiates a new Gh release builder.

@@ -19,17 +19,17 @@ import java.util.Objects;
  */
 public class GHWorkflow extends GHObject {
 
+    private String badgeUrl;
+
+    private String htmlUrl;
+
+    private String name;
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
-
-    private String name;
-
     private String path;
-    private String state;
-    private String htmlUrl;
 
-    private String badgeUrl;
+    private String state;
     /**
      * Create default GHWorkflow instance
      */

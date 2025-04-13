@@ -11,10 +11,10 @@ import java.util.List;
  * @author Kohsuke Kawaguchi
  */
 public class GHIssueBuilder {
-    private final GHRepository repo;
+    private List<String> assignees = new ArrayList<String>();
     private final Requester builder;
     private List<String> labels = new ArrayList<String>();
-    private List<String> assignees = new ArrayList<String>();
+    private final GHRepository repo;
 
     /**
      * Instantiates a new GH issue builder.

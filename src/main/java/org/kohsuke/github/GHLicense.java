@@ -47,25 +47,25 @@ import java.util.Objects;
         justification = "JSON API")
 public class GHLicense extends GHObject {
 
-    /** The name. */
-    // these fields are always present, even in the short form
-    protected String key, name, spdxId;
-
     /** The featured. */
     // the rest is only after populated
     protected Boolean featured;
 
+    /** The forbidden. */
+    protected List<String> forbidden = new ArrayList<String>();
+
     /** The body. */
     protected String htmlUrl, description, category, implementation, body;
 
-    /** The required. */
-    protected List<String> required = new ArrayList<String>();
+    /** The name. */
+    // these fields are always present, even in the short form
+    protected String key, name, spdxId;
 
     /** The permitted. */
     protected List<String> permitted = new ArrayList<String>();
 
-    /** The forbidden. */
-    protected List<String> forbidden = new ArrayList<String>();
+    /** The required. */
+    protected List<String> required = new ArrayList<String>();
 
     /**
      * Create default GHLicense instance

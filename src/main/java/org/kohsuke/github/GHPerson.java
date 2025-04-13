@@ -20,19 +20,19 @@ import java.util.TreeMap;
  */
 public abstract class GHPerson extends GHObject {
 
-    /** The avatar url. */
-    // core data fields that exist even for "small" user data (such as the user info in pull request)
-    protected String login, avatarUrl;
+    /** The public gists. */
+    protected int followers, following, publicRepos, publicGists;
+
+    /** The html url. */
+    protected String htmlUrl;
 
     /** The twitter username. */
     // other fields (that only show up in full data)
     protected String location, blog, email, bio, name, company, type, twitterUsername;
 
-    /** The html url. */
-    protected String htmlUrl;
-
-    /** The public gists. */
-    protected int followers, following, publicRepos, publicGists;
+    /** The avatar url. */
+    // core data fields that exist even for "small" user data (such as the user info in pull request)
+    protected String login, avatarUrl;
 
     /** The hireable. */
     protected boolean siteAdmin, hireable;

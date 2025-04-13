@@ -25,17 +25,17 @@ public class GHMyself extends GHUser {
         /** All public and private repositories that current user has access or collaborates to. */
         ALL,
 
+        /** Public and private repositories that current user is a member. */
+        MEMBER,
+
         /** Public and private repositories owned by current user. */
         OWNER,
-
-        /** Public repositories that current user has access or collaborates to. */
-        PUBLIC,
 
         /** Private repositories that current user has access or collaborates to. */
         PRIVATE,
 
-        /** Public and private repositories that current user is a member. */
-        MEMBER;
+        /** Public repositories that current user has access or collaborates to. */
+        PUBLIC;
     }
 
     /**

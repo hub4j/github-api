@@ -196,14 +196,14 @@ public class GHRepository extends GHObject {
      */
     public enum Visibility {
 
-        /** The public. */
-        PUBLIC,
-
         /** The internal. */
         INTERNAL,
 
         /** The private. */
         PRIVATE,
+
+        /** The public. */
+        PUBLIC,
 
         /**
          * Placeholder for unexpected data values.
@@ -269,9 +269,33 @@ public class GHRepository extends GHObject {
         return root.createRequest().withUrlPath("/repos/" + owner + '/' + name).fetch(GHRepository.class);
     }
 
-    private String nodeId, description, homepage, name, fullName;
+    private boolean allowForking;
+
+    private boolean allowMergeCommit;
+
+    private boolean allowRebaseMerge;
+
+    private boolean allowSquashMerge;
+
+    private Map<String, GHCommit> commits = Collections.synchronizedMap(new WeakHashMap<>());
+
+    private boolean compareUsePaginatedCommits;
+
+    private String defaultBranch, language;
+
+    private boolean deleteBranchOnMerge;
+
+    private int forksCount, stargazersCount, watchersCount, size, openIssuesCount, subscribersCount;
+
+    private String gitUrl, sshUrl, cloneUrl, svnUrl, mirrorUrl;
+
+    private boolean hasIssues, hasWiki, fork, hasDownloads, hasPages, archived, disabled, hasProjects;
 
     private String htmlUrl; // this is the UI
+
+    @JsonProperty("private")
+    private boolean isPrivate;
+    private Boolean isTemplate;
 
     /*
      * The license information makes use of the preview API.
@@ -280,46 +304,22 @@ public class GHRepository extends GHObject {
      */
     private GHLicense license;
 
-    private String gitUrl, sshUrl, cloneUrl, svnUrl, mirrorUrl;
-
-    private GHUser owner; // not fully populated. beware.
-
-    private boolean hasIssues, hasWiki, fork, hasDownloads, hasPages, archived, disabled, hasProjects;
-
-    private boolean allowSquashMerge;
-
-    private boolean allowMergeCommit;
-
-    private boolean allowRebaseMerge;
-
-    private boolean allowForking;
-
-    private boolean deleteBranchOnMerge;
-
-    @JsonProperty("private")
-    private boolean isPrivate;
-
-    private String visibility;
-    private int forksCount, stargazersCount, watchersCount, size, openIssuesCount, subscribersCount;
-
-    private String pushedAt;
-
     private Map<Integer, GHMilestone> milestones = Collections.synchronizedMap(new WeakHashMap<>());
 
-    private String defaultBranch, language;
+    private String nodeId, description, homepage, name, fullName;
 
-    private GHRepository templateRepository;
-
-    private Map<String, GHCommit> commits = Collections.synchronizedMap(new WeakHashMap<>());
+    private GHUser owner; // not fully populated. beware.
 
     @SkipFromToString
     private GHRepoPermission permissions;
 
+    private String pushedAt;
+
     private GHRepository source, parent;
 
-    private Boolean isTemplate;
+    private GHRepository templateRepository;
 
-    private boolean compareUsePaginatedCommits;
+    private String visibility;
 
     /**
      * Create default GHRepository instance

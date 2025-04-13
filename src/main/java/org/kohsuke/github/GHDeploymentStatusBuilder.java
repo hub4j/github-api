@@ -10,8 +10,8 @@ import java.io.IOException;
  */
 public class GHDeploymentStatusBuilder {
     private final Requester builder;
-    private GHRepository repo;
     private long deploymentId;
+    private GHRepository repo;
 
     /**
      * Instantiates a new GH deployment status builder.

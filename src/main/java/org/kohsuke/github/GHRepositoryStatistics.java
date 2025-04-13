@@ -23,9 +23,9 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      */
     public static class CodeFrequency {
 
-        private final int week;
         private final int additions;
         private final int deletions;
+        private final int week;
 
         @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         private CodeFrequency(List<Integer> item) {
@@ -138,11 +138,11 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
                 justification = "JSON API")
         public static class Week {
 
-            private long w;
-
             private int a;
-            private int d;
+
             private int c;
+            private int d;
+            private long w;
             /**
              * Create default Week instance
              */

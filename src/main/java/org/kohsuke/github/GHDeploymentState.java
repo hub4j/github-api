@@ -6,12 +6,6 @@ package org.kohsuke.github;
  */
 public enum GHDeploymentState {
 
-    /** The pending. */
-    PENDING,
-
-    /** The success. */
-    SUCCESS,
-
     /** The error. */
     ERROR,
 
@@ -19,17 +13,23 @@ public enum GHDeploymentState {
     FAILURE,
 
     /**
+     * The state of the deployment currently reflects it's no longer active.
+     */
+    INACTIVE,
+
+    /**
      * The state of the deployment currently reflects it's in progress.
      */
     IN_PROGRESS,
+
+    /** The pending. */
+    PENDING,
 
     /**
      * The state of the deployment currently reflects it's queued up for processing.
      */
     QUEUED,
 
-    /**
-     * The state of the deployment currently reflects it's no longer active.
-     */
-    INACTIVE
+    /** The success. */
+    SUCCESS
 }

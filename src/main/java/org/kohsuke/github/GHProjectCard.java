@@ -15,14 +15,14 @@ import java.net.URL;
  */
 public class GHProjectCard extends GHObject {
 
-    private GHProject project;
+    private boolean archived;
 
     private GHProjectColumn column;
-    private String note;
+    private String contentUrl, projectUrl, columnUrl;
 
     private GHUser creator;
-    private String contentUrl, projectUrl, columnUrl;
-    private boolean archived;
+    private String note;
+    private GHProject project;
     /**
      * Create default GHProjectCard instance
      */

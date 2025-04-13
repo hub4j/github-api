@@ -71,21 +71,6 @@ public class GitHubRequest implements GitHubConnectorRequest {
      */
     static class Builder<B extends Builder<B>> {
 
-        @Nonnull
-        private final List<Entry> args;
-
-        /**
-         * The header values for this request.
-         */
-        @Nonnull
-        private final Map<String, List<String>> headers;
-
-        /**
-         * Injected local data map
-         */
-        @Nonnull
-        private final Map<String, Object> injectedMappingValues;
-
         /**
          * The base GitHub API for this request.
          */
@@ -93,7 +78,23 @@ public class GitHubRequest implements GitHubConnectorRequest {
         private String apiUrl;
 
         @Nonnull
-        private String urlPath;
+        private final List<Entry> args;
+
+        private byte[] body;
+
+        private boolean forceBody;
+
+        /**
+         * The header values for this request.
+         */
+        @Nonnull
+        private final Map<String, List<String>> headers;
+        /**
+         * Injected local data map
+         */
+        @Nonnull
+        private final Map<String, Object> injectedMappingValues;
+
         /**
          * Request method.
          */
@@ -102,9 +103,8 @@ public class GitHubRequest implements GitHubConnectorRequest {
 
         @Nonnull
         private RateLimitTarget rateLimitTarget;
-
-        private byte[] body;
-        private boolean forceBody;
+        @Nonnull
+        private String urlPath;
 
         private Builder(@Nonnull List<Entry> args,
                 @Nonnull Map<String, List<String>> headers,
@@ -552,9 +552,9 @@ public class GitHubRequest implements GitHubConnectorRequest {
             return (B) this;
         }
     }
+    private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
     private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
             .nullsFirst(String.CASE_INSENSITIVE_ORDER);
-    private static final List<String> METHODS_WITHOUT_BODY = asList("GET", "DELETE");
     /**
      * Encode the path to url safe string.
      *
@@ -619,23 +619,23 @@ public class GitHubRequest implements GitHubConnectorRequest {
         // replace with '_'
         return en.toString().toLowerCase(Locale.ENGLISH).replace('_', '-');
     }
-    private final List<Entry> args;
-    private final Map<String, List<String>> headers;
-    private final Map<String, Object> injectedMappingValues;
-
     private final String apiUrl;
+    private final List<Entry> args;
+    private final byte[] body;
 
-    private final String urlPath;
+    private final boolean forceBody;
+
+    private final Map<String, List<String>> headers;
+
+    private final Map<String, Object> injectedMappingValues;
 
     private final String method;
 
     private final RateLimitTarget rateLimitTarget;
 
-    private final byte[] body;
-
-    private final boolean forceBody;
-
     private final URL url;
+
+    private final String urlPath;
 
     @SuppressFBWarnings(value = { "CT_CONSTRUCTOR_THROW" }, justification = "Basic argument validation")
     private GitHubRequest(@Nonnull List<Entry> args,

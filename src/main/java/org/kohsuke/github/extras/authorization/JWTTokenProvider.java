@@ -59,17 +59,17 @@ public class JWTTokenProvider implements AuthorizationProvider {
         }
     }
 
-    private final PrivateKey privateKey;
-
-    @Nonnull
-    private Instant validUntil = Instant.MIN;
-
-    private String authorization;
-
     /**
      * The identifier for the application
      */
     private final String applicationId;
+
+    private String authorization;
+
+    private final PrivateKey privateKey;
+
+    @Nonnull
+    private Instant validUntil = Instant.MIN;
 
     /**
      * Create a JWTTokenProvider

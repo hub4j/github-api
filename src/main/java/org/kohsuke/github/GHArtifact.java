@@ -22,16 +22,16 @@ import static java.util.Objects.requireNonNull;
  */
 public class GHArtifact extends GHObject {
 
+    private String archiveDownloadUrl;
+
+    private boolean expired;
+
+    private String expiresAt;
+    private String name;
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
-
-    private String name;
-
     private long sizeInBytes;
-    private String archiveDownloadUrl;
-    private boolean expired;
-    private String expiresAt;
     /**
      * Create default GHArtifact instance
      */

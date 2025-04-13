@@ -15,12 +15,12 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
 
         /** The created. */
         CREATED,
-        /** The updated. */
-        UPDATED,
+        /** The long running. */
+        LONG_RUNNING,
         /** The popularity. */
         POPULARITY,
-        /** The long running. */
-        LONG_RUNNING
+        /** The updated. */
+        UPDATED
     }
 
     private final GHRepository repo;

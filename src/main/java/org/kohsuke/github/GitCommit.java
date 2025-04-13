@@ -24,11 +24,11 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      */
     static class Tree {
 
-        /** The url. */
-        String url;
-
         /** The sha. */
         String sha;
+
+        /** The url. */
+        String url;
 
         /**
          * Gets the sha.
@@ -49,19 +49,19 @@ public class GitCommit extends GitHubBridgeAdapterObject {
         }
 
     }
-    private GHRepository owner;
-    private String sha, nodeId, url, htmlUrl;
     private GitUser author;
-
     private GitUser committer;
-
     private String message;
 
-    private GHVerification verification;
+    private GHRepository owner;
+
+    private List<GHCommit.Parent> parents;
+
+    private String sha, nodeId, url, htmlUrl;
 
     private Tree tree;
 
-    private List<GHCommit.Parent> parents;
+    private GHVerification verification;
 
     /**
      * Instantiates a new git commit.

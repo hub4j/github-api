@@ -34,11 +34,11 @@ public class GHTreeBuilder {
     @SuppressFBWarnings("URF_UNREAD_FIELD")
     private static class TreeEntry {
 
-        private final String path;
-        private final String mode;
-        private final String type;
-        private String sha;
         private String content;
+        private final String mode;
+        private final String path;
+        private String sha;
+        private final String type;
 
         private TreeEntry(String path, String mode, String type) {
             this.path = path;

@@ -14,26 +14,26 @@ public class GHDeploymentStatus extends GHObject {
     /** The creator. */
     protected GHUser creator;
 
-    /** The state. */
-    protected String state;
+    /** The deployment url. */
+    protected String deploymentUrl;
 
     /** The description. */
     protected String description;
 
-    /** The target url. */
-    protected String targetUrl;
+    /** The environment url. */
+    protected String environmentUrl;
 
     /** The log url. */
     protected String logUrl;
 
-    /** The deployment url. */
-    protected String deploymentUrl;
-
     /** The repository url. */
     protected String repositoryUrl;
 
-    /** The environment url. */
-    protected String environmentUrl;
+    /** The state. */
+    protected String state;
+
+    /** The target url. */
+    protected String targetUrl;
 
     /**
      * Create default GHDeploymentStatus instance

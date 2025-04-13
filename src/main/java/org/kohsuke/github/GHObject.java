@@ -45,17 +45,17 @@ public abstract class GHObject extends GitHubInteractiveObject {
         }
     };
 
+    private String createdAt;
+
+    private long id;
+    private String nodeId;
+    private String updatedAt;
+    private String url;
+
     /**
      * Capture response HTTP headers on the state object.
      */
     protected transient Map<String, List<String>> responseHeaderFields;
-
-    private String url;
-    private long id;
-    private String nodeId;
-    private String createdAt;
-
-    private String updatedAt;
 
     /**
      * Instantiates a new GH object.

@@ -26,13 +26,6 @@ import javax.annotation.Nonnull;
  */
 public class PagedIterator<T> implements Iterator<T> {
 
-    /** The base. */
-    @Nonnull
-    protected final Iterator<T[]> base;
-
-    @CheckForNull
-    private final Consumer<T> itemInitializer;
-
     /**
      * Current batch of items. Each time {@link #next()} is called the next item in this array will be returned. After
      * the last item of the array is returned, when {@link #next()} is called again, a new page of items will be fetched
@@ -42,12 +35,19 @@ public class PagedIterator<T> implements Iterator<T> {
      */
     private T[] currentPage;
 
+    @CheckForNull
+    private final Consumer<T> itemInitializer;
+
     /**
      * The index of the next item on the page, the item that will be returned when {@link #next()} is called.
      *
      * @see #fetch() {@link #fetch()} for details on how this field is used.
      */
     private int nextItemIndex;
+
+    /** The base. */
+    @Nonnull
+    protected final Iterator<T[]> base;
 
     /**
      * Instantiates a new paged iterator.

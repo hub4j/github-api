@@ -43,16 +43,16 @@ import javax.annotation.CheckForNull;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHPullRequestReview extends GHObject {
 
-    /** The owner. */
-    GHPullRequest owner;
-
     private String body;
 
-    private GHUser user;
     private String commitId;
+
+    private String htmlUrl;
     private GHPullRequestReviewState state;
     private String submittedAt;
-    private String htmlUrl;
+    private GHUser user;
+    /** The owner. */
+    GHPullRequest owner;
     /**
      * Create default GHPullRequestReview instance
      */

@@ -118,14 +118,14 @@ public class GHDiscussion extends GHObject {
                 .toIterable(GHDiscussion[].class, item -> item.wrapUp(team));
     }
 
-    private GHTeam team;
-
-    private long number;
-
     private String body, title, htmlUrl;
 
     @JsonProperty(value = "private")
     private boolean isPrivate;
+
+    private long number;
+
+    private GHTeam team;
 
     /**
      * Create default GHDiscussion instance

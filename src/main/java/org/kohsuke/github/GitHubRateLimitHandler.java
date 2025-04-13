@@ -25,9 +25,19 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {
 
     /**
-     * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
+     * Fail immediately.
      */
-    private static final int MINIMUM_RATE_LIMIT_RETRY_MILLIS = 1000;
+    public static final GitHubRateLimitHandler FAIL = new GitHubRateLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            throw new HttpException("API rate limit reached",
+                    connectorResponse.statusCode(),
+                    connectorResponse.header("Status"),
+                    connectorResponse.request().url().toString())
+                    .withResponseHeaderFields(connectorResponse.allHeaders());
+
+        }
+    };
 
     /**
      * Wait until the API abuse "wait time" is passed.
@@ -44,19 +54,9 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
     };
 
     /**
-     * Fail immediately.
+     * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
      */
-    public static final GitHubRateLimitHandler FAIL = new GitHubRateLimitHandler() {
-        @Override
-        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-            throw new HttpException("API rate limit reached",
-                    connectorResponse.statusCode(),
-                    connectorResponse.header("Status"),
-                    connectorResponse.request().url().toString())
-                    .withResponseHeaderFields(connectorResponse.allHeaders());
-
-        }
-    };
+    private static final int MINIMUM_RATE_LIMIT_RETRY_MILLIS = 1000;
 
     /**
      * Create default GitHubRateLimitHandler instance

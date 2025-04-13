@@ -28,15 +28,15 @@ public class GHAsset extends GHObject {
         return assets;
     }
 
+    private String browserDownloadUrl;
+    private String contentType;
+    private long downloadCount;
+    private String label;
+    private String name;
+    private long size;
+    private String state;
     /** The owner. */
     GHRepository owner;
-    private String name;
-    private String label;
-    private String state;
-    private String contentType;
-    private long size;
-    private long downloadCount;
-    private String browserDownloadUrl;
 
     /**
      * Create default GHAsset instance

@@ -10,11 +10,11 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 public class GHRequestedAction extends GHObject {
 
-    private GHRepository owner;
+    private String description;
 
     private String identifier;
     private String label;
-    private String description;
+    private GHRepository owner;
     /**
      * Create default GHRequestedAction instance
      */

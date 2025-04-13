@@ -15,14 +15,14 @@ import java.util.Date;
  */
 public class GHMarketplacePendingChange extends GitHubInteractiveObject {
 
-    private long id;
-
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private Long unitCount;
+    private String effectiveDate;
+
+    private long id;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplacePlan plan;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private String effectiveDate;
+    private Long unitCount;
     /**
      * Create default GHMarketplacePendingChange instance
      */

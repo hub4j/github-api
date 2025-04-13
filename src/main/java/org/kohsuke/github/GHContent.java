@@ -31,24 +31,24 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
         return repository.getApiTailUrl("contents/" + path);
     }
 
+    private String content;
+
+    private String downloadUrl;
+    private String encoding;
+    private String gitUrl; // this is the Blob url
+    private String htmlUrl; // this is the UI
+    private String name;
+    private String path;
     /*
      * In normal use of this class, repository field is set via wrap(), but in the code search API, there's a nested
      * 'repository' field that gets populated from JSON.
      */
     private GHRepository repository;
-
-    private String type;
-    private String encoding;
-    private long size;
     private String sha;
-    private String name;
-    private String path;
+    private long size;
     private String target;
-    private String content;
+    private String type;
     private String url; // this is the API url
-    private String gitUrl; // this is the Blob url
-    private String htmlUrl; // this is the UI
-    private String downloadUrl;
 
     /**
      * Create default GHContent instance

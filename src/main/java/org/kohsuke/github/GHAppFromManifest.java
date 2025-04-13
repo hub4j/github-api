@@ -11,8 +11,8 @@ public class GHAppFromManifest extends GHApp {
     private String clientId;
 
     private String clientSecret;
-    private String webhookSecret;
     private String pem;
+    private String webhookSecret;
     /**
      * Create default GHAppFromManifest instance
      */

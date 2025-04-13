@@ -29,17 +29,17 @@ public class GHCommit {
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "It's being initialized by JSON deserialization")
     public static class File {
 
-        /** The status. */
-        String status;
-
         /** The deletions. */
         int changes, additions, deletions;
+
+        /** The previous filename. */
+        String filename, previousFilename;
 
         /** The patch. */
         String rawUrl, blobUrl, sha, patch;
 
-        /** The previous filename. */
-        String filename, previousFilename;
+        /** The status. */
+        String status;
 
         /**
          * Create default File instance
@@ -149,12 +149,12 @@ public class GHCommit {
      */
     public static class Parent {
 
+        /** The sha. */
+        String sha;
+
         /** The url. */
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         String url;
-
-        /** The sha. */
-        String sha;
 
         /**
          * Create default Parent instance
@@ -243,37 +243,37 @@ public class GHCommit {
      */
     static class User {
 
-        /** The gravatar id. */
-        // TODO: what if someone who doesn't have an account on GitHub makes a commit?
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        String url, avatarUrl, gravatarId;
-
         /** The id. */
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         int id;
 
         /** The login. */
         String login;
-    }
 
-    private GHRepository owner;
+        /** The gravatar id. */
+        // TODO: what if someone who doesn't have an account on GitHub makes a commit?
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
+        String url, avatarUrl, gravatarId;
+    }
 
     private ShortInfo commit;
 
-    /** The sha. */
-    String url, htmlUrl, sha, message;
+    private GHRepository owner;
+
+    /** The committer. */
+    User author, committer;
 
     /** The files. */
     List<File> files;
 
-    /** The stats. */
-    Stats stats;
-
     /** The parents. */
     List<Parent> parents;
 
-    /** The committer. */
-    User author, committer;
+    /** The stats. */
+    Stats stats;
+
+    /** The sha. */
+    String url, htmlUrl, sha, message;
 
     /**
      * Creates an instance of {@link GHCommit}.

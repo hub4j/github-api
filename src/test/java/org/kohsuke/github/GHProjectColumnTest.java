@@ -18,9 +18,9 @@ import static org.hamcrest.Matchers.nullValue;
  */
 public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
 
-    private GHProject project;
-
     private GHProjectColumn column;
+
+    private GHProject project;
     /**
      * Create default GHProjectColumnTest instance
      */

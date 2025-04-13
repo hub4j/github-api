@@ -13,27 +13,27 @@ import java.util.Date;
  */
 public class GHDeployKey {
 
-    /** The title. */
-    protected String url, key, title;
+    /** Name of user that added the deploy key */
+    private String addedBy;
 
-    /** The verified. */
-    protected boolean verified;
-
-    /** The id. */
-    protected long id;
-
-    private GHRepository owner;
     /** Creation date of the deploy key */
     private String createdAt;
 
     /** Last used date of the deploy key */
     private String lastUsed;
 
-    /** Name of user that added the deploy key */
-    private String addedBy;
-
+    private GHRepository owner;
     /** Whether the deploykey has readonly permission or full access */
     private boolean readOnly;
+
+    /** The id. */
+    protected long id;
+
+    /** The title. */
+    protected String url, key, title;
+
+    /** The verified. */
+    protected boolean verified;
 
     /**
      * Create default GHDeployKey instance

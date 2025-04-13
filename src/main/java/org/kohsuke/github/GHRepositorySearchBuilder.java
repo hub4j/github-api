@@ -16,10 +16,10 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      */
     public enum Sort {
 
-        /** The stars. */
-        STARS,
         /** The forks. */
         FORKS,
+        /** The stars. */
+        STARS,
         /** The updated. */
         UPDATED
     }

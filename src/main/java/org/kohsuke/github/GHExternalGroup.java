@@ -22,6 +22,12 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
     public static class GHLinkedExternalMember {
 
         /**
+         * The email attached to the user
+         */
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
+        private String memberEmail;
+
+        /**
          * The internal user ID of the identity
          */
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
@@ -38,12 +44,6 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
          */
         @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
         private String memberName;
-
-        /**
-         * The email attached to the user
-         */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-        private String memberEmail;
 
         /**
          * Create default GHLinkedExternalMember instance
@@ -147,10 +147,12 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
     private String groupName;
 
     /**
-     * The date when the group was last updated at
+     * The external members linked to this group
      */
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private String updatedAt;
+    private List<GHLinkedExternalMember> members;
+
+    private GHOrganization organization;
 
     /**
      * The teams linked to this group
@@ -159,12 +161,10 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
     private List<GHLinkedTeam> teams;
 
     /**
-     * The external members linked to this group
+     * The date when the group was last updated at
      */
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private List<GHLinkedExternalMember> members;
-
-    private GHOrganization organization;
+    private String updatedAt;
 
     GHExternalGroup() {
         this.teams = Collections.emptyList();

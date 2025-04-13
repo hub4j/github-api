@@ -18,13 +18,13 @@ import javax.annotation.Nonnull;
  */
 public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
 
-    /** The terms. */
-    protected final List<String> terms = new ArrayList<String>();
-
     /**
      * Data transfer object that receives the result of search.
      */
     private final Class<? extends SearchResult<T>> receiverType;
+
+    /** The terms. */
+    protected final List<String> terms = new ArrayList<String>();
 
     /**
      * Instantiates a new GH search builder.

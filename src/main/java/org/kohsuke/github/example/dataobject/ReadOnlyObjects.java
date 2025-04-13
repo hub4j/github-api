@@ -108,13 +108,13 @@ public final class ReadOnlyObjects {
      */
     public static class GHMetaGettersFinal implements GHMetaExample {
 
-        private final boolean verifiablePasswordAuthentication;
-        private final List<String> hooks = new ArrayList<>();
-        private final List<String> git = new ArrayList<>();
-        private final List<String> web = new ArrayList<>();
         private final List<String> api = new ArrayList<>();
-        private final List<String> pages = new ArrayList<>();
+        private final List<String> git = new ArrayList<>();
+        private final List<String> hooks = new ArrayList<>();
         private final List<String> importer = new ArrayList<>();
+        private final List<String> pages = new ArrayList<>();
+        private final boolean verifiablePasswordAuthentication;
+        private final List<String> web = new ArrayList<>();
 
         @JsonCreator
         private GHMetaGettersFinal(
@@ -176,13 +176,13 @@ public final class ReadOnlyObjects {
      */
     public static class GHMetaGettersFinalCreator implements GHMetaExample {
 
-        private final boolean verifiablePasswordAuthentication;
-        private final List<String> hooks;
-        private final List<String> git;
-        private final List<String> web;
         private final List<String> api;
-        private final List<String> pages;
+        private final List<String> git;
+        private final List<String> hooks;
         private final List<String> importer;
+        private final List<String> pages;
+        private final boolean verifiablePasswordAuthentication;
+        private final List<String> web;
 
         /**
          *
@@ -283,18 +283,18 @@ public final class ReadOnlyObjects {
      */
     public static class GHMetaGettersUnmodifiable implements GHMetaExample {
 
-        @JsonProperty("verifiable_password_authentication")
-        private boolean verifiablePasswordAuthentication;
-
-        private List<String> hooks;
-        private List<String> git;
-        private List<String> web;
         private List<String> api;
-        private List<String> pages;
+
+        private List<String> git;
+        private List<String> hooks;
         /**
          * If this were an optional member, we could fill it with an empty list by default.
          */
         private List<String> importer = new ArrayList<>();
+        private List<String> pages;
+        @JsonProperty("verifiable_password_authentication")
+        private boolean verifiablePasswordAuthentication;
+        private List<String> web;
         /**
          * Create default GHMetaGettersUnmodifiable instance
          */
@@ -352,18 +352,18 @@ public final class ReadOnlyObjects {
      */
     public static class GHMetaPackage implements GHMetaExample {
 
-        private boolean verifiablePasswordAuthentication;
-
-        private List<String> hooks;
-        private List<String> git;
-        private List<String> web;
         private List<String> api;
-        private List<String> pages;
+
+        private List<String> git;
+        private List<String> hooks;
         /**
          * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
          */
         @JsonProperty
         private List<String> importer;
+        private List<String> pages;
+        private boolean verifiablePasswordAuthentication;
+        private List<String> web;
 
         /**
          * Create default GHMetaPackage instance
@@ -492,15 +492,15 @@ public final class ReadOnlyObjects {
      */
     public static class GHMetaPublic implements GHMetaExample {
 
+        private List<String> api;
+
+        private List<String> git;
+        private List<String> hooks;
+        private List<String> importer;
+        private List<String> pages;
         @JsonProperty("verifiable_password_authentication")
         private boolean verifiablePasswordAuthentication;
-
-        private List<String> hooks;
-        private List<String> git;
         private List<String> web;
-        private List<String> api;
-        private List<String> pages;
-        private List<String> importer;
         /**
          * Create default GHMetaPublic instance
          */

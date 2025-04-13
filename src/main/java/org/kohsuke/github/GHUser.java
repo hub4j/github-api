@@ -37,11 +37,11 @@ import java.util.*;
  */
 public class GHUser extends GHPerson {
 
-    /** The ldap dn. */
-    protected String ldapDn;
-
     /** The suspendedAt */
     private String suspendedAt;
+
+    /** The ldap dn. */
+    protected String ldapDn;
 
     /**
      * Create default GHUser instance

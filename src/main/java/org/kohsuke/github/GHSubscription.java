@@ -19,8 +19,8 @@ public class GHSubscription extends GitHubInteractiveObject {
 
     private String createdAt, url, repositoryUrl, reason;
 
-    private boolean subscribed, ignored;
     private GHRepository repo;
+    private boolean subscribed, ignored;
 
     /**
      * Create default GHSubscription instance

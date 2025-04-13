@@ -32,23 +32,23 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
-    private static final String REPO_NAME = "hub4j-test-org/GHWorkflowRunTest";
+    private static final String ARTIFACTS_WORKFLOW_NAME = "Artifacts workflow";
 
-    private static final String MAIN_BRANCH = "main";
-    private static final String SECOND_BRANCH = "second-branch";
+    private static final String ARTIFACTS_WORKFLOW_PATH = "artifacts-workflow.yml";
+    private static final String FAST_WORKFLOW_NAME = "Fast workflow";
     private static final String FAST_WORKFLOW_PATH = "fast-workflow.yml";
 
-    private static final String FAST_WORKFLOW_NAME = "Fast workflow";
-    private static final String SLOW_WORKFLOW_PATH = "slow-workflow.yml";
+    private static final String MAIN_BRANCH = "main";
+    private static final String MULTI_JOBS_WORKFLOW_NAME = "Multi jobs workflow";
+
+    private static final String MULTI_JOBS_WORKFLOW_PATH = "multi-jobs-workflow.yml";
+    private static final String REPO_NAME = "hub4j-test-org/GHWorkflowRunTest";
+
+    private static final String RUN_A_ONE_LINE_SCRIPT_STEP_NAME = "Run a one-line script";
+    private static final String SECOND_BRANCH = "second-branch";
 
     private static final String SLOW_WORKFLOW_NAME = "Slow workflow";
-    private static final String ARTIFACTS_WORKFLOW_PATH = "artifacts-workflow.yml";
-
-    private static final String ARTIFACTS_WORKFLOW_NAME = "Artifacts workflow";
-    private static final String MULTI_JOBS_WORKFLOW_PATH = "multi-jobs-workflow.yml";
-
-    private static final String MULTI_JOBS_WORKFLOW_NAME = "Multi jobs workflow";
-    private static final String RUN_A_ONE_LINE_SCRIPT_STEP_NAME = "Run a one-line script";
+    private static final String SLOW_WORKFLOW_PATH = "slow-workflow.yml";
     private static final String UBUNTU_LABEL = "ubuntu-latest";
     private static void checkArtifactProperties(GHArtifact artifact, String artifactName) throws IOException {
         assertThat(artifact.getId(), notNullValue());

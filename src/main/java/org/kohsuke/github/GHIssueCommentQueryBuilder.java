@@ -21,8 +21,8 @@ import java.util.Date;
  * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
  */
 public class GHIssueCommentQueryBuilder {
-    private final Requester req;
     private final GHIssue issue;
+    private final Requester req;
 
     /**
      * Instantiates a new GH issue comment query builder.

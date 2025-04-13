@@ -19,17 +19,17 @@ public class GHError implements Serializable {
     private static final long serialVersionUID = 2008071901;
 
     /**
-     * The error message.
-     */
-    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private String message;
-
-    /**
      * The URL to the documentation for the error.
      */
     @JsonProperty("documentation_url")
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private String documentation;
+
+    /**
+     * The error message.
+     */
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
+    private String message;
 
     /**
      * Create default GHError instance

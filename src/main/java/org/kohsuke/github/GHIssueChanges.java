@@ -34,8 +34,8 @@ public class GHIssueChanges {
         }
     }
 
-    private GHFrom title;
     private GHFrom body;
+    private GHFrom title;
 
     /**
      * Create default GHIssueChanges instance

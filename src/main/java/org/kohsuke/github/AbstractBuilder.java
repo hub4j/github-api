@@ -43,13 +43,13 @@ import javax.annotation.Nonnull;
  */
 abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements GitHubRequestBuilderDone<R> {
 
-    @Nonnull
-    private final Class<R> returnType;
+    @CheckForNull
+    private final R baseInstance;
 
     private final boolean commitChangesImmediately;
 
-    @CheckForNull
-    private final R baseInstance;
+    @Nonnull
+    private final Class<R> returnType;
 
     /** The requester. */
     @Nonnull

@@ -15,17 +15,17 @@ import java.util.Date;
  */
 public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
 
-    private String billingCycle;
-
-    private String nextBillingDate;
-    private boolean onFreeTrial;
-    private String freeTrialEndsOn;
-    private Long unitCount;
-    private String updatedAt;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplaceAccount account;
+
+    private String billingCycle;
+    private String freeTrialEndsOn;
+    private String nextBillingDate;
+    private boolean onFreeTrial;
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplacePlan plan;
+    private Long unitCount;
+    private String updatedAt;
     /**
      * Create default GHMarketplaceUserPurchase instance
      */

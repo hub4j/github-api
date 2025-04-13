@@ -10,8 +10,8 @@ import java.io.IOException;
  * @see GHPullRequest#createReviewComment()
  */
 public class GHPullRequestReviewCommentBuilder {
-    private final GHPullRequest pr;
     private final Requester builder;
+    private final GHPullRequest pr;
 
     /**
      * Instantiates a new GH pull request review comment builder.

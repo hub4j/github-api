@@ -43,12 +43,12 @@ public class WireMockRuleConfiguration implements Options {
     public static WireMockRuleConfiguration wireMockConfig() {
         return new WireMockRuleConfiguration();
     }
-    private final Options parent;
     private final String childDirectory;
+    private Map<String, Extension> extensions = Maps.newLinkedHashMap();
 
     private MappingsSource mappingsSource;
 
-    private Map<String, Extension> extensions = Maps.newLinkedHashMap();
+    private final Options parent;
 
     /**
      * Instantiates a new wire mock rule configuration.

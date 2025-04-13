@@ -20,13 +20,13 @@ import java.util.List;
         justification = "JSON API")
 public class GHTree {
 
-    /** The repo. */
-    /* package almost final */GHRepository repo;
+    private String sha, url;
+
+    private GHTreeEntry[] tree;
 
     private boolean truncated;
-
-    private String sha, url;
-    private GHTreeEntry[] tree;
+    /** The repo. */
+    /* package almost final */GHRepository repo;
     /**
      * Create default GHTree instance
      */

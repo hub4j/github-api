@@ -72,13 +72,13 @@ final class JwtBuilderUtil {
         private static <T extends Enum<T>> T createEnumInstance(Class<?> type, String name) {
             return Enum.valueOf((Class<T>) type, name);
         }
-        private Method setIssuedAtMethod;
-        private Method setExpirationMethod;
-        private Method setIssuerMethod;
         private Enum<?> rs256SignatureAlgorithm;
-        private Method signWithMethod;
-
         private Method serializeToJsonMethod;
+        private Method setExpirationMethod;
+        private Method setIssuedAtMethod;
+        private Method setIssuerMethod;
+
+        private Method signWithMethod;
 
         ReflectionBuilderImpl() throws ReflectiveOperationException {
             JwtBuilder jwtBuilder = Jwts.builder();

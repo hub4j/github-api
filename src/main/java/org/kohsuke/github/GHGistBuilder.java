@@ -14,8 +14,8 @@ import javax.annotation.Nonnull;
  * @see GitHub#createGist() GitHub#createGist()
  */
 public class GHGistBuilder {
-    private final Requester req;
     private final LinkedHashMap<String, Object> files = new LinkedHashMap<String, Object>();
+    private final Requester req;
 
     /**
      * Instantiates a new Gh gist builder.

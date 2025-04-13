@@ -48,6 +48,9 @@ public class GHPullRequestCommitDetail {
         /** The author. */
         GitUser author;
 
+        /** The comment count. */
+        Integer commentCount;
+
         /** The committer. */
         GitUser committer;
 
@@ -59,9 +62,6 @@ public class GHPullRequestCommitDetail {
 
         /** The url. */
         String url;
-
-        /** The comment count. */
-        Integer commentCount;
 
         /**
          * Create default Commit instance
@@ -140,14 +140,14 @@ public class GHPullRequestCommitDetail {
      */
     public static class CommitPointer {
 
+        /** The html url. */
+        String htmlUrl;
+
         /** The sha. */
         String sha;
 
         /** The url. */
         String url;
-
-        /** The html url. */
-        String htmlUrl;
 
         /**
          * Create default CommitPointer instance
@@ -232,23 +232,23 @@ public class GHPullRequestCommitDetail {
 
     private GHPullRequest owner;
 
-    /** The sha. */
-    String sha;
+    /** The comments url. */
+    String commentsUrl;
 
     /** The commit. */
     Commit commit;
 
-    /** The url. */
-    String url;
-
     /** The html url. */
     String htmlUrl;
 
-    /** The comments url. */
-    String commentsUrl;
-
     /** The parents. */
     CommitPointer[] parents;
+
+    /** The sha. */
+    String sha;
+
+    /** The url. */
+    String url;
 
     /**
      * Create default GHPullRequestCommitDetail instance

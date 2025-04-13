@@ -41,11 +41,11 @@ import java.util.UUID;
  */
 public class WireMockRule implements MethodRule, TestRule, Container, Stubbing, Admin {
 
-    private WireMockServer wireMockServer;
     private boolean failOnUnmatchedRequests;
+    private String methodName = null;
     private final Options options;
 
-    private String methodName = null;
+    private WireMockServer wireMockServer;
 
     /**
      * Instantiates a new wire mock rule.

@@ -45,30 +45,30 @@ import static org.junit.Assume.assumeTrue;
  */
 public class OkHttpGitHubConnectorTest extends AbstractGitHubWireMockTest {
 
-    private static int defaultRateLimitUsed = 17;
-
-    private static int okhttpRateLimitUsed = 17;
-    private static int maxAgeZeroRateLimitUsed = 7;
-    private static int maxAgeThreeRateLimitUsed = 7;
-    private static int maxAgeNoneRateLimitUsed = 4;
-    private static int userRequestCount = 0;
-
     private static int defaultNetworkRequestCount = 16;
 
-    private static int okhttpNetworkRequestCount = 16;
-    private static int maxAgeZeroNetworkRequestCount = 16;
-    private static int maxAgeThreeNetworkRequestCount = 9;
-    private static int maxAgeNoneNetworkRequestCount = 5;
-    private static int maxAgeZeroHitCount = 10;
-
-    private static int maxAgeThreeHitCount = 10;
+    private static int defaultRateLimitUsed = 17;
     private static int maxAgeNoneHitCount = 11;
+    private static int maxAgeNoneNetworkRequestCount = 5;
+    private static int maxAgeNoneRateLimitUsed = 4;
+    private static int maxAgeThreeHitCount = 10;
+
+    private static int maxAgeThreeNetworkRequestCount = 9;
+
+    private static int maxAgeThreeRateLimitUsed = 7;
+    private static int maxAgeZeroHitCount = 10;
+    private static int maxAgeZeroNetworkRequestCount = 16;
+    private static int maxAgeZeroRateLimitUsed = 7;
+    private static int okhttpNetworkRequestCount = 16;
+
+    private static int okhttpRateLimitUsed = 17;
+    private static int userRequestCount = 0;
     private static GHRepository getRepository(GitHub gitHub) throws IOException {
         return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
-    private GHRateLimit rateLimitBefore;
     private Cache cache = null;
+    private GHRateLimit rateLimitBefore;
 
     /**
      * Instantiates a new ok http git hub connector test.

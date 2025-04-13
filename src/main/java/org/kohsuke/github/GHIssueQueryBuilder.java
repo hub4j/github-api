@@ -104,12 +104,12 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
      */
     public enum Sort {
 
+        /** The comments. */
+        COMMENTS,
         /** The created. */
         CREATED,
         /** The updated. */
-        UPDATED,
-        /** The comments. */
-        COMMENTS
+        UPDATED
     }
 
     private final List<String> labels = new ArrayList<>();

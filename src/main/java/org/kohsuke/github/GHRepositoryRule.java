@@ -22,9 +22,9 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      */
     public static enum AlertsThreshold {
         /**
-         * none
+         * all
          */
-        NONE,
+        ALL,
 
         /**
          * errors
@@ -37,9 +37,9 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         ERRORS_AND_WARNINGS,
 
         /**
-         * all
+         * none
          */
-        ALL
+        NONE
     }
 
     /**
@@ -146,9 +146,9 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      */
     public static enum Operator {
         /**
-         * starts_with
+         * contains
          */
-        STARTS_WITH,
+        CONTAINS,
 
         /**
          * ends_with
@@ -156,14 +156,14 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         ENDS_WITH,
 
         /**
-         * contains
-         */
-        CONTAINS,
-
-        /**
          * regex
          */
-        REGEX
+        REGEX,
+
+        /**
+         * starts_with
+         */
+        STARTS_WITH
     }
 
     /**
@@ -213,18 +213,13 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      */
     public interface Parameters {
         /**
-         * update_allows_fetch_and_merge parameter
+         * code_scanning_tools parameter
          */
-        public static final BooleanParameter UPDATE_ALLOWS_FETCH_AND_MERGE = new BooleanParameter(
-                "update_allows_fetch_and_merge");
-        /**
-         * required_deployment_environments parameter
-         */
-        public static final ListParameter<String> REQUIRED_DEPLOYMENT_ENVIRONMENTS = new ListParameter<String>(
-                "required_deployment_environments") {
+        public static final ListParameter<CodeScanningTool> CODE_SCANNING_TOOLS = new ListParameter<CodeScanningTool>(
+                "code_scanning_tools") {
             @Override
-            TypeReference<List<String>> getType() {
-                return new TypeReference<List<String>>() {
+            TypeReference<List<CodeScanningTool>> getType() {
+                return new TypeReference<List<CodeScanningTool>>() {
                 };
             }
         };
@@ -233,42 +228,6 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          */
         public static final BooleanParameter DISMISS_STALE_REVIEWS_ON_PUSH = new BooleanParameter(
                 "dismiss_stale_reviews_on_push");
-        /**
-         * require_code_owner_review parameter
-         */
-        public static final BooleanParameter REQUIRE_CODE_OWNER_REVIEW = new BooleanParameter(
-                "require_code_owner_review");
-        /**
-         * require_last_push_approval parameter
-         */
-        public static final BooleanParameter REQUIRE_LAST_PUSH_APPROVAL = new BooleanParameter(
-                "require_last_push_approval");
-        /**
-         * required_approving_review_count parameter
-         */
-        public static final IntegerParameter REQUIRED_APPROVING_REVIEW_COUNT = new IntegerParameter(
-                "required_approving_review_count");
-        /**
-         * required_review_thread_resolution parameter
-         */
-        public static final BooleanParameter REQUIRED_REVIEW_THREAD_RESOLUTION = new BooleanParameter(
-                "required_review_thread_resolution");
-        /**
-         * required_status_checks parameter
-         */
-        public static final ListParameter<StatusCheckConfiguration> REQUIRED_STATUS_CHECKS = new ListParameter<StatusCheckConfiguration>(
-                "required_status_checks") {
-            @Override
-            TypeReference<List<StatusCheckConfiguration>> getType() {
-                return new TypeReference<List<StatusCheckConfiguration>>() {
-                };
-            }
-        };
-        /**
-         * strict_required_status_checks_policy parameter
-         */
-        public static final BooleanParameter STRICT_REQUIRED_STATUS_CHECKS_POLICY = new BooleanParameter(
-                "strict_required_status_checks_policy");
         /**
          * name parameter
          */
@@ -292,6 +251,58 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          */
         public static final StringParameter REGEX = new StringParameter("regex");
         /**
+         * required_approving_review_count parameter
+         */
+        public static final IntegerParameter REQUIRED_APPROVING_REVIEW_COUNT = new IntegerParameter(
+                "required_approving_review_count");
+        /**
+         * required_deployment_environments parameter
+         */
+        public static final ListParameter<String> REQUIRED_DEPLOYMENT_ENVIRONMENTS = new ListParameter<String>(
+                "required_deployment_environments") {
+            @Override
+            TypeReference<List<String>> getType() {
+                return new TypeReference<List<String>>() {
+                };
+            }
+        };
+        /**
+         * required_review_thread_resolution parameter
+         */
+        public static final BooleanParameter REQUIRED_REVIEW_THREAD_RESOLUTION = new BooleanParameter(
+                "required_review_thread_resolution");
+        /**
+         * required_status_checks parameter
+         */
+        public static final ListParameter<StatusCheckConfiguration> REQUIRED_STATUS_CHECKS = new ListParameter<StatusCheckConfiguration>(
+                "required_status_checks") {
+            @Override
+            TypeReference<List<StatusCheckConfiguration>> getType() {
+                return new TypeReference<List<StatusCheckConfiguration>>() {
+                };
+            }
+        };
+        /**
+         * require_code_owner_review parameter
+         */
+        public static final BooleanParameter REQUIRE_CODE_OWNER_REVIEW = new BooleanParameter(
+                "require_code_owner_review");
+        /**
+         * require_last_push_approval parameter
+         */
+        public static final BooleanParameter REQUIRE_LAST_PUSH_APPROVAL = new BooleanParameter(
+                "require_last_push_approval");
+        /**
+         * strict_required_status_checks_policy parameter
+         */
+        public static final BooleanParameter STRICT_REQUIRED_STATUS_CHECKS_POLICY = new BooleanParameter(
+                "strict_required_status_checks_policy");
+        /**
+         * update_allows_fetch_and_merge parameter
+         */
+        public static final BooleanParameter UPDATE_ALLOWS_FETCH_AND_MERGE = new BooleanParameter(
+                "update_allows_fetch_and_merge");
+        /**
          * workflows parameter
          */
         public static final ListParameter<WorkflowFileReference> WORKFLOWS = new ListParameter<WorkflowFileReference>(
@@ -302,17 +313,6 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
                 };
             }
         };
-        /**
-         * code_scanning_tools parameter
-         */
-        public static final ListParameter<CodeScanningTool> CODE_SCANNING_TOOLS = new ListParameter<CodeScanningTool>(
-                "code_scanning_tools") {
-            @Override
-            TypeReference<List<CodeScanningTool>> getType() {
-                return new TypeReference<List<CodeScanningTool>>() {
-                };
-            }
-        };
     }
 
     /**
@@ -320,9 +320,9 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      */
     public enum RulesetSourceType {
         /**
-         * unknown
+         * Organization
          */
-        UNKNOWN,
+        ORGANIZATION,
 
         /**
          * Repository
@@ -330,9 +330,9 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         REPOSITORY,
 
         /**
-         * Organization
+         * unknown
          */
-        ORGANIZATION
+        UNKNOWN
     }
 
     /**
@@ -340,9 +340,9 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      */
     public static enum SecurityAlertsThreshold {
         /**
-         * none
+         * all
          */
-        NONE,
+        ALL,
 
         /**
          * critical
@@ -360,9 +360,9 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         MEDIUM_OR_HIGHER,
 
         /**
-         * all
+         * none
          */
-        ALL
+        NONE
     }
 
     /**
@@ -424,64 +424,14 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      */
     public static enum Type {
         /**
-         * unknown
+         * branch_name_pattern
          */
-        UNKNOWN,
+        BRANCH_NAME_PATTERN,
 
         /**
-         * creation
+         * code_scanning
          */
-        CREATION,
-
-        /**
-         * update
-         */
-        UPDATE,
-
-        /**
-         * deletion
-         */
-        DELETION,
-
-        /**
-         * required_linear_history
-         */
-        REQUIRED_LINEAR_HISTORY,
-
-        /**
-         * required_deployments
-         */
-        REQUIRED_DEPLOYMENTS,
-
-        /**
-         * required_signatures
-         */
-        REQUIRED_SIGNATURES,
-
-        /**
-         * pull_request
-         */
-        PULL_REQUEST,
-
-        /**
-         * required_status_checks
-         */
-        REQUIRED_STATUS_CHECKS,
-
-        /**
-         * non_fast_forward
-         */
-        NON_FAST_FORWARD,
-
-        /**
-         * commit_message_pattern
-         */
-        COMMIT_MESSAGE_PATTERN,
-
-        /**
-         * commit_author_email_pattern
-         */
-        COMMIT_AUTHOR_EMAIL_PATTERN,
+        CODE_SCANNING,
 
         /**
          * committer_email_pattern
@@ -489,9 +439,54 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         COMMITTER_EMAIL_PATTERN,
 
         /**
-         * branch_name_pattern
+         * commit_author_email_pattern
          */
-        BRANCH_NAME_PATTERN,
+        COMMIT_AUTHOR_EMAIL_PATTERN,
+
+        /**
+         * commit_message_pattern
+         */
+        COMMIT_MESSAGE_PATTERN,
+
+        /**
+         * creation
+         */
+        CREATION,
+
+        /**
+         * deletion
+         */
+        DELETION,
+
+        /**
+         * non_fast_forward
+         */
+        NON_FAST_FORWARD,
+
+        /**
+         * pull_request
+         */
+        PULL_REQUEST,
+
+        /**
+         * required_deployments
+         */
+        REQUIRED_DEPLOYMENTS,
+
+        /**
+         * required_linear_history
+         */
+        REQUIRED_LINEAR_HISTORY,
+
+        /**
+         * required_signatures
+         */
+        REQUIRED_SIGNATURES,
+
+        /**
+         * required_status_checks
+         */
+        REQUIRED_STATUS_CHECKS,
 
         /**
          * tag_name_pattern
@@ -499,14 +494,19 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         TAG_NAME_PATTERN,
 
         /**
-         * workflows
+         * unknown
          */
-        WORKFLOWS,
+        UNKNOWN,
 
         /**
-         * code_scanning
+         * update
          */
-        CODE_SCANNING
+        UPDATE,
+
+        /**
+         * workflows
+         */
+        WORKFLOWS
     }
 
     /**
@@ -562,15 +562,15 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         }
     }
 
-    private String type;
-
-    private String rulesetSourceType;
-
-    private String rulesetSource;
+    private Map<String, JsonNode> parameters;
 
     private long rulesetId;
 
-    private Map<String, JsonNode> parameters;
+    private String rulesetSource;
+
+    private String rulesetSourceType;
+
+    private String type;
 
     /**
      * Create default GHRepositoryRule instance

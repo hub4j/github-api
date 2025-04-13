@@ -70,9 +70,9 @@ public class GHPullRequestChanges {
         }
     }
     private GHCommitPointer base;
-    private GHFrom title;
-
     private GHFrom body;
+
+    private GHFrom title;
 
     /**
      * Create default GHPullRequestChanges instance

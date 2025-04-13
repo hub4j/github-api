@@ -40,9 +40,9 @@ public class GHBranch extends GitHubInteractiveObject {
         }
     }
 
-    private GHRepository owner;
-    private String name;
     private Commit commit;
+    private String name;
+    private GHRepository owner;
     @JsonProperty("protected")
     private boolean protection;
 

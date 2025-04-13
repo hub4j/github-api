@@ -28,10 +28,10 @@ import java.util.NoSuchElementException;
 public class GHNotificationStream extends GitHubInteractiveObject implements Iterable<GHThread> {
     private static final GHThread[] EMPTY_ARRAY = new GHThread[0];
     private Boolean all, participating;
-    private String since;
     private String apiUrl;
-
     private boolean nonBlocking = false;
+
+    private String since;
 
     /**
      * Instantiates a new GH notification stream.
@@ -60,19 +60,9 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
 
         return new Iterator<GHThread>() {
             /**
-             * Stuff we've fetched but haven't returned to the caller. Newer ones first.
-             */
-            private GHThread[] threads = EMPTY_ARRAY;
-
-            /**
              * Next element in {@link #threads} to return. This counts down.
              */
             private int idx = -1;
-
-            /**
-             * threads whose updated_at is older than this should be ignored.
-             */
-            private long lastUpdated = -1;
 
             /**
              * Next request should have "If-Modified-Since" header with this value.
@@ -80,11 +70,21 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
             private String lastModified;
 
             /**
+             * threads whose updated_at is older than this should be ignored.
+             */
+            private long lastUpdated = -1;
+
+            private GHThread next;
+
+            /**
              * When is the next polling allowed?
              */
             private long nextCheckTime = -1;
 
-            private GHThread next;
+            /**
+             * Stuff we've fetched but haven't returned to the caller. Newer ones first.
+             */
+            private GHThread[] threads = EMPTY_ARRAY;
 
             public boolean hasNext() {
                 if (next == null)

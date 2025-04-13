@@ -20,8 +20,8 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
     private static final String DEPLOY_KEY_TEST_REPO_NAME = "hub4j-test-org/GHDeployKeyTest";
 
     private static final String ED_25519_READONLY = "DeployKey - ed25519 - readonly";
-    private static final String RSA_4096_READWRITE = "Deploykey - rsa4096 - readwrite";
     private static final String KEY_CREATOR_USERNAME = "van-vliet";
+    private static final String RSA_4096_READWRITE = "Deploykey - rsa4096 - readwrite";
     /**
      * Create default GHDeployKeyTest instance
      */

@@ -26,11 +26,14 @@ public class GHVerification {
      */
     public enum Reason {
 
+        /** The signing certificate or its chain could not be verified. */
+        BAD_CERT,
+
+        /** Invalid email used for signing. */
+        BAD_EMAIL,
+
         /** Signing key expired. */
         EXPIRED_KEY,
-
-        /** The usage flags for the key that signed this don't allow signing. */
-        NOT_SIGNING_KEY,
 
         /** The GPG verification service misbehaved. */
         GPGVERIFY_ERROR,
@@ -38,38 +41,20 @@ public class GHVerification {
         /** The GPG verification service is unavailable at the moment. */
         GPGVERIFY_UNAVAILABLE,
 
-        /** Unsigned. */
-        UNSIGNED,
+        /** Invalid signature. */
+        INVALID,
 
-        /** Unknown signature type. */
-        UNKNOWN_SIGNATURE_TYPE,
-
-        /** Email used for signing not known to GitHub. */
-        NO_USER,
-
-        /** Email used for signing unverified on GitHub. */
-        UNVERIFIED_EMAIL,
-
-        /** Invalid email used for signing. */
-        BAD_EMAIL,
-
-        /** Key used for signing not known to GitHub. */
-        UNKNOWN_KEY,
+        /** Malformed signature. (Returned by graphQL) */
+        MALFORMED_SIG,
 
         /** Malformed signature. */
         MALFORMED_SIGNATURE,
 
-        /** Invalid signature. */
-        INVALID,
+        /** The usage flags for the key that signed this don't allow signing. */
+        NOT_SIGNING_KEY,
 
-        /** Valid signature and verified by GitHub. */
-        VALID,
-
-        /** The signing certificate or its chain could not be verified. */
-        BAD_CERT,
-
-        /** Malformed signature. (Returned by graphQL) */
-        MALFORMED_SIG,
+        /** Email used for signing not known to GitHub. */
+        NO_USER,
 
         /** Valid signature, though certificate revocation check failed. */
         OCSP_ERROR,
@@ -78,12 +63,27 @@ public class GHVerification {
         OCSP_PENDING,
 
         /** One or more certificates in chain has been revoked. */
-        OCSP_REVOKED
+        OCSP_REVOKED,
+
+        /** Key used for signing not known to GitHub. */
+        UNKNOWN_KEY,
+
+        /** Unknown signature type. */
+        UNKNOWN_SIGNATURE_TYPE,
+
+        /** Unsigned. */
+        UNSIGNED,
+
+        /** Email used for signing unverified on GitHub. */
+        UNVERIFIED_EMAIL,
+
+        /** Valid signature and verified by GitHub. */
+        VALID
     }
 
+    private Reason reason;
     private String signature, payload;
     private boolean verified;
-    private Reason reason;
 
     /**
      * Create default GHVerification instance

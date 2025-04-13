@@ -24,11 +24,11 @@ import javax.annotation.Nonnull;
  */
 public class PayloadRule implements TestRule {
 
-    private final String type;
+    private String resourceName;
 
     private Class<?> testClass;
 
-    private String resourceName;
+    private final String type;
 
     /**
      * Instantiates a new payload rule.

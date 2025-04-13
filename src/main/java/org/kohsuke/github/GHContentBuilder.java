@@ -15,9 +15,9 @@ import java.util.Base64;
  * @see GHRepository#createContent() GHRepository#createContent()
  */
 public final class GHContentBuilder {
+    private String path;
     private final GHRepository repo;
     private final Requester req;
-    private String path;
 
     /**
      * Instantiates a new GH content builder.

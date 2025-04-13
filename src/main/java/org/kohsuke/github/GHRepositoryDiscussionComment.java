@@ -17,15 +17,15 @@ import java.net.URL;
  */
 public class GHRepositoryDiscussionComment extends GHObject {
 
+    private GHCommentAuthorAssociation authorAssociation;
+
+    private String body;
+
+    private int childCommentCount;
     private String htmlUrl;
 
     private Long parentId;
-
-    private int childCommentCount;
     private GHUser user;
-
-    private GHCommentAuthorAssociation authorAssociation;
-    private String body;
     /**
      * Create default GHRepositoryDiscussionComment instance
      */

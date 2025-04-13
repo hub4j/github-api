@@ -14,14 +14,14 @@ import java.io.IOException;
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHKey extends GitHubInteractiveObject {
 
+    /** The id. */
+    protected int id;
+
     /** The title. */
     protected String url, key, title;
 
     /** The verified. */
     protected boolean verified;
-
-    /** The id. */
-    protected int id;
 
     /**
      * Create default GHKey instance

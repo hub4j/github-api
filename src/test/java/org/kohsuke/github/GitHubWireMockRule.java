@@ -145,11 +145,11 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
 
             return targetPath;
         }
-        final Path filePath;
         final Path bodyPath; // body file from the mapping file contents
-        final Path renamedFilePath;
-
+        final Path filePath;
         final Path renamedBodyPath;
+
+        final Path renamedFilePath;
 
         MappingFileDetails(Path filePath, Map<String, Object> parsedObject) {
             this.filePath = filePath;
@@ -220,22 +220,22 @@ public class GitHubWireMockRule extends WireMockMultiServerRule {
         }
     }
 
+    private final static Pattern ACTIONS_USER_CONTENT_PATTERN = Pattern
+            .compile("https://pipelines[a-z0-9]*\\.actions\\.githubusercontent\\.com", Pattern.CASE_INSENSITIVE);
+    private final static Pattern BLOB_CORE_WINDOWS_PATTERN = Pattern
+            .compile("https://([a-z0-9]*\\.blob\\.core\\.windows\\.net)", Pattern.CASE_INSENSITIVE);
+    private final static String ORIGINAL_HOST = "originalHost";
+
     // By default the wiremock tests will run without proxy or taking a snapshot.
     // The tests will use only the stubbed data and will fail if requests are made for missing data.
     // You can use the proxy without taking a snapshot while writing and debugging tests.
     // You cannot take a snapshot without proxying.
     private final static boolean takeSnapshot = System.getProperty("test.github.takeSnapshot", "false") != "false";
+
     private final static boolean testWithOrg = System.getProperty("test.github.org", "true") == "true";
+
     private final static boolean useProxy = takeSnapshot
             || System.getProperty("test.github.useProxy", "false") != "false";
-
-    private final static Pattern ACTIONS_USER_CONTENT_PATTERN = Pattern
-            .compile("https://pipelines[a-z0-9]*\\.actions\\.githubusercontent\\.com", Pattern.CASE_INSENSITIVE);
-
-    private final static Pattern BLOB_CORE_WINDOWS_PATTERN = Pattern
-            .compile("https://([a-z0-9]*\\.blob\\.core\\.windows\\.net)", Pattern.CASE_INSENSITIVE);
-
-    private final static String ORIGINAL_HOST = "originalHost";
 
     /**
      * Gets the request count.

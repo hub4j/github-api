@@ -114,9 +114,6 @@ public class GHIssue extends GHObject implements Reactable {
         return names;
     }
 
-    /** The owner. */
-    GHRepository owner;
-
     /** The assignee. */
     // API v3
     protected GHUser assignee; // not sure what this field is now that 'assignees' exist
@@ -124,45 +121,48 @@ public class GHIssue extends GHObject implements Reactable {
     /** The assignees. */
     protected GHUser[] assignees;
 
+    /** The body. */
+    @SkipFromToString
+    protected String body;
+
+    /** The closed at. */
+    protected String closedAt;
+
+    /** The closed by. */
+    protected GHUser closedBy;
+
+    /** The comments. */
+    protected int comments;
+
+    /** The labels. */
+    protected List<GHLabel> labels;
+
+    /** The locked. */
+    protected boolean locked;
+
+    /** The milestone. */
+    protected GHMilestone milestone;
+
+    /** The number. */
+    protected int number;
+
+    /** The pull request. */
+    protected GHIssue.PullRequest pullRequest;
+
     /** The state. */
     protected String state;
 
     /** The state reason. */
     protected String stateReason;
 
-    /** The number. */
-    protected int number;
-
-    /** The closed at. */
-    protected String closedAt;
-
-    /** The comments. */
-    protected int comments;
-
-    /** The body. */
-    @SkipFromToString
-    protected String body;
-
-    /** The labels. */
-    protected List<GHLabel> labels;
+    /** The html url. */
+    protected String title, htmlUrl;
 
     /** The user. */
     protected GHUser user;
 
-    /** The html url. */
-    protected String title, htmlUrl;
-
-    /** The pull request. */
-    protected GHIssue.PullRequest pullRequest;
-
-    /** The milestone. */
-    protected GHMilestone milestone;
-
-    /** The closed by. */
-    protected GHUser closedBy;
-
-    /** The locked. */
-    protected boolean locked;
+    /** The owner. */
+    GHRepository owner;
 
     /**
      * Create default GHIssue instance

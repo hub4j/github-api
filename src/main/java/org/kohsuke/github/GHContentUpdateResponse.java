@@ -8,9 +8,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class GHContentUpdateResponse {
 
-    private GHContent content;
-
     private GitCommit commit;
+
+    private GHContent content;
     /**
      * Create default GHContentUpdateResponse instance
      */

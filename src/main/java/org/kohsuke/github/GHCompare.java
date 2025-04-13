@@ -49,10 +49,10 @@ public class GHCompare {
      */
     public static class InnerCommit {
 
-        private String url, sha, message;
-
         private GitUser author, committer;
+
         private Tree tree;
+        private String url, sha, message;
         /**
          * Create default InnerCommit instance
          */
@@ -118,14 +118,14 @@ public class GHCompare {
      */
     public static enum Status {
 
-        /** The behind. */
-        behind,
         /** The ahead. */
         ahead,
-        /** The identical. */
-        identical,
+        /** The behind. */
+        behind,
         /** The diverged. */
-        diverged
+        diverged,
+        /** The identical. */
+        identical
     }
     /**
      * The type Tree.
@@ -219,11 +219,7 @@ public class GHCompare {
             };
         }
     }
-    private String url, htmlUrl, permalinkUrl, diffUrl, patchUrl;
-    private Status status;
-
     private int aheadBy, behindBy, totalCommits;
-
     private Commit baseCommit, mergeBaseCommit;
 
     private Commit[] commits;
@@ -231,6 +227,10 @@ public class GHCompare {
     private GHCommit.File[] files;
 
     private GHRepository owner;
+
+    private Status status;
+
+    private String url, htmlUrl, permalinkUrl, diffUrl, patchUrl;
 
     @JacksonInject("GHCompare_usePaginatedCommits")
     private boolean usePaginatedCommits;

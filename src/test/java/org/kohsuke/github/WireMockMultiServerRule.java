@@ -26,12 +26,12 @@ import java.util.Map;
  */
 public class WireMockMultiServerRule implements MethodRule, TestRule {
 
-    /** The servers. */
-    protected final Map<String, WireMockServer> servers = new HashMap<>();
     private boolean failOnUnmatchedRequests;
+    private String methodName = null;
     private final Options options;
 
-    private String methodName = null;
+    /** The servers. */
+    protected final Map<String, WireMockServer> servers = new HashMap<>();
 
     /**
      * Instantiates a new wire mock multi server rule.

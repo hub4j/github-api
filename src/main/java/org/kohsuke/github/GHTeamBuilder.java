@@ -12,9 +12,9 @@ import java.io.IOException;
  */
 public class GHTeamBuilder extends GitHubInteractiveObject {
 
+    private final String orgName;
     /** The builder. */
     protected final Requester builder;
-    private final String orgName;
 
     /**
      * Instantiates a new GH team builder.

@@ -29,9 +29,9 @@ public class GHEventInfo extends GitHubInteractiveObject {
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         private long id;
 
+        private String name; // owner/repo
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         private String url; // repository API URL
-        private String name; // owner/repo
         /**
          * Create default GHEventRepository instance
          */
@@ -78,11 +78,18 @@ public class GHEventInfo extends GitHubInteractiveObject {
         return mapTypeStringToEvent.getOrDefault(type, GHEvent.UNKNOWN);
     }
 
+    private GHUser actor;
+
+    private String createdAt;
+    private long id;
+    private GHOrganization org;
+
     // we don't want to expose Jackson dependency to the user. This needs databinding
     private ObjectNode payload;
 
-    private long id;
-    private String createdAt;
+    // these are all shallow objects
+    private GHEventRepository repo;
+
     /**
      * Representation of GitHub Event API Event Type.
      *
@@ -93,13 +100,6 @@ public class GHEventInfo extends GitHubInteractiveObject {
      *      types</a>
      */
     private String type;
-
-    // these are all shallow objects
-    private GHEventRepository repo;
-
-    private GHUser actor;
-
-    private GHOrganization org;
 
     /**
      * Create default GHEventInfo instance

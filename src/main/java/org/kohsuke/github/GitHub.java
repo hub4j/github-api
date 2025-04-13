@@ -60,9 +60,9 @@ public class GitHub {
      */
     public static abstract class DependentAuthorizationProvider implements AuthorizationProvider {
 
+        private final AuthorizationProvider authorizationProvider;
         private GitHub baseGitHub;
         private GitHub gitHub;
-        private final AuthorizationProvider authorizationProvider;
 
         /**
          * An AuthorizationProvider that requires an authenticated GitHub instance to provide its authorization.
@@ -131,10 +131,10 @@ public class GitHub {
     }
 
     private static class LoginLoadingUserAuthorizationProvider implements UserAuthorizationProvider {
-        private final GitHub gitHub;
         private final AuthorizationProvider authorizationProvider;
-        private boolean loginLoaded = false;
+        private final GitHub gitHub;
         private String login;
+        private boolean loginLoaded = false;
 
         LoginLoadingUserAuthorizationProvider(AuthorizationProvider authorizationProvider, GitHub gitHub) {
             this.gitHub = gitHub;
@@ -325,12 +325,12 @@ public class GitHub {
     @CheckForNull
     private GHMyself myself;
 
-    private final ConcurrentMap<String, GHUser> users;
-
     private final ConcurrentMap<String, GHOrganization> orgs;
 
     @Nonnull
     private final GitHubSanityCachedValue<GHMeta> sanityCachedMeta = new GitHubSanityCachedValue<>();
+
+    private final ConcurrentMap<String, GHUser> users;
 
     private GitHub(GitHubClient client) {
         users = new ConcurrentHashMap<>();

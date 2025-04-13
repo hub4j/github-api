@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.*;
 public class EnumUtilsTest {
 
     private enum TestEnum {
-        VALUE_1, VALUE_2, UNKNOWN;
+        UNKNOWN, VALUE_1, VALUE_2;
     }
 
     /**

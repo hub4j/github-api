@@ -19,16 +19,16 @@ import javax.annotation.Nonnull;
                 "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
         justification = "Constructed by JSON API")
 public class PagedSearchIterable<T> extends PagedIterable<T> {
-    private final transient GitHub root;
+    private final Class<? extends SearchResult<T>> receiverType;
 
     private final GitHubRequest request;
-
-    private final Class<? extends SearchResult<T>> receiverType;
 
     /**
      * As soon as we have any result fetched, it's set here so that we can report the total count.
      */
     private SearchResult<T> result;
+
+    private final transient GitHub root;
 
     /**
      * Instantiates a new paged search iterable.

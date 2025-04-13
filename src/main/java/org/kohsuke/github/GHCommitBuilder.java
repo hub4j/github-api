@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class GHCommitBuilder {
     private static final class UserInfo {
-        private final String name;
-        private final String email;
         private final String date;
+        private final String email;
+        private final String name;
 
         private UserInfo(String name, String email, Instant date) {
             this.name = name;
@@ -22,11 +22,11 @@ public class GHCommitBuilder {
             this.date = GitHubClient.printInstant(date);
         }
     }
+    private final List<String> parents = new ArrayList<String>();
+
     private final GHRepository repo;
 
     private final Requester req;
-
-    private final List<String> parents = new ArrayList<String>();
 
     /**
      * Instantiates a new GH commit builder.

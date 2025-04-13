@@ -35,38 +35,38 @@ import java.net.URL;
  */
 public class GHPullRequestFileDetail {
 
-    /** The sha. */
-    String sha;
-
-    /** The filename. */
-    String filename;
-
-    /** The status. */
-    String status;
-
     /** The additions. */
     int additions;
-
-    /** The deletions. */
-    int deletions;
-
-    /** The changes. */
-    int changes;
 
     /** The blob url. */
     String blobUrl;
 
-    /** The raw url. */
-    String rawUrl;
+    /** The changes. */
+    int changes;
 
     /** The contents url. */
     String contentsUrl;
+
+    /** The deletions. */
+    int deletions;
+
+    /** The filename. */
+    String filename;
 
     /** The patch. */
     String patch;
 
     /** The previous filename. */
     String previousFilename;
+
+    /** The raw url. */
+    String rawUrl;
+
+    /** The sha. */
+    String sha;
+
+    /** The status. */
+    String status;
 
     /**
      * Create default GHPullRequestFileDetail instance

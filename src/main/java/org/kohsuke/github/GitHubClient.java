@@ -98,23 +98,23 @@ class GitHubClient {
         }
     }
 
+    private static final DateTimeFormatter DATE_TIME_PARSER_SLASHES = DateTimeFormatter
+            .ofPattern("yyyy/MM/dd HH:mm:ss Z");
+
     /** The Constant CONNECTION_ERROR_RETRIES. */
     private static final int DEFAULT_CONNECTION_ERROR_RETRIES = 2;
 
-    /** The Constant DEFAULT_MINIMUM_RETRY_TIMEOUT_MILLIS. */
-    private static final int DEFAULT_MINIMUM_RETRY_MILLIS = 100;
-
     /** The Constant DEFAULT_MAXIMUM_RETRY_TIMEOUT_MILLIS. */
-    private static final int DEFAULT_MAXIMUM_RETRY_MILLIS = DEFAULT_MINIMUM_RETRY_MILLIS;
-    private static final ThreadLocal<String> sendRequestTraceId = new ThreadLocal<>();
+    private static final int DEFAULT_MAXIMUM_RETRY_MILLIS = 100;
+    /** The Constant DEFAULT_MINIMUM_RETRY_TIMEOUT_MILLIS. */
+    private static final int DEFAULT_MINIMUM_RETRY_MILLIS = DEFAULT_MAXIMUM_RETRY_MILLIS;
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    private static final ThreadLocal<String> sendRequestTraceId = new ThreadLocal<>();
+
     /** The Constant GITHUB_URL. */
     static final String GITHUB_URL = "https://api.github.com";
-
-    private static final DateTimeFormatter DATE_TIME_PARSER_SLASHES = DateTimeFormatter
-            .ofPattern("yyyy/MM/dd HH:mm:ss Z");
 
     static {
         MAPPER.registerModule(new JavaTimeModule());
@@ -453,14 +453,10 @@ class GitHubClient {
         return map == null ? null : Collections.unmodifiableMap(map);
     }
 
-    // Cache of myself object.
-    private final String apiUrl;
-
-    private final GitHubRateLimitHandler rateLimitHandler;
-
     private final GitHubAbuseLimitHandler abuseLimitHandler;
 
-    private final GitHubRateLimitChecker rateLimitChecker;
+    // Cache of myself object.
+    private final String apiUrl;
 
     private final AuthorizationProvider authorizationProvider;
 
@@ -469,11 +465,15 @@ class GitHubClient {
     @Nonnull
     private final AtomicReference<GHRateLimit> rateLimit = new AtomicReference<>(GHRateLimit.DEFAULT);
 
-    @Nonnull
-    private final GitHubSanityCachedValue<GHRateLimit> sanityCachedRateLimit = new GitHubSanityCachedValue<>();
+    private final GitHubRateLimitChecker rateLimitChecker;
+
+    private final GitHubRateLimitHandler rateLimitHandler;
 
     @Nonnull
     private GitHubSanityCachedValue<Boolean> sanityCachedIsCredentialValid = new GitHubSanityCachedValue<>();
+
+    @Nonnull
+    private final GitHubSanityCachedValue<GHRateLimit> sanityCachedRateLimit = new GitHubSanityCachedValue<>();
 
     /**
      * Instantiates a new git hub client.

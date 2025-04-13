@@ -23,13 +23,13 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
      */
     class TestForkBuilder extends GHRepositoryForkBuilder {
         /**
-         * The Sleep count.
-         */
-        int sleepCount = 0;
-        /**
          * The Last sleep millis.
          */
         int lastSleepMillis = 0;
+        /**
+         * The Sleep count.
+         */
+        int sleepCount = 0;
 
         /**
          * Instantiates a new Test fork builder.
@@ -57,9 +57,9 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
         }
     }
     private static final String TARGET_ORG = "nts-api-test-org";
-    private GHRepository repo;
-
     private int originalInterval;
+
+    private GHRepository repo;
 
     /**
      * Instantiates a new Gh repository fork builder test.

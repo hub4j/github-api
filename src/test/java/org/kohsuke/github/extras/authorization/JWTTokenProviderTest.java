@@ -32,9 +32,9 @@ import static org.hamcrest.Matchers.*;
  */
 public class JWTTokenProviderTest extends AbstractGHAppInstallationTest {
 
-    private static String TEST_APP_ID_2 = "83009";
-
     private static String PRIVATE_KEY_FILE_APP_2 = "/ghapi-test-app-2.private-key.pem";
+
+    private static String TEST_APP_ID_2 = "83009";
     /**
      * Create default JWTTokenProviderTest instance
      */

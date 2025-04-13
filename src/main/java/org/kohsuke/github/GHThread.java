@@ -24,23 +24,23 @@ public class GHThread extends GHObject {
      */
     static class Subject extends GitHubBridgeAdapterObject {
 
-        /** The title. */
-        String title;
-
-        /** The url. */
-        String url;
-
         /** The latest comment url. */
         String latestCommentUrl;
 
+        /** The title. */
+        String title;
+
         /** The type. */
         String type;
+
+        /** The url. */
+        String url;
     }
+    private String lastReadAt;
+    private String reason;
     private GHRepository repository;
     private Subject subject;
-    private String reason;
     private boolean unread;
-    private String lastReadAt;
 
     private String url, subscriptionUrl;
 

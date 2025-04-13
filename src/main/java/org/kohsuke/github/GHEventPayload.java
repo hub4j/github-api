@@ -34,9 +34,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class CheckRun extends GHEventPayload {
 
-        private int number;
-
         private GHCheckRun checkRun;
+
+        private int number;
         private GHRequestedAction requestedAction;
         /**
          * Create default CheckRun instance
@@ -232,11 +232,11 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Create extends GHEventPayload {
 
-        private String ref;
-
-        private String refType;
-        private String masterBranch;
         private String description;
+
+        private String masterBranch;
+        private String ref;
+        private String refType;
         /**
          * Create default Create instance
          */
@@ -369,9 +369,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class DeploymentStatus extends GHEventPayload {
 
-        private GHDeploymentStatus deploymentStatus;
-
         private GHDeployment deployment;
+
+        private GHDeploymentStatus deploymentStatus;
         /**
          * Create default DeploymentStatus instance
          */
@@ -462,9 +462,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class DiscussionComment extends GHEventPayload {
 
-        private GHRepositoryDiscussion discussion;
-
         private GHRepositoryDiscussionComment comment;
+
+        private GHRepositoryDiscussion discussion;
 
         /**
          * Create default DiscussionComment instance
@@ -546,13 +546,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         public static class Repository {
 
-            private long id;
-
             private String fullName;
-            private String name;
-            private String nodeId;
+
+            private long id;
             @JsonProperty(value = "private")
             private boolean isPrivate;
+            private String name;
+            private String nodeId;
             /**
              * Create default Repository instance
              */
@@ -605,8 +605,8 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
             }
         }
 
-        private List<Repository> repositories;
         private List<GHRepository> ghRepositories = null;
+        private List<Repository> repositories;
 
         /**
          * Create default Installation instance
@@ -675,10 +675,10 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class InstallationRepositories extends GHEventPayload {
 
-        private String repositorySelection;
-
         private List<GHRepository> repositoriesAdded;
+
         private List<GHRepository> repositoriesRemoved;
+        private String repositorySelection;
         /**
          * Create default InstallationRepositories instance
          */
@@ -750,11 +750,11 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Issue extends GHEventPayload {
 
+        private GHIssueChanges changes;
+
         private GHIssue issue;
 
         private GHLabel label;
-
-        private GHIssueChanges changes;
 
         /**
          * Create default Issue instance
@@ -815,10 +815,10 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class IssueComment extends GHEventPayload {
 
-        private GHIssueComment comment;
-
-        private GHIssue issue;
         private CommentChanges changes;
+
+        private GHIssueComment comment;
+        private GHIssue issue;
         /**
          * Create default IssueComment instance
          */
@@ -876,9 +876,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Label extends GHEventPayload {
 
-        private GHLabel label;
-
         private GHLabelChanges changes;
+
+        private GHLabel label;
 
         /**
          * Create default Label instance
@@ -913,9 +913,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Member extends GHEventPayload {
 
-        private GHUser member;
-
         private GHMemberChanges changes;
+
+        private GHUser member;
 
         /**
          * Create default Member instance
@@ -950,9 +950,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Membership extends GHEventPayload {
 
-        private GHTeam team;
-
         private GHUser member;
+
+        private GHTeam team;
 
         /**
          * Create default Membership instance
@@ -1023,9 +1023,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class ProjectsV2Item extends GHEventPayload {
 
-        private GHProjectsV2Item projectsV2Item;
-
         private GHProjectsV2ItemChanges changes;
+
+        private GHProjectsV2Item projectsV2Item;
         /**
          * Create default ProjectsV2Item instance
          */
@@ -1079,11 +1079,11 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class PullRequest extends GHEventPayload {
 
-        private int number;
-
-        private GHPullRequest pullRequest;
-        private GHLabel label;
         private GHPullRequestChanges changes;
+
+        private GHLabel label;
+        private int number;
+        private GHPullRequest pullRequest;
         /**
          * Create default PullRequest instance
          */
@@ -1155,9 +1155,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class PullRequestReview extends GHEventPayload {
 
-        private GHPullRequestReview review;
-
         private GHPullRequest pullRequest;
+
+        private GHPullRequestReview review;
         /**
          * Create default PullRequestReview instance
          */
@@ -1213,10 +1213,10 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class PullRequestReviewComment extends GHEventPayload {
 
-        private GHPullRequestReviewComment comment;
-
-        private GHPullRequest pullRequest;
         private CommentChanges changes;
+
+        private GHPullRequestReviewComment comment;
+        private GHPullRequest pullRequest;
         /**
          * Create default PullRequestReviewComment instance
          */
@@ -1283,12 +1283,12 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
          */
         public static class PushCommit {
 
-            private GitUser author;
-
-            private GitUser committer;
-            private String url, sha, message, timestamp;
-            private boolean distinct;
             private List<String> added, removed, modified;
+
+            private GitUser author;
+            private GitUser committer;
+            private boolean distinct;
+            private String url, sha, message, timestamp;
             /**
              * Create default PushCommit instance
              */
@@ -1424,15 +1424,15 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
                 return name;
             }
         }
-        private String head, before;
-        private boolean created, deleted, forced;
-        private String ref;
-        private int size;
         private List<PushCommit> commits;
+        private String compare;
+        private boolean created, deleted, forced;
+        private String head, before;
         private PushCommit headCommit;
         private Pusher pusher;
+        private String ref;
 
-        private String compare;
+        private int size;
 
         /**
          * Create default Push instance
@@ -1643,11 +1643,11 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Status extends GHEventPayload {
 
-        private String context;
+        private GHCommit commit;
 
+        private String context;
         private String description;
         private GHCommitState state;
-        private GHCommit commit;
         private String targetUrl;
         /**
          * Create default Status instance
@@ -1727,9 +1727,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class Team extends GHEventPayload {
 
-        private GHTeam team;
-
         private GHTeamChanges changes;
+
+        private GHTeam team;
 
         /**
          * Create default Team instance
@@ -1924,9 +1924,9 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
      */
     public static class WorkflowRun extends GHEventPayload {
 
-        private GHWorkflowRun workflowRun;
-
         private GHWorkflow workflow;
+
+        private GHWorkflowRun workflowRun;
         /**
          * Create default WorkflowRun instance
          */
@@ -1976,13 +1976,13 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     // Webhook payload object common properties: action, sender, repository, organization, installation
     private String action;
 
-    private GHUser sender;
-
-    private GHRepository repository;
+    private GHAppInstallation installation;
 
     private GHOrganization organization;
 
-    private GHAppInstallation installation;
+    private GHRepository repository;
+
+    private GHUser sender;
 
     /**
      * Instantiates a new GH event payload.

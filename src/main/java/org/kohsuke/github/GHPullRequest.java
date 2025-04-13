@@ -54,11 +54,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     public static class AutoMerge {
 
-        private GHUser enabledBy;
-
-        private MergeMethod mergeMethod;
-        private String commitTitle;
         private String commitMessage;
+
+        private String commitTitle;
+        private GHUser enabledBy;
+        private MergeMethod mergeMethod;
         /**
          * Create default AutoMerge instance
          */
@@ -108,39 +108,39 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 
         /** The merge. */
         MERGE,
-        /** The squash. */
-        SQUASH,
         /** The rebase. */
-        REBASE
+        REBASE,
+        /** The squash. */
+        SQUASH
     }
     private static final String COMMENTS_ACTION = "/comments";
 
     private static final String REQUEST_REVIEWERS = "/requested_reviewers";
-    private String patchUrl, diffUrl, issueUrl;
+    private AutoMerge autoMerge;
     private GHCommitPointer base;
-    private String mergedAt;
+    private int changedFiles;
 
+    private int deletions;
     private GHCommitPointer head;
+    private String mergeCommitSha;
+
+    private Boolean mergeable;
+    private String mergeableState;
+    private boolean merged, maintainerCanModify;
+    private String mergedAt;
     // details that are only available when obtained from ID
     private GHUser mergedBy;
-    private int reviewComments, additions, commits;
-
-    private boolean merged, maintainerCanModify;
-    /** The draft. */
-    // making these package private to all for testing
-    boolean draft;
-    private Boolean mergeable;
-    private int deletions;
-    private String mergeableState;
-    private int changedFiles;
-    private String mergeCommitSha;
+    private String patchUrl, diffUrl, issueUrl;
+    private GHUser[] requestedReviewers;
 
     // pull request reviewers
 
-    private AutoMerge autoMerge;
-    private GHUser[] requestedReviewers;
-
     private GHTeam[] requestedTeams;
+    private int reviewComments, additions, commits;
+
+    /** The draft. */
+    // making these package private to all for testing
+    boolean draft;
 
     /**
      * Create default GHPullRequest instance

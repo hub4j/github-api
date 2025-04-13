@@ -9,9 +9,9 @@ package org.kohsuke.github;
  */
 public class GHCodeownersError {
 
-    private int line, column;
-
     private String kind, source, suggestion, message, path;
+
+    private int line, column;
 
     /**
      * Create default GHCodeownersError instance

@@ -42,20 +42,20 @@ public class GHMembership extends GitHubInteractiveObject {
         PENDING;
     }
 
-    /** The url. */
-    String url;
-
-    /** The state. */
-    String state;
+    /** The organization. */
+    GHOrganization organization;
 
     /** The role. */
     String role;
 
+    /** The state. */
+    String state;
+
+    /** The url. */
+    String url;
+
     /** The user. */
     GHUser user;
-
-    /** The organization. */
-    GHOrganization organization;
 
     /**
      * Create default GHMembership instance

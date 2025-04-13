@@ -58,9 +58,9 @@ public final class GHCheckRunBuilder {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Action {
 
-        private final String label;
         private final String description;
         private final String identifier;
+        private final String label;
 
         /**
          * Instantiates a new action.
@@ -88,15 +88,15 @@ public final class GHCheckRunBuilder {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Annotation {
 
-        private final String path;
-        private final int startLine;
-        private final int endLine;
         private final String annotationLevel;
-        private final String message;
-        private Integer startColumn;
         private Integer endColumn;
-        private String title;
+        private final int endLine;
+        private final String message;
+        private final String path;
         private String rawDetails;
+        private Integer startColumn;
+        private final int startLine;
+        private String title;
 
         /**
          * Instantiates a new annotation.
@@ -201,8 +201,8 @@ public final class GHCheckRunBuilder {
     public static final class Image {
 
         private final String alt;
-        private final String imageUrl;
         private String caption;
+        private final String imageUrl;
 
         /**
          * Instantiates a new image.
@@ -238,11 +238,11 @@ public final class GHCheckRunBuilder {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Output {
 
-        private final String title;
-        private final String summary;
-        private String text;
         private List<Annotation> annotations;
         private List<Image> images;
+        private final String summary;
+        private String text;
+        private final String title;
 
         /**
          * Instantiates a new output.
@@ -303,15 +303,15 @@ public final class GHCheckRunBuilder {
 
     private static final int MAX_ANNOTATIONS = 50;
 
+    private List<Action> actions;
+
+    private Output output;
+
     /** The repo. */
     protected final GHRepository repo;
 
     /** The requester. */
     protected final Requester requester;
-
-    private Output output;
-
-    private List<Action> actions;
 
     private GHCheckRunBuilder(GHRepository repo, Requester requester) {
         this.repo = repo;

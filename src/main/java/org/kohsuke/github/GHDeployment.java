@@ -17,41 +17,41 @@ public class GHDeployment extends GHObject {
 
     private GHRepository owner;
 
-    /** The sha. */
-    protected String sha;
-
-    /** The ref. */
-    protected String ref;
-
-    /** The task. */
-    protected String task;
-
-    /** The payload. */
-    protected Object payload;
-
-    /** The environment. */
-    protected String environment;
+    /** The creator. */
+    protected GHUser creator;
 
     /** The description. */
     protected String description;
 
-    /** The statuses url. */
-    protected String statusesUrl;
-
-    /** The repository url. */
-    protected String repositoryUrl;
-
-    /** The creator. */
-    protected GHUser creator;
+    /** The environment. */
+    protected String environment;
 
     /** The original environment. */
     protected String originalEnvironment;
 
-    /** The transient environment. */
-    protected boolean transientEnvironment;
+    /** The payload. */
+    protected Object payload;
 
     /** The production environment. */
     protected boolean productionEnvironment;
+
+    /** The ref. */
+    protected String ref;
+
+    /** The repository url. */
+    protected String repositoryUrl;
+
+    /** The sha. */
+    protected String sha;
+
+    /** The statuses url. */
+    protected String statusesUrl;
+
+    /** The task. */
+    protected String task;
+
+    /** The transient environment. */
+    protected boolean transientEnvironment;
 
     /**
      * Create default GHDeployment instance

@@ -23,21 +23,21 @@ import java.util.Map.Entry;
  */
 public class GHGist extends GHObject {
 
-    /** The owner. */
-    final GHUser owner;
+    private int comments;
+
+    private String commentsUrl;
+
+    private String description;
+
+    private final Map<String, GHGistFile> files;
 
     private String forksUrl, commitsUrl, id, gitPullUrl, gitPushUrl, htmlUrl;
 
     @JsonProperty("public")
     private boolean isPublic;
 
-    private String description;
-
-    private int comments;
-
-    private String commentsUrl;
-
-    private final Map<String, GHGistFile> files;
+    /** The owner. */
+    final GHUser owner;
 
     @JsonCreator
     private GHGist(@JsonProperty("owner") GHUser owner, @JsonProperty("files") Map<String, GHGistFile> files) {

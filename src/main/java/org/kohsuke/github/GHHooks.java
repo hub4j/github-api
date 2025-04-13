@@ -44,8 +44,8 @@ class GHHooks {
     }
 
     private static class RepoContext extends Context {
-        private final GHRepository repository;
         private final GHUser owner;
+        private final GHRepository repository;
 
         private RepoContext(GHRepository repository, GHUser owner) {
             super(repository.root());

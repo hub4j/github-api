@@ -32,12 +32,12 @@ public class AbstractGHAppInstallationTest extends AbstractGitHubWireMockTest {
     private static String ENV_GITHUB_APP_ORG = "GITHUB_APP_ORG";
     private static String ENV_GITHUB_APP_REPO = "GITHUB_APP_REPO";
 
-    private static String TEST_APP_ID_1 = "82994";
-    private static String TEST_APP_ID_2 = "83009";
-    private static String TEST_APP_ID_3 = "89368";
     private static String PRIVATE_KEY_FILE_APP_1 = "/ghapi-test-app-1.private-key.pem";
     private static String PRIVATE_KEY_FILE_APP_2 = "/ghapi-test-app-2.private-key.pem";
     private static String PRIVATE_KEY_FILE_APP_3 = "/ghapi-test-app-3.private-key.pem";
+    private static String TEST_APP_ID_1 = "82994";
+    private static String TEST_APP_ID_2 = "83009";
+    private static String TEST_APP_ID_3 = "89368";
 
     /** The jwt provider 1. */
     protected final AuthorizationProvider jwtProvider1;

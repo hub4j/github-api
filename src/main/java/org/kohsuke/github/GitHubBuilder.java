@@ -155,20 +155,20 @@ public class GitHubBuilder implements Cloneable {
                 .initCause(cause);
     }
 
-    // default scoped so unit tests can read them.
-    /** The endpoint. */
-    /* private */ String endpoint = GitHubClient.GITHUB_URL;
+    private GitHubAbuseLimitHandler abuseLimitHandler = GitHubAbuseLimitHandler.WAIT;
 
     private GitHubConnector connector;
 
-    private GitHubRateLimitHandler rateLimitHandler = GitHubRateLimitHandler.WAIT;
-
-    private GitHubAbuseLimitHandler abuseLimitHandler = GitHubAbuseLimitHandler.WAIT;
-
     private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
+
+    private GitHubRateLimitHandler rateLimitHandler = GitHubRateLimitHandler.WAIT;
 
     /** The authorization provider. */
     /* private */ AuthorizationProvider authorizationProvider = AuthorizationProvider.ANONYMOUS;
+
+    // default scoped so unit tests can read them.
+    /** The endpoint. */
+    /* private */ String endpoint = GitHubClient.GITHUB_URL;
 
     /**
      * Instantiates a new Git hub builder.

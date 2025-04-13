@@ -35,17 +35,17 @@ public class GHRepositoryDiscussion extends GHObject {
      */
     public static class Category extends GitHubBridgeAdapterObject {
 
-        private long id;
+        private String createdAt;
 
+        private String description;
+        private String emoji;
+        private long id;
+        private boolean isAnswerable;
+        private String name;
         private String nodeId;
         private long repositoryId;
-        private String emoji;
-        private String name;
-        private String description;
-        private String createdAt;
-        private String updatedAt;
         private String slug;
-        private boolean isAnswerable;
+        private String updatedAt;
         /**
          * Create default Category instance
          */
@@ -150,32 +150,32 @@ public class GHRepositoryDiscussion extends GHObject {
      */
     public enum State {
 
-        /** The open. */
-        OPEN,
         /** The locked. */
         LOCKED,
+        /** The open. */
+        OPEN,
         /** The unknown. */
         UNKNOWN;
     }
 
-    private Category category;
+    private String activeLockReason;
 
-    private String answerHtmlUrl;
     private String answerChosenAt;
     private GHUser answerChosenBy;
+    private String answerHtmlUrl;
 
-    private String htmlUrl;
-    private int number;
-    private String title;
-    private GHUser user;
-    private String state;
-    private boolean locked;
-    private int comments;
     private GHCommentAuthorAssociation authorAssociation;
-    private String activeLockReason;
     private String body;
-
+    private Category category;
+    private int comments;
+    private String htmlUrl;
+    private boolean locked;
+    private int number;
+    private String state;
     private String timelineUrl;
+    private String title;
+
+    private GHUser user;
 
     /**
      * Create default GHRepositoryDiscussion instance

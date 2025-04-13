@@ -40,23 +40,23 @@ public class GHRelease extends GHObject {
         return releases;
     }
 
-    /** The owner. */
-    GHRepository owner;
-
-    private String htmlUrl;
-    private String assetsUrl;
     private List<GHAsset> assets;
-    private String uploadUrl;
-    private String tagName;
-    private String targetCommitish;
-    private String name;
+
+    private String assetsUrl;
     private String body;
+    private String discussionUrl;
     private boolean draft;
+    private String htmlUrl;
+    private String name;
     private boolean prerelease;
     private String publishedAt;
+    private String tagName;
     private String tarballUrl;
+    private String targetCommitish;
+    private String uploadUrl;
     private String zipballUrl;
-    private String discussionUrl;
+    /** The owner. */
+    GHRepository owner;
 
     /**
      * Create default GHRelease instance

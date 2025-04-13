@@ -20,10 +20,10 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
         COMMENTS,
         /** The created. */
         CREATED,
-        /** The updated. */
-        UPDATED,
         /** The relevance. */
-        RELEVANCE
+        RELEVANCE,
+        /** The updated. */
+        UPDATED
 
     }
 

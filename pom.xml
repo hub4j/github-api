@@ -488,6 +488,7 @@
               <file>${basedir}/src/build/eclipse/formatter.xml</file>
               <sortMembersEnabled>true</sortMembersEnabled>
               <sortMembersVisibilityOrderEnabled>true</sortMembersVisibilityOrderEnabled>
+              <sortMembersDoNotSortFields>false</sortMembersDoNotSortFields>
             </eclipse>
 
             <importOrder>

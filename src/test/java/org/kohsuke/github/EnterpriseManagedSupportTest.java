@@ -17,11 +17,11 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
     private static final String NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR = "{\"message\":\"This organization is not part of externally managed enterprise.\","
             + "\"documentation_url\": \"https://docs.github.com/rest/teams/external-groups#list-external-groups-in-an-organization\"}";
 
-    private static final String UNKNOWN_ERROR = "{\"message\":\"Unknown error\","
-            + "\"documentation_url\": \"https://docs.github.com/rest/unknown#unknown\"}";
-
     private static final String TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR = "{\"message\":\"This team cannot be externally managed since it has explicit members.\","
             + "\"documentation_url\": \"https://docs.github.com/rest/teams/external-groups#list-a-connection-between-an-external-group-and-a-team\"}";
+
+    private static final String UNKNOWN_ERROR = "{\"message\":\"Unknown error\","
+            + "\"documentation_url\": \"https://docs.github.com/rest/unknown#unknown\"}";
 
     /**
      * Create default EnterpriseManagedSupportTest instance

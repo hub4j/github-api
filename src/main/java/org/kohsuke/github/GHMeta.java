@@ -18,22 +18,22 @@ import java.util.Map;
  */
 public class GHMeta {
 
-    @JsonProperty("verifiable_password_authentication")
-    private boolean verifiablePasswordAuthentication;
+    private List<String> actions;
 
+    private List<String> api;
+    private List<String> dependabot;
+    private List<String> git;
+    private List<String> hooks;
+    private List<String> importer = new ArrayList<>();
+    private List<String> packages;
+    private List<String> pages;
     @JsonProperty("ssh_key_fingerprints")
     private Map<String, String> sshKeyFingerprints;
     @JsonProperty("ssh_keys")
     private List<String> sshKeys;
-    private List<String> hooks;
-    private List<String> git;
+    @JsonProperty("verifiable_password_authentication")
+    private boolean verifiablePasswordAuthentication;
     private List<String> web;
-    private List<String> api;
-    private List<String> pages;
-    private List<String> importer = new ArrayList<>();
-    private List<String> packages;
-    private List<String> actions;
-    private List<String> dependabot;
     /**
      * Create default GHMeta instance
      */

@@ -12,8 +12,8 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
 
     /** The Constant APP_INSTALLATIONS_URL. */
     public static final String APP_INSTALLATIONS_URL = "/user/installations";
-    private final transient GitHub root;
     private GHAppInstallationsPage result;
+    private final transient GitHub root;
 
     /**
      * Instantiates a new GH app installations iterable.

@@ -14,14 +14,14 @@ import java.util.*;
  */
 public class GHAppInstallationToken extends GitHubInteractiveObject {
 
-    private String token;
+    private Map<String, String> permissions;
 
+    private List<GHRepository> repositories;
+
+    private GHRepositorySelection repositorySelection;
+    private String token;
     /** The expires at. */
     protected String expiresAt;
-
-    private Map<String, String> permissions;
-    private List<GHRepository> repositories;
-    private GHRepositorySelection repositorySelection;
     /**
      * Create default GHAppInstallationToken instance
      */

@@ -11,11 +11,11 @@ import java.io.IOException;
  */
 public class GHAutolinkBuilder {
 
+    private Boolean isAlphanumeric;
+    private String keyPrefix;
     private final GHRepository repo;
     private final Requester req;
-    private String keyPrefix;
     private String urlTemplate;
-    private Boolean isAlphanumeric;
 
     /**
      * Instantiates a new Gh autolink builder.

@@ -22,9 +22,9 @@ import static org.hamcrest.Matchers.notNullValue;
 public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
 
     private enum Type implements Predicate<GHIssueEvent>, Consumer<GHIssueEvent> {
-        milestone(e -> assertThat(e.getMilestone(), notNullValue()), "milestoned", "demilestoned"),
+        assignment(e -> assertThat(e.getAssignee(), notNullValue()), "assigned", "unassigned"),
         label(e -> assertThat(e.getLabel(), notNullValue()), "labeled", "unlabeled"),
-        assignment(e -> assertThat(e.getAssignee(), notNullValue()), "assigned", "unassigned");
+        milestone(e -> assertThat(e.getMilestone(), notNullValue()), "milestoned", "demilestoned");
 
         private final Consumer<GHIssueEvent> assertion;
         private final Set<String> subtypes;

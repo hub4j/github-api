@@ -44,10 +44,10 @@ public class GHProject extends GHObject {
      */
     public enum ProjectState {
 
-        /** The open. */
-        OPEN,
         /** The closed. */
-        CLOSED
+        CLOSED,
+        /** The open. */
+        OPEN
     }
 
     /**
@@ -57,22 +57,22 @@ public class GHProject extends GHObject {
 
         /** The all. */
         ALL,
-        /** The open. */
-        OPEN,
         /** The closed. */
-        CLOSED
+        CLOSED,
+        /** The open. */
+        OPEN
     }
+
+    private String body;
+    private GHUser creator;
+    private String htmlUrl;
+    private String name;
+    private int number;
+    private String ownerUrl;
+    private String state;
 
     /** The owner. */
     protected GHObject owner;
-    private String ownerUrl;
-    private String htmlUrl;
-    private String name;
-    private String body;
-    private int number;
-    private String state;
-
-    private GHUser creator;
 
     /**
      * Create default GHProject instance

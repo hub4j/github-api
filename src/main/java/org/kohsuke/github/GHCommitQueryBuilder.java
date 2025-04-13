@@ -21,8 +21,8 @@ import java.util.Date;
  * @see GHRepository#queryCommits() GHRepository#queryCommits()
  */
 public class GHCommitQueryBuilder {
-    private final Requester req;
     private final GHRepository repo;
+    private final Requester req;
 
     /**
      * Instantiates a new GH commit query builder.

@@ -64,11 +64,11 @@ public abstract class RateLimitChecker {
 
     }
 
-    private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());
-
     /** The Constant NONE. */
     public static final RateLimitChecker NONE = new RateLimitChecker() {
     };
+
+    private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());
 
     /**
      * Create default RateLimitChecker instance

@@ -15,22 +15,22 @@ import java.util.Date;
  */
 public class GHIssueEvent extends GitHubInteractiveObject {
 
-    private long id;
-
-    private String nodeId;
-    private String url;
     private GHUser actor;
-    private String event;
+
+    private GHUser assignee;
     private String commitId;
     private String commitUrl;
     private String createdAt;
-    private GHMilestone milestone;
-    private GHLabel label;
-    private GHUser assignee;
-    private GHIssueRename rename;
-    private GHUser reviewRequester;
-    private GHUser requestedReviewer;
+    private String event;
+    private long id;
     private GHIssue issue;
+    private GHLabel label;
+    private GHMilestone milestone;
+    private String nodeId;
+    private GHIssueRename rename;
+    private GHUser requestedReviewer;
+    private GHUser reviewRequester;
+    private String url;
 
     /**
      * Create default GHIssueEvent instance

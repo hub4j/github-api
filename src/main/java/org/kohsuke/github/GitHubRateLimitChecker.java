@@ -38,13 +38,13 @@ class GitHubRateLimitChecker {
     private final RateLimitChecker core;
 
     @Nonnull
-    private final RateLimitChecker search;
-
-    @Nonnull
     private final RateLimitChecker graphql;
 
     @Nonnull
     private final RateLimitChecker integrationManifest;
+
+    @Nonnull
+    private final RateLimitChecker search;
 
     /**
      * Instantiates a new git hub rate limit checker.

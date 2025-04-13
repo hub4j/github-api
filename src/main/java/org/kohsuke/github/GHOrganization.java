@@ -29,12 +29,12 @@ public class GHOrganization extends GHPerson {
         ADMIN,
         /** The maintain. */
         MAINTAIN,
+        /** The pull. */
+        PULL,
         /** The push. */
         PUSH,
         /** The triage. */
         TRIAGE,
-        /** The pull. */
-        PULL,
         /** Unknown, before we add the new permission to the enum */
         UNKNOWN
     }

@@ -30,12 +30,12 @@ public class GHCheckRun extends GHObject {
      */
     public static enum AnnotationLevel {
 
+        /** The failure. */
+        FAILURE,
         /** The notice. */
         NOTICE,
         /** The warning. */
-        WARNING,
-        /** The failure. */
-        FAILURE
+        WARNING
     }
 
     /**
@@ -54,12 +54,12 @@ public class GHCheckRun extends GHObject {
         FAILURE,
         /** The neutral. */
         NEUTRAL,
-        /** The success. */
-        SUCCESS,
         /** The skipped. */
         SKIPPED,
         /** The stale. */
         STALE,
+        /** The success. */
+        SUCCESS,
         /** The timed out. */
         TIMED_OUT,
         /** The unknown. */
@@ -94,12 +94,12 @@ public class GHCheckRun extends GHObject {
      */
     public static class Output {
 
-        private String title;
+        private int annotationsCount;
 
+        private String annotationsUrl;
         private String summary;
         private String text;
-        private int annotationsCount;
-        private String annotationsUrl;
+        private String title;
         /**
          * Create default Output instance
          */
@@ -156,12 +156,12 @@ public class GHCheckRun extends GHObject {
      */
     public static enum Status {
 
-        /** The queued. */
-        QUEUED,
-        /** The in progress. */
-        IN_PROGRESS,
         /** The completed. */
         COMPLETED,
+        /** The in progress. */
+        IN_PROGRESS,
+        /** The queued. */
+        QUEUED,
         /** The unknown. */
         UNKNOWN;
 
@@ -186,26 +186,26 @@ public class GHCheckRun extends GHObject {
             return name().toLowerCase(Locale.ROOT);
         }
     }
+    private GHApp app;
+    private GHCheckSuite checkSuite;
+    private String completedAt;
+    private String conclusion;
+    private String detailsUrl;
+    private String externalId;
+    private String headSha;
+    private String htmlUrl;
+    private String name;
+    private String nodeId;
+    private Output output;
+    private GHPullRequest[] pullRequests = new GHPullRequest[0];
+
+    private String startedAt;
+
+    private String status;
+
     /** The owner. */
     @JsonProperty("repository")
     GHRepository owner;
-    private String status;
-    private String conclusion;
-    private String name;
-    private String headSha;
-    private String nodeId;
-    private String externalId;
-    private String startedAt;
-    private String completedAt;
-    private String htmlUrl;
-    private String detailsUrl;
-    private Output output;
-
-    private GHApp app;
-
-    private GHPullRequest[] pullRequests = new GHPullRequest[0];
-
-    private GHCheckSuite checkSuite;
 
     /**
      * Create default GHCheckRun instance

@@ -39,12 +39,12 @@ import java.net.URL;
  */
 public class GHIssueComment extends GHObject implements Reactable {
 
-    /** The owner. */
-    GHIssue owner;
-
     private String body, gravatarId, htmlUrl, authorAssociation;
 
     private GHUser user; // not fully populated. beware.
+
+    /** The owner. */
+    GHIssue owner;
     /**
      * Create default GHIssueComment instance
      */

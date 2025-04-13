@@ -48,8 +48,8 @@ public class GHProject extends GHObject {
     /** The owner. */
     protected GHObject owner;
 
-    private String owner_url;
-    private String html_url;
+    private String ownerUrl;
+    private String htmlUrl;
     private String name;
     private String body;
     private int number;
@@ -62,7 +62,7 @@ public class GHProject extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L65">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L65">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -76,11 +76,11 @@ public class GHProject extends GHObject {
     public GHObject getOwner() throws IOException {
 <span class="nc bnc" id="L77" title="All 2 branches missed.">        if (owner == null) {</span>
             try {
-<span class="nc bnc" id="L79" title="All 2 branches missed.">                if (owner_url.contains(&quot;/orgs/&quot;)) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                if (ownerUrl.contains(&quot;/orgs/&quot;)) {</span>
 <span class="nc" id="L80">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHOrganization.class);</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/users/&quot;)) {</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                } else if (ownerUrl.contains(&quot;/users/&quot;)) {</span>
 <span class="nc" id="L82">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class);</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">                } else if (owner_url.contains(&quot;/repos/&quot;)) {</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">                } else if (ownerUrl.contains(&quot;/repos/&quot;)) {</span>
 <span class="nc" id="L84">                    String[] pathElements = getOwnerUrl().getPath().split(&quot;/&quot;);</span>
 <span class="nc" id="L85">                    owner = GHRepository.read(root(), pathElements[1], pathElements[2]);</span>
                 }
@@ -97,7 +97,7 @@ public class GHProject extends GHObject {
      * @return the owner url
      */
     public URL getOwnerUrl() {
-<span class="nc" id="L100">        return GitHubClient.parseURL(owner_url);</span>
+<span class="fc" id="L100">        return GitHubClient.parseURL(ownerUrl);</span>
     }
 
     /**

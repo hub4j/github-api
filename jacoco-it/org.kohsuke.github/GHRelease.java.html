@@ -33,20 +33,20 @@ public class GHRelease extends GHObject {
     /** The owner. */
     GHRepository owner;
 
-    private String html_url;
-    private String assets_url;
+    private String htmlUrl;
+    private String assetsUrl;
     private List&lt;GHAsset&gt; assets;
-    private String upload_url;
-    private String tag_name;
-    private String target_commitish;
+    private String uploadUrl;
+    private String tagName;
+    private String targetCommitish;
     private String name;
     private String body;
     private boolean draft;
     private boolean prerelease;
     private String publishedAt;
-    private String tarball_url;
-    private String zipball_url;
-    private String discussion_url;
+    private String tarballUrl;
+    private String zipballUrl;
+    private String discussionUrl;
 
     /**
      * Gets discussion url. Only present if a discussion relating to the release exists
@@ -54,7 +54,7 @@ public class GHRelease extends GHObject {
      * @return the discussion url
      */
     public String getDiscussionUrl() {
-<span class="fc" id="L57">        return discussion_url;</span>
+<span class="fc" id="L57">        return discussionUrl;</span>
     }
 
     /**
@@ -63,7 +63,7 @@ public class GHRelease extends GHObject {
      * @return the assets url
      */
     public String getAssetsUrl() {
-<span class="fc" id="L66">        return assets_url;</span>
+<span class="fc" id="L66">        return assetsUrl;</span>
     }
 
     /**
@@ -90,7 +90,7 @@ public class GHRelease extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L93">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L93">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -147,7 +147,7 @@ public class GHRelease extends GHObject {
      * @return the tag name
      */
     public String getTagName() {
-<span class="fc" id="L150">        return tag_name;</span>
+<span class="fc" id="L150">        return tagName;</span>
     }
 
     /**
@@ -156,7 +156,7 @@ public class GHRelease extends GHObject {
      * @return the target commitish
      */
     public String getTargetCommitish() {
-<span class="fc" id="L159">        return target_commitish;</span>
+<span class="fc" id="L159">        return targetCommitish;</span>
     }
 
     /**
@@ -165,7 +165,7 @@ public class GHRelease extends GHObject {
      * @return the upload url
      */
     public String getUploadUrl() {
-<span class="fc" id="L168">        return upload_url;</span>
+<span class="fc" id="L168">        return uploadUrl;</span>
     }
 
     /**
@@ -174,7 +174,7 @@ public class GHRelease extends GHObject {
      * @return the zipball url
      */
     public String getZipballUrl() {
-<span class="fc" id="L177">        return zipball_url;</span>
+<span class="fc" id="L177">        return zipballUrl;</span>
     }
 
     /**
@@ -183,7 +183,7 @@ public class GHRelease extends GHObject {
      * @return the tarball url
      */
     public String getTarballUrl() {
-<span class="fc" id="L186">        return tarball_url;</span>
+<span class="fc" id="L186">        return tarballUrl;</span>
     }
 
     /**

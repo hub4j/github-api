@@ -56,30 +56,30 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     private static final String COMMENTS_ACTION = &quot;/comments&quot;;
     private static final String REQUEST_REVIEWERS = &quot;/requested_reviewers&quot;;
 
-    private String patch_url, diff_url, issue_url;
+    private String patchUrl, diffUrl, issueUrl;
     private GHCommitPointer base;
-    private String merged_at;
+    private String mergedAt;
     private GHCommitPointer head;
 
     // details that are only available when obtained from ID
-    private GHUser merged_by;
-    private int review_comments, additions, commits;
-    private boolean merged, maintainer_can_modify;
+    private GHUser mergedBy;
+    private int reviewComments, additions, commits;
+    private boolean merged, maintainerCanModify;
 
     /** The draft. */
     // making these package private to all for testing
     boolean draft;
     private Boolean mergeable;
     private int deletions;
-    private String mergeable_state;
-    private int changed_files;
-    private String merge_commit_sha;
-    private AutoMerge auto_merge;
+    private String mergeableState;
+    private int changedFiles;
+    private String mergeCommitSha;
+    private AutoMerge autoMerge;
 
     // pull request reviewers
 
-    private GHUser[] requested_reviewers;
-    private GHTeam[] requested_teams;
+    private GHUser[] requestedReviewers;
+    private GHTeam[] requestedTeams;
 
     /**
      * Wrap up.
@@ -119,7 +119,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the {@linkplain AutoMerge} or {@code null} if no auto merge is set.
      */
     public AutoMerge getAutoMerge() {
-<span class="fc" id="L122">        return auto_merge;</span>
+<span class="fc" id="L122">        return autoMerge;</span>
     }
 
     /**
@@ -128,7 +128,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the patch url
      */
     public URL getPatchUrl() {
-<span class="fc" id="L131">        return GitHubClient.parseURL(patch_url);</span>
+<span class="fc" id="L131">        return GitHubClient.parseURL(patchUrl);</span>
     }
 
     /**
@@ -137,7 +137,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the issue url
      */
     public URL getIssueUrl() {
-<span class="nc" id="L140">        return GitHubClient.parseURL(issue_url);</span>
+<span class="fc" id="L140">        return GitHubClient.parseURL(issueUrl);</span>
     }
 
     /**
@@ -164,7 +164,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the diff url
      */
     public URL getDiffUrl() {
-<span class="fc" id="L167">        return GitHubClient.parseURL(diff_url);</span>
+<span class="fc" id="L167">        return GitHubClient.parseURL(diffUrl);</span>
     }
 
     /**
@@ -174,7 +174,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getMergedAt() {
-<span class="fc" id="L177">        return GitHubClient.parseInstant(merged_at);</span>
+<span class="fc" id="L177">        return GitHubClient.parseInstant(mergedAt);</span>
     }
 
     /**
@@ -211,7 +211,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getMergedBy() throws IOException {
 <span class="fc" id="L213">        populate();</span>
-<span class="fc" id="L214">        return merged_by;</span>
+<span class="fc" id="L214">        return mergedBy;</span>
     }
 
     /**
@@ -223,7 +223,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public int getReviewComments() throws IOException {
 <span class="fc" id="L225">        populate();</span>
-<span class="fc" id="L226">        return review_comments;</span>
+<span class="fc" id="L226">        return reviewComments;</span>
     }
 
     /**
@@ -271,7 +271,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public boolean canMaintainerModify() throws IOException {
 <span class="fc" id="L273">        populate();</span>
-<span class="fc" id="L274">        return maintainer_can_modify;</span>
+<span class="fc" id="L274">        return maintainerCanModify;</span>
     }
 
     /**
@@ -330,7 +330,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public String getMergeableState() throws IOException {
 <span class="fc" id="L332">        populate();</span>
-<span class="fc" id="L333">        return mergeable_state;</span>
+<span class="fc" id="L333">        return mergeableState;</span>
     }
 
     /**
@@ -342,7 +342,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public int getChangedFiles() throws IOException {
 <span class="fc" id="L344">        populate();</span>
-<span class="fc" id="L345">        return changed_files;</span>
+<span class="fc" id="L345">        return changedFiles;</span>
     }
 
     /**
@@ -354,7 +354,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public String getMergeCommitSha() throws IOException {
 <span class="fc" id="L356">        populate();</span>
-<span class="fc" id="L357">        return merge_commit_sha;</span>
+<span class="fc" id="L357">        return mergeCommitSha;</span>
     }
 
     /**
@@ -365,8 +365,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public List&lt;GHUser&gt; getRequestedReviewers() throws IOException {
-<span class="fc" id="L368">        refresh(requested_reviewers);</span>
-<span class="fc" id="L369">        return Collections.unmodifiableList(Arrays.asList(requested_reviewers));</span>
+<span class="fc" id="L368">        refresh(requestedReviewers);</span>
+<span class="fc" id="L369">        return Collections.unmodifiableList(Arrays.asList(requestedReviewers));</span>
     }
 
     /**
@@ -377,8 +377,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public List&lt;GHTeam&gt; getRequestedTeams() throws IOException {
-<span class="fc" id="L380">        refresh(requested_teams);</span>
-<span class="fc" id="L381">        return Collections.unmodifiableList(Arrays.asList(requested_teams));</span>
+<span class="fc" id="L380">        refresh(requestedTeams);</span>
+<span class="fc" id="L381">        return Collections.unmodifiableList(Arrays.asList(requestedTeams));</span>
     }
 
     /**
@@ -388,7 +388,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     private void populate() throws IOException {
-<span class="fc bfc" id="L391" title="All 2 branches covered.">        if (mergeable_state != null)</span>
+<span class="fc bfc" id="L391" title="All 2 branches covered.">        if (mergeableState != null)</span>
 <span class="fc" id="L392">            return; // already populated</span>
 <span class="fc" id="L393">        refresh();</span>
 <span class="fc" id="L394">    }</span>
@@ -705,10 +705,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
 <span class="fc" id="L705">        public AutoMerge() {</span>
 <span class="fc" id="L706">        }</span>
 
-        private GHUser enabled_by;
-        private MergeMethod merge_method;
-        private String commit_title;
-        private String commit_message;
+        private GHUser enabledBy;
+        private MergeMethod mergeMethod;
+        private String commitTitle;
+        private String commitMessage;
 
         /**
          * The user who enabled the auto merge of the pull request.
@@ -717,7 +717,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          */
         @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
         public GHUser getEnabledBy() {
-<span class="fc" id="L720">            return enabled_by;</span>
+<span class="fc" id="L720">            return enabledBy;</span>
         }
 
         /**
@@ -726,7 +726,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          * @return the {@linkplain MergeMethod}
          */
         public MergeMethod getMergeMethod() {
-<span class="fc" id="L729">            return merge_method;</span>
+<span class="fc" id="L729">            return mergeMethod;</span>
         }
 
         /**
@@ -735,7 +735,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          * @return the title of the commit
          */
         public String getCommitTitle() {
-<span class="fc" id="L738">            return commit_title;</span>
+<span class="fc" id="L738">            return commitTitle;</span>
         }
 
         /**
@@ -744,7 +744,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          * @return the message of the commit
          */
         public String getCommitMessage() {
-<span class="fc" id="L747">            return commit_message;</span>
+<span class="fc" id="L747">            return commitMessage;</span>
         }
     }
 }

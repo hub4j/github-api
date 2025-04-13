@@ -30,16 +30,16 @@ public class GHDeployKey {
     private GHRepository owner;
 
     /** Creation date of the deploy key */
-    private String created_at;
+    private String createdAt;
 
     /** Last used date of the deploy key */
-    private String last_used;
+    private String lastUsed;
 
     /** Name of user that added the deploy key */
-    private String added_by;
+    private String addedBy;
 
     /** Whether the deploykey has readonly permission or full access */
-    private boolean read_only;
+    private boolean readOnly;
 
     /**
      * Gets id.
@@ -87,13 +87,13 @@ public class GHDeployKey {
     }
 
     /**
-     * Gets created_at.
+     * Gets createdAt.
      *
-     * @return the created_at
+     * @return the createdAt
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getCreatedAt() {
-<span class="fc" id="L96">        return GitHubClient.parseInstant(created_at);</span>
+<span class="fc" id="L96">        return GitHubClient.parseInstant(createdAt);</span>
     }
 
     /**
@@ -103,7 +103,18 @@ public class GHDeployKey {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getLastUsedAt() {
-<span class="fc" id="L106">        return GitHubClient.parseInstant(last_used);</span>
+<span class="fc" id="L106">        return GitHubClient.parseInstant(lastUsed);</span>
+    }
+
+    /**
+     * Gets added_by
+     *
+     * @return the added_by
+     * @deprecated Use {@link #getAddedBy()}
+     */
+    @Deprecated
+    public String getAdded_by() {
+<span class="fc" id="L117">        return getAddedBy();</span>
     }
 
     /**
@@ -111,8 +122,19 @@ public class GHDeployKey {
      *
      * @return the added_by
      */
-    public String getAdded_by() {
-<span class="fc" id="L115">        return added_by;</span>
+    public String getAddedBy() {
+<span class="fc" id="L126">        return addedBy;</span>
+    }
+
+    /**
+     * Is read_only
+     *
+     * @return true if the key can only read. False if the key has write permission as well.
+     * @deprecated {@link #isReadOnly()}
+     */
+    @Deprecated
+    public boolean isRead_only() {
+<span class="fc" id="L137">        return isReadOnly();</span>
     }
 
     /**
@@ -120,8 +142,8 @@ public class GHDeployKey {
      *
      * @return true if the key can only read. False if the key has write permission as well.
      */
-    public boolean isRead_only() {
-<span class="fc" id="L124">        return read_only;</span>
+    public boolean isReadOnly() {
+<span class="fc" id="L146">        return readOnly;</span>
     }
 
     /**
@@ -132,8 +154,8 @@ public class GHDeployKey {
      * @return the gh deploy key
      */
     GHDeployKey lateBind(GHRepository repo) {
-<span class="fc" id="L135">        this.owner = repo;</span>
-<span class="fc" id="L136">        return this;</span>
+<span class="fc" id="L157">        this.owner = repo;</span>
+<span class="fc" id="L158">        return this;</span>
     }
 
     /**
@@ -142,14 +164,14 @@ public class GHDeployKey {
      * @return the string
      */
     public String toString() {
-<span class="fc" id="L145">        return new ToStringBuilder(this).append(&quot;title&quot;, title)</span>
-<span class="fc" id="L146">                .append(&quot;id&quot;, id)</span>
-<span class="fc" id="L147">                .append(&quot;key&quot;, key)</span>
-<span class="fc" id="L148">                .append(&quot;created_at&quot;, created_at)</span>
-<span class="fc" id="L149">                .append(&quot;last_used&quot;, last_used)</span>
-<span class="fc" id="L150">                .append(&quot;added_by&quot;, added_by)</span>
-<span class="fc" id="L151">                .append(&quot;read_only&quot;, read_only)</span>
-<span class="fc" id="L152">                .toString();</span>
+<span class="fc" id="L167">        return new ToStringBuilder(this).append(&quot;title&quot;, title)</span>
+<span class="fc" id="L168">                .append(&quot;id&quot;, id)</span>
+<span class="fc" id="L169">                .append(&quot;key&quot;, key)</span>
+<span class="fc" id="L170">                .append(&quot;created_at&quot;, createdAt)</span>
+<span class="fc" id="L171">                .append(&quot;last_used&quot;, lastUsed)</span>
+<span class="fc" id="L172">                .append(&quot;added_by&quot;, addedBy)</span>
+<span class="fc" id="L173">                .append(&quot;read_only&quot;, readOnly)</span>
+<span class="fc" id="L174">                .toString();</span>
     }
 
     /**
@@ -159,11 +181,11 @@ public class GHDeployKey {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L162">        owner.root()</span>
-<span class="fc" id="L163">                .createRequest()</span>
-<span class="fc" id="L164">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L165">                .withUrlPath(String.format(&quot;/repos/%s/%s/keys/%d&quot;, owner.getOwnerName(), owner.getName(), id))</span>
-<span class="fc" id="L166">                .send();</span>
-<span class="fc" id="L167">    }</span>
+<span class="fc" id="L184">        owner.root()</span>
+<span class="fc" id="L185">                .createRequest()</span>
+<span class="fc" id="L186">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L187">                .withUrlPath(String.format(&quot;/repos/%s/%s/keys/%d&quot;, owner.getOwnerName(), owner.getName(), id))</span>
+<span class="fc" id="L188">                .send();</span>
+<span class="fc" id="L189">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

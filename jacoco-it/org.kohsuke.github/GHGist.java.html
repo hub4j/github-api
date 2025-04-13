@@ -26,16 +26,16 @@ public class GHGist extends GHObject {
     /** The owner. */
     final GHUser owner;
 
-    private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
+    private String forksUrl, commitsUrl, id, gitPullUrl, gitPushUrl, htmlUrl;
 
     @JsonProperty(&quot;public&quot;)
-    private boolean _public;
+    private boolean isPublic;
 
     private String description;
 
     private int comments;
 
-    private String comments_url;
+    private String commentsUrl;
 
     private final Map&lt;String, GHGistFile&gt; files;
 
@@ -88,7 +88,7 @@ public class GHGist extends GHObject {
      * @return the forks url
      */
     public String getForksUrl() {
-<span class="fc" id="L91">        return forks_url;</span>
+<span class="fc" id="L91">        return forksUrl;</span>
     }
 
     /**
@@ -97,7 +97,7 @@ public class GHGist extends GHObject {
      * @return the commits url
      */
     public String getCommitsUrl() {
-<span class="fc" id="L100">        return commits_url;</span>
+<span class="fc" id="L100">        return commitsUrl;</span>
     }
 
     /**
@@ -106,7 +106,7 @@ public class GHGist extends GHObject {
      * @return URL like https://gist.github.com/gists/12345.git
      */
     public String getGitPullUrl() {
-<span class="fc" id="L109">        return git_pull_url;</span>
+<span class="fc" id="L109">        return gitPullUrl;</span>
     }
 
     /**
@@ -115,7 +115,7 @@ public class GHGist extends GHObject {
      * @return the git push url
      */
     public String getGitPushUrl() {
-<span class="fc" id="L118">        return git_push_url;</span>
+<span class="fc" id="L118">        return gitPushUrl;</span>
     }
 
     /**
@@ -124,7 +124,7 @@ public class GHGist extends GHObject {
      * @return the github html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L127">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L127">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -133,7 +133,7 @@ public class GHGist extends GHObject {
      * @return the boolean
      */
     public boolean isPublic() {
-<span class="fc" id="L136">        return _public;</span>
+<span class="fc" id="L136">        return isPublic;</span>
     }
 
     /**
@@ -160,7 +160,7 @@ public class GHGist extends GHObject {
      * @return API URL of listing comments.
      */
     public String getCommentsUrl() {
-<span class="fc" id="L163">        return comments_url;</span>
+<span class="fc" id="L163">        return commentsUrl;</span>
     }
 
     /**

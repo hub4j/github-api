@@ -60,19 +60,19 @@ public class GHPullRequestFileDetail {
     int changes;
 
     /** The blob url. */
-    String blob_url;
+    String blobUrl;
 
     /** The raw url. */
-    String raw_url;
+    String rawUrl;
 
     /** The contents url. */
-    String contents_url;
+    String contentsUrl;
 
     /** The patch. */
     String patch;
 
     /** The previous filename. */
-    String previous_filename;
+    String previousFilename;
 
     /**
      * Gets sha of the file (not commit sha).
@@ -136,7 +136,7 @@ public class GHPullRequestFileDetail {
      * @return the blob url
      */
     public URL getBlobUrl() {
-<span class="nc" id="L139">        return GitHubClient.parseURL(blob_url);</span>
+<span class="nc" id="L139">        return GitHubClient.parseURL(blobUrl);</span>
     }
 
     /**
@@ -145,7 +145,7 @@ public class GHPullRequestFileDetail {
      * @return the raw url
      */
     public URL getRawUrl() {
-<span class="nc" id="L148">        return GitHubClient.parseURL(raw_url);</span>
+<span class="nc" id="L148">        return GitHubClient.parseURL(rawUrl);</span>
     }
 
     /**
@@ -154,7 +154,7 @@ public class GHPullRequestFileDetail {
      * @return the contents url
      */
     public URL getContentsUrl() {
-<span class="nc" id="L157">        return GitHubClient.parseURL(contents_url);</span>
+<span class="nc" id="L157">        return GitHubClient.parseURL(contentsUrl);</span>
     }
 
     /**
@@ -172,7 +172,7 @@ public class GHPullRequestFileDetail {
      * @return the previous filename
      */
     public String getPreviousFilename() {
-<span class="nc" id="L175">        return previous_filename;</span>
+<span class="nc" id="L175">        return previousFilename;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

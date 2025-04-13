@@ -363,14 +363,14 @@ public final class GHCheckRunBuilder {
     public static final class Annotation {
 
         private final String path;
-        private final int start_line;
-        private final int end_line;
-        private final String annotation_level;
+        private final int startLine;
+        private final int endLine;
+        private final String annotationLevel;
         private final String message;
-        private Integer start_column;
-        private Integer end_column;
+        private Integer startColumn;
+        private Integer endColumn;
         private String title;
-        private String raw_details;
+        private String rawDetails;
 
         /**
          * Instantiates a new annotation.
@@ -411,9 +411,9 @@ public final class GHCheckRunBuilder {
                 @NonNull GHCheckRun.AnnotationLevel annotationLevel,
 <span class="fc" id="L412">                @NonNull String message) {</span>
 <span class="fc" id="L413">            this.path = path;</span>
-<span class="fc" id="L414">            start_line = startLine;</span>
-<span class="fc" id="L415">            end_line = endLine;</span>
-<span class="fc" id="L416">            annotation_level = annotationLevel.toString().toLowerCase(Locale.ROOT);</span>
+<span class="fc" id="L414">            this.startLine = startLine;</span>
+<span class="fc" id="L415">            this.endLine = endLine;</span>
+<span class="fc" id="L416">            this.annotationLevel = annotationLevel.toString().toLowerCase(Locale.ROOT);</span>
 <span class="fc" id="L417">            this.message = message;</span>
 <span class="fc" id="L418">        }</span>
 
@@ -425,7 +425,7 @@ public final class GHCheckRunBuilder {
          * @return the annotation
          */
         public @NonNull Annotation withStartColumn(@CheckForNull Integer startColumn) {
-<span class="nc" id="L428">            start_column = startColumn;</span>
+<span class="nc" id="L428">            this.startColumn = startColumn;</span>
 <span class="nc" id="L429">            return this;</span>
         }
 
@@ -437,7 +437,7 @@ public final class GHCheckRunBuilder {
          * @return the annotation
          */
         public @NonNull Annotation withEndColumn(@CheckForNull Integer endColumn) {
-<span class="nc" id="L440">            end_column = endColumn;</span>
+<span class="nc" id="L440">            this.endColumn = endColumn;</span>
 <span class="nc" id="L441">            return this;</span>
         }
 
@@ -461,7 +461,7 @@ public final class GHCheckRunBuilder {
          * @return the annotation
          */
         public @NonNull Annotation withRawDetails(@CheckForNull String rawDetails) {
-<span class="nc" id="L464">            raw_details = rawDetails;</span>
+<span class="nc" id="L464">            this.rawDetails = rawDetails;</span>
 <span class="nc" id="L465">            return this;</span>
         }
 
@@ -476,7 +476,7 @@ public final class GHCheckRunBuilder {
     public static final class Image {
 
         private final String alt;
-        private final String image_url;
+        private final String imageUrl;
         private String caption;
 
         /**
@@ -489,7 +489,7 @@ public final class GHCheckRunBuilder {
          */
 <span class="fc" id="L490">        public Image(@NonNull String alt, @NonNull String imageURL) {</span>
 <span class="fc" id="L491">            this.alt = alt;</span>
-<span class="fc" id="L492">            image_url = imageURL;</span>
+<span class="fc" id="L492">            this.imageUrl = imageURL;</span>
 <span class="fc" id="L493">        }</span>
 
         /**

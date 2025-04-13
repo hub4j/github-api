@@ -23,7 +23,7 @@ public class GHSubscription extends GitHubInteractiveObject {
 <span class="fc" id="L23">    public GHSubscription() {</span>
 <span class="fc" id="L24">    }</span>
 
-    private String created_at, url, repository_url, reason;
+    private String createdAt, url, repositoryUrl, reason;
     private boolean subscribed, ignored;
 
     private GHRepository repo;
@@ -35,7 +35,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getCreatedAt() {
-<span class="fc" id="L38">        return GitHubClient.parseInstant(created_at);</span>
+<span class="fc" id="L38">        return GitHubClient.parseInstant(createdAt);</span>
     }
 
     /**
@@ -53,7 +53,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      * @return the repository url
      */
     public String getRepositoryUrl() {
-<span class="fc" id="L56">        return repository_url;</span>
+<span class="fc" id="L56">        return repositoryUrl;</span>
     }
 
     /**

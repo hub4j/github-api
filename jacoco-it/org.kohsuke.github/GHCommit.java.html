@@ -36,7 +36,7 @@ public class GHCommit {
             justification = &quot;JSON API&quot;)
     public static class ShortInfo extends GitCommit {
 
-<span class="fc" id="L39">        private int comment_count = -1;</span>
+<span class="fc" id="L39">        private int commentCount = -1;</span>
 
         /**
          * Gets comment count.
@@ -46,10 +46,10 @@ public class GHCommit {
          *             the GH exception
          */
         public int getCommentCount() throws GHException {
-<span class="fc bfc" id="L49" title="All 2 branches covered.">            if (comment_count &lt; 0) {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            if (commentCount &lt; 0) {</span>
 <span class="fc" id="L50">                throw new GHException(&quot;Not available on this endpoint.&quot;);</span>
             }
-<span class="fc" id="L52">            return comment_count;</span>
+<span class="fc" id="L52">            return commentCount;</span>
         }
 
         /**
@@ -121,10 +121,10 @@ public class GHCommit {
         int changes, additions, deletions;
 
         /** The patch. */
-        String raw_url, blob_url, sha, patch;
+        String rawUrl, blobUrl, sha, patch;
 
         /** The previous filename. */
-        String filename, previous_filename;
+        String filename, previousFilename;
 
         /**
          * Gets lines changed.
@@ -179,7 +179,7 @@ public class GHCommit {
          * @return Previous path, in case file has moved.
          */
         public String getPreviousFilename() {
-<span class="fc" id="L182">            return previous_filename;</span>
+<span class="fc" id="L182">            return previousFilename;</span>
         }
 
         /**
@@ -199,7 +199,7 @@ public class GHCommit {
          *         resolves to the actual content of the file.
          */
         public URL getRawUrl() {
-<span class="fc" id="L202">            return GitHubClient.parseURL(raw_url);</span>
+<span class="fc" id="L202">            return GitHubClient.parseURL(rawUrl);</span>
         }
 
         /**
@@ -210,7 +210,7 @@ public class GHCommit {
          *         that resolves to the HTML page that describes this file.
          */
         public URL getBlobUrl() {
-<span class="fc" id="L213">            return GitHubClient.parseURL(blob_url);</span>
+<span class="fc" id="L213">            return GitHubClient.parseURL(blobUrl);</span>
         }
 
         /**
@@ -250,7 +250,7 @@ public class GHCommit {
         /** The gravatar id. */
         // TODO: what if someone who doesn't have an account on GitHub makes a commit?
         @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
-        String url, avatar_url, gravatar_id;
+        String url, avatarUrl, gravatarId;
 
         /** The id. */
         @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
@@ -261,7 +261,7 @@ public class GHCommit {
     }
 
     /** The sha. */
-    String url, html_url, sha, message;
+    String url, htmlUrl, sha, message;
 
     /** The files. */
     List&lt;File&gt; files;
@@ -296,7 +296,7 @@ public class GHCommit {
 <span class="fc" id="L296">        commit = shortInfo;</span>
 
 <span class="fc" id="L298">        owner = commit.getOwner();</span>
-<span class="fc" id="L299">        html_url = commit.getHtmlUrl();</span>
+<span class="fc" id="L299">        htmlUrl = commit.getHtmlUrl();</span>
 <span class="fc" id="L300">        sha = commit.getSha();</span>
 <span class="fc" id="L301">        url = commit.getUrl();</span>
 <span class="fc" id="L302">        parents = commit.getParents();</span>
@@ -380,7 +380,7 @@ public class GHCommit {
      *         &quot;https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000&quot;
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L383">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L383">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**

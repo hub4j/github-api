@@ -812,14 +812,14 @@ class GitHubClient {
 <span class="fc" id="L812">    }</span>
 
     private static class GHApiInfo {
-        private String rate_limit_url;
+        private String rateLimitUrl;
 
         void check(String apiUrl) throws IOException {
-<span class="fc bfc" id="L818" title="All 2 branches covered.">            if (rate_limit_url == null)</span>
+<span class="fc bfc" id="L818" title="All 2 branches covered.">            if (rateLimitUrl == null)</span>
 <span class="fc" id="L819">                throw new IOException(apiUrl + &quot; doesn't look like GitHub API URL&quot;);</span>
 
             // make sure that the URL is legitimate
-<span class="fc" id="L822">            new URL(rate_limit_url);</span>
+<span class="fc" id="L822">            new URL(rateLimitUrl);</span>
 <span class="fc" id="L823">        }</span>
     }
 

@@ -23,8 +23,8 @@ public class GHThread extends GHObject {
     private Subject subject;
     private String reason;
     private boolean unread;
-    private String last_read_at;
-    private String url, subscription_url;
+    private String lastReadAt;
+    private String url, subscriptionUrl;
 
     /**
      * The Class Subject.
@@ -38,7 +38,7 @@ public class GHThread extends GHObject {
         String url;
 
         /** The latest comment url. */
-        String latest_comment_url;
+        String latestCommentUrl;
 
         /** The type. */
         String type;
@@ -54,7 +54,7 @@ public class GHThread extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getLastReadAt() {
-<span class="fc" id="L57">        return GitHubClient.parseInstant(last_read_at);</span>
+<span class="fc" id="L57">        return GitHubClient.parseInstant(lastReadAt);</span>
     }
 
     /**
@@ -111,7 +111,7 @@ public class GHThread extends GHObject {
      * @return the last comment url
      */
     public String getLastCommentUrl() {
-<span class="fc" id="L114">        return subject.latest_comment_url;</span>
+<span class="fc" id="L114">        return subject.latestCommentUrl;</span>
     }
 
     /**
@@ -179,7 +179,7 @@ public class GHThread extends GHObject {
 <span class="nc" id="L179">                .method(&quot;PUT&quot;)</span>
 <span class="nc" id="L180">                .with(&quot;subscribed&quot;, subscribed)</span>
 <span class="nc" id="L181">                .with(&quot;ignored&quot;, ignored)</span>
-<span class="nc" id="L182">                .withUrlPath(subscription_url)</span>
+<span class="nc" id="L182">                .withUrlPath(subscriptionUrl)</span>
 <span class="nc" id="L183">                .fetch(GHSubscription.class);</span>
     }
 
@@ -192,7 +192,7 @@ public class GHThread extends GHObject {
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-<span class="nc" id="L195">            return root().createRequest().method(&quot;POST&quot;).withUrlPath(subscription_url).fetch(GHSubscription.class);</span>
+<span class="nc" id="L195">            return root().createRequest().method(&quot;POST&quot;).withUrlPath(subscriptionUrl).fetch(GHSubscription.class);</span>
 <span class="nc" id="L196">        } catch (FileNotFoundException e) {</span>
 <span class="nc" id="L197">            return null;</span>
         }

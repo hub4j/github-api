@@ -15,9 +15,9 @@ import java.io.IOException;
 public class GHAutolink {
 
     private int id;
-    private String key_prefix;
-    private String url_template;
-    private boolean is_alphanumeric;
+    private String keyPrefix;
+    private String urlTemplate;
+    private boolean isAlphanumeric;
     private GHRepository owner;
 
     /**
@@ -41,7 +41,7 @@ public class GHAutolink {
      * @return the key prefix string
      */
     public String getKeyPrefix() {
-<span class="fc" id="L44">        return key_prefix;</span>
+<span class="fc" id="L44">        return keyPrefix;</span>
     }
 
     /**
@@ -50,7 +50,7 @@ public class GHAutolink {
      * @return the URL template string
      */
     public String getUrlTemplate() {
-<span class="fc" id="L53">        return url_template;</span>
+<span class="fc" id="L53">        return urlTemplate;</span>
     }
 
     /**
@@ -59,7 +59,7 @@ public class GHAutolink {
      * @return true if alphanumeric, false otherwise
      */
     public boolean isAlphanumeric() {
-<span class="fc" id="L62">        return is_alphanumeric;</span>
+<span class="fc" id="L62">        return isAlphanumeric;</span>
     }
 
     /**

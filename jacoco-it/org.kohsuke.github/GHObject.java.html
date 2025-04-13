@@ -149,8 +149,8 @@ public abstract class GHObject extends GitHubInteractiveObject {
         @Override
         public void append(StringBuffer buffer, String fieldName, Object value, Boolean fullDetail) {
             // skip unimportant properties. '_' is a heuristics as important properties tend to have short names
-<span class="fc bfc" id="L152" title="All 2 branches covered.">            if (fieldName.contains(&quot;_&quot;))</span>
-<span class="fc" id="L153">                return;</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            if (fieldName.contains(&quot;_&quot;))</span>
+<span class="nc" id="L153">                return;</span>
             // avoid recursing other GHObject
 <span class="pc bpc" id="L155" title="1 of 2 branches missed.">            if (value instanceof GHObject)</span>
 <span class="nc" id="L156">                return;</span>

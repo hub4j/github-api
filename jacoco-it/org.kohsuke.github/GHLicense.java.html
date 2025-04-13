@@ -62,7 +62,7 @@ public class GHLicense extends GHObject {
     protected Boolean featured;
 
     /** The body. */
-    protected String html_url, description, category, implementation, body;
+    protected String htmlUrl, description, category, implementation, body;
 
     /** The required. */
 <span class="fc" id="L68">    protected List&lt;String&gt; required = new ArrayList&lt;String&gt;();</span>
@@ -121,7 +121,7 @@ public class GHLicense extends GHObject {
      */
     public URL getHtmlUrl() throws IOException {
 <span class="fc" id="L123">        populate();</span>
-<span class="fc" id="L124">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L124">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**

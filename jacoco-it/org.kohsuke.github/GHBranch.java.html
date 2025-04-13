@@ -27,7 +27,7 @@ public class GHBranch extends GitHubInteractiveObject {
     private Commit commit;
     @JsonProperty(&quot;protected&quot;)
     private boolean protection;
-    private String protection_url;
+    private String protectionUrl;
 
     /**
      * Instantiates a new GH branch.
@@ -94,7 +94,7 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return API URL that deals with the protection of this branch.
      */
     public URL getProtectionUrl() {
-<span class="fc" id="L97">        return GitHubClient.parseURL(protection_url);</span>
+<span class="fc" id="L97">        return GitHubClient.parseURL(protectionUrl);</span>
     }
 
     /**
@@ -105,7 +105,7 @@ public class GHBranch extends GitHubInteractiveObject {
      *             the io exception
      */
     public GHBranchProtection getProtection() throws IOException {
-<span class="fc" id="L108">        return root().createRequest().setRawUrlPath(protection_url).fetch(GHBranchProtection.class);</span>
+<span class="fc" id="L108">        return root().createRequest().setRawUrlPath(protectionUrl).fetch(GHBranchProtection.class);</span>
     }
 
     /**
@@ -124,7 +124,7 @@ public class GHBranch extends GitHubInteractiveObject {
      *             if disabling protection fails
      */
     public void disableProtection() throws IOException {
-<span class="fc" id="L127">        root().createRequest().method(&quot;DELETE&quot;).setRawUrlPath(protection_url).send();</span>
+<span class="fc" id="L127">        root().createRequest().method(&quot;DELETE&quot;).setRawUrlPath(protectionUrl).send();</span>
 <span class="fc" id="L128">    }</span>
 
     /**

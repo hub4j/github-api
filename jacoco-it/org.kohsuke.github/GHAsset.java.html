@@ -23,10 +23,10 @@ public class GHAsset extends GHObject {
     private String name;
     private String label;
     private String state;
-    private String content_type;
+    private String contentType;
     private long size;
-    private long download_count;
-    private String browser_download_url;
+    private long downloadCount;
+    private String browserDownloadUrl;
 
     /**
      * Gets content type.
@@ -34,7 +34,7 @@ public class GHAsset extends GHObject {
      * @return the content type
      */
     public String getContentType() {
-<span class="fc" id="L37">        return content_type;</span>
+<span class="fc" id="L37">        return contentType;</span>
     }
 
     /**
@@ -47,7 +47,7 @@ public class GHAsset extends GHObject {
      */
     public void setContentType(String contentType) throws IOException {
 <span class="nc" id="L49">        edit(&quot;content_type&quot;, contentType);</span>
-<span class="nc" id="L50">        this.content_type = contentType;</span>
+<span class="nc" id="L50">        this.contentType = contentType;</span>
 <span class="nc" id="L51">    }</span>
 
     /**
@@ -56,7 +56,7 @@ public class GHAsset extends GHObject {
      * @return the download count
      */
     public long getDownloadCount() {
-<span class="fc" id="L59">        return download_count;</span>
+<span class="fc" id="L59">        return downloadCount;</span>
     }
 
     /**
@@ -124,7 +124,7 @@ public class GHAsset extends GHObject {
      * @return the browser download url
      */
     public String getBrowserDownloadUrl() {
-<span class="fc" id="L127">        return browser_download_url;</span>
+<span class="fc" id="L127">        return browserDownloadUrl;</span>
     }
 
     private void edit(String key, Object value) throws IOException {

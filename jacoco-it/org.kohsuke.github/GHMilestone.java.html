@@ -28,11 +28,11 @@ public class GHMilestone extends GHObject {
 
     /** The creator. */
     GHUser creator;
-    private String state, due_on, title, description, html_url;
-    private int closed_issues, open_issues, number;
+    private String state, dueOn, title, description, htmlUrl;
+    private int closedIssues, openIssues, number;
 
     /** The closed at. */
-    protected String closed_at;
+    protected String closedAt;
 
     /**
      * Gets owner.
@@ -60,7 +60,7 @@ public class GHMilestone extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getDueOn() {
-<span class="fc" id="L63">        return GitHubClient.parseInstant(due_on);</span>
+<span class="fc" id="L63">        return GitHubClient.parseInstant(dueOn);</span>
     }
 
     /**
@@ -70,7 +70,7 @@ public class GHMilestone extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getClosedAt() {
-<span class="fc" id="L73">        return GitHubClient.parseInstant(closed_at);</span>
+<span class="fc" id="L73">        return GitHubClient.parseInstant(closedAt);</span>
     }
 
     /**
@@ -97,7 +97,7 @@ public class GHMilestone extends GHObject {
      * @return the closed issues
      */
     public int getClosedIssues() {
-<span class="fc" id="L100">        return closed_issues;</span>
+<span class="fc" id="L100">        return closedIssues;</span>
     }
 
     /**
@@ -106,7 +106,7 @@ public class GHMilestone extends GHObject {
      * @return the open issues
      */
     public int getOpenIssues() {
-<span class="fc" id="L109">        return open_issues;</span>
+<span class="fc" id="L109">        return openIssues;</span>
     }
 
     /**
@@ -124,7 +124,7 @@ public class GHMilestone extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L127">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L127">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**

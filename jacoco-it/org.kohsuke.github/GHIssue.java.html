@@ -77,13 +77,13 @@ public class GHIssue extends GHObject implements Reactable {
     protected String state;
 
     /** The state reason. */
-    protected String state_reason;
+    protected String stateReason;
 
     /** The number. */
     protected int number;
 
     /** The closed at. */
-    protected String closed_at;
+    protected String closedAt;
 
     /** The comments. */
     protected int comments;
@@ -99,16 +99,16 @@ public class GHIssue extends GHObject implements Reactable {
     protected GHUser user;
 
     /** The html url. */
-    protected String title, html_url;
+    protected String title, htmlUrl;
 
     /** The pull request. */
-    protected GHIssue.PullRequest pull_request;
+    protected GHIssue.PullRequest pullRequest;
 
     /** The milestone. */
     protected GHMilestone milestone;
 
     /** The closed by. */
-    protected GHUser closed_by;
+    protected GHUser closedBy;
 
     /** The locked. */
     protected boolean locked;
@@ -180,7 +180,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L183">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L183">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -216,7 +216,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the state reason
      */
     public GHIssueStateReason getStateReason() {
-<span class="fc" id="L219">        return EnumUtils.getNullableEnumOrDefault(GHIssueStateReason.class, state_reason, GHIssueStateReason.UNKNOWN);</span>
+<span class="fc" id="L219">        return EnumUtils.getNullableEnumOrDefault(GHIssueStateReason.class, stateReason, GHIssueStateReason.UNKNOWN);</span>
     }
 
     /**
@@ -238,7 +238,7 @@ public class GHIssue extends GHObject implements Reactable {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getClosedAt() {
-<span class="fc" id="L241">        return GitHubClient.parseInstant(closed_at);</span>
+<span class="fc" id="L241">        return GitHubClient.parseInstant(closedAt);</span>
     }
 
     /**
@@ -758,7 +758,7 @@ public class GHIssue extends GHObject implements Reactable {
         /*
          * if (closed_by==null) { closed_by = owner.getIssue(number).getClosed_by(); }
          */
-<span class="nc" id="L761">        return root().intern(closed_by);</span>
+<span class="nc" id="L761">        return root().intern(closedBy);</span>
     }
 
     /**
@@ -776,7 +776,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the pull request
      */
     public PullRequest getPullRequest() {
-<span class="fc" id="L779">        return pull_request;</span>
+<span class="fc" id="L779">        return pullRequest;</span>
     }
 
     /**
@@ -785,7 +785,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the boolean
      */
     public boolean isPullRequest() {
-<span class="nc bnc" id="L788" title="All 2 branches missed.">        return pull_request != null;</span>
+<span class="nc bnc" id="L788" title="All 2 branches missed.">        return pullRequest != null;</span>
     }
 
     /**
@@ -810,7 +810,7 @@ public class GHIssue extends GHObject implements Reactable {
 <span class="fc" id="L810">        public PullRequest() {</span>
 <span class="fc" id="L811">        }</span>
 
-        private String diff_url, patch_url, html_url;
+        private String diffUrl, patchUrl, htmlUrl;
 
         /**
          * Gets diff url.
@@ -818,7 +818,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the diff url
          */
         public URL getDiffUrl() {
-<span class="nc" id="L821">            return GitHubClient.parseURL(diff_url);</span>
+<span class="nc" id="L821">            return GitHubClient.parseURL(diffUrl);</span>
         }
 
         /**
@@ -827,7 +827,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the patch url
          */
         public URL getPatchUrl() {
-<span class="nc" id="L830">            return GitHubClient.parseURL(patch_url);</span>
+<span class="nc" id="L830">            return GitHubClient.parseURL(patchUrl);</span>
         }
 
         /**
@@ -836,7 +836,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the url
          */
         public URL getUrl() {
-<span class="fc" id="L839">            return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L839">            return GitHubClient.parseURL(htmlUrl);</span>
         }
     }
 

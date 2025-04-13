@@ -79,11 +79,11 @@ public class GHAuthorization extends GHObject {
 
     private List&lt;String&gt; scopes;
     private String token;
-    private String token_last_eight;
-    private String hashed_token;
+    private String tokenLastEight;
+    private String hashedToken;
     private App app;
     private String note;
-    private String note_url;
+    private String noteUrl;
     private String fingerprint;
     // TODO add some user class for https://developer.github.com/v3/oauth_authorizations/#check-an-authorization ?
     // private GHUser user;
@@ -112,7 +112,7 @@ public class GHAuthorization extends GHObject {
      * @return the token last eight
      */
     public String getTokenLastEight() {
-<span class="fc" id="L115">        return token_last_eight;</span>
+<span class="fc" id="L115">        return tokenLastEight;</span>
     }
 
     /**
@@ -121,7 +121,7 @@ public class GHAuthorization extends GHObject {
      * @return the hashed token
      */
     public String getHashedToken() {
-<span class="fc" id="L124">        return hashed_token;</span>
+<span class="fc" id="L124">        return hashedToken;</span>
     }
 
     /**
@@ -157,7 +157,7 @@ public class GHAuthorization extends GHObject {
      * @return the note url
      */
     public URL getNoteUrl() {
-<span class="fc" id="L160">        return GitHubClient.parseURL(note_url);</span>
+<span class="fc" id="L160">        return GitHubClient.parseURL(noteUrl);</span>
     }
 
     /**

@@ -51,28 +51,28 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     /** The owner. */
     GHPullRequest owner;
 
-<span class="fc" id="L54">    private Long pull_request_review_id = -1L;</span>
+<span class="fc" id="L54">    private Long pullRequestReviewId = -1L;</span>
     private String body;
     private GHUser user;
     private String path;
-    private String html_url;
-    private String pull_request_url;
+    private String htmlUrl;
+    private String pullRequestUrl;
 <span class="fc" id="L60">    private int position = -1;</span>
-<span class="fc" id="L61">    private int original_position = -1;</span>
-<span class="fc" id="L62">    private long in_reply_to_id = -1L;</span>
-<span class="fc" id="L63">    private Integer start_line = -1;</span>
-<span class="fc" id="L64">    private Integer original_start_line = -1;</span>
-    private String start_side;
+<span class="fc" id="L61">    private int originalPosition = -1;</span>
+<span class="fc" id="L62">    private long inReplyToId = -1L;</span>
+<span class="fc" id="L63">    private Integer startLine = -1;</span>
+<span class="fc" id="L64">    private Integer originalStartLine = -1;</span>
+    private String startSide;
 <span class="fc" id="L66">    private int line = -1;</span>
-<span class="fc" id="L67">    private int original_line = -1;</span>
+<span class="fc" id="L67">    private int originalLine = -1;</span>
     private String side;
-    private String diff_hunk;
-    private String commit_id;
-    private String original_commit_id;
-    private String body_html;
-    private String body_text;
+    private String diffHunk;
+    private String commitId;
+    private String originalCommitId;
+    private String bodyHtml;
+    private String bodyText;
     private GHPullRequestReviewCommentReactions reactions;
-    private GHCommentAuthorAssociation author_association;
+    private GHCommentAuthorAssociation authorAssociation;
 
     /**
      * Wrap up.
@@ -141,7 +141,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the original position
      */
     public int getOriginalPosition() {
-<span class="nc" id="L144">        return original_position;</span>
+<span class="nc" id="L144">        return originalPosition;</span>
     }
 
     /**
@@ -150,7 +150,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the diff hunk
      */
     public String getDiffHunk() {
-<span class="fc" id="L153">        return diff_hunk;</span>
+<span class="fc" id="L153">        return diffHunk;</span>
     }
 
     /**
@@ -159,7 +159,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the commit id
      */
     public String getCommitId() {
-<span class="fc" id="L162">        return commit_id;</span>
+<span class="fc" id="L162">        return commitId;</span>
     }
 
     /**
@@ -168,7 +168,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the commit id
      */
     public String getOriginalCommitId() {
-<span class="fc" id="L171">        return original_commit_id;</span>
+<span class="fc" id="L171">        return originalCommitId;</span>
     }
 
     /**
@@ -177,7 +177,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the author association to the project
      */
     public GHCommentAuthorAssociation getAuthorAssociation() {
-<span class="fc" id="L180">        return author_association;</span>
+<span class="fc" id="L180">        return authorAssociation;</span>
     }
 
     /**
@@ -187,7 +187,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      */
     @CheckForNull
     public long getInReplyToId() {
-<span class="fc" id="L190">        return in_reply_to_id;</span>
+<span class="fc" id="L190">        return inReplyToId;</span>
     }
 
     /**
@@ -196,7 +196,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L199">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L199">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -227,7 +227,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the start line
      */
     public int getStartLine() {
-<span class="fc bfc" id="L230" title="All 2 branches covered.">        return start_line != null ? start_line : -1;</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        return startLine != null ? startLine : -1;</span>
     }
 
     /**
@@ -236,7 +236,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the original start line
      */
     public int getOriginalStartLine() {
-<span class="pc bpc" id="L239" title="1 of 2 branches missed.">        return original_start_line != null ? original_start_line : -1;</span>
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">        return originalStartLine != null ? originalStartLine : -1;</span>
     }
 
     /**
@@ -245,7 +245,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return {@link Side} the side of the first line
      */
     public Side getStartSide() {
-<span class="fc" id="L248">        return Side.from(start_side);</span>
+<span class="fc" id="L248">        return Side.from(startSide);</span>
     }
 
     /**
@@ -263,7 +263,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the line to which the comment applies
      */
     public int getOriginalLine() {
-<span class="fc" id="L266">        return original_line;</span>
+<span class="fc" id="L266">        return originalLine;</span>
     }
 
     /**
@@ -282,7 +282,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return {@link Long} the ID of the pull request review
      */
     public Long getPullRequestReviewId() {
-<span class="nc bnc" id="L285" title="All 2 branches missed.">        return pull_request_review_id != null ? pull_request_review_id : -1;</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">        return pullRequestReviewId != null ? pullRequestReviewId : -1;</span>
     }
 
     /**
@@ -291,7 +291,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return {@link URL} the URL of the pull request
      */
     public URL getPullRequestUrl() {
-<span class="fc" id="L294">        return GitHubClient.parseURL(pull_request_url);</span>
+<span class="fc" id="L294">        return GitHubClient.parseURL(pullRequestUrl);</span>
     }
 
     /**
@@ -300,7 +300,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return {@link String} the body in html format
      */
     public String getBodyHtml() {
-<span class="fc" id="L303">        return body_html;</span>
+<span class="fc" id="L303">        return bodyHtml;</span>
     }
 
     /**
@@ -309,7 +309,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return {@link String} the body text
      */
     public String getBodyText() {
-<span class="fc" id="L312">        return body_text;</span>
+<span class="fc" id="L312">        return bodyText;</span>
     }
 
     /**

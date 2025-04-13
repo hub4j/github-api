@@ -39,9 +39,9 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     private String target;
     private String content;
     private String url; // this is the API url
-    private String git_url; // this is the Blob url
-    private String html_url; // this is the UI
-    private String download_url;
+    private String gitUrl; // this is the Blob url
+    private String htmlUrl; // this is the UI
+    private String downloadUrl;
 
     /**
      * Gets owner.
@@ -167,7 +167,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the git url
      */
     public String getGitUrl() {
-<span class="nc" id="L170">        return git_url;</span>
+<span class="fc" id="L170">        return gitUrl;</span>
     }
 
     /**
@@ -176,7 +176,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the html url
      */
     public String getHtmlUrl() {
-<span class="nc" id="L179">        return html_url;</span>
+<span class="fc" id="L179">        return htmlUrl;</span>
     }
 
     /**
@@ -219,8 +219,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public String getDownloadUrl() throws IOException {
-<span class="fc" id="L222">        refresh(download_url);</span>
-<span class="fc" id="L223">        return download_url;</span>
+<span class="fc" id="L222">        refresh(downloadUrl);</span>
+<span class="fc" id="L223">        return downloadUrl;</span>
     }
 
     /**

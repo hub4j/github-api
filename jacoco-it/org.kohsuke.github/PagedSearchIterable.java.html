@@ -65,7 +65,7 @@ public class PagedSearchIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
      */
     public int getTotalCount() {
 <span class="fc" id="L67">        populate();</span>
-<span class="fc" id="L68">        return result.total_count;</span>
+<span class="fc" id="L68">        return result.totalCount;</span>
     }
 
     /**
@@ -75,7 +75,7 @@ public class PagedSearchIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
      */
     public boolean isIncomplete() {
 <span class="nc" id="L77">        populate();</span>
-<span class="nc" id="L78">        return result.incomplete_results;</span>
+<span class="nc" id="L78">        return result.incompleteResults;</span>
     }
 
     private void populate() {

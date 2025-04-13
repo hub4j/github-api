@@ -23,7 +23,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
     private String token;
 
     /** The expires at. */
-    protected String expires_at;
+    protected String expiresAt;
     private Map&lt;String, String&gt; permissions;
     private List&lt;GHRepository&gt; repositories;
     private GHRepositorySelection repositorySelection;
@@ -71,7 +71,7 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getExpiresAt() {
-<span class="fc" id="L74">        return GitHubClient.parseInstant(expires_at);</span>
+<span class="fc" id="L74">        return GitHubClient.parseInstant(expiresAt);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

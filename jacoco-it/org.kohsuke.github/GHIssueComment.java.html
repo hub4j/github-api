@@ -24,6 +24,7 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,13 +42,13 @@ public class GHIssueComment extends GHObject implements Reactable {
     /**
      * Create default GHIssueComment instance
      */
-<span class="fc" id="L44">    public GHIssueComment() {</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L45">    public GHIssueComment() {</span>
+<span class="fc" id="L46">    }</span>
 
     /** The owner. */
     GHIssue owner;
 
-    private String body, gravatar_id, html_url, author_association;
+    private String body, gravatarId, htmlUrl, authorAssociation;
     private GHUser user; // not fully populated. beware.
 
     /**
@@ -58,8 +59,8 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the GH issue comment
      */
     GHIssueComment wrapUp(GHIssue owner) {
-<span class="fc" id="L61">        this.owner = owner;</span>
-<span class="fc" id="L62">        return this;</span>
+<span class="fc" id="L62">        this.owner = owner;</span>
+<span class="fc" id="L63">        return this;</span>
     }
 
     /**
@@ -69,7 +70,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHIssue getParent() {
-<span class="fc" id="L72">        return owner;</span>
+<span class="fc" id="L73">        return owner;</span>
     }
 
     /**
@@ -78,7 +79,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L81">        return body;</span>
+<span class="fc" id="L82">        return body;</span>
     }
 
     /**
@@ -89,7 +90,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-<span class="pc bpc" id="L92" title="1 of 4 branches missed.">        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());</span>
+<span class="pc bpc" id="L93" title="1 of 4 branches missed.">        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());</span>
     }
 
     /**
@@ -98,7 +99,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L101">        return GitHubClient.parseURL(html_url);</span>
+<span class="fc" id="L102">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -107,7 +108,9 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the author association
      */
     public GHCommentAuthorAssociation getAuthorAssociation() {
-<span class="nc" id="L110">        return GHCommentAuthorAssociation.valueOf(author_association);</span>
+<span class="fc" id="L111">        return EnumUtils.getEnumOrDefault(GHCommentAuthorAssociation.class,</span>
+                authorAssociation,
+                GHCommentAuthorAssociation.UNKNOWN);
     }
 
     /**
@@ -119,14 +122,14 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-<span class="nc" id="L122">        owner.root()</span>
-<span class="nc" id="L123">                .createRequest()</span>
-<span class="nc" id="L124">                .method(&quot;PATCH&quot;)</span>
-<span class="nc" id="L125">                .with(&quot;body&quot;, body)</span>
-<span class="nc" id="L126">                .withUrlPath(getApiRoute())</span>
-<span class="nc" id="L127">                .fetch(GHIssueComment.class);</span>
-<span class="nc" id="L128">        this.body = body;</span>
-<span class="nc" id="L129">    }</span>
+<span class="nc" id="L125">        owner.root()</span>
+<span class="nc" id="L126">                .createRequest()</span>
+<span class="nc" id="L127">                .method(&quot;PATCH&quot;)</span>
+<span class="nc" id="L128">                .with(&quot;body&quot;, body)</span>
+<span class="nc" id="L129">                .withUrlPath(getApiRoute())</span>
+<span class="nc" id="L130">                .fetch(GHIssueComment.class);</span>
+<span class="nc" id="L131">        this.body = body;</span>
+<span class="nc" id="L132">    }</span>
 
     /**
      * Deletes this issue comment.
@@ -135,8 +138,8 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="nc" id="L138">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="nc" id="L139">    }</span>
+<span class="nc" id="L141">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="nc" id="L142">    }</span>
 
     /**
      * Creates the reaction.
@@ -148,12 +151,12 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             Signals that an I/O exception has occurred.
      */
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="fc" id="L151">        return owner.root()</span>
-<span class="fc" id="L152">                .createRequest()</span>
-<span class="fc" id="L153">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L154">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="fc" id="L155">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L156">                .fetch(GHReaction.class);</span>
+<span class="fc" id="L154">        return owner.root()</span>
+<span class="fc" id="L155">                .createRequest()</span>
+<span class="fc" id="L156">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L157">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="fc" id="L158">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L159">                .fetch(GHReaction.class);</span>
     }
 
     /**
@@ -165,12 +168,12 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             Signals that an I/O exception has occurred.
      */
     public void deleteReaction(GHReaction reaction) throws IOException {
-<span class="fc" id="L168">        owner.root()</span>
-<span class="fc" id="L169">                .createRequest()</span>
-<span class="fc" id="L170">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L171">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
-<span class="fc" id="L172">                .send();</span>
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L171">        owner.root()</span>
+<span class="fc" id="L172">                .createRequest()</span>
+<span class="fc" id="L173">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L174">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
+<span class="fc" id="L175">                .send();</span>
+<span class="fc" id="L176">    }</span>
 
     /**
      * List reactions.
@@ -178,15 +181,15 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L181">        return owner.root()</span>
-<span class="fc" id="L182">                .createRequest()</span>
-<span class="fc" id="L183">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L184">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
+<span class="fc" id="L184">        return owner.root()</span>
+<span class="fc" id="L185">                .createRequest()</span>
+<span class="fc" id="L186">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L187">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
     }
 
     private String getApiRoute() {
-<span class="fc" id="L188">        return &quot;/repos/&quot; + owner.getRepository().getOwnerName() + &quot;/&quot; + owner.getRepository().getName()</span>
-<span class="fc" id="L189">                + &quot;/issues/comments/&quot; + getId();</span>
+<span class="fc" id="L191">        return &quot;/repos/&quot; + owner.getRepository().getOwnerName() + &quot;/&quot; + owner.getRepository().getName()</span>
+<span class="fc" id="L192">                + &quot;/issues/comments/&quot; + getId();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

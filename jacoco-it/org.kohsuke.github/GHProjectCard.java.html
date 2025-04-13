@@ -26,7 +26,7 @@ public class GHProjectCard extends GHObject {
 
     private String note;
     private GHUser creator;
-    private String content_url, project_url, column_url;
+    private String contentUrl, projectUrl, columnUrl;
     private boolean archived;
 
     /**
@@ -109,10 +109,10 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public GHIssue getContent() throws IOException {
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (StringUtils.isEmpty(content_url))</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (StringUtils.isEmpty(contentUrl))</span>
 <span class="nc" id="L113">            return null;</span>
         try {
-<span class="pc bpc" id="L115" title="1 of 2 branches missed.">            if (content_url.contains(&quot;/pulls&quot;)) {</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">            if (contentUrl.contains(&quot;/pulls&quot;)) {</span>
 <span class="nc" id="L116">                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHPullRequest.class);</span>
             } else {
 <span class="fc" id="L118">                return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);</span>
@@ -147,7 +147,7 @@ public class GHProjectCard extends GHObject {
      * @return the content url
      */
     public URL getContentUrl() {
-<span class="fc" id="L150">        return GitHubClient.parseURL(content_url);</span>
+<span class="fc" id="L150">        return GitHubClient.parseURL(contentUrl);</span>
     }
 
     /**
@@ -156,7 +156,7 @@ public class GHProjectCard extends GHObject {
      * @return the project url
      */
     public URL getProjectUrl() {
-<span class="nc" id="L159">        return GitHubClient.parseURL(project_url);</span>
+<span class="fc" id="L159">        return GitHubClient.parseURL(projectUrl);</span>
     }
 
     /**
@@ -165,7 +165,7 @@ public class GHProjectCard extends GHObject {
      * @return the column url
      */
     public URL getColumnUrl() {
-<span class="nc" id="L168">        return GitHubClient.parseURL(column_url);</span>
+<span class="fc" id="L168">        return GitHubClient.parseURL(columnUrl);</span>
     }
 
     /**

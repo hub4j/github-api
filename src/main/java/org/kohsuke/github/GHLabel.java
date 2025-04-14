@@ -24,115 +24,41 @@ import javax.annotation.Nonnull;
  */
 public class GHLabel extends GitHubInteractiveObject {
 
-    private long id;
-    private String nodeId;
-    @JsonProperty("default")
-    private boolean isDefault;
-
-    @Nonnull
-    private String url, name, color;
-
-    @CheckForNull
-    private String description;
-
-    @JsonCreator
-    private GHLabel(@JacksonInject @Nonnull GitHub root) {
-        url = "";
-        name = "";
-        color = "";
-        description = null;
-    }
-
     /**
-     * Gets the api root.
+     * A {@link GHLabelBuilder} that creates a new {@link GHLabel}
      *
-     * @return the api root
+     * Consumer must call {@link Creator#done()} to create the new instance.
      */
-    @Nonnull
-    GitHub getApiRoot() {
-        return Objects.requireNonNull(root());
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Gets node id.
-     *
-     * @return the node id.
-     */
-    public String getNodeId() {
-        return nodeId;
-    }
-
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    @Nonnull
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    @Nonnull
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Color code without leading '#', such as 'f29513'.
-     *
-     * @return the color
-     */
-    @Nonnull
-    public String getColor() {
-        return color;
-    }
-
-    /**
-     * Purpose of Label.
-     *
-     * @return the description
-     */
-    @CheckForNull
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * If the label is one of the default labels created by GitHub automatically.
-     *
-     * @return true if the label is a default one
-     */
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    /**
-     * To names.
-     *
-     * @param labels
-     *            the labels
-     * @return the collection
-     */
-    static Collection<String> toNames(Collection<GHLabel> labels) {
-        List<String> r = new ArrayList<>();
-        for (GHLabel l : labels) {
-            r.add(l.getName());
+    @BetaApi
+    public static class Creator extends GHLabelBuilder<Creator> {
+        private Creator(@Nonnull GHRepository repository) {
+            super(Creator.class, repository.root(), null);
+            requester.method("POST").withUrlPath(repository.getApiTailUrl("labels"));
         }
-        return r;
+    }
+    /**
+     * A {@link GHLabelBuilder} that updates a single property per request
+     *
+     * {@link Setter#done()} is called automatically after the property is set.
+     */
+    @BetaApi
+    public static class Setter extends GHLabelBuilder<GHLabel> {
+        private Setter(@Nonnull GHLabel base) {
+            super(GHLabel.class, base.getApiRoot(), base);
+            requester.method("PATCH").setRawUrlPath(base.getUrl());
+        }
+    }
+    /**
+     * A {@link GHLabelBuilder} that allows multiple properties to be updated per request.
+     *
+     * Consumer must call {@link Updater#done()} to commit changes.
+     */
+    @BetaApi
+    public static class Updater extends GHLabelBuilder<Updater> {
+        private Updater(@Nonnull GHLabel base) {
+            super(Updater.class, base.getApiRoot(), base);
+            requester.method("PATCH").setRawUrlPath(base.getUrl());
+        }
     }
 
     /**
@@ -184,25 +110,39 @@ public class GHLabel extends GitHubInteractiveObject {
     }
 
     /**
-     * Begins a batch update
+     * To names.
      *
-     * Consumer must call {@link Updater#done()} to commit changes.
-     *
-     * @return a {@link Updater}
+     * @param labels
+     *            the labels
+     * @return the collection
      */
-    @BetaApi
-    public Updater update() {
-        return new Updater(this);
+    static Collection<String> toNames(Collection<GHLabel> labels) {
+        List<String> r = new ArrayList<>();
+        for (GHLabel l : labels) {
+            r.add(l.getName());
+        }
+        return r;
     }
 
-    /**
-     * Begins a single property update.
-     *
-     * @return a {@link Setter}
-     */
-    @BetaApi
-    public Setter set() {
-        return new Setter(this);
+    @CheckForNull
+    private String description;
+
+    private long id;
+
+    @JsonProperty("default")
+    private boolean isDefault;
+
+    private String nodeId;
+
+    @Nonnull
+    private String url, name, color;
+
+    @JsonCreator
+    private GHLabel(@JacksonInject @Nonnull GitHub root) {
+        url = "";
+        name = "";
+        color = "";
+        description = null;
     }
 
     /**
@@ -234,6 +174,64 @@ public class GHLabel extends GitHubInteractiveObject {
     }
 
     /**
+     * Color code without leading '#', such as 'f29513'.
+     *
+     * @return the color
+     */
+    @Nonnull
+    public String getColor() {
+        return color;
+    }
+
+    /**
+     * Purpose of Label.
+     *
+     * @return the description
+     */
+    @CheckForNull
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    @Nonnull
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets node id.
+     *
+     * @return the node id.
+     */
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    @Nonnull
+    public String getUrl() {
+        return url;
+    }
+
+    /**
      * Hash code.
      *
      * @return the int
@@ -244,42 +242,44 @@ public class GHLabel extends GitHubInteractiveObject {
     }
 
     /**
-     * A {@link GHLabelBuilder} that updates a single property per request
+     * If the label is one of the default labels created by GitHub automatically.
      *
-     * {@link Setter#done()} is called automatically after the property is set.
+     * @return true if the label is a default one
      */
-    @BetaApi
-    public static class Setter extends GHLabelBuilder<GHLabel> {
-        private Setter(@Nonnull GHLabel base) {
-            super(GHLabel.class, base.getApiRoot(), base);
-            requester.method("PATCH").setRawUrlPath(base.getUrl());
-        }
+    public boolean isDefault() {
+        return isDefault;
     }
 
     /**
-     * A {@link GHLabelBuilder} that allows multiple properties to be updated per request.
+     * Begins a single property update.
+     *
+     * @return a {@link Setter}
+     */
+    @BetaApi
+    public Setter set() {
+        return new Setter(this);
+    }
+
+    /**
+     * Begins a batch update
      *
      * Consumer must call {@link Updater#done()} to commit changes.
+     *
+     * @return a {@link Updater}
      */
     @BetaApi
-    public static class Updater extends GHLabelBuilder<Updater> {
-        private Updater(@Nonnull GHLabel base) {
-            super(Updater.class, base.getApiRoot(), base);
-            requester.method("PATCH").setRawUrlPath(base.getUrl());
-        }
+    public Updater update() {
+        return new Updater(this);
     }
 
     /**
-     * A {@link GHLabelBuilder} that creates a new {@link GHLabel}
+     * Gets the api root.
      *
-     * Consumer must call {@link Creator#done()} to create the new instance.
+     * @return the api root
      */
-    @BetaApi
-    public static class Creator extends GHLabelBuilder<Creator> {
-        private Creator(@Nonnull GHRepository repository) {
-            super(Creator.class, repository.root(), null);
-            requester.method("POST").withUrlPath(repository.getApiTailUrl("labels"));
-        }
+    @Nonnull
+    GitHub getApiRoot() {
+        return Objects.requireNonNull(root());
     }
 
 }

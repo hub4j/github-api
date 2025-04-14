@@ -12,32 +12,38 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 public class GHTagObject extends GitHubInteractiveObject {
 
+    private String message;
+
+    private GHRef.GHObject object;
+
+    private GHRepository owner;
+    private String sha;
+    private String tag;
+    private GitUser tagger;
+    private String url;
+    private GHVerification verification;
     /**
      * Create default GHTagObject instance
      */
     public GHTagObject() {
     }
 
-    private GHRepository owner;
-
-    private String tag;
-    private String sha;
-    private String url;
-    private String message;
-    private GitUser tagger;
-    private GHRef.GHObject object;
-    private GHVerification verification;
+    /**
+     * Gets message.
+     *
+     * @return the message
+     */
+    public String getMessage() {
+        return message;
+    }
 
     /**
-     * Wrap.
+     * Gets object.
      *
-     * @param owner
-     *            the owner
-     * @return the GH tag object
+     * @return the object
      */
-    GHTagObject wrap(GHRepository owner) {
-        this.owner = owner;
-        return this;
+    public GHRef.GHObject getObject() {
+        return object;
     }
 
     /**
@@ -51,15 +57,6 @@ public class GHTagObject extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets tag.
-     *
-     * @return the tag
-     */
-    public String getTag() {
-        return tag;
-    }
-
-    /**
      * Gets sha.
      *
      * @return the sha
@@ -69,21 +66,12 @@ public class GHTagObject extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets url.
+     * Gets tag.
      *
-     * @return the url
+     * @return the tag
      */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Gets message.
-     *
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
+    public String getTag() {
+        return tag;
     }
 
     /**
@@ -96,12 +84,12 @@ public class GHTagObject extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets object.
+     * Gets url.
      *
-     * @return the object
+     * @return the url
      */
-    public GHRef.GHObject getObject() {
-        return object;
+    public String getUrl() {
+        return url;
     }
 
     /**
@@ -111,5 +99,17 @@ public class GHTagObject extends GitHubInteractiveObject {
      */
     public GHVerification getVerification() {
         return verification;
+    }
+
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH tag object
+     */
+    GHTagObject wrap(GHRepository owner) {
+        this.owner = owner;
+        return this;
     }
 }

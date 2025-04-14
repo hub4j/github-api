@@ -36,20 +36,45 @@ import static java.net.HttpURLConnection.HTTP_OK;
  */
 public abstract class GitHubConnectorResponse implements Closeable {
 
+    /**
+     * A ByteArrayResponse class
+     *
+     * @deprecated Inherit directly from {@link GitHubConnectorResponse}.
+     */
+    @Deprecated
+    public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
+
+        /**
+         * Constructor for ByteArray Response
+         *
+         * @param request
+         *            the request
+         * @param statusCode
+         *            the status code
+         * @param headers
+         *            the headers
+         */
+        protected ByteArrayResponse(@Nonnull GitHubConnectorRequest request,
+                int statusCode,
+                @Nonnull Map<String, List<String>> headers) {
+            super(request, statusCode, headers);
+        }
+    }
+
     private static final Comparator<String> nullableCaseInsensitiveComparator = Comparator
             .nullsFirst(String.CASE_INSENSITIVE_ORDER);
 
-    private final int statusCode;
-
-    @Nonnull
-    private final GitHubConnectorRequest request;
+    private byte[] bodyBytes = null;
+    private InputStream bodyStream = null;
+    private boolean bodyStreamCalled = false;
     @Nonnull
     private final Map<String, List<String>> headers;
-    private boolean bodyStreamCalled = false;
-    private InputStream bodyStream = null;
-    private byte[] bodyBytes = null;
-    private boolean isClosed = false;
     private boolean isBodyStreamRereadable;
+    private boolean isClosed = false;
+    @Nonnull
+    private final GitHubConnectorRequest request;
+
+    private final int statusCode;
 
     /**
      * GitHubConnectorResponse constructor
@@ -77,19 +102,14 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
-     * Gets the value of a header field for this response.
+     * The headers for this response.
      *
-     * @param name
-     *            the name of the header field.
-     * @return the value of the header field, or {@code null} if the header isn't set.
+     * @return the headers for this response.
      */
-    @CheckForNull
-    public String header(String name) {
-        String result = null;
-        if (headers.containsKey(name)) {
-            result = headers.get(name).get(0);
-        }
-        return result;
+    @Nonnull
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable map of unmodifiable lists")
+    public Map<String, List<String>> allHeaders() {
+        return headers;
     }
 
     /**
@@ -142,49 +162,31 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
-     * Get the raw implementation specific body stream for this response.
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() throws IOException {
+        synchronized (this) {
+            IOUtils.closeQuietly(bodyStream);
+            isClosed = true;
+            this.bodyBytes = null;
+        }
+    }
+
+    /**
+     * Gets the value of a header field for this response.
      *
-     * This method will only be called once to completion. If an exception is thrown by this method, it may be called
-     * multiple times.
-     *
-     * The stream returned from this method will be closed when the response is closed or sooner. Inheriting classes do
-     * not need to close it.
-     *
-     * @return the stream for the raw response
-     * @throws IOException
-     *             if an I/O Exception occurs.
+     * @param name
+     *            the name of the header field.
+     * @return the value of the header field, or {@code null} if the header isn't set.
      */
     @CheckForNull
-    protected abstract InputStream rawBodyStream() throws IOException;
-
-    /**
-     * Gets the {@link GitHubConnector} for this response.
-     *
-     * @return the {@link GitHubConnector} for this response.
-     */
-    @Nonnull
-    public GitHubConnectorRequest request() {
-        return request;
-    }
-
-    /**
-     * The status code for this response.
-     *
-     * @return the status code for this response.
-     */
-    public int statusCode() {
-        return statusCode;
-    }
-
-    /**
-     * The headers for this response.
-     *
-     * @return the headers for this response.
-     */
-    @Nonnull
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable map of unmodifiable lists")
-    public Map<String, List<String>> allHeaders() {
-        return headers;
+    public String header(String name) {
+        String result = null;
+        if (headers.containsKey(name)) {
+            result = headers.get(name).get(0);
+        }
+        return result;
     }
 
     /**
@@ -202,6 +204,34 @@ public abstract class GitHubConnectorResponse implements Closeable {
         synchronized (this) {
             return isBodyStreamRereadable || statusCode != HTTP_OK;
         }
+    }
+
+    /**
+     * Parse a header value as a signed decimal integer.
+     *
+     * @param name
+     *            the header field to parse
+     * @return integer value of the header field
+     * @throws NumberFormatException
+     *             if the header is missing or does not contain a parsable integer.
+     */
+    public final int parseInt(String name) throws NumberFormatException {
+        try {
+            String headerValue = header(name);
+            return Integer.parseInt(headerValue);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException(name + ": " + e.getMessage());
+        }
+    }
+
+    /**
+     * Gets the {@link GitHubConnector} for this response.
+     *
+     * @return the {@link GitHubConnector} for this response.
+     */
+    @Nonnull
+    public GitHubConnectorRequest request() {
+        return request;
     }
 
     /**
@@ -226,16 +256,29 @@ public abstract class GitHubConnectorResponse implements Closeable {
     }
 
     /**
-     * {@inheritDoc}
+     * The status code for this response.
+     *
+     * @return the status code for this response.
      */
-    @Override
-    public void close() throws IOException {
-        synchronized (this) {
-            IOUtils.closeQuietly(bodyStream);
-            isClosed = true;
-            this.bodyBytes = null;
-        }
+    public int statusCode() {
+        return statusCode;
     }
+
+    /**
+     * Get the raw implementation specific body stream for this response.
+     *
+     * This method will only be called once to completion. If an exception is thrown by this method, it may be called
+     * multiple times.
+     *
+     * The stream returned from this method will be closed when the response is closed or sooner. Inheriting classes do
+     * not need to close it.
+     *
+     * @return the stream for the raw response
+     * @throws IOException
+     *             if an I/O Exception occurs.
+     */
+    @CheckForNull
+    protected abstract InputStream rawBodyStream() throws IOException;
 
     /**
      * Handles wrapping the body stream if indicated by the "Content-Encoding" header.
@@ -254,48 +297,5 @@ public abstract class GitHubConnectorResponse implements Closeable {
             return new GZIPInputStream(stream);
 
         throw new UnsupportedOperationException("Unexpected Content-Encoding: " + encoding);
-    }
-
-    /**
-     * Parse a header value as a signed decimal integer.
-     *
-     * @param name
-     *            the header field to parse
-     * @return integer value of the header field
-     * @throws NumberFormatException
-     *             if the header is missing or does not contain a parsable integer.
-     */
-    public final int parseInt(String name) throws NumberFormatException {
-        try {
-            String headerValue = header(name);
-            return Integer.parseInt(headerValue);
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException(name + ": " + e.getMessage());
-        }
-    }
-
-    /**
-     * A ByteArrayResponse class
-     *
-     * @deprecated Inherit directly from {@link GitHubConnectorResponse}.
-     */
-    @Deprecated
-    public abstract static class ByteArrayResponse extends GitHubConnectorResponse {
-
-        /**
-         * Constructor for ByteArray Response
-         *
-         * @param request
-         *            the request
-         * @param statusCode
-         *            the status code
-         * @param headers
-         *            the headers
-         */
-        protected ByteArrayResponse(@Nonnull GitHubConnectorRequest request,
-                int statusCode,
-                @Nonnull Map<String, List<String>> headers) {
-            super(request, statusCode, headers);
-        }
     }
 }

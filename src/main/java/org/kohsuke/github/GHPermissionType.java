@@ -10,14 +10,14 @@ public enum GHPermissionType {
 
     /** The admin. */
     ADMIN(30),
-    /** The write. */
-    WRITE(20),
-    /** The read. */
-    READ(10),
     /** The none. */
     NONE(0),
+    /** The read. */
+    READ(10),
     /** The unknown permission type returned when an unrecognized permission type is returned. */
-    UNKNOWN(-5);
+    UNKNOWN(-5),
+    /** The write. */
+    WRITE(20);
 
     private final int level;
 

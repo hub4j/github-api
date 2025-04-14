@@ -21,8 +21,8 @@ import java.util.Date;
  * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
  */
 public class GHIssueCommentQueryBuilder {
-    private final Requester req;
     private final GHIssue issue;
+    private final Requester req;
 
     /**
      * Instantiates a new GH issue comment query builder.
@@ -33,6 +33,15 @@ public class GHIssueCommentQueryBuilder {
     GHIssueCommentQueryBuilder(GHIssue issue) {
         this.issue = issue;
         this.req = issue.root().createRequest().withUrlPath(issue.getIssuesApiRoute() + "/comments");
+    }
+
+    /**
+     * Lists up the comments with the criteria added so far.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHIssueComment> list() {
+        return req.toIterable(GHIssueComment[].class, item -> item.wrapUp(issue));
     }
 
     /**
@@ -69,14 +78,5 @@ public class GHIssueCommentQueryBuilder {
      */
     public GHIssueCommentQueryBuilder since(long timestamp) {
         return since(Instant.ofEpochMilli(timestamp));
-    }
-
-    /**
-     * Lists up the comments with the criteria added so far.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHIssueComment> list() {
-        return req.toIterable(GHIssueComment[].class, item -> item.wrapUp(issue));
     }
 }

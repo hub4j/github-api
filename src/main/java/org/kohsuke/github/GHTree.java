@@ -20,35 +20,17 @@ import java.util.List;
         justification = "JSON API")
 public class GHTree {
 
+    private String sha, url;
+
+    private GHTreeEntry[] tree;
+
+    private boolean truncated;
+    /** The repo. */
+    /* package almost final */GHRepository repo;
     /**
      * Create default GHTree instance
      */
     public GHTree() {
-    }
-
-    /** The repo. */
-    /* package almost final */GHRepository repo;
-
-    private boolean truncated;
-    private String sha, url;
-    private GHTreeEntry[] tree;
-
-    /**
-     * The SHA for this trees.
-     *
-     * @return the sha
-     */
-    public String getSha() {
-        return sha;
-    }
-
-    /**
-     * Return an array of entries of the trees.
-     *
-     * @return the tree
-     */
-    public List<GHTreeEntry> getTree() {
-        return Collections.unmodifiableList(Arrays.asList(tree));
     }
 
     /**
@@ -69,12 +51,21 @@ public class GHTree {
     }
 
     /**
-     * Returns true if the number of items in the tree array exceeded the GitHub maximum limit.
+     * The SHA for this trees.
      *
-     * @return true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
+     * @return the sha
      */
-    public boolean isTruncated() {
-        return truncated;
+    public String getSha() {
+        return sha;
+    }
+
+    /**
+     * Return an array of entries of the trees.
+     *
+     * @return the tree
+     */
+    public List<GHTreeEntry> getTree() {
+        return Collections.unmodifiableList(Arrays.asList(tree));
     }
 
     /**
@@ -85,6 +76,15 @@ public class GHTree {
      */
     public URL getUrl() {
         return GitHubClient.parseURL(url);
+    }
+
+    /**
+     * Returns true if the number of items in the tree array exceeded the GitHub maximum limit.
+     *
+     * @return true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
+     */
+    public boolean isTruncated() {
+        return truncated;
     }
 
     /**

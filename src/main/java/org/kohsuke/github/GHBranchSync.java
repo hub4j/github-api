@@ -8,20 +8,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHBranchSync extends GitHubInteractiveObject {
 
     /**
-     * Create default GHBranchSync instance
+     * The base branch.
      */
-    public GHBranchSync() {
-    }
-
-    /**
-     * The Repository that this branch is in.
-     */
-    private GHRepository owner;
-
-    /**
-     * The message.
-     */
-    private String message;
+    private String baseBranch;
 
     /**
      * The merge type.
@@ -29,27 +18,28 @@ public class GHBranchSync extends GitHubInteractiveObject {
     private String mergeType;
 
     /**
-     * The base branch.
+     * The message.
      */
-    private String baseBranch;
+    private String message;
 
     /**
-     * Gets owner.
-     *
-     * @return the repository that this branch is in.
+     * The Repository that this branch is in.
      */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
+    private GHRepository owner;
+
+    /**
+     * Create default GHBranchSync instance
+     */
+    public GHBranchSync() {
     }
 
     /**
-     * Gets message.
+     * Gets base branch.
      *
-     * @return the message
+     * @return the base branch
      */
-    public String getMessage() {
-        return message;
+    public String getBaseBranch() {
+        return baseBranch;
     }
 
     /**
@@ -62,12 +52,22 @@ public class GHBranchSync extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets base branch.
+     * Gets message.
      *
-     * @return the base branch
+     * @return the message
      */
-    public String getBaseBranch() {
-        return baseBranch;
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the repository that this branch is in.
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
     }
 
     /**

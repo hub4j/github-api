@@ -15,69 +15,28 @@ import java.net.URL;
  */
 public class GHProjectCard extends GHObject {
 
+    private boolean archived;
+
+    private GHProjectColumn column;
+    private String contentUrl, projectUrl, columnUrl;
+
+    private GHUser creator;
+    private String note;
+    private GHProject project;
     /**
      * Create default GHProjectCard instance
      */
     public GHProjectCard() {
     }
 
-    private GHProject project;
-    private GHProjectColumn column;
-
-    private String note;
-    private GHUser creator;
-    private String contentUrl, projectUrl, columnUrl;
-    private boolean archived;
-
     /**
-     * Gets the html url.
+     * Delete.
      *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return null;
-    }
-
-    /**
-     * Wrap gh project card.
-     *
-     * @param root
-     *            the root
-     * @return the gh project card
-     */
-    GHProjectCard lateBind(GitHub root) {
-        return this;
-    }
-
-    /**
-     * Wrap gh project card.
-     *
-     * @param column
-     *            the column
-     * @return the gh project card
-     */
-    GHProjectCard lateBind(GHProjectColumn column) {
-        this.column = column;
-        this.project = column.project;
-        return lateBind(column.root());
-    }
-
-    /**
-     * Gets project.
-     *
-     * @return the project
      * @throws IOException
      *             the io exception
      */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHProject getProject() throws IOException {
-        if (project == null) {
-            try {
-                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
-            } catch (FileNotFoundException e) {
-            }
-        }
-        return project;
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -102,6 +61,15 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
+     * Gets column url.
+     *
+     * @return the column url
+     */
+    public URL getColumnUrl() {
+        return GitHubClient.parseURL(columnUrl);
+    }
+
+    /**
      * Gets content if present. Might be a {@link GHPullRequest} or a {@link GHIssue}.
      *
      * @return the content
@@ -123,12 +91,12 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets note.
+     * Gets content url.
      *
-     * @return the note
+     * @return the content url
      */
-    public String getNote() {
-        return note;
+    public URL getContentUrl() {
+        return GitHubClient.parseURL(contentUrl);
     }
 
     /**
@@ -142,12 +110,39 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets content url.
+     * Gets the html url.
      *
-     * @return the content url
+     * @return the html url
      */
-    public URL getContentUrl() {
-        return GitHubClient.parseURL(contentUrl);
+    public URL getHtmlUrl() {
+        return null;
+    }
+
+    /**
+     * Gets note.
+     *
+     * @return the note
+     */
+    public String getNote() {
+        return note;
+    }
+
+    /**
+     * Gets project.
+     *
+     * @return the project
+     * @throws IOException
+     *             the io exception
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHProject getProject() throws IOException {
+        if (project == null) {
+            try {
+                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
+            } catch (FileNotFoundException e) {
+            }
+        }
+        return project;
     }
 
     /**
@@ -160,33 +155,12 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets column url.
-     *
-     * @return the column url
-     */
-    public URL getColumnUrl() {
-        return GitHubClient.parseURL(columnUrl);
-    }
-
-    /**
      * Is archived boolean.
      *
      * @return the boolean
      */
     public boolean isArchived() {
         return archived;
-    }
-
-    /**
-     * Sets note.
-     *
-     * @param note
-     *            the note
-     * @throws IOException
-     *             the io exception
-     */
-    public void setNote(String note) throws IOException {
-        edit("note", note);
     }
 
     /**
@@ -199,6 +173,18 @@ public class GHProjectCard extends GHObject {
      */
     public void setArchived(boolean archived) throws IOException {
         edit("archived", archived);
+    }
+
+    /**
+     * Sets note.
+     *
+     * @param note
+     *            the note
+     * @throws IOException
+     *             the io exception
+     */
+    public void setNote(String note) throws IOException {
+        edit("note", note);
     }
 
     private void edit(String key, Object value) throws IOException {
@@ -215,12 +201,26 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Delete.
+     * Wrap gh project card.
      *
-     * @throws IOException
-     *             the io exception
+     * @param column
+     *            the column
+     * @return the gh project card
      */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    GHProjectCard lateBind(GHProjectColumn column) {
+        this.column = column;
+        this.project = column.project;
+        return lateBind(column.root());
+    }
+
+    /**
+     * Wrap gh project card.
+     *
+     * @param root
+     *            the root
+     * @return the gh project card
+     */
+    GHProjectCard lateBind(GitHub root) {
+        return this;
     }
 }

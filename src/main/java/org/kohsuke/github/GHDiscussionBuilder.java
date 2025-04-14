@@ -44,20 +44,6 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
     }
 
     /**
-     * Title for this discussion.
-     *
-     * @param value
-     *            title of discussion
-     * @return either a continuing builder or an updated {@link GHDiscussion}
-     * @throws IOException
-     *             if there is an I/O Exception
-     */
-    @Nonnull
-    public S title(String value) throws IOException {
-        return with("title", value);
-    }
-
-    /**
      * Body content for this discussion.
      *
      * @param value
@@ -78,5 +64,19 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
     @Override
     public GHDiscussion done() throws IOException {
         return super.done().wrapUp(team);
+    }
+
+    /**
+     * Title for this discussion.
+     *
+     * @param value
+     *            title of discussion
+     * @return either a continuing builder or an updated {@link GHDiscussion}
+     * @throws IOException
+     *             if there is an I/O Exception
+     */
+    @Nonnull
+    public S title(String value) throws IOException {
+        return with("title", value);
     }
 }

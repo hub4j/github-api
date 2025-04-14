@@ -23,6 +23,27 @@ public class GHAutolinkTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Cleanup.
+     */
+    @After
+    public void cleanup() {
+        if (repo != null) {
+            try {
+                PagedIterable<GHAutolink> autolinks = repo.listAutolinks();
+                for (GHAutolink autolink : autolinks) {
+                    try {
+                        autolink.delete();
+                    } catch (Exception e) {
+                        System.err.println("Failed to delete autolink: " + e.getMessage());
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Cleanup failed: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
      * Sets up.
      *
      * @throws Exception
@@ -65,29 +86,44 @@ public class GHAutolinkTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test get autolink.
+     * Test delete autolink.
      *
      * @throws Exception
      *             the exception
      */
     @Test
-    public void testReadAutolink() throws Exception {
+    public void testDeleteAutolink() throws Exception {
+        // Delete autolink using the instance method
         GHAutolink autolink = repo.createAutolink()
-                .withKeyPrefix("JIRA-")
-                .withUrlTemplate("https://example.com/test/<num>")
-                .withIsAlphanumeric(false)
+                .withKeyPrefix("DELETE-")
+                .withUrlTemplate("https://example.com/delete/<num>")
+                .withIsAlphanumeric(true)
                 .create();
-
-        GHAutolink fetched = repo.readAutolink(autolink.getId());
-
-        assertThat(fetched.getId(), equalTo(autolink.getId()));
-        assertThat(fetched.getKeyPrefix(), equalTo(autolink.getKeyPrefix()));
-        assertThat(fetched.getUrlTemplate(), equalTo(autolink.getUrlTemplate()));
-        assertThat(fetched.isAlphanumeric(), equalTo(autolink.isAlphanumeric()));
-        assertThat(fetched.getOwner(), equalTo(repo));
 
         autolink.delete();
 
+        try {
+            repo.readAutolink(autolink.getId());
+            fail("Expected GHFileNotFoundException");
+        } catch (GHFileNotFoundException e) {
+            // Expected
+        }
+
+        // Delete autolink using repository delete method
+        autolink = repo.createAutolink()
+                .withKeyPrefix("DELETED-")
+                .withUrlTemplate("https://example.com/delete2/<num>")
+                .withIsAlphanumeric(true)
+                .create();
+
+        repo.deleteAutolink(autolink.getId());
+
+        try {
+            repo.readAutolink(autolink.getId());
+            fail("Expected GHFileNotFoundException");
+        } catch (GHFileNotFoundException e) {
+            // Expected
+        }
     }
 
     /**
@@ -142,64 +178,28 @@ public class GHAutolinkTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test delete autolink.
+     * Test get autolink.
      *
      * @throws Exception
      *             the exception
      */
     @Test
-    public void testDeleteAutolink() throws Exception {
-        // Delete autolink using the instance method
+    public void testReadAutolink() throws Exception {
         GHAutolink autolink = repo.createAutolink()
-                .withKeyPrefix("DELETE-")
-                .withUrlTemplate("https://example.com/delete/<num>")
-                .withIsAlphanumeric(true)
+                .withKeyPrefix("JIRA-")
+                .withUrlTemplate("https://example.com/test/<num>")
+                .withIsAlphanumeric(false)
                 .create();
+
+        GHAutolink fetched = repo.readAutolink(autolink.getId());
+
+        assertThat(fetched.getId(), equalTo(autolink.getId()));
+        assertThat(fetched.getKeyPrefix(), equalTo(autolink.getKeyPrefix()));
+        assertThat(fetched.getUrlTemplate(), equalTo(autolink.getUrlTemplate()));
+        assertThat(fetched.isAlphanumeric(), equalTo(autolink.isAlphanumeric()));
+        assertThat(fetched.getOwner(), equalTo(repo));
 
         autolink.delete();
 
-        try {
-            repo.readAutolink(autolink.getId());
-            fail("Expected GHFileNotFoundException");
-        } catch (GHFileNotFoundException e) {
-            // Expected
-        }
-
-        // Delete autolink using repository delete method
-        autolink = repo.createAutolink()
-                .withKeyPrefix("DELETED-")
-                .withUrlTemplate("https://example.com/delete2/<num>")
-                .withIsAlphanumeric(true)
-                .create();
-
-        repo.deleteAutolink(autolink.getId());
-
-        try {
-            repo.readAutolink(autolink.getId());
-            fail("Expected GHFileNotFoundException");
-        } catch (GHFileNotFoundException e) {
-            // Expected
-        }
-    }
-
-    /**
-     * Cleanup.
-     */
-    @After
-    public void cleanup() {
-        if (repo != null) {
-            try {
-                PagedIterable<GHAutolink> autolinks = repo.listAutolinks();
-                for (GHAutolink autolink : autolinks) {
-                    try {
-                        autolink.delete();
-                    } catch (Exception e) {
-                        System.err.println("Failed to delete autolink: " + e.getMessage());
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("Cleanup failed: " + e.getMessage());
-            }
-        }
     }
 }

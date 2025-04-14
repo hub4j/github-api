@@ -32,31 +32,176 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
+    private static final String ARTIFACTS_WORKFLOW_NAME = "Artifacts workflow";
+
+    private static final String ARTIFACTS_WORKFLOW_PATH = "artifacts-workflow.yml";
+    private static final String FAST_WORKFLOW_NAME = "Fast workflow";
+    private static final String FAST_WORKFLOW_PATH = "fast-workflow.yml";
+
+    private static final String MAIN_BRANCH = "main";
+    private static final String MULTI_JOBS_WORKFLOW_NAME = "Multi jobs workflow";
+
+    private static final String MULTI_JOBS_WORKFLOW_PATH = "multi-jobs-workflow.yml";
+    private static final String REPO_NAME = "hub4j-test-org/GHWorkflowRunTest";
+
+    private static final String RUN_A_ONE_LINE_SCRIPT_STEP_NAME = "Run a one-line script";
+    private static final String SECOND_BRANCH = "second-branch";
+
+    private static final String SLOW_WORKFLOW_NAME = "Slow workflow";
+    private static final String SLOW_WORKFLOW_PATH = "slow-workflow.yml";
+    private static final String UBUNTU_LABEL = "ubuntu-latest";
+    private static void checkArtifactProperties(GHArtifact artifact, String artifactName) throws IOException {
+        assertThat(artifact.getId(), notNullValue());
+        assertThat(artifact.getNodeId(), notNullValue());
+        assertThat(artifact.getRepository().getFullName(), equalTo(REPO_NAME));
+        assertThat(artifact.getName(), is(artifactName));
+        assertThat(artifact.getArchiveDownloadUrl().getPath(), containsString("actions/artifacts"));
+        assertThat(artifact.getCreatedAt(), notNullValue());
+        assertThat(artifact.getUpdatedAt(), notNullValue());
+        assertThat(artifact.getExpiresAt(), notNullValue());
+        assertThat(artifact.getSizeInBytes(), greaterThan(0L));
+        assertThat(artifact.isExpired(), is(false));
+    }
+
+    private static void checkJobProperties(long workflowRunId, GHWorkflowJob job, String jobName) {
+        assertThat(job.getId(), notNullValue());
+        assertThat(job.getNodeId(), notNullValue());
+        assertThat(job.getRepository().getFullName(), equalTo(REPO_NAME));
+        assertThat(job.getName(), is(jobName));
+        assertThat(job.getStartedAt(), notNullValue());
+        assertThat(job.getCompletedAt(), notNullValue());
+        assertThat(job.getHeadSha(), notNullValue());
+        assertThat(job.getStatus(), is(Status.COMPLETED));
+        assertThat(job.getConclusion(), is(Conclusion.SUCCESS));
+        assertThat(job.getRunId(), is(workflowRunId));
+        assertThat(job.getUrl().getPath(), containsString("/actions/jobs/"));
+        assertThat(job.getHtmlUrl().getPath(), containsString("/runs/" + job.getId()));
+        assertThat(job.getCheckRunUrl().getPath(), containsString("/check-runs/"));
+        assertThat(job.getRunnerId(), is(1));
+        assertThat(job.getRunnerName(), containsString("my runner"));
+        assertThat(job.getRunnerGroupId(), is(2));
+        assertThat(job.getRunnerGroupName(), containsString("my runner group"));
+
+        // we only test the step we have control over, the others are added by GitHub
+        Optional<Step> step = job.getSteps()
+                .stream()
+                .filter(s -> RUN_A_ONE_LINE_SCRIPT_STEP_NAME.equals(s.getName()))
+                .findFirst();
+        if (!step.isPresent()) {
+            fail("Unable to find " + RUN_A_ONE_LINE_SCRIPT_STEP_NAME + " step");
+        }
+
+        Optional<String> labelOptional = job.getLabels().stream().filter(s -> s.equals(UBUNTU_LABEL)).findFirst();
+        if (!labelOptional.isPresent()) {
+            fail("Unable to find " + UBUNTU_LABEL + " label");
+        }
+
+        checkStepProperties(step.get(), RUN_A_ONE_LINE_SCRIPT_STEP_NAME, 2);
+    }
+
+    private static void checkStepProperties(Step step, String name, int number) {
+        assertThat(step.getName(), is(name));
+        assertThat(step.getNumber(), is(number));
+        assertThat(step.getStatus(), is(Status.COMPLETED));
+        assertThat(step.getConclusion(), is(Conclusion.SUCCESS));
+        assertThat(step.getStartedAt(), notNullValue());
+        assertThat(step.getCompletedAt(), notNullValue());
+    }
+
+    @SuppressWarnings("resource")
+    private static InputStreamFunction<String> getLogArchiveInputStreamFunction(String mainLogFileName,
+            List<String> logsArchiveEntries) {
+        return (is) -> {
+            try (ZipInputStream zis = new ZipInputStream(is)) {
+                StringBuilder sb = new StringBuilder();
+
+                ZipEntry ze;
+                while ((ze = zis.getNextEntry()) != null) {
+                    logsArchiveEntries.add(ze.getName());
+                    if (mainLogFileName.equals(ze.getName())) {
+                        // the scanner has to be kept open to avoid closing zis
+                        Scanner scanner = new Scanner(zis);
+                        while (scanner.hasNextLine()) {
+                            sb.append(scanner.nextLine()).append("\n");
+                        }
+                    }
+                }
+
+                return sb.toString();
+            }
+        };
+    }
+
+    @SuppressWarnings("resource")
+    private static InputStreamFunction<String> getLogTextInputStreamFunction() {
+        return (is) -> {
+            StringBuilder sb = new StringBuilder();
+            Scanner scanner = new Scanner(is);
+            while (scanner.hasNextLine()) {
+                sb.append(scanner.nextLine()).append("\n");
+            }
+            return sb.toString();
+        };
+    }
+
+    private static Optional<GHWorkflowRun> getWorkflowRun(GHRepository repository,
+            String workflowName,
+            String branch,
+            Conclusion conclusion) {
+        List<GHWorkflowRun> workflowRuns = repository.queryWorkflowRuns()
+                .branch(branch)
+                .conclusion(conclusion)
+                .event(GHEvent.PULL_REQUEST)
+                .list()
+                .withPageSize(20)
+                .iterator()
+                .nextPage();
+
+        for (GHWorkflowRun workflowRun : workflowRuns) {
+            if (workflowRun.getName().equals(workflowName)) {
+                return Optional.of(workflowRun);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static Optional<GHWorkflowRun> getWorkflowRun(GHRepository repository,
+            String workflowName,
+            String branch,
+            Status status,
+            long latestPreexistingWorkflowRunId) {
+        List<GHWorkflowRun> workflowRuns = repository.queryWorkflowRuns()
+                .branch(branch)
+                .status(status)
+                .event(GHEvent.WORKFLOW_DISPATCH)
+                .list()
+                .withPageSize(20)
+                .iterator()
+                .nextPage();
+
+        for (GHWorkflowRun workflowRun : workflowRuns) {
+            if (workflowRun.getName().equals(workflowName) && workflowRun.getId() > latestPreexistingWorkflowRunId) {
+                return Optional.of(workflowRun);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static Status getWorkflowRunStatus(GHRepository repository, long workflowRunId) {
+        try {
+            return repository.getWorkflowRun(workflowRunId).getStatus();
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to get workflow run status", e);
+        }
+    }
+
+    private GHRepository repo;
+
     /**
      * Create default GHWorkflowRunTest instance
      */
     public GHWorkflowRunTest() {
     }
-
-    private static final String REPO_NAME = "hub4j-test-org/GHWorkflowRunTest";
-    private static final String MAIN_BRANCH = "main";
-    private static final String SECOND_BRANCH = "second-branch";
-
-    private static final String FAST_WORKFLOW_PATH = "fast-workflow.yml";
-    private static final String FAST_WORKFLOW_NAME = "Fast workflow";
-
-    private static final String SLOW_WORKFLOW_PATH = "slow-workflow.yml";
-    private static final String SLOW_WORKFLOW_NAME = "Slow workflow";
-
-    private static final String ARTIFACTS_WORKFLOW_PATH = "artifacts-workflow.yml";
-    private static final String ARTIFACTS_WORKFLOW_NAME = "Artifacts workflow";
-
-    private static final String MULTI_JOBS_WORKFLOW_PATH = "multi-jobs-workflow.yml";
-    private static final String MULTI_JOBS_WORKFLOW_NAME = "Multi jobs workflow";
-    private static final String RUN_A_ONE_LINE_SCRIPT_STEP_NAME = "Run a one-line script";
-    private static final String UBUNTU_LABEL = "ubuntu-latest";
-
-    private GHRepository repo;
 
     /**
      * Sets the up.
@@ -70,289 +215,44 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test manual run and basic information.
+     * Test approval.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testManualRunAndBasicInformation() throws IOException {
-        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
-
-        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
-
-        workflow.dispatch(MAIN_BRANCH);
-
-        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
-                FAST_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId).isPresent());
-
-        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId)
-                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
-
-        assertThat(workflowRun.getWorkflowId(), equalTo(workflow.getId()));
-        assertThat(workflowRun.getId(), notNullValue());
-        assertThat(workflowRun.getNodeId(), notNullValue());
-        assertThat(workflowRun.getRepository().getFullName(), equalTo(REPO_NAME));
-        assertThat(workflowRun.getUrl().getPath(), containsString("/actions/runs/"));
-        assertThat(workflowRun.getHtmlUrl().getPath(), containsString("/actions/runs/"));
-        assertThat(workflowRun.getJobsUrl().getPath(), endsWith("/jobs"));
-        assertThat(workflowRun.getLogsUrl().getPath(), endsWith("/logs"));
-        assertThat(workflowRun.getCheckSuiteUrl().getPath(), containsString("/check-suites/"));
-        assertThat(workflowRun.getArtifactsUrl().getPath(), endsWith("/artifacts"));
-        assertThat(workflowRun.getCancelUrl().getPath(), endsWith("/cancel"));
-        assertThat(workflowRun.getRerunUrl().getPath(), endsWith("/rerun"));
-        assertThat(workflowRun.getWorkflowUrl().getPath(), containsString("/actions/workflows/"));
-        assertThat(workflowRun.getHeadBranch(), equalTo(MAIN_BRANCH));
-        assertThat(workflowRun.getHeadCommit().getId(), notNullValue());
-        assertThat(workflowRun.getHeadCommit().getTreeId(), notNullValue());
-        assertThat(workflowRun.getHeadCommit().getMessage(), notNullValue());
-        assertThat(workflowRun.getHeadCommit().getTimestamp(), notNullValue());
-        assertThat(workflowRun.getHeadCommit().getAuthor().getEmail(), notNullValue());
-        assertThat(workflowRun.getHeadCommit().getCommitter().getEmail(), notNullValue());
-        assertThat(workflowRun.getEvent(), equalTo(GHEvent.WORKFLOW_DISPATCH));
-        assertThat(workflowRun.getStatus(), equalTo(Status.COMPLETED));
-        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.SUCCESS));
-        assertThat(workflowRun.getHeadSha(), notNullValue());
-        assertThat(workflowRun.getTriggeringActor(), hasProperty("login", equalTo("octocat")));
-    }
-
-    /**
-     * Test cancel and rerun.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testCancelAndRerun() throws IOException {
-        GHWorkflow workflow = repo.getWorkflow(SLOW_WORKFLOW_PATH);
-
-        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
-
-        workflow.dispatch(MAIN_BRANCH);
-
-        // now that we have triggered the workflow run, we will wait until it's in progress and then cancel it
-        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
-                SLOW_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.IN_PROGRESS,
-                latestPreexistingWorkflowRunId).isPresent());
-
-        GHWorkflowRun workflowRun = getWorkflowRun(SLOW_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.IN_PROGRESS,
-                latestPreexistingWorkflowRunId)
-                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
-
-        assertThat(workflowRun.getId(), notNullValue());
-
-        workflowRun.cancel();
-        long cancelledWorkflowRunId = workflowRun.getId();
-
-        // let's wait until it's completed
-        await((nonRecordingRepo) -> getWorkflowRunStatus(nonRecordingRepo, cancelledWorkflowRunId) == Status.COMPLETED);
-
-        // let's check that it has been properly cancelled
-        workflowRun = repo.getWorkflowRun(cancelledWorkflowRunId);
-        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.CANCELLED));
-
-        // now let's rerun it
-        workflowRun.rerun();
-
-        // let's check that it has been rerun
-        await((nonRecordingRepo) -> getWorkflowRunStatus(nonRecordingRepo,
-                cancelledWorkflowRunId) == Status.IN_PROGRESS);
-
-        // cancel it again
-        workflowRun.cancel();
-    }
-
-    /**
-     * Test delete.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testDelete() throws IOException {
-        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
-
-        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
-
-        workflow.dispatch(MAIN_BRANCH);
-
-        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
-                FAST_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId).isPresent());
-
-        GHWorkflowRun workflowRunToDelete = getWorkflowRun(FAST_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId)
-                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
-
-        assertThat(workflowRunToDelete.getId(), notNullValue());
-
-        workflowRunToDelete.delete();
-
-        try {
-            repo.getWorkflowRun(workflowRunToDelete.getId());
-            fail("The workflow " + workflowRunToDelete.getId() + " should have been deleted.");
-        } catch (GHFileNotFoundException e) {
-            // success
-        }
-    }
-
-    /**
-     * Test search on branch.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testSearchOnBranch() throws IOException {
-        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
-
-        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
-
-        workflow.dispatch(SECOND_BRANCH);
-
-        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
-                FAST_WORKFLOW_NAME,
-                SECOND_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId).isPresent());
-
-        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
-                SECOND_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId)
-                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
-
-        assertThat(workflowRun.getWorkflowId(), equalTo(workflow.getId()));
-        assertThat(workflowRun.getHeadBranch(), equalTo(SECOND_BRANCH));
-        assertThat(workflowRun.getEvent(), equalTo(GHEvent.WORKFLOW_DISPATCH));
-        assertThat(workflowRun.getStatus(), equalTo(Status.COMPLETED));
-        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.SUCCESS));
-    }
-
-    /**
-     * Test search on created and head sha.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testSearchOnCreatedAndHeadSha() throws IOException {
-        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
-
-        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
-
-        Instant before = Instant.parse("2024-02-09T10:19:00.00Z");
-
-        String mainBranchHeadSha = repo.getBranch(MAIN_BRANCH).getSHA1();
-        String secondBranchHeadSha = repo.getBranch(SECOND_BRANCH).getSHA1();
-
-        workflow.dispatch(MAIN_BRANCH);
-        workflow.dispatch(SECOND_BRANCH);
-
-        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
-                FAST_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId).isPresent());
-        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
-                FAST_WORKFLOW_NAME,
-                SECOND_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId).isPresent());
-
-        List<GHWorkflowRun> mainBranchHeadShaWorkflowRuns = repo.queryWorkflowRuns()
-                .headSha(mainBranchHeadSha)
-                .created(">=" + before.toString())
-                .list()
-                .toList();
-        List<GHWorkflowRun> secondBranchHeadShaWorkflowRuns = repo.queryWorkflowRuns()
-                .headSha(secondBranchHeadSha)
-                .created(">=" + before.toString())
+    public void testApproval() throws IOException {
+        List<GHPullRequest> pullRequests = repo.queryPullRequests()
+                .base(MAIN_BRANCH)
+                .sort(Sort.CREATED)
+                .direction(GHDirection.DESC)
+                .state(GHIssueState.OPEN)
                 .list()
                 .toList();
 
-        assertThat(mainBranchHeadShaWorkflowRuns, hasSize(greaterThanOrEqualTo(1)));
-        assertThat(mainBranchHeadShaWorkflowRuns, everyItem(hasProperty("headSha", equalTo(mainBranchHeadSha))));
-        // Ideally, we would use everyItem() but the bridge method is in the way
-        for (GHWorkflowRun workflowRun : mainBranchHeadShaWorkflowRuns) {
-            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(before));
-        }
+        assertThat(pullRequests.size(), greaterThanOrEqualTo(1));
+        GHPullRequest pullRequest = pullRequests.get(0);
 
-        assertThat(secondBranchHeadShaWorkflowRuns, hasSize(greaterThanOrEqualTo(1)));
-        assertThat(secondBranchHeadShaWorkflowRuns, everyItem(hasProperty("headSha", equalTo(secondBranchHeadSha))));
-        // Ideally, we would use everyItem() but the bridge method is in the way
-        for (GHWorkflowRun workflowRun : secondBranchHeadShaWorkflowRuns) {
-            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(before));
-        }
+        await("Waiting for workflow run to be pending",
+                (nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                        FAST_WORKFLOW_NAME,
+                        MAIN_BRANCH,
+                        Conclusion.ACTION_REQUIRED).isPresent());
 
-        List<GHWorkflowRun> mainBranchHeadShaWorkflowRunsBefore = repo.queryWorkflowRuns()
-                .headSha(repo.getBranch(MAIN_BRANCH).getSHA1())
-                .created("<" + before)
-                .list()
-                .toList();
-        // Ideally, we would use that but the bridge method is causing issues
-        // assertThat(mainBranchHeadShaWorkflowRunsBefore, everyItem(hasProperty("createdAt",
-        // lessThan(Date.from(before)))));
-        for (GHWorkflowRun workflowRun : mainBranchHeadShaWorkflowRunsBefore) {
-            assertThat(workflowRun.getCreatedAt(), lessThan(before));
-        }
-    }
-
-    /**
-     * Test logs.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testLogs() throws IOException {
-        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
-
-        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
-
-        workflow.dispatch(MAIN_BRANCH);
-
-        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
-                FAST_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId).isPresent());
-
-        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId)
+        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME, MAIN_BRANCH, Conclusion.ACTION_REQUIRED)
                 .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
-        List<String> logsArchiveEntries = new ArrayList<>();
-        String fullLogContent = workflowRun
-                .downloadLogs(getLogArchiveInputStreamFunction("1_build.txt", logsArchiveEntries));
+        workflowRun.approve();
 
-        assertThat(logsArchiveEntries, hasItems("1_build.txt", "build/9_Complete job.txt"));
-        assertThat(fullLogContent, containsString("Hello, world!"));
+        await("Waiting for workflow run to be approved",
+                (nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                        FAST_WORKFLOW_NAME,
+                        pullRequest.getHead().getRef(),
+                        Conclusion.SUCCESS).isPresent());
 
-        workflowRun.deleteLogs();
+        workflowRun = repo.getWorkflowRun(workflowRun.getId());
 
-        try {
-            workflowRun.downloadLogs((is) -> "");
-            fail("Downloading logs should not be possible as they were deleted");
-        } catch (GHFileNotFoundException e) {
-            assertThat(e.getMessage(), containsString("Not Found"));
-        }
+        assertThat(workflowRun.getConclusion(), is(Conclusion.SUCCESS));
     }
 
     /**
@@ -471,6 +371,94 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test cancel and rerun.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testCancelAndRerun() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(SLOW_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(MAIN_BRANCH);
+
+        // now that we have triggered the workflow run, we will wait until it's in progress and then cancel it
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                SLOW_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.IN_PROGRESS,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRun = getWorkflowRun(SLOW_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.IN_PROGRESS,
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        assertThat(workflowRun.getId(), notNullValue());
+
+        workflowRun.cancel();
+        long cancelledWorkflowRunId = workflowRun.getId();
+
+        // let's wait until it's completed
+        await((nonRecordingRepo) -> getWorkflowRunStatus(nonRecordingRepo, cancelledWorkflowRunId) == Status.COMPLETED);
+
+        // let's check that it has been properly cancelled
+        workflowRun = repo.getWorkflowRun(cancelledWorkflowRunId);
+        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.CANCELLED));
+
+        // now let's rerun it
+        workflowRun.rerun();
+
+        // let's check that it has been rerun
+        await((nonRecordingRepo) -> getWorkflowRunStatus(nonRecordingRepo,
+                cancelledWorkflowRunId) == Status.IN_PROGRESS);
+
+        // cancel it again
+        workflowRun.cancel();
+    }
+
+    /**
+     * Test delete.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testDelete() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(MAIN_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRunToDelete = getWorkflowRun(FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        assertThat(workflowRunToDelete.getId(), notNullValue());
+
+        workflowRunToDelete.delete();
+
+        try {
+            repo.getWorkflowRun(workflowRunToDelete.getId());
+            fail("The workflow " + workflowRunToDelete.getId() + " should have been deleted.");
+        } catch (GHFileNotFoundException e) {
+            // success
+        }
+    }
+
+    /**
      * Test jobs.
      *
      * @throws IOException
@@ -524,44 +512,201 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test approval.
+     * Test logs.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testApproval() throws IOException {
-        List<GHPullRequest> pullRequests = repo.queryPullRequests()
-                .base(MAIN_BRANCH)
-                .sort(Sort.CREATED)
-                .direction(GHDirection.DESC)
-                .state(GHIssueState.OPEN)
+    public void testLogs() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(MAIN_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        List<String> logsArchiveEntries = new ArrayList<>();
+        String fullLogContent = workflowRun
+                .downloadLogs(getLogArchiveInputStreamFunction("1_build.txt", logsArchiveEntries));
+
+        assertThat(logsArchiveEntries, hasItems("1_build.txt", "build/9_Complete job.txt"));
+        assertThat(fullLogContent, containsString("Hello, world!"));
+
+        workflowRun.deleteLogs();
+
+        try {
+            workflowRun.downloadLogs((is) -> "");
+            fail("Downloading logs should not be possible as they were deleted");
+        } catch (GHFileNotFoundException e) {
+            assertThat(e.getMessage(), containsString("Not Found"));
+        }
+    }
+
+    /**
+     * Test manual run and basic information.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testManualRunAndBasicInformation() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(MAIN_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        assertThat(workflowRun.getWorkflowId(), equalTo(workflow.getId()));
+        assertThat(workflowRun.getId(), notNullValue());
+        assertThat(workflowRun.getNodeId(), notNullValue());
+        assertThat(workflowRun.getRepository().getFullName(), equalTo(REPO_NAME));
+        assertThat(workflowRun.getUrl().getPath(), containsString("/actions/runs/"));
+        assertThat(workflowRun.getHtmlUrl().getPath(), containsString("/actions/runs/"));
+        assertThat(workflowRun.getJobsUrl().getPath(), endsWith("/jobs"));
+        assertThat(workflowRun.getLogsUrl().getPath(), endsWith("/logs"));
+        assertThat(workflowRun.getCheckSuiteUrl().getPath(), containsString("/check-suites/"));
+        assertThat(workflowRun.getArtifactsUrl().getPath(), endsWith("/artifacts"));
+        assertThat(workflowRun.getCancelUrl().getPath(), endsWith("/cancel"));
+        assertThat(workflowRun.getRerunUrl().getPath(), endsWith("/rerun"));
+        assertThat(workflowRun.getWorkflowUrl().getPath(), containsString("/actions/workflows/"));
+        assertThat(workflowRun.getHeadBranch(), equalTo(MAIN_BRANCH));
+        assertThat(workflowRun.getHeadCommit().getId(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getTreeId(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getMessage(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getTimestamp(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getAuthor().getEmail(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getCommitter().getEmail(), notNullValue());
+        assertThat(workflowRun.getEvent(), equalTo(GHEvent.WORKFLOW_DISPATCH));
+        assertThat(workflowRun.getStatus(), equalTo(Status.COMPLETED));
+        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.SUCCESS));
+        assertThat(workflowRun.getHeadSha(), notNullValue());
+        assertThat(workflowRun.getTriggeringActor(), hasProperty("login", equalTo("octocat")));
+    }
+
+    /**
+     * Test search on branch.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testSearchOnBranch() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(SECOND_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                SECOND_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME,
+                SECOND_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        assertThat(workflowRun.getWorkflowId(), equalTo(workflow.getId()));
+        assertThat(workflowRun.getHeadBranch(), equalTo(SECOND_BRANCH));
+        assertThat(workflowRun.getEvent(), equalTo(GHEvent.WORKFLOW_DISPATCH));
+        assertThat(workflowRun.getStatus(), equalTo(Status.COMPLETED));
+        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.SUCCESS));
+    }
+
+    /**
+     * Test search on created and head sha.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testSearchOnCreatedAndHeadSha() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        Instant before = Instant.parse("2024-02-09T10:19:00.00Z");
+
+        String mainBranchHeadSha = repo.getBranch(MAIN_BRANCH).getSHA1();
+        String secondBranchHeadSha = repo.getBranch(SECOND_BRANCH).getSHA1();
+
+        workflow.dispatch(MAIN_BRANCH);
+        workflow.dispatch(SECOND_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                SECOND_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        List<GHWorkflowRun> mainBranchHeadShaWorkflowRuns = repo.queryWorkflowRuns()
+                .headSha(mainBranchHeadSha)
+                .created(">=" + before.toString())
+                .list()
+                .toList();
+        List<GHWorkflowRun> secondBranchHeadShaWorkflowRuns = repo.queryWorkflowRuns()
+                .headSha(secondBranchHeadSha)
+                .created(">=" + before.toString())
                 .list()
                 .toList();
 
-        assertThat(pullRequests.size(), greaterThanOrEqualTo(1));
-        GHPullRequest pullRequest = pullRequests.get(0);
+        assertThat(mainBranchHeadShaWorkflowRuns, hasSize(greaterThanOrEqualTo(1)));
+        assertThat(mainBranchHeadShaWorkflowRuns, everyItem(hasProperty("headSha", equalTo(mainBranchHeadSha))));
+        // Ideally, we would use everyItem() but the bridge method is in the way
+        for (GHWorkflowRun workflowRun : mainBranchHeadShaWorkflowRuns) {
+            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(before));
+        }
 
-        await("Waiting for workflow run to be pending",
-                (nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
-                        FAST_WORKFLOW_NAME,
-                        MAIN_BRANCH,
-                        Conclusion.ACTION_REQUIRED).isPresent());
+        assertThat(secondBranchHeadShaWorkflowRuns, hasSize(greaterThanOrEqualTo(1)));
+        assertThat(secondBranchHeadShaWorkflowRuns, everyItem(hasProperty("headSha", equalTo(secondBranchHeadSha))));
+        // Ideally, we would use everyItem() but the bridge method is in the way
+        for (GHWorkflowRun workflowRun : secondBranchHeadShaWorkflowRuns) {
+            assertThat(workflowRun.getCreatedAt(), greaterThanOrEqualTo(before));
+        }
 
-        GHWorkflowRun workflowRun = getWorkflowRun(FAST_WORKFLOW_NAME, MAIN_BRANCH, Conclusion.ACTION_REQUIRED)
-                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
-
-        workflowRun.approve();
-
-        await("Waiting for workflow run to be approved",
-                (nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
-                        FAST_WORKFLOW_NAME,
-                        pullRequest.getHead().getRef(),
-                        Conclusion.SUCCESS).isPresent());
-
-        workflowRun = repo.getWorkflowRun(workflowRun.getId());
-
-        assertThat(workflowRun.getConclusion(), is(Conclusion.SUCCESS));
+        List<GHWorkflowRun> mainBranchHeadShaWorkflowRunsBefore = repo.queryWorkflowRuns()
+                .headSha(repo.getBranch(MAIN_BRANCH).getSHA1())
+                .created("<" + before)
+                .list()
+                .toList();
+        // Ideally, we would use that but the bridge method is causing issues
+        // assertThat(mainBranchHeadShaWorkflowRunsBefore, everyItem(hasProperty("createdAt",
+        // lessThan(Date.from(before)))));
+        for (GHWorkflowRun workflowRun : mainBranchHeadShaWorkflowRunsBefore) {
+            assertThat(workflowRun.getCreatedAt(), lessThan(before));
+        }
     }
 
     /**
@@ -586,6 +731,10 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(list.get(0).getConclusion(), is(Conclusion.STARTUP_FAILURE));
     }
 
+    private void await(Function<GHRepository, Boolean> condition) throws IOException {
+        await(null, condition);
+    }
+
     private void await(String alias, Function<GHRepository, Boolean> condition) throws IOException {
         if (!mockGitHub.isUseProxy()) {
             return;
@@ -598,34 +747,12 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         });
     }
 
-    private void await(Function<GHRepository, Boolean> condition) throws IOException {
-        await(null, condition);
-    }
-
     private long getLatestPreexistingWorkflowRunId() {
         return repo.queryWorkflowRuns().list().withPageSize(1).iterator().next().getId();
     }
 
-    private static Optional<GHWorkflowRun> getWorkflowRun(GHRepository repository,
-            String workflowName,
-            String branch,
-            Status status,
-            long latestPreexistingWorkflowRunId) {
-        List<GHWorkflowRun> workflowRuns = repository.queryWorkflowRuns()
-                .branch(branch)
-                .status(status)
-                .event(GHEvent.WORKFLOW_DISPATCH)
-                .list()
-                .withPageSize(20)
-                .iterator()
-                .nextPage();
-
-        for (GHWorkflowRun workflowRun : workflowRuns) {
-            if (workflowRun.getName().equals(workflowName) && workflowRun.getId() > latestPreexistingWorkflowRunId) {
-                return Optional.of(workflowRun);
-            }
-        }
-        return Optional.empty();
+    private Optional<GHWorkflowRun> getWorkflowRun(String workflowName, String branch, Conclusion conclusion) {
+        return getWorkflowRun(this.repo, workflowName, branch, conclusion);
     }
 
     private Optional<GHWorkflowRun> getWorkflowRun(String workflowName,
@@ -633,132 +760,5 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
             Status status,
             long latestPreexistingWorkflowRunId) {
         return getWorkflowRun(this.repo, workflowName, branch, status, latestPreexistingWorkflowRunId);
-    }
-
-    private static Optional<GHWorkflowRun> getWorkflowRun(GHRepository repository,
-            String workflowName,
-            String branch,
-            Conclusion conclusion) {
-        List<GHWorkflowRun> workflowRuns = repository.queryWorkflowRuns()
-                .branch(branch)
-                .conclusion(conclusion)
-                .event(GHEvent.PULL_REQUEST)
-                .list()
-                .withPageSize(20)
-                .iterator()
-                .nextPage();
-
-        for (GHWorkflowRun workflowRun : workflowRuns) {
-            if (workflowRun.getName().equals(workflowName)) {
-                return Optional.of(workflowRun);
-            }
-        }
-        return Optional.empty();
-    }
-
-    private Optional<GHWorkflowRun> getWorkflowRun(String workflowName, String branch, Conclusion conclusion) {
-        return getWorkflowRun(this.repo, workflowName, branch, conclusion);
-    }
-
-    private static Status getWorkflowRunStatus(GHRepository repository, long workflowRunId) {
-        try {
-            return repository.getWorkflowRun(workflowRunId).getStatus();
-        } catch (IOException e) {
-            throw new IllegalStateException("Unable to get workflow run status", e);
-        }
-    }
-
-    @SuppressWarnings("resource")
-    private static InputStreamFunction<String> getLogArchiveInputStreamFunction(String mainLogFileName,
-            List<String> logsArchiveEntries) {
-        return (is) -> {
-            try (ZipInputStream zis = new ZipInputStream(is)) {
-                StringBuilder sb = new StringBuilder();
-
-                ZipEntry ze;
-                while ((ze = zis.getNextEntry()) != null) {
-                    logsArchiveEntries.add(ze.getName());
-                    if (mainLogFileName.equals(ze.getName())) {
-                        // the scanner has to be kept open to avoid closing zis
-                        Scanner scanner = new Scanner(zis);
-                        while (scanner.hasNextLine()) {
-                            sb.append(scanner.nextLine()).append("\n");
-                        }
-                    }
-                }
-
-                return sb.toString();
-            }
-        };
-    }
-
-    @SuppressWarnings("resource")
-    private static InputStreamFunction<String> getLogTextInputStreamFunction() {
-        return (is) -> {
-            StringBuilder sb = new StringBuilder();
-            Scanner scanner = new Scanner(is);
-            while (scanner.hasNextLine()) {
-                sb.append(scanner.nextLine()).append("\n");
-            }
-            return sb.toString();
-        };
-    }
-
-    private static void checkArtifactProperties(GHArtifact artifact, String artifactName) throws IOException {
-        assertThat(artifact.getId(), notNullValue());
-        assertThat(artifact.getNodeId(), notNullValue());
-        assertThat(artifact.getRepository().getFullName(), equalTo(REPO_NAME));
-        assertThat(artifact.getName(), is(artifactName));
-        assertThat(artifact.getArchiveDownloadUrl().getPath(), containsString("actions/artifacts"));
-        assertThat(artifact.getCreatedAt(), notNullValue());
-        assertThat(artifact.getUpdatedAt(), notNullValue());
-        assertThat(artifact.getExpiresAt(), notNullValue());
-        assertThat(artifact.getSizeInBytes(), greaterThan(0L));
-        assertThat(artifact.isExpired(), is(false));
-    }
-
-    private static void checkJobProperties(long workflowRunId, GHWorkflowJob job, String jobName) {
-        assertThat(job.getId(), notNullValue());
-        assertThat(job.getNodeId(), notNullValue());
-        assertThat(job.getRepository().getFullName(), equalTo(REPO_NAME));
-        assertThat(job.getName(), is(jobName));
-        assertThat(job.getStartedAt(), notNullValue());
-        assertThat(job.getCompletedAt(), notNullValue());
-        assertThat(job.getHeadSha(), notNullValue());
-        assertThat(job.getStatus(), is(Status.COMPLETED));
-        assertThat(job.getConclusion(), is(Conclusion.SUCCESS));
-        assertThat(job.getRunId(), is(workflowRunId));
-        assertThat(job.getUrl().getPath(), containsString("/actions/jobs/"));
-        assertThat(job.getHtmlUrl().getPath(), containsString("/runs/" + job.getId()));
-        assertThat(job.getCheckRunUrl().getPath(), containsString("/check-runs/"));
-        assertThat(job.getRunnerId(), is(1));
-        assertThat(job.getRunnerName(), containsString("my runner"));
-        assertThat(job.getRunnerGroupId(), is(2));
-        assertThat(job.getRunnerGroupName(), containsString("my runner group"));
-
-        // we only test the step we have control over, the others are added by GitHub
-        Optional<Step> step = job.getSteps()
-                .stream()
-                .filter(s -> RUN_A_ONE_LINE_SCRIPT_STEP_NAME.equals(s.getName()))
-                .findFirst();
-        if (!step.isPresent()) {
-            fail("Unable to find " + RUN_A_ONE_LINE_SCRIPT_STEP_NAME + " step");
-        }
-
-        Optional<String> labelOptional = job.getLabels().stream().filter(s -> s.equals(UBUNTU_LABEL)).findFirst();
-        if (!labelOptional.isPresent()) {
-            fail("Unable to find " + UBUNTU_LABEL + " label");
-        }
-
-        checkStepProperties(step.get(), RUN_A_ONE_LINE_SCRIPT_STEP_NAME, 2);
-    }
-
-    private static void checkStepProperties(Step step, String name, int number) {
-        assertThat(step.getName(), is(name));
-        assertThat(step.getNumber(), is(number));
-        assertThat(step.getStatus(), is(Status.COMPLETED));
-        assertThat(step.getConclusion(), is(Conclusion.SUCCESS));
-        assertThat(step.getStartedAt(), notNullValue());
-        assertThat(step.getCompletedAt(), notNullValue());
     }
 }

@@ -14,21 +14,24 @@ import java.io.IOException;
  */
 public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
 
+    static class RefreshingAuthorizationProvider implements AuthorizationProvider {
+        private boolean used = false;
+
+        @Override
+        public String getEncodedAuthorization() {
+            if (used) {
+                return "refreshed token";
+            }
+            used = true;
+            return "original token";
+        }
+    }
+
     /**
      * Instantiates a new test.
      */
     public AuthorizationTokenRefreshTest() {
         useDefaultGitHub = false;
-    }
-
-    /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
     /**
@@ -64,16 +67,13 @@ public class AuthorizationTokenRefreshTest extends AbstractGitHubWireMockTest {
         assertThat("Usernames match", "kohsuke".equals(kohsuke.getLogin()));
     }
 
-    static class RefreshingAuthorizationProvider implements AuthorizationProvider {
-        private boolean used = false;
-
-        @Override
-        public String getEncodedAuthorization() {
-            if (used) {
-                return "refreshed token";
-            }
-            used = true;
-            return "original token";
-        }
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 }

@@ -15,15 +15,125 @@ import org.kohsuke.github.internal.EnumUtils;
 public class GHTeamChanges {
 
     /**
+     * Changes made to privacy.
+     */
+    public static class FromPrivacy {
+
+        private String from;
+
+        /**
+         * Create default FromPrivacy instance
+         */
+        public FromPrivacy() {
+        }
+
+        /**
+         * Gets the from.
+         *
+         * @return the from
+         */
+        public Privacy getFrom() {
+            return EnumUtils.getNullableEnumOrDefault(Privacy.class, from, Privacy.UNKNOWN);
+        }
+    }
+
+    /**
+     * Changes made for repository events.
+     */
+    public static class FromRepository {
+
+        private FromRepositoryPermissions permissions;
+
+        /**
+         * Create default FromRepository instance
+         */
+        public FromRepository() {
+        }
+
+        /**
+         * Gets the changes to permissions.
+         *
+         * @return the changes to permissions
+         */
+        public FromRepositoryPermissions getPermissions() {
+            return permissions;
+        }
+    }
+    /**
+     * Changes made to permissions.
+     */
+    public static class FromRepositoryPermissions {
+
+        private GHRepoPermission from;
+
+        /**
+         * Create default FromRepositoryPermissions instance
+         */
+        public FromRepositoryPermissions() {
+        }
+
+        /**
+         * Has admin access boolean.
+         *
+         * @return the boolean
+         */
+        public boolean hadAdminAccess() {
+            return from != null && from.admin;
+        }
+
+        /**
+         * Has pull access boolean.
+         *
+         * @return the boolean
+         */
+        public boolean hadPullAccess() {
+            return from != null && from.pull;
+        }
+
+        /**
+         * Has push access boolean.
+         *
+         * @return the boolean
+         */
+        public boolean hadPushAccess() {
+            return from != null && from.push;
+        }
+    }
+    /**
+     * Changes made to a string value.
+     */
+    public static class FromString {
+
+        private String from;
+
+        /**
+         * Create default FromString instance
+         */
+        public FromString() {
+        }
+
+        /**
+         * Gets the from.
+         *
+         * @return the from
+         */
+        public String getFrom() {
+            return from;
+        }
+    }
+    private FromString description;
+
+    private FromString name;
+
+    private FromPrivacy privacy;
+
+    private FromRepository repository;
+
+    /**
      * Create default GHTeamChanges instance
      */
     public GHTeamChanges() {
     }
-
-    private FromString description;
-    private FromString name;
-    private FromPrivacy privacy;
-    private FromRepository repository;
 
     /**
      * Gets changes to description.
@@ -59,115 +169,5 @@ public class GHTeamChanges {
      */
     public FromRepository getRepository() {
         return repository;
-    }
-
-    /**
-     * Changes made to a string value.
-     */
-    public static class FromString {
-
-        /**
-         * Create default FromString instance
-         */
-        public FromString() {
-        }
-
-        private String from;
-
-        /**
-         * Gets the from.
-         *
-         * @return the from
-         */
-        public String getFrom() {
-            return from;
-        }
-    }
-
-    /**
-     * Changes made to privacy.
-     */
-    public static class FromPrivacy {
-
-        /**
-         * Create default FromPrivacy instance
-         */
-        public FromPrivacy() {
-        }
-
-        private String from;
-
-        /**
-         * Gets the from.
-         *
-         * @return the from
-         */
-        public Privacy getFrom() {
-            return EnumUtils.getNullableEnumOrDefault(Privacy.class, from, Privacy.UNKNOWN);
-        }
-    }
-
-    /**
-     * Changes made for repository events.
-     */
-    public static class FromRepository {
-
-        /**
-         * Create default FromRepository instance
-         */
-        public FromRepository() {
-        }
-
-        private FromRepositoryPermissions permissions;
-
-        /**
-         * Gets the changes to permissions.
-         *
-         * @return the changes to permissions
-         */
-        public FromRepositoryPermissions getPermissions() {
-            return permissions;
-        }
-    }
-
-    /**
-     * Changes made to permissions.
-     */
-    public static class FromRepositoryPermissions {
-
-        /**
-         * Create default FromRepositoryPermissions instance
-         */
-        public FromRepositoryPermissions() {
-        }
-
-        private GHRepoPermission from;
-
-        /**
-         * Has pull access boolean.
-         *
-         * @return the boolean
-         */
-        public boolean hadPullAccess() {
-            return from != null && from.pull;
-        }
-
-        /**
-         * Has push access boolean.
-         *
-         * @return the boolean
-         */
-        public boolean hadPushAccess() {
-            return from != null && from.push;
-        }
-
-        /**
-         * Has admin access boolean.
-         *
-         * @return the boolean
-         */
-        public boolean hadAdminAccess() {
-            return from != null && from.admin;
-        }
     }
 }

@@ -23,6 +23,46 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test events for issue rename.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testEventsForIssueRename() throws Exception {
+        // Create the issue.
+        GHRepository repo = getRepository();
+        GHIssueBuilder builder = repo.createIssue("Some invalid issue name");
+        GHIssue issue = builder.create();
+
+        // Generate rename event.
+        issue.setTitle("Fixed issue name");
+
+        // Test that the event is present.
+        List<GHIssueEvent> list = issue.listEvents().toList();
+        assertThat(list.size(), equalTo(1));
+
+        GHIssueEvent event = list.get(0);
+        assertThat(event.getIssue().getNumber(), equalTo(issue.getNumber()));
+        assertThat(event.getEvent(), equalTo("renamed"));
+        assertThat(event.getRename(), notNullValue());
+        assertThat(event.getRename().getFrom(), equalTo("Some invalid issue name"));
+        assertThat(event.getRename().getTo(), equalTo("Fixed issue name"));
+
+        // Test that we can get a single event directly.
+        GHIssueEvent eventFromRepo = repo.getIssueEvent(event.getId());
+        assertThat(eventFromRepo.getId(), equalTo(event.getId()));
+        assertThat(eventFromRepo.getCreatedAt(), equalTo(event.getCreatedAt()));
+        assertThat(eventFromRepo.getEvent(), equalTo("renamed"));
+        assertThat(eventFromRepo.getRename(), notNullValue());
+        assertThat(eventFromRepo.getRename().getFrom(), equalTo("Some invalid issue name"));
+        assertThat(eventFromRepo.getRename().getTo(), equalTo("Fixed issue name"));
+
+        // Close the issue.
+        issue.close();
+    }
+
+    /**
      * Test events for single issue.
      *
      * @throws Exception
@@ -91,46 +131,6 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test events for issue rename.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testEventsForIssueRename() throws Exception {
-        // Create the issue.
-        GHRepository repo = getRepository();
-        GHIssueBuilder builder = repo.createIssue("Some invalid issue name");
-        GHIssue issue = builder.create();
-
-        // Generate rename event.
-        issue.setTitle("Fixed issue name");
-
-        // Test that the event is present.
-        List<GHIssueEvent> list = issue.listEvents().toList();
-        assertThat(list.size(), equalTo(1));
-
-        GHIssueEvent event = list.get(0);
-        assertThat(event.getIssue().getNumber(), equalTo(issue.getNumber()));
-        assertThat(event.getEvent(), equalTo("renamed"));
-        assertThat(event.getRename(), notNullValue());
-        assertThat(event.getRename().getFrom(), equalTo("Some invalid issue name"));
-        assertThat(event.getRename().getTo(), equalTo("Fixed issue name"));
-
-        // Test that we can get a single event directly.
-        GHIssueEvent eventFromRepo = repo.getIssueEvent(event.getId());
-        assertThat(eventFromRepo.getId(), equalTo(event.getId()));
-        assertThat(eventFromRepo.getCreatedAt(), equalTo(event.getCreatedAt()));
-        assertThat(eventFromRepo.getEvent(), equalTo("renamed"));
-        assertThat(eventFromRepo.getRename(), notNullValue());
-        assertThat(eventFromRepo.getRename().getFrom(), equalTo("Some invalid issue name"));
-        assertThat(eventFromRepo.getRename().getTo(), equalTo("Fixed issue name"));
-
-        // Close the issue.
-        issue.close();
-    }
-
-    /**
      * Test repository events.
      *
      * @throws Exception
@@ -161,6 +161,10 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
         assertThat("All issue checks must be found and passed", successfulChecks, equalTo(1));
     }
 
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
     /**
      * Gets the repository.
      *
@@ -170,9 +174,5 @@ public class GHIssueEventTest extends AbstractGitHubWireMockTest {
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 }

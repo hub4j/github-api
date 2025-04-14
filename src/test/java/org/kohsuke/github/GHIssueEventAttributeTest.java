@@ -21,16 +21,10 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
 
-    /**
-     * Create default GHIssueEventAttributeTest instance
-     */
-    public GHIssueEventAttributeTest() {
-    }
-
     private enum Type implements Predicate<GHIssueEvent>, Consumer<GHIssueEvent> {
-        milestone(e -> assertThat(e.getMilestone(), notNullValue()), "milestoned", "demilestoned"),
+        assignment(e -> assertThat(e.getAssignee(), notNullValue()), "assigned", "unassigned"),
         label(e -> assertThat(e.getLabel(), notNullValue()), "labeled", "unlabeled"),
-        assignment(e -> assertThat(e.getAssignee(), notNullValue()), "assigned", "unassigned");
+        milestone(e -> assertThat(e.getMilestone(), notNullValue()), "milestoned", "demilestoned");
 
         private final Consumer<GHIssueEvent> assertion;
         private final Set<String> subtypes;
@@ -41,22 +35,20 @@ public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
         }
 
         @Override
-        public boolean test(final GHIssueEvent event) {
-            return this.subtypes.contains(event.getEvent());
-        }
-
-        @Override
         public void accept(final GHIssueEvent event) {
             this.assertion.accept(event);
         }
+
+        @Override
+        public boolean test(final GHIssueEvent event) {
+            return this.subtypes.contains(event.getEvent());
+        }
     }
 
-    private List<GHIssueEvent> listEvents(final Type type) throws IOException {
-        return StreamSupport
-                .stream(gitHub.getRepository("chids/project-milestone-test").getIssue(1).listEvents().spliterator(),
-                        false)
-                .filter(type)
-                .collect(toList());
+    /**
+     * Create default GHIssueEventAttributeTest instance
+     */
+    public GHIssueEventAttributeTest() {
     }
 
     /**
@@ -72,5 +64,13 @@ public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
             assertThat(events, hasSize(2));
             events.forEach(type);
         }
+    }
+
+    private List<GHIssueEvent> listEvents(final Type type) throws IOException {
+        return StreamSupport
+                .stream(gitHub.getRepository("chids/project-milestone-test").getIssue(1).listEvents().spliterator(),
+                        false)
+                .filter(type)
+                .collect(toList());
     }
 }

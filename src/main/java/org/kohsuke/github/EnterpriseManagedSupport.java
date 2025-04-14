@@ -14,16 +14,36 @@ import java.util.logging.Logger;
  */
 class EnterpriseManagedSupport {
 
+    private static final Logger LOGGER = Logger.getLogger(EnterpriseManagedSupport.class.getName());
     static final String COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS = "Could not retrieve organization external groups";
     static final String NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR = "This organization is not part of externally managed enterprise.";
+
     static final String TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR = "This team cannot be externally managed since it has explicit members.";
 
-    private static final Logger LOGGER = Logger.getLogger(EnterpriseManagedSupport.class.getName());
+    private static String logUnexpectedFailure(final JsonProcessingException exception, final String payload) {
+        final StringWriter sw = new StringWriter();
+        final PrintWriter pw = new PrintWriter(sw);
+        exception.printStackTrace(pw);
+        return String.format("Could not parse GitHub error response: '%s'. Full stacktrace follows:%n%s", payload, sw);
+    }
+
+    static EnterpriseManagedSupport forOrganization(final GHOrganization org) {
+        return new EnterpriseManagedSupport(org);
+    }
 
     private final GHOrganization organization;
 
     private EnterpriseManagedSupport(GHOrganization organization) {
         this.organization = organization;
+    }
+
+    Optional<GHException> filterException(final GHException e) {
+        if (e.getCause() instanceof HttpException) {
+            final HttpException he = (HttpException) e.getCause();
+            return filterException(he, COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS)
+                    .map(translated -> new GHException(COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS, translated));
+        }
+        return Optional.empty();
     }
 
     Optional<GHIOException> filterException(final HttpException he, final String scenario) {
@@ -44,26 +64,6 @@ class EnterpriseManagedSupport {
             }
         }
         return Optional.empty();
-    }
-
-    Optional<GHException> filterException(final GHException e) {
-        if (e.getCause() instanceof HttpException) {
-            final HttpException he = (HttpException) e.getCause();
-            return filterException(he, COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS)
-                    .map(translated -> new GHException(COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS, translated));
-        }
-        return Optional.empty();
-    }
-
-    static EnterpriseManagedSupport forOrganization(final GHOrganization org) {
-        return new EnterpriseManagedSupport(org);
-    }
-
-    private static String logUnexpectedFailure(final JsonProcessingException exception, final String payload) {
-        final StringWriter sw = new StringWriter();
-        final PrintWriter pw = new PrintWriter(sw);
-        exception.printStackTrace(pw);
-        return String.format("Could not parse GitHub error response: '%s'. Full stacktrace follows:%n%s", payload, sw);
     }
 
 }

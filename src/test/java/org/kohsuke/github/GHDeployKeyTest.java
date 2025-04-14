@@ -17,16 +17,16 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
 
+    private static final String DEPLOY_KEY_TEST_REPO_NAME = "hub4j-test-org/GHDeployKeyTest";
+
+    private static final String ED_25519_READONLY = "DeployKey - ed25519 - readonly";
+    private static final String KEY_CREATOR_USERNAME = "van-vliet";
+    private static final String RSA_4096_READWRITE = "Deploykey - rsa4096 - readwrite";
     /**
      * Create default GHDeployKeyTest instance
      */
     public GHDeployKeyTest() {
     }
-
-    private static final String DEPLOY_KEY_TEST_REPO_NAME = "hub4j-test-org/GHDeployKeyTest";
-    private static final String ED_25519_READONLY = "DeployKey - ed25519 - readonly";
-    private static final String RSA_4096_READWRITE = "Deploykey - rsa4096 - readwrite";
-    private static final String KEY_CREATOR_USERNAME = "van-vliet";
 
     /**
      * Test get deploymentkeys.
@@ -70,6 +70,10 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
         assertThat("The key only has read/write access", rsa_4096Key.get().isRead_only(), is(false));
     }
 
+    private GHRepository getRepository(final GitHub gitHub) throws IOException {
+        return gitHub.getRepository(DEPLOY_KEY_TEST_REPO_NAME);
+    }
+
     /**
      * Gets the repository.
      *
@@ -79,9 +83,5 @@ public class GHDeployKeyTest extends AbstractGitHubWireMockTest {
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(final GitHub gitHub) throws IOException {
-        return gitHub.getRepository(DEPLOY_KEY_TEST_REPO_NAME);
     }
 }

@@ -8,8 +8,8 @@ package org.kohsuke.github;
  */
 public enum GHMilestoneState {
 
-    /** The open. */
-    OPEN,
     /** The closed. */
-    CLOSED
+    CLOSED,
+    /** The open. */
+    OPEN
 }

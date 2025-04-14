@@ -47,59 +47,26 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Basic test to ensure that the list of licenses from {@link GitHub#listLicenses()} is returned.
-     */
-    @Test
-    public void listLicenses() {
-        Iterable<GHLicense> licenses = gitHub.listLicenses();
-        assertThat(licenses, is(not(emptyIterable())));
-    }
-
-    /**
-     * Tests that {@link GitHub#listLicenses()} returns the MIT license in the expected manner.
+     * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)} and then calls
+     * {@link GHRepository#getLicense()} and checks that certain properties are correct.
      *
      * @throws IOException
      *             if test fails
      */
     @Test
-    public void listLicensesCheckIndividualLicense() throws IOException {
-        PagedIterable<GHLicense> licenses = gitHub.listLicenses();
-        for (GHLicense lic : licenses) {
-            if (lic.getKey().equals("mit")) {
-                assertThat(lic.getUrl(), equalTo(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
-                return;
-            }
-        }
-        fail("The MIT license was not found");
-    }
-
-    /**
-     * Checks that the request for an individual license using {@link GitHub#getLicense(String)} returns expected values
-     * (not all properties are checked).
-     *
-     * @throws IOException
-     *             if test fails
-     */
-    @Test
-    public void getLicense() throws IOException {
-        String key = "mit";
-        GHLicense license = gitHub.getLicense(key);
-        assertThat(license, notNullValue());
-        assertThat("The name is correct", license.getName(), equalTo("MIT License"));
+    public void checkRepositoryFullLicense() throws IOException {
+        GHRepository repo = gitHub.getRepository("hub4j/github-api");
+        GHLicense license = repo.getLicense();
+        assertThat("The license is populated", license, notNullValue());
+        assertThat("The key is correct", license.getKey(), equalTo("mit"));
         assertThat("The SPDX ID is correct", license.getSpdxId(), is(equalTo("MIT")));
+        assertThat("The name is correct", license.getName(), equalTo("MIT License"));
+        assertThat("The URL is correct",
+                license.getUrl(),
+                equalTo(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
         assertThat("The HTML URL is correct",
                 license.getHtmlUrl(),
                 equalTo(new URL("http://choosealicense.com/licenses/mit/")));
-        assertThat(license.getBody(), startsWith("MIT License\n" + "\n" + "Copyright (c) [year] [fullname]\n\n"));
-        assertThat(license.getForbidden(), is(empty()));
-        assertThat(license.getPermitted(), is(empty()));
-        assertThat(license.getRequired(), is(empty()));
-        assertThat(license.getImplementation(),
-                equalTo("Create a text file (typically named LICENSE or LICENSE.txt) in the root of your source code and copy the text of the license into the file. Replace [year] with the current year and [fullname] with the name (or names) of the copyright holders."));
-        assertThat(license.getCategory(), nullValue());
-        assertThat(license.isFeatured(), equalTo(true));
-        assertThat(license.equals(null), equalTo(false));
-        assertThat(license.equals(gitHub.getLicense(key)), equalTo(true));
     }
 
     /**
@@ -142,63 +109,6 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)} and checks that the license is
-     * correct.
-     *
-     * @throws IOException
-     *             if test fails
-     */
-    @Test
-    public void checkRepositoryLicensePomes() throws IOException {
-        GHRepository repo = gitHub.getRepository("pomes/pomes");
-        GHLicense license = repo.getLicense();
-        assertThat("The license is populated", license, notNullValue());
-        assertThat("The key is correct", license.getKey(), equalTo("apache-2.0"));
-        assertThat("The SPDX ID is correct", license.getSpdxId(), is(equalTo("Apache-2.0")));
-        assertThat("The name is correct", license.getName(), equalTo("Apache License 2.0"));
-        assertThat("The URL is correct",
-                license.getUrl(),
-                equalTo(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/apache-2.0")));
-    }
-
-    /**
-     * Accesses the 'dedickinson/test-repo' repo using {@link GitHub#getRepository(String)} and checks that *no* license
-     * is returned as the repo doesn't have one.
-     *
-     * @throws IOException
-     *             if test fails
-     */
-    @Test
-    public void checkRepositoryWithoutLicense() throws IOException {
-        GHRepository repo = gitHub.getRepository(GITHUB_API_TEST_ORG + "/empty");
-        GHLicense license = repo.getLicense();
-        assertThat("There is no license", license, nullValue());
-    }
-
-    /**
-     * Accesses the 'kohsuke/github-api' repo using {@link GitHub#getRepository(String)} and then calls
-     * {@link GHRepository#getLicense()} and checks that certain properties are correct.
-     *
-     * @throws IOException
-     *             if test fails
-     */
-    @Test
-    public void checkRepositoryFullLicense() throws IOException {
-        GHRepository repo = gitHub.getRepository("hub4j/github-api");
-        GHLicense license = repo.getLicense();
-        assertThat("The license is populated", license, notNullValue());
-        assertThat("The key is correct", license.getKey(), equalTo("mit"));
-        assertThat("The SPDX ID is correct", license.getSpdxId(), is(equalTo("MIT")));
-        assertThat("The name is correct", license.getName(), equalTo("MIT License"));
-        assertThat("The URL is correct",
-                license.getUrl(),
-                equalTo(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
-        assertThat("The HTML URL is correct",
-                license.getHtmlUrl(),
-                equalTo(new URL("http://choosealicense.com/licenses/mit/")));
-    }
-
-    /**
      * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)} and then calls
      * {@link GHRepository#getLicenseContent()} and checks that certain properties are correct.
      *
@@ -236,5 +146,95 @@ public class GHLicenseTest extends AbstractGitHubWireMockTest {
         assertThat(license.getKey(), equalTo("other"));
         assertThat(license.getDescription(), is(nullValue()));
         assertThat(license.getUrl(), is(nullValue()));
+    }
+
+    /**
+     * Accesses the 'pomes/pomes' repo using {@link GitHub#getRepository(String)} and checks that the license is
+     * correct.
+     *
+     * @throws IOException
+     *             if test fails
+     */
+    @Test
+    public void checkRepositoryLicensePomes() throws IOException {
+        GHRepository repo = gitHub.getRepository("pomes/pomes");
+        GHLicense license = repo.getLicense();
+        assertThat("The license is populated", license, notNullValue());
+        assertThat("The key is correct", license.getKey(), equalTo("apache-2.0"));
+        assertThat("The SPDX ID is correct", license.getSpdxId(), is(equalTo("Apache-2.0")));
+        assertThat("The name is correct", license.getName(), equalTo("Apache License 2.0"));
+        assertThat("The URL is correct",
+                license.getUrl(),
+                equalTo(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/apache-2.0")));
+    }
+
+    /**
+     * Accesses the 'dedickinson/test-repo' repo using {@link GitHub#getRepository(String)} and checks that *no* license
+     * is returned as the repo doesn't have one.
+     *
+     * @throws IOException
+     *             if test fails
+     */
+    @Test
+    public void checkRepositoryWithoutLicense() throws IOException {
+        GHRepository repo = gitHub.getRepository(GITHUB_API_TEST_ORG + "/empty");
+        GHLicense license = repo.getLicense();
+        assertThat("There is no license", license, nullValue());
+    }
+
+    /**
+     * Checks that the request for an individual license using {@link GitHub#getLicense(String)} returns expected values
+     * (not all properties are checked).
+     *
+     * @throws IOException
+     *             if test fails
+     */
+    @Test
+    public void getLicense() throws IOException {
+        String key = "mit";
+        GHLicense license = gitHub.getLicense(key);
+        assertThat(license, notNullValue());
+        assertThat("The name is correct", license.getName(), equalTo("MIT License"));
+        assertThat("The SPDX ID is correct", license.getSpdxId(), is(equalTo("MIT")));
+        assertThat("The HTML URL is correct",
+                license.getHtmlUrl(),
+                equalTo(new URL("http://choosealicense.com/licenses/mit/")));
+        assertThat(license.getBody(), startsWith("MIT License\n" + "\n" + "Copyright (c) [year] [fullname]\n\n"));
+        assertThat(license.getForbidden(), is(empty()));
+        assertThat(license.getPermitted(), is(empty()));
+        assertThat(license.getRequired(), is(empty()));
+        assertThat(license.getImplementation(),
+                equalTo("Create a text file (typically named LICENSE or LICENSE.txt) in the root of your source code and copy the text of the license into the file. Replace [year] with the current year and [fullname] with the name (or names) of the copyright holders."));
+        assertThat(license.getCategory(), nullValue());
+        assertThat(license.isFeatured(), equalTo(true));
+        assertThat(license.equals(null), equalTo(false));
+        assertThat(license.equals(gitHub.getLicense(key)), equalTo(true));
+    }
+
+    /**
+     * Basic test to ensure that the list of licenses from {@link GitHub#listLicenses()} is returned.
+     */
+    @Test
+    public void listLicenses() {
+        Iterable<GHLicense> licenses = gitHub.listLicenses();
+        assertThat(licenses, is(not(emptyIterable())));
+    }
+
+    /**
+     * Tests that {@link GitHub#listLicenses()} returns the MIT license in the expected manner.
+     *
+     * @throws IOException
+     *             if test fails
+     */
+    @Test
+    public void listLicensesCheckIndividualLicense() throws IOException {
+        PagedIterable<GHLicense> licenses = gitHub.listLicenses();
+        for (GHLicense lic : licenses) {
+            if (lic.getKey().equals("mit")) {
+                assertThat(lic.getUrl(), equalTo(new URL(mockGitHub.apiServer().baseUrl() + "/licenses/mit")));
+                return;
+            }
+        }
+        fail("The MIT license was not found");
     }
 }

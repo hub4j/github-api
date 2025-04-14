@@ -75,6 +75,10 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
         assertThat(ref, notNullValue());
     }
 
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    }
+
     /**
      * Gets the repository.
      *
@@ -84,9 +88,5 @@ public class GHTagTest extends AbstractGitHubWireMockTest {
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 }

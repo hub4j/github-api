@@ -15,9 +15,9 @@ import java.util.Base64;
  * @see GHRepository#createContent() GHRepository#createContent()
  */
 public final class GHContentBuilder {
+    private String path;
     private final GHRepository repo;
     private final Requester req;
-    private String path;
 
     /**
      * Instantiates a new GH content builder.
@@ -31,19 +31,6 @@ public final class GHContentBuilder {
     }
 
     /**
-     * Path gh content builder.
-     *
-     * @param path
-     *            the path
-     * @return the gh content builder
-     */
-    public GHContentBuilder path(String path) {
-        this.path = path;
-        req.with("path", path);
-        return this;
-    }
-
-    /**
      * Branch gh content builder.
      *
      * @param branch
@@ -52,53 +39,6 @@ public final class GHContentBuilder {
      */
     public GHContentBuilder branch(String branch) {
         req.with("branch", branch);
-        return this;
-    }
-
-    /**
-     * Used when updating (but not creating a new content) to specify the blob SHA of the file being replaced.
-     *
-     * @param sha
-     *            the sha
-     * @return the gh content builder
-     */
-    public GHContentBuilder sha(String sha) {
-        req.with("sha", sha);
-        return this;
-    }
-
-    /**
-     * Content gh content builder.
-     *
-     * @param content
-     *            the content
-     * @return the gh content builder
-     */
-    public GHContentBuilder content(byte[] content) {
-        req.with("content", Base64.getEncoder().encodeToString(content));
-        return this;
-    }
-
-    /**
-     * Content gh content builder.
-     *
-     * @param content
-     *            the content
-     * @return the gh content builder
-     */
-    public GHContentBuilder content(String content) {
-        return content(content.getBytes(StandardCharsets.UTF_8));
-    }
-
-    /**
-     * Message gh content builder.
-     *
-     * @param commitMessage
-     *            the commit message
-     * @return the gh content builder
-     */
-    public GHContentBuilder message(String commitMessage) {
-        req.with("message", commitMessage);
         return this;
     }
 
@@ -117,5 +57,65 @@ public final class GHContentBuilder {
         response.getCommit().wrapUp(repo);
 
         return response;
+    }
+
+    /**
+     * Content gh content builder.
+     *
+     * @param content
+     *            the content
+     * @return the gh content builder
+     */
+    public GHContentBuilder content(String content) {
+        return content(content.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Content gh content builder.
+     *
+     * @param content
+     *            the content
+     * @return the gh content builder
+     */
+    public GHContentBuilder content(byte[] content) {
+        req.with("content", Base64.getEncoder().encodeToString(content));
+        return this;
+    }
+
+    /**
+     * Message gh content builder.
+     *
+     * @param commitMessage
+     *            the commit message
+     * @return the gh content builder
+     */
+    public GHContentBuilder message(String commitMessage) {
+        req.with("message", commitMessage);
+        return this;
+    }
+
+    /**
+     * Path gh content builder.
+     *
+     * @param path
+     *            the path
+     * @return the gh content builder
+     */
+    public GHContentBuilder path(String path) {
+        this.path = path;
+        req.with("path", path);
+        return this;
+    }
+
+    /**
+     * Used when updating (but not creating a new content) to specify the blob SHA of the file being replaced.
+     *
+     * @param sha
+     *            the sha
+     * @return the gh content builder
+     */
+    public GHContentBuilder sha(String sha) {
+        req.with("sha", sha);
+        return this;
     }
 }

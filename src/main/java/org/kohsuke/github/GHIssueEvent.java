@@ -15,54 +15,27 @@ import java.util.Date;
  */
 public class GHIssueEvent extends GitHubInteractiveObject {
 
+    private GHUser actor;
+
+    private GHUser assignee;
+    private String commitId;
+    private String commitUrl;
+    private String createdAt;
+    private String event;
+    private long id;
+    private GHIssue issue;
+    private GHLabel label;
+    private GHMilestone milestone;
+    private String nodeId;
+    private GHIssueRename rename;
+    private GHUser requestedReviewer;
+    private GHUser reviewRequester;
+    private String url;
+
     /**
      * Create default GHIssueEvent instance
      */
     public GHIssueEvent() {
-    }
-
-    private long id;
-    private String nodeId;
-    private String url;
-    private GHUser actor;
-    private String event;
-    private String commitId;
-    private String commitUrl;
-    private String createdAt;
-    private GHMilestone milestone;
-    private GHLabel label;
-    private GHUser assignee;
-    private GHIssueRename rename;
-    private GHUser reviewRequester;
-    private GHUser requestedReviewer;
-
-    private GHIssue issue;
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Gets node id.
-     *
-     * @return the node id
-     */
-    public String getNodeId() {
-        return nodeId;
-    }
-
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    public String getUrl() {
-        return url;
     }
 
     /**
@@ -76,12 +49,14 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets event.
+     * Get the {@link GHUser} that was assigned or unassigned from the issue. Only present for events "assigned" and
+     * "unassigned", <code>null</code> otherwise.
      *
-     * @return the event
+     * @return the user
      */
-    public String getEvent() {
-        return event;
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getAssignee() {
+        return assignee;
     }
 
     /**
@@ -113,6 +88,24 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     }
 
     /**
+     * Gets event.
+     *
+     * @return the event
+     */
+    public String getEvent() {
+        return event;
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
      * Gets issue.
      *
      * @return the issue
@@ -120,17 +113,6 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHIssue getIssue() {
         return issue;
-    }
-
-    /**
-     * Get the {@link GHMilestone} that this issue was added to or removed from. Only present for events "milestoned"
-     * and "demilestoned", <code>null</code> otherwise.
-     *
-     * @return the milestone
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHMilestone getMilestone() {
-        return milestone;
     }
 
     /**
@@ -145,14 +127,23 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     }
 
     /**
-     * Get the {@link GHUser} that was assigned or unassigned from the issue. Only present for events "assigned" and
-     * "unassigned", <code>null</code> otherwise.
+     * Get the {@link GHMilestone} that this issue was added to or removed from. Only present for events "milestoned"
+     * and "demilestoned", <code>null</code> otherwise.
      *
-     * @return the user
+     * @return the milestone
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getAssignee() {
-        return assignee;
+    public GHMilestone getMilestone() {
+        return milestone;
+    }
+
+    /**
+     * Gets node id.
+     *
+     * @return the node id
+     */
+    public String getNodeId() {
+        return nodeId;
     }
 
     /**
@@ -163,23 +154,6 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     public GHIssueRename getRename() {
         return this.rename;
-    }
-
-    /**
-     *
-     * Get the {@link GHUser} person who requested a review. Only present for events "review_requested",
-     * "review_request_removed", <code>null</code> otherwise.
-     *
-     * @return the GHUser
-     *
-     * @see <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_requested">review_requested</a>
-     *      and <a href=
-     *      "https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_request_removed">review_request_removed</a>
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getReviewRequester() {
-        return this.reviewRequester;
     }
 
     /**
@@ -200,15 +174,29 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     }
 
     /**
-     * Wrap up.
      *
-     * @param parent
-     *            the parent
-     * @return the GH issue event
+     * Get the {@link GHUser} person who requested a review. Only present for events "review_requested",
+     * "review_request_removed", <code>null</code> otherwise.
+     *
+     * @return the GHUser
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_requested">review_requested</a>
+     *      and <a href=
+     *      "https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_request_removed">review_request_removed</a>
      */
-    GHIssueEvent wrapUp(GHIssue parent) {
-        this.issue = parent;
-        return this;
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getReviewRequester() {
+        return this.reviewRequester;
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
     }
 
     /**
@@ -223,5 +211,17 @@ public class GHIssueEvent extends GitHubInteractiveObject {
                 getEvent(),
                 getActor().getLogin(),
                 getCreatedAt().toString());
+    }
+
+    /**
+     * Wrap up.
+     *
+     * @param parent
+     *            the parent
+     * @return the GH issue event
+     */
+    GHIssueEvent wrapUp(GHIssue parent) {
+        this.issue = parent;
+        return this;
     }
 }

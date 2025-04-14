@@ -32,30 +32,17 @@ import javax.annotation.Nonnull;
 public final class ReadOnlyObjects {
 
     /**
-     * Placeholder constructor.
-     */
-    public ReadOnlyObjects() {
-    }
-
-    /**
      * All GHMeta data objects should expose these values.
      *
      * @author Liam Newman
      */
     public interface GHMetaExample {
         /**
-         * Is verifiable password authentication boolean.
+         * Gets api.
          *
-         * @return the boolean
+         * @return the api
          */
-        boolean isVerifiablePasswordAuthentication();
-
-        /**
-         * Gets hooks.
-         *
-         * @return the hooks
-         */
-        List<String> getHooks();
+        List<String> getApi();
 
         /**
          * Gets git.
@@ -65,18 +52,18 @@ public final class ReadOnlyObjects {
         List<String> getGit();
 
         /**
-         * Gets web.
+         * Gets hooks.
          *
-         * @return the web
+         * @return the hooks
          */
-        List<String> getWeb();
+        List<String> getHooks();
 
         /**
-         * Gets api.
+         * Gets importer.
          *
-         * @return the api
+         * @return the importer
          */
-        List<String> getApi();
+        List<String> getImporter();
 
         /**
          * Gets pages.
@@ -86,371 +73,18 @@ public final class ReadOnlyObjects {
         List<String> getPages();
 
         /**
-         * Gets importer.
+         * Gets web.
          *
-         * @return the importer
+         * @return the web
          */
-        List<String> getImporter();
-    }
-
-    /**
-     * This version uses public getters and setters and leaves it up to Jackson how it wants to fill them.
-     * <p>
-     * Pro:
-     * <ul>
-     * <li>Easy to create</li>
-     * <li>Not much code</li>
-     * <li>Minimal annotations</li>
-     * </ul>
-     * Con:
-     * <ul>
-     * <li>Exposes public setters for fields that should not be changed, flagged by spotbugs</li>
-     * <li>Lists modifiable when they should not be changed</li>
-     * <li>Jackson generally doesn't call the setters, it just sets the fields directly</li>
-     * </ul>
-     *
-     * @author Paulo Miguel Almeida
-     * @see org.kohsuke.github.GHMeta
-     */
-    public static class GHMetaPublic implements GHMetaExample {
+        List<String> getWeb();
 
         /**
-         * Create default GHMetaPublic instance
-         */
-        public GHMetaPublic() {
-        }
-
-        @JsonProperty("verifiable_password_authentication")
-        private boolean verifiablePasswordAuthentication;
-        private List<String> hooks;
-        private List<String> git;
-        private List<String> web;
-        private List<String> api;
-        private List<String> pages;
-        private List<String> importer;
-
-        public boolean isVerifiablePasswordAuthentication() {
-            return verifiablePasswordAuthentication;
-        }
-
-        /**
-         * Sets verifiable password authentication.
+         * Is verifiable password authentication boolean.
          *
-         * @param verifiablePasswordAuthentication
-         *            the verifiable password authentication
+         * @return the boolean
          */
-        public void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
-            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
-        }
-
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getHooks() {
-            return hooks;
-        }
-
-        /**
-         * Sets hooks.
-         *
-         * @param hooks
-         *            the hooks
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
-        public void setHooks(List<String> hooks) {
-            this.hooks = hooks;
-        }
-
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getGit() {
-            return git;
-        }
-
-        /**
-         * Sets git.
-         *
-         * @param git
-         *            the git
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
-        public void setGit(List<String> git) {
-            this.git = git;
-        }
-
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getWeb() {
-            return web;
-        }
-
-        /**
-         * Sets web.
-         *
-         * @param web
-         *            the web
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
-        public void setWeb(List<String> web) {
-            this.web = web;
-        }
-
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getApi() {
-            return api;
-        }
-
-        /**
-         * Sets api.
-         *
-         * @param api
-         *            the api
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
-        public void setApi(List<String> api) {
-            this.api = api;
-        }
-
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getPages() {
-            return pages;
-        }
-
-        /**
-         * Sets pages.
-         *
-         * @param pages
-         *            the pages
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
-        public void setPages(List<String> pages) {
-            this.pages = pages;
-        }
-
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getImporter() {
-            return importer;
-        }
-
-        /**
-         * Sets importer.
-         *
-         * @param importer
-         *            the importer
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
-        public void setImporter(List<String> importer) {
-            this.importer = importer;
-        }
-
-    }
-
-    /**
-     * This version uses public getters and shows that package or private setters both can be used by jackson. You can
-     * check this by running in debug and setting break points in the setters.
-     *
-     * <p>
-     * Pro:
-     * <ul>
-     * <li>Easy to create</li>
-     * <li>Not much code</li>
-     * <li>Some annotations</li>
-     * </ul>
-     * Con:
-     * <ul>
-     * <li>Exposes some package setters for fields that should not be changed, better than public</li>
-     * <li>Lists modifiable when they should not be changed</li>
-     * </ul>
-     *
-     * @author Liam Newman
-     * @see org.kohsuke.github.GHMeta
-     */
-    public static class GHMetaPackage implements GHMetaExample {
-
-        /**
-         * Create default GHMetaPackage instance
-         */
-        public GHMetaPackage() {
-        }
-
-        private boolean verifiablePasswordAuthentication;
-        private List<String> hooks;
-        private List<String> git;
-        private List<String> web;
-        private List<String> api;
-        private List<String> pages;
-
-        /**
-         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
-         */
-        @JsonProperty
-        private List<String> importer;
-
-        @JsonProperty("verifiable_password_authentication")
-        public boolean isVerifiablePasswordAuthentication() {
-            return verifiablePasswordAuthentication;
-        }
-
-        private void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
-            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
-        }
-
-        @JsonProperty
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getHooks() {
-            return hooks;
-        }
-
-        /**
-         * Setters can be private (or package local) and will still be called by Jackson. The {@link JsonProperty} can
-         * got on the getter or setter and still work.
-         *
-         * @param hooks
-         *            list of hooks
-         */
-        private void setHooks(List<String> hooks) {
-            this.hooks = hooks;
-        }
-
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getGit() {
-            return git;
-        }
-
-        /**
-         * Since we mostly use Jackson for deserialization, {@link JsonSetter} is also okay, but {@link JsonProperty} is
-         * preferred.
-         *
-         * @param git
-         *            list of git addresses
-         */
-        @JsonSetter
-        void setGit(List<String> git) {
-            this.git = git;
-        }
-
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getWeb() {
-            return web;
-        }
-
-        /**
-         * The {@link JsonProperty} can got on the getter or setter and still work.
-         *
-         * @param web
-         *            list of web addresses
-         */
-        void setWeb(List<String> web) {
-            this.web = web;
-        }
-
-        @JsonProperty
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getApi() {
-            return api;
-        }
-
-        void setApi(List<String> api) {
-            this.api = api;
-        }
-
-        @JsonProperty
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getPages() {
-            return pages;
-        }
-
-        void setPages(List<String> pages) {
-            this.pages = pages;
-        }
-
-        /**
-         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
-         *
-         * @return list of importer addresses
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
-        public List<String> getImporter() {
-            return importer;
-        }
-
-        /**
-         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
-         *
-         * @param importer
-         *            list of importer addresses
-         */
-        void setImporter(List<String> importer) {
-            this.importer = importer;
-        }
-
-    }
-
-    /**
-     * This version uses only public getters and returns unmodifiable lists.
-     *
-     *
-     * <p>
-     * Pro:
-     * <ul>
-     * <li>Very Easy to create</li>
-     * <li>Minimal code</li>
-     * <li>Minimal annotations</li>
-     * <li>Fields effectively final and lists unmodifiable</li>
-     * </ul>
-     * Con:
-     * <ul>
-     * <li>Effectively final is not quite really final</li>
-     * <li>If one of the lists were missing (an option member, for example), it will throw NPE but we could mitigate by
-     * checking for null or assigning a default.</li>
-     * </ul>
-     *
-     * @author Liam Newman
-     * @see org.kohsuke.github.GHMeta
-     */
-    public static class GHMetaGettersUnmodifiable implements GHMetaExample {
-
-        /**
-         * Create default GHMetaGettersUnmodifiable instance
-         */
-        public GHMetaGettersUnmodifiable() {
-        }
-
-        @JsonProperty("verifiable_password_authentication")
-        private boolean verifiablePasswordAuthentication;
-        private List<String> hooks;
-        private List<String> git;
-        private List<String> web;
-        private List<String> api;
-        private List<String> pages;
-        /**
-         * If this were an optional member, we could fill it with an empty list by default.
-         */
-        private List<String> importer = new ArrayList<>();
-
-        public boolean isVerifiablePasswordAuthentication() {
-            return verifiablePasswordAuthentication;
-        }
-
-        public List<String> getHooks() {
-            return Collections.unmodifiableList(hooks);
-        }
-
-        public List<String> getGit() {
-            return Collections.unmodifiableList(git);
-        }
-
-        public List<String> getWeb() {
-            return Collections.unmodifiableList(web);
-        }
-
-        public List<String> getApi() {
-            return Collections.unmodifiableList(api);
-        }
-
-        public List<String> getPages() {
-            return Collections.unmodifiableList(pages);
-        }
-
-        public List<String> getImporter() {
-            return Collections.unmodifiableList(importer);
-        }
+        boolean isVerifiablePasswordAuthentication();
     }
 
     /**
@@ -474,13 +108,13 @@ public final class ReadOnlyObjects {
      */
     public static class GHMetaGettersFinal implements GHMetaExample {
 
-        private final boolean verifiablePasswordAuthentication;
-        private final List<String> hooks = new ArrayList<>();
-        private final List<String> git = new ArrayList<>();
-        private final List<String> web = new ArrayList<>();
         private final List<String> api = new ArrayList<>();
-        private final List<String> pages = new ArrayList<>();
+        private final List<String> git = new ArrayList<>();
+        private final List<String> hooks = new ArrayList<>();
         private final List<String> importer = new ArrayList<>();
+        private final List<String> pages = new ArrayList<>();
+        private final boolean verifiablePasswordAuthentication;
+        private final List<String> web = new ArrayList<>();
 
         @JsonCreator
         private GHMetaGettersFinal(
@@ -489,32 +123,32 @@ public final class ReadOnlyObjects {
             this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
         }
 
-        public boolean isVerifiablePasswordAuthentication() {
-            return verifiablePasswordAuthentication;
-        }
-
-        public List<String> getHooks() {
-            return Collections.unmodifiableList(hooks);
+        public List<String> getApi() {
+            return Collections.unmodifiableList(api);
         }
 
         public List<String> getGit() {
             return Collections.unmodifiableList(git);
         }
 
-        public List<String> getWeb() {
-            return Collections.unmodifiableList(web);
+        public List<String> getHooks() {
+            return Collections.unmodifiableList(hooks);
         }
 
-        public List<String> getApi() {
-            return Collections.unmodifiableList(api);
+        public List<String> getImporter() {
+            return Collections.unmodifiableList(importer);
         }
 
         public List<String> getPages() {
             return Collections.unmodifiableList(pages);
         }
 
-        public List<String> getImporter() {
-            return Collections.unmodifiableList(importer);
+        public List<String> getWeb() {
+            return Collections.unmodifiableList(web);
+        }
+
+        public boolean isVerifiablePasswordAuthentication() {
+            return verifiablePasswordAuthentication;
         }
     }
 
@@ -542,13 +176,13 @@ public final class ReadOnlyObjects {
      */
     public static class GHMetaGettersFinalCreator implements GHMetaExample {
 
-        private final boolean verifiablePasswordAuthentication;
-        private final List<String> hooks;
-        private final List<String> git;
-        private final List<String> web;
         private final List<String> api;
-        private final List<String> pages;
+        private final List<String> git;
+        private final List<String> hooks;
         private final List<String> importer;
+        private final List<String> pages;
+        private final boolean verifiablePasswordAuthentication;
+        private final List<String> web;
 
         /**
          *
@@ -590,13 +224,9 @@ public final class ReadOnlyObjects {
             this.importer = Collections.unmodifiableList(importer);
         }
 
-        public boolean isVerifiablePasswordAuthentication() {
-            return verifiablePasswordAuthentication;
-        }
-
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
-        public List<String> getHooks() {
-            return hooks;
+        public List<String> getApi() {
+            return api;
         }
 
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
@@ -605,13 +235,13 @@ public final class ReadOnlyObjects {
         }
 
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
-        public List<String> getWeb() {
-            return web;
+        public List<String> getHooks() {
+            return hooks;
         }
 
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
-        public List<String> getApi() {
-            return api;
+        public List<String> getImporter() {
+            return importer;
         }
 
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
@@ -620,8 +250,378 @@ public final class ReadOnlyObjects {
         }
 
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Unmodifiable but spotbugs doesn't detect")
+        public List<String> getWeb() {
+            return web;
+        }
+
+        public boolean isVerifiablePasswordAuthentication() {
+            return verifiablePasswordAuthentication;
+        }
+    }
+
+    /**
+     * This version uses only public getters and returns unmodifiable lists.
+     *
+     *
+     * <p>
+     * Pro:
+     * <ul>
+     * <li>Very Easy to create</li>
+     * <li>Minimal code</li>
+     * <li>Minimal annotations</li>
+     * <li>Fields effectively final and lists unmodifiable</li>
+     * </ul>
+     * Con:
+     * <ul>
+     * <li>Effectively final is not quite really final</li>
+     * <li>If one of the lists were missing (an option member, for example), it will throw NPE but we could mitigate by
+     * checking for null or assigning a default.</li>
+     * </ul>
+     *
+     * @author Liam Newman
+     * @see org.kohsuke.github.GHMeta
+     */
+    public static class GHMetaGettersUnmodifiable implements GHMetaExample {
+
+        private List<String> api;
+
+        private List<String> git;
+        private List<String> hooks;
+        /**
+         * If this were an optional member, we could fill it with an empty list by default.
+         */
+        private List<String> importer = new ArrayList<>();
+        private List<String> pages;
+        @JsonProperty("verifiable_password_authentication")
+        private boolean verifiablePasswordAuthentication;
+        private List<String> web;
+        /**
+         * Create default GHMetaGettersUnmodifiable instance
+         */
+        public GHMetaGettersUnmodifiable() {
+        }
+
+        public List<String> getApi() {
+            return Collections.unmodifiableList(api);
+        }
+
+        public List<String> getGit() {
+            return Collections.unmodifiableList(git);
+        }
+
+        public List<String> getHooks() {
+            return Collections.unmodifiableList(hooks);
+        }
+
+        public List<String> getImporter() {
+            return Collections.unmodifiableList(importer);
+        }
+
+        public List<String> getPages() {
+            return Collections.unmodifiableList(pages);
+        }
+
+        public List<String> getWeb() {
+            return Collections.unmodifiableList(web);
+        }
+
+        public boolean isVerifiablePasswordAuthentication() {
+            return verifiablePasswordAuthentication;
+        }
+    }
+
+    /**
+     * This version uses public getters and shows that package or private setters both can be used by jackson. You can
+     * check this by running in debug and setting break points in the setters.
+     *
+     * <p>
+     * Pro:
+     * <ul>
+     * <li>Easy to create</li>
+     * <li>Not much code</li>
+     * <li>Some annotations</li>
+     * </ul>
+     * Con:
+     * <ul>
+     * <li>Exposes some package setters for fields that should not be changed, better than public</li>
+     * <li>Lists modifiable when they should not be changed</li>
+     * </ul>
+     *
+     * @author Liam Newman
+     * @see org.kohsuke.github.GHMeta
+     */
+    public static class GHMetaPackage implements GHMetaExample {
+
+        private List<String> api;
+
+        private List<String> git;
+        private List<String> hooks;
+        /**
+         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
+         */
+        @JsonProperty
+        private List<String> importer;
+        private List<String> pages;
+        private boolean verifiablePasswordAuthentication;
+        private List<String> web;
+
+        /**
+         * Create default GHMetaPackage instance
+         */
+        public GHMetaPackage() {
+        }
+
+        @JsonProperty
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getApi() {
+            return api;
+        }
+
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getGit() {
+            return git;
+        }
+
+        @JsonProperty
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getHooks() {
+            return hooks;
+        }
+
+        /**
+         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
+         *
+         * @return list of importer addresses
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
         public List<String> getImporter() {
             return importer;
         }
+
+        @JsonProperty
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getPages() {
+            return pages;
+        }
+
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getWeb() {
+            return web;
+        }
+
+        @JsonProperty("verifiable_password_authentication")
+        public boolean isVerifiablePasswordAuthentication() {
+            return verifiablePasswordAuthentication;
+        }
+
+        /**
+         * Setters can be private (or package local) and will still be called by Jackson. The {@link JsonProperty} can
+         * got on the getter or setter and still work.
+         *
+         * @param hooks
+         *            list of hooks
+         */
+        private void setHooks(List<String> hooks) {
+            this.hooks = hooks;
+        }
+
+        private void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
+            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
+        }
+
+        void setApi(List<String> api) {
+            this.api = api;
+        }
+
+        /**
+         * Since we mostly use Jackson for deserialization, {@link JsonSetter} is also okay, but {@link JsonProperty} is
+         * preferred.
+         *
+         * @param git
+         *            list of git addresses
+         */
+        @JsonSetter
+        void setGit(List<String> git) {
+            this.git = git;
+        }
+
+        /**
+         * Missing {@link JsonProperty} or having it on the field will cause Jackson to ignore getters and setters.
+         *
+         * @param importer
+         *            list of importer addresses
+         */
+        void setImporter(List<String> importer) {
+            this.importer = importer;
+        }
+
+        void setPages(List<String> pages) {
+            this.pages = pages;
+        }
+
+        /**
+         * The {@link JsonProperty} can got on the getter or setter and still work.
+         *
+         * @param web
+         *            list of web addresses
+         */
+        void setWeb(List<String> web) {
+            this.web = web;
+        }
+
+    }
+
+    /**
+     * This version uses public getters and setters and leaves it up to Jackson how it wants to fill them.
+     * <p>
+     * Pro:
+     * <ul>
+     * <li>Easy to create</li>
+     * <li>Not much code</li>
+     * <li>Minimal annotations</li>
+     * </ul>
+     * Con:
+     * <ul>
+     * <li>Exposes public setters for fields that should not be changed, flagged by spotbugs</li>
+     * <li>Lists modifiable when they should not be changed</li>
+     * <li>Jackson generally doesn't call the setters, it just sets the fields directly</li>
+     * </ul>
+     *
+     * @author Paulo Miguel Almeida
+     * @see org.kohsuke.github.GHMeta
+     */
+    public static class GHMetaPublic implements GHMetaExample {
+
+        private List<String> api;
+
+        private List<String> git;
+        private List<String> hooks;
+        private List<String> importer;
+        private List<String> pages;
+        @JsonProperty("verifiable_password_authentication")
+        private boolean verifiablePasswordAuthentication;
+        private List<String> web;
+        /**
+         * Create default GHMetaPublic instance
+         */
+        public GHMetaPublic() {
+        }
+
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getApi() {
+            return api;
+        }
+
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getGit() {
+            return git;
+        }
+
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getHooks() {
+            return hooks;
+        }
+
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getImporter() {
+            return importer;
+        }
+
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getPages() {
+            return pages;
+        }
+
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Noted above")
+        public List<String> getWeb() {
+            return web;
+        }
+
+        public boolean isVerifiablePasswordAuthentication() {
+            return verifiablePasswordAuthentication;
+        }
+
+        /**
+         * Sets api.
+         *
+         * @param api
+         *            the api
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
+        public void setApi(List<String> api) {
+            this.api = api;
+        }
+
+        /**
+         * Sets git.
+         *
+         * @param git
+         *            the git
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
+        public void setGit(List<String> git) {
+            this.git = git;
+        }
+
+        /**
+         * Sets hooks.
+         *
+         * @param hooks
+         *            the hooks
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
+        public void setHooks(List<String> hooks) {
+            this.hooks = hooks;
+        }
+
+        /**
+         * Sets importer.
+         *
+         * @param importer
+         *            the importer
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
+        public void setImporter(List<String> importer) {
+            this.importer = importer;
+        }
+
+        /**
+         * Sets pages.
+         *
+         * @param pages
+         *            the pages
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
+        public void setPages(List<String> pages) {
+            this.pages = pages;
+        }
+
+        /**
+         * Sets verifiable password authentication.
+         *
+         * @param verifiablePasswordAuthentication
+         *            the verifiable password authentication
+         */
+        public void setVerifiablePasswordAuthentication(boolean verifiablePasswordAuthentication) {
+            this.verifiablePasswordAuthentication = verifiablePasswordAuthentication;
+        }
+
+        /**
+         * Sets web.
+         *
+         * @param web
+         *            the web
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
+        public void setWeb(List<String> web) {
+            this.web = web;
+        }
+
+    }
+
+    /**
+     * Placeholder constructor.
+     */
+    public ReadOnlyObjects() {
     }
 }

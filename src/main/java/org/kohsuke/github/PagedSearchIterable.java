@@ -19,16 +19,16 @@ import javax.annotation.Nonnull;
                 "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
         justification = "Constructed by JSON API")
 public class PagedSearchIterable<T> extends PagedIterable<T> {
-    private final transient GitHub root;
+    private final Class<? extends SearchResult<T>> receiverType;
 
     private final GitHubRequest request;
-
-    private final Class<? extends SearchResult<T>> receiverType;
 
     /**
      * As soon as we have any result fetched, it's set here so that we can report the total count.
      */
     private SearchResult<T> result;
+
+    private final transient GitHub root;
 
     /**
      * Instantiates a new paged search iterable.
@@ -47,15 +47,18 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
     }
 
     /**
-     * With page size.
+     * Iterator.
      *
-     * @param size
-     *            the size
-     * @return the paged search iterable
+     * @param pageSize
+     *            the page size
+     * @return the paged iterator
      */
+    @Nonnull
     @Override
-    public PagedSearchIterable<T> withPageSize(int size) {
-        return (PagedSearchIterable<T>) super.withPageSize(size);
+    public PagedIterator<T> _iterator(int pageSize) {
+        final Iterator<T[]> adapter = adapt(
+                GitHubPageIterator.create(root.getClient(), receiverType, request, pageSize));
+        return new PagedIterator<T>(adapter, null);
     }
 
     /**
@@ -78,24 +81,21 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
         return result.incompleteResults;
     }
 
+    /**
+     * With page size.
+     *
+     * @param size
+     *            the size
+     * @return the paged search iterable
+     */
+    @Override
+    public PagedSearchIterable<T> withPageSize(int size) {
+        return (PagedSearchIterable<T>) super.withPageSize(size);
+    }
+
     private void populate() {
         if (result == null)
             iterator().hasNext();
-    }
-
-    /**
-     * Iterator.
-     *
-     * @param pageSize
-     *            the page size
-     * @return the paged iterator
-     */
-    @Nonnull
-    @Override
-    public PagedIterator<T> _iterator(int pageSize) {
-        final Iterator<T[]> adapter = adapt(
-                GitHubPageIterator.create(root.getClient(), receiverType, request, pageSize));
-        return new PagedIterator<T>(adapter, null);
     }
 
     /**

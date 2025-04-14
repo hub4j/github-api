@@ -21,8 +21,8 @@ import java.util.Date;
  * @see GHRepository#queryCommits() GHRepository#queryCommits()
  */
 public class GHCommitQueryBuilder {
-    private final Requester req;
     private final GHRepository repo;
+    private final Requester req;
 
     /**
      * Instantiates a new GH commit query builder.
@@ -48,18 +48,6 @@ public class GHCommitQueryBuilder {
     }
 
     /**
-     * Only commits containing this file path will be returned.
-     *
-     * @param path
-     *            the path
-     * @return the gh commit query builder
-     */
-    public GHCommitQueryBuilder path(String path) {
-        req.with("path", path);
-        return this;
-    }
-
-    /**
      * Specifies the SHA1 commit / tag / branch / etc to start listing commits from.
      *
      * @param ref
@@ -72,6 +60,15 @@ public class GHCommitQueryBuilder {
     }
 
     /**
+     * Lists up the commits with the criteria built so far.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHCommit> list() {
+        return req.withUrlPath(repo.getApiTailUrl("commits")).toIterable(GHCommit[].class, item -> item.wrapUp(repo));
+    }
+
+    /**
      * Page size gh commit query builder.
      *
      * @param pageSize
@@ -80,6 +77,18 @@ public class GHCommitQueryBuilder {
      */
     public GHCommitQueryBuilder pageSize(int pageSize) {
         req.with("per_page", pageSize);
+        return this;
+    }
+
+    /**
+     * Only commits containing this file path will be returned.
+     *
+     * @param path
+     *            the path
+     * @return the gh commit query builder
+     */
+    public GHCommitQueryBuilder path(String path) {
+        req.with("path", path);
         return this;
     }
 
@@ -153,14 +162,5 @@ public class GHCommitQueryBuilder {
      */
     public GHCommitQueryBuilder until(long timestamp) {
         return until(Instant.ofEpochMilli(timestamp));
-    }
-
-    /**
-     * Lists up the commits with the criteria built so far.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHCommit> list() {
-        return req.withUrlPath(repo.getApiTailUrl("commits")).toIterable(GHCommit[].class, item -> item.wrapUp(repo));
     }
 }

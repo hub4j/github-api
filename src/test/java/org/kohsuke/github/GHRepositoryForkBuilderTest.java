@@ -18,9 +18,48 @@ import static org.hamcrest.Matchers.*;
  * The Class GHRepositoryForkBuilderTest.
  */
 public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
-    private GHRepository repo;
+    /**
+     * The type Test fork builder.
+     */
+    class TestForkBuilder extends GHRepositoryForkBuilder {
+        /**
+         * The Last sleep millis.
+         */
+        int lastSleepMillis = 0;
+        /**
+         * The Sleep count.
+         */
+        int sleepCount = 0;
+
+        /**
+         * Instantiates a new Test fork builder.
+         *
+         * @param repo
+         *            the repo
+         */
+        TestForkBuilder(GHRepository repo) {
+            super(repo);
+        }
+
+        @Override
+        void sleep(int millis) throws IOException {
+            sleepCount++;
+            lastSleepMillis = millis;
+            try {
+                if (mockGitHub.isUseProxy()) {
+                    Thread.sleep(millis);
+                } else {
+                    Thread.sleep(1);
+                }
+            } catch (InterruptedException e) {
+                throw (IOException) new InterruptedIOException().initCause(e);
+            }
+        }
+    }
     private static final String TARGET_ORG = "nts-api-test-org";
     private int originalInterval;
+
+    private GHRepository repo;
 
     /**
      * Instantiates a new Gh repository fork builder test.
@@ -64,73 +103,6 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * The type Test fork builder.
-     */
-    class TestForkBuilder extends GHRepositoryForkBuilder {
-        /**
-         * The Sleep count.
-         */
-        int sleepCount = 0;
-        /**
-         * The Last sleep millis.
-         */
-        int lastSleepMillis = 0;
-
-        /**
-         * Instantiates a new Test fork builder.
-         *
-         * @param repo
-         *            the repo
-         */
-        TestForkBuilder(GHRepository repo) {
-            super(repo);
-        }
-
-        @Override
-        void sleep(int millis) throws IOException {
-            sleepCount++;
-            lastSleepMillis = millis;
-            try {
-                if (mockGitHub.isUseProxy()) {
-                    Thread.sleep(millis);
-                } else {
-                    Thread.sleep(1);
-                }
-            } catch (InterruptedException e) {
-                throw (IOException) new InterruptedIOException().initCause(e);
-            }
-        }
-    }
-
-    private TestForkBuilder createBuilder() {
-        return new TestForkBuilder(repo);
-    }
-
-    private void verifyBasicForkProperties(GHRepository original, GHRepository forked, String expectedName)
-            throws IOException {
-        GHRepository updatedFork = forked;
-
-        await().atMost(Duration.ofSeconds(30))
-                .pollInterval(Duration.ofSeconds(3))
-                .until(() -> gitHub.getRepository(forked.getFullName()).isFork());
-
-        assertThat(updatedFork, notNullValue());
-        assertThat(updatedFork.getName(), equalTo(expectedName));
-        assertThat(updatedFork.isFork(), is(true));
-        assertThat(updatedFork.getParent().getFullName(), equalTo(original.getFullName()));
-    }
-
-    private void verifyBranches(GHRepository forked, boolean defaultBranchOnly) throws IOException {
-        Map<String, GHBranch> branches = forked.getBranches();
-        if (defaultBranchOnly) {
-            assertThat(branches.size(), equalTo(1));
-        } else {
-            assertThat(branches.size(), greaterThan(1));
-        }
-        assertThat(branches.containsKey(forked.getDefaultBranch()), is(true));
-    }
-
-    /**
      * Test fork.
      *
      * @throws Exception
@@ -143,6 +115,42 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
 
         verifyBasicForkProperties(repo, forkedRepo, repo.getName());
         verifyBranches(forkedRepo, false);
+
+        forkedRepo.delete();
+    }
+
+    /**
+     * Test fork changed name.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testForkChangedName() throws Exception {
+        String newRepoName = "test-fork-with-new-name";
+        TestForkBuilder builder = createBuilder();
+        GHRepository forkedRepo = builder.name(newRepoName).create();
+
+        assertThat(forkedRepo.getName(), equalTo(newRepoName));
+        verifyBasicForkProperties(repo, forkedRepo, newRepoName);
+        verifyBranches(forkedRepo, false);
+
+        forkedRepo.delete();
+    }
+
+    /**
+     * Test fork default branch only.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testForkDefaultBranchOnly() throws Exception {
+        TestForkBuilder builder = createBuilder();
+        GHRepository forkedRepo = builder.defaultBranchOnly(true).create();
+
+        verifyBasicForkProperties(repo, forkedRepo, repo.getName());
+        verifyBranches(forkedRepo, true);
 
         forkedRepo.delete();
     }
@@ -167,39 +175,23 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test fork default branch only.
+     * Test sleep.
      *
      * @throws Exception
      *             the exception
      */
     @Test
-    public void testForkDefaultBranchOnly() throws Exception {
-        TestForkBuilder builder = createBuilder();
-        GHRepository forkedRepo = builder.defaultBranchOnly(true).create();
+    public void testSleep() throws Exception {
+        GHRepositoryForkBuilder builder = new GHRepositoryForkBuilder(repo);
+        Thread.currentThread().interrupt();
 
-        verifyBasicForkProperties(repo, forkedRepo, repo.getName());
-        verifyBranches(forkedRepo, true);
-
-        forkedRepo.delete();
-    }
-
-    /**
-     * Test fork changed name.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testForkChangedName() throws Exception {
-        String newRepoName = "test-fork-with-new-name";
-        TestForkBuilder builder = createBuilder();
-        GHRepository forkedRepo = builder.name(newRepoName).create();
-
-        assertThat(forkedRepo.getName(), equalTo(newRepoName));
-        verifyBasicForkProperties(repo, forkedRepo, newRepoName);
-        verifyBranches(forkedRepo, false);
-
-        forkedRepo.delete();
+        try {
+            builder.sleep(100);
+            fail("Expected InterruptedIOException");
+        } catch (InterruptedIOException e) {
+            assertThat(e, instanceOf(InterruptedIOException.class));
+            assertThat(e.getCause(), instanceOf(InterruptedException.class));
+        }
     }
 
     /**
@@ -254,24 +246,32 @@ public class GHRepositoryForkBuilderTest extends AbstractGitHubWireMockTest {
         }
     }
 
-    /**
-     * Test sleep.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testSleep() throws Exception {
-        GHRepositoryForkBuilder builder = new GHRepositoryForkBuilder(repo);
-        Thread.currentThread().interrupt();
+    private TestForkBuilder createBuilder() {
+        return new TestForkBuilder(repo);
+    }
 
-        try {
-            builder.sleep(100);
-            fail("Expected InterruptedIOException");
-        } catch (InterruptedIOException e) {
-            assertThat(e, instanceOf(InterruptedIOException.class));
-            assertThat(e.getCause(), instanceOf(InterruptedException.class));
+    private void verifyBasicForkProperties(GHRepository original, GHRepository forked, String expectedName)
+            throws IOException {
+        GHRepository updatedFork = forked;
+
+        await().atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(3))
+                .until(() -> gitHub.getRepository(forked.getFullName()).isFork());
+
+        assertThat(updatedFork, notNullValue());
+        assertThat(updatedFork.getName(), equalTo(expectedName));
+        assertThat(updatedFork.isFork(), is(true));
+        assertThat(updatedFork.getParent().getFullName(), equalTo(original.getFullName()));
+    }
+
+    private void verifyBranches(GHRepository forked, boolean defaultBranchOnly) throws IOException {
+        Map<String, GHBranch> branches = forked.getBranches();
+        if (defaultBranchOnly) {
+            assertThat(branches.size(), equalTo(1));
+        } else {
+            assertThat(branches.size(), greaterThan(1));
         }
+        assertThat(branches.containsKey(forked.getDefaultBranch()), is(true));
     }
 
 }

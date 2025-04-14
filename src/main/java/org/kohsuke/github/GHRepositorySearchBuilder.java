@@ -12,6 +12,33 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
 
     /**
+     * The enum Sort.
+     */
+    public enum Sort {
+
+        /** The forks. */
+        FORKS,
+        /** The stars. */
+        STARS,
+        /** The updated. */
+        UPDATED
+    }
+
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
+    private static class RepositorySearchResult extends SearchResult<GHRepository> {
+        private GHRepository[] items;
+
+        @Override
+        GHRepository[] getItems(GitHub root) {
+            for (GHRepository item : items) {
+            }
+            return items;
+        }
+    }
+
+    /**
      * Instantiates a new GH repository search builder.
      *
      * @param root
@@ -22,43 +49,14 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GHRepositorySearchBuilder q(String term) {
-        super.q(term);
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    GHRepositorySearchBuilder q(String qualifier, String value) {
-        super.q(qualifier, value);
-        return this;
-    }
-
-    /**
-     * In gh repository search builder.
+     * Created gh repository search builder.
      *
      * @param v
      *            the v
      * @return the gh repository search builder
      */
-    public GHRepositorySearchBuilder in(String v) {
-        return q("in:" + v);
-    }
-
-    /**
-     * Size gh repository search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh repository search builder
-     */
-    public GHRepositorySearchBuilder size(String v) {
-        return q("size:" + v);
+    public GHRepositorySearchBuilder created(String v) {
+        return q("created:" + v);
     }
 
     /**
@@ -90,36 +88,48 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * Search by repository visibility.
-     *
-     * @param visibility
-     *            repository visibility
-     * @return the gh repository search builder
-     * @throws GHException
-     *             if {@link GHRepository.Visibility#UNKNOWN} is passed. UNKNOWN is a placeholder for unexpected values
-     *             encountered when reading data.
-     * @see <a href=
-     *      "https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-repository-visibility">Search
-     *      by repository visibility</a>
-     */
-    public GHRepositorySearchBuilder visibility(GHRepository.Visibility visibility) {
-        if (visibility == GHRepository.Visibility.UNKNOWN) {
-            throw new GHException(
-                    "UNKNOWN is a placeholder for unexpected values encountered when reading data. It cannot be passed as a search parameter.");
-        }
-
-        return q("is:" + visibility);
-    }
-
-    /**
-     * Created gh repository search builder.
+     * In gh repository search builder.
      *
      * @param v
      *            the v
      * @return the gh repository search builder
      */
-    public GHRepositorySearchBuilder created(String v) {
-        return q("created:" + v);
+    public GHRepositorySearchBuilder in(String v) {
+        return q("in:" + v);
+    }
+
+    /**
+     * Language gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder language(String v) {
+        return q("language:" + v);
+    }
+
+    /**
+     * Order gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder order(GHDirection v) {
+        req.with("order", v);
+        return this;
+    }
+
+    /**
+     * Org gh repository search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder org(String v) {
+        return q("org:" + v);
     }
 
     /**
@@ -134,14 +144,12 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * User gh repository search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh repository search builder
+     * {@inheritDoc}
      */
-    public GHRepositorySearchBuilder user(String v) {
-        return q("user:" + v);
+    @Override
+    public GHRepositorySearchBuilder q(String term) {
+        super.q(term);
+        return this;
     }
 
     /**
@@ -156,14 +164,26 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * Language gh repository search builder.
+     * Size gh repository search builder.
      *
      * @param v
      *            the v
      * @return the gh repository search builder
      */
-    public GHRepositorySearchBuilder language(String v) {
-        return q("language:" + v);
+    public GHRepositorySearchBuilder size(String v) {
+        return q("size:" + v);
+    }
+
+    /**
+     * Sort gh repository search builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh repository search builder
+     */
+    public GHRepositorySearchBuilder sort(Sort sort) {
+        req.with("sort", sort);
+        return this;
     }
 
     /**
@@ -189,65 +209,36 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     }
 
     /**
-     * Org gh repository search builder.
+     * User gh repository search builder.
      *
      * @param v
      *            the v
      * @return the gh repository search builder
      */
-    public GHRepositorySearchBuilder org(String v) {
-        return q("org:" + v);
+    public GHRepositorySearchBuilder user(String v) {
+        return q("user:" + v);
     }
 
     /**
-     * Order gh repository search builder.
+     * Search by repository visibility.
      *
-     * @param v
-     *            the v
+     * @param visibility
+     *            repository visibility
      * @return the gh repository search builder
+     * @throws GHException
+     *             if {@link GHRepository.Visibility#UNKNOWN} is passed. UNKNOWN is a placeholder for unexpected values
+     *             encountered when reading data.
+     * @see <a href=
+     *      "https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-for-repositories#search-by-repository-visibility">Search
+     *      by repository visibility</a>
      */
-    public GHRepositorySearchBuilder order(GHDirection v) {
-        req.with("order", v);
-        return this;
-    }
-
-    /**
-     * Sort gh repository search builder.
-     *
-     * @param sort
-     *            the sort
-     * @return the gh repository search builder
-     */
-    public GHRepositorySearchBuilder sort(Sort sort) {
-        req.with("sort", sort);
-        return this;
-    }
-
-    /**
-     * The enum Sort.
-     */
-    public enum Sort {
-
-        /** The stars. */
-        STARS,
-        /** The forks. */
-        FORKS,
-        /** The updated. */
-        UPDATED
-    }
-
-    @SuppressFBWarnings(
-            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
-            justification = "JSON API")
-    private static class RepositorySearchResult extends SearchResult<GHRepository> {
-        private GHRepository[] items;
-
-        @Override
-        GHRepository[] getItems(GitHub root) {
-            for (GHRepository item : items) {
-            }
-            return items;
+    public GHRepositorySearchBuilder visibility(GHRepository.Visibility visibility) {
+        if (visibility == GHRepository.Visibility.UNKNOWN) {
+            throw new GHException(
+                    "UNKNOWN is a placeholder for unexpected values encountered when reading data. It cannot be passed as a search parameter.");
         }
+
+        return q("is:" + visibility);
     }
 
     /**
@@ -258,5 +249,14 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
     @Override
     protected String getApiUrl() {
         return "/search/repositories";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    GHRepositorySearchBuilder q(String qualifier, String value) {
+        super.q(qualifier, value);
+        return this;
     }
 }

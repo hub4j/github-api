@@ -41,21 +41,6 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
     }
 
     /**
-     * Name.
-     *
-     * @param value
-     *            the value
-     * @return the s
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Nonnull
-    @BetaApi
-    public S name(String value) throws IOException {
-        return with("name", value);
-    }
-
-    /**
      * Color.
      *
      * @param value
@@ -83,5 +68,20 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
     @BetaApi
     public S description(String value) throws IOException {
         return with("description", value);
+    }
+
+    /**
+     * Name.
+     *
+     * @param value
+     *            the value
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Nonnull
+    @BetaApi
+    public S name(String value) throws IOException {
+        return with("name", value);
     }
 }

@@ -18,13 +18,13 @@ import javax.annotation.Nonnull;
  */
 public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
 
-    /** The terms. */
-    protected final List<String> terms = new ArrayList<String>();
-
     /**
      * Data transfer object that receives the result of search.
      */
     private final Class<? extends SearchResult<T>> receiverType;
+
+    /** The terms. */
+    protected final List<String> terms = new ArrayList<String>();
 
     /**
      * Instantiates a new GH search builder.
@@ -42,6 +42,18 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
     }
 
     /**
+     * Performs the search.
+     *
+     * @return the paged search iterable
+     */
+    @Override
+    public PagedSearchIterable<T> list() {
+
+        req.set("q", StringUtils.join(terms, " "));
+        return new PagedSearchIterable<>(root(), req.build(), receiverType);
+    }
+
+    /**
      * Search terms.
      *
      * @param term
@@ -52,6 +64,13 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
         terms.add(term);
         return this;
     }
+
+    /**
+     * Gets api url.
+     *
+     * @return the api url
+     */
+    protected abstract String getApiUrl();
 
     /**
      * Add a search term with qualifier.
@@ -76,23 +95,4 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
         }
         return this;
     }
-
-    /**
-     * Performs the search.
-     *
-     * @return the paged search iterable
-     */
-    @Override
-    public PagedSearchIterable<T> list() {
-
-        req.set("q", StringUtils.join(terms, " "));
-        return new PagedSearchIterable<>(root(), req.build(), receiverType);
-    }
-
-    /**
-     * Gets api url.
-     *
-     * @return the api url
-     */
-    protected abstract String getApiUrl();
 }

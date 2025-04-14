@@ -21,9 +21,9 @@ class GHCommitFileIterable extends PagedIterable<GHCommit.File> {
      */
     private static final int GH_FILE_LIMIT_PER_COMMIT_PAGE = 300;
 
+    private final File[] files;
     private final GHRepository owner;
     private final String sha;
-    private final File[] files;
 
     /**
      * Instantiates a new GH commit iterable.

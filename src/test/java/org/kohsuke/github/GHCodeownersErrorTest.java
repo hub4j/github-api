@@ -44,6 +44,10 @@ public class GHCodeownersErrorTest extends AbstractGitHubWireMockTest {
         assertThat(firstError.getPath(), is(".github/CODEOWNERS"));
     }
 
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
+    }
+
     /**
      * Gets the repository.
      *
@@ -53,9 +57,5 @@ public class GHCodeownersErrorTest extends AbstractGitHubWireMockTest {
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
     }
 }

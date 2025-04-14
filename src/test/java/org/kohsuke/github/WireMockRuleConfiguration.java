@@ -27,10 +27,28 @@ import java.util.Map;
  */
 public class WireMockRuleConfiguration implements Options {
 
-    private final Options parent;
+    /**
+     * Options.
+     *
+     * @return the wire mock rule configuration
+     */
+    public static WireMockRuleConfiguration options() {
+        return wireMockConfig();
+    }
+    /**
+     * Wire mock config.
+     *
+     * @return the wire mock rule configuration
+     */
+    public static WireMockRuleConfiguration wireMockConfig() {
+        return new WireMockRuleConfiguration();
+    }
     private final String childDirectory;
-    private MappingsSource mappingsSource;
     private Map<String, Extension> extensions = Maps.newLinkedHashMap();
+
+    private MappingsSource mappingsSource;
+
+    private final Options parent;
 
     /**
      * Instantiates a new wire mock rule configuration.
@@ -56,79 +74,39 @@ public class WireMockRuleConfiguration implements Options {
     }
 
     /**
-     * Wire mock config.
+     * Bind address.
      *
-     * @return the wire mock rule configuration
+     * @return the string
      */
-    public static WireMockRuleConfiguration wireMockConfig() {
-        return new WireMockRuleConfiguration();
+    public String bindAddress() {
+        return parent.bindAddress();
     }
 
     /**
-     * Options.
+     * Browser proxy settings.
      *
-     * @return the wire mock rule configuration
+     * @return the browser proxy settings
      */
-    public static WireMockRuleConfiguration options() {
-        return wireMockConfig();
+    public BrowserProxySettings browserProxySettings() {
+        return parent.browserProxySettings();
     }
 
     /**
-     * For child path.
+     * Browser proxying enabled.
      *
-     * @param childPath
-     *            the child path
-     * @return the wire mock rule configuration
+     * @return true, if successful
      */
-    public WireMockRuleConfiguration forChildPath(String childPath) {
-        return new WireMockRuleConfiguration(this, childPath);
-    }
-
-    private MappingsSource getMappingsSource() {
-        if (this.mappingsSource == null) {
-            this.mappingsSource = new JsonFileMappingsSource(this.filesRoot().child("mappings"));
-        }
-
-        return this.mappingsSource;
+    public boolean browserProxyingEnabled() {
+        return parent.browserProxyingEnabled();
     }
 
     /**
-     * Files root.
+     * Container threads.
      *
-     * @return the file source
+     * @return the int
      */
-    public FileSource filesRoot() {
-        return childDirectory != null ? parent.filesRoot().child(childDirectory) : parent.filesRoot();
-    }
-
-    /**
-     * Mappings loader.
-     *
-     * @return the mappings loader
-     */
-    public MappingsLoader mappingsLoader() {
-        return this.getMappingsSource();
-    }
-
-    /**
-     * Mappings saver.
-     *
-     * @return the mappings saver
-     */
-    public MappingsSaver mappingsSaver() {
-        return this.getMappingsSource();
-    }
-
-    /**
-     * Mapping source.
-     *
-     * @param mappingsSource
-     *            the mappings source
-     * @return the wire mock rule configuration
-     */
-    public WireMockRuleConfiguration mappingSource(MappingsSource mappingsSource) {
-        this.mappingsSource = mappingsSource;
-        return this;
+    public int containerThreads() {
+        return parent.containerThreads();
     }
 
     /**
@@ -147,169 +125,27 @@ public class WireMockRuleConfiguration implements Options {
         return result;
     }
 
+    /**
+     * Files root.
+     *
+     * @return the file source
+     */
+    public FileSource filesRoot() {
+        return childDirectory != null ? parent.filesRoot().child(childDirectory) : parent.filesRoot();
+    }
+
+    /**
+     * For child path.
+     *
+     * @param childPath
+     *            the child path
+     * @return the wire mock rule configuration
+     */
+    public WireMockRuleConfiguration forChildPath(String childPath) {
+        return new WireMockRuleConfiguration(this, childPath);
+    }
+
     // Simple wrappers
-
-    /**
-     * Port number.
-     *
-     * @return the int
-     */
-    public int portNumber() {
-        return parent.portNumber();
-    }
-
-    /**
-     * Gets the http disabled.
-     *
-     * @return the http disabled
-     */
-    public boolean getHttpDisabled() {
-        return parent.getHttpDisabled();
-    }
-
-    /**
-     * Container threads.
-     *
-     * @return the int
-     */
-    public int containerThreads() {
-        return parent.containerThreads();
-    }
-
-    /**
-     * Https settings.
-     *
-     * @return the https settings
-     */
-    public HttpsSettings httpsSettings() {
-        return parent.httpsSettings();
-    }
-
-    /**
-     * Jetty settings.
-     *
-     * @return the jetty settings
-     */
-    public JettySettings jettySettings() {
-        return parent.jettySettings();
-    }
-
-    /**
-     * Browser proxying enabled.
-     *
-     * @return true, if successful
-     */
-    public boolean browserProxyingEnabled() {
-        return parent.browserProxyingEnabled();
-    }
-
-    /**
-     * Browser proxy settings.
-     *
-     * @return the browser proxy settings
-     */
-    public BrowserProxySettings browserProxySettings() {
-        return parent.browserProxySettings();
-    }
-
-    /**
-     * Proxy via.
-     *
-     * @return the proxy settings
-     */
-    public ProxySettings proxyVia() {
-        return parent.proxyVia();
-    }
-
-    /**
-     * Notifier.
-     *
-     * @return the notifier
-     */
-    public Notifier notifier() {
-        return parent.notifier();
-    }
-
-    /**
-     * Request journal disabled.
-     *
-     * @return true, if successful
-     */
-    public boolean requestJournalDisabled() {
-        return parent.requestJournalDisabled();
-    }
-
-    /**
-     * Max request journal entries.
-     *
-     * @return the optional
-     */
-    public Optional<Integer> maxRequestJournalEntries() {
-        return parent.maxRequestJournalEntries();
-    }
-
-    /**
-     * Bind address.
-     *
-     * @return the string
-     */
-    public String bindAddress() {
-        return parent.bindAddress();
-    }
-
-    /**
-     * Matching headers.
-     *
-     * @return the list
-     */
-    public List<CaseInsensitiveKey> matchingHeaders() {
-        return parent.matchingHeaders();
-    }
-
-    /**
-     * Http server factory.
-     *
-     * @return the http server factory
-     */
-    public HttpServerFactory httpServerFactory() {
-        return parent.httpServerFactory();
-    }
-
-    /**
-     * Thread pool factory.
-     *
-     * @return the thread pool factory
-     */
-    public ThreadPoolFactory threadPoolFactory() {
-        return parent.threadPoolFactory();
-    }
-
-    /**
-     * Should preserve host header.
-     *
-     * @return true, if successful
-     */
-    public boolean shouldPreserveHostHeader() {
-        return parent.shouldPreserveHostHeader();
-    }
-
-    /**
-     * Proxy host header.
-     *
-     * @return the string
-     */
-    public String proxyHostHeader() {
-        return parent.proxyHostHeader();
-    }
-
-    /**
-     * Network traffic listener.
-     *
-     * @return the wiremock network traffic listener
-     */
-    public WiremockNetworkTrafficListener networkTrafficListener() {
-        return parent.networkTrafficListener();
-    }
 
     /**
      * Gets the admin authenticator.
@@ -318,24 +154,6 @@ public class WireMockRuleConfiguration implements Options {
      */
     public Authenticator getAdminAuthenticator() {
         return parent.getAdminAuthenticator();
-    }
-
-    /**
-     * Gets the https required for admin api.
-     *
-     * @return the https required for admin api
-     */
-    public boolean getHttpsRequiredForAdminApi() {
-        return parent.getHttpsRequiredForAdminApi();
-    }
-
-    /**
-     * Gets the not matched renderer.
-     *
-     * @return the not matched renderer
-     */
-    public NotMatchedRenderer getNotMatchedRenderer() {
-        return parent.getNotMatchedRenderer();
     }
 
     /**
@@ -357,39 +175,12 @@ public class WireMockRuleConfiguration implements Options {
     }
 
     /**
-     * Gets the gzip disabled.
+     * Gets the data truncation settings.
      *
-     * @return the gzip disabled
+     * @return the data truncation settings
      */
-    public boolean getGzipDisabled() {
-        return parent.getGzipDisabled();
-    }
-
-    /**
-     * Gets the stub request logging disabled.
-     *
-     * @return the stub request logging disabled
-     */
-    public boolean getStubRequestLoggingDisabled() {
-        return parent.getStubRequestLoggingDisabled();
-    }
-
-    /**
-     * Gets the stub cors enabled.
-     *
-     * @return the stub cors enabled
-     */
-    public boolean getStubCorsEnabled() {
-        return parent.getStubCorsEnabled();
-    }
-
-    /**
-     * Timeout.
-     *
-     * @return the long
-     */
-    public long timeout() {
-        return parent.timeout();
+    public DataTruncationSettings getDataTruncationSettings() {
+        return parent.getDataTruncationSettings();
     }
 
     /**
@@ -411,12 +202,39 @@ public class WireMockRuleConfiguration implements Options {
     }
 
     /**
-     * Gets the data truncation settings.
+     * Gets the gzip disabled.
      *
-     * @return the data truncation settings
+     * @return the gzip disabled
      */
-    public DataTruncationSettings getDataTruncationSettings() {
-        return parent.getDataTruncationSettings();
+    public boolean getGzipDisabled() {
+        return parent.getGzipDisabled();
+    }
+
+    /**
+     * Gets the http disabled.
+     *
+     * @return the http disabled
+     */
+    public boolean getHttpDisabled() {
+        return parent.getHttpDisabled();
+    }
+
+    /**
+     * Gets the https required for admin api.
+     *
+     * @return the https required for admin api
+     */
+    public boolean getHttpsRequiredForAdminApi() {
+        return parent.getHttpsRequiredForAdminApi();
+    }
+
+    /**
+     * Gets the not matched renderer.
+     *
+     * @return the not matched renderer
+     */
+    public NotMatchedRenderer getNotMatchedRenderer() {
+        return parent.getNotMatchedRenderer();
     }
 
     /**
@@ -426,5 +244,187 @@ public class WireMockRuleConfiguration implements Options {
      */
     public NetworkAddressRules getProxyTargetRules() {
         return parent.getProxyTargetRules();
+    }
+
+    /**
+     * Gets the stub cors enabled.
+     *
+     * @return the stub cors enabled
+     */
+    public boolean getStubCorsEnabled() {
+        return parent.getStubCorsEnabled();
+    }
+
+    /**
+     * Gets the stub request logging disabled.
+     *
+     * @return the stub request logging disabled
+     */
+    public boolean getStubRequestLoggingDisabled() {
+        return parent.getStubRequestLoggingDisabled();
+    }
+
+    /**
+     * Http server factory.
+     *
+     * @return the http server factory
+     */
+    public HttpServerFactory httpServerFactory() {
+        return parent.httpServerFactory();
+    }
+
+    /**
+     * Https settings.
+     *
+     * @return the https settings
+     */
+    public HttpsSettings httpsSettings() {
+        return parent.httpsSettings();
+    }
+
+    /**
+     * Jetty settings.
+     *
+     * @return the jetty settings
+     */
+    public JettySettings jettySettings() {
+        return parent.jettySettings();
+    }
+
+    /**
+     * Mapping source.
+     *
+     * @param mappingsSource
+     *            the mappings source
+     * @return the wire mock rule configuration
+     */
+    public WireMockRuleConfiguration mappingSource(MappingsSource mappingsSource) {
+        this.mappingsSource = mappingsSource;
+        return this;
+    }
+
+    /**
+     * Mappings loader.
+     *
+     * @return the mappings loader
+     */
+    public MappingsLoader mappingsLoader() {
+        return this.getMappingsSource();
+    }
+
+    /**
+     * Mappings saver.
+     *
+     * @return the mappings saver
+     */
+    public MappingsSaver mappingsSaver() {
+        return this.getMappingsSource();
+    }
+
+    /**
+     * Matching headers.
+     *
+     * @return the list
+     */
+    public List<CaseInsensitiveKey> matchingHeaders() {
+        return parent.matchingHeaders();
+    }
+
+    /**
+     * Max request journal entries.
+     *
+     * @return the optional
+     */
+    public Optional<Integer> maxRequestJournalEntries() {
+        return parent.maxRequestJournalEntries();
+    }
+
+    /**
+     * Network traffic listener.
+     *
+     * @return the wiremock network traffic listener
+     */
+    public WiremockNetworkTrafficListener networkTrafficListener() {
+        return parent.networkTrafficListener();
+    }
+
+    /**
+     * Notifier.
+     *
+     * @return the notifier
+     */
+    public Notifier notifier() {
+        return parent.notifier();
+    }
+
+    /**
+     * Port number.
+     *
+     * @return the int
+     */
+    public int portNumber() {
+        return parent.portNumber();
+    }
+
+    /**
+     * Proxy host header.
+     *
+     * @return the string
+     */
+    public String proxyHostHeader() {
+        return parent.proxyHostHeader();
+    }
+
+    /**
+     * Proxy via.
+     *
+     * @return the proxy settings
+     */
+    public ProxySettings proxyVia() {
+        return parent.proxyVia();
+    }
+
+    /**
+     * Request journal disabled.
+     *
+     * @return true, if successful
+     */
+    public boolean requestJournalDisabled() {
+        return parent.requestJournalDisabled();
+    }
+
+    /**
+     * Should preserve host header.
+     *
+     * @return true, if successful
+     */
+    public boolean shouldPreserveHostHeader() {
+        return parent.shouldPreserveHostHeader();
+    }
+
+    /**
+     * Thread pool factory.
+     *
+     * @return the thread pool factory
+     */
+    public ThreadPoolFactory threadPoolFactory() {
+        return parent.threadPoolFactory();
+    }
+
+    /**
+     * Timeout.
+     *
+     * @return the long
+     */
+    public long timeout() {
+        return parent.timeout();
+    }
+
+    private MappingsSource getMappingsSource() {
+        if (this.mappingsSource == null) {
+            this.mappingsSource = new JsonFileMappingsSource(this.filesRoot().child("mappings"));
+        }
+
+        return this.mappingsSource;
     }
 }

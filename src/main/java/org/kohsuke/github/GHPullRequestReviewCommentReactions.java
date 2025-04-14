@@ -14,69 +14,24 @@ import java.net.URL;
  */
 public class GHPullRequestReviewCommentReactions {
 
+    private int confused = -1;
+
+    private int eyes = -1;
+
+    private int heart = -1;
+    private int hooray = -1;
+    private int laugh = -1;
+    @JsonProperty("-1")
+    private int minusOne = -1;
+    @JsonProperty("+1")
+    private int plusOne = -1;
+    private int rocket = -1;
+    private int totalCount = -1;
+    private String url;
     /**
      * Create default GHPullRequestReviewCommentReactions instance
      */
     public GHPullRequestReviewCommentReactions() {
-    }
-
-    private String url;
-
-    private int totalCount = -1;
-    @JsonProperty("+1")
-    private int plusOne = -1;
-    @JsonProperty("-1")
-    private int minusOne = -1;
-    private int laugh = -1;
-    private int confused = -1;
-    private int heart = -1;
-    private int hooray = -1;
-    private int eyes = -1;
-    private int rocket = -1;
-
-    /**
-     * Gets the URL of the comment's reactions
-     *
-     * @return the URL of the comment's reactions
-     */
-    public URL getUrl() {
-        return GitHubClient.parseURL(url);
-    }
-
-    /**
-     * Gets the total count of reactions
-     *
-     * @return the number of total reactions
-     */
-    public int getTotalCount() {
-        return totalCount;
-    }
-
-    /**
-     * Gets the number of +1 reactions
-     *
-     * @return the number of +1 reactions
-     */
-    public int getPlusOne() {
-        return plusOne;
-    }
-
-    /**
-     * Gets the number of -1 reactions
-     *
-     * @return the number of -1 reactions
-     */
-    public int getMinusOne() {
-        return minusOne;
-    }
-
-    /**
-     * Gets the number of laugh reactions
-     *
-     * @return the number of laugh reactions
-     */
-    public int getLaugh() {
-        return laugh;
     }
 
     /**
@@ -86,6 +41,15 @@ public class GHPullRequestReviewCommentReactions {
      */
     public int getConfused() {
         return confused;
+    }
+
+    /**
+     * Gets the number of eyes reactions
+     *
+     * @return the number of eyes reactions
+     */
+    public int getEyes() {
+        return eyes;
     }
 
     /**
@@ -107,12 +71,30 @@ public class GHPullRequestReviewCommentReactions {
     }
 
     /**
-     * Gets the number of eyes reactions
+     * Gets the number of laugh reactions
      *
-     * @return the number of eyes reactions
+     * @return the number of laugh reactions
      */
-    public int getEyes() {
-        return eyes;
+    public int getLaugh() {
+        return laugh;
+    }
+
+    /**
+     * Gets the number of -1 reactions
+     *
+     * @return the number of -1 reactions
+     */
+    public int getMinusOne() {
+        return minusOne;
+    }
+
+    /**
+     * Gets the number of +1 reactions
+     *
+     * @return the number of +1 reactions
+     */
+    public int getPlusOne() {
+        return plusOne;
     }
 
     /**
@@ -122,5 +104,23 @@ public class GHPullRequestReviewCommentReactions {
      */
     public int getRocket() {
         return rocket;
+    }
+
+    /**
+     * Gets the total count of reactions
+     *
+     * @return the number of total reactions
+     */
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    /**
+     * Gets the URL of the comment's reactions
+     *
+     * @return the URL of the comment's reactions
+     */
+    public URL getUrl() {
+        return GitHubClient.parseURL(url);
     }
 }

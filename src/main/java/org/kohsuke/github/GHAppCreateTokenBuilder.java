@@ -14,9 +14,9 @@ import java.util.Map;
  */
 public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
 
+    private final String apiUrlTail;
     /** The builder. */
     protected final Requester builder;
-    private final String apiUrlTail;
 
     /**
      * Instantiates a new GH app create token builder.
@@ -34,32 +34,16 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * By default the installation token has access to all repositories that the installation can access. To restrict
-     * the access to specific repositories, you can provide the repository_ids when creating the token. When you omit
-     * repository_ids, the response does not contain neither the repositories nor the permissions key.
+     * Creates an app token with all the parameters.
+     * <p>
+     * You must use a JWT to access this endpoint.
      *
-     * @param repositoryIds
-     *            Array containing the repositories Ids
-     * @return a GHAppCreateTokenBuilder
+     * @return a GHAppInstallationToken
+     * @throws IOException
+     *             on error
      */
-    @BetaApi
-    public GHAppCreateTokenBuilder repositoryIds(List<Long> repositoryIds) {
-        this.builder.with("repository_ids", repositoryIds);
-        return this;
-    }
-
-    /**
-     * By default the installation token has access to all repositories that the installation can access. To restrict
-     * the access to specific repositories, you can provide repository names when creating the token.
-     *
-     * @param repositories
-     *            Array containing the repository names
-     * @return a GHAppCreateTokenBuilder
-     */
-    @BetaApi
-    public GHAppCreateTokenBuilder repositories(List<String> repositories) {
-        this.builder.with("repositories", repositories);
-        return this;
+    public GHAppInstallationToken create() throws IOException {
+        return builder.method("POST").withUrlPath(apiUrlTail).fetch(GHAppInstallationToken.class);
     }
 
     /**
@@ -81,16 +65,32 @@ public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * Creates an app token with all the parameters.
-     * <p>
-     * You must use a JWT to access this endpoint.
+     * By default the installation token has access to all repositories that the installation can access. To restrict
+     * the access to specific repositories, you can provide repository names when creating the token.
      *
-     * @return a GHAppInstallationToken
-     * @throws IOException
-     *             on error
+     * @param repositories
+     *            Array containing the repository names
+     * @return a GHAppCreateTokenBuilder
      */
-    public GHAppInstallationToken create() throws IOException {
-        return builder.method("POST").withUrlPath(apiUrlTail).fetch(GHAppInstallationToken.class);
+    @BetaApi
+    public GHAppCreateTokenBuilder repositories(List<String> repositories) {
+        this.builder.with("repositories", repositories);
+        return this;
+    }
+
+    /**
+     * By default the installation token has access to all repositories that the installation can access. To restrict
+     * the access to specific repositories, you can provide the repository_ids when creating the token. When you omit
+     * repository_ids, the response does not contain neither the repositories nor the permissions key.
+     *
+     * @param repositoryIds
+     *            Array containing the repositories Ids
+     * @return a GHAppCreateTokenBuilder
+     */
+    @BetaApi
+    public GHAppCreateTokenBuilder repositoryIds(List<Long> repositoryIds) {
+        this.builder.with("repository_ids", repositoryIds);
+        return this;
     }
 
 }

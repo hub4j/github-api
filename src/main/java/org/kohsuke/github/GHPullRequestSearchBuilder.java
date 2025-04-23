@@ -44,7 +44,7 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
      *            the root
      */
     GHPullRequestSearchBuilder(GitHub root) {
-        super(root, PullRequestSearchResult.class);
+        super(root, PullRequestSearchResult.class, GHPullRequest.class);
     }
 
     /**

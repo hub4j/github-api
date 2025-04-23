@@ -5,10 +5,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Iterator;
-
-import javax.annotation.Nonnull;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -16,7 +12,7 @@ import javax.annotation.Nonnull;
  *
  * @author Michael Clarke
  */
-public class GHCompare {
+public class GHCompare implements GitHubPage<GHCompare.Commit> {
 
     /**
      * Compare commits had a child commit element with additional details we want to capture. This extension of GHCommit
@@ -113,6 +109,7 @@ public class GHCompare {
             return url;
         }
     }
+
     /**
      * The enum Status.
      */
@@ -158,70 +155,9 @@ public class GHCompare {
             return url;
         }
     }
-    /**
-     * Iterable for commit listing.
-     */
-    class GHCompareCommitsIterable extends PagedIterable<Commit> {
-
-        private GHCompare result;
-
-        /**
-         * Instantiates a new GH compare commits iterable.
-         */
-        public GHCompareCommitsIterable() {
-        }
-
-        /**
-         * Iterator.
-         *
-         * @param pageSize
-         *            the page size
-         * @return the paged iterator
-         */
-        @Nonnull
-        @Override
-        public PagedIterator<Commit> _iterator(int pageSize) {
-            GitHubRequest request = owner.root()
-                    .createRequest()
-                    .injectMappingValue("GHCompare_usePaginatedCommits", usePaginatedCommits)
-                    .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf("/compare/"))))
-                    .build();
-
-            // page_size must be set for GHCompare commit pagination
-            if (pageSize == 0) {
-                pageSize = 10;
-            }
-            return new PagedIterator<>(
-                    adapt(GitHubPageIterator.create(owner.root().getClient(), GHCompare.class, request, pageSize)),
-                    item -> item.wrapUp(owner));
-        }
-
-        /**
-         * Adapt.
-         *
-         * @param base
-         *            the base
-         * @return the iterator
-         */
-        protected Iterator<Commit[]> adapt(final Iterator<GHCompare> base) {
-            return new Iterator<Commit[]>() {
-                public boolean hasNext() {
-                    return base.hasNext();
-                }
-
-                public Commit[] next() {
-                    GHCompare v = base.next();
-                    if (result == null) {
-                        result = v;
-                    }
-                    return v.commits;
-                }
-            };
-        }
-    }
     private int aheadBy, behindBy, totalCommits;
-    private Commit baseCommit, mergeBaseCommit;
 
+    private Commit baseCommit, mergeBaseCommit;
     private Commit[] commits;
 
     private GHCommit.File[] files;
@@ -324,6 +260,11 @@ public class GHCompare {
         return GitHubClient.parseURL(htmlUrl);
     }
 
+    @Override
+    public GHCompare.Commit[] getItems() {
+        return commits;
+    }
+
     /**
      * Gets merge base commit.
      *
@@ -395,16 +336,16 @@ public class GHCompare {
      */
     public PagedIterable<Commit> listCommits() {
         if (usePaginatedCommits) {
-            return new GHCompareCommitsIterable();
+            final GHRepository owner = this.owner;
+            return owner.root()
+                    .createRequest()
+                    .injectMappingValue("GHCompare_usePaginatedCommits", usePaginatedCommits)
+                    .withUrlPath(owner.getApiTailUrl(url.substring(url.lastIndexOf("/compare/"))))
+                    .toIterable(GHCompare.class, Commit.class, item -> item.wrapUp(owner))
+                    .withPageSize(10);
         } else {
             // if not using paginated commits, adapt the returned commits array
-            return new PagedIterable<Commit>() {
-                @Nonnull
-                @Override
-                public PagedIterator<Commit> _iterator(int pageSize) {
-                    return new PagedIterator<>(Collections.singleton(commits).iterator(), null);
-                }
-            };
+            return new PagedIterable<>(GitHubEndpointIterable.ofSingleton(this.commits));
         }
     }
 

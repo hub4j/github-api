@@ -32,8 +32,6 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
 
         @Override
         GHRepository[] getItems(GitHub root) {
-            for (GHRepository item : items) {
-            }
             return items;
         }
     }
@@ -45,7 +43,7 @@ public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
      *            the root
      */
     GHRepositorySearchBuilder(GitHub root) {
-        super(root, RepositorySearchResult.class);
+        super(root, RepositorySearchResult.class, GHRepository.class);
     }
 
     /**

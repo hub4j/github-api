@@ -166,6 +166,7 @@ public class GHCodeScanningAlert extends GHObject {
         private String full_description;
         private String[] tags;
         private String help;
+        private String security_severity_level;
 
         /**
          * Id of rule
@@ -228,6 +229,10 @@ public class GHCodeScanningAlert extends GHObject {
          */
         public String getHelp() {
             return help;
+        }
+
+        public String getSecuritySeverityLevel() {
+            return security_severity_level;
         }
     }
 

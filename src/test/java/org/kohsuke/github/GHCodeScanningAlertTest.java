@@ -62,6 +62,7 @@ public class GHCodeScanningAlertTest extends AbstractGitHubWireMockTest {
         assertThat(rule.getId(), not((Object) null));
         assertThat(rule.getName(), not((Object) null));
         assertThat(rule.getSeverity(), not((Object) null));
+        assertThat(rule.getSecuritySeverityLevel(), not((Object) null));
 
         // Act - Search by filtering on alert status
         List<GHCodeScanningAlert> openAlerts = repo.listCodeScanningAlerts(GHCodeScanningAlertState.OPEN)

@@ -231,7 +231,9 @@ public class GHCodeScanningAlert extends GHObject {
             return help;
         }
 
-        public String getSecuritySeverityLevel() { return security_severity_level; }
+        public String getSecuritySeverityLevel() {
+            return security_severity_level;
+        }
     }
 
     /**

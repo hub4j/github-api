@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -59,6 +60,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getAction(), is("created"));
         assertThat(event.getInstallation().getId(), is(43898337L));
         assertThat(event.getInstallation().getAccount().getLogin(), is("CronFire"));
+        assertThat(event.getInstallation().getAccount(), instanceOf(GHOrganization.class));
+        assertThat(event.getInstallation().getAccount().getType(), is("Organization"));
 
         assertThat(event.getRepositories().isEmpty(), is(false));
         assertThat(event.getRepositories().get(0).getId(), is(1296269L));
@@ -84,6 +87,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getAction(), is("deleted"));
         assertThat(event.getInstallation().getId(), is(2L));
         assertThat(event.getInstallation().getAccount().getLogin(), is("octocat"));
+        assertThat(event.getInstallation().getAccount(), instanceOf(GHUser.class));
+        assertThat(event.getInstallation().getAccount().getType(), is("User"));
 
         assertThrows(IllegalStateException.class, () -> event.getRepositories().isEmpty());
         assertThat(event.getRawRepositories().isEmpty(), is(false));

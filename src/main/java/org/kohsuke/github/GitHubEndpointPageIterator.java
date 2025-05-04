@@ -2,8 +2,10 @@ package org.kohsuke.github;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URL;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 /**
@@ -21,8 +23,21 @@ import java.util.function.Consumer;
  * @param <P>
  *            type of each page (not the items in the page).
  */
-class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> extends GitHubPageIterator<P, Item> {
+class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> implements java.util.Iterator<P> {
 
+    protected final Class<P> pageType;
+    private final Consumer<Item> itemInitializer;
+    /**
+     * The page that will be returned when {@link #next()} is called.
+     *
+     * <p>
+     * Will be {@code null} after {@link #next()} is called.
+     * </p>
+     * <p>
+     * Will not be {@code null} after {@link #fetchNext()} is called if a new page was fetched.
+     * </p>
+     */
+    private P next;
     /**
      * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
      * response that was retrieved.
@@ -37,12 +52,18 @@ class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> extends GitHu
      */
     protected GitHubRequest nextRequest;
 
+    private GitHubEndpointPageIterator(P page) {
+        this(null, (Class<P>)page.getClass(), null, 0, null);
+        this.next = page;
+    }
+
     GitHubEndpointPageIterator(GitHubClient client,
             Class<P> pageType,
             GitHubRequest request,
             int pageSize,
             Consumer<Item> itemInitializer) {
-        super(pageType, itemInitializer);
+        this.pageType = pageType;
+        this.itemInitializer = itemInitializer;
 
         if (pageSize > 0) {
             GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
@@ -55,6 +76,10 @@ class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> extends GitHu
 
         this.client = client;
         this.nextRequest = request;
+    }
+
+    static <P extends GitHubPage<Item>, Item> GitHubEndpointPageIterator<P, Item> ofSingleton(final P page) {
+        return new GitHubEndpointPageIterator<>(page);
     }
 
     /**
@@ -97,7 +122,8 @@ class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> extends GitHu
      * Fetch is called at the start of {@link #hasNext()} or {@link #next()} to fetch another page of data if it is
      * needed.
      * <p>
-     * If {@link #next} is not {@code null}, no further action is needed. If {@link #next} is {@code null} and
+     * If {@link #next} is not {@code null}, no further action is needed.
+     * If {@link #next} is {@code null} and
      * {@link #nextRequest} is {@code null}, there are no more pages to fetch.
      * </p>
      * <p>
@@ -106,10 +132,9 @@ class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> extends GitHu
      * after the current response, {@link #nextRequest} is set to {@code null}.
      * </p>
      */
-    @Override
     protected P fetchNext() {
-        if (next != null || nextRequest == null)
-            return null; // already fetched or no more data to fetch
+        if (nextRequest == null)
+            return null; // no more data to fetch
 
         P result;
 
@@ -132,4 +157,50 @@ class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> extends GitHu
                 (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, pageType));
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasNext() {
+        return peek() != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Nonnull
+    public P next() {
+        P result = peek();
+        if (result == null)
+            throw new NoSuchElementException();
+        next = null;
+        return result;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public P peek() {
+        if (next == null) {
+            P result = fetchNext();
+            if (result != null) {
+                next = result;
+                initializeItems();
+            }
+        }
+        return next;
+    }
+
+    /**
+     * This method initializes items with local data after they are fetched. It is up to the implementer to decide what
+     * local data to apply.
+     *
+     */
+    private void initializeItems() {
+        if (itemInitializer != null) {
+            for (Item item : next.getItems()) {
+                itemInitializer.accept(item);
+            }
+        }
+    }
 }

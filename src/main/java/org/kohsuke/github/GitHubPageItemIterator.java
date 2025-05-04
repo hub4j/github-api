@@ -25,9 +25,9 @@ class GitHubPageItemIterator<Page extends GitHubPage<Item>, Item> implements Ite
      */
     private int nextItemIndex;
 
-    private final GitHubPageIterator<Page, Item> pageIterator;
+    private final GitHubEndpointPageIterator<Page, Item> pageIterator;
 
-    GitHubPageItemIterator(GitHubPageIterator<Page, Item> pageIterator) {
+    GitHubPageItemIterator(GitHubEndpointPageIterator<Page, Item> pageIterator) {
         this.pageIterator = pageIterator;
     }
 
@@ -54,8 +54,24 @@ class GitHubPageItemIterator<Page extends GitHubPage<Item>, Item> implements Ite
      *
      * @return the list
      */
+    @Deprecated
     public List<Item> nextPage() {
-        return Arrays.asList(nextPageArray());
+        // if we have not fetched any pages yet, always fetch.
+        // If we have fetched at least one page, check hasNext()
+        if (currentPage == null) {
+            peek();
+        } else if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+
+        // Current should never be null after fetch
+        Objects.requireNonNull(currentPage);
+        Item[] r = currentPage.getItems();
+        if (nextItemIndex != 0) {
+            r = Arrays.copyOfRange(r, nextItemIndex, r.length);
+        }
+        nextItemIndex = currentPage.getItems().length;
+        return Arrays.asList(r);
     }
 
     /**
@@ -99,40 +115,5 @@ class GitHubPageItemIterator<Page extends GitHubPage<Item>, Item> implements Ite
         return currentPage != null && currentPage.getItems().length > nextItemIndex
                 ? currentPage.getItems()[nextItemIndex]
                 : null;
-    }
-
-    /**
-     * Gets the next page worth of data.
-     *
-     * @return the list
-     */
-    protected Page currentPage() {
-        peek();
-        return currentPage;
-    }
-
-    /**
-     * Gets the next page worth of data.
-     *
-     * @return the list
-     */
-    @Nonnull
-    Item[] nextPageArray() {
-        // if we have not fetched any pages yet, always fetch.
-        // If we have fetched at least one page, check hasNext()
-        if (currentPage == null) {
-            peek();
-        } else if (!hasNext()) {
-            throw new NoSuchElementException();
-        }
-
-        // Current should never be null after fetch
-        Objects.requireNonNull(currentPage);
-        Item[] r = currentPage.getItems();
-        if (nextItemIndex != 0) {
-            r = Arrays.copyOfRange(r, nextItemIndex, r.length);
-        }
-        nextItemIndex = currentPage.getItems().length;
-        return r;
     }
 }

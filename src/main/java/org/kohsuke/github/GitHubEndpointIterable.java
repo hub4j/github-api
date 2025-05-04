@@ -107,8 +107,8 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
         return new GitHubEndpointIterable<>(null, null, (Class<P>) page.getClass(), itemType, null) {
             @Nonnull
             @Override
-            public GitHubPageIterator<P, I> pageIterator() {
-                return GitHubPageIterator.ofSingleton(page);
+            public GitHubEndpointPageIterator<P, I> pageIterator() {
+                return GitHubEndpointPageIterator.ofSingleton(page);
             }
         };
     }
@@ -165,7 +165,7 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      * @return
      */
     @Nonnull
-    public GitHubPageIterator<Page, Item> pageIterator() {
+    public GitHubEndpointPageIterator<Page, Item> pageIterator() {
         return new GitHubEndpointPageIterator<>(client, pageType, request, pageSize, itemInitializer);
     }
 
@@ -251,7 +251,7 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      * @throws IOException
      *             if an I/O exception occurs.
      */
-    private Item[] toArray(final GitHubPageIterator<Page, Item> iterator, Class<Item> itemType) throws IOException {
+    private Item[] toArray(final GitHubEndpointPageIterator<Page, Item> iterator, Class<Item> itemType) throws IOException {
         try {
             ArrayList<Item[]> pages = new ArrayList<>();
             int totalSize = 0;
@@ -284,7 +284,7 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      */
     @Nonnull
     final GitHubResponse<Item[]> toResponse() throws IOException {
-        GitHubPageIterator<Page, Item> iterator = pageIterator();
+        GitHubEndpointPageIterator<Page, Item> iterator = pageIterator();
         Item[] items = toArray(iterator, itemType);
         GitHubResponse<Page> lastResponse = iterator.finalResponse();
         return new GitHubResponse<>(lastResponse, items);

@@ -33,7 +33,7 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
      */
     public int getTotalCount() {
         // populate();
-        return paginatedEndpoint.itemIterator().currentPage().totalCount;
+        return paginatedEndpoint.pageIterator().peek().totalCount;
     }
 
     /**
@@ -43,6 +43,6 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
      */
     public boolean isIncomplete() {
         // populate();
-        return paginatedEndpoint.itemIterator().currentPage().incompleteResults;
+        return paginatedEndpoint.pageIterator().peek().incompleteResults;
     }
 }

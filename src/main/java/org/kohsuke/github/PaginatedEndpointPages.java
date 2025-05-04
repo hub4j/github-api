@@ -2,11 +2,12 @@ package org.kohsuke.github;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URL;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
+
+import javax.annotation.Nonnull;
 
 /**
  * May be used for any item that has pagination information. Iterates over paginated {@code P} objects (not the items
@@ -23,9 +24,16 @@ import java.util.function.Consumer;
  * @param <P>
  *            type of each page (not the items in the page).
  */
-class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> implements java.util.Iterator<P> {
+class PaginatedEndpointPages<P extends GitHubPage<Item>, Item> implements java.util.Iterator<P> {
 
-    protected final Class<P> pageType;
+    static <P extends GitHubPage<Item>, Item> PaginatedEndpointPages<P, Item> ofSingleton(final P page) {
+        return new PaginatedEndpointPages<>(page);
+    }
+    /**
+     * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
+     * response that was retrieved.
+     */
+    private GitHubResponse<P> finalResponse = null;
     private final Consumer<Item> itemInitializer;
     /**
      * The page that will be returned when {@link #next()} is called.
@@ -38,11 +46,6 @@ class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> implements ja
      * </p>
      */
     private P next;
-    /**
-     * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
-     * response that was retrieved.
-     */
-    private GitHubResponse<P> finalResponse = null;
 
     protected final GitHubClient client;
 
@@ -52,12 +55,14 @@ class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> implements ja
      */
     protected GitHubRequest nextRequest;
 
-    private GitHubEndpointPageIterator(P page) {
-        this(null, (Class<P>)page.getClass(), null, 0, null);
+    protected final Class<P> pageType;
+
+    private PaginatedEndpointPages(P page) {
+        this(null, (Class<P>) page.getClass(), null, 0, null);
         this.next = page;
     }
 
-    GitHubEndpointPageIterator(GitHubClient client,
+    PaginatedEndpointPages(GitHubClient client,
             Class<P> pageType,
             GitHubRequest request,
             int pageSize,
@@ -78,10 +83,6 @@ class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> implements ja
         this.nextRequest = request;
     }
 
-    static <P extends GitHubPage<Item>, Item> GitHubEndpointPageIterator<P, Item> ofSingleton(final P page) {
-        return new GitHubEndpointPageIterator<>(page);
-    }
-
     /**
      * On rare occasions the final response from iterating is needed.
      *
@@ -92,69 +93,6 @@ class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> implements ja
             throw new GHException("Final response is not available until after iterator is done.");
         }
         return finalResponse;
-    }
-
-    /**
-     * Locate the next page from the pagination "Link" tag.
-     */
-    private void updateNextRequest(GitHubResponse<P> nextResponse) {
-        GitHubRequest result = null;
-        String link = nextResponse.header("Link");
-        if (link != null) {
-            for (String token : link.split(", ")) {
-                if (token.endsWith("rel=\"next\"")) {
-                    // found the next page. This should look something like
-                    // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
-                    int idx = token.indexOf('>');
-                    result = nextRequest.toBuilder().setRawUrlPath(token.substring(1, idx)).build();
-                    break;
-                }
-            }
-        }
-        nextRequest = result;
-        if (nextRequest == null) {
-            // If this is the last page, keep the response
-            finalResponse = nextResponse;
-        }
-    }
-
-    /**
-     * Fetch is called at the start of {@link #hasNext()} or {@link #next()} to fetch another page of data if it is
-     * needed.
-     * <p>
-     * If {@link #next} is not {@code null}, no further action is needed.
-     * If {@link #next} is {@code null} and
-     * {@link #nextRequest} is {@code null}, there are no more pages to fetch.
-     * </p>
-     * <p>
-     * Otherwise, a new response page is fetched using {@link #nextRequest}. The response is then checked to see if
-     * there is a page after it and {@link #nextRequest} is updated to point to it. If there are no pages available
-     * after the current response, {@link #nextRequest} is set to {@code null}.
-     * </p>
-     */
-    protected P fetchNext() {
-        if (nextRequest == null)
-            return null; // no more data to fetch
-
-        P result;
-
-        URL url = nextRequest.url();
-        try {
-            GitHubResponse<P> nextResponse = sendNextRequest();
-            assert nextResponse.body() != null;
-            result = nextResponse.body();
-            updateNextRequest(nextResponse);
-        } catch (IOException e) {
-            // Iterators do not throw IOExceptions, so we wrap any IOException
-            // in a runtime GHException to bubble out if needed.
-            throw new GHException("Failed to retrieve " + url, e);
-        }
-        return result;
-    }
-
-    @NotNull protected GitHubResponse<P> sendNextRequest() throws IOException {
-        return client.sendRequest(nextRequest,
-                (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, pageType));
     }
 
     /**
@@ -202,5 +140,67 @@ class GitHubEndpointPageIterator<P extends GitHubPage<Item>, Item> implements ja
                 itemInitializer.accept(item);
             }
         }
+    }
+
+    /**
+     * Locate the next page from the pagination "Link" tag.
+     */
+    private void updateNextRequest(GitHubResponse<P> nextResponse) {
+        GitHubRequest result = null;
+        String link = nextResponse.header("Link");
+        if (link != null) {
+            for (String token : link.split(", ")) {
+                if (token.endsWith("rel=\"next\"")) {
+                    // found the next page. This should look something like
+                    // <https://api.github.com/repos?page=3&per_page=100>; rel="next"
+                    int idx = token.indexOf('>');
+                    result = nextRequest.toBuilder().setRawUrlPath(token.substring(1, idx)).build();
+                    break;
+                }
+            }
+        }
+        nextRequest = result;
+        if (nextRequest == null) {
+            // If this is the last page, keep the response
+            finalResponse = nextResponse;
+        }
+    }
+
+    /**
+     * Fetch is called at the start of {@link #hasNext()} or {@link #next()} to fetch another page of data if it is
+     * needed.
+     * <p>
+     * If {@link #next} is not {@code null}, no further action is needed. If {@link #next} is {@code null} and
+     * {@link #nextRequest} is {@code null}, there are no more pages to fetch.
+     * </p>
+     * <p>
+     * Otherwise, a new response page is fetched using {@link #nextRequest}. The response is then checked to see if
+     * there is a page after it and {@link #nextRequest} is updated to point to it. If there are no pages available
+     * after the current response, {@link #nextRequest} is set to {@code null}.
+     * </p>
+     */
+    protected P fetchNext() {
+        if (nextRequest == null)
+            return null; // no more data to fetch
+
+        P result;
+
+        URL url = nextRequest.url();
+        try {
+            GitHubResponse<P> nextResponse = sendNextRequest();
+            assert nextResponse.body() != null;
+            result = nextResponse.body();
+            updateNextRequest(nextResponse);
+        } catch (IOException e) {
+            // Iterators do not throw IOExceptions, so we wrap any IOException
+            // in a runtime GHException to bubble out if needed.
+            throw new GHException("Failed to retrieve " + url, e);
+        }
+        return result;
+    }
+
+    @NotNull protected GitHubResponse<P> sendNextRequest() throws IOException {
+        return client.sendRequest(nextRequest,
+                (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, pageType));
     }
 }

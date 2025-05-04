@@ -16,7 +16,7 @@ class GHAppInstallationsIterable extends PagedIterable<GHAppInstallation> {
      *            the root
      */
     public GHAppInstallationsIterable(GitHub root) {
-        super(new GitHubEndpointIterable<>(root.getClient(),
+        super(new PaginatedEndpoint<>(root.getClient(),
                 root.createRequest().withUrlPath(APP_INSTALLATIONS_URL).build(),
                 GHAppInstallationsPage.class,
                 GHAppInstallation.class,

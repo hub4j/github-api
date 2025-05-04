@@ -77,7 +77,7 @@ public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
 
         req.set("q", StringUtils.join(terms, " "));
         return new PagedSearchIterable<>(
-                new GitHubEndpointIterable<>(root().getClient(), req.build(), receiverType, itemType, itemInitializer));
+                new PaginatedEndpoint<>(root().getClient(), req.build(), receiverType, itemType, itemInitializer));
     }
 
     /**

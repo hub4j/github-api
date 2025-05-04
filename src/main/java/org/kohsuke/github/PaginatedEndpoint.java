@@ -10,21 +10,21 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
 /**
- * {@link GitHubEndpointIterable} implementation that take a {@link Consumer} that initializes all the items on each
- * page as they are retrieved.
+ * {@link PaginatedEndpoint} implementation that take a {@link Consumer} that initializes all the items on each page as
+ * they are retrieved.
  *
- * {@link GitHubEndpointIterable} is immutable and thread-safe, but the iterator returned from {@link #iterator()} is
- * not. Any one instance of iterator should only be called from a single thread.
+ * {@link PaginatedEndpoint} is immutable and thread-safe, but the iterator returned from {@link #iterator()} is not.
+ * Any one instance of iterator should only be called from a single thread.
  *
  * @author Liam Newman
  * @param <Item>
  *            the type of items on each page
  */
-class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Iterable<Item> {
+class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable<Item> {
 
-    private static class ArrayIterable<I> extends GitHubEndpointIterable<GitHubPage<I>, I> {
+    private static class ArrayIterable<I> extends PaginatedEndpoint<GitHubPage<I>, I> {
 
-        private class ArrayIterator extends GitHubEndpointPageIterator<GitHubPage<I>, I> {
+        private class ArrayIterator extends PaginatedEndpointPages<GitHubPage<I>, I> {
 
             ArrayIterator(GitHubClient client,
                     Class<GitHubPage<I>> pageType,
@@ -58,7 +58,7 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
         }
 
         @NotNull @Override
-        public GitHubEndpointPageIterator<GitHubPage<I>, I> pageIterator() {
+        public PaginatedEndpointPages<GitHubPage<I>, I> pages() {
             return new ArrayIterator(client, pageType, request, pageSize, itemInitializer);
         }
     }
@@ -91,24 +91,24 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
         }
     }
 
-    static <I> GitHubEndpointIterable<GitHubPage<I>, I> ofArrayEndpoint(GitHubClient client,
+    static <I> PaginatedEndpoint<GitHubPage<I>, I> ofArrayEndpoint(GitHubClient client,
             GitHubRequest request,
             Class<I[]> receiverType,
             Consumer<I> itemInitializer) {
         return new ArrayIterable<>(client, request, receiverType, itemInitializer);
     }
 
-    static <I> GitHubEndpointIterable<GitHubPage<I>, I> ofSingleton(I[] array) {
+    static <I> PaginatedEndpoint<GitHubPage<I>, I> ofSingleton(I[] array) {
         return ofSingleton(new GitHubArrayPage<>(array));
     }
 
-    static <P extends GitHubPage<I>, I> GitHubEndpointIterable<P, I> ofSingleton(P page) {
+    static <P extends GitHubPage<I>, I> PaginatedEndpoint<P, I> ofSingleton(P page) {
         Class<I> itemType = (Class<I>) page.getItems().getClass().getComponentType();
-        return new GitHubEndpointIterable<>(null, null, (Class<P>) page.getClass(), itemType, null) {
+        return new PaginatedEndpoint<>(null, null, (Class<P>) page.getClass(), itemType, null) {
             @Nonnull
             @Override
-            public GitHubEndpointPageIterator<P, I> pageIterator() {
-                return GitHubEndpointPageIterator.ofSingleton(page);
+            public PaginatedEndpointPages<P, I> pages() {
+                return PaginatedEndpointPages.ofSingleton(page);
             }
         };
     }
@@ -138,7 +138,7 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      * @param itemInitializer
      *            the item initializer
      */
-    GitHubEndpointIterable(GitHubClient client,
+    PaginatedEndpoint(GitHubClient client,
             GitHubRequest request,
             Class<Page> pageType,
             Class<Item> itemType,
@@ -151,13 +151,13 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
     }
 
     @Nonnull
-    public final GitHubPageItemIterator<Page, Item> itemIterator() {
-        return new GitHubPageItemIterator<>(this.pageIterator());
+    public final PaginatedEndpointItems<Page, Item> items() {
+        return new PaginatedEndpointItems<>(this.pages());
     }
     @Nonnull
     @Override
     public final Iterator<Item> iterator() {
-        return this.itemIterator();
+        return this.items();
     }
 
     /**
@@ -165,8 +165,8 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      * @return
      */
     @Nonnull
-    public GitHubEndpointPageIterator<Page, Item> pageIterator() {
-        return new GitHubEndpointPageIterator<>(client, pageType, request, pageSize, itemInitializer);
+    public PaginatedEndpointPages<Page, Item> pages() {
+        return new PaginatedEndpointPages<>(client, pageType, request, pageSize, itemInitializer);
     }
 
     /**
@@ -178,7 +178,7 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      */
     @Nonnull
     public final Item[] toArray() throws IOException {
-        return toArray(pageIterator(), itemType);
+        return toList().toArray((Item[]) Array.newInstance(itemType, 0));
     }
 
     /**
@@ -190,7 +190,7 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      */
     @Nonnull
     public final List<Item> toList() throws IOException {
-        return Collections.unmodifiableList(Arrays.asList(this.toArray()));
+        return Collections.unmodifiableList(toList(pages(), itemType));
     }
 
     /**
@@ -202,7 +202,7 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      */
     @Nonnull
     public final Set<Item> toSet() throws IOException {
-        return Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(this.toArray())));
+        return Collections.unmodifiableSet(new LinkedHashSet<>(toList()));
     }
 
     /**
@@ -215,31 +215,9 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      *            the size
      * @return the paged iterable
      */
-    public final GitHubEndpointIterable<Page, Item> withPageSize(int size) {
+    public final PaginatedEndpoint<Page, Item> withPageSize(int size) {
         this.pageSize = size;
         return this;
-    }
-
-    /**
-     * Concatenates a list of arrays into a single array.
-     *
-     * @param pages
-     *            the list of arrays to be concatenated.
-     * @param totalLength
-     *            the total length of the returned array.
-     * @return an array containing all elements from all pages.
-     */
-    @Nonnull
-    private Item[] concatenatePages(List<Item[]> pages, int totalLength) {
-        Item[] result = (Item[]) Array.newInstance(itemType, totalLength);
-
-        int position = 0;
-        for (Item[] page : pages) {
-            final int pageLength = Array.getLength(page);
-            System.arraycopy(page, 0, result, position, pageLength);
-            position += pageLength;
-        }
-        return result;
     }
 
     /**
@@ -251,18 +229,14 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      * @throws IOException
      *             if an I/O exception occurs.
      */
-    private Item[] toArray(final GitHubEndpointPageIterator<Page, Item> iterator, Class<Item> itemType) throws IOException {
+    private List<Item> toList(final PaginatedEndpointPages<Page, Item> iterator, Class<Item> itemType)
+            throws IOException {
         try {
-            ArrayList<Item[]> pages = new ArrayList<>();
-            int totalSize = 0;
-            Item[] item;
-            while (iterator.hasNext()) {
-                item = iterator.next().getItems();
-                totalSize += Array.getLength(item);
-                pages.add(item);
-            }
-
-            return concatenatePages(pages, totalSize);
+            ArrayList<Item> pageList = new ArrayList<>();
+            iterator.forEachRemaining(page -> {
+                pageList.addAll(Arrays.asList(page.getItems()));
+            });
+            return pageList;
         } catch (GHException e) {
             // if there was an exception inside the iterator it is wrapped as a GHException
             // if the wrapped exception is an IOException, throw that
@@ -284,8 +258,8 @@ class GitHubEndpointIterable<Page extends GitHubPage<Item>, Item> implements Ite
      */
     @Nonnull
     final GitHubResponse<Item[]> toResponse() throws IOException {
-        GitHubEndpointPageIterator<Page, Item> iterator = pageIterator();
-        Item[] items = toArray(iterator, itemType);
+        PaginatedEndpointPages<Page, Item> iterator = pages();
+        Item[] items = toArray();
         GitHubResponse<Page> lastResponse = iterator.finalResponse();
         return new GitHubResponse<>(lastResponse, items);
     }

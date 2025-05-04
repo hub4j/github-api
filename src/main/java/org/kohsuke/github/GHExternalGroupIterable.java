@@ -18,14 +18,14 @@ class GHExternalGroupIterable extends PagedIterable<GHExternalGroup> {
      *            the request builder
      */
     GHExternalGroupIterable(final GHOrganization owner, GitHubRequest.Builder<?> requestBuilder) {
-        super(new GitHubEndpointIterable<>(owner.root().getClient(),
+        super(new PaginatedEndpoint<>(owner.root().getClient(),
                 requestBuilder.build(),
                 GHExternalGroupPage.class,
                 GHExternalGroup.class,
                 item -> item.wrapUp(owner)) {
             @NotNull @Override
-            public GitHubEndpointPageIterator<GHExternalGroupPage, GHExternalGroup> pageIterator() {
-                return new GitHubEndpointPageIterator<>(client, pageType, request, pageSize, itemInitializer) {
+            public PaginatedEndpointPages<GHExternalGroupPage, GHExternalGroup> pages() {
+                return new PaginatedEndpointPages<>(client, pageType, request, pageSize, itemInitializer) {
                     @Override
                     public boolean hasNext() {
                         try {

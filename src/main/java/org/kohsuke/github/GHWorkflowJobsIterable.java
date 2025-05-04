@@ -16,7 +16,7 @@ class GHWorkflowJobsIterable extends PagedIterable<GHWorkflowJob> {
      *            the request
      */
     public GHWorkflowJobsIterable(GHRepository repo, GitHubRequest request) {
-        super(new GitHubEndpointIterable<>(repo.root()
+        super(new PaginatedEndpoint<>(repo.root()
                 .getClient(), request, GHWorkflowJobsPage.class, GHWorkflowJob.class, item -> item.wrapUp(repo)));
     }
 }

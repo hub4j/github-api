@@ -15,7 +15,7 @@ class GHArtifactsIterable extends PagedIterable<GHArtifact> {
      *            the request builder
      */
     public GHArtifactsIterable(GHRepository owner, GitHubRequest.Builder<?> requestBuilder) {
-        super(new GitHubEndpointIterable<>(owner.root().getClient(),
+        super(new PaginatedEndpoint<>(owner.root().getClient(),
                 requestBuilder.build(),
                 GHArtifactsPage.class,
                 GHArtifact.class,

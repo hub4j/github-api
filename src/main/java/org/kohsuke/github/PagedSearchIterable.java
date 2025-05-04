@@ -16,12 +16,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "Constructed by JSON API")
 public class PagedSearchIterable<T> extends PagedIterable<T> {
 
-    private final GitHubEndpointIterable<? extends SearchResult<T>, T> paginatedEndpoint;
+    private final PaginatedEndpoint<? extends SearchResult<T>, T> paginatedEndpoint;
 
     /**
      * Instantiates a new git hub page contents iterable.
      */
-    <Result extends SearchResult<T>> PagedSearchIterable(GitHubEndpointIterable<Result, T> paginatedEndpoint) {
+    <Result extends SearchResult<T>> PagedSearchIterable(PaginatedEndpoint<Result, T> paginatedEndpoint) {
         super(paginatedEndpoint);
         this.paginatedEndpoint = paginatedEndpoint;
     }
@@ -33,7 +33,7 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
      */
     public int getTotalCount() {
         // populate();
-        return paginatedEndpoint.pageIterator().peek().totalCount;
+        return paginatedEndpoint.pages().peek().totalCount;
     }
 
     /**
@@ -43,6 +43,6 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
      */
     public boolean isIncomplete() {
         // populate();
-        return paginatedEndpoint.pageIterator().peek().incompleteResults;
+        return paginatedEndpoint.pages().peek().incompleteResults;
     }
 }

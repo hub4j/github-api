@@ -2,12 +2,10 @@ package org.kohsuke.github;
 
 import java.util.*;
 
-import javax.annotation.Nonnull;
-
 /**
  * This class is not thread-safe. Any one instance should only be called from a single thread.
  */
-class GitHubPageItemIterator<Page extends GitHubPage<Item>, Item> implements Iterator<Item> {
+class PaginatedEndpointItems<Page extends GitHubPage<Item>, Item> implements Iterator<Item> {
 
     /**
      * Current batch of items. Each time {@link #next()} is called the next item in this array will be returned. After
@@ -25,9 +23,9 @@ class GitHubPageItemIterator<Page extends GitHubPage<Item>, Item> implements Ite
      */
     private int nextItemIndex;
 
-    private final GitHubEndpointPageIterator<Page, Item> pageIterator;
+    private final PaginatedEndpointPages<Page, Item> pageIterator;
 
-    GitHubPageItemIterator(GitHubEndpointPageIterator<Page, Item> pageIterator) {
+    PaginatedEndpointItems(PaginatedEndpointPages<Page, Item> pageIterator) {
         this.pageIterator = pageIterator;
     }
 

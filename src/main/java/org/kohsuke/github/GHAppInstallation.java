@@ -267,7 +267,7 @@ public class GHAppInstallation extends GHObject {
 
         request = root().createRequest().withUrlPath("/installation/repositories").build();
 
-        return new PagedSearchIterable<>(new GitHubEndpointIterable<>(root()
+        return new PagedSearchIterable<>(new PaginatedEndpoint<>(root()
                 .getClient(), request, GHAppInstallationRepositoryResult.class, GHRepository.class, null));
     }
 }

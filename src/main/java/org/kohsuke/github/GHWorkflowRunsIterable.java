@@ -14,7 +14,7 @@ class GHWorkflowRunsIterable extends PagedIterable<GHWorkflowRun> {
      *            the request builder
      */
     public GHWorkflowRunsIterable(GHRepository owner, GitHubRequest.Builder<?> requestBuilder) {
-        super(new GitHubEndpointIterable<>(owner.root().getClient(),
+        super(new PaginatedEndpoint<>(owner.root().getClient(),
                 requestBuilder.build(),
                 GHWorkflowRunsPage.class,
                 GHWorkflowRun.class,

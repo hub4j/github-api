@@ -203,7 +203,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
             Class<R> itemType,
             Consumer<R> itemInitializer) {
         GitHubRequest request = build();
-        return new PagedIterable<>(new GitHubEndpointIterable<>(client, request, pageType, itemType, itemInitializer));
+        return new PagedIterable<>(new PaginatedEndpoint<>(client, request, pageType, itemType, itemInitializer));
     }
 
     /**
@@ -223,8 +223,7 @@ class Requester extends GitHubRequest.Builder<Requester> {
      */
     public <R> PagedIterable<R> toIterable(Class<R[]> receiverType, Consumer<R> itemInitializer) {
         GitHubRequest request = build();
-        return new PagedIterable<>(
-                GitHubEndpointIterable.ofArrayEndpoint(client, request, receiverType, itemInitializer));
+        return new PagedIterable<>(PaginatedEndpoint.ofArrayEndpoint(client, request, receiverType, itemInitializer));
     }
 
 }

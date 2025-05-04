@@ -17,12 +17,12 @@ import javax.annotation.Nonnull;
  */
 public class PagedIterable<T> implements Iterable<T> {
 
-    private final GitHubEndpointIterable<?, T> paginatedEndpoint;
+    private final PaginatedEndpoint<?, T> paginatedEndpoint;
 
     /**
      * Instantiates a new git hub page contents iterable.
      */
-    PagedIterable(GitHubEndpointIterable<?, T> paginatedEndpoint) {
+    PagedIterable(PaginatedEndpoint<?, T> paginatedEndpoint) {
         this.paginatedEndpoint = paginatedEndpoint;
     }
 
@@ -32,7 +32,7 @@ public class PagedIterable<T> implements Iterable<T> {
 
     @Nonnull
     public final PagedIterator<T> iterator() {
-        return new PagedIterator<>(paginatedEndpoint.itemIterator());
+        return new PagedIterator<>(paginatedEndpoint.items());
     }
 
     @Nonnull

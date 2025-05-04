@@ -14,7 +14,7 @@ class GHCheckRunsIterable extends PagedIterable<GHCheckRun> {
      *            the request
      */
     public GHCheckRunsIterable(GHRepository owner, GitHubRequest request) {
-        super(new GitHubEndpointIterable<>(owner.root()
+        super(new PaginatedEndpoint<>(owner.root()
                 .getClient(), request, GHCheckRunsPage.class, GHCheckRun.class, item -> item.wrap(owner)));
     }
 }

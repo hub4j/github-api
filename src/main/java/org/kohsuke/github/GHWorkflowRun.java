@@ -558,7 +558,11 @@ public class GHWorkflowRun extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHArtifact> listArtifacts() {
-        return new GHArtifactsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), "artifacts"));
+        return new PagedIterable<>(new PaginatedEndpoint<>(owner.root().getClient(),
+                root().createRequest().withUrlPath(getApiRoute(), "artifacts").build(),
+                GHArtifactsPage.class,
+                GHArtifact.class,
+                item -> item.wrapUp(owner)));
     }
 
     /**

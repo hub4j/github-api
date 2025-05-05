@@ -1192,7 +1192,8 @@ public class GHRepository extends GHObject {
         GitHubRequest request = root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
                 .build();
-        return new GHCheckRunsIterable(this, request);
+        return new PagedIterable<>(new PaginatedEndpoint<>(root()
+                .getClient(), request, GHCheckRunsPage.class, GHCheckRun.class, item -> item.wrap(this)));
     }
 
     /**
@@ -1211,7 +1212,8 @@ public class GHRepository extends GHObject {
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
                 .with(params)
                 .build();
-        return new GHCheckRunsIterable(this, request);
+        return new PagedIterable<>(new PaginatedEndpoint<>(root()
+                .getClient(), request, GHCheckRunsPage.class, GHCheckRun.class, item -> item.wrap(this)));
     }
 
     /**
@@ -2548,7 +2550,11 @@ public class GHRepository extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHArtifact> listArtifacts() {
-        return new GHArtifactsIterable(this, root().createRequest().withUrlPath(getApiTailUrl("actions/artifacts")));
+        return new PagedIterable<>(new PaginatedEndpoint<>(this.root().getClient(),
+                root().createRequest().withUrlPath(getApiTailUrl("actions/artifacts")).build(),
+                GHArtifactsPage.class,
+                GHArtifact.class,
+                item -> item.wrapUp(this)));
     }
 
     /**
@@ -2956,7 +2962,11 @@ public class GHRepository extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHWorkflow> listWorkflows() {
-        return new GHWorkflowsIterable(this);
+        return new PagedIterable<>(new PaginatedEndpoint<>(root().getClient(),
+                root().createRequest().withUrlPath(getApiTailUrl("actions/workflows")).build(),
+                GHWorkflowsPage.class,
+                GHWorkflow.class,
+                item -> item.wrapUp(this)));
     }
 
     /**

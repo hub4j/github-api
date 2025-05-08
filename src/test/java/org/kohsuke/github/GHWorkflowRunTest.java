@@ -148,14 +148,20 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
             String workflowName,
             String branch,
             Conclusion conclusion) {
-        List<GHWorkflowRun> workflowRuns = repository.queryWorkflowRuns()
-                .branch(branch)
-                .conclusion(conclusion)
-                .event(GHEvent.PULL_REQUEST)
-                .list()
-                .withPageSize(20)
-                .iterator()
-                .nextPage();
+        List<GHWorkflowRun> workflowRuns;
+        try {
+            workflowRuns = repository.getWorkflow(workflowName)
+                    .queryRuns()
+                    .branch(branch)
+                    .conclusion(conclusion)
+                    .event(GHEvent.PULL_REQUEST)
+                    .list()
+                    .withPageSize(20)
+                    .iterator()
+                    .nextPage();
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to get workflow run", e);
+        }
 
         for (GHWorkflowRun workflowRun : workflowRuns) {
             if (workflowRun.getName().equals(workflowName)) {

@@ -19,21 +19,78 @@ import java.util.Objects;
  */
 public class GHWorkflow extends GHObject {
 
-    private String badgeUrl;
-
-    private String htmlUrl;
-
-    private String name;
-    // Not provided by the API.
-    @JsonIgnore
-    private GHRepository owner;
-    private String path;
-
-    private String state;
     /**
      * Create default GHWorkflow instance
      */
     public GHWorkflow() {
+    }
+
+    // Not provided by the API.
+    @JsonIgnore
+    private GHRepository owner;
+
+    private String name;
+    private String path;
+    private String state;
+
+    private String htmlUrl;
+    private String badgeUrl;
+
+    /**
+     * The name of the workflow.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * The path of the workflow e.g. .github/workflows/blank.yaml
+     *
+     * @return the path
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
+     * The state of the workflow.
+     *
+     * @return the state
+     */
+    public String getState() {
+        return state;
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public URL getHtmlUrl() throws IOException {
+        return GitHubClient.parseURL(htmlUrl);
+    }
+
+    /**
+     * Repository to which the workflow belongs.
+     *
+     * @return the repository
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getRepository() {
+        return owner;
+    }
+
+    /**
+     * The badge URL, like https://github.com/octo-org/octo-repo/workflows/CI/badge.svg
+     *
+     * @return the badge url
+     */
+    public URL getBadgeUrl() {
+        return GitHubClient.parseURL(badgeUrl);
     }
 
     /**
@@ -44,6 +101,16 @@ public class GHWorkflow extends GHObject {
      */
     public void disable() throws IOException {
         root().createRequest().method("PUT").withUrlPath(getApiRoute(), "disable").send();
+    }
+
+    /**
+     * Enable the workflow.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void enable() throws IOException {
+        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").send();
     }
 
     /**
@@ -80,71 +147,6 @@ public class GHWorkflow extends GHObject {
         }
 
         requester.send();
-    }
-
-    /**
-     * Enable the workflow.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void enable() throws IOException {
-        root().createRequest().method("PUT").withUrlPath(getApiRoute(), "enable").send();
-    }
-
-    /**
-     * The badge URL, like https://github.com/octo-org/octo-repo/workflows/CI/badge.svg
-     *
-     * @return the badge url
-     */
-    public URL getBadgeUrl() {
-        return GitHubClient.parseURL(badgeUrl);
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
-     * The name of the workflow.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * The path of the workflow e.g. .github/workflows/blank.yaml
-     *
-     * @return the path
-     */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     * Repository to which the workflow belongs.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getRepository() {
-        return owner;
-    }
-
-    /**
-     * The state of the workflow.
-     *
-     * @return the state
-     */
-    public String getState() {
-        return state;
     }
 
     /**

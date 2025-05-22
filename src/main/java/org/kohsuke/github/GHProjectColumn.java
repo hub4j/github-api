@@ -14,73 +14,39 @@ import java.net.URL;
  */
 public class GHProjectColumn extends GHObject {
 
-    private String name;
-
-    private String projectUrl;
-
-    /** The project. */
-    protected GHProject project;
     /**
      * Create default GHProjectColumn instance
      */
     public GHProjectColumn() {
     }
 
+    /** The project. */
+    protected GHProject project;
+
+    private String name;
+    private String project_url;
+
     /**
-     * Create card gh project card.
+     * Wrap gh project column.
      *
-     * @param issue
-     *            the issue
-     * @return the gh project card
-     * @throws IOException
-     *             the io exception
+     * @param root
+     *            the root
+     * @return the gh project column
      */
-    public GHProjectCard createCard(GHIssue issue) throws IOException {
-        String contentType = issue instanceof GHPullRequest ? "PullRequest" : "Issue";
-        return root().createRequest()
-                .method("POST")
-                .with("content_type", contentType)
-                .with("content_id", issue.getId())
-                .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
-                .fetch(GHProjectCard.class)
-                .lateBind(this);
+    GHProjectColumn lateBind(GitHub root) {
+        return this;
     }
 
     /**
-     * Create card gh project card.
+     * Wrap gh project column.
      *
-     * @param note
-     *            the note
-     * @return the gh project card
-     * @throws IOException
-     *             the io exception
+     * @param project
+     *            the project
+     * @return the gh project column
      */
-    public GHProjectCard createCard(String note) throws IOException {
-        return root().createRequest()
-                .method("POST")
-                .with("note", note)
-                .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
-                .fetch(GHProjectCard.class)
-                .lateBind(this);
-    }
-
-    /**
-     * Delete.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
+    GHProjectColumn lateBind(GHProject project) {
+        this.project = project;
+        return lateBind(project.root());
     }
 
     /**
@@ -102,24 +68,21 @@ public class GHProjectColumn extends GHObject {
     }
 
     /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Gets project url.
      *
      * @return the project url
      */
     public URL getProjectUrl() {
-        return GitHubClient.parseURL(projectUrl);
-    }
-
-    /**
-     * List cards paged iterable.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHProjectCard> listCards() {
-        final GHProjectColumn column = this;
-        return root().createRequest()
-                .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
-                .toIterable(GHProjectCard[].class, item -> item.lateBind(column));
+        return GitHubClient.parseURL(project_url);
     }
 
     /**
@@ -148,25 +111,64 @@ public class GHProjectColumn extends GHObject {
     }
 
     /**
-     * Wrap gh project column.
+     * Delete.
      *
-     * @param project
-     *            the project
-     * @return the gh project column
+     * @throws IOException
+     *             the io exception
      */
-    GHProjectColumn lateBind(GHProject project) {
-        this.project = project;
-        return lateBind(project.root());
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
-     * Wrap gh project column.
+     * List cards paged iterable.
      *
-     * @param root
-     *            the root
-     * @return the gh project column
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
      */
-    GHProjectColumn lateBind(GitHub root) {
-        return this;
+    public PagedIterable<GHProjectCard> listCards() throws IOException {
+        final GHProjectColumn column = this;
+        return root().createRequest()
+                .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
+                .toIterable(GHProjectCard[].class, item -> item.lateBind(column));
+    }
+
+    /**
+     * Create card gh project card.
+     *
+     * @param note
+     *            the note
+     * @return the gh project card
+     * @throws IOException
+     *             the io exception
+     */
+    public GHProjectCard createCard(String note) throws IOException {
+        return root().createRequest()
+                .method("POST")
+                .with("note", note)
+                .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
+                .fetch(GHProjectCard.class)
+                .lateBind(this);
+    }
+
+    /**
+     * Create card gh project card.
+     *
+     * @param issue
+     *            the issue
+     * @return the gh project card
+     * @throws IOException
+     *             the io exception
+     */
+    public GHProjectCard createCard(GHIssue issue) throws IOException {
+        String contentType = issue instanceof GHPullRequest ? "PullRequest" : "Issue";
+        return root().createRequest()
+                .method("POST")
+                .with("content_type", contentType)
+                .with("content_id", issue.getId())
+                .withUrlPath(String.format("/projects/columns/%d/cards", getId()))
+                .fetch(GHProjectCard.class)
+                .lateBind(this);
     }
 }

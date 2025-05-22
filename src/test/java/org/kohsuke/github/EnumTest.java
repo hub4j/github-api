@@ -27,7 +27,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
         assertThat(GHCheckRun.Conclusion.values().length, equalTo(9));
         assertThat(GHCheckRun.Status.values().length, equalTo(4));
 
-        assertThat(GHCommentAuthorAssociation.values().length, equalTo(9));
+        assertThat(GHCommentAuthorAssociation.values().length, equalTo(8));
 
         assertThat(GHCommitSearchBuilder.Sort.values().length, equalTo(2));
 
@@ -54,7 +54,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
 
         assertThat(GHIssueState.values().length, equalTo(3));
 
-        assertThat(GHIssueStateReason.values().length, equalTo(4));
+        assertThat(GHIssueStateReason.values().length, equalTo(3));
 
         assertThat(GHMarketplaceAccountType.values().length, equalTo(2));
 

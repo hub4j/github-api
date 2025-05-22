@@ -13,26 +13,26 @@ import java.net.URL;
  */
 public class GHMarketplaceAccount extends GitHubInteractiveObject {
 
-    private String email;
-
-    private long id;
-    private String login;
-    private String organizationBillingEmail;
-    private GHMarketplaceAccountType type;
-    private String url;
     /**
      * Create default GHMarketplaceAccount instance
      */
     public GHMarketplaceAccount() {
     }
 
+    private String url;
+    private long id;
+    private String login;
+    private String email;
+    private String organizationBillingEmail;
+    private GHMarketplaceAccountType type;
+
     /**
-     * Gets email.
+     * Gets url.
      *
-     * @return the email
+     * @return the url
      */
-    public String getEmail() {
-        return email;
+    public URL getUrl() {
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -54,12 +54,30 @@ public class GHMarketplaceAccount extends GitHubInteractiveObject {
     }
 
     /**
+     * Gets email.
+     *
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
      * Gets organization billing email.
      *
      * @return the organization billing email
      */
     public String getOrganizationBillingEmail() {
         return organizationBillingEmail;
+    }
+
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
+    public GHMarketplaceAccountType getType() {
+        return type;
     }
 
     /**
@@ -81,24 +99,6 @@ public class GHMarketplaceAccount extends GitHubInteractiveObject {
      */
     public GHMarketplaceAccountPlan getPlan() throws IOException {
         return new GHMarketplacePlanForAccountBuilder(root(), this.id).createRequest();
-    }
-
-    /**
-     * Gets type.
-     *
-     * @return the type
-     */
-    public GHMarketplaceAccountType getType() {
-        return type;
-    }
-
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    public URL getUrl() {
-        return GitHubClient.parseURL(url);
     }
 
 }

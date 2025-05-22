@@ -47,121 +47,31 @@ import java.util.Objects;
         justification = "JSON API")
 public class GHLicense extends GHObject {
 
-    /** The featured. */
-    // the rest is only after populated
-    protected Boolean featured;
-
-    /** The forbidden. */
-    protected List<String> forbidden = new ArrayList<String>();
-
-    /** The body. */
-    protected String htmlUrl, description, category, implementation, body;
-
-    /** The name. */
-    // these fields are always present, even in the short form
-    protected String key, name, spdxId;
-
-    /** The permitted. */
-    protected List<String> permitted = new ArrayList<String>();
-
-    /** The required. */
-    protected List<String> required = new ArrayList<String>();
-
     /**
      * Create default GHLicense instance
      */
     public GHLicense() {
     }
 
-    /**
-     * Equals.
-     *
-     * @param o
-     *            the o
-     * @return true, if successful
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof GHLicense))
-            return false;
+    /** The name. */
+    // these fields are always present, even in the short form
+    protected String key, name, spdxId;
 
-        GHLicense that = (GHLicense) o;
-        return Objects.equals(getUrl(), that.getUrl());
-    }
+    /** The featured. */
+    // the rest is only after populated
+    protected Boolean featured;
 
-    /**
-     * Gets body.
-     *
-     * @return the body
-     * @throws IOException
-     *             the io exception
-     */
-    public String getBody() throws IOException {
-        populate();
-        return body;
-    }
+    /** The body. */
+    protected String html_url, description, category, implementation, body;
 
-    /**
-     * Gets category.
-     *
-     * @return the category
-     * @throws IOException
-     *             the io exception
-     */
-    public String getCategory() throws IOException {
-        populate();
-        return category;
-    }
+    /** The required. */
+    protected List<String> required = new ArrayList<String>();
 
-    /**
-     * Gets description.
-     *
-     * @return the description
-     * @throws IOException
-     *             the io exception
-     */
-    public String getDescription() throws IOException {
-        populate();
-        return description;
-    }
+    /** The permitted. */
+    protected List<String> permitted = new ArrayList<String>();
 
-    /**
-     * Gets forbidden.
-     *
-     * @return the forbidden
-     * @throws IOException
-     *             the io exception
-     */
-    public List<String> getForbidden() throws IOException {
-        populate();
-        return Collections.unmodifiableList(forbidden);
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public URL getHtmlUrl() throws IOException {
-        populate();
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
-     * Gets implementation.
-     *
-     * @return the implementation
-     * @throws IOException
-     *             the io exception
-     */
-    public String getImplementation() throws IOException {
-        populate();
-        return implementation;
-    }
+    /** The forbidden. */
+    protected List<String> forbidden = new ArrayList<String>();
 
     /**
      * Gets key.
@@ -182,15 +92,72 @@ public class GHLicense extends GHObject {
     }
 
     /**
-     * Gets permitted.
+     * Gets SPDX ID.
      *
-     * @return the permitted
+     * @return the spdx id
+     */
+    public String getSpdxId() {
+        return spdxId;
+    }
+
+    /**
+     * Featured licenses are bold in the new repository drop-down.
+     *
+     * @return True if the license is featured, false otherwise
      * @throws IOException
      *             the io exception
      */
-    public List<String> getPermitted() throws IOException {
+    public Boolean isFeatured() throws IOException {
         populate();
-        return Collections.unmodifiableList(permitted);
+        return featured;
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public URL getHtmlUrl() throws IOException {
+        populate();
+        return GitHubClient.parseURL(html_url);
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     * @throws IOException
+     *             the io exception
+     */
+    public String getDescription() throws IOException {
+        populate();
+        return description;
+    }
+
+    /**
+     * Gets category.
+     *
+     * @return the category
+     * @throws IOException
+     *             the io exception
+     */
+    public String getCategory() throws IOException {
+        populate();
+        return category;
+    }
+
+    /**
+     * Gets implementation.
+     *
+     * @return the implementation
+     * @throws IOException
+     *             the io exception
+     */
+    public String getImplementation() throws IOException {
+        populate();
+        return implementation;
     }
 
     /**
@@ -206,34 +173,39 @@ public class GHLicense extends GHObject {
     }
 
     /**
-     * Gets SPDX ID.
+     * Gets permitted.
      *
-     * @return the spdx id
-     */
-    public String getSpdxId() {
-        return spdxId;
-    }
-
-    /**
-     * Hash code.
-     *
-     * @return the int
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getUrl());
-    }
-
-    /**
-     * Featured licenses are bold in the new repository drop-down.
-     *
-     * @return True if the license is featured, false otherwise
+     * @return the permitted
      * @throws IOException
      *             the io exception
      */
-    public Boolean isFeatured() throws IOException {
+    public List<String> getPermitted() throws IOException {
         populate();
-        return featured;
+        return Collections.unmodifiableList(permitted);
+    }
+
+    /**
+     * Gets forbidden.
+     *
+     * @return the forbidden
+     * @throws IOException
+     *             the io exception
+     */
+    public List<String> getForbidden() throws IOException {
+        populate();
+        return Collections.unmodifiableList(forbidden);
+    }
+
+    /**
+     * Gets body.
+     *
+     * @return the body
+     * @throws IOException
+     *             the io exception
+     */
+    public String getBody() throws IOException {
+        populate();
+        return body;
     }
 
     /**
@@ -256,5 +228,33 @@ public class GHLicense extends GHObject {
         if (url != null) {
             root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);
         }
+    }
+
+    /**
+     * Equals.
+     *
+     * @param o
+     *            the o
+     * @return true, if successful
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof GHLicense))
+            return false;
+
+        GHLicense that = (GHLicense) o;
+        return Objects.equals(getUrl(), that.getUrl());
+    }
+
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getUrl());
     }
 }

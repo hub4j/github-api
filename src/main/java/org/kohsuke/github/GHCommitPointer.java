@@ -35,43 +35,28 @@ import java.io.IOException;
  */
 public class GHCommitPointer {
 
-    private String ref, sha, label;
-
-    private GHRepository repo;
-    private GHUser user;
     /**
      * Create default GHCommitPointer instance
      */
     public GHCommitPointer() {
     }
 
+    private String ref, sha, label;
+    private GHUser user;
+    private GHRepository repo;
+
     /**
-     * Obtains the commit that this pointer is referring to.
+     * This points to the user who owns the {@link #getRepository()}.
      *
-     * @return the commit
+     * @return the user
      * @throws IOException
      *             the io exception
      */
-    public GHCommit getCommit() throws IOException {
-        return getRepository().getCommit(getSha());
-    }
-
-    /**
-     * String that looks like "USERNAME:REF".
-     *
-     * @return the label
-     */
-    public String getLabel() {
-        return label;
-    }
-
-    /**
-     * Named ref to the commit. This appears to be a "short ref" that doesn't include "refs/heads/" portion.
-     *
-     * @return the ref
-     */
-    public String getRef() {
-        return ref;
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getUser() throws IOException {
+        if (user != null)
+            return user.root().intern(user);
+        return user;
     }
 
     /**
@@ -85,6 +70,15 @@ public class GHCommitPointer {
     }
 
     /**
+     * Named ref to the commit. This appears to be a "short ref" that doesn't include "refs/heads/" portion.
+     *
+     * @return the ref
+     */
+    public String getRef() {
+        return ref;
+    }
+
+    /**
      * SHA1 of the commit.
      *
      * @return the sha
@@ -94,15 +88,23 @@ public class GHCommitPointer {
     }
 
     /**
-     * This points to the user who owns the {@link #getRepository()}.
+     * String that looks like "USERNAME:REF".
      *
-     * @return the user
+     * @return the label
      */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getUser() {
-        if (user != null)
-            return user.root().intern(user);
-        return user;
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * Obtains the commit that this pointer is referring to.
+     *
+     * @return the commit
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCommit getCommit() throws IOException {
+        return getRepository().getCommit(getSha());
     }
 
 }

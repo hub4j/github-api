@@ -15,13 +15,15 @@ class GHOrgHook extends GHHook {
     transient GHOrganization organization;
 
     /**
-     * Gets the api route.
+     * Wrap.
      *
-     * @return the api route
+     * @param owner
+     *            the owner
+     * @return the GH org hook
      */
-    @Override
-    String getApiRoute() {
-        return String.format("/orgs/%s/hooks/%d", organization.getLogin(), getId());
+    GHOrgHook wrap(GHOrganization owner) {
+        this.organization = owner;
+        return this;
     }
 
     /**
@@ -35,14 +37,12 @@ class GHOrgHook extends GHHook {
     }
 
     /**
-     * Wrap.
+     * Gets the api route.
      *
-     * @param owner
-     *            the owner
-     * @return the GH org hook
+     * @return the api route
      */
-    GHOrgHook wrap(GHOrganization owner) {
-        this.organization = owner;
-        return this;
+    @Override
+    String getApiRoute() {
+        return String.format("/orgs/%s/hooks/%d", organization.getLogin(), getId());
     }
 }

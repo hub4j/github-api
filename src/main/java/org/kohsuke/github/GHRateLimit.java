@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -31,363 +30,17 @@ import static java.util.logging.Level.FINEST;
 @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
 public class GHRateLimit {
 
-    /**
-     * A rate limit record.
-     *
-     * @author Liam Newman
-     * @since 1.100
-     */
-    public static class Record {
-        /**
-         * EpochSeconds time (UTC) at which this instance was created.
-         */
-        private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;
+    @Nonnull
+    private final Record core;
 
-        /**
-         * Allotted API call per time period.
-         */
-        private final int limit;
+    @Nonnull
+    private final Record search;
 
-        /**
-         * Remaining calls that can be made.
-         */
-        private final int remaining;
+    @Nonnull
+    private final Record graphql;
 
-        /**
-         * The time at which the current rate limit window resets in UTC epoch seconds.
-         */
-        private final long resetEpochSeconds;
-
-        /**
-         * The date at which the rate limit will reset, adjusted to local machine time if the local machine's clock not
-         * synchronized with to the same clock as the GitHub server.
-         *
-         * @see #calculateResetInstant(String)
-         * @see #getResetInstant()
-         */
-        @Nonnull
-        private final Instant resetInstant;
-
-        /**
-         * Instantiates a new Record.
-         *
-         * @param limit
-         *            the limit
-         * @param remaining
-         *            the remaining
-         * @param resetEpochSeconds
-         *            the reset epoch seconds
-         */
-        public Record(@JsonProperty(value = "limit", required = true) int limit,
-                @JsonProperty(value = "remaining", required = true) int remaining,
-                @JsonProperty(value = "reset", required = true) long resetEpochSeconds) {
-            this(limit, remaining, resetEpochSeconds, null);
-        }
-
-        /**
-         * Instantiates a new Record. Called by Jackson data binding or during header parsing.
-         *
-         * @param limit
-         *            the limit
-         * @param remaining
-         *            the remaining
-         * @param resetEpochSeconds
-         *            the reset epoch seconds
-         * @param connectorResponse
-         *            the response info
-         */
-        @JsonCreator
-        Record(@JsonProperty(value = "limit", required = true) int limit,
-                @JsonProperty(value = "remaining", required = true) int remaining,
-                @JsonProperty(value = "reset", required = true) long resetEpochSeconds,
-                @JacksonInject @CheckForNull GitHubConnectorResponse connectorResponse) {
-            this.limit = limit;
-            this.remaining = remaining;
-            this.resetEpochSeconds = resetEpochSeconds;
-            String updatedAt = null;
-            if (connectorResponse != null) {
-                updatedAt = connectorResponse.header("Date");
-            }
-            this.resetInstant = calculateResetInstant(updatedAt);
-        }
-
-        /**
-         * Equals.
-         *
-         * @param o
-         *            the o
-         * @return true, if successful
-         */
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            Record record = (Record) o;
-            return getRemaining() == record.getRemaining() && getLimit() == record.getLimit()
-                    && getResetEpochSeconds() == record.getResetEpochSeconds()
-                    && getResetInstant().equals(record.getResetInstant());
-        }
-
-        /**
-         * Gets the total number of API calls per hour allotted for this connection.
-         *
-         * @return an integer
-         */
-        public int getLimit() {
-            return limit;
-        }
-
-        /**
-         * Gets the remaining number of requests allowed before this connection will be throttled.
-         *
-         * @return an integer
-         */
-        public int getRemaining() {
-            return remaining;
-        }
-
-        /**
-         * The date at which the rate limit will reset, adjusted to local machine time if the local machine's clock not
-         * synchronized with to the same clock as the GitHub server.
-         *
-         * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
-         *
-         * @return the calculated date at which the rate limit has or will reset.
-         * @deprecated Use {@link #getResetInstant()}
-         */
-        @Nonnull
-        @Deprecated
-        public Date getResetDate() {
-            return Date.from(getResetInstant());
-        }
-
-        /**
-         * Gets the time in epoch seconds when the rate limit will reset.
-         *
-         * This is the raw value returned by the server. This value is not adjusted if local machine time is not
-         * synchronized with server time. If attempting to check when the rate limit will reset, use
-         * {@link #getResetInstant()} or implement a {@link RateLimitChecker} instead.
-         *
-         * @return a long representing the time in epoch seconds when the rate limit will reset
-         * @see #getResetInstant()
-         */
-        public long getResetEpochSeconds() {
-            return resetEpochSeconds;
-        }
-
-        /**
-         * The Instant at which the rate limit will reset, adjusted to local machine time if the local machine's clock
-         * not synchronized with to the same clock as the GitHub server.
-         *
-         * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
-         *
-         * @return the calculated date at which the rate limit has or will reset.
-         */
-        @Nonnull
-        public Instant getResetInstant() {
-            return resetInstant;
-        }
-
-        /**
-         * Hash code.
-         *
-         * @return the int
-         */
-        @Override
-        public int hashCode() {
-            return Objects.hash(getRemaining(), getLimit(), getResetEpochSeconds(), getResetInstant());
-        }
-
-        /**
-         * Whether the rate limit reset date indicated by this instance is expired
-         *
-         * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
-         *
-         * @return true if the rate limit reset date has passed. Otherwise false.
-         */
-        public boolean isExpired() {
-            return getResetInstant().toEpochMilli() < System.currentTimeMillis();
-        }
-
-        /**
-         * To string.
-         *
-         * @return the string
-         */
-        @Override
-        public String toString() {
-            return "{" + "remaining=" + getRemaining() + ", limit=" + getLimit() + ", resetDate="
-                    + GitHubClient.printInstant(getResetInstant()) + '}';
-        }
-
-        /**
-         * Recalculates the {@link #resetInstant} relative to the local machine clock.
-         * <p>
-         * {@link RateLimitChecker}s and {@link RateLimitHandler}s use {@link #getResetInstant()} to make decisions
-         * about how long to wait for until for the rate limit to reset. That means that {@link #getResetInstant()}
-         * needs to be calculated based on the local machine clock.
-         * </p>
-         * <p>
-         * When we say that the clock on two machines is "synchronized", we mean that the UTC time returned from
-         * {@link System#currentTimeMillis()} on each machine is basically the same. For the purposes of rate limits an
-         * differences of up to a second can be ignored.
-         * </p>
-         * <p>
-         * When the clock on the local machine is synchronized to the same time as the clock on the GitHub server (via a
-         * time service for example), the {@link #resetDate} generated directly from {@link #resetEpochSeconds} will be
-         * accurate for the local machine as well.
-         * </p>
-         * <p>
-         * When the clock on the local machine is not synchronized with the server, the {@link #resetDate} must be
-         * recalculated relative to the local machine clock. This is done by taking the number of seconds between the
-         * response "Date" header and {@link #resetEpochSeconds} and then adding that to this record's
-         * {@link #createdAtEpochSeconds}.
-         *
-         * @param updatedAt
-         *            a string date in RFC 1123
-         * @return reset date based on the passed date
-         */
-        @Nonnull
-        private Instant calculateResetInstant(@CheckForNull String updatedAt) {
-            long updatedAtEpochSeconds = createdAtEpochSeconds;
-            if (!StringUtils.isBlank(updatedAt)) {
-                try {
-                    // Get the server date and reset data, will always return a time in GMT
-                    updatedAtEpochSeconds = ZonedDateTime.parse(updatedAt, DateTimeFormatter.RFC_1123_DATE_TIME)
-                            .toEpochSecond();
-                } catch (DateTimeParseException e) {
-                    if (LOGGER.isLoggable(FINEST)) {
-                        LOGGER.log(FINEST, "Malformed Date header value " + updatedAt, e);
-                    }
-                }
-            }
-
-            // This may seem odd but it results in an accurate or slightly pessimistic reset date
-            // based on system time rather than assuming the system time synchronized with the server
-            long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;
-            return Instant.ofEpochMilli((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
-        }
-
-        /**
-         * Determine if the current {@link Record} is outdated compared to another. Rate Limit dates are only accurate
-         * to the second, so we look at other information in the record as well.
-         *
-         * {@link Record}s with earlier {@link #getResetEpochSeconds()} are replaced by those with later.
-         * {@link Record}s with the same {@link #getResetEpochSeconds()} are replaced by those with less remaining
-         * count.
-         *
-         * {@link UnknownLimitRecord}s compare with each other like regular {@link Record}s.
-         *
-         * {@link Record}s are replaced by {@link UnknownLimitRecord}s only when the current {@link Record} is expired
-         * and the {@link UnknownLimitRecord} is not. Otherwise Regular {@link Record}s are not replaced by
-         * {@link UnknownLimitRecord}s.
-         *
-         * Expiration is only considered after other checks, meaning expired records may sometimes be replaced by other
-         * expired records.
-         *
-         * @param other
-         *            the other {@link Record}
-         * @return the {@link Record} that is most current
-         */
-        Record currentOrUpdated(@Nonnull Record other) {
-            // This set of checks avoids most calls to isExpired()
-            // Depends on UnknownLimitRecord.current() to prevent continuous updating of GHRateLimit rateLimit()
-            if (getResetEpochSeconds() > other.getResetEpochSeconds()
-                    || (getResetEpochSeconds() == other.getResetEpochSeconds()
-                            && getRemaining() <= other.getRemaining())) {
-                // If the current record has a later reset
-                // or the current record has the same reset and fewer or same requests remaining
-                // Then it is most recent
-                return this;
-            } else if (!(other instanceof UnknownLimitRecord)) {
-                // If the above is not the case that means other has a later reset
-                // or the same reset and fewer requests remaining.
-                // If the other record is not an unknown record, the other is more recent
-                return other;
-            } else if (this.isExpired() && !other.isExpired()) {
-                // The other is an unknown record.
-                // If the current record has expired and the other hasn't, return the other.
-                return other;
-            }
-
-            // If none of the above, the current record is most valid.
-            return this;
-        }
-    }
-
-    /**
-     * A limit record used as a placeholder when the actual limit is not known.
-     *
-     * @since 1.100
-     */
-    public static class UnknownLimitRecord extends Record {
-
-        // The default UnknownLimitRecord is an expired record.
-        private static final UnknownLimitRecord DEFAULT = new UnknownLimitRecord(Long.MIN_VALUE);
-
-        // The starting current UnknownLimitRecord is an expired record.
-        private static final AtomicReference<UnknownLimitRecord> current = new AtomicReference<>(DEFAULT);
-
-        private static final long defaultUnknownLimitResetSeconds = Duration.ofSeconds(30).getSeconds();
-
-        /** The Constant unknownLimit. */
-        static final int unknownLimit = 1000000;
-
-        /**
-         * The number of seconds until a {@link UnknownLimitRecord} will expire.
-         *
-         * This is set to a somewhat short duration, rather than a long one. This avoids
-         * {@link GitHubClient#rateLimit(RateLimitTarget)} requesting rate limit updates continuously, but also avoids
-         * holding on to stale unknown records indefinitely.
-         *
-         * When merging {@link GHRateLimit} instances, {@link UnknownLimitRecord}s will be superseded by incoming
-         * regular {@link Record}s.
-         *
-         * @see GHRateLimit#getMergedRateLimit(GHRateLimit)
-         */
-        static long unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
-
-        /** The Constant unknownRemaining. */
-        static final int unknownRemaining = 999999;
-
-        /**
-         * Current.
-         *
-         * @return the record
-         */
-        static Record current() {
-            Record result = current.get();
-            if (result.isExpired()) {
-                current.set(new UnknownLimitRecord(System.currentTimeMillis() / 1000L + unknownLimitResetSeconds));
-                result = current.get();
-            }
-            return result;
-        }
-
-        /**
-         * Reset the current UnknownLimitRecord. For use during testing only.
-         */
-        static void reset() {
-            current.set(DEFAULT);
-            unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
-        }
-
-        /**
-         * Create a new unknown record that resets at the specified time.
-         *
-         * @param resetEpochSeconds
-         *            the epoch second time when this record will expire.
-         */
-        private UnknownLimitRecord(long resetEpochSeconds) {
-            super(unknownLimit, unknownRemaining, resetEpochSeconds);
-        }
-    }
-
-    private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());
+    @Nonnull
+    private final Record integrationManifest;
 
     /**
      * The default GHRateLimit provided to new {@link GitHubClient}s.
@@ -443,18 +96,6 @@ public class GHRateLimit {
         }
     }
 
-    @Nonnull
-    private final Record core;
-
-    @Nonnull
-    private final Record graphql;
-
-    @Nonnull
-    private final Record integrationManifest;
-
-    @Nonnull
-    private final Record search;
-
     /**
      * Instantiates a new GH rate limit.
      *
@@ -485,24 +126,53 @@ public class GHRateLimit {
     }
 
     /**
-     * Equals.
+     * Returns the date at which the Core API rate limit will reset.
      *
-     * @param o
-     *            the o
-     * @return true, if successful
+     * @return the calculated date at which the rate limit has or will reset.
      */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        GHRateLimit rateLimit = (GHRateLimit) o;
-        return getCore().equals(rateLimit.getCore()) && getSearch().equals(rateLimit.getSearch())
-                && getGraphQL().equals(rateLimit.getGraphQL())
-                && getIntegrationManifest().equals(rateLimit.getIntegrationManifest());
+    @Nonnull
+    public Date getResetDate() {
+        return getCore().getResetDate();
+    }
+
+    /**
+     * Gets the remaining number of Core APIs requests allowed before this connection will be throttled.
+     *
+     * @return an integer
+     * @since 1.100
+     */
+    public int getRemaining() {
+        return getCore().getRemaining();
+    }
+
+    /**
+     * Gets the total number of Core API calls per hour allotted for this connection.
+     *
+     * @return an integer
+     * @since 1.100
+     */
+    public int getLimit() {
+        return getCore().getLimit();
+    }
+
+    /**
+     * Gets the time in epoch seconds when the Core API rate limit will reset.
+     *
+     * @return a long
+     * @since 1.100
+     */
+    public long getResetEpochSeconds() {
+        return getCore().getResetEpochSeconds();
+    }
+
+    /**
+     * Whether the reset date for the Core API rate limit has passed.
+     *
+     * @return true if the rate limit reset date has passed. Otherwise false.
+     * @since 1.100
+     */
+    public boolean isExpired() {
+        return getCore().isExpired();
     }
 
     /**
@@ -514,6 +184,17 @@ public class GHRateLimit {
     @Nonnull
     public Record getCore() {
         return core;
+    }
+
+    /**
+     * The search record provides the rate limit status for the Search API.
+     *
+     * @return a rate limit record
+     * @since 1.115
+     */
+    @Nonnull
+    public Record getSearch() {
+        return search;
     }
 
     /**
@@ -540,62 +221,35 @@ public class GHRateLimit {
     }
 
     /**
-     * Gets the total number of Core API calls per hour allotted for this connection.
+     * To string.
      *
-     * @return an integer
-     * @since 1.100
-     * @deprecated use {@link #getCore()}
+     * @return the string
      */
-    @Deprecated
-    public int getLimit() {
-        return getCore().getLimit();
+    @Override
+    public String toString() {
+        return "GHRateLimit {" + "core " + getCore().toString() + ", search " + getSearch().toString() + ", graphql "
+                + getGraphQL().toString() + ", integrationManifest " + getIntegrationManifest().toString() + "}";
     }
 
     /**
-     * Gets the remaining number of Core APIs requests allowed before this connection will be throttled.
+     * Equals.
      *
-     * @return an integer
-     * @since 1.100
-     * @deprecated use {@link #getCore()}
+     * @param o
+     *            the o
+     * @return true, if successful
      */
-    @Deprecated
-    public int getRemaining() {
-        return getCore().getRemaining();
-    }
-
-    /**
-     * Returns the date at which the Core API rate limit will reset.
-     *
-     * @return the calculated date at which the rate limit has or will reset.
-     * @deprecated use {@link #getCore()}
-     */
-    @Nonnull
-    @Deprecated
-    public Date getResetDate() {
-        return getCore().getResetDate();
-    }
-
-    /**
-     * Gets the time in epoch seconds when the Core API rate limit will reset.
-     *
-     * @return a long
-     * @since 1.100
-     * @deprecated use {@link #getCore()}
-     */
-    @Deprecated
-    public long getResetEpochSeconds() {
-        return getCore().getResetEpochSeconds();
-    }
-
-    /**
-     * The search record provides the rate limit status for the Search API.
-     *
-     * @return a rate limit record
-     * @since 1.115
-     */
-    @Nonnull
-    public Record getSearch() {
-        return search;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GHRateLimit rateLimit = (GHRateLimit) o;
+        return getCore().equals(rateLimit.getCore()) && getSearch().equals(rateLimit.getSearch())
+                && getGraphQL().equals(rateLimit.getGraphQL())
+                && getIntegrationManifest().equals(rateLimit.getIntegrationManifest());
     }
 
     /**
@@ -606,29 +260,6 @@ public class GHRateLimit {
     @Override
     public int hashCode() {
         return Objects.hash(getCore(), getSearch(), getGraphQL(), getIntegrationManifest());
-    }
-
-    /**
-     * Whether the reset date for the Core API rate limit has passed.
-     *
-     * @return true if the rate limit reset date has passed. Otherwise false.
-     * @since 1.100
-     * @deprecated use {@link #getCore()}
-     */
-    @Deprecated
-    public boolean isExpired() {
-        return getCore().isExpired();
-    }
-
-    /**
-     * To string.
-     *
-     * @return the string
-     */
-    @Override
-    public String toString() {
-        return "GHRateLimit {" + "core " + getCore().toString() + ", search " + getSearch().toString() + ", graphql "
-                + getGraphQL().toString() + ", integrationManifest " + getIntegrationManifest().toString() + "}";
     }
 
     /**
@@ -681,4 +312,347 @@ public class GHRateLimit {
             throw new IllegalArgumentException("Unknown rate limit target: " + rateLimitTarget.toString());
         }
     }
+
+    /**
+     * A limit record used as a placeholder when the actual limit is not known.
+     *
+     * @since 1.100
+     */
+    public static class UnknownLimitRecord extends Record {
+
+        private static final long defaultUnknownLimitResetSeconds = Duration.ofSeconds(30).getSeconds();
+
+        /**
+         * The number of seconds until a {@link UnknownLimitRecord} will expire.
+         *
+         * This is set to a somewhat short duration, rather than a long one. This avoids
+         * {@link {@link GitHubClient#rateLimit(RateLimitTarget)}} requesting rate limit updates continuously, but also
+         * avoids holding on to stale unknown records indefinitely.
+         *
+         * When merging {@link GHRateLimit} instances, {@link UnknownLimitRecord}s will be superseded by incoming
+         * regular {@link Record}s.
+         *
+         * @see GHRateLimit#getMergedRateLimit(GHRateLimit)
+         */
+        static long unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
+
+        /** The Constant unknownLimit. */
+        static final int unknownLimit = 1000000;
+
+        /** The Constant unknownRemaining. */
+        static final int unknownRemaining = 999999;
+
+        // The default UnknownLimitRecord is an expired record.
+        private static final UnknownLimitRecord DEFAULT = new UnknownLimitRecord(Long.MIN_VALUE);
+
+        // The starting current UnknownLimitRecord is an expired record.
+        private static final AtomicReference<UnknownLimitRecord> current = new AtomicReference<>(DEFAULT);
+
+        /**
+         * Create a new unknown record that resets at the specified time.
+         *
+         * @param resetEpochSeconds
+         *            the epoch second time when this record will expire.
+         */
+        private UnknownLimitRecord(long resetEpochSeconds) {
+            super(unknownLimit, unknownRemaining, resetEpochSeconds);
+        }
+
+        /**
+         * Current.
+         *
+         * @return the record
+         */
+        static Record current() {
+            Record result = current.get();
+            if (result.isExpired()) {
+                current.set(new UnknownLimitRecord(System.currentTimeMillis() / 1000L + unknownLimitResetSeconds));
+                result = current.get();
+            }
+            return result;
+        }
+
+        /**
+         * Reset the current UnknownLimitRecord. For use during testing only.
+         */
+        static void reset() {
+            current.set(DEFAULT);
+            unknownLimitResetSeconds = defaultUnknownLimitResetSeconds;
+        }
+    }
+
+    /**
+     * A rate limit record.
+     *
+     * @author Liam Newman
+     * @since 1.100
+     */
+    public static class Record {
+        /**
+         * Remaining calls that can be made.
+         */
+        private final int remaining;
+
+        /**
+         * Allotted API call per time period.
+         */
+        private final int limit;
+
+        /**
+         * The time at which the current rate limit window resets in UTC epoch seconds.
+         */
+        private final long resetEpochSeconds;
+
+        /**
+         * EpochSeconds time (UTC) at which this instance was created.
+         */
+        private final long createdAtEpochSeconds = System.currentTimeMillis() / 1000;
+
+        /**
+         * The date at which the rate limit will reset, adjusted to local machine time if the local machine's clock not
+         * synchronized with to the same clock as the GitHub server.
+         *
+         * @see #calculateResetDate(String)
+         * @see #getResetDate()
+         */
+        @Nonnull
+        private final Date resetDate;
+
+        /**
+         * Instantiates a new Record.
+         *
+         * @param limit
+         *            the limit
+         * @param remaining
+         *            the remaining
+         * @param resetEpochSeconds
+         *            the reset epoch seconds
+         */
+        public Record(@JsonProperty(value = "limit", required = true) int limit,
+                @JsonProperty(value = "remaining", required = true) int remaining,
+                @JsonProperty(value = "reset", required = true) long resetEpochSeconds) {
+            this(limit, remaining, resetEpochSeconds, null);
+        }
+
+        /**
+         * Instantiates a new Record. Called by Jackson data binding or during header parsing.
+         *
+         * @param limit
+         *            the limit
+         * @param remaining
+         *            the remaining
+         * @param resetEpochSeconds
+         *            the reset epoch seconds
+         * @param connectorResponse
+         *            the response info
+         */
+        @JsonCreator
+        Record(@JsonProperty(value = "limit", required = true) int limit,
+                @JsonProperty(value = "remaining", required = true) int remaining,
+                @JsonProperty(value = "reset", required = true) long resetEpochSeconds,
+                @JacksonInject @CheckForNull GitHubConnectorResponse connectorResponse) {
+            this.limit = limit;
+            this.remaining = remaining;
+            this.resetEpochSeconds = resetEpochSeconds;
+            String updatedAt = null;
+            if (connectorResponse != null) {
+                updatedAt = connectorResponse.header("Date");
+            }
+            this.resetDate = calculateResetDate(updatedAt);
+        }
+
+        /**
+         * Determine if the current {@link Record} is outdated compared to another. Rate Limit dates are only accurate
+         * to the second, so we look at other information in the record as well.
+         *
+         * {@link Record}s with earlier {@link #getResetEpochSeconds()} are replaced by those with later.
+         * {@link Record}s with the same {@link #getResetEpochSeconds()} are replaced by those with less remaining
+         * count.
+         *
+         * {@link UnknownLimitRecord}s compare with each other like regular {@link Record}s.
+         *
+         * {@link Record}s are replaced by {@link UnknownLimitRecord}s only when the current {@link Record} is expired
+         * and the {@link UnknownLimitRecord} is not. Otherwise Regular {@link Record}s are not replaced by
+         * {@link UnknownLimitRecord}s.
+         *
+         * Expiration is only considered after other checks, meaning expired records may sometimes be replaced by other
+         * expired records.
+         *
+         * @param other
+         *            the other {@link Record}
+         * @return the {@link Record} that is most current
+         */
+        Record currentOrUpdated(@Nonnull Record other) {
+            // This set of checks avoids most calls to isExpired()
+            // Depends on UnknownLimitRecord.current() to prevent continuous updating of GHRateLimit rateLimit()
+            if (getResetEpochSeconds() > other.getResetEpochSeconds()
+                    || (getResetEpochSeconds() == other.getResetEpochSeconds()
+                            && getRemaining() <= other.getRemaining())) {
+                // If the current record has a later reset
+                // or the current record has the same reset and fewer or same requests remaining
+                // Then it is most recent
+                return this;
+            } else if (!(other instanceof UnknownLimitRecord)) {
+                // If the above is not the case that means other has a later reset
+                // or the same reset and fewer requests remaining.
+                // If the other record is not an unknown record, the other is more recent
+                return other;
+            } else if (this.isExpired() && !other.isExpired()) {
+                // The other is an unknown record.
+                // If the current record has expired and the other hasn't, return the other.
+                return other;
+            }
+
+            // If none of the above, the current record is most valid.
+            return this;
+        }
+
+        /**
+         * Recalculates the {@link #resetDate} relative to the local machine clock.
+         * <p>
+         * {@link RateLimitChecker}s and {@link RateLimitHandler}s use {@link #getResetDate()} to make decisions about
+         * how long to wait for until for the rate limit to reset. That means that {@link #getResetDate()} needs to be
+         * calculated based on the local machine clock.
+         * </p>
+         * <p>
+         * When we say that the clock on two machines is "synchronized", we mean that the UTC time returned from
+         * {@link System#currentTimeMillis()} on each machine is basically the same. For the purposes of rate limits an
+         * differences of up to a second can be ignored.
+         * </p>
+         * <p>
+         * When the clock on the local machine is synchronized to the same time as the clock on the GitHub server (via a
+         * time service for example), the {@link #resetDate} generated directly from {@link #resetEpochSeconds} will be
+         * accurate for the local machine as well.
+         * </p>
+         * <p>
+         * When the clock on the local machine is not synchronized with the server, the {@link #resetDate} must be
+         * recalculated relative to the local machine clock. This is done by taking the number of seconds between the
+         * response "Date" header and {@link #resetEpochSeconds} and then adding that to this record's
+         * {@link #createdAtEpochSeconds}.
+         *
+         * @param updatedAt
+         *            a string date in RFC 1123
+         * @return reset date based on the passed date
+         */
+        @Nonnull
+        private Date calculateResetDate(@CheckForNull String updatedAt) {
+            long updatedAtEpochSeconds = createdAtEpochSeconds;
+            if (!StringUtils.isBlank(updatedAt)) {
+                try {
+                    // Get the server date and reset data, will always return a time in GMT
+                    updatedAtEpochSeconds = ZonedDateTime.parse(updatedAt, DateTimeFormatter.RFC_1123_DATE_TIME)
+                            .toEpochSecond();
+                } catch (DateTimeParseException e) {
+                    if (LOGGER.isLoggable(FINEST)) {
+                        LOGGER.log(FINEST, "Malformed Date header value " + updatedAt, e);
+                    }
+                }
+            }
+
+            // This may seem odd but it results in an accurate or slightly pessimistic reset date
+            // based on system time rather than assuming the system time synchronized with the server
+            long calculatedSecondsUntilReset = resetEpochSeconds - updatedAtEpochSeconds;
+            return new Date((createdAtEpochSeconds + calculatedSecondsUntilReset) * 1000);
+        }
+
+        /**
+         * Gets the remaining number of requests allowed before this connection will be throttled.
+         *
+         * @return an integer
+         */
+        public int getRemaining() {
+            return remaining;
+        }
+
+        /**
+         * Gets the total number of API calls per hour allotted for this connection.
+         *
+         * @return an integer
+         */
+        public int getLimit() {
+            return limit;
+        }
+
+        /**
+         * Gets the time in epoch seconds when the rate limit will reset.
+         *
+         * This is the raw value returned by the server. This value is not adjusted if local machine time is not
+         * synchronized with server time. If attempting to check when the rate limit will reset, use
+         * {@link #getResetDate()} or implement a {@link RateLimitChecker} instead.
+         *
+         * @return a long representing the time in epoch seconds when the rate limit will reset
+         * @see #getResetDate()
+         */
+        public long getResetEpochSeconds() {
+            return resetEpochSeconds;
+        }
+
+        /**
+         * Whether the rate limit reset date indicated by this instance is expired
+         *
+         * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
+         *
+         * @return true if the rate limit reset date has passed. Otherwise false.
+         */
+        public boolean isExpired() {
+            return getResetDate().getTime() < System.currentTimeMillis();
+        }
+
+        /**
+         * The date at which the rate limit will reset, adjusted to local machine time if the local machine's clock not
+         * synchronized with to the same clock as the GitHub server.
+         *
+         * If attempting to wait for the rate limit to reset, consider implementing a {@link RateLimitChecker} instead.
+         *
+         * @return the calculated date at which the rate limit has or will reset.
+         */
+        @Nonnull
+        public Date getResetDate() {
+            return new Date(resetDate.getTime());
+        }
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+            return "{" + "remaining=" + getRemaining() + ", limit=" + getLimit() + ", resetDate=" + getResetDate()
+                    + '}';
+        }
+
+        /**
+         * Equals.
+         *
+         * @param o
+         *            the o
+         * @return true, if successful
+         */
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            Record record = (Record) o;
+            return getRemaining() == record.getRemaining() && getLimit() == record.getLimit()
+                    && getResetEpochSeconds() == record.getResetEpochSeconds()
+                    && getResetDate().equals(record.getResetDate());
+        }
+
+        /**
+         * Hash code.
+         *
+         * @return the int
+         */
+        @Override
+        public int hashCode() {
+            return Objects.hash(getRemaining(), getLimit(), getResetEpochSeconds(), getResetDate());
+        }
+    }
+
+    private static final Logger LOGGER = Logger.getLogger(Requester.class.getName());
 }

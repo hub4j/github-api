@@ -1,10 +1,8 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -17,35 +15,42 @@ import java.util.Date;
  */
 public class GHSubscription extends GitHubInteractiveObject {
 
-    private String createdAt, url, repositoryUrl, reason;
-
-    private GHRepository repo;
-    private boolean subscribed, ignored;
-
     /**
      * Create default GHSubscription instance
      */
     public GHSubscription() {
     }
 
-    /**
-     * Removes this subscription.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(repo.getApiTailUrl("subscription")).send();
-    }
+    private String created_at, url, repository_url, reason;
+    private boolean subscribed, ignored;
+
+    private GHRepository repo;
 
     /**
      * Gets created at.
      *
      * @return the created at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCreatedAt() {
-        return GitHubClient.parseInstant(createdAt);
+    public Date getCreatedAt() {
+        return GitHubClient.parseDate(created_at);
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Gets repository url.
+     *
+     * @return the repository url
+     */
+    public String getRepositoryUrl() {
+        return repository_url;
     }
 
     /**
@@ -55,6 +60,24 @@ public class GHSubscription extends GitHubInteractiveObject {
      */
     public String getReason() {
         return reason;
+    }
+
+    /**
+     * Is subscribed boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isSubscribed() {
+        return subscribed;
+    }
+
+    /**
+     * Is ignored boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isIgnored() {
+        return ignored;
     }
 
     /**
@@ -68,39 +91,13 @@ public class GHSubscription extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets repository url.
+     * Removes this subscription.
      *
-     * @return the repository url
+     * @throws IOException
+     *             the io exception
      */
-    public String getRepositoryUrl() {
-        return repositoryUrl;
-    }
-
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Is ignored boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isIgnored() {
-        return ignored;
-    }
-
-    /**
-     * Is subscribed boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isSubscribed() {
-        return subscribed;
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(repo.getApiTailUrl("subscription")).send();
     }
 
     /**

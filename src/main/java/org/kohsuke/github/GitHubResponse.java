@@ -35,6 +35,107 @@ class GitHubResponse<T> {
 
     private static final Logger LOGGER = Logger.getLogger(GitHubResponse.class.getName());
 
+    private final int statusCode;
+
+    @Nonnull
+    private final Map<String, List<String>> headers;
+
+    @CheckForNull
+    private final T body;
+
+    /**
+     * Instantiates a new git hub response.
+     *
+     * @param response
+     *            the response
+     * @param body
+     *            the body
+     */
+    GitHubResponse(GitHubResponse<T> response, @CheckForNull T body) {
+        this.statusCode = response.statusCode();
+        this.headers = response.headers;
+        this.body = body;
+    }
+
+    /**
+     * Instantiates a new git hub response.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @param body
+     *            the body
+     */
+    GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {
+        this.statusCode = connectorResponse.statusCode();
+        this.headers = connectorResponse.allHeaders();
+        this.body = body;
+    }
+
+    /**
+     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@link T}.
+     *
+     * @param <T>
+     *            the type
+     * @param connectorResponse
+     *            response info to parse.
+     * @param type
+     *            the type to be constructed.
+     * @return a new instance of {@link T}.
+     * @throws IOException
+     *             if there is an I/O Exception.
+     */
+    @CheckForNull
+    static <T> T parseBody(GitHubConnectorResponse connectorResponse, Class<T> type) throws IOException {
+
+        if (connectorResponse.statusCode() == HTTP_NO_CONTENT) {
+            if (type != null && type.isArray()) {
+                // no content for array should be empty array
+                return type.cast(Array.newInstance(type.getComponentType(), 0));
+            } else {
+                // no content for object should be null
+                return null;
+            }
+        }
+
+        String data = getBodyAsString(connectorResponse);
+        try {
+            InjectableValues.Std inject = new InjectableValues.Std();
+            inject.addValue(GitHubConnectorResponse.class, connectorResponse);
+
+            return GitHubClient.getMappingObjectReader(connectorResponse).forType(type).readValue(data);
+        } catch (JsonMappingException | JsonParseException e) {
+            String message = "Failed to deserialize: " + data;
+            LOGGER.log(Level.FINE, message);
+            throw e;
+        }
+    }
+
+    /**
+     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@link T}.
+     *
+     * @param <T>
+     *            the type
+     * @param connectorResponse
+     *            response info to parse.
+     * @param instance
+     *            the object to fill with data parsed from body
+     * @return a new instance of {@link T}.
+     * @throws IOException
+     *             if there is an I/O Exception.
+     */
+    @CheckForNull
+    static <T> T parseBody(GitHubConnectorResponse connectorResponse, T instance) throws IOException {
+
+        String data = getBodyAsString(connectorResponse);
+        try {
+            return GitHubClient.getMappingObjectReader(connectorResponse).withValueToUpdate(instance).readValue(data);
+        } catch (JsonMappingException | JsonParseException e) {
+            String message = "Failed to deserialize: " + data;
+            LOGGER.log(Level.FINE, message);
+            throw e;
+        }
+    }
+
     /**
      * Gets the body of the response as a {@link String}.
      *
@@ -68,113 +169,24 @@ class GitHubResponse<T> {
     }
 
     /**
-     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@code T}.
+     * The status code for this response.
      *
-     * @param <T>
-     *            the type
-     * @param connectorResponse
-     *            response info to parse.
-     * @param type
-     *            the type to be constructed.
-     * @return a new instance of {@code T}.
-     * @throws IOException
-     *             if there is an I/O Exception.
+     * @return the status code for this response.
      */
-    @CheckForNull
-    static <T> T parseBody(GitHubConnectorResponse connectorResponse, Class<T> type) throws IOException {
-
-        if (connectorResponse.statusCode() == HTTP_NO_CONTENT) {
-            if (type != null && type.isArray()) {
-                // no content for array should be empty array
-                return type.cast(Array.newInstance(type.getComponentType(), 0));
-            } else {
-                // no content for object should be null
-                return null;
-            }
-        }
-
-        String data = getBodyAsString(connectorResponse);
-        try {
-            InjectableValues.Std inject = new InjectableValues.Std();
-            inject.addValue(GitHubConnectorResponse.class, connectorResponse);
-
-            return GitHubClient.getMappingObjectReader(connectorResponse).forType(type).readValue(data);
-        } catch (JsonMappingException | JsonParseException e) {
-            String message = "Failed to deserialize: " + data;
-            LOGGER.log(Level.FINE, message);
-            throw e;
-        }
+    public int statusCode() {
+        return statusCode;
     }
 
     /**
-     * Parses a {@link GitHubConnectorResponse} body into a new instance of {@code T}.
+     * The headers for this response.
      *
-     * @param <T>
-     *            the type
-     * @param connectorResponse
-     *            response info to parse.
-     * @param instance
-     *            the object to fill with data parsed from body
-     * @return a new instance of {@code T}.
-     * @throws IOException
-     *             if there is an I/O Exception.
+     * @param field
+     *            the field
+     * @return the headers for this response.
      */
-    @CheckForNull
-    static <T> T parseBody(GitHubConnectorResponse connectorResponse, T instance) throws IOException {
-
-        String data = getBodyAsString(connectorResponse);
-        try {
-            return GitHubClient.getMappingObjectReader(connectorResponse).withValueToUpdate(instance).readValue(data);
-        } catch (JsonMappingException | JsonParseException e) {
-            String message = "Failed to deserialize: " + data;
-            LOGGER.log(Level.FINE, message);
-            throw e;
-        }
-    }
-
-    @CheckForNull
-    private final T body;
-
     @Nonnull
-    private final Map<String, List<String>> headers;
-
-    private final int statusCode;
-
-    /**
-     * Instantiates a new git hub response.
-     *
-     * @param connectorResponse
-     *            the connector response
-     * @param body
-     *            the body
-     */
-    GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {
-        this.statusCode = connectorResponse.statusCode();
-        this.headers = connectorResponse.allHeaders();
-        this.body = body;
-    }
-
-    /**
-     * Instantiates a new git hub response.
-     *
-     * @param response
-     *            the response
-     * @param body
-     *            the body
-     */
-    GitHubResponse(GitHubResponse<T> response, @CheckForNull T body) {
-        this.statusCode = response.statusCode();
-        this.headers = response.headers;
-        this.body = body;
-    }
-
-    /**
-     * The body of the response parsed as a {@code T}.
-     *
-     * @return body of the response
-     */
-    public T body() {
-        return body;
+    public List<String> headers(String field) {
+        return headers.get(field);
     }
 
     /**
@@ -195,24 +207,12 @@ class GitHubResponse<T> {
     }
 
     /**
-     * The headers for this response.
+     * The body of the response parsed as a {@link T}.
      *
-     * @param field
-     *            the field
-     * @return the headers for this response.
+     * @return body of the response
      */
-    @Nonnull
-    public List<String> headers(String field) {
-        return headers.get(field);
-    }
-
-    /**
-     * The status code for this response.
-     *
-     * @return the status code for this response.
-     */
-    public int statusCode() {
-        return statusCode;
+    public T body() {
+        return body;
     }
 
 }

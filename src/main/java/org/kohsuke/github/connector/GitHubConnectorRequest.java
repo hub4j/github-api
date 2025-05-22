@@ -24,35 +24,22 @@ import javax.annotation.Nonnull;
 public interface GitHubConnectorRequest {
 
     /**
+     * The request method for this request.
+     *
+     * For example, {@code GET} or {@code PATCH}.
+     *
+     * @return the request method.
+     */
+    @Nonnull
+    String method();
+
+    /**
      * All request headers for this request.
      *
      * @return a map of all headers.
      */
     @Nonnull
     Map<String, List<String>> allHeaders();
-
-    /**
-     * Gets the request body as an InputStream.
-     *
-     * @return the request body as an InputStream.
-     */
-    @CheckForNull
-    InputStream body();
-
-    /**
-     * Get the content type for the body of this request.
-     *
-     * @return the content type string for the body of this request.
-     */
-    @CheckForNull
-    String contentType();
-
-    /**
-     * Gets whether the request has information in {@link #body()} that needs to be sent.
-     *
-     * @return true, if the body is not null. Otherwise, false.
-     */
-    boolean hasBody();
 
     /**
      * Gets the value contained in a header field.
@@ -65,14 +52,20 @@ public interface GitHubConnectorRequest {
     String header(String name);
 
     /**
-     * The request method for this request.
+     * Get the content type for the body of this request.
      *
-     * For example, {@code GET} or {@code PATCH}.
-     *
-     * @return the request method.
+     * @return the content type string for the body of this request.
      */
-    @Nonnull
-    String method();
+    @CheckForNull
+    String contentType();
+
+    /**
+     * Gets the request body as an InputStream.
+     *
+     * @return the request body as an InputStream.
+     */
+    @CheckForNull
+    InputStream body();
 
     /**
      * Gets the url for this request.
@@ -81,4 +74,11 @@ public interface GitHubConnectorRequest {
      */
     @Nonnull
     URL url();
+
+    /**
+     * Gets whether the request has information in {@link #body()} that needs to be sent.
+     *
+     * @return true, if the body is not null. Otherwise, false.
+     */
+    boolean hasBody();
 }

@@ -10,27 +10,18 @@ package org.kohsuke.github;
  */
 public class GHGistFile {
 
-    private String rawUrl, type, language, content;
-
-    private int size;
-
-    private boolean truncated;
-    /** The file name. */
-    /* package almost final */ String fileName;
     /**
      * Create default GHGistFile instance
      */
     public GHGistFile() {
     }
 
-    /**
-     * Content of this file.
-     *
-     * @return the content
-     */
-    public String getContent() {
-        return content;
-    }
+    /** The file name. */
+    /* package almost final */ String fileName;
+
+    private int size;
+    private String raw_url, type, language, content;
+    private boolean truncated;
 
     /**
      * Gets file name.
@@ -39,24 +30,6 @@ public class GHGistFile {
      */
     public String getFileName() {
         return fileName;
-    }
-
-    /**
-     * Gets language.
-     *
-     * @return the language
-     */
-    public String getLanguage() {
-        return language;
-    }
-
-    /**
-     * URL that serves this file as-is.
-     *
-     * @return the raw url
-     */
-    public String getRawUrl() {
-        return rawUrl;
     }
 
     /**
@@ -69,12 +42,39 @@ public class GHGistFile {
     }
 
     /**
+     * URL that serves this file as-is.
+     *
+     * @return the raw url
+     */
+    public String getRawUrl() {
+        return raw_url;
+    }
+
+    /**
      * Content type of this Gist, such as "text/plain".
      *
      * @return the type
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * Gets language.
+     *
+     * @return the language
+     */
+    public String getLanguage() {
+        return language;
+    }
+
+    /**
+     * Content of this file.
+     *
+     * @return the content
+     */
+    public String getContent() {
+        return content;
     }
 
     /**

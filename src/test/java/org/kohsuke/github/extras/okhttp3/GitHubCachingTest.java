@@ -19,6 +19,8 @@ import org.kohsuke.github.GitHub;
 import java.io.File;
 import java.io.IOException;
 
+import static org.junit.Assert.fail;
+
 // TODO: Auto-generated Javadoc
 /**
  * Test showing the behavior of OkHttpGitHubConnector cache with GitHub 404 responses.
@@ -27,20 +29,27 @@ import java.io.IOException;
  */
 public class GitHubCachingTest extends AbstractGitHubWireMockTest {
 
-    private static int clientCount = 0;
-
-    private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    /**
+     * Instantiates a new git hub caching test.
+     */
+    public GitHubCachingTest() {
+        useDefaultGitHub = false;
     }
 
     /** The test ref name. */
     String testRefName = "heads/test/content_ref_cache";
 
     /**
-     * Instantiates a new git hub caching test.
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
      */
-    public GitHubCachingTest() {
-        useDefaultGitHub = false;
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions()
+                // Use the same data files as the 2.x test
+                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
+                .extensions(templating.newResponseTransformer());
     }
 
     /**
@@ -178,6 +187,8 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         repo.getRef(testRefName);
     }
 
+    private static int clientCount = 0;
+
     private OkHttpClient createClient(boolean useCache) throws IOException {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
 
@@ -194,17 +205,8 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         return builder.build();
     }
 
-    /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions()
-                // Use the same data files as the 2.x test
-                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
-                .extensions(templating.newResponseTransformer());
+    private static GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
 }

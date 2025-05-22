@@ -9,12 +9,12 @@ package org.kohsuke.github;
  */
 public enum GHCommitState {
 
-    /** The error. */
-    ERROR,
-    /** The failure. */
-    FAILURE,
     /** The pending. */
     PENDING,
     /** The success. */
-    SUCCESS
+    SUCCESS,
+    /** The error. */
+    ERROR,
+    /** The failure. */
+    FAILURE
 }

@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import java.io.IOException;
+
 // TODO: Auto-generated Javadoc
 /**
  * Represents a status of a commit.
@@ -12,50 +14,23 @@ package org.kohsuke.github;
  */
 public class GHCommitStatus extends GHObject {
 
-    /** The context. */
-    String context;
-
-    /** The creator. */
-    GHUser creator;
-
-    /** The state. */
-    String state;
-
-    /** The description. */
-    String targetUrl, description;
-
     /**
      * Create default GHCommitStatus instance
      */
     public GHCommitStatus() {
     }
 
-    /**
-     * Gets context.
-     *
-     * @return the context
-     */
-    public String getContext() {
-        return context;
-    }
+    /** The state. */
+    String state;
 
-    /**
-     * Gets creator.
-     *
-     * @return the creator
-     */
-    public GHUser getCreator() {
-        return root().intern(creator);
-    }
+    /** The description. */
+    String target_url, description;
 
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
+    /** The context. */
+    String context;
+
+    /** The creator. */
+    GHUser creator;
 
     /**
      * Gets state.
@@ -78,7 +53,36 @@ public class GHCommitStatus extends GHObject {
      * @return the target url
      */
     public String getTargetUrl() {
-        return targetUrl;
+        return target_url;
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Gets creator.
+     *
+     * @return the creator
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getCreator() throws IOException {
+        return root().intern(creator);
+    }
+
+    /**
+     * Gets context.
+     *
+     * @return the context
+     */
+    public String getContext() {
+        return context;
     }
 
 }

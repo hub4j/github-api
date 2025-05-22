@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -21,8 +20,8 @@ import java.util.Date;
  * @see GHRepository#queryCommits() GHRepository#queryCommits()
  */
 public class GHCommitQueryBuilder {
-    private final GHRepository repo;
     private final Requester req;
+    private final GHRepository repo;
 
     /**
      * Instantiates a new GH commit query builder.
@@ -48,6 +47,18 @@ public class GHCommitQueryBuilder {
     }
 
     /**
+     * Only commits containing this file path will be returned.
+     *
+     * @param path
+     *            the path
+     * @return the gh commit query builder
+     */
+    public GHCommitQueryBuilder path(String path) {
+        req.with("path", path);
+        return this;
+    }
+
+    /**
      * Specifies the SHA1 commit / tag / branch / etc to start listing commits from.
      *
      * @param ref
@@ -57,15 +68,6 @@ public class GHCommitQueryBuilder {
     public GHCommitQueryBuilder from(String ref) {
         req.with("sha", ref);
         return this;
-    }
-
-    /**
-     * Lists up the commits with the criteria built so far.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHCommit> list() {
-        return req.withUrlPath(repo.getApiTailUrl("commits")).toIterable(GHCommit[].class, item -> item.wrapUp(repo));
     }
 
     /**
@@ -81,39 +83,14 @@ public class GHCommitQueryBuilder {
     }
 
     /**
-     * Only commits containing this file path will be returned.
-     *
-     * @param path
-     *            the path
-     * @return the gh commit query builder
-     */
-    public GHCommitQueryBuilder path(String path) {
-        req.with("path", path);
-        return this;
-    }
-
-    /**
      * Only commits after this date will be returned.
      *
      * @param dt
      *            the dt
      * @return the gh commit query builder
-     * @deprecated use {@link #since(Instant)}
      */
-    @Deprecated
     public GHCommitQueryBuilder since(Date dt) {
-        return since(GitHubClient.toInstantOrNull(dt));
-    }
-
-    /**
-     * Only commits after this date will be returned.
-     *
-     * @param dt
-     *            the dt
-     * @return the gh commit query builder
-     */
-    public GHCommitQueryBuilder since(Instant dt) {
-        req.with("since", GitHubClient.printInstant(dt));
+        req.with("since", GitHubClient.printDate(dt));
         return this;
     }
 
@@ -125,7 +102,7 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder since(long timestamp) {
-        return since(Instant.ofEpochMilli(timestamp));
+        return since(new Date(timestamp));
     }
 
     /**
@@ -134,22 +111,9 @@ public class GHCommitQueryBuilder {
      * @param dt
      *            the dt
      * @return the gh commit query builder
-     * @deprecated use {@link #until(Instant)}
      */
-    @Deprecated
     public GHCommitQueryBuilder until(Date dt) {
-        return until(GitHubClient.toInstantOrNull(dt));
-    }
-
-    /**
-     * Only commits before this date will be returned.
-     *
-     * @param dt
-     *            the dt
-     * @return the gh commit query builder
-     */
-    public GHCommitQueryBuilder until(Instant dt) {
-        req.with("until", GitHubClient.printInstant(dt));
+        req.with("until", GitHubClient.printDate(dt));
         return this;
     }
 
@@ -161,6 +125,15 @@ public class GHCommitQueryBuilder {
      * @return the gh commit query builder
      */
     public GHCommitQueryBuilder until(long timestamp) {
-        return until(Instant.ofEpochMilli(timestamp));
+        return until(new Date(timestamp));
+    }
+
+    /**
+     * Lists up the commits with the criteria built so far.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHCommit> list() {
+        return req.withUrlPath(repo.getApiTailUrl("commits")).toIterable(GHCommit[].class, item -> item.wrapUp(repo));
     }
 }

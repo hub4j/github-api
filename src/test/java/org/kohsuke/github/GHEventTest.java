@@ -12,6 +12,12 @@ import static org.hamcrest.Matchers.is;
 public class GHEventTest {
 
     /**
+     * Create default GHEventTest instance
+     */
+    public GHEventTest() {
+    }
+
+    /**
      * Function from GHEventInfo to transform string event to GHEvent which has been replaced by static mapping due to
      * complex parsing logic below
      */
@@ -25,12 +31,6 @@ public class GHEventTest {
             }
         }
         return GHEvent.UNKNOWN;
-    }
-
-    /**
-     * Create default GHEventTest instance
-     */
-    public GHEventTest() {
     }
 
     /**

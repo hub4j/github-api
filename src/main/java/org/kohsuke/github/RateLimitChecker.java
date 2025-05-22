@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,57 +23,16 @@ import java.util.logging.Logger;
 public abstract class RateLimitChecker {
 
     /**
-     * A {@link RateLimitChecker} with a simple number as the limit.
-     */
-    public static class LiteralValue extends RateLimitChecker {
-        private final int sleepAtOrBelow;
-
-        /**
-         * Instantiates a new literal value.
-         *
-         * @param sleepAtOrBelow
-         *            the sleep at or below
-         */
-        public LiteralValue(int sleepAtOrBelow) {
-            if (sleepAtOrBelow < 0) {
-                // ignore negative numbers
-                sleepAtOrBelow = 0;
-            }
-            this.sleepAtOrBelow = sleepAtOrBelow;
-        }
-
-        /**
-         * Check rate limit.
-         *
-         * @param record
-         *            the record
-         * @param count
-         *            the count
-         * @return true, if successful
-         * @throws InterruptedException
-         *             the interrupted exception
-         */
-        @Override
-        protected boolean checkRateLimit(GHRateLimit.Record record, long count) throws InterruptedException {
-            if (record.getRemaining() <= sleepAtOrBelow) {
-                return sleepUntilReset(record);
-            }
-            return false;
-        }
-
-    }
-
-    /** The Constant NONE. */
-    public static final RateLimitChecker NONE = new RateLimitChecker() {
-    };
-
-    private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());
-
-    /**
      * Create default RateLimitChecker instance
      */
     public RateLimitChecker() {
     }
+
+    private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());
+
+    /** The Constant NONE. */
+    public static final RateLimitChecker NONE = new RateLimitChecker() {
+    };
 
     /**
      * Decides whether the current request exceeds the allowed "rate limit" budget. If this determines the rate limit
@@ -121,13 +79,13 @@ public abstract class RateLimitChecker {
      */
     protected final boolean sleepUntilReset(GHRateLimit.Record record) throws InterruptedException {
         // Sleep until reset
-        long sleepMilliseconds = record.getResetInstant().toEpochMilli() - System.currentTimeMillis();
+        long sleepMilliseconds = record.getResetDate().getTime() - System.currentTimeMillis();
         if (sleepMilliseconds > 0) {
             String message = String.format(
                     "GitHub API - Current quota has %d remaining of %d. Waiting for quota to reset at %tT.",
                     record.getRemaining(),
                     record.getLimit(),
-                    Date.from(record.getResetInstant()));
+                    record.getResetDate());
 
             LOGGER.log(Level.INFO, message);
 
@@ -135,6 +93,47 @@ public abstract class RateLimitChecker {
             return true;
         }
         return false;
+    }
+
+    /**
+     * A {@link RateLimitChecker} with a simple number as the limit.
+     */
+    public static class LiteralValue extends RateLimitChecker {
+        private final int sleepAtOrBelow;
+
+        /**
+         * Instantiates a new literal value.
+         *
+         * @param sleepAtOrBelow
+         *            the sleep at or below
+         */
+        public LiteralValue(int sleepAtOrBelow) {
+            if (sleepAtOrBelow < 0) {
+                // ignore negative numbers
+                sleepAtOrBelow = 0;
+            }
+            this.sleepAtOrBelow = sleepAtOrBelow;
+        }
+
+        /**
+         * Check rate limit.
+         *
+         * @param record
+         *            the record
+         * @param count
+         *            the count
+         * @return true, if successful
+         * @throws InterruptedException
+         *             the interrupted exception
+         */
+        @Override
+        protected boolean checkRateLimit(GHRateLimit.Record record, long count) throws InterruptedException {
+            if (record.getRemaining() <= sleepAtOrBelow) {
+                return sleepUntilReset(record);
+            }
+            return false;
+        }
+
     }
 
 }

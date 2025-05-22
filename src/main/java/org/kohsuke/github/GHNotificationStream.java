@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -26,12 +25,10 @@ import java.util.NoSuchElementException;
  * @see GHRepository#listNotifications() GHRepository#listNotifications()
  */
 public class GHNotificationStream extends GitHubInteractiveObject implements Iterable<GHThread> {
-    private static final GHThread[] EMPTY_ARRAY = new GHThread[0];
     private Boolean all, participating;
+    private String since;
     private String apiUrl;
     private boolean nonBlocking = false;
-
-    private String since;
 
     /**
      * Instantiates a new GH notification stream.
@@ -44,6 +41,66 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
     GHNotificationStream(GitHub root, String apiUrl) {
         super(root);
         this.apiUrl = apiUrl;
+    }
+
+    /**
+     * Should the stream include notifications that are already read?.
+     *
+     * @param v
+     *            the v
+     * @return the gh notification stream
+     */
+    public GHNotificationStream read(boolean v) {
+        all = v;
+        return this;
+    }
+
+    /**
+     * Should the stream be restricted to notifications in which the user is directly participating or mentioned?.
+     *
+     * @param v
+     *            the v
+     * @return the gh notification stream
+     */
+    public GHNotificationStream participating(boolean v) {
+        participating = v;
+        return this;
+    }
+
+    /**
+     * Since gh notification stream.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the gh notification stream
+     */
+    public GHNotificationStream since(long timestamp) {
+        return since(new Date(timestamp));
+    }
+
+    /**
+     * Since gh notification stream.
+     *
+     * @param dt
+     *            the dt
+     * @return the gh notification stream
+     */
+    public GHNotificationStream since(Date dt) {
+        since = GitHubClient.printDate(dt);
+        return this;
+    }
+
+    /**
+     * If set to true, {@link #iterator()} will stop iterating instead of blocking and waiting for the updates to
+     * arrive.
+     *
+     * @param v
+     *            the v
+     * @return the gh notification stream
+     */
+    public GHNotificationStream nonBlocking(boolean v) {
+        this.nonBlocking = v;
+        return this;
     }
 
     /**
@@ -60,9 +117,19 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
 
         return new Iterator<GHThread>() {
             /**
+             * Stuff we've fetched but haven't returned to the caller. Newer ones first.
+             */
+            private GHThread[] threads = EMPTY_ARRAY;
+
+            /**
              * Next element in {@link #threads} to return. This counts down.
              */
             private int idx = -1;
+
+            /**
+             * threads whose updated_at is older than this should be ignored.
+             */
+            private long lastUpdated = -1;
 
             /**
              * Next request should have "If-Modified-Since" header with this value.
@@ -70,27 +137,11 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
             private String lastModified;
 
             /**
-             * threads whose updated_at is older than this should be ignored.
-             */
-            private long lastUpdated = -1;
-
-            private GHThread next;
-
-            /**
              * When is the next polling allowed?
              */
             private long nextCheckTime = -1;
 
-            /**
-             * Stuff we've fetched but haven't returned to the caller. Newer ones first.
-             */
-            private GHThread[] threads = EMPTY_ARRAY;
-
-            public boolean hasNext() {
-                if (next == null)
-                    next = fetch();
-                return next != null;
-            }
+            private GHThread next;
 
             public GHThread next() {
                 if (next == null) {
@@ -104,12 +155,10 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                 return r;
             }
 
-            private long calcNextCheckTime(GitHubResponse<GHThread[]> response) {
-                String v = response.header("X-Poll-Interval");
-                if (v == null)
-                    v = "60";
-                long seconds = Integer.parseInt(v);
-                return System.currentTimeMillis() + seconds * 1000;
+            public boolean hasNext() {
+                if (next == null)
+                    next = fetch();
+                return next != null;
             }
 
             GHThread fetch() {
@@ -119,7 +168,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                         // if we have fetched un-returned threads, use them first
                         while (idx >= 0) {
                             GHThread n = threads[idx--];
-                            long nt = n.getUpdatedAt().toEpochMilli();
+                            long nt = n.getUpdatedAt().getTime();
                             if (nt >= lastUpdated) {
                                 lastUpdated = nt;
                                 return n;
@@ -138,9 +187,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                             Thread.sleep(waitTime);
                         }
 
-                        if (lastModified != null) {
-                            req.setHeader("If-Modified-Since", lastModified);
-                        }
+                        req.setHeader("If-Modified-Since", lastModified);
 
                         Requester requester = req.withUrlPath(apiUrl);
                         GitHubResponse<GHThread[]> response = ((GitHubPageContentsIterable<GHThread>) requester
@@ -161,6 +208,14 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                 } catch (IOException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+            }
+
+            private long calcNextCheckTime(GitHubResponse<GHThread[]> response) {
+                String v = response.header("X-Poll-Interval");
+                if (v == null)
+                    v = "60";
+                long seconds = Integer.parseInt(v);
+                return System.currentTimeMillis() + seconds * 1000;
             }
         };
     }
@@ -186,80 +241,9 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
     public void markAsRead(long timestamp) throws IOException {
         final Requester req = root().createRequest();
         if (timestamp >= 0)
-            req.with("last_read_at", GitHubClient.printInstant(Instant.ofEpochMilli(timestamp)));
+            req.with("last_read_at", GitHubClient.printDate(new Date(timestamp)));
         req.withUrlPath(apiUrl).fetchHttpStatusCode();
     }
 
-    /**
-     * If set to true, {@link #iterator()} will stop iterating instead of blocking and waiting for the updates to
-     * arrive.
-     *
-     * @param v
-     *            the v
-     * @return the gh notification stream
-     */
-    public GHNotificationStream nonBlocking(boolean v) {
-        this.nonBlocking = v;
-        return this;
-    }
-
-    /**
-     * Should the stream be restricted to notifications in which the user is directly participating or mentioned?.
-     *
-     * @param v
-     *            the v
-     * @return the gh notification stream
-     */
-    public GHNotificationStream participating(boolean v) {
-        participating = v;
-        return this;
-    }
-
-    /**
-     * Should the stream include notifications that are already read?.
-     *
-     * @param v
-     *            the v
-     * @return the gh notification stream
-     */
-    public GHNotificationStream read(boolean v) {
-        all = v;
-        return this;
-    }
-
-    /**
-     * Since gh notification stream.
-     *
-     * @param dt
-     *            the dt
-     * @return the gh notification stream
-     * @deprecated {@link #since(Instant)}
-     */
-    @Deprecated
-    public GHNotificationStream since(Date dt) {
-        return since(GitHubClient.toInstantOrNull(dt));
-    }
-
-    /**
-     * Since gh notification stream.
-     *
-     * @param dt
-     *            the dt
-     * @return the gh notification stream
-     */
-    public GHNotificationStream since(Instant dt) {
-        since = GitHubClient.printInstant(dt);
-        return this;
-    }
-
-    /**
-     * Since gh notification stream.
-     *
-     * @param timestamp
-     *            the timestamp
-     * @return the gh notification stream
-     */
-    public GHNotificationStream since(long timestamp) {
-        return since(new Date(timestamp));
-    }
+    private static final GHThread[] EMPTY_ARRAY = new GHThread[0];
 }

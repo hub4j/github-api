@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
  * Base class for creating or updating a discussion.
  *
  * @param <S>
- *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@code S}
+ *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link GHLabel}, this builder will commit changes after each call to
  *            {@link #with(String, Object)}.
  */
@@ -23,7 +23,7 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
      *
      * @param intermediateReturnType
      *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
-     *            {@code S} the same as {@link GHDiscussion}, this builder will commit changes after each call to
+     *            {@link S} the same as {@link GHDiscussion}, this builder will commit changes after each call to
      *            {@link #with(String, Object)}.
      * @param team
      *            the GitHub team. Updates will be sent to the root of this team.
@@ -41,6 +41,20 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
             requester.with("title", baseInstance.getTitle());
             requester.with("body", baseInstance.getBody());
         }
+    }
+
+    /**
+     * Title for this discussion.
+     *
+     * @param value
+     *            title of discussion
+     * @return either a continuing builder or an updated {@link GHDiscussion}
+     * @throws IOException
+     *             if there is an I/O Exception
+     */
+    @Nonnull
+    public S title(String value) throws IOException {
+        return with("title", value);
     }
 
     /**
@@ -64,19 +78,5 @@ class GHDiscussionBuilder<S> extends AbstractBuilder<GHDiscussion, S> {
     @Override
     public GHDiscussion done() throws IOException {
         return super.done().wrapUp(team);
-    }
-
-    /**
-     * Title for this discussion.
-     *
-     * @param value
-     *            title of discussion
-     * @return either a continuing builder or an updated {@link GHDiscussion}
-     * @throws IOException
-     *             if there is an I/O Exception
-     */
-    @Nonnull
-    public S title(String value) throws IOException {
-        return with("title", value);
     }
 }

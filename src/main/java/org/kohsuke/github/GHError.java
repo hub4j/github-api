@@ -14,9 +14,21 @@ import java.net.URL;
 public class GHError implements Serializable {
 
     /**
+     * Create default GHError instance
+     */
+    public GHError() {
+    }
+
+    /**
      * The serial version UID of the error
      */
     private static final long serialVersionUID = 2008071901;
+
+    /**
+     * The error message.
+     */
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
+    private String message;
 
     /**
      * The URL to the documentation for the error.
@@ -26,15 +38,12 @@ public class GHError implements Serializable {
     private String documentation;
 
     /**
-     * The error message.
+     * Get the error message.
+     *
+     * @return the message
      */
-    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private String message;
-
-    /**
-     * Create default GHError instance
-     */
-    public GHError() {
+    public String getMessage() {
+        return message;
     }
 
     /**
@@ -44,15 +53,6 @@ public class GHError implements Serializable {
      */
     public URL getDocumentationUrl() {
         return GitHubClient.parseURL(documentation);
-    }
-
-    /**
-     * Get the error message.
-     *
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
     }
 
 }

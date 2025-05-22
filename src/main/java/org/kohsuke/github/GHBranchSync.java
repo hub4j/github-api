@@ -8,19 +8,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHBranchSync extends GitHubInteractiveObject {
 
     /**
-     * The base branch.
+     * Create default GHBranchSync instance
      */
-    private String baseBranch;
-
-    /**
-     * The merge type.
-     */
-    private String mergeType;
-
-    /**
-     * The message.
-     */
-    private String message;
+    public GHBranchSync() {
+    }
 
     /**
      * The Repository that this branch is in.
@@ -28,27 +19,28 @@ public class GHBranchSync extends GitHubInteractiveObject {
     private GHRepository owner;
 
     /**
-     * Create default GHBranchSync instance
+     * The message.
      */
-    public GHBranchSync() {
-    }
+    private String message;
 
     /**
-     * Gets base branch.
-     *
-     * @return the base branch
+     * The merge type.
      */
-    public String getBaseBranch() {
-        return baseBranch;
-    }
+    private String mergeType;
 
     /**
-     * Gets merge type.
-     *
-     * @return the merge type
+     * The base branch.
      */
-    public String getMergeType() {
-        return mergeType;
+    private String baseBranch;
+
+    /**
+     * Gets owner.
+     *
+     * @return the repository that this branch is in.
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
     }
 
     /**
@@ -61,13 +53,21 @@ public class GHBranchSync extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets owner.
+     * Gets merge type.
      *
-     * @return the repository that this branch is in.
+     * @return the merge type
      */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
+    public String getMergeType() {
+        return mergeType;
+    }
+
+    /**
+     * Gets base branch.
+     *
+     * @return the base branch
+     */
+    public String getBaseBranch() {
+        return baseBranch;
     }
 
     /**

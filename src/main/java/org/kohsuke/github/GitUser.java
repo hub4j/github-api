@@ -1,9 +1,7 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.time.Instant;
 import java.util.Date;
 
 import javax.annotation.CheckForNull;
@@ -19,24 +17,16 @@ import javax.annotation.CheckForNull;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GitUser extends GitHubBridgeAdapterObject {
+public class GitUser {
     private String name, email, date, username;
 
     /**
-     * Instantiates a new git user.
-     */
-    public GitUser() {
-        // Empty constructor for Jackson binding
-    }
-
-    /**
-     * Gets date.
+     * Gets the git user name for an author or committer on a git commit.
      *
-     * @return Commit Date.
+     * @return Human readable name of the user, such as "Kohsuke Kawaguchi"
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getDate() {
-        return GitHubClient.parseInstant(date);
+    public String getName() {
+        return name;
     }
 
     /**
@@ -49,15 +39,6 @@ public class GitUser extends GitHubBridgeAdapterObject {
     }
 
     /**
-     * Gets the git user name for an author or committer on a git commit.
-     *
-     * @return Human readable name of the user, such as "Kohsuke Kawaguchi"
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
      * Gets username. Note: it presents only in events.
      *
      * @return GitHub username
@@ -65,5 +46,21 @@ public class GitUser extends GitHubBridgeAdapterObject {
     @CheckForNull
     public String getUsername() {
         return username;
+    }
+
+    /**
+     * Gets date.
+     *
+     * @return Commit Date.
+     */
+    public Date getDate() {
+        return GitHubClient.parseDate(date);
+    }
+
+    /**
+     * Instantiates a new git user.
+     */
+    public GitUser() {
+        // Empty constructor for Jackson binding
     }
 }

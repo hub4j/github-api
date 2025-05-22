@@ -15,48 +15,80 @@ import java.net.URL;
 public class GHRef extends GitHubInteractiveObject {
 
     /**
-     * The type GHObject.
+     * Create default GHRef instance
      */
-    @SuppressFBWarnings(
-            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
-            justification = "JSON API")
-    public static class GHObject {
+    public GHRef() {
+    }
 
-        private String type, sha, url;
+    private String ref, url;
+    private GHObject object;
 
-        /**
-         * Create default GHObject instance
-         */
-        public GHObject() {
-        }
+    /**
+     * Name of the ref, such as "refs/tags/abc".
+     *
+     * @return the ref
+     */
+    public String getRef() {
+        return ref;
+    }
 
-        /**
-         * SHA1 of this object.
-         *
-         * @return the sha
-         */
-        public String getSha() {
-            return sha;
-        }
+    /**
+     * The API URL of this tag, such as https://api.github.com/repos/jenkinsci/jenkins/git/refs/tags/1.312
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+        return GitHubClient.parseURL(url);
+    }
 
-        /**
-         * Type of the object, such as "commit".
-         *
-         * @return the type
-         */
-        public String getType() {
-            return type;
-        }
+    /**
+     * The object that this ref points to.
+     *
+     * @return the object
+     */
+    public GHObject getObject() {
+        return object;
+    }
 
-        /**
-         * API URL to this Git data, such as
-         * https://api.github.com/repos/jenkinsci/jenkins/git/commits/b72322675eb0114363a9a86e9ad5a170d1d07ac0
-         *
-         * @return the url
-         */
-        public URL getUrl() {
-            return GitHubClient.parseURL(url);
-        }
+    /**
+     * Updates this ref to the specified commit.
+     *
+     * @param sha
+     *            The SHA1 value to set this reference to
+     * @throws IOException
+     *             the io exception
+     */
+    public void updateTo(String sha) throws IOException {
+        updateTo(sha, false);
+    }
+
+    /**
+     * Updates this ref to the specified commit.
+     *
+     * @param sha
+     *            The SHA1 value to set this reference to
+     * @param force
+     *            Whether or not to force this ref update.
+     * @throws IOException
+     *             the io exception
+     */
+    public void updateTo(String sha, Boolean force) throws IOException {
+        root().createRequest()
+                .method("PATCH")
+                .with("sha", sha)
+                .with("force", force)
+                .withUrlPath(url)
+                .fetch(GHRef.class);
+    }
+
+    /**
+     * Deletes this ref from the repository using the GitHub API.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(url).send();
     }
 
     /**
@@ -104,6 +136,7 @@ public class GHRef extends GitHubInteractiveObject {
         }
         return result;
     }
+
     /**
      * Retrieves all refs of the given type for the current GitHub repository.
      *
@@ -112,8 +145,10 @@ public class GHRef extends GitHubInteractiveObject {
      * @param refType
      *            the type of reg to search for e.g. <code>tags</code> or <code>commits</code>
      * @return paged iterable of all refs of the specified type
+     * @throws IOException
+     *             on failure communicating with GitHub, potentially due to an invalid ref type being requested
      */
-    static PagedIterable<GHRef> readMatching(GHRepository repository, String refType) {
+    static PagedIterable<GHRef> readMatching(GHRepository repository, String refType) throws IOException {
         if (refType.startsWith("refs/")) {
             refType = refType.replaceFirst("refs/", "");
         }
@@ -126,81 +161,48 @@ public class GHRef extends GitHubInteractiveObject {
         return repository.root().createRequest().withUrlPath(url).toIterable(GHRef[].class, item -> repository.root());
     }
 
-    private GHObject object;
-
-    private String ref, url;
-
     /**
-     * Create default GHRef instance
+     * The type GHObject.
      */
-    public GHRef() {
-    }
+    @SuppressFBWarnings(
+            value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+            justification = "JSON API")
+    public static class GHObject {
 
-    /**
-     * Deletes this ref from the repository using the GitHub API.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(url).send();
-    }
+        /**
+         * Create default GHObject instance
+         */
+        public GHObject() {
+        }
 
-    /**
-     * The object that this ref points to.
-     *
-     * @return the object
-     */
-    public GHObject getObject() {
-        return object;
-    }
+        private String type, sha, url;
 
-    /**
-     * Name of the ref, such as "refs/tags/abc".
-     *
-     * @return the ref
-     */
-    public String getRef() {
-        return ref;
-    }
+        /**
+         * Type of the object, such as "commit".
+         *
+         * @return the type
+         */
+        public String getType() {
+            return type;
+        }
 
-    /**
-     * The API URL of this tag, such as https://api.github.com/repos/jenkinsci/jenkins/git/refs/tags/1.312
-     *
-     * @return the url
-     */
-    public URL getUrl() {
-        return GitHubClient.parseURL(url);
-    }
+        /**
+         * SHA1 of this object.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+            return sha;
+        }
 
-    /**
-     * Updates this ref to the specified commit.
-     *
-     * @param sha
-     *            The SHA1 value to set this reference to
-     * @throws IOException
-     *             the io exception
-     */
-    public void updateTo(String sha) throws IOException {
-        updateTo(sha, false);
-    }
-
-    /**
-     * Updates this ref to the specified commit.
-     *
-     * @param sha
-     *            The SHA1 value to set this reference to
-     * @param force
-     *            Whether or not to force this ref update.
-     * @throws IOException
-     *             the io exception
-     */
-    public void updateTo(String sha, Boolean force) throws IOException {
-        root().createRequest()
-                .method("PATCH")
-                .with("sha", sha)
-                .with("force", force)
-                .withUrlPath(url)
-                .fetch(GHRef.class);
+        /**
+         * API URL to this Git data, such as
+         * https://api.github.com/repos/jenkinsci/jenkins/git/commits/b72322675eb0114363a9a86e9ad5a170d1d07ac0
+         *
+         * @return the url
+         */
+        public URL getUrl() {
+            return GitHubClient.parseURL(url);
+        }
     }
 }

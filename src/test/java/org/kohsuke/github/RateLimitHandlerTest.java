@@ -43,6 +43,16 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
+    }
+
+    /**
      * Test handler fail.
      *
      * @throws Exception
@@ -137,38 +147,6 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test handler wait stuck.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testHandler_WaitStuck() throws Exception {
-        // Customized response that templates the date to keep things working
-        snapshotNotAllowed();
-
-        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
-                .withRateLimitHandler(new GitHubRateLimitHandler() {
-                    @Override
-                    public void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
-                    }
-                })
-                .build();
-
-        gitHub.getMyself();
-        assertThat(mockGitHub.getRequestCount(), equalTo(1));
-
-        try {
-            getTempRepository();
-            fail();
-        } catch (Exception e) {
-            assertThat(e, instanceOf(GHIOException.class));
-        }
-
-        assertThat(mockGitHub.getRequestCount(), equalTo(4));
-    }
-
-    /**
      * Test the wait logic in the case where the "Date" header field is missing from the response.
      *
      * @throws IOException
@@ -200,13 +178,35 @@ public class RateLimitHandlerTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the wire mock options.
+     * Test handler wait stuck.
      *
-     * @return the wire mock options
+     * @throws Exception
+     *             the exception
      */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
+    @Test
+    public void testHandler_WaitStuck() throws Exception {
+        // Customized response that templates the date to keep things working
+        snapshotNotAllowed();
+
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withRateLimitHandler(new GitHubRateLimitHandler() {
+                    @Override
+                    public void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
+                    }
+                })
+                .build();
+
+        gitHub.getMyself();
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        try {
+            getTempRepository();
+            fail();
+        } catch (Exception e) {
+            assertThat(e, instanceOf(GHIOException.class));
+        }
+
+        assertThat(mockGitHub.getRequestCount(), equalTo(4));
     }
 
 }

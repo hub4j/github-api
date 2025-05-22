@@ -20,35 +20,18 @@ import java.util.List;
         justification = "JSON API")
 public class GHTree {
 
-    private String sha, url;
-
-    private GHTreeEntry[] tree;
-
-    private boolean truncated;
-    /** The repo. */
-    /* package almost final */GHRepository repo;
     /**
      * Create default GHTree instance
      */
     public GHTree() {
     }
 
-    /**
-     * Finds a tree entry by its name.
-     * <p>
-     * IOW, find a directory entry by a file name.
-     *
-     * @param path
-     *            the path
-     * @return the entry
-     */
-    public GHTreeEntry getEntry(String path) {
-        for (GHTreeEntry e : tree) {
-            if (e.getPath().equals(path))
-                return e;
-        }
-        return null;
-    }
+    /** The repo. */
+    /* package almost final */GHRepository repo;
+
+    private boolean truncated;
+    private String sha, url;
+    private GHTreeEntry[] tree;
 
     /**
      * The SHA for this trees.
@@ -69,13 +52,20 @@ public class GHTree {
     }
 
     /**
-     * The API URL of this tag, such as "url":
-     * "https://api.github.com/repos/octocat/Hello-World/trees/fc6274d15fa3ae2ab983129fb037999f264ba9a7",
+     * Finds a tree entry by its name.
+     * <p>
+     * IOW, find a directory entry by a file name.
      *
-     * @return the url
+     * @param path
+     *            the path
+     * @return the entry
      */
-    public URL getUrl() {
-        return GitHubClient.parseURL(url);
+    public GHTreeEntry getEntry(String path) {
+        for (GHTreeEntry e : tree) {
+            if (e.getPath().equals(path))
+                return e;
+        }
+        return null;
     }
 
     /**
@@ -85,6 +75,16 @@ public class GHTree {
      */
     public boolean isTruncated() {
         return truncated;
+    }
+
+    /**
+     * The API URL of this tag, such as "url":
+     * "https://api.github.com/repos/octocat/Hello-World/trees/fc6274d15fa3ae2ab983129fb037999f264ba9a7",
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+        return GitHubClient.parseURL(url);
     }
 
     /**

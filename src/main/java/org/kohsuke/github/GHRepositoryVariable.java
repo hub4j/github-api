@@ -13,46 +13,78 @@ import javax.annotation.Nonnull;
 public class GHRepositoryVariable extends GitHubInteractiveObject {
 
     /**
-     * A {@link GHRepositoryVariableBuilder} that creates a new {@link GHRepositoryVariable}
-     * <p>
-     * Consumer must call {@link #done()} to create the new instance.
+     * Create default GHRepositoryVariable instance
      */
-    @BetaApi
-    public static class Creator extends GHRepositoryVariableBuilder<Creator> {
-        private Creator(@Nonnull GHRepository repository) {
-            super(GHRepositoryVariable.Creator.class, repository.root(), null);
-            requester.method("POST").withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE));
-        }
-    }
-
-    /**
-     * A {@link GHRepositoryVariableBuilder} that updates a single property per request
-     * <p>
-     * {@link #done()} is called automatically after the property is set.
-     */
-    @BetaApi
-    public static class Setter extends GHRepositoryVariableBuilder<GHRepositoryVariable> {
-        private Setter(@Nonnull GHRepositoryVariable base) {
-            super(GHRepositoryVariable.class, base.getApiRoot(), base);
-            requester.method("PATCH").withUrlPath(base.getUrl().concat(SLASH).concat(base.getName()));
-        }
+    public GHRepositoryVariable() {
     }
 
     private static final String SLASH = "/";
 
     private static final String VARIABLE_NAMESPACE = "actions/variables";
+
+    private String name;
+    private String value;
+
+    private String url;
+    private String createdAt;
+    private String updatedAt;
+
     /**
-     * Begins the creation of a new instance.
-     * <p>
-     * Consumer must call {@link GHRepositoryVariable.Creator#done()} to commit changes.
+     * Gets url.
      *
-     * @param repository
-     *            the repository in which the variable will be created.
-     * @return a {@link GHRepositoryVariable.Creator}
+     * @return the url
      */
-    @BetaApi
-    static GHRepositoryVariable.Creator create(GHRepository repository) {
-        return new GHRepositoryVariable.Creator(repository);
+    @Nonnull
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets name.
+     *
+     * @param name
+     *            the name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Gets value.
+     *
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * Sets value.
+     *
+     * @param value
+     *            the value
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    /**
+     * Gets the api root.
+     *
+     * @return the api root
+     */
+    @Nonnull
+    GitHub getApiRoot() {
+        return Objects.requireNonNull(root());
     }
 
     /**
@@ -74,19 +106,21 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
         variable.url = repository.getApiTailUrl("actions/variables");
         return variable;
     }
-    private String createdAt;
-    private String name;
-
-    private String updatedAt;
-
-    private String url;
-
-    private String value;
 
     /**
-     * Create default GHRepositoryVariable instance
+     * Begins the creation of a new instance.
+     * <p>
+     * Consumer must call {@link GHRepositoryVariable.Creator#done()} to commit changes.
+     *
+     * @param repository
+     *            the repository in which the variable will be created.
+     * @return a {@link GHRepositoryVariable.Creator}
+     * @throws IOException
+     *             the io exception
      */
-    public GHRepositoryVariable() {
+    @BetaApi
+    static GHRepositoryVariable.Creator create(GHRepository repository) throws IOException {
+        return new GHRepositoryVariable.Creator(repository);
     }
 
     /**
@@ -100,34 +134,6 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    @Nonnull
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Gets value.
-     *
-     * @return the value
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
      * Begins a single property update.
      *
      * @return a {@link GHRepositoryVariable.Setter}
@@ -138,33 +144,29 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
     }
 
     /**
-     * Sets name.
-     *
-     * @param name
-     *            the name
+     * A {@link GHRepositoryVariableBuilder} that updates a single property per request
+     * <p>
+     * {@link #done()} is called automatically after the property is set.
      */
-    public void setName(String name) {
-        this.name = name;
+    @BetaApi
+    public static class Setter extends GHRepositoryVariableBuilder<GHRepositoryVariable> {
+        private Setter(@Nonnull GHRepositoryVariable base) {
+            super(GHRepositoryVariable.class, base.getApiRoot(), base);
+            requester.method("PATCH").withUrlPath(base.getUrl().concat(SLASH).concat(base.getName()));
+        }
     }
 
     /**
-     * Sets value.
-     *
-     * @param value
-     *            the value
+     * A {@link GHRepositoryVariableBuilder} that creates a new {@link GHRepositoryVariable}
+     * <p>
+     * Consumer must call {@link #done()} to create the new instance.
      */
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    /**
-     * Gets the api root.
-     *
-     * @return the api root
-     */
-    @Nonnull
-    GitHub getApiRoot() {
-        return Objects.requireNonNull(root());
+    @BetaApi
+    public static class Creator extends GHRepositoryVariableBuilder<Creator> {
+        private Creator(@Nonnull GHRepository repository) {
+            super(GHRepositoryVariable.Creator.class, repository.root(), null);
+            requester.method("POST").withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE));
+        }
     }
 
 }

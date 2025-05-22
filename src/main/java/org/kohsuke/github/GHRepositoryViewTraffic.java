@@ -10,32 +10,6 @@ import java.util.List;
  * @see GHRepository#getViewTraffic() GHRepository#getViewTraffic()
  */
 public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
-    /**
-     * The type DailyInfo.
-     */
-    public static class DailyInfo extends GHRepositoryTraffic.DailyInfo {
-
-        /**
-         * Instantiates a new daily info.
-         */
-        DailyInfo() {
-        }
-
-        /**
-         * Instantiates a new daily info.
-         *
-         * @param timestamp
-         *            the timestamp
-         * @param count
-         *            the count
-         * @param uniques
-         *            the uniques
-         */
-        DailyInfo(String timestamp, int count, int uniques) {
-            super(timestamp, count, uniques);
-        }
-    }
-
     private List<DailyInfo> views;
 
     /**
@@ -60,6 +34,15 @@ public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
     }
 
     /**
+     * Gets views.
+     *
+     * @return the views
+     */
+    public List<DailyInfo> getViews() {
+        return Collections.unmodifiableList(views);
+    }
+
+    /**
      * Gets the daily info.
      *
      * @return the daily info
@@ -69,11 +52,28 @@ public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
     }
 
     /**
-     * Gets views.
-     *
-     * @return the views
+     * The type DailyInfo.
      */
-    public List<DailyInfo> getViews() {
-        return Collections.unmodifiableList(views);
+    public static class DailyInfo extends GHRepositoryTraffic.DailyInfo {
+
+        /**
+         * Instantiates a new daily info.
+         */
+        DailyInfo() {
+        }
+
+        /**
+         * Instantiates a new daily info.
+         *
+         * @param timestamp
+         *            the timestamp
+         * @param count
+         *            the count
+         * @param uniques
+         *            the uniques
+         */
+        DailyInfo(String timestamp, int count, int uniques) {
+            super(timestamp, count, uniques);
+        }
     }
 }

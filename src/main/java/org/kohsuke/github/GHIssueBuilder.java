@@ -11,10 +11,10 @@ import java.util.List;
  * @author Kohsuke Kawaguchi
  */
 public class GHIssueBuilder {
-    private List<String> assignees = new ArrayList<String>();
+    private final GHRepository repo;
     private final Requester builder;
     private List<String> labels = new ArrayList<String>();
-    private final GHRepository repo;
+    private List<String> assignees = new ArrayList<String>();
 
     /**
      * Instantiates a new GH issue builder.
@@ -28,6 +28,18 @@ public class GHIssueBuilder {
         this.repo = repo;
         this.builder = repo.root().createRequest().method("POST");
         builder.with("title", title);
+    }
+
+    /**
+     * Sets the main text of an issue, which is arbitrary multi-line text.
+     *
+     * @param str
+     *            the str
+     * @return the gh issue builder
+     */
+    public GHIssueBuilder body(String str) {
+        builder.with("body", str);
+        return this;
     }
 
     /**
@@ -57,30 +69,16 @@ public class GHIssueBuilder {
     }
 
     /**
-     * Sets the main text of an issue, which is arbitrary multi-line text.
+     * Milestone gh issue builder.
      *
-     * @param str
-     *            the str
+     * @param milestone
+     *            the milestone
      * @return the gh issue builder
      */
-    public GHIssueBuilder body(String str) {
-        builder.with("body", str);
+    public GHIssueBuilder milestone(GHMilestone milestone) {
+        if (milestone != null)
+            builder.with("milestone", milestone.getNumber());
         return this;
-    }
-
-    /**
-     * Creates a new issue.
-     *
-     * @return the gh issue
-     * @throws IOException
-     *             the io exception
-     */
-    public GHIssue create() throws IOException {
-        return builder.with("labels", labels)
-                .with("assignees", assignees)
-                .withUrlPath(repo.getApiTailUrl("issues"))
-                .fetch(GHIssue.class)
-                .wrap(repo);
     }
 
     /**
@@ -97,15 +95,17 @@ public class GHIssueBuilder {
     }
 
     /**
-     * Milestone gh issue builder.
+     * Creates a new issue.
      *
-     * @param milestone
-     *            the milestone
-     * @return the gh issue builder
+     * @return the gh issue
+     * @throws IOException
+     *             the io exception
      */
-    public GHIssueBuilder milestone(GHMilestone milestone) {
-        if (milestone != null)
-            builder.with("milestone", milestone.getNumber());
-        return this;
+    public GHIssue create() throws IOException {
+        return builder.with("labels", labels)
+                .with("assignees", assignees)
+                .withUrlPath(repo.getApiTailUrl("issues"))
+                .fetch(GHIssue.class)
+                .wrap(repo);
     }
 }

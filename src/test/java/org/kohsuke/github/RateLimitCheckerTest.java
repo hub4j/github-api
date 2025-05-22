@@ -17,21 +17,27 @@ import static org.hamcrest.CoreMatchers.*;
  */
 public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
 
-    private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
-    }
+    /** The rate limit. */
+    GHRateLimit rateLimit = null;
 
     /** The previous limit. */
     GHRateLimit previousLimit = null;
-
-    /** The rate limit. */
-    GHRateLimit rateLimit = null;
 
     /**
      * Instantiates a new rate limit checker test.
      */
     public RateLimitCheckerTest() {
         useDefaultGitHub = false;
+    }
+
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
     }
 
     /**
@@ -51,7 +57,6 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
         // Give this a moment
         Thread.sleep(1000);
 
-        // noinspection UseOfObsoleteDateTimeApi
         templating.testStartDate = new Date();
         // -------------------------------------------------------------
         // /user gets response with rate limit information
@@ -98,21 +103,15 @@ public class RateLimitCheckerTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
-     */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions().extensions(templating.newResponseTransformer());
-    }
-
-    /**
      * Update test rate limit.
      */
     protected void updateTestRateLimit() {
         previousLimit = rateLimit;
         rateLimit = gitHub.lastRateLimit();
+    }
+
+    private static GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
 }

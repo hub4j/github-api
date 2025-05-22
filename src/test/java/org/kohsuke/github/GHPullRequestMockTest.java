@@ -33,4 +33,5 @@ public class GHPullRequestMockTest {
 
         assertThat("Mock should return true", pullRequest.isDraft());
     }
+
 }

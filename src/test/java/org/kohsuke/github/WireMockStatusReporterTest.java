@@ -26,6 +26,58 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * User when proxying auth correctly configured.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void user_whenProxying_AuthCorrectlyConfigured() throws Exception {
+        snapshotNotAllowed();
+        requireProxy("Tests proper configuration when proxying.");
+
+        verifyAuthenticated(gitHub);
+
+        assertThat(gitHub.getClient().getLogin(), not(equalTo(STUBBED_USER_LOGIN)));
+
+        // If this user query fails, either the proxying config has broken (unlikely)
+        // or your auth settings are not being retrieved from the environment.
+        // Check your settings.
+        GHUser user = gitHub.getMyself();
+        assertThat(user.getLogin(), notNullValue());
+
+        System.out.println();
+        System.out.println(
+                "WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user login: "
+                        + user.getLogin());
+        System.out.println();
+    }
+
+    /**
+     * User when not proxying stubbed.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void user_whenNotProxying_Stubbed() throws Exception {
+        snapshotNotAllowed();
+
+        assumeFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
+
+        verifyAuthenticated(gitHub);
+        assertThat(gitHub.getClient().getLogin(), equalTo(STUBBED_USER_LOGIN));
+
+        GHUser user = gitHub.getMyself();
+        // NOTE: the stubbed user does not have to match the login provided from the github object
+        // github.login is literally just a placeholder when mocking
+        assertThat(user.getLogin(), not(equalTo(STUBBED_USER_LOGIN)));
+        assertThat(user.getLogin(), equalTo("stubbed-user-login"));
+
+        // System.out.println("GitHub proxying and user auth correctly configured for user login: " + user.getLogin());
+    }
+
+    /**
      * Basic behaviors when not proxying.
      *
      * @throws Exception
@@ -105,62 +157,13 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * User when not proxying stubbed.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void user_whenNotProxying_Stubbed() throws Exception {
-        snapshotNotAllowed();
-
-        assumeFalse("Test only valid when not proxying", mockGitHub.isUseProxy());
-
-        verifyAuthenticated(gitHub);
-        assertThat(gitHub.getClient().getLogin(), equalTo(STUBBED_USER_LOGIN));
-
-        GHUser user = gitHub.getMyself();
-        // NOTE: the stubbed user does not have to match the login provided from the github object
-        // github.login is literally just a placeholder when mocking
-        assertThat(user.getLogin(), not(equalTo(STUBBED_USER_LOGIN)));
-        assertThat(user.getLogin(), equalTo("stubbed-user-login"));
-
-        // System.out.println("GitHub proxying and user auth correctly configured for user login: " + user.getLogin());
-    }
-
-    /**
-     * User when proxying auth correctly configured.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void user_whenProxying_AuthCorrectlyConfigured() throws Exception {
-        snapshotNotAllowed();
-        requireProxy("Tests proper configuration when proxying.");
-
-        verifyAuthenticated(gitHub);
-
-        assertThat(gitHub.getClient().getLogin(), not(equalTo(STUBBED_USER_LOGIN)));
-
-        // If this user query fails, either the proxying config has broken (unlikely)
-        // or your auth settings are not being retrieved from the environment.
-        // Check your settings.
-        GHUser user = gitHub.getMyself();
-        assertThat(user.getLogin(), notNullValue());
-
-        System.out.println();
-        System.out.println(
-                "WireMockStatusReporterTest: GitHub proxying and user auth correctly configured for user login: "
-                        + user.getLogin());
-        System.out.println();
-    }
-
-    /**
      * When snapshot ensure proxy.
+     *
+     * @throws Exception
+     *             the exception
      */
     @Test
-    public void whenSnapshot_EnsureProxy() {
+    public void whenSnapshot_EnsureProxy() throws Exception {
         assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)",
                 mockGitHub.isTakeSnapshot());
 
@@ -169,10 +172,13 @@ public class WireMockStatusReporterTest extends AbstractGitHubWireMockTest {
 
     /**
      * When snapshot ensure record to expected location.
+     *
+     * @throws Exception
+     *             the exception
      */
     @Ignore("Not implemented yet")
     @Test
-    public void whenSnapshot_EnsureRecordToExpectedLocation() {
+    public void whenSnapshot_EnsureRecordToExpectedLocation() throws Exception {
         assumeTrue("Test only valid when Snapshotting (-Dtest.github.takeSnapshot to enable)",
                 mockGitHub.isTakeSnapshot());
 

@@ -1,9 +1,7 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -15,31 +13,22 @@ import java.util.Date;
  */
 public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
 
-    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private GHMarketplaceAccount account;
-
-    private String billingCycle;
-    private String freeTrialEndsOn;
-    private String nextBillingDate;
-    private boolean onFreeTrial;
-    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private GHMarketplacePlan plan;
-    private Long unitCount;
-    private String updatedAt;
     /**
      * Create default GHMarketplaceUserPurchase instance
      */
     public GHMarketplaceUserPurchase() {
     }
 
-    /**
-     * Gets account.
-     *
-     * @return the account
-     */
-    public GHMarketplaceAccount getAccount() {
-        return account;
-    }
+    private String billingCycle;
+    private String nextBillingDate;
+    private boolean onFreeTrial;
+    private String freeTrialEndsOn;
+    private Long unitCount;
+    private String updatedAt;
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
+    private GHMarketplaceAccount account;
+    @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
+    private GHMarketplacePlan plan;
 
     /**
      * Gets billing cycle.
@@ -51,32 +40,30 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets free trial ends on.
-     *
-     * @return the free trial ends on
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getFreeTrialEndsOn() {
-        return GitHubClient.parseInstant(freeTrialEndsOn);
-    }
-
-    /**
      * Gets next billing date.
      *
      * @return the next billing date
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getNextBillingDate() {
-        return GitHubClient.parseInstant(nextBillingDate);
+    public Date getNextBillingDate() {
+        return GitHubClient.parseDate(nextBillingDate);
     }
 
     /**
-     * Gets plan.
+     * Is on free trial boolean.
      *
-     * @return the plan
+     * @return the boolean
      */
-    public GHMarketplacePlan getPlan() {
-        return plan;
+    public boolean isOnFreeTrial() {
+        return onFreeTrial;
+    }
+
+    /**
+     * Gets free trial ends on.
+     *
+     * @return the free trial ends on
+     */
+    public Date getFreeTrialEndsOn() {
+        return GitHubClient.parseDate(freeTrialEndsOn);
     }
 
     /**
@@ -93,17 +80,25 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
      *
      * @return the updated at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getUpdatedAt() {
-        return GitHubClient.parseInstant(updatedAt);
+    public Date getUpdatedAt() {
+        return GitHubClient.parseDate(updatedAt);
     }
 
     /**
-     * Is on free trial boolean.
+     * Gets account.
      *
-     * @return the boolean
+     * @return the account
      */
-    public boolean isOnFreeTrial() {
-        return onFreeTrial;
+    public GHMarketplaceAccount getAccount() {
+        return account;
+    }
+
+    /**
+     * Gets plan.
+     *
+     * @return the plan
+     */
+    public GHMarketplacePlan getPlan() {
+        return plan;
     }
 }

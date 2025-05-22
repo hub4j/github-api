@@ -14,115 +14,17 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
-    /** The max iterations. */
-    public static int MAX_ITERATIONS = 3;
-
-    /** The sleep interval. */
-    public static int SLEEP_INTERVAL = 5000;
-
     /**
      * Create default GHRepositoryStatisticsTest instance
      */
     public GHRepositoryStatisticsTest() {
     }
 
-    /**
-     * Test code frequency.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     * @throws InterruptedException
-     *             the interrupted exception
-     */
-    @Test
-    @SuppressWarnings("SleepWhileInLoop")
-    public void testCodeFrequency() throws IOException, InterruptedException {
-        // get the statistics
-        List<GHRepositoryStatistics.CodeFrequency> stats = null;
+    /** The max iterations. */
+    public static int MAX_ITERATIONS = 3;
 
-        for (int i = 0; i < MAX_ITERATIONS; i += 1) {
-            stats = getRepository().getStatistics().getCodeFrequency();
-            if (stats == null) {
-                Thread.sleep(SLEEP_INTERVAL);
-            } else {
-                break;
-            }
-        }
-
-        // check that the statistics were eventually retrieved
-        if (stats == null) {
-            fail("Statistics took too long to retrieve.");
-            return;
-        }
-
-        // check the statistics are accurate
-        // TODO: Perhaps return this as a map with the timestamp as the key?
-        // Either that or wrap in an object with accessor methods.
-        Boolean foundWeek = false;
-        for (GHRepositoryStatistics.CodeFrequency item : stats) {
-            if (item.getWeekTimestamp() == 1535241600) {
-                assertThat(item.getAdditions(), equalTo(185L));
-                assertThat(item.getDeletions(), equalTo(-243L));
-                assertThat(item.toString(), equalTo("Week starting 1535241600 has 185 additions and 243 deletions"));
-                foundWeek = true;
-                break;
-            }
-        }
-        assertThat("Could not find week starting 1535241600", foundWeek);
-    }
-
-    /**
-     * Test commit activity.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     * @throws InterruptedException
-     *             the interrupted exception
-     */
-    @Test
-    @SuppressWarnings("SleepWhileInLoop")
-    public void testCommitActivity() throws IOException, InterruptedException {
-        // get the statistics
-        PagedIterable<GHRepositoryStatistics.CommitActivity> stats = null;
-
-        for (int i = 0; i < MAX_ITERATIONS; i += 1) {
-            stats = getRepository().getStatistics().getCommitActivity();
-            if (stats == null) {
-                Thread.sleep(SLEEP_INTERVAL);
-            } else {
-                break;
-            }
-        }
-
-        // check that the statistics were eventually retrieved
-        if (stats == null) {
-            fail("Statistics took too long to retrieve.");
-            return;
-        }
-
-        // check the statistics are accurate
-        List<GHRepositoryStatistics.CommitActivity> list = stats.toList();
-
-        // TODO: Return this as a map with the timestamp as the key.
-        // Either that or wrap in an object an accessor method.
-        Boolean foundWeek = false;
-        for (GHRepositoryStatistics.CommitActivity item : list) {
-            if (item.getWeek() == 1566691200) {
-                assertThat(item.getTotal(), equalTo(6));
-                List<Integer> days = item.getDays();
-                assertThat((long) days.get(0), equalTo(0L));
-                assertThat((long) days.get(1), equalTo(0L));
-                assertThat((long) days.get(2), equalTo(1L));
-                assertThat((long) days.get(3), equalTo(0L));
-                assertThat((long) days.get(4), equalTo(0L));
-                assertThat((long) days.get(5), equalTo(1L));
-                assertThat((long) days.get(6), equalTo(4L));
-                foundWeek = true;
-                break;
-            }
-        }
-        assertThat("Could not find week starting 1546128000", foundWeek);
-    }
+    /** The sleep interval. */
+    public static int SLEEP_INTERVAL = 5000;
 
     /**
      * Test contributor stats.
@@ -179,6 +81,104 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         }
 
         assertThat("Did not find author " + authorLogin, developerFound);
+    }
+
+    /**
+     * Test commit activity.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
+     */
+    @Test
+    @SuppressWarnings("SleepWhileInLoop")
+    public void testCommitActivity() throws IOException, InterruptedException {
+        // get the statistics
+        PagedIterable<GHRepositoryStatistics.CommitActivity> stats = null;
+
+        for (int i = 0; i < MAX_ITERATIONS; i += 1) {
+            stats = getRepository().getStatistics().getCommitActivity();
+            if (stats == null) {
+                Thread.sleep(SLEEP_INTERVAL);
+            } else {
+                break;
+            }
+        }
+
+        // check that the statistics were eventually retrieved
+        if (stats == null) {
+            fail("Statistics took too long to retrieve.");
+            return;
+        }
+
+        // check the statistics are accurate
+        List<GHRepositoryStatistics.CommitActivity> list = stats.toList();
+
+        // TODO: Return this as a map with the timestamp as the key.
+        // Either that or wrap in an object an accessor method.
+        Boolean foundWeek = false;
+        for (GHRepositoryStatistics.CommitActivity item : list) {
+            if (item.getWeek() == 1566691200) {
+                assertThat(item.getTotal(), equalTo(6));
+                List<Integer> days = item.getDays();
+                assertThat((long) days.get(0), equalTo(0L));
+                assertThat((long) days.get(1), equalTo(0L));
+                assertThat((long) days.get(2), equalTo(1L));
+                assertThat((long) days.get(3), equalTo(0L));
+                assertThat((long) days.get(4), equalTo(0L));
+                assertThat((long) days.get(5), equalTo(1L));
+                assertThat((long) days.get(6), equalTo(4L));
+                foundWeek = true;
+                break;
+            }
+        }
+        assertThat("Could not find week starting 1546128000", foundWeek);
+    }
+
+    /**
+     * Test code frequency.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
+     */
+    @Test
+    @SuppressWarnings("SleepWhileInLoop")
+    public void testCodeFrequency() throws IOException, InterruptedException {
+        // get the statistics
+        List<GHRepositoryStatistics.CodeFrequency> stats = null;
+
+        for (int i = 0; i < MAX_ITERATIONS; i += 1) {
+            stats = getRepository().getStatistics().getCodeFrequency();
+            if (stats == null) {
+                Thread.sleep(SLEEP_INTERVAL);
+            } else {
+                break;
+            }
+        }
+
+        // check that the statistics were eventually retrieved
+        if (stats == null) {
+            fail("Statistics took too long to retrieve.");
+            return;
+        }
+
+        // check the statistics are accurate
+        // TODO: Perhaps return this as a map with the timestamp as the key?
+        // Either that or wrap in an object with accessor methods.
+        Boolean foundWeek = false;
+        for (GHRepositoryStatistics.CodeFrequency item : stats) {
+            if (item.getWeekTimestamp() == 1535241600) {
+                assertThat(item.getAdditions(), equalTo(185L));
+                assertThat(item.getDeletions(), equalTo(-243L));
+                assertThat(item.toString(), equalTo("Week starting 1535241600 has 185 additions and 243 deletions"));
+                foundWeek = true;
+                break;
+            }
+        }
+        assertThat("Could not find week starting 1535241600", foundWeek);
     }
 
     /**
@@ -263,10 +263,6 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         assertThat("Hour 10 for Day 2 not found.", hourFound);
     }
 
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
-    }
-
     /**
      * Gets the repository.
      *
@@ -276,5 +272,9 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
     }
 }

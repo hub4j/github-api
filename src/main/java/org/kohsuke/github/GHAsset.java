@@ -13,55 +13,20 @@ import java.io.IOException;
 public class GHAsset extends GHObject {
 
     /**
-     * Wrap gh asset [ ].
-     *
-     * @param assets
-     *            the assets
-     * @param release
-     *            the release
-     * @return the gh asset [ ]
-     */
-    public static GHAsset[] wrap(GHAsset[] assets, GHRelease release) {
-        for (GHAsset aTo : assets) {
-            aTo.wrap(release);
-        }
-        return assets;
-    }
-
-    private String browserDownloadUrl;
-    private String contentType;
-    private long downloadCount;
-    private String label;
-    private String name;
-    private long size;
-    private String state;
-    /** The owner. */
-    GHRepository owner;
-
-    /**
      * Create default GHAsset instance
      */
     public GHAsset() {
     }
 
-    /**
-     * Delete.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * Gets browser download url.
-     *
-     * @return the browser download url
-     */
-    public String getBrowserDownloadUrl() {
-        return browserDownloadUrl;
-    }
+    /** The owner. */
+    GHRepository owner;
+    private String name;
+    private String label;
+    private String state;
+    private String content_type;
+    private long size;
+    private long download_count;
+    private String browser_download_url;
 
     /**
      * Gets content type.
@@ -69,7 +34,20 @@ public class GHAsset extends GHObject {
      * @return the content type
      */
     public String getContentType() {
-        return contentType;
+        return content_type;
+    }
+
+    /**
+     * Sets content type.
+     *
+     * @param contentType
+     *            the content type
+     * @throws IOException
+     *             the io exception
+     */
+    public void setContentType(String contentType) throws IOException {
+        edit("content_type", contentType);
+        this.content_type = contentType;
     }
 
     /**
@@ -78,7 +56,7 @@ public class GHAsset extends GHObject {
      * @return the download count
      */
     public long getDownloadCount() {
-        return downloadCount;
+        return download_count;
     }
 
     /**
@@ -88,6 +66,19 @@ public class GHAsset extends GHObject {
      */
     public String getLabel() {
         return label;
+    }
+
+    /**
+     * Sets label.
+     *
+     * @param label
+     *            the label
+     * @throws IOException
+     *             the io exception
+     */
+    public void setLabel(String label) throws IOException {
+        edit("label", label);
+        this.label = label;
     }
 
     /**
@@ -128,33 +119,26 @@ public class GHAsset extends GHObject {
     }
 
     /**
-     * Sets content type.
+     * Gets browser download url.
      *
-     * @param contentType
-     *            the content type
-     * @throws IOException
-     *             the io exception
+     * @return the browser download url
      */
-    public void setContentType(String contentType) throws IOException {
-        edit("content_type", contentType);
-        this.contentType = contentType;
-    }
-
-    /**
-     * Sets label.
-     *
-     * @param label
-     *            the label
-     * @throws IOException
-     *             the io exception
-     */
-    public void setLabel(String label) throws IOException {
-        edit("label", label);
-        this.label = label;
+    public String getBrowserDownloadUrl() {
+        return browser_download_url;
     }
 
     private void edit(String key, Object value) throws IOException {
         root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     private String getApiRoute() {
@@ -171,5 +155,21 @@ public class GHAsset extends GHObject {
     GHAsset wrap(GHRelease release) {
         this.owner = release.getOwner();
         return this;
+    }
+
+    /**
+     * Wrap gh asset [ ].
+     *
+     * @param assets
+     *            the assets
+     * @param release
+     *            the release
+     * @return the gh asset [ ]
+     */
+    public static GHAsset[] wrap(GHAsset[] assets, GHRelease release) {
+        for (GHAsset aTo : assets) {
+            aTo.wrap(release);
+        }
+        return assets;
     }
 }

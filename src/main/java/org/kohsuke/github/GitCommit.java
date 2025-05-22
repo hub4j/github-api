@@ -1,9 +1,7 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.time.Instant;
 import java.util.AbstractList;
 import java.util.Collections;
 import java.util.Date;
@@ -18,26 +16,26 @@ import java.util.List;
  */
 
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GitCommit extends GitHubBridgeAdapterObject {
+public class GitCommit {
+    private GHRepository owner;
+    private String sha, node_id, url, html_url;
+    private GitUser author;
+    private GitUser committer;
+
+    private String message;
+
+    private GHVerification verification;
+
     /**
      * The Class Tree.
      */
     static class Tree {
 
-        /** The sha. */
-        String sha;
-
         /** The url. */
         String url;
 
-        /**
-         * Gets the sha.
-         *
-         * @return the sha
-         */
-        public String getSha() {
-            return sha;
-        }
+        /** The sha. */
+        String sha;
 
         /**
          * Gets the url.
@@ -48,20 +46,20 @@ public class GitCommit extends GitHubBridgeAdapterObject {
             return url;
         }
 
+        /**
+         * Gets the sha.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+            return sha;
+        }
+
     }
-    private GitUser author;
-    private GitUser committer;
-    private String message;
-
-    private GHRepository owner;
-
-    private List<GHCommit.Parent> parents;
-
-    private String sha, nodeId, url, htmlUrl;
 
     private Tree tree;
 
-    private GHVerification verification;
+    private List<GHCommit.Parent> parents;
 
     /**
      * Instantiates a new git commit.
@@ -81,15 +79,70 @@ public class GitCommit extends GitHubBridgeAdapterObject {
         // to GHCommit, for testing purposes
         this.owner = commit.getOwner();
         this.sha = commit.getSha();
-        this.nodeId = commit.getNodeId();
+        this.node_id = commit.getNodeId();
         this.url = commit.getUrl();
-        this.htmlUrl = commit.getHtmlUrl();
+        this.html_url = commit.getHtmlUrl();
         this.author = commit.getAuthor();
         this.committer = commit.getCommitter();
         this.message = commit.getMessage();
         this.verification = commit.getVerification();
         this.tree = commit.getTree();
         this.parents = commit.getParents();
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the repository that contains the commit.
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
+    }
+
+    /**
+     * Gets SHA1.
+     *
+     * @return The SHA1 of this commit
+     */
+    public String getSHA1() {
+        return sha;
+    }
+
+    /**
+     * Gets SHA.
+     *
+     * @return The SHA of this commit
+     */
+    public String getSha() {
+        return sha;
+    }
+
+    /**
+     * Gets node id.
+     *
+     * @return The node id of this commit
+     */
+    public String getNodeId() {
+        return node_id;
+    }
+
+    /**
+     * Gets URL.
+     *
+     * @return The URL of this commit
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Gets HTML URL.
+     *
+     * @return The HTML URL of this commit
+     */
+    public String getHtmlUrl() {
+        return html_url;
     }
 
     /**
@@ -106,19 +159,8 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      *
      * @return the authored date
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getAuthoredDate() {
+    public Date getAuthoredDate() {
         return author.getDate();
-    }
-
-    /**
-     * Gets commit date.
-     *
-     * @return the commit date
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCommitDate() {
-        return committer.getDate();
     }
 
     /**
@@ -131,12 +173,12 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     }
 
     /**
-     * Gets HTML URL.
+     * Gets commit date.
      *
-     * @return The HTML URL of this commit
+     * @return the commit date
      */
-    public String getHtmlUrl() {
-        return htmlUrl;
+    public Date getCommitDate() {
+        return committer.getDate();
     }
 
     /**
@@ -149,22 +191,49 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     }
 
     /**
-     * Gets node id.
+     * Gets Verification Status.
      *
-     * @return The node id of this commit
+     * @return the Verification status
      */
-    public String getNodeId() {
-        return nodeId;
+    public GHVerification getVerification() {
+        return verification;
     }
 
     /**
-     * Gets owner.
+     * Gets the tree.
      *
-     * @return the repository that contains the commit.
+     * @return the tree
      */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
+    Tree getTree() {
+        return tree;
+    }
+
+    /**
+     * Gets the tree SHA 1.
+     *
+     * @return the tree SHA 1
+     */
+    public String getTreeSHA1() {
+        return tree.getSha();
+    }
+
+    /**
+     * Gets the tree url.
+     *
+     * @return the tree url
+     */
+    public String getTreeUrl() {
+        return tree.getUrl();
+    }
+
+    /**
+     * Gets the parents.
+     *
+     * @return the parents
+     */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
+    List<GHCommit.Parent> getParents() {
+        return parents;
     }
 
     /**
@@ -189,88 +258,6 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     }
 
     /**
-     * Gets SHA1.
-     *
-     * @return The SHA1 of this commit
-     */
-    public String getSHA1() {
-        return sha;
-    }
-
-    /**
-     * Gets SHA.
-     *
-     * @return The SHA of this commit
-     */
-    public String getSha() {
-        return sha;
-    }
-
-    /**
-     * Gets the tree SHA 1.
-     *
-     * @return the tree SHA 1
-     */
-    public String getTreeSHA1() {
-        return tree.getSha();
-    }
-
-    /**
-     * Gets the tree url.
-     *
-     * @return the tree url
-     */
-    public String getTreeUrl() {
-        return tree.getUrl();
-    }
-
-    /**
-     * Gets URL.
-     *
-     * @return The URL of this commit
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Gets Verification Status.
-     *
-     * @return the Verification status
-     */
-    public GHVerification getVerification() {
-        return verification;
-    }
-
-    /**
-     * Gets the parents.
-     *
-     * @return the parents
-     */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
-    List<GHCommit.Parent> getParents() {
-        return parents;
-    }
-
-    /**
-     * Gets the tree.
-     *
-     * @return the tree
-     */
-    Tree getTree() {
-        return tree;
-    }
-
-    /**
-     * For test purposes only.
-     *
-     * @return Equivalent GHCommit
-     */
-    GHCommit toGHCommit() {
-        return new GHCommit(new GHCommit.ShortInfo(this));
-    }
-
-    /**
      * Wrap up.
      *
      * @param owner
@@ -280,6 +267,15 @@ public class GitCommit extends GitHubBridgeAdapterObject {
     GitCommit wrapUp(GHRepository owner) {
         this.owner = owner;
         return this;
+    }
+
+    /**
+     * For test purposes only.
+     *
+     * @return Equivalent GHCommit
+     */
+    GHCommit toGHCommit() {
+        return new GHCommit(new GHCommit.ShortInfo(this));
     }
 
 }

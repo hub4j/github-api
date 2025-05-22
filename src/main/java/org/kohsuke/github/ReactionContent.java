@@ -13,11 +13,17 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum ReactionContent {
 
+    /** The plus one. */
+    PLUS_ONE("+1"),
+
+    /** The minus one. */
+    MINUS_ONE("-1"),
+
+    /** The laugh. */
+    LAUGH("laugh"),
+
     /** The confused. */
     CONFUSED("confused"),
-
-    /** The eyes. */
-    EYES("eyes"),
 
     /** The heart. */
     HEART("heart"),
@@ -25,33 +31,11 @@ public enum ReactionContent {
     /** The hooray. */
     HOORAY("hooray"),
 
-    /** The laugh. */
-    LAUGH("laugh"),
-
-    /** The minus one. */
-    MINUS_ONE("-1"),
-
-    /** The plus one. */
-    PLUS_ONE("+1"),
-
     /** The rocket. */
-    ROCKET("rocket");
+    ROCKET("rocket"),
 
-    /**
-     * For content reaction content.
-     *
-     * @param content
-     *            the content
-     * @return the reaction content
-     */
-    @JsonCreator
-    public static ReactionContent forContent(String content) {
-        for (ReactionContent c : ReactionContent.values()) {
-            if (c.getContent().equals(content))
-                return c;
-        }
-        return null;
-    }
+    /** The eyes. */
+    EYES("eyes");
 
     private final String content;
 
@@ -73,5 +57,21 @@ public enum ReactionContent {
     @JsonValue
     public String getContent() {
         return content;
+    }
+
+    /**
+     * For content reaction content.
+     *
+     * @param content
+     *            the content
+     * @return the reaction content
+     */
+    @JsonCreator
+    public static ReactionContent forContent(String content) {
+        for (ReactionContent c : ReactionContent.values()) {
+            if (c.getContent().equals(content))
+                return c;
+        }
+        return null;
     }
 }

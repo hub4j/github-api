@@ -24,14 +24,12 @@
 
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -56,63 +54,15 @@ import java.util.Objects;
 public class GHIssue extends GHObject implements Reactable {
 
     /**
-     * The type PullRequest.
+     * Create default GHIssue instance
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-    public static class PullRequest {
-
-        private String diffUrl, patchUrl, htmlUrl;
-
-        /**
-         * Create default PullRequest instance
-         */
-        public PullRequest() {
-        }
-
-        /**
-         * Gets diff url.
-         *
-         * @return the diff url
-         */
-        public URL getDiffUrl() {
-            return GitHubClient.parseURL(diffUrl);
-        }
-
-        /**
-         * Gets patch url.
-         *
-         * @return the patch url
-         */
-        public URL getPatchUrl() {
-            return GitHubClient.parseURL(patchUrl);
-        }
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public URL getUrl() {
-            return GitHubClient.parseURL(htmlUrl);
-        }
+    public GHIssue() {
     }
 
     private static final String ASSIGNEES = "assignees";
 
-    /**
-     * Gets the logins.
-     *
-     * @param users
-     *            the users
-     * @return the logins
-     */
-    protected static List<String> getLogins(Collection<GHUser> users) {
-        List<String> names = new ArrayList<String>(users.size());
-        for (GHUser a : users) {
-            names.add(a.getLogin());
-        }
-        return names;
-    }
+    /** The owner. */
+    GHRepository owner;
 
     /** The assignee. */
     // API v3
@@ -121,138 +71,228 @@ public class GHIssue extends GHObject implements Reactable {
     /** The assignees. */
     protected GHUser[] assignees;
 
-    /** The body. */
-    @SkipFromToString
-    protected String body;
-
-    /** The closed at. */
-    protected String closedAt;
-
-    /** The closed by. */
-    protected GHUser closedBy;
-
-    /** The comments. */
-    protected int comments;
-
-    /** The labels. */
-    protected List<GHLabel> labels;
-
-    /** The locked. */
-    protected boolean locked;
-
-    /** The milestone. */
-    protected GHMilestone milestone;
-
-    /** The number. */
-    protected int number;
-
-    /** The pull request. */
-    protected GHIssue.PullRequest pullRequest;
-
     /** The state. */
     protected String state;
 
     /** The state reason. */
-    protected String stateReason;
+    protected String state_reason;
 
-    /** The html url. */
-    protected String title, htmlUrl;
+    /** The number. */
+    protected int number;
+
+    /** The closed at. */
+    protected String closed_at;
+
+    /** The comments. */
+    protected int comments;
+
+    /** The body. */
+    @SkipFromToString
+    protected String body;
+
+    /** The labels. */
+    protected List<GHLabel> labels;
 
     /** The user. */
     protected GHUser user;
 
-    /** The owner. */
-    GHRepository owner;
+    /** The html url. */
+    protected String title, html_url;
+
+    /** The pull request. */
+    protected GHIssue.PullRequest pull_request;
+
+    /** The milestone. */
+    protected GHMilestone milestone;
+
+    /** The closed by. */
+    protected GHUser closed_by;
+
+    /** The locked. */
+    protected boolean locked;
 
     /**
-     * Create default GHIssue instance
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH issue
      */
-    public GHIssue() {
+    GHIssue wrap(GHRepository owner) {
+        this.owner = owner;
+        if (milestone != null)
+            milestone.lateBind(owner);
+        return this;
+    }
+
+    private String getRepositoryUrlPath() {
+        String url = getUrl().toString();
+        int index = url.indexOf("/issues");
+        if (index == -1) {
+            index = url.indexOf("/pulls");
+        }
+        return url.substring(0, index);
     }
 
     /**
-     * Add assignees.
+     * Repository to which the issue belongs.
      *
-     * @param assignees
-     *            the assignees
+     * @return the repository
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getRepository() {
+        try {
+            synchronized (this) {
+                if (owner == null) {
+                    String repositoryUrlPath = getRepositoryUrlPath();
+                    wrap(root().createRequest().withUrlPath(repositoryUrlPath).fetch(GHRepository.class));
+                }
+            }
+        } catch (IOException e) {
+            throw new GHException("Failed to fetch repository", e);
+        }
+        return owner;
+    }
+
+    /**
+     * The description of this pull request.
+     *
+     * @return the body
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * ID.
+     *
+     * @return the number
+     */
+    public int getNumber() {
+        return number;
+    }
+
+    /**
+     * The HTML page of this issue, like https://github.com/jenkinsci/jenkins/issues/100
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
+    }
+
+    /**
+     * Gets title.
+     *
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Is locked boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isLocked() {
+        return locked;
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public GHIssueState getState() {
+        return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
+    }
+
+    /**
+     * Gets state reason.
+     *
+     * @return the state reason
+     */
+    public GHIssueStateReason getStateReason() {
+        return EnumUtils.getNullableEnumOrDefault(GHIssueStateReason.class, state_reason, GHIssueStateReason.UNKNOWN);
+    }
+
+    /**
+     * Gets labels.
+     *
+     * @return the labels
+     */
+    public Collection<GHLabel> getLabels() {
+        if (labels == null) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(labels);
+    }
+
+    /**
+     * Gets closed at.
+     *
+     * @return the closed at
+     */
+    public Date getClosedAt() {
+        return GitHubClient.parseDate(closed_at);
+    }
+
+    /**
+     * Lock.
+     *
      * @throws IOException
      *             the io exception
      */
-    public void addAssignees(Collection<GHUser> assignees) throws IOException {
-        root().createRequest()
+    public void lock() throws IOException {
+        root().createRequest().method("PUT").withUrlPath(getApiRoute() + "/lock").send();
+    }
+
+    /**
+     * Unlock.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void unlock() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute() + "/lock").send();
+    }
+
+    /**
+     * Updates the issue by adding a comment.
+     *
+     * @param message
+     *            the message
+     * @return Newly posted comment.
+     * @throws IOException
+     *             the io exception
+     */
+    public GHIssueComment comment(String message) throws IOException {
+        GHIssueComment r = root().createRequest()
                 .method("POST")
-                .with(ASSIGNEES, getLogins(assignees))
-                .withUrlPath(getIssuesApiRoute() + "/assignees")
-                .fetchInto(this);
+                .with("body", message)
+                .withUrlPath(getIssuesApiRoute() + "/comments")
+                .fetch(GHIssueComment.class);
+        return r.wrapUp(this);
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
+    }
+
+    private void edit(Map<String, Object> map) throws IOException {
+        root().createRequest().with(map).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
     /**
-     * Add assignees.
-     *
-     * @param assignees
-     *            the assignees
-     * @throws IOException
-     *             the io exception
+     * Identical to edit(), but allows null for the value.
      */
-    public void addAssignees(GHUser... assignees) throws IOException {
-        addAssignees(Arrays.asList(assignees));
+    private void editNullable(String key, Object value) throws IOException {
+        root().createRequest().withNullable(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
-    /**
-     * Add labels.
-     *
-     * Labels that are already present on the target are ignored.
-     *
-     * @param labels
-     *            the labels
-     * @return the complete list of labels including the new additions
-     * @throws IOException
-     *             the io exception
-     */
-    public List<GHLabel> addLabels(Collection<GHLabel> labels) throws IOException {
-        return _addLabels(GHLabel.toNames(labels));
-    }
-
-    /**
-     * Add labels.
-     *
-     * Labels that are already present on the target are ignored.
-     *
-     * @param labels
-     *            the labels
-     * @return the complete list of labels including the new additions
-     * @throws IOException
-     *             the io exception
-     */
-    public List<GHLabel> addLabels(GHLabel... labels) throws IOException {
-        return addLabels(Arrays.asList(labels));
-    }
-
-    /**
-     * Adds labels to the issue.
-     *
-     * Labels that are already present on the target are ignored.
-     *
-     * @param names
-     *            Names of the label
-     * @return the complete list of labels including the new additions
-     * @throws IOException
-     *             the io exception
-     */
-    public List<GHLabel> addLabels(String... names) throws IOException {
-        return _addLabels(Arrays.asList(names));
-    }
-
-    /**
-     * Assign to.
-     *
-     * @param user
-     *            the user
-     * @throws IOException
-     *             the io exception
-     */
-    public void assignTo(GHUser user) throws IOException {
-        setAssignees(user);
+    private void editIssue(String key, Object value) throws IOException {
+        root().createRequest().withNullable(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
     }
 
     /**
@@ -281,21 +321,243 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Updates the issue by adding a comment.
+     * Reopens this issue.
      *
-     * @param message
-     *            the message
-     * @return Newly posted comment.
      * @throws IOException
      *             the io exception
      */
-    public GHIssueComment comment(String message) throws IOException {
-        GHIssueComment r = root().createRequest()
+    public void reopen() throws IOException {
+        edit("state", "open");
+    }
+
+    /**
+     * Sets title.
+     *
+     * @param title
+     *            the title
+     * @throws IOException
+     *             the io exception
+     */
+    public void setTitle(String title) throws IOException {
+        edit("title", title);
+    }
+
+    /**
+     * Sets body.
+     *
+     * @param body
+     *            the body
+     * @throws IOException
+     *             the io exception
+     */
+    public void setBody(String body) throws IOException {
+        edit("body", body);
+    }
+
+    /**
+     * Sets the milestone for this issue.
+     *
+     * @param milestone
+     *            The milestone to assign this issue to. Use null to remove the milestone for this issue.
+     * @throws IOException
+     *             The io exception
+     */
+    public void setMilestone(GHMilestone milestone) throws IOException {
+        if (milestone == null) {
+            editIssue("milestone", null);
+        } else {
+            editIssue("milestone", milestone.getNumber());
+        }
+    }
+
+    /**
+     * Assign to.
+     *
+     * @param user
+     *            the user
+     * @throws IOException
+     *             the io exception
+     */
+    public void assignTo(GHUser user) throws IOException {
+        setAssignees(user);
+    }
+
+    /**
+     * Sets labels on the target to a specific list.
+     *
+     * @param labels
+     *            the labels
+     * @throws IOException
+     *             the io exception
+     */
+    public void setLabels(String... labels) throws IOException {
+        editIssue("labels", labels);
+    }
+
+    /**
+     * Adds labels to the issue.
+     *
+     * Labels that are already present on the target are ignored.
+     *
+     * @param names
+     *            Names of the label
+     * @return the complete list of labels including the new additions
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHLabel> addLabels(String... names) throws IOException {
+        return _addLabels(Arrays.asList(names));
+    }
+
+    /**
+     * Add labels.
+     *
+     * Labels that are already present on the target are ignored.
+     *
+     * @param labels
+     *            the labels
+     * @return the complete list of labels including the new additions
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHLabel> addLabels(GHLabel... labels) throws IOException {
+        return addLabels(Arrays.asList(labels));
+    }
+
+    /**
+     * Add labels.
+     *
+     * Labels that are already present on the target are ignored.
+     *
+     * @param labels
+     *            the labels
+     * @return the complete list of labels including the new additions
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHLabel> addLabels(Collection<GHLabel> labels) throws IOException {
+        return _addLabels(GHLabel.toNames(labels));
+    }
+
+    private List<GHLabel> _addLabels(Collection<String> names) throws IOException {
+        return Arrays.asList(root().createRequest()
+                .with("labels", names)
                 .method("POST")
-                .with("body", message)
+                .withUrlPath(getIssuesApiRoute() + "/labels")
+                .fetch(GHLabel[].class));
+    }
+
+    /**
+     * Remove a single label.
+     *
+     * Attempting to remove a label that is not present throws {@link GHFileNotFoundException}.
+     *
+     * @param name
+     *            the name
+     * @return the remaining list of labels
+     * @throws IOException
+     *             the io exception, throws {@link GHFileNotFoundException} if label was not present.
+     */
+    public List<GHLabel> removeLabel(String name) throws IOException {
+        return Arrays.asList(root().createRequest()
+                .method("DELETE")
+                .withUrlPath(getIssuesApiRoute() + "/labels", name)
+                .fetch(GHLabel[].class));
+    }
+
+    /**
+     * Remove a collection of labels.
+     *
+     * Attempting to remove labels that are not present on the target are ignored.
+     *
+     * @param names
+     *            the names
+     * @return the remaining list of labels
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHLabel> removeLabels(String... names) throws IOException {
+        return _removeLabels(Arrays.asList(names));
+    }
+
+    /**
+     * Remove a collection of labels.
+     *
+     * Attempting to remove labels that are not present on the target are ignored.
+     *
+     * @param labels
+     *            the labels
+     * @return the remaining list of labels
+     * @throws IOException
+     *             the io exception
+     * @see #removeLabels(String...) #removeLabels(String...)
+     */
+    public List<GHLabel> removeLabels(GHLabel... labels) throws IOException {
+        return removeLabels(Arrays.asList(labels));
+    }
+
+    /**
+     * Remove a collection of labels.
+     *
+     * Attempting to remove labels that are not present on the target are ignored.
+     *
+     * @param labels
+     *            the labels
+     * @return the remaining list of labels
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHLabel> removeLabels(Collection<GHLabel> labels) throws IOException {
+        return _removeLabels(GHLabel.toNames(labels));
+    }
+
+    private List<GHLabel> _removeLabels(Collection<String> names) throws IOException {
+        List<GHLabel> remainingLabels = Collections.emptyList();
+        for (String name : names) {
+            try {
+                remainingLabels = removeLabel(name);
+            } catch (GHFileNotFoundException e) {
+                // when trying to remove multiple labels, we ignore already removed
+            }
+        }
+        return remainingLabels;
+    }
+
+    /**
+     * Obtains all the comments associated with this issue.
+     *
+     * @return the comments
+     * @throws IOException
+     *             the io exception
+     * @see #listComments() #listComments()
+     */
+    public List<GHIssueComment> getComments() throws IOException {
+        return listComments().toList();
+    }
+
+    /**
+     * Obtains all the comments associated with this issue, without any filter.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
+     * @see #queryComments() queryComments to apply filters.
+     */
+    public PagedIterable<GHIssueComment> listComments() throws IOException {
+        return root().createRequest()
                 .withUrlPath(getIssuesApiRoute() + "/comments")
-                .fetch(GHIssueComment.class);
-        return r.wrapUp(this);
+                .toIterable(GHIssueComment[].class, item -> item.wrapUp(this));
+    }
+
+    /**
+     * Search comments on this issue by specifying filters through a builder pattern.
+     *
+     * @return the query builder
+     * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
+     */
+    public GHIssueCommentQueryBuilder queryComments() {
+        return new GHIssueCommentQueryBuilder(this);
     }
 
     /**
@@ -332,231 +594,6 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Gets assignee.
-     *
-     * @return the assignee
-     */
-    public GHUser getAssignee() {
-        return root().intern(assignee);
-    }
-
-    /**
-     * Gets assignees.
-     *
-     * @return the assignees
-     */
-    public List<GHUser> getAssignees() {
-        return Collections.unmodifiableList(Arrays.asList(assignees));
-    }
-
-    /**
-     * The description of this pull request.
-     *
-     * @return the body
-     */
-    public String getBody() {
-        return body;
-    }
-
-    /**
-     * Gets closed at.
-     *
-     * @return the closed at
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getClosedAt() {
-        return GitHubClient.parseInstant(closedAt);
-    }
-
-    /**
-     * Reports who has closed the issue.
-     *
-     * <p>
-     * Note that GitHub doesn't always seem to report this information even for an issue that's already closed. See
-     * https://github.com/kohsuke/github-api/issues/60.
-     *
-     * @return the closed by
-     */
-    public GHUser getClosedBy() {
-        if (!"closed".equals(state))
-            return null;
-
-        // TODO
-        /*
-         * if (closed_by==null) { closed_by = owner.getIssue(number).getClosed_by(); }
-         */
-        return root().intern(closedBy);
-    }
-
-    /**
-     * Obtains all the comments associated with this issue.
-     *
-     * @return the comments
-     * @throws IOException
-     *             the io exception
-     * @see #listComments() #listComments()
-     */
-    public List<GHIssueComment> getComments() throws IOException {
-        return listComments().toList();
-    }
-
-    /**
-     * Gets comments count.
-     *
-     * @return the comments count
-     */
-    public int getCommentsCount() {
-        return comments;
-    }
-
-    /**
-     * The HTML page of this issue, like https://github.com/jenkinsci/jenkins/issues/100
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
-     * Gets labels.
-     *
-     * @return the labels
-     */
-    public Collection<GHLabel> getLabels() {
-        if (labels == null) {
-            return Collections.emptyList();
-        }
-        return Collections.unmodifiableList(labels);
-    }
-
-    /**
-     * Gets milestone.
-     *
-     * @return the milestone
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHMilestone getMilestone() {
-        return milestone;
-    }
-
-    /**
-     * ID.
-     *
-     * @return the number
-     */
-    public int getNumber() {
-        return number;
-    }
-
-    /**
-     * Returns non-null if this issue is a shadow of a pull request.
-     *
-     * @return the pull request
-     */
-    public PullRequest getPullRequest() {
-        return pullRequest;
-    }
-
-    /**
-     * Repository to which the issue belongs.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getRepository() {
-        try {
-            synchronized (this) {
-                if (owner == null) {
-                    String repositoryUrlPath = getRepositoryUrlPath();
-                    wrap(root().createRequest().withUrlPath(repositoryUrlPath).fetch(GHRepository.class));
-                }
-            }
-        } catch (IOException e) {
-            throw new GHException("Failed to fetch repository", e);
-        }
-        return owner;
-    }
-
-    /**
-     * Gets state.
-     *
-     * @return the state
-     */
-    public GHIssueState getState() {
-        return Enum.valueOf(GHIssueState.class, state.toUpperCase(Locale.ENGLISH));
-    }
-
-    /**
-     * Gets state reason.
-     *
-     * @return the state reason
-     */
-    public GHIssueStateReason getStateReason() {
-        return EnumUtils.getNullableEnumOrDefault(GHIssueStateReason.class, stateReason, GHIssueStateReason.UNKNOWN);
-    }
-
-    /**
-     * Gets title.
-     *
-     * @return the title
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * User who submitted the issue.
-     *
-     * @return the user
-     */
-    public GHUser getUser() {
-        return root().intern(user);
-    }
-
-    /**
-     * Is locked boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isLocked() {
-        return locked;
-    }
-
-    /**
-     * Is pull request boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isPullRequest() {
-        return pullRequest != null;
-    }
-
-    /**
-     * Obtains all the comments associated with this issue, without any filter.
-     *
-     * @return the paged iterable
-     * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
-     * @see #queryComments() queryComments to apply filters.
-     */
-    public PagedIterable<GHIssueComment> listComments() {
-        return root().createRequest()
-                .withUrlPath(getIssuesApiRoute() + "/comments")
-                .toIterable(GHIssueComment[].class, item -> item.wrapUp(this));
-    }
-
-    /**
-     * Lists events for this issue. See https://developer.github.com/v3/issues/events/
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHIssueEvent> listEvents() {
-        return root().createRequest()
-                .withUrlPath(getRepository().getApiTailUrl(String.format("/issues/%s/events", number)))
-                .toIterable(GHIssueEvent[].class, item -> item.wrapUp(this));
-    }
-
-    /**
      * List reactions.
      *
      * @return the paged iterable
@@ -568,126 +605,43 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Lock.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void lock() throws IOException {
-        root().createRequest().method("PUT").withUrlPath(getApiRoute() + "/lock").send();
-    }
-
-    /**
-     * Search comments on this issue by specifying filters through a builder pattern.
-     *
-     * @return the query builder
-     * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
-     */
-    public GHIssueCommentQueryBuilder queryComments() {
-        return new GHIssueCommentQueryBuilder(this);
-    }
-
-    /**
-     * Remove assignees.
+     * Add assignees.
      *
      * @param assignees
      *            the assignees
      * @throws IOException
      *             the io exception
      */
-    public void removeAssignees(Collection<GHUser> assignees) throws IOException {
+    public void addAssignees(GHUser... assignees) throws IOException {
+        addAssignees(Arrays.asList(assignees));
+    }
+
+    /**
+     * Add assignees.
+     *
+     * @param assignees
+     *            the assignees
+     * @throws IOException
+     *             the io exception
+     */
+    public void addAssignees(Collection<GHUser> assignees) throws IOException {
         root().createRequest()
-                .method("DELETE")
+                .method("POST")
                 .with(ASSIGNEES, getLogins(assignees))
-                .inBody()
                 .withUrlPath(getIssuesApiRoute() + "/assignees")
                 .fetchInto(this);
     }
 
     /**
-     * Remove assignees.
+     * Sets assignees.
      *
      * @param assignees
      *            the assignees
      * @throws IOException
      *             the io exception
      */
-    public void removeAssignees(GHUser... assignees) throws IOException {
-        removeAssignees(Arrays.asList(assignees));
-    }
-
-    /**
-     * Remove a single label.
-     *
-     * Attempting to remove a label that is not present throws {@link GHFileNotFoundException}.
-     *
-     * @param name
-     *            the name
-     * @return the remaining list of labels
-     * @throws IOException
-     *             the io exception, throws {@link GHFileNotFoundException} if label was not present.
-     */
-    public List<GHLabel> removeLabel(String name) throws IOException {
-        return Arrays.asList(root().createRequest()
-                .method("DELETE")
-                .withUrlPath(getIssuesApiRoute() + "/labels", name)
-                .fetch(GHLabel[].class));
-    }
-
-    /**
-     * Remove a collection of labels.
-     *
-     * Attempting to remove labels that are not present on the target are ignored.
-     *
-     * @param labels
-     *            the labels
-     * @return the remaining list of labels
-     * @throws IOException
-     *             the io exception
-     */
-    public List<GHLabel> removeLabels(Collection<GHLabel> labels) throws IOException {
-        return _removeLabels(GHLabel.toNames(labels));
-    }
-
-    /**
-     * Remove a collection of labels.
-     *
-     * Attempting to remove labels that are not present on the target are ignored.
-     *
-     * @param labels
-     *            the labels
-     * @return the remaining list of labels
-     * @throws IOException
-     *             the io exception
-     * @see #removeLabels(String...) #removeLabels(String...)
-     */
-    public List<GHLabel> removeLabels(GHLabel... labels) throws IOException {
-        return removeLabels(Arrays.asList(labels));
-    }
-
-    /**
-     * Remove a collection of labels.
-     *
-     * Attempting to remove labels that are not present on the target are ignored.
-     *
-     * @param names
-     *            the names
-     * @return the remaining list of labels
-     * @throws IOException
-     *             the io exception
-     */
-    public List<GHLabel> removeLabels(String... names) throws IOException {
-        return _removeLabels(Arrays.asList(names));
-    }
-
-    /**
-     * Reopens this issue.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void reopen() throws IOException {
-        edit("state", "open");
+    public void setAssignees(GHUser... assignees) throws IOException {
+        setAssignees(Arrays.asList(assignees));
     }
 
     /**
@@ -707,125 +661,32 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Sets assignees.
+     * Remove assignees.
      *
      * @param assignees
      *            the assignees
      * @throws IOException
      *             the io exception
      */
-    public void setAssignees(GHUser... assignees) throws IOException {
-        setAssignees(Arrays.asList(assignees));
+    public void removeAssignees(GHUser... assignees) throws IOException {
+        removeAssignees(Arrays.asList(assignees));
     }
 
     /**
-     * Sets body.
+     * Remove assignees.
      *
-     * @param body
-     *            the body
+     * @param assignees
+     *            the assignees
      * @throws IOException
      *             the io exception
      */
-    public void setBody(String body) throws IOException {
-        edit("body", body);
-    }
-
-    /**
-     * Sets labels on the target to a specific list.
-     *
-     * @param labels
-     *            the labels
-     * @throws IOException
-     *             the io exception
-     */
-    public void setLabels(String... labels) throws IOException {
-        editIssue("labels", labels);
-    }
-
-    /**
-     * Sets the milestone for this issue.
-     *
-     * @param milestone
-     *            The milestone to assign this issue to. Use null to remove the milestone for this issue.
-     * @throws IOException
-     *             The io exception
-     */
-    public void setMilestone(GHMilestone milestone) throws IOException {
-        if (milestone == null) {
-            editIssue("milestone", null);
-        } else {
-            editIssue("milestone", milestone.getNumber());
-        }
-    }
-
-    /**
-     * Sets title.
-     *
-     * @param title
-     *            the title
-     * @throws IOException
-     *             the io exception
-     */
-    public void setTitle(String title) throws IOException {
-        edit("title", title);
-    }
-
-    /**
-     * Unlock.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void unlock() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute() + "/lock").send();
-    }
-
-    private List<GHLabel> _addLabels(Collection<String> names) throws IOException {
-        return Arrays.asList(root().createRequest()
-                .with("labels", names)
-                .method("POST")
-                .withUrlPath(getIssuesApiRoute() + "/labels")
-                .fetch(GHLabel[].class));
-    }
-
-    private List<GHLabel> _removeLabels(Collection<String> names) throws IOException {
-        List<GHLabel> remainingLabels = Collections.emptyList();
-        for (String name : names) {
-            try {
-                remainingLabels = removeLabel(name);
-            } catch (GHFileNotFoundException e) {
-                // when trying to remove multiple labels, we ignore already removed
-            }
-        }
-        return remainingLabels;
-    }
-
-    private void edit(Map<String, Object> map) throws IOException {
-        root().createRequest().with(map).method("PATCH").withUrlPath(getApiRoute()).send();
-    }
-
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
-    }
-
-    private void editIssue(String key, Object value) throws IOException {
-        root().createRequest().withNullable(key, value).method("PATCH").withUrlPath(getIssuesApiRoute()).send();
-    }
-
-    /**
-     * Identical to edit(), but allows null for the value.
-     */
-    private void editNullable(String key, Object value) throws IOException {
-        root().createRequest().withNullable(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
-    }
-
-    private String getRepositoryUrlPath() {
-        String url = getUrl().toString();
-        int index = url.indexOf("/issues");
-        if (index == -1) {
-            index = url.indexOf("/pulls");
-        }
-        return url.substring(0, index);
+    public void removeAssignees(Collection<GHUser> assignees) throws IOException {
+        root().createRequest()
+                .method("DELETE")
+                .with(ASSIGNEES, getLogins(assignees))
+                .inBody()
+                .withUrlPath(getIssuesApiRoute() + "/assignees")
+                .fetchInto(this);
     }
 
     /**
@@ -853,16 +714,162 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
-     * Wrap.
+     * Gets assignee.
      *
-     * @param owner
-     *            the owner
-     * @return the GH issue
+     * @return the assignee
+     * @throws IOException
+     *             the io exception
      */
-    GHIssue wrap(GHRepository owner) {
-        this.owner = owner;
-        if (milestone != null)
-            milestone.lateBind(owner);
-        return this;
+    public GHUser getAssignee() throws IOException {
+        return root().intern(assignee);
+    }
+
+    /**
+     * Gets assignees.
+     *
+     * @return the assignees
+     */
+    public List<GHUser> getAssignees() {
+        return Collections.unmodifiableList(Arrays.asList(assignees));
+    }
+
+    /**
+     * User who submitted the issue.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getUser() throws IOException {
+        return root().intern(user);
+    }
+
+    /**
+     * Reports who has closed the issue.
+     *
+     * <p>
+     * Note that GitHub doesn't always seem to report this information even for an issue that's already closed. See
+     * https://github.com/kohsuke/github-api/issues/60.
+     *
+     * @return the closed by
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getClosedBy() throws IOException {
+        if (!"closed".equals(state))
+            return null;
+
+        // TODO
+        /*
+         * if (closed_by==null) { closed_by = owner.getIssue(number).getClosed_by(); }
+         */
+        return root().intern(closed_by);
+    }
+
+    /**
+     * Gets comments count.
+     *
+     * @return the comments count
+     */
+    public int getCommentsCount() {
+        return comments;
+    }
+
+    /**
+     * Returns non-null if this issue is a shadow of a pull request.
+     *
+     * @return the pull request
+     */
+    public PullRequest getPullRequest() {
+        return pull_request;
+    }
+
+    /**
+     * Is pull request boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isPullRequest() {
+        return pull_request != null;
+    }
+
+    /**
+     * Gets milestone.
+     *
+     * @return the milestone
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHMilestone getMilestone() {
+        return milestone;
+    }
+
+    /**
+     * The type PullRequest.
+     */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    public static class PullRequest {
+
+        /**
+         * Create default PullRequest instance
+         */
+        public PullRequest() {
+        }
+
+        private String diff_url, patch_url, html_url;
+
+        /**
+         * Gets diff url.
+         *
+         * @return the diff url
+         */
+        public URL getDiffUrl() {
+            return GitHubClient.parseURL(diff_url);
+        }
+
+        /**
+         * Gets patch url.
+         *
+         * @return the patch url
+         */
+        public URL getPatchUrl() {
+            return GitHubClient.parseURL(patch_url);
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public URL getUrl() {
+            return GitHubClient.parseURL(html_url);
+        }
+    }
+
+    /**
+     * Gets the logins.
+     *
+     * @param users
+     *            the users
+     * @return the logins
+     */
+    protected static List<String> getLogins(Collection<GHUser> users) {
+        List<String> names = new ArrayList<String>(users.size());
+        for (GHUser a : users) {
+            names.add(a.getLogin());
+        }
+        return names;
+    }
+
+    /**
+     * Lists events for this issue. See https://developer.github.com/v3/issues/events/
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public PagedIterable<GHIssueEvent> listEvents() throws IOException {
+        return root().createRequest()
+                .withUrlPath(getRepository().getApiTailUrl(String.format("/issues/%s/events", number)))
+                .toIterable(GHIssueEvent[].class, item -> item.wrapUp(this));
     }
 }

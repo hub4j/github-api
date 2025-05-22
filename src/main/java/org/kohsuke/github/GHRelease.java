@@ -8,12 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.String.format;
+import static java.lang.String.*;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -23,6 +22,179 @@ import static java.lang.String.format;
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
 public class GHRelease extends GHObject {
+
+    /**
+     * Create default GHRelease instance
+     */
+    public GHRelease() {
+    }
+
+    /** The owner. */
+    GHRepository owner;
+
+    private String html_url;
+    private String assets_url;
+    private List<GHAsset> assets;
+    private String upload_url;
+    private String tag_name;
+    private String target_commitish;
+    private String name;
+    private String body;
+    private boolean draft;
+    private boolean prerelease;
+    private Date published_at;
+    private String tarball_url;
+    private String zipball_url;
+    private String discussion_url;
+
+    /**
+     * Gets discussion url. Only present if a discussion relating to the release exists
+     *
+     * @return the discussion url
+     */
+    public String getDiscussionUrl() {
+        return discussion_url;
+    }
+
+    /**
+     * Gets assets url.
+     *
+     * @return the assets url
+     */
+    public String getAssetsUrl() {
+        return assets_url;
+    }
+
+    /**
+     * Gets body.
+     *
+     * @return the body
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * Is draft boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isDraft() {
+        return draft;
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets name.
+     *
+     * @param name
+     *            the name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
+    }
+
+    /**
+     * Is prerelease boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isPrerelease() {
+        return prerelease;
+    }
+
+    /**
+     * Gets published at.
+     *
+     * @return the published at
+     */
+    public Date getPublished_at() {
+        return new Date(published_at.getTime());
+    }
+
+    /**
+     * Gets tag name.
+     *
+     * @return the tag name
+     */
+    public String getTagName() {
+        return tag_name;
+    }
+
+    /**
+     * Gets target commitish.
+     *
+     * @return the target commitish
+     */
+    public String getTargetCommitish() {
+        return target_commitish;
+    }
+
+    /**
+     * Gets upload url.
+     *
+     * @return the upload url
+     */
+    public String getUploadUrl() {
+        return upload_url;
+    }
+
+    /**
+     * Gets zipball url.
+     *
+     * @return the zipball url
+     */
+    public String getZipballUrl() {
+        return zipball_url;
+    }
+
+    /**
+     * Gets tarball url.
+     *
+     * @return the tarball url
+     */
+    public String getTarballUrl() {
+        return tarball_url;
+    }
+
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH release
+     */
+    GHRelease wrap(GHRepository owner) {
+        this.owner = owner;
+        return this;
+    }
 
     /**
      * Wrap.
@@ -38,206 +210,6 @@ public class GHRelease extends GHObject {
             release.wrap(owner);
         }
         return releases;
-    }
-
-    private List<GHAsset> assets;
-
-    private String assetsUrl;
-    private String body;
-    private String discussionUrl;
-    private boolean draft;
-    private String htmlUrl;
-    private String name;
-    private boolean prerelease;
-    private String publishedAt;
-    private String tagName;
-    private String tarballUrl;
-    private String targetCommitish;
-    private String uploadUrl;
-    private String zipballUrl;
-    /** The owner. */
-    GHRepository owner;
-
-    /**
-     * Create default GHRelease instance
-     */
-    public GHRelease() {
-    }
-
-    /**
-     * Deletes this release.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + getId())).send();
-    }
-
-    /**
-     * Get the cached assets.
-     *
-     * @return the assets
-     */
-    public List<GHAsset> getAssets() {
-        return Collections.unmodifiableList(assets);
-    }
-
-    /**
-     * Gets assets url.
-     *
-     * @return the assets url
-     */
-    public String getAssetsUrl() {
-        return assetsUrl;
-    }
-
-    /**
-     * Gets body.
-     *
-     * @return the body
-     */
-    public String getBody() {
-        return body;
-    }
-
-    /**
-     * Gets discussion url. Only present if a discussion relating to the release exists
-     *
-     * @return the discussion url
-     */
-    public String getDiscussionUrl() {
-        return discussionUrl;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets owner.
-     *
-     * @return the owner
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
-    }
-
-    /**
-     * Gets published at.
-     *
-     * @return the published at
-     */
-    public Instant getPublishedAt() {
-        return GitHubClient.parseInstant(publishedAt);
-    }
-
-    /**
-     * Gets published at.
-     *
-     * @return the published at
-     * @deprecated Use #getPublishedAt()
-     */
-    @Deprecated
-    public Date getPublished_at() {
-        return Date.from(getPublishedAt());
-    }
-
-    /**
-     * Gets tag name.
-     *
-     * @return the tag name
-     */
-    public String getTagName() {
-        return tagName;
-    }
-
-    /**
-     * Gets tarball url.
-     *
-     * @return the tarball url
-     */
-    public String getTarballUrl() {
-        return tarballUrl;
-    }
-
-    /**
-     * Gets target commitish.
-     *
-     * @return the target commitish
-     */
-    public String getTargetCommitish() {
-        return targetCommitish;
-    }
-
-    /**
-     * Gets upload url.
-     *
-     * @return the upload url
-     */
-    public String getUploadUrl() {
-        return uploadUrl;
-    }
-
-    /**
-     * Gets zipball url.
-     *
-     * @return the zipball url
-     */
-    public String getZipballUrl() {
-        return zipballUrl;
-    }
-
-    /**
-     * Is draft boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isDraft() {
-        return draft;
-    }
-
-    /**
-     * Is prerelease boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isPrerelease() {
-        return prerelease;
-    }
-
-    /**
-     * Re-fetch the assets of this release.
-     *
-     * @return the assets iterable
-     */
-    public PagedIterable<GHAsset> listAssets() {
-        Requester builder = owner.root().createRequest();
-        return builder.withUrlPath(getApiTailUrl("assets")).toIterable(GHAsset[].class, item -> item.wrap(this));
-    }
-
-    /**
-     * Updates this release via a builder.
-     *
-     * @return the gh release updater
-     */
-    public GHReleaseUpdater update() {
-        return new GHReleaseUpdater(this);
     }
 
     /**
@@ -288,19 +260,45 @@ public class GHRelease extends GHObject {
         return builder.contentType(contentType).with(stream).withUrlPath(url).fetch(GHAsset.class).wrap(this);
     }
 
-    private String getApiTailUrl(String end) {
-        return owner.getApiTailUrl(format("releases/%s/%s", getId(), end));
+    /**
+     * Get the cached assets.
+     *
+     * @return the assets
+     */
+    public List<GHAsset> getAssets() {
+        return Collections.unmodifiableList(assets);
     }
 
     /**
-     * Wrap.
+     * Re-fetch the assets of this release.
      *
-     * @param owner
-     *            the owner
-     * @return the GH release
+     * @return the assets iterable
      */
-    GHRelease wrap(GHRepository owner) {
-        this.owner = owner;
-        return this;
+    public PagedIterable<GHAsset> listAssets() {
+        Requester builder = owner.root().createRequest();
+        return builder.withUrlPath(getApiTailUrl("assets")).toIterable(GHAsset[].class, item -> item.wrap(this));
+    }
+
+    /**
+     * Deletes this release.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(owner.getApiTailUrl("releases/" + getId())).send();
+    }
+
+    /**
+     * Updates this release via a builder.
+     *
+     * @return the gh release updater
+     */
+    public GHReleaseUpdater update() {
+        return new GHReleaseUpdater(this);
+    }
+
+    private String getApiTailUrl(String end) {
+        return owner.getApiTailUrl(format("releases/%s/%s", getId(), end));
     }
 }

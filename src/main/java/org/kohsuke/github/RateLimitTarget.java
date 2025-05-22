@@ -13,6 +13,11 @@ public enum RateLimitTarget {
     CORE,
 
     /**
+     * Selects or updates the {@link GHRateLimit#getSearch()} record.
+     */
+    SEARCH,
+
+    /**
      * Selects or updates the {@link GHRateLimit#getGraphQL()} record.
      */
     GRAPHQL,
@@ -28,10 +33,5 @@ public enum RateLimitTarget {
      * This request uses no rate limit. If the response header includes rate limit information, it will apply to
      * {@link #CORE}.
      */
-    NONE,
-
-    /**
-     * Selects or updates the {@link GHRateLimit#getSearch()} record.
-     */
-    SEARCH
+    NONE
 }

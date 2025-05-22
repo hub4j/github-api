@@ -10,8 +10,8 @@ import java.io.IOException;
  * @see GHPullRequest#createReviewComment()
  */
 public class GHPullRequestReviewCommentBuilder {
-    private final Requester builder;
     private final GHPullRequest pr;
+    private final Requester builder;
 
     /**
      * Instantiates a new GH pull request review comment builder.
@@ -22,18 +22,6 @@ public class GHPullRequestReviewCommentBuilder {
     GHPullRequestReviewCommentBuilder(GHPullRequest pr) {
         this.pr = pr;
         this.builder = pr.root().createRequest();
-    }
-
-    /**
-     * The text of the pull request review comment.
-     *
-     * @param body
-     *            the body
-     * @return the gh pull request review comment builder
-     */
-    public GHPullRequestReviewCommentBuilder body(String body) {
-        builder.with("body", body);
-        return this;
     }
 
     /**
@@ -51,17 +39,41 @@ public class GHPullRequestReviewCommentBuilder {
     }
 
     /**
-     * Create gh pull request review comment.
+     * The text of the pull request review comment.
      *
+     * @param body
+     *            the body
      * @return the gh pull request review comment builder
-     * @throws IOException
-     *             the io exception
      */
-    public GHPullRequestReviewComment create() throws IOException {
-        return builder.method("POST")
-                .withUrlPath(pr.getApiRoute() + "/comments")
-                .fetch(GHPullRequestReviewComment.class)
-                .wrapUp(pr);
+    public GHPullRequestReviewCommentBuilder body(String body) {
+        builder.with("body", body);
+        return this;
+    }
+
+    /**
+     * The relative path to the file that necessitates a comment.
+     *
+     * @param path
+     *            the path
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder path(String path) {
+        builder.with("path", path);
+        return this;
+    }
+
+    /**
+     * The position in the diff where you want to add a review comment.
+     *
+     * @param position
+     *            the position
+     * @return the gh pull request review comment builder
+     * @implNote As position is deprecated in GitHub API, only keep this for internal usage (for retro-compatibility
+     *           with {@link GHPullRequest#createReviewComment(String, String, String, int)}).
+     */
+    GHPullRequestReviewCommentBuilder position(int position) {
+        builder.with("position", position);
+        return this;
     }
 
     /**
@@ -99,66 +111,17 @@ public class GHPullRequestReviewCommentBuilder {
     }
 
     /**
-     * The relative path to the file that necessitates a comment.
+     * Create gh pull request review comment.
      *
-     * @param path
-     *            the path
      * @return the gh pull request review comment builder
+     * @throws IOException
+     *             the io exception
      */
-    public GHPullRequestReviewCommentBuilder path(String path) {
-        builder.with("path", path);
-        return this;
-    }
-
-    /**
-     * The side of the diff in the pull request that the comment applies to.
-     * <p>
-     * {@link #side(GHPullRequestReviewComment.Side)} and
-     * {@link #sides(GHPullRequestReviewComment.Side, GHPullRequestReviewComment.Side)} will overwrite each other's
-     * values.
-     *
-     * @param side
-     *            side of the diff to which the comment applies
-     * @return the gh pull request review comment builder
-     */
-    public GHPullRequestReviewCommentBuilder side(GHPullRequestReviewComment.Side side) {
-        builder.with("side", side);
-        builder.remove("start_side");
-        return this;
-    }
-
-    /**
-     * The sides of the diff in the pull request that the comment applies to.
-     * <p>
-     * {@link #side(GHPullRequestReviewComment.Side)} and
-     * {@link #sides(GHPullRequestReviewComment.Side, GHPullRequestReviewComment.Side)} will overwrite each other's
-     * values.
-     *
-     * @param startSide
-     *            side of the diff to which the start of the comment applies
-     * @param endSide
-     *            side of the diff to which the end of the comment applies
-     * @return the gh pull request review comment builder
-     */
-    public GHPullRequestReviewCommentBuilder sides(GHPullRequestReviewComment.Side startSide,
-            GHPullRequestReviewComment.Side endSide) {
-        builder.with("start_side", startSide);
-        builder.with("side", endSide);
-        return this;
-    }
-
-    /**
-     * The position in the diff where you want to add a review comment.
-     *
-     * @param position
-     *            the position
-     * @return the gh pull request review comment builder
-     * @implNote As position is deprecated in GitHub API, only keep this for internal usage (for retro-compatibility
-     *           with {@link GHPullRequest#createReviewComment(String, String, String, int)}).
-     */
-    GHPullRequestReviewCommentBuilder position(int position) {
-        builder.with("position", position);
-        return this;
+    public GHPullRequestReviewComment create() throws IOException {
+        return builder.method("POST")
+                .withUrlPath(pr.getApiRoute() + "/comments")
+                .fetch(GHPullRequestReviewComment.class)
+                .wrapUp(pr);
     }
 
 }

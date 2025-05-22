@@ -1,11 +1,9 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.*;
 
 // TODO: Auto-generated Javadoc
@@ -18,6 +16,34 @@ import java.util.*;
 public class GHEventInfo extends GitHubInteractiveObject {
 
     /**
+     * Create default GHEventInfo instance
+     */
+    public GHEventInfo() {
+    }
+
+    // we don't want to expose Jackson dependency to the user. This needs databinding
+    private ObjectNode payload;
+
+    private long id;
+    private String created_at;
+
+    /**
+     * Representation of GitHub Event API Event Type.
+     *
+     * This is not the same as the values used for hook methods such as
+     * {@link GHRepository#createHook(String, Map, Collection, boolean)}.
+     *
+     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/github-event-types">GitHub event
+     *      types</a>
+     */
+    private String type;
+
+    // these are all shallow objects
+    private GHEventRepository repo;
+    private GHUser actor;
+    private GHOrganization org;
+
+    /**
      * Inside the event JSON model, GitHub uses a slightly different format.
      */
     @SuppressFBWarnings(
@@ -26,17 +52,17 @@ public class GHEventInfo extends GitHubInteractiveObject {
             justification = "JSON API")
     public static class GHEventRepository {
 
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        private long id;
-
-        private String name; // owner/repo
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        private String url; // repository API URL
         /**
          * Create default GHEventRepository instance
          */
         public GHEventRepository() {
         }
+
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
+        private long id;
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
+        private String url; // repository API URL
+        private String name; // owner/repo
     }
 
     /** The Constant mapTypeStringToEvent. */
@@ -67,6 +93,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
         map.put("WatchEvent", GHEvent.WATCH);
         return Collections.unmodifiableMap(map);
     }
+
     /**
      * Transform type to GH event.
      *
@@ -78,33 +105,44 @@ public class GHEventInfo extends GitHubInteractiveObject {
         return mapTypeStringToEvent.getOrDefault(type, GHEvent.UNKNOWN);
     }
 
-    private GHUser actor;
-
-    private String createdAt;
-    private long id;
-    private GHOrganization org;
-
-    // we don't want to expose Jackson dependency to the user. This needs databinding
-    private ObjectNode payload;
-
-    // these are all shallow objects
-    private GHEventRepository repo;
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
+    public GHEvent getType() {
+        return transformTypeToGHEvent(type);
+    }
 
     /**
-     * Representation of GitHub Event API Event Type.
+     * Gets id.
      *
-     * This is not the same as the values used for hook methods such as
-     * {@link GHRepository#createHook(String, Map, Collection, boolean)}.
-     *
-     * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/github-event-types">GitHub event
-     *      types</a>
+     * @return the id
      */
-    private String type;
+    public long getId() {
+        return id;
+    }
 
     /**
-     * Create default GHEventInfo instance
+     * Gets created at.
+     *
+     * @return the created at
      */
-    public GHEventInfo() {
+    public Date getCreatedAt() {
+        return GitHubClient.parseDate(created_at);
+    }
+
+    /**
+     * Gets repository.
+     *
+     * @return Repository where the change was made.
+     * @throws IOException
+     *             on error
+     */
+    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
+            justification = "The field comes from JSON deserialization")
+    public GHRepository getRepository() throws IOException {
+        return root().getRepository(repo.name);
     }
 
     /**
@@ -124,28 +162,11 @@ public class GHEventInfo extends GitHubInteractiveObject {
      * Gets actor login.
      *
      * @return the login of the actor.
+     * @throws IOException
+     *             on error
      */
-    public String getActorLogin() {
+    public String getActorLogin() throws IOException {
         return actor.getLogin();
-    }
-
-    /**
-     * Gets created at.
-     *
-     * @return the created at
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCreatedAt() {
-        return GitHubClient.parseInstant(createdAt);
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public long getId() {
-        return id;
     }
 
     /**
@@ -177,27 +198,5 @@ public class GHEventInfo extends GitHubInteractiveObject {
         T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);
         v.lateBind();
         return v;
-    }
-
-    /**
-     * Gets repository.
-     *
-     * @return Repository where the change was made.
-     * @throws IOException
-     *             on error
-     */
-    @SuppressFBWarnings(value = { "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
-            justification = "The field comes from JSON deserialization")
-    public GHRepository getRepository() throws IOException {
-        return root().getRepository(repo.name);
-    }
-
-    /**
-     * Gets type.
-     *
-     * @return the type
-     */
-    public GHEvent getType() {
-        return transformTypeToGHEvent(type);
     }
 }

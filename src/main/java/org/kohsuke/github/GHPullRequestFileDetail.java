@@ -35,43 +35,72 @@ import java.net.URL;
  */
 public class GHPullRequestFileDetail {
 
+    /**
+     * Create default GHPullRequestFileDetail instance
+     */
+    public GHPullRequestFileDetail() {
+    }
+
+    /** The sha. */
+    String sha;
+
+    /** The filename. */
+    String filename;
+
+    /** The status. */
+    String status;
+
     /** The additions. */
     int additions;
-
-    /** The blob url. */
-    String blobUrl;
-
-    /** The changes. */
-    int changes;
-
-    /** The contents url. */
-    String contentsUrl;
 
     /** The deletions. */
     int deletions;
 
-    /** The filename. */
-    String filename;
+    /** The changes. */
+    int changes;
+
+    /** The blob url. */
+    String blob_url;
+
+    /** The raw url. */
+    String raw_url;
+
+    /** The contents url. */
+    String contents_url;
 
     /** The patch. */
     String patch;
 
     /** The previous filename. */
-    String previousFilename;
-
-    /** The raw url. */
-    String rawUrl;
-
-    /** The sha. */
-    String sha;
-
-    /** The status. */
-    String status;
+    String previous_filename;
 
     /**
-     * Create default GHPullRequestFileDetail instance
+     * Gets sha of the file (not commit sha).
+     *
+     * @return the sha
+     * @see <a href="https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files">List pull requests
+     *      files</a>
      */
-    public GHPullRequestFileDetail() {
+    public String getSha() {
+        return sha;
+    }
+
+    /**
+     * Gets filename.
+     *
+     * @return the filename
+     */
+    public String getFilename() {
+        return filename;
+    }
+
+    /**
+     * Gets status (added/modified/deleted).
+     *
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
     }
 
     /**
@@ -84,12 +113,12 @@ public class GHPullRequestFileDetail {
     }
 
     /**
-     * Gets blob url.
+     * Gets deletions.
      *
-     * @return the blob url
+     * @return the deletions
      */
-    public URL getBlobUrl() {
-        return GitHubClient.parseURL(blobUrl);
+    public int getDeletions() {
+        return deletions;
     }
 
     /**
@@ -102,30 +131,30 @@ public class GHPullRequestFileDetail {
     }
 
     /**
+     * Gets blob url.
+     *
+     * @return the blob url
+     */
+    public URL getBlobUrl() {
+        return GitHubClient.parseURL(blob_url);
+    }
+
+    /**
+     * Gets raw url.
+     *
+     * @return the raw url
+     */
+    public URL getRawUrl() {
+        return GitHubClient.parseURL(raw_url);
+    }
+
+    /**
      * Gets contents url.
      *
      * @return the contents url
      */
     public URL getContentsUrl() {
-        return GitHubClient.parseURL(contentsUrl);
-    }
-
-    /**
-     * Gets deletions.
-     *
-     * @return the deletions
-     */
-    public int getDeletions() {
-        return deletions;
-    }
-
-    /**
-     * Gets filename.
-     *
-     * @return the filename
-     */
-    public String getFilename() {
-        return filename;
+        return GitHubClient.parseURL(contents_url);
     }
 
     /**
@@ -143,35 +172,6 @@ public class GHPullRequestFileDetail {
      * @return the previous filename
      */
     public String getPreviousFilename() {
-        return previousFilename;
-    }
-
-    /**
-     * Gets raw url.
-     *
-     * @return the raw url
-     */
-    public URL getRawUrl() {
-        return GitHubClient.parseURL(rawUrl);
-    }
-
-    /**
-     * Gets sha of the file (not commit sha).
-     *
-     * @return the sha
-     * @see <a href="https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files">List pull requests
-     *      files</a>
-     */
-    public String getSha() {
-        return sha;
-    }
-
-    /**
-     * Gets status (added/modified/deleted).
-     *
-     * @return the status
-     */
-    public String getStatus() {
-        return status;
+        return previous_filename;
     }
 }

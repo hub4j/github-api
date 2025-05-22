@@ -43,112 +43,57 @@ import javax.annotation.CheckForNull;
 public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     /**
-     * The side of the diff to which the comment applies
-     */
-    public static enum Side {
-        /** Left side */
-        LEFT,
-        /** Right side */
-        RIGHT,
-        /** Unknown side */
-        UNKNOWN;
-
-        /**
-         * From.
-         *
-         * @param value
-         *            the value
-         * @return the status
-         */
-        public static Side from(String value) {
-            return EnumUtils.getEnumOrDefault(Side.class, value, Side.UNKNOWN);
-        }
-
-    }
-
-    private GHCommentAuthorAssociation authorAssociation;
-
-    private String body;
-    private String bodyHtml;
-    private String bodyText;
-    private String commitId;
-    private String diffHunk;
-    private String htmlUrl;
-    private long inReplyToId = -1L;
-    private int line = -1;
-    private String originalCommitId;
-    private int originalLine = -1;
-    private int originalPosition = -1;
-    private Integer originalStartLine = -1;
-    private String path;
-    private int position = -1;
-    private Long pullRequestReviewId = -1L;
-    private String pullRequestUrl;
-    private GHPullRequestReviewCommentReactions reactions;
-    private String side;
-    private Integer startLine = -1;
-    private String startSide;
-    private GHUser user;
-    /** The owner. */
-    GHPullRequest owner;
-
-    /**
      * Create default GHPullRequestReviewComment instance
      */
     public GHPullRequestReviewComment() {
     }
 
+    /** The owner. */
+    GHPullRequest owner;
+
+    private Long pull_request_review_id = -1L;
+    private String body;
+    private GHUser user;
+    private String path;
+    private String html_url;
+    private String pull_request_url;
+    private int position = -1;
+    private int original_position = -1;
+    private long in_reply_to_id = -1L;
+    private Integer start_line = -1;
+    private Integer original_start_line = -1;
+    private String start_side;
+    private int line = -1;
+    private int original_line = -1;
+    private String side;
+    private String diff_hunk;
+    private String commit_id;
+    private String original_commit_id;
+    private String body_html;
+    private String body_text;
+    private GHPullRequestReviewCommentReactions reactions;
+    private GHCommentAuthorAssociation author_association;
+
     /**
-     * Creates the reaction.
+     * Wrap up.
      *
-     * @param content
-     *            the content
-     * @return the GH reaction
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
+     * @param owner
+     *            the owner
+     * @return the GH pull request review comment
      */
-    public GHReaction createReaction(ReactionContent content) throws IOException {
-        return owner.root()
-                .createRequest()
-                .method("POST")
-                .with("content", content.getContent())
-                .withUrlPath(getApiRoute() + "/reactions")
-                .fetch(GHReaction.class);
+    GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
+        this.owner = owner;
+        return this;
     }
 
     /**
-     * Deletes this review comment.
+     * Gets the pull request to which this review comment is associated.
      *
-     * @throws IOException
-     *             the io exception
+     * @return the parent
      */
-    public void delete() throws IOException {
-        owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * Delete reaction.
-     *
-     * @param reaction
-     *            the reaction
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public void deleteReaction(GHReaction reaction) throws IOException {
-        owner.root()
-                .createRequest()
-                .method("DELETE")
-                .withUrlPath(getApiRoute(), "reactions", String.valueOf(reaction.getId()))
-                .send();
-    }
-
-    /**
-     * Gets the author association to the project.
-     *
-     * @return the author association to the project
-     */
-    public GHCommentAuthorAssociation getAuthorAssociation() {
-        return authorAssociation;
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHPullRequest getParent() {
+        return owner;
     }
 
     /**
@@ -161,113 +106,14 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     }
 
     /**
-     * Gets The body in html format.
+     * Gets the user who posted this comment.
      *
-     * @return {@link String} the body in html format
+     * @return the user
+     * @throws IOException
+     *             the io exception
      */
-    public String getBodyHtml() {
-        return bodyHtml;
-    }
-
-    /**
-     * Gets The body text.
-     *
-     * @return {@link String} the body text
-     */
-    public String getBodyText() {
-        return bodyText;
-    }
-
-    /**
-     * Gets commit id.
-     *
-     * @return the commit id
-     */
-    public String getCommitId() {
-        return commitId;
-    }
-
-    /**
-     * Gets diff hunk.
-     *
-     * @return the diff hunk
-     */
-    public String getDiffHunk() {
-        return diffHunk;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
-     * Gets in reply to id.
-     *
-     * @return the in reply to id
-     */
-    @CheckForNull
-    public long getInReplyToId() {
-        return inReplyToId;
-    }
-
-    /**
-     * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
-     *
-     * @return the line to which the comment applies
-     */
-    public int getLine() {
-        return line;
-    }
-
-    /**
-     * Gets commit id.
-     *
-     * @return the commit id
-     */
-    public String getOriginalCommitId() {
-        return originalCommitId;
-    }
-
-    /**
-     * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
-     *
-     * @return the line to which the comment applies
-     */
-    public int getOriginalLine() {
-        return originalLine;
-    }
-
-    /**
-     * Gets original position.
-     *
-     * @return the original position
-     */
-    public int getOriginalPosition() {
-        return originalPosition;
-    }
-
-    /**
-     * Gets The first line of the range for a multi-line comment.
-     *
-     * @return the original start line
-     */
-    public int getOriginalStartLine() {
-        return originalStartLine != null ? originalStartLine : -1;
-    }
-
-    /**
-     * Gets the pull request to which this review comment is associated.
-     *
-     * @return the parent
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHPullRequest getParent() {
-        return owner;
+    public GHUser getUser() throws IOException {
+        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.login);
     }
 
     /**
@@ -290,113 +136,67 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     }
 
     /**
-     * Gets The ID of the pull request review to which the comment belongs.
+     * Gets original position.
      *
-     * @return {@link Long} the ID of the pull request review
+     * @return the original position
      */
-    public Long getPullRequestReviewId() {
-        return pullRequestReviewId != null ? pullRequestReviewId : -1;
+    public int getOriginalPosition() {
+        return original_position;
     }
 
     /**
-     * Gets URL for the pull request that the review comment belongs to.
+     * Gets diff hunk.
      *
-     * @return {@link URL} the URL of the pull request
+     * @return the diff hunk
      */
-    public URL getPullRequestUrl() {
-        return GitHubClient.parseURL(pullRequestUrl);
+    public String getDiffHunk() {
+        return diff_hunk;
     }
 
     /**
-     * Gets the Reaction Rollup
+     * Gets commit id.
      *
-     * @return {@link GHPullRequestReviewCommentReactions} the reaction rollup
+     * @return the commit id
      */
-    public GHPullRequestReviewCommentReactions getReactions() {
-        return reactions;
+    public String getCommitId() {
+        return commit_id;
     }
 
     /**
-     * Gets The side of the diff to which the comment applies. The side of the last line of the range for a multi-line
-     * comment
+     * Gets commit id.
      *
-     * @return {@link Side} the side if the diff to which the comment applies
+     * @return the commit id
      */
-    public Side getSide() {
-        return Side.from(side);
+    public String getOriginalCommitId() {
+        return original_commit_id;
     }
 
     /**
-     * Gets The first line of the range for a multi-line comment.
+     * Gets the author association to the project.
      *
-     * @return the start line
+     * @return the author association to the project
      */
-    public int getStartLine() {
-        return startLine != null ? startLine : -1;
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+        return author_association;
     }
 
     /**
-     * Gets The side of the first line of the range for a multi-line comment.
+     * Gets in reply to id.
      *
-     * @return {@link Side} the side of the first line
+     * @return the in reply to id
      */
-    public Side getStartSide() {
-        return Side.from(startSide);
+    @CheckForNull
+    public long getInReplyToId() {
+        return in_reply_to_id;
     }
 
     /**
-     * Gets the user who posted this comment.
+     * Gets the html url.
      *
-     * @return the user
-     * @throws IOException
-     *             the io exception
+     * @return the html url
      */
-    public GHUser getUser() throws IOException {
-        return owner.root().getUser(user.getLogin());
-    }
-
-    /**
-     * List reactions.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHReaction> listReactions() {
-        return owner.root()
-                .createRequest()
-                .withUrlPath(getApiRoute() + "/reactions")
-                .toIterable(GHReaction[].class, item -> owner.root());
-    }
-
-    /**
-     * Create a new comment that replies to this comment.
-     *
-     * @param body
-     *            the body
-     * @return the gh pull request review comment
-     * @throws IOException
-     *             the io exception
-     */
-    public GHPullRequestReviewComment reply(String body) throws IOException {
-        return owner.root()
-                .createRequest()
-                .method("POST")
-                .with("body", body)
-                .withUrlPath(getApiRoute(true) + "/replies")
-                .fetch(GHPullRequestReviewComment.class)
-                .wrapUp(owner);
-    }
-
-    /**
-     * Updates the comment.
-     *
-     * @param body
-     *            the body
-     * @throws IOException
-     *             the io exception
-     */
-    public void update(String body) throws IOException {
-        owner.root().createRequest().method("PATCH").with("body", body).withUrlPath(getApiRoute()).fetchInto(this);
-        this.body = body;
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -422,14 +222,214 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     }
 
     /**
-     * Wrap up.
+     * Gets The first line of the range for a multi-line comment.
      *
-     * @param owner
-     *            the owner
-     * @return the GH pull request review comment
+     * @return the start line
      */
-    GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
-        this.owner = owner;
-        return this;
+    public int getStartLine() {
+        return start_line != null ? start_line : -1;
+    }
+
+    /**
+     * Gets The first line of the range for a multi-line comment.
+     *
+     * @return the original start line
+     */
+    public int getOriginalStartLine() {
+        return original_start_line != null ? original_start_line : -1;
+    }
+
+    /**
+     * Gets The side of the first line of the range for a multi-line comment.
+     *
+     * @return {@link Side} the side of the first line
+     */
+    public Side getStartSide() {
+        return Side.from(start_side);
+    }
+
+    /**
+     * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
+     *
+     * @return the line to which the comment applies
+     */
+    public int getLine() {
+        return line;
+    }
+
+    /**
+     * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
+     *
+     * @return the line to which the comment applies
+     */
+    public int getOriginalLine() {
+        return original_line;
+    }
+
+    /**
+     * Gets The side of the diff to which the comment applies. The side of the last line of the range for a multi-line
+     * comment
+     *
+     * @return {@link Side} the side if the diff to which the comment applies
+     */
+    public Side getSide() {
+        return Side.from(side);
+    }
+
+    /**
+     * Gets The ID of the pull request review to which the comment belongs.
+     *
+     * @return {@link Long} the ID of the pull request review
+     */
+    public Long getPullRequestReviewId() {
+        return pull_request_review_id != null ? pull_request_review_id : -1;
+    }
+
+    /**
+     * Gets URL for the pull request that the review comment belongs to.
+     *
+     * @return {@link URL} the URL of the pull request
+     */
+    public URL getPullRequestUrl() {
+        return GitHubClient.parseURL(pull_request_url);
+    }
+
+    /**
+     * Gets The body in html format.
+     *
+     * @return {@link String} the body in html format
+     */
+    public String getBodyHtml() {
+        return body_html;
+    }
+
+    /**
+     * Gets The body text.
+     *
+     * @return {@link String} the body text
+     */
+    public String getBodyText() {
+        return body_text;
+    }
+
+    /**
+     * Gets the Reaction Rollup
+     *
+     * @return {@link GHPullRequestReviewCommentReactions} the reaction rollup
+     */
+    public GHPullRequestReviewCommentReactions getReactions() {
+        return reactions;
+    }
+
+    /**
+     * The side of the diff to which the comment applies
+     */
+    public static enum Side {
+        /** Right side */
+        RIGHT,
+        /** Left side */
+        LEFT,
+        /** Unknown side */
+        UNKNOWN;
+
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the status
+         */
+        public static Side from(String value) {
+            return EnumUtils.getEnumOrDefault(Side.class, value, Side.UNKNOWN);
+        }
+
+    }
+
+    /**
+     * Updates the comment.
+     *
+     * @param body
+     *            the body
+     * @throws IOException
+     *             the io exception
+     */
+    public void update(String body) throws IOException {
+        owner.root().createRequest().method("PATCH").with("body", body).withUrlPath(getApiRoute()).fetchInto(this);
+        this.body = body;
+    }
+
+    /**
+     * Deletes this review comment.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Create a new comment that replies to this comment.
+     *
+     * @param body
+     *            the body
+     * @return the gh pull request review comment
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequestReviewComment reply(String body) throws IOException {
+        return owner.root()
+                .createRequest()
+                .method("POST")
+                .with("body", body)
+                .withUrlPath(getApiRoute(true) + "/replies")
+                .fetch(GHPullRequestReviewComment.class)
+                .wrapUp(owner);
+    }
+
+    /**
+     * Creates the reaction.
+     *
+     * @param content
+     *            the content
+     * @return the GH reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public GHReaction createReaction(ReactionContent content) throws IOException {
+        return owner.root()
+                .createRequest()
+                .method("POST")
+                .with("content", content.getContent())
+                .withUrlPath(getApiRoute() + "/reactions")
+                .fetch(GHReaction.class);
+    }
+
+    /**
+     * Delete reaction.
+     *
+     * @param reaction
+     *            the reaction
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public void deleteReaction(GHReaction reaction) throws IOException {
+        owner.root()
+                .createRequest()
+                .method("DELETE")
+                .withUrlPath(getApiRoute(), "reactions", String.valueOf(reaction.getId()))
+                .send();
+    }
+
+    /**
+     * List reactions.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHReaction> listReactions() {
+        return owner.root()
+                .createRequest()
+                .withUrlPath(getApiRoute() + "/reactions")
+                .toIterable(GHReaction[].class, item -> owner.root());
     }
 }

@@ -30,7 +30,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
@@ -50,268 +49,13 @@ import java.util.Locale;
 @SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Jackson serializes these even without a getter")
 public final class GHCheckRunBuilder {
 
-    /**
-     * The Class Action.
-     *
-     * @see <a href="https://developer.github.com/v3/checks/runs/#actions-object">documentation</a>
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static final class Action {
-
-        private final String description;
-        private final String identifier;
-        private final String label;
-
-        /**
-         * Instantiates a new action.
-         *
-         * @param label
-         *            the label
-         * @param description
-         *            the description
-         * @param identifier
-         *            the identifier
-         */
-        public Action(@NonNull String label, @NonNull String description, @NonNull String identifier) {
-            this.label = label;
-            this.description = description;
-            this.identifier = identifier;
-        }
-
-    }
-
-    /**
-     * The Class Annotation.
-     *
-     * @see <a href="https://developer.github.com/v3/checks/runs/#annotations-object">documentation</a>
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static final class Annotation {
-
-        private final String annotationLevel;
-        private Integer endColumn;
-        private final int endLine;
-        private final String message;
-        private final String path;
-        private String rawDetails;
-        private Integer startColumn;
-        private final int startLine;
-        private String title;
-
-        /**
-         * Instantiates a new annotation.
-         *
-         * @param path
-         *            the path
-         * @param line
-         *            the line
-         * @param annotationLevel
-         *            the annotation level
-         * @param message
-         *            the message
-         */
-        public Annotation(@NonNull String path,
-                int line,
-                @NonNull GHCheckRun.AnnotationLevel annotationLevel,
-                @NonNull String message) {
-            this(path, line, line, annotationLevel, message);
-        }
-
-        /**
-         * Instantiates a new annotation.
-         *
-         * @param path
-         *            the path
-         * @param startLine
-         *            the start line
-         * @param endLine
-         *            the end line
-         * @param annotationLevel
-         *            the annotation level
-         * @param message
-         *            the message
-         */
-        public Annotation(@NonNull String path,
-                int startLine,
-                int endLine,
-                @NonNull GHCheckRun.AnnotationLevel annotationLevel,
-                @NonNull String message) {
-            this.path = path;
-            this.startLine = startLine;
-            this.endLine = endLine;
-            this.annotationLevel = annotationLevel.toString().toLowerCase(Locale.ROOT);
-            this.message = message;
-        }
-
-        /**
-         * With end column.
-         *
-         * @param endColumn
-         *            the end column
-         * @return the annotation
-         */
-        public @NonNull Annotation withEndColumn(@CheckForNull Integer endColumn) {
-            this.endColumn = endColumn;
-            return this;
-        }
-
-        /**
-         * With raw details.
-         *
-         * @param rawDetails
-         *            the raw details
-         * @return the annotation
-         */
-        public @NonNull Annotation withRawDetails(@CheckForNull String rawDetails) {
-            this.rawDetails = rawDetails;
-            return this;
-        }
-
-        /**
-         * With start column.
-         *
-         * @param startColumn
-         *            the start column
-         * @return the annotation
-         */
-        public @NonNull Annotation withStartColumn(@CheckForNull Integer startColumn) {
-            this.startColumn = startColumn;
-            return this;
-        }
-
-        /**
-         * With title.
-         *
-         * @param title
-         *            the title
-         * @return the annotation
-         */
-        public @NonNull Annotation withTitle(@CheckForNull String title) {
-            this.title = title;
-            return this;
-        }
-
-    }
-    /**
-     * The Class Image.
-     *
-     * @see <a href="https://developer.github.com/v3/checks/runs/#images-object">documentation</a>
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static final class Image {
-
-        private final String alt;
-        private String caption;
-        private final String imageUrl;
-
-        /**
-         * Instantiates a new image.
-         *
-         * @param alt
-         *            the alt
-         * @param imageURL
-         *            the image URL
-         */
-        public Image(@NonNull String alt, @NonNull String imageURL) {
-            this.alt = alt;
-            this.imageUrl = imageURL;
-        }
-
-        /**
-         * With caption.
-         *
-         * @param caption
-         *            the caption
-         * @return the image
-         */
-        public @NonNull Image withCaption(@CheckForNull String caption) {
-            this.caption = caption;
-            return this;
-        }
-
-    }
-    /**
-     * The Class Output.
-     *
-     * @see <a href="https://developer.github.com/v3/checks/runs/#output-object">documentation</a>
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static final class Output {
-
-        private List<Annotation> annotations;
-        private List<Image> images;
-        private final String summary;
-        private String text;
-        private final String title;
-
-        /**
-         * Instantiates a new output.
-         *
-         * @param title
-         *            the title
-         * @param summary
-         *            the summary
-         */
-        public Output(@NonNull String title, @NonNull String summary) {
-            this.title = title;
-            this.summary = summary;
-        }
-
-        /**
-         * Adds the.
-         *
-         * @param annotation
-         *            the annotation
-         * @return the output
-         */
-        public @NonNull Output add(@NonNull Annotation annotation) {
-            if (annotations == null) {
-                annotations = new LinkedList<>();
-            }
-            annotations.add(annotation);
-            return this;
-        }
-
-        /**
-         * Adds the.
-         *
-         * @param image
-         *            the image
-         * @return the output
-         */
-        public @NonNull Output add(@NonNull Image image) {
-            if (images == null) {
-                images = new LinkedList<>();
-            }
-            images.add(image);
-            return this;
-        }
-
-        /**
-         * With text.
-         *
-         * @param text
-         *            the text
-         * @return the output
-         */
-        public @NonNull Output withText(@CheckForNull String text) {
-            this.text = text;
-            return this;
-        }
-
-    }
-
-    private static final int MAX_ANNOTATIONS = 50;
-
-    private List<Action> actions;
-
-    private Output output;
-
     /** The repo. */
     protected final GHRepository repo;
 
     /** The requester. */
     protected final Requester requester;
+    private Output output;
+    private List<Action> actions;
 
     private GHCheckRunBuilder(GHRepository repo, Requester requester) {
         this.repo = repo;
@@ -352,17 +96,100 @@ public final class GHCheckRunBuilder {
     }
 
     /**
-     * Adds the.
+     * With name.
      *
-     * @param action
-     *            the action
+     * @param name
+     *            the name
+     * @param oldName
+     *            the old name
      * @return the GH check run builder
      */
-    public @NonNull GHCheckRunBuilder add(@NonNull Action action) {
-        if (actions == null) {
-            actions = new LinkedList<>();
+    public @NonNull GHCheckRunBuilder withName(@CheckForNull String name, String oldName) {
+        if (oldName == null) {
+            throw new GHException("Can not update uncreated check run");
         }
-        actions.add(action);
+        requester.with("name", name);
+        return this;
+    }
+
+    /**
+     * With details URL.
+     *
+     * @param detailsURL
+     *            the details URL
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withDetailsURL(@CheckForNull String detailsURL) {
+        requester.with("details_url", detailsURL);
+        return this;
+    }
+
+    /**
+     * With external ID.
+     *
+     * @param externalID
+     *            the external ID
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withExternalID(@CheckForNull String externalID) {
+        requester.with("external_id", externalID);
+        return this;
+    }
+
+    /**
+     * With status.
+     *
+     * @param status
+     *            the status
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withStatus(@CheckForNull GHCheckRun.Status status) {
+        if (status != null) {
+            // Do *not* use the overload taking Enum, as that s/_/-/g which would be wrong here.
+            requester.with("status", status.toString().toLowerCase(Locale.ROOT));
+        }
+        return this;
+    }
+
+    /**
+     * With conclusion.
+     *
+     * @param conclusion
+     *            the conclusion
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withConclusion(@CheckForNull GHCheckRun.Conclusion conclusion) {
+        if (conclusion != null) {
+            requester.with("conclusion", conclusion.toString().toLowerCase(Locale.ROOT));
+        }
+        return this;
+    }
+
+    /**
+     * With started at.
+     *
+     * @param startedAt
+     *            the started at
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
+        if (startedAt != null) {
+            requester.with("started_at", GitHubClient.printDate(startedAt));
+        }
+        return this;
+    }
+
+    /**
+     * With completed at.
+     *
+     * @param completedAt
+     *            the completed at
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
+        if (completedAt != null) {
+            requester.with("completed_at", GitHubClient.printDate(completedAt));
+        }
         return this;
     }
 
@@ -381,6 +208,22 @@ public final class GHCheckRunBuilder {
         return this;
     }
 
+    /**
+     * Adds the.
+     *
+     * @param action
+     *            the action
+     * @return the GH check run builder
+     */
+    public @NonNull GHCheckRunBuilder add(@NonNull Action action) {
+        if (actions == null) {
+            actions = new LinkedList<>();
+        }
+        actions.add(action);
+        return this;
+    }
+
+    private static final int MAX_ANNOTATIONS = 50;
     /**
      * Actually creates the check run. (If more than fifty annotations were requested, this is done in batches.)
      *
@@ -414,126 +257,256 @@ public final class GHCheckRunBuilder {
     }
 
     /**
-     * With completed at.
+     * The Class Output.
      *
-     * @param completedAt
-     *            the completed at
-     * @return the GH check run builder
-     * @deprecated Use {@link #withCompletedAt(Instant)}
+     * @see <a href="https://developer.github.com/v3/checks/runs/#output-object">documentation</a>
      */
-    @Deprecated
-    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
-        return withCompletedAt(GitHubClient.toInstantOrNull(completedAt));
-    }
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static final class Output {
 
-    /**
-     * With completed at.
-     *
-     * @param completedAt
-     *            the completed at
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Instant completedAt) {
-        if (completedAt != null) {
-            requester.with("completed_at", GitHubClient.printInstant(completedAt));
+        private final String title;
+        private final String summary;
+        private String text;
+        private List<Annotation> annotations;
+        private List<Image> images;
+
+        /**
+         * Instantiates a new output.
+         *
+         * @param title
+         *            the title
+         * @param summary
+         *            the summary
+         */
+        public Output(@NonNull String title, @NonNull String summary) {
+            this.title = title;
+            this.summary = summary;
         }
-        return this;
-    }
 
-    /**
-     * With conclusion.
-     *
-     * @param conclusion
-     *            the conclusion
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withConclusion(@CheckForNull GHCheckRun.Conclusion conclusion) {
-        if (conclusion != null) {
-            requester.with("conclusion", conclusion.toString().toLowerCase(Locale.ROOT));
+        /**
+         * With text.
+         *
+         * @param text
+         *            the text
+         * @return the output
+         */
+        public @NonNull Output withText(@CheckForNull String text) {
+            this.text = text;
+            return this;
         }
-        return this;
-    }
 
-    /**
-     * With details URL.
-     *
-     * @param detailsURL
-     *            the details URL
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withDetailsURL(@CheckForNull String detailsURL) {
-        requester.with("details_url", detailsURL);
-        return this;
-    }
-    /**
-     * With external ID.
-     *
-     * @param externalID
-     *            the external ID
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withExternalID(@CheckForNull String externalID) {
-        requester.with("external_id", externalID);
-        return this;
-    }
-
-    /**
-     * With name.
-     *
-     * @param name
-     *            the name
-     * @param oldName
-     *            the old name
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withName(@CheckForNull String name, String oldName) {
-        if (oldName == null) {
-            throw new GHException("Can not update uncreated check run");
+        /**
+         * Adds the.
+         *
+         * @param annotation
+         *            the annotation
+         * @return the output
+         */
+        public @NonNull Output add(@NonNull Annotation annotation) {
+            if (annotations == null) {
+                annotations = new LinkedList<>();
+            }
+            annotations.add(annotation);
+            return this;
         }
-        requester.with("name", name);
-        return this;
-    }
 
-    /**
-     * With started at.
-     *
-     * @param startedAt
-     *            the started at
-     * @return the GH check run builder
-     * @deprecated Use {@link #withStartedAt(Instant)}
-     */
-    @Deprecated
-    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
-        return withStartedAt(GitHubClient.toInstantOrNull(startedAt));
-    }
-
-    /**
-     * With started at.
-     *
-     * @param startedAt
-     *            the started at
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Instant startedAt) {
-        if (startedAt != null) {
-            requester.with("started_at", GitHubClient.printInstant(startedAt));
+        /**
+         * Adds the.
+         *
+         * @param image
+         *            the image
+         * @return the output
+         */
+        public @NonNull Output add(@NonNull Image image) {
+            if (images == null) {
+                images = new LinkedList<>();
+            }
+            images.add(image);
+            return this;
         }
-        return this;
+
     }
 
     /**
-     * With status.
+     * The Class Annotation.
      *
-     * @param status
-     *            the status
-     * @return the GH check run builder
+     * @see <a href="https://developer.github.com/v3/checks/runs/#annotations-object">documentation</a>
      */
-    public @NonNull GHCheckRunBuilder withStatus(@CheckForNull GHCheckRun.Status status) {
-        if (status != null) {
-            // Do *not* use the overload taking Enum, as that s/_/-/g which would be wrong here.
-            requester.with("status", status.toString().toLowerCase(Locale.ROOT));
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static final class Annotation {
+
+        private final String path;
+        private final int start_line;
+        private final int end_line;
+        private final String annotation_level;
+        private final String message;
+        private Integer start_column;
+        private Integer end_column;
+        private String title;
+        private String raw_details;
+
+        /**
+         * Instantiates a new annotation.
+         *
+         * @param path
+         *            the path
+         * @param line
+         *            the line
+         * @param annotationLevel
+         *            the annotation level
+         * @param message
+         *            the message
+         */
+        public Annotation(@NonNull String path,
+                int line,
+                @NonNull GHCheckRun.AnnotationLevel annotationLevel,
+                @NonNull String message) {
+            this(path, line, line, annotationLevel, message);
         }
-        return this;
+
+        /**
+         * Instantiates a new annotation.
+         *
+         * @param path
+         *            the path
+         * @param startLine
+         *            the start line
+         * @param endLine
+         *            the end line
+         * @param annotationLevel
+         *            the annotation level
+         * @param message
+         *            the message
+         */
+        public Annotation(@NonNull String path,
+                int startLine,
+                int endLine,
+                @NonNull GHCheckRun.AnnotationLevel annotationLevel,
+                @NonNull String message) {
+            this.path = path;
+            start_line = startLine;
+            end_line = endLine;
+            annotation_level = annotationLevel.toString().toLowerCase(Locale.ROOT);
+            this.message = message;
+        }
+
+        /**
+         * With start column.
+         *
+         * @param startColumn
+         *            the start column
+         * @return the annotation
+         */
+        public @NonNull Annotation withStartColumn(@CheckForNull Integer startColumn) {
+            start_column = startColumn;
+            return this;
+        }
+
+        /**
+         * With end column.
+         *
+         * @param endColumn
+         *            the end column
+         * @return the annotation
+         */
+        public @NonNull Annotation withEndColumn(@CheckForNull Integer endColumn) {
+            end_column = endColumn;
+            return this;
+        }
+
+        /**
+         * With title.
+         *
+         * @param title
+         *            the title
+         * @return the annotation
+         */
+        public @NonNull Annotation withTitle(@CheckForNull String title) {
+            this.title = title;
+            return this;
+        }
+
+        /**
+         * With raw details.
+         *
+         * @param rawDetails
+         *            the raw details
+         * @return the annotation
+         */
+        public @NonNull Annotation withRawDetails(@CheckForNull String rawDetails) {
+            raw_details = rawDetails;
+            return this;
+        }
+
+    }
+
+    /**
+     * The Class Image.
+     *
+     * @see <a href="https://developer.github.com/v3/checks/runs/#images-object">documentation</a>
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static final class Image {
+
+        private final String alt;
+        private final String image_url;
+        private String caption;
+
+        /**
+         * Instantiates a new image.
+         *
+         * @param alt
+         *            the alt
+         * @param imageURL
+         *            the image URL
+         */
+        public Image(@NonNull String alt, @NonNull String imageURL) {
+            this.alt = alt;
+            image_url = imageURL;
+        }
+
+        /**
+         * With caption.
+         *
+         * @param caption
+         *            the caption
+         * @return the image
+         */
+        public @NonNull Image withCaption(@CheckForNull String caption) {
+            this.caption = caption;
+            return this;
+        }
+
+    }
+
+    /**
+     * The Class Action.
+     *
+     * @see <a href="https://developer.github.com/v3/checks/runs/#actions-object">documentation</a>
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static final class Action {
+
+        private final String label;
+        private final String description;
+        private final String identifier;
+
+        /**
+         * Instantiates a new action.
+         *
+         * @param label
+         *            the label
+         * @param description
+         *            the description
+         * @param identifier
+         *            the identifier
+         */
+        public Action(@NonNull String label, @NonNull String description, @NonNull String identifier) {
+            this.label = label;
+            this.description = description;
+            this.identifier = identifier;
+        }
+
     }
 
 }

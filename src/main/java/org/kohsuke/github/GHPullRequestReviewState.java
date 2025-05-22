@@ -6,6 +6,9 @@ package org.kohsuke.github;
  */
 public enum GHPullRequestReviewState {
 
+    /** The pending. */
+    PENDING,
+
     /** The approved. */
     APPROVED,
 
@@ -16,10 +19,7 @@ public enum GHPullRequestReviewState {
     COMMENTED,
 
     /** The dismissed. */
-    DISMISSED,
-
-    /** The pending. */
-    PENDING;
+    DISMISSED;
 
     /**
      * Action string.

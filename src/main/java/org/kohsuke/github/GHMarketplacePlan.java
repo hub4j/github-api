@@ -15,25 +15,34 @@ import java.util.List;
  */
 public class GHMarketplacePlan extends GitHubInteractiveObject {
 
-    private String accountsUrl;
-
-    private List<String> bullets;
-    private String description;
-    @JsonProperty("has_free_trial")
-    private boolean freeTrial; // JavaBeans Spec 1.01 section 8.3.2 forces us to have is<propertyName>
-    private long id;
-    private long monthlyPriceInCents;
-    private String name;
-    private long number;
-    private GHMarketplacePriceModel priceModel;
-    private String state;
-    private String unitName;
-    private String url;
-    private long yearlyPriceInCents;
     /**
      * Create default GHMarketplacePlan instance
      */
     public GHMarketplacePlan() {
+    }
+
+    private String url;
+    private String accountsUrl;
+    private long id;
+    private long number;
+    private String name;
+    private String description;
+    private long monthlyPriceInCents;
+    private long yearlyPriceInCents;
+    private GHMarketplacePriceModel priceModel;
+    @JsonProperty("has_free_trial")
+    private boolean freeTrial; // JavaBeans Spec 1.01 section 8.3.2 forces us to have is<propertyName>
+    private String unitName;
+    private String state;
+    private List<String> bullets;
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -46,48 +55,12 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets bullets.
-     *
-     * @return the bullets
-     */
-    public List<String> getBullets() {
-        return Collections.unmodifiableList(bullets);
-    }
-
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
      * Gets id.
      *
      * @return the id
      */
     public long getId() {
         return id;
-    }
-
-    /**
-     * Gets monthly price in cents.
-     *
-     * @return the monthly price in cents
-     */
-    public long getMonthlyPriceInCents() {
-        return monthlyPriceInCents;
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
     }
 
     /**
@@ -100,39 +73,30 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets price model.
+     * Gets name.
      *
-     * @return the price model
+     * @return the name
      */
-    public GHMarketplacePriceModel getPriceModel() {
-        return priceModel;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Gets state.
+     * Gets description.
      *
-     * @return the state
+     * @return the description
      */
-    public String getState() {
-        return state;
+    public String getDescription() {
+        return description;
     }
 
     /**
-     * Gets unit name.
+     * Gets monthly price in cents.
      *
-     * @return the unit name
+     * @return the monthly price in cents
      */
-    public String getUnitName() {
-        return unitName;
-    }
-
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    public URL getUrl() {
-        return GitHubClient.parseURL(url);
+    public long getMonthlyPriceInCents() {
+        return monthlyPriceInCents;
     }
 
     /**
@@ -145,12 +109,48 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
     }
 
     /**
+     * Gets price model.
+     *
+     * @return the price model
+     */
+    public GHMarketplacePriceModel getPriceModel() {
+        return priceModel;
+    }
+
+    /**
      * Is free trial boolean.
      *
      * @return the boolean
      */
     public boolean isFreeTrial() {
         return freeTrial;
+    }
+
+    /**
+     * Gets unit name.
+     *
+     * @return the unit name
+     */
+    public String getUnitName() {
+        return unitName;
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public String getState() {
+        return state;
+    }
+
+    /**
+     * Gets bullets.
+     *
+     * @return the bullets
+     */
+    public List<String> getBullets() {
+        return Collections.unmodifiableList(bullets);
     }
 
     /**

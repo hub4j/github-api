@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -10,7 +9,6 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,38 +22,17 @@ import javax.annotation.CheckForNull;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public abstract class GHObject extends GitHubInteractiveObject {
-    private static final ToStringStyle TOSTRING_STYLE = new ToStringStyle() {
-        {
-            this.setUseShortClassName(true);
-        }
-
-        @Override
-        public void append(StringBuffer buffer, String fieldName, Object value, Boolean fullDetail) {
-            // skip unimportant properties. '_' is a heuristics as important properties tend to have short names
-            if (fieldName.contains("_"))
-                return;
-            // avoid recursing other GHObject
-            if (value instanceof GHObject)
-                return;
-            // likewise no point in showing root
-            if (value instanceof GitHub)
-                return;
-
-            super.append(buffer, fieldName, value, fullDetail);
-        }
-    };
-
-    private String createdAt;
-
-    private long id;
-    private String nodeId;
-    private String updatedAt;
-    private String url;
-
     /**
      * Capture response HTTP headers on the state object.
      */
     protected transient Map<String, List<String>> responseHeaderFields;
+
+    private String url;
+
+    private long id;
+    private String nodeId;
+    private String createdAt;
+    private String updatedAt;
 
     /**
      * Instantiates a new GH object.
@@ -64,34 +41,16 @@ public abstract class GHObject extends GitHubInteractiveObject {
     }
 
     /**
-     * When was this resource created?.
+     * Called by Jackson.
      *
-     * @return date created
-     * @throws IOException
-     *             on error
+     * @param connectorResponse
+     *            the {@link GitHubConnectorResponse} to get headers from.
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCreatedAt() throws IOException {
-        return GitHubClient.parseInstant(createdAt);
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return Unique ID number of this resource.
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Get Global node_id from Github object.
-     *
-     * @return Global Node ID.
-     * @see <a href="https://developer.github.com/v4/guides/using-global-node-ids/">Using Global Node IDs</a>
-     */
-    public String getNodeId() {
-        return nodeId;
+    @JacksonInject
+    protected void setResponseHeaderFields(@CheckForNull GitHubConnectorResponse connectorResponse) {
+        if (connectorResponse != null) {
+            responseHeaderFields = connectorResponse.allHeaders();
+        }
     }
 
     /**
@@ -113,15 +72,14 @@ public abstract class GHObject extends GitHubInteractiveObject {
     }
 
     /**
-     * When was this resource last updated?.
+     * When was this resource created?.
      *
-     * @return updated date
+     * @return date created
      * @throws IOException
      *             on error
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getUpdatedAt() throws IOException {
-        return GitHubClient.parseInstant(updatedAt);
+    public Date getCreatedAt() throws IOException {
+        return GitHubClient.parseDate(createdAt);
     }
 
     /**
@@ -131,6 +89,36 @@ public abstract class GHObject extends GitHubInteractiveObject {
      */
     public URL getUrl() {
         return GitHubClient.parseURL(url);
+    }
+
+    /**
+     * When was this resource last updated?.
+     *
+     * @return updated date
+     * @throws IOException
+     *             on error
+     */
+    public Date getUpdatedAt() throws IOException {
+        return GitHubClient.parseDate(updatedAt);
+    }
+
+    /**
+     * Get Global node_id from Github object.
+     *
+     * @return Global Node ID.
+     * @see <a href="https://developer.github.com/v4/guides/using-global-node-ids/">Using Global Node IDs</a>
+     */
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return Unique ID number of this resource.
+     */
+    public long getId() {
+        return id;
     }
 
     /**
@@ -149,16 +137,24 @@ public abstract class GHObject extends GitHubInteractiveObject {
         }.toString();
     }
 
-    /**
-     * Called by Jackson.
-     *
-     * @param connectorResponse
-     *            the {@link GitHubConnectorResponse} to get headers from.
-     */
-    @JacksonInject
-    protected void setResponseHeaderFields(@CheckForNull GitHubConnectorResponse connectorResponse) {
-        if (connectorResponse != null) {
-            responseHeaderFields = connectorResponse.allHeaders();
+    private static final ToStringStyle TOSTRING_STYLE = new ToStringStyle() {
+        {
+            this.setUseShortClassName(true);
         }
-    }
+
+        @Override
+        public void append(StringBuffer buffer, String fieldName, Object value, Boolean fullDetail) {
+            // skip unimportant properties. '_' is a heuristics as important properties tend to have short names
+            if (fieldName.contains("_"))
+                return;
+            // avoid recursing other GHObject
+            if (value instanceof GHObject)
+                return;
+            // likewise no point in showing root
+            if (value instanceof GitHub)
+                return;
+
+            super.append(buffer, fieldName, value, fullDetail);
+        }
+    };
 }

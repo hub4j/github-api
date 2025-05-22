@@ -27,7 +27,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.kohsuke.github.function.InputStreamFunction;
-import org.kohsuke.github.internal.graphql.response.GHGraphQLResponse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -45,25 +44,6 @@ import javax.annotation.Nonnull;
  */
 class Requester extends GitHubRequest.Builder<Requester> {
 
-    /**
-     * Helper function to make it easy to pull streams.
-     *
-     * Copies an input stream to an in-memory input stream. The performance on this is not great but
-     * {@link GitHubConnectorResponse#bodyStream()} is closed at the end of every call to
-     * {@link GitHubClient#sendRequest(GitHubRequest, GitHubClient.BodyHandler)}, so any reads to the original input
-     * stream must be completed before then. There are a number of deprecated methods that return {@link InputStream}.
-     * This method keeps all of them using the same code path.
-     *
-     * @param inputStream
-     *            the input stream to be copied
-     * @return an in-memory copy of the passed input stream
-     * @throws IOException
-     *             if an error occurs while copying the stream
-     */
-    @NonNull public static InputStream copyInputStream(InputStream inputStream) throws IOException {
-        return new ByteArrayInputStream(IOUtils.toByteArray(inputStream));
-    }
-
     /** The client. */
     /* private */ final transient GitHubClient client;
 
@@ -79,52 +59,31 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
+     * Sends a request to the specified URL and checks that it is successful.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void send() throws IOException {
+        // Send expects there to be some body response, but doesn't care what it is.
+        // If there isn't a body, this will throw.
+        client.sendRequest(this, (connectorResponse) -> GitHubResponse.getBodyAsString(connectorResponse));
+    }
+
+    /**
      * Sends a request and parses the response into the given type via databinding.
      *
      * @param <T>
      *            the type parameter
      * @param type
      *            the type
-     * @return an instance of {@code T}
+     * @return an instance of {@link T}
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
     public <T> T fetch(@Nonnull Class<T> type) throws IOException {
         return client.sendRequest(this, (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, type))
                 .body();
-    }
-
-    /**
-     * Sends a request and parses the response into the given type via databinding in GraphQL response.
-     *
-     * @param <T>
-     *            the type parameter
-     * @param type
-     *            the type
-     * @return an instance of {@code GHGraphQLResponse<T>}
-     * @throws IOException
-     *             if the server returns 4xx/5xx responses.
-     */
-    public <T extends GHGraphQLResponse<S>, S> S fetchGraphQL(@Nonnull Class<T> type) throws IOException {
-        T response = fetch(type);
-
-        if (!response.isSuccessful()) {
-            throw new IOException("GraphQL request failed by:" + response.getErrorMessages());
-        }
-
-        return response.getData();
-    }
-
-    /**
-     * Makes a request and just obtains the HTTP status code. Method does not throw exceptions for many status codes
-     * that would otherwise throw.
-     *
-     * @return the int
-     * @throws IOException
-     *             the io exception
-     */
-    public int fetchHttpStatusCode() throws IOException {
-        return client.sendRequest(build(), null).statusCode();
     }
 
     /**
@@ -145,6 +104,18 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
+     * Makes a request and just obtains the HTTP status code. Method does not throw exceptions for many status codes
+     * that would otherwise throw.
+     *
+     * @return the int
+     * @throws IOException
+     *             the io exception
+     */
+    public int fetchHttpStatusCode() throws IOException {
+        return client.sendRequest(build(), null).statusCode();
+    }
+
+    /**
      * Response input stream. There are scenarios where direct stream reading is needed, however it is better to use
      * {@link #fetch(Class)} where possible.
      *
@@ -161,29 +132,27 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
-     * Sends a request to the specified URL and checks that it is successful.
+     * Helper function to make it easy to pull streams.
      *
+     * Copies an input stream to an in-memory input stream. The performance on this is not great but
+     * {@link GitHubConnectorResponse#bodyStream()} is closed at the end of every call to
+     * {@link GitHubClient#sendRequest(GitHubRequest, GitHubClient.BodyHandler)}, so any reads to the original input
+     * stream must be completed before then. There are a number of deprecated methods that return {@link InputStream}.
+     * This method keeps all of them using the same code path.
+     *
+     * @param inputStream
+     *            the input stream to be copied
+     * @return an in-memory copy of the passed input stream
      * @throws IOException
-     *             the io exception
+     *             if an error occurs while copying the stream
      */
-    public void send() throws IOException {
-        // Send expects there to be some body response, but doesn't care what it is.
-        // If there isn't a body, this will throw.
-        client.sendRequest(this, (connectorResponse) -> GitHubResponse.getBodyAsString(connectorResponse));
+    @NonNull
+    public static InputStream copyInputStream(InputStream inputStream) throws IOException {
+        return new ByteArrayInputStream(IOUtils.toByteArray(inputStream));
     }
 
     /**
-     * Sends a GraphQL request with no response
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void sendGraphQL() throws IOException {
-        fetchGraphQL(GHGraphQLResponse.ObjectResponse.class);
-    }
-
-    /**
-     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer}{@code <R>}.
+     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer<R>}.
      * <p>
      * This method and the {@link PagedIterable <R>} do not actually begin fetching data until {@link Iterator#next()}
      * or {@link Iterator#hasNext()} are called.

@@ -21,10 +21,38 @@ import javax.annotation.CheckForNull;
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
 public class GHBranch extends GitHubInteractiveObject {
+    private GHRepository owner;
+
+    private String name;
+    private Commit commit;
+    @JsonProperty("protected")
+    private boolean protection;
+    private String protection_url;
+
+    /**
+     * Instantiates a new GH branch.
+     *
+     * @param name
+     *            the name
+     * @throws Exception
+     *             the exception
+     */
+    @JsonCreator
+    GHBranch(@JsonProperty(value = "name", required = true) String name) throws Exception {
+        Objects.requireNonNull(name);
+        this.name = name;
+    }
+
     /**
      * The type Commit.
      */
     public static class Commit {
+
+        /**
+         * Create default Commit instance
+         */
+        public Commit() {
+        }
 
         /** The sha. */
         String sha;
@@ -32,61 +60,6 @@ public class GHBranch extends GitHubInteractiveObject {
         /** The url. */
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
         String url;
-
-        /**
-         * Create default Commit instance
-         */
-        public Commit() {
-        }
-    }
-
-    private Commit commit;
-    private String name;
-    private GHRepository owner;
-    @JsonProperty("protected")
-    private boolean protection;
-
-    private String protectionUrl;
-
-    /**
-     * Instantiates a new GH branch.
-     *
-     * @param name
-     *            the name
-     */
-    @JsonCreator
-    GHBranch(@JsonProperty(value = "name", required = true) String name) {
-        Objects.requireNonNull(name);
-        this.name = name;
-    }
-
-    /**
-     * Disables branch protection and allows anyone with push access to push changes.
-     *
-     * @throws IOException
-     *             if disabling protection fails
-     */
-    public void disableProtection() throws IOException {
-        root().createRequest().method("DELETE").setRawUrlPath(protectionUrl).send();
-    }
-
-    /**
-     * Enables branch protection to control what commit statuses are required to push.
-     *
-     * @return GHBranchProtectionBuilder for enabling protection
-     * @see GHCommitStatus#getContext() GHCommitStatus#getContext()
-     */
-    public GHBranchProtectionBuilder enableProtection() {
-        return new GHBranchProtectionBuilder(this);
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
     }
 
     /**
@@ -100,14 +73,21 @@ public class GHBranch extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets protection.
+     * Gets name.
      *
-     * @return the protection
-     * @throws IOException
-     *             the io exception
+     * @return the name
      */
-    public GHBranchProtection getProtection() throws IOException {
-        return root().createRequest().setRawUrlPath(protectionUrl).fetch(GHBranchProtection.class);
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Is protected boolean.
+     *
+     * @return true if the push to this branch is restricted via branch protection.
+     */
+    public boolean isProtected() {
+        return protection;
     }
 
     /**
@@ -116,7 +96,18 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return API URL that deals with the protection of this branch.
      */
     public URL getProtectionUrl() {
-        return GitHubClient.parseURL(protectionUrl);
+        return GitHubClient.parseURL(protection_url);
+    }
+
+    /**
+     * Gets protection.
+     *
+     * @return the protection
+     * @throws IOException
+     *             the io exception
+     */
+    public GHBranchProtection getProtection() throws IOException {
+        return root().createRequest().setRawUrlPath(protection_url).fetch(GHBranchProtection.class);
     }
 
     /**
@@ -129,12 +120,23 @@ public class GHBranch extends GitHubInteractiveObject {
     }
 
     /**
-     * Is protected boolean.
+     * Disables branch protection and allows anyone with push access to push changes.
      *
-     * @return true if the push to this branch is restricted via branch protection.
+     * @throws IOException
+     *             if disabling protection fails
      */
-    public boolean isProtected() {
-        return protection;
+    public void disableProtection() throws IOException {
+        root().createRequest().method("DELETE").setRawUrlPath(protection_url).send();
+    }
+
+    /**
+     * Enables branch protection to control what commit statuses are required to push.
+     *
+     * @return GHBranchProtectionBuilder for enabling protection
+     * @see GHCommitStatus#getContext() GHCommitStatus#getContext()
+     */
+    public GHBranchProtectionBuilder enableProtection() {
+        return new GHBranchProtectionBuilder(this);
     }
 
     /**
@@ -191,6 +193,15 @@ public class GHBranch extends GitHubInteractiveObject {
     }
 
     /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
+    String getApiRoute() {
+        return owner.getApiTailUrl("/branches/" + name);
+    }
+
+    /**
      * To string.
      *
      * @return the string
@@ -199,15 +210,6 @@ public class GHBranch extends GitHubInteractiveObject {
     public String toString() {
         final String url = owner != null ? owner.getUrl().toString() : "unknown";
         return "Branch:" + name + " in " + url;
-    }
-
-    /**
-     * Gets the api route.
-     *
-     * @return the api route
-     */
-    String getApiRoute() {
-        return owner.getApiTailUrl("/branches/" + name);
     }
 
     /**

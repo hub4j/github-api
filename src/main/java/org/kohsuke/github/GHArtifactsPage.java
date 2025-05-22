@@ -9,8 +9,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 class GHArtifactsPage {
+    private int total_count;
     private GHArtifact[] artifacts;
-    private int totalCount;
 
     /**
      * Gets the total count.
@@ -18,7 +18,7 @@ class GHArtifactsPage {
      * @return the total count
      */
     public int getTotalCount() {
-        return totalCount;
+        return total_count;
     }
 
     /**

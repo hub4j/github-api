@@ -15,28 +15,71 @@ import java.net.URL;
  */
 public class GHProjectCard extends GHObject {
 
-    private boolean archived;
-
-    private GHProjectColumn column;
-    private String contentUrl, projectUrl, columnUrl;
-
-    private GHUser creator;
-    private String note;
-    private GHProject project;
     /**
      * Create default GHProjectCard instance
      */
     public GHProjectCard() {
     }
 
+    private GHProject project;
+    private GHProjectColumn column;
+
+    private String note;
+    private GHUser creator;
+    private String content_url, project_url, column_url;
+    private boolean archived;
+
     /**
-     * Delete.
+     * Gets the html url.
      *
+     * @return the html url
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public URL getHtmlUrl() throws IOException {
+        return null;
+    }
+
+    /**
+     * Wrap gh project card.
+     *
+     * @param root
+     *            the root
+     * @return the gh project card
+     */
+    GHProjectCard lateBind(GitHub root) {
+        return this;
+    }
+
+    /**
+     * Wrap gh project card.
+     *
+     * @param column
+     *            the column
+     * @return the gh project card
+     */
+    GHProjectCard lateBind(GHProjectColumn column) {
+        this.column = column;
+        this.project = column.project;
+        return lateBind(column.root());
+    }
+
+    /**
+     * Gets project.
+     *
+     * @return the project
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHProject getProject() throws IOException {
+        if (project == null) {
+            try {
+                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
+            } catch (FileNotFoundException e) {
+            }
+        }
+        return project;
     }
 
     /**
@@ -61,15 +104,6 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets column url.
-     *
-     * @return the column url
-     */
-    public URL getColumnUrl() {
-        return GitHubClient.parseURL(columnUrl);
-    }
-
-    /**
      * Gets content if present. Might be a {@link GHPullRequest} or a {@link GHIssue}.
      *
      * @return the content
@@ -77,10 +111,10 @@ public class GHProjectCard extends GHObject {
      *             the io exception
      */
     public GHIssue getContent() throws IOException {
-        if (StringUtils.isEmpty(contentUrl))
+        if (StringUtils.isEmpty(content_url))
             return null;
         try {
-            if (contentUrl.contains("/pulls")) {
+            if (content_url.contains("/pulls")) {
                 return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHPullRequest.class);
             } else {
                 return root().createRequest().withUrlPath(getContentUrl().getPath()).fetch(GHIssue.class);
@@ -91,12 +125,12 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets content url.
+     * Gets note.
      *
-     * @return the content url
+     * @return the note
      */
-    public URL getContentUrl() {
-        return GitHubClient.parseURL(contentUrl);
+    public String getNote() {
+        return note;
     }
 
     /**
@@ -110,39 +144,12 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Gets the html url.
+     * Gets content url.
      *
-     * @return the html url
+     * @return the content url
      */
-    public URL getHtmlUrl() {
-        return null;
-    }
-
-    /**
-     * Gets note.
-     *
-     * @return the note
-     */
-    public String getNote() {
-        return note;
-    }
-
-    /**
-     * Gets project.
-     *
-     * @return the project
-     * @throws IOException
-     *             the io exception
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHProject getProject() throws IOException {
-        if (project == null) {
-            try {
-                project = root().createRequest().withUrlPath(getProjectUrl().getPath()).fetch(GHProject.class);
-            } catch (FileNotFoundException e) {
-            }
-        }
-        return project;
+    public URL getContentUrl() {
+        return GitHubClient.parseURL(content_url);
     }
 
     /**
@@ -151,7 +158,16 @@ public class GHProjectCard extends GHObject {
      * @return the project url
      */
     public URL getProjectUrl() {
-        return GitHubClient.parseURL(projectUrl);
+        return GitHubClient.parseURL(project_url);
+    }
+
+    /**
+     * Gets column url.
+     *
+     * @return the column url
+     */
+    public URL getColumnUrl() {
+        return GitHubClient.parseURL(column_url);
     }
 
     /**
@@ -164,18 +180,6 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Sets archived.
-     *
-     * @param archived
-     *            the archived
-     * @throws IOException
-     *             the io exception
-     */
-    public void setArchived(boolean archived) throws IOException {
-        edit("archived", archived);
-    }
-
-    /**
      * Sets note.
      *
      * @param note
@@ -185,6 +189,18 @@ public class GHProjectCard extends GHObject {
      */
     public void setNote(String note) throws IOException {
         edit("note", note);
+    }
+
+    /**
+     * Sets archived.
+     *
+     * @param archived
+     *            the archived
+     * @throws IOException
+     *             the io exception
+     */
+    public void setArchived(boolean archived) throws IOException {
+        edit("archived", archived);
     }
 
     private void edit(String key, Object value) throws IOException {
@@ -201,26 +217,12 @@ public class GHProjectCard extends GHObject {
     }
 
     /**
-     * Wrap gh project card.
+     * Delete.
      *
-     * @param column
-     *            the column
-     * @return the gh project card
+     * @throws IOException
+     *             the io exception
      */
-    GHProjectCard lateBind(GHProjectColumn column) {
-        this.column = column;
-        this.project = column.project;
-        return lateBind(column.root());
-    }
-
-    /**
-     * Wrap gh project card.
-     *
-     * @param root
-     *            the root
-     * @return the gh project card
-     */
-    GHProjectCard lateBind(GitHub root) {
-        return this;
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 }

@@ -23,21 +23,21 @@ import java.util.Map.Entry;
  */
 public class GHGist extends GHObject {
 
-    private int comments;
+    /** The owner. */
+    final GHUser owner;
 
-    private String commentsUrl;
+    private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
+
+    @JsonProperty("public")
+    private boolean _public;
 
     private String description;
 
+    private int comments;
+
+    private String comments_url;
+
     private final Map<String, GHGistFile> files;
-
-    private String forksUrl, commitsUrl, id, gitPullUrl, gitPushUrl, htmlUrl;
-
-    @JsonProperty("public")
-    private boolean isPublic;
-
-    /** The owner. */
-    final GHUser owner;
 
     @JsonCreator
     private GHGist(@JsonProperty("owner") GHUser owner, @JsonProperty("files") Map<String, GHGistFile> files) {
@@ -49,42 +49,102 @@ public class GHGist extends GHObject {
     }
 
     /**
-     * Deletes this gist.
+     * Unlike most other GitHub objects, the id for Gists can be non-numeric, such as "aa5a315d61ae9438b18d". If the id
+     * is numeric, this method will get it. If id is not numeric, this will throw a runtime
+     * {@link NumberFormatException}.
      *
-     * @throws IOException
-     *             the io exception
+     * @return id of the Gist.
+     * @deprecated Use {@link #getGistId()} instead.
      */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath("/gists/" + id).send();
-    }
-
-    /**
-     * Equals.
-     *
-     * @param o
-     *            the o
-     * @return true, if successful
-     */
+    @Deprecated
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        GHGist ghGist = (GHGist) o;
-        return id.equals(ghGist.id);
-
+    public long getId() {
+        return Long.parseLong(getGistId());
     }
 
     /**
-     * Forks this gist into your own.
+     * Gets the id for this Gist. Unlike most other GitHub objects, the id for Gists can be non-numeric, such as
+     * "aa5a315d61ae9438b18d". This should be used instead of {@link #getId()}.
      *
-     * @return the gh gist
+     * @return id of this Gist
+     */
+    public String getGistId() {
+        return this.id;
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return User that owns this Gist.
      * @throws IOException
      *             the io exception
      */
-    public GHGist fork() throws IOException {
-        return root().createRequest().method("POST").withUrlPath(getApiTailUrl("forks")).fetch(GHGist.class);
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getOwner() throws IOException {
+        return owner;
+    }
+
+    /**
+     * Gets forks url.
+     *
+     * @return the forks url
+     */
+    public String getForksUrl() {
+        return forks_url;
+    }
+
+    /**
+     * Gets commits url.
+     *
+     * @return the commits url
+     */
+    public String getCommitsUrl() {
+        return commits_url;
+    }
+
+    /**
+     * Gets git pull url.
+     *
+     * @return URL like https://gist.github.com/gists/12345.git
+     */
+    public String getGitPullUrl() {
+        return git_pull_url;
+    }
+
+    /**
+     * Gets git push url.
+     *
+     * @return the git push url
+     */
+    public String getGitPushUrl() {
+        return git_push_url;
+    }
+
+    /**
+     * Get the html url.
+     *
+     * @return the github html url
+     */
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
+    }
+
+    /**
+     * Is public boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isPublic() {
+        return _public;
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
     }
 
     /**
@@ -102,25 +162,7 @@ public class GHGist extends GHObject {
      * @return API URL of listing comments.
      */
     public String getCommentsUrl() {
-        return commentsUrl;
-    }
-
-    /**
-     * Gets commits url.
-     *
-     * @return the commits url
-     */
-    public String getCommitsUrl() {
-        return commitsUrl;
-    }
-
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
+        return comments_url;
     }
 
     /**
@@ -144,112 +186,18 @@ public class GHGist extends GHObject {
     }
 
     /**
-     * Gets forks url.
+     * Gets the api tail url.
      *
-     * @return the forks url
+     * @param tail
+     *            the tail
+     * @return the api tail url
      */
-    public String getForksUrl() {
-        return forksUrl;
-    }
-
-    /**
-     * Gets the id for this Gist. Unlike most other GitHub objects, the id for Gists can be non-numeric, such as
-     * "aa5a315d61ae9438b18d". This should be used instead of {@link #getId()}.
-     *
-     * @return id of this Gist
-     */
-    public String getGistId() {
-        return this.id;
-    }
-
-    /**
-     * Gets git pull url.
-     *
-     * @return URL like https://gist.github.com/gists/12345.git
-     */
-    public String getGitPullUrl() {
-        return gitPullUrl;
-    }
-
-    /**
-     * Gets git push url.
-     *
-     * @return the git push url
-     */
-    public String getGitPushUrl() {
-        return gitPushUrl;
-    }
-
-    /**
-     * Get the html url.
-     *
-     * @return the github html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
-     * Unlike most other GitHub objects, the id for Gists can be non-numeric, such as "aa5a315d61ae9438b18d". If the id
-     * is numeric, this method will get it. If id is not numeric, this will throw a runtime
-     * {@link NumberFormatException}.
-     *
-     * @return id of the Gist.
-     * @deprecated Use {@link #getGistId()} instead.
-     */
-    @Deprecated
-    @Override
-    public long getId() {
-        return Long.parseLong(getGistId());
-    }
-
-    /**
-     * Gets owner.
-     *
-     * @return User that owns this Gist.
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getOwner() {
-        return owner;
-    }
-
-    /**
-     * Hash code.
-     *
-     * @return the int
-     */
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
-
-    /**
-     * Is public boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isPublic() {
-        return isPublic;
-    }
-
-    /**
-     * Is starred boolean.
-     *
-     * @return the boolean
-     * @throws IOException
-     *             the io exception
-     */
-    public boolean isStarred() throws IOException {
-        return root().createRequest().withUrlPath(getApiTailUrl("star")).fetchHttpStatusCode() / 100 == 2;
-    }
-
-    /**
-     * List forks paged iterable.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHGist> listForks() {
-        return root().createRequest().withUrlPath(getApiTailUrl("forks")).toIterable(GHGist[].class, null);
+    String getApiTailUrl(String tail) {
+        String result = "/gists/" + id;
+        if (!StringUtils.isBlank(tail)) {
+            result += StringUtils.prependIfMissing(tail, "/");
+        }
+        return result;
     }
 
     /**
@@ -273,26 +221,82 @@ public class GHGist extends GHObject {
     }
 
     /**
+     * Is starred boolean.
+     *
+     * @return the boolean
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isStarred() throws IOException {
+        return root().createRequest().withUrlPath(getApiTailUrl("star")).fetchHttpStatusCode() / 100 == 2;
+    }
+
+    /**
+     * Forks this gist into your own.
+     *
+     * @return the gh gist
+     * @throws IOException
+     *             the io exception
+     */
+    public GHGist fork() throws IOException {
+        return root().createRequest().method("POST").withUrlPath(getApiTailUrl("forks")).fetch(GHGist.class);
+    }
+
+    /**
+     * List forks paged iterable.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHGist> listForks() {
+        return root().createRequest().withUrlPath(getApiTailUrl("forks")).toIterable(GHGist[].class, null);
+    }
+
+    /**
+     * Deletes this gist.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath("/gists/" + id).send();
+    }
+
+    /**
      * Updates this gist via a builder.
      *
      * @return the gh gist updater
+     * @throws IOException
+     *             the io exception
      */
-    public GHGistUpdater update() {
+    public GHGistUpdater update() throws IOException {
         return new GHGistUpdater(this);
     }
 
     /**
-     * Gets the api tail url.
+     * Equals.
      *
-     * @param tail
-     *            the tail
-     * @return the api tail url
+     * @param o
+     *            the o
+     * @return true, if successful
      */
-    String getApiTailUrl(String tail) {
-        String result = "/gists/" + id;
-        if (!StringUtils.isBlank(tail)) {
-            result += StringUtils.prependIfMissing(tail, "/");
-        }
-        return result;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        GHGist ghGist = (GHGist) o;
+        return id.equals(ghGist.id);
+
+    }
+
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

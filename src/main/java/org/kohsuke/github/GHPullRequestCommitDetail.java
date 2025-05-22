@@ -41,15 +41,72 @@ import java.net.URL;
 public class GHPullRequestCommitDetail {
 
     /**
+     * Create default GHPullRequestCommitDetail instance
+     */
+    public GHPullRequestCommitDetail() {
+    }
+
+    private GHPullRequest owner;
+
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     */
+    void wrapUp(GHPullRequest owner) {
+        this.owner = owner;
+    }
+
+    /**
+     * The type Tree.
+     */
+    public static class Tree {
+
+        /**
+         * Create default Tree instance
+         */
+        public Tree() {
+        }
+
+        /** The sha. */
+        String sha;
+
+        /** The url. */
+        String url;
+
+        /**
+         * Gets sha.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+            return sha;
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public URL getUrl() {
+            return GitHubClient.parseURL(url);
+        }
+    }
+
+    /**
      * The type Commit.
      */
     public static class Commit {
 
+        /**
+         * Create default Commit instance
+         */
+        public Commit() {
+        }
+
         /** The author. */
         GitUser author;
-
-        /** The comment count. */
-        Integer commentCount;
 
         /** The committer. */
         GitUser committer;
@@ -63,11 +120,8 @@ public class GHPullRequestCommitDetail {
         /** The url. */
         String url;
 
-        /**
-         * Create default Commit instance
-         */
-        public Commit() {
-        }
+        /** The comment count. */
+        int comment_count;
 
         /**
          * Gets author.
@@ -76,26 +130,6 @@ public class GHPullRequestCommitDetail {
          */
         public GitUser getAuthor() {
             return author;
-        }
-
-        /**
-         * Gets comment count.
-         *
-         * @return the comment count
-         */
-        public Integer getCommentCount() {
-            return commentCount;
-        }
-
-        /**
-         * Gets comment count.
-         *
-         * @return the comment count
-         * @deprecated Use {@link #getCommentCount()}
-         */
-        @Deprecated
-        public int getComment_count() {
-            return getCommentCount();
         }
 
         /**
@@ -117,21 +151,30 @@ public class GHPullRequestCommitDetail {
         }
 
         /**
-         * Gets tree.
-         *
-         * @return the tree
-         */
-        public Tree getTree() {
-            return tree;
-        }
-
-        /**
          * Gets url.
          *
          * @return the url
          */
         public URL getUrl() {
             return GitHubClient.parseURL(url);
+        }
+
+        /**
+         * Gets comment count.
+         *
+         * @return the comment count
+         */
+        public int getComment_count() {
+            return comment_count;
+        }
+
+        /**
+         * Gets tree.
+         *
+         * @return the tree
+         */
+        public Tree getTree() {
+            return tree;
         }
     }
 
@@ -140,75 +183,37 @@ public class GHPullRequestCommitDetail {
      */
     public static class CommitPointer {
 
-        /** The html url. */
-        String htmlUrl;
-
-        /** The sha. */
-        String sha;
-
-        /** The url. */
-        String url;
-
         /**
          * Create default CommitPointer instance
          */
         public CommitPointer() {
         }
 
-        /**
-         * Gets html url.
-         *
-         * @return the html url
-         */
-        public URL getHtmlUrl() {
-            return GitHubClient.parseURL(htmlUrl);
-        }
-
-        /**
-         * Gets html url.
-         *
-         * @return the html url
-         * @deprecated Use {@link #getHtmlUrl()}
-         */
-        @Deprecated
-        public URL getHtml_url() {
-            return getHtmlUrl();
-        }
-
-        /**
-         * Gets sha.
-         *
-         * @return the sha
-         */
-        public String getSha() {
-            return sha;
-        }
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public URL getUrl() {
-            return GitHubClient.parseURL(url);
-        }
-    }
-
-    /**
-     * The type Tree.
-     */
-    public static class Tree {
-
         /** The sha. */
         String sha;
 
         /** The url. */
         String url;
 
+        /** The html url. */
+        String html_url;
+
         /**
-         * Create default Tree instance
+         * Gets url.
+         *
+         * @return the url
          */
-        public Tree() {
+        public URL getUrl() {
+            return GitHubClient.parseURL(url);
+        }
+
+        /**
+         * Gets html url.
+         *
+         * @return the html url
+         */
+        public URL getHtml_url() {
+            return GitHubClient.parseURL(html_url);
         }
 
         /**
@@ -219,59 +224,33 @@ public class GHPullRequestCommitDetail {
         public String getSha() {
             return sha;
         }
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public URL getUrl() {
-            return GitHubClient.parseURL(url);
-        }
     }
-
-    private GHPullRequest owner;
-
-    /** The comments url. */
-    String commentsUrl;
-
-    /** The commit. */
-    Commit commit;
-
-    /** The html url. */
-    String htmlUrl;
-
-    /** The parents. */
-    CommitPointer[] parents;
 
     /** The sha. */
     String sha;
 
+    /** The commit. */
+    Commit commit;
+
     /** The url. */
     String url;
 
-    /**
-     * Create default GHPullRequestCommitDetail instance
-     */
-    public GHPullRequestCommitDetail() {
-    }
+    /** The html url. */
+    String html_url;
+
+    /** The comments url. */
+    String comments_url;
+
+    /** The parents. */
+    CommitPointer[] parents;
 
     /**
-     * Gets api url.
+     * Gets sha.
      *
-     * @return the api url
+     * @return the sha
      */
-    public URL getApiUrl() {
-        return GitHubClient.parseURL(url);
-    }
-
-    /**
-     * Gets comments url.
-     *
-     * @return the comments url
-     */
-    public URL getCommentsUrl() {
-        return GitHubClient.parseURL(commentsUrl);
+    public String getSha() {
+        return sha;
     }
 
     /**
@@ -284,23 +263,12 @@ public class GHPullRequestCommitDetail {
     }
 
     /**
-     * Get parents commit pointer [ ].
+     * Gets api url.
      *
-     * @return the commit pointer [ ]
+     * @return the api url
      */
-    public CommitPointer[] getParents() {
-        CommitPointer[] newValue = new CommitPointer[parents.length];
-        System.arraycopy(parents, 0, newValue, 0, parents.length);
-        return newValue;
-    }
-
-    /**
-     * Gets sha.
-     *
-     * @return the sha
-     */
-    public String getSha() {
-        return sha;
+    public URL getApiUrl() {
+        return GitHubClient.parseURL(url);
     }
 
     /**
@@ -309,16 +277,26 @@ public class GHPullRequestCommitDetail {
      * @return the url
      */
     public URL getUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
-     * Wrap up.
+     * Gets comments url.
      *
-     * @param owner
-     *            the owner
+     * @return the comments url
      */
-    void wrapUp(GHPullRequest owner) {
-        this.owner = owner;
+    public URL getCommentsUrl() {
+        return GitHubClient.parseURL(comments_url);
+    }
+
+    /**
+     * Get parents commit pointer [ ].
+     *
+     * @return the commit pointer [ ]
+     */
+    public CommitPointer[] getParents() {
+        CommitPointer[] newValue = new CommitPointer[parents.length];
+        System.arraycopy(parents, 0, newValue, 0, parents.length);
+        return newValue;
     }
 }

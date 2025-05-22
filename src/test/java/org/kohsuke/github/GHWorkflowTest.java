@@ -21,42 +21,15 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class GHWorkflowTest extends AbstractGitHubWireMockTest {
 
-    private static String REPO_NAME = "hub4j-test-org/GHWorkflowTest";
-
-    private static void checkWorkflowRunProperties(GHWorkflowRun workflowRun, long workflowId) {
-        assertThat(workflowRun.getWorkflowId(), equalTo(workflowId));
-        assertThat(workflowRun.getId(), notNullValue());
-        assertThat(workflowRun.getNodeId(), notNullValue());
-        assertThat(workflowRun.getRepository().getFullName(), equalTo(REPO_NAME));
-        assertThat(workflowRun.getUrl().getPath(), containsString("/actions/runs/"));
-        assertThat(workflowRun.getHtmlUrl().getPath(), containsString("/actions/runs/"));
-        assertThat(workflowRun.getJobsUrl().getPath(), endsWith("/jobs"));
-        assertThat(workflowRun.getLogsUrl().getPath(), endsWith("/logs"));
-        assertThat(workflowRun.getCheckSuiteUrl().getPath(), containsString("/check-suites/"));
-        assertThat(workflowRun.getArtifactsUrl().getPath(), endsWith("/artifacts"));
-        assertThat(workflowRun.getCancelUrl().getPath(), endsWith("/cancel"));
-        assertThat(workflowRun.getRerunUrl().getPath(), endsWith("/rerun"));
-        assertThat(workflowRun.getWorkflowUrl().getPath(), containsString("/actions/workflows/"));
-        assertThat(workflowRun.getHeadBranch(), equalTo("main"));
-        assertThat(workflowRun.getHeadCommit().getId(), notNullValue());
-        assertThat(workflowRun.getHeadCommit().getTreeId(), notNullValue());
-        assertThat(workflowRun.getHeadCommit().getMessage(), notNullValue());
-        assertThat(workflowRun.getHeadCommit().getTimestamp(), notNullValue());
-        assertThat(workflowRun.getHeadCommit().getAuthor().getEmail(), notNullValue());
-        assertThat(workflowRun.getHeadCommit().getCommitter().getEmail(), notNullValue());
-        assertThat(workflowRun.getEvent(), equalTo(GHEvent.WORKFLOW_DISPATCH));
-        assertThat(workflowRun.getStatus(), equalTo(GHWorkflowRun.Status.COMPLETED));
-        assertThat(workflowRun.getConclusion(), equalTo(GHWorkflowRun.Conclusion.SUCCESS));
-        assertThat(workflowRun.getHeadSha(), notNullValue());
-    }
-
-    private GHRepository repo;
-
     /**
      * Create default GHWorkflowTest instance
      */
     public GHWorkflowTest() {
     }
+
+    private static String REPO_NAME = "hub4j-test-org/GHWorkflowTest";
+
+    private GHRepository repo;
 
     /**
      * Cleanup.
@@ -160,23 +133,6 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test list workflow runs.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testListWorkflowRuns() throws IOException {
-        GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
-
-        List<GHWorkflowRun> workflowRuns = workflow.listRuns().toList();
-        assertThat(workflowRuns.size(), greaterThan(2));
-
-        checkWorkflowRunProperties(workflowRuns.get(0), workflow.getId());
-        checkWorkflowRunProperties(workflowRuns.get(1), workflow.getId());
-    }
-
-    /**
      * Test list workflows.
      *
      * @throws IOException
@@ -198,6 +154,50 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
                 equalTo("/hub4j-test-org/GHWorkflowTest/blob/main/.github/workflows/test-workflow.yml"));
         assertThat(workflow.getBadgeUrl().getPath(),
                 equalTo("/hub4j-test-org/GHWorkflowTest/workflows/test-workflow/badge.svg"));
+    }
+
+    /**
+     * Test list workflow runs.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testListWorkflowRuns() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow("test-workflow.yml");
+
+        List<GHWorkflowRun> workflowRuns = workflow.listRuns().toList();
+        assertThat(workflowRuns.size(), greaterThan(2));
+
+        checkWorkflowRunProperties(workflowRuns.get(0), workflow.getId());
+        checkWorkflowRunProperties(workflowRuns.get(1), workflow.getId());
+    }
+
+    private static void checkWorkflowRunProperties(GHWorkflowRun workflowRun, long workflowId) throws IOException {
+        assertThat(workflowRun.getWorkflowId(), equalTo(workflowId));
+        assertThat(workflowRun.getId(), notNullValue());
+        assertThat(workflowRun.getNodeId(), notNullValue());
+        assertThat(workflowRun.getRepository().getFullName(), equalTo(REPO_NAME));
+        assertThat(workflowRun.getUrl().getPath(), containsString("/actions/runs/"));
+        assertThat(workflowRun.getHtmlUrl().getPath(), containsString("/actions/runs/"));
+        assertThat(workflowRun.getJobsUrl().getPath(), endsWith("/jobs"));
+        assertThat(workflowRun.getLogsUrl().getPath(), endsWith("/logs"));
+        assertThat(workflowRun.getCheckSuiteUrl().getPath(), containsString("/check-suites/"));
+        assertThat(workflowRun.getArtifactsUrl().getPath(), endsWith("/artifacts"));
+        assertThat(workflowRun.getCancelUrl().getPath(), endsWith("/cancel"));
+        assertThat(workflowRun.getRerunUrl().getPath(), endsWith("/rerun"));
+        assertThat(workflowRun.getWorkflowUrl().getPath(), containsString("/actions/workflows/"));
+        assertThat(workflowRun.getHeadBranch(), equalTo("main"));
+        assertThat(workflowRun.getHeadCommit().getId(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getTreeId(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getMessage(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getTimestamp(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getAuthor().getEmail(), notNullValue());
+        assertThat(workflowRun.getHeadCommit().getCommitter().getEmail(), notNullValue());
+        assertThat(workflowRun.getEvent(), equalTo(GHEvent.WORKFLOW_DISPATCH));
+        assertThat(workflowRun.getStatus(), equalTo(GHWorkflowRun.Status.COMPLETED));
+        assertThat(workflowRun.getConclusion(), equalTo(GHWorkflowRun.Conclusion.SUCCESS));
+        assertThat(workflowRun.getHeadSha(), notNullValue());
     }
 
 }

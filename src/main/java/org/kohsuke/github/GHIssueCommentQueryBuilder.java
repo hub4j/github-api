@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -21,8 +20,8 @@ import java.util.Date;
  * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
  */
 public class GHIssueCommentQueryBuilder {
-    private final GHIssue issue;
     private final Requester req;
+    private final GHIssue issue;
 
     /**
      * Instantiates a new GH issue comment query builder.
@@ -36,36 +35,14 @@ public class GHIssueCommentQueryBuilder {
     }
 
     /**
-     * Lists up the comments with the criteria added so far.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHIssueComment> list() {
-        return req.toIterable(GHIssueComment[].class, item -> item.wrapUp(issue));
-    }
-
-    /**
      * Only comments created/updated after this date will be returned.
      *
      * @param date
      *            the date
      * @return the query builder
-     * @deprecated Use {@link #since(Instant)}
      */
-    @Deprecated
     public GHIssueCommentQueryBuilder since(Date date) {
-        return since(GitHubClient.toInstantOrNull(date));
-    }
-
-    /**
-     * Only comments created/updated after this date will be returned.
-     *
-     * @param date
-     *            the date
-     * @return the query builder
-     */
-    public GHIssueCommentQueryBuilder since(Instant date) {
-        req.with("since", GitHubClient.printInstant(date));
+        req.with("since", GitHubClient.printDate(date));
         return this;
     }
 
@@ -77,6 +54,15 @@ public class GHIssueCommentQueryBuilder {
      * @return the query builder
      */
     public GHIssueCommentQueryBuilder since(long timestamp) {
-        return since(Instant.ofEpochMilli(timestamp));
+        return since(new Date(timestamp));
+    }
+
+    /**
+     * Lists up the comments with the criteria added so far.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHIssueComment> list() {
+        return req.toIterable(GHIssueComment[].class, item -> item.wrapUp(issue));
     }
 }

@@ -10,8 +10,8 @@ import java.io.IOException;
  */
 public class GHDeploymentStatusBuilder {
     private final Requester builder;
-    private long deploymentId;
     private GHRepository repo;
+    private long deploymentId;
 
     /**
      * Instantiates a new GH deployment status builder.
@@ -42,20 +42,6 @@ public class GHDeploymentStatusBuilder {
     public GHDeploymentStatusBuilder autoInactive(boolean autoInactive) {
         this.builder.with("auto_inactive", autoInactive);
         return this;
-    }
-
-    /**
-     * Create gh deployment status.
-     *
-     * @return the gh deployment status
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public GHDeploymentStatus create() throws IOException {
-        return builder.withUrlPath(repo.getApiTailUrl("deployments/" + deploymentId + "/statuses"))
-                .fetch(GHDeploymentStatus.class)
-                .lateBind(repo);
     }
 
     /**
@@ -105,5 +91,19 @@ public class GHDeploymentStatusBuilder {
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
         this.builder.with("log_url", logUrl);
         return this;
+    }
+
+    /**
+     * Create gh deployment status.
+     *
+     * @return the gh deployment status
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeploymentStatus create() throws IOException {
+        return builder.withUrlPath(repo.getApiTailUrl("deployments/" + deploymentId + "/statuses"))
+                .fetch(GHDeploymentStatus.class)
+                .lateBind(repo);
     }
 }

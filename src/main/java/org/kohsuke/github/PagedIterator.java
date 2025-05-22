@@ -26,6 +26,13 @@ import javax.annotation.Nonnull;
  */
 public class PagedIterator<T> implements Iterator<T> {
 
+    /** The base. */
+    @Nonnull
+    protected final Iterator<T[]> base;
+
+    @CheckForNull
+    private final Consumer<T> itemInitializer;
+
     /**
      * Current batch of items. Each time {@link #next()} is called the next item in this array will be returned. After
      * the last item of the array is returned, when {@link #next()} is called again, a new page of items will be fetched
@@ -35,19 +42,12 @@ public class PagedIterator<T> implements Iterator<T> {
      */
     private T[] currentPage;
 
-    @CheckForNull
-    private final Consumer<T> itemInitializer;
-
     /**
      * The index of the next item on the page, the item that will be returned when {@link #next()} is called.
      *
      * @see #fetch() {@link #fetch()} for details on how this field is used.
      */
     private int nextItemIndex;
-
-    /** The base. */
-    @Nonnull
-    protected final Iterator<T[]> base;
 
     /**
      * Instantiates a new paged iterator.
@@ -60,6 +60,21 @@ public class PagedIterator<T> implements Iterator<T> {
     PagedIterator(@Nonnull Iterator<T[]> base, @CheckForNull Consumer<T> itemInitializer) {
         this.base = base;
         this.itemInitializer = itemInitializer;
+    }
+
+    /**
+     * This poorly named method, initializes items with local data after they are fetched. It is up to the implementer
+     * to decide what local data to apply.
+     *
+     * @param page
+     *            the page of items to be initialized
+     */
+    protected void wrapUp(T[] page) {
+        if (itemInitializer != null) {
+            for (T item : page) {
+                itemInitializer.accept(item);
+            }
+        }
     }
 
     /**
@@ -77,15 +92,6 @@ public class PagedIterator<T> implements Iterator<T> {
         if (!hasNext())
             throw new NoSuchElementException();
         return currentPage[nextItemIndex++];
-    }
-
-    /**
-     * Gets the next page worth of data.
-     *
-     * @return the list
-     */
-    public List<T> nextPage() {
-        return Arrays.asList(nextPageArray());
     }
 
     /**
@@ -117,18 +123,12 @@ public class PagedIterator<T> implements Iterator<T> {
     }
 
     /**
-     * This poorly named method, initializes items with local data after they are fetched. It is up to the implementer
-     * to decide what local data to apply.
+     * Gets the next page worth of data.
      *
-     * @param page
-     *            the page of items to be initialized
+     * @return the list
      */
-    protected void wrapUp(T[] page) {
-        if (itemInitializer != null) {
-            for (T item : page) {
-                itemInitializer.accept(item);
-            }
-        }
+    public List<T> nextPage() {
+        return Arrays.asList(nextPageArray());
     }
 
     /**

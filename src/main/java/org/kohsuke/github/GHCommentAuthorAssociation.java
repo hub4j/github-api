@@ -38,9 +38,5 @@ public enum GHCommentAuthorAssociation {
     /**
      * Author is the owner of the repository.
      */
-    OWNER,
-    /**
-     * Author association is not recognized.
-     */
-    UNKNOWN
+    OWNER
 }

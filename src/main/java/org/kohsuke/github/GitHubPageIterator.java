@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -9,9 +10,9 @@ import javax.annotation.Nonnull;
 
 // TODO: Auto-generated Javadoc
 /**
- * May be used for any item that has pagination information. Iterates over paginated {@code T} objects (not the items
- * inside the page). Also exposes {@link #finalResponse()} to allow getting a full {@link GitHubResponse}{@code <T>}
- * after iterating completes.
+ * May be used for any item that has pagination information. Iterates over paginated {@link T} objects (not the items
+ * inside the page). Also exposes {@link #finalResponse()} to allow getting a full {@link GitHubResponse<T>} after
+ * iterating completes.
  *
  * Works for array responses, also works for search results which are single instances with an array of items inside.
  *
@@ -22,6 +23,39 @@ import javax.annotation.Nonnull;
  *            type of each page (not the items in the page).
  */
 class GitHubPageIterator<T> implements Iterator<T> {
+
+    private final GitHubClient client;
+    private final Class<T> type;
+
+    /**
+     * The page that will be returned when {@link #next()} is called.
+     *
+     * <p>
+     * Will be {@code null} after {@link #next()} is called.
+     * </p>
+     * <p>
+     * Will not be {@code null} after {@link #fetch()} is called if a new page was fetched.
+     * </p>
+     */
+    private T next;
+
+    /**
+     * The request that will be sent when to get a new response page if {@link #next} is {@code null}. Will be
+     * {@code null} when there are no more pages to fetch.
+     */
+    private GitHubRequest nextRequest;
+
+    /**
+     * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
+     * response that was retrieved.
+     */
+    private GitHubResponse<T> finalResponse = null;
+
+    private GitHubPageIterator(GitHubClient client, Class<T> type, GitHubRequest request) {
+        this.client = client;
+        this.type = type;
+        this.nextRequest = request;
+    }
 
     /**
      * Loads paginated resources.
@@ -51,51 +85,6 @@ class GitHubPageIterator<T> implements Iterator<T> {
 
         return new GitHubPageIterator<>(client, type, request);
     }
-    private final GitHubClient client;
-
-    /**
-     * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
-     * response that was retrieved.
-     */
-    private GitHubResponse<T> finalResponse = null;
-
-    /**
-     * The page that will be returned when {@link #next()} is called.
-     *
-     * <p>
-     * Will be {@code null} after {@link #next()} is called.
-     * </p>
-     * <p>
-     * Will not be {@code null} after {@link #fetch()} is called if a new page was fetched.
-     * </p>
-     */
-    private T next;
-
-    /**
-     * The request that will be sent when to get a new response page if {@link #next} is {@code null}. Will be
-     * {@code null} when there are no more pages to fetch.
-     */
-    private GitHubRequest nextRequest;
-
-    private final Class<T> type;
-
-    private GitHubPageIterator(GitHubClient client, Class<T> type, GitHubRequest request) {
-        this.client = client;
-        this.type = type;
-        this.nextRequest = request;
-    }
-
-    /**
-     * On rare occasions the final response from iterating is needed.
-     *
-     * @return the final response of the iterator.
-     */
-    public GitHubResponse<T> finalResponse() {
-        if (hasNext()) {
-            throw new GHException("Final response is not available until after iterator is done.");
-        }
-        return finalResponse;
-    }
 
     /**
      * {@inheritDoc}
@@ -119,6 +108,18 @@ class GitHubPageIterator<T> implements Iterator<T> {
         // If this is the last page, keep the response
         next = null;
         return result;
+    }
+
+    /**
+     * On rare occasions the final response from iterating is needed.
+     *
+     * @return the final response of the iterator.
+     */
+    public GitHubResponse<T> finalResponse() {
+        if (hasNext()) {
+            throw new GHException("Final response is not available until after iterator is done.");
+        }
+        return finalResponse;
     }
 
     /**
@@ -160,7 +161,8 @@ class GitHubPageIterator<T> implements Iterator<T> {
     /**
      * Locate the next page from the pagination "Link" tag.
      */
-    private GitHubRequest findNextURL(GitHubRequest nextRequest, GitHubResponse<T> nextResponse) {
+    private GitHubRequest findNextURL(GitHubRequest nextRequest, GitHubResponse<T> nextResponse)
+            throws MalformedURLException {
         GitHubRequest result = null;
         String link = nextResponse.header("Link");
         if (link != null) {

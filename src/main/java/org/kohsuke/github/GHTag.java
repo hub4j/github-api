@@ -12,45 +12,16 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 public class GHTag extends GitHubInteractiveObject {
 
-    private GHCommit commit;
-
-    private String name;
-
-    private GHRepository owner;
     /**
      * Create default GHTag instance
      */
     public GHTag() {
     }
 
-    /**
-     * Gets commit.
-     *
-     * @return the commit
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHCommit getCommit() {
-        return commit;
-    }
+    private GHRepository owner;
 
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets owner.
-     *
-     * @return the owner
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
-    }
+    private String name;
+    private GHCommit commit;
 
     /**
      * Wrap.
@@ -64,5 +35,34 @@ public class GHTag extends GitHubInteractiveObject {
         if (commit != null)
             commit.wrapUp(owner);
         return this;
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets commit.
+     *
+     * @return the commit
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHCommit getCommit() {
+        return commit;
     }
 }

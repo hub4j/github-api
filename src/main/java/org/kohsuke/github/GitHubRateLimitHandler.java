@@ -19,39 +19,10 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
  *
  * @author Kohsuke Kawaguchi
  * @author Liam Newman
- * @see GitHubBuilder#withRateLimitHandler(GitHubRateLimitHandler)
+ * @see GitHubBuilder#withRateLimitHandler(RateLimitHandler) GitHubBuilder#withRateLimitHandler(RateLimitHandler)
  * @see GitHubAbuseLimitHandler
  */
 public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {
-
-    /**
-     * Fail immediately.
-     */
-    public static final GitHubRateLimitHandler FAIL = new GitHubRateLimitHandler() {
-        @Override
-        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-            throw new HttpException("API rate limit reached",
-                    connectorResponse.statusCode(),
-                    connectorResponse.header("Status"),
-                    connectorResponse.request().url().toString())
-                    .withResponseHeaderFields(connectorResponse.allHeaders());
-
-        }
-    };
-
-    /**
-     * Wait until the API abuse "wait time" is passed.
-     */
-    public static final GitHubRateLimitHandler WAIT = new GitHubRateLimitHandler() {
-        @Override
-        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-            try {
-                Thread.sleep(parseWaitTime(connectorResponse));
-            } catch (InterruptedException ex) {
-                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);
-            }
-        }
-    };
 
     /**
      * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
@@ -62,6 +33,21 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
      * Create default GitHubRateLimitHandler instance
      */
     public GitHubRateLimitHandler() {
+    }
+
+    /**
+     * Checks if is error.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @return true, if is error
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Override
+    boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
+        return connectorResponse.statusCode() == HTTP_FORBIDDEN
+                && "0".equals(connectorResponse.header("X-RateLimit-Remaining"));
     }
 
     /**
@@ -82,19 +68,18 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 
     /**
-     * Checks if is error.
-     *
-     * @param connectorResponse
-     *            the connector response
-     * @return true, if is error
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
+     * Wait until the API abuse "wait time" is passed.
      */
-    @Override
-    boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-        return connectorResponse.statusCode() == HTTP_FORBIDDEN
-                && "0".equals(connectorResponse.header("X-RateLimit-Remaining"));
-    }
+    public static final GitHubRateLimitHandler WAIT = new GitHubRateLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            try {
+                Thread.sleep(parseWaitTime(connectorResponse));
+            } catch (InterruptedException ex) {
+                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);
+            }
+        }
+    };
 
     /*
      * Exposed for testability. Given an http response, find the rate limit reset header field and parse it. If no
@@ -117,5 +102,20 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
         }
         return Math.max(MINIMUM_RATE_LIMIT_RETRY_MILLIS, (Long.parseLong(v) - now.toInstant().getEpochSecond()) * 1000);
     }
+
+    /**
+     * Fail immediately.
+     */
+    public static final GitHubRateLimitHandler FAIL = new GitHubRateLimitHandler() {
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            throw new HttpException("API rate limit reached",
+                    connectorResponse.statusCode(),
+                    connectorResponse.header("Status"),
+                    connectorResponse.request().url().toString())
+                    .withResponseHeaderFields(connectorResponse.allHeaders());
+
+        }
+    };
 
 }

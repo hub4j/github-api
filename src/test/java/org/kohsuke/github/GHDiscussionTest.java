@@ -18,13 +18,24 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHDiscussionTest extends AbstractGitHubWireMockTest {
 
-    private final String TEAM_SLUG = "dummy-team";
-
-    private GHTeam team;
     /**
      * Create default GHDiscussionTest instance
      */
     public GHDiscussionTest() {
+    }
+
+    private final String TEAM_SLUG = "dummy-team";
+    private GHTeam team;
+
+    /**
+     * Sets the up.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Before
+    public void setUp() throws Exception {
+        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(TEAM_SLUG);
     }
 
     /**
@@ -43,17 +54,6 @@ public class GHDiscussionTest extends AbstractGitHubWireMockTest {
                 discussion.delete();
             }
         }
-    }
-
-    /**
-     * Sets the up.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(TEAM_SLUG);
     }
 
     /**

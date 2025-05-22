@@ -11,8 +11,8 @@ import java.util.List;
  */
 // Based on https://developer.github.com/v3/repos/deployments/#create-a-deployment
 public class GHDeploymentBuilder {
-    private final Requester builder;
     private final GHRepository repo;
+    private final Requester builder;
 
     /**
      * Instantiates a new Gh deployment builder.
@@ -40,82 +40,6 @@ public class GHDeploymentBuilder {
     }
 
     /**
-     * Auto merge gh deployment builder.
-     *
-     * @param autoMerge
-     *            the auto merge
-     *
-     * @return the gh deployment builder
-     */
-    public GHDeploymentBuilder autoMerge(boolean autoMerge) {
-        builder.with("auto_merge", autoMerge);
-        return this;
-    }
-
-    /**
-     * Create gh deployment.
-     *
-     * @return the gh deployment
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public GHDeployment create() throws IOException {
-        return builder.withUrlPath(repo.getApiTailUrl("deployments")).fetch(GHDeployment.class).wrap(repo);
-    }
-
-    /**
-     * Description gh deployment builder.
-     *
-     * @param description
-     *            the description
-     *
-     * @return the gh deployment builder
-     */
-    public GHDeploymentBuilder description(String description) {
-        builder.with("description", description);
-        return this;
-    }
-
-    /**
-     * Environment gh deployment builder.
-     *
-     * @param environment
-     *            the environment
-     *
-     * @return the gh deployment builder
-     */
-    public GHDeploymentBuilder environment(String environment) {
-        builder.with("environment", environment);
-        return this;
-    }
-
-    /**
-     * Payload gh deployment builder.
-     *
-     * @param payload
-     *            the payload
-     *
-     * @return the gh deployment builder
-     */
-    public GHDeploymentBuilder payload(String payload) {
-        builder.with("payload", payload);
-        return this;
-    }
-
-    /**
-     * Specifies if the given environment is one that end-users directly interact with.
-     *
-     * @param productionEnvironment
-     *            the environment is used by end-users directly
-     * @return the gh deployment builder
-     */
-    public GHDeploymentBuilder productionEnvironment(boolean productionEnvironment) {
-        builder.with("production_environment", productionEnvironment);
-        return this;
-    }
-
-    /**
      * Ref gh deployment builder.
      *
      * @param branch
@@ -125,19 +49,6 @@ public class GHDeploymentBuilder {
      */
     public GHDeploymentBuilder ref(String branch) {
         builder.with("ref", branch);
-        return this;
-    }
-
-    /**
-     * Required contexts gh deployment builder.
-     *
-     * @param requiredContexts
-     *            the required contexts
-     *
-     * @return the gh deployment builder
-     */
-    public GHDeploymentBuilder requiredContexts(List<String> requiredContexts) {
-        builder.with("required_contexts", requiredContexts);
         return this;
     }
 
@@ -155,6 +66,58 @@ public class GHDeploymentBuilder {
     }
 
     /**
+     * Auto merge gh deployment builder.
+     *
+     * @param autoMerge
+     *            the auto merge
+     *
+     * @return the gh deployment builder
+     */
+    public GHDeploymentBuilder autoMerge(boolean autoMerge) {
+        builder.with("auto_merge", autoMerge);
+        return this;
+    }
+
+    /**
+     * Required contexts gh deployment builder.
+     *
+     * @param requiredContexts
+     *            the required contexts
+     *
+     * @return the gh deployment builder
+     */
+    public GHDeploymentBuilder requiredContexts(List<String> requiredContexts) {
+        builder.with("required_contexts", requiredContexts);
+        return this;
+    }
+
+    /**
+     * Payload gh deployment builder.
+     *
+     * @param payload
+     *            the payload
+     *
+     * @return the gh deployment builder
+     */
+    public GHDeploymentBuilder payload(String payload) {
+        builder.with("payload", payload);
+        return this;
+    }
+
+    /**
+     * Environment gh deployment builder.
+     *
+     * @param environment
+     *            the environment
+     *
+     * @return the gh deployment builder
+     */
+    public GHDeploymentBuilder environment(String environment) {
+        builder.with("environment", environment);
+        return this;
+    }
+
+    /**
      * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
      * future.
      *
@@ -165,5 +128,42 @@ public class GHDeploymentBuilder {
     public GHDeploymentBuilder transientEnvironment(boolean transientEnvironment) {
         builder.with("transient_environment", transientEnvironment);
         return this;
+    }
+
+    /**
+     * Specifies if the given environment is one that end-users directly interact with.
+     *
+     * @param productionEnvironment
+     *            the environment is used by end-users directly
+     * @return the gh deployment builder
+     */
+    public GHDeploymentBuilder productionEnvironment(boolean productionEnvironment) {
+        builder.with("production_environment", productionEnvironment);
+        return this;
+    }
+
+    /**
+     * Description gh deployment builder.
+     *
+     * @param description
+     *            the description
+     *
+     * @return the gh deployment builder
+     */
+    public GHDeploymentBuilder description(String description) {
+        builder.with("description", description);
+        return this;
+    }
+
+    /**
+     * Create gh deployment.
+     *
+     * @return the gh deployment
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeployment create() throws IOException {
+        return builder.withUrlPath(repo.getApiTailUrl("deployments")).fetch(GHDeployment.class).wrap(repo);
     }
 }

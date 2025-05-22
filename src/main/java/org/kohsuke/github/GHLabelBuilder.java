@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
  * The Class GHLabelBuilder.
  *
  * @param <S>
- *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@code S}
+ *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If {@link S}
  *            the same as {@link GHLabel}, this builder will commit changes after each call to
  *            {@link #with(String, Object)}.
  */
@@ -21,7 +21,7 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
      *
      * @param intermediateReturnType
      *            Intermediate return type for this builder returned by calls to {@link #with(String, Object)}. If
-     *            {@code S} the same as {@link GHLabel}, this builder will commit changes after each call to
+     *            {@link S} the same as {@link GHLabel}, this builder will commit changes after each call to
      *            {@link #with(String, Object)}.
      * @param root
      *            the GitHub instance to which updates will be sent
@@ -38,6 +38,21 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
             requester.with("color", baseInstance.getColor());
             requester.with("description", baseInstance.getDescription());
         }
+    }
+
+    /**
+     * Name.
+     *
+     * @param value
+     *            the value
+     * @return the s
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Nonnull
+    @BetaApi
+    public S name(String value) throws IOException {
+        return with("name", value);
     }
 
     /**
@@ -68,20 +83,5 @@ class GHLabelBuilder<S> extends AbstractBuilder<GHLabel, S> {
     @BetaApi
     public S description(String value) throws IOException {
         return with("description", value);
-    }
-
-    /**
-     * Name.
-     *
-     * @param value
-     *            the value
-     * @return the s
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Nonnull
-    @BetaApi
-    public S name(String value) throws IOException {
-        return with("name", value);
     }
 }

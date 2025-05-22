@@ -12,9 +12,6 @@ import java.util.Locale;
  */
 public enum GHEvent {
 
-    /** Special event type that means "every possible event". */
-    ALL,
-
     /** The branch protection rule. */
     BRANCH_PROTECTION_RULE,
 
@@ -39,14 +36,14 @@ public enum GHEvent {
     /** The delete. */
     DELETE,
 
+    /** The deploy key. */
+    DEPLOY_KEY,
+
     /** The deployment. */
     DEPLOYMENT,
 
     /** The deployment status. */
     DEPLOYMENT_STATUS,
-
-    /** The deploy key. */
-    DEPLOY_KEY,
 
     /** The discussion. */
     DISCUSSION,
@@ -66,11 +63,11 @@ public enum GHEvent {
     /** The fork apply. */
     FORK_APPLY,
 
-    /** The gist. */
-    GIST,
-
     /** The github app authorization. */
     GITHUB_APP_AUTHORIZATION,
+
+    /** The gist. */
+    GIST,
 
     /** The gollum. */
     GOLLUM,
@@ -84,11 +81,11 @@ public enum GHEvent {
     /** The integration installation repositories. */
     INTEGRATION_INSTALLATION_REPOSITORIES,
 
-    /** The issues. */
-    ISSUES,
-
     /** The issue comment. */
     ISSUE_COMMENT,
+
+    /** The issues. */
+    ISSUES,
 
     /** The label. */
     LABEL,
@@ -102,11 +99,11 @@ public enum GHEvent {
     /** The membership. */
     MEMBERSHIP,
 
-    /** The merge group entry. */
-    MERGE_GROUP,
-
     /** The merge queue entry. */
     MERGE_QUEUE_ENTRY,
+
+    /** The merge group entry. */
+    MERGE_GROUP,
 
     /** The meta. */
     META,
@@ -126,17 +123,17 @@ public enum GHEvent {
     /** The page build. */
     PAGE_BUILD,
 
-    /** The ping. */
-    PING,
-
-    /** The project. */
-    PROJECT,
-
     /** The project card. */
     PROJECT_CARD,
 
     /** The project column. */
     PROJECT_COLUMN,
+
+    /** The project. */
+    PROJECT,
+
+    /** The ping. */
+    PING,
 
     /** The public. */
     PUBLIC,
@@ -161,12 +158,12 @@ public enum GHEvent {
 
     /** The release. */
     RELEASE,
-    /** The repository. */
-    // only valid for org hooks
-    REPOSITORY,
 
     /** The repository dispatch. */
     REPOSITORY_DISPATCH,
+    /** The repository. */
+    // only valid for org hooks
+    REPOSITORY,
 
     /** The repository import. */
     REPOSITORY_IMPORT,
@@ -192,22 +189,25 @@ public enum GHEvent {
     /** The team add. */
     TEAM_ADD,
 
+    /** The watch. */
+    WATCH,
+
+    /** The workflow job. */
+    WORKFLOW_JOB,
+
+    /** The workflow dispatch. */
+    WORKFLOW_DISPATCH,
+
+    /** The workflow run. */
+    WORKFLOW_RUN,
+
     /**
      * Special event type that means we haven't found an enum value corresponding to the event.
      */
     UNKNOWN,
 
-    /** The watch. */
-    WATCH,
-
-    /** The workflow dispatch. */
-    WORKFLOW_DISPATCH,
-
-    /** The workflow job. */
-    WORKFLOW_JOB,
-
-    /** The workflow run. */
-    WORKFLOW_RUN;
+    /** Special event type that means "every possible event". */
+    ALL;
 
     /**
      * Returns GitHub's internal representation of this event.

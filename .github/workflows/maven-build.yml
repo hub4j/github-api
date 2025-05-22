@@ -60,25 +60,6 @@ jobs:
       # running install site seems to more closely imitate real site deployment,
       # more likely to prevent failed deployment
       run: mvn -B clean install site -DskipTests --file pom.xml
-  test-bridged:
-    name: build-and-test Bridged (Java 17)
-    # Does not require build output, but orders execution to prevent launching test workflows when simple build fails 
-    needs: build
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK
-      uses: actions/setup-java@v4
-      with:
-        java-version: 17
-        distribution: 'temurin'
-        cache: 'maven'
-    - name: Maven Install (skipTests)
-      env:
-        MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
-      run: mvn -B clean install -Pbridged -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
   test:
     name: test (${{ matrix.os }}, Java ${{ matrix.java }})
     # Does not require build output, but orders execution to prevent launching test workflows when simple build fails 
@@ -126,7 +107,7 @@ jobs:
         name: maven-test-target-directory
         path: target
     - name: Codecov Report
-      uses: codecov/codecov-action@v5.4.0
+      uses: codecov/codecov-action@v4.5.0
       with:
         # Codecov token from https://app.codecov.io/gh/hub4j/github-api/settings
         token: ${{ secrets.CODECOV_TOKEN }}

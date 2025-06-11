@@ -156,6 +156,16 @@ public class GHWorkflow extends GHObject {
         return new GHWorkflowRunsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), "runs"));
     }
 
+    /**
+     * Workflow run query builder for this workflow.
+     *
+     * @return the GHWorkflowRunQueryBuilder instance for querying runs
+     */
+    public GHWorkflowRunQueryBuilder queryRuns() {
+        return new GHWorkflowRunQueryBuilder(this);
+
+    }
+
     private String getApiRoute() {
         if (owner == null) {
             // Workflow runs returned from search to do not have an owner. Attempt to use url.

@@ -11,6 +11,7 @@ import org.kohsuke.github.GHWorkflowRun.Status;
  * @see GHRepository#queryWorkflowRuns()
  */
 public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
+    private final GHWorkflow ghWorkflow;
     private final GHRepository repo;
 
     /**
@@ -22,6 +23,19 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
     GHWorkflowRunQueryBuilder(GHRepository repo) {
         super(repo.root());
         this.repo = repo;
+        this.ghWorkflow = null;
+    }
+
+    /**
+     * Instantiates a new GH workflow run query builder for a specific workflow.
+     *
+     * @param ghWorkflow
+     *            the ghWorkflow
+     */
+    GHWorkflowRunQueryBuilder(GHWorkflow ghWorkflow) {
+        super(ghWorkflow.getRepository().root());
+        this.repo = ghWorkflow.getRepository();
+        this.ghWorkflow = ghWorkflow;
     }
 
     /**
@@ -133,7 +147,12 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
      */
     @Override
     public PagedIterable<GHWorkflowRun> list() {
-        return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl("actions/runs")));
+        if (ghWorkflow != null) {
+            req.withUrlPath(repo.getApiTailUrl("actions/workflows"), String.valueOf(ghWorkflow.getId()), "runs");
+        } else {
+            req.withUrlPath(repo.getApiTailUrl("actions/runs"));
+        }
+        return new GHWorkflowRunsIterable(repo, req);
     }
 
     /**

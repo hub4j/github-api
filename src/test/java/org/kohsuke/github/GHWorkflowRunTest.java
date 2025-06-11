@@ -610,7 +610,8 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getStatus(), equalTo(Status.COMPLETED));
         assertThat(workflowRun.getConclusion(), equalTo(Conclusion.SUCCESS));
         assertThat(workflowRun.getHeadSha(), notNullValue());
-        assertThat(workflowRun.getTriggeringActor(), hasProperty("login", equalTo("octocat")));
+        assertThat(workflowRun.getActor(), hasProperty("login", equalTo("octocat")));
+        assertThat(workflowRun.getTriggeringActor(), hasProperty("login", equalTo("octocat_trigger")));
     }
 
     /**

@@ -1,8 +1,6 @@
 package org.kohsuke.github;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.GHOrganization.Permission;
 import org.kohsuke.github.GHOrganization.RepositoryRole;
@@ -44,21 +42,21 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Before
-    @After
-    public void cleanUpTeam() throws IOException {
-        // Cleanup is only needed when proxying
-        if (!mockGitHub.isUseProxy()) {
-            return;
-        }
-
-        GHTeam team = getNonRecordingGitHub().getOrganization(GITHUB_API_TEST_ORG).getTeamByName(TEAM_NAME_CREATE);
-        if (team != null) {
-            team.delete();
-        }
-
-        getNonRecordingGitHub().getOrganization(GITHUB_API_TEST_ORG).enableOrganizationProjects(true);
-    }
+    // @Before
+    // @After
+    // public void cleanUpTeam() throws IOException {
+    // // Cleanup is only needed when proxying
+    // if (!mockGitHub.isUseProxy()) {
+    // return;
+    // }
+    //
+    // GHTeam team = getNonRecordingGitHub().getOrganization(GITHUB_API_TEST_ORG).getTeamByName(TEAM_NAME_CREATE);
+    // if (team != null) {
+    // team.delete();
+    // }
+    //
+    // getNonRecordingGitHub().getOrganization(GITHUB_API_TEST_ORG).enableOrganizationProjects(true);
+    // }
 
     /**
      * Test are organization projects enabled.
@@ -261,6 +259,37 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         assertThat(repository, notNullValue());
         assertThat(repository.getReadme(), notNullValue());
+
+    }
+
+    /**
+     * Test create a repository from a template with all branches included
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             Signals that Thread.sleep() was interrupted
+     */
+
+    @Test
+    public void testCreateRepositoryWithTemplateAndIncludeAllBranches() throws IOException, InterruptedException {
+        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHRepository templateRepository = org.getRepository(GITHUB_API_TEMPLATE_TEST);
+
+        GHRepository repository = gitHub.createRepository(GITHUB_API_TEST)
+                .fromTemplateRepository(templateRepository)
+                .includeAllBranches(true)
+                .owner(GITHUB_API_TEST_ORG)
+                .create();
+
+        assertThat(repository, notNullValue());
+
+        // give it a moment for branches to be created
+        Thread.sleep(1500);
+
+        assertThat(repository.getBranches().keySet(), equalTo(templateRepository.getBranches().keySet()));
 
     }
 

@@ -43,10 +43,14 @@ public class GHRelease extends GHObject {
     private List<GHAsset> assets;
 
     private String assetsUrl;
+    private GHUser author;
     private String body;
+    private String bodyHtml;
+    private String bodyText;
     private String discussionUrl;
     private boolean draft;
     private String htmlUrl;
+    private int mentionsCount;
     private String name;
     private boolean prerelease;
     private String publishedAt;
@@ -93,12 +97,39 @@ public class GHRelease extends GHObject {
     }
 
     /**
+     * Gets the author.
+     *
+     * @return the author
+     */
+    public GHUser getAuthor() {
+        return author;
+    }
+
+    /**
      * Gets body.
      *
      * @return the body
      */
     public String getBody() {
         return body;
+    }
+
+    /**
+     * Gets body html.
+     *
+     * @return the body html
+     */
+    public String getBodyHtml() {
+        return bodyHtml;
+    }
+
+    /**
+     * Gets body text.
+     *
+     * @return the body text
+     */
+    public String getBodyText() {
+        return bodyText;
     }
 
     /**
@@ -117,6 +148,10 @@ public class GHRelease extends GHObject {
      */
     public URL getHtmlUrl() {
         return GitHubClient.parseURL(htmlUrl);
+    }
+
+    public int getMentionsCount() {
+        return this.mentionsCount;
     }
 
     /**

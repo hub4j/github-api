@@ -4,9 +4,14 @@ package org.kohsuke.github;
 /**
  * Represents the one page of GHAppInstallations.
  */
-class GHAppInstallationsPage {
+class GHAppInstallationsPage implements GitHubPage<GHAppInstallation> {
     private GHAppInstallation[] installations;
     private int totalCount;
+
+    @Override
+    public GHAppInstallation[] getItems() {
+        return getInstallations();
+    }
 
     /**
      * Gets the total count.

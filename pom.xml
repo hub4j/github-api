@@ -310,7 +310,7 @@
         <plugin>
           <groupId>com.infradna.tool</groupId>
           <artifactId>bridge-method-injector</artifactId>
-          <version>1.30</version>
+          <version>1.31</version>
           <executions>
             <execution>
               <goals>

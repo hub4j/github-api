@@ -32,8 +32,6 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
 
         @Override
         GHIssue[] getItems(GitHub root) {
-            for (GHIssue i : items) {
-            }
             return items;
         }
     }
@@ -45,7 +43,7 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
      *            the root
      */
     GHIssueSearchBuilder(GitHub root) {
-        super(root, IssueSearchResult.class);
+        super(root, IssueSearchResult.class, GHIssue.class);
     }
 
     /**

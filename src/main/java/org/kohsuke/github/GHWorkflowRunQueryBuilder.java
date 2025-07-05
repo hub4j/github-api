@@ -133,7 +133,11 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
      */
     @Override
     public PagedIterable<GHWorkflowRun> list() {
-        return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl("actions/runs")));
+        return new PagedIterable<>(new PaginatedEndpoint<>(repo.root().getClient(),
+                req.withUrlPath(repo.getApiTailUrl("actions/runs")).build(),
+                GHWorkflowRunsPage.class,
+                GHWorkflowRun.class,
+                item -> item.wrapUp(repo)));
     }
 
     /**

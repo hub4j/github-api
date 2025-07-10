@@ -147,6 +147,11 @@
       <artifactId>jackson-datatype-jsr310</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <version>${spotbugs.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.infradna.tool</groupId>
       <artifactId>bridge-method-annotation</artifactId>
       <version>1.30</version>
@@ -190,11 +195,6 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.17.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.spotbugs</groupId>
-      <artifactId>spotbugs-annotations</artifactId>
-      <version>${spotbugs.version}</version>
     </dependency>
     <dependency>
       <groupId>com.github.npathai</groupId>
@@ -492,10 +492,10 @@
             <importOrder>
               <file>${basedir}/src/build/eclipse/eclipse.importorder</file>
             </importOrder>
-            
+
             <removeUnusedImports></removeUnusedImports>
-            <formatAnnotations />
-            
+            <formatAnnotations></formatAnnotations>
+
             <trimTrailingWhitespace></trimTrailingWhitespace>
             <endWithNewline></endWithNewline>
 

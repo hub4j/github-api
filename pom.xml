@@ -150,7 +150,6 @@
       <groupId>com.infradna.tool</groupId>
       <artifactId>bridge-method-annotation</artifactId>
       <version>1.30</version>
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
@@ -196,7 +195,6 @@
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs-annotations</artifactId>
       <version>${spotbugs.version}</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.github.npathai</groupId>

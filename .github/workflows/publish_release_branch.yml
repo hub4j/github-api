@@ -90,7 +90,7 @@ jobs:
           cp -r ./target/site/* ./
 
       - name: Publish GH Pages
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "Release (${{ github.actor }}): v${{ steps.release.outputs.version }}" 
           branch: gh-pages
